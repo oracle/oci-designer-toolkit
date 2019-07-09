@@ -146,7 +146,11 @@ var connectorStartYTop = 0;
 
 function handleConnectorDrag(e) {
     if (connectorStartElement) {
-        console.log('Connector Drag : ' + getMousePosition(e).x + ' - ' + getMousePosition(e).y);
+        //console.log('Connector Drag : ' + getMousePosition(e).x + ' - ' + getMousePosition(e).y);
+        var connector = d3.select("#Connector");
+        var mousePos = getMousePosition(e);
+        connector.attr("x2", mousePos.x);
+        connector.attr("y2", mousePos.y);
     }
 }
 
@@ -176,6 +180,20 @@ function handleConnectorDragStart(e) {
     console.log("SVG Relative Point (" + svgrelative.x + ", " + svgrelative.y + ")");
     connectorStartXLeft = svgrelative.x;
     connectorStartYTop = svgrelative.y;
+
+    // Start Drawing line
+    var mousePos = getMousePosition(e);
+    svg = d3.select("#okitcanvas");
+    svg.append('line')
+        .attr("id", "Connector")
+        .attr("x1", connectorStartXLeft)
+        .attr("y1", connectorStartYTop)
+        .attr("x2", mousePos.x)
+        .attr("y2", mousePos.y)
+        .attr("stroke-width", "2")
+        .attr("stroke-dasharray", "3, 3")
+        .attr("stroke", "darkgray");
+
 }
 
 function handleConnectorDragEnter(e) {
@@ -221,14 +239,14 @@ function handleConnectorDrop(e) {
     connectorStartElement = null;
     connectorStartXLeft = 0;
     connectorStartYTop = 0;
+    d3.select("#Connector").remove();
 }
 
 function getMousePosition(evt) {
-    var CTM = okitcanvas.getScreenCTM();
     if (evt.touches) { evt = evt.touches[0]; }
     return {
-        x: (evt.clientX - CTM.e) / CTM.a,
-        y: (evt.clientY - CTM.f) / CTM.d
+        x: (evt.clientX - okitcanvasScreenCTM.e) / okitcanvasScreenCTM.a,
+        y: (evt.clientY - okitcanvasScreenCTM.f) / okitcanvasScreenCTM.d
     };
 }
 
@@ -386,6 +404,10 @@ function addVirtualCloudNetwork() {
     d3.select('g#' + okitid + '-group').selectAll('path')
         .on("click", function() { assetSelected('VirtualCloudNetwork', okitid) });
     assetSelected('VirtualCloudNetwork', okitid);
+
+    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+    $('#' + okitid).on("mousemove", handleConnectorDrag);
+    $('#' + okitid).on("mouseup", handleConnectorDrop);
 }
 
 function addInternetGateway(vcnid) {
@@ -675,7 +697,7 @@ function addSubnet(vcnid) {
     //var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     //var translate_y = icon_translate_y_start;
     var translate_x = icon_width;
-    var translate_y = (icon_height * 3) + ((icon_height + 10) * (subnet_count - 1));
+    var translate_y = (icon_height * 5) + ((icon_height + 10) * (subnet_count - 1));
     var data_type = "Subnet";
 
     // Add Virtual Cloud Network to JSON
@@ -754,7 +776,7 @@ function addSubnet(vcnid) {
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     $('#' + okitid).on("mousedown", handleConnectorDragStart);
-    //$('#' + okitid).on("mousemove", handleConnectorDrag);
+    $('#' + okitid).on("mousemove", handleConnectorDrag);
     $('#' + okitid).on("mouseup", handleConnectorDrop);
     $('#' + okitid).on("mouseover", handleConnectorDragEnter);
     $('#' + okitid).on("mouseout", handleConnectorDragLeave);
