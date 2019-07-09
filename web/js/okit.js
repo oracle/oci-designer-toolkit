@@ -1,6 +1,9 @@
 var palatte_source_type = '';
 var okitIdsJsonObj = {};
 
+/*
+* Define palette Drag & Drop functions
+ */
 function handleDragStart(e) {
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('text/plain', this.title);
@@ -131,6 +134,26 @@ okitcanvas.addEventListener('drop', handleDrop, false);
 okitcanvas.addEventListener('dragend', handleDragEnd, false);
 
 /*
+* define Connector Drag & Drop functions
+ */
+
+function handleConnectorDragStart(e) {
+    console.log('Connector Drag Start : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+}
+
+function handleConnectorDragEnd(e) {
+    console.log('Connector Drag End : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+}
+
+function handleConnectorDragEnter(e) {
+    console.log('Connector Drag Enter : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+}
+
+function handleConnectorDragLeave(e) {
+    console.log('Connector Drag Leave : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+}
+
+/*
 ** Json Object Processing
  */
 
@@ -186,10 +209,26 @@ var route_table_ids = [];
 var security_list_ids = [];
 var subnet_ids = [];
 
+var virtual_cloud_network_count = 0;
+var internet_gateway_count = 0;
+var route_table_count = 0;
+var security_list_count = 0;
+var subnet_count = 0;
+
+var icon_stroke_colour = "#F80000";
+var subnet_stroke_colour = ["orange", "blue", "green", "black"];
+
+var vcn_element_icon_position = 0;
+
+function generateDefaultName(prefix, count) {
+    return prefix + ('000' + count).slice(-3);
+}
+
 function addVirtualCloudNetwork() {
     var okitid = 'okit-vcn-' + uuidv4();
     var translate_x = 0;
     var translate_y = 0;
+    var data_type = 'Virtual Cloud Network';
 
     // Add Virtual Cloud Network to JSON
 
@@ -201,13 +240,16 @@ function addVirtualCloudNetwork() {
     okitIdsJsonObj[okitid] = '';
     virtual_network_ids.push(okitid);
 
+    // Increment Count
+    virtual_cloud_network_count += 1;
     var virtual_cloud_network = {};
     virtual_cloud_network['okitid'] = okitid;
     virtual_cloud_network['ocid'] = '';
-    virtual_cloud_network['name'] = '';
+    virtual_cloud_network['name'] = generateDefaultName('VCN', virtual_cloud_network_count);
     virtual_cloud_network['cidr'] = '';
     virtual_cloud_network['dns_label'] = '';
     OKITJsonObj['compartment']['virtual_cloud_networks'].push(virtual_cloud_network);
+    okitIdsJsonObj[okitid] = virtual_cloud_network['name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 
@@ -218,17 +260,19 @@ function addVirtualCloudNetwork() {
         svg.append(xml.documentElement.getElementsByTagName('g')[0]);
     });
     */
-    var vcn = svg.append("g")
-        .attr("id", okitid)
+    var vcngroup = svg.append("g")
+        .attr("id", okitid + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
+    var vcn = vcngroup.append("g");
     vcn.append("rect")
         .attr("id", okitid)
-        .attr("data-type", "Virtual Cloud Network")
+        .attr("data-type", data_type)
+        .attr("title", virtual_cloud_network['name'])
         .attr("x", 20)
         .attr("y", 50)
         .attr("width", 800)
-        .attr("height", 600)
-        .attr("stroke", "green")
+        .attr("height", 400)
+        .attr("stroke", "purple")
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white");
     var iconsvg = vcn.append("svg")
@@ -256,17 +300,23 @@ function addVirtualCloudNetwork() {
         .attr("class", "st0")
         .attr("d", "M144,87.8c-31,0-56.2,25.2-56.2,56.2c0,31,25.2,56.2,56.2,56.2s56.2-25.2,56.2-56.2C200.2,113,175,87.8,144,87.8z M170.6,160.9c-0.9,0-1.8-0.3-2.6-0.7l-14.7,14.3c0.4,0.7,0.6,1.6,0.6,2.5c0,3.1-2.5,5.6-5.6,5.6s-5.6-2.5-5.6-5.6c0-0.6,0.1-1.1,0.3-1.7l-22-15.5c-0.9,0.7-2.1,1.1-3.4,1.1c-3.1,0-5.6-2.5-5.6-5.6c0-3,2.3-5.4,5.2-5.6l5.2-21.4c-1.6-1-2.7-2.8-2.7-4.8c0-3.1,2.5-5.6,5.6-5.6c2.5,0,4.7,1.7,5.4,4l29.9,0.6c0.8-2.2,2.8-3.8,5.3-3.8c3.1,0,5.6,2.5,5.6,5.6c0,2.2-1.3,4.1-3.1,5l3.2,20.4c2.7,0.4,4.7,2.7,4.7,5.6C176.2,158.4,173.7,160.9,170.6,160.9z");
 
-    var vcnelem = document.querySelector('#' + okitid);
-
-    //vcnelem.addEventListener("mouseover", function() { $("#properties").load("propertysheets/virtualcloudnetwork.html") });
-    //vcnelem.addEventListener("mouseout", function() { $("#properties").load("propertysheets/empty.html") });
-    vcnelem.addEventListener("click", function() { assetSelected('VirtualCloudNetwork', okitid) });
+    //var vcnelem = document.querySelector('#' + okitid);
+    //vcnelem.addEventListener("click", function() { assetSelected('VirtualCloudNetwork', okitid) });
+    $('#' + okitid).on("click", function() { assetSelected('VirtualCloudNetwork', okitid) });
+    d3.select('g#' + okitid + '-group').selectAll('path')
+        .on("click", function() { assetSelected('VirtualCloudNetwork', okitid) });
+    assetSelected('VirtualCloudNetwork', okitid);
 }
 
 function addInternetGateway(vcnid) {
     var okitid = 'okit-ig-' + uuidv4();
-    var translate_x = icon_translate_x_start;
+    var position = vcn_element_icon_position;
+    var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
+    var data_type = "Internet Gateway";
+
+    // Increment Icon Position
+    vcn_element_icon_position += 1;
 
     // Add Virtual Cloud Network to JSON
 
@@ -278,35 +328,40 @@ function addInternetGateway(vcnid) {
     okitIdsJsonObj[okitid] = '';
     internet_gateway_ids.push(okitid);
 
+    // Increment Count
+    internet_gateway_count += 1;
     var internet_gateway = {};
     internet_gateway['virtual_cloud_network_id'] = vcnid;
     internet_gateway['virtual_cloud_network'] = '';
     internet_gateway['okitid'] = okitid;
     internet_gateway['ocid'] = '';
-    internet_gateway['name'] = '';
+    internet_gateway['name'] = generateDefaultName('IG', internet_gateway_count);
     OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
+    okitIdsJsonObj[okitid] = internet_gateway['name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 
-    svg = d3.select(okitcanvas);
+    //svg = d3.select(okitcanvas);
+    svg = d3.select('#' + vcnid + '-group');
 
     var ig = svg.append("g")
-        .attr("id", okitid)
+        .attr("id", okitid + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
     ig.append("rect")
         .attr("id", okitid)
-        .attr("data-type", "Internet Gateway")
+        .attr("data-type", data_type)
+        .attr("title", internet_gateway['name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         .attr("width", icon_width)
         .attr("height", icon_height)
-        .attr("stroke", "green")
+        .attr("stroke", icon_stroke_colour)
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     var iconsvg = ig.append("svg")
         .attr("id", okitid)
-        .attr("data-type", "Internet Gateway")
+        .attr("data-type", data_type)
         .attr("width", "100")
         .attr("height", "100")
         .attr("viewbox", "0 0 200 200");
@@ -328,16 +383,25 @@ function addInternetGateway(vcnid) {
         .attr("class", "st0")
         .attr("d", "M103.5,140.8c-15.9,0-28.8,12.9-28.8,28.8c0,15.9,12.9,28.8,28.8,28.8c15.9,0,28.8-12.9,28.8-28.8C132.3,153.6,119.4,140.8,103.5,140.8z M82.2,171v-3h7.3v-4.5l10.4,6l-10.4,6V171H82.2z M103.7,190.7l-6-10.4h4.5v-21.6h-4.5l6-10.4l6,10.4h-4.5v21.6h4.5L103.7,190.7z M118.1,171v4.5l-10.4-6l10.4-6v4.5h7.3v3H118.1z");
 
-    var igelem = document.querySelector('#' + okitid);
+    //var igelem = document.querySelector('#' + okitid);
+    //igelem.addEventListener("click", function() { assetSelected('InternetGateway', okitid) });
 
-    igelem.addEventListener("click", function() { assetSelected('InternetGateway', okitid) });
+    // Add click event to display properties
+    $('#' + okitid).on("click", function() { assetSelected('InternetGateway', okitid) });
+    d3.select('g#' + okitid + '-group').selectAll('path')
+        .on("click", function() { assetSelected('InternetGateway', okitid) });
+    assetSelected('InternetGateway', okitid);
 }
 
 function addRouteTable(vcnid) {
     var okitid = 'okit-rt-' + uuidv4();
-    var position = 1;
+    var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
+    var data_type = "Route Table";
+
+    // Increment Icon Position
+    vcn_element_icon_position += 1;
 
     // Add Virtual Cloud Network to JSON
 
@@ -349,35 +413,40 @@ function addRouteTable(vcnid) {
     okitIdsJsonObj[okitid] = '';
     route_table_ids.push(okitid);
 
+    // Increment Count
+    route_table_count += 1;
     var route_table = {};
     route_table['virtual_cloud_network_id'] = vcnid;
     route_table['virtual_cloud_network'] = '';
     route_table['okitid'] = okitid;
     route_table['ocid'] = '';
-    route_table['name'] = '';
+    route_table['name'] = generateDefaultName('RT', route_table_count);
     OKITJsonObj['compartment']['route_tables'].push(route_table);
+    okitIdsJsonObj[okitid] = route_table['name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 
-    svg = d3.select(okitcanvas);
+    //svg = d3.select(okitcanvas);
+    svg = d3.select('#' + vcnid + '-group');
 
     var rt = svg.append("g")
-        .attr("id", okitid)
+        .attr("id", okitid + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
     rt.append("rect")
         .attr("id", okitid)
-        .attr("data-type", "Internet Gateway")
+        .attr("data-type", data_type)
+        .attr("title", route_table['name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         .attr("width", icon_width)
         .attr("height", icon_height)
-        .attr("stroke", "green")
+        .attr("stroke", icon_stroke_colour)
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     var iconsvg = rt.append("svg")
         .attr("id", okitid)
-        .attr("data-type", "Internet Gateway")
+        .attr("data-type", data_type)
         .attr("width", "100")
         .attr("height", "100")
         .attr("viewbox", "0 0 200 200");
@@ -411,16 +480,33 @@ function addRouteTable(vcnid) {
         .attr("class", "st0")
         .attr("d", "M188.4,187.7v-22.9h-59.6v22.9H188.4z M171.1,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,171.2z M166.1,178.1h2.3v2.5h-2.3V178.1z M153.8,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,171.2z M148.8,178.1h2.3v2.5h-2.3V178.1z M139.8,171.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
 
-    var igelem = document.querySelector('#' + okitid);
+    //var igelem = document.querySelector('#' + okitid);
+    //igelem.addEventListener("click", function() { assetSelected('RouteTable', okitid) });
 
-    igelem.addEventListener("click", function() { assetSelected('RouteTable', okitid) });
+    // Add click event to display properties
+    $('#' + okitid).on("click", function() { assetSelected('RouteTable', okitid) });
+    d3.select('g#' + okitid + '-group').selectAll('path')
+        .on("click", function() { assetSelected('RouteTable', okitid) });
+    assetSelected('RouteTable', okitid);
+
+    // Add Drag start event to allow connector
+    $('#' + okitid).on("mousedown", function(e) { handleConnectorDragStart(e) });
+    $('#' + okitid).on("mouseup", function(e) { handleConnectorDragEnd(e) });
+    $('#' + okitid).on("mouseover", function(e) { handleConnectorDragEnter(e) });
+    $('#' + okitid).on("mouseout", function(e) { handleConnectorDragLeave(e) });
+    d3.select('#' + okitid)
+        .attr("dragable", true);
 }
 
 function addSecurityList(vcnid) {
     var okitid = 'okit-sl-' + uuidv4();
-    var position = 2;
+    var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
+    var data_type = "Security List";
+
+    // Increment Icon Position
+    vcn_element_icon_position += 1;
 
     // Add Virtual Cloud Network to JSON
 
@@ -432,35 +518,40 @@ function addSecurityList(vcnid) {
     okitIdsJsonObj[okitid] = '';
     security_list_ids.push(okitid);
 
+    // Increment Count
+    security_list_count += 1;
     var security_list = {};
     security_list['virtual_cloud_network_id'] = vcnid;
     security_list['virtual_cloud_network'] = '';
     security_list['okitid'] = okitid;
     security_list['ocid'] = '';
-    security_list['name'] = '';
+    security_list['name'] = generateDefaultName('SL', security_list_count);
     OKITJsonObj['compartment']['security_lists'].push(security_list);
+    okitIdsJsonObj[okitid] = security_list['name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 
-    svg = d3.select(okitcanvas);
+    //svg = d3.select(okitcanvas);
+    svg = d3.select('#' + vcnid + '-group');
 
     var sl = svg.append("g")
-        .attr("id", okitid)
+        .attr("id", okitid + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
     sl.append("rect")
         .attr("id", okitid)
-        .attr("data-type", "Internet Gateway")
+        .attr("data-type", data_type)
+        .attr("title", security_list['name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         .attr("width", icon_width)
         .attr("height", icon_height)
-        .attr("stroke", "green")
+        .attr("stroke", icon_stroke_colour)
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     var iconsvg = sl.append("svg")
         .attr("id", okitid)
-        .attr("data-type", "Internet Gateway")
+        .attr("data-type", data_type)
         .attr("width", "100")
         .attr("height", "100")
         .attr("viewbox", "0 0 200 200");
@@ -470,16 +561,22 @@ function addSecurityList(vcnid) {
         .attr("class", "st0")
         .attr("d", "M144,85.5l-43.8,18.8v41.8v0.1c1.3,23.2,18.4,43.6,43.8,56.3c25.5-12.7,42.5-33.1,43.8-56.3v-0.1v-41.8L144,85.5z M151.3,161.8h-31.5v-4.3h31.5V161.8z M151.3,144.7h-31.5v-4.3h31.5V144.7z M151.3,126.6h-31.5v-4.3h31.5V126.6zM170.4,155.8l-7.7,7.7l-4.9-4.9c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l2.8,2.8l5.6-5.6c0.6-0.6,1.5-0.6,2,0C171,154.3,171,155.2,170.4,155.8z M159.4,138.6c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l3,3l3-3c0.6-0.6,1.5-0.6,2,0c0.6,0.6,0.6,1.5,0,2l-3,3l3,3c0.6,0.6,0.6,1.5,0,2c-0.3,0.3-0.6,0.4-1,0.4c-0.4,0-0.7-0.1-1-0.4l-3-3l-3,3c-0.3,0.3-0.6,0.4-1,0.4c-0.4,0-0.7-0.1-1-0.4c-0.6-0.6-0.6-1.5,0-2l3-3L159.4,138.6z M170.7,121.9l-7.7,7.7l-4.9-4.9c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l2.8,2.8l5.6-5.6c0.6-0.6,1.5-0.6,2,0C171.2,120.4,171.2,121.3,170.7,121.9z")
 
-    var igelem = document.querySelector('#' + okitid);
-
-    igelem.addEventListener("click", function() { assetSelected('SecurityList', okitid) });
+    //var igelem = document.querySelector('#' + okitid);
+    //igelem.addEventListener("click", function() { assetSelected('SecurityList', okitid) });
+    $('#' + okitid).on("click", function() { assetSelected('SecurityList', okitid) });
+    d3.select('g#' + okitid + '-group').selectAll('path')
+        .on("click", function() { assetSelected('SecurityList', okitid) });
+    assetSelected('SecurityList', okitid);
 }
 
 function addSubnet(vcnid) {
     var okitid = 'okit-sn-' + uuidv4();
     var position = 3;
-    var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-    var translate_y = icon_translate_y_start;
+    //var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
+    //var translate_y = icon_translate_y_start;
+    var translate_x = icon_width;
+    var translate_y = (icon_height * 3) + ((icon_height + 10) * (subnet_count - 1));
+    var data_type = "Subnet";
 
     // Add Virtual Cloud Network to JSON
 
@@ -487,16 +584,23 @@ function addSubnet(vcnid) {
         OKITJsonObj['compartment']['subnets'] = [];
     }
 
+    vcn_width = d3.select('#' + vcnid).style("width").replace("px", "");
+    vcn_height = d3.select('#' + vcnid).style("height").replace("px", "");
+    console.log("VCN Width : "+vcn_width);
+    console.log("VCN Height : "+vcn_height);
+
     // Add okitid & empty name to okitid JSON
     okitIdsJsonObj[okitid] = '';
     subnet_ids.push(okitid);
 
+    // Increment Count
+    subnet_count += 1;
     var subnet = {};
     subnet['virtual_cloud_network_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
     subnet['okitid'] = okitid;
     subnet['ocid'] = '';
-    subnet['name'] = '';
+    subnet['name'] = generateDefaultName('SN', subnet_count);
     subnet['cidr'] = '';
     subnet['dns_label'] = '';
     subnet['route_table'] = '';
@@ -505,27 +609,30 @@ function addSubnet(vcnid) {
     subnet['security_lists_id'] = [];
     OKITJsonObj['compartment']['subnets'].push(subnet);
     console.log(JSON.stringify(OKITJsonObj, null, 2));
+    okitIdsJsonObj[okitid] = subnet['name'];
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 
-    svg = d3.select(okitcanvas);
+    //svg = d3.select(okitcanvas);
+    svg = d3.select('#' + vcnid + '-group');
 
     var sn = svg.append("g")
-        .attr("id", okitid)
+        .attr("id", okitid + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
     sn.append("rect")
         .attr("id", okitid)
-        .attr("data-type", "Internet Gateway")
+        .attr("data-type", data_type)
+        .attr("title", subnet['name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
-        .attr("width", icon_width)
+        .attr("width", vcn_width - (icon_width * 2))
         .attr("height", icon_height)
-        .attr("stroke", "green")
-        .attr("stroke-dasharray", "5, 5")
-        .attr("fill", "white")
+        .attr("stroke", subnet_stroke_colour[(subnet_count % 3)])
+        //.attr("stroke-dasharray", "5, 5")
+        .attr("fill", subnet_stroke_colour[(subnet_count % 3)])
         .attr("style", "fill-opacity: .25;");
     var iconsvg = sn.append("svg")
         .attr("id", okitid)
-        .attr("data-type", "Internet Gateway")
+        .attr("data-type", data_type)
         .attr("width", "100")
         .attr("height", "100")
         .attr("viewbox", "0 0 200 200");
@@ -538,9 +645,12 @@ function addSubnet(vcnid) {
         .attr("class", "st0")
         .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
 
-    var igelem = document.querySelector('#' + okitid);
-
-    igelem.addEventListener("click", function() { assetSelected('Subnet', okitid) });
+    //var igelem = document.querySelector('#' + okitid);
+    //igelem.addEventListener("click", function() { assetSelected('Subnet', okitid) });
+    $('#' + okitid).on("click", function() { assetSelected('Subnet', okitid) });
+    d3.select('g#' + okitid + '-group').selectAll('path')
+        .on("click", function() { assetSelected('Subnet', okitid) });
+    assetSelected('Subnet', okitid);
 }
 
 function assetSelected(type, okitid) {
