@@ -126,7 +126,8 @@ var palatteicons = document.querySelectorAll('#palatte .palatteicon');
     palatteicon.addEventListener('dragstart', handleDragStart, false);
 });
 
-var okitcanvas = document.querySelector('#okitcanvas');
+//var okitcanvas = document.querySelector('#okitcanvas');
+var okitcanvas = document.getElementById('okitcanvas');
 okitcanvas.addEventListener('dragenter', handleDragEnter, false)
 okitcanvas.addEventListener('dragover', handleDragOver, false);
 okitcanvas.addEventListener('dragleave', handleDragLeave, false);
@@ -137,21 +138,100 @@ okitcanvas.addEventListener('dragend', handleDragEnd, false);
 * define Connector Drag & Drop functions
  */
 
-function handleConnectorDragStart(e) {
-    console.log('Connector Drag Start : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+var okitcanvasSVGPoint = okitcanvas.createSVGPoint();
+var okitcanvasScreenCTM = okitcanvas.getScreenCTM();
+var connectorStartElement = null;
+var connectorStartXLeft = 0;
+var connectorStartYTop = 0;
+
+function handleConnectorDrag(e) {
+    if (connectorStartElement) {
+        console.log('Connector Drag : ' + getMousePosition(e).x + ' - ' + getMousePosition(e).y);
+    }
 }
 
-function handleConnectorDragEnd(e) {
-    console.log('Connector Drag End : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+function handleConnectorDragStart(e) {
+    e.preventDefault();
+    console.log('Connector Drag Start : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+    // Set Start Element to know we are dragging
+    connectorStartElement = e.target;
+    console.log('D3 x: '+connectorStartElement.getBoundingClientRect().x+' y: '+connectorStartElement.getBoundingClientRect().y);
+    console.log('D3 height: '+connectorStartElement.getBoundingClientRect().height+' width: '+connectorStartElement.getBoundingClientRect().width);
+    // Calculate start point of bottom middle
+    //var boundingClientRect = d3.select('#' + e.target.id).node().getBoundingClientRect();
+    //console.log('D3 x: '+boundingClientRect.x+' y: '+boundingClientRect.y);
+    //console.log('D3 height: '+boundingClientRect.height+' width: '+boundingClientRect.width);
+
+    var boundingClientRect = connectorStartElement.getBoundingClientRect();
+    okitcanvasSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+    okitcanvasSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
+
+    //var connectorStartOffset = $('#'+e.target.id).offset();
+    //console.log('Offset x: '+connectorStartOffset.left+' y: '+connectorStartOffset.top);
+    //okitcanvasSVGPoint.x = connectorStartOffset.left;
+    //okitcanvasSVGPoint.y = connectorStartOffset.top;
+
+    // Convert to SVG Relative positioning
+    var svgrelative = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
+    console.log("SVG Relative Point (" + svgrelative.x + ", " + svgrelative.y + ")");
+    connectorStartXLeft = svgrelative.x;
+    connectorStartYTop = svgrelative.y;
 }
 
 function handleConnectorDragEnter(e) {
-    console.log('Connector Drag Enter : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+    if (connectorStartElement) {
+        console.log('Connector Drag Enter : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+    }
 }
 
 function handleConnectorDragLeave(e) {
-    console.log('Connector Drag Leave : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+    if (connectorStartElement) {
+        console.log('Connector Drag Leave : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+    }
 }
+
+function handleConnectorDrop(e) {
+    if (connectorStartElement) {
+        var sourceType = connectorStartElement.getAttribute('data-type');
+        var destinationType = e.target.getAttribute('data-type');
+        var validSubnetSource = ['Route Table', 'Security List'];
+        console.log('Connector Drop  : ' + e.target.id + ' - ' + destinationType);
+        console.log('Drag Start Type : ' + sourceType);
+
+        if (validSubnetSource.indexOf(sourceType) >= 0 && destinationType == 'Subnet') {
+            console.log('Creating Connector Line');
+            //var offset = $('#'+e.target.id).offset();
+            //okitcanvasSVGPoint.x = offset.left;
+            //okitcanvasSVGPoint.y = offset.top;
+            var boundingClientRect = e.target.getBoundingClientRect();
+            okitcanvasSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+            okitcanvasSVGPoint.y = boundingClientRect.y;
+            var svgrelative = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
+            svg = d3.select("#okitcanvas");
+            svg.append('line')
+                .attr("x1", connectorStartXLeft)
+                .attr("y1", connectorStartYTop)
+                .attr("x2", svgrelative.x)
+                .attr("y2", svgrelative.y)
+                .attr("stroke-width", "2")
+                .attr("stroke", "black");
+        }
+    }
+
+    connectorStartElement = null;
+    connectorStartXLeft = 0;
+    connectorStartYTop = 0;
+}
+
+function getMousePosition(evt) {
+    var CTM = okitcanvas.getScreenCTM();
+    if (evt.touches) { evt = evt.touches[0]; }
+    return {
+        x: (evt.clientX - CTM.e) / CTM.a,
+        y: (evt.clientY - CTM.f) / CTM.d
+    };
+}
+
 
 /*
 ** Json Object Processing
@@ -489,11 +569,17 @@ function addRouteTable(vcnid) {
         .on("click", function() { assetSelected('RouteTable', okitid) });
     assetSelected('RouteTable', okitid);
 
-    // Add Drag start event to allow connector
-    $('#' + okitid).on("mousedown", function(e) { handleConnectorDragStart(e) });
-    $('#' + okitid).on("mouseup", function(e) { handleConnectorDragEnd(e) });
-    $('#' + okitid).on("mouseover", function(e) { handleConnectorDragEnter(e) });
-    $('#' + okitid).on("mouseout", function(e) { handleConnectorDragLeave(e) });
+    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+    $('#' + okitid).on("mousedown", handleConnectorDragStart);
+    $('#' + okitid).on("mousemove", handleConnectorDrag);
+    $('#' + okitid).on("mouseup", handleConnectorDrop);
+    $('#' + okitid).on("mouseover", handleConnectorDragEnter);
+    $('#' + okitid).on("mouseout", handleConnectorDragLeave);
+    // Add dragevent versions
+    $('#' + okitid).on("dragstart", handleConnectorDragStart);
+    $('#' + okitid).on("drop", handleConnectorDrop);
+    $('#' + okitid).on("dragenter", handleConnectorDragEnter);
+    $('#' + okitid).on("dragleave", handleConnectorDragLeave);
     d3.select('#' + okitid)
         .attr("dragable", true);
 }
@@ -567,6 +653,20 @@ function addSecurityList(vcnid) {
     d3.select('g#' + okitid + '-group').selectAll('path')
         .on("click", function() { assetSelected('SecurityList', okitid) });
     assetSelected('SecurityList', okitid);
+
+    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+    $('#' + okitid).on("mousedown", handleConnectorDragStart);
+    //$('#' + okitid).on("mousemove", handleConnectorDrag);
+    $('#' + okitid).on("mouseup", handleConnectorDrop);
+    $('#' + okitid).on("mouseover", handleConnectorDragEnter);
+    $('#' + okitid).on("mouseout", handleConnectorDragLeave);
+    // Add dragevent versions
+    $('#' + okitid).on("dragstart", handleConnectorDragStart);
+    $('#' + okitid).on("drop", handleConnectorDrop);
+    $('#' + okitid).on("dragenter", handleConnectorDragEnter);
+    $('#' + okitid).on("dragleave", handleConnectorDragLeave);
+    d3.select('#' + okitid)
+        .attr("dragable", true);
 }
 
 function addSubnet(vcnid) {
@@ -651,6 +751,20 @@ function addSubnet(vcnid) {
     d3.select('g#' + okitid + '-group').selectAll('path')
         .on("click", function() { assetSelected('Subnet', okitid) });
     assetSelected('Subnet', okitid);
+
+    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+    $('#' + okitid).on("mousedown", handleConnectorDragStart);
+    //$('#' + okitid).on("mousemove", handleConnectorDrag);
+    $('#' + okitid).on("mouseup", handleConnectorDrop);
+    $('#' + okitid).on("mouseover", handleConnectorDragEnter);
+    $('#' + okitid).on("mouseout", handleConnectorDragLeave);
+    // Add dragevent versions
+    $('#' + okitid).on("dragstart", handleConnectorDragStart);
+    $('#' + okitid).on("drop", handleConnectorDrop);
+    $('#' + okitid).on("dragenter", handleConnectorDragEnter);
+    $('#' + okitid).on("dragleave", handleConnectorDragLeave);
+    d3.select('#' + okitid)
+        .attr("dragable", true);
 }
 
 function assetSelected(type, okitid) {
