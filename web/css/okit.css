@@ -139,3 +139,17 @@
     width: 20%;
     height: 100%;
 }
+
+#toolbar {
+    background: darkslateblue;
+}
+
+#leftbuttons {
+    width: 20%;
+    height: 100%;
+}
+
+#rightbuttons {
+    flex-grow: 1;
+    height: 100%;
+}
