@@ -13,7 +13,10 @@ ENV ANSIBLE_CONFIG_DIR=/oci/ansible/config
 ENV ANSIBLE_INVENTORY=${ANSIBLE_CONFIG_DIR}/ansible_hosts
 ENV ANSIBLE_CONFIG=${ANSIBLE_CONFIG_DIR}/ansible.cfg
 ENV ANSIBLE_LIBRARY=${SRC}:${ANSIBLE_LIBRARY}
-# Define Systen
+# Flask
+ENV FLASK_APP=okitweb
+ENV FLASK_DEBUG=development
+# Define System
 ENV LANG en_GB.UTF-8
 ENV LANGUAGE en_GB:en
 ENV LC_ALL en_GB.UTF-8
@@ -79,6 +82,7 @@ RUN yum update -y ; \
         asciinema \
         configparser \
         flask \
+        flask-cors \
         flask_restful \
         ipaddress \
         ipcalc \
@@ -101,6 +105,6 @@ RUN yum update -y ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
-    mkdir -p /oci/{ansible,config,terraform,workspace} \
+    mkdir -p /oci/{ansible,config,terraform,visualiser,workspace} \
     env | sort
 

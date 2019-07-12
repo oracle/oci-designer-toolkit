@@ -18,11 +18,11 @@ docker run \
        ${HOSTINFO} \
        ${VOLUMES} \
        ${ENVIRONMENT} \
-       -w /oci/workspace \
+       -w /oci/visualiser \
        -p 6443:6443 \
        --rm \
        -it \
        ${DOCKERIMAGE} \
-       /bin/bash
+       /bin/bash -c "pwd;env;python3 -m flask run --host=0.0.0.0 --port=6443 --no-debugger"
 
 docker ps -l

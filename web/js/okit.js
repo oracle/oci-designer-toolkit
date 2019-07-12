@@ -4,6 +4,7 @@ var okitIdsJsonObj = {};
 /*
 * Define palette Drag & Drop functions
  */
+
 function handleDragStart(e) {
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('text/plain', this.title);
@@ -135,7 +136,7 @@ okitcanvas.addEventListener('drop', handleDrop, false);
 okitcanvas.addEventListener('dragend', handleDragEnd, false);
 
 /*
-* define Connector Drag & Drop functions
+** Define Connector Drag & Drop functions
  */
 
 var okitcanvasSVGPoint = okitcanvas.createSVGPoint();
@@ -189,8 +190,10 @@ function handleConnectorDragStart(e) {
         .attr("id", "Connector")
         .attr("x1", connectorStartXLeft)
         .attr("y1", connectorStartYTop)
-        .attr("x2", mousePos.x)
-        .attr("y2", mousePos.y)
+        .attr("x2", connectorStartXLeft)
+        .attr("y2", connectorStartYTop)
+        //.attr("x2", mousePos.x)
+        //.attr("y2", mousePos.y)
         .attr("stroke-width", "2")
         .attr("stroke-dasharray", "3, 3")
         .attr("stroke", "darkgray");
@@ -274,11 +277,59 @@ function getAsJson(readFile) {
 
 function loaded(evt) {
     // Obtain the read file data
-    console.log('Json: ' + OKITJsonObj['compartment']['name']);
     var fileString = evt.target.result;
     console.log('Loaded: ' + fileString);
     OKITJsonObj = JSON.parse(fileString);
-    console.log('Json: ' + OKITJsonObj['compartment']['name']);
+    displayOkitJson();
+    // Draw SVG
+    if ('compartment' in OKITJsonObj) {
+        if ('virtual_cloud_networks' in OKITJsonObj['compartment']) {
+            virtual_network_ids = [];
+            for (var i=0; i < OKITJsonObj['compartment']['virtual_cloud_networks'].length; i++) {
+                virtual_network_ids.push(OKITJsonObj['compartment']['virtual_cloud_networks'][i]['okitid']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['virtual_cloud_networks'][i]['okitid']] = OKITJsonObj['compartment']['virtual_cloud_networks'][i]['name'];
+                virtual_cloud_network_count += 1;
+                drawVirtualCloudNetworkSVG(OKITJsonObj['compartment']['virtual_cloud_networks'][i]);
+            }
+        }
+        if ('internet_gateways' in OKITJsonObj['compartment']) {
+            internet_gateway_ids = [];
+            for (var i=0; i < OKITJsonObj['compartment']['internet_gateways'].length; i++) {
+                internet_gateway_ids.push(OKITJsonObj['compartment']['internet_gateways'][i]['okitid']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['internet_gateways'][i]['okitid']] = OKITJsonObj['compartment']['internet_gateways'][i]['name'];
+                internet_gateway_count += 1;
+                drawInternetGatewaySVG(OKITJsonObj['compartment']['internet_gateways'][i]);
+            }
+        }
+        if ('route_tables' in OKITJsonObj['compartment']) {
+            route_table_ids = [];
+            for (var i=0; i < OKITJsonObj['compartment']['route_tables'].length; i++) {
+                route_table_ids.push(OKITJsonObj['compartment']['route_tables'][i]['okitid']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['route_tables'][i]['okitid']] = OKITJsonObj['compartment']['route_tables'][i]['name'];
+                route_table_count += 1;
+                drawRouteTableSVG(OKITJsonObj['compartment']['route_tables'][i]);
+            }
+        }
+        if ('security_lists' in OKITJsonObj['compartment']) {
+            security_list_ids = [];
+            for (var i=0; i < OKITJsonObj['compartment']['security_lists'].length; i++) {
+                security_list_ids.push(OKITJsonObj['compartment']['security_lists'][i]['okitid']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['security_lists'][i]['okitid']] = OKITJsonObj['compartment']['security_lists'][i]['name'];
+                security_list_count += 1;
+                drawSecurityListSVG(OKITJsonObj['compartment']['security_lists'][i]);
+            }
+        }
+        if ('subnets' in OKITJsonObj['compartment']) {
+            subnet_ids = [];
+            for (var i=0; i < OKITJsonObj['compartment']['subnets'].length; i++) {
+                subnet_ids.push(OKITJsonObj['compartment']['subnets'][i]['okitid']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['subnets'][i]['okitid']] = OKITJsonObj['compartment']['subnets'][i]['name'];
+                subnet_count += 1;
+                drawSubnetSVG(OKITJsonObj['compartment']['subnets'][i]);
+                drawSubnetConnectorsSVG(OKITJsonObj['compartment']['subnets'][i]);
+            }
+        }
+    }
 }
 
 function errorHandler(evt) {
@@ -310,16 +361,49 @@ function saveJson(text, filename){
 document.getElementById('savejson').addEventListener('click', handleSave, false);
 
 /*
-** SVG Creation functions
+** Generate Button handlers
  */
-var icon_width = 45;
-var icon_height = 45;
-var icon_x = 25;
-var icon_y = 25;
-var icon_translate_x_start = 60;
-var icon_translate_y_start = 10;
-var vcn_icon_spacing = 35;
 
+function openInNewTab(url) {
+    var win = window.open(url, '_blank');
+    win.focus();
+}
+
+function handleGenerateTerraform(e) {
+    $.ajax({
+        type: 'post',
+        url: 'http://localhost:6443/okit/rest/v1/terraform',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(OKITJsonObj),
+        success: function(resp) {
+            console.log('REST Response : ' + resp);
+            openInNewTab('http://localhost:6443/okit/rest/v1/terraform/' + resp);
+        }
+    });
+}
+
+document.getElementById('generateterraform').addEventListener('click', handleGenerateTerraform, false);
+
+function handleGenerateAnsible(e) {
+    $.ajax({
+        type: 'post',
+        url: 'http://localhost:6443/okit/rest/v1/ansible',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(OKITJsonObj),
+        success: function(resp) {
+            console.log('REST Response : ' + resp);
+            openInNewTab('http://localhost:6443/okit/rest/v1/ansible/' + resp);
+        }
+    });
+}
+
+document.getElementById('generateansible').addEventListener('click', handleGenerateAnsible, false);
+
+/*
+** Add Assets to JSON Model
+ */
 var virtual_network_ids = [];
 var internet_gateway_ids = [];
 var route_table_ids = [];
@@ -332,26 +416,12 @@ var route_table_count = 0;
 var security_list_count = 0;
 var subnet_count = 0;
 
-var icon_stroke_colour = "#F80000";
-var subnet_stroke_colour = ["orange", "blue", "green", "black"];
-
-var vcn_element_icon_position = 0;
-
-function uuidv4() {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    )
-}
-
 function generateDefaultName(prefix, count) {
     return prefix + ('000' + count).slice(-3);
 }
 
 function addVirtualCloudNetwork() {
     var okitid = 'okit-vcn-' + uuidv4();
-    var translate_x = 0;
-    var translate_y = 0;
-    var data_type = 'Virtual Cloud Network';
 
     // Add Virtual Cloud Network to JSON
 
@@ -374,7 +444,155 @@ function addVirtualCloudNetwork() {
     OKITJsonObj['compartment']['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[okitid] = virtual_cloud_network['name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
-    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+    displayOkitJson();
+    drawVirtualCloudNetworkSVG(virtual_cloud_network);
+}
+
+function addInternetGateway(vcnid) {
+    var okitid = 'okit-ig-' + uuidv4();
+
+    // Add Virtual Cloud Network to JSON
+
+    if (!('internet_gateways' in OKITJsonObj['compartment'])) {
+        OKITJsonObj['compartment']['internet_gateways'] = [];
+    }
+
+    // Add okitid & empty name to okitid JSON
+    okitIdsJsonObj[okitid] = '';
+    internet_gateway_ids.push(okitid);
+
+    // Increment Count
+    internet_gateway_count += 1;
+    var internet_gateway = {};
+    internet_gateway['virtual_cloud_network_id'] = vcnid;
+    internet_gateway['virtual_cloud_network'] = '';
+    internet_gateway['okitid'] = okitid;
+    internet_gateway['ocid'] = '';
+    internet_gateway['name'] = generateDefaultName('IG', internet_gateway_count);
+    OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
+    okitIdsJsonObj[okitid] = internet_gateway['name'];
+    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    displayOkitJson();
+    drawInternetGatewaySVG(internet_gateway);
+}
+
+function addRouteTable(vcnid) {
+    var okitid = 'okit-rt-' + uuidv4();
+
+    // Add Virtual Cloud Network to JSON
+
+    if (!('route_tables' in OKITJsonObj['compartment'])) {
+        OKITJsonObj['compartment']['route_tables'] = [];
+    }
+
+    // Add okitid & empty name to okitid JSON
+    okitIdsJsonObj[okitid] = '';
+    route_table_ids.push(okitid);
+
+    // Increment Count
+    route_table_count += 1;
+    var route_table = {};
+    route_table['virtual_cloud_network_id'] = vcnid;
+    route_table['virtual_cloud_network'] = '';
+    route_table['okitid'] = okitid;
+    route_table['ocid'] = '';
+    route_table['name'] = generateDefaultName('RT', route_table_count);
+    OKITJsonObj['compartment']['route_tables'].push(route_table);
+    okitIdsJsonObj[okitid] = route_table['name'];
+    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    displayOkitJson();
+    drawRouteTableSVG(route_table);
+}
+
+function addSecurityList(vcnid) {
+    var okitid = 'okit-sl-' + uuidv4();
+
+    // Add Virtual Cloud Network to JSON
+
+    if (!('security_lists' in OKITJsonObj['compartment'])) {
+        OKITJsonObj['compartment']['security_lists'] = [];
+    }
+
+    // Add okitid & empty name to okitid JSON
+    okitIdsJsonObj[okitid] = '';
+    security_list_ids.push(okitid);
+
+    // Increment Count
+    security_list_count += 1;
+    var security_list = {};
+    security_list['virtual_cloud_network_id'] = vcnid;
+    security_list['virtual_cloud_network'] = '';
+    security_list['okitid'] = okitid;
+    security_list['ocid'] = '';
+    security_list['name'] = generateDefaultName('SL', security_list_count);
+    OKITJsonObj['compartment']['security_lists'].push(security_list);
+    okitIdsJsonObj[okitid] = security_list['name'];
+    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    displayOkitJson();
+    drawSecurityListSVG(security_list);
+}
+
+function addSubnet(vcnid) {
+    var okitid = 'okit-sn-' + uuidv4();
+
+    // Add Virtual Cloud Network to JSON
+
+    if (!('subnets' in OKITJsonObj['compartment'])) {
+        OKITJsonObj['compartment']['subnets'] = [];
+    }
+
+    // Add okitid & empty name to okitid JSON
+    okitIdsJsonObj[okitid] = '';
+    subnet_ids.push(okitid);
+
+    // Increment Count
+    subnet_count += 1;
+    var subnet = {};
+    subnet['virtual_cloud_network_id'] = vcnid;
+    subnet['virtual_cloud_network'] = '';
+    subnet['okitid'] = okitid;
+    subnet['ocid'] = '';
+    subnet['name'] = generateDefaultName('SN', subnet_count);
+    subnet['cidr'] = '';
+    subnet['dns_label'] = '';
+    subnet['route_table'] = '';
+    subnet['route_table_id'] = '';
+    subnet['security_lists'] = [];
+    subnet['security_lists_id'] = [];
+    OKITJsonObj['compartment']['subnets'].push(subnet);
+    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    okitIdsJsonObj[okitid] = subnet['name'];
+    displayOkitJson();
+    drawSubnetSVG(subnet);
+}
+
+/*
+** SVG Creation functions
+ */
+var icon_width = 45;
+var icon_height = 45;
+var icon_x = 25;
+var icon_y = 25;
+var icon_translate_x_start = 60;
+var icon_translate_y_start = 10;
+var vcn_icon_spacing = 35;
+
+var icon_stroke_colour = "#F80000";
+var subnet_stroke_colour = ["orange", "blue", "green", "black"];
+
+var vcn_element_icon_position = 0;
+
+function uuidv4() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    )
+}
+
+function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
+    var okitid = virtual_cloud_network['okitid'];
+    var translate_x = 0;
+    var translate_y = 0;
+    var data_type = 'Virtual Cloud Network';
 
     svg = d3.select(okitcanvas);
     /*
@@ -435,8 +653,9 @@ function addVirtualCloudNetwork() {
     $('#' + okitid).on("mouseup", handleConnectorDrop);
 }
 
-function addInternetGateway(vcnid) {
-    var okitid = 'okit-ig-' + uuidv4();
+function drawInternetGatewaySVG(internet_gateway) {
+    var vcnid = internet_gateway['virtual_cloud_network_id'];
+    var okitid = internet_gateway['okitid'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
@@ -445,30 +664,6 @@ function addInternetGateway(vcnid) {
     // Increment Icon Position
     vcn_element_icon_position += 1;
 
-    // Add Virtual Cloud Network to JSON
-
-    if (!('internet_gateways' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['internet_gateways'] = [];
-    }
-
-    // Add okitid & empty name to okitid JSON
-    okitIdsJsonObj[okitid] = '';
-    internet_gateway_ids.push(okitid);
-
-    // Increment Count
-    internet_gateway_count += 1;
-    var internet_gateway = {};
-    internet_gateway['virtual_cloud_network_id'] = vcnid;
-    internet_gateway['virtual_cloud_network'] = '';
-    internet_gateway['okitid'] = okitid;
-    internet_gateway['ocid'] = '';
-    internet_gateway['name'] = generateDefaultName('IG', internet_gateway_count);
-    OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
-    okitIdsJsonObj[okitid] = internet_gateway['name'];
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
-    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
-
-    //svg = d3.select(okitcanvas);
     svg = d3.select('#' + vcnid + '-group');
 
     var ig = svg.append("g")
@@ -520,8 +715,9 @@ function addInternetGateway(vcnid) {
     assetSelected('InternetGateway', okitid);
 }
 
-function addRouteTable(vcnid) {
-    var okitid = 'okit-rt-' + uuidv4();
+function drawRouteTableSVG(route_table) {
+    var vcnid = route_table['virtual_cloud_network_id'];
+    var okitid = route_table['okitid'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
@@ -529,29 +725,6 @@ function addRouteTable(vcnid) {
 
     // Increment Icon Position
     vcn_element_icon_position += 1;
-
-    // Add Virtual Cloud Network to JSON
-
-    if (!('route_tables' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['route_tables'] = [];
-    }
-
-    // Add okitid & empty name to okitid JSON
-    okitIdsJsonObj[okitid] = '';
-    route_table_ids.push(okitid);
-
-    // Increment Count
-    route_table_count += 1;
-    var route_table = {};
-    route_table['virtual_cloud_network_id'] = vcnid;
-    route_table['virtual_cloud_network'] = '';
-    route_table['okitid'] = okitid;
-    route_table['ocid'] = '';
-    route_table['name'] = generateDefaultName('RT', route_table_count);
-    OKITJsonObj['compartment']['route_tables'].push(route_table);
-    okitIdsJsonObj[okitid] = route_table['name'];
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
-    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 
     //svg = d3.select(okitcanvas);
     svg = d3.select('#' + vcnid + '-group');
@@ -631,8 +804,9 @@ function addRouteTable(vcnid) {
         .attr("dragable", true);
 }
 
-function addSecurityList(vcnid) {
-    var okitid = 'okit-sl-' + uuidv4();
+function drawSecurityListSVG(security_list) {
+    var vcnid = security_list['virtual_cloud_network_id'];
+    var okitid = security_list['okitid'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
@@ -640,29 +814,6 @@ function addSecurityList(vcnid) {
 
     // Increment Icon Position
     vcn_element_icon_position += 1;
-
-    // Add Virtual Cloud Network to JSON
-
-    if (!('security_lists' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['security_lists'] = [];
-    }
-
-    // Add okitid & empty name to okitid JSON
-    okitIdsJsonObj[okitid] = '';
-    security_list_ids.push(okitid);
-
-    // Increment Count
-    security_list_count += 1;
-    var security_list = {};
-    security_list['virtual_cloud_network_id'] = vcnid;
-    security_list['virtual_cloud_network'] = '';
-    security_list['okitid'] = okitid;
-    security_list['ocid'] = '';
-    security_list['name'] = generateDefaultName('SL', security_list_count);
-    OKITJsonObj['compartment']['security_lists'].push(security_list);
-    okitIdsJsonObj[okitid] = security_list['name'];
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
-    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 
     //svg = d3.select(okitcanvas);
     svg = d3.select('#' + vcnid + '-group');
@@ -716,8 +867,9 @@ function addSecurityList(vcnid) {
         .attr("dragable", true);
 }
 
-function addSubnet(vcnid) {
-    var okitid = 'okit-sn-' + uuidv4();
+function drawSubnetSVG(subnet) {
+    var vcnid = subnet['virtual_cloud_network_id'];
+    var okitid = subnet['okitid'];
     var position = 3;
     //var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     //var translate_y = icon_translate_y_start;
@@ -725,39 +877,10 @@ function addSubnet(vcnid) {
     var translate_y = (icon_height * 5) + ((icon_height + 10) * (subnet_count - 1));
     var data_type = "Subnet";
 
-    // Add Virtual Cloud Network to JSON
-
-    if (!('subnets' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['subnets'] = [];
-    }
-
-    vcn_width = d3.select('#' + vcnid).style("width").replace("px", "");
-    vcn_height = d3.select('#' + vcnid).style("height").replace("px", "");
+    var vcn_width = d3.select('#' + vcnid).style("width").replace("px", "");
+    var vcn_height = d3.select('#' + vcnid).style("height").replace("px", "");
     //console.log("VCN Width : "+vcn_width);
     //console.log("VCN Height : "+vcn_height);
-
-    // Add okitid & empty name to okitid JSON
-    okitIdsJsonObj[okitid] = '';
-    subnet_ids.push(okitid);
-
-    // Increment Count
-    subnet_count += 1;
-    var subnet = {};
-    subnet['virtual_cloud_network_id'] = vcnid;
-    subnet['virtual_cloud_network'] = '';
-    subnet['okitid'] = okitid;
-    subnet['ocid'] = '';
-    subnet['name'] = generateDefaultName('SN', subnet_count);
-    subnet['cidr'] = '';
-    subnet['dns_label'] = '';
-    subnet['route_table'] = '';
-    subnet['route_table_id'] = '';
-    subnet['security_lists'] = [];
-    subnet['security_lists_id'] = [];
-    OKITJsonObj['compartment']['subnets'].push(subnet);
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
-    okitIdsJsonObj[okitid] = subnet['name'];
-    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 
     //svg = d3.select(okitcanvas);
     svg = d3.select('#' + vcnid + '-group');
@@ -814,6 +937,54 @@ function addSubnet(vcnid) {
         .attr("dragable", true);
 }
 
+function drawSubnetConnectorsSVG(subnet) {
+    var vcnid = subnet['virtual_cloud_network_id'];
+    var okitid = subnet['okitid'];
+
+    var boundingClientRect = d3.select("#" + okitid).node().getBoundingClientRect();
+    okitcanvasSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+    okitcanvasSVGPoint.y = boundingClientRect.y;
+    var subnetrelative = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
+    var sourcesvg = null;
+    svg = d3.select("#okitcanvas");
+
+    if (subnet['route_table_id'] != '') {
+        boundingClientRect = d3.select("#" + subnet['route_table_id']).node().getBoundingClientRect();
+        okitcanvasSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+        okitcanvasSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
+        sourcesvg = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
+        svg.append('line')
+            .attr("id", generateConnectorId(subnet['route_table_id'], okitid))
+            .attr("x1", sourcesvg.x)
+            .attr("y1", sourcesvg.y)
+            .attr("x2", subnetrelative.x)
+            .attr("y2", subnetrelative.y)
+            .attr("stroke-width", "2")
+            .attr("stroke", "black");
+    }
+
+    if (subnet['security_lists_id'].length > 0) {
+        for (var i = 0; i < subnet['security_lists_id'].length; i++) {
+            boundingClientRect = d3.select("#" + subnet['security_lists_id'][i]).node().getBoundingClientRect();
+            okitcanvasSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+            okitcanvasSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
+            sourcesvg = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
+            svg.append('line')
+                .attr("id", generateConnectorId(subnet['security_lists_id'][i], okitid))
+                .attr("x1", sourcesvg.x)
+                .attr("y1", sourcesvg.y)
+                .attr("x2", subnetrelative.x)
+                .attr("y2", subnetrelative.y)
+                .attr("stroke-width", "2")
+                .attr("stroke", "black");
+        }
+    }
+}
+
+/*
+** Property Sheet Load functions
+ */
+
 function assetSelected(type, okitid) {
     //console.log("Selected: " + type + " - " + okitid);
     if (type == 'VirtualCloudNetwork') {
@@ -831,10 +1002,6 @@ function assetSelected(type, okitid) {
         $("#properties").load("propertysheets/empty.html");
     }
 }
-
-/*
-** Property Sheet Load functions
- */
 
 function loadVirtualCloudNetworkProperties(okitid) {
     $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
@@ -858,7 +1025,7 @@ function loadVirtualCloudNetworkProperties(okitid) {
                             if (inputfield.id == 'name') {
                                 okitIdsJsonObj[okitid] = inputfield.value;
                             }
-                            $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+                            displayOkitJson();
                         });
                     });
                     break;
@@ -890,7 +1057,7 @@ function loadInternetGatewayProperties(okitid) {
                             if (inputfield.id == 'name') {
                                 okitIdsJsonObj[okitid] = inputfield.value;
                             }
-                            $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+                            displayOkitJson();
                         });
                     });
                     break;
@@ -922,7 +1089,7 @@ function loadRouteTableProperties(okitid) {
                             if (inputfield.id == 'name') {
                                 okitIdsJsonObj[okitid] = inputfield.value;
                             }
-                            $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+                            displayOkitJson();
                         });
                     });
                     break;
@@ -954,7 +1121,7 @@ function loadSecurityListProperties(okitid) {
                             if (inputfield.id == 'name') {
                                 okitIdsJsonObj[okitid] = inputfield.value;
                             }
-                            $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+                            displayOkitJson();
                         });
                     });
                     break;
@@ -1009,7 +1176,7 @@ function loadSubnetProperties(okitid) {
                             if (inputfield.id == 'name') {
                                 okitIdsJsonObj[okitid] = inputfield.value;
                             }
-                            $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+                            displayOkitJson();
                         });
                     });
                     inputfields = document.querySelectorAll('.property-editor-table select');
@@ -1030,7 +1197,7 @@ function loadSubnetProperties(okitid) {
                                 subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = inputfield.options[inputfield.selectedIndex].text;
                             }
                             // If this is the name field copy to the Ids Map
-                            $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+                            displayOkitJson();
                         });
                     });
                     break;
@@ -1039,6 +1206,12 @@ function loadSubnetProperties(okitid) {
         }
     });
 }
+
+/*
+** Set Empty Properties Sheet
+ */
+
+$("#properties").load("propertysheets/empty.html");
 
 /*
 ** OKIT Json Update Function
@@ -1070,12 +1243,10 @@ function updateSubnetLinks(sourcetype, sourceid, okitid) {
         }
         console.log('After : ' + JSON.stringify(subnet, null, 2));
     }
-    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+    displayOkitJson();
     assetSelected('Subnet', okitid);
 }
 
-/*
-** Set Empty Properties Sheet
- */
-
-$("#properties").load("propertysheets/empty.html");
+function displayOkitJson() {
+    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
+}
