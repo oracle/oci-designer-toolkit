@@ -290,6 +290,10 @@ var OKITJsonObj = {compartment: {okitid: 'okit-comp-' + uuidv4(), name: 'Not Spe
 ** New File functionality
  */
 
+function handleNew(evt) {
+    newDiagram();
+}
+
 function newDiagram() {
     console.log('Creating New Diagram');
     OKITJsonObj = {compartment: {okitid: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};

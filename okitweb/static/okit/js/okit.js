@@ -35,6 +35,8 @@ var connectorStartYTop = 0;
  */
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
+document.getElementById('newdiagram').addEventListener('click', handleNew, false);
+
 document.getElementById('savejson').addEventListener('click', handleSave, false);
 
 document.getElementById('generateterraform').addEventListener('click', handleGenerateTerraform, false);
