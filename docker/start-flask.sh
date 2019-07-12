@@ -20,6 +20,7 @@ docker run \
        ${ENVIRONMENT} \
        -w /oci/visualiser \
        -p 6443:6443 \
+       -e PYTHONPATH=":/oci/visualiser/visualiser" \
        --rm \
        -it \
        ${DOCKERIMAGE} \

@@ -1,0 +1,13 @@
+---
+# file: variables.yml
+# copyright: Copyright (c) 2013, 2014-2017  Oracle and/or its affiliates. All rights reserved.
+tenancy_ocid: "{{ tenancy_ocid }}"
+user_ocid: "{{ user_ocid }}"
+fingerprint: "{{ fingerprint }}"
+private_key_path: "{{ private_key_path }}"
+region: "{{ region }}"
+compartment_ocid: "{{ compartment_ocid }}"
+vm_os: "{{ vm_os }}"
+vm_version: "{{ vm_version }}"
+vm_shape: "{{ vm_shape }}"
+...

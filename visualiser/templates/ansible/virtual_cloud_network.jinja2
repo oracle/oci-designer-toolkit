@@ -1,0 +1,26 @@
+
+# -- Copyright: {{ copyright }}
+# ---- Author : {{ author }}
+# ------ Create Virtual Cloud Network
+    - name: Create Virtual Cloud Network {{ output_name }}
+      oci_vcn:
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        cidr_block: "{{ cidr_block }}"
+        # Optional
+        dns_label: "{{ dns_label }}"
+        display_name: "{{ display_name }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ my_defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ my_freeform_tags }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.vcn.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.vcn.id {{ '}}' }}"
+        {{ resource_name }}_domain_name: "{{ '{{' }} {{ resource_name }}.vcn.vcn_domain_name {{ '}}' }}"
+        {{ resource_name }}_dhcp_options_id: "{{ '{{' }} {{ resource_name }}.vcn.default_dhcp_options_id {{ '}}' }}"

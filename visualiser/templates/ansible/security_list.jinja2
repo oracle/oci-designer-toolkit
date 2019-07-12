@@ -1,0 +1,44 @@
+
+# -- Copyright: {{ copyright }}
+# ---- Author : {{ author }}
+# ------ Create Security List
+    - name: Create Security List {{ output_name }}
+      oci_security_list:
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        vcn_id: "{{ vcn_id }}"
+        egress_security_rules:
+{% for rule in egress_rules %}
+              # Required
+            - protocol: "{{ rule.protocol }}"
+              destination: "{{ rule.destination }}"
+    {% if rule.destination_type is defined %}
+              # Optional
+              destination_type: "{{ rule.destination_type }}"
+    {% endif %}
+{% endfor %}
+        ingress_security_rules:
+{% for rule in ingress_rules %}
+              # Required
+            - protocol: "{{ rule.protocol }}"
+              source: "{{ rule.source }}"
+    {% if rule.tcp_options is defined %}
+              # Optional
+              tcp_options:
+                min: {{ rule.tcp_options.min }}
+                max: {{ rule.tcp_options.max }}
+    {% endif %}
+{% endfor %}
+        # Optional
+        display_name: "{{ display_name }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.security_list.id {{ '}}' }}"

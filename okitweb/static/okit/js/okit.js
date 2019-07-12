@@ -47,3 +47,8 @@ document.getElementById('generateansible').addEventListener('click', handleGener
 
 $("#properties").load("propertysheets/empty.html");
 
+/*
+** Clean and start new diagram
+ */
+
+newDiagram();

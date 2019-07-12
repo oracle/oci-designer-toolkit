@@ -1,0 +1,46 @@
+
+# -- Copyright: {{ copyright }}
+# ---- Author : {{ author }}
+# ------ Create Subnet
+# ---- Create Public Subnet
+resource "oci_core_subnet" "{{ resource_name }}" {
+    # Required
+    compartment_id             = "{{ compartment_ocid }}"
+    vcn_id                     = "{{ vcn_id }}"
+    cidr_block                 = "{{ cidr_block }}"
+    security_list_ids          = [
+{% for security_list_id in security_list_ids %}
+                                   "{{ security_list_id }}"{% if not loop.last %},{% endif %}
+{% endfor %}
+                                 ]
+    # Optional
+{% if display_name is defined %}
+    display_name               = "{{ display_name }}"
+{% endif %}
+{% if dns_label is defined %}
+    dns_label                  = "{{ dns_label }}"
+{% endif %}
+{% if route_table_id is defined %}
+    route_table_id             = "{{ route_table_id }}"
+{% endif %}
+{%  if regional_subnets is defined and not regional_subnets %}
+    availability_domain        = "{{ availability_domain }}"
+{% endif %}
+{% if dhcp_options_id is defined %}
+    dhcp_options_id            = "{{ dhcp_options_id }}"
+{% endif %}
+{% if prohibit_public_ip is defined %}
+    prohibit_public_ip_on_vnic = "{{ prohibit_public_ip }}"
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags               = "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags              = "{{ freeform_tags }}"
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id              = "${oci_core_subnet.{{ resource_name }}.id}"
+    {{ resource_name }}_domain_name     = "${oci_core_subnet.{{ resource_name }}.subnet_domain_name }"
+}

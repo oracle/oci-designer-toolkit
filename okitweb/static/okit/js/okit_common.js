@@ -287,6 +287,38 @@ function generateConnectorId(sourceid, destinationid) {
 var OKITJsonObj = {compartment: {okitid: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
 
 /*
+** New File functionality
+ */
+
+function newDiagram() {
+    console.log('Creating New Diagram');
+    OKITJsonObj = {compartment: {okitid: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
+    okitIdsJsonObj = {};
+    clearSVG();
+}
+
+function clearSVG() {
+    console.log('Clearing Diagram');
+    $('#okitcanvas').empty();
+    // Virtual Cloud Network
+    vcn_element_icon_position = 0;
+    virtual_network_ids = [];
+    virtual_cloud_network_count = 0;
+    // Internet Gateway
+    internet_gateway_ids = [];
+    internet_gateway_count = 0;
+    // Route Table
+    route_table_ids = [];
+    route_table_count = 0;
+    // Security List
+    security_list_ids = [];
+    security_list_count = 0;
+    // Subnet
+    subnet_ids = [];
+    subnet_count = 0;
+}
+
+/*
 ** Load file
  */
 
@@ -303,6 +335,8 @@ function loaded(evt) {
     console.log('Loaded: ' + fileString);
     OKITJsonObj = JSON.parse(fileString);
     displayOkitJson();
+    // Clear existing
+    clearSVG();
     // Draw SVG
     if ('compartment' in OKITJsonObj) {
         if ('virtual_cloud_networks' in OKITJsonObj['compartment']) {
@@ -412,13 +446,18 @@ function openInNewTab(url) {
 function handleGenerateTerraform(e) {
     $.ajax({
         type: 'post',
-        url: 'http://localhost:6443/okit/rest/v1/terraform',
-        dataType: 'json',
+        url: 'generate/terraform',
+        dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(OKITJsonObj),
         success: function(resp) {
-            console.log('REST Response : ' + resp);
-            openInNewTab('http://localhost:6443/okit/rest/v1/terraform/' + resp);
+            console.log('Response : ' + resp);
+            window.location = 'generate/terraform';
+            //openInNewTab('generate/terraform');
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
         }
     });
 }
@@ -426,13 +465,18 @@ function handleGenerateTerraform(e) {
 function handleGenerateAnsible(e) {
     $.ajax({
         type: 'post',
-        url: 'http://localhost:6443/okit/rest/v1/ansible',
-        dataType: 'json',
+        url: 'generate/ansible',
+        dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(OKITJsonObj),
         success: function(resp) {
             console.log('REST Response : ' + resp);
-            openInNewTab('http://localhost:6443/okit/rest/v1/ansible/' + resp);
+            window.location = 'generate/ansible';
+            //openInNewTab('generate/ansible');
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
         }
     });
 }
