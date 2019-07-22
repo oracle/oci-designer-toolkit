@@ -25,7 +25,6 @@ function addSubnet(vcnid) {
     subnet['virtual_cloud_network_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
-    subnet['ocid'] = '';
     subnet['name'] = generateDefaultName('SN', subnet_count);
     subnet['cidr'] = '';
     subnet['dns_label'] = '';
@@ -172,7 +171,6 @@ function loadSubnetProperties(id) {
                     //console.log('Found Subnet: ' + id);
                     subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['virtual_cloud_network_id']];
                     $("#virtual_cloud_network").html(subnet['virtual_cloud_network']);
-                    $('#ocid').html(subnet['ocid']);
                     $('#name').val(subnet['name']);
                     $('#cidr').val(subnet['cidr']);
                     $('#dns_label').val(subnet['dns_label']);

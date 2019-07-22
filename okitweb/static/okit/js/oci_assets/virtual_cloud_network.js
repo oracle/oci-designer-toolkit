@@ -23,7 +23,6 @@ function addVirtualCloudNetwork() {
     virtual_cloud_network_count += 1;
     var virtual_cloud_network = {};
     virtual_cloud_network['id'] = id;
-    virtual_cloud_network['ocid'] = '';
     virtual_cloud_network['name'] = generateDefaultName('VCN', virtual_cloud_network_count);
     virtual_cloud_network['cidr'] = '';
     virtual_cloud_network['dns_label'] = '';
@@ -115,7 +114,6 @@ function loadVirtualCloudNetworkProperties(id) {
                 //console.log(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {
                     //console.log('Found Virtual Cloud Network: ' + id);
-                    $('#ocid').html(virtual_cloud_network['ocid']);
                     $('#name').val(virtual_cloud_network['name']);
                     $('#cidr').val(virtual_cloud_network['cidr']);
                     $('#dns_label').val(virtual_cloud_network['dns_label']);

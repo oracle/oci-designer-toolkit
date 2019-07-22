@@ -25,7 +25,6 @@ function addSecurityList(vcnid) {
     security_list['virtual_cloud_network_id'] = vcnid;
     security_list['virtual_cloud_network'] = '';
     security_list['id'] = id;
-    security_list['ocid'] = '';
     security_list['name'] = generateDefaultName('SL', security_list_count);
     OKITJsonObj['compartment']['security_lists'].push(security_list);
     okitIdsJsonObj[id] = security_list['name'];
@@ -115,7 +114,6 @@ function loadSecurityListProperties(id) {
                     //console.log('Found Security List: ' + id);
                     security_list['virtual_cloud_network'] = okitIdsJsonObj[security_list['virtual_cloud_network_id']];
                     $("#virtual_cloud_network").html(security_list['virtual_cloud_network']);
-                    $('#ocid').html(security_list['ocid']);
                     $('#name').val(security_list['name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {

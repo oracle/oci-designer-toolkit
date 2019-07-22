@@ -25,7 +25,6 @@ function addRouteTable(vcnid) {
     route_table['virtual_cloud_network_id'] = vcnid;
     route_table['virtual_cloud_network'] = '';
     route_table['id'] = id;
-    route_table['ocid'] = '';
     route_table['name'] = generateDefaultName('RT', route_table_count);
     OKITJsonObj['compartment']['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['name'];
@@ -141,7 +140,6 @@ function loadRouteTableProperties(id) {
                     //console.log('Found Route Table: ' + id);
                     route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['virtual_cloud_network_id']];
                     $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
-                    $('#ocid').html(route_table['ocid']);
                     $('#name').val(route_table['name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {

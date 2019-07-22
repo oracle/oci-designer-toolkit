@@ -25,7 +25,6 @@ function addInternetGateway(vcnid) {
     internet_gateway['virtual_cloud_network_id'] = vcnid;
     internet_gateway['virtual_cloud_network'] = '';
     internet_gateway['id'] = id;
-    internet_gateway['ocid'] = '';
     internet_gateway['name'] = generateDefaultName('IG', internet_gateway_count);
     OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
     okitIdsJsonObj[id] = internet_gateway['name'];
@@ -114,7 +113,6 @@ function loadInternetGatewayProperties(id) {
                     //console.log('Found Internet Gateway: ' + id);
                     internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['virtual_cloud_network_id']];
                     $("#virtual_cloud_network").html(internet_gateway['virtual_cloud_network']);
-                    $('#ocid').html(internet_gateway['ocid']);
                     $('#name').val(internet_gateway['name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
