@@ -235,13 +235,13 @@ function handleConnectorDrop(e) {
         var sourceType = connectorStartElement.getAttribute('data-type');
         var destinationType = e.target.getAttribute('data-type');
         var validSubnetSource = ['Route Table', 'Security List'];
-        var sourceokitid = connectorStartElement.id;
-        var okitid = e.target.id;
+        var sourceid = connectorStartElement.id;
+        var id = e.target.id;
         //console.log('Connector Drop  : ' + e.target.id + ' - ' + destinationType);
         //console.log('Drag Start Type : ' + sourceType);
 
         if (validSubnetSource.indexOf(sourceType) >= 0 && destinationType == 'Subnet') {
-            updateSubnetLinks(sourceType, sourceokitid, okitid);
+            updateSubnetLinks(sourceType, sourceid, id);
             console.log('Creating Connector Line');
             //var offset = $('#'+e.target.id).offset();
             //okitcanvasSVGPoint.x = offset.left;
@@ -252,7 +252,7 @@ function handleConnectorDrop(e) {
             var svgrelative = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
             svg = d3.select("#okitcanvas");
             svg.append('line')
-                .attr("id", generateConnectorId(sourceokitid, okitid))
+                .attr("id", generateConnectorId(sourceid, id))
                 .attr("x1", connectorStartXLeft)
                 .attr("y1", connectorStartYTop)
                 .attr("x2", svgrelative.x)
@@ -284,7 +284,7 @@ function generateConnectorId(sourceid, destinationid) {
 ** Json Object Processing
  */
 
-var OKITJsonObj = {compartment: {okitid: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
+var OKITJsonObj = {compartment: {id: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
 
 /*
 ** New File functionality
@@ -296,7 +296,7 @@ function handleNew(evt) {
 
 function newDiagram() {
     console.log('Creating New Diagram');
-    OKITJsonObj = {compartment: {okitid: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
+    OKITJsonObj = {compartment: {id: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
     okitIdsJsonObj = {};
     clearSVG();
 }
@@ -346,8 +346,8 @@ function loaded(evt) {
         if ('virtual_cloud_networks' in OKITJsonObj['compartment']) {
             virtual_network_ids = [];
             for (var i=0; i < OKITJsonObj['compartment']['virtual_cloud_networks'].length; i++) {
-                virtual_network_ids.push(OKITJsonObj['compartment']['virtual_cloud_networks'][i]['okitid']);
-                okitIdsJsonObj[OKITJsonObj['compartment']['virtual_cloud_networks'][i]['okitid']] = OKITJsonObj['compartment']['virtual_cloud_networks'][i]['name'];
+                virtual_network_ids.push(OKITJsonObj['compartment']['virtual_cloud_networks'][i]['id']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['virtual_cloud_networks'][i]['id']] = OKITJsonObj['compartment']['virtual_cloud_networks'][i]['name'];
                 virtual_cloud_network_count += 1;
                 drawVirtualCloudNetworkSVG(OKITJsonObj['compartment']['virtual_cloud_networks'][i]);
             }
@@ -355,8 +355,8 @@ function loaded(evt) {
         if ('internet_gateways' in OKITJsonObj['compartment']) {
             internet_gateway_ids = [];
             for (var i=0; i < OKITJsonObj['compartment']['internet_gateways'].length; i++) {
-                internet_gateway_ids.push(OKITJsonObj['compartment']['internet_gateways'][i]['okitid']);
-                okitIdsJsonObj[OKITJsonObj['compartment']['internet_gateways'][i]['okitid']] = OKITJsonObj['compartment']['internet_gateways'][i]['name'];
+                internet_gateway_ids.push(OKITJsonObj['compartment']['internet_gateways'][i]['id']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['internet_gateways'][i]['id']] = OKITJsonObj['compartment']['internet_gateways'][i]['name'];
                 internet_gateway_count += 1;
                 drawInternetGatewaySVG(OKITJsonObj['compartment']['internet_gateways'][i]);
             }
@@ -364,8 +364,8 @@ function loaded(evt) {
         if ('route_tables' in OKITJsonObj['compartment']) {
             route_table_ids = [];
             for (var i=0; i < OKITJsonObj['compartment']['route_tables'].length; i++) {
-                route_table_ids.push(OKITJsonObj['compartment']['route_tables'][i]['okitid']);
-                okitIdsJsonObj[OKITJsonObj['compartment']['route_tables'][i]['okitid']] = OKITJsonObj['compartment']['route_tables'][i]['name'];
+                route_table_ids.push(OKITJsonObj['compartment']['route_tables'][i]['id']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['route_tables'][i]['id']] = OKITJsonObj['compartment']['route_tables'][i]['name'];
                 route_table_count += 1;
                 drawRouteTableSVG(OKITJsonObj['compartment']['route_tables'][i]);
             }
@@ -373,8 +373,8 @@ function loaded(evt) {
         if ('security_lists' in OKITJsonObj['compartment']) {
             security_list_ids = [];
             for (var i=0; i < OKITJsonObj['compartment']['security_lists'].length; i++) {
-                security_list_ids.push(OKITJsonObj['compartment']['security_lists'][i]['okitid']);
-                okitIdsJsonObj[OKITJsonObj['compartment']['security_lists'][i]['okitid']] = OKITJsonObj['compartment']['security_lists'][i]['name'];
+                security_list_ids.push(OKITJsonObj['compartment']['security_lists'][i]['id']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['security_lists'][i]['id']] = OKITJsonObj['compartment']['security_lists'][i]['name'];
                 security_list_count += 1;
                 drawSecurityListSVG(OKITJsonObj['compartment']['security_lists'][i]);
             }
@@ -382,8 +382,8 @@ function loaded(evt) {
         if ('subnets' in OKITJsonObj['compartment']) {
             subnet_ids = [];
             for (var i=0; i < OKITJsonObj['compartment']['subnets'].length; i++) {
-                subnet_ids.push(OKITJsonObj['compartment']['subnets'][i]['okitid']);
-                okitIdsJsonObj[OKITJsonObj['compartment']['subnets'][i]['okitid']] = OKITJsonObj['compartment']['subnets'][i]['name'];
+                subnet_ids.push(OKITJsonObj['compartment']['subnets'][i]['id']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['subnets'][i]['id']] = OKITJsonObj['compartment']['subnets'][i]['name'];
                 subnet_count += 1;
                 drawSubnetSVG(OKITJsonObj['compartment']['subnets'][i]);
                 drawSubnetConnectorsSVG(OKITJsonObj['compartment']['subnets'][i]);
@@ -420,19 +420,19 @@ function saveJson(text, filename){
 ** Property Sheet Load function
  */
 
-function assetSelected(type, okitid) {
-    //console.log("Selected: " + type + " - " + okitid);
+function assetSelected(type, id) {
+    //console.log("Selected: " + type + " - " + id);
     if (type == 'VirtualCloudNetwork') {
         //$("#properties").load("propertysheets/virtualcloudnetwork.html");
-        loadVirtualCloudNetworkProperties(okitid);
+        loadVirtualCloudNetworkProperties(id);
     } else if (type == "InternetGateway") {
-        loadInternetGatewayProperties(okitid);
+        loadInternetGatewayProperties(id);
     } else if (type == "RouteTable") {
-        loadRouteTableProperties(okitid);
+        loadRouteTableProperties(id);
     } else if (type == "SecurityList") {
-        loadSecurityListProperties(okitid);
+        loadSecurityListProperties(id);
     } else if (type == "Subnet") {
-        loadSubnetProperties(okitid);
+        loadSubnetProperties(id);
     } else {
         $("#properties").load("propertysheets/empty.html");
     }

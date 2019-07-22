@@ -7,7 +7,7 @@ var virtual_cloud_network_count = 0;
 ** Add Asset to JSON Model
  */
 function addVirtualCloudNetwork() {
-    var okitid = 'okit-vcn-' + uuidv4();
+    var id = 'okit-vcn-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
 
@@ -15,20 +15,20 @@ function addVirtualCloudNetwork() {
         OKITJsonObj['compartment']['virtual_cloud_networks'] = [];
     }
 
-    // Add okitid & empty name to okitid JSON
-    okitIdsJsonObj[okitid] = '';
-    virtual_network_ids.push(okitid);
+    // Add id & empty name to id JSON
+    okitIdsJsonObj[id] = '';
+    virtual_network_ids.push(id);
 
     // Increment Count
     virtual_cloud_network_count += 1;
     var virtual_cloud_network = {};
-    virtual_cloud_network['okitid'] = okitid;
+    virtual_cloud_network['id'] = id;
     virtual_cloud_network['ocid'] = '';
     virtual_cloud_network['name'] = generateDefaultName('VCN', virtual_cloud_network_count);
     virtual_cloud_network['cidr'] = '';
     virtual_cloud_network['dns_label'] = '';
     OKITJsonObj['compartment']['virtual_cloud_networks'].push(virtual_cloud_network);
-    okitIdsJsonObj[okitid] = virtual_cloud_network['name'];
+    okitIdsJsonObj[id] = virtual_cloud_network['name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawVirtualCloudNetworkSVG(virtual_cloud_network);
@@ -38,7 +38,7 @@ function addVirtualCloudNetwork() {
 ** SVG Creation
  */
 function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
-    var okitid = virtual_cloud_network['okitid'];
+    var id = virtual_cloud_network['id'];
     var translate_x = 0;
     var translate_y = 0;
     var data_type = 'Virtual Cloud Network';
@@ -51,11 +51,11 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     });
     */
     var vcngroup = svg.append("g")
-        .attr("id", okitid + '-group')
+        .attr("id", id + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
     var vcn = vcngroup.append("g");
     vcn.append("rect")
-        .attr("id", okitid)
+        .attr("id", id)
         .attr("data-type", data_type)
         .attr("title", virtual_cloud_network['name'])
         .attr("x", 20)
@@ -90,31 +90,31 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("class", "st0")
         .attr("d", "M144,87.8c-31,0-56.2,25.2-56.2,56.2c0,31,25.2,56.2,56.2,56.2s56.2-25.2,56.2-56.2C200.2,113,175,87.8,144,87.8z M170.6,160.9c-0.9,0-1.8-0.3-2.6-0.7l-14.7,14.3c0.4,0.7,0.6,1.6,0.6,2.5c0,3.1-2.5,5.6-5.6,5.6s-5.6-2.5-5.6-5.6c0-0.6,0.1-1.1,0.3-1.7l-22-15.5c-0.9,0.7-2.1,1.1-3.4,1.1c-3.1,0-5.6-2.5-5.6-5.6c0-3,2.3-5.4,5.2-5.6l5.2-21.4c-1.6-1-2.7-2.8-2.7-4.8c0-3.1,2.5-5.6,5.6-5.6c2.5,0,4.7,1.7,5.4,4l29.9,0.6c0.8-2.2,2.8-3.8,5.3-3.8c3.1,0,5.6,2.5,5.6,5.6c0,2.2-1.3,4.1-3.1,5l3.2,20.4c2.7,0.4,4.7,2.7,4.7,5.6C176.2,158.4,173.7,160.9,170.6,160.9z");
 
-    //var vcnelem = document.querySelector('#' + okitid);
-    //vcnelem.addEventListener("click", function() { assetSelected('VirtualCloudNetwork', okitid) });
-    $('#' + okitid).on("click", function() { assetSelected('VirtualCloudNetwork', okitid) });
-    d3.select('g#' + okitid + '-group').selectAll('path')
-        .on("click", function() { assetSelected('VirtualCloudNetwork', okitid) });
-    assetSelected('VirtualCloudNetwork', okitid);
+    //var vcnelem = document.querySelector('#' + id);
+    //vcnelem.addEventListener("click", function() { assetSelected('VirtualCloudNetwork', id) });
+    $('#' + id).on("click", function() { assetSelected('VirtualCloudNetwork', id) });
+    d3.select('g#' + id + '-group').selectAll('path')
+        .on("click", function() { assetSelected('VirtualCloudNetwork', id) });
+    assetSelected('VirtualCloudNetwork', id);
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + okitid).on("mousemove", handleConnectorDrag);
-    $('#' + okitid).on("mouseup", handleConnectorDrop);
+    $('#' + id).on("mousemove", handleConnectorDrag);
+    $('#' + id).on("mouseup", handleConnectorDrop);
 }
 
 /*
 ** Property Sheet Load function
  */
-function loadVirtualCloudNetworkProperties(okitid) {
+function loadVirtualCloudNetworkProperties(id) {
     $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
         if ('compartment' in OKITJsonObj && 'virtual_cloud_networks' in OKITJsonObj['compartment']) {
-            console.log('Loading Virtual Cloud Network: ' + okitid);
+            console.log('Loading Virtual Cloud Network: ' + id);
             var json = OKITJsonObj['compartment']['virtual_cloud_networks'];
             for (var i = 0; i < json.length; i++) {
                 virtual_cloud_network = json[i];
                 //console.log(JSON.stringify(virtual_cloud_network, null, 2));
-                if (virtual_cloud_network['okitid'] == okitid) {
-                    //console.log('Found Virtual Cloud Network: ' + okitid);
+                if (virtual_cloud_network['id'] == id) {
+                    //console.log('Found Virtual Cloud Network: ' + id);
                     $('#ocid').html(virtual_cloud_network['ocid']);
                     $('#name').val(virtual_cloud_network['name']);
                     $('#cidr').val(virtual_cloud_network['cidr']);
@@ -125,7 +125,7 @@ function loadVirtualCloudNetworkProperties(okitid) {
                             virtual_cloud_network[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
                             if (inputfield.id == 'name') {
-                                okitIdsJsonObj[okitid] = inputfield.value;
+                                okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();
                         });
