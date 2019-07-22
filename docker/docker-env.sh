@@ -30,31 +30,11 @@ then
     exit 1
 fi
 
-if [ -z ${OCI_TERRAFORM_DIR} ]
-then
-    echo "OCI_TERRAFORM_DIR has not been set exiting."
-    exit 1
-fi
-
-if [ -z ${OCI_ANSIBLE_DIR} ]
-then
-    echo "OCI_ANSIBLE_DIR has not been set exiting."
-    exit 1
-fi
-
-if [ -z ${OCI_VISUALISER_DIR} ]
-then
-    echo "OCI_VISUALISER_DIR has not been set exiting."
-    exit 1
-fi
-
 export VOLUMES="\
        -v ${OCI_CONFIG_DIR}:/oci/config:Z \
        -v ${OCI_CONFIG_DIR}:/root/.oci:Z \
        -v ${OCI_WORKSPACE}:/oci/workspace:Z \
-       -v ${OCI_TERRAFORM_DIR}:/oci/terraform:Z
-       -v ${OCI_ANSIBLE_DIR}:/oci/ansible:Z
-       -v ${OCI_VISUALISER_DIR}:/oci/visualiser:Z
+       -v ${ROOT_DIR}:/oci/visualiser:Z
 "
 
 export ENVIRONMENT="\
