@@ -59,8 +59,10 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("title", virtual_cloud_network['name'])
         .attr("x", 20)
         .attr("y", 50)
-        .attr("width", 800)
-        .attr("height", 400)
+        //.attr("width", 800)
+        //.attr("height", 400)
+        .attr("width", "80%")
+        .attr("height", "40%")
         .attr("stroke", "purple")
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white");
