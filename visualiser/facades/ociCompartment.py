@@ -21,20 +21,21 @@ import oci
 import sys
 
 from facades.ociConnection import OCIIdentityConnection
-from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetwork
+from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from common.ociLogging import getLogger
 
 # Configure logging
 logger = getLogger()
 
 
-class OCICompartment(OCIIdentityConnection):
+class OCICompartments(OCIIdentityConnection):
     def __init__(self, config=None, configfile=None, **kwargs):
-        self.compartments = []
+        self.compartments_obj = []
+        self.compartments_json = []
         self.names = {}
         self.parents = {}
         self.canonicalnames = []
-        super(OCICompartment, self).__init__(config=config, configfile=configfile)
+        super(OCICompartments, self).__init__(config=config, configfile=configfile)
 
     def list(self, id=None, recursive=False):
         if id is None:
@@ -44,18 +45,27 @@ class OCICompartment(OCIIdentityConnection):
 
         compartments = self.client.list_compartments(compartment_id=id, compartment_id_in_subtree=recursive, limit=self.PAGINATION_LIMIT).data
         # Convert to Json object
-        self.compartments = self.toJson(compartments)
-        logger.debug(str(self.compartments))
-        return self.compartments
+        self.compartments_json = self.toJson(compartments)
+        logger.debug(str(self.compartments_json))
+        # Generate Name / Id mappings
+        for compartment in self.compartments_json:
+            self.names[compartment['id']] = compartment['name']
+            self.parents[compartment['id']] = compartment['compartment_id']
+        # Build List of Compartment Objects that have methods for getting VCN / Security Lists / Route Tables etc
+        self.compartments_obj = []
+        for compartment in self.compartments_json:
+            compartment['display_name'] = self.getCanonicalName(compartment['id'])
+            self.compartments_obj.append(OCICompartment(self.config, self.configfile, compartment))
+        return self.compartments_json
 
     def listTenancy(self):
         return self.list(self.config['tenancy'], True)
 
     def listHierarchicalNames(self):
         compartments = self.listTenancy()
-        for compartment in compartments:
-            self.names[compartment['id']] = compartment['name']
-            self.parents[compartment['id']] = compartment['compartment_id']
+        #for compartment in compartments:
+        #    self.names[compartment['id']] = compartment['name']
+        #    self.parents[compartment['id']] = compartment['compartment_id']
         #for compartment in sorted(compartments, key=lambda k: k.time_created):
         for compartment in sorted(compartments, key=lambda k: k['time_created']):
                 self.canonicalnames.append(self.getCanonicalName(compartment['id']))
@@ -67,23 +77,49 @@ class OCICompartment(OCIIdentityConnection):
             parentsname = self.getCanonicalName(self.parents[id])
         return '{0!s:s}/{1!s:s}'.format(parentsname, self.names[id])
 
-    def getVirtualCloudNetworkClient(self, compartment_id):
-        return OCIVirtualCloudNetwork(self.config, self.configfile, compartment_id)
+
+class OCICompartment(object):
+    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+        self.config = config
+        self.configfile = configfile
+        self.data = data
+
+    def getVirtualCloudNetworkClients(self):
+        return OCIVirtualCloudNetworks(self.config, self.configfile, self.data['id'])
+
 
 # Main processing function
 def main(argv):
-    ociCompartment = OCICompartment()
-    compartments = ociCompartment.listTenancy()
-    names = {}
-    for compartment in compartments:
-        #logger.info("Compartment: {0!s:s}".format(compartment))
-        names[compartment['id']] = compartment['name']
-    for name in ociCompartment.listHierarchicalNames():
+    oci_compartments = OCICompartments()
+    oci_compartments.listTenancy()
+    for name in oci_compartments.listHierarchicalNames():
         logger.info('Name: {0!s:s}'.format(name))
-    for compartment in compartments:
-        vcnclient = ociCompartment.getVirtualCloudNetworkClient(compartment['id'])
-        for vcn in vcnclient.list():
-            logger.info('Virtual Cloud Network : {0!s:s}'.format(vcn['display_name']))
+    for oci_compartment in oci_compartments.compartments_obj:
+        logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['display_name']))
+        oci_virtual_cloud_networks = oci_compartment.getVirtualCloudNetworkClients()
+        oci_virtual_cloud_networks.list()
+        for oci_virtual_cloud_network in oci_virtual_cloud_networks.virtual_cloud_networks_obj:
+            logger.info('\tVirtual Cloud Network : {0!s:s}'.format(oci_virtual_cloud_network.data['display_name']))
+            # Internet Gateways
+            oci_internet_gateways = oci_virtual_cloud_network.getInternetGatewayClients()
+            oci_internet_gateways.list()
+            for oci_internet_gateway in oci_internet_gateways.internet_gateways_obj:
+                logger.info('\t\tInternet Gateway : {0!s:s}'.format(oci_internet_gateway.data['display_name']))
+            # Route Tables
+            oci_route_tables = oci_virtual_cloud_network.getRouteTableClients()
+            oci_route_tables.list()
+            for oci_route_table in oci_route_tables.route_tables_obj:
+                logger.info('\t\tRoute Table : {0!s:s}'.format(oci_route_table.data['display_name']))
+            # Security Lists
+            security_lists = oci_virtual_cloud_network.getSecurityListClients()
+            security_lists.list()
+            for security_list in security_lists.security_lists_obj:
+                logger.info('\t\tSecurity List : {0!s:s}'.format(security_list.data['display_name']))
+            # Subnets
+            subnets = oci_virtual_cloud_network.getSubnetClients()
+            subnets.list()
+            for subnet in subnets.subnets_obj:
+                logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
     return
 
 # Main function to kick off processing

@@ -18,7 +18,7 @@ docker run \
        ${HOSTINFO} \
        ${VOLUMES} \
        ${ENVIRONMENT} \
-       -w /oci/workspace \
+       -w /okit/workspace \
        -p 6443:6443 \
        --rm \
        -it \

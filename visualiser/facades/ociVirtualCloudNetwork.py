@@ -18,33 +18,67 @@ __module__ = "ociNetwork"
 
 
 import oci
+import re
 import sys
 
 from facades.ociConnection import OCIVirtualNetworkConnection
+from facades.ociInternetGateway import OCIInternetGateways
+from facades.ociRouteTable import OCIRouteTables
+from facades.ociSecurityList import OCISecurityLists
+from facades.ociSubnet import OCISubnets
 from common.ociLogging import getLogger
 
 # Configure logging
 logger = getLogger()
 
 
-class OCIVirtualCloudNetwork(OCIVirtualNetworkConnection):
+class OCIVirtualCloudNetworks(OCIVirtualNetworkConnection):
     def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
         self.compartment_id = compartment_id
-        self.virtual_cloud_networks = []
-        self.names = {}
-        self.parents = {}
-        self.canonicalnames = []
-        super(OCIVirtualCloudNetwork, self).__init__(config=config, configfile=configfile)
+        self.virtual_cloud_networks_json = []
+        self.virtual_cloud_networks_obj = []
+        super(OCIVirtualCloudNetworks, self).__init__(config=config, configfile=configfile)
 
-    def list(self, compartment_id=None):
+    def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
         virtual_cloud_networks = self.client.list_vcns(compartment_id=compartment_id, limit=self.PAGINATION_LIMIT).data
         # Convert to Json object
-        self.virtual_cloud_networks = self.toJson(virtual_cloud_networks)
-        logger.debug(str(self.virtual_cloud_networks))
-        return self.virtual_cloud_networks
+        self.virtual_cloud_networks_json = self.toJson(virtual_cloud_networks)
+        logger.debug(str(self.virtual_cloud_networks_json))
+        # Build List of Subnet Objects
+        self.virtual_cloud_networks_obj = []
+        for virtual_cloud_network in self.virtual_cloud_networks_json:
+            self.virtual_cloud_networks_obj.append(OCIVirtualCloudNetwork(self.config, self.configfile, virtual_cloud_network))
+        # Check if the results should be filtered
+        if filter is None:
+            return self.virtual_cloud_networks_json
+        else:
+            filtered = self.virtual_cloud_networks_json[:]
+            for key, val in filter.items():
+                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+            return filtered
+
+
+class OCIVirtualCloudNetwork(object):
+    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+        self.config = config
+        self.configfile = configfile
+        self.data = data
+
+    def getInternetGatewayClients(self):
+        return OCIInternetGateways(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
+    def getRouteTableClients(self):
+        return OCIRouteTables(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
+    def getSecurityListClients(self):
+        return OCISecurityLists(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
+    def getSubnetClients(self):
+        return OCISubnets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
 
 
 # Main processing function
