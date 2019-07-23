@@ -402,6 +402,36 @@ function handleFileSelect(evt) {
 }
 
 /*
+** Query OCI
+ */
+
+function handleQueryAjax(e) {
+    $.ajax({
+        type: 'get',
+        url: 'oci/compartment',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(OKITJsonObj),
+        success: function(resp) {
+            console.log('Response : ' + resp);
+            var jsonBody = JSON.parse(resp)
+            var len =  jsonBody.length;
+            for(var i=0;i<len;i++ ){
+                console.log(jsonBody[i]['display_name']);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+function handleQuery(e) {
+    window.location = 'oci/query';
+}
+
+/*
 ** Save file
  */
 

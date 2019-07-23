@@ -43,6 +43,8 @@ document.getElementById('generateterraform').addEventListener('click', handleGen
 
 document.getElementById('generateansible').addEventListener('click', handleGenerateAnsible, false);
 
+document.getElementById('queryoci').addEventListener('click', handleQuery, false);
+
 /*
 ** Set Empty Properties Sheet
  */

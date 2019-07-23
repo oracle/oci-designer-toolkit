@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>OKIT OCI Web Designer</title>
+    <!--script src="https://d3js.org/d3.v5.min.js"></script-->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_common.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/designer.css') }}">
+</head>
+<body>
+    <div id="queryparameters">
+        <label>Compartment</label>
+        <select id="compartment">
+        {% for compartment in compartments %}
+            <option value="{{ compartment['id'] }}">{{ compartment['display_name'] }}</option>
+        {%  endfor %}
+        </select>
+    </div>
+</body>
+</html>

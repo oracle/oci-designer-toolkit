@@ -13,6 +13,7 @@ __status__ = "@RELEASE@"
 __module__ = "okitWebDesigner"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import json
 import os
 import shutil
 import tempfile
@@ -29,6 +30,7 @@ from flask import url_for
 from generators.ociTerraformGenerator import OCITerraformGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
+from facades.ociCompartment import OCICompartments
 
 from common.ociLogging import getLogger
 
@@ -80,4 +82,17 @@ def generate(language):
         return send_from_directory('/tmp', "okit-{0:s}.zip".format(str(language)), mimetype='application/zip', as_attachment=True)
 
 
+@bp.route('/oci/compartment', methods=(['GET']))
+def ociCompartment():
+    ociCompartments = OCICompartments()
+    compartments = ociCompartments.listTenancy()
+    #logger.info("Compartments: {0!s:s}".format(compartments))
+    return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
+
+
+@bp.route('/oci/query', methods=(['GET']))
+def ociQuery():
+    ociCompartments = OCICompartments()
+    compartments = ociCompartments.listTenancy()
+    return render_template('okit/oci_query.html', compartments=compartments)
 
