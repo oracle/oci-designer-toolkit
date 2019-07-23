@@ -14,13 +14,13 @@ then
 fi
 
 # Run command
+#       -e PYTHONPATH=":/okit/visualiser" \
 docker run \
        ${HOSTINFO} \
        ${VOLUMES} \
        ${ENVIRONMENT} \
-       -w /oci/visualiser \
+       -w /okit \
        -p 8080:8080 \
-       -e PYTHONPATH=":/oci/visualiser/visualiser" \
        --rm \
        -it \
        ${DOCKERIMAGE} \

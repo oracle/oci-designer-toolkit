@@ -19,10 +19,10 @@ export DOCKERDIR=$(cd $(dirname $0); pwd)
 export ABSOLUTEDIRNAME=$(cd $DIRNAME; pwd)
 export PROJECTROOT=${ROOT_DIR}
 
-if [ -z ${OCI_WORKSPACE} ]; then
-    echo "OCI_WORKSPACE has not been set exiting."
-    exit 1
-fi
+#if [ -z ${OCI_WORKSPACE} ]; then
+#    echo "OCI_WORKSPACE has not been set exiting."
+#    exit 1
+#fi
 
 if [ -z ${OCI_CONFIG_DIR} ]
 then
@@ -30,11 +30,12 @@ then
     exit 1
 fi
 
+#       -v ${OCI_WORKSPACE}:/okit/workspace:Z \
 export VOLUMES="\
-       -v ${OCI_CONFIG_DIR}:/oci/config:Z \
+       -v ${OCI_CONFIG_DIR}:/okit/config:Z \
        -v ${OCI_CONFIG_DIR}:/root/.oci:Z \
-       -v ${OCI_WORKSPACE}:/oci/workspace:Z \
-       -v ${ROOT_DIR}:/oci/visualiser:Z
+       -v ${ROOT_DIR}/okitweb:/okit/okitweb:Z \
+       -v ${ROOT_DIR}/visualiser:/okit/visualiser:Z
 "
 
 export ENVIRONMENT="\
