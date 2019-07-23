@@ -7,7 +7,7 @@ var route_table_count = 0;
 ** Add Asset to JSON Model
  */
 function addRouteTable(vcnid) {
-    var okitid = 'okit-rt-' + uuidv4();
+    var id = 'okit-rt-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
 
@@ -15,20 +15,19 @@ function addRouteTable(vcnid) {
         OKITJsonObj['compartment']['route_tables'] = [];
     }
 
-    // Add okitid & empty name to okitid JSON
-    okitIdsJsonObj[okitid] = '';
-    route_table_ids.push(okitid);
+    // Add id & empty name to id JSON
+    okitIdsJsonObj[id] = '';
+    route_table_ids.push(id);
 
     // Increment Count
     route_table_count += 1;
     var route_table = {};
     route_table['virtual_cloud_network_id'] = vcnid;
     route_table['virtual_cloud_network'] = '';
-    route_table['okitid'] = okitid;
-    route_table['ocid'] = '';
+    route_table['id'] = id;
     route_table['name'] = generateDefaultName('RT', route_table_count);
     OKITJsonObj['compartment']['route_tables'].push(route_table);
-    okitIdsJsonObj[okitid] = route_table['name'];
+    okitIdsJsonObj[id] = route_table['name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawRouteTableSVG(route_table);
@@ -39,7 +38,7 @@ function addRouteTable(vcnid) {
  */
 function drawRouteTableSVG(route_table) {
     var vcnid = route_table['virtual_cloud_network_id'];
-    var okitid = route_table['okitid'];
+    var id = route_table['id'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
@@ -52,10 +51,10 @@ function drawRouteTableSVG(route_table) {
     svg = d3.select('#' + vcnid + '-group');
 
     var rt = svg.append("g")
-        .attr("id", okitid + '-group')
+        .attr("id", id + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
     rt.append("rect")
-        .attr("id", okitid)
+        .attr("id", id)
         .attr("data-type", data_type)
         .attr("title", route_table['name'])
         .attr("x", icon_x)
@@ -67,7 +66,7 @@ function drawRouteTableSVG(route_table) {
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     var iconsvg = rt.append("svg")
-        .attr("id", okitid)
+        .attr("id", id)
         .attr("data-type", data_type)
         .attr("width", "100")
         .attr("height", "100")
@@ -102,46 +101,45 @@ function drawRouteTableSVG(route_table) {
         .attr("class", "st0")
         .attr("d", "M188.4,187.7v-22.9h-59.6v22.9H188.4z M171.1,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,171.2z M166.1,178.1h2.3v2.5h-2.3V178.1z M153.8,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,171.2z M148.8,178.1h2.3v2.5h-2.3V178.1z M139.8,171.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
 
-    //var igelem = document.querySelector('#' + okitid);
-    //igelem.addEventListener("click", function() { assetSelected('RouteTable', okitid) });
+    //var igelem = document.querySelector('#' + id);
+    //igelem.addEventListener("click", function() { assetSelected('RouteTable', id) });
 
     // Add click event to display properties
-    $('#' + okitid).on("click", function() { assetSelected('RouteTable', okitid) });
-    d3.select('g#' + okitid + '-group').selectAll('path')
-        .on("click", function() { assetSelected('RouteTable', okitid) });
-    assetSelected('RouteTable', okitid);
+    $('#' + id).on("click", function() { assetSelected('RouteTable', id) });
+    d3.select('g#' + id + '-group').selectAll('path')
+        .on("click", function() { assetSelected('RouteTable', id) });
+    assetSelected('RouteTable', id);
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + okitid).on("mousedown", handleConnectorDragStart);
-    $('#' + okitid).on("mousemove", handleConnectorDrag);
-    $('#' + okitid).on("mouseup", handleConnectorDrop);
-    $('#' + okitid).on("mouseover", handleConnectorDragEnter);
-    $('#' + okitid).on("mouseout", handleConnectorDragLeave);
+    $('#' + id).on("mousedown", handleConnectorDragStart);
+    $('#' + id).on("mousemove", handleConnectorDrag);
+    $('#' + id).on("mouseup", handleConnectorDrop);
+    $('#' + id).on("mouseover", handleConnectorDragEnter);
+    $('#' + id).on("mouseout", handleConnectorDragLeave);
     // Add dragevent versions
-    $('#' + okitid).on("dragstart", handleConnectorDragStart);
-    $('#' + okitid).on("drop", handleConnectorDrop);
-    $('#' + okitid).on("dragenter", handleConnectorDragEnter);
-    $('#' + okitid).on("dragleave", handleConnectorDragLeave);
-    d3.select('#' + okitid)
+    $('#' + id).on("dragstart", handleConnectorDragStart);
+    $('#' + id).on("drop", handleConnectorDrop);
+    $('#' + id).on("dragenter", handleConnectorDragEnter);
+    $('#' + id).on("dragleave", handleConnectorDragLeave);
+    d3.select('#' + id)
         .attr("dragable", true);
 }
 
 /*
 ** Property Sheet Load function
  */
-function loadRouteTableProperties(okitid) {
+function loadRouteTableProperties(id) {
     $("#properties").load("propertysheets/route_table.html", function () {
         if ('compartment' in OKITJsonObj && 'route_tables' in OKITJsonObj['compartment']) {
-            console.log('Loading Route Table: ' + okitid);
+            console.log('Loading Route Table: ' + id);
             var json = OKITJsonObj['compartment']['route_tables'];
             for (var i = 0; i < json.length; i++) {
                 route_table = json[i];
                 //console.log(JSON.stringify(route_table, null, 2));
-                if (route_table['okitid'] == okitid) {
-                    //console.log('Found Route Table: ' + okitid);
+                if (route_table['id'] == id) {
+                    //console.log('Found Route Table: ' + id);
                     route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['virtual_cloud_network_id']];
                     $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
-                    $('#ocid').html(route_table['ocid']);
                     $('#name').val(route_table['name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
@@ -149,7 +147,7 @@ function loadRouteTableProperties(okitid) {
                             route_table[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
                             if (inputfield.id == 'name') {
-                                okitIdsJsonObj[okitid] = inputfield.value;
+                                okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();
                         });

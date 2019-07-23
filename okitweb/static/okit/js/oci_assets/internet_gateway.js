@@ -7,7 +7,7 @@ var internet_gateway_count = 0;
 ** Add Asset to JSON Model
  */
 function addInternetGateway(vcnid) {
-    var okitid = 'okit-ig-' + uuidv4();
+    var id = 'okit-ig-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
 
@@ -15,20 +15,19 @@ function addInternetGateway(vcnid) {
         OKITJsonObj['compartment']['internet_gateways'] = [];
     }
 
-    // Add okitid & empty name to okitid JSON
-    okitIdsJsonObj[okitid] = '';
-    internet_gateway_ids.push(okitid);
+    // Add id & empty name to id JSON
+    okitIdsJsonObj[id] = '';
+    internet_gateway_ids.push(id);
 
     // Increment Count
     internet_gateway_count += 1;
     var internet_gateway = {};
     internet_gateway['virtual_cloud_network_id'] = vcnid;
     internet_gateway['virtual_cloud_network'] = '';
-    internet_gateway['okitid'] = okitid;
-    internet_gateway['ocid'] = '';
+    internet_gateway['id'] = id;
     internet_gateway['name'] = generateDefaultName('IG', internet_gateway_count);
     OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
-    okitIdsJsonObj[okitid] = internet_gateway['name'];
+    okitIdsJsonObj[id] = internet_gateway['name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawInternetGatewaySVG(internet_gateway);
@@ -39,7 +38,7 @@ function addInternetGateway(vcnid) {
  */
 function drawInternetGatewaySVG(internet_gateway) {
     var vcnid = internet_gateway['virtual_cloud_network_id'];
-    var okitid = internet_gateway['okitid'];
+    var id = internet_gateway['id'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
@@ -51,10 +50,10 @@ function drawInternetGatewaySVG(internet_gateway) {
     svg = d3.select('#' + vcnid + '-group');
 
     var ig = svg.append("g")
-        .attr("id", okitid + '-group')
+        .attr("id", id + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
     ig.append("rect")
-        .attr("id", okitid)
+        .attr("id", id)
         .attr("data-type", data_type)
         .attr("title", internet_gateway['name'])
         .attr("x", icon_x)
@@ -66,7 +65,7 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     var iconsvg = ig.append("svg")
-        .attr("id", okitid)
+        .attr("id", id)
         .attr("data-type", data_type)
         .attr("width", "100")
         .attr("height", "100")
@@ -89,32 +88,31 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("class", "st0")
         .attr("d", "M103.5,140.8c-15.9,0-28.8,12.9-28.8,28.8c0,15.9,12.9,28.8,28.8,28.8c15.9,0,28.8-12.9,28.8-28.8C132.3,153.6,119.4,140.8,103.5,140.8z M82.2,171v-3h7.3v-4.5l10.4,6l-10.4,6V171H82.2z M103.7,190.7l-6-10.4h4.5v-21.6h-4.5l6-10.4l6,10.4h-4.5v21.6h4.5L103.7,190.7z M118.1,171v4.5l-10.4-6l10.4-6v4.5h7.3v3H118.1z");
 
-    //var igelem = document.querySelector('#' + okitid);
-    //igelem.addEventListener("click", function() { assetSelected('InternetGateway', okitid) });
+    //var igelem = document.querySelector('#' + id);
+    //igelem.addEventListener("click", function() { assetSelected('InternetGateway', id) });
 
     // Add click event to display properties
-    $('#' + okitid).on("click", function() { assetSelected('InternetGateway', okitid) });
-    d3.select('g#' + okitid + '-group').selectAll('path')
-        .on("click", function() { assetSelected('InternetGateway', okitid) });
-    assetSelected('InternetGateway', okitid);
+    $('#' + id).on("click", function() { assetSelected('InternetGateway', id) });
+    d3.select('g#' + id + '-group').selectAll('path')
+        .on("click", function() { assetSelected('InternetGateway', id) });
+    assetSelected('InternetGateway', id);
 }
 
 /*
 ** Property Sheet Load function
  */
-function loadInternetGatewayProperties(okitid) {
+function loadInternetGatewayProperties(id) {
     $("#properties").load("propertysheets/internet_gateway.html", function () {
         if ('compartment' in OKITJsonObj && 'internet_gateways' in OKITJsonObj['compartment']) {
-            console.log('Loading Internet Gateway: ' + okitid);
+            console.log('Loading Internet Gateway: ' + id);
             var json = OKITJsonObj['compartment']['internet_gateways'];
             for (var i = 0; i < json.length; i++) {
                 internet_gateway = json[i];
                 //console.log(JSON.stringify(internet_gateway, null, 2));
-                if (internet_gateway['okitid'] == okitid) {
-                    //console.log('Found Internet Gateway: ' + okitid);
+                if (internet_gateway['id'] == id) {
+                    //console.log('Found Internet Gateway: ' + id);
                     internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['virtual_cloud_network_id']];
                     $("#virtual_cloud_network").html(internet_gateway['virtual_cloud_network']);
-                    $('#ocid').html(internet_gateway['ocid']);
                     $('#name').val(internet_gateway['name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
@@ -122,7 +120,7 @@ function loadInternetGatewayProperties(okitid) {
                             internet_gateway[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
                             if (inputfield.id == 'name') {
-                                okitIdsJsonObj[okitid] = inputfield.value;
+                                okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();
                         });

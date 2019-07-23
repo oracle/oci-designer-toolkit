@@ -2,15 +2,15 @@ ARG os_version=latest
 ARG os=oraclelinux
 FROM ${os}:${os_version}
 LABEL version="1.0"
-LABEL description="OCI DevOps Server."
+LABEL description="OKIT OCI Web Designer Server."
 SHELL ["/bin/bash", "-c"]
 ENV http_proxy ${http_proxy}
 ENV https_proxy ${https_proxy}
 # Set Python Variables
 ENV PYTHONIOENCODING=utf8
-#ENV PYTHONPATH=":/oci/visualiser/visualiser"
+ENV PYTHONPATH=":/okit/visualiser:/okit/okitweb"
 # Specify Ansible Config variables
-ENV ANSIBLE_CONFIG_DIR=/oci/ansible/config
+ENV ANSIBLE_CONFIG_DIR=/okit/ansible/config
 ENV ANSIBLE_INVENTORY=${ANSIBLE_CONFIG_DIR}/ansible_hosts
 ENV ANSIBLE_CONFIG=${ANSIBLE_CONFIG_DIR}/ansible.cfg
 ENV ANSIBLE_LIBRARY=${SRC}:${ANSIBLE_LIBRARY}
@@ -106,6 +106,6 @@ RUN yum update -y ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
-    mkdir -p /oci/{ansible,config,terraform,visualiser,workspace} \
+    mkdir -p /okit/{ansible,config,terraform,visualiser,okitweb,workspace} \
     env | sort
 

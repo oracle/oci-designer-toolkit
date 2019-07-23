@@ -14,16 +14,16 @@ then
 fi
 
 # Run command
+#       -e PYTHONPATH=":/okit/visualiser" \
 docker run \
        ${HOSTINFO} \
        ${VOLUMES} \
        ${ENVIRONMENT} \
-       -w /oci/visualiser \
-       -p 6443:6443 \
-       -e PYTHONPATH=":/oci/visualiser/visualiser" \
+       -w /okit \
+       -p 8080:8080 \
        --rm \
        -it \
        ${DOCKERIMAGE} \
-       /bin/bash -c "pwd;env;python3 -m flask run --host=0.0.0.0 --port=6443 --no-debugger"
+       /bin/bash -c "pwd;env;python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger"
 
 docker ps -l

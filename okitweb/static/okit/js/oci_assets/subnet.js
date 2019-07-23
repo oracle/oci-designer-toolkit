@@ -7,7 +7,7 @@ var subnet_count = 0;
 ** Add Asset to JSON Model
  */
 function addSubnet(vcnid) {
-    var okitid = 'okit-sn-' + uuidv4();
+    var id = 'okit-sn-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
 
@@ -15,17 +15,16 @@ function addSubnet(vcnid) {
         OKITJsonObj['compartment']['subnets'] = [];
     }
 
-    // Add okitid & empty name to okitid JSON
-    okitIdsJsonObj[okitid] = '';
-    subnet_ids.push(okitid);
+    // Add id & empty name to id JSON
+    okitIdsJsonObj[id] = '';
+    subnet_ids.push(id);
 
     // Increment Count
     subnet_count += 1;
     var subnet = {};
     subnet['virtual_cloud_network_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
-    subnet['okitid'] = okitid;
-    subnet['ocid'] = '';
+    subnet['id'] = id;
     subnet['name'] = generateDefaultName('SN', subnet_count);
     subnet['cidr'] = '';
     subnet['dns_label'] = '';
@@ -35,7 +34,7 @@ function addSubnet(vcnid) {
     subnet['security_lists_id'] = [];
     OKITJsonObj['compartment']['subnets'].push(subnet);
     console.log(JSON.stringify(OKITJsonObj, null, 2));
-    okitIdsJsonObj[okitid] = subnet['name'];
+    okitIdsJsonObj[id] = subnet['name'];
     displayOkitJson();
     drawSubnetSVG(subnet);
 }
@@ -45,7 +44,7 @@ function addSubnet(vcnid) {
  */
 function drawSubnetSVG(subnet) {
     var vcnid = subnet['virtual_cloud_network_id'];
-    var okitid = subnet['okitid'];
+    var id = subnet['id'];
     var position = 3;
     //var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     //var translate_y = icon_translate_y_start;
@@ -62,10 +61,10 @@ function drawSubnetSVG(subnet) {
     svg = d3.select('#' + vcnid + '-group');
 
     var sn = svg.append("g")
-        .attr("id", okitid + '-group')
+        .attr("id", id + '-group')
         .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
     sn.append("rect")
-        .attr("id", okitid)
+        .attr("id", id)
         .attr("data-type", data_type)
         .attr("title", subnet['name'])
         .attr("x", icon_x)
@@ -77,7 +76,7 @@ function drawSubnetSVG(subnet) {
         .attr("fill", subnet_stroke_colour[(subnet_count % 3)])
         .attr("style", "fill-opacity: .25;");
     var iconsvg = sn.append("svg")
-        .attr("id", okitid)
+        .attr("id", id)
         .attr("data-type", data_type)
         .attr("width", "100")
         .attr("height", "100")
@@ -91,33 +90,33 @@ function drawSubnetSVG(subnet) {
         .attr("class", "st0")
         .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
 
-    //var igelem = document.querySelector('#' + okitid);
-    //igelem.addEventListener("click", function() { assetSelected('Subnet', okitid) });
-    $('#' + okitid).on("click", function() { assetSelected('Subnet', okitid) });
-    d3.select('g#' + okitid + '-group').selectAll('path')
-        .on("click", function() { assetSelected('Subnet', okitid) });
-    assetSelected('Subnet', okitid);
+    //var igelem = document.querySelector('#' + id);
+    //igelem.addEventListener("click", function() { assetSelected('Subnet', id) });
+    $('#' + id).on("click", function() { assetSelected('Subnet', id) });
+    d3.select('g#' + id + '-group').selectAll('path')
+        .on("click", function() { assetSelected('Subnet', id) });
+    assetSelected('Subnet', id);
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + okitid).on("mousedown", handleConnectorDragStart);
-    $('#' + okitid).on("mousemove", handleConnectorDrag);
-    $('#' + okitid).on("mouseup", handleConnectorDrop);
-    $('#' + okitid).on("mouseover", handleConnectorDragEnter);
-    $('#' + okitid).on("mouseout", handleConnectorDragLeave);
+    $('#' + id).on("mousedown", handleConnectorDragStart);
+    $('#' + id).on("mousemove", handleConnectorDrag);
+    $('#' + id).on("mouseup", handleConnectorDrop);
+    $('#' + id).on("mouseover", handleConnectorDragEnter);
+    $('#' + id).on("mouseout", handleConnectorDragLeave);
     // Add dragevent versions
-    $('#' + okitid).on("dragstart", handleConnectorDragStart);
-    $('#' + okitid).on("drop", handleConnectorDrop);
-    $('#' + okitid).on("dragenter", handleConnectorDragEnter);
-    $('#' + okitid).on("dragleave", handleConnectorDragLeave);
-    d3.select('#' + okitid)
+    $('#' + id).on("dragstart", handleConnectorDragStart);
+    $('#' + id).on("drop", handleConnectorDrop);
+    $('#' + id).on("dragenter", handleConnectorDragEnter);
+    $('#' + id).on("dragleave", handleConnectorDragLeave);
+    d3.select('#' + id)
         .attr("dragable", true);
 }
 
 function drawSubnetConnectorsSVG(subnet) {
     var vcnid = subnet['virtual_cloud_network_id'];
-    var okitid = subnet['okitid'];
+    var id = subnet['id'];
 
-    var boundingClientRect = d3.select("#" + okitid).node().getBoundingClientRect();
+    var boundingClientRect = d3.select("#" + id).node().getBoundingClientRect();
     okitcanvasSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
     okitcanvasSVGPoint.y = boundingClientRect.y;
     var subnetrelative = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
@@ -130,7 +129,7 @@ function drawSubnetConnectorsSVG(subnet) {
         okitcanvasSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
         sourcesvg = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
         svg.append('line')
-            .attr("id", generateConnectorId(subnet['route_table_id'], okitid))
+            .attr("id", generateConnectorId(subnet['route_table_id'], id))
             .attr("x1", sourcesvg.x)
             .attr("y1", sourcesvg.y)
             .attr("x2", subnetrelative.x)
@@ -146,7 +145,7 @@ function drawSubnetConnectorsSVG(subnet) {
             okitcanvasSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
             sourcesvg = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
             svg.append('line')
-                .attr("id", generateConnectorId(subnet['security_lists_id'][i], okitid))
+                .attr("id", generateConnectorId(subnet['security_lists_id'][i], id))
                 .attr("x1", sourcesvg.x)
                 .attr("y1", sourcesvg.y)
                 .attr("x2", subnetrelative.x)
@@ -160,19 +159,18 @@ function drawSubnetConnectorsSVG(subnet) {
 /*
 ** Property Sheet Load function
  */
-function loadSubnetProperties(okitid) {
+function loadSubnetProperties(id) {
     $("#properties").load("propertysheets/subnet.html", function () {
         if ('compartment' in OKITJsonObj && 'subnets' in OKITJsonObj['compartment']) {
-            console.log('Loading Security List: ' + okitid);
+            console.log('Loading Security List: ' + id);
             var json = OKITJsonObj['compartment']['subnets'];
             for (var i = 0; i < json.length; i++) {
                 subnet = json[i];
                 //console.log(JSON.stringify(subnet, null, 2));
-                if (subnet['okitid'] == okitid) {
-                    //console.log('Found Subnet: ' + okitid);
+                if (subnet['id'] == id) {
+                    //console.log('Found Subnet: ' + id);
                     subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['virtual_cloud_network_id']];
                     $("#virtual_cloud_network").html(subnet['virtual_cloud_network']);
-                    $('#ocid').html(subnet['ocid']);
                     $('#name').val(subnet['name']);
                     $('#cidr').val(subnet['cidr']);
                     $('#dns_label').val(subnet['dns_label']);
@@ -203,7 +201,7 @@ function loadSubnetProperties(okitid) {
                             subnet[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
                             if (inputfield.id == 'name') {
-                                okitIdsJsonObj[okitid] = inputfield.value;
+                                okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();
                         });
@@ -239,25 +237,25 @@ function loadSubnetProperties(okitid) {
 /*
 ** OKIT Json Update Function
  */
-function updateSubnetLinks(sourcetype, sourceid, okitid) {
+function updateSubnetLinks(sourcetype, sourceid, id) {
     var subnets = OKITJsonObj['compartment']['subnets'];
-    console.log('Updating Subnet ' + okitid + 'Adding ' + sourcetype + ' ' +sourceid);
+    console.log('Updating Subnet ' + id + 'Adding ' + sourcetype + ' ' +sourceid);
     for (var i = 0; i < subnets.length; i++) {
         subnet = subnets[i];
         console.log('Before : ' + JSON.stringify(subnet, null, 2));
-        if (subnet['okitid'] == okitid) {
+        if (subnet['id'] == id) {
             if (sourcetype == 'Route Table') {
                 if (subnet['route_table_id'] != '') {
                     // Only single Route Table allow so delete existing line.
-                    console.log('Deleting Connector : ' + generateConnectorId(subnet['route_table_id'], okitid));
-                    d3.select("#" + generateConnectorId(subnet['route_table_id'], okitid)).remove();
+                    console.log('Deleting Connector : ' + generateConnectorId(subnet['route_table_id'], id));
+                    d3.select("#" + generateConnectorId(subnet['route_table_id'], id)).remove();
                 }
                 subnet['route_table_id'] = sourceid;
             } else if (sourcetype == 'Security List') {
                 if (subnet['security_lists_id'].indexOf(sourceid) >0 ) {
                     // Already connected so delete existing line
-                    console.log('Deleting Connector : ' + generateConnectorId(sourceid, okitid));
-                    d3.select("#" + generateConnectorId(sourceid, okitid)).remove();
+                    console.log('Deleting Connector : ' + generateConnectorId(sourceid, id));
+                    d3.select("#" + generateConnectorId(sourceid, id)).remove();
                 } else {
                     subnet['security_lists_id'].push(sourceid);
                 }
@@ -266,7 +264,7 @@ function updateSubnetLinks(sourcetype, sourceid, okitid) {
         console.log('After : ' + JSON.stringify(subnet, null, 2));
     }
     displayOkitJson();
-    assetSelected('Subnet', okitid);
+    assetSelected('Subnet', id);
 }
 
 

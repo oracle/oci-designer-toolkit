@@ -43,6 +43,7 @@ template_root = '/oci/visualiser/visualiser/templates'
 @bp.route('/designer', methods=(['GET']))
 def designer():
     oci_assets_js = os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets'))
+    print(oci_assets_js)
     return render_template('okit/designer.html', oci_assets_js=oci_assets_js)
 
 
