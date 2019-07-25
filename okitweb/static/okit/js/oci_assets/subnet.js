@@ -2,6 +2,7 @@ console.log('Loaded Internet Gateway Javascript');
 
 var subnet_ids = [];
 var subnet_count = 0;
+var subnet_position_x = 0;
 
 /*
 ** Add Asset to JSON Model
@@ -42,7 +43,8 @@ function addSubnet(vcnid) {
 /*
 ** SVG Creation
  */
-function drawSubnetSVG(subnet) {
+// TODO: Delete
+function drawSubnetSVGOrig(subnet) {
     var vcnid = subnet['virtual_cloud_network_id'];
     var id = subnet['id'];
     var position = 3;
@@ -69,7 +71,8 @@ function drawSubnetSVG(subnet) {
         .attr("title", subnet['name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
-        .attr("width", vcn_width - (icon_width * 2))
+        //.attr("width", vcn_width - (icon_width * 2))
+        .attr("width", "70%")
         .attr("height", icon_height)
         .attr("stroke", subnet_stroke_colour[(subnet_count % 3)])
         //.attr("stroke-dasharray", "5, 5")
@@ -112,7 +115,8 @@ function drawSubnetSVG(subnet) {
         .attr("dragable", true);
 }
 
-function drawSubnetConnectorsSVG(subnet) {
+// TODO: Delete
+function drawSubnetConnectorsSVGOrig(subnet) {
     var vcnid = subnet['virtual_cloud_network_id'];
     var id = subnet['id'];
 
@@ -121,6 +125,7 @@ function drawSubnetConnectorsSVG(subnet) {
     okitcanvasSVGPoint.y = boundingClientRect.y;
     var subnetrelative = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
     var sourcesvg = null;
+
     svg = d3.select("#okitcanvas");
 
     if (subnet['route_table_id'] != '') {
@@ -144,6 +149,123 @@ function drawSubnetConnectorsSVG(subnet) {
             okitcanvasSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
             okitcanvasSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
             sourcesvg = okitcanvasSVGPoint.matrixTransform(okitcanvasScreenCTM.inverse());
+            svg.append('line')
+                .attr("id", generateConnectorId(subnet['security_lists_id'][i], id))
+                .attr("x1", sourcesvg.x)
+                .attr("y1", sourcesvg.y)
+                .attr("x2", subnetrelative.x)
+                .attr("y2", subnetrelative.y)
+                .attr("stroke-width", "2")
+                .attr("stroke", "black");
+        }
+    }
+}
+
+function drawSubnetSVG(subnet) {
+    var vcnid = subnet['virtual_cloud_network_id'];
+    var id = subnet['id'];
+    var position = subnet_position_x;
+    var vcn_offset_x = (icon_width / 2);
+    var vcn_offset_y = ((icon_height / 4) * 3) + ((icon_height + vcn_icon_spacing) * 1);
+    var count_offset_x = (icon_width * position) + (vcn_icon_spacing * position);
+    var count_offset_y = ((icon_height + vcn_icon_spacing) * subnet_count);
+    var svg_x = vcn_offset_x + count_offset_x;
+    var svg_y = vcn_offset_y + count_offset_y;
+    var data_type = "Subnet";
+
+    var okitcanvas_svg = d3.select('#' + vcnid + "-svg");
+    var svg = okitcanvas_svg.append("svg")
+        .attr("id", id + '-svg')
+        .attr("data-type", data_type)
+        .attr("data-vcnid", vcnid)
+        .attr("title", subnet['name'])
+        .attr("x", svg_x)
+        .attr("y", svg_y)
+        .attr("width", "95%")
+        .attr("height", "100");
+    svg.append("rect")
+        .attr("id", id)
+        .attr("data-type", data_type)
+        .attr("data-vcnid", vcnid)
+        .attr("title", subnet['name'])
+        .attr("x", icon_x)
+        .attr("y", icon_y)
+        //.attr("width", vcn_width - (icon_width * 2))
+        .attr("width", "70%")
+        .attr("height", icon_height)
+        .attr("stroke", subnet_stroke_colour[(subnet_count % 3)])
+        //.attr("stroke-dasharray", "5, 5")
+        .attr("fill", subnet_stroke_colour[(subnet_count % 3)])
+        .attr("style", "fill-opacity: .25;");
+    var g = svg.append("g")
+        .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
+    g.append("path")
+        .attr("class", "st0")
+        .attr("d", "M142.7,138v-13.5h-8.4v-20.8h20.8v20.8h-8.4V138h52.8c-3-27.4-26.2-48.8-54.4-48.8c-28.2,0-51.4,21.3-54.4,48.8H142.7z")
+    g.append("path")
+        .attr("class", "st0")
+        .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
+
+    //var igelem = document.querySelector('#' + id);
+    //igelem.addEventListener("click", function() { assetSelected('Subnet', id) });
+    $('#' + id).on("click", function() { assetSelected('Subnet', id) });
+    d3.select('svg#' + id + '-svg').selectAll('path')
+        .on("click", function() { assetSelected('Subnet', id) });
+    assetSelected('Subnet', id);
+
+    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+    $('#' + id).on("mousedown", handleConnectorDragStart);
+    $('#' + id).on("mousemove", handleConnectorDrag);
+    $('#' + id).on("mouseup", handleConnectorDrop);
+    $('#' + id).on("mouseover", handleConnectorDragEnter);
+    $('#' + id).on("mouseout", handleConnectorDragLeave);
+    // Add dragevent versions
+    $('#' + id).on("dragstart", handleConnectorDragStart);
+    $('#' + id).on("drop", handleConnectorDrop);
+    $('#' + id).on("dragenter", handleConnectorDragEnter);
+    $('#' + id).on("dragleave", handleConnectorDragLeave);
+    d3.select('#' + id)
+        .attr("dragable", true);
+}
+
+function drawSubnetConnectorsSVG(subnet) {
+    var vcnid = subnet['virtual_cloud_network_id'];
+    var id = subnet['id'];
+    var boundingClientRect = d3.select("#" + id).node().getBoundingClientRect();
+    var parent_svg = document.getElementById(vcnid + "-svg");
+
+    // Define SVG position manipulation variables
+    var svgPoint = parent_svg.createSVGPoint();
+    var screenCTM = parent_svg.getScreenCTM();
+    svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+    svgPoint.y = boundingClientRect.y;
+
+    var subnetrelative = svgPoint.matrixTransform(screenCTM.inverse());
+    var sourcesvg = null;
+
+    svg = d3.select('#' + vcnid + "-svg");
+
+    if (subnet['route_table_id'] != '') {
+        boundingClientRect = d3.select("#" + subnet['route_table_id']).node().getBoundingClientRect();
+        svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+        svgPoint.y = boundingClientRect.y + boundingClientRect.height;
+        sourcesvg = svgPoint.matrixTransform(screenCTM.inverse());
+        svg.append('line')
+            .attr("id", generateConnectorId(subnet['route_table_id'], id))
+            .attr("x1", sourcesvg.x)
+            .attr("y1", sourcesvg.y)
+            .attr("x2", subnetrelative.x)
+            .attr("y2", subnetrelative.y)
+            .attr("stroke-width", "2")
+            .attr("stroke", "black");
+    }
+
+    if (subnet['security_lists_id'].length > 0) {
+        for (var i = 0; i < subnet['security_lists_id'].length; i++) {
+            boundingClientRect = d3.select("#" + subnet['security_lists_id'][i]).node().getBoundingClientRect();
+            svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+            svgPoint.y = boundingClientRect.y + boundingClientRect.height;
+            sourcesvg = svgPoint.matrixTransform(screenCTM.inverse());
             svg.append('line')
                 .attr("id", generateConnectorId(subnet['security_lists_id'][i], id))
                 .attr("x1", sourcesvg.x)

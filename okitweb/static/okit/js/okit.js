@@ -29,6 +29,8 @@ var okitcanvasScreenCTM = okitcanvas.getScreenCTM();
 var connectorStartElement = null;
 var connectorStartXLeft = 0;
 var connectorStartYTop = 0;
+var connectorContainerSVGPoint = null;
+var connectorContainerScreenCTM = null;
 
 /*
 ** Add button handlers

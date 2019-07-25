@@ -10,11 +10,13 @@ var icon_x = 25;
 var icon_y = 25;
 var icon_translate_x_start = 60;
 var icon_translate_y_start = 10;
-var vcn_icon_spacing = 35;
+//var vcn_icon_spacing = 35;
+var vcn_icon_spacing = 10;
 
 var icon_stroke_colour = "#F80000";
 var subnet_stroke_colour = ["orange", "blue", "green", "black"];
 
+var vcn_gateway_icon_position = 0;
 var vcn_element_icon_position = 0;
 
 
@@ -173,7 +175,8 @@ function handleConnectorDrag(e) {
     }
 }
 
-function handleConnectorDragStart(e) {
+// TODO: Delete
+function handleConnectorDragStartOrig(e) {
     e.preventDefault();
     // Set Start Element to know we are dragging
     connectorStartElement = e.target;
@@ -218,6 +221,44 @@ function handleConnectorDragStart(e) {
 
 }
 
+function handleConnectorDragStart(e) {
+    e.preventDefault();
+    // Set Start Element to know we are dragging
+    connectorStartElement = e.target;
+    var vcnid = connectorStartElement.getAttribute('data-vcnid');
+    //console.log('DragStart VCNid : ' + vcnid);
+    var okitcanvas_svg = document.getElementById(vcnid + "-svg");
+    var boundingClientRect = connectorStartElement.getBoundingClientRect();
+
+    // Define SVG position manipulation variables
+    connectorContainerSVGPoint = okitcanvas_svg.createSVGPoint();
+    connectorContainerScreenCTM = okitcanvas_svg.getScreenCTM();
+    connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+    connectorContainerSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
+
+    // Convert to SVG Relative positioning
+    var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
+    //console.log("SVG Relative Point (" + svgrelative.x + ", " + svgrelative.y + ")");
+    connectorStartXLeft = svgrelative.x;
+    connectorStartYTop = svgrelative.y;
+
+    // Start Drawing line
+    var mousePos = getMousePosition(e);
+    svg = d3.select('#' + vcnid + "-svg");
+    svg.append('line')
+        .attr("id", "Connector")
+        .attr("x1", connectorStartXLeft)
+        .attr("y1", connectorStartYTop)
+        .attr("x2", connectorStartXLeft)
+        .attr("y2", connectorStartYTop)
+        //.attr("x2", mousePos.x)
+        //.attr("y2", mousePos.y)
+        .attr("stroke-width", "2")
+        .attr("stroke-dasharray", "3, 3")
+        .attr("stroke", "darkgray");
+
+}
+
 function handleConnectorDragEnter(e) {
     if (connectorStartElement) {
         //console.log('Connector Drag Enter : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
@@ -230,13 +271,16 @@ function handleConnectorDragLeave(e) {
     }
 }
 
-function handleConnectorDrop(e) {
+// TODO: Delete
+function handleConnectorDropOrig(e) {
     if (connectorStartElement) {
         var sourceType = connectorStartElement.getAttribute('data-type');
         var destinationType = e.target.getAttribute('data-type');
+        var vcnid = e.target.getAttribute('data-vcnid');
         var validSubnetSource = ['Route Table', 'Security List'];
         var sourceid = connectorStartElement.id;
         var id = e.target.id;
+        //console.log('VCNid: '+ vcnid);
         //console.log('Connector Drop  : ' + e.target.id + ' - ' + destinationType);
         //console.log('Drag Start Type : ' + sourceType);
 
@@ -268,11 +312,54 @@ function handleConnectorDrop(e) {
     d3.selectAll("#Connector").remove();
 }
 
-function getMousePosition(evt) {
+function handleConnectorDrop(e) {
+    if (connectorStartElement) {
+        var sourceType = connectorStartElement.getAttribute('data-type');
+        var destinationType = e.target.getAttribute('data-type');
+        var vcnid = e.target.getAttribute('data-vcnid');
+        var validSubnetSource = ['Route Table', 'Security List'];
+        var sourceid = connectorStartElement.id;
+        var id = e.target.id;
+
+        if (validSubnetSource.indexOf(sourceType) >= 0 && destinationType == 'Subnet') {
+            updateSubnetLinks(sourceType, sourceid, id);
+            console.log('Creating Connector Line');
+            var boundingClientRect = e.target.getBoundingClientRect();
+            connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+            connectorContainerSVGPoint.y = boundingClientRect.y;
+            var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
+            svg = d3.select("#" + vcnid + '-svg');
+            svg.append('line')
+                .attr("id", generateConnectorId(sourceid, id))
+                .attr("x1", connectorStartXLeft)
+                .attr("y1", connectorStartYTop)
+                .attr("x2", svgrelative.x)
+                .attr("y2", svgrelative.y)
+                .attr("stroke-width", "2")
+                .attr("stroke", "black");
+        }
+    }
+
+    connectorStartElement = null;
+    connectorStartXLeft = 0;
+    connectorStartYTop = 0;
+    d3.selectAll("#Connector").remove();
+}
+
+// TODO: Delete
+function getMousePositionOrig(evt) {
     if (evt.touches) { evt = evt.touches[0]; }
     return {
         x: (evt.clientX - okitcanvasScreenCTM.e) / okitcanvasScreenCTM.a,
         y: (evt.clientY - okitcanvasScreenCTM.f) / okitcanvasScreenCTM.d
+    };
+}
+
+function getMousePosition(evt) {
+    if (evt.touches) { evt = evt.touches[0]; }
+    return {
+        x: (evt.clientX - connectorContainerScreenCTM.e) / connectorContainerScreenCTM.a,
+        y: (evt.clientY - connectorContainerScreenCTM.f) / connectorContainerScreenCTM.d
     };
 }
 
@@ -305,6 +392,7 @@ function clearSVG() {
     console.log('Clearing Diagram');
     $('#okitcanvas').empty();
     // Virtual Cloud Network
+    vcn_gateway_icon_position = 0;
     vcn_element_icon_position = 0;
     virtual_network_ids = [];
     virtual_cloud_network_count = 0;

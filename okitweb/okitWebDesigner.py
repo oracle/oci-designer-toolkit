@@ -31,6 +31,7 @@ from generators.ociTerraformGenerator import OCITerraformGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
 from facades.ociCompartment import OCICompartments
+from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 
 from common.ociLogging import getLogger
 
@@ -40,7 +41,7 @@ logger = getLogger()
 bp = Blueprint('okit', __name__, url_prefix='/okit', static_folder='static/okit')
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
-template_root = '/oci/visualiser/visualiser/templates'
+template_root = '/okit/visualiser/templates'
 
 @bp.route('/designer', methods=(['GET']))
 def designer():
@@ -90,9 +91,53 @@ def ociCompartment():
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
 
 
-@bp.route('/oci/query', methods=(['GET']))
+@bp.route('/oci/query', methods=(['GET', 'POST']))
 def ociQuery():
-    ociCompartments = OCICompartments()
-    compartments = ociCompartments.listTenancy()
-    return render_template('okit/oci_query.html', compartments=compartments)
+    if request.method == 'POST':
+        response_json = {}
+        logger.info('JSON     : {0:s}'.format(str(request.json)))
+        compartment_id = request.json['compartment_id']
+        filter = request.json.get('virtual_cloud_network_filter', '')
+        oci_compartments = OCICompartments
+        compartment_json = oci_compartments.get(id=compartment_id)
+        oci_compartment = oci_compartments.compartments_obj[0]
+        # Build OKIT Response json add compartment information
+        response_json['compartment'] = {}
+        response_json['compartment']['id'] = compartment_json['id']
+        response_json['compartment']['name'] = compartment_json['name']
+        logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['display_name']))
+        # Query all Virtual Cloud Networks
+        #oci_virtual_cloud_network_client = OCIVirtualCloudNetworks(compartment_id=compartment_id)
+        #return oci_virtual_cloud_network_client.list(compartment_id=compartment_id, )
+        oci_virtual_cloud_networks = oci_compartment.getVirtualCloudNetworkClients()
+        response_json['compartment']["virtual_cloud_networks"] = oci_virtual_cloud_networks.list(filter=filter)
+        # Loop through resulting json
+        for oci_virtual_cloud_network in oci_virtual_cloud_networks.virtual_cloud_networks_obj:
+            logger.info('\tVirtual Cloud Network : {0!s:s}'.format(oci_virtual_cloud_network.data['display_name']))
+            # Internet Gateways
+            oci_internet_gateways = oci_virtual_cloud_network.getInternetGatewayClients()
+            response_json['compartment']['internet_gateways'] = oci_internet_gateways.list()
+            for oci_internet_gateway in oci_internet_gateways.internet_gateways_obj:
+                logger.info('\t\tInternet Gateway : {0!s:s}'.format(oci_internet_gateway.data['display_name']))
+            # Route Tables
+            oci_route_tables = oci_virtual_cloud_network.getRouteTableClients()
+            response_json['compartment']['route_tables'] = oci_route_tables.list()
+            for oci_route_table in oci_route_tables.route_tables_obj:
+                logger.info('\t\tRoute Table : {0!s:s}'.format(oci_route_table.data['display_name']))
+            # Security Lists
+            security_lists = oci_virtual_cloud_network.getSecurityListClients()
+            response_json['compartment']['security_lists'] = security_lists.list()
+            for security_list in security_lists.security_lists_obj:
+                logger.info('\t\tSecurity List : {0!s:s}'.format(security_list.data['display_name']))
+            # Subnets
+            subnets = oci_virtual_cloud_network.getSubnetClients()
+            response_json['compartment']['subnets'] = subnets.list()
+            for subnet in subnets.subnets_obj:
+                logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
+        logger.info('Response     : {0:s}'.format(str(response_json)))
+        return response_json
+    else:
+        ociCompartments = OCICompartments()
+        compartments = ociCompartments.listTenancy()
+        return render_template('okit/oci_query.html', compartments=compartments)
 
