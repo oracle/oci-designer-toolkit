@@ -10,16 +10,23 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/designer.css') }}">
 </head>
 <body>
-    <div id="queryparameters" class="property-editor">
-        <table id="query_table" class="property-editor-table">
-            <tr><td>Compartment</td><td>
-                <select id="compartment">
-                {% for compartment in compartments %}
-                    <option value="{{ compartment['id'] }}">{{ compartment['display_name'] }}</option>
-                {%  endfor %}
-                </select></td></tr>
-            <tr><td>VCN Name Filter</td><td><input type="text" id="virtual_cloud_network_filter" name="virtual_cloud_network_filter" class="property-value"></td></tr>
-        </table>
+    <div id="query_panel" class="flex-column" style="height: 99vh; width:100%;">
+        <div id="queryparameters" class="property-editor">
+            <table id="query_table" class="property-editor-table">
+                <tr><td>Compartment</td><td>
+                    <select id="compartment">
+                        {% for compartment in compartments %}
+                            <option value="{{ compartment['id'] }}">{{ compartment['display_name'] }}</option>
+                        {%  endfor %}
+                    </select></td></tr>
+                <tr><td>VCN Name Filter</td><td><input type="text" id="virtual_cloud_network_filter" name="virtual_cloud_network_filter" class="property-value"></td></tr>
+                <tr><td><input type="button" id="submitquery" class="toolbar-button" value="Submit"></td><td></td></tr>
+            </table>
+        </div>
+        <div id="query_footer" style="flex-grow: 1;">
+            <textarea id="okitjson" readonly="readonly"></textarea>
+        </div>
     </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_query.js') }}"></script>
 </body>
 </html>

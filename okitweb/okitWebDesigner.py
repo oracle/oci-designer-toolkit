@@ -27,6 +27,7 @@ from flask import send_from_directory
 from flask import session
 from flask import url_for
 
+from common.ociCommon import logJson
 from generators.ociTerraformGenerator import OCITerraformGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
@@ -95,17 +96,17 @@ def ociCompartment():
 def ociQuery():
     if request.method == 'POST':
         response_json = {}
-        logger.info('JSON     : {0:s}'.format(str(request.json)))
+        logger.info('Post JSON : {0:s}'.format(str(request.json)))
         compartment_id = request.json['compartment_id']
         filter = request.json.get('virtual_cloud_network_filter', '')
-        oci_compartments = OCICompartments
-        compartment_json = oci_compartments.get(id=compartment_id)
+        oci_compartments = OCICompartments()
+        compartment_json = oci_compartments.get(compartment_id=compartment_id)
         oci_compartment = oci_compartments.compartments_obj[0]
         # Build OKIT Response json add compartment information
         response_json['compartment'] = {}
         response_json['compartment']['id'] = compartment_json['id']
         response_json['compartment']['name'] = compartment_json['name']
-        logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['display_name']))
+        logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['name']))
         # Query all Virtual Cloud Networks
         #oci_virtual_cloud_network_client = OCIVirtualCloudNetworks(compartment_id=compartment_id)
         #return oci_virtual_cloud_network_client.list(compartment_id=compartment_id, )
@@ -135,6 +136,7 @@ def ociQuery():
             for subnet in subnets.subnets_obj:
                 logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
         logger.info('Response     : {0:s}'.format(str(response_json)))
+        logJson(response_json)
         return response_json
     else:
         ociCompartments = OCICompartments()

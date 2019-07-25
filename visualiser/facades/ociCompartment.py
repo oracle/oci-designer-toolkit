@@ -37,8 +37,8 @@ class OCICompartments(OCIIdentityConnection):
         self.canonicalnames = []
         super(OCICompartments, self).__init__(config=config, configfile=configfile)
 
-    def get(self, id):
-        compartment = self.client.get_compartment(compartment_id=id).data
+    def get(self, compartment_id):
+        compartment = self.client.get_compartment(compartment_id=compartment_id).data
         self.compartments_json = [self.toJson(compartment)]
         self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
         return self.compartments_json[0]
@@ -77,11 +77,11 @@ class OCICompartments(OCIIdentityConnection):
                 self.canonicalnames.append(self.getCanonicalName(compartment['id']))
         return sorted(self.canonicalnames)
 
-    def getCanonicalName(self, id):
+    def getCanonicalName(self, compartment_id):
         parentsname = ''
-        if self.parents[id] in self.names:
-            parentsname = self.getCanonicalName(self.parents[id])
-        return '{0!s:s}/{1!s:s}'.format(parentsname, self.names[id])
+        if self.parents[compartment_id] in self.names:
+            parentsname = self.getCanonicalName(self.parents[compartment_id])
+        return '{0!s:s}/{1!s:s}'.format(parentsname, self.names[compartment_id])
 
 
 class OCICompartment(object):
