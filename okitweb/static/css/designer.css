@@ -93,6 +93,8 @@
 #designer {
     height: 99vh !important;
     width: 100%;
+    padding-right: 10px;
+    margin-right: 10px;
 }
 
 #palatte {
@@ -157,4 +159,22 @@
 .toolbar-button {
     padding-left: 5px;
     padding-right: 20px;
+}
+
+.add-button {
+    background-color: lime;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.delete-button {
+    background-color: red;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
 }

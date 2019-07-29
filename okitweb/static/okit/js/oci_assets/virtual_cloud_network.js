@@ -117,7 +117,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("title", virtual_cloud_network['name'])
         .attr("x", 20)
         .attr("y", 70)
-        .attr("width", "98%")
+        .attr("width", "105%")
         .attr("height", "40%");
     svg.append("rect")
         .attr("id", id)

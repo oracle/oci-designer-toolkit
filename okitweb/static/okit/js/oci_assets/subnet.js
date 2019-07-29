@@ -181,7 +181,7 @@ function drawSubnetSVG(subnet) {
         .attr("title", subnet['name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
-        .attr("width", "95%")
+        .attr("width", "125%")
         .attr("height", "100");
     svg.append("rect")
         .attr("id", id)
@@ -226,6 +226,11 @@ function drawSubnetSVG(subnet) {
     $('#' + id).on("dragleave", handleConnectorDragLeave);
     d3.select('#' + id)
         .attr("dragable", true);
+}
+
+function clearSubnetConnectorsSVG(subnet) {
+    var id = subnet['id'];
+    d3.selectAll("line[id*='" + id + "']").remove();
 }
 
 function drawSubnetConnectorsSVG(subnet) {
@@ -284,7 +289,7 @@ function drawSubnetConnectorsSVG(subnet) {
 function loadSubnetProperties(id) {
     $("#properties").load("propertysheets/subnet.html", function () {
         if ('compartment' in OKITJsonObj && 'subnets' in OKITJsonObj['compartment']) {
-            console.log('Loading Security List: ' + id);
+            console.log('Loading Subnet: ' + id);
             var json = OKITJsonObj['compartment']['subnets'];
             for (var i = 0; i < json.length; i++) {
                 subnet = json[i];
@@ -347,6 +352,9 @@ function loadSubnetProperties(id) {
                             }
                             // If this is the name field copy to the Ids Map
                             displayOkitJson();
+                            // Redraw Connectors
+                            clearSubnetConnectorsSVG(subnet);
+                            drawSubnetConnectorsSVG(subnet);
                         });
                     });
                     break;
@@ -373,6 +381,7 @@ function updateSubnetLinks(sourcetype, sourceid, id) {
                     d3.select("#" + generateConnectorId(subnet['route_table_id'], id)).remove();
                 }
                 subnet['route_table_id'] = sourceid;
+                subnet['route_table'] = okitIdsJsonObj[sourceid];
             } else if (sourcetype == 'Security List') {
                 if (subnet['security_lists_id'].indexOf(sourceid) >0 ) {
                     // Already connected so delete existing line
@@ -380,6 +389,7 @@ function updateSubnetLinks(sourcetype, sourceid, id) {
                     d3.select("#" + generateConnectorId(sourceid, id)).remove();
                 } else {
                     subnet['security_lists_id'].push(sourceid);
+                    subnet['security_lists'].push(okitIdsJsonObj[sourceid]);
                 }
             }
         }

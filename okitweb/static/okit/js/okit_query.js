@@ -1,8 +1,3 @@
-/*
-** Add button handlers
- */
-document.getElementById('submitquery').addEventListener('click', handleSubmitQuery, false);
-
 function handleSubmitQuery(e) {
     $('*').css('cursor', 'wait');
     var queryJsonBody = {};
@@ -28,4 +23,10 @@ function handleSubmitQuery(e) {
         }
     });
 }
+
+
+/*
+** Add button handlers
+ */
+document.getElementById('submitquery').addEventListener('click', handleSubmitQuery, false);
 
