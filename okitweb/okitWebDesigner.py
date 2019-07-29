@@ -44,11 +44,65 @@ bp = Blueprint('okit', __name__, url_prefix='/okit', static_folder='static/okit'
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 template_root = '/okit/visualiser/templates'
 
-@bp.route('/designer', methods=(['GET']))
+def executeQuery(request_json={}, ** kwargs):
+    response_json = {}
+    logger.info('Request JSON : {0:s}'.format(str(request_json)))
+    compartment_id = request_json['compartment_id']
+    filter = request_json.get('virtual_cloud_network_filter', None)
+    if filter == '':
+        filter = None
+    oci_compartments = OCICompartments()
+    compartment_json = oci_compartments.get(compartment_id=compartment_id)
+    oci_compartment = oci_compartments.compartments_obj[0]
+    # Build OKIT Response json add compartment information
+    response_json['compartment'] = {}
+    response_json['compartment']['id'] = compartment_json['id']
+    response_json['compartment']['name'] = compartment_json['name']
+    logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['name']))
+    # Query all Virtual Cloud Networks
+    oci_virtual_cloud_networks = oci_compartment.getVirtualCloudNetworkClients()
+    response_json['compartment']["virtual_cloud_networks"] = oci_virtual_cloud_networks.list(filter=filter)
+    # Loop through resulting json
+    for oci_virtual_cloud_network in oci_virtual_cloud_networks.virtual_cloud_networks_obj:
+        logger.info('\tVirtual Cloud Network : {0!s:s}'.format(oci_virtual_cloud_network.data['display_name']))
+        # Internet Gateways
+        oci_internet_gateways = oci_virtual_cloud_network.getInternetGatewayClients()
+        response_json['compartment']['internet_gateways'] = oci_internet_gateways.list()
+        for oci_internet_gateway in oci_internet_gateways.internet_gateways_obj:
+            logger.info('\t\tInternet Gateway : {0!s:s}'.format(oci_internet_gateway.data['display_name']))
+        # Route Tables
+        oci_route_tables = oci_virtual_cloud_network.getRouteTableClients()
+        response_json['compartment']['route_tables'] = oci_route_tables.list()
+        for oci_route_table in oci_route_tables.route_tables_obj:
+            logger.info('\t\tRoute Table : {0!s:s}'.format(oci_route_table.data['display_name']))
+        # Security Lists
+        security_lists = oci_virtual_cloud_network.getSecurityListClients()
+        response_json['compartment']['security_lists'] = security_lists.list()
+        for security_list in security_lists.security_lists_obj:
+            logger.info('\t\tSecurity List : {0!s:s}'.format(security_list.data['display_name']))
+        # Subnets
+        subnets = oci_virtual_cloud_network.getSubnetClients()
+        response_json['compartment']['subnets'] = subnets.list()
+        for subnet in subnets.subnets_obj:
+            logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
+    logger.info('Response     : {0:s}'.format(str(response_json)))
+    logJson(response_json)
+    return response_json
+
+
+@bp.route('/designer', methods=(['GET', 'POST']))
 def designer():
     oci_assets_js = os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets'))
-    print(oci_assets_js)
-    return render_template('okit/designer.html', oci_assets_js=oci_assets_js)
+    if request.method == 'POST':
+        request_json = {}
+        for key, value in request.form.items():
+            request_json[key] = value
+        request_json['virtual_cloud_network_filter'] = {'display_name': request_json.get('virtual_cloud_network_name_filter', '')}
+        response_json = executeQuery(request_json)
+        response_string = json.dumps(response_json, separators=(',', ': '))
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, okit_query_json=response_string)
+    elif request.method == 'GET':
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
@@ -97,47 +151,7 @@ def ociQuery():
     if request.method == 'POST':
         response_json = {}
         logger.info('Post JSON : {0:s}'.format(str(request.json)))
-        compartment_id = request.json['compartment_id']
-        filter = request.json.get('virtual_cloud_network_filter', '')
-        oci_compartments = OCICompartments()
-        compartment_json = oci_compartments.get(compartment_id=compartment_id)
-        oci_compartment = oci_compartments.compartments_obj[0]
-        # Build OKIT Response json add compartment information
-        response_json['compartment'] = {}
-        response_json['compartment']['id'] = compartment_json['id']
-        response_json['compartment']['name'] = compartment_json['name']
-        logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['name']))
-        # Query all Virtual Cloud Networks
-        #oci_virtual_cloud_network_client = OCIVirtualCloudNetworks(compartment_id=compartment_id)
-        #return oci_virtual_cloud_network_client.list(compartment_id=compartment_id, )
-        oci_virtual_cloud_networks = oci_compartment.getVirtualCloudNetworkClients()
-        response_json['compartment']["virtual_cloud_networks"] = oci_virtual_cloud_networks.list(filter=filter)
-        # Loop through resulting json
-        for oci_virtual_cloud_network in oci_virtual_cloud_networks.virtual_cloud_networks_obj:
-            logger.info('\tVirtual Cloud Network : {0!s:s}'.format(oci_virtual_cloud_network.data['display_name']))
-            # Internet Gateways
-            oci_internet_gateways = oci_virtual_cloud_network.getInternetGatewayClients()
-            response_json['compartment']['internet_gateways'] = oci_internet_gateways.list()
-            for oci_internet_gateway in oci_internet_gateways.internet_gateways_obj:
-                logger.info('\t\tInternet Gateway : {0!s:s}'.format(oci_internet_gateway.data['display_name']))
-            # Route Tables
-            oci_route_tables = oci_virtual_cloud_network.getRouteTableClients()
-            response_json['compartment']['route_tables'] = oci_route_tables.list()
-            for oci_route_table in oci_route_tables.route_tables_obj:
-                logger.info('\t\tRoute Table : {0!s:s}'.format(oci_route_table.data['display_name']))
-            # Security Lists
-            security_lists = oci_virtual_cloud_network.getSecurityListClients()
-            response_json['compartment']['security_lists'] = security_lists.list()
-            for security_list in security_lists.security_lists_obj:
-                logger.info('\t\tSecurity List : {0!s:s}'.format(security_list.data['display_name']))
-            # Subnets
-            subnets = oci_virtual_cloud_network.getSubnetClients()
-            response_json['compartment']['subnets'] = subnets.list()
-            for subnet in subnets.subnets_obj:
-                logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
-        logger.info('Response     : {0:s}'.format(str(response_json)))
-        logJson(response_json)
-        return response_json
+        return executeQuery(request.json)
     else:
         ociCompartments = OCICompartments()
         compartments = ociCompartments.listTenancy()

@@ -34,11 +34,15 @@ function displayOkitJson() {
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
 }
 
+function generateConnectorId(sourceid, destinationid) {
+    return sourceid + '-' + destinationid;
+}
+
 /*
 ** Json Object Processing
  */
 
-var OKITJsonObj = {compartment: {id: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
+var OKITJsonObj = {"compartment": {id: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
 
 /*
 ** New File functionality
@@ -94,6 +98,11 @@ function loaded(evt) {
     console.log('Loaded: ' + fileString);
     OKITJsonObj = JSON.parse(fileString);
     displayOkitJson();
+    drawSVGforJson();
+}
+
+function drawSVGforJson() {
+    console.log('******** Drawing SVG *********');
     // Clear existing
     clearSVG();
     // Draw SVG
