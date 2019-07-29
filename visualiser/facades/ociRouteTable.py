@@ -40,7 +40,7 @@ class OCIRouteTables(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        route_tables = self.client.list_route_tables(compartment_id=compartment_id, vcn_id=self.vcn_id, limit=self.PAGINATION_LIMIT).data
+        route_tables = oci.pagination.list_call_get_all_results(self.client.list_route_tables, compartment_id=compartment_id, vcn_id=self.vcn_id).data
         # Convert to Json object
         self.route_tables_json = self.toJson(route_tables)
         logger.debug(str(self.route_tables_json))
