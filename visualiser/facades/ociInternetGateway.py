@@ -40,7 +40,7 @@ class OCIInternetGateways(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        internet_gateways = self.client.list_internet_gateways(compartment_id=compartment_id, vcn_id=self.vcn_id, limit=self.PAGINATION_LIMIT).data
+        internet_gateways = oci.pagination.list_call_get_all_results(self.client.list_internet_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
         # Convert to Json object
         self.internet_gateways_json = self.toJson(internet_gateways)
         logger.debug(str(self.internet_gateways_json))

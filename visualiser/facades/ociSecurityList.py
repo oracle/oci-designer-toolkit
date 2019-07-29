@@ -40,7 +40,7 @@ class OCISecurityLists(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        security_lists = self.client.list_security_lists(compartment_id=compartment_id, vcn_id=self.vcn_id, limit=self.PAGINATION_LIMIT).data
+        security_lists = oci.pagination.list_call_get_all_results(self.client.list_security_lists, compartment_id=compartment_id, vcn_id=self.vcn_id).data
         # Convert to Json object
         self.security_lists_json = self.toJson(security_lists)
         logger.debug(str(self.security_lists_json))

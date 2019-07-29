@@ -64,3 +64,17 @@ class OCIVirtualNetworkConnection(OCIConnection):
         self.client = oci.core.VirtualNetworkClient(self.config)
         return
 
+
+class OCILoadBalancerConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, **kwargs):
+        super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile)
+
+    def connect(self):
+        if self.config is None:
+            if self.configfile is None:
+                self.config = oci.config.from_file()
+            else:
+                self.config = oci.config.from_file(self.configfile)
+        self.client = oci.core.LoadBalancerClient(self.config)
+        return
+
