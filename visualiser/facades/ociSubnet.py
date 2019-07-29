@@ -40,7 +40,7 @@ class OCISubnets(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        subnets = self.client.list_subnets(compartment_id=compartment_id, vcn_id=self.vcn_id, limit=self.PAGINATION_LIMIT).data
+        subnets = oci.pagination.list_call_get_all_results(self.client.list_subnets, compartment_id=compartment_id, vcn_id=self.vcn_id).data
         # Convert to Json object
         self.subnets_json = self.toJson(subnets)
         logger.debug(str(self.subnets_json))

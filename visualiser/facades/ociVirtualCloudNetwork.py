@@ -43,7 +43,7 @@ class OCIVirtualCloudNetworks(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        virtual_cloud_networks = self.client.list_vcns(compartment_id=compartment_id, limit=self.PAGINATION_LIMIT).data
+        virtual_cloud_networks = oci.pagination.list_call_get_all_results(self.client.list_vcns, compartment_id=compartment_id).data
         # Convert to Json object
         self.virtual_cloud_networks_json = self.toJson(virtual_cloud_networks)
         logger.debug(str(self.virtual_cloud_networks_json))

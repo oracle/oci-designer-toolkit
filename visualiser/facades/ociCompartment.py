@@ -43,7 +43,7 @@ class OCICompartments(OCIIdentityConnection):
         # Recursive only valid if we are querying the root / tenancy
         recursive = (recursive and (id == self.config['tenancy']))
 
-        compartments = self.client.list_compartments(compartment_id=id, compartment_id_in_subtree=recursive, limit=self.PAGINATION_LIMIT).data
+        compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
         # Convert to Json object
         self.compartments_json = self.toJson(compartments)
         logger.debug(str(self.compartments_json))
@@ -120,6 +120,10 @@ def main(argv):
             subnets.list()
             for subnet in subnets.subnets_obj:
                 logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
+
+        oci_load_balancers = oci_compartment.getLoadBalancerClients()
+        oci_load_balancers.list()
+
     return
 
 # Main function to kick off processing
