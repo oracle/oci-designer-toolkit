@@ -22,12 +22,12 @@ function addRouteTable(vcnid) {
     // Increment Count
     route_table_count += 1;
     var route_table = {};
-    route_table['virtual_cloud_network_id'] = vcnid;
+    route_table['vcn_id'] = vcnid;
     route_table['virtual_cloud_network'] = '';
     route_table['id'] = id;
-    route_table['name'] = generateDefaultName('RT', route_table_count);
+    route_table['display_name'] = generateDefaultName('RT', route_table_count);
     OKITJsonObj['compartment']['route_tables'].push(route_table);
-    okitIdsJsonObj[id] = route_table['name'];
+    okitIdsJsonObj[id] = route_table['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawRouteTableSVG(route_table);
@@ -37,41 +37,42 @@ function addRouteTable(vcnid) {
 ** SVG Creation
  */
 function drawRouteTableSVG(route_table) {
-    var vcnid = route_table['virtual_cloud_network_id'];
+    var vcnid = route_table['vcn_id'];
     var id = route_table['id'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
+    var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
+    var svg_y = (icon_height / 4) * 3;
     var data_type = "Route Table";
 
     // Increment Icon Position
     vcn_element_icon_position += 1;
 
-    //svg = d3.select(okitcanvas);
-    svg = d3.select('#' + vcnid + '-group');
-
-    var rt = svg.append("g")
-        .attr("id", id + '-group')
-        .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
-    rt.append("rect")
+    var okitcanvas_svg = d3.select('#' + vcnid + "-svg");
+    var svg = okitcanvas_svg.append("svg")
+        .attr("id", id + '-svg')
+        .attr("data-type", data_type)
+        .attr("data-vcnid", vcnid)
+        .attr("title", route_table['display_name'])
+        .attr("x", svg_x)
+        .attr("y", svg_y)
+        .attr("width", "100")
+        .attr("height", "100");
+    svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
-        .attr("title", route_table['name'])
+        .attr("data-vcnid", vcnid)
+        .attr("title", route_table['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         .attr("width", icon_width)
         .attr("height", icon_height)
         .attr("stroke", icon_stroke_colour)
-        .attr("stroke-dasharray", "5, 5")
+        .attr("stroke-dasharray", "1, 1")
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
-    var iconsvg = rt.append("svg")
-        .attr("id", id)
-        .attr("data-type", data_type)
-        .attr("width", "100")
-        .attr("height", "100")
-        .attr("viewbox", "0 0 200 200");
-    var g = iconsvg.append("g")
+    var g = svg.append("g")
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
     g.append("rect")
         .attr("x", "99.6")
@@ -106,7 +107,7 @@ function drawRouteTableSVG(route_table) {
 
     // Add click event to display properties
     $('#' + id).on("click", function() { assetSelected('RouteTable', id) });
-    d3.select('g#' + id + '-group').selectAll('path')
+    d3.select('svg#' + id + '-svg').selectAll('path')
         .on("click", function() { assetSelected('RouteTable', id) });
     assetSelected('RouteTable', id);
 
@@ -138,15 +139,15 @@ function loadRouteTableProperties(id) {
                 //console.log(JSON.stringify(route_table, null, 2));
                 if (route_table['id'] == id) {
                     //console.log('Found Route Table: ' + id);
-                    route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['virtual_cloud_network_id']];
+                    route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['vcn_id']];
                     $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
-                    $('#name').val(route_table['name']);
+                    $('#display_name').val(route_table['display_name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
                             route_table[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'name') {
+                            if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();

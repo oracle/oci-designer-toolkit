@@ -22,12 +22,12 @@ function addInternetGateway(vcnid) {
     // Increment Count
     internet_gateway_count += 1;
     var internet_gateway = {};
-    internet_gateway['virtual_cloud_network_id'] = vcnid;
+    internet_gateway['vcn_id'] = vcnid;
     internet_gateway['virtual_cloud_network'] = '';
     internet_gateway['id'] = id;
-    internet_gateway['name'] = generateDefaultName('IG', internet_gateway_count);
+    internet_gateway['display_name'] = generateDefaultName('IG', internet_gateway_count);
     OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
-    okitIdsJsonObj[id] = internet_gateway['name'];
+    okitIdsJsonObj[id] = internet_gateway['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawInternetGatewaySVG(internet_gateway);
@@ -37,42 +37,44 @@ function addInternetGateway(vcnid) {
 ** SVG Creation
  */
 function drawInternetGatewaySVG(internet_gateway) {
-    var vcnid = internet_gateway['virtual_cloud_network_id'];
+    var vcnid = internet_gateway['vcn_id'];
     var id = internet_gateway['id'];
-    var position = vcn_element_icon_position;
+    var position = vcn_gateway_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
+    var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
+    var svg_y = (icon_height / 2) * -1;
     var data_type = "Internet Gateway";
 
     // Increment Icon Position
-    vcn_element_icon_position += 1;
+    vcn_gateway_icon_position += 1;
 
-    svg = d3.select('#' + vcnid + '-group');
-
-    var ig = svg.append("g")
-        .attr("id", id + '-group')
-        .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
-    ig.append("rect")
+    //var okitcanvas_svg = d3.select(okitcanvas);
+    var okitcanvas_svg = d3.select('#' + vcnid + "-svg");
+    var svg = okitcanvas_svg.append("svg")
+        .attr("id", id + '-svg')
+        .attr("data-type", data_type)
+        .attr("data-vcnid", vcnid)
+        .attr("title", internet_gateway['display_name'])
+        .attr("x", svg_x)
+        .attr("y", svg_y)
+        .attr("width", "100")
+        .attr("height", "100");
+    svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
-        .attr("title", internet_gateway['name'])
+        .attr("data-vcnid", vcnid)
+        .attr("title", internet_gateway['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         .attr("width", icon_width)
         .attr("height", icon_height)
         .attr("stroke", icon_stroke_colour)
-        .attr("stroke-dasharray", "5, 5")
+        .attr("stroke-dasharray", "1, 1")
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
-    var iconsvg = ig.append("svg")
-        .attr("id", id)
-        .attr("data-type", data_type)
-        .attr("width", "100")
-        .attr("height", "100")
-        .attr("viewbox", "0 0 200 200");
-    var g1 = iconsvg.append("g")
+    var g1 = svg.append("g")
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-//.attr("transform", "translate(" + translate_x + ", " + translate_y + ") scale(0.3, 0.3)");
     var g2 = g1.append("g");
     var g3 = g2.append("g");
     var g4 = g3.append("g");
@@ -93,7 +95,7 @@ function drawInternetGatewaySVG(internet_gateway) {
 
     // Add click event to display properties
     $('#' + id).on("click", function() { assetSelected('InternetGateway', id) });
-    d3.select('g#' + id + '-group').selectAll('path')
+    d3.select('svg#' + id + '-svg').selectAll('path')
         .on("click", function() { assetSelected('InternetGateway', id) });
     assetSelected('InternetGateway', id);
 }
@@ -111,15 +113,15 @@ function loadInternetGatewayProperties(id) {
                 //console.log(JSON.stringify(internet_gateway, null, 2));
                 if (internet_gateway['id'] == id) {
                     //console.log('Found Internet Gateway: ' + id);
-                    internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['virtual_cloud_network_id']];
+                    internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['vcn_id']];
                     $("#virtual_cloud_network").html(internet_gateway['virtual_cloud_network']);
-                    $('#name').val(internet_gateway['name']);
+                    $('#display_name').val(internet_gateway['display_name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
                             internet_gateway[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'name') {
+                            if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();

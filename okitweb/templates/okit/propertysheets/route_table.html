@@ -12,7 +12,19 @@
         <table id="route_table" class="property-editor-table">
             <tr><th>Property</th><th>Value</th></tr>
             <tr><td>Virtual Cloud Network</td><td><label id="virtual_cloud_network" class="property-value"></label></td></tr>
-            <tr><td>Name</td><td><input type="text" id="name" name="name" class="property-value"></td></tr>
+            <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
+        </table>
+        <table id="route_rules_table" class="property-editor-table">
+            <tr><th>Rules</th><th width="20px"><input type="button" id="add_button" class="add-button" value="+"/></th></tr>
+            <tr><td colspan="2">
+                <table id="rule_table_001" class="property-editor-table">
+                    <tr><td><input type="button" id="delete_button" class="delete-button" value="-" onclick="deleteRouteRulesRow(this)"/></td><td></td></tr>
+                    <tr><td>CIDR</td><td><input type="text" id="cidr_block" name="cidr_block" class="property-value"></td></tr>
+                    <tr><td>Destination</td><td><input type="text" id="destination" name="destination" class="property-value"></td></tr>
+                    <tr><td>Destination Type</td><td><label id="destination_type" class="property-value">CIDR_BLOCK</label></td></tr>
+                    <tr><td>Network Entity</td><td><input type="text" id="network_entity" name="network_entity" class="property-value"></td></tr>
+                </table>
+            </td></tr>
         </table>
     </div>
 </body>

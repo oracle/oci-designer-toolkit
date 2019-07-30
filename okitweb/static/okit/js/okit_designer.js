@@ -10,7 +10,6 @@ var palatteicons = document.querySelectorAll('#palatte .palatteicon');
     palatteicon.addEventListener('dragstart', handleDragStart, false);
 });
 
-//var okitcanvas = document.querySelector('#okitcanvas');
 /*
 ** Handle drop functionality for canvas
  */
@@ -21,6 +20,13 @@ okitcanvas.addEventListener('dragleave', handleDragLeave, false);
 okitcanvas.addEventListener('drop', handleDrop, false);
 okitcanvas.addEventListener('dragend', handleDragEnd, false);
 
+// Set SVG Attributes
+d3.select('#okitcanvas')
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', '100%')
+    .attr('height', '100%');
+
 /*
 ** Define Connector Drag & Drop functions point manipulation code.
  */
@@ -29,6 +35,8 @@ var okitcanvasScreenCTM = okitcanvas.getScreenCTM();
 var connectorStartElement = null;
 var connectorStartXLeft = 0;
 var connectorStartYTop = 0;
+var connectorContainerSVGPoint = null;
+var connectorContainerScreenCTM = null;
 
 /*
 ** Add button handlers

@@ -134,22 +134,22 @@ class OCIGenerator(object):
 
     def renderVirtualCloudNetworks(self, virtual_cloud_network):
         # Read Data
-        standardisedName = self.standardiseResourceName(virtual_cloud_network['name'])
+        standardisedName = self.standardiseResourceName(virtual_cloud_network['display_name'])
         # resourceName = 'VirtualCloudNetwork_{0:s}'.format(standardisedName)
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = virtual_cloud_network['name']
+        self.jinja2_variables['output_name'] = virtual_cloud_network['display_name']
         # Process Virtual Cloud Networks Data
         logger.info("Processing Virtual Cloud Network Information")
         # -- Define Variables
         # ---- CIDR Block
         variableName = '{0:s}_cidr_block'.format(standardisedName)
         self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["cidr"]
+        self.run_variables[variableName] = virtual_cloud_network["cidr_block"]
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["name"]
+        self.run_variables[variableName] = virtual_cloud_network["display_name"]
         # ---- DNS Label
         variableName = '{0:s}_dns_label'.format(standardisedName)
         self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
@@ -164,11 +164,11 @@ class OCIGenerator(object):
 
     def renderInternetGateway(self, internet_gateway):
         # Read Data
-        standardisedName = self.standardiseResourceName(internet_gateway['name'])
+        standardisedName = self.standardiseResourceName(internet_gateway['display_name'])
         # resourceName = 'InternetGateway_{0:s}'.format(standardisedName)
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = internet_gateway['name']
+        self.jinja2_variables['output_name'] = internet_gateway['display_name']
         # Process Internet Gateway Data
         logger.info("Processing Internet Gateway Information")
         # -- Define Variables
@@ -177,7 +177,7 @@ class OCIGenerator(object):
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = internet_gateway["name"]
+        self.run_variables[variableName] = internet_gateway["display_name"]
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("internet_gateway.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
@@ -186,11 +186,11 @@ class OCIGenerator(object):
 
     def renderSecurityList(self, security_list):
         # Read Data
-        standardisedName = self.standardiseResourceName(security_list['name'])
+        standardisedName = self.standardiseResourceName(security_list['display_name'])
         # resourceName = 'SecurityList_{0:s}'.format(standardisedName)
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = security_list['name']
+        self.jinja2_variables['output_name'] = security_list['display_name']
         # Process Security List Data
         logger.info("Processing Security List Information")
         # -- Define Variables
@@ -199,7 +199,7 @@ class OCIGenerator(object):
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = security_list["name"]
+        self.run_variables[variableName] = security_list["display_name"]
         # ---- Egress Rules
         rule_number = 1
         jinja2_egress_rules = []
@@ -250,10 +250,10 @@ class OCIGenerator(object):
 
     def renderRouteTable(self, route_table):
         # Read Data
-        standardisedName = self.standardiseResourceName(route_table['name'])
+        standardisedName = self.standardiseResourceName(route_table['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = route_table['name']
+        self.jinja2_variables['output_name'] = route_table['display_name']
         # Process Route Table Data
         logger.info("Processing Route Table Information")
         # -- Define Variables
@@ -262,7 +262,7 @@ class OCIGenerator(object):
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = route_table["name"]
+        self.run_variables[variableName] = route_table["display_name"]
         # ---- Route Rules
         rule_number = 1
         jinja2_route_rules = []
@@ -294,10 +294,10 @@ class OCIGenerator(object):
 
     def renderSubnet(self, subnet):
         # Read Data
-        standardisedName = self.standardiseResourceName(subnet['name'])
+        standardisedName = self.standardiseResourceName(subnet['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = subnet['name']
+        self.jinja2_variables['output_name'] = subnet['display_name']
         # Process Subnet Data
         logger.info("Processing Subnet Information")
         # -- Define Variables
@@ -306,11 +306,11 @@ class OCIGenerator(object):
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["name"]
+        self.run_variables[variableName] = subnet["display_name"]
         # ---- CIDR Block
         variableName = '{0:s}_cidr_block'.format(standardisedName)
         self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["cidr"]
+        self.run_variables[variableName] = subnet["cidr_block"]
         # ---- DNS Label
         variableName = '{0:s}_dns_label'.format(standardisedName)
         self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
@@ -336,17 +336,17 @@ class OCIGenerator(object):
 
     def renderInstance(self, instance):
         # Read Data
-        standardisedName = self.standardiseResourceName(instance['name'])
+        standardisedName = self.standardiseResourceName(instance['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = instance['name']
+        self.jinja2_variables['output_name'] = instance['display_name']
         # Process Subnet Data
         logger.info("Processing Instance Information")
         # -- Define Variables
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["name"]
+        self.run_variables[variableName] = instance["display_name"]
         # ---- Hostame
         variableName = '{0:s}_hostname'.format(standardisedName)
         self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
@@ -377,17 +377,17 @@ class OCIGenerator(object):
 
     def renderLoadbalancer(self, loadbalancer):
         # Read Data
-        standardisedName = self.standardiseResourceName(loadbalancer['name'])
+        standardisedName = self.standardiseResourceName(loadbalancer['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = loadbalancer['name']
+        self.jinja2_variables['output_name'] = loadbalancer['display_name']
         # Process Subnet Data
         logger.info("Processing Loadbalancer Information")
         # -- Define Variables
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = loadbalancer["name"]
+        self.run_variables[variableName] = loadbalancer["display_name"]
         # ---- Shape
         variableName = '{0:s}_shape'.format(standardisedName)
         self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
