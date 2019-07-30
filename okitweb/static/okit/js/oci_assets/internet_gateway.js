@@ -25,9 +25,9 @@ function addInternetGateway(vcnid) {
     internet_gateway['vcn_id'] = vcnid;
     internet_gateway['virtual_cloud_network'] = '';
     internet_gateway['id'] = id;
-    internet_gateway['name'] = generateDefaultName('IG', internet_gateway_count);
+    internet_gateway['display_name'] = generateDefaultName('IG', internet_gateway_count);
     OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
-    okitIdsJsonObj[id] = internet_gateway['name'];
+    okitIdsJsonObj[id] = internet_gateway['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawInternetGatewaySVG(internet_gateway);
@@ -55,7 +55,7 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
-        .attr("title", internet_gateway['name'])
+        .attr("title", internet_gateway['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
         .attr("width", "100")
@@ -64,7 +64,7 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
-        .attr("title", internet_gateway['name'])
+        .attr("title", internet_gateway['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         .attr("width", icon_width)
@@ -115,13 +115,13 @@ function loadInternetGatewayProperties(id) {
                     //console.log('Found Internet Gateway: ' + id);
                     internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['vcn_id']];
                     $("#virtual_cloud_network").html(internet_gateway['virtual_cloud_network']);
-                    $('#name').val(internet_gateway['name']);
+                    $('#display_name').val(internet_gateway['display_name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
                             internet_gateway[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'name') {
+                            if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();

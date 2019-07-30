@@ -25,10 +25,11 @@ function addSecurityList(vcnid) {
     security_list['vcn_id'] = vcnid;
     security_list['virtual_cloud_network'] = '';
     security_list['id'] = id;
-    security_list['name'] = generateDefaultName('SL', security_list_count);
+    security_list['display_name'] = generateDefaultName('SL', security_list_count);
     OKITJsonObj['compartment']['security_lists'].push(security_list);
-    okitIdsJsonObj[id] = security_list['name'];
+    okitIdsJsonObj[id] = security_list['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
+    console.log(security_list_ids);
     displayOkitJson();
     drawSecurityListSVG(security_list);
 }
@@ -54,7 +55,7 @@ function drawSecurityListSVG(security_list) {
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
-        .attr("title", security_list['name'])
+        .attr("title", security_list['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
         .attr("width", "100")
@@ -63,7 +64,7 @@ function drawSecurityListSVG(security_list) {
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
-        .attr("title", security_list['name'])
+        .attr("title", security_list['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         .attr("width", icon_width)
@@ -115,13 +116,13 @@ function loadSecurityListProperties(id) {
                     //console.log('Found Security List: ' + id);
                     security_list['virtual_cloud_network'] = okitIdsJsonObj[security_list['vcn_id']];
                     $("#virtual_cloud_network").html(security_list['virtual_cloud_network']);
-                    $('#name').val(security_list['name']);
+                    $('#display_name').val(security_list['display_name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
                             security_list[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'name') {
+                            if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();

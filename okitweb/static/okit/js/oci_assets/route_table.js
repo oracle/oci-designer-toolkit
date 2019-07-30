@@ -25,9 +25,9 @@ function addRouteTable(vcnid) {
     route_table['vcn_id'] = vcnid;
     route_table['virtual_cloud_network'] = '';
     route_table['id'] = id;
-    route_table['name'] = generateDefaultName('RT', route_table_count);
+    route_table['display_name'] = generateDefaultName('RT', route_table_count);
     OKITJsonObj['compartment']['route_tables'].push(route_table);
-    okitIdsJsonObj[id] = route_table['name'];
+    okitIdsJsonObj[id] = route_table['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawRouteTableSVG(route_table);
@@ -54,7 +54,7 @@ function drawRouteTableSVG(route_table) {
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
-        .attr("title", route_table['name'])
+        .attr("title", route_table['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
         .attr("width", "100")
@@ -63,7 +63,7 @@ function drawRouteTableSVG(route_table) {
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
-        .attr("title", route_table['name'])
+        .attr("title", route_table['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         .attr("width", icon_width)
@@ -141,13 +141,13 @@ function loadRouteTableProperties(id) {
                     //console.log('Found Route Table: ' + id);
                     route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['vcn_id']];
                     $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
-                    $('#name').val(route_table['name']);
+                    $('#display_name').val(route_table['display_name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
                             route_table[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'name') {
+                            if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();

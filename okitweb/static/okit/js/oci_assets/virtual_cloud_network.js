@@ -23,11 +23,11 @@ function addVirtualCloudNetwork() {
     virtual_cloud_network_count += 1;
     var virtual_cloud_network = {};
     virtual_cloud_network['id'] = id;
-    virtual_cloud_network['name'] = generateDefaultName('VCN', virtual_cloud_network_count);
+    virtual_cloud_network['display_name'] = generateDefaultName('VCN', virtual_cloud_network_count);
     virtual_cloud_network['cidr'] = '';
     virtual_cloud_network['dns_label'] = '';
     OKITJsonObj['compartment']['virtual_cloud_networks'].push(virtual_cloud_network);
-    okitIdsJsonObj[id] = virtual_cloud_network['name'];
+    okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawVirtualCloudNetworkSVG(virtual_cloud_network);
@@ -46,7 +46,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     var svg = okitcanvas_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
-        .attr("title", virtual_cloud_network['name'])
+        .attr("title", virtual_cloud_network['display_name'])
         .attr("x", 20)
         .attr("y", 70)
         .attr("width", "105%")
@@ -54,7 +54,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
-        .attr("title", virtual_cloud_network['name'])
+        .attr("title", virtual_cloud_network['display_name'])
         .attr("x", icon_width / 2)
         .attr("y", icon_height / 2)
         .attr("width", "90%")
@@ -108,7 +108,7 @@ function loadVirtualCloudNetworkProperties(id) {
                 //console.log(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {
                     //console.log('Found Virtual Cloud Network: ' + id);
-                    $('#name').val(virtual_cloud_network['name']);
+                    $('#name').val(virtual_cloud_network['display_name']);
                     $('#cidr').val(virtual_cloud_network['cidr']);
                     $('#dns_label').val(virtual_cloud_network['dns_label']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
@@ -116,7 +116,7 @@ function loadVirtualCloudNetworkProperties(id) {
                         inputfield.addEventListener('change', function () {
                             virtual_cloud_network[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'name') {
+                            if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();

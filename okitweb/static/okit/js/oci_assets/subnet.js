@@ -26,16 +26,16 @@ function addSubnet(vcnid) {
     subnet['vcn_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
-    subnet['name'] = generateDefaultName('SN', subnet_count);
+    subnet['display_name'] = generateDefaultName('SN', subnet_count);
     subnet['cidr'] = '';
     subnet['dns_label'] = '';
     subnet['route_table'] = '';
     subnet['route_table_id'] = '';
     subnet['security_lists'] = [];
-    subnet['security_lists_id'] = [];
+    subnet['security_list_ids'] = [];
     OKITJsonObj['compartment']['subnets'].push(subnet);
     console.log(JSON.stringify(OKITJsonObj, null, 2));
-    okitIdsJsonObj[id] = subnet['name'];
+    okitIdsJsonObj[id] = subnet['display_name'];
     displayOkitJson();
     drawSubnetSVG(subnet);
 }
@@ -60,7 +60,7 @@ function drawSubnetSVG(subnet) {
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
-        .attr("title", subnet['name'])
+        .attr("title", subnet['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
         .attr("width", "125%")
@@ -69,7 +69,7 @@ function drawSubnetSVG(subnet) {
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
-        .attr("title", subnet['name'])
+        .attr("title", subnet['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
         //.attr("width", vcn_width - (icon_width * 2))
@@ -147,14 +147,14 @@ function drawSubnetConnectorsSVG(subnet) {
             .attr("stroke", "black");
     }
 
-    if (subnet['security_lists_id'].length > 0) {
-        for (var i = 0; i < subnet['security_lists_id'].length; i++) {
-            boundingClientRect = d3.select("#" + subnet['security_lists_id'][i]).node().getBoundingClientRect();
+    if (subnet['security_list_ids'].length > 0) {
+        for (var i = 0; i < subnet['security_list_ids'].length; i++) {
+            boundingClientRect = d3.select("#" + subnet['security_list_ids'][i]).node().getBoundingClientRect();
             svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
             svgPoint.y = boundingClientRect.y + boundingClientRect.height;
             sourcesvg = svgPoint.matrixTransform(screenCTM.inverse());
             svg.append('line')
-                .attr("id", generateConnectorId(subnet['security_lists_id'][i], id))
+                .attr("id", generateConnectorId(subnet['security_list_ids'][i], id))
                 .attr("x1", sourcesvg.x)
                 .attr("y1", sourcesvg.y)
                 .attr("x2", subnetrelative.x)
@@ -170,6 +170,10 @@ function drawSubnetConnectorsSVG(subnet) {
  */
 function loadSubnetProperties(id) {
     $("#properties").load("propertysheets/subnet.html", function () {
+        var name_id_mapping = {"security_lists": "security_list_ids",
+                                "security_list_ids": "security_lists",
+                                "route_table": "route_table_id",
+                                "route_table_id": "route_table"};
         if ('compartment' in OKITJsonObj && 'subnets' in OKITJsonObj['compartment']) {
             console.log('Loading Subnet: ' + id);
             var json = OKITJsonObj['compartment']['subnets'];
@@ -180,7 +184,7 @@ function loadSubnetProperties(id) {
                     //console.log('Found Subnet: ' + id);
                     subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['vcn_id']];
                     $("#virtual_cloud_network").html(subnet['virtual_cloud_network']);
-                    $('#name').val(subnet['name']);
+                    $('#display_name').val(subnet['display_name']);
                     $('#cidr').val(subnet['cidr']);
                     $('#dns_label').val(subnet['dns_label']);
                     var route_table_select = $('#route_table_id');
@@ -194,11 +198,13 @@ function loadSubnetProperties(id) {
                         }
 
                     }
-                    var security_lists_select = $('#security_lists_id');
-                    //console.log('Security List Ids: ' + security_list_ids);
+                    var security_lists_select = $('#security_list_ids');
+                    console.log('Security List Ids: ' + security_list_ids);
                     for (var slcnt = 0; slcnt < security_list_ids.length; slcnt++) {
                         var slid = security_list_ids[slcnt];
-                        if (subnet['security_lists_id'].indexOf(slid) >= 0) {
+                        console.log('Security List Id: ' + slid);
+                        console.log('okitIdsJsonObj: ' + JSON.stringify(okitIdsJsonObj, null, 2));
+                        if (subnet['security_list_ids'].indexOf(slid) >= 0) {
                             security_lists_select.append($('<option>').attr('value', slid).attr('selected', 'selected').text(okitIdsJsonObj[slid]));
                         } else {
                             security_lists_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
@@ -209,7 +215,7 @@ function loadSubnetProperties(id) {
                         inputfield.addEventListener('change', function () {
                             subnet[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'name') {
+                            if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
                             }
                             displayOkitJson();
@@ -223,14 +229,17 @@ function loadSubnetProperties(id) {
                                 selectedopts = inputfield.querySelectorAll('option:checked');
                                 if (selectedopts.length > 0) {
                                     subnet[inputfield.id] = Array.from(selectedopts, e=>e.value);
-                                    subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = Array.from(selectedopts, e=>e.text);
+                                    //subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = Array.from(selectedopts, e=>e.text);
+                                    subnet[name_id_mapping[inputfield.id]] = Array.from(selectedopts, e=>e.text);
                                 } else {
                                     subnet[inputfield.id] = [];
-                                    subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = [];
+                                    //subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = [];
+                                    subnet[name_id_mapping[inputfield.id]] = [];
                                 }
                             } else {
                                 subnet[inputfield.id] = inputfield.options[inputfield.selectedIndex].value;
-                                subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = inputfield.options[inputfield.selectedIndex].text;
+                                //subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = inputfield.options[inputfield.selectedIndex].text;
+                                subnet[name_id_mapping[inputfield.id]] = inputfield.options[inputfield.selectedIndex].text;
                             }
                             // If this is the name field copy to the Ids Map
                             displayOkitJson();
@@ -265,12 +274,12 @@ function updateSubnetLinks(sourcetype, sourceid, id) {
                 subnet['route_table_id'] = sourceid;
                 subnet['route_table'] = okitIdsJsonObj[sourceid];
             } else if (sourcetype == 'Security List') {
-                if (subnet['security_lists_id'].indexOf(sourceid) >0 ) {
+                if (subnet['security_list_ids'].indexOf(sourceid) >0 ) {
                     // Already connected so delete existing line
                     console.log('Deleting Connector : ' + generateConnectorId(sourceid, id));
                     d3.select("#" + generateConnectorId(sourceid, id)).remove();
                 } else {
-                    subnet['security_lists_id'].push(sourceid);
+                    subnet['security_list_ids'].push(sourceid);
                     subnet['security_lists'].push(okitIdsJsonObj[sourceid]);
                 }
             }
