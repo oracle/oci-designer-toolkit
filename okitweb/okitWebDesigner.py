@@ -87,22 +87,44 @@ def executeQuery(request_json={}, ** kwargs):
             logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
     logger.info('Response     : {0:s}'.format(str(response_json)))
     logJson(response_json)
+    response_json = standardiseJson(response_json)
+    logJson(response_json)
     return response_json
 
 
-def modifyIdDotDash(json_data={}, from_char='.', to_char='-'):
-    if json_data is not None:
-        if isinstance(json_data, (dict)):
-            for key, val in json_data.items():
-                if key == 'id' or key.endswith('_id'):
-                    json_data[key] = val.replace(from_char, to_char)
-                elif key == 'id' or key.endswith('_ids'):
-                    json_data[key] = (v.replace(from_char, to_char) for v in json_data[key])
-                elif isinstance(val, (dict, list)):
-                    modifyIdDotDash(json_data[key], from_char, to_char)
-        elif isinstance(json_data, (list)):
-            for json_elem in json_data:
-                modifyIdDotDash(json_elem, from_char, to_char)
+def standardiseJson(json_data={}, **kwargs):
+    if 'compartment' in json_data:
+        if 'virtual_cloud_networks' in json_data['compartment']:
+            for virtual_network in json_data['compartment']['virtual_cloud_networks']:
+                virtual_network['id'] = standardiseId(virtual_network['id'])
+                virtual_network['compartment_id'] = standardiseId(virtual_network['compartment_id'])
+        if 'internet_gateways'in json_data['compartment']:
+            for internet_gateway in json_data['compartment']['internet_gateways']:
+                internet_gateway['id'] = standardiseId(internet_gateway['id'])
+                internet_gateway['vcn_id'] = standardiseId(internet_gateway['vcn_id'])
+                internet_gateway['compartment_id'] = standardiseId(internet_gateway['compartment_id'])
+        if 'route_tables'in json_data['compartment']:
+            for route_table in json_data['compartment']['route_tables']:
+                route_table['id'] = standardiseId(route_table['id'])
+                route_table['vcn_id'] = standardiseId(route_table['vcn_id'])
+                route_table['compartment_id'] = standardiseId(route_table['compartment_id'])
+        if 'security_lists'in json_data['compartment']:
+            for security_list in json_data['compartment']['security_lists']:
+                security_list['id'] = standardiseId(security_list['id'])
+                security_list['vcn_id'] = standardiseId(security_list['vcn_id'])
+                security_list['compartment_id'] = standardiseId(security_list['compartment_id'])
+        if 'subnets'in json_data['compartment']:
+            for subnet in json_data['compartment']['subnets']:
+                subnet['id'] = standardiseId(subnet['id'])
+                subnet['vcn_id'] = standardiseId(subnet['vcn_id'])
+                subnet['compartment_id'] = standardiseId(subnet['compartment_id'])
+                subnet['route_table_id'] = standardiseId(subnet['route_table_id'])
+                subnet['security_list_ids'] = [standardiseId(id) for id in subnet['security_list_ids']]
+    return json_data
+
+
+def standardiseId(id, from_char='.', to_char='-'):
+    return id.replace(from_char, to_char)
 
 
 @bp.route('/designer', methods=(['GET', 'POST']))

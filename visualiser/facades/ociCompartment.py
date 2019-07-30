@@ -18,6 +18,7 @@ __module__ = "ociCompartment"
 
 
 import oci
+import re
 import sys
 
 from facades.ociConnection import OCIIdentityConnection
@@ -43,16 +44,34 @@ class OCICompartments(OCIIdentityConnection):
         self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
         return self.compartments_json[0]
 
-    def list(self, id=None, recursive=False):
+    def list(self, id=None, filter={}, recursive=False, **kwargs):
         if id is None:
             id = self.compartment_ocid
         # Recursive only valid if we are querying the root / tenancy
         recursive = (recursive and (id == self.config['tenancy']))
 
+        # Add filter to only return ACTIVE Compartments
+        if filter is None:
+            filter = {}
+
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = 'ACTIVE'
+
         compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
         # Convert to Json object
-        self.compartments_json = self.toJson(compartments)
+        compartments_json = self.toJson(compartments)
+        logger.debug(str(compartments_json))
+
+        # Check if the results should be filtered
+        if filter is None:
+            self.compartments_json = compartments_json
+        else:
+            filtered = compartments_json[:]
+            for key, val in filter.items():
+                filtered = [comp for comp in filtered if re.compile(val).search(comp[key])]
+            self.compartments_json = filtered
         logger.debug(str(self.compartments_json))
+
         # Generate Name / Id mappings
         for compartment in self.compartments_json:
             self.names[compartment['id']] = compartment['name']
@@ -65,7 +84,7 @@ class OCICompartments(OCIIdentityConnection):
         return self.compartments_json
 
     def listTenancy(self):
-        return self.list(self.config['tenancy'], True)
+        return self.list(id=self.config['tenancy'], recursive=True)
 
     def listHierarchicalNames(self):
         compartments = self.listTenancy()
