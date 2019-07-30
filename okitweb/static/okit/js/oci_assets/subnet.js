@@ -28,7 +28,7 @@ function addSubnet(vcnid) {
     subnet['id'] = id;
     subnet['display_name'] = generateDefaultName('SN', subnet_count);
     subnet['cidr_block'] = '';
-    subnet['dns_label'] = '';
+    subnet['dns_label'] = subnet['display_name'].toLowerCase();
     subnet['route_table'] = '';
     subnet['route_table_id'] = '';
     subnet['security_lists'] = [];

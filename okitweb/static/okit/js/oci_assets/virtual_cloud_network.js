@@ -25,7 +25,7 @@ function addVirtualCloudNetwork() {
     virtual_cloud_network['id'] = id;
     virtual_cloud_network['display_name'] = generateDefaultName('VCN', virtual_cloud_network_count);
     virtual_cloud_network['cidr_block'] = '';
-    virtual_cloud_network['dns_label'] = '';
+    virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase();
     OKITJsonObj['compartment']['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
@@ -108,7 +108,7 @@ function loadVirtualCloudNetworkProperties(id) {
                 //console.log(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {
                     //console.log('Found Virtual Cloud Network: ' + id);
-                    $('#name').val(virtual_cloud_network['display_name']);
+                    $('#display_name').val(virtual_cloud_network['display_name']);
                     $('#cidr_block').val(virtual_cloud_network['cidr_block']);
                     $('#dns_label').val(virtual_cloud_network['dns_label']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');

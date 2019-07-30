@@ -38,6 +38,10 @@ function generateConnectorId(sourceid, destinationid) {
     return sourceid + '-' + destinationid;
 }
 
+function standardiseId(id) {
+    return id.r.replace(/\./g, '-');
+}
+
 /*
 ** Json Object Processing
  */

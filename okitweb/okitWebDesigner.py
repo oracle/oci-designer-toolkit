@@ -90,6 +90,21 @@ def executeQuery(request_json={}, ** kwargs):
     return response_json
 
 
+def modifyIdDotDash(json_data={}, from_char='.', to_char='-'):
+    if json_data is not None:
+        if isinstance(json_data, (dict)):
+            for key, val in json_data.items():
+                if key == 'id' or key.endswith('_id'):
+                    json_data[key] = val.replace(from_char, to_char)
+                elif key == 'id' or key.endswith('_ids'):
+                    json_data[key] = (v.replace(from_char, to_char) for v in json_data[key])
+                elif isinstance(val, (dict, list)):
+                    modifyIdDotDash(json_data[key], from_char, to_char)
+        elif isinstance(json_data, (list)):
+            for json_elem in json_data:
+                modifyIdDotDash(json_elem, from_char, to_char)
+
+
 @bp.route('/designer', methods=(['GET', 'POST']))
 def designer():
     oci_assets_js = os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets'))
