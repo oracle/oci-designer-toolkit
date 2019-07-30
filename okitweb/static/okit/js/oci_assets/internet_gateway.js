@@ -22,7 +22,7 @@ function addInternetGateway(vcnid) {
     // Increment Count
     internet_gateway_count += 1;
     var internet_gateway = {};
-    internet_gateway['virtual_cloud_network_id'] = vcnid;
+    internet_gateway['vcn_id'] = vcnid;
     internet_gateway['virtual_cloud_network'] = '';
     internet_gateway['id'] = id;
     internet_gateway['name'] = generateDefaultName('IG', internet_gateway_count);
@@ -37,7 +37,7 @@ function addInternetGateway(vcnid) {
 ** SVG Creation
  */
 function drawInternetGatewaySVG(internet_gateway) {
-    var vcnid = internet_gateway['virtual_cloud_network_id'];
+    var vcnid = internet_gateway['vcn_id'];
     var id = internet_gateway['id'];
     var position = vcn_gateway_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -113,7 +113,7 @@ function loadInternetGatewayProperties(id) {
                 //console.log(JSON.stringify(internet_gateway, null, 2));
                 if (internet_gateway['id'] == id) {
                     //console.log('Found Internet Gateway: ' + id);
-                    internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['virtual_cloud_network_id']];
+                    internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['vcn_id']];
                     $("#virtual_cloud_network").html(internet_gateway['virtual_cloud_network']);
                     $('#name').val(internet_gateway['name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');

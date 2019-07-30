@@ -22,7 +22,7 @@ function addSecurityList(vcnid) {
     // Increment Count
     security_list_count += 1;
     var security_list = {};
-    security_list['virtual_cloud_network_id'] = vcnid;
+    security_list['vcn_id'] = vcnid;
     security_list['virtual_cloud_network'] = '';
     security_list['id'] = id;
     security_list['name'] = generateDefaultName('SL', security_list_count);
@@ -37,7 +37,7 @@ function addSecurityList(vcnid) {
 ** SVG Creation
  */
 function drawSecurityListSVG(security_list) {
-    var vcnid = security_list['virtual_cloud_network_id'];
+    var vcnid = security_list['vcn_id'];
     var id = security_list['id'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -113,7 +113,7 @@ function loadSecurityListProperties(id) {
                 //console.log(JSON.stringify(security_list, null, 2));
                 if (security_list['id'] == id) {
                     //console.log('Found Security List: ' + id);
-                    security_list['virtual_cloud_network'] = okitIdsJsonObj[security_list['virtual_cloud_network_id']];
+                    security_list['virtual_cloud_network'] = okitIdsJsonObj[security_list['vcn_id']];
                     $("#virtual_cloud_network").html(security_list['virtual_cloud_network']);
                     $('#name').val(security_list['name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');

@@ -23,7 +23,7 @@ function addSubnet(vcnid) {
     // Increment Count
     subnet_count += 1;
     var subnet = {};
-    subnet['virtual_cloud_network_id'] = vcnid;
+    subnet['vcn_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
     subnet['name'] = generateDefaultName('SN', subnet_count);
@@ -44,7 +44,7 @@ function addSubnet(vcnid) {
 ** SVG Creation
  */
 function drawSubnetSVG(subnet) {
-    var vcnid = subnet['virtual_cloud_network_id'];
+    var vcnid = subnet['vcn_id'];
     var id = subnet['id'];
     var position = subnet_position_x;
     var vcn_offset_x = (icon_width / 2);
@@ -116,7 +116,7 @@ function clearSubnetConnectorsSVG(subnet) {
 }
 
 function drawSubnetConnectorsSVG(subnet) {
-    var vcnid = subnet['virtual_cloud_network_id'];
+    var vcnid = subnet['vcn_id'];
     var id = subnet['id'];
     var boundingClientRect = d3.select("#" + id).node().getBoundingClientRect();
     var parent_svg = document.getElementById(vcnid + "-svg");
@@ -178,7 +178,7 @@ function loadSubnetProperties(id) {
                 //console.log(JSON.stringify(subnet, null, 2));
                 if (subnet['id'] == id) {
                     //console.log('Found Subnet: ' + id);
-                    subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['virtual_cloud_network_id']];
+                    subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['vcn_id']];
                     $("#virtual_cloud_network").html(subnet['virtual_cloud_network']);
                     $('#name').val(subnet['name']);
                     $('#cidr').val(subnet['cidr']);

@@ -22,7 +22,7 @@ function addRouteTable(vcnid) {
     // Increment Count
     route_table_count += 1;
     var route_table = {};
-    route_table['virtual_cloud_network_id'] = vcnid;
+    route_table['vcn_id'] = vcnid;
     route_table['virtual_cloud_network'] = '';
     route_table['id'] = id;
     route_table['name'] = generateDefaultName('RT', route_table_count);
@@ -37,7 +37,7 @@ function addRouteTable(vcnid) {
 ** SVG Creation
  */
 function drawRouteTableSVG(route_table) {
-    var vcnid = route_table['virtual_cloud_network_id'];
+    var vcnid = route_table['vcn_id'];
     var id = route_table['id'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -139,7 +139,7 @@ function loadRouteTableProperties(id) {
                 //console.log(JSON.stringify(route_table, null, 2));
                 if (route_table['id'] == id) {
                     //console.log('Found Route Table: ' + id);
-                    route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['virtual_cloud_network_id']];
+                    route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['vcn_id']];
                     $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
                     $('#name').val(route_table['name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
