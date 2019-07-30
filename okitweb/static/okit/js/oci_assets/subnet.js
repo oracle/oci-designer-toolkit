@@ -27,7 +27,7 @@ function addSubnet(vcnid) {
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
     subnet['display_name'] = generateDefaultName('SN', subnet_count);
-    subnet['cidr'] = '';
+    subnet['cidr_block'] = '';
     subnet['dns_label'] = '';
     subnet['route_table'] = '';
     subnet['route_table_id'] = '';
@@ -185,7 +185,7 @@ function loadSubnetProperties(id) {
                     subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['vcn_id']];
                     $("#virtual_cloud_network").html(subnet['virtual_cloud_network']);
                     $('#display_name').val(subnet['display_name']);
-                    $('#cidr').val(subnet['cidr']);
+                    $('#cidr_block').val(subnet['cidr_block']);
                     $('#dns_label').val(subnet['dns_label']);
                     var route_table_select = $('#route_table_id');
                     //console.log('Route Table Ids: ' + route_table_ids);
@@ -199,11 +199,9 @@ function loadSubnetProperties(id) {
 
                     }
                     var security_lists_select = $('#security_list_ids');
-                    console.log('Security List Ids: ' + security_list_ids);
+                    //console.log('Security List Ids: ' + security_list_ids);
                     for (var slcnt = 0; slcnt < security_list_ids.length; slcnt++) {
                         var slid = security_list_ids[slcnt];
-                        console.log('Security List Id: ' + slid);
-                        console.log('okitIdsJsonObj: ' + JSON.stringify(okitIdsJsonObj, null, 2));
                         if (subnet['security_list_ids'].indexOf(slid) >= 0) {
                             security_lists_select.append($('<option>').attr('value', slid).attr('selected', 'selected').text(okitIdsJsonObj[slid]));
                         } else {
