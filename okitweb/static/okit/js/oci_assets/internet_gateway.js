@@ -60,7 +60,7 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("y", svg_y)
         .attr("width", "100")
         .attr("height", "100");
-    svg.append("rect")
+    var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
@@ -73,6 +73,8 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("stroke-dasharray", "1, 1")
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
+    rect.append("title")
+        .text("Internet Gateway: " + internet_gateway['display_name']);
     var g1 = svg.append("g")
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
     var g2 = g1.append("g");

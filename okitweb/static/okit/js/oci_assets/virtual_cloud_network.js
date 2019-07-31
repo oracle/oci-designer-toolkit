@@ -51,7 +51,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("y", 70)
         .attr("width", "105%")
         .attr("height", "40%");
-    svg.append("rect")
+    var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("title", virtual_cloud_network['display_name'])
@@ -62,6 +62,8 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("stroke", "purple")
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white");
+    rect.append("title")
+        .text("Virtual Cloud Network: " + virtual_cloud_network['display_name']);
     var g = svg.append("g")
         .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
     g.append("path")

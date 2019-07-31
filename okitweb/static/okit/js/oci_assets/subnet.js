@@ -65,7 +65,7 @@ function drawSubnetSVG(subnet) {
         .attr("y", svg_y)
         .attr("width", "125%")
         .attr("height", "100");
-    svg.append("rect")
+    var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
@@ -79,6 +79,8 @@ function drawSubnetSVG(subnet) {
         //.attr("stroke-dasharray", "5, 5")
         .attr("fill", subnet_stroke_colour[(subnet_count % 3)])
         .attr("style", "fill-opacity: .25;");
+    rect.append("title")
+        .text("Subnet: " + subnet['display_name']);
     var g = svg.append("g")
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
     g.append("path")
