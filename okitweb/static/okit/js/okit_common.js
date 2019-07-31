@@ -215,3 +215,10 @@ function saveJson(text, filename){
     a.click()
 }
 
+function setBusyIcon() {
+    $('*').css('cursor', 'wait');
+}
+
+function unsetBusyIcon() {
+    $('*').css('cursor', 'auto');
+}

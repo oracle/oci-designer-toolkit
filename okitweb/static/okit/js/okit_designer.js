@@ -64,3 +64,6 @@ $("#properties").load("propertysheets/empty.html");
  */
 
 newDiagram();
+
+// Remove Busy Icon if set
+unsetBusyIcon();

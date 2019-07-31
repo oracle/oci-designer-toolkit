@@ -15,6 +15,8 @@ function assetSelected(type, id) {
         loadSecurityListProperties(id);
     } else if (type == "Subnet") {
         loadSubnetProperties(id);
+    } else if (type == "LoadBalancer") {
+        loadLoadBalancerProperties(id);
     } else {
         $("#properties").load("propertysheets/empty.html");
     }

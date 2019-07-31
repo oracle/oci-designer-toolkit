@@ -12,7 +12,7 @@
 <body>
     <div id="query_panel" class="flex-column" style="height: 99vh; width:100%;">
         <div id="queryparameters" class="property-editor">
-            <form id="queryform" action="../designer" method="post">
+            <form id="queryform" action="../designer" method="post" onsubmit="setBusyIcon();">
                 <table id="query_table" class="property-editor-table">
                     <tr><td>Compartment</td><td>
                         <select id="compartment" name="compartment_id" form="queryform">
