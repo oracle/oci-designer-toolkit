@@ -59,7 +59,7 @@ function drawRouteTableSVG(route_table) {
         .attr("y", svg_y)
         .attr("width", "100")
         .attr("height", "100");
-    svg.append("rect")
+    var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-vcnid", vcnid)
@@ -72,6 +72,8 @@ function drawRouteTableSVG(route_table) {
         .attr("stroke-dasharray", "1, 1")
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
+    rect.append("title")
+        .text("Route Tablet: "+ route_table['display_name']);
     var g = svg.append("g")
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
     g.append("rect")

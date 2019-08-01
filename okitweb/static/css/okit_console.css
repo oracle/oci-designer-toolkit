@@ -1,0 +1,126 @@
+div {
+    display: block;
+}
+
+footer, header, main, nav, section, summary {
+    display: block;
+}
+
+/*
+** OCI Console Classes
+ */
+
+.one-console {
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+}
+
+#console-wrapper>* {
+    flex-shrink: 0;
+}
+/*
+** Header
+ */
+
+#console-header-wrapper {
+    z-index: 100;
+    position: relative;
+    height: 60px;
+}
+
+#console-header-wrapper #console-header-container {
+    position: fixed;
+    width: 100%;
+}
+
+.header-gradient {
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(90deg,#b4ec51 0,#53a0fd);
+}
+
+.console-branding-bar {
+    background: #1d2733;
+    color: #fff;
+    height: 56px;
+}
+
+.nav-menu-button {
+    margin-left: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.nav-menu-button-icon {
+    margin-right: 0;
+    padding: 8px 0;
+}
+
+/*
+** Body
+ */
+
+#console-content-wrapper {
+    flex: 1;
+    overflow-y: auto;
+}
+
+#console-content-wrapper>* {
+    flex-shrink: 0;
+}
+
+#baseplate {
+    height: 100%;
+}
+
+/*
+** Footer
+ */
+
+#console-footer-wrapper.one-console .footer-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/*
+** Drop down Menu
+ */
+
+.dropbtn {
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 60px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content dt {
+    color: black;
+    font-family: Arial;
+    font-size: 13px;
+    font-weight: bold;
+    padding-left: 6px;
+    display: block;
+}
+
+.dropdown-content dd {
+    color: black;
+    font-weight: bold;
+    display: block;
+}
+
+.dropdown-content dd input:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+/* .dropdown:hover .dropbtn {background-color: #3e8e41;} */
+

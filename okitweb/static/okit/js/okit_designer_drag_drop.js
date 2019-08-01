@@ -1,3 +1,5 @@
+console.log('Loaded Drag & Drop Javascript');
+
 /*
 ** Drag & Drop Handlers
  */
@@ -9,11 +11,12 @@
 var palatte_source_type = '';
 
 function handleDragStart(e) {
+    console.log('Drag Start');
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('text/plain', this.title);
     palatte_source_type = this.title;
     //e.dataTransfer.setData('text/html', this.src);
-    //console.log(this.title);
+    console.log(this.title);
     //console.log(this.src);
 }
 
@@ -35,6 +38,9 @@ function handleDragOver(e) {
         e.dataTransfer.effectAllowed = "none";
         e.dataTransfer.dropEffect = "none";
     } else if (palatte_source_type == "Subnet" && type != "Virtual Cloud Network") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    } else if (palatte_source_type == "Load Balancer" && type != "Virtual Cloud Network") {
         e.dataTransfer.effectAllowed = "none";
         e.dataTransfer.dropEffect = "none";
     } else {
@@ -64,6 +70,9 @@ function handleDragEnter(e) {
     } else if (palatte_source_type == "Subnet" && type != "Virtual Cloud Network") {
         e.dataTransfer.effectAllowed = "none";
         e.dataTransfer.dropEffect = "none";
+    } else if (palatte_source_type == "Load Balancer" && type != "Virtual Cloud Network") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
     } else {
         //console.log('Type: ' + e.target.getAttribute('data-type'));
         //console.log('Id: ' + e.target.id);
@@ -76,6 +85,7 @@ function handleDragLeave(e) {
 }
 
 function handleDrop(e) {
+    console.log('Drag Drop');
     // this/e.target is current target element.
 
     if (e.stopPropagation) {
@@ -105,6 +115,9 @@ function handleDrop(e) {
     } else if (title == "Subnet" && type == "Virtual Cloud Network") {
         //iconSVGFile = 'svg/OCI_InternetGateway_red.svg';
         addSubnet(id);
+    } else if (title == "Load Balancer" && type == "Virtual Cloud Network") {
+        //iconSVGFile = 'svg/OCI_LoadBalance_red.svg';
+        addLoadBalancer(id);
     }
 
     //var img = new Image();

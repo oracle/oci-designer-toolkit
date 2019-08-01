@@ -59,7 +59,7 @@ function handleNew(evt) {
 
 function newDiagram() {
     console.log('Creating New Diagram');
-    OKITJsonObj = {compartment: {id: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
+    OKITJsonObj = {compartment: {id: 'okit-comp-' + uuidv4(), name: 'Not Specified'}};
     okitIdsJsonObj = {};
     clearSVG();
 }
@@ -84,6 +84,10 @@ function clearSVG() {
     // Subnet
     subnet_ids = [];
     subnet_count = 0;
+    // Add Path Style
+    //var okitcanvas_svg = d3.select('#okitcanvas');
+    d3.select('#okitcanvas').append('style')
+        .text('.st0{fill:#F80000;}');
 }
 
 /*
@@ -170,6 +174,11 @@ function handleFileSelect(evt) {
     getAsJson(files[0]);
 }
 
+function handleLoadClick(evt) {
+    var fileinput = document.getElementById("files");
+    fileinput.click();
+}
+
 /*
 ** Query OCI
  */
@@ -196,8 +205,8 @@ function handleQueryAjax(e) {
     });
 }
 
-function handleQuery(e) {
-    window.location = 'oci/query';
+function handleQueryOci(e) {
+    window.location = 'oci/query/oci';
 }
 
 /*
@@ -215,3 +224,35 @@ function saveJson(text, filename){
     a.click()
 }
 
+/*
+** Export SVG
+ */
+
+function handleExport(evt) {
+    saveSvg(okitcanvas, 'okit.svg')
+}
+
+function saveSvg(svgEl, name) {
+    svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    var svgData = svgEl.outerHTML;
+    var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+    var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+    var svgUrl = URL.createObjectURL(svgBlob);
+    var downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = name;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+
+/*
+** Set cursor icons
+ */
+function setBusyIcon() {
+    $('*').css('cursor', 'wait');
+}
+
+function unsetBusyIcon() {
+    $('*').css('cursor', 'auto');
+}

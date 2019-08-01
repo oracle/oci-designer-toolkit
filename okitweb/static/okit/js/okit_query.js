@@ -1,3 +1,5 @@
+console.log('Loaded Query Javascript');
+
 function handleSubmitQuery(e) {
     $('*').css('cursor', 'wait');
     var queryJsonBody = {};
@@ -28,5 +30,7 @@ function handleSubmitQuery(e) {
 /*
 ** Add button handlers
  */
-document.getElementById('submitquery').addEventListener('click', handleSubmitQuery, false);
+document.getElementById('newdiagram').addEventListener('click', handleNew, false);
+
+document.getElementById('queryoci').addEventListener('click', handleQueryOci, false);
 

@@ -1,3 +1,5 @@
+console.log('Loaded Generation Javascript');
+
 /*
 ** Generate Button handlers
  */
