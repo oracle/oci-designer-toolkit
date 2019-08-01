@@ -24,6 +24,7 @@
 }
 
 .st1{fill:#F80000;}
+.st0{fill:lightgray;}
 
 .property-editor {
     background: ghostwhite;
@@ -117,6 +118,11 @@
     padding-right: 20px;
     border: none;
     background-color: #f1f1f1;
+}
+
+.menu-item {
+    font-family: Arial;
+    font-size: 12px;
 }
 
 .icons-pallet {

@@ -103,6 +103,14 @@ footer, header, main, nav, section, summary {
     z-index: 1;
 }
 
+.dropdown-content a {
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
 .dropdown-content dt {
     color: black;
     font-family: Arial;
