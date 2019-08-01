@@ -43,15 +43,19 @@ var connectorContainerScreenCTM = null;
  */
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
+document.getElementById('loaddiagram').addEventListener('click', handleLoadClick, false);
+
 document.getElementById('newdiagram').addEventListener('click', handleNew, false);
 
 document.getElementById('savejson').addEventListener('click', handleSave, false);
+
+document.getElementById('exportsvg').addEventListener('click', handleExport, false);
 
 document.getElementById('generateterraform').addEventListener('click', handleGenerateTerraform, false);
 
 document.getElementById('generateansible').addEventListener('click', handleGenerateAnsible, false);
 
-document.getElementById('queryoci').addEventListener('click', handleQuery, false);
+document.getElementById('queryoci').addEventListener('click', handleQueryOci, false);
 
 /*
 ** Set Empty Properties Sheet
@@ -66,4 +70,4 @@ $("#properties").load("propertysheets/empty.html");
 newDiagram();
 
 // Remove Busy Icon if set
-unsetBusyIcon();
+//unsetBusyIcon();

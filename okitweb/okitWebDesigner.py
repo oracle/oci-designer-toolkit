@@ -183,14 +183,17 @@ def ociCompartment():
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
 
 
-@bp.route('/oci/query', methods=(['GET', 'POST']))
-def ociQuery():
-    if request.method == 'POST':
-        response_json = {}
-        logger.info('Post JSON : {0:s}'.format(str(request.json)))
-        return executeQuery(request.json)
+@bp.route('/oci/query/<string:cloud>', methods=(['GET', 'POST']))
+def ociQuery(cloud):
+    if cloud == 'oci':
+        if request.method == 'POST':
+            response_json = {}
+            logger.info('Post JSON : {0:s}'.format(str(request.json)))
+            return executeQuery(request.json)
+        else:
+            ociCompartments = OCICompartments()
+            compartments = ociCompartments.listTenancy()
+            return render_template('okit/oci_query.html', compartments=compartments)
     else:
-        ociCompartments = OCICompartments()
-        compartments = ociCompartments.listTenancy()
-        return render_template('okit/oci_query.html', compartments=compartments)
+        return '404'
 
