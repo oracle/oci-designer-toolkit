@@ -5,7 +5,7 @@
 /*
 ** Drag start for all pallet icons
  */
-var palatteicons = document.querySelectorAll('#palatte .palatteicon');
+var palatteicons = document.querySelectorAll('#icon-palette .palatte-icon');
 [].forEach.call(palatteicons, function (palatteicon) {
     palatteicon.addEventListener('dragstart', handleDragStart, false);
 });

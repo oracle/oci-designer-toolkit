@@ -1,3 +1,5 @@
+console.log('Loaded Properties Javascript');
+
 /*
 ** Property Sheet Load function
  */

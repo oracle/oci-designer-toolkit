@@ -1,3 +1,5 @@
+console.log('Loaded Drag & Drop Javascript');
+
 /*
 ** Drag & Drop Handlers
  */
@@ -9,6 +11,7 @@
 var palatte_source_type = '';
 
 function handleDragStart(e) {
+    console.log('Drag Start');
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('text/plain', this.title);
     palatte_source_type = this.title;
@@ -82,6 +85,7 @@ function handleDragLeave(e) {
 }
 
 function handleDrop(e) {
+    console.log('Drag Drop');
     // this/e.target is current target element.
 
     if (e.stopPropagation) {

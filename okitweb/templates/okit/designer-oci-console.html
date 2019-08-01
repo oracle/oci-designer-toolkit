@@ -1,21 +1,4 @@
-{% extends "okit/base.html" %}
-
-{% block menublock %}
-    <div class="dropdown-content">
-        <dl>
-            <dt>File</dt>
-                <dd>New</dd>
-                <dd>Load</dd>
-                <dd>Save</dd>
-                <dd>Export</dd>
-            <dt>Query</dt>
-                <dd>OCI</dd>
-            <dt>Generate</dt>
-                <dd>Terraform</dd>
-                <dd>Ansible</dd>
-        </dl>
-    </div>
-{% endblock %}
+{% extends "okit/console.html" %}
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
@@ -24,10 +7,6 @@
     {% for oci_asset_js in oci_assets_js %}
         <script type="text/javascript" src="{{ url_for('static', filename='okit/js/oci_assets/' + oci_asset_js) }}"></script>
     {% endfor %}
-{% endblock %}
-
-{% block headcss %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/designer.css') }}">
 {% endblock %}
 
 {% block mainblock %}

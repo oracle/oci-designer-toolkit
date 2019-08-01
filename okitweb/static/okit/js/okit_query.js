@@ -1,3 +1,5 @@
+console.log('Loaded Query Javascript');
+
 function handleSubmitQuery(e) {
     $('*').css('cursor', 'wait');
     var queryJsonBody = {};
