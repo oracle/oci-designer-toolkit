@@ -98,24 +98,27 @@ footer, header, main, nav, section, summary {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 160px;
+    min-width: 60px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
 
 .dropdown-content dt {
     color: black;
-    padding: 12px 16px;
+    font-family: Arial;
+    font-size: 13px;
+    font-weight: bold;
+    padding-left: 6px;
     display: block;
 }
 
 .dropdown-content dd {
     color: black;
-    padding: 2px 6px;
+    font-weight: bold;
     display: block;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content dd input:hover {background-color: #ddd;}
 
 .dropdown:hover .dropdown-content {display: block;}
 
