@@ -67,7 +67,7 @@ ul {
     max-width: 40px;
 }
 
-.nav-menu-button div:hover {
+.nav-menu-button *:hover {
     background-color: #242526;
 }
 
@@ -208,7 +208,7 @@ ul.nav-list li .header-item {
     align-items: center;
 }
 
-a:hover {background-color: red;}
+ul.nav-list li a:hover {background-color: #242526;border-left-width: 5px; border-left-color: #b4ec51;}
 
 /*
 ** Body
@@ -236,57 +236,4 @@ a:hover {background-color: red;}
     bottom: 0;
     width: 100%;
 }
-
-/*
-** Drop down Menu
- */
-
-.dropbtn {
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 150px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a {
-    color: black;
-    text-decoration: none;
-    display: block;
-    padding-top: 6px;
-    padding-right: 6px;
-}
-
-.dropdown-content a:hover {background-color: #ddd;}
-
-.dropdown-content dt {
-    color: black;
-    font-family: Arial;
-    font-size: 13px;
-    font-weight: bold;
-    padding-top: 6px;
-    padding-left: 6px;
-    display: block;
-}
-
-.dropdown-content dd {
-    color: black;
-    font-weight: bold;
-    display: block;
-}
-
-.dropdown-content dd input:hover {background-color: #ddd;}
-
-.dropdown:hover .dropdown-content {display: block;}
-
-/* .dropdown:hover .dropbtn {background-color: #3e8e41;} */
 

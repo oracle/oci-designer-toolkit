@@ -10,6 +10,7 @@ function openInNewTab(url) {
 }
 
 function handleGenerateTerraform(e) {
+    hideNavMenu();
     $.ajax({
         type: 'post',
         url: 'generate/terraform',
@@ -29,6 +30,7 @@ function handleGenerateTerraform(e) {
 }
 
 function handleGenerateAnsible(e) {
+    hideNavMenu();
     $.ajax({
         type: 'post',
         url: 'generate/ansible',

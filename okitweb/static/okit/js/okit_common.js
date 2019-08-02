@@ -175,6 +175,7 @@ function handleFileSelect(evt) {
 }
 
 function handleLoadClick(evt) {
+    hideNavMenu();
     var fileinput = document.getElementById("files");
     fileinput.click();
 }
@@ -214,6 +215,7 @@ function handleQueryOci(e) {
  */
 
 function handleSave(evt) {
+    hideNavMenu();
     saveJson(JSON.stringify(OKITJsonObj, null, 2), "okit.json");
 }
 
@@ -229,6 +231,7 @@ function saveJson(text, filename){
  */
 
 function handleExport(evt) {
+    hideNavMenu();
     saveSvg(okitcanvas, 'okit.svg')
 }
 

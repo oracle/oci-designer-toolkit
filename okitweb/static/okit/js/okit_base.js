@@ -10,4 +10,8 @@ function handleNavMenuClick(evt) {
     element.classList.toggle("nav-menu-panel-show");
 }
 
+function hideNavMenu() {
+    var element = document.getElementById("console-nav-menu-panel");
+    element.classList.remove("nav-menu-panel-show");
+}
 
