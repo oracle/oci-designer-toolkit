@@ -30,7 +30,16 @@ function handleSubmitQuery(e) {
 /*
 ** Add button handlers
  */
-document.getElementById('newdiagram').addEventListener('click', handleNew, false);
+//document.getElementById('newdiagram').addEventListener('click', handleNew, false);
 
-document.getElementById('queryoci').addEventListener('click', handleQueryOci, false);
+//document.getElementById('queryoci').addEventListener('click', handleQueryOci, false);
 
+/*
+** Add Menu Item handlers
+ */
+
+// File Menu
+//document.getElementById('file-new-menu-item').addEventListener('click', handleNew, false);
+
+// Query Menu
+//document.getElementById('query-oci-menu-item').addEventListener('click', handleQueryOci, false);

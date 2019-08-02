@@ -4,9 +4,9 @@
     <div class="dropdown-content">
         <dl>
             <dt>File</dt>
-                <dd><input type="button" id="newdiagram" class="toolbar-button" value="New"></dd>
+                <dd><a id="file-new-menu-item" class="menu-item" href="{{ url_for('okit.designer') }}">New</a> </dd>
             <dt>Query</dt>
-                <dd><input type="button" id="queryoci" class="toolbar-button" value="OCI"></dd>
+                <dd><a id="query-oci-menu-item" class="menu-item" href="{{ url_for('okit.ociQuery', cloud='oci') }}">OCI</a> </dd>
         </dl>
     </div>
 {% endblock %}

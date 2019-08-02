@@ -8,18 +8,11 @@
                 <dd><a id="file-load-menu-item" class="menu-item" href="#">Load</a> </dd>
                 <dd><a id="file-save-menu-item" class="menu-item" href="#">Save</a> </dd>
                 <dd><a id="file-export-menu-item" class="menu-item" href="#">Export</a> </dd>
-                <dd><input type="button" id="newdiagram" class="toolbar-button" value="New"></dd>
-                <dd><input type="button" id="loaddiagram" class="toolbar-button" value="Load"></dd>
-                <dd><input type="button" id="savejson" class="toolbar-button" value="Save"></dd>
-                <dd><input type="button" id="exportsvg" class="toolbar-button" value="Export"></dd>
             <dt>Query</dt>
-                <dd><a id="query-oci-menu-item" class="menu-item" href="{{ url_for('okit.ociQuery', cloud='oci') }}">Query</a> </dd>
-                <dd><input type="button" id="queryoci" class="toolbar-button" value="OCI"></dd>
+                <dd><a id="query-oci-menu-item" class="menu-item" href="{{ url_for('okit.ociQuery', cloud='oci') }}">OCI</a> </dd>
             <dt>Generate</dt>
                 <dd><a id="generate-terraform-menu-item" class="menu-item" href="#">Terraform</a> </dd>
                 <dd><a id="generate-ansible-menu-item" class="menu-item" href="#">Ansible</a> </dd>
-                <dd><input type="button" id="generateterraform" class="toolbar-button" value="Terraform"></dd>
-                <dd><input type="button" id="generateansible" class="toolbar-button" value="Ansible"></dd>
         </dl>
     </div>
 {% endblock %}

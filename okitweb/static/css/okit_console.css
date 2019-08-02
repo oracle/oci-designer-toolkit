@@ -6,6 +6,21 @@ footer, header, main, nav, section, summary {
     display: block;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
 /*
 ** OCI Console Classes
  */
@@ -56,6 +71,75 @@ footer, header, main, nav, section, summary {
 }
 
 /*
+** Popout Menu
+ */
+
+#console-nav-menu-container .nav-menu-overlay {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(34,34,34,.2);
+}
+
+#console-nav-container .nav-menu-container {
+    position: fixed;
+    top: 95px;
+    left: 0;
+    bottom: 30px;
+    right: 0;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+#console-nav-menu-container .nav-menu-panel {
+    background-color: #242526;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+    width: 315px;
+    height: 100%;
+    transition: all .25s;
+    visibility: hidden;
+    transform: translateX(-100%);
+    direction: rtl;
+    -ms-scrollbar-base-color: #242526;
+    -ms-scrollbar-track-color: #242526;
+    -ms-scrollbar-face-color: #555;
+}
+
+#console-nav-menu-container .nav-menu-panel.nav-menu-panel-show {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+.one-console #console-nav-menu-container ul.nav-list li .header-item {
+    color: #fff;
+    display: flex;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 24px 16px 8px;
+    padding: 0;
+    text-transform: none;
+}
+.header-item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    font: normal 14px/20px Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    user-select: none;
+    padding: 15px 20px 0;
+    text-transform: uppercase;
+    color: #aeaeae;
+    font-size: 11px;
+    cursor: default;
+}
+
+/*
 ** Body
  */
 
@@ -98,7 +182,7 @@ footer, header, main, nav, section, summary {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 60px;
+    min-width: 100px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
@@ -107,6 +191,8 @@ footer, header, main, nav, section, summary {
     color: black;
     text-decoration: none;
     display: block;
+    padding-top: 6px;
+    padding-right: 6px;
 }
 
 .dropdown-content a:hover {background-color: #ddd;}
@@ -116,6 +202,7 @@ footer, header, main, nav, section, summary {
     font-family: Arial;
     font-size: 13px;
     font-weight: bold;
+    padding-top: 6px;
     padding-left: 6px;
     display: block;
 }

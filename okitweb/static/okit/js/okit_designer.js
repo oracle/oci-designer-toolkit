@@ -43,26 +43,26 @@ var connectorContainerScreenCTM = null;
  */
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
-document.getElementById('loaddiagram').addEventListener('click', handleLoadClick, false);
+//document.getElementById('loaddiagram').addEventListener('click', handleLoadClick, false);
 
-document.getElementById('newdiagram').addEventListener('click', handleNew, false);
+//document.getElementById('newdiagram').addEventListener('click', handleNew, false);
 
-document.getElementById('savejson').addEventListener('click', handleSave, false);
+//document.getElementById('savejson').addEventListener('click', handleSave, false);
 
-document.getElementById('exportsvg').addEventListener('click', handleExport, false);
+//document.getElementById('exportsvg').addEventListener('click', handleExport, false);
 
-document.getElementById('generateterraform').addEventListener('click', handleGenerateTerraform, false);
+//document.getElementById('generateterraform').addEventListener('click', handleGenerateTerraform, false);
 
-document.getElementById('generateansible').addEventListener('click', handleGenerateAnsible, false);
+//document.getElementById('generateansible').addEventListener('click', handleGenerateAnsible, false);
 
-document.getElementById('queryoci').addEventListener('click', handleQueryOci, false);
+//document.getElementById('queryoci').addEventListener('click', handleQueryOci, false);
 
 /*
 ** Add Menu Item handlers
  */
 
 // File Menu
-document.getElementById('file-new-menu-item').addEventListener('click', handleNew, false);
+//document.getElementById('file-new-menu-item').addEventListener('click', handleNew, false);
 
 document.getElementById('file-load-menu-item').addEventListener('click', handleLoadClick, false);
 
@@ -71,7 +71,7 @@ document.getElementById('file-save-menu-item').addEventListener('click', handleS
 document.getElementById('file-export-menu-item').addEventListener('click', handleExport, false);
 
 // Query Menu
-document.getElementById('query-oci-menu-item').addEventListener('click', handleQueryOci, false);
+//document.getElementById('query-oci-menu-item').addEventListener('click', handleQueryOci, false);
 
 // Generate Menu
 document.getElementById('generate-terraform-menu-item').addEventListener('click', handleGenerateTerraform, false);
