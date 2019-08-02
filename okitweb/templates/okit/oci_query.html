@@ -1,14 +1,26 @@
 {% extends "okit/base.html" %}
 
-{% block menublock %}
-    <div class="dropdown-content">
-        <dl>
-            <dt>File</dt>
-                <dd><a id="file-new-menu-item" class="menu-item" href="{{ url_for('okit.designer') }}">New</a> </dd>
-            <dt>Query</dt>
-                <dd><a id="query-oci-menu-item" class="menu-item" href="{{ url_for('okit.ociQuery', cloud='oci') }}">OCI</a> </dd>
-        </dl>
-    </div>
+{% block navmenublock %}
+    <ul class="nav-list">
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>File</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="file-new-menu-item" class="parent-item" href="{{ url_for('okit.designer') }}">New</a></li>
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>Query</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="query-oci-menu-item" class="parent-item" href="{{ url_for('okit.ociQuery', cloud='oci') }}">OCI</a></li>
+    </ul>
 {% endblock %}
 
 {% block headcss %}
