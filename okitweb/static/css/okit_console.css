@@ -39,12 +39,13 @@ ul {
 #console-header-wrapper {
     z-index: 100;
     position: relative;
-    height: 60px;
+    height: 56px;
 }
 
-#console-header-wrapper #console-header-container {
+#console-header-container {
     position: fixed;
     width: 100%;
+    height: 56px;
 }
 
 .header-gradient {
@@ -63,6 +64,11 @@ ul {
     margin-left: 16px;
     padding-left: 8px;
     padding-right: 8px;
+    max-width: 40px;
+}
+
+.nav-menu-button div:hover {
+    background-color: #242526;
 }
 
 .nav-menu-button-icon {
@@ -74,23 +80,50 @@ ul {
 ** Popout Menu
  */
 
-#console-nav-menu-container .nav-menu-overlay {
+#console-nav-container {
     height: 100%;
-    width: 100%;
-    background-color: rgba(34,34,34,.2);
 }
 
-#console-nav-container .nav-menu-container {
+.nav-list {
+    margin: 0;
+    padding: 0;
+    direction: ltr;
+}
+
+.nav-menu-button {
+    z-index: 20;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    user-select: none;
+    text-transform: uppercase!important;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    box-sizing: border-box;
+}
+
+.nav-menu-container {
     position: fixed;
-    top: 95px;
+    top: 56px;
     left: 0;
-    bottom: 30px;
+    bottom: 32px;
     right: 0;
     z-index: 1000;
     pointer-events: none;
 }
 
-#console-nav-menu-container .nav-menu-panel {
+.nav-menu-overlay {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(34,34,34,.2);
+}
+
+.nav-menu-panel {
     background-color: #242526;
     overflow-y: auto;
     overflow-x: hidden;
@@ -109,20 +142,11 @@ ul {
     -ms-scrollbar-face-color: #555;
 }
 
-#console-nav-menu-container .nav-menu-panel.nav-menu-panel-show {
+.nav-menu-panel-show {
     transform: translateX(0);
     visibility: visible;
 }
 
-.one-console #console-nav-menu-container ul.nav-list li .header-item {
-    color: #fff;
-    display: flex;
-    font-size: 12px;
-    line-height: 16px;
-    margin: 24px 16px 8px;
-    padding: 0;
-    text-transform: none;
-}
 .header-item {
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -138,6 +162,53 @@ ul {
     font-size: 11px;
     cursor: default;
 }
+
+.header-item img {
+    display: block;
+    height: 18px;
+    width: 18px;
+    margin-top: -2px;
+    margin-right: 8px;
+}
+
+.header-item span {
+    opacity: .6;
+    font: normal 16px/20px Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+ul.nav-list li:first-child .header-item {
+    margin-top: 18px;
+}
+
+ul.nav-list li .header-item {
+    color: #fff;
+    display: flex;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 24px 16px 8px;
+    padding: 0;
+    text-transform: none;
+}
+
+.parent-item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    font: normal 14px/20px Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    user-select: none;
+    padding: 12.5px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    align-items: center;
+}
+
+a:hover {background-color: red;}
 
 /*
 ** Body
@@ -160,7 +231,7 @@ ul {
 ** Footer
  */
 
-#console-footer-wrapper.one-console .footer-container {
+.footer-container {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -182,7 +253,7 @@ ul {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 100px;
+    min-width: 150px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }

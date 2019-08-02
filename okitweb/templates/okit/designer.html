@@ -17,6 +17,42 @@
     </div>
 {% endblock %}
 
+{% block navmenublock %}
+    <ul class="nav-list">
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>File</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="file-new-menu-item" class="parent-item" href="{{ url_for('okit.designer') }}">New</a></li>
+        <li><a id="file-load-menu-item" class="parent-item" href="#">Load</a></li>
+        <li><a id="file-save-menu-item" class="parent-item" href="#">Save</a></li>
+        <li><a id="file-export-menu-item" class="parent-item" href="#">Export</a></li>
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>Query</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="query-oci-menu-item" class="parent-item" href="{{ url_for('okit.ociQuery', cloud='oci') }}">OCI</a></li>
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>Generate</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="generate-terraform-menu-item" class="parent-item" href="#">Terraform</a></li>
+        <li><a id="generate-ansible-menu-item" class="parent-item" href="#">Ansible</a></li>
+    </ul>
+{% endblock %}
+
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
