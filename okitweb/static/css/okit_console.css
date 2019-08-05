@@ -216,7 +216,7 @@ ul.nav-list li a:hover {background-color: #242526;border-left-width: 5px; border
 
 #console-content-wrapper {
     flex: 1;
-    overflow-y: auto;
+    overflow-y: none;
 }
 
 #console-content-wrapper>* {

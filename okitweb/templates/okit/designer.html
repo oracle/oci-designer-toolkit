@@ -60,7 +60,7 @@
 
 {% block mainblock %}
     <div id="main-panel" class="main-panel flex-column">
-        <div id="icon-palette" class="icons-pallet">
+        <div id="icon-palette" class="icons-palette">
             <img class="palatte-icon" src="{{ url_for('static', filename='svg/OCI_VCloudNetwork_red.svg') }}" title="Virtual Cloud Network" draggable="true">
             <img class="palatte-icon" src="{{ url_for('static', filename='svg/OCI_InternetGateway_red.svg') }}" title="Internet Gateway" draggable="true">
             <img class="palatte-icon" src="{{ url_for('static', filename='svg/OCI_RouteTable_red.svg') }}" title="Route Table" draggable="true">
@@ -73,7 +73,7 @@
             <div id="canvas-wrapper" class="designer-left-column canvas-wrapper">
                 <svg id="okitcanvas" data-type="Compartment" class="svg-canvas"></svg>
             </div>
-            <div id="asset-properties" class="designer-right-column">
+            <div id="asset-properties" class="designer-right-column properties-wrapper">
                 <div id="properties" class="property-editor"></div>
             </div>
         </div>
