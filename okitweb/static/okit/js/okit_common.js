@@ -70,20 +70,19 @@ function clearSVG() {
     // Virtual Cloud Network
     vcn_gateway_icon_position = 0;
     vcn_element_icon_position = 0;
-    virtual_network_ids = [];
-    virtual_cloud_network_count = 0;
+    clearVirtualCloudNetworkVariables();
     // Internet Gateway
-    internet_gateway_ids = [];
-    internet_gateway_count = 0;
+    clearInternetGatewayVariables();
     // Route Table
-    route_table_ids = [];
-    route_table_count = 0;
+    clearRouteTableVariables();
     // Security List
-    security_list_ids = [];
-    security_list_count = 0;
+    clearSecurityListVariables();
     // Subnet
-    subnet_ids = [];
-    subnet_count = 0;
+    clearSubnetVariables();
+    // Load Balancer
+    clearLoadBalancerVariables();
+    // Instance
+    clearInstanceVariables();
     // Add Path Style
     //var okitcanvas_svg = d3.select('#okitcanvas');
     d3.select('#okitcanvas').append('style')
@@ -178,6 +177,21 @@ function handleLoadClick(evt) {
     hideNavMenu();
     var fileinput = document.getElementById("files");
     fileinput.click();
+}
+
+/*
+** Reload / Redraw functionality
+ */
+
+function handleRedraw(evt) {
+    redrawSVGCanvas();
+    return false;
+}
+
+function redrawSVGCanvas() {
+    hideNavMenu();
+    clearSVG();
+    drawSVGforJson();
 }
 
 /*

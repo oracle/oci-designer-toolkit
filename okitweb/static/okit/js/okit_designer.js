@@ -68,7 +68,10 @@ document.getElementById('file-load-menu-item').addEventListener('click', handleL
 
 document.getElementById('file-save-menu-item').addEventListener('click', handleSave, false);
 
+// Canvas Menu
 document.getElementById('file-export-menu-item').addEventListener('click', handleExport, false);
+
+document.getElementById('file-redraw-menu-item').addEventListener('click', handleRedraw, false);
 
 // Query Menu
 //document.getElementById('query-oci-menu-item').addEventListener('click', handleQueryOci, false);
@@ -91,4 +94,5 @@ $("#properties").load("propertysheets/empty.html");
 newDiagram();
 
 // Remove Busy Icon if set
-//unsetBusyIcon();
+unsetBusyIcon();
+

@@ -13,6 +13,15 @@
         <li><a id="file-new-menu-item" class="parent-item" href="{{ url_for('okit.designer') }}">New</a></li>
         <li><a id="file-load-menu-item" class="parent-item" href="#">Load</a></li>
         <li><a id="file-save-menu-item" class="parent-item" href="#">Save</a></li>
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>Canvas</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="file-redraw-menu-item" class="parent-item" href="#">Redraw</a></li>
         <li><a id="file-export-menu-item" class="parent-item" href="#">Export</a></li>
         <li>
             <div>
@@ -50,7 +59,7 @@
 {% endblock %}
 
 {% block mainblock %}
-    <div id="main-panel" class="main-panel">
+    <div id="main-panel" class="main-panel flex-column">
         <div id="menubar" class="menu-bar">
             <input type="file" id="files" class="file-button toolbar-button" name="file[]">
             <!--input type="button" id="newdiagram" class="toolbar-button" value="New">

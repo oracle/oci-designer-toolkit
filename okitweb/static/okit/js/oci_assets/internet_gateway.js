@@ -4,6 +4,15 @@ var internet_gateway_ids = [];
 var internet_gateway_count = 0;
 
 /*
+** Reset variables
+ */
+
+function clearInternetGatewayVariables() {
+    internet_gateway_ids = [];
+    internet_gateway_count = 0;
+}
+
+/*
 ** Add Asset to JSON Model
  */
 function addInternetGateway(vcnid) {
@@ -136,3 +145,4 @@ function loadInternetGatewayProperties(id) {
     });
 }
 
+clearInternetGatewayVariables();

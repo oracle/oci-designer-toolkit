@@ -1,7 +1,20 @@
 console.log('Loaded Virtual Cloud Network Javascript');
 
+var vcn_svg_width = "99%"
+var vcn_svg_height = "70%"
+var vcn_rect_width = "95%"
+var vcn_rect_height = "85%"
 var virtual_network_ids = [];
 var virtual_cloud_network_count = 0;
+
+/*
+** Reset variables
+ */
+
+function clearVirtualCloudNetworkVariables() {
+    virtual_network_ids = [];
+    virtual_cloud_network_count = 0;
+}
 
 /*
 ** Add Asset to JSON Model
@@ -49,16 +62,16 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("title", virtual_cloud_network['display_name'])
         .attr("x", 20)
         .attr("y", 70)
-        .attr("width", "105%")
-        .attr("height", "40%");
+        .attr("width", vcn_svg_width)
+        .attr("height", vcn_svg_height);
     var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("title", virtual_cloud_network['display_name'])
         .attr("x", icon_width / 2)
         .attr("y", icon_height / 2)
-        .attr("width", "90%")
-        .attr("height", "80%")
+        .attr("width", vcn_rect_width)
+        .attr("height", vcn_rect_height)
         .attr("stroke", "purple")
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white");
@@ -131,4 +144,4 @@ function loadVirtualCloudNetworkProperties(id) {
     });
 }
 
-
+clearVirtualCloudNetworkVariables();

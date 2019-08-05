@@ -4,6 +4,15 @@ var route_table_ids = [];
 var route_table_count = 0;
 
 /*
+** Reset variables
+ */
+
+function clearRouteTableVariables() {
+    route_table_ids = [];
+    route_table_count = 0;
+}
+
+/*
 ** Add Asset to JSON Model
  */
 function addRouteTable(vcnid) {
@@ -162,3 +171,4 @@ function loadRouteTableProperties(id) {
     });
 }
 
+clearRouteTableVariables();

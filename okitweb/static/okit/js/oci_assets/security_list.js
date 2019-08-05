@@ -4,6 +4,15 @@ var security_list_ids = [];
 var security_list_count = 0;
 
 /*
+** Reset variables
+ */
+
+function clearSecurityListVariables() {
+    security_list_ids = [];
+    security_list_count = 0;
+}
+
+/*
 ** Add Asset to JSON Model
  */
 function addSecurityList(vcnid) {
@@ -137,3 +146,4 @@ function loadSecurityListProperties(id) {
     });
 }
 
+clearSecurityListVariables();
