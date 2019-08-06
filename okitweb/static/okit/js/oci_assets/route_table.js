@@ -184,7 +184,6 @@ function loadRouteTableProperties(id) {
 }
 
 function addRouteRuleHtml(route_rule) {
-    var rule_template = $('#rule_table_template');
     var rules_table_body = d3.select('#route_rules_table_body');
     var rules_count = $('#route_rules_table_body > tr').length;
     var rule_num = rules_count + 1;

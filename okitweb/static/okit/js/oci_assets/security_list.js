@@ -142,11 +142,97 @@ function loadSecurityListProperties(id) {
                             displayOkitJson();
                         });
                     });
+                    // Add Handler to Add Button
+                    document.getElementById('egress_add_button').addEventListener('click', handleAddAccessRule, false);
+                    document.getElementById('egress_add_button').security_list = security_list;
+                    document.getElementById('ingress_add_button').addEventListener('click', handleAddAccessRule, false);
+                    document.getElementById('ingress_add_button').security_list = security_list;
                     break;
                 }
             }
         }
     });
 }
+
+function addAccessRuleHtml(access_rule, access_type) {
+    if (access_type == 'egress') {
+        var rules_table_body = d3.select('#egress_rules_table_body');
+        var rules_count = $('#egress_rules_table_body > tr').length;
+        var source_dest = 'destination';
+        var source_dest_title = 'Destination';
+    } else {
+        var rules_table_body = d3.select('#ingress_rules_table_body');
+        var rules_count = $('#ingress_rules_table_body > tr').length;
+        var source_dest = 'source';
+        var source_dest_title = 'Source';
+    }
+    var rule_num = rules_count + 1;
+    var row = rules_table_body.append('tr');
+    var cell = row.append('td')
+        .attr("id", "rule_" + rule_num)
+        .attr("colspan", "2");
+    var rule_table = cell.append('table')
+        .attr("id", "rule_table_" + rule_num)
+        .attr("class", "property-editor-table");
+    // First Row with Delete Button
+    var rule_row = rule_table.append('tr');
+    var rule_cell = rule_row.append('td')
+        .attr("colspan", "2");
+    rule_cell.append('input')
+        .attr("type", "button")
+        .attr("class", "delete-button")
+        .attr("value", "-")
+        .attr("onclick", "handleDeleteRouteRulesRow(this)");
+    // Destination / Source Type
+    rule_row = rule_table.append('tr');
+    rule_cell = rule_row.append('td')
+        .text(source_dest_title + " Type");
+    rule_cell = rule_row.append('td');
+    rule_cell.append('input')
+        .attr("type", "text")
+        .attr("class", "property-value")
+        .attr("readonly", "readonly")
+        .attr("id", source_dest + "_type")
+        .attr("name", source_dest + "_type")
+        .attr("value", access_rule[source_dest + '_type'])
+        .on("change", function() {
+            access_rule[source_dest + '_type'] = this.value;
+            displayOkitJson();
+        });
+    // Destination / Source
+    rule_row = rule_table.append('tr');
+    rule_cell = rule_row.append('td')
+        .text(source_dest_title);
+    rule_cell = rule_row.append('td');
+    rule_cell.append('input')
+        .attr("type", "text")
+        .attr("class", "property-value")
+        .attr("id", source_dest)
+        .attr("name", source_dest)
+        .attr("value", access_rule[source_dest])
+        .on("change", function() {
+            access_rule[source_dest] = this.value;
+            console.log('Changed destination: ' + this.value);
+            displayOkitJson();
+        });
+}
+function handleAddAccessRule(evt) {
+    console.log('Adding access rule');
+    if (evt.target.id == 'egress_add_button') {
+        var new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0"}
+        evt.target.security_list['egress_security_rules'].push(new_rule)
+    } else {
+        var new_rule = {source_type: "CIDR_BLOCK", source: "0.0.0.0/0"}
+        evt.target.security_list['ingress_security_rules'].push(new_rule)
+    }
+    addAccessRuleHtml(new_rule, evt.target.id.split('_')[0]);
+    displayOkitJson();
+}
+
+function handleDeleteRouteRulesRow(btn) {
+    var row = btn.parentNode.parentNode.parentNode.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+}
+
 
 clearSecurityListVariables();
