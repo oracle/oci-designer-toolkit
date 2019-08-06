@@ -129,14 +129,23 @@
 }
 
 .property-editor-table {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    margin-top: 10px;
     border-collapse: collapse;
     width: 100%;
 }
 
-.property-editor-table td, .property-editor-table th {
+.property-editor-table th {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 2px;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.property-editor-table td {
+    border: 1px solid #ddd;
+    padding: 2px;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
 .property-editor-table tr:nth-child(even){background-color: #f2f2f2;}
@@ -146,16 +155,17 @@
 .property-editor-table tr:hover {background-color: #ddd;}
 
 .property-editor-table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     text-align: left;
     background-color: #4CAF50;
     color: white;
 }
 
 .property-value {
-    font-family: "Helvetica Arial";
-    font-size: larger;
+    font-family: Helvetica,  Arial, sans-serif;
+    font-size: 12px;
     width: 100%;
 }
 
