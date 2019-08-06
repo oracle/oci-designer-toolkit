@@ -6,6 +6,7 @@ var vcn_rect_width = "95%"
 var vcn_rect_height = "85%"
 var virtual_network_ids = [];
 var virtual_cloud_network_count = 0;
+var virtual_cloud_network_prefix = 'vcn';
 
 /*
 ** Reset variables
@@ -36,9 +37,9 @@ function addVirtualCloudNetwork() {
     virtual_cloud_network_count += 1;
     var virtual_cloud_network = {};
     virtual_cloud_network['id'] = id;
-    virtual_cloud_network['display_name'] = generateDefaultName('VCN', virtual_cloud_network_count);
+    virtual_cloud_network['display_name'] = generateDefaultName(virtual_cloud_network_prefix, virtual_cloud_network_count);
     virtual_cloud_network['cidr_block'] = '';
-    virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase();
+    virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase().slice(-6);
     OKITJsonObj['compartment']['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));

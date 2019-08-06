@@ -2,6 +2,7 @@ console.log('Loaded Subnet Javascript');
 
 var security_list_ids = [];
 var security_list_count = 0;
+var security_list_prefix = 'sl';
 
 /*
 ** Reset variables
@@ -34,7 +35,7 @@ function addSecurityList(vcnid) {
     security_list['vcn_id'] = vcnid;
     security_list['virtual_cloud_network'] = '';
     security_list['id'] = id;
-    security_list['display_name'] = generateDefaultName('SL', security_list_count);
+    security_list['display_name'] = generateDefaultName(security_list_prefix, security_list_count);
     OKITJsonObj['compartment']['security_lists'].push(security_list);
     okitIdsJsonObj[id] = security_list['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));

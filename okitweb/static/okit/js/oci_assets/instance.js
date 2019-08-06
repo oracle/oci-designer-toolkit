@@ -2,6 +2,7 @@ console.log('Loaded Instance Javascript');
 
 var instance_ids = [];
 var instance_count = 0;
+var instance_prefix = 'in';
 
 /*
 ** Reset variables
@@ -34,7 +35,7 @@ function addInstance(vcnid) {
     instance['vcn_id'] = vcnid;
     instance['virtual_cloud_network'] = '';
     instance['id'] = id;
-    instance['display_name'] = generateDefaultName('IN', instance_count);
+    instance['display_name'] = generateDefaultName(instance_prefix, instance_count);
     OKITJsonObj['compartment']['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));

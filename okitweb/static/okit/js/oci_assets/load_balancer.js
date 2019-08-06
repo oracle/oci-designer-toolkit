@@ -34,7 +34,7 @@ function addLoadBalancer(vcnid) {
     load_balancer['vcn_id'] = vcnid;
     load_balancer['virtual_cloud_network'] = '';
     load_balancer['id'] = id;
-    load_balancer['display_name'] = generateDefaultName('LB', load_balancer_count);
+    load_balancer['display_name'] = generateDefaultName('lb', load_balancer_count);
     load_balancer['is_private'] = false;
     load_balancer['shape'] = '100Mbps';
     OKITJsonObj['compartment']['load_balancers'].push(load_balancer);

@@ -141,6 +141,8 @@
 
 .property-editor-table tr:nth-child(even){background-color: #f2f2f2;}
 
+.property-editor-table tr:nth-child(odd){background-color: ghostwhite;}
+
 .property-editor-table tr:hover {background-color: #ddd;}
 
 .property-editor-table th {
@@ -174,6 +176,12 @@
     text-align: center;
     font-weight: bold;
 }
+
+.hidden {
+    visibility: hidden;
+}
+
+
 /* Menu Bar */
 .menu-bar {
     width: 100%;

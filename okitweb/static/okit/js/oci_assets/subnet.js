@@ -8,6 +8,7 @@ var subnet_ids = [];
 var subnet_count = 0;
 var subnet_position_x = 0;
 var subnet_content = {};
+var subnet_prefix = 'sn';
 
 /*
 ** Reset variables
@@ -42,9 +43,9 @@ function addSubnet(vcnid) {
     subnet['vcn_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
-    subnet['display_name'] = generateDefaultName('SN', subnet_count);
+    subnet['display_name'] = generateDefaultName(subnet_prefix, subnet_count);
     subnet['cidr_block'] = '';
-    subnet['dns_label'] = subnet['display_name'].toLowerCase();
+    subnet['dns_label'] = subnet['display_name'].toLowerCase().slice(-5);
     subnet['route_table'] = '';
     subnet['route_table_id'] = '';
     subnet['security_lists'] = [];

@@ -2,6 +2,7 @@ console.log('Loaded Internet Gateway Javascript');
 
 var internet_gateway_ids = [];
 var internet_gateway_count = 0;
+var internet_gateway_prefix = 'ig';
 
 /*
 ** Reset variables
@@ -34,7 +35,7 @@ function addInternetGateway(vcnid) {
     internet_gateway['vcn_id'] = vcnid;
     internet_gateway['virtual_cloud_network'] = '';
     internet_gateway['id'] = id;
-    internet_gateway['display_name'] = generateDefaultName('IG', internet_gateway_count);
+    internet_gateway['display_name'] = generateDefaultName(internet_gateway_prefix, internet_gateway_count);
     OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
     okitIdsJsonObj[id] = internet_gateway['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));

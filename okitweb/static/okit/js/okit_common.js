@@ -1,5 +1,8 @@
 console.log('Loaded OKIT Common Javascript');
 
+// Asset name prefix
+var display_name_prefix = 'okit-';
+
 var okitIdsJsonObj = {};
 /*
 ** SVG Creation standard values
@@ -21,7 +24,7 @@ var vcn_element_icon_position = 0;
 
 
 function generateDefaultName(prefix, count) {
-    return prefix + ('000' + count).slice(-3);
+    return display_name_prefix + prefix + ('000' + count).slice(-3);
 }
 
 function uuidv4() {
@@ -32,7 +35,7 @@ function uuidv4() {
 
 function displayOkitJson() {
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
-}
+    console.log(JSON.stringify(OKITJsonObj, null, 2));}
 
 function generateConnectorId(sourceid, destinationid) {
     return sourceid + '-' + destinationid;
