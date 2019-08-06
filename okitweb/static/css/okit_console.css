@@ -160,7 +160,7 @@ ul {
     text-transform: uppercase;
     color: #aeaeae;
     font-size: 11px;
-    cursor: default;
+    cursor: none;
 }
 
 .header-item img {
@@ -208,7 +208,9 @@ ul.nav-list li .header-item {
     align-items: center;
 }
 
-ul.nav-list li a:hover {background-color: #242526;border-left-width: 5px; border-left-color: #b4ec51;}
+ul.nav-list1 li a:hover {background-color: #242526;border-left-width: 5px; border-left-color: #b4ec51; cursor: pointer;}
+ul.nav-list2 li a:hover {background-color: #1d2733;border-left-width: 5px; border-left-color: lime; cursor: context-menu;}
+ul.nav-list li a:hover {background-color: #F80000;border-left-width: 5px; border-left-color: lime; cursor: context-menu;}
 
 /*
 ** Body

@@ -286,7 +286,9 @@ class OCIGenerator(object):
             variableName = '{0:s}_route_rule_{1:02d}_network_entity_id'.format(standardisedName, rule_number)
             self.run_variables[variableName] = route_rule["network_entity_id"]
             jinja2_route_rule = {
-                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
+                #"network_entity_id": self.formatJinja2IdReference(variableName)
+                #"network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
+                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             }
             # ------ Destination
             variableName = '{0:s}_route_rule_{1:02d}_destination'.format(standardisedName, rule_number)

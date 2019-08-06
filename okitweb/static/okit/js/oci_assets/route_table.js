@@ -241,33 +241,33 @@ function addRouteRuleHtml(route_rule) {
     rule_cell = rule_row.append('td')
         .text("Network Entity");
     rule_cell = rule_row.append('td');
-    var network_entity_select = rule_cell.append('select')
+    var network_entity_id_select = rule_cell.append('select')
         .attr("class", "property-value")
-        .attr("id", "network_entity")
+        .attr("id", "network_entity_id")
         .on("change", function() {
-            route_rule['network_entity'] = this.options[this.selectedIndex].value;
-            console.log('Changed network_entity ' + this.selectedIndex);
+            route_rule['network_entity_id'] = this.options[this.selectedIndex].value;
+            console.log('Changed network_entity_id ' + this.selectedIndex);
             displayOkitJson();
         });
     // Add Internet gateways
     for (var igcnt=0; igcnt < internet_gateway_ids.length; igcnt++) {
-        var opt = network_entity_select.append('option')
+        var opt = network_entity_id_select.append('option')
             .attr("value", internet_gateway_ids[igcnt])
             .text(okitIdsJsonObj[internet_gateway_ids[igcnt]])
-        if (route_rule['network_entity'] == internet_gateway_ids[igcnt]) {
+        if (route_rule['network_entity_id'] == internet_gateway_ids[igcnt]) {
             opt.attr("selected", "selected");
         }
     }
-    //console.log('Selected Index: ' + network_entity_select.node().selectedIndex);
-    if (route_rule['network_entity'] == '') {
-        route_rule['network_entity'] = network_entity_select.node().options[network_entity_select.node().selectedIndex].value;
+    //console.log('Selected Index: ' + network_entity_id_select.node().selectedIndex);
+    if (route_rule['network_entity_id'] == '') {
+        route_rule['network_entity_id'] = network_entity_id_select.node().options[network_entity_id_select.node().selectedIndex].value;
     }
 }
 
 function handleAddRouteRule(evt) {
     //route_table = evt.target.route_table;
     console.log('Adding route rule to : ' + route_table);
-    var new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity: ""}
+    var new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity_id: ""}
     evt.target.route_table['route_rules'].push(new_rule)
     addRouteRuleHtml(new_rule);
     displayOkitJson();

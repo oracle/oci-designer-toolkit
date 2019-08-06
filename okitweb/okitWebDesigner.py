@@ -136,6 +136,7 @@ def designer():
             request_json[key] = value
         request_json['virtual_cloud_network_filter'] = {'display_name': request_json.get('virtual_cloud_network_name_filter', '')}
         response_json = executeQuery(request_json)
+        logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
         return render_template('okit/designer.html', oci_assets_js=oci_assets_js, okit_query_json=response_string)
     elif request.method == 'GET':

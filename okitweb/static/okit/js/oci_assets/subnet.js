@@ -9,6 +9,7 @@ var subnet_count = 0;
 var subnet_position_x = 0;
 var subnet_content = {};
 var subnet_prefix = 'sn';
+var subnet_cidr = {};
 
 /*
 ** Reset variables
@@ -19,6 +20,7 @@ function clearSubnetVariables() {
     subnet_count = 0;
     subnet_position_x = 0;
     subnet_content = {};
+    subnet_cidr = {};
 }
 
 /*
@@ -39,12 +41,16 @@ function addSubnet(vcnid) {
 
     // Increment Count
     subnet_count += 1;
+    // Generate Cidr
+    vcn_cidr = virtual_cloud_network_cidr[vcnid].split('/')[0].split('.');
+    subnet_cidr[id] = vcn_cidr[0] + '.' + vcn_cidr[1] + '.' + (subnet_count - 1) + '.' + vcn_cidr[3] + '/24';
+    // Build Subnet Object
     var subnet = {};
     subnet['vcn_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
     subnet['display_name'] = generateDefaultName(subnet_prefix, subnet_count);
-    subnet['cidr_block'] = '';
+    subnet['cidr_block'] = subnet_cidr[id];
     subnet['dns_label'] = subnet['display_name'].toLowerCase().slice(-5);
     subnet['route_table'] = '';
     subnet['route_table_id'] = '';

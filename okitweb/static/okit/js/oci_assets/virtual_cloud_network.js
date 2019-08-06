@@ -7,6 +7,7 @@ var vcn_rect_height = "85%"
 var virtual_network_ids = [];
 var virtual_cloud_network_count = 0;
 var virtual_cloud_network_prefix = 'vcn';
+var virtual_cloud_network_cidr = {};
 
 /*
 ** Reset variables
@@ -15,6 +16,7 @@ var virtual_cloud_network_prefix = 'vcn';
 function clearVirtualCloudNetworkVariables() {
     virtual_network_ids = [];
     virtual_cloud_network_count = 0;
+    virtual_cloud_network_cidr = {};
 }
 
 /*
@@ -35,10 +37,13 @@ function addVirtualCloudNetwork() {
 
     // Increment Count
     virtual_cloud_network_count += 1;
+    // Generate Cidr
+    virtual_cloud_network_cidr[id] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
+    // Build Virtual Cloud Network Object
     var virtual_cloud_network = {};
     virtual_cloud_network['id'] = id;
     virtual_cloud_network['display_name'] = generateDefaultName(virtual_cloud_network_prefix, virtual_cloud_network_count);
-    virtual_cloud_network['cidr_block'] = '';
+    virtual_cloud_network['cidr_block'] = virtual_cloud_network_cidr[id];
     virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase().slice(-6);
     OKITJsonObj['compartment']['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
@@ -134,6 +139,8 @@ function loadVirtualCloudNetworkProperties(id) {
                             // If this is the name field copy to the Ids Map
                             if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
+                            } else if (inputfield.id == 'cidr_block') {
+                                virtual_cloud_network['id'] = inputfield.value;
                             }
                             displayOkitJson();
                         });
@@ -144,5 +151,6 @@ function loadVirtualCloudNetworkProperties(id) {
         }
     });
 }
+
 
 clearVirtualCloudNetworkVariables();

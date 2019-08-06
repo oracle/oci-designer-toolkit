@@ -7,7 +7,7 @@ resource "oci_core_route_table" "{{ resource_name }}" {
     compartment_id = "{{ compartment_ocid }}"
     vcn_id         = "{{ vcn_id }}"
 {% for rule in route_rules %}
-    route_rules    = {
+    route_rules    {
         destination       = "{{ rule.destination }}"
         destination_type  = "{{ rule.destination_type }}"
         network_entity_id = "{{ rule.network_entity_id }}"

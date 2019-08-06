@@ -14,6 +14,20 @@
             <tr><td>Virtual Cloud Network</td><td><label id="virtual_cloud_network" class="property-value"></label></td></tr>
             <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
         </table>
+        <table id="ingress_rules_table" class="property-editor-table">
+            <thead>
+            <tr><th>Ingress Rules</th><th width="20px"><input type="button" id="ingress_add_button" class="add-button" value="+"/></th></tr>
+            </thead>
+            <tbody id="ingress_rules_table_body">
+            </tbody>
+        </table>
+        <table id="egress_rules_table" class="property-editor-table">
+            <thead>
+            <tr><th>Egress Rules</th><th width="20px"><input type="button" id="egress_add_button" class="add-button" value="+"/></th></tr>
+            </thead>
+            <tbody id="egress_rules_table_body">
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

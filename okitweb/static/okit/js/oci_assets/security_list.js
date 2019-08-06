@@ -36,6 +36,8 @@ function addSecurityList(vcnid) {
     security_list['virtual_cloud_network'] = '';
     security_list['id'] = id;
     security_list['display_name'] = generateDefaultName(security_list_prefix, security_list_count);
+    security_list['egress_security_rules'] = []
+    security_list['ingress_security_rules'] = []
     OKITJsonObj['compartment']['security_lists'].push(security_list);
     okitIdsJsonObj[id] = security_list['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
