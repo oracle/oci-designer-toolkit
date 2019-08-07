@@ -92,12 +92,15 @@ def executeQuery(request_json={}, ** kwargs):
     logJson(response_json)
     return response_json
 
+
 def standardiseJson(json_data={}, **kwargs):
     logJson(json_data)
     json_data = standardiseIds(json_data)
     logJson(json_data)
     return json_data
 
+
+# TODO: Delete
 def standardiseJson1(json_data={}, **kwargs):
     if 'compartment' in json_data:
         if 'virtual_cloud_networks' in json_data['compartment']:
@@ -129,6 +132,7 @@ def standardiseJson1(json_data={}, **kwargs):
     return json_data
 
 
+# TODO: Delete
 def standardiseId(id, from_char='.', to_char='-'):
     return id.replace(from_char, to_char)
 
