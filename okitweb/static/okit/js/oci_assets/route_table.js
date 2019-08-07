@@ -252,7 +252,7 @@ function addRouteRuleHtml(route_rule) {
     for (var igcnt=0; igcnt < internet_gateway_ids.length; igcnt++) {
         var opt = network_entity_id_select.append('option')
             .attr("value", internet_gateway_ids[igcnt])
-            .text(okitIdsJsonObj[internet_gateway_ids[igcnt]])
+            .text(okitIdsJsonObj[internet_gateway_ids[igcnt]]);
         if (route_rule['network_entity_id'] == internet_gateway_ids[igcnt]) {
             opt.attr("selected", "selected");
         }

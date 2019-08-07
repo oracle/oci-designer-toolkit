@@ -49,3 +49,23 @@ function handleGenerateAnsible(e) {
     });
 }
 
+function handleExportToResourceManager(e) {
+    hideNavMenu();
+    $.ajax({
+        type: 'post',
+        url: 'export/resourcemanager',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(OKITJsonObj),
+        success: function(resp) {
+            console.log('Response : ' + resp);
+            //window.location = 'generate/terraform';
+            //openInNewTab('generate/terraform');
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+

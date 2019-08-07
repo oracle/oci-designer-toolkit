@@ -78,3 +78,17 @@ class OCILoadBalancerConnection(OCIConnection):
         self.client = oci.load_balancer.LoadBalancerClient(self.config)
         return
 
+
+class OCIResourceManagerConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, **kwargs):
+        super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile)
+
+    def connect(self):
+        if self.config is None:
+            if self.configfile is None:
+                self.config = oci.config.from_file()
+            else:
+                self.config = oci.config.from_file(self.configfile)
+        self.client = oci.resource_manager.ResourceManagerClient(self.config)
+        return
+
