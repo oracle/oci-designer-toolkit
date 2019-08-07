@@ -19,9 +19,11 @@ __module__ = "ociCompartment"
 
 import oci
 import sys
+import json
 
 from facades.ociConnection import OCIIdentityConnection
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from facades.ociLoadBalancer import OCILoadBalancers
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -44,9 +46,14 @@ class OCICompartments(OCIIdentityConnection):
         recursive = (recursive and (id == self.config['tenancy']))
 
         compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
+
         # Convert to Json object
         self.compartments_json = self.toJson(compartments)
         logger.debug(str(self.compartments_json))
+
+        with open("compartments.json", "w") as data_file:
+            json.dump(self.compartments_json, data_file, indent=2)
+
         # Generate Name / Id mappings
         for compartment in self.compartments_json:
             self.names[compartment['id']] = compartment['name']
@@ -87,6 +94,9 @@ class OCICompartment(object):
     def getVirtualCloudNetworkClients(self):
         return OCIVirtualCloudNetworks(self.config, self.configfile, self.data['id'])
 
+    def getLoadBalancerClients(self):
+        return OCILoadBalancers(self.config, self.configfile, self.data['id'])
+
 
 # Main processing function
 def main(argv):
@@ -95,34 +105,52 @@ def main(argv):
     for name in oci_compartments.listHierarchicalNames():
         logger.info('Name: {0!s:s}'.format(name))
     for oci_compartment in oci_compartments.compartments_obj:
-        logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['display_name']))
+        logger.info('Compartment: {} {}'.format(oci_compartment.data['display_name'], oci_compartment.data['lifecycle_state']))
         oci_virtual_cloud_networks = oci_compartment.getVirtualCloudNetworkClients()
         oci_virtual_cloud_networks.list()
         for oci_virtual_cloud_network in oci_virtual_cloud_networks.virtual_cloud_networks_obj:
-            logger.info('\tVirtual Cloud Network : {0!s:s}'.format(oci_virtual_cloud_network.data['display_name']))
+            #logger.info('\tVirtual Cloud Network : {0!s:s}'.format(oci_virtual_cloud_network.data['display_name']))
             # Internet Gateways
             oci_internet_gateways = oci_virtual_cloud_network.getInternetGatewayClients()
             oci_internet_gateways.list()
-            for oci_internet_gateway in oci_internet_gateways.internet_gateways_obj:
-                logger.info('\t\tInternet Gateway : {0!s:s}'.format(oci_internet_gateway.data['display_name']))
+            #for oci_internet_gateway in oci_internet_gateways.internet_gateways_obj:
+            #    logger.info('\t\tInternet Gateway : {0!s:s}'.format(oci_internet_gateway.data['display_name']))
             # Route Tables
             oci_route_tables = oci_virtual_cloud_network.getRouteTableClients()
             oci_route_tables.list()
-            for oci_route_table in oci_route_tables.route_tables_obj:
-                logger.info('\t\tRoute Table : {0!s:s}'.format(oci_route_table.data['display_name']))
+            #for oci_route_table in oci_route_tables.route_tables_obj:
+            #    logger.info('\t\tRoute Table : {0!s:s}'.format(oci_route_table.data['display_name']))
             # Security Lists
             security_lists = oci_virtual_cloud_network.getSecurityListClients()
             security_lists.list()
-            for security_list in security_lists.security_lists_obj:
-                logger.info('\t\tSecurity List : {0!s:s}'.format(security_list.data['display_name']))
+            #for security_list in security_lists.security_lists_obj:
+            #    logger.info('\t\tSecurity List : {0!s:s}'.format(security_list.data['display_name']))
             # Subnets
             subnets = oci_virtual_cloud_network.getSubnetClients()
             subnets.list()
-            for subnet in subnets.subnets_obj:
-                logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
+            #for subnet in subnets.subnets_obj:
+            #    logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
 
-        oci_load_balancers = oci_compartment.getLoadBalancerClients()
-        oci_load_balancers.list()
+
+        if (oci_compartment.data['lifecycle_state'] == "ACTIVE"):
+            oci_load_balancers = oci_compartment.getLoadBalancerClients()
+            oci_load_balancers.list()
+            for oci_load_balancer in oci_load_balancers.load_balancers_obj:
+                logger.info('\t\tLoadBalancer : {0!s:s}, {1!s:s}'.format(oci_load_balancer.data['display_name'], oci_load_balancer.data['id']))
+
+                oci_loadbalancer_hosts = oci_load_balancer.getLBHostClients()
+                oci_loadbalancer_hosts.list()
+                for lb_host in oci_loadbalancer_hosts.lb_hosts_obj:
+                    logger.info('\t\tLoadBalancer Host : {0!s:s}'.format(lb_host.data['display_name']))
+
+                oci_backendsets = oci_load_balancer.getBackendSetClients()
+                oci_backendsets.list()
+                for backendset in oci_backendsets.backendsets_obj:
+                    logger.info('\t\tBackendSet : {0!s:s}'.format(backendset.data['name']))
+                    oci_backends = oci_load_balancer.getBackendClients(load_balancer_id=oci_load_balancer.data['id'], backend_set_name=backendset.data['name'])
+                    oci_backends.list()
+                    for backend in oci_backends.backends_obj:
+                        logger.info('\t\tBackend : {0!s:s}'.format(backend.data['name']))
 
     return
 

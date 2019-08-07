@@ -20,9 +20,12 @@ __module__ = "ociNetwork"
 import oci
 import re
 import sys
+import json
 
 from facades.ociConnection import OCILoadBalancerConnection
-from facades.ociInternetGateway import OCIInternetGateways
+from facades.ociLBHost import OCILBHosts
+from facades.ociBackendSet import OCIBackendSets
+from facades.ociBackend import OCIBackends
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -41,13 +44,19 @@ class OCILoadBalancers(OCILoadBalancerConnection):
             compartment_id = self.compartment_id
 
         load_balancers = oci.pagination.list_call_get_all_results(self.client.list_load_balancers, compartment_id=compartment_id).data
+
         # Convert to Json object
         self.load_balancers_json = self.toJson(load_balancers)
+
+        with open("loadbalancers.json", "a") as data_file:
+            json.dump(self.load_balancers_json, data_file, indent=2)
+
         logger.debug(str(self.load_balancers_json))
-        # Build List of Subnet Objects
+        # Build List of Loadbalancer Objects
         self.load_balancers_obj = []
         for load_balancer in self.load_balancers_json:
             self.load_balancers_obj.append(OCILoadBalancer(self.config, self.configfile, load_balancer))
+
         # Check if the results should be filtered
         if filter is None:
             return self.load_balancers_json
@@ -64,8 +73,14 @@ class OCILoadBalancer(object):
         self.configfile = configfile
         self.data = data
 
-    def getInternetGatewayClients(self):
-        return OCIInternetGateways(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+    def getLBHostClients(self):
+        return OCILBHosts(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
+    def getBackendSetClients(self):
+        return OCIBackendSets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
+    def getBackendClients(self, load_balancer_id=None, backend_set_name=None):
+        return OCIBackends(self.config, self.configfile, load_balancer_id, backend_set_name)
 
 
 

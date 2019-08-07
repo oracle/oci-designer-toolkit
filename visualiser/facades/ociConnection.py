@@ -75,6 +75,6 @@ class OCILoadBalancerConnection(OCIConnection):
                 self.config = oci.config.from_file()
             else:
                 self.config = oci.config.from_file(self.configfile)
-        self.client = oci.core.LoadBalancerClient(self.config)
+        self.client = oci.load_balancer.LoadBalancerClient(self.config)
         return
 
