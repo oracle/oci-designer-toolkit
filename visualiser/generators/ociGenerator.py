@@ -60,6 +60,9 @@ class OCIGenerator(object):
         # Initialise Jinja2
         self.template_loader = jinja2.FileSystemLoader(searchpath=template_dir)
         self.jinja2_environment = jinja2.Environment(loader=self.template_loader, trim_blocks=True, lstrip_blocks=True)
+        # Initialise working variables
+        self.id_name_map = {}
+
 
     def getCheckOutputDirectory(self):
         if not os.path.exists(self.output_dir):
@@ -89,9 +92,21 @@ class OCIGenerator(object):
     def formatJinja2DhcpReference(self, resource_name):
         pass
 
+    def buildIdNameMap(self):
+        logger.info("Build Id/Name Map")
+        self.id_name_map = {}
+        if "compartment" in self.visualiser_json:
+            for key, value in self.visualiser_json["compartment"].items():
+                if isinstance(value, list):
+                    for asset in value:
+                        self.id_name_map[asset["id"]] = asset["display_name"]
+        return
+
     def generate(self):
         # Validate input json
         validateVisualiserJson(self.visualiser_json)
+        # Build the Id to Name Map
+        self.buildIdNameMap()
         # Process Provider Connection information
         logger.info("Processing Provider Information")
         jinja2_template = self.jinja2_environment.get_template("provider.jinja2")
@@ -271,7 +286,9 @@ class OCIGenerator(object):
             variableName = '{0:s}_route_rule_{1:02d}_network_entity_id'.format(standardisedName, rule_number)
             self.run_variables[variableName] = route_rule["network_entity_id"]
             jinja2_route_rule = {
-                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
+                #"network_entity_id": self.formatJinja2IdReference(variableName)
+                #"network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
+                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             }
             # ------ Destination
             variableName = '{0:s}_route_rule_{1:02d}_destination'.format(standardisedName, rule_number)
@@ -316,7 +333,8 @@ class OCIGenerator(object):
         self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = subnet["dns_label"]
         # ---- Route Table
-        self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(subnet['route_table']))
+        #self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(subnet['route_table']))
+        self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['route_table_id']]))
         # ---- Security Lists
         jinja2_security_list_ids = []
         for security_list in subnet.get('security_lists', []):

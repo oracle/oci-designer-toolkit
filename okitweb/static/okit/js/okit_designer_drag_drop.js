@@ -10,6 +10,36 @@ console.log('Loaded Drag & Drop Javascript');
 
 var palatte_source_type = '';
 
+function setDragDropIcon(e) {
+    var type = e.target.getAttribute('data-type');
+    if (palatte_source_type == "Virtual Cloud Network" && type != "Compartment") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    } else if (palatte_source_type == "Internet Gateway" && type != "Virtual Cloud Network") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    } else if (palatte_source_type == "Route Table" && type != "Virtual Cloud Network") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    } else if (palatte_source_type == "Security List" && type != "Virtual Cloud Network") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    } else if (palatte_source_type == "Subnet" && type != "Virtual Cloud Network") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    } else if (palatte_source_type == "Load Balancer" && type != "Subnet") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    } else if (palatte_source_type == "Instance" && type != "Subnet") {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    } else {
+        //console.log('Type: ' + e.target.getAttribute('data-type'));
+        //console.log('Id: ' + e.target.id);
+        e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
+    }
+}
+
 function handleDragStart(e) {
     console.log('Drag Start');
     e.dataTransfer.effectAllowed = 'copy';
@@ -24,60 +54,14 @@ function handleDragOver(e) {
     if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
     }
-    var type = e.target.getAttribute('data-type');
-    if (palatte_source_type == "Virtual Cloud Network" && type != "Compartment") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Internet Gateway" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Route Table" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Security List" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Subnet" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Load Balancer" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else {
-        //console.log('Type: ' + e.target.getAttribute('data-type'));
-        //console.log('Id: ' + e.target.id);
-        e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
-    }
+    setDragDropIcon(e);
     return false;
 }
 
 function handleDragEnter(e) {
     // this / e.target is the current hover target.
     //this.classList.add('over');
-    var type = e.target.getAttribute('data-type');
-    if (palatte_source_type == "Virtual Cloud Network" && type != "Compartment") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Internet Gateway" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Route Table" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Security List" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Subnet" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Load Balancer" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else {
-        //console.log('Type: ' + e.target.getAttribute('data-type'));
-        //console.log('Id: ' + e.target.id);
-        e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
-    }
+    setDragDropIcon(e);
 }
 
 function handleDragLeave(e) {
@@ -101,23 +85,19 @@ function handleDrop(e) {
     var id = e.target.id;
     //console.log('Type: '+type+' - '+title+' - '+id)
     if (title == "Virtual Cloud Network" && type == "Compartment") {
-        //iconSVGFile = 'svg/OCI_VCloudNetwork_red.svg';
         addVirtualCloudNetwork();
     } else if (title == "Internet Gateway" && type == "Virtual Cloud Network") {
-        //iconSVGFile = 'svg/OCI_InternetGateway_red.svg';
         addInternetGateway(id);
     } else if (title == "Route Table" && type == "Virtual Cloud Network") {
-        //iconSVGFile = 'svg/OCI_InternetGateway_red.svg';
         addRouteTable(id);
     } else if (title == "Security List" && type == "Virtual Cloud Network") {
-        //iconSVGFile = 'svg/OCI_InternetGateway_red.svg';
         addSecurityList(id);
     } else if (title == "Subnet" && type == "Virtual Cloud Network") {
-        //iconSVGFile = 'svg/OCI_InternetGateway_red.svg';
         addSubnet(id);
-    } else if (title == "Load Balancer" && type == "Virtual Cloud Network") {
-        //iconSVGFile = 'svg/OCI_LoadBalance_red.svg';
+    } else if (title == "Load Balancer" && type == "Subnet") {
         addLoadBalancer(id);
+    } else if (title == "Instance" && type == "Subnet") {
+        addInstance(id);
     }
 
     //var img = new Image();

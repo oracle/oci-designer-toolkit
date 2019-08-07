@@ -1,7 +1,16 @@
-console.log('Loaded Route Table Javascript');
+console.log('Loaded Load Balancer Javascript');
 
 var load_balancer_ids = [];
 var load_balancer_count = 0;
+
+/*
+** Reset variables
+ */
+
+function clearLoadBalancerVariables() {
+    load_balancer_ids = [];
+    load_balancer_count = 0;
+}
 
 /*
 ** Add Asset to JSON Model
@@ -25,7 +34,7 @@ function addLoadBalancer(vcnid) {
     load_balancer['vcn_id'] = vcnid;
     load_balancer['virtual_cloud_network'] = '';
     load_balancer['id'] = id;
-    load_balancer['display_name'] = generateDefaultName('LB', load_balancer_count);
+    load_balancer['display_name'] = generateDefaultName('lb', load_balancer_count);
     load_balancer['is_private'] = false;
     load_balancer['shape'] = '100Mbps';
     OKITJsonObj['compartment']['load_balancers'].push(load_balancer);
@@ -115,7 +124,7 @@ function drawLoadBalancerSVG(load_balancer) {
 function loadLoadBalancerProperties(id) {
     $("#properties").load("propertysheets/load_balancer.html", function () {
         if ('compartment' in OKITJsonObj && 'load_balancers' in OKITJsonObj['compartment']) {
-            console.log('Loading Route Table: ' + id);
+            console.log('Loading Load Balancer: ' + id);
             var json = OKITJsonObj['compartment']['load_balancers'];
             for (var i = 0; i < json.length; i++) {
                 load_balancer = json[i];
@@ -142,3 +151,5 @@ function loadLoadBalancerProperties(id) {
         }
     });
 }
+
+clearLoadBalancerVariables();

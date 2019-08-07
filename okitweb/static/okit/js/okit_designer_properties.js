@@ -23,9 +23,3 @@ function assetSelected(type, id) {
         $("#properties").load("propertysheets/empty.html");
     }
 }
-
-function deleteRouteRulesRow(btn) {
-    var table = btn.parentNode.parentNode.parentNode;
-    var row = table.parentNode;
-    row.parentNode.removeChild(row);
-}

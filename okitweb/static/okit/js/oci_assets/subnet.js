@@ -1,8 +1,27 @@
 console.log('Loaded Internet Gateway Javascript');
 
+var subnet_svg_height = 200;
+var subnet_svg_width = "95%";
+var subnet_rect_height = "85%";
+var subnet_rect_width = "95%";
 var subnet_ids = [];
 var subnet_count = 0;
 var subnet_position_x = 0;
+var subnet_content = {};
+var subnet_prefix = 'sn';
+var subnet_cidr = {};
+
+/*
+** Reset variables
+ */
+
+function clearSubnetVariables() {
+    subnet_ids = [];
+    subnet_count = 0;
+    subnet_position_x = 0;
+    subnet_content = {};
+    subnet_cidr = {};
+}
 
 /*
 ** Add Asset to JSON Model
@@ -22,13 +41,17 @@ function addSubnet(vcnid) {
 
     // Increment Count
     subnet_count += 1;
+    // Generate Cidr
+    vcn_cidr = virtual_cloud_network_cidr[vcnid].split('/')[0].split('.');
+    subnet_cidr[id] = vcn_cidr[0] + '.' + vcn_cidr[1] + '.' + (subnet_count - 1) + '.' + vcn_cidr[3] + '/24';
+    // Build Subnet Object
     var subnet = {};
     subnet['vcn_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
-    subnet['display_name'] = generateDefaultName('SN', subnet_count);
-    subnet['cidr_block'] = '';
-    subnet['dns_label'] = subnet['display_name'].toLowerCase();
+    subnet['display_name'] = generateDefaultName(subnet_prefix, subnet_count);
+    subnet['cidr_block'] = subnet_cidr[id];
+    subnet['dns_label'] = subnet['display_name'].toLowerCase().slice(-5);
     subnet['route_table'] = '';
     subnet['route_table_id'] = '';
     subnet['security_lists'] = [];
@@ -36,6 +59,14 @@ function addSubnet(vcnid) {
     OKITJsonObj['compartment']['subnets'].push(subnet);
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     okitIdsJsonObj[id] = subnet['display_name'];
+
+    // Set subnet specific positioning variables
+    subnet_content[id] = {}
+    subnet_content[id]['load_balancer_count'] = 0;
+    subnet_content[id]['load_balancer_xleft'] = 0;
+    subnet_content[id]['instance_count'] = 0;
+    subnet_content[id]['instance_xleft'] = 0;
+
     displayOkitJson();
     drawSubnetSVG(subnet);
 }
@@ -48,9 +79,9 @@ function drawSubnetSVG(subnet) {
     var id = subnet['id'];
     var position = subnet_position_x;
     var vcn_offset_x = (icon_width / 2);
-    var vcn_offset_y = ((icon_height / 4) * 3) + ((icon_height + vcn_icon_spacing) * 1);
+    var vcn_offset_y = ((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1);
     var count_offset_x = (icon_width * position) + (vcn_icon_spacing * position);
-    var count_offset_y = ((icon_height + vcn_icon_spacing) * subnet_count);
+    var count_offset_y = ((subnet_svg_height + vcn_icon_spacing) * (subnet_count -1));
     var svg_x = vcn_offset_x + count_offset_x;
     var svg_y = vcn_offset_y + count_offset_y;
     var data_type = "Subnet";
@@ -63,8 +94,8 @@ function drawSubnetSVG(subnet) {
         .attr("title", subnet['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
-        .attr("width", "125%")
-        .attr("height", "100");
+        .attr("width", subnet_svg_width)
+        .attr("height", subnet_svg_height);
     var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
@@ -73,8 +104,8 @@ function drawSubnetSVG(subnet) {
         .attr("x", icon_x)
         .attr("y", icon_y)
         //.attr("width", vcn_width - (icon_width * 2))
-        .attr("width", "70%")
-        .attr("height", icon_height)
+        .attr("width", subnet_rect_width)
+        .attr("height", subnet_rect_height)
         .attr("stroke", subnet_stroke_colour[(subnet_count % 3)])
         //.attr("stroke-dasharray", "5, 5")
         .attr("fill", subnet_stroke_colour[(subnet_count % 3)])
@@ -82,7 +113,7 @@ function drawSubnetSVG(subnet) {
     rect.append("title")
         .text("Subnet: " + subnet['display_name']);
     var g = svg.append("g")
-        .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
+        .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
     g.append("path")
         .attr("class", "st0")
         .attr("d", "M142.7,138v-13.5h-8.4v-20.8h20.8v20.8h-8.4V138h52.8c-3-27.4-26.2-48.8-54.4-48.8c-28.2,0-51.4,21.3-54.4,48.8H142.7z")
@@ -290,4 +321,4 @@ function updateSubnetLinks(sourcetype, sourceid, id) {
     assetSelected('Subnet', id);
 }
 
-
+clearSubnetVariables();

@@ -24,10 +24,95 @@
 }
 
 .st1{fill:#F80000;}
+.st0{fill:lightgray;}
+
+/*
+** Main Panel (Main Block) CSS
+ */
+.main-panel {
+    height: calc(100vh - 100px);
+    width: 100%;
+}
+
+
+/* Icons Palette */
+.icons-palette {
+    border-width: 1px;
+    border-color: black;
+    width: 100%;
+    height: 70px;
+    min-height: 70px;
+    max-height: 70px;
+}
+
+.palatte-icon {
+    width: 70px;
+    height: 70px;
+    float: left;
+}
+
+
+/* Web Designer Panel */
+.web-designer-panel {
+    width: 100%;
+    height: calc(100vh - 160px);
+    display: flex;
+}
+
+.designer-left-column {
+    flex-grow: 1;
+    overflow: auto;
+    display: flex;
+}
+
+.designer-right-column {
+    padding-left: 10px;
+    padding-left: 5px;
+    border-left: 2px solid black;
+    width: 20%;
+    overflow: auto;
+    resize: horizontal;
+    direction: rtl;
+    display: flex;
+}
+
+
+/* SVG Canvas */
+.canvas-wrapper {
+    background-color: whitesmoke;
+    border-width: 1px;
+    border-color: black;
+    margin: 0;
+    max-height: calc(100vh - 160px);
+    display: flex;
+    overflow: scroll;
+}
+
+.svg-canvas {
+    margin: 0;
+    max-width: 100%;
+    min-height: calc(100vh - 160px);
+    display: flex;
+}
+
+
+/* Asset Properties */
+
+.properties-wrapper {
+    background-color: ghostwhite;
+    border-width: 1px;
+    border-color: black;
+    margin: 0;
+    max-height: calc(100vh - 160px);
+    display: flex;
+    overflow: scroll;
+}
 
 .property-editor {
     background: ghostwhite;
     width: 100%;
+    display: block;
+    direction: ltr;
 }
 
 .property-editor-title {
@@ -40,196 +125,46 @@
     text-align: center;
 }
 
+.property-editor-body {
+    display: flex;
+}
+
 .property-editor-table {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    margin-top: 10px;
     border-collapse: collapse;
     width: 100%;
 }
 
-.property-editor-table td, .property-editor-table th {
+.property-editor-table th {
     border: 1px solid #ddd;
-    padding: 8px;
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.property-editor-table td {
+    border: 1px solid #ddd;
+    padding: 2px;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
 .property-editor-table tr:nth-child(even){background-color: #f2f2f2;}
 
+.property-editor-table tr:nth-child(odd){background-color: ghostwhite;}
+
 .property-editor-table tr:hover {background-color: #ddd;}
 
-.property-editor-table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
-}
-
 .property-value {
-    font-family: "Helvetica Arial";
-    font-size: larger;
-    width: 100%;
-}
-
-#console-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 30px);
-}
-
-
-#header {
-    width: 100%;
-    height: 100px;
-    background: lightslategray;
-}
-
-#footer {
-    width: 100%;
-    height: 100px;
-    background: darkslategray;
-    display: block;
-    color: white;
-}
-
-#okitjson {
-    width: 100%;
-    height: 100%;
-    overflow-scrolling: auto;
-    background: lightskyblue;
-}
-
-.main-panel {
-    height: 100%;
-    width: 100%;
-}
-
-.menu-bar {
-    width: 100%;
-    height: 50px;
-    background: lightskyblue;
-    display: none;
-}
-
-.toolbar-button {
-    font-family: Arial;
+    font-family: Helvetica,  Arial, sans-serif;
     font-size: 12px;
-    font-weight: bold;
-    padding-left: 5px;
-    padding-right: 20px;
-    border: none;
-    background-color: #f1f1f1;
-}
-
-.icons-pallet {
-    border-width: 1px;
-    border-color: black;
-    width: 100%;
-    height: 70px;
-}
-
-.web-designer-panel {
-    flex-grow: 1;
-    width: 100%;
-}
-
-.canvas-wrapper {
-    background-color: whitesmoke;
-    border-width: 1px;
-    border-color: black;
-    margin: 0;
-    max-width: 100%;
-    min-height: calc(100vh - 60px);
-    display: flex;
-}
-
-.svg-canvas {
-    margin: 0;
-    max-width: 100%;
-    min-height: calc(100vh - 60px);
-    display: flex;
-}
-
-#designerOrig {
-    height: 99vh !important;
-    width: 100%;
-    padding-right: 10px;
-    margin-right: 10px;
-}
-
-#palatte1 {
-    overflow: scroll;
-    display: block;
-    height: 80px;
-    width: 100%;
-    max-height: 80px;
-}
-
-.palatte-icons {
-    flex-grow: 1;
-}
-
-.palatte-icon {
-    width: 70px;
-    height: 70px;
-    float: left;
-}
-
-.designer-left-column {
-    flex-grow: 1;
-    height: 100%;
-}
-
-.designer-right-column {
-    width: 20%;
-    height: 100%;
-}
-
-#webdesigner {
-    height: 100%;
-    width: 100%;
-}
-
-#okitcanvas1 {
-    height: 100%;
-    width: 100%;
-}
-
-#properties {
-    vertical-align: top;
-    height: 100%;
-    width: 100%;
-}
-
-#files {
-    border-color: red;
-    border-width: 1px;
-}
-
-#leftcolumn {
-    flex-grow: 1;
-    height: 100%;
-}
-
-#rightcolumn {
-    width: 20%;
-    height: 100%;
-}
-
-#toolbar {
-    background: lightskyblue;
-}
-
-#leftbuttons {
-    flex-grow: 1;
-    height: 100%;
-}
-
-#rightbuttons {
-    width: 10%;
-    height: 100%;
-}
-
-.file-button {
-    display: none;
+    width: 99%;
+    margin-right: 5px;
 }
 
 .add-button {
@@ -249,3 +184,34 @@
     text-align: center;
     font-weight: bold;
 }
+
+.hidden {
+    visibility: hidden;
+}
+
+
+/* Menu Bar */
+.menu-bar {
+    width: 100%;
+    height: 50px;
+    background: lightskyblue;
+    display: none;
+}
+
+.file-button {
+    display: none;
+}
+
+/*
+** Footer Panel (Footer Block) CSS
+ */
+
+#okitjson {
+    width: 100%;
+    height: 100%;
+    overflow-scrolling: auto;
+    background: lightskyblue;
+}
+
+
+

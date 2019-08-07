@@ -1,5 +1,8 @@
 console.log('Loaded OKIT Common Javascript');
 
+// Asset name prefix
+var display_name_prefix = 'okit-';
+
 var okitIdsJsonObj = {};
 /*
 ** SVG Creation standard values
@@ -21,7 +24,7 @@ var vcn_element_icon_position = 0;
 
 
 function generateDefaultName(prefix, count) {
-    return prefix + ('000' + count).slice(-3);
+    return display_name_prefix + prefix + ('000' + count).slice(-3);
 }
 
 function uuidv4() {
@@ -32,7 +35,7 @@ function uuidv4() {
 
 function displayOkitJson() {
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
-}
+    console.log(JSON.stringify(OKITJsonObj, null, 2));}
 
 function generateConnectorId(sourceid, destinationid) {
     return sourceid + '-' + destinationid;
@@ -70,20 +73,19 @@ function clearSVG() {
     // Virtual Cloud Network
     vcn_gateway_icon_position = 0;
     vcn_element_icon_position = 0;
-    virtual_network_ids = [];
-    virtual_cloud_network_count = 0;
+    clearVirtualCloudNetworkVariables();
     // Internet Gateway
-    internet_gateway_ids = [];
-    internet_gateway_count = 0;
+    clearInternetGatewayVariables();
     // Route Table
-    route_table_ids = [];
-    route_table_count = 0;
+    clearRouteTableVariables();
     // Security List
-    security_list_ids = [];
-    security_list_count = 0;
+    clearSecurityListVariables();
     // Subnet
-    subnet_ids = [];
-    subnet_count = 0;
+    clearSubnetVariables();
+    // Load Balancer
+    clearLoadBalancerVariables();
+    // Instance
+    clearInstanceVariables();
     // Add Path Style
     //var okitcanvas_svg = d3.select('#okitcanvas');
     d3.select('#okitcanvas').append('style')
@@ -175,8 +177,24 @@ function handleFileSelect(evt) {
 }
 
 function handleLoadClick(evt) {
+    hideNavMenu();
     var fileinput = document.getElementById("files");
     fileinput.click();
+}
+
+/*
+** Reload / Redraw functionality
+ */
+
+function handleRedraw(evt) {
+    redrawSVGCanvas();
+    return false;
+}
+
+function redrawSVGCanvas() {
+    hideNavMenu();
+    clearSVG();
+    drawSVGforJson();
 }
 
 /*
@@ -214,6 +232,7 @@ function handleQueryOci(e) {
  */
 
 function handleSave(evt) {
+    hideNavMenu();
     saveJson(JSON.stringify(OKITJsonObj, null, 2), "okit.json");
 }
 
@@ -229,6 +248,7 @@ function saveJson(text, filename){
  */
 
 function handleExport(evt) {
+    hideNavMenu();
     saveSvg(okitcanvas, 'okit.svg')
 }
 
