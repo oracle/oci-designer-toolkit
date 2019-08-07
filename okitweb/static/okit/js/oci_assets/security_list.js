@@ -142,6 +142,14 @@ function loadSecurityListProperties(id) {
                             displayOkitJson();
                         });
                     });
+                    // Egress Rules
+                    for (var rulecnt = 0; rulecnt < security_list['egress_security_rules'].length; rulecnt++) {
+                        addAccessRuleHtml(security_list['egress_security_rules'][rulecnt], 'egress')
+                    }
+                    // Ingress Rules
+                    for (var rulecnt = 0; rulecnt < security_list['ingress_security_rules'].length; rulecnt++) {
+                        addAccessRuleHtml(security_list['ingress_security_rules'][rulecnt], 'ingress')
+                    }
                     // Add Handler to Add Button
                     document.getElementById('egress_add_button').addEventListener('click', handleAddAccessRule, false);
                     document.getElementById('egress_add_button').security_list = security_list;
