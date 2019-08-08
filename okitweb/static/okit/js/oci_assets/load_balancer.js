@@ -15,7 +15,7 @@ function clearLoadBalancerVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addLoadBalancer(vcnid) {
+function addLoadBalancer(subnetid) {
     var id = 'okit-lb-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
@@ -31,8 +31,8 @@ function addLoadBalancer(vcnid) {
     // Increment Count
     load_balancer_count += 1;
     var load_balancer = {};
-    load_balancer['vcn_id'] = vcnid;
-    load_balancer['virtual_cloud_network'] = '';
+    load_balancer['subnet_id'] = subnetid;
+    load_balancer['subnet'] = '';
     load_balancer['id'] = id;
     load_balancer['display_name'] = generateDefaultName('lb', load_balancer_count);
     load_balancer['is_private'] = false;
@@ -48,23 +48,25 @@ function addLoadBalancer(vcnid) {
 ** SVG Creation
  */
 function drawLoadBalancerSVG(load_balancer) {
-    var vcnid = load_balancer['vcn_id'];
+    console.log(JSON.stringify(subnet_subcomponents));
+    var subnetid = load_balancer['subnet_id'];
+    console.log('VCN Id : ' + subnetid);
     var id = load_balancer['id'];
-    var position = vcn_element_icon_position;
+    var position = subnet_subcomponents[subnetid]['load_balancer_position'];
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
     var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    var svg_y = (icon_height / 4) * 3;
+    var svg_y = (icon_height / 4);
     var data_type = "Route Table";
 
     // Increment Icon Position
-    vcn_element_icon_position += 1;
+    subnet_subcomponents[subnetid]['load_balancer_position'] += 1;
 
-    var okitcanvas_svg = d3.select('#' + vcnid + "-svg");
+    var okitcanvas_svg = d3.select('#' + subnetid + "-svg");
     var svg = okitcanvas_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
-        .attr("data-vcnid", vcnid)
+        .attr("data-subnetid", subnetid)
         .attr("title", load_balancer['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
@@ -73,7 +75,7 @@ function drawLoadBalancerSVG(load_balancer) {
     var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
-        .attr("data-vcnid", vcnid)
+        .attr("data-subnetid", subnetid)
         .attr("title", load_balancer['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
@@ -131,7 +133,7 @@ function loadLoadBalancerProperties(id) {
                 //console.log(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
                     //console.log('Found Route Table: ' + id);
-                    load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['vcn_id']];
+                    load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_id']];
                     $("#virtual_cloud_network").html(load_balancer['virtual_cloud_network']);
                     $('#display_name').val(load_balancer['display_name']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');

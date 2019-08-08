@@ -10,6 +10,7 @@ var subnet_position_x = 0;
 var subnet_content = {};
 var subnet_prefix = 'sn';
 var subnet_cidr = {};
+var subnet_subcomponents = {};
 
 /*
 ** Reset variables
@@ -21,6 +22,7 @@ function clearSubnetVariables() {
     subnet_position_x = 0;
     subnet_content = {};
     subnet_cidr = {};
+    subnet_subcomponents = {};
 }
 
 /*
@@ -34,6 +36,9 @@ function addSubnet(vcnid) {
     if (!('subnets' in OKITJsonObj['compartment'])) {
         OKITJsonObj['compartment']['subnets'] = [];
     }
+
+    // Add Sub Component position
+    subnet_subcomponents[id] = {"load_balancer_position": 0, "instance_position": 0}
 
     // Add id & empty name to id JSON
     okitIdsJsonObj[id] = '';
