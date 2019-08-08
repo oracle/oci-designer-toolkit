@@ -55,7 +55,7 @@ function addInstance(subnetid) {
 function drawInstanceSVG(instance) {
     var subnetid = instance['subnet_id'];
     var id = instance['id'];
-    var position = subnet_subcomponents[subnetid]['instance_position'];
+    var position = subnet_content[subnetid]['instance_position'];
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
     var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
@@ -63,7 +63,7 @@ function drawInstanceSVG(instance) {
     var data_type = "Route Table";
 
     // Increment Icon Position
-    subnet_subcomponents[subnetid]['instance_position'] += 1;
+    subnet_content[subnetid]['instance_position'] += 1;
 
     var okitcanvas_svg = d3.select('#' + subnetid + "-svg");
     var svg = okitcanvas_svg.append("svg")

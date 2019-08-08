@@ -112,6 +112,7 @@ function handleDrop(e) {
 
 function handleDragEnd(e) {
     // this/e.target is the source node.
+    console.log('Drag End');
 
     [].forEach.call(cols, function (col) {
         col.classList.remove('over');
@@ -136,14 +137,18 @@ function handleConnectorDragStart(e) {
     e.preventDefault();
     // Set Start Element to know we are dragging
     connectorStartElement = e.target;
-    var vcnid = connectorStartElement.getAttribute('data-vcnid');
-    //console.log('DragStart VCNid : ' + vcnid);
-    var okitcanvas_svg = document.getElementById(vcnid + "-svg");
+    var parentid = connectorStartElement.getAttribute('data-vcnid');
+    console.log('DragStart Parent Id : ' + parentid);
+    if (parentid == '' || parentid == null) {
+        parentid = connectorStartElement.getAttribute('data-subnetid');
+        console.log('DragStart Parent Id : ' + parentid);
+    }
+    var parent_svg = document.getElementById(parentid + "-svg");
     var boundingClientRect = connectorStartElement.getBoundingClientRect();
 
     // Define SVG position manipulation variables
-    connectorContainerSVGPoint = okitcanvas_svg.createSVGPoint();
-    connectorContainerScreenCTM = okitcanvas_svg.getScreenCTM();
+    connectorContainerSVGPoint = parent_svg.createSVGPoint();
+    connectorContainerScreenCTM = parent_svg.getScreenCTM();
     connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
     connectorContainerSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
 
@@ -155,7 +160,7 @@ function handleConnectorDragStart(e) {
 
     // Start Drawing line
     var mousePos = getMousePosition(e);
-    svg = d3.select('#' + vcnid + "-svg");
+    svg = d3.select('#' + parentid + "-svg");
     svg.append('line')
         .attr("id", "Connector")
         .attr("x1", connectorStartXLeft)
