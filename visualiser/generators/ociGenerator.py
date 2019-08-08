@@ -372,7 +372,7 @@ class OCIGenerator(object):
         # ---- Hostame
         variableName = '{0:s}_hostname'.format(standardisedName)
         self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["hostname"]
+        self.run_variables[variableName] = instance["hostname_label"]
         # ---- Shape
         variableName = '{0:s}_shape'.format(standardisedName)
         self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
@@ -386,7 +386,7 @@ class OCIGenerator(object):
         self.jinja2_variables["os_version"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["version"]
         # ---- Network OCID
-        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(instance['subnet']))
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance['subnet_id']]))
         # ---- Authorised Public SSH Keys
         variableName = '{0:s}_authorized_keys'.format(standardisedName)
         self.jinja2_variables["authorized_keys"] = self.formatJinja2Variable(variableName)

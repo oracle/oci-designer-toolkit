@@ -42,9 +42,9 @@ resource "oci_core_instance" "{{ resource_name }}" {
 #        nested_object = "{\"some_string\": \"stringB\", \"object\": {\"some_string\": \"stringC\"}}"
 #    }
     fault_domain = "{{ fault_domain }}"
-    metadata {
+    metadata = {
         ssh_authorized_keys = "{{ authorized_keys }}"
-        user_data           = "${base64encode(file("${path.module}/cloud_init.yml"))}"
+#        user_data           = "${base64encode(file("${path.module}/cloud_init.yml"))}"
     }
     source_details {
         # Required
@@ -69,10 +69,10 @@ locals {
     {{ resource_name }}_private_ip    = "${oci_core_instance.{{ resource_name }}.private_ip }"
 }
 
-output "{{ output_name }} Public IP" {
+output "{{ output_name }}PublicIP" {
     value = "${local.{{ resource_name }}_public_ip}"
 }
 
-output "{{ output_name }} Private IP" {
+output "{{ output_name }}PrivateIP" {
     value = "${local.{{ resource_name }}_private_ip}"
 }
