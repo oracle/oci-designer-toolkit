@@ -1,22 +1,56 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
-    <meta charset="UTF-8">
-    <title>OKIT OCI Web Designer</title>
-    <!--script src="https://d3js.org/d3.v5.min.js"></script-->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_common.js') }}"></script>
+{% extends "okit/base.html" %}
+
+{% block navmenublock %}
+    <ul class="nav-list">
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>File</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="file-new-menu-item" class="parent-item" href="{{ url_for('okit.designer') }}">New</a></li>
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>Query</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="query-oci-menu-item" class="parent-item" href="{{ url_for('okit.ociQuery', cloud='oci') }}">OCI</a></li>
+    </ul>
+{% endblock %}
+
+{% block headcss %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/designer.css') }}">
-</head>
-<body>
-    <div id="queryparameters">
-        <label>Compartment</label>
-        <select id="compartment">
-        {% for compartment in compartments %}
-            <option value="{{ compartment['id'] }}">{{ compartment['display_name'] }}</option>
-        {%  endfor %}
-        </select>
+{% endblock %}
+
+{% block mainblock %}
+    <div id="main-panel" class="main-panel">
+        <div id="queryparameters" class="property-editor">
+            <form id="queryform" action="{{ url_for('okit.designer') }}" method="post" onsubmit="setBusyIcon();">
+                <table id="query_table" class="property-editor-table">
+                    <tr><td>Compartment</td><td>
+                        <select id="compartment" name="compartment_id" form="queryform">
+                            {% for compartment in compartments %}
+                                <option value="{{ compartment['id'] }}">{{ compartment['display_name'] }}</option>
+                            {%  endfor %}
+                        </select></td></tr>
+                    <tr><td>VCN Name Filter</td><td><input type="text" id="virtual_cloud_network_name_filter" name="virtual_cloud_network_name_filter" class="property-value"></td></tr>
+                    <tr><td><input type = "submit" value = "submit" /></td><td></td></tr>
+                </table>
+            </form>
+        </div>
     </div>
-</body>
-</html>
+{% endblock %}
+
+{% block footerblock %}
+    <textarea id="okitjson" readonly="readonly"></textarea>
+{% endblock %}
+
+{% block footerscripts %}
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_query.js') }}"></script>
+{% endblock %}
+

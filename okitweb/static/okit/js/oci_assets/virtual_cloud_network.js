@@ -1,7 +1,25 @@
 console.log('Loaded Virtual Cloud Network Javascript');
 
+var vcn_svg_width = "99%"
+var vcn_svg_height = "70%"
+var vcn_rect_width = "95%"
+var vcn_rect_height = "85%"
 var virtual_network_ids = [];
 var virtual_cloud_network_count = 0;
+var virtual_cloud_network_prefix = 'vcn';
+var virtual_cloud_network_cidr = {};
+var virtual_cloud_network_subcomponents = {};
+
+/*
+** Reset variables
+ */
+
+function clearVirtualCloudNetworkVariables() {
+    virtual_network_ids = [];
+    virtual_cloud_network_count = 0;
+    virtual_cloud_network_cidr = {};
+    virtual_cloud_network_subcomponents = {};
+}
 
 /*
 ** Add Asset to JSON Model
@@ -15,19 +33,25 @@ function addVirtualCloudNetwork() {
         OKITJsonObj['compartment']['virtual_cloud_networks'] = [];
     }
 
+    // Add Sub Component position
+    virtual_cloud_network_subcomponents[id] = {"load_balancer_position": 0, "instance_position": 0}
+
     // Add id & empty name to id JSON
     okitIdsJsonObj[id] = '';
     virtual_network_ids.push(id);
 
     // Increment Count
     virtual_cloud_network_count += 1;
+    // Generate Cidr
+    virtual_cloud_network_cidr[id] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
+    // Build Virtual Cloud Network Object
     var virtual_cloud_network = {};
     virtual_cloud_network['id'] = id;
-    virtual_cloud_network['name'] = generateDefaultName('VCN', virtual_cloud_network_count);
-    virtual_cloud_network['cidr'] = '';
-    virtual_cloud_network['dns_label'] = '';
+    virtual_cloud_network['display_name'] = generateDefaultName(virtual_cloud_network_prefix, virtual_cloud_network_count);
+    virtual_cloud_network['cidr_block'] = virtual_cloud_network_cidr[id];
+    virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase().slice(-6);
     OKITJsonObj['compartment']['virtual_cloud_networks'].push(virtual_cloud_network);
-    okitIdsJsonObj[id] = virtual_cloud_network['name'];
+    okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawVirtualCloudNetworkSVG(virtual_cloud_network);
@@ -42,36 +66,30 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     var translate_y = 0;
     var data_type = 'Virtual Cloud Network';
 
-    svg = d3.select(okitcanvas);
-    /*
-    d3.xml('svg/OCI_InternetGateway_red.svg', function(error, xml) {
-        if (error) throw error;
-        svg.append(xml.documentElement.getElementsByTagName('g')[0]);
-    });
-    */
-    var vcngroup = svg.append("g")
-        .attr("id", id + '-group')
-        .attr("transform", "translate(" + translate_x + ", " + translate_y + ")");
-    var vcn = vcngroup.append("g");
-    vcn.append("rect")
+    var okitcanvas_svg = d3.select(okitcanvas);
+    var svg = okitcanvas_svg.append("svg")
+        .attr("id", id + '-svg')
+        .attr("data-type", data_type)
+        .attr("title", virtual_cloud_network['display_name'])
+        .attr("x", 20)
+        .attr("y", 70)
+        .attr("width", vcn_svg_width)
+        .attr("height", vcn_svg_height);
+    var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
-        .attr("title", virtual_cloud_network['name'])
-        .attr("x", 20)
-        .attr("y", 50)
-        //.attr("width", 800)
-        //.attr("height", 400)
-        .attr("width", "80%")
-        .attr("height", "40%")
+        .attr("title", virtual_cloud_network['display_name'])
+        .attr("x", icon_width / 2)
+        .attr("y", icon_height / 2)
+        .attr("width", vcn_rect_width)
+        .attr("height", vcn_rect_height)
         .attr("stroke", "purple")
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white");
-    var iconsvg = vcn.append("svg")
-        .attr("width", "100")
-        .attr("height", "100")
-        .attr("viewbox", "0 0 20 20");
-    var g = iconsvg.append("g")
-        .attr("transform", "translate(0, 30) scale(0.3, 0.3)");
+    rect.append("title")
+        .text("Virtual Cloud Network: " + virtual_cloud_network['display_name']);
+    var g = svg.append("g")
+        .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
     g.append("path")
         .attr("class", "st0")
         .attr("d", "M143.4,154.1c-0.4,0.8-0.9,1.5-1.5,2l6,15.2c0.1,0,0.2,0,0.3,0c0.9,0,1.8,0.3,2.6,0.7l14.7-14.3c-0.2-0.4-0.4-0.8-0.5-1.3L143.4,154.1z")
@@ -94,7 +112,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     //var vcnelem = document.querySelector('#' + id);
     //vcnelem.addEventListener("click", function() { assetSelected('VirtualCloudNetwork', id) });
     $('#' + id).on("click", function() { assetSelected('VirtualCloudNetwork', id) });
-    d3.select('g#' + id + '-group').selectAll('path')
+    d3.select('svg#' + id + '-svg').selectAll('path')
         .on("click", function() { assetSelected('VirtualCloudNetwork', id) });
     assetSelected('VirtualCloudNetwork', id);
 
@@ -116,16 +134,18 @@ function loadVirtualCloudNetworkProperties(id) {
                 //console.log(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {
                     //console.log('Found Virtual Cloud Network: ' + id);
-                    $('#name').val(virtual_cloud_network['name']);
-                    $('#cidr').val(virtual_cloud_network['cidr']);
+                    $('#display_name').val(virtual_cloud_network['display_name']);
+                    $('#cidr_block').val(virtual_cloud_network['cidr_block']);
                     $('#dns_label').val(virtual_cloud_network['dns_label']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
                             virtual_cloud_network[inputfield.id] = inputfield.value;
                             // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'name') {
+                            if (inputfield.id == 'display_name') {
                                 okitIdsJsonObj[id] = inputfield.value;
+                            } else if (inputfield.id == 'cidr_block') {
+                                virtual_cloud_network['id'] = inputfield.value;
                             }
                             displayOkitJson();
                         });
@@ -138,3 +158,4 @@ function loadVirtualCloudNetworkProperties(id) {
 }
 
 
+clearVirtualCloudNetworkVariables();

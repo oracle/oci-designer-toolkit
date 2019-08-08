@@ -18,6 +18,7 @@ __module__ = "ociCompartment"
 
 
 import oci
+import re
 import sys
 import json
 
@@ -39,20 +40,40 @@ class OCICompartments(OCIIdentityConnection):
         self.canonicalnames = []
         super(OCICompartments, self).__init__(config=config, configfile=configfile)
 
-    def list(self, id=None, recursive=False):
+    def get(self, compartment_id):
+        compartment = self.client.get_compartment(compartment_id=compartment_id).data
+        self.compartments_json = [self.toJson(compartment)]
+        self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
+        return self.compartments_json[0]
+
+    def list(self, id=None, filter={}, recursive=False, **kwargs):
         if id is None:
             id = self.compartment_ocid
         # Recursive only valid if we are querying the root / tenancy
         recursive = (recursive and (id == self.config['tenancy']))
 
+        # Add filter to only return ACTIVE Compartments
+        if filter is None:
+            filter = {}
+
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = 'ACTIVE'
+
         compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
 
         # Convert to Json object
-        self.compartments_json = self.toJson(compartments)
-        logger.debug(str(self.compartments_json))
+        compartments_json = self.toJson(compartments)
+        logger.debug(str(compartments_json))
 
-        with open("compartments.json", "w") as data_file:
-            json.dump(self.compartments_json, data_file, indent=2)
+        # Check if the results should be filtered
+        if filter is None:
+            self.compartments_json = compartments_json
+        else:
+            filtered = compartments_json[:]
+            for key, val in filter.items():
+                filtered = [comp for comp in filtered if re.compile(val).search(comp[key])]
+            self.compartments_json = filtered
+        logger.debug(str(self.compartments_json))
 
         # Generate Name / Id mappings
         for compartment in self.compartments_json:
@@ -66,7 +87,7 @@ class OCICompartments(OCIIdentityConnection):
         return self.compartments_json
 
     def listTenancy(self):
-        return self.list(self.config['tenancy'], True)
+        return self.list(id=self.config['tenancy'], recursive=True)
 
     def listHierarchicalNames(self):
         compartments = self.listTenancy()
@@ -78,11 +99,11 @@ class OCICompartments(OCIIdentityConnection):
                 self.canonicalnames.append(self.getCanonicalName(compartment['id']))
         return sorted(self.canonicalnames)
 
-    def getCanonicalName(self, id):
+    def getCanonicalName(self, compartment_id):
         parentsname = ''
-        if self.parents[id] in self.names:
-            parentsname = self.getCanonicalName(self.parents[id])
-        return '{0!s:s}/{1!s:s}'.format(parentsname, self.names[id])
+        if self.parents[compartment_id] in self.names:
+            parentsname = self.getCanonicalName(self.parents[compartment_id])
+        return '{0!s:s}/{1!s:s}'.format(parentsname, self.names[compartment_id])
 
 
 class OCICompartment(object):

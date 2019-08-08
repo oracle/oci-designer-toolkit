@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Load Balancer</title>
+</head>
+<body>
+    <div id="property-editor" class="property-editor">
+        <div class="property-editor-title">
+            <label>Load Balancer</label>
+        </div>
+        <table id="load_balancer" class="property-editor-table">
+            <tr><th>Property</th><th>Value</th></tr>
+            <tr><td>Virtual Cloud Network</td><td><label id="virtual_cloud_network" class="property-value"></label></td></tr>
+            <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
+            <tr><td><input type="radio" id="is_private" name="is_private" value="False" checked="checked" class="property-value">Public</td><td><input type="radio" id="is_private" name="is_private" value="True" class="property-value">Private</td></tr>
+            <tr><td>Bandwidth</td><td><select id="shape" class="property-value">
+                <option value="100Mbps" selected="selected">Small 100Mbps</option>
+                <option value="400Mbps">Medium 400Mbps</option>
+                <option value="8000Mbps">Large 8000Mbps</option>
+            </select></td></tr>
+        </table>
+    </div>
+</body>
+</html>

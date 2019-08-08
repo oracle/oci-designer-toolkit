@@ -42,20 +42,32 @@ class OCISubnets(OCIVirtualNetworkConnection):
 
         subnets = oci.pagination.list_call_get_all_results(self.client.list_subnets, compartment_id=compartment_id, vcn_id=self.vcn_id).data
         # Convert to Json object
-        self.subnets_json = self.toJson(subnets)
+        subnets_json = self.toJson(subnets)
+        logger.debug(str(subnets_json))
+
+        # Check if the results should be filtered
+        if filter is None:
+            self.subnets_json = subnets_json
+        else:
+            filtered = self.subnets_json[:]
+            for key, val in filter.items():
+                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+            self.subnets_json = filtered
         logger.debug(str(self.subnets_json))
+
         # Build List of Subnet Objects
         self.subnets_obj = []
         for subnet in self.subnets_json:
             self.subnets_obj.append(OCISubnet(self.config, self.configfile, subnet))
         # Check if the results should be filtered
-        if filter is None:
-            return self.subnets_json
-        else:
-            filtered = self.subnets_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            return filtered
+        #if filter is None:
+        #    return self.subnets_json
+        #else:
+        #    filtered = self.subnets_json[:]
+        #    for key, val in filter.items():
+        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+        #    return filtered
+        return self.subnets_json
 
 
 class OCISubnet(object):
