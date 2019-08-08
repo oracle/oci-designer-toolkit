@@ -16,3 +16,5 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+okit.wpr
