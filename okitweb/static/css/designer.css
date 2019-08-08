@@ -110,6 +110,7 @@
 
 .property-editor {
     background: ghostwhite;
+    margin-right: 5px;
     width: 100%;
     display: block;
     direction: ltr;

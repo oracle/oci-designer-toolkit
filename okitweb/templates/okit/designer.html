@@ -22,7 +22,16 @@
             </div>
         </li>
         <li><a id="file-redraw-menu-item" class="parent-item" href="#">Redraw</a></li>
-        <li><a id="file-export-menu-item" class="parent-item" href="#">Export</a></li>
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>Export</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="file-export-menu-item" class="parent-item" href="#">SVG</a></li>
+        <li><a id="file-export-rm-menu-item" class="parent-item" href="#">Resource Manager</a></li>
         <li>
             <div>
                 <span class="header-item">
