@@ -67,15 +67,19 @@ function addSubnet(vcnid) {
     console.log(JSON.stringify(OKITJsonObj, null, 2));
     okitIdsJsonObj[id] = subnet['display_name'];
 
+    initialiseSubnetChildData(id);
+
+    displayOkitJson();
+    drawSubnetSVG(subnet);
+}
+
+function initialiseSubnetChildData(id) {
     // Set subnet specific positioning variables
     subnet_content[id] = {}
     subnet_content[id]['load_balancer_count'] = 0;
     subnet_content[id]['load_balancer_position'] = 0;
     subnet_content[id]['instance_count'] = 0;
     subnet_content[id]['instance_position'] = 0;
-
-    displayOkitJson();
-    drawSubnetSVG(subnet);
 }
 
 /*

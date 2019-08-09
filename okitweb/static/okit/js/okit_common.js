@@ -159,6 +159,7 @@ function drawSVGforJson() {
             for (var i=0; i < OKITJsonObj['compartment']['subnets'].length; i++) {
                 subnet_ids.push(OKITJsonObj['compartment']['subnets'][i]['id']);
                 okitIdsJsonObj[OKITJsonObj['compartment']['subnets'][i]['id']] = OKITJsonObj['compartment']['subnets'][i]['display_name'];
+                initialiseSubnetChildData(OKITJsonObj['compartment']['subnets'][i]['id']);
                 subnet_count += 1;
                 drawSubnetSVG(OKITJsonObj['compartment']['subnets'][i]);
                 drawSubnetConnectorsSVG(OKITJsonObj['compartment']['subnets'][i]);
