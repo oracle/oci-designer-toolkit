@@ -147,7 +147,7 @@ def main(argv):
                 oci_backendsets.list()
                 for backendset in oci_backendsets.backendsets_obj:
                     logger.info('\t\tBackendSet : {0!s:s}'.format(backendset.data['name']))
-                    oci_backends = oci_load_balancer.getBackendClients(load_balancer_id=oci_load_balancer.data['id'], backend_set_name=backendset.data['name'])
+                    oci_backends = oci_load_balancer.getBackendClients(backend_set_name=backendset.data['name'])
                     oci_backends.list()
                     for backend in oci_backends.backends_obj:
                         logger.info('\t\tBackend : {0!s:s}'.format(backend.data['name']))
