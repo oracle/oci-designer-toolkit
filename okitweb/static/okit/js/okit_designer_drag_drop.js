@@ -1,16 +1,21 @@
 console.log('Loaded Drag & Drop Javascript');
 
 /*
-** Define Dynamic Add function
+** Define Dynamic Add/Update function
  */
 
 var asset_add_functions = {};
+var asset_update_functions = {};
 
 function addAssetToDropTarget(title, target_id) {
     //console.log('addAssetToDropTarget - Title : ' + title);
     //console.log('addAssetToDropTarget - Target Id : ' + target_id);
     //console.log('addAssetToDropTarget - Add Functions : ' + JSON.stringify(asset_add_functions));
     window[asset_add_functions[title]](target_id);
+}
+
+function updateAssetTarget(title, source_type, source_id, target_id) {
+    window[asset_update_functions[title]](source_type, source_id, target_id);
 }
 
 /*
@@ -27,7 +32,7 @@ var asset_connect_targets = {};
 
 function setDragDropIcon(e) {
     var type = e.target.getAttribute('data-type');
-    if (asset_drop_targets[palatte_source_type] == type) {
+    if (asset_drop_targets[palatte_source_type].indexOf(type) >= 0) {
         e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
         e.dataTransfer.effectAllowed = "none";
@@ -110,7 +115,9 @@ function handleConnectorDrag(e) {
 }
 
 function handleConnectorDragStart(e) {
-    e.preventDefault();
+    if (e.preventDefault) {
+        e.preventDefault(); // Necessary. Allows us to drop.
+    }
     // Set Start Element to know we are dragging
     connectorStartElement = e.target;
     var parentid = connectorStartElement.getAttribute('data-parentid');
@@ -159,10 +166,33 @@ function handleConnectorDragLeave(e) {
     }
 }
 
-function handleConnectorDropNew(e) {
+function handleConnectorDrop(e) {
+    console.log('Connector Drop');
     if (connectorStartElement) {
         var sourceType = connectorStartElement.getAttribute('data-type');
         var destinationType = e.target.getAttribute('data-type');
+        var parentid = e.target.getAttribute('data-parentid');
+        var sourceid = connectorStartElement.id;
+        var id = e.target.id;
+
+        // Check is Connection of
+        if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
+            updateAssetTarget(destinationType, sourceType, sourceid, id)
+            console.log('Creating Connector Line');
+            var boundingClientRect = e.target.getBoundingClientRect();
+            connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
+            connectorContainerSVGPoint.y = boundingClientRect.y;
+            var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
+            svg = d3.select("#" + parentid + '-svg');
+            svg.append('line')
+                .attr("id", generateConnectorId(sourceid, id))
+                .attr("x1", connectorStartXLeft)
+                .attr("y1", connectorStartYTop)
+                .attr("x2", svgrelative.x)
+                .attr("y2", svgrelative.y)
+                .attr("stroke-width", "2")
+                .attr("stroke", "black");
+        }
     }
 
     connectorStartElement = null;
@@ -171,23 +201,23 @@ function handleConnectorDropNew(e) {
     d3.selectAll("#Connector").remove();
 }
 
-function handleConnectorDrop(e) {
+function handleConnectorDropOrig(e) {
     if (connectorStartElement) {
         var sourceType = connectorStartElement.getAttribute('data-type');
         var destinationType = e.target.getAttribute('data-type');
-        var vcnid = e.target.getAttribute('data-parentid');
+        var parentid = e.target.getAttribute('data-parentid');
         var validSubnetSource = ['Route Table', 'Security List'];
         var sourceid = connectorStartElement.id;
         var id = e.target.id;
 
         if (validSubnetSource.indexOf(sourceType) >= 0 && destinationType == 'Subnet') {
-            updateSubnetLinks(sourceType, sourceid, id);
+            updateSubnet(sourceType, sourceid, id);
             console.log('Creating Connector Line');
             var boundingClientRect = e.target.getBoundingClientRect();
             connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
             connectorContainerSVGPoint.y = boundingClientRect.y;
             var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-            svg = d3.select("#" + vcnid + '-svg');
+            svg = d3.select("#" + parentid + '-svg');
             svg.append('line')
                 .attr("id", generateConnectorId(sourceid, id))
                 .attr("x1", connectorStartXLeft)

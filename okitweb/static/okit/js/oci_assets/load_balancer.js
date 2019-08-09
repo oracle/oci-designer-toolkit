@@ -5,8 +5,9 @@ console.log('Loaded Load Balancer Javascript');
  */
 
 asset_drop_targets["Load Balancer"] = ["Subnet"];
-asset_connect_targets["Load Balancer"] = ["Load Balancer"];
+asset_connect_targets["Load Balancer"] = ["Instance"];
 asset_add_functions["Load Balancer"] = "addLoadBalancer";
+asset_update_functions["Load Balancer"] = "updateLoadBalancer";
 
 var load_balancer_ids = [];
 var load_balancer_count = 0;
@@ -59,10 +60,10 @@ function addLoadBalancer(subnetid) {
  */
 function drawLoadBalancerSVG(load_balancer) {
     console.log(JSON.stringify(subnet_content));
-    var subnetid = load_balancer['subnet_id'];
-    console.log('VCN Id : ' + subnetid);
+    var parent_id = load_balancer['subnet_id'];
+    console.log('VCN Id : ' + parent_id);
     var id = load_balancer['id'];
-    var position = subnet_content[subnetid]['load_balancer_position'];
+    var position = subnet_content[parent_id]['load_balancer_position'];
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
     var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
@@ -70,13 +71,13 @@ function drawLoadBalancerSVG(load_balancer) {
     var data_type = "Route Table";
 
     // Increment Icon Position
-    subnet_content[subnetid]['load_balancer_position'] += 1;
+    subnet_content[parent_id]['load_balancer_position'] += 1;
 
-    var okitcanvas_svg = d3.select('#' + subnetid + "-svg");
+    var okitcanvas_svg = d3.select('#' + parent_id + "-svg");
     var svg = okitcanvas_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
-        .attr("data-parentid", subnetid)
+        .attr("data-parentid", parent_id)
         .attr("title", load_balancer['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
@@ -85,7 +86,7 @@ function drawLoadBalancerSVG(load_balancer) {
     var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
-        .attr("data-parentid", subnetid)
+        .attr("data-parentid", parent_id)
         .attr("title", load_balancer['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
@@ -96,24 +97,49 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     rect.append("title")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .text("Load Balancer: "+ load_balancer['display_name']);
     var g = svg.append("g")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
     g.append("path")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("class", "st0")
-        .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v54.3h18.2v-23.9c0-5.2,4.2-9.3,9.3-9.3h20.1c5.2,0,9.3,4.2,9.3,9.3v20.9l22.7-21.8l-3-3.1l12.7-3.1l-3.6,12.6l-3-3.1l-22.4,21.6h28.7v-4.4l11.3,6.5l-11.3,6.5v-4.4h-28.7l22.4,21.6l3-3.1l3.6,12.6l-12.7-3.1l3-3.1l-22.7-21.8v20.9c0,5.2-4.2,9.3-9.3,9.3h-20.1c-5.2,0-9.3-4.2-9.3-9.3v-23.9H87.1v53c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z")
+        .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v54.3h18.2v-23.9c0-5.2,4.2-9.3,9.3-9.3h20.1c5.2,0,9.3,4.2,9.3,9.3v20.9l22.7-21.8l-3-3.1l12.7-3.1l-3.6,12.6l-3-3.1l-22.4,21.6h28.7v-4.4l11.3,6.5l-11.3,6.5v-4.4h-28.7l22.4,21.6l3-3.1l3.6,12.6l-12.7-3.1l3-3.1l-22.7-21.8v20.9c0,5.2-4.2,9.3-9.3,9.3h-20.1c-5.2,0-9.3-4.2-9.3-9.3v-23.9H87.1v53c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z");
     g.append("path")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("class", "st0")
-        .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z")
+        .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z");
 
     // Add click event to display properties
+    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+    // Add dragevent versions
+    $('#' + id + '-svg')
+        .on("click", function() { loadLoadBalancerProperties(id) })
+        .on("mousedown", handleConnectorDragStart)
+        .on("mousemove", handleConnectorDrag)
+        .on("mouseup", handleConnectorDrop)
+        .on("mouseover", handleConnectorDragEnter)
+        .on("mouseout", handleConnectorDragLeave)
+        .on("dragstart", handleConnectorDragStart)
+        .on("drop", handleConnectorDrop)
+        .on("dragenter", handleConnectorDragEnter)
+        .on("dragleave", handleConnectorDragLeave);
+    loadLoadBalancerProperties(id);
+
+    /*
+    // Add click event to display properties
     $('#' + id).on("click", function() { loadLoadBalancerProperties(id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
+    d3.select('#' + id + '-svg').selectAll('path')
         .on("click", function() { loadLoadBalancerProperties(id) });
     loadLoadBalancerProperties(id);
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + id).on("mousedown", handleConnectorDragStart);
+    $('#' + id + '-svg').on("mousedown", handleConnectorDragStart);
     $('#' + id).on("mousemove", handleConnectorDrag);
     $('#' + id).on("mouseup", handleConnectorDrop);
     $('#' + id).on("mouseover", handleConnectorDragEnter);
@@ -123,6 +149,7 @@ function drawLoadBalancerSVG(load_balancer) {
     $('#' + id).on("drop", handleConnectorDrop);
     $('#' + id).on("dragenter", handleConnectorDragEnter);
     $('#' + id).on("dragleave", handleConnectorDragLeave);
+    */
     d3.select('#' + id)
         .attr("dragable", true);
 }
@@ -170,6 +197,13 @@ function loadLoadBalancerProperties(id) {
             }
         }
     });
+}
+
+/*
+** OKIT Json Update Function
+ */
+function updateLoadBalancer(source_type, source_id, id) {
+
 }
 
 clearLoadBalancerVariables();
