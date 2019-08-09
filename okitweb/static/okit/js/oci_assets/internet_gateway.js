@@ -5,6 +5,7 @@ console.log('Loaded Internet Gateway Javascript');
  */
 
 asset_drop_targets["Internet Gateway"] = ["Virtual Cloud Network"];
+asset_add_functions["Internet Gateway"] = "addInternetGateway";
 
 var internet_gateway_ids = [];
 var internet_gateway_count = 0;

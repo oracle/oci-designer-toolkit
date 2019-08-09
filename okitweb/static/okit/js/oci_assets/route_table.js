@@ -5,6 +5,7 @@ console.log('Loaded Route Table Javascript');
  */
 
 asset_drop_targets["Route Table"] = ["Virtual Cloud Network"];
+asset_add_functions["Route Table"] = "addRouteTable";
 
 var route_table_ids = [];
 var route_table_count = 0;

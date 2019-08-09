@@ -5,6 +5,7 @@ console.log('Loaded Internet Gateway Javascript');
  */
 
 asset_drop_targets["Subnet"] = ["Virtual Cloud Network"];
+asset_add_functions["Subnet"] = "addSubnet";
 
 var subnet_svg_height = 200;
 var subnet_svg_width = "95%";

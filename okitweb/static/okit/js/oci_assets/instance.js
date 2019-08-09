@@ -5,6 +5,7 @@ console.log('Loaded Instance Javascript');
  */
 
 asset_drop_targets["Instance"] = ["Subnet"];
+asset_add_functions["Instance"] = "addInstance";
 
 var instance_ids = [];
 var instance_count = 0;

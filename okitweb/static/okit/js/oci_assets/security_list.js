@@ -5,6 +5,7 @@ console.log('Loaded Subnet Javascript');
  */
 
 asset_drop_targets["Security List"] = ["Virtual Cloud Network"];
+asset_add_functions["Security List"] = "addSecurityList";
 
 var security_list_ids = [];
 var security_list_count = 0;

@@ -5,6 +5,7 @@ console.log('Loaded Virtual Cloud Network Javascript');
  */
 
 asset_drop_targets["Virtual Cloud Network"] = ["Compartment"];
+asset_add_functions["Virtual Cloud Network"] = "addVirtualCloudNetwork";
 
 var vcn_svg_width = "99%"
 var vcn_svg_height = "70%"
@@ -30,7 +31,7 @@ function clearVirtualCloudNetworkVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addVirtualCloudNetwork() {
+function addVirtualCloudNetwork(compartmentid) {
     var id = 'okit-vcn-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON

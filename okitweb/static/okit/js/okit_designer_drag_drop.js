@@ -1,6 +1,19 @@
 console.log('Loaded Drag & Drop Javascript');
 
 /*
+** Define Dynamic Add function
+ */
+
+var asset_add_functions = {};
+
+function addAssetToDropTarget(title, target_id) {
+    //console.log('addAssetToDropTarget - Title : ' + title);
+    //console.log('addAssetToDropTarget - Target Id : ' + target_id);
+    //console.log('addAssetToDropTarget - Add Functions : ' + JSON.stringify(asset_add_functions));
+    window[asset_add_functions[title]](target_id);
+}
+
+/*
 ** Drag & Drop Handlers
  */
 
@@ -50,6 +63,29 @@ function handleDragLeave(e) {
 }
 
 function handleDrop(e) {
+    console.log('Drag Drop (Dynamic)');
+    // this/e.target is current target element.
+
+    if (e.stopPropagation) {
+        e.stopPropagation(); // Stops some browsers from redirecting.
+    }
+    if (e.preventDefault) {
+        e.preventDefault(); // Necessary. Allows us to drop.
+    }
+
+    //this.innerHTML = e.dataTransfer.getData('text/html');
+    var title = e.dataTransfer.getData('text/plain');
+    var type = e.target.getAttribute('data-type');
+    var target_id = e.target.id;
+    // Call Add Function
+    addAssetToDropTarget(title, target_id)
+
+    this.classList.remove('over');  // this / e.target is previous target element.
+
+    return false;
+}
+
+function handleDropOrig(e) {
     console.log('Drag Drop');
     // this/e.target is current target element.
 

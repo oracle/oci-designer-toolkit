@@ -5,6 +5,7 @@ console.log('Loaded Load Balancer Javascript');
  */
 
 asset_drop_targets["Load Balancer"] = ["Subnet"];
+asset_add_functions["Load Balancer"] = "addLoadBalancer";
 
 var load_balancer_ids = [];
 var load_balancer_count = 0;
