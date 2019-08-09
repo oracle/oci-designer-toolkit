@@ -1,5 +1,11 @@
 console.log('Loaded Virtual Cloud Network Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Virtual Cloud Network"] = ["Compartment"];
+
 var vcn_svg_width = "99%"
 var vcn_svg_height = "70%"
 var vcn_rect_width = "95%"

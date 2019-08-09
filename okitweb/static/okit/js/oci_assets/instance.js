@@ -1,5 +1,11 @@
 console.log('Loaded Instance Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Instance"] = ["Subnet"];
+
 var instance_ids = [];
 var instance_count = 0;
 var instance_prefix = 'in';

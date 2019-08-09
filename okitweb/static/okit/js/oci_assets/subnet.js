@@ -1,5 +1,11 @@
 console.log('Loaded Internet Gateway Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Subnet"] = ["Virtual Cloud Network"];
+
 var subnet_svg_height = 200;
 var subnet_svg_width = "95%";
 var subnet_rect_height = "85%";

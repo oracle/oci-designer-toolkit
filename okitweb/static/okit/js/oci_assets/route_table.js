@@ -1,5 +1,11 @@
 console.log('Loaded Route Table Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Route Table"] = ["Virtual Cloud Network"];
+
 var route_table_ids = [];
 var route_table_count = 0;
 var route_table_prefix = 'rt';

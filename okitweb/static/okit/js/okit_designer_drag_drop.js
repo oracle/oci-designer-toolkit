@@ -9,8 +9,19 @@ console.log('Loaded Drag & Drop Javascript');
  */
 
 var palatte_source_type = '';
+var asset_drop_targets = {};
 
 function setDragDropIcon(e) {
+    var type = e.target.getAttribute('data-type');
+    if (asset_drop_targets[palatte_source_type] == type) {
+        e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
+    } else {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+    }
+}
+
+function setDragDropIcon1(e) {
     var type = e.target.getAttribute('data-type');
     if (palatte_source_type == "Virtual Cloud Network" && type != "Compartment") {
         e.dataTransfer.effectAllowed = "none";

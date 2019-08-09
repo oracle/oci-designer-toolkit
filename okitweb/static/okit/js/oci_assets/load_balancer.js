@@ -1,5 +1,11 @@
 console.log('Loaded Load Balancer Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Load Balancer"] = ["Subnet"];
+
 var load_balancer_ids = [];
 var load_balancer_count = 0;
 

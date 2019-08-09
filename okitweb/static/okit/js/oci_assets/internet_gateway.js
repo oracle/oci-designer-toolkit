@@ -1,5 +1,11 @@
 console.log('Loaded Internet Gateway Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Internet Gateway"] = ["Virtual Cloud Network"];
+
 var internet_gateway_ids = [];
 var internet_gateway_count = 0;
 var internet_gateway_prefix = 'ig';
