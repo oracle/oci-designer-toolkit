@@ -78,7 +78,11 @@ class OCILoadBalancer(object):
     def getBackendSetClients(self):
         return OCIBackendSets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
+<<<<<<< HEAD
     def getBackendClients(self, backend_set_name=None):
+=======
+    def getBackendClients(self, load_balancer_id=None, backend_set_name=None):
+>>>>>>> dab904351cf355323342383b28feedfd1c5ffe7f
         return OCIBackends(self.config, self.configfile, self.data['id'], backend_set_name)
 
 

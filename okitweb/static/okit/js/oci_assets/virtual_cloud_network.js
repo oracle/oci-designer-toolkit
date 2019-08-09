@@ -1,5 +1,12 @@
 console.log('Loaded Virtual Cloud Network Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Virtual Cloud Network"] = ["Compartment"];
+asset_add_functions["Virtual Cloud Network"] = "addVirtualCloudNetwork";
+
 var vcn_svg_width = "99%"
 var vcn_svg_height = "70%"
 var vcn_rect_width = "95%"
@@ -24,7 +31,7 @@ function clearVirtualCloudNetworkVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addVirtualCloudNetwork() {
+function addVirtualCloudNetwork(compartmentid) {
     var id = 'okit-vcn-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
@@ -109,12 +116,11 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("class", "st0")
         .attr("d", "M144,87.8c-31,0-56.2,25.2-56.2,56.2c0,31,25.2,56.2,56.2,56.2s56.2-25.2,56.2-56.2C200.2,113,175,87.8,144,87.8z M170.6,160.9c-0.9,0-1.8-0.3-2.6-0.7l-14.7,14.3c0.4,0.7,0.6,1.6,0.6,2.5c0,3.1-2.5,5.6-5.6,5.6s-5.6-2.5-5.6-5.6c0-0.6,0.1-1.1,0.3-1.7l-22-15.5c-0.9,0.7-2.1,1.1-3.4,1.1c-3.1,0-5.6-2.5-5.6-5.6c0-3,2.3-5.4,5.2-5.6l5.2-21.4c-1.6-1-2.7-2.8-2.7-4.8c0-3.1,2.5-5.6,5.6-5.6c2.5,0,4.7,1.7,5.4,4l29.9,0.6c0.8-2.2,2.8-3.8,5.3-3.8c3.1,0,5.6,2.5,5.6,5.6c0,2.2-1.3,4.1-3.1,5l3.2,20.4c2.7,0.4,4.7,2.7,4.7,5.6C176.2,158.4,173.7,160.9,170.6,160.9z");
 
-    //var vcnelem = document.querySelector('#' + id);
-    //vcnelem.addEventListener("click", function() { assetSelected('VirtualCloudNetwork', id) });
-    $('#' + id).on("click", function() { assetSelected('VirtualCloudNetwork', id) });
+    // Add click event to display properties
+    $('#' + id).on("click", function() { loadVirtualCloudNetworkProperties(id) });
     d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { assetSelected('VirtualCloudNetwork', id) });
-    assetSelected('VirtualCloudNetwork', id);
+        .on("click", function() { loadVirtualCloudNetworkProperties(id) });
+    loadVirtualCloudNetworkProperties(id);
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     $('#' + id).on("mousemove", handleConnectorDrag);

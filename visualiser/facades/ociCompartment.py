@@ -24,6 +24,7 @@ import json
 
 from facades.ociConnection import OCIIdentityConnection
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from facades.ociInstance import OCIInstances
 from facades.ociLoadBalancer import OCILoadBalancers
 from common.ociLogging import getLogger
 
@@ -40,7 +41,7 @@ class OCICompartments(OCIIdentityConnection):
         self.canonicalnames = []
         super(OCICompartments, self).__init__(config=config, configfile=configfile)
 
-    def get(self, compartment_id):
+    def get(self, compartment_id):      
         compartment = self.client.get_compartment(compartment_id=compartment_id).data
         self.compartments_json = [self.toJson(compartment)]
         self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
@@ -58,6 +59,7 @@ class OCICompartments(OCIIdentityConnection):
 
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'ACTIVE'
+            #filter['name'] = 'Stefan'
 
         compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
 
@@ -86,15 +88,11 @@ class OCICompartments(OCIIdentityConnection):
             self.compartments_obj.append(OCICompartment(self.config, self.configfile, compartment))
         return self.compartments_json
 
-    def listTenancy(self):
-        return self.list(id=self.config['tenancy'], recursive=True)
+    def listTenancy(self, filter={}, **kwargs):
+        return self.list(id=self.config['tenancy'], filter=filter, recursive=True)
 
-    def listHierarchicalNames(self):
-        compartments = self.listTenancy()
-        #for compartment in compartments:
-        #    self.names[compartment['id']] = compartment['name']
-        #    self.parents[compartment['id']] = compartment['compartment_id']
-        #for compartment in sorted(compartments, key=lambda k: k.time_created):
+    def listHierarchicalNames(self, filter={}, **kwargs):
+        compartments = self.listTenancy(filter=filter)
         for compartment in sorted(compartments, key=lambda k: k['time_created']):
                 self.canonicalnames.append(self.getCanonicalName(compartment['id']))
         return sorted(self.canonicalnames)
@@ -115,12 +113,16 @@ class OCICompartment(object):
     def getVirtualCloudNetworkClients(self):
         return OCIVirtualCloudNetworks(self.config, self.configfile, self.data['id'])
 
+    def getInstanceClients(self):
+        return OCIInstances(self.config, self.configfile, self.data['id'])
+
     def getLoadBalancerClients(self):
         return OCILoadBalancers(self.config, self.configfile, self.data['id'])
 
 
 # Main processing function
 def main(argv):
+<<<<<<< HEAD
     oci_compartments = OCICompartments()
     oci_compartments.listTenancy()
     for name in oci_compartments.listHierarchicalNames():
@@ -172,6 +174,8 @@ def main(argv):
                     oci_backends.list()
                     for backend in oci_backends.backends_obj:
                         logger.info('\t\tBackend : {0!s:s}'.format(backend.data['name']))
+=======
+>>>>>>> dab904351cf355323342383b28feedfd1c5ffe7f
 
     return
 

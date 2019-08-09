@@ -1,6 +1,19 @@
 console.log('Loaded Drag & Drop Javascript');
 
 /*
+** Define Dynamic Add function
+ */
+
+var asset_add_functions = {};
+
+function addAssetToDropTarget(title, target_id) {
+    //console.log('addAssetToDropTarget - Title : ' + title);
+    //console.log('addAssetToDropTarget - Target Id : ' + target_id);
+    //console.log('addAssetToDropTarget - Add Functions : ' + JSON.stringify(asset_add_functions));
+    window[asset_add_functions[title]](target_id);
+}
+
+/*
 ** Drag & Drop Handlers
  */
 
@@ -9,34 +22,15 @@ console.log('Loaded Drag & Drop Javascript');
  */
 
 var palatte_source_type = '';
+var asset_drop_targets = {};
 
 function setDragDropIcon(e) {
     var type = e.target.getAttribute('data-type');
-    if (palatte_source_type == "Virtual Cloud Network" && type != "Compartment") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Internet Gateway" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Route Table" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Security List" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Subnet" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Load Balancer" && type != "Subnet") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Instance" && type != "Subnet") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else {
-        //console.log('Type: ' + e.target.getAttribute('data-type'));
-        //console.log('Id: ' + e.target.id);
+    if (asset_drop_targets[palatte_source_type] == type) {
         e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
+    } else {
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
     }
 }
 
@@ -69,7 +63,7 @@ function handleDragLeave(e) {
 }
 
 function handleDrop(e) {
-    console.log('Drag Drop');
+    console.log('Drag Drop (Dynamic)');
     // this/e.target is current target element.
 
     if (e.stopPropagation) {
@@ -82,28 +76,9 @@ function handleDrop(e) {
     //this.innerHTML = e.dataTransfer.getData('text/html');
     var title = e.dataTransfer.getData('text/plain');
     var type = e.target.getAttribute('data-type');
-    var id = e.target.id;
-    //console.log('Type: '+type+' - '+title+' - '+id)
-    if (title == "Virtual Cloud Network" && type == "Compartment") {
-        addVirtualCloudNetwork();
-    } else if (title == "Internet Gateway" && type == "Virtual Cloud Network") {
-        addInternetGateway(id);
-    } else if (title == "Route Table" && type == "Virtual Cloud Network") {
-        addRouteTable(id);
-    } else if (title == "Security List" && type == "Virtual Cloud Network") {
-        addSecurityList(id);
-    } else if (title == "Subnet" && type == "Virtual Cloud Network") {
-        addSubnet(id);
-    } else if (title == "Load Balancer" && type == "Subnet") {
-        addLoadBalancer(id);
-    } else if (title == "Instance" && type == "Subnet") {
-        addInstance(id);
-    }
-
-    //var img = new Image();
-    //img.src = iconSVGFile;
-    //var ctx = okitcanvas.getContext("2d");
-    //ctx.drawImage(img, 50, 50, 10, 10);
+    var target_id = e.target.id;
+    // Call Add Function
+    addAssetToDropTarget(title, target_id)
 
     this.classList.remove('over');  // this / e.target is previous target element.
 
@@ -112,6 +87,7 @@ function handleDrop(e) {
 
 function handleDragEnd(e) {
     // this/e.target is the source node.
+    console.log('Drag End');
 
     [].forEach.call(cols, function (col) {
         col.classList.remove('over');
@@ -136,14 +112,18 @@ function handleConnectorDragStart(e) {
     e.preventDefault();
     // Set Start Element to know we are dragging
     connectorStartElement = e.target;
-    var vcnid = connectorStartElement.getAttribute('data-vcnid');
-    //console.log('DragStart VCNid : ' + vcnid);
-    var okitcanvas_svg = document.getElementById(vcnid + "-svg");
+    var parentid = connectorStartElement.getAttribute('data-vcnid');
+    console.log('DragStart Parent Id : ' + parentid);
+    if (parentid == '' || parentid == null) {
+        parentid = connectorStartElement.getAttribute('data-subnetid');
+        console.log('DragStart Parent Id : ' + parentid);
+    }
+    var parent_svg = document.getElementById(parentid + "-svg");
     var boundingClientRect = connectorStartElement.getBoundingClientRect();
 
     // Define SVG position manipulation variables
-    connectorContainerSVGPoint = okitcanvas_svg.createSVGPoint();
-    connectorContainerScreenCTM = okitcanvas_svg.getScreenCTM();
+    connectorContainerSVGPoint = parent_svg.createSVGPoint();
+    connectorContainerScreenCTM = parent_svg.getScreenCTM();
     connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
     connectorContainerSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
 
@@ -155,7 +135,7 @@ function handleConnectorDragStart(e) {
 
     // Start Drawing line
     var mousePos = getMousePosition(e);
-    svg = d3.select('#' + vcnid + "-svg");
+    svg = d3.select('#' + parentid + "-svg");
     svg.append('line')
         .attr("id", "Connector")
         .attr("x1", connectorStartXLeft)
