@@ -43,6 +43,11 @@ def main(argv):
         
         for instance in oci_instances.instances_obj:
             logger.info('\tInstance : {0!s:s}'.format(instance.data['display_name']))
+            
+            vnic_attachments = instance.getInstanceVnicAttachmentClients()
+            vnic_attachments.list()
+            for vnic_attachment in vnic_attachments.vnic_attachments_obj:
+                logger.info('\t\tVnic ID : {0!s:s}'.format(vnic_attachment.data['vnic_id']))
 
     return
 
