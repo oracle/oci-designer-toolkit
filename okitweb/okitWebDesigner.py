@@ -140,6 +140,13 @@ def standardiseId(id, from_char='.', to_char='-'):
 @bp.route('/designer', methods=(['GET', 'POST']))
 def designer():
     oci_assets_js = os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets'))
+    palette_icons_svg = os.listdir(os.path.join(bp.static_folder, 'palette'))
+    palette_icons = []
+    for palette_svg in sorted(palette_icons_svg):
+        palette_icon = {'svg': palette_svg}
+        palette_icon['title'] = palette_svg.split('.')[0].replace('_', ' ')
+        palette_icons.append(palette_icon)
+    logger.info('Palette Icons : {0!s:s}'.format(palette_icons))
     if request.method == 'POST':
         request_json = {}
         for key, value in request.form.items():
@@ -148,9 +155,9 @@ def designer():
         response_json = executeQuery(request_json)
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, okit_query_json=response_string)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_query_json=response_string)
     elif request.method == 'GET':
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))

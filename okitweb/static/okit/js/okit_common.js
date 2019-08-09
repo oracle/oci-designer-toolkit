@@ -191,6 +191,11 @@ function handleRedraw(evt) {
     return false;
 }
 
+function handleResize(evt) {
+    redrawSVGCanvas();
+    return false;
+}
+
 function redrawSVGCanvas() {
     hideNavMenu();
     clearSVG();

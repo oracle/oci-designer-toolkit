@@ -1,5 +1,11 @@
 console.log('Loaded Subnet Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Security List"] = ["Virtual Cloud Network"];
+
 var security_list_ids = [];
 var security_list_count = 0;
 var security_list_prefix = 'sl';
