@@ -163,6 +163,18 @@ function handleConnectorDragLeave(e) {
     }
 }
 
+function handleConnectorDropNew(e) {
+    if (connectorStartElement) {
+        var sourceType = connectorStartElement.getAttribute('data-type');
+        var destinationType = e.target.getAttribute('data-type');
+    }
+
+    connectorStartElement = null;
+    connectorStartXLeft = 0;
+    connectorStartYTop = 0;
+    d3.selectAll("#Connector").remove();
+}
+
 function handleConnectorDrop(e) {
     if (connectorStartElement) {
         var sourceType = connectorStartElement.getAttribute('data-type');
