@@ -27,6 +27,38 @@ from common.ociLogging import getLogger
 # Configure logging
 logger = getLogger()
 
+class OCIInstanceVnicAttachments(OCIComputeConnection):
+    def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None, **kwargs):
+        self.compartment_id = compartment_id
+        self.instance_id = instance_id
+        self.vnic_attachments_json = []
+        self.vnic_attachments_obj = []
+        super(OCIInstanceVnicAttachments, self).__init__(config=config, configfile=configfile)
+
+    def list(self, compartment_id=None, instance_id=None):
+        if compartment_id is None:
+            compartment_id = self.compartment_id
+        if instance_id is None:
+            instance_id = self.instance_id
+
+        vnic_attachments = oci.pagination.list_call_get_all_results(self.client.list_vnic_attachments, compartment_id=compartment_id, instance_id=instance_id).data
+        # Convert to Json object
+        vnic_attachments_json = self.toJson(vnic_attachments)
+        logger.debug(str(vnic_attachments_json))
+  
+        self.vnic_attachments_json=vnic_attachments_json
+        logger.debug(str(self.vnic_attachments_json))
+
+        for vnic_attachment in self.vnic_attachments_json:
+            self.vnic_attachments_obj.append(OCIInstanceVnicAttachment(self.config, self.configfile, vnic_attachment))
+
+        return self.vnic_attachments_json
+
+class OCIInstanceVnicAttachment(object):
+    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+        self.config = config
+        self.configfile = configfile
+        self.data = data
 
 class OCIInstances(OCIComputeConnection):
     def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
@@ -64,10 +96,14 @@ class OCIInstances(OCIComputeConnection):
 
 
 class OCIInstance(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, data=None, id=None):
         self.config = config
         self.configfile = configfile
         self.data = data
+        
+    def getInstanceVnicAttachmentClients(self):
+        return OCIInstanceVnicAttachments(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        
 
 # Main processing function
 def main(argv):
