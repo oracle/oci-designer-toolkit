@@ -21,36 +21,6 @@ function setDragDropIcon(e) {
     }
 }
 
-function setDragDropIcon1(e) {
-    var type = e.target.getAttribute('data-type');
-    if (palatte_source_type == "Virtual Cloud Network" && type != "Compartment") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Internet Gateway" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Route Table" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Security List" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Subnet" && type != "Virtual Cloud Network") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Load Balancer" && type != "Subnet") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else if (palatte_source_type == "Instance" && type != "Subnet") {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
-    } else {
-        //console.log('Type: ' + e.target.getAttribute('data-type'));
-        //console.log('Id: ' + e.target.id);
-        e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
-    }
-}
-
 function handleDragStart(e) {
     console.log('Drag Start');
     e.dataTransfer.effectAllowed = 'copy';
