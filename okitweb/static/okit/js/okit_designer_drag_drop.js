@@ -113,12 +113,8 @@ function handleConnectorDragStart(e) {
     e.preventDefault();
     // Set Start Element to know we are dragging
     connectorStartElement = e.target;
-    var parentid = connectorStartElement.getAttribute('data-vcnid');
+    var parentid = connectorStartElement.getAttribute('data-parentid');
     console.log('DragStart Parent Id : ' + parentid);
-    if (parentid == '' || parentid == null) {
-        parentid = connectorStartElement.getAttribute('data-subnetid');
-        console.log('DragStart Parent Id : ' + parentid);
-    }
     var parent_svg = document.getElementById(parentid + "-svg");
     var boundingClientRect = connectorStartElement.getBoundingClientRect();
 
@@ -179,7 +175,7 @@ function handleConnectorDrop(e) {
     if (connectorStartElement) {
         var sourceType = connectorStartElement.getAttribute('data-type');
         var destinationType = e.target.getAttribute('data-type');
-        var vcnid = e.target.getAttribute('data-vcnid');
+        var vcnid = e.target.getAttribute('data-parentid');
         var validSubnetSource = ['Route Table', 'Security List'];
         var sourceid = connectorStartElement.id;
         var id = e.target.id;
