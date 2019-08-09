@@ -48,9 +48,6 @@ class OCILoadBalancers(OCILoadBalancerConnection):
         # Convert to Json object
         self.load_balancers_json = self.toJson(load_balancers)
 
-        with open("loadbalancers.json", "a") as data_file:
-            json.dump(self.load_balancers_json, data_file, indent=2)
-
         logger.debug(str(self.load_balancers_json))
         # Build List of Loadbalancer Objects
         self.load_balancers_obj = []
@@ -79,8 +76,8 @@ class OCILoadBalancer(object):
     def getBackendSetClients(self):
         return OCIBackendSets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
-    def getBackendClients(self, load_balancer_id=None, backend_set_name=None):
-        return OCIBackends(self.config, self.configfile, load_balancer_id, backend_set_name)
+    def getBackendClients(self, backend_set_name=None):
+        return OCIBackends(self.config, self.configfile, self.data['id'], backend_set_name)
 
 
 
