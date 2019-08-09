@@ -105,4 +105,3 @@ class OCIResourceManagerConnection(OCIConnection):
                 self.config = oci.config.from_file(self.configfile)
         self.client = oci.resource_manager.ResourceManagerClient(self.config)
         return
-
