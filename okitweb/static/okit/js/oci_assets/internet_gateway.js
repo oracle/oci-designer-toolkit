@@ -114,16 +114,6 @@ function drawInternetGatewaySVG(internet_gateway) {
     d3.select('svg#' + id + '-svg').selectAll('path')
         .on("click", function() { loadInternetGatewayProperties(id) });
     loadInternetGatewayProperties(id);
-    /*
-    //var igelem = document.querySelector('#' + id);
-    //igelem.addEventListener("click", function() { assetSelected('InternetGateway', id) });
-
-    // Add click event to display properties
-    $('#' + id).on("click", function() { assetSelected('InternetGateway', id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { assetSelected('InternetGateway', id) });
-    assetSelected('InternetGateway', id);
-    */
 }
 
 /*

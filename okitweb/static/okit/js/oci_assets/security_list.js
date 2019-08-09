@@ -105,14 +105,6 @@ function drawSecurityListSVG(security_list) {
     d3.select('svg#' + id + '-svg').selectAll('path')
         .on("click", function() { loadSecurityListProperties(id) });
     loadSecurityListProperties(id);
-    /*
-    //var igelem = document.querySelector('#' + id);
-    //igelem.addEventListener("click", function() { assetSelected('SecurityList', id) });
-    $('#' + id).on("click", function() { assetSelected('SecurityList', id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { assetSelected('SecurityList', id) });
-    assetSelected('SecurityList', id);
-    */
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     $('#' + id).on("mousedown", handleConnectorDragStart);

@@ -128,16 +128,6 @@ function drawRouteTableSVG(route_table) {
     d3.select('svg#' + id + '-svg').selectAll('path')
         .on("click", function() { loadRouteTableProperties(id) });
     loadRouteTableProperties(id);
-    /*
-    //var igelem = document.querySelector('#' + id);
-    //igelem.addEventListener("click", function() { assetSelected('RouteTable', id) });
-
-    // Add click event to display properties
-    $('#' + id).on("click", function() { assetSelected('RouteTable', id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { assetSelected('RouteTable', id) });
-    assetSelected('RouteTable', id);
-    */
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     $('#' + id).on("mousedown", handleConnectorDragStart);
