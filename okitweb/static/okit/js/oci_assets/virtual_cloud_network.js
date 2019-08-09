@@ -8,6 +8,7 @@ var virtual_network_ids = [];
 var virtual_cloud_network_count = 0;
 var virtual_cloud_network_prefix = 'vcn';
 var virtual_cloud_network_cidr = {};
+var virtual_cloud_network_subcomponents = {};
 
 /*
 ** Reset variables
@@ -17,6 +18,7 @@ function clearVirtualCloudNetworkVariables() {
     virtual_network_ids = [];
     virtual_cloud_network_count = 0;
     virtual_cloud_network_cidr = {};
+    virtual_cloud_network_subcomponents = {};
 }
 
 /*
@@ -30,6 +32,9 @@ function addVirtualCloudNetwork() {
     if (!('virtual_cloud_networks' in OKITJsonObj['compartment'])) {
         OKITJsonObj['compartment']['virtual_cloud_networks'] = [];
     }
+
+    // Add Sub Component position
+    virtual_cloud_network_subcomponents[id] = {"load_balancer_position": 0, "instance_position": 0}
 
     // Add id & empty name to id JSON
     okitIdsJsonObj[id] = '';

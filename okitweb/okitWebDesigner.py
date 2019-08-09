@@ -28,6 +28,7 @@ from flask import session
 from flask import url_for
 
 from common.ociCommon import logJson
+from common.ociCommon import standardiseIds
 from generators.ociTerraformGenerator import OCITerraformGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
@@ -93,6 +94,14 @@ def executeQuery(request_json={}, ** kwargs):
 
 
 def standardiseJson(json_data={}, **kwargs):
+    logJson(json_data)
+    json_data = standardiseIds(json_data)
+    logJson(json_data)
+    return json_data
+
+
+# TODO: Delete
+def standardiseJson1(json_data={}, **kwargs):
     if 'compartment' in json_data:
         if 'virtual_cloud_networks' in json_data['compartment']:
             for virtual_network in json_data['compartment']['virtual_cloud_networks']:
@@ -123,6 +132,7 @@ def standardiseJson(json_data={}, **kwargs):
     return json_data
 
 
+# TODO: Delete
 def standardiseId(id, from_char='.', to_char='-'):
     return id.replace(from_char, to_char)
 
@@ -198,3 +208,22 @@ def ociQuery(cloud):
     else:
         return '404'
 
+
+@bp.route('/export/<string:destination>', methods=(['POST']))
+def export(destination):
+    logger.info('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
+    logger.info('JSON     : {0:s}'.format(str(request.json)))
+    if request.method == 'POST':
+        try:
+            destination_dir = tempfile.mkdtemp();
+            if destination == 'resourcemanager':
+                generator = OCITerraformGenerator(template_root, destination_dir, request.json)
+            generator.generate()
+            generator.writeFiles()
+            zipname = generator.createZipArchive(os.path.join(destination_dir, 'terraform'), "/tmp/okit-resource-manager")
+            logger.info('Zipfile : {0:s}'.format(str(zipname)))
+            shutil.rmtree(destination_dir)
+        except Exception as e:
+            logger.exception(e)
+            return str(e), 500
+    return

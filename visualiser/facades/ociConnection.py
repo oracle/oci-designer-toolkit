@@ -79,9 +79,9 @@ class OCILoadBalancerConnection(OCIConnection):
         return
 
 
-class OCIComputeConnection(OCIConnection):
+class OCIResourceManagerConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, **kwargs):
-        super(OCIComputeConnection, self).__init__(config=config, configfile=configfile)
+        super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):
         if self.config is None:
@@ -89,5 +89,5 @@ class OCIComputeConnection(OCIConnection):
                 self.config = oci.config.from_file()
             else:
                 self.config = oci.config.from_file(self.configfile)
-        self.client = oci.core.ComputeClient(self.config)
+        self.client = oci.resource_manager.ResourceManagerClient(self.config)
         return

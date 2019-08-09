@@ -142,6 +142,14 @@ function loadSecurityListProperties(id) {
                             displayOkitJson();
                         });
                     });
+                    // Egress Rules
+                    for (var rulecnt = 0; rulecnt < security_list['egress_security_rules'].length; rulecnt++) {
+                        addAccessRuleHtml(security_list['egress_security_rules'][rulecnt], 'egress')
+                    }
+                    // Ingress Rules
+                    for (var rulecnt = 0; rulecnt < security_list['ingress_security_rules'].length; rulecnt++) {
+                        addAccessRuleHtml(security_list['ingress_security_rules'][rulecnt], 'ingress')
+                    }
                     // Add Handler to Add Button
                     document.getElementById('egress_add_button').addEventListener('click', handleAddAccessRule, false);
                     document.getElementById('egress_add_button').security_list = security_list;
@@ -199,6 +207,26 @@ function addAccessRuleHtml(access_rule, access_type) {
             access_rule[source_dest + '_type'] = this.value;
             displayOkitJson();
         });
+    // Stateful
+    rule_row = rule_table.append('tr');
+    rule_cell = rule_row.append('td');
+    rule_cell = rule_row.append('td');
+    rule_cell.append('input')
+        .attr("type", "checkbox")
+        .attr("class", "property-value")
+        .attr("id", "is_stateless")
+        .attr("name", "is_stateless")
+        .on("change", function() {
+            access_rule['is_stateless'] = this.checked;
+            console.log('Changed is_stateless: ' + this.checked);
+            displayOkitJson();
+        });
+    if (access_rule['is_stateless']) {
+        rule_cell.attr("checked", access_rule['is_stateless']);
+    }
+    rule_cell.append('label')
+        .attr("class", "property-value")
+        .text('Stateless');
     // Destination / Source
     rule_row = rule_table.append('tr');
     rule_cell = rule_row.append('td')
@@ -215,14 +243,51 @@ function addAccessRuleHtml(access_rule, access_type) {
             console.log('Changed destination: ' + this.value);
             displayOkitJson();
         });
+    // Add Protocol
+    rule_row = rule_table.append('tr');
+    rule_cell = rule_row.append('td')
+        .text("Protocol");
+    rule_cell = rule_row.append('td');
+    var protocol_select = rule_cell.append('select')
+        .attr("class", "property-value")
+        .attr("id", "protocol")
+        .on("change", function() {
+            access_rule['protocol'] = this.options[this.selectedIndex].value;
+            console.log('Changed network_entity_id ' + this.selectedIndex);
+            displayOkitJson();
+        });
+    // Add Protocol Options
+    var protocols = {
+        'All': 'all',
+        'ICMP': '1',
+        'TCP': '6',
+        'UDP': '17'
+    };
+    for (var key in protocols) {
+        if (protocols.hasOwnProperty(key)) {
+            var opt = protocol_select.append('option')
+                .attr("value", protocols[key])
+                .text(key);
+            if (access_rule['protocol'] == protocols[key]) {
+                opt.attr("selected", "selected");
+            }
+        }
+    }
+    if (access_rule['protocol'] == '') {
+        access_rule['protocol'] = protocol_select.node().options[protocol_select.node().selectedIndex].value;
+    }
 }
+
 function handleAddAccessRule(evt) {
     console.log('Adding access rule');
+    var new_rule = { "protocol": "all", "is_stateless": false}
     if (evt.target.id == 'egress_add_button') {
-        var new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0"}
+        new_rule["destination_type"] = "CIDR_BLOCK";
+        new_rule["destination"] = "0.0.0.0/0";
         evt.target.security_list['egress_security_rules'].push(new_rule)
     } else {
-        var new_rule = {source_type: "CIDR_BLOCK", source: "0.0.0.0/0"}
+        new_rule["source_type"] = "CIDR_BLOCK";
+        new_rule["source"] = "0.0.0.0/0";
         evt.target.security_list['ingress_security_rules'].push(new_rule)
     }
     addAccessRuleHtml(new_rule, evt.target.id.split('_')[0]);

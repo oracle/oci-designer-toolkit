@@ -99,8 +99,12 @@ class OCIGenerator(object):
             for key, value in self.visualiser_json["compartment"].items():
                 if isinstance(value, list):
                     for asset in value:
-                        self.id_name_map[asset["id"]] = asset["display_name"]
+                        self.id_name_map[self.formatOcid(asset["id"])] = asset["display_name"]
         return
+
+    def formatOcid(self, id):
+        return id
+        #return id.replace('-', '.')
 
     def generate(self):
         # Validate input json
@@ -218,7 +222,7 @@ class OCIGenerator(object):
         # ---- Egress Rules
         rule_number = 1
         jinja2_egress_rules = []
-        for egress_rule in security_list.get('egress_rules', []):
+        for egress_rule in security_list.get('egress_security_rules', []):
             # ------ Protocol
             variableName = '{0:s}_egress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
             self.run_variables[variableName] = egress_rule["protocol"]
@@ -241,7 +245,7 @@ class OCIGenerator(object):
         # ---- Ingress Rules
         rule_number = 1
         jinja2_ingress_rules = []
-        for ingress_rule in security_list.get('ingress_rules', []):
+        for ingress_rule in security_list.get('ingress_security_rules', []):
             # ------ Protocol
             variableName = '{0:s}_ingress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
             self.run_variables[variableName] = ingress_rule["protocol"]
@@ -368,7 +372,7 @@ class OCIGenerator(object):
         # ---- Hostame
         variableName = '{0:s}_hostname'.format(standardisedName)
         self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["hostname"]
+        self.run_variables[variableName] = instance["hostname_label"]
         # ---- Shape
         variableName = '{0:s}_shape'.format(standardisedName)
         self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
@@ -382,7 +386,7 @@ class OCIGenerator(object):
         self.jinja2_variables["os_version"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["version"]
         # ---- Network OCID
-        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(instance['subnet']))
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance['subnet_id']]))
         # ---- Authorised Public SSH Keys
         variableName = '{0:s}_authorized_keys'.format(standardisedName)
         self.jinja2_variables["authorized_keys"] = self.formatJinja2Variable(variableName)

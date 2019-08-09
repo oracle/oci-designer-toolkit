@@ -16,7 +16,7 @@ function clearInstanceVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addInstance(vcnid) {
+function addInstance(subnetid) {
     var id = 'okit-in-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
@@ -32,10 +32,16 @@ function addInstance(vcnid) {
     // Increment Count
     instance_count += 1;
     var instance = {};
-    instance['vcn_id'] = vcnid;
-    instance['virtual_cloud_network'] = '';
+    instance['subnet_id'] = subnetid;
+    instance['subnet'] = '';
     instance['id'] = id;
     instance['display_name'] = generateDefaultName(instance_prefix, instance_count);
+    instance['hostname_label'] = instance['display_name'].toLowerCase();
+    instance['os'] = 'Oracle Linux';
+    instance['version'] = '7.6';
+    instance['shape'] = 'VM.Standard2.1';
+    instance['boot_volume_size_in_gbs'] = '50';
+    instance['authorized_keys'] = '';
     OKITJsonObj['compartment']['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
@@ -47,23 +53,23 @@ function addInstance(vcnid) {
 ** SVG Creation
  */
 function drawInstanceSVG(instance) {
-    var vcnid = instance['vcn_id'];
+    var subnetid = instance['subnet_id'];
     var id = instance['id'];
-    var position = vcn_element_icon_position;
+    var position = subnet_subcomponents[subnetid]['instance_position'];
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
     var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    var svg_y = (icon_height / 4) * 3;
+    var svg_y = (icon_height / 4) * 9;
     var data_type = "Route Table";
 
     // Increment Icon Position
-    vcn_element_icon_position += 1;
+    subnet_subcomponents[subnetid]['instance_position'] += 1;
 
-    var okitcanvas_svg = d3.select('#' + vcnid + "-svg");
+    var okitcanvas_svg = d3.select('#' + subnetid + "-svg");
     var svg = okitcanvas_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
-        .attr("data-vcnid", vcnid)
+        .attr("data-subnetid", subnetid)
         .attr("title", instance['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
@@ -72,7 +78,7 @@ function drawInstanceSVG(instance) {
     var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
-        .attr("data-vcnid", vcnid)
+        .attr("data-subnetid", subnetid)
         .attr("title", instance['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
@@ -138,9 +144,12 @@ function loadInstanceProperties(id) {
                 //console.log(JSON.stringify(instance, null, 2));
                 if (instance['id'] == id) {
                     //console.log('Found Route Table: ' + id);
-                    instance['virtual_cloud_network'] = okitIdsJsonObj[instance['vcn_id']];
+                    instance['virtual_cloud_network'] = okitIdsJsonObj[instance['subnet_id']];
                     $("#virtual_cloud_network").html(instance['virtual_cloud_network']);
                     $('#display_name').val(instance['display_name']);
+                    $('#hostname_label').val(instance['hostname_label']);
+                    $('#boot_volume_size_in_gbs').val(instance['boot_volume_size_in_gbs']);
+                    $('#authorized_keys').val(instance['authorized_keys']);
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
