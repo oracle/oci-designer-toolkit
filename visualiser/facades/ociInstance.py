@@ -47,13 +47,18 @@ class OCIInstances(OCIComputeConnection):
         # Check if the results should be filtered
         # Stefan: No filtering here so far...
         #if filter is None:
-            #self.instances_json = virtual_cloud_networks_json
+            #self.instances_json = instances_json
         #else:
             #filtered = instances_json[:]
             #for key, val in filter.items():
-                #filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            #self.virtual_cloud_networks_json = filtered
-        #logger.debug(str(self.virtual_cloud_networks_json))
+                #filtered = [instance for instance in filtered if re.compile(val).search(instance[key])]
+            #self.instances_json = filtered
+ 
+        self.instances_json=instances_json
+        logger.debug(str(self.instances_json))
+
+        for instance in self.instances_json:
+            self.instances_obj.append(OCIInstance(self.config, self.configfile, instance))
 
         return self.instances_json
 

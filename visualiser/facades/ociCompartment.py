@@ -23,6 +23,7 @@ import sys
 
 from facades.ociConnection import OCIIdentityConnection
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from facades.ociInstance import OCIInstances
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -38,7 +39,7 @@ class OCICompartments(OCIIdentityConnection):
         self.canonicalnames = []
         super(OCICompartments, self).__init__(config=config, configfile=configfile)
 
-    def get(self, compartment_id):
+    def get(self, compartment_id):      
         compartment = self.client.get_compartment(compartment_id=compartment_id).data
         self.compartments_json = [self.toJson(compartment)]
         self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
@@ -56,8 +57,11 @@ class OCICompartments(OCIIdentityConnection):
 
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'ACTIVE'
+            #filter['name'] = 'Stefan'
 
         compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
+        #bad trick
+        #compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id="ocid1.compartment.oc1..aaaaaaaalcm3ddu5xrcpjgmdqbyoaciwbjwkcfa4xmqjkfwxg6w5ejrl2eta").data
         # Convert to Json object
         compartments_json = self.toJson(compartments)
         logger.debug(str(compartments_json))
@@ -112,6 +116,9 @@ class OCICompartment(object):
     def getVirtualCloudNetworkClients(self):
         return OCIVirtualCloudNetworks(self.config, self.configfile, self.data['id'])
 
+    def getInstanceClients(self):
+        return OCIInstances(self.config, self.configfile, self.data['id'])
+
 
 # Main processing function
 def main(argv):
@@ -120,7 +127,12 @@ def main(argv):
     for name in oci_compartments.listHierarchicalNames():
         logger.info('Name: {0!s:s}'.format(name))
     for oci_compartment in oci_compartments.compartments_obj:
-        logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['display_name']))
+       
+        logger.info('Instances in Compartment: {0!s:s}'.format(oci_compartment.data['display_name']))
+        oci_instances = oci_compartment.getInstanceClients()
+        oci_instances.list()
+
+        logger.info('VCNs in Compartment: {0!s:s}'.format(oci_compartment.data['display_name']))
         oci_virtual_cloud_networks = oci_compartment.getVirtualCloudNetworkClients()
         oci_virtual_cloud_networks.list()
         for oci_virtual_cloud_network in oci_virtual_cloud_networks.virtual_cloud_networks_obj:
@@ -146,8 +158,8 @@ def main(argv):
             for subnet in subnets.subnets_obj:
                 logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
 
-        oci_load_balancers = oci_compartment.getLoadBalancerClients()
-        oci_load_balancers.list()
+      #  oci_load_balancers = oci_compartment.getLoadBalancerClients()
+      #  oci_load_balancers.list()
 
     return
 
