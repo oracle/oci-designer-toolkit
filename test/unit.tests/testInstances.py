@@ -33,7 +33,7 @@ logger = getLogger()
 # Main processing function
 def main(argv):
     oci_compartments = OCICompartments()
-    for name in oci_compartments.listHierarchicalNames():
+    for name in oci_compartments.listHierarchicalNames(filter={'name': 'Stefan'}):
         logger.info('Compartmentname: {0!s:s}'.format(name))
     for oci_compartment in oci_compartments.compartments_obj:
        
