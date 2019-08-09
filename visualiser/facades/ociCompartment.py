@@ -24,6 +24,7 @@ import json
 
 from facades.ociConnection import OCIIdentityConnection
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from facades.ociInstance import OCIInstances
 from facades.ociLoadBalancer import OCILoadBalancers
 from common.ociLogging import getLogger
 
@@ -114,6 +115,9 @@ class OCICompartment(object):
 
     def getVirtualCloudNetworkClients(self):
         return OCIVirtualCloudNetworks(self.config, self.configfile, self.data['id'])
+
+    def getInstanceClients(self):
+        return OCIInstances(self.config, self.configfile, self.data['id'])
 
     def getLoadBalancerClients(self):
         return OCILoadBalancers(self.config, self.configfile, self.data['id'])
