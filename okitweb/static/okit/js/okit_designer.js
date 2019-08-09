@@ -5,7 +5,7 @@
 /*
 ** Drag start for all pallet icons
  */
-var palatteicons = document.querySelectorAll('#icon-palette .palatte-icon');
+var palatteicons = document.querySelectorAll('#icon-palette .palette-icon');
 [].forEach.call(palatteicons, function (palatteicon) {
     palatteicon.addEventListener('dragstart', handleDragStart, false);
 });
@@ -81,11 +81,20 @@ document.getElementById('generate-terraform-menu-item').addEventListener('click'
 
 document.getElementById('generate-ansible-menu-item').addEventListener('click', handleGenerateAnsible, false);
 
+// Set Redraw when window resized
+window.addEventListener("resize", handleResize, false);
+
 /*
 ** Set Empty Properties Sheet
  */
 
 $("#properties").load("propertysheets/empty.html");
+
+// Set Properties drag events
+var asset_properties = document.getElementById('asset-properties');
+asset_properties.addEventListener('dragend', handlePropertiesDragEnd, false);
+asset_properties.addEventListener('mousedown', handlePropertiesMouseDown, false);
+asset_properties.addEventListener('mouseup', handlePropertiesMouseUp, false);
 
 /*
 ** Clean and start new diagram

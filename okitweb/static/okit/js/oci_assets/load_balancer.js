@@ -1,5 +1,12 @@
 console.log('Loaded Load Balancer Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Load Balancer"] = ["Instance"];
+asset_add_functions["Load Balancer"] = "addLoadBalancer";
+
 var load_balancer_ids = [];
 var load_balancer_count = 0;
 
@@ -37,6 +44,8 @@ function addLoadBalancer(subnetid) {
     load_balancer['display_name'] = generateDefaultName('lb', load_balancer_count);
     load_balancer['is_private'] = false;
     load_balancer['shape'] = '100Mbps';
+    load_balancer['instances'] = [];
+    load_balancer['instance_ids'] = [];
     OKITJsonObj['compartment']['load_balancers'].push(load_balancer);
     okitIdsJsonObj[id] = load_balancer['display_name'];
     console.log(JSON.stringify(OKITJsonObj, null, 2));
@@ -48,11 +57,11 @@ function addLoadBalancer(subnetid) {
 ** SVG Creation
  */
 function drawLoadBalancerSVG(load_balancer) {
-    console.log(JSON.stringify(subnet_subcomponents));
+    console.log(JSON.stringify(subnet_content));
     var subnetid = load_balancer['subnet_id'];
     console.log('VCN Id : ' + subnetid);
     var id = load_balancer['id'];
-    var position = subnet_subcomponents[subnetid]['load_balancer_position'];
+    var position = subnet_content[subnetid]['load_balancer_position'];
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
     var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
@@ -60,7 +69,7 @@ function drawLoadBalancerSVG(load_balancer) {
     var data_type = "Route Table";
 
     // Increment Icon Position
-    subnet_subcomponents[subnetid]['load_balancer_position'] += 1;
+    subnet_content[subnetid]['load_balancer_position'] += 1;
 
     var okitcanvas_svg = d3.select('#' + subnetid + "-svg");
     var svg = okitcanvas_svg.append("svg")
@@ -96,14 +105,11 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("class", "st0")
         .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z")
 
-    //var igelem = document.querySelector('#' + id);
-    //igelem.addEventListener("click", function() { assetSelected('LoadBalancer', id) });
-
     // Add click event to display properties
-    $('#' + id).on("click", function() { assetSelected('LoadBalancer', id) });
+    $('#' + id).on("click", function() { loadLoadBalancerProperties(id) });
     d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { assetSelected('LoadBalancer', id) });
-    assetSelected('LoadBalancer', id);
+        .on("click", function() { loadLoadBalancerProperties(id) });
+    loadLoadBalancerProperties(id);
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     $('#' + id).on("mousedown", handleConnectorDragStart);
@@ -136,6 +142,17 @@ function loadLoadBalancerProperties(id) {
                     load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_id']];
                     $("#virtual_cloud_network").html(load_balancer['virtual_cloud_network']);
                     $('#display_name').val(load_balancer['display_name']);
+                    var instances_select = $('#instance_ids');
+                    //console.log('Security List Ids: ' + security_list_ids);
+                    for (var slcnt = 0; slcnt < instance_ids.length; slcnt++) {
+                        var slid = instance_ids[slcnt];
+                        if (load_balancer['instance_ids'].indexOf(slid) >= 0) {
+                            instances_select.append($('<option>').attr('value', slid).attr('selected', 'selected').text(okitIdsJsonObj[slid]));
+                        } else {
+                            instances_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
+                        }
+                    }
+                    // Add Event Listeners
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {

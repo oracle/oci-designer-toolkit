@@ -1,5 +1,12 @@
 console.log('Loaded Instance Javascript');
 
+/*
+** Set Valid drop Targets
+ */
+
+asset_drop_targets["Instance"] = ["Load Balancer"];
+asset_add_functions["Instance"] = "addInstance";
+
 var instance_ids = [];
 var instance_count = 0;
 var instance_prefix = 'in';
@@ -55,7 +62,7 @@ function addInstance(subnetid) {
 function drawInstanceSVG(instance) {
     var subnetid = instance['subnet_id'];
     var id = instance['id'];
-    var position = subnet_subcomponents[subnetid]['instance_position'];
+    var position = subnet_content[subnetid]['instance_position'];
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     var translate_y = icon_translate_y_start;
     var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
@@ -63,7 +70,7 @@ function drawInstanceSVG(instance) {
     var data_type = "Route Table";
 
     // Increment Icon Position
-    subnet_subcomponents[subnetid]['instance_position'] += 1;
+    subnet_content[subnetid]['instance_position'] += 1;
 
     var okitcanvas_svg = d3.select('#' + subnetid + "-svg");
     var svg = okitcanvas_svg.append("svg")
@@ -101,20 +108,11 @@ function drawInstanceSVG(instance) {
         .attr("class", "st0")
         .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v111.8c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z M132.4,114.5v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V114.5z M132.4,142.6v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V142.6z M105.1,114.5v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V114.5zM105.1,142.6v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V142.6z M182.9,180.2c0,1.9-1.6,3.5-3.5,3.5h-70.7c-1.9,0-3.5-1.6-3.5-3.5v-19.6h77.8V180.2z M182.9,141.8v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7v-10.7v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7V141.8z M182.9,113.8v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7v-10.7v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7V113.8z")
 
-    //var igelem = document.querySelector('#' + id);
-    //igelem.addEventListener("click", function() { assetSelected('Instance', id) });
-
     // Add click event to display properties
     $('#' + id).on("click", function() { loadInstanceProperties(id) });
     d3.select('svg#' + id + '-svg').selectAll('path')
         .on("click", function() { loadInstanceProperties(id) });
     loadInstanceProperties(id);
-    /*
-    $('#' + id).on("click", function() { assetSelected('Instance', id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { assetSelected('Instance', id) });
-    assetSelected('Instance', id);
-     */
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     $('#' + id).on("mousedown", handleConnectorDragStart);
