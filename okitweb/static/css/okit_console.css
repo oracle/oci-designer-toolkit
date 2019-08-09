@@ -1,0 +1,241 @@
+div {
+    display: block;
+}
+
+footer, header, main, nav, section, summary {
+    display: block;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+/*
+** OCI Console Classes
+ */
+
+.one-console {
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+}
+
+#console-wrapper>* {
+    flex-shrink: 0;
+}
+/*
+** Header
+ */
+
+#console-header-wrapper {
+    z-index: 100;
+    position: relative;
+    height: 56px;
+}
+
+#console-header-container {
+    position: fixed;
+    width: 100%;
+    height: 56px;
+}
+
+.header-gradient {
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(90deg,#b4ec51 0,#53a0fd);
+}
+
+.console-branding-bar {
+    background: #1d2733;
+    color: #fff;
+    height: 56px;
+}
+
+.nav-menu-button {
+    margin-left: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+    max-width: 40px;
+}
+
+.nav-menu-button *:hover {
+    background-color: #242526;
+}
+
+.nav-menu-button-icon {
+    margin-right: 0;
+    padding: 8px 0;
+}
+
+/*
+** Popout Menu
+ */
+
+#console-nav-container {
+    height: 100%;
+}
+
+.nav-list {
+    margin: 0;
+    padding: 0;
+    direction: ltr;
+}
+
+.nav-menu-button {
+    z-index: 20;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    user-select: none;
+    text-transform: uppercase!important;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    box-sizing: border-box;
+}
+
+.nav-menu-container {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    bottom: 32px;
+    right: 0;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.nav-menu-overlay {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(34,34,34,.2);
+}
+
+.nav-menu-panel {
+    background-color: #242526;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+    width: 315px;
+    height: 100%;
+    transition: all .25s;
+    visibility: hidden;
+    transform: translateX(-100%);
+    direction: rtl;
+    -ms-scrollbar-base-color: #242526;
+    -ms-scrollbar-track-color: #242526;
+    -ms-scrollbar-face-color: #555;
+}
+
+.nav-menu-panel-show {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+.header-item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    font: normal 14px/20px Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    user-select: none;
+    padding: 15px 20px 0;
+    text-transform: uppercase;
+    color: #aeaeae;
+    font-size: 11px;
+    cursor: none;
+}
+
+.header-item img {
+    display: block;
+    height: 18px;
+    width: 18px;
+    margin-top: -2px;
+    margin-right: 8px;
+}
+
+.header-item span {
+    opacity: .6;
+    font: normal 16px/20px Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+ul.nav-list li:first-child .header-item {
+    margin-top: 18px;
+}
+
+ul.nav-list li .header-item {
+    color: #fff;
+    display: flex;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 24px 16px 8px;
+    padding: 0;
+    text-transform: none;
+}
+
+.parent-item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    font: normal 14px/20px Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    user-select: none;
+    padding: 12.5px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    align-items: center;
+}
+
+ul.nav-list1 li a:hover {background-color: #242526;border-left-width: 5px; border-left-color: #b4ec51; cursor: pointer;}
+ul.nav-list2 li a:hover {background-color: #1d2733;border-left-width: 5px; border-left-color: lime; cursor: context-menu;}
+ul.nav-list li a:hover {background-color: #F80000;border-left-width: 5px; border-left-color: lime; cursor: context-menu;}
+
+/*
+** Body
+ */
+
+#console-content-wrapper {
+    flex: 1;
+    overflow-y: none;
+}
+
+#console-content-wrapper>* {
+    flex-shrink: 0;
+}
+
+#baseplate {
+    height: 100%;
+}
+
+/*
+** Footer
+ */
+
+.footer-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+

@@ -42,20 +42,32 @@ class OCISecurityLists(OCIVirtualNetworkConnection):
 
         security_lists = oci.pagination.list_call_get_all_results(self.client.list_security_lists, compartment_id=compartment_id, vcn_id=self.vcn_id).data
         # Convert to Json object
-        self.security_lists_json = self.toJson(security_lists)
+        security_lists_json = self.toJson(security_lists)
+        logger.debug(str(security_lists_json))
+
+        # Check if the results should be filtered
+        if filter is None:
+            self.security_lists_json = security_lists_json
+        else:
+            filtered = self.security_lists_json[:]
+            for key, val in filter.items():
+                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+            self.security_lists_json = filtered
         logger.debug(str(self.security_lists_json))
+
         # Build List of SecurityList Objects
         self.security_lists_obj = []
         for security_list in self.security_lists_json:
             self.security_lists_obj.append(OCISecurityList(self.config, self.configfile, security_list))
         # Check if the results should be filtered
-        if filter is None:
-            return self.security_lists_json
-        else:
-            filtered = self.security_lists_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            return filtered
+        #if filter is None:
+        #    return self.security_lists_json
+        #else:
+        #    filtered = self.security_lists_json[:]
+        #    for key, val in filter.items():
+        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+        #    return filtered
+        return self.security_lists_json
 
 
 class OCISecurityList(object):

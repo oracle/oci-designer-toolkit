@@ -8,7 +8,7 @@ ENV http_proxy ${http_proxy}
 ENV https_proxy ${https_proxy}
 # Set Python Variables
 ENV PYTHONIOENCODING=utf8
-ENV PYTHONPATH=":/okit/visualiser:/okit/okitweb"
+ENV PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit"
 # Specify Ansible Config variables
 ENV ANSIBLE_CONFIG_DIR=/okit/ansible/config
 ENV ANSIBLE_INVENTORY=${ANSIBLE_CONFIG_DIR}/ansible_hosts
@@ -85,6 +85,7 @@ RUN yum update -y ; \
         flask \
         flask-cors \
         flask_restful \
+        gunicorn \
         ipaddress \
         ipcalc \
         jinja2 \

@@ -20,7 +20,6 @@ __module__ = "ociNetwork"
 import oci
 import re
 import sys
-import json
 
 from facades.ociConnection import OCILoadBalancerConnection
 from facades.ociLBHost import OCILBHosts
@@ -46,22 +45,25 @@ class OCILoadBalancers(OCILoadBalancerConnection):
         load_balancers = oci.pagination.list_call_get_all_results(self.client.list_load_balancers, compartment_id=compartment_id).data
 
         # Convert to Json object
-        self.load_balancers_json = self.toJson(load_balancers)
+        load_balancers_json = self.toJson(load_balancers)
+        logger.debug(str(load_balancers_json))
 
+        # Check if the results should be filtered
+        if filter is None:
+            self.load_balancers_json = load_balancers_json
+        else:
+            filtered = self.load_balancers_json[:]
+            for key, val in filter.items():
+                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+            self.load_balancers_json = filtered
         logger.debug(str(self.load_balancers_json))
+
         # Build List of Loadbalancer Objects
         self.load_balancers_obj = []
         for load_balancer in self.load_balancers_json:
             self.load_balancers_obj.append(OCILoadBalancer(self.config, self.configfile, load_balancer))
 
-        # Check if the results should be filtered
-        if filter is None:
-            return self.load_balancers_json
-        else:
-            filtered = self.load_balancers_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            return filtered
+        return self.load_balancers_json
 
 
 class OCILoadBalancer(object):
