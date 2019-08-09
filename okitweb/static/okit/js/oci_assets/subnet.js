@@ -5,6 +5,7 @@ console.log('Loaded Internet Gateway Javascript');
  */
 
 asset_drop_targets["Subnet"] = ["Virtual Cloud Network"];
+asset_add_functions["Subnet"] = "addSubnet";
 
 var subnet_svg_height = 200;
 var subnet_svg_width = "95%";
@@ -127,12 +128,11 @@ function drawSubnetSVG(subnet) {
         .attr("class", "st0")
         .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
 
-    //var igelem = document.querySelector('#' + id);
-    //igelem.addEventListener("click", function() { assetSelected('Subnet', id) });
-    $('#' + id).on("click", function() { assetSelected('Subnet', id) });
+    // Add click event to display properties
+    $('#' + id).on("click", function() { loadSubnetProperties(id) });
     d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { assetSelected('Subnet', id) });
-    assetSelected('Subnet', id);
+        .on("click", function() { loadSubnetProperties(id) });
+    loadSubnetProperties(id);
 
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     $('#' + id).on("mousedown", handleConnectorDragStart);
@@ -324,7 +324,7 @@ function updateSubnetLinks(sourcetype, sourceid, id) {
         console.log('After : ' + JSON.stringify(subnet, null, 2));
     }
     displayOkitJson();
-    assetSelected('Subnet', id);
+    loadSubnetProperties(id);
 }
 
 clearSubnetVariables();

@@ -1,6 +1,19 @@
 console.log('Loaded Drag & Drop Javascript');
 
 /*
+** Define Dynamic Add function
+ */
+
+var asset_add_functions = {};
+
+function addAssetToDropTarget(title, target_id) {
+    //console.log('addAssetToDropTarget - Title : ' + title);
+    //console.log('addAssetToDropTarget - Target Id : ' + target_id);
+    //console.log('addAssetToDropTarget - Add Functions : ' + JSON.stringify(asset_add_functions));
+    window[asset_add_functions[title]](target_id);
+}
+
+/*
 ** Drag & Drop Handlers
  */
 
@@ -50,7 +63,7 @@ function handleDragLeave(e) {
 }
 
 function handleDrop(e) {
-    console.log('Drag Drop');
+    console.log('Drag Drop (Dynamic)');
     // this/e.target is current target element.
 
     if (e.stopPropagation) {
@@ -63,28 +76,9 @@ function handleDrop(e) {
     //this.innerHTML = e.dataTransfer.getData('text/html');
     var title = e.dataTransfer.getData('text/plain');
     var type = e.target.getAttribute('data-type');
-    var id = e.target.id;
-    //console.log('Type: '+type+' - '+title+' - '+id)
-    if (title == "Virtual Cloud Network" && type == "Compartment") {
-        addVirtualCloudNetwork();
-    } else if (title == "Internet Gateway" && type == "Virtual Cloud Network") {
-        addInternetGateway(id);
-    } else if (title == "Route Table" && type == "Virtual Cloud Network") {
-        addRouteTable(id);
-    } else if (title == "Security List" && type == "Virtual Cloud Network") {
-        addSecurityList(id);
-    } else if (title == "Subnet" && type == "Virtual Cloud Network") {
-        addSubnet(id);
-    } else if (title == "Load Balancer" && type == "Subnet") {
-        addLoadBalancer(id);
-    } else if (title == "Instance" && type == "Subnet") {
-        addInstance(id);
-    }
-
-    //var img = new Image();
-    //img.src = iconSVGFile;
-    //var ctx = okitcanvas.getContext("2d");
-    //ctx.drawImage(img, 50, 50, 10, 10);
+    var target_id = e.target.id;
+    // Call Add Function
+    addAssetToDropTarget(title, target_id)
 
     this.classList.remove('over');  // this / e.target is previous target element.
 

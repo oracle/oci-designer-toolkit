@@ -29,6 +29,7 @@ from flask import url_for
 
 from common.ociCommon import logJson
 from common.ociCommon import standardiseIds
+from common.ociQuery import executeQuery
 from generators.ociTerraformGenerator import OCITerraformGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
@@ -45,7 +46,7 @@ bp = Blueprint('okit', __name__, url_prefix='/okit', static_folder='static/okit'
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 template_root = '/okit/visualiser/templates'
 
-def executeQuery(request_json={}, ** kwargs):
+def executeQuery1(request_json={}, ** kwargs):
     response_json = {}
     logger.info('Request JSON : {0:s}'.format(str(request_json)))
     compartment_id = request_json['compartment_id']
