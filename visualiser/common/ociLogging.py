@@ -52,7 +52,7 @@ def getConsoleLogLevel():
 
 
 def getLogFilename():
-    return os.getenv('OCI_LOGFILE', '/var/log/okit.log')
+    return os.getenv('OCI_LOGFILE', '/var/tmp/okit.log')
 
 
 def getDebugLogFilename():

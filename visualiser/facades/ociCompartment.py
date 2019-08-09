@@ -41,7 +41,7 @@ class OCICompartments(OCIIdentityConnection):
         self.canonicalnames = []
         super(OCICompartments, self).__init__(config=config, configfile=configfile)
 
-    def get(self, compartment_id):
+    def get(self, compartment_id):      
         compartment = self.client.get_compartment(compartment_id=compartment_id).data
         self.compartments_json = [self.toJson(compartment)]
         self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
@@ -59,6 +59,7 @@ class OCICompartments(OCIIdentityConnection):
 
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'ACTIVE'
+            #filter['name'] = 'Stefan'
 
         compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
 
