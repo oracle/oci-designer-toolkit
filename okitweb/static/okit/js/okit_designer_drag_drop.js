@@ -23,6 +23,7 @@ function addAssetToDropTarget(title, target_id) {
 
 var palatte_source_type = '';
 var asset_drop_targets = {};
+var asset_connect_targets = {};
 
 function setDragDropIcon(e) {
     var type = e.target.getAttribute('data-type');
