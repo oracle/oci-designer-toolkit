@@ -20,6 +20,7 @@ __module__ = "ociQuery"
 from common.ociCommon import logJson
 from common.ociCommon import standardiseIds
 from facades.ociCompartment import OCICompartments
+from facades.ociCompartment import OCICompartment
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -74,6 +75,13 @@ def executeQuery(request_json={}, ** kwargs):
         response_json['compartment']['subnets'] = subnets.list()
         for subnet in subnets.subnets_obj:
             logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
+    # Query all Instances
+    oci_instances = oci_compartment.getInstanceClients()
+    response_json['compartment']['instances'] = oci_instances.list(filter=filter)
+    # Query all Load Balancers
+    oci_load_balancers = oci_compartment.getLoadBalancerClients()
+    response_json['compartment']['load_balancers'] = oci_load_balancers.list(filter=filter)
+
     logger.info('Response     : {0:s}'.format(str(response_json)))
     logJson(response_json)
     response_json = standardiseJson(response_json)
