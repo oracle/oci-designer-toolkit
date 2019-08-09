@@ -4,7 +4,7 @@ console.log('Loaded Instance Javascript');
 ** Set Valid drop Targets
  */
 
-asset_drop_targets["Instance"] = ["Subnet"];
+asset_drop_targets["Instance"] = ["Load Balancer"];
 asset_add_functions["Instance"] = "addInstance";
 
 var instance_ids = [];
