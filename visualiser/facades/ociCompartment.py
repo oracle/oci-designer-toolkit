@@ -88,15 +88,11 @@ class OCICompartments(OCIIdentityConnection):
             self.compartments_obj.append(OCICompartment(self.config, self.configfile, compartment))
         return self.compartments_json
 
-    def listTenancy(self):
-        return self.list(id=self.config['tenancy'], recursive=True)
+    def listTenancy(self, filter={}, **kwargs):
+        return self.list(id=self.config['tenancy'], filter=filter, recursive=True)
 
-    def listHierarchicalNames(self):
-        compartments = self.listTenancy()
-        #for compartment in compartments:
-        #    self.names[compartment['id']] = compartment['name']
-        #    self.parents[compartment['id']] = compartment['compartment_id']
-        #for compartment in sorted(compartments, key=lambda k: k.time_created):
+    def listHierarchicalNames(self, filter={}, **kwargs):
+        compartments = self.listTenancy(filter=filter)
         for compartment in sorted(compartments, key=lambda k: k['time_created']):
                 self.canonicalnames.append(self.getCanonicalName(compartment['id']))
         return sorted(self.canonicalnames)
