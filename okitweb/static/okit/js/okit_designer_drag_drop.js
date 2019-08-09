@@ -85,48 +85,6 @@ function handleDrop(e) {
     return false;
 }
 
-function handleDropOrig(e) {
-    console.log('Drag Drop');
-    // this/e.target is current target element.
-
-    if (e.stopPropagation) {
-        e.stopPropagation(); // Stops some browsers from redirecting.
-    }
-    if (e.preventDefault) {
-        e.preventDefault(); // Necessary. Allows us to drop.
-    }
-
-    //this.innerHTML = e.dataTransfer.getData('text/html');
-    var title = e.dataTransfer.getData('text/plain');
-    var type = e.target.getAttribute('data-type');
-    var id = e.target.id;
-    //console.log('Type: '+type+' - '+title+' - '+id)
-    if (title == "Virtual Cloud Network" && type == "Compartment") {
-        addVirtualCloudNetwork();
-    } else if (title == "Internet Gateway" && type == "Virtual Cloud Network") {
-        addInternetGateway(id);
-    } else if (title == "Route Table" && type == "Virtual Cloud Network") {
-        addRouteTable(id);
-    } else if (title == "Security List" && type == "Virtual Cloud Network") {
-        addSecurityList(id);
-    } else if (title == "Subnet" && type == "Virtual Cloud Network") {
-        addSubnet(id);
-    } else if (title == "Load Balancer" && type == "Subnet") {
-        addLoadBalancer(id);
-    } else if (title == "Instance" && type == "Subnet") {
-        addInstance(id);
-    }
-
-    //var img = new Image();
-    //img.src = iconSVGFile;
-    //var ctx = okitcanvas.getContext("2d");
-    //ctx.drawImage(img, 50, 50, 10, 10);
-
-    this.classList.remove('over');  // this / e.target is previous target element.
-
-    return false;
-}
-
 function handleDragEnd(e) {
     // this/e.target is the source node.
     console.log('Drag End');
