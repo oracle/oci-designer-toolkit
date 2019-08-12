@@ -243,7 +243,6 @@ function handleConnectorDrop(e) {
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
             updateAssetTarget(destinationType, sourceType, sourceid, id)
             console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
-            var boundingClientRect = e.target.getBoundingClientRect();
             connectorContainerSVGPoint.x = e.target.getAttribute('data-connector-end-x');
             connectorContainerSVGPoint.y = e.target.getAttribute('data-connector-end-y');
             var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
