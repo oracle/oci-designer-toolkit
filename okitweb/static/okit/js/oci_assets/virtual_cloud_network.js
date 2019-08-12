@@ -70,6 +70,7 @@ function addVirtualCloudNetwork(compartmentid) {
  */
 function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     var id = virtual_cloud_network['id'];
+    var parent_id = ''
     var translate_x = 0;
     var translate_y = 0;
     var data_type = 'Virtual Cloud Network';
@@ -128,17 +129,10 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .on("dragleave", handleConnectorDragLeave);
     loadVirtualCloudNetworkProperties(id);
 
-    /*
-    // Add click event to display properties
-    $('#' + id).on("click", function() { loadVirtualCloudNetworkProperties(id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { loadVirtualCloudNetworkProperties(id) });
-    loadVirtualCloudNetworkProperties(id);
-
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + id).on("mousemove", handleConnectorDrag);
-    $('#' + id).on("mouseup", handleConnectorDrop);
-    */
+    //d3.select('#' + id)
+    svg.selectAll("*")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id);
 }
 
 /*

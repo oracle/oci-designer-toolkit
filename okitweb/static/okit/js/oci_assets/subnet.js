@@ -159,11 +159,15 @@ function drawSubnetSVG(subnet) {
     loadSubnetProperties(id);
 
     var boundingClientRect = rect.node().getBoundingClientRect();
-    d3.select('#' + id)
+    //d3.select('#' + id)
+    svg.selectAll("*")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
         .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("data-connector-end-y", boundingClientRect.y)
         .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+        .attr("data-connector-id", id)
         .attr("dragable", true);
 }
 

@@ -184,15 +184,20 @@ function handleConnectorDrop(e) {
         var parentid = e.target.getAttribute('data-parentid');
         var sourceid = connectorStartElement.id;
         var id = e.target.id;
+        var connector_source_id = connectorStartElement.getAttribute('data-connector-id');
+        var connector_destination_id = e.target.getAttribute('data-connector-id');
 
         console.log('Connector Source Type : ' + sourceType);
         console.log('Connector Destination Type : ' + destinationType);
         console.log('Connector Allowed : ' + JSON.stringify(asset_connect_targets));
 
         console.log('Connector Drag End Parent Id : ' + parentid);
+        console.log('Connector Drag Start Id : ' + sourceid);
         console.log('Connector Drag End Id : ' + e.target.id);
         console.log('Connector Drag End data-connector-end-y : ' + e.target.getAttribute('data-connector-end-y'));
         console.log('Connector Drag End data-connector-end-x : ' + e.target.getAttribute('data-connector-end-x'));
+        console.log('Connector Source Id : ' + connector_source_id);
+        console.log('Connector Destination Id : ' + connector_destination_id);
 
         // Check is Connection of
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {

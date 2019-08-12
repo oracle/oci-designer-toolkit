@@ -127,6 +127,10 @@ function drawInternetGatewaySVG(internet_gateway) {
         .on("click", function() { loadInternetGatewayProperties(id); return false; });
     loadInternetGatewayProperties(id);
 
+    //d3.select('#' + id)
+    svg.selectAll("*")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id);
 }
 
 /*

@@ -73,15 +73,11 @@ function drawInstanceSVG(instance) {
     // Increment Icon Position
     subnet_content[parent_id]['instance_position'] += 1;
 
-    var okitcanvas_svg = d3.select('#' + parent_id + "-svg");
-    var svg = okitcanvas_svg.append("svg")
+    var parent_svg = d3.select('#' + parent_id + "-svg");
+    var svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
-        .attr("data-connector-start-y", 0)
-        .attr("data-connector-start-x", 0.5)
-        .attr("data-connector-end-y", 0)
-        .attr("data-connector-end-x", 0.5)
         .attr("title", instance['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
@@ -138,11 +134,15 @@ function drawInstanceSVG(instance) {
     loadInstanceProperties(id);
 
     var boundingClientRect = rect.node().getBoundingClientRect();
-    d3.select('#' + id)
+    //d3.select('#' + id)
+    svg.selectAll("*")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("data-connector-start-y", boundingClientRect.y)
         .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("data-connector-end-y", boundingClientRect.y)
         .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+        .attr("data-connector-id", id)
         .attr("dragable", true);
 }
 
