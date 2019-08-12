@@ -174,13 +174,13 @@ def writePythonFile(python_file, contents, **kwargs):
 def standardiseIds(json_data={}, from_char='.', to_char='-', **kwargs):
     if isinstance(json_data, dict):
         for key, val in json_data.items():
-            logger.info(key)
+            logger.debug('{0!s:s} : {1!s:s}'.format(key, val))
             if isinstance(val, dict):
                 json_data[key] = standardiseIds(val, from_char, to_char)
             elif key == 'id' or key.endswith('_id') or key.endswith('_ids'):
                 if isinstance(val, list):
                     json_data[key] = [id.replace(from_char, to_char) for id in val]
-                else:
+                elif val is not None:
                     json_data[key] = val.replace(from_char, to_char)
             elif isinstance(val, list):
                 json_data[key] = [standardiseIds(element, from_char, to_char) for element in val]
