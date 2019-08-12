@@ -45,9 +45,6 @@ class OCILBHosts(OCILoadBalancerConnection):
         # Convert to Json object
         self.lb_hosts_json = self.toJson(lb_hosts)
 
-        with open("lb_hosts.json", "a") as data_file:
-            json.dump(self.lb_hosts_json, data_file, indent=2)
-
         logger.debug(str(self.lb_hosts_json))
         # Build List of LoadBalancer Host Objects
         self.lb_hosts_obj = []
