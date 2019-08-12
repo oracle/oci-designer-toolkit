@@ -50,7 +50,7 @@ function addLoadBalancer(subnetid) {
     load_balancer['instance_ids'] = [];
     OKITJsonObj['compartment']['load_balancers'].push(load_balancer);
     okitIdsJsonObj[id] = load_balancer['display_name'];
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawLoadBalancerSVG(load_balancer);
 }
@@ -131,26 +131,12 @@ function drawLoadBalancerSVG(load_balancer) {
         .on("dragleave", handleConnectorDragLeave);
     loadLoadBalancerProperties(id);
 
-    /*
-    // Add click event to display properties
-    $('#' + id).on("click", function() { loadLoadBalancerProperties(id) });
-    d3.select('#' + id + '-svg').selectAll('path')
-        .on("click", function() { loadLoadBalancerProperties(id) });
-    loadLoadBalancerProperties(id);
-
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + id + '-svg').on("mousedown", handleConnectorDragStart);
-    $('#' + id).on("mousemove", handleConnectorDrag);
-    $('#' + id).on("mouseup", handleConnectorDrop);
-    $('#' + id).on("mouseover", handleConnectorDragEnter);
-    $('#' + id).on("mouseout", handleConnectorDragLeave);
-    // Add dragevent versions
-    $('#' + id).on("dragstart", handleConnectorDragStart);
-    $('#' + id).on("drop", handleConnectorDrop);
-    $('#' + id).on("dragenter", handleConnectorDragEnter);
-    $('#' + id).on("dragleave", handleConnectorDragLeave);
-    */
+    var boundingClientRect = rect.node().getBoundingClientRect();
     d3.select('#' + id)
+        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+        .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("dragable", true);
 }
 

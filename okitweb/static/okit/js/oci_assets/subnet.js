@@ -66,7 +66,7 @@ function addSubnet(vcnid) {
     subnet['security_lists'] = [];
     subnet['security_list_ids'] = [];
     OKITJsonObj['compartment']['subnets'].push(subnet);
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
     okitIdsJsonObj[id] = subnet['display_name'];
 
     initialiseSubnetChildData(id);
@@ -158,26 +158,12 @@ function drawSubnetSVG(subnet) {
         .on("dragleave", handleConnectorDragLeave);
     loadSubnetProperties(id);
 
-    /*
-    // Add click event to display properties
-    $('#' + id).on("click", function() { loadSubnetProperties(id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { loadSubnetProperties(id) });
-    loadSubnetProperties(id);
-
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + id).on("mousedown", handleConnectorDragStart);
-    $('#' + id).on("mousemove", handleConnectorDrag);
-    $('#' + id).on("mouseup", handleConnectorDrop);
-    $('#' + id).on("mouseover", handleConnectorDragEnter);
-    $('#' + id).on("mouseout", handleConnectorDragLeave);
-    // Add dragevent versions
-    $('#' + id).on("dragstart", handleConnectorDragStart);
-    $('#' + id).on("drop", handleConnectorDrop);
-    $('#' + id).on("dragenter", handleConnectorDragEnter);
-    $('#' + id).on("dragleave", handleConnectorDragLeave);
-    */
+    var boundingClientRect = rect.node().getBoundingClientRect();
     d3.select('#' + id)
+        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+        .attr("data-connector-end-y", boundingClientRect.y)
+        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("dragable", true);
 }
 
@@ -332,7 +318,7 @@ function updateSubnet(sourcetype, sourceid, id) {
     console.log('Updating Subnet ' + id + 'Adding ' + sourcetype + ' ' +sourceid);
     for (var i = 0; i < subnets.length; i++) {
         subnet = subnets[i];
-        console.log('Before : ' + JSON.stringify(subnet, null, 2));
+        //console.log('Before : ' + JSON.stringify(subnet, null, 2));
         if (subnet['id'] == id) {
             if (sourcetype == 'Route Table') {
                 if (subnet['route_table_id'] != '') {
@@ -345,7 +331,7 @@ function updateSubnet(sourcetype, sourceid, id) {
             } else if (sourcetype == 'Security List') {
                 if (subnet['security_list_ids'].indexOf(sourceid) >0 ) {
                     // Already connected so delete existing line
-                    console.log('Deleting Connector : ' + generateConnectorId(sourceid, id));
+                    //console.log('Deleting Connector : ' + generateConnectorId(sourceid, id));
                     d3.select("#" + generateConnectorId(sourceid, id)).remove();
                 } else {
                     subnet['security_list_ids'].push(sourceid);
@@ -353,7 +339,7 @@ function updateSubnet(sourcetype, sourceid, id) {
                 }
             }
         }
-        console.log('After : ' + JSON.stringify(subnet, null, 2));
+        //console.log('After : ' + JSON.stringify(subnet, null, 2));
     }
     displayOkitJson();
     loadSubnetProperties(id);

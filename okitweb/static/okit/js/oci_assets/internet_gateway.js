@@ -46,7 +46,7 @@ function addInternetGateway(vcnid) {
     internet_gateway['display_name'] = generateDefaultName(internet_gateway_prefix, internet_gateway_count);
     OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
     okitIdsJsonObj[id] = internet_gateway['display_name'];
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawInternetGatewaySVG(internet_gateway);
 }
@@ -127,13 +127,6 @@ function drawInternetGatewaySVG(internet_gateway) {
         .on("click", function() { loadInternetGatewayProperties(id); return false; });
     loadInternetGatewayProperties(id);
 
-    /*
-    // Add click event to display properties
-    $('#' + id).on("click", function() { loadInternetGatewayProperties(id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { loadInternetGatewayProperties(id) });
-    loadInternetGatewayProperties(id);
-    */
 }
 
 /*

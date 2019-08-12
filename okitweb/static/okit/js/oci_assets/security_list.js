@@ -48,8 +48,8 @@ function addSecurityList(vcnid) {
     security_list['ingress_security_rules'] = []
     OKITJsonObj['compartment']['security_lists'].push(security_list);
     okitIdsJsonObj[id] = security_list['display_name'];
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
-    console.log(security_list_ids);
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(security_list_ids);
     displayOkitJson();
     drawSecurityListSVG(security_list);
 }
@@ -123,26 +123,12 @@ function drawSecurityListSVG(security_list) {
         .on("dragleave", handleConnectorDragLeave);
     loadSecurityListProperties(id);
 
-    /*
-    // Add click event to display properties
-    $('#' + id).on("click", function() { loadSecurityListProperties(id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { loadSecurityListProperties(id) });
-    loadSecurityListProperties(id);
-
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + id).on("mousedown", handleConnectorDragStart);
-    //$('#' + id).on("mousemove", handleConnectorDrag);
-    $('#' + id).on("mouseup", handleConnectorDrop);
-    $('#' + id).on("mouseover", handleConnectorDragEnter);
-    $('#' + id).on("mouseout", handleConnectorDragLeave);
-    // Add dragevent versions
-    $('#' + id).on("dragstart", handleConnectorDragStart);
-    $('#' + id).on("drop", handleConnectorDrop);
-    $('#' + id).on("dragenter", handleConnectorDragEnter);
-    $('#' + id).on("dragleave", handleConnectorDragLeave);
-    */
+    var boundingClientRect = rect.node().getBoundingClientRect();
     d3.select('#' + id)
+        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+        .attr("data-connector-end-y", boundingClientRect.y)
+        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("dragable", true);
 }
 

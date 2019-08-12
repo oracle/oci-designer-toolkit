@@ -88,6 +88,9 @@
             </div>
             <div id="asset-properties" class="designer-right-column properties-wrapper">
                 <div id="properties" class="property-editor"></div>
+                <div id="json-display" class="property-editor hidden">
+                    <textarea id="okitjson" readonly="readonly"></textarea>
+                </div>
             </div>
         </div>
         <div id="menubar" class="menu-bar">
@@ -97,7 +100,6 @@
 {% endblock %}
 
 {% block footerblock %}
-    <textarea id="okitjson" readonly="readonly"></textarea>
 {% endblock %}
 
 {% block footerscripts %}

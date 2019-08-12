@@ -48,7 +48,7 @@ function addRouteTable(vcnid) {
     route_table['route_rules'] = []
     OKITJsonObj['compartment']['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['display_name'];
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawRouteTableSVG(route_table);
 }
@@ -156,26 +156,12 @@ function drawRouteTableSVG(route_table) {
         .on("dragleave", handleConnectorDragLeave);
     loadRouteTableProperties(id);
 
-    /*
-    // Add click event to display properties
-    $('#' + id).on("click", function() { loadRouteTableProperties(id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { loadRouteTableProperties(id) });
-    loadRouteTableProperties(id);
-
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + id).on("mousedown", handleConnectorDragStart);
-    $('#' + id).on("mousemove", handleConnectorDrag);
-    $('#' + id).on("mouseup", handleConnectorDrop);
-    $('#' + id).on("mouseover", handleConnectorDragEnter);
-    $('#' + id).on("mouseout", handleConnectorDragLeave);
-    // Add dragevent versions
-    $('#' + id).on("dragstart", handleConnectorDragStart);
-    $('#' + id).on("drop", handleConnectorDrop);
-    $('#' + id).on("dragenter", handleConnectorDragEnter);
-    $('#' + id).on("dragleave", handleConnectorDragLeave);
-    */
+    var boundingClientRect = rect.node().getBoundingClientRect();
     d3.select('#' + id)
+        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+        .attr("data-connector-end-y", boundingClientRect.y)
+        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("dragable", true);
 }
 

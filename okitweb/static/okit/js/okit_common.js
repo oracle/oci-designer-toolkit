@@ -35,7 +35,8 @@ function uuidv4() {
 
 function displayOkitJson() {
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
-    console.log(JSON.stringify(OKITJsonObj, null, 2));}
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+}
 
 function generateConnectorId(sourceid, destinationid) {
     return sourceid + '-' + destinationid;
