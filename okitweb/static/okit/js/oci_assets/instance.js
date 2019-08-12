@@ -68,7 +68,7 @@ function drawInstanceSVG(instance) {
     var translate_y = icon_translate_y_start;
     var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
     var svg_y = (icon_height / 4) * 9;
-    var data_type = "Route Table";
+    var data_type = "Instance";
 
     // Increment Icon Position
     subnet_content[parent_id]['instance_position'] += 1;
@@ -78,6 +78,10 @@ function drawInstanceSVG(instance) {
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
+        .attr("data-connector-start-y", 0)
+        .attr("data-connector-start-x", 0.5)
+        .attr("data-connector-end-y", 0)
+        .attr("data-connector-end-x", 0.5)
         .attr("title", instance['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
@@ -121,7 +125,7 @@ function drawInstanceSVG(instance) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     $('#' + id + '-svg')
-        .on("click", function() { loadInstanceProperties(id) })
+        .on("click", function() { loadInstanceProperties(id); return false; })
         .on("mousedown", handleConnectorDragStart)
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)

@@ -121,7 +121,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     $('#' + id + '-svg')
-        .on("click", function() { loadVirtualCloudNetworkProperties(id) })
+        .on("click", function() { loadVirtualCloudNetworkProperties(id); return false; })
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)
         .on("dragenter", handleConnectorDragEnter)

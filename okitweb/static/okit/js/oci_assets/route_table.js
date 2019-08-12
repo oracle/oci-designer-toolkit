@@ -144,7 +144,7 @@ function drawRouteTableSVG(route_table) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     $('#' + id + '-svg')
-        .on("click", function() { loadRouteTableProperties(id) })
+        .on("click", function() { loadRouteTableProperties(id); return false; })
         .on("mousedown", handleConnectorDragStart)
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)

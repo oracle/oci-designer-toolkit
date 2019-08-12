@@ -175,10 +175,13 @@ function handleConnectorDrop(e) {
         var sourceid = connectorStartElement.id;
         var id = e.target.id;
 
+        console.log('Source Type : ' + sourceType);
+        console.log('Destination Type : ' + destinationType);
+        console.log('Allowed : ' + JSON.stringify(asset_connect_targets));
         // Check is Connection of
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
             updateAssetTarget(destinationType, sourceType, sourceid, id)
-            console.log('Creating Connector Line');
+            console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
             var boundingClientRect = e.target.getBoundingClientRect();
             connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
             connectorContainerSVGPoint.y = boundingClientRect.y;

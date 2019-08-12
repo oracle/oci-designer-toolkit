@@ -5,7 +5,7 @@ console.log('Loaded Load Balancer Javascript');
  */
 
 asset_drop_targets["Load Balancer"] = ["Subnet"];
-asset_connect_targets["Load Balancer"] = ["Instance"];
+//asset_connect_targets["Load Balancer"] = ["Instance"];
 asset_add_functions["Load Balancer"] = "addLoadBalancer";
 asset_update_functions["Load Balancer"] = "updateLoadBalancer";
 
@@ -68,7 +68,7 @@ function drawLoadBalancerSVG(load_balancer) {
     var translate_y = icon_translate_y_start;
     var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
     var svg_y = (icon_height / 4);
-    var data_type = "Route Table";
+    var data_type = "Load Balancer";
 
     // Increment Icon Position
     subnet_content[parent_id]['load_balancer_position'] += 1;
@@ -119,7 +119,7 @@ function drawLoadBalancerSVG(load_balancer) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     $('#' + id + '-svg')
-        .on("click", function() { loadLoadBalancerProperties(id) })
+        .on("click", function() { loadLoadBalancerProperties(id); return false; })
         .on("mousedown", handleConnectorDragStart)
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)

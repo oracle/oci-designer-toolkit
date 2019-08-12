@@ -124,7 +124,7 @@ function drawInternetGatewaySVG(internet_gateway) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     $('#' + id + '-svg')
-        .on("click", function() { loadInternetGatewayProperties(id) });
+        .on("click", function() { loadInternetGatewayProperties(id); return false; });
     loadInternetGatewayProperties(id);
 
     /*
