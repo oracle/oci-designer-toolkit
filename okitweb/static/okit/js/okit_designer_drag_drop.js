@@ -164,51 +164,6 @@ function handleConnectorDragStart(e) {
     }
 }
 
-function handleConnectorDragStartOrig(e) {
-    if (e.preventDefault) {
-        e.preventDefault(); // Necessary. Allows us to drop.
-    }
-    // Set Start Element to know we are dragging
-    connectorStartElement = e.target;
-    var parentid = connectorStartElement.getAttribute('data-parentid');
-    console.log('DragStart Parent Id : ' + parentid);
-    console.log('DragStart Id : ' + e.target.id);
-    console.log('DragStart data-connector-start-y : ' + e.target.getAttribute('data-connector-start-y'));
-    console.log('DragStart data-connector-start-x : ' + e.target.getAttribute('data-connector-start-x'));
-    var parent_svg = document.getElementById(parentid + "-svg");
-    var boundingClientRect = connectorStartElement.getBoundingClientRect();
-
-    // Define SVG position manipulation variables
-    connectorContainerSVGPoint = parent_svg.createSVGPoint();
-    connectorContainerScreenCTM = parent_svg.getScreenCTM();
-    connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
-    connectorContainerSVGPoint.y = boundingClientRect.y + boundingClientRect.height;
-    //console.log('DragStart Bounding Rect x : ' + boundingClientRect.x);
-    //console.log('DragStart Bounding Rect y : ' + boundingClientRect.y);
-
-    // Convert to SVG Relative positioning
-    var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-    //console.log("SVG Relative Point (" + svgrelative.x + ", " + svgrelative.y + ")");
-    connectorStartXLeft = svgrelative.x;
-    connectorStartYTop = svgrelative.y;
-
-    // Start Drawing line
-    var mousePos = getMousePosition(e);
-    svg = d3.select('#' + parentid + "-svg");
-    svg.append('line')
-        .attr("id", "Connector")
-        .attr("x1", connectorStartXLeft)
-        .attr("y1", connectorStartYTop)
-        .attr("x2", connectorStartXLeft)
-        .attr("y2", connectorStartYTop)
-        //.attr("x2", mousePos.x)
-        //.attr("y2", mousePos.y)
-        .attr("stroke-width", "2")
-        .attr("stroke-dasharray", "3, 3")
-        .attr("stroke", "darkgray");
-
-}
-
 function handleConnectorDragEnter(e) {
     if (connectorStartElement) {
         //console.log('Connector Drag Enter : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
@@ -245,78 +200,6 @@ function handleConnectorDrop(e) {
             console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
             connectorContainerSVGPoint.x = e.target.getAttribute('data-connector-end-x');
             connectorContainerSVGPoint.y = e.target.getAttribute('data-connector-end-y');
-            var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-            svg = d3.select("#" + parentid + '-svg');
-            svg.append('line')
-                .attr("id", generateConnectorId(sourceid, id))
-                .attr("x1", connectorStartXLeft)
-                .attr("y1", connectorStartYTop)
-                .attr("x2", svgrelative.x)
-                .attr("y2", svgrelative.y)
-                .attr("stroke-width", "2")
-                .attr("stroke", "black");
-        }
-    }
-
-    connectorStartElement = null;
-    connectorStartXLeft = 0;
-    connectorStartYTop = 0;
-    d3.selectAll("#Connector").remove();
-}
-
-function handleConnectorDropOrig(e) {
-    console.log('Connector Drop');
-    if (connectorStartElement) {
-        var sourceType = connectorStartElement.getAttribute('data-type');
-        var destinationType = e.target.getAttribute('data-type');
-        var parentid = e.target.getAttribute('data-parentid');
-        var sourceid = connectorStartElement.id;
-        var id = e.target.id;
-
-        console.log('Connector Source Type : ' + sourceType);
-        console.log('Connector Destination Type : ' + destinationType);
-        console.log('Connector Allowed : ' + JSON.stringify(asset_connect_targets));
-        // Check is Connection of
-        if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
-            updateAssetTarget(destinationType, sourceType, sourceid, id)
-            console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
-            var boundingClientRect = e.target.getBoundingClientRect();
-            connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
-            connectorContainerSVGPoint.y = boundingClientRect.y;
-            var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-            svg = d3.select("#" + parentid + '-svg');
-            svg.append('line')
-                .attr("id", generateConnectorId(sourceid, id))
-                .attr("x1", connectorStartXLeft)
-                .attr("y1", connectorStartYTop)
-                .attr("x2", svgrelative.x)
-                .attr("y2", svgrelative.y)
-                .attr("stroke-width", "2")
-                .attr("stroke", "black");
-        }
-    }
-
-    connectorStartElement = null;
-    connectorStartXLeft = 0;
-    connectorStartYTop = 0;
-    d3.selectAll("#Connector").remove();
-}
-
-function handleConnectorDropOrig(e) {
-    if (connectorStartElement) {
-        var sourceType = connectorStartElement.getAttribute('data-type');
-        var destinationType = e.target.getAttribute('data-type');
-        var parentid = e.target.getAttribute('data-parentid');
-        var validSubnetSource = ['Route Table', 'Security List'];
-        var sourceid = connectorStartElement.id;
-        var id = e.target.id;
-
-        if (validSubnetSource.indexOf(sourceType) >= 0 && destinationType == 'Subnet') {
-            updateSubnet(sourceType, sourceid, id);
-            console.log('Creating Connector Line');
-            var boundingClientRect = e.target.getBoundingClientRect();
-            connectorContainerSVGPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
-            connectorContainerSVGPoint.y = boundingClientRect.y;
             var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
             svg = d3.select("#" + parentid + '-svg');
             svg.append('line')
