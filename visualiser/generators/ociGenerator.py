@@ -415,14 +415,20 @@ class OCIGenerator(object):
         self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = loadbalancer["shape"]
         # ---- Subnets
+        #jinja2_subnet_ids = []
+        #for subnet in loadbalancer.get('subnets', []):
+        #    jinja2_subnet_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(subnet)))
         jinja2_subnet_ids = []
-        for subnet in loadbalancer.get('subnets', []):
-            jinja2_subnet_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(subnet)))
+        for subnet_id in loadbalancer.get('subnet_ids', []):
+            jinja2_subnet_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet_id])))
         self.jinja2_variables["loadbalancer_subnet_ids"] = jinja2_subnet_ids
         # ---- Backend Instances
+        #jinja2_backend_instances_resource_names = []
+        #for backend_instance in loadbalancer.get('backend_instances', []):
+        #    jinja2_backend_instances_resource_names.append(self.standardiseResourceName(backend_instance))
         jinja2_backend_instances_resource_names = []
-        for backend_instance in loadbalancer.get('backend_instances', []):
-            jinja2_backend_instances_resource_names.append(self.standardiseResourceName(backend_instance))
+        for backend_instance_id in loadbalancer.get('instance_ids', []):
+            jinja2_backend_instances_resource_names.append(self.standardiseResourceName(self.id_name_map[backend_instance_id]))
         self.jinja2_variables["backend_instances"] = jinja2_backend_instances_resource_names
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("loadbalancer.jinja2")

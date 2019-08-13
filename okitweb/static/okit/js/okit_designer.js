@@ -84,9 +84,10 @@ $(document).ready(function(){
 
     $("#show-code").click(function(){
         $("#json-display").slideToggle();
+        $("#json-display").removeClass('hidden');
+        $("#properties").slideToggle();
     });
     $("#json-display").slideToggle();
-    $("#json-display").removeClass('hidden');
 
 });
 

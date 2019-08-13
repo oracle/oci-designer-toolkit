@@ -40,8 +40,8 @@ function addLoadBalancer(subnetid) {
     // Increment Count
     load_balancer_count += 1;
     var load_balancer = {};
-    load_balancer['subnet_id'] = subnetid;
-    load_balancer['subnet'] = '';
+    load_balancer['subnet_ids'] = [subnetid];
+    load_balancer['subnets'] = [''];
     load_balancer['id'] = id;
     load_balancer['display_name'] = generateDefaultName('lb', load_balancer_count);
     load_balancer['is_private'] = false;
@@ -60,7 +60,7 @@ function addLoadBalancer(subnetid) {
  */
 function drawLoadBalancerSVG(load_balancer) {
     console.log(JSON.stringify(subnet_content));
-    var parent_id = load_balancer['subnet_id'];
+    var parent_id = load_balancer['subnet_ids'][0];
     console.log('VCN Id : ' + parent_id);
     var id = load_balancer['id'];
     var position = subnet_content[parent_id]['load_balancer_position'];
@@ -152,6 +152,36 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("dragable", true);
 }
 
+function drawLoadBalancerConnectorsSVG(load_balancer) {
+    var parent_id = load_balancer['subnet_ids'][0];
+    var id = load_balancer['id'];
+    var parent_svg = d3.select('#' + parent_id + "-svg");
+    // Define SVG position manipulation variables
+    var svgPoint = parent_svg.node().createSVGPoint();
+    var screenCTM = parent_svg.node().getScreenCTM();
+    svgPoint.x = d3.select('#' + id).attr('data-connector-start-x');
+    svgPoint.y = d3.select('#' + id).attr('data-connector-start-y');
+    var connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+
+    var connector_end = null;
+
+    if (load_balancer['instance_ids'].length > 0) {
+        for (var i = 0; i < load_balancer['instance_ids'].length; i++) {
+            svgPoint.x = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-x');
+            svgPoint.y = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-y');
+            connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+            parent_svg.append('line')
+                .attr("id", generateConnectorId(load_balancer['instance_ids'][i], id))
+                .attr("x1", connector_start.x)
+                .attr("y1", connector_start.y)
+                .attr("x2", connector_end.x)
+                .attr("y2", connector_end.y)
+                .attr("stroke-width", "2")
+                .attr("stroke", "black");
+        }
+    }
+}
+
 /*
 ** Property Sheet Load function
  */
@@ -165,7 +195,7 @@ function loadLoadBalancerProperties(id) {
                 //console.log(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
                     //console.log('Found Route Table: ' + id);
-                    load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_id']];
+                    load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_ids'][0]];
                     $("#virtual_cloud_network").html(load_balancer['virtual_cloud_network']);
                     $('#display_name').val(load_balancer['display_name']);
                     var instances_select = $('#instance_ids');

@@ -27,7 +27,7 @@ locals {
     {{ resource_name }}_ip_address    = "${lookup(oci_load_balancer_load_balancer.{{ resource_name }}.ip_address_details[0], "ip_address")}"
 }
 
-output "{{ output_name }} IP Address" {
+output "{{ output_name }}IPAddress" {
     value = "${local.{{ resource_name }}_ip_address}"
 }
 
