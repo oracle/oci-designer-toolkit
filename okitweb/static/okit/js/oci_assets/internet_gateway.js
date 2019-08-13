@@ -120,17 +120,17 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("class", "st0")
         .attr("d", "M103.5,140.8c-15.9,0-28.8,12.9-28.8,28.8c0,15.9,12.9,28.8,28.8,28.8c15.9,0,28.8-12.9,28.8-28.8C132.3,153.6,119.4,140.8,103.5,140.8z M82.2,171v-3h7.3v-4.5l10.4,6l-10.4,6V171H82.2z M103.7,190.7l-6-10.4h4.5v-21.6h-4.5l6-10.4l6,10.4h-4.5v21.6h4.5L103.7,190.7z M118.1,171v4.5l-10.4-6l10.4-6v4.5h7.3v3H118.1z");
 
+    loadInternetGatewayProperties(id);
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
-    $('#' + id + '-svg')
-        .on("click", function() { loadInternetGatewayProperties(id); return false; });
-    loadInternetGatewayProperties(id);
-
-    //d3.select('#' + id)
-    svg.selectAll("*")
+    // Set common attributes on svg element and children
+    svg.on("click", function() { loadInternetGatewayProperties(id); })
         .attr("data-type", data_type)
-        .attr("data-parentid", parent_id);
+        .attr("data-parentid", parent_id)
+        .selectAll("*")
+           .attr("data-type", data_type)
+           .attr("data-parentid", parent_id);
 }
 
 /*

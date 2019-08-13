@@ -115,11 +115,13 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("class", "st0")
         .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z");
 
+    loadLoadBalancerProperties(id);
+    var boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
-    $('#' + id + '-svg')
-        .on("click", function() { loadLoadBalancerProperties(id); return false; })
+    // Set common attributes on svg element and children
+    svg.on("click", function() { loadLoadBalancerProperties(id); })
         .on("mousedown", handleConnectorDragStart)
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)
@@ -128,12 +130,7 @@ function drawLoadBalancerSVG(load_balancer) {
         .on("dragstart", handleConnectorDragStart)
         .on("drop", handleConnectorDrop)
         .on("dragenter", handleConnectorDragEnter)
-        .on("dragleave", handleConnectorDragLeave);
-    loadLoadBalancerProperties(id);
-
-    var boundingClientRect = rect.node().getBoundingClientRect();
-    //d3.select('#' + id)
-    svg.selectAll("*")
+        .on("dragleave", handleConnectorDragLeave)
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
@@ -141,7 +138,16 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
         .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("data-connector-id", id)
-        .attr("dragable", true);
+        .attr("dragable", true)
+        .selectAll("*")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
 }
 
 /*

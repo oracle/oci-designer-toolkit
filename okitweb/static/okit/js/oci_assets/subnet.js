@@ -99,8 +99,8 @@ function drawSubnetSVG(subnet) {
     var svg_y = vcn_offset_y + count_offset_y;
     var data_type = "Subnet";
 
-    var okitcanvas_svg = d3.select('#' + parent_id + "-svg");
-    var svg = okitcanvas_svg.append("svg")
+    var parent_svg = d3.select('#' + parent_id + "-svg");
+    var asset_svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -109,6 +109,15 @@ function drawSubnetSVG(subnet) {
         .attr("y", svg_y)
         .attr("width", subnet_svg_width)
         .attr("height", subnet_svg_height);
+    var svg = asset_svg.append("svg")
+        .attr("id", id + '-svg')
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
+        .attr("title", subnet['display_name'])
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", "100%")
+        .attr("height", "100%");
     var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
@@ -142,11 +151,13 @@ function drawSubnetSVG(subnet) {
         .attr("class", "st0")
         .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
 
+    loadSubnetProperties(id);
+    var boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
-    $('#' + id + '-svg')
-        .on("click", function() { loadSubnetProperties(id); return false; })
+    // Set common attributes on svg element and children
+    svg.on("click", function() { loadSubnetProperties(id); })
         .on("mousedown", handleConnectorDragStart)
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)
@@ -155,12 +166,7 @@ function drawSubnetSVG(subnet) {
         .on("dragstart", handleConnectorDragStart)
         .on("drop", handleConnectorDrop)
         .on("dragenter", handleConnectorDragEnter)
-        .on("dragleave", handleConnectorDragLeave);
-    loadSubnetProperties(id);
-
-    var boundingClientRect = rect.node().getBoundingClientRect();
-    //d3.select('#' + id)
-    svg.selectAll("*")
+        .on("dragleave", handleConnectorDragLeave)
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
@@ -168,7 +174,16 @@ function drawSubnetSVG(subnet) {
         .attr("data-connector-end-y", boundingClientRect.y)
         .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("data-connector-id", id)
-        .attr("dragable", true);
+        .attr("dragable", true)
+        .selectAll("*")
+           .attr("data-type", data_type)
+           .attr("data-parentid", parent_id)
+           .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+           .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+           .attr("data-connector-end-y", boundingClientRect.y)
+           .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+           .attr("data-connector-id", id)
+           .attr("dragable", true);
 }
 
 function clearSubnetConnectorsSVG(subnet) {

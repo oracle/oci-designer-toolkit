@@ -140,11 +140,13 @@ function drawRouteTableSVG(route_table) {
         .attr("class", "st0")
         .attr("d", "M188.4,187.7v-22.9h-59.6v22.9H188.4z M171.1,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,171.2z M166.1,178.1h2.3v2.5h-2.3V178.1z M153.8,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,171.2z M148.8,178.1h2.3v2.5h-2.3V178.1z M139.8,171.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
 
+    loadRouteTableProperties(id);
+    var boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
-    $('#' + id + '-svg')
-        .on("click", function() { loadRouteTableProperties(id); return false; })
+    // Set common attributes on svg element and children
+    svg.on("click", function() { loadRouteTableProperties(id); })
         .on("mousedown", handleConnectorDragStart)
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)
@@ -153,20 +155,24 @@ function drawRouteTableSVG(route_table) {
         .on("dragstart", handleConnectorDragStart)
         .on("drop", handleConnectorDrop)
         .on("dragenter", handleConnectorDragEnter)
-        .on("dragleave", handleConnectorDragLeave);
-    loadRouteTableProperties(id);
-
-    var boundingClientRect = rect.node().getBoundingClientRect();
-    //d3.select('#' + id)
-    svg.selectAll("*")
+        .on("dragleave", handleConnectorDragLeave)
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
         .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-end-y", boundingClientRect.y)
+        .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
         .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("data-connector-id", id)
-        .attr("dragable", true);
+        .attr("dragable", true)
+        .selectAll("*")
+           .attr("data-type", data_type)
+           .attr("data-parentid", parent_id)
+           .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+           .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+           .attr("data-connector-end-y", boundingClientRect.y)
+           .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+           .attr("data-connector-id", id)
+           .attr("dragable", true);
 }
 
 /*
