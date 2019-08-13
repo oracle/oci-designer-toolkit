@@ -24,7 +24,7 @@ $(document).ready(function(){
     okitcanvas.addEventListener('drop', handleDrop, false);
     okitcanvas.addEventListener('dragend', handleDragEnd, false);
 
-// Set SVG Attributes
+    // Set SVG Attributes
     d3.select('#okitcanvas')
         .attr('x', 0)
         .attr('y', 0)
@@ -36,45 +36,29 @@ $(document).ready(function(){
      */
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
-//document.getElementById('loaddiagram').addEventListener('click', handleLoadClick, false);
-
-//document.getElementById('newdiagram').addEventListener('click', handleNew, false);
-
-//document.getElementById('savejson').addEventListener('click', handleSave, false);
-
-//document.getElementById('exportsvg').addEventListener('click', handleExport, false);
-
-//document.getElementById('generateterraform').addEventListener('click', handleGenerateTerraform, false);
-
-//document.getElementById('generateansible').addEventListener('click', handleGenerateAnsible, false);
-
-//document.getElementById('queryoci').addEventListener('click', handleQueryOci, false);
-
     /*
     ** Add Menu Item handlers
      */
 
-// File Menu
-//document.getElementById('file-new-menu-item').addEventListener('click', handleNew, false);
+    // File Menu
 
     document.getElementById('file-load-menu-item').addEventListener('click', handleLoadClick, false);
 
     document.getElementById('file-save-menu-item').addEventListener('click', handleSave, false);
 
-// Canvas Menu
+    // Canvas Menu
     document.getElementById('file-export-menu-item').addEventListener('click', handleExport, false);
 
     document.getElementById('file-redraw-menu-item').addEventListener('click', handleRedraw, false);
 
-// Query Menu
-//document.getElementById('query-oci-menu-item').addEventListener('click', handleQueryOci, false);
+    // Query Menu
 
-// Generate Menu
+    // Generate Menu
     document.getElementById('generate-terraform-menu-item').addEventListener('click', handleGenerateTerraform, false);
 
     document.getElementById('generate-ansible-menu-item').addEventListener('click', handleGenerateAnsible, false);
 
-// Set Redraw when window resized
+    // Set Redraw when window resized
     window.addEventListener("resize", handleResize, false);
 
     /*
@@ -83,7 +67,7 @@ $(document).ready(function(){
 
     $("#properties").load("propertysheets/empty.html");
 
-// Set Properties drag events
+    // Set Properties drag events
     var asset_properties = document.getElementById('asset-properties');
     asset_properties.addEventListener('dragend', handlePropertiesDragEnd, false);
     asset_properties.addEventListener('mousedown', handlePropertiesMouseDown, false);
@@ -95,8 +79,14 @@ $(document).ready(function(){
 
     newDiagram();
 
-// Remove Busy Icon if set
+    // Remove Busy Icon if set
     unsetBusyIcon();
+
+    $("#show-code").click(function(){
+        $("#json-display").slideToggle();
+    });
+    $("#json-display").slideToggle();
+    $("#json-display").removeClass('hidden');
 
 });
 

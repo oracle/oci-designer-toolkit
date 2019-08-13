@@ -213,6 +213,7 @@ function handleConnectorDrop(e) {
         // Check is Connection of
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
             updateAssetTarget(destinationType, sourceType, sourceid, id)
+            console.log('Creating Connector Line (' + sourceType + ') - (' + destinationType + ')');
             console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
             connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-end-x');
             connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-end-y');

@@ -29,8 +29,8 @@ function addLoadBalancer(subnetid) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('load_balancers' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['load_balancers'] = [];
+    if (!('loadbalancers' in OKITJsonObj['compartment'])) {
+        OKITJsonObj['compartment']['loadbalancers'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -48,7 +48,7 @@ function addLoadBalancer(subnetid) {
     load_balancer['shape'] = '100Mbps';
     load_balancer['instances'] = [];
     load_balancer['instance_ids'] = [];
-    OKITJsonObj['compartment']['load_balancers'].push(load_balancer);
+    OKITJsonObj['compartment']['loadbalancers'].push(load_balancer);
     okitIdsJsonObj[id] = load_balancer['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
@@ -157,9 +157,9 @@ function drawLoadBalancerSVG(load_balancer) {
  */
 function loadLoadBalancerProperties(id) {
     $("#properties").load("propertysheets/load_balancer.html", function () {
-        if ('compartment' in OKITJsonObj && 'load_balancers' in OKITJsonObj['compartment']) {
+        if ('compartment' in OKITJsonObj && 'loadbalancers' in OKITJsonObj['compartment']) {
             console.log('Loading Load Balancer: ' + id);
-            var json = OKITJsonObj['compartment']['load_balancers'];
+            var json = OKITJsonObj['compartment']['loadbalancers'];
             for (var i = 0; i < json.length; i++) {
                 load_balancer = json[i];
                 //console.log(JSON.stringify(load_balancer, null, 2));
@@ -201,7 +201,26 @@ function loadLoadBalancerProperties(id) {
 ** OKIT Json Update Function
  */
 function updateLoadBalancer(source_type, source_id, id) {
-
+    console.log('Update Load Balancer : ' + id + ' Adding ' + source_type + ' ' + source_id);
+    var load_balancers = OKITJsonObj['compartment']['loadbalancers'];
+    console.log(JSON.stringify(load_balancers))
+    for (var i = 0; i < load_balancers.length; i++) {
+        var load_balancer = load_balancers[i];
+        console.log(i + ') ' + JSON.stringify(load_balancer))
+        if (load_balancer['id'] == id) {
+            if (source_type == 'Instance') {
+                if (load_balancer['instance_ids'].indexOf(source_id) > 0 ) {
+                    // Already connected so delete existing line
+                    d3.select("#" + generateConnectorId(source_id, id)).remove();
+                } else {
+                    load_balancer['instance_ids'].push(source_id);
+                    load_balancer['instances'].push(okitIdsJsonObj[source_id]);
+                }
+            }
+        }
+    }
+    displayOkitJson();
+    loadLoadBalancerProperties(id);
 }
 
 clearLoadBalancerVariables();

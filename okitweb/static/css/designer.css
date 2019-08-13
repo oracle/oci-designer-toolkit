@@ -186,9 +186,19 @@
     font-weight: bold;
 }
 
+.slide-bar {
+    width: 2px;
+}
+
 .hidden {
     visibility: hidden;
     display: none;
+}
+
+.source-code {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 

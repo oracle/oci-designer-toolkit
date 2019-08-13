@@ -336,7 +336,7 @@ function loadSubnetProperties(id) {
  */
 function updateSubnet(sourcetype, sourceid, id) {
     var subnets = OKITJsonObj['compartment']['subnets'];
-    console.log('Updating Subnet ' + id + 'Adding ' + sourcetype + ' ' +sourceid);
+    console.log('Updating Subnet ' + id + ' Adding ' + sourcetype + ' ' + sourceid);
     for (var i = 0; i < subnets.length; i++) {
         subnet = subnets[i];
         //console.log('Before : ' + JSON.stringify(subnet, null, 2));
@@ -350,7 +350,7 @@ function updateSubnet(sourcetype, sourceid, id) {
                 subnet['route_table_id'] = sourceid;
                 subnet['route_table'] = okitIdsJsonObj[sourceid];
             } else if (sourcetype == 'Security List') {
-                if (subnet['security_list_ids'].indexOf(sourceid) >0 ) {
+                if (subnet['security_list_ids'].indexOf(sourceid) > 0 ) {
                     // Already connected so delete existing line
                     //console.log('Deleting Connector : ' + generateConnectorId(sourceid, id));
                     d3.select("#" + generateConnectorId(sourceid, id)).remove();
