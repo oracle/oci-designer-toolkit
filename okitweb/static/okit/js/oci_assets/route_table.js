@@ -157,6 +157,7 @@ function drawRouteTableSVG(route_table) {
         .on("dragenter", handleConnectorDragEnter)
         .on("dragleave", handleConnectorDragLeave)
         .attr("data-type", data_type)
+        .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
         .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
         .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
@@ -165,14 +166,15 @@ function drawRouteTableSVG(route_table) {
         .attr("data-connector-id", id)
         .attr("dragable", true)
         .selectAll("*")
-           .attr("data-type", data_type)
-           .attr("data-parentid", parent_id)
-           .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-           .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-           .attr("data-connector-end-y", boundingClientRect.y)
-           .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-           .attr("data-connector-id", id)
-           .attr("dragable", true);
+            .attr("data-type", data_type)
+            .attr("data-okit-id", id)
+            .attr("data-parentid", parent_id)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-end-y", boundingClientRect.y)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
 }
 
 /*

@@ -127,10 +127,12 @@ function drawInternetGatewaySVG(internet_gateway) {
     // Set common attributes on svg element and children
     svg.on("click", function() { loadInternetGatewayProperties(id); })
         .attr("data-type", data_type)
+        .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
         .selectAll("*")
-           .attr("data-type", data_type)
-           .attr("data-parentid", parent_id);
+            .attr("data-type", data_type)
+            .attr("data-okit-id", id)
+            .attr("data-parentid", parent_id);
 }
 
 /*

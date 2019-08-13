@@ -137,10 +137,12 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .on("dragenter", handleConnectorDragEnter)
         .on("dragleave", handleConnectorDragLeave)
         .attr("data-type", data_type)
+        .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
         .selectAll("*")
-           .attr("data-type", data_type)
-           .attr("data-parentid", parent_id);
+            .attr("data-type", data_type)
+            .attr("data-okit-id", id)
+            .attr("data-parentid", parent_id);
 }
 
 /*
