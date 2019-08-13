@@ -182,8 +182,8 @@ function handleConnectorDrop(e) {
         var sourceType = connectorStartElement.getAttribute('data-type');
         var destinationType = d3.select(this).attr('data-type');
         var parentid = d3.select(this).attr('data-parentid');
-        var sourceid = connectorStartElement.id;
-        var id = d3.select(this).attr('id');
+        var sourceid = connectorStartElement.getAttribute('data-okit-id');
+        var id = d3.select(this).attr('data-okit-id');
         var connector_source_id = connectorStartElement.getAttribute('data-connector-id');
         var connector_destination_id = d3.select(this).attr('data-connector-id');
 
