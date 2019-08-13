@@ -1,6 +1,17 @@
 console.log('Loaded Drag & Drop Javascript');
 
 /*
+** Define Connector Drag & Drop functions point manipulation code.
+ */
+//var okitcanvasSVGPoint = okitcanvas.createSVGPoint();
+//var okitcanvasScreenCTM = okitcanvas.getScreenCTM();
+var connectorStartElement = null;
+var connectorStartXLeft = 0;
+var connectorStartYTop = 0;
+var connectorContainerSVGPoint = null;
+var connectorContainerScreenCTM = null;
+
+/*
 ** Define Dynamic Add/Update function
  */
 

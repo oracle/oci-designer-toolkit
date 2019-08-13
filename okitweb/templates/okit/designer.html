@@ -56,6 +56,7 @@
 {% endblock %}
 
 {% block headscripts %}
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
@@ -103,7 +104,6 @@
 {% endblock %}
 
 {% block footerscripts %}
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
     {% if okit_query_json is defined %}
         <script type="text/javascript">
             OKITJsonObj = {{ okit_query_json | safe }};
