@@ -45,9 +45,6 @@ class OCIBackends(OCILoadBalancerConnection):
         # Convert to Json object
         self.backends_json = self.toJson(backends)
 
-        with open("backends.json", "a") as data_file:
-            json.dump(self.backends_json, data_file, indent=2)
-
         logger.debug(str(self.backends_json))
         # Build List of Backend Objects
         self.backends_obj = []

@@ -20,7 +20,6 @@ __module__ = "ociNetwork"
 import oci
 import re
 import sys
-import json
 
 from facades.ociConnection import OCILoadBalancerConnection
 from facades.ociLBHost import OCILBHosts
@@ -59,18 +58,11 @@ class OCILoadBalancers(OCILoadBalancerConnection):
             self.load_balancers_json = filtered
         logger.debug(str(self.load_balancers_json))
 
-        # Build List of Subnet Objects
+        # Build List of Loadbalancer Objects
         self.load_balancers_obj = []
         for load_balancer in self.load_balancers_json:
             self.load_balancers_obj.append(OCILoadBalancer(self.config, self.configfile, load_balancer))
-        # Check if the results should be filtered
-        #if filter is None:
-        #    return self.load_balancers_json
-        #else:
-        #    filtered = self.load_balancers_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    return filtered
+
         return self.load_balancers_json
 
 
@@ -86,7 +78,7 @@ class OCILoadBalancer(object):
     def getBackendSetClients(self):
         return OCIBackendSets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
-    def getBackendClients(self, load_balancer_id=None, backend_set_name=None):
+    def getBackendClients(self, backend_set_name=None):
         return OCIBackends(self.config, self.configfile, self.data['id'], backend_set_name)
 
 
