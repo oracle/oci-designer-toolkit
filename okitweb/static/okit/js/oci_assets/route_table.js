@@ -48,7 +48,7 @@ function addRouteTable(vcnid) {
     route_table['route_rules'] = []
     OKITJsonObj['compartment']['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['display_name'];
-    console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawRouteTableSVG(route_table);
 }
@@ -57,7 +57,7 @@ function addRouteTable(vcnid) {
 ** SVG Creation
  */
 function drawRouteTableSVG(route_table) {
-    var vcnid = route_table['vcn_id'];
+    var parent_id = route_table['vcn_id'];
     var id = route_table['id'];
     var position = vcn_element_icon_position;
     var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -69,11 +69,11 @@ function drawRouteTableSVG(route_table) {
     // Increment Icon Position
     vcn_element_icon_position += 1;
 
-    var okitcanvas_svg = d3.select('#' + vcnid + "-svg");
-    var svg = okitcanvas_svg.append("svg")
+    var parent_svg = d3.select('#' + parent_id + "-svg");
+    var svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
-        .attr("data-vcnid", vcnid)
+        .attr("data-parentid", parent_id)
         .attr("title", route_table['display_name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
@@ -82,7 +82,7 @@ function drawRouteTableSVG(route_table) {
     var rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
-        .attr("data-vcnid", vcnid)
+        .attr("data-parentid", parent_id)
         .attr("title", route_table['display_name'])
         .attr("x", icon_x)
         .attr("y", icon_y)
@@ -93,56 +93,88 @@ function drawRouteTableSVG(route_table) {
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     rect.append("title")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .text("Route Tablet: "+ route_table['display_name']);
     var g = svg.append("g")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
     g.append("rect")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("x", "99.6")
         .attr("y", "100.3")
         .attr("class", "st0")
         .attr("width", "22.1")
         .attr("height", "22.9");
     g.append("path")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("class", "st0")
         .attr("d", "M188.4,123.3v-22.9h-59.6v22.9H188.4z M171.1,109.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,109.2z M166.1,116.1h2.3v2.5h-2.3V116.1z M153.8,109.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,109.2z M148.8,116.1h2.3v2.5h-2.3V116.1z M139.8,109.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
     g.append("rect")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("x", "99.6")
         .attr("y", "132.5")
         .attr("class", "st0")
         .attr("width", "22.1")
         .attr("height", "22.9");
     g.append("path")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("class", "st0")
         .attr("d", "M188.4,155.5v-22.9h-59.6v22.9H188.4z M171.1,140.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,140.2z M166.1,147.1h2.3v2.5h-2.3V147.1z M153.8,140.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,140.2z M148.8,147.1h2.3v2.5h-2.3V147.1z M139.8,140.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
     g.append("rect")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("x", "99.6")
         .attr("y", "164.7")
         .attr("class", "st0")
         .attr("width", "22.1")
         .attr("height", "22.9");
     g.append("path")
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
         .attr("class", "st0")
         .attr("d", "M188.4,187.7v-22.9h-59.6v22.9H188.4z M171.1,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,171.2z M166.1,178.1h2.3v2.5h-2.3V178.1z M153.8,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,171.2z M148.8,178.1h2.3v2.5h-2.3V178.1z M139.8,171.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
 
-    // Add click event to display properties
-    $('#' + id).on("click", function() { loadRouteTableProperties(id) });
-    d3.select('svg#' + id + '-svg').selectAll('path')
-        .on("click", function() { loadRouteTableProperties(id) });
     loadRouteTableProperties(id);
-
+    var boundingClientRect = rect.node().getBoundingClientRect();
+    // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    $('#' + id).on("mousedown", handleConnectorDragStart);
-    $('#' + id).on("mousemove", handleConnectorDrag);
-    $('#' + id).on("mouseup", handleConnectorDrop);
-    $('#' + id).on("mouseover", handleConnectorDragEnter);
-    $('#' + id).on("mouseout", handleConnectorDragLeave);
     // Add dragevent versions
-    $('#' + id).on("dragstart", handleConnectorDragStart);
-    $('#' + id).on("drop", handleConnectorDrop);
-    $('#' + id).on("dragenter", handleConnectorDragEnter);
-    $('#' + id).on("dragleave", handleConnectorDragLeave);
-    d3.select('#' + id)
-        .attr("dragable", true);
+    // Set common attributes on svg element and children
+    svg.on("click", function() { loadRouteTableProperties(id); })
+        .on("mousedown", handleConnectorDragStart)
+        .on("mousemove", handleConnectorDrag)
+        .on("mouseup", handleConnectorDrop)
+        .on("mouseover", handleConnectorDragEnter)
+        .on("mouseout", handleConnectorDragLeave)
+        .on("dragstart", handleConnectorDragStart)
+        .on("drop", handleConnectorDrop)
+        .on("dragenter", handleConnectorDragEnter)
+        .on("dragleave", handleConnectorDragLeave)
+        .attr("data-type", data_type)
+        .attr("data-okit-id", id)
+        .attr("data-parentid", parent_id)
+        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+        .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+        .attr("data-connector-id", id)
+        .attr("dragable", true)
+        .selectAll("*")
+            .attr("data-type", data_type)
+            .attr("data-okit-id", id)
+            .attr("data-parentid", parent_id)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-end-y", boundingClientRect.y)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
 }
 
 /*

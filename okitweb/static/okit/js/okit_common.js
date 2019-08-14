@@ -35,7 +35,8 @@ function uuidv4() {
 
 function displayOkitJson() {
     $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
-    console.log(JSON.stringify(OKITJsonObj, null, 2));}
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+}
 
 function generateConnectorId(sourceid, destinationid) {
     return sourceid + '-' + destinationid;
@@ -163,6 +164,25 @@ function drawSVGforJson() {
                 subnet_count += 1;
                 drawSubnetSVG(OKITJsonObj['compartment']['subnets'][i]);
                 drawSubnetConnectorsSVG(OKITJsonObj['compartment']['subnets'][i]);
+            }
+        }
+        if ('instances' in OKITJsonObj['compartment']) {
+            instance_ids = [];
+            for (var i=0; i < OKITJsonObj['compartment']['instances'].length; i++) {
+                instance_ids.push(OKITJsonObj['compartment']['instances'][i]['id']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['instances'][i]['id']] = OKITJsonObj['compartment']['instances'][i]['display_name'];
+                instance_count += 1;
+                drawInstanceSVG(OKITJsonObj['compartment']['instances'][i]);
+            }
+        }
+        if ('load_balancers' in OKITJsonObj['compartment']) {
+            load_balancer_ids = [];
+            for (var i=0; i < OKITJsonObj['compartment']['load_balancers'].length; i++) {
+                load_balancer_ids.push(OKITJsonObj['compartment']['load_balancers'][i]['id']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['load_balancers'][i]['id']] = OKITJsonObj['compartment']['instances'][i]['display_name'];
+                load_balancer_count += 1;
+                drawLoadBalancerSVG(OKITJsonObj['compartment']['load_balancers'][i]);
+                drawLoadBalancerConnectorsSVG(OKITJsonObj['compartment']['load_balancers'][i]);
             }
         }
     }
