@@ -186,8 +186,21 @@
     font-weight: bold;
 }
 
+.slide-bar {
+    display: block;
+}
+
 .hidden {
     visibility: hidden;
+    display: none;
+}
+
+.source-code {
+    display: block;
+    width: 100%;
+    font-family: Courier, "Courier New", Arial;
+    font-weight: bold;
+    direction: ltr;
 }
 
 
