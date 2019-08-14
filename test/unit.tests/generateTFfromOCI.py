@@ -55,6 +55,7 @@ def processWorkflow(args):
     request_json['virtual_cloud_network_filter'] = {'display_name': 'Uli-Dev-Subnet-Ad1'}
 
     response_json = executeQuery2(request_json)
+    #response_json = executeQuery(request_json)
 
     resp_json = str(response_json)
     resp_json = resp_json.replace("'", '"')
