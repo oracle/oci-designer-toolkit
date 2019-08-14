@@ -45,7 +45,7 @@ function addLoadBalancer(subnetid) {
     load_balancer['id'] = id;
     load_balancer['display_name'] = generateDefaultName('lb', load_balancer_count);
     load_balancer['is_private'] = false;
-    load_balancer['shape'] = '100Mbps';
+    load_balancer['shape_name'] = '100Mbps';
     load_balancer['instances'] = [];
     load_balancer['instance_ids'] = [];
     OKITJsonObj['compartment']['loadbalancers'].push(load_balancer);
