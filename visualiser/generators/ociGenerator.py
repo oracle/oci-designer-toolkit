@@ -109,6 +109,7 @@ class OCIGenerator(object):
     def generate(self):
         # Validate input json
         validateVisualiserJson(self.visualiser_json)
+        #logger.info('Input JSON : {0:s}'.format(str(self.visualiser_json)))
         # Build the Id to Name Map
         self.buildIdNameMap()
         # Process Provider Connection information
@@ -159,7 +160,7 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = virtual_cloud_network['display_name']
         # Process Virtual Cloud Networks Data
-        logger.info("Processing Virtual Cloud Network Information")
+        logger.info('Processing Virtual Cloud Network Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # ---- CIDR Block
         variableName = '{0:s}_cidr_block'.format(standardisedName)
@@ -189,7 +190,7 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = internet_gateway['display_name']
         # Process Internet Gateway Data
-        logger.info("Processing Internet Gateway Information")
+        logger.info('Processing Internet Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[internet_gateway['vcn_id']]))
@@ -211,7 +212,7 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = security_list['display_name']
         # Process Security List Data
-        logger.info("Processing Security List Information")
+        logger.info('Processing Security List Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['vcn_id']]))
@@ -274,7 +275,7 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = route_table['display_name']
         # Process Route Table Data
-        logger.info("Processing Route Table Information")
+        logger.info('Processing Route Table Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['vcn_id']]))
@@ -291,8 +292,8 @@ class OCIGenerator(object):
             self.run_variables[variableName] = route_rule["network_entity_id"]
             jinja2_route_rule = {
                 #"network_entity_id": self.formatJinja2IdReference(variableName)
-                #"network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
-                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
+                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
+                #"network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             }
             # ------ Destination
             variableName = '{0:s}_route_rule_{1:02d}_destination'.format(standardisedName, rule_number)
@@ -320,7 +321,7 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = subnet['display_name']
         # Process Subnet Data
-        logger.info("Processing Subnet Information")
+        logger.info('Processing Subnet Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
@@ -349,7 +350,7 @@ class OCIGenerator(object):
         if 'dhcp_options' in subnet:
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['dhcp_options']))
         else:
-            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['virtual_cloud_network']))
+            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['vcn_id']))
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("subnet.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
@@ -363,7 +364,7 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = instance['display_name']
         # Process Subnet Data
-        logger.info("Processing Instance Information")
+        logger.info('Processing Instance Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
@@ -404,7 +405,8 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = loadbalancer['display_name']
         # Process Subnet Data
-        logger.info("Processing Loadbalancer Information")
+        logger.info('Processing Loadbalancer Information {0!s:s}'.format(standardisedName))
+        #logger.info('Loadbalancer Information {0!s:s}'.format(loadbalancer))
         # -- Define Variables
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
