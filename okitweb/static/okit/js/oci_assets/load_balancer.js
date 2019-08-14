@@ -29,8 +29,8 @@ function addLoadBalancer(subnetid) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('loadbalancers' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['loadbalancers'] = [];
+    if (!('load_balancers' in OKITJsonObj['compartment'])) {
+        OKITJsonObj['compartment']['load_balancers'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -48,7 +48,7 @@ function addLoadBalancer(subnetid) {
     load_balancer['shape_name'] = '100Mbps';
     load_balancer['instances'] = [];
     load_balancer['instance_ids'] = [];
-    OKITJsonObj['compartment']['loadbalancers'].push(load_balancer);
+    OKITJsonObj['compartment']['load_balancers'].push(load_balancer);
     okitIdsJsonObj[id] = load_balancer['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
@@ -187,9 +187,9 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
  */
 function loadLoadBalancerProperties(id) {
     $("#properties").load("propertysheets/load_balancer.html", function () {
-        if ('compartment' in OKITJsonObj && 'loadbalancers' in OKITJsonObj['compartment']) {
+        if ('compartment' in OKITJsonObj && 'load_balancers' in OKITJsonObj['compartment']) {
             console.log('Loading Load Balancer: ' + id);
-            var json = OKITJsonObj['compartment']['loadbalancers'];
+            var json = OKITJsonObj['compartment']['load_balancers'];
             for (var i = 0; i < json.length; i++) {
                 load_balancer = json[i];
                 //console.log(JSON.stringify(load_balancer, null, 2));
@@ -232,7 +232,7 @@ function loadLoadBalancerProperties(id) {
  */
 function updateLoadBalancer(source_type, source_id, id) {
     console.log('Update Load Balancer : ' + id + ' Adding ' + source_type + ' ' + source_id);
-    var load_balancers = OKITJsonObj['compartment']['loadbalancers'];
+    var load_balancers = OKITJsonObj['compartment']['load_balancers'];
     console.log(JSON.stringify(load_balancers))
     for (var i = 0; i < load_balancers.length; i++) {
         var load_balancer = load_balancers[i];

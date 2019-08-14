@@ -146,7 +146,7 @@ class OCIGenerator(object):
         for instance in compartment.get('instances', []):
             self.renderInstance(instance)
         # -- Loadbalancers
-        for loadbalancer in compartment.get('loadbalancers', []):
+        for loadbalancer in compartment.get('load_balancers', []):
             self.renderLoadbalancer(loadbalancer)
 
         return

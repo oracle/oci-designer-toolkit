@@ -175,14 +175,14 @@ function drawSVGforJson() {
                 drawInstanceSVG(OKITJsonObj['compartment']['instances'][i]);
             }
         }
-        if ('loadbalancers' in OKITJsonObj['compartment']) {
+        if ('load_balancers' in OKITJsonObj['compartment']) {
             load_balancer_ids = [];
-            for (var i=0; i < OKITJsonObj['compartment']['loadbalancers'].length; i++) {
-                load_balancer_ids.push(OKITJsonObj['compartment']['loadbalancers'][i]['id']);
-                okitIdsJsonObj[OKITJsonObj['compartment']['loadbalancers'][i]['id']] = OKITJsonObj['compartment']['instances'][i]['display_name'];
+            for (var i=0; i < OKITJsonObj['compartment']['load_balancers'].length; i++) {
+                load_balancer_ids.push(OKITJsonObj['compartment']['load_balancers'][i]['id']);
+                okitIdsJsonObj[OKITJsonObj['compartment']['load_balancers'][i]['id']] = OKITJsonObj['compartment']['instances'][i]['display_name'];
                 load_balancer_count += 1;
-                drawLoadBalancerSVG(OKITJsonObj['compartment']['loadbalancers'][i]);
-                drawLoadBalancerConnectorsSVG(OKITJsonObj['compartment']['loadbalancers'][i]);
+                drawLoadBalancerSVG(OKITJsonObj['compartment']['load_balancers'][i]);
+                drawLoadBalancerConnectorsSVG(OKITJsonObj['compartment']['load_balancers'][i]);
             }
         }
     }
