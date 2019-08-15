@@ -9,6 +9,13 @@ can quickly be turned into code and ultimately built in the OCI environment.
 ## Table of Contents
 
 1. [Installation](#installation)
+2. [Usage](#usage)
+    1. [Currently Implement Artifacts](#currently-implement-artifacts)
+    2. [Web Interface](#web-interface)
+    3. [Command Line](#command-line)
+3. [Development](#development)
+4. [Contributing](#contributing)
+5. [Examples](#examples)
 
 ## Installation
 Although OKIT can simply be downloaded and the command line executed it is recommended that it be executed within a
@@ -170,8 +177,6 @@ cd test/unit.test
 python3 ./generateTFfromOCI.py -d . -c Stefan
 ```
 
-## Cleanup
-
 ## Development
 
 ## Contributing
@@ -179,3 +184,6 @@ python3 ./generateTFfromOCI.py -d . -c Stefan
 Bug reports, enhancement request and pull requests are welcome on the OraHub at [okit.oci.web.designer/issues](https://orahub.oraclecorp.com/cloud-tools-ateam/okit.oci.web.designer/issues)
 
 ## Examples
+
+## Cleanup
+
