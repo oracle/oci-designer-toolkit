@@ -55,6 +55,10 @@ def readargs(opts, args):
     return moduleargs
 
 
+def usage():
+    return
+
+
 # Main processing function
 def main(argv):
     # Configure Parameters and Options

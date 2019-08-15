@@ -6,6 +6,10 @@ through simple command line or web based interface, and then convert them to sta
 The web based drawing toll can also be used to generate simple architectural representations of customer systems that 
 can quickly be turned into code and ultimately built in the OCI environment.
 
+## Table of Contents
+
+1. [Installation](#installation)
+
 ## Installation
 Although OKIT can simply be downloaded and the command line executed it is recommended that it be executed within a
 docker container that can be built using the Dockerfile within this repository. This will guarantee that all the required 
@@ -53,50 +57,118 @@ anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
 
 ## Usage
+### Currently Implement Artifacts
+In the present release the following OCI artifacts have been implemented. The information captured in the properties may 
+only be the minimum to create the artifacts but will be extended in the future.
+- Virtual Cloud Network 
+- Internet Gateway
+- Route Table
+- Security List
+- Subnet
+- Instance
+- Load Balancer
+
 ### Web Interface
-![OKIT Web Interface](documentation/images/okit_web_interface.png?raw=true "OKIT Web Interface")
-#### Palette
-![](okitweb/static/okit/palette/Virtual_Cloud_Network.svg?raw=true){style="width:70px; height:70px;"}
-- <img src="okitweb/static/okit/palette/Virtual_Cloud_Network.svg?raw=true" width="30" height="30"/> Virtual Cloud Network 
+#### Designer
+The Designer consists of 3 main areas.
+1. Palette
+2. Canvas
+3. Properties Sheet
+
+The palette should all currently available assets and they can be dragged from the palette on the canvas below. During the 
+drag process the icon will indicate if the palette icon can be dropped on the underlying component. If appropriate a "+" 
+sign will be displayed. Once the icon has been dropped the appropriate properties sheet will be displayed for the new asset.
+
+If assets (e.g. subnet) are dropped within a containing asset (e.g. virtual cloud network) then it will be associated with the 
+containing asset. Alternatively assets may be linked using connectors which can be dragged from the asset to associate
+(e.g. route table) to the associated asset (e.g. subnet). Again the drop is only appropriate on certain components and 
+the web front end will restrict this.
+
+A simple diagram representing a virtual Cloud Network with associated Internet Gateway, Route Table, Security List and 
+Instances fronted by a Load Balancer can be seen below.
+
+![OKIT Designer Canvas](documentation/images/okit_web_interface.png?raw=true "OKIT Designer Canvas")
+
+The hamburger menu in the top left will display a slide out menu with all available actions (described below).
+
+##### Palette
+- <img src="okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true" width="30" height="30"/> Virtual Cloud Network 
 - <img src="okitweb/static/okit/palette/Internet_Gateway.svg?sanitize=true" width="30" height="30"/> Internet Gateway
 - <img src="okitweb/static/okit/palette/Route_Table.svg.svg?sanitize=true" width="30" height="30"/> Route Table
 - <img src="okitweb/static/okit/palette/Security_List.svg.svg?sanitize=true" width="30" height="30"/> Security List
 - <img src="okitweb/static/okit/palette/Subnet.svg.svg?sanitize=true" width="30" height="30"/> Subnet
 - <img src="okitweb/static/okit/palette/Instance.svg.svg?sanitize=true" width="30" height="30"/> Instance
 - <img src="okitweb/static/okit/palette/Load_Balancer.svg.svg?sanitize=true" width="30" height="30"/> Load Balancer
-#### Menu 
+
+##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
 
 - File
-  - New
-  - Load
-  - Save
+    - New
+    - Load
+    - Save
 - Canvas
-  - Redraw
+    - Redraw
 - Export
-  - SVG
-  - Resource Manager
-  - Orca
+    - SVG
+    - Resource Manager
+    - Orca
 - Query
-  - OCI
+    - OCI
 - Generate
-  - Terraform
-  - Ansible
+    - Terraform
+    - Ansible
 
-##### File/New
+###### File/New
 Creates a new clear canvas.
-##### File/Load
+###### File/Load
 Allows the user to select a previously saved or command line generated json file.
-##### File/Save
+###### File/Save
 Saves the current diagram as a json representation.
-##### Canvas/Redraw
+###### Canvas/Redraw
 Redraws the existing canvas this will have the effect of grouping similar assets.
-##### Export/SVG
+###### Export/SVG
 Will export the current diagram as an SVG object that can be distributed.
-##### Export/Resource Manager
-
+###### Export/Resource Manager
+***(WIP)*** Will generate Terraform code and export the resulting zip file into the OCI Resource Manager.
+###### Export/Orca
+***(WIP)*** Convert the OKIT JSON format to Orca input format.
+##### Query/OCI
+Opens Query pages and populates the Compartment list. Once the user has chosen the compartment and added a virtual cloud network 
+filter submitting will query OCI and draw the returning assets on the new designer canvas.
+##### Generate/Terraform
+Generate a set of Terraform that can be used to build the designed OCI infrastructure currently loaded and return as a zip file.
+##### Generate/Ansible
+Generate a set of Ansible that can be used to build the designed OCI infrastructure currently loaded  and return as a zip file.
 
 ### Command Line
+The command line interface consits of a number of python programs as follows:
+#### Capture
+***(WIP)*** The capture python will connect to the specified OCI instance (defaults to config in users home directory) and 
+queries OCI based on the specified filters. The resulting data is then written to the specified OKIT json file (okit.json)
+and can be subsequently imported into the web based interface or used to generate the DevOps files (see [Generate](#generate)).
+#### Validate
+***(WIP)*** The validate python will read the specified OKIT json file (okit.json) and check if the references are consistent.
+#### Generate
+The generate python process takes a specified OKIT json file (okit.json) and converts it to a number terraform or ansible 
+files that can then be used with the appropriate DevOps tooling to build the artifacts defined within the json file.
+```bash
+# Generate Terraform
+python3 generate.py -f okit.json -d destination_directory -t
+
+# Generate Ansible
+python3 generate.py -f okit.json -d destination_directory -a
+
+# Generate Terraform & Ansible
+python3 generate.py -f okit.json -d destination_directory -t -a
+```
+#### Generate TF from OCI
+This test program will connect to OCI with the default configuration and query based on the specified filter (-c) then generate
+appropriate yerraform files below the specified directory.
+```bash
+cd test/unit.test
+python3 ./generateTFfromOCI.py -d . -c Stefan
+```
 
 ## Cleanup
 
