@@ -115,6 +115,7 @@ function loaded(evt) {
 
 function drawSVGforJson() {
     console.log('******** Drawing SVG *********');
+    displayOkitJson();
     // Clear existing
     clearSVG();
     // Draw SVG
