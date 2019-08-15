@@ -40,10 +40,13 @@ RUN yum update -y ; \
  && yum update -y && yum install -y \
         ansible \
         asciinema \
-        curl-devel \
-        expat-devel \
+        #curl-devel \
+        curl \
+        #expat-devel \
+        expa \
         gcc \
-        gettext-devel \
+        #gettext-devel \
+        gettext \
         git \
         java \
         jq \
@@ -54,10 +57,13 @@ RUN yum update -y ; \
         make \
         nfs-utils \
         nginx \
-        openssl-devel \
-        python-devel \
-        python36-devel \
-        python36u-devel \
+        #openssl-devel \
+        openssl \
+        #python-devel \
+        python \
+        python36 \
+        #python36-devel \
+        #python36u-devel \
         rpm-build \
         sudo \
         tar \
@@ -65,7 +71,8 @@ RUN yum update -y ; \
         traceroute \
         tree \
         wget \
-        zlib-devel \
+        #zlib-devel \
+        zlib \
  && yum repolist all \
  && yum clean all \
 # Install pip
