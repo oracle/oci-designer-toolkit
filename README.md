@@ -11,8 +11,9 @@ can quickly be turned into code and ultimately built in the OCI environment.
 1. [Installation](#installation)
 2. [Usage](#usage)
     1. [Currently Implement Artifacts](#currently-implement-artifacts)
-    2. [Web Interface](#web-interface)
-    3. [Command Line](#command-line)
+    2. [Prerequisites](#prerequisites)
+    3. [Web Interface](#web-interface)
+    4. [Command Line](#command-line)
 3. [Development](#development)
 4. [Contributing](#contributing)
 5. [Examples](#examples)
@@ -75,7 +76,96 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Instance
 - Load Balancer
 
+### Prerequisites
+Before executing any of the docker container scripts we OKIT requires that a OCI connection configuration file be created.
+This file will contain the following:
+```properties
+[DEFAULT]
+user=ocid1.user.oc1..aaaaaaaak6z......
+fingerprint=3b:7e:37:ec:a0:86:1....
+key_file=/root/.oci/oci_api_key.pem
+tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
+region=us-phoenix-1
+
+```
+You will then need to create the following environment variable that points to the directory containing the config file.
+
+```bash
+export OCI_CONFIG_DIR=~/.oci/oci.config
+```
+
 ### Web Interface
+To use the Web Application you will first need to start the docker container and run either flask or gunicorn which can 
+be achieved by running either of the following scripts, that can be found in the docker sub-directory.
+```bash
+anhopki-mac:docker anhopki$ ./start-flask.sh
+
+DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+/okit
+HOSTNAME=start-flask
+TERM=xterm
+ANSIBLE_INVENTORY=/okit/ansible/config/ansible_hosts
+LC_ALL=en_GB.UTF-8
+FLASK_APP=okitweb
+PYTHONIOENCODING=utf8
+http_proxy=
+ftp_proxy=
+ANSIBLE_LIBRARY=:
+PATH=/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/okit
+LANG=en_GB.UTF-8
+FLASK_DEBUG=development
+https_proxy=
+SHLVL=1
+HOME=/root
+LANGUAGE=en_GB:en
+no_proxy=*
+ANSIBLE_CONFIG_DIR=/okit/ansible/config
+PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
+ANSIBLE_CONFIG=/okit/ansible/config/ansible.cfg
+_=/usr/bin/env
+ * Serving Flask app "okitweb" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:8080/ (Press CTRL+C to quit)
+ * Restarting with stat
+```
+
+```bash
+anhopki-mac:docker anhopki$ ./start-gunicorn.sh
+
+DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+/okit/okitweb
+HOSTNAME=start-gunicorn
+TERM=xterm
+ANSIBLE_INVENTORY=/okit/ansible/config/ansible_hosts
+LC_ALL=en_GB.UTF-8
+FLASK_APP=okitweb
+PYTHONIOENCODING=utf8
+http_proxy=
+ftp_proxy=
+ANSIBLE_LIBRARY=:
+PATH=/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/okit/okitweb
+LANG=en_GB.UTF-8
+FLASK_DEBUG=development
+https_proxy=
+SHLVL=1
+HOME=/root
+LANGUAGE=en_GB:en
+no_proxy=*
+ANSIBLE_CONFIG_DIR=/okit/ansible/config
+PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
+ANSIBLE_CONFIG=/okit/ansible/config/ansible.cfg
+_=/usr/bin/env
+[2019-08-15 14:32:05 +0000] [7] [INFO] Starting gunicorn 19.9.0
+[2019-08-15 14:32:05 +0000] [7] [INFO] Listening at: http://0.0.0.0:8080 (7)
+[2019-08-15 14:32:05 +0000] [7] [INFO] Using worker: sync
+[2019-08-15 14:32:05 +0000] [10] [INFO] Booting worker with pid: 10
+[2019-08-15 14:32:05 +0000] [11] [INFO] Booting worker with pid: 11
+```
 #### Designer
 The Designer consists of 3 main areas.
 1. Palette
@@ -149,7 +239,18 @@ Generate a set of Terraform that can be used to build the designed OCI infrastru
 Generate a set of Ansible that can be used to build the designed OCI infrastructure currently loaded  and return as a zip file.
 
 ### Command Line
-The command line interface consits of a number of python programs as follows:
+To use the Command Line you will first need to start the docker container using the following script:
+```bash
+anhopki-mac:docker anhopki$ ./start-bash-shell.sh
+DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+[root@start-bash-shell workspace]#
+```
+Alternatively if you are running the Webb Application you can connect to the existing docker contain using either:
+
+- connect-flask-bash-shell.sh
+- connect-gunicorn-bash-shell.sh
+
+The command line interface consists of a number of python programs as follows:
 #### Capture
 ***(WIP)*** The capture python will connect to the specified OCI instance (defaults to config in users home directory) and 
 queries OCI based on the specified filters. The resulting data is then written to the specified OKIT json file (okit.json)
