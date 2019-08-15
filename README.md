@@ -56,13 +56,13 @@ anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ### Web Interface
 ![OKIT Web Interface](documentation/images/okit_web_interface.png?raw=true "OKIT Web Interface")
 #### Palette
-- <img src="okitweb/static/okit/palette/Virtual_Cloud_Network.svg" width="30" height="30"/> Virtual Cloud Network 
-- <img src="okitweb/static/okit/palette/Internet_Gateway.svg" width="30" height="30"/> Internet Gateway
-- <img src="okitweb/static/okit/palette/Route_Table.svg.svg" width="30" height="30"/> Route Table
-- <img src="okitweb/static/okit/palette/Security_List.svg.svg" width="30" height="30"/> Security List
-- <img src="okitweb/static/okit/palette/Subnet.svg.svg" width="30" height="30"/> Subnet
-- <img src="okitweb/static/okit/palette/Instance.svg.svg" width="30" height="30"/> Instance
-- <img src="okitweb/static/okit/palette/Load_Balancer.svg.svg" width="30" height="30"/> Load Balancer
+- <img src="okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true" width="30" height="30"/> Virtual Cloud Network 
+- <img src="okitweb/static/okit/palette/Internet_Gateway.svg?sanitize=true" width="30" height="30"/> Internet Gateway
+- <img src="okitweb/static/okit/palette/Route_Table.svg.svg?sanitize=true" width="30" height="30"/> Route Table
+- <img src="okitweb/static/okit/palette/Security_List.svg.svg?sanitize=true" width="30" height="30"/> Security List
+- <img src="okitweb/static/okit/palette/Subnet.svg.svg?sanitize=true" width="30" height="30"/> Subnet
+- <img src="okitweb/static/okit/palette/Instance.svg.svg?sanitize=true" width="30" height="30"/> Instance
+- <img src="okitweb/static/okit/palette/Load_Balancer.svg.svg?sanitize=true" width="30" height="30"/> Load Balancer
 #### Menu
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
 
