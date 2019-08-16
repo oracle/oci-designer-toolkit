@@ -286,44 +286,40 @@ function loadSubnetProperties(id) {
                             security_lists_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
                         }
                     }
-                    var inputfields = document.querySelectorAll('.property-editor-table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            subnet[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
-                            }
-                            displayOkitJson();
-                        });
-                    });
-                    inputfields = document.querySelectorAll('.property-editor-table select');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            // Check if Multi Select
-                            if (inputfield.multiple) {
-                                selectedopts = inputfield.querySelectorAll('option:checked');
-                                if (selectedopts.length > 0) {
-                                    subnet[inputfield.id] = Array.from(selectedopts, e=>e.value);
-                                    //subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = Array.from(selectedopts, e=>e.text);
-                                    subnet[name_id_mapping[inputfield.id]] = Array.from(selectedopts, e=>e.text);
+                    // Add Event Listeners
+                    // Input Fields
+                    $('.property-editor-table input').each(
+                        function(index) {
+                            var inputfield = $(this);
+                            inputfield.on('input', function () {
+                                if (this.type == 'text') {
+                                    subnet[this.id] = this.value;
+                                    // If this is the name field copy to the Ids Map
+                                    if (this.id == 'display_name') {
+                                        okitIdsJsonObj[this.id] = this.value;
+                                    }
+                                } else if (this.type == 'checkbox') {
+                                    subnet[this.id] = $(this).is(':checked');
                                 } else {
-                                    subnet[inputfield.id] = [];
-                                    //subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = [];
-                                    subnet[name_id_mapping[inputfield.id]] = [];
+                                    console.log('Unknown input type ' + $(this).attr('type'));
                                 }
-                            } else {
-                                subnet[inputfield.id] = inputfield.options[inputfield.selectedIndex].value;
-                                //subnet[inputfield.id.substring(0, inputfield.id.length - 3)] = inputfield.options[inputfield.selectedIndex].text;
-                                subnet[name_id_mapping[inputfield.id]] = inputfield.options[inputfield.selectedIndex].text;
-                            }
-                            // If this is the name field copy to the Ids Map
-                            displayOkitJson();
-                            // Redraw Connectors
-                            clearSubnetConnectorsSVG(subnet);
-                            drawSubnetConnectorsSVG(subnet);
-                        });
-                    });
+                                displayOkitJson();
+                            });
+                        }
+                    );
+                    // Select Boxes
+                    $('.property-editor-table select').each(
+                        function(index) {
+                            var inputfield = $(this);
+                            inputfield.on('change', function () {
+                                subnet[this.id] = $(this).val()
+                                displayOkitJson();
+                                // Redraw Connectors
+                                clearSubnetConnectorsSVG(subnet);
+                                drawSubnetConnectorsSVG(subnet);
+                            });
+                        }
+                    );
                     break;
                 }
             }
