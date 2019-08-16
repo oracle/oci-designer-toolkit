@@ -162,19 +162,6 @@ function loadSecurityListProperties(id) {
                     $('#display_name').val(security_list['display_name']);
                     // Add Event Listeners
                     addPropertiesEventListeners(security_list, []);
-                    /*
-                    var inputfields = document.querySelectorAll('.property-editor-table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            security_list[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
-                            }
-                            displayOkitJson();
-                        });
-                    });
-                    */
                     // Egress Rules
                     for (var rulecnt = 0; rulecnt < security_list['egress_security_rules'].length; rulecnt++) {
                         addAccessRuleHtml(security_list['egress_security_rules'][rulecnt], 'egress')

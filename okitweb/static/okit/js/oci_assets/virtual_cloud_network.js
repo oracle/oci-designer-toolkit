@@ -163,21 +163,6 @@ function loadVirtualCloudNetworkProperties(id) {
                     $('#dns_label').val(virtual_cloud_network['dns_label']);
                     // Add Event Listeners
                     addPropertiesEventListeners(virtual_cloud_network, []);
-                    /*
-                    var inputfields = document.querySelectorAll('.property-editor-table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            virtual_cloud_network[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
-                            } else if (inputfield.id == 'cidr_block') {
-                                virtual_cloud_network['id'] = inputfield.value;
-                            }
-                            displayOkitJson();
-                        });
-                    });
-                    */
                     break;
                 }
             }

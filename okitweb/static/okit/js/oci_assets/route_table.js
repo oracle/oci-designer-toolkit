@@ -195,20 +195,6 @@ function loadRouteTableProperties(id) {
                     $('#display_name').val(route_table['display_name']);
                     // Add Event Listeners
                     addPropertiesEventListeners(route_table, []);
-                    /*
-                    // Add Change Events to fields
-                    var inputfields = document.querySelectorAll('#route_table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            route_table[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
-                            }
-                            displayOkitJson();
-                        });
-                    });
-                    */
                     // Route Rules
                     for (var rulecnt = 0; rulecnt < route_table['route_rules'].length; rulecnt++) {
                         addRouteRuleHtml(route_table['route_rules'][rulecnt])

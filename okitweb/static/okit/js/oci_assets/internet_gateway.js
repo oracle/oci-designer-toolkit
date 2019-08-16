@@ -153,19 +153,6 @@ function loadInternetGatewayProperties(id) {
                     $('#display_name').val(internet_gateway['display_name']);
                     // Add Event Listeners
                     addPropertiesEventListeners(internet_gateway, []);
-                    /*
-                    var inputfields = document.querySelectorAll('.property-editor-table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            internet_gateway[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
-                            }
-                            displayOkitJson();
-                        });
-                    });
-                    */
                     break;
                 }
             }

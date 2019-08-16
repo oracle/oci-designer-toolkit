@@ -175,19 +175,6 @@ function loadInstanceProperties(id) {
                     $('#authorized_keys').val(instance['authorized_keys']);
                     // Add Event Listeners
                     addPropertiesEventListeners(instance, []);
-                    /*
-                    var inputfields = document.querySelectorAll('.property-editor-table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            instance[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
-                            }
-                            displayOkitJson();
-                        });
-                    });
-                    */
                     break;
                 }
             }
