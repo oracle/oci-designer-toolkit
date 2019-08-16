@@ -173,6 +173,9 @@ function loadInstanceProperties(id) {
                     $('#hostname_label').val(instance['hostname_label']);
                     $('#boot_volume_size_in_gbs').val(instance['boot_volume_size_in_gbs']);
                     $('#authorized_keys').val(instance['authorized_keys']);
+                    // Add Event Listeners
+                    addPropertiesEventListeners(instance, []);
+                    /*
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
@@ -184,6 +187,7 @@ function loadInstanceProperties(id) {
                             displayOkitJson();
                         });
                     });
+                    */
                     break;
                 }
             }

@@ -161,6 +161,9 @@ function loadVirtualCloudNetworkProperties(id) {
                     $('#display_name').val(virtual_cloud_network['display_name']);
                     $('#cidr_block').val(virtual_cloud_network['cidr_block']);
                     $('#dns_label').val(virtual_cloud_network['dns_label']);
+                    // Add Event Listeners
+                    addPropertiesEventListeners(virtual_cloud_network, []);
+                    /*
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
@@ -174,6 +177,7 @@ function loadVirtualCloudNetworkProperties(id) {
                             displayOkitJson();
                         });
                     });
+                    */
                     break;
                 }
             }

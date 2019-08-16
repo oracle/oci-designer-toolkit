@@ -160,6 +160,9 @@ function loadSecurityListProperties(id) {
                     security_list['virtual_cloud_network'] = okitIdsJsonObj[security_list['vcn_id']];
                     $("#virtual_cloud_network").html(security_list['virtual_cloud_network']);
                     $('#display_name').val(security_list['display_name']);
+                    // Add Event Listeners
+                    addPropertiesEventListeners(security_list, []);
+                    /*
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
@@ -171,6 +174,7 @@ function loadSecurityListProperties(id) {
                             displayOkitJson();
                         });
                     });
+                    */
                     // Egress Rules
                     for (var rulecnt = 0; rulecnt < security_list['egress_security_rules'].length; rulecnt++) {
                         addAccessRuleHtml(security_list['egress_security_rules'][rulecnt], 'egress')

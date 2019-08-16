@@ -287,6 +287,8 @@ function loadSubnetProperties(id) {
                         }
                     }
                     // Add Event Listeners
+                    addPropertiesEventListeners(subnet, [clearSubnetConnectorsSVG, drawSubnetConnectorsSVG]);
+                    /*
                     // Input Fields
                     $('.property-editor-table input').each(
                         function(index) {
@@ -320,6 +322,7 @@ function loadSubnetProperties(id) {
                             });
                         }
                     );
+                    */
                     break;
                 }
             }

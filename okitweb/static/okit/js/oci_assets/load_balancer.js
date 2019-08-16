@@ -219,6 +219,8 @@ function loadLoadBalancerProperties(id) {
                         }
                     }
                     // Add Event Listeners
+                    addPropertiesEventListeners(load_balancer, [clearLoadBalancerConnectorsSVG, drawLoadBalancerConnectorsSVG]);
+                    /*
                     // Input Fields
                     $('.property-editor-table input').each(
                         function(index) {
@@ -252,6 +254,7 @@ function loadLoadBalancerProperties(id) {
                             });
                         }
                     );
+                    */
                     break;
                 }
             }

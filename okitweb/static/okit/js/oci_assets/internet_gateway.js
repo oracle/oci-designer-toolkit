@@ -151,6 +151,9 @@ function loadInternetGatewayProperties(id) {
                     internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['vcn_id']];
                     $("#virtual_cloud_network").html(internet_gateway['virtual_cloud_network']);
                     $('#display_name').val(internet_gateway['display_name']);
+                    // Add Event Listeners
+                    addPropertiesEventListeners(internet_gateway, []);
+                    /*
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
                         inputfield.addEventListener('change', function () {
@@ -162,6 +165,7 @@ function loadInternetGatewayProperties(id) {
                             displayOkitJson();
                         });
                     });
+                    */
                     break;
                 }
             }
