@@ -72,13 +72,6 @@
 {% block mainblock %}
     <div id="main-panel" class="main-panel flex-column">
         <div id="icon-palette" class="icons-palette">
-            <!--img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_VCloudNetwork_red.svg') }}" title="Virtual Cloud Network" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_InternetGateway_red.svg') }}" title="Internet Gateway" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_RouteTable_red.svg') }}" title="Route Table" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_SecurityLists_red.svg') }}" title="Security List" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_Backbone_red.svg') }}" title="Subnet" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_LoadBalance_red.svg') }}" title="Load Balancer" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_VM_red.svg') }}" title="Instance" draggable="true"-->
             {% for palette_icon in palette_icons %}
             <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true">
             {% endfor %}
@@ -88,10 +81,16 @@
                 <svg id="okitcanvas" data-type="Compartment" class="svg-canvas"></svg>
             </div>
             <div id="asset-properties" class="designer-right-column properties-wrapper">
-                <div id="properties-toggle" class="slide-bar"><button id="show-code"><<</button></div>
-                <div id="properties" class="property-editor"></div>
-                <div id="json-display" class="source-code hidden">
-                    <textarea id="okitjson" readonly="readonly"></textarea>
+                <div id="properties-and-source" class="properties-source-wrapper">
+                    <div id="properties-toggle" class="slide-bar">
+                        <!--button id="show-code">Source</button-->
+                        <input type="radio" name="source-properties" value="source">Source
+                        <input type="radio" name="source-properties" value="properties" checked="checked">Properties
+                    </div>
+                    <div id="properties" class="property-editor"></div>
+                    <div id="json-display" class="source-code hidden">
+                        <textarea id="okitjson" readonly="readonly"></textarea>
+                    </div>
                 </div>
             </div>
         </div>

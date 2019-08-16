@@ -73,6 +73,7 @@ function addSubnet(vcnid) {
 
     displayOkitJson();
     drawSubnetSVG(subnet);
+    loadSubnetProperties(id);
 }
 
 function initialiseSubnetChildData(id) {
@@ -151,7 +152,7 @@ function drawSubnetSVG(subnet) {
         .attr("class", "st0")
         .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
 
-    loadSubnetProperties(id);
+    //loadSubnetProperties(id);
     var boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)

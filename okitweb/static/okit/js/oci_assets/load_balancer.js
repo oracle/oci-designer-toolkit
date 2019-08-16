@@ -53,6 +53,7 @@ function addLoadBalancer(subnetid) {
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawLoadBalancerSVG(load_balancer);
+    loadLoadBalancerProperties(id);
 }
 
 /*
@@ -115,7 +116,7 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("class", "st0")
         .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z");
 
-    loadLoadBalancerProperties(id);
+    //loadLoadBalancerProperties(id);
     var boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)

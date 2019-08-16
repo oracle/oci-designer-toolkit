@@ -55,6 +55,7 @@ function addInstance(subnetid) {
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawInstanceSVG(instance);
+    loadInstanceProperties(id);
 }
 
 /*
@@ -117,7 +118,7 @@ function drawInstanceSVG(instance) {
         .attr("class", "st0")
         .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v111.8c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z M132.4,114.5v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V114.5z M132.4,142.6v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V142.6z M105.1,114.5v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V114.5zM105.1,142.6v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V142.6z M182.9,180.2c0,1.9-1.6,3.5-3.5,3.5h-70.7c-1.9,0-3.5-1.6-3.5-3.5v-19.6h77.8V180.2z M182.9,141.8v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7v-10.7v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7V141.8z M182.9,113.8v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7v-10.7v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7V113.8z")
 
-    loadInstanceProperties(id);
+    //loadInstanceProperties(id);
     var boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)

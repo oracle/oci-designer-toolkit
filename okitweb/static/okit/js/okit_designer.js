@@ -1,5 +1,12 @@
 console.log('Loaded Designer Javascript');
 
+const ro = new ResizeObserver(entries => {
+    //for (let entry of entries) {
+    //    entry.target.style.borderRadius = Math.max(0, 250 - entry.contentRect.width) + 'px';
+    //}
+    redrawSVGCanvas();
+});
+
 $(document).ready(function(){
     /*
     ** Add handler functionality
@@ -68,10 +75,10 @@ $(document).ready(function(){
     $("#properties").load("propertysheets/empty.html");
 
     // Set Properties drag events
-    var asset_properties = document.getElementById('asset-properties');
-    asset_properties.addEventListener('dragend', handlePropertiesDragEnd, false);
-    asset_properties.addEventListener('mousedown', handlePropertiesMouseDown, false);
-    asset_properties.addEventListener('mouseup', handlePropertiesMouseUp, false);
+    //var asset_properties = document.getElementById('asset-properties');
+    //asset_properties.addEventListener('dragend', handlePropertiesDragEnd, false);
+    //asset_properties.addEventListener('mousedown', handlePropertiesMouseDown, false);
+    //asset_properties.addEventListener('mouseup', handlePropertiesMouseUp, false);
 
     /*
     ** Clean and start new diagram
@@ -82,12 +89,28 @@ $(document).ready(function(){
     // Remove Busy Icon if set
     unsetBusyIcon();
 
+    /*
     $("#show-code").click(function(){
         $("#json-display").slideToggle();
         $("#json-display").removeClass('hidden');
         $("#properties").slideToggle();
     });
+    */
+
+    $('input[type=radio][name=source-properties]').change(function() {
+        if (this.value == 'source') {
+        }
+        else if (this.value == 'properties') {
+        }
+        $("#json-display").slideToggle();
+        $("#json-display").removeClass('hidden');
+        $("#properties").slideToggle();
+    });
+
     $("#json-display").slideToggle();
+
+    // Only observe the canvas
+    ro.observe(document.querySelector('#canvas-wrapper'));
 
 });
 
