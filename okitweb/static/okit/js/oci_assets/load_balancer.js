@@ -187,6 +187,10 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
  */
 function loadLoadBalancerProperties(id) {
     $("#properties").load("propertysheets/load_balancer.html", function () {
+        var name_id_mapping = {
+            "instances": "instance_ids",
+            "instance_ids": "instances"
+        };
         if ('compartment' in OKITJsonObj && 'load_balancers' in OKITJsonObj['compartment']) {
             console.log('Loading Load Balancer: ' + id);
             var json = OKITJsonObj['compartment']['load_balancers'];
@@ -194,12 +198,13 @@ function loadLoadBalancerProperties(id) {
                 load_balancer = json[i];
                 //console.log(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
-                    //console.log('Found Route Table: ' + id);
                     load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_ids'][0]];
                     $("#virtual_cloud_network").html(load_balancer['virtual_cloud_network']);
                     $('#display_name').val(load_balancer['display_name']);
+                    $('#shape_name').val(load_balancer['shape_name']);
+                    $('#is_private').attr('checked', load_balancer['is_private']);
                     var instances_select = $('#instance_ids');
-                    //console.log('Security List Ids: ' + security_list_ids);
+                    console.log('Instance Ids: ' + instance_ids);
                     for (var slcnt = 0; slcnt < instance_ids.length; slcnt++) {
                         var slid = instance_ids[slcnt];
                         if (load_balancer['instance_ids'].indexOf(slid) >= 0) {
@@ -209,17 +214,85 @@ function loadLoadBalancerProperties(id) {
                         }
                     }
                     // Add Event Listeners
+                    // Input Fields
+                    $('.property-editor-table input').each(
+                        function(index) {
+                            var inputfield = $(this);
+                            inputfield.on('input', function () {
+                                if (this.type == 'text') {
+                                    load_balancer[this.id] = this.value;
+                                    // If this is the name field copy to the Ids Map
+                                    if (this.id == 'display_name') {
+                                        okitIdsJsonObj[this.id] = this.value;
+                                    }
+                                } else if (this.type == 'checkbox') {
+                                    load_balancer[this.id] = $(this).is(':checked');
+                                } else {
+                                    console.log('Unknown input type ' + $(this).attr('type'));
+                                }
+                                displayOkitJson();
+                            });
+                        }
+                    );
+                    /*
                     var inputfields = document.querySelectorAll('.property-editor-table input');
                     [].forEach.call(inputfields, function (inputfield) {
+                        console.log('>>>>>>>>>>>>>>>> Field '+inputfield.id);
                         inputfield.addEventListener('change', function () {
-                            load_balancer[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
+                            if (inputfield.type == 'text') {
+                                load_balancer[inputfield.id] = inputfield.value;
+                                // If this is the name field copy to the Ids Map
+                                if (inputfield.id == 'display_name') {
+                                    okitIdsJsonObj[id] = inputfield.value;
+                                }
+                            } else if (inputfield.type == 'checkbox') {
+                                load_balancer[inputfield.id] = inputfield.is(':checked');
                             }
                             displayOkitJson();
                         });
                     });
+                    */
+                    // Select Boxes
+                    $('.property-editor-table select').each(
+                        function(index) {
+                            var inputfield = $(this);
+                            inputfield.on('change', function () {
+                                load_balancer[this.id] = $(this).val()
+                                displayOkitJson();
+                            });
+                        }
+                    );
+                    /*
+                    inputfields = document.querySelectorAll('.property-editor-table select');
+                    [].forEach.call(inputfields, function (inputfield) {
+                        inputfield.addEventListener('change', function () {
+                            // Check if Multi Select
+                            if (inputfield.multiple) {
+                                //console.log('Multiple Select ' + inputfield.id);
+                                selectedopts = inputfield.querySelectorAll('option:checked');
+                                if (selectedopts.length > 0) {
+                                    load_balancer[inputfield.id] = Array.from(selectedopts, e=>e.value);
+                                    //load_balancer[inputfield.id.substring(0, inputfield.id.length - 3)] = Array.from(selectedopts, e=>e.text);
+                                    //load_balancer[name_id_mapping[inputfield.id]] = Array.from(selectedopts, e=>e.text);
+                                } else {
+                                    load_balancer[inputfield.id] = [];
+                                    //load_balancer[inputfield.id.substring(0, inputfield.id.length - 3)] = [];
+                                    //load_balancer[name_id_mapping[inputfield.id]] = [];
+                                }
+                            } else {
+                                //console.log('Single Select ' + inputfield.id);
+                                load_balancer[inputfield.id] = inputfield.options[inputfield.selectedIndex].value;
+                                //load_balancer[inputfield.id.substring(0, inputfield.id.length - 3)] = inputfield.options[inputfield.selectedIndex].text;
+                                //load_balancer[name_id_mapping[inputfield.id]] = inputfield.options[inputfield.selectedIndex].text;
+                            }
+                            // If this is the name field copy to the Ids Map
+                            displayOkitJson();
+                            // Redraw Connectors
+                            clearSubnetConnectorsSVG(subnet);
+                            drawSubnetConnectorsSVG(subnet);
+                        });
+                    });
+                    */
                     break;
                 }
             }
