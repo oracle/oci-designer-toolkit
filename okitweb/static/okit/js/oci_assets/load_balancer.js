@@ -53,6 +53,7 @@ function addLoadBalancer(subnetid) {
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawLoadBalancerSVG(load_balancer);
+    loadLoadBalancerProperties(id);
 }
 
 /*
@@ -115,7 +116,7 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("class", "st0")
         .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z");
 
-    loadLoadBalancerProperties(id);
+    //loadLoadBalancerProperties(id);
     var boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
@@ -150,6 +151,11 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
             .attr("data-connector-id", id)
             .attr("dragable", true);
+}
+
+function clearLoadBalancerConnectorsSVG(load_balancer) {
+    var id = load_balancer['id'];
+    d3.selectAll("line[id*='" + id + "']").remove();
 }
 
 function drawLoadBalancerConnectorsSVG(load_balancer) {
@@ -187,6 +193,10 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
  */
 function loadLoadBalancerProperties(id) {
     $("#properties").load("propertysheets/load_balancer.html", function () {
+        var name_id_mapping = {
+            "instances": "instance_ids",
+            "instance_ids": "instances"
+        };
         if ('compartment' in OKITJsonObj && 'load_balancers' in OKITJsonObj['compartment']) {
             console.log('Loading Load Balancer: ' + id);
             var json = OKITJsonObj['compartment']['load_balancers'];
@@ -194,12 +204,13 @@ function loadLoadBalancerProperties(id) {
                 load_balancer = json[i];
                 //console.log(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
-                    //console.log('Found Route Table: ' + id);
                     load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_ids'][0]];
                     $("#virtual_cloud_network").html(load_balancer['virtual_cloud_network']);
                     $('#display_name').val(load_balancer['display_name']);
+                    $('#shape_name').val(load_balancer['shape_name']);
+                    $('#is_private').attr('checked', load_balancer['is_private']);
                     var instances_select = $('#instance_ids');
-                    //console.log('Security List Ids: ' + security_list_ids);
+                    console.log('Instance Ids: ' + instance_ids);
                     for (var slcnt = 0; slcnt < instance_ids.length; slcnt++) {
                         var slid = instance_ids[slcnt];
                         if (load_balancer['instance_ids'].indexOf(slid) >= 0) {
@@ -209,17 +220,7 @@ function loadLoadBalancerProperties(id) {
                         }
                     }
                     // Add Event Listeners
-                    var inputfields = document.querySelectorAll('.property-editor-table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            load_balancer[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
-                            }
-                            displayOkitJson();
-                        });
-                    });
+                    addPropertiesEventListeners(load_balancer, [clearLoadBalancerConnectorsSVG, drawLoadBalancerConnectorsSVG]);
                     break;
                 }
             }

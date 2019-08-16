@@ -10,7 +10,7 @@ can quickly be turned into code and ultimately built in the OCI environment.
 
 1. [Installation](#installation)
 2. [Usage](#usage)
-    1. [Currently Implement Artifacts](#currently-implement-artifacts)
+    1. [Currently Implemented Artifacts](#currently-implemented-artifacts)
     2. [Prerequisites](#prerequisites)
     3. [Web Interface](#web-interface)
     4. [Command Line](#command-line)
@@ -65,9 +65,10 @@ anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
 
 ## Usage
-### Currently Implement Artifacts
+### Currently Implemented Artifacts
 In the present release the following OCI artifacts have been implemented. The information captured in the properties may 
 only be the minimum to create the artifacts but will be extended in the future.
+
 - Virtual Cloud Network 
 - Internet Gateway
 - Route Table
@@ -79,6 +80,7 @@ only be the minimum to create the artifacts but will be extended in the future.
 ### Prerequisites
 Before executing any of the docker container scripts we OKIT requires that a OCI connection configuration file be created.
 This file will contain the following:
+
 ```properties
 [DEFAULT]
 user=ocid1.user.oc1..aaaaaaaak6z......
@@ -97,6 +99,7 @@ export OCI_CONFIG_DIR=~/.oci/oci.config
 ### Web Interface
 To use the Web Application you will first need to start the docker container and run either flask or gunicorn which can 
 be achieved by running either of the following scripts, that can be found in the docker sub-directory.
+
 ```bash
 anhopki-mac:docker anhopki$ ./start-flask.sh
 

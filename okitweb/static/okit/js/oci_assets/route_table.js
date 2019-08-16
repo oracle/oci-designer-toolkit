@@ -51,6 +51,7 @@ function addRouteTable(vcnid) {
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     drawRouteTableSVG(route_table);
+    loadRouteTableProperties(id);
 }
 
 /*
@@ -140,7 +141,7 @@ function drawRouteTableSVG(route_table) {
         .attr("class", "st0")
         .attr("d", "M188.4,187.7v-22.9h-59.6v22.9H188.4z M171.1,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,171.2z M166.1,178.1h2.3v2.5h-2.3V178.1z M153.8,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,171.2z M148.8,178.1h2.3v2.5h-2.3V178.1z M139.8,171.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
 
-    loadRouteTableProperties(id);
+    //loadRouteTableProperties(id);
     var boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
@@ -193,18 +194,8 @@ function loadRouteTableProperties(id) {
                     route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['vcn_id']];
                     $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
                     $('#display_name').val(route_table['display_name']);
-                    // Add Change Events to fields
-                    var inputfields = document.querySelectorAll('#route_table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            route_table[inputfield.id] = inputfield.value;
-                            // If this is the name field copy to the Ids Map
-                            if (inputfield.id == 'display_name') {
-                                okitIdsJsonObj[id] = inputfield.value;
-                            }
-                            displayOkitJson();
-                        });
-                    });
+                    // Add Event Listeners
+                    addPropertiesEventListeners(route_table, []);
                     // Route Rules
                     for (var rulecnt = 0; rulecnt < route_table['route_rules'].length; rulecnt++) {
                         addRouteRuleHtml(route_table['route_rules'][rulecnt])
