@@ -152,6 +152,11 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("dragable", true);
 }
 
+function clearLoadBalancerConnectorsSVG(load_balancer) {
+    var id = load_balancer['id'];
+    d3.selectAll("line[id*='" + id + "']").remove();
+}
+
 function drawLoadBalancerConnectorsSVG(load_balancer) {
     var parent_id = load_balancer['subnet_ids'][0];
     var id = load_balancer['id'];
@@ -234,24 +239,6 @@ function loadLoadBalancerProperties(id) {
                             });
                         }
                     );
-                    /*
-                    var inputfields = document.querySelectorAll('.property-editor-table input');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        console.log('>>>>>>>>>>>>>>>> Field '+inputfield.id);
-                        inputfield.addEventListener('change', function () {
-                            if (inputfield.type == 'text') {
-                                load_balancer[inputfield.id] = inputfield.value;
-                                // If this is the name field copy to the Ids Map
-                                if (inputfield.id == 'display_name') {
-                                    okitIdsJsonObj[id] = inputfield.value;
-                                }
-                            } else if (inputfield.type == 'checkbox') {
-                                load_balancer[inputfield.id] = inputfield.is(':checked');
-                            }
-                            displayOkitJson();
-                        });
-                    });
-                    */
                     // Select Boxes
                     $('.property-editor-table select').each(
                         function(index) {
@@ -259,40 +246,12 @@ function loadLoadBalancerProperties(id) {
                             inputfield.on('change', function () {
                                 load_balancer[this.id] = $(this).val()
                                 displayOkitJson();
+                                // Redraw Connectors
+                                clearLoadBalancerConnectorsSVG(load_balancer);
+                                drawLoadBalancerConnectorsSVG(load_balancer);
                             });
                         }
                     );
-                    /*
-                    inputfields = document.querySelectorAll('.property-editor-table select');
-                    [].forEach.call(inputfields, function (inputfield) {
-                        inputfield.addEventListener('change', function () {
-                            // Check if Multi Select
-                            if (inputfield.multiple) {
-                                //console.log('Multiple Select ' + inputfield.id);
-                                selectedopts = inputfield.querySelectorAll('option:checked');
-                                if (selectedopts.length > 0) {
-                                    load_balancer[inputfield.id] = Array.from(selectedopts, e=>e.value);
-                                    //load_balancer[inputfield.id.substring(0, inputfield.id.length - 3)] = Array.from(selectedopts, e=>e.text);
-                                    //load_balancer[name_id_mapping[inputfield.id]] = Array.from(selectedopts, e=>e.text);
-                                } else {
-                                    load_balancer[inputfield.id] = [];
-                                    //load_balancer[inputfield.id.substring(0, inputfield.id.length - 3)] = [];
-                                    //load_balancer[name_id_mapping[inputfield.id]] = [];
-                                }
-                            } else {
-                                //console.log('Single Select ' + inputfield.id);
-                                load_balancer[inputfield.id] = inputfield.options[inputfield.selectedIndex].value;
-                                //load_balancer[inputfield.id.substring(0, inputfield.id.length - 3)] = inputfield.options[inputfield.selectedIndex].text;
-                                //load_balancer[name_id_mapping[inputfield.id]] = inputfield.options[inputfield.selectedIndex].text;
-                            }
-                            // If this is the name field copy to the Ids Map
-                            displayOkitJson();
-                            // Redraw Connectors
-                            clearSubnetConnectorsSVG(subnet);
-                            drawSubnetConnectorsSVG(subnet);
-                        });
-                    });
-                    */
                     break;
                 }
             }
