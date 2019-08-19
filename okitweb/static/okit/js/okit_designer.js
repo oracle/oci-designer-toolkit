@@ -16,7 +16,7 @@ $(document).ready(function(){
     /*
     ** Drag start for all pallet icons
      */
-    var palatteicons = document.querySelectorAll('#icon-palette .palette-icon');
+    let palatteicons = document.querySelectorAll('#icon-palette .palette-icon');
     [].forEach.call(palatteicons, function (palatteicon) {
         palatteicon.addEventListener('dragstart', handleDragStart, false);
     });
@@ -24,7 +24,7 @@ $(document).ready(function(){
     /*
     ** Handle drop functionality for canvas
      */
-    var okitcanvas = document.getElementById('okitcanvas');
+    let okitcanvas = document.getElementById('okitcanvas');
     okitcanvas.addEventListener('dragenter', handleDragEnter, false)
     okitcanvas.addEventListener('dragover', handleDragOver, false);
     okitcanvas.addEventListener('dragleave', handleDragLeave, false);
@@ -75,7 +75,7 @@ $(document).ready(function(){
     $("#properties").load("propertysheets/empty.html");
 
     // Set Properties drag events
-    //var asset_properties = document.getElementById('asset-properties');
+    //let asset_properties = document.getElementById('asset-properties');
     //asset_properties.addEventListener('dragend', handlePropertiesDragEnd, false);
     //asset_properties.addEventListener('mousedown', handlePropertiesMouseDown, false);
     //asset_properties.addEventListener('mouseup', handlePropertiesMouseUp, false);

@@ -1,26 +1,26 @@
 console.log('Loaded OKIT Common Javascript');
 
 // Asset name prefix
-var display_name_prefix = 'okit-';
+let display_name_prefix = 'okit-';
 
-var okitIdsJsonObj = {};
+let okitIdsJsonObj = {};
 /*
 ** SVG Creation standard values
  */
-var icon_width = 45;
-var icon_height = 45;
-var icon_x = 25;
-var icon_y = 25;
-var icon_translate_x_start = 60;
-var icon_translate_y_start = 10;
-//var vcn_icon_spacing = 35;
-var vcn_icon_spacing = 10;
+let icon_width = 45;
+let icon_height = 45;
+let icon_x = 25;
+let icon_y = 25;
+let icon_translate_x_start = 60;
+let icon_translate_y_start = 10;
+//let vcn_icon_spacing = 35;
+let vcn_icon_spacing = 10;
 
-var icon_stroke_colour = "#F80000";
-var subnet_stroke_colour = ["orange", "blue", "green", "black"];
+let icon_stroke_colour = "#F80000";
+let subnet_stroke_colour = ["orange", "blue", "green", "black"];
 
-var vcn_gateway_icon_position = 0;
-var vcn_element_icon_position = 0;
+let vcn_gateway_icon_position = 0;
+let vcn_element_icon_position = 0;
 
 
 function generateDefaultName(prefix, count) {
@@ -50,7 +50,7 @@ function standardiseId(id) {
 ** Json Object Processing
  */
 
-var OKITJsonObj = {"compartment": {id: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
+let OKITJsonObj = {"compartment": {id: 'okit-comp-' + uuidv4(), name: 'Not Specified', ocid: 'Not Specified'}};
 
 /*
 ** New File functionality
@@ -88,7 +88,7 @@ function clearSVG() {
     // Instance
     clearInstanceVariables();
     // Add Path Style
-    //var okitcanvas_svg = d3.select('#okitcanvas');
+    //let okitcanvas_svg = d3.select('#okitcanvas');
     d3.select('#okitcanvas').append('style')
         .text('.st0{fill:#F80000;}');
 }
@@ -98,7 +98,7 @@ function clearSVG() {
  */
 
 function getAsJson(readFile) {
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.onload = loaded;
     reader.onerror = errorHandler;
     reader.readAsText(readFile);
@@ -106,7 +106,7 @@ function getAsJson(readFile) {
 
 function loaded(evt) {
     // Obtain the read file data
-    var fileString = evt.target.result;
+    let fileString = evt.target.result;
     console.log('Loaded: ' + fileString);
     OKITJsonObj = JSON.parse(fileString);
     displayOkitJson();
@@ -122,7 +122,7 @@ function drawSVGforJson() {
     if ('compartment' in OKITJsonObj) {
         if ('virtual_cloud_networks' in OKITJsonObj['compartment']) {
             virtual_network_ids = [];
-            for (var i=0; i < OKITJsonObj['compartment']['virtual_cloud_networks'].length; i++) {
+            for (let i=0; i < OKITJsonObj['compartment']['virtual_cloud_networks'].length; i++) {
                 virtual_network_ids.push(OKITJsonObj['compartment']['virtual_cloud_networks'][i]['id']);
                 okitIdsJsonObj[OKITJsonObj['compartment']['virtual_cloud_networks'][i]['id']] = OKITJsonObj['compartment']['virtual_cloud_networks'][i]['display_name'];
                 virtual_cloud_network_count += 1;
@@ -131,7 +131,7 @@ function drawSVGforJson() {
         }
         if ('internet_gateways' in OKITJsonObj['compartment']) {
             internet_gateway_ids = [];
-            for (var i=0; i < OKITJsonObj['compartment']['internet_gateways'].length; i++) {
+            for (let i=0; i < OKITJsonObj['compartment']['internet_gateways'].length; i++) {
                 internet_gateway_ids.push(OKITJsonObj['compartment']['internet_gateways'][i]['id']);
                 okitIdsJsonObj[OKITJsonObj['compartment']['internet_gateways'][i]['id']] = OKITJsonObj['compartment']['internet_gateways'][i]['display_name'];
                 internet_gateway_count += 1;
@@ -140,7 +140,7 @@ function drawSVGforJson() {
         }
         if ('route_tables' in OKITJsonObj['compartment']) {
             route_table_ids = [];
-            for (var i=0; i < OKITJsonObj['compartment']['route_tables'].length; i++) {
+            for (let i=0; i < OKITJsonObj['compartment']['route_tables'].length; i++) {
                 route_table_ids.push(OKITJsonObj['compartment']['route_tables'][i]['id']);
                 okitIdsJsonObj[OKITJsonObj['compartment']['route_tables'][i]['id']] = OKITJsonObj['compartment']['route_tables'][i]['display_name'];
                 route_table_count += 1;
@@ -149,7 +149,7 @@ function drawSVGforJson() {
         }
         if ('security_lists' in OKITJsonObj['compartment']) {
             security_list_ids = [];
-            for (var i=0; i < OKITJsonObj['compartment']['security_lists'].length; i++) {
+            for (let i=0; i < OKITJsonObj['compartment']['security_lists'].length; i++) {
                 security_list_ids.push(OKITJsonObj['compartment']['security_lists'][i]['id']);
                 okitIdsJsonObj[OKITJsonObj['compartment']['security_lists'][i]['id']] = OKITJsonObj['compartment']['security_lists'][i]['display_name'];
                 security_list_count += 1;
@@ -158,7 +158,7 @@ function drawSVGforJson() {
         }
         if ('subnets' in OKITJsonObj['compartment']) {
             subnet_ids = [];
-            for (var i=0; i < OKITJsonObj['compartment']['subnets'].length; i++) {
+            for (let i=0; i < OKITJsonObj['compartment']['subnets'].length; i++) {
                 subnet_ids.push(OKITJsonObj['compartment']['subnets'][i]['id']);
                 okitIdsJsonObj[OKITJsonObj['compartment']['subnets'][i]['id']] = OKITJsonObj['compartment']['subnets'][i]['display_name'];
                 initialiseSubnetChildData(OKITJsonObj['compartment']['subnets'][i]['id']);
@@ -169,7 +169,7 @@ function drawSVGforJson() {
         }
         if ('instances' in OKITJsonObj['compartment']) {
             instance_ids = [];
-            for (var i=0; i < OKITJsonObj['compartment']['instances'].length; i++) {
+            for (let i=0; i < OKITJsonObj['compartment']['instances'].length; i++) {
                 instance_ids.push(OKITJsonObj['compartment']['instances'][i]['id']);
                 okitIdsJsonObj[OKITJsonObj['compartment']['instances'][i]['id']] = OKITJsonObj['compartment']['instances'][i]['display_name'];
                 instance_count += 1;
@@ -178,7 +178,7 @@ function drawSVGforJson() {
         }
         if ('load_balancers' in OKITJsonObj['compartment']) {
             load_balancer_ids = [];
-            for (var i=0; i < OKITJsonObj['compartment']['load_balancers'].length; i++) {
+            for (let i=0; i < OKITJsonObj['compartment']['load_balancers'].length; i++) {
                 load_balancer_ids.push(OKITJsonObj['compartment']['load_balancers'][i]['id']);
                 okitIdsJsonObj[OKITJsonObj['compartment']['load_balancers'][i]['id']] = OKITJsonObj['compartment']['instances'][i]['display_name'];
                 load_balancer_count += 1;
@@ -194,13 +194,13 @@ function errorHandler(evt) {
 }
 
 function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
+    let files = evt.target.files; // FileList object
     getAsJson(files[0]);
 }
 
 function handleLoadClick(evt) {
     hideNavMenu();
-    var fileinput = document.getElementById("files");
+    let fileinput = document.getElementById("files");
     fileinput.click();
 }
 
@@ -237,9 +237,9 @@ function handleQueryAjax(e) {
         data: JSON.stringify(OKITJsonObj),
         success: function(resp) {
             console.log('Response : ' + resp);
-            var jsonBody = JSON.parse(resp)
-            var len =  jsonBody.length;
-            for(var i=0;i<len;i++ ){
+            let jsonBody = JSON.parse(resp)
+            let len =  jsonBody.length;
+            for(let i=0;i<len;i++ ){
                 console.log(jsonBody[i]['display_name']);
             }
         },
@@ -264,7 +264,7 @@ function handleSave(evt) {
 }
 
 function saveJson(text, filename){
-    var a = document.createElement('a');
+    let a = document.createElement('a');
     a.setAttribute('href', 'data:text/plain;charset=utf-u,'+encodeURIComponent(text));
     a.setAttribute('download', filename);
     a.click()
@@ -281,11 +281,11 @@ function handleExport(evt) {
 
 function saveSvg(svgEl, name) {
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    var svgData = svgEl.outerHTML;
-    var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-    var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
-    var svgUrl = URL.createObjectURL(svgBlob);
-    var downloadLink = document.createElement("a");
+    let svgData = svgEl.outerHTML;
+    let preface = '<?xml version="1.0" standalone="no"?>\r\n';
+    let svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+    let svgUrl = URL.createObjectURL(svgBlob);
+    let downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
     downloadLink.download = name;
     document.body.appendChild(downloadLink);

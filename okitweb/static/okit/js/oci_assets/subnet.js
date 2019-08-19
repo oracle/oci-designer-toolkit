@@ -9,16 +9,16 @@ asset_connect_targets["Subnet"] = [];
 asset_add_functions["Subnet"] = "addSubnet";
 asset_update_functions["Subnet"] = "updateSubnet";
 
-var subnet_svg_height = 200;
-var subnet_svg_width = "95%";
-var subnet_rect_height = "85%";
-var subnet_rect_width = "95%";
-var subnet_ids = [];
-var subnet_count = 0;
-var subnet_position_x = 0;
-var subnet_content = {};
-var subnet_prefix = 'sn';
-var subnet_cidr = {};
+let subnet_svg_height = 200;
+let subnet_svg_width = "95%";
+let subnet_rect_height = "85%";
+let subnet_rect_width = "95%";
+let subnet_ids = [];
+let subnet_count = 0;
+let subnet_position_x = 0;
+let subnet_content = {};
+let subnet_prefix = 'sn';
+let subnet_cidr = {};
 
 /*
 ** Reset variables
@@ -36,7 +36,7 @@ function clearSubnetVariables() {
 ** Add Asset to JSON Model
  */
 function addSubnet(vcnid) {
-    var id = 'okit-sn-' + uuidv4();
+    let id = 'okit-sn-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
 
@@ -54,7 +54,7 @@ function addSubnet(vcnid) {
     vcn_cidr = virtual_cloud_network_cidr[vcnid].split('/')[0].split('.');
     subnet_cidr[id] = vcn_cidr[0] + '.' + vcn_cidr[1] + '.' + (subnet_count - 1) + '.' + vcn_cidr[3] + '/24';
     // Build Subnet Object
-    var subnet = {};
+    let subnet = {};
     subnet['vcn_id'] = vcnid;
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
@@ -89,19 +89,19 @@ function initialiseSubnetChildData(id) {
 ** SVG Creation
  */
 function drawSubnetSVG(subnet) {
-    var parent_id = subnet['vcn_id'];
-    var id = subnet['id'];
-    var position = subnet_position_x;
-    var vcn_offset_x = (icon_width / 2);
-    var vcn_offset_y = ((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1);
-    var count_offset_x = (icon_width * position) + (vcn_icon_spacing * position);
-    var count_offset_y = ((subnet_svg_height + vcn_icon_spacing) * (subnet_count -1));
-    var svg_x = vcn_offset_x + count_offset_x;
-    var svg_y = vcn_offset_y + count_offset_y;
-    var data_type = "Subnet";
+    let parent_id = subnet['vcn_id'];
+    let id = subnet['id'];
+    let position = subnet_position_x;
+    let vcn_offset_x = (icon_width / 2);
+    let vcn_offset_y = ((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1);
+    let count_offset_x = (icon_width * position) + (vcn_icon_spacing * position);
+    let count_offset_y = ((subnet_svg_height + vcn_icon_spacing) * (subnet_count -1));
+    let svg_x = vcn_offset_x + count_offset_x;
+    let svg_y = vcn_offset_y + count_offset_y;
+    let data_type = "Subnet";
 
-    var parent_svg = d3.select('#' + parent_id + "-svg");
-    var asset_svg = parent_svg.append("svg")
+    let parent_svg = d3.select('#' + parent_id + "-svg");
+    let asset_svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -110,7 +110,7 @@ function drawSubnetSVG(subnet) {
         .attr("y", svg_y)
         .attr("width", subnet_svg_width)
         .attr("height", subnet_svg_height);
-    var svg = asset_svg.append("svg")
+    let svg = asset_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -119,7 +119,7 @@ function drawSubnetSVG(subnet) {
         .attr("y", 0)
         .attr("width", "100%")
         .attr("height", "100%");
-    var rect = svg.append("rect")
+    let rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -137,7 +137,7 @@ function drawSubnetSVG(subnet) {
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .text("Subnet: " + subnet['display_name']);
-    var g = svg.append("g")
+    let g = svg.append("g")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
@@ -153,7 +153,7 @@ function drawSubnetSVG(subnet) {
         .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
 
     //loadSubnetProperties(id);
-    var boundingClientRect = rect.node().getBoundingClientRect();
+    let boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
@@ -191,24 +191,24 @@ function drawSubnetSVG(subnet) {
 }
 
 function clearSubnetConnectorsSVG(subnet) {
-    var id = subnet['id'];
+    let id = subnet['id'];
     d3.selectAll("line[id*='" + id + "']").remove();
 }
 
 function drawSubnetConnectorsSVG(subnet) {
-    var parent_id = subnet['vcn_id'];
-    var id = subnet['id'];
-    var boundingClientRect = d3.select("#" + id).node().getBoundingClientRect();
-    var parent_svg = document.getElementById(parent_id + "-svg");
+    let parent_id = subnet['vcn_id'];
+    let id = subnet['id'];
+    let boundingClientRect = d3.select("#" + id).node().getBoundingClientRect();
+    let parent_svg = document.getElementById(parent_id + "-svg");
 
     // Define SVG position manipulation variables
-    var svgPoint = parent_svg.createSVGPoint();
-    var screenCTM = parent_svg.getScreenCTM();
+    let svgPoint = parent_svg.createSVGPoint();
+    let screenCTM = parent_svg.getScreenCTM();
     svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
     svgPoint.y = boundingClientRect.y;
 
-    var subnetrelative = svgPoint.matrixTransform(screenCTM.inverse());
-    var sourcesvg = null;
+    let subnetrelative = svgPoint.matrixTransform(screenCTM.inverse());
+    let sourcesvg = null;
 
     svg = d3.select('#' + parent_id + "-svg");
 
@@ -228,7 +228,7 @@ function drawSubnetConnectorsSVG(subnet) {
     }
 
     if (subnet['security_list_ids'].length > 0) {
-        for (var i = 0; i < subnet['security_list_ids'].length; i++) {
+        for (let i = 0; i < subnet['security_list_ids'].length; i++) {
             boundingClientRect = d3.select("#" + subnet['security_list_ids'][i]).node().getBoundingClientRect();
             svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
             svgPoint.y = boundingClientRect.y + boundingClientRect.height;
@@ -250,14 +250,14 @@ function drawSubnetConnectorsSVG(subnet) {
  */
 function loadSubnetProperties(id) {
     $("#properties").load("propertysheets/subnet.html", function () {
-        var name_id_mapping = {"security_lists": "security_list_ids",
+        let name_id_mapping = {"security_lists": "security_list_ids",
                                 "security_list_ids": "security_lists",
                                 "route_table": "route_table_id",
                                 "route_table_id": "route_table"};
         if ('compartment' in OKITJsonObj && 'subnets' in OKITJsonObj['compartment']) {
             console.log('Loading Subnet: ' + id);
-            var json = OKITJsonObj['compartment']['subnets'];
-            for (var i = 0; i < json.length; i++) {
+            let json = OKITJsonObj['compartment']['subnets'];
+            for (let i = 0; i < json.length; i++) {
                 subnet = json[i];
                 //console.log(JSON.stringify(subnet, null, 2));
                 if (subnet['id'] == id) {
@@ -267,10 +267,10 @@ function loadSubnetProperties(id) {
                     $('#display_name').val(subnet['display_name']);
                     $('#cidr_block').val(subnet['cidr_block']);
                     $('#dns_label').val(subnet['dns_label']);
-                    var route_table_select = $('#route_table_id');
+                    let route_table_select = $('#route_table_id');
                     //console.log('Route Table Ids: ' + route_table_ids);
-                    for (var rtcnt = 0; rtcnt < route_table_ids.length; rtcnt++) {
-                        var rtid = route_table_ids[rtcnt];
+                    for (let rtcnt = 0; rtcnt < route_table_ids.length; rtcnt++) {
+                        let rtid = route_table_ids[rtcnt];
                         if (rtid == subnet['route_table_id']) {
                             route_table_select.append($('<option>').attr('value', rtid).attr('selected', 'selected').text(okitIdsJsonObj[rtid]));
                         } else {
@@ -278,10 +278,10 @@ function loadSubnetProperties(id) {
                         }
 
                     }
-                    var security_lists_select = $('#security_list_ids');
+                    let security_lists_select = $('#security_list_ids');
                     //console.log('Security List Ids: ' + security_list_ids);
-                    for (var slcnt = 0; slcnt < security_list_ids.length; slcnt++) {
-                        var slid = security_list_ids[slcnt];
+                    for (let slcnt = 0; slcnt < security_list_ids.length; slcnt++) {
+                        let slid = security_list_ids[slcnt];
                         if (subnet['security_list_ids'].indexOf(slid) >= 0) {
                             security_lists_select.append($('<option>').attr('value', slid).attr('selected', 'selected').text(okitIdsJsonObj[slid]));
                         } else {
@@ -301,9 +301,9 @@ function loadSubnetProperties(id) {
 ** OKIT Json Update Function
  */
 function updateSubnet(sourcetype, sourceid, id) {
-    var subnets = OKITJsonObj['compartment']['subnets'];
+    let subnets = OKITJsonObj['compartment']['subnets'];
     console.log('Updating Subnet ' + id + ' Adding ' + sourcetype + ' ' + sourceid);
-    for (var i = 0; i < subnets.length; i++) {
+    for (let i = 0; i < subnets.length; i++) {
         subnet = subnets[i];
         //console.log('Before : ' + JSON.stringify(subnet, null, 2));
         if (subnet['id'] == id) {

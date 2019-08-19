@@ -9,8 +9,8 @@ asset_drop_targets["Load Balancer"] = ["Subnet"];
 asset_add_functions["Load Balancer"] = "addLoadBalancer";
 asset_update_functions["Load Balancer"] = "updateLoadBalancer";
 
-var load_balancer_ids = [];
-var load_balancer_count = 0;
+let load_balancer_ids = [];
+let load_balancer_count = 0;
 
 /*
 ** Reset variables
@@ -25,7 +25,7 @@ function clearLoadBalancerVariables() {
 ** Add Asset to JSON Model
  */
 function addLoadBalancer(subnetid) {
-    var id = 'okit-lb-' + uuidv4();
+    let id = 'okit-lb-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
 
@@ -39,7 +39,7 @@ function addLoadBalancer(subnetid) {
 
     // Increment Count
     load_balancer_count += 1;
-    var load_balancer = {};
+    let load_balancer = {};
     load_balancer['subnet_ids'] = [subnetid];
     load_balancer['subnets'] = [''];
     load_balancer['id'] = id;
@@ -61,21 +61,21 @@ function addLoadBalancer(subnetid) {
  */
 function drawLoadBalancerSVG(load_balancer) {
     console.log(JSON.stringify(subnet_content));
-    var parent_id = load_balancer['subnet_ids'][0];
+    let parent_id = load_balancer['subnet_ids'][0];
     console.log('VCN Id : ' + parent_id);
-    var id = load_balancer['id'];
-    var position = subnet_content[parent_id]['load_balancer_position'];
-    var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-    var translate_y = icon_translate_y_start;
-    var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    var svg_y = (icon_height / 4);
-    var data_type = "Load Balancer";
+    let id = load_balancer['id'];
+    let position = subnet_content[parent_id]['load_balancer_position'];
+    let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
+    let translate_y = icon_translate_y_start;
+    let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
+    let svg_y = (icon_height / 4);
+    let data_type = "Load Balancer";
 
     // Increment Icon Position
     subnet_content[parent_id]['load_balancer_position'] += 1;
 
-    var parent_svg = d3.select('#' + parent_id + "-svg");
-    var svg = parent_svg.append("svg")
+    let parent_svg = d3.select('#' + parent_id + "-svg");
+    let svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -84,7 +84,7 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("y", svg_y)
         .attr("width", "100")
         .attr("height", "100");
-    var rect = svg.append("rect")
+    let rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -101,7 +101,7 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .text("Load Balancer: "+ load_balancer['display_name']);
-    var g = svg.append("g")
+    let g = svg.append("g")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
@@ -117,7 +117,7 @@ function drawLoadBalancerSVG(load_balancer) {
         .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z");
 
     //loadLoadBalancerProperties(id);
-    var boundingClientRect = rect.node().getBoundingClientRect();
+    let boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
@@ -155,25 +155,25 @@ function drawLoadBalancerSVG(load_balancer) {
 }
 
 function clearLoadBalancerConnectorsSVG(load_balancer) {
-    var id = load_balancer['id'];
+    let id = load_balancer['id'];
     d3.selectAll("line[id*='" + id + "']").remove();
 }
 
 function drawLoadBalancerConnectorsSVG(load_balancer) {
-    var parent_id = load_balancer['subnet_ids'][0];
-    var id = load_balancer['id'];
-    var parent_svg = d3.select('#' + parent_id + "-svg");
+    let parent_id = load_balancer['subnet_ids'][0];
+    let id = load_balancer['id'];
+    let parent_svg = d3.select('#' + parent_id + "-svg");
     // Define SVG position manipulation variables
-    var svgPoint = parent_svg.node().createSVGPoint();
-    var screenCTM = parent_svg.node().getScreenCTM();
+    let svgPoint = parent_svg.node().createSVGPoint();
+    let screenCTM = parent_svg.node().getScreenCTM();
     svgPoint.x = d3.select('#' + id).attr('data-connector-start-x');
     svgPoint.y = d3.select('#' + id).attr('data-connector-start-y');
-    var connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+    let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
 
-    var connector_end = null;
+    let connector_end = null;
 
     if (load_balancer['instance_ids'].length > 0) {
-        for (var i = 0; i < load_balancer['instance_ids'].length; i++) {
+        for (let i = 0; i < load_balancer['instance_ids'].length; i++) {
             svgPoint.x = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-x');
             svgPoint.y = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-y');
             connector_end = svgPoint.matrixTransform(screenCTM.inverse());
@@ -194,14 +194,14 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
  */
 function loadLoadBalancerProperties(id) {
     $("#properties").load("propertysheets/load_balancer.html", function () {
-        var name_id_mapping = {
+        let name_id_mapping = {
             "instances": "instance_ids",
             "instance_ids": "instances"
         };
         if ('compartment' in OKITJsonObj && 'load_balancers' in OKITJsonObj['compartment']) {
             console.log('Loading Load Balancer: ' + id);
-            var json = OKITJsonObj['compartment']['load_balancers'];
-            for (var i = 0; i < json.length; i++) {
+            let json = OKITJsonObj['compartment']['load_balancers'];
+            for (let i = 0; i < json.length; i++) {
                 load_balancer = json[i];
                 //console.log(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
@@ -210,10 +210,10 @@ function loadLoadBalancerProperties(id) {
                     $('#display_name').val(load_balancer['display_name']);
                     $('#shape_name').val(load_balancer['shape_name']);
                     $('#is_private').attr('checked', load_balancer['is_private']);
-                    var instances_select = $('#instance_ids');
+                    let instances_select = $('#instance_ids');
                     console.log('Instance Ids: ' + instance_ids);
-                    for (var slcnt = 0; slcnt < instance_ids.length; slcnt++) {
-                        var slid = instance_ids[slcnt];
+                    for (let slcnt = 0; slcnt < instance_ids.length; slcnt++) {
+                        let slid = instance_ids[slcnt];
                         if (load_balancer['instance_ids'].indexOf(slid) >= 0) {
                             instances_select.append($('<option>').attr('value', slid).attr('selected', 'selected').text(okitIdsJsonObj[slid]));
                         } else {
@@ -234,10 +234,10 @@ function loadLoadBalancerProperties(id) {
  */
 function updateLoadBalancer(source_type, source_id, id) {
     console.log('Update Load Balancer : ' + id + ' Adding ' + source_type + ' ' + source_id);
-    var load_balancers = OKITJsonObj['compartment']['load_balancers'];
+    let load_balancers = OKITJsonObj['compartment']['load_balancers'];
     console.log(JSON.stringify(load_balancers))
-    for (var i = 0; i < load_balancers.length; i++) {
-        var load_balancer = load_balancers[i];
+    for (let i = 0; i < load_balancers.length; i++) {
+        let load_balancer = load_balancers[i];
         console.log(i + ') ' + JSON.stringify(load_balancer))
         if (load_balancer['id'] == id) {
             if (source_type == 'Instance') {

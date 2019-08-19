@@ -8,9 +8,9 @@ asset_drop_targets["Instance"] = ["Subnet"];
 asset_connect_targets["Instance"] = ["Load Balancer"];
 asset_add_functions["Instance"] = "addInstance";
 
-var instance_ids = [];
-var instance_count = 0;
-var instance_prefix = 'in';
+let instance_ids = [];
+let instance_count = 0;
+let instance_prefix = 'in';
 
 /*
 ** Reset variables
@@ -25,7 +25,7 @@ function clearInstanceVariables() {
 ** Add Asset to JSON Model
  */
 function addInstance(subnetid) {
-    var id = 'okit-in-' + uuidv4();
+    let id = 'okit-in-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
 
@@ -39,7 +39,7 @@ function addInstance(subnetid) {
 
     // Increment Count
     instance_count += 1;
-    var instance = {};
+    let instance = {};
     instance['subnet_id'] = subnetid;
     instance['subnet'] = '';
     instance['id'] = id;
@@ -62,20 +62,20 @@ function addInstance(subnetid) {
 ** SVG Creation
  */
 function drawInstanceSVG(instance) {
-    var parent_id = instance['subnet_id'];
-    var id = instance['id'];
-    var position = subnet_content[parent_id]['instance_position'];
-    var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-    var translate_y = icon_translate_y_start;
-    var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    var svg_y = (icon_height / 4) * 9;
-    var data_type = "Instance";
+    let parent_id = instance['subnet_id'];
+    let id = instance['id'];
+    let position = subnet_content[parent_id]['instance_position'];
+    let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
+    let translate_y = icon_translate_y_start;
+    let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
+    let svg_y = (icon_height / 4) * 9;
+    let data_type = "Instance";
 
     // Increment Icon Position
     subnet_content[parent_id]['instance_position'] += 1;
 
-    var parent_svg = d3.select('#' + parent_id + "-svg");
-    var svg = parent_svg.append("svg")
+    let parent_svg = d3.select('#' + parent_id + "-svg");
+    let svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -84,7 +84,7 @@ function drawInstanceSVG(instance) {
         .attr("y", svg_y)
         .attr("width", "100")
         .attr("height", "100");
-    var rect = svg.append("rect")
+    let rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -101,7 +101,7 @@ function drawInstanceSVG(instance) {
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .text("Instance: "+ instance['display_name']);
-    var g = svg.append("g")
+    let g = svg.append("g")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
@@ -119,7 +119,7 @@ function drawInstanceSVG(instance) {
         .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v111.8c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z M132.4,114.5v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V114.5z M132.4,142.6v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V142.6z M105.1,114.5v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V114.5zM105.1,142.6v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V142.6z M182.9,180.2c0,1.9-1.6,3.5-3.5,3.5h-70.7c-1.9,0-3.5-1.6-3.5-3.5v-19.6h77.8V180.2z M182.9,141.8v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7v-10.7v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7V141.8z M182.9,113.8v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7v-10.7v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7V113.8z")
 
     //loadInstanceProperties(id);
-    var boundingClientRect = rect.node().getBoundingClientRect();
+    let boundingClientRect = rect.node().getBoundingClientRect();
     // Add click event to display properties
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
@@ -163,8 +163,8 @@ function loadInstanceProperties(id) {
     $("#properties").load("propertysheets/instance.html", function () {
         if ('compartment' in OKITJsonObj && 'instances' in OKITJsonObj['compartment']) {
             console.log('Loading Instance: ' + id);
-            var json = OKITJsonObj['compartment']['instances'];
-            for (var i = 0; i < json.length; i++) {
+            let json = OKITJsonObj['compartment']['instances'];
+            for (let i = 0; i < json.length; i++) {
                 instance = json[i];
                 //console.log(JSON.stringify(instance, null, 2));
                 if (instance['id'] == id) {

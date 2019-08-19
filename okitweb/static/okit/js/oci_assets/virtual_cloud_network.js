@@ -8,15 +8,15 @@ asset_drop_targets["Virtual Cloud Network"] = ["Compartment"];
 asset_connect_targets["Virtual Cloud Network"] = [];
 asset_add_functions["Virtual Cloud Network"] = "addVirtualCloudNetwork";
 
-var vcn_svg_width = "99%"
-var vcn_svg_height = "70%"
-var vcn_rect_width = "95%"
-var vcn_rect_height = "85%"
-var virtual_network_ids = [];
-var virtual_cloud_network_count = 0;
-var virtual_cloud_network_prefix = 'vcn';
-var virtual_cloud_network_cidr = {};
-var virtual_cloud_network_subcomponents = {};
+let vcn_svg_width = "99%"
+let vcn_svg_height = "70%"
+let vcn_rect_width = "95%"
+let vcn_rect_height = "85%"
+let virtual_network_ids = [];
+let virtual_cloud_network_count = 0;
+let virtual_cloud_network_prefix = 'vcn';
+let virtual_cloud_network_cidr = {};
+let virtual_cloud_network_subcomponents = {};
 
 /*
 ** Reset variables
@@ -33,7 +33,7 @@ function clearVirtualCloudNetworkVariables() {
 ** Add Asset to JSON Model
  */
 function addVirtualCloudNetwork(compartmentid) {
-    var id = 'okit-vcn-' + uuidv4();
+    let id = 'okit-vcn-' + uuidv4();
 
     // Add Virtual Cloud Network to JSON
 
@@ -53,7 +53,7 @@ function addVirtualCloudNetwork(compartmentid) {
     // Generate Cidr
     virtual_cloud_network_cidr[id] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
     // Build Virtual Cloud Network Object
-    var virtual_cloud_network = {};
+    let virtual_cloud_network = {};
     virtual_cloud_network['id'] = id;
     virtual_cloud_network['display_name'] = generateDefaultName(virtual_cloud_network_prefix, virtual_cloud_network_count);
     virtual_cloud_network['cidr_block'] = virtual_cloud_network_cidr[id];
@@ -70,14 +70,14 @@ function addVirtualCloudNetwork(compartmentid) {
 ** SVG Creation
  */
 function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
-    var id = virtual_cloud_network['id'];
-    var parent_id = ''
-    var translate_x = 0;
-    var translate_y = 0;
-    var data_type = 'Virtual Cloud Network';
+    let id = virtual_cloud_network['id'];
+    let parent_id = ''
+    let translate_x = 0;
+    let translate_y = 0;
+    let data_type = 'Virtual Cloud Network';
 
-    var parent_svg = d3.select(okitcanvas);
-    var asset_svg = parent_svg.append("svg")
+    let parent_svg = d3.select(okitcanvas);
+    let asset_svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("title", virtual_cloud_network['display_name'])
@@ -85,7 +85,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("y", 70)
         .attr("width", vcn_svg_width)
         .attr("height", vcn_svg_height);
-    var svg = asset_svg.append("svg")
+    let svg = asset_svg.append("svg")
         .attr("id", id + '-asset-svg')
         .attr("data-type", data_type)
         .attr("title", virtual_cloud_network['display_name'])
@@ -93,7 +93,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("y", 0)
         .attr("width", "100%")
         .attr("height", "100%");
-    var rect = svg.append("rect")
+    let rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("title", virtual_cloud_network['display_name'])
@@ -106,7 +106,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("fill", "white");
     rect.append("title")
         .text("Virtual Cloud Network: " + virtual_cloud_network['display_name']);
-    var g = svg.append("g")
+    let g = svg.append("g")
         .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
     g.append("path")
         .attr("class", "st0")
@@ -154,8 +154,8 @@ function loadVirtualCloudNetworkProperties(id) {
     $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
         if ('compartment' in OKITJsonObj && 'virtual_cloud_networks' in OKITJsonObj['compartment']) {
             console.log('Loading Virtual Cloud Network: ' + id);
-            var json = OKITJsonObj['compartment']['virtual_cloud_networks'];
-            for (var i = 0; i < json.length; i++) {
+            let json = OKITJsonObj['compartment']['virtual_cloud_networks'];
+            for (let i = 0; i < json.length; i++) {
                 virtual_cloud_network = json[i];
                 //console.log(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {

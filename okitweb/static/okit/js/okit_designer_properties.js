@@ -8,7 +8,7 @@ function handlePropertiesDragEnd(e) {
     console.log('Properties Drag End');
 }
 
-var asset_propereties_width = 0;
+let asset_propereties_width = 0;
 function handlePropertiesMouseDown(e) {
     console.log('Properties Mouse Down : ' + e.target.clientWidth);
     asset_propereties_width = e.target.clientWidth;
@@ -23,12 +23,12 @@ function handlePropertiesMouseUp(e) {
 
 function addPropertiesEventListeners(json_element, callbacks) {
     // Default callbacks if not passed
-    var callbacks = (typeof callbacks !== 'undefined') ? callbacks : [];
+    callbacks = (typeof callbacks !== 'undefined') ? callbacks : [];
     // Add Event Listeners
     // Input Fields
     $('.property-editor-table input').each(
         function(index) {
-            var inputfield = $(this);
+            let inputfield = $(this);
             inputfield.on('input', function () {
                 if (this.type == 'text') {
                     json_element[this.id] = this.value;
@@ -48,12 +48,12 @@ function addPropertiesEventListeners(json_element, callbacks) {
     // Select Boxes
     $('.property-editor-table select').each(
         function(index) {
-            var inputfield = $(this);
+            let inputfield = $(this);
             inputfield.on('change', function () {
                 json_element[this.id] = $(this).val()
                 displayOkitJson();
                 // Redraw Connectors
-                var f = '';
+                let f = '';
                 for (f of callbacks) {
                     f(json_element);
                 }
