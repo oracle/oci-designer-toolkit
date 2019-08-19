@@ -34,6 +34,7 @@ function clearVirtualCloudNetworkVariables() {
  */
 function addVirtualCloudNetwork(compartmentid) {
     let id = 'okit-vcn-' + uuidv4();
+    console.log('Adding Virtual Cloud Network : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -72,6 +73,7 @@ function addVirtualCloudNetwork(compartmentid) {
 function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     let id = virtual_cloud_network['id'];
     let parent_id = ''
+    console.log('Drawing Virtual Cloud Network : ' + id);
     let translate_x = 0;
     let translate_y = 0;
     let data_type = 'Virtual Cloud Network';

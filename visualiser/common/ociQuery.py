@@ -20,7 +20,6 @@ __module__ = "ociQuery"
 from common.ociCommon import logJson
 from common.ociCommon import standardiseIds
 from facades.ociCompartment import OCICompartments
-from facades.ociCompartment import OCICompartment
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -78,6 +77,10 @@ def executeQuery(request_json={}, ** kwargs):
     # Query all Instances
     oci_instances = oci_compartment.getInstanceClients()
     response_json['compartment']['instances'] = oci_instances.list(filter=filter)
+    oci_instance_vnics = oci_compartment.getInstanceVnicClients()
+    for instance in response_json['compartment']['instances']:
+        instance['vnics'] = oci_instance_vnics.list(instance_id=instance['id'])
+        instance['subnet_id'] = instance['vnics'][0]['subnet_id']
     # Query all Load Balancers
     oci_load_balancers = oci_compartment.getLoadBalancerClients()
     response_json['compartment']['load_balancers'] = oci_load_balancers.list(filter=filter)

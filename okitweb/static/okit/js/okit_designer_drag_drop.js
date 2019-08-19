@@ -30,6 +30,12 @@ function updateAssetTarget(title, source_type, source_id, target_id) {
     window[asset_update_functions[title]](source_type, source_id, target_id);
 }
 
+function deleteAssetFromSVG(artifact, id) {
+    window[asset_delete_functions[artifact]](id);
+    // Hide Context Menu
+    $("#context-menu").addClass("hidden");
+}
+
 /*
 ** Drag & Drop Handlers
  */
@@ -255,6 +261,8 @@ function getMousePosition(evt) {
 
 function handleContextMenu() {
     let thisid = d3.select(this).attr('id');
+    let okit_id = d3.select(this).attr('data-okit-id');
+    let artifact = d3.select(this).attr('data-type');
     console.log('Right Click on ' + thisid);
     d3.event.preventDefault();
     d3.event.stopPropagation();
@@ -263,5 +271,7 @@ function handleContextMenu() {
     element.classList.toggle("hidden");
     element.style.top =  d3.event.clientY + 'px';
     element.style.left = d3.event.clientX + 'px';
+    $("#context-menu").find("*").off();
+    $("#right-click-delete").on('click', function() {deleteAssetFromSVG(artifact, okit_id);});
 }
 

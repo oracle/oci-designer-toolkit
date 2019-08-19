@@ -37,6 +37,7 @@ function clearSubnetVariables() {
  */
 function addSubnet(vcnid) {
     let id = 'okit-sn-' + uuidv4();
+    console.log('Adding Subnet : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -91,6 +92,7 @@ function initialiseSubnetChildData(id) {
 function drawSubnetSVG(subnet) {
     let parent_id = subnet['vcn_id'];
     let id = subnet['id'];
+    console.log('Drawing Subnet : ' + id);
     let position = subnet_position_x;
     let vcn_offset_x = (icon_width / 2);
     let vcn_offset_y = ((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1);

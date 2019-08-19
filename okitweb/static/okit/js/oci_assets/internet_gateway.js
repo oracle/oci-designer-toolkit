@@ -26,6 +26,7 @@ function clearInternetGatewayVariables() {
  */
 function addInternetGateway(vcnid) {
     let id = 'okit-ig-' + uuidv4();
+    console.log('Adding Internet Gateway : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -58,6 +59,7 @@ function addInternetGateway(vcnid) {
 function drawInternetGatewaySVG(internet_gateway) {
     let parent_id = internet_gateway['vcn_id'];
     let id = internet_gateway['id'];
+    console.log('Drawing Internet Gateway : ' + id);
     let position = vcn_gateway_icon_position;
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     let translate_y = icon_translate_y_start;

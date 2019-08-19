@@ -28,6 +28,7 @@ function clearRouteTableVariables() {
  */
 function addRouteTable(vcnid) {
     let id = 'okit-rt-' + uuidv4();
+    console.log('Adding Route Table : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -60,7 +61,11 @@ function addRouteTable(vcnid) {
  */
 
 function deleteRouteTable(id) {
+    console.log('Delete Route Table ' + id);
+    d3.select("#" + id + "-svg").remove()
+    for (route_table in OKITJsonObj['route_tables']) {
 
+    }
 }
 
 /*
@@ -69,6 +74,7 @@ function deleteRouteTable(id) {
 function drawRouteTableSVG(route_table) {
     let parent_id = route_table['vcn_id'];
     let id = route_table['id'];
+    console.log('Drawing Route Table : ' + id);
     let position = vcn_element_icon_position;
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     let translate_y = icon_translate_y_start;

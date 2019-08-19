@@ -26,6 +26,7 @@ function clearLoadBalancerVariables() {
  */
 function addLoadBalancer(subnetid) {
     let id = 'okit-lb-' + uuidv4();
+    console.log('Adding Load Balancer : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -64,6 +65,7 @@ function drawLoadBalancerSVG(load_balancer) {
     let parent_id = load_balancer['subnet_ids'][0];
     console.log('VCN Id : ' + parent_id);
     let id = load_balancer['id'];
+    console.log('Drawing Load Balancer : ' + id);
     let position = subnet_content[parent_id]['load_balancer_position'];
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     let translate_y = icon_translate_y_start;
