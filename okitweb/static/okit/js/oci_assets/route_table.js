@@ -7,6 +7,7 @@ console.log('Loaded Route Table Javascript');
 asset_drop_targets["Route Table"] = ["Virtual Cloud Network"];
 asset_connect_targets["Route Table"] = ["Subnet"];
 asset_add_functions["Route Table"] = "addRouteTable";
+asset_delete_functions["Route Table"] = "deleteRouteTable";
 
 var route_table_ids = [];
 var route_table_count = 0;
@@ -52,6 +53,14 @@ function addRouteTable(vcnid) {
     displayOkitJson();
     drawRouteTableSVG(route_table);
     loadRouteTableProperties(id);
+}
+
+/*
+** Delete From JSON Model
+ */
+
+function deleteRouteTable(id) {
+
 }
 
 /*
@@ -157,6 +166,7 @@ function drawRouteTableSVG(route_table) {
         .on("drop", handleConnectorDrop)
         .on("dragenter", handleConnectorDragEnter)
         .on("dragleave", handleConnectorDragLeave)
+        .on("contextmenu", handleContextMenu)
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)

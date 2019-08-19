@@ -137,6 +137,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .on("mouseup", handleConnectorDrop)
         .on("dragenter", handleConnectorDragEnter)
         .on("dragleave", handleConnectorDragLeave)
+        .on("contextmenu", handleContextMenu)
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)

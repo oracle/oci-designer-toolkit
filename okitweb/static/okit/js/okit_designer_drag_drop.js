@@ -17,6 +17,7 @@ var connectorContainerScreenCTM = null;
 
 var asset_add_functions = {};
 var asset_update_functions = {};
+var asset_delete_functions = {};
 
 function addAssetToDropTarget(title, target_id) {
     //console.log('addAssetToDropTarget - Title : ' + title);
@@ -125,50 +126,58 @@ function handleConnectorDrag(e) {
     }
 }
 
+const left_click = 1;
+const middle_click = 2;
+const right_click = 3;
+
 function handleConnectorDragStart() {
     console.log('Connector Drag Start');
-    var thisid = d3.select(this).attr('id');
-    console.log('This Id : ' + thisid);
-    var source_type = d3.select(this).attr('data-type');
-    if (asset_connect_targets.hasOwnProperty(source_type) && asset_connect_targets[source_type].length > 0) {
-        // Set Start Element to know we are dragging
-        connectorStartElement = this;
-        var parentid = d3.select(this).attr('data-parentid');
-        var parent_svg = document.getElementById(parentid + "-svg");
+    if (d3.event.which == left_click) {
+        var thisid = d3.select(this).attr('id');
+        console.log('This Id : ' + thisid);
+        var source_type = d3.select(this).attr('data-type');
+        if (asset_connect_targets.hasOwnProperty(source_type) && asset_connect_targets[source_type].length > 0) {
+            // Set Start Element to know we are dragging
+            connectorStartElement = this;
+            var parentid = d3.select(this).attr('data-parentid');
+            var parent_svg = document.getElementById(parentid + "-svg");
 
-        console.log('Connector Drag Start Parent Id : ' + parentid);
-        console.log('Connector Drag Start Id : ' + d3.select(this).attr('id'));
-        console.log('Connector Drag Start data-connector-start-y : ' + d3.select(this).attr('data-connector-start-y'));
-        console.log('Connector Drag Start data-connector-start-x : ' + d3.select(this).attr('data-connector-start-x'));
+            console.log('Connector Drag Start Parent Id : ' + parentid);
+            console.log('Connector Drag Start Id : ' + d3.select(this).attr('id'));
+            console.log('Connector Drag Start data-connector-start-y : ' + d3.select(this).attr('data-connector-start-y'));
+            console.log('Connector Drag Start data-connector-start-x : ' + d3.select(this).attr('data-connector-start-x'));
 
-        // Define SVG position manipulation variables
-        connectorContainerSVGPoint = parent_svg.createSVGPoint();
-        connectorContainerScreenCTM = parent_svg.getScreenCTM();
-        connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-start-x');
-        connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-start-y');
+            // Define SVG position manipulation variables
+            connectorContainerSVGPoint = parent_svg.createSVGPoint();
+            connectorContainerScreenCTM = parent_svg.getScreenCTM();
+            connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-start-x');
+            connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-start-y');
 
-        // Convert to SVG Relative positioning
-        var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-        connectorStartXLeft = svgrelative.x;
-        connectorStartYTop = svgrelative.y;
+            // Convert to SVG Relative positioning
+            var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
+            connectorStartXLeft = svgrelative.x;
+            connectorStartYTop = svgrelative.y;
 
-        // Start Drawing line
-        svg = d3.select('#' + parentid + "-svg");
-        svg.append('line')
-            .attr("id", "Connector")
-            .attr("x1", connectorStartXLeft)
-            .attr("y1", connectorStartYTop)
-            .attr("x2", connectorStartXLeft)
-            .attr("y2", connectorStartYTop)
-            .attr("stroke-width", "2")
-            .attr("stroke-dasharray", "3, 3")
-            .attr("stroke", "darkgray");
-    } else {
-        console.log('Not a drag source : ' + source_type);
-        connectorStartElement = null;
-        connectorStartXLeft = 0;
-        connectorStartYTop = 0;
-        d3.selectAll("#Connector").remove();
+            // Start Drawing line
+            svg = d3.select('#' + parentid + "-svg");
+            svg.append('line')
+                .attr("id", "Connector")
+                .attr("x1", connectorStartXLeft)
+                .attr("y1", connectorStartYTop)
+                .attr("x2", connectorStartXLeft)
+                .attr("y2", connectorStartYTop)
+                .attr("stroke-width", "2")
+                .attr("stroke-dasharray", "3, 3")
+                .attr("stroke", "darkgray");
+        } else {
+            console.log('Not a drag source : ' + source_type);
+            connectorStartElement = null;
+            connectorStartXLeft = 0;
+            connectorStartYTop = 0;
+            d3.selectAll("#Connector").remove();
+        }
+        // Hide Context Menu
+        $("#context-menu").addClass("hidden");
     }
 }
 
@@ -242,5 +251,17 @@ function getMousePosition(evt) {
         x: (evt.clientX - connectorContainerScreenCTM.e) / connectorContainerScreenCTM.a,
         y: (evt.clientY - connectorContainerScreenCTM.f) / connectorContainerScreenCTM.d
     };
+}
+
+function handleContextMenu() {
+    let thisid = d3.select(this).attr('id');
+    console.log('Right Click on ' + thisid);
+    d3.event.preventDefault();
+    d3.event.stopPropagation();
+    //alert('Right Click');
+    let element = document.getElementById("context-menu");
+    element.classList.toggle("hidden");
+    element.style.top =  d3.event.clientY + 'px';
+    element.style.left = d3.event.clientX + 'px';
 }
 

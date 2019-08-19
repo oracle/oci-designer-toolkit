@@ -168,6 +168,7 @@ function drawSubnetSVG(subnet) {
         .on("drop", handleConnectorDrop)
         .on("dragenter", handleConnectorDragEnter)
         .on("dragleave", handleConnectorDragLeave)
+        .on("contextmenu", handleContextMenu)
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
