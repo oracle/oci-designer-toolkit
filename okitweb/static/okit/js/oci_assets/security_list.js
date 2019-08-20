@@ -7,6 +7,7 @@ console.log('Loaded Subnet Javascript');
 asset_drop_targets["Security List"] = ["Virtual Cloud Network"];
 asset_connect_targets["Security List"] = ["Subnet"];
 asset_add_functions["Security List"] = "addSecurityList";
+asset_delete_functions["Security List"] = "deleteSecurityList";
 
 let security_list_ids = [];
 let security_list_count = 0;
@@ -54,6 +55,32 @@ function addSecurityList(vcnid) {
     displayOkitJson();
     drawSecurityListSVG(security_list);
     loadSecurityListProperties(id);
+}
+
+/*
+** Delete From JSON Model
+ */
+
+function deleteSecurityList(id) {
+    console.log('Delete Security List ' + id);
+    // Remove SVG Element
+    d3.select("#" + id + "-svg").remove()
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['compartment']['security_lists'].length; i++) {
+        if (OKITJsonObj['compartment']['security_lists'][i]['id'] == id) {
+            OKITJsonObj['compartment']['security_lists'].splice(i, 1);
+        }
+    }
+    // Remove Subnet references
+    if ('subnets' in OKITJsonObj['compartment']) {
+        for (subnet of OKITJsonObj['compartment']['subnets']) {
+            for (let i=0; i < subnet['security_list_ids'].length; i++) {
+                if (subnet['security_list_ids'][i] == id) {
+                    subnet['security_list_ids'].splice(i, 1);
+                }
+            }
+        }
+    }
 }
 
 /*

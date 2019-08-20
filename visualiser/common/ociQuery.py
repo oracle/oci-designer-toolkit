@@ -92,4 +92,6 @@ def executeQuery(request_json={}, ** kwargs):
     return response_json
 
 
+def queryCompartment():
+    return
 

@@ -7,6 +7,7 @@ console.log('Loaded Internet Gateway Javascript');
 asset_drop_targets["Internet Gateway"] = ["Virtual Cloud Network"];
 asset_connect_targets["Internet Gateway"] = [];
 asset_add_functions["Internet Gateway"] = "addInternetGateway";
+asset_delete_functions["Internet Gateway"] = "deleteInternetGateway";
 
 let internet_gateway_ids = [];
 let internet_gateway_count = 0;
@@ -51,6 +52,32 @@ function addInternetGateway(vcnid) {
     displayOkitJson();
     drawInternetGatewaySVG(internet_gateway);
     loadInternetGatewayProperties(id);
+}
+
+/*
+** Delete From JSON Model
+ */
+
+function deleteInternetGateway(id) {
+    console.log('Delete Internet Gateway ' + id);
+    // Remove SVG Element
+    d3.select("#" + id + "-svg").remove()
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['compartment']['internet_gateways'].length; i++) {
+        if (OKITJsonObj['compartment']['internet_gateways'][i]['id'] == id) {
+            OKITJsonObj['compartment']['internet_gateways'].splice(i, 1);
+        }
+    }
+    // Remove Subnet references
+    if ('route_tables' in OKITJsonObj['compartment']) {
+        for (route_table of OKITJsonObj['compartment']['route_tables']) {
+            for (let i = 0; i < route_table['route_rules'].length; i++) {
+                if (route_table['route_rules'][i]['network_entity_id'] == id) {
+                    route_table['route_rules'].splice(i, 1);
+                }
+            }
+        }
+    }
 }
 
 /*

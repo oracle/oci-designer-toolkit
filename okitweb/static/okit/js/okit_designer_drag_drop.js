@@ -34,6 +34,8 @@ function deleteAssetFromSVG(artifact, id) {
     window[asset_delete_functions[artifact]](id);
     // Hide Context Menu
     $("#context-menu").addClass("hidden");
+    // Redraw
+    redrawSVGCanvas();
 }
 
 /*

@@ -7,6 +7,7 @@ console.log('Loaded Virtual Cloud Network Javascript');
 asset_drop_targets["Virtual Cloud Network"] = ["Compartment"];
 asset_connect_targets["Virtual Cloud Network"] = [];
 asset_add_functions["Virtual Cloud Network"] = "addVirtualCloudNetwork";
+asset_delete_functions["Virtual Cloud Network"] = "deleteVirtualCloudNetwork";
 
 let vcn_svg_width = "99%"
 let vcn_svg_height = "70%"
@@ -65,6 +66,55 @@ function addVirtualCloudNetwork(compartmentid) {
     displayOkitJson();
     drawVirtualCloudNetworkSVG(virtual_cloud_network);
     loadVirtualCloudNetworkProperties(id);
+}
+
+/*
+** Delete From JSON Model
+ */
+
+function deleteVirtualCloudNetwork(id) {
+    console.log('Delete Virtual Cloud Network ' + id);
+    // Remove SVG Element
+    d3.select("#" + id + "-svg").remove()
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['compartment']['virtual_cloud_networks'].length; i++) {
+        if (OKITJsonObj['compartment']['virtual_cloud_networks'][i]['id'] == id) {
+            OKITJsonObj['compartment']['virtual_cloud_networks'].splice(i, 1);
+        }
+    }
+    // Remove Sub Components
+    if ('internet_gateways' in OKITJsonObj['compartment']) {
+        for (let i = OKITJsonObj['compartment']['internet_gateways'].length - 1; i >= 0; i--) {
+            let internet_gateway = OKITJsonObj['compartment']['internet_gateways'][i];
+            if (internet_gateway['vcn_id'] == id) {
+                deleteInternetGateway(internet_gateway['id']);
+            }
+        }
+    }
+    if ('subnets' in OKITJsonObj['compartment']) {
+        for (let i = OKITJsonObj['compartment']['subnets'].length - 1; i >= 0; i--) {
+            let subnet = OKITJsonObj['compartment']['subnets'][i];
+            if (subnet['vcn_id'] == id) {
+                deleteSubnet(subnet['id']);
+            }
+        }
+    }
+    if ('route_tables' in OKITJsonObj['compartment']) {
+        for (let i = OKITJsonObj['compartment']['route_tables'].length - 1; i >= 0; i--) {
+            let route_table = OKITJsonObj['compartment']['route_tables'][i];
+            if (route_table['vcn_id'] == id) {
+                deleteRouteTable(route_table['id']);
+            }
+        }
+    }
+    if ('security_lists' in OKITJsonObj['compartment']) {
+        for (let i = OKITJsonObj['compartment']['security_lists'].length - 1; i >= 0; i--) {
+            let security_list = OKITJsonObj['compartment']['security_lists'][i];
+            if (security_list['vcn_id'] == id) {
+                deleteSecurityList(security_list['id']);
+            }
+        }
+    }
 }
 
 /*

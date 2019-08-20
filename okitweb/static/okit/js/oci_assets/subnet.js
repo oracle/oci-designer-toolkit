@@ -8,6 +8,7 @@ asset_drop_targets["Subnet"] = ["Virtual Cloud Network"];
 asset_connect_targets["Subnet"] = [];
 asset_add_functions["Subnet"] = "addSubnet";
 asset_update_functions["Subnet"] = "updateSubnet";
+asset_delete_functions["Subnet"] = "deleteSubnet";
 
 let subnet_svg_height = 200;
 let subnet_svg_width = "95%";
@@ -84,6 +85,39 @@ function initialiseSubnetChildData(id) {
     subnet_content[id]['load_balancer_position'] = 0;
     subnet_content[id]['instance_count'] = 0;
     subnet_content[id]['instance_position'] = 0;
+}
+
+/*
+** Delete From JSON Model
+ */
+
+function deleteSubnet(id) {
+    console.log('Delete Subnet ' + id);
+    // Remove SVG Element
+    d3.select("#" + id + "-svg").remove()
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['compartment']['subnets'].length; i++) {
+        if (OKITJsonObj['compartment']['subnets'][i]['id'] == id) {
+            OKITJsonObj['compartment']['subnets'].splice(i, 1);
+        }
+    }
+    // Remove Sub Components
+    if ('instances' in OKITJsonObj['compartment']) {
+        for (let i = OKITJsonObj['compartment']['instances'].length - 1; i >= 0; i--) {
+            let instance = OKITJsonObj['compartment']['instances'][i];
+            if (instance['subnet_id'] == id) {
+                deleteInstance(instance['id']);
+            }
+        }
+    }
+    if ('load_balancers' in OKITJsonObj['compartment']) {
+        for (let i = OKITJsonObj['compartment']['load_balancers'].length - 1; i >= 0; i--) {
+            let load_balancer = OKITJsonObj['compartment']['load_balancers'][i];
+            if (load_balancer['subnet_ids'].length > 0 && load_balancer['subnet_ids'][0] == id) {
+                deleteLoadBalancer(load_balancer['id']);
+            }
+        }
+    }
 }
 
 /*

@@ -62,9 +62,21 @@ function addRouteTable(vcnid) {
 
 function deleteRouteTable(id) {
     console.log('Delete Route Table ' + id);
+    // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
-    for (route_table in OKITJsonObj['route_tables']) {
-
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['compartment']['route_tables'].length; i++) {
+        if (OKITJsonObj['compartment']['route_tables'][i]['id'] == id) {
+            OKITJsonObj['compartment']['route_tables'].splice(i, 1);
+        }
+    }
+    // Remove Subnet references
+    if ('subnets' in OKITJsonObj['compartment']) {
+        for (subnet of OKITJsonObj['compartment']['subnets']) {
+            if (subnet['route_table_id'] == id) {
+                subnet['route_table_id'] = '';
+            }
+        }
     }
 }
 

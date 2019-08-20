@@ -7,6 +7,7 @@ console.log('Loaded Instance Javascript');
 asset_drop_targets["Instance"] = ["Subnet"];
 asset_connect_targets["Instance"] = ["Load Balancer"];
 asset_add_functions["Instance"] = "addInstance";
+asset_delete_functions["Instance"] = "deleteInstance";
 
 let instance_ids = [];
 let instance_count = 0;
@@ -57,6 +58,32 @@ function addInstance(subnetid) {
     displayOkitJson();
     drawInstanceSVG(instance);
     loadInstanceProperties(id);
+}
+
+/*
+** Delete From JSON Model
+ */
+
+function deleteInstance(id) {
+    console.log('Delete Instance ' + id);
+    // Remove SVG Element
+    d3.select("#" + id + "-svg").remove()
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['compartment']['instances'].length; i++) {
+        if (OKITJsonObj['compartment']['instances'][i]['id'] == id) {
+            OKITJsonObj['compartment']['instances'].splice(i, 1);
+        }
+    }
+    // Remove Load Balancer references
+    if ('load_balancers' in OKITJsonObj['compartment']) {
+        for (load_balancer of OKITJsonObj['compartment']['load_balancers']) {
+            for (let i=0; i < load_balancer['instance_ids'].length; i++) {
+                if (load_balancer['instance_ids'][i] == id) {
+                    load_balancer['instance_ids'].splice(i, 1);
+                }
+            }
+        }
+    }
 }
 
 /*

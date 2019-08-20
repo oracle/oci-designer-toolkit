@@ -8,6 +8,7 @@ asset_drop_targets["Load Balancer"] = ["Subnet"];
 //asset_connect_targets["Load Balancer"] = ["Instance"];
 asset_add_functions["Load Balancer"] = "addLoadBalancer";
 asset_update_functions["Load Balancer"] = "updateLoadBalancer";
+asset_delete_functions["Load Balancer"] = "deleteLoadBalancer";
 
 let load_balancer_ids = [];
 let load_balancer_count = 0;
@@ -55,6 +56,22 @@ function addLoadBalancer(subnetid) {
     displayOkitJson();
     drawLoadBalancerSVG(load_balancer);
     loadLoadBalancerProperties(id);
+}
+
+/*
+** Delete From JSON Model
+ */
+
+function deleteLoadBalancer(id) {
+    console.log('Delete Load Balancer ' + id);
+    // Remove SVG Element
+    d3.select("#" + id + "-svg").remove()
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['compartment']['load_balancers'].length; i++) {
+        if (OKITJsonObj['compartment']['load_balancers'][i]['id'] == id) {
+            OKITJsonObj['compartment']['load_balancers'].splice(i, 1);
+        }
+    }
 }
 
 /*

@@ -35,6 +35,7 @@ from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
 from facades.ociCompartment import OCICompartments
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from facades.ociInternetGateway import OCIInternetGateways
 
 from common.ociLogging import getLogger
 
@@ -213,6 +214,18 @@ def ociQuery(cloud):
             ociCompartments = OCICompartments()
             compartments = ociCompartments.listTenancy()
             return render_template('okit/oci_query.html', compartments=compartments)
+    else:
+        return '404'
+
+
+@bp.route('/oci/artifacts/<string:artifact>', methods=(['GET']))
+def ociArtifacts(artifact):
+    if artifact == 'VirtualCloudNetwork':
+        ociVirtualCloudNetwork = OCIVirtualCloudNetworks()
+        return ociVirtualCloudNetwork.list()
+    elif artifact == 'InternetGateway':
+        ociInternetGateways = OCIInternetGateways()
+        return ociInternetGateways.list()
     else:
         return '404'
 
