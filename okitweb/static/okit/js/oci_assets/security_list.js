@@ -31,8 +31,8 @@ function addSecurityList(vcnid) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('security_lists' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['security_lists'] = [];
+    if (!('security_lists' in OKITJsonObj)) {
+        OKITJsonObj['security_lists'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -48,7 +48,7 @@ function addSecurityList(vcnid) {
     security_list['display_name'] = generateDefaultName(security_list_prefix, security_list_count);
     security_list['egress_security_rules'] = []
     security_list['ingress_security_rules'] = []
-    OKITJsonObj['compartment']['security_lists'].push(security_list);
+    OKITJsonObj['security_lists'].push(security_list);
     okitIdsJsonObj[id] = security_list['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     //console.log(security_list_ids);
@@ -66,14 +66,14 @@ function deleteSecurityList(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['compartment']['security_lists'].length; i++) {
-        if (OKITJsonObj['compartment']['security_lists'][i]['id'] == id) {
-            OKITJsonObj['compartment']['security_lists'].splice(i, 1);
+    for (let i=0; i < OKITJsonObj['security_lists'].length; i++) {
+        if (OKITJsonObj['security_lists'][i]['id'] == id) {
+            OKITJsonObj['security_lists'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('subnets' in OKITJsonObj['compartment']) {
-        for (subnet of OKITJsonObj['compartment']['subnets']) {
+    if ('subnets' in OKITJsonObj) {
+        for (subnet of OKITJsonObj['subnets']) {
             for (let i=0; i < subnet['security_list_ids'].length; i++) {
                 if (subnet['security_list_ids'][i] == id) {
                     subnet['security_list_ids'].splice(i, 1);
@@ -180,9 +180,9 @@ function drawSecurityListSVG(security_list) {
  */
 function loadSecurityListProperties(id) {
     $("#properties").load("propertysheets/security_list.html", function () {
-        if ('compartment' in OKITJsonObj && 'security_lists' in OKITJsonObj['compartment']) {
+        if ('compartment' in OKITJsonObj && 'security_lists' in OKITJsonObj) {
             console.log('Loading Security List: ' + id);
-            let json = OKITJsonObj['compartment']['security_lists'];
+            let json = OKITJsonObj['security_lists'];
             for (let i = 0; i < json.length; i++) {
                 security_list = json[i];
                 //console.log(JSON.stringify(security_list, null, 2));

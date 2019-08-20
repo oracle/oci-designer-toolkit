@@ -42,8 +42,8 @@ function addSubnet(vcnid) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('subnets' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['subnets'] = [];
+    if (!('subnets' in OKITJsonObj)) {
+        OKITJsonObj['subnets'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -67,7 +67,7 @@ function addSubnet(vcnid) {
     subnet['route_table_id'] = '';
     subnet['security_lists'] = [];
     subnet['security_list_ids'] = [];
-    OKITJsonObj['compartment']['subnets'].push(subnet);
+    OKITJsonObj['subnets'].push(subnet);
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     okitIdsJsonObj[id] = subnet['display_name'];
 
@@ -96,23 +96,23 @@ function deleteSubnet(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['compartment']['subnets'].length; i++) {
-        if (OKITJsonObj['compartment']['subnets'][i]['id'] == id) {
-            OKITJsonObj['compartment']['subnets'].splice(i, 1);
+    for (let i=0; i < OKITJsonObj['subnets'].length; i++) {
+        if (OKITJsonObj['subnets'][i]['id'] == id) {
+            OKITJsonObj['subnets'].splice(i, 1);
         }
     }
     // Remove Sub Components
-    if ('instances' in OKITJsonObj['compartment']) {
-        for (let i = OKITJsonObj['compartment']['instances'].length - 1; i >= 0; i--) {
-            let instance = OKITJsonObj['compartment']['instances'][i];
+    if ('instances' in OKITJsonObj) {
+        for (let i = OKITJsonObj['instances'].length - 1; i >= 0; i--) {
+            let instance = OKITJsonObj['instances'][i];
             if (instance['subnet_id'] == id) {
                 deleteInstance(instance['id']);
             }
         }
     }
-    if ('load_balancers' in OKITJsonObj['compartment']) {
-        for (let i = OKITJsonObj['compartment']['load_balancers'].length - 1; i >= 0; i--) {
-            let load_balancer = OKITJsonObj['compartment']['load_balancers'][i];
+    if ('load_balancers' in OKITJsonObj) {
+        for (let i = OKITJsonObj['load_balancers'].length - 1; i >= 0; i--) {
+            let load_balancer = OKITJsonObj['load_balancers'][i];
             if (load_balancer['subnet_ids'].length > 0 && load_balancer['subnet_ids'][0] == id) {
                 deleteLoadBalancer(load_balancer['id']);
             }
@@ -290,9 +290,9 @@ function loadSubnetProperties(id) {
                                 "security_list_ids": "security_lists",
                                 "route_table": "route_table_id",
                                 "route_table_id": "route_table"};
-        if ('compartment' in OKITJsonObj && 'subnets' in OKITJsonObj['compartment']) {
+        if ('compartment' in OKITJsonObj && 'subnets' in OKITJsonObj) {
             console.log('Loading Subnet: ' + id);
-            let json = OKITJsonObj['compartment']['subnets'];
+            let json = OKITJsonObj['subnets'];
             for (let i = 0; i < json.length; i++) {
                 subnet = json[i];
                 //console.log(JSON.stringify(subnet, null, 2));
@@ -337,7 +337,7 @@ function loadSubnetProperties(id) {
 ** OKIT Json Update Function
  */
 function updateSubnet(sourcetype, sourceid, id) {
-    let subnets = OKITJsonObj['compartment']['subnets'];
+    let subnets = OKITJsonObj['subnets'];
     console.log('Updating Subnet ' + id + ' Adding ' + sourcetype + ' ' + sourceid);
     for (let i = 0; i < subnets.length; i++) {
         subnet = subnets[i];

@@ -31,8 +31,8 @@ function addInstance(subnetid) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('instances' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['instances'] = [];
+    if (!('instances' in OKITJsonObj)) {
+        OKITJsonObj['instances'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -52,7 +52,7 @@ function addInstance(subnetid) {
     instance['shape'] = 'VM.Standard2.1';
     instance['boot_volume_size_in_gbs'] = '50';
     instance['authorized_keys'] = '';
-    OKITJsonObj['compartment']['instances'].push(instance);
+    OKITJsonObj['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
@@ -69,14 +69,14 @@ function deleteInstance(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['compartment']['instances'].length; i++) {
-        if (OKITJsonObj['compartment']['instances'][i]['id'] == id) {
-            OKITJsonObj['compartment']['instances'].splice(i, 1);
+    for (let i=0; i < OKITJsonObj['instances'].length; i++) {
+        if (OKITJsonObj['instances'][i]['id'] == id) {
+            OKITJsonObj['instances'].splice(i, 1);
         }
     }
     // Remove Load Balancer references
-    if ('load_balancers' in OKITJsonObj['compartment']) {
-        for (load_balancer of OKITJsonObj['compartment']['load_balancers']) {
+    if ('load_balancers' in OKITJsonObj) {
+        for (load_balancer of OKITJsonObj['load_balancers']) {
             for (let i=0; i < load_balancer['instance_ids'].length; i++) {
                 if (load_balancer['instance_ids'][i] == id) {
                     load_balancer['instance_ids'].splice(i, 1);
@@ -195,9 +195,9 @@ function drawInstanceSVG(instance) {
  */
 function loadInstanceProperties(id) {
     $("#properties").load("propertysheets/instance.html", function () {
-        if ('compartment' in OKITJsonObj && 'instances' in OKITJsonObj['compartment']) {
+        if ('compartment' in OKITJsonObj && 'instances' in OKITJsonObj) {
             console.log('Loading Instance: ' + id);
-            let json = OKITJsonObj['compartment']['instances'];
+            let json = OKITJsonObj['instances'];
             for (let i = 0; i < json.length; i++) {
                 instance = json[i];
                 //console.log(JSON.stringify(instance, null, 2));

@@ -31,8 +31,8 @@ function addInternetGateway(vcnid) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('internet_gateways' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['internet_gateways'] = [];
+    if (!('internet_gateways' in OKITJsonObj)) {
+        OKITJsonObj['internet_gateways'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -46,7 +46,7 @@ function addInternetGateway(vcnid) {
     internet_gateway['virtual_cloud_network'] = '';
     internet_gateway['id'] = id;
     internet_gateway['display_name'] = generateDefaultName(internet_gateway_prefix, internet_gateway_count);
-    OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
+    OKITJsonObj['internet_gateways'].push(internet_gateway);
     okitIdsJsonObj[id] = internet_gateway['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
@@ -63,14 +63,14 @@ function deleteInternetGateway(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['compartment']['internet_gateways'].length; i++) {
-        if (OKITJsonObj['compartment']['internet_gateways'][i]['id'] == id) {
-            OKITJsonObj['compartment']['internet_gateways'].splice(i, 1);
+    for (let i=0; i < OKITJsonObj['internet_gateways'].length; i++) {
+        if (OKITJsonObj['internet_gateways'][i]['id'] == id) {
+            OKITJsonObj['internet_gateways'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('route_tables' in OKITJsonObj['compartment']) {
-        for (route_table of OKITJsonObj['compartment']['route_tables']) {
+    if ('route_tables' in OKITJsonObj) {
+        for (route_table of OKITJsonObj['route_tables']) {
             for (let i = 0; i < route_table['route_rules'].length; i++) {
                 if (route_table['route_rules'][i]['network_entity_id'] == id) {
                     route_table['route_rules'].splice(i, 1);
@@ -171,9 +171,9 @@ function drawInternetGatewaySVG(internet_gateway) {
  */
 function loadInternetGatewayProperties(id) {
     $("#properties").load("propertysheets/internet_gateway.html", function () {
-        if ('compartment' in OKITJsonObj && 'internet_gateways' in OKITJsonObj['compartment']) {
+        if ('compartment' in OKITJsonObj && 'internet_gateways' in OKITJsonObj) {
             console.log('Loading Internet Gateway: ' + id);
-            let json = OKITJsonObj['compartment']['internet_gateways'];
+            let json = OKITJsonObj['internet_gateways'];
             for (let i = 0; i < json.length; i++) {
                 internet_gateway = json[i];
                 //console.log(JSON.stringify(internet_gateway, null, 2));

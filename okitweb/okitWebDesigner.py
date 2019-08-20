@@ -157,7 +157,7 @@ def designer():
         response_json = executeQuery(request_json)
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_query_json=response_string)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
         return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons)
 

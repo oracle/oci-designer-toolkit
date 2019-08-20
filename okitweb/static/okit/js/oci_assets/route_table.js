@@ -32,8 +32,8 @@ function addRouteTable(vcnid) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('route_tables' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['route_tables'] = [];
+    if (!('route_tables' in OKITJsonObj)) {
+        OKITJsonObj['route_tables'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -48,7 +48,7 @@ function addRouteTable(vcnid) {
     route_table['id'] = id;
     route_table['display_name'] = generateDefaultName(route_table_prefix, route_table_count);
     route_table['route_rules'] = []
-    OKITJsonObj['compartment']['route_tables'].push(route_table);
+    OKITJsonObj['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
@@ -65,14 +65,14 @@ function deleteRouteTable(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['compartment']['route_tables'].length; i++) {
-        if (OKITJsonObj['compartment']['route_tables'][i]['id'] == id) {
-            OKITJsonObj['compartment']['route_tables'].splice(i, 1);
+    for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
+        if (OKITJsonObj['route_tables'][i]['id'] == id) {
+            OKITJsonObj['route_tables'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('subnets' in OKITJsonObj['compartment']) {
-        for (subnet of OKITJsonObj['compartment']['subnets']) {
+    if ('subnets' in OKITJsonObj) {
+        for (subnet of OKITJsonObj['subnets']) {
             if (subnet['route_table_id'] == id) {
                 subnet['route_table_id'] = '';
             }
@@ -211,9 +211,9 @@ function drawRouteTableSVG(route_table) {
  */
 function loadRouteTableProperties(id) {
     $("#properties").load("propertysheets/route_table.html", function () {
-        if ('compartment' in OKITJsonObj && 'route_tables' in OKITJsonObj['compartment']) {
+        if ('compartment' in OKITJsonObj && 'route_tables' in OKITJsonObj) {
             console.log('Loading Route Table: ' + id);
-            let json = OKITJsonObj['compartment']['route_tables'];
+            let json = OKITJsonObj['route_tables'];
             for (let i = 0; i < json.length; i++) {
                 route_table = json[i];
                 //console.log(JSON.stringify(route_table, null, 2));
