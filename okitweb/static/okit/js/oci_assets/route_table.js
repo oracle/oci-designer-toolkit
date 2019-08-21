@@ -211,7 +211,7 @@ function drawRouteTableSVG(route_table) {
  */
 function loadRouteTableProperties(id) {
     $("#properties").load("propertysheets/route_table.html", function () {
-        if ('compartment' in OKITJsonObj && 'route_tables' in OKITJsonObj) {
+        if ('route_tables' in OKITJsonObj) {
             console.log('Loading Route Table: ' + id);
             let json = OKITJsonObj['route_tables'];
             for (let i = 0; i < json.length; i++) {

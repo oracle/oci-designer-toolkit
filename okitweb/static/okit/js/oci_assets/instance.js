@@ -195,7 +195,7 @@ function drawInstanceSVG(instance) {
  */
 function loadInstanceProperties(id) {
     $("#properties").load("propertysheets/instance.html", function () {
-        if ('compartment' in OKITJsonObj && 'instances' in OKITJsonObj) {
+        if ('instances' in OKITJsonObj) {
             console.log('Loading Instance: ' + id);
             let json = OKITJsonObj['instances'];
             for (let i = 0; i < json.length; i++) {

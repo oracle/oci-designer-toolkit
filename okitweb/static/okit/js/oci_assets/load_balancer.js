@@ -217,7 +217,7 @@ function loadLoadBalancerProperties(id) {
             "instances": "instance_ids",
             "instance_ids": "instances"
         };
-        if ('compartment' in OKITJsonObj && 'load_balancers' in OKITJsonObj) {
+        if ('load_balancers' in OKITJsonObj) {
             console.log('Loading Load Balancer: ' + id);
             let json = OKITJsonObj['load_balancers'];
             for (let i = 0; i < json.length; i++) {

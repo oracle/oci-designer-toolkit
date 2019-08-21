@@ -292,7 +292,7 @@ function loadSubnetProperties(id) {
                                 "security_list_ids": "security_lists",
                                 "route_table": "route_table_id",
                                 "route_table_id": "route_table"};
-        if ('compartment' in OKITJsonObj && 'subnets' in OKITJsonObj) {
+        if ('subnets' in OKITJsonObj) {
             console.log('Loading Subnet: ' + id);
             let json = OKITJsonObj['subnets'];
             for (let i = 0; i < json.length; i++) {

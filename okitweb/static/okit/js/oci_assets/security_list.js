@@ -180,7 +180,7 @@ function drawSecurityListSVG(security_list) {
  */
 function loadSecurityListProperties(id) {
     $("#properties").load("propertysheets/security_list.html", function () {
-        if ('compartment' in OKITJsonObj && 'security_lists' in OKITJsonObj) {
+        if ('security_lists' in OKITJsonObj) {
             console.log('Loading Security List: ' + id);
             let json = OKITJsonObj['security_lists'];
             for (let i = 0; i < json.length; i++) {

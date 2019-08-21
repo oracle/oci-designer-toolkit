@@ -204,7 +204,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
  */
 function loadVirtualCloudNetworkProperties(id) {
     $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
-        if ('compartment' in OKITJsonObj && 'virtual_cloud_networks' in OKITJsonObj) {
+        if ('virtual_cloud_networks' in OKITJsonObj) {
             console.log('Loading Virtual Cloud Network: ' + id);
             let json = OKITJsonObj['virtual_cloud_networks'];
             for (let i = 0; i < json.length; i++) {

@@ -171,7 +171,7 @@ function drawInternetGatewaySVG(internet_gateway) {
  */
 function loadInternetGatewayProperties(id) {
     $("#properties").load("propertysheets/internet_gateway.html", function () {
-        if ('compartment' in OKITJsonObj && 'internet_gateways' in OKITJsonObj) {
+        if ('internet_gateways' in OKITJsonObj) {
             console.log('Loading Internet Gateway: ' + id);
             let json = OKITJsonObj['internet_gateways'];
             for (let i = 0; i < json.length; i++) {

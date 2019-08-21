@@ -132,7 +132,7 @@ function drawCompartmentSVG(compartment) {
  */
 function loadCompartmentProperties(id) {
     $("#properties").load("propertysheets/compartment.html", function () {
-        if ('compartment' in OKITJsonObj && 'compartments' in OKITJsonObj) {
+        if ('compartments' in OKITJsonObj) {
             console.log('Loading Internet Gateway: ' + id);
             let json = OKITJsonObj['compartments'];
             for (let i = 0; i < json.length; i++) {
