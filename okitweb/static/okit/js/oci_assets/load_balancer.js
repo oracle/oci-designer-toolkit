@@ -78,99 +78,104 @@ function deleteLoadBalancer(id) {
 ** SVG Creation
  */
 function drawLoadBalancerSVG(load_balancer) {
-    console.log(JSON.stringify(subnet_content));
     let parent_id = load_balancer['subnet_ids'][0];
-    console.log('VCN Id : ' + parent_id);
     let id = load_balancer['id'];
     console.log('Drawing Load Balancer : ' + id);
-    let position = subnet_content[parent_id]['load_balancer_position'];
-    let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-    let translate_y = icon_translate_y_start;
-    let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    let svg_y = (icon_height / 4);
-    let data_type = "Load Balancer";
+    //console.log('Subnet Id : ' + parent_id);
+    //console.log('Subnet Content : ' + JSON.stringify(subnet_content));
+    // Only draw the instance if the subnet exists
+    if (parent_id in subnet_content) {
+        let position = subnet_content[parent_id]['load_balancer_position'];
+        let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
+        let translate_y = icon_translate_y_start;
+        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
+        let svg_y = (icon_height / 4);
+        let data_type = "Load Balancer";
 
-    // Increment Icon Position
-    subnet_content[parent_id]['load_balancer_position'] += 1;
+        // Increment Icon Position
+        subnet_content[parent_id]['load_balancer_position'] += 1;
 
-    let parent_svg = d3.select('#' + parent_id + "-svg");
-    let svg = parent_svg.append("svg")
-        .attr("id", id + '-svg')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", load_balancer['display_name'])
-        .attr("x", svg_x)
-        .attr("y", svg_y)
-        .attr("width", "100")
-        .attr("height", "100");
-    let rect = svg.append("rect")
-        .attr("id", id)
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", load_balancer['display_name'])
-        .attr("x", icon_x)
-        .attr("y", icon_y)
-        .attr("width", icon_width)
-        .attr("height", icon_height)
-        .attr("stroke", icon_stroke_colour)
-        .attr("stroke-dasharray", "1, 1")
-        .attr("fill", "white")
-        .attr("style", "fill-opacity: .25;");
-    rect.append("title")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .text("Load Balancer: "+ load_balancer['display_name']);
-    let g = svg.append("g")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-    g.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v54.3h18.2v-23.9c0-5.2,4.2-9.3,9.3-9.3h20.1c5.2,0,9.3,4.2,9.3,9.3v20.9l22.7-21.8l-3-3.1l12.7-3.1l-3.6,12.6l-3-3.1l-22.4,21.6h28.7v-4.4l11.3,6.5l-11.3,6.5v-4.4h-28.7l22.4,21.6l3-3.1l3.6,12.6l-12.7-3.1l3-3.1l-22.7-21.8v20.9c0,5.2-4.2,9.3-9.3,9.3h-20.1c-5.2,0-9.3-4.2-9.3-9.3v-23.9H87.1v53c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z");
-    g.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z");
+        let parent_svg = d3.select('#' + parent_id + "-svg");
+        let svg = parent_svg.append("svg")
+            .attr("id", id + '-svg')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", load_balancer['display_name'])
+            .attr("x", svg_x)
+            .attr("y", svg_y)
+            .attr("width", "100")
+            .attr("height", "100");
+        let rect = svg.append("rect")
+            .attr("id", id)
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", load_balancer['display_name'])
+            .attr("x", icon_x)
+            .attr("y", icon_y)
+            .attr("width", icon_width)
+            .attr("height", icon_height)
+            .attr("stroke", icon_stroke_colour)
+            .attr("stroke-dasharray", "1, 1")
+            .attr("fill", "white")
+            .attr("style", "fill-opacity: .25;");
+        rect.append("title")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .text("Load Balancer: " + load_balancer['display_name']);
+        let g = svg.append("g")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v54.3h18.2v-23.9c0-5.2,4.2-9.3,9.3-9.3h20.1c5.2,0,9.3,4.2,9.3,9.3v20.9l22.7-21.8l-3-3.1l12.7-3.1l-3.6,12.6l-3-3.1l-22.4,21.6h28.7v-4.4l11.3,6.5l-11.3,6.5v-4.4h-28.7l22.4,21.6l3-3.1l3.6,12.6l-12.7-3.1l3-3.1l-22.7-21.8v20.9c0,5.2-4.2,9.3-9.3,9.3h-20.1c-5.2,0-9.3-4.2-9.3-9.3v-23.9H87.1v53c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z");
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z");
 
-    //loadLoadBalancerProperties(id);
-    let boundingClientRect = rect.node().getBoundingClientRect();
-    // Add click event to display properties
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    // Add dragevent versions
-    // Set common attributes on svg element and children
-    svg.on("click", function() { loadLoadBalancerProperties(id); })
-        .on("mousedown", handleConnectorDragStart)
-        .on("mousemove", handleConnectorDrag)
-        .on("mouseup", handleConnectorDrop)
-        .on("mouseover", handleConnectorDragEnter)
-        .on("mouseout", handleConnectorDragLeave)
-        .on("dragstart", handleConnectorDragStart)
-        .on("drop", handleConnectorDrop)
-        .on("dragenter", handleConnectorDragEnter)
-        .on("dragleave", handleConnectorDragLeave)
-        .on("contextmenu", handleContextMenu)
-        .attr("data-type", data_type)
-        .attr("data-okit-id", id)
-        .attr("data-parentid", parent_id)
-        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-id", id)
-        .attr("dragable", true)
-        .selectAll("*")
+        //loadLoadBalancerProperties(id);
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add click event to display properties
+        // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+        // Add dragevent versions
+        // Set common attributes on svg element and children
+        svg.on("click", function () {
+            loadLoadBalancerProperties(id);
+        })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-id", id)
-            .attr("dragable", true);
+            .attr("dragable", true)
+            .selectAll("*")
+                .attr("data-type", data_type)
+                .attr("data-okit-id", id)
+                .attr("data-parentid", parent_id)
+                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", id)
+                .attr("dragable", true);
+    }
 }
 
 function clearLoadBalancerConnectorsSVG(load_balancer) {
@@ -182,28 +187,32 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
     let parent_id = load_balancer['subnet_ids'][0];
     let id = load_balancer['id'];
     let parent_svg = d3.select('#' + parent_id + "-svg");
-    // Define SVG position manipulation variables
-    let svgPoint = parent_svg.node().createSVGPoint();
-    let screenCTM = parent_svg.node().getScreenCTM();
-    svgPoint.x = d3.select('#' + id).attr('data-connector-start-x');
-    svgPoint.y = d3.select('#' + id).attr('data-connector-start-y');
-    let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+    // Only Draw if parent exists
+    console.log('Parent SVG : ' + parent_svg.node());
+    if (parent_svg.node() != null) {
+        // Define SVG position manipulation variables
+        let svgPoint = parent_svg.node().createSVGPoint();
+        let screenCTM = parent_svg.node().getScreenCTM();
+        svgPoint.x = d3.select('#' + id).attr('data-connector-start-x');
+        svgPoint.y = d3.select('#' + id).attr('data-connector-start-y');
+        let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
 
-    let connector_end = null;
+        let connector_end = null;
 
-    if (load_balancer['instance_ids'].length > 0) {
-        for (let i = 0; i < load_balancer['instance_ids'].length; i++) {
-            svgPoint.x = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-x');
-            svgPoint.y = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-y');
-            connector_end = svgPoint.matrixTransform(screenCTM.inverse());
-            parent_svg.append('line')
-                .attr("id", generateConnectorId(load_balancer['instance_ids'][i], id))
-                .attr("x1", connector_start.x)
-                .attr("y1", connector_start.y)
-                .attr("x2", connector_end.x)
-                .attr("y2", connector_end.y)
-                .attr("stroke-width", "2")
-                .attr("stroke", "black");
+        if (load_balancer['instance_ids'].length > 0) {
+            for (let i = 0; i < load_balancer['instance_ids'].length; i++) {
+                svgPoint.x = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-x');
+                svgPoint.y = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-y');
+                connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                parent_svg.append('line')
+                    .attr("id", generateConnectorId(load_balancer['instance_ids'][i], id))
+                    .attr("x1", connector_start.x)
+                    .attr("y1", connector_start.y)
+                    .attr("x2", connector_end.x)
+                    .attr("y2", connector_end.y)
+                    .attr("stroke-width", "2")
+                    .attr("stroke", "black");
+            }
         }
     }
 }

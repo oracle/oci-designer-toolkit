@@ -136,6 +136,8 @@ function drawSubnetSVG(subnet) {
     let svg_y = vcn_offset_y + count_offset_y;
     let data_type = "Subnet";
 
+    initialiseSubnetChildData(id);
+
     let parent_svg = d3.select('#' + parent_id + "-svg");
     let asset_svg = parent_svg.append("svg")
         .attr("id", id + '-svg')

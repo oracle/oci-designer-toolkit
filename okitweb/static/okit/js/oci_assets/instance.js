@@ -93,8 +93,8 @@ function drawInstanceSVG(instance) {
     let parent_id = instance['subnet_id'];
     let id = instance['id'];
     console.log('Drawing Instance : ' + id);
-    console.log('Subnet Id : ' + parent_id);
-    console.log('Subnet Content : ' + JSON.stringify(subnet_content));
+    //console.log('Subnet Id : ' + parent_id);
+    //console.log('Subnet Content : ' + JSON.stringify(subnet_content));
     // Only draw the instance if the subnet exists
     if (parent_id in subnet_content) {
         let position = subnet_content[parent_id]['instance_position'];

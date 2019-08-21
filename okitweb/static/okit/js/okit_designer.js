@@ -171,7 +171,7 @@ function drawSVGforJson() {
         load_balancer_ids = [];
         for (let i=0; i < OKITJsonObj['load_balancers'].length; i++) {
             load_balancer_ids.push(OKITJsonObj['load_balancers'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['load_balancers'][i]['id']] = OKITJsonObj['instances'][i]['display_name'];
+            okitIdsJsonObj[OKITJsonObj['load_balancers'][i]['id']] = OKITJsonObj['load_balancers'][i]['display_name'];
             load_balancer_count += 1;
             drawLoadBalancerSVG(OKITJsonObj['load_balancers'][i]);
             drawLoadBalancerConnectorsSVG(OKITJsonObj['load_balancers'][i]);
