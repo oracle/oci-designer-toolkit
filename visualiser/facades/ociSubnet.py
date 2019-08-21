@@ -36,7 +36,7 @@ class OCISubnets(OCIVirtualNetworkConnection):
         self.subnets_obj = []
         super(OCISubnets, self).__init__(config=config, configfile=configfile)
 
-    def list(self, compartment_id=None, filter=None):
+    def list(self, compartment_id=None, filter=None, **kwargs):
         if compartment_id is None:
             compartment_id = self.compartment_id
 

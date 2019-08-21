@@ -42,6 +42,7 @@ from facades.ociSecurityList import OCISecurityLists
 from facades.ociSubnet import OCISubnets
 from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociInstance import OCIInstances
+from facades.ociInstance import OCIInstanceVnics
 
 from common.ociLogging import getLogger
 
@@ -151,31 +152,45 @@ def ociArtifacts(artifact):
     logger.info(json.dumps(query_json, sort_keys=True, indent=2, separators=(',', ': ')))
     response_json = {}
     if artifact == 'VirtualCloudNetwork':
-        logger.info('---- Processing Virtual Cloud Network')
-        ociVirtualCloudNetwork = OCIVirtualCloudNetworks(compartment_id=query_json['compartment_id'])
-        response_json =  ociVirtualCloudNetwork.list(filter=query_json.get('virtual_cloud_network_filter', None))
+        logger.info('---- Processing Virtual Cloud Networks')
+        oci_virtual_cloud_networks = OCIVirtualCloudNetworks(compartment_id=query_json['compartment_id'])
+        response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
     elif artifact == 'InternetGateway':
-        ociInternetGateways = OCIInternetGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json =  ociInternetGateways.list(filter=query_json.get('internet_gateway_filter', None))
+        logger.info('---- Processing Internet Gateways')
+        oci_internet_gateways = OCIInternetGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
     elif artifact == 'RouteTable':
-        ociRouteTables = OCIRouteTables(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json =  ociRouteTables.list(filter=query_json.get('route_table_filter', None))
+        logger.info('---- Processing Route Tables')
+        oci_route_tables = OCIRouteTables(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_route_tables.list(filter=query_json.get('route_table_filter', None))
     elif artifact == 'SecurityList':
-        ociSecurityLists = OCISecurityLists(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json =  ociSecurityLists.list(filter=query_json.get('security_list_filter', None))
+        logger.info('---- Processing Security Lists')
+        oci_security_lists = OCISecurityLists(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_security_lists.list(filter=query_json.get('security_list_filter', None))
     elif artifact == 'Subnet':
-        ociSubnets = OCISubnets(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json =  ociSubnets.list(filter=query_json.get('subnet_filter', None))
+        logger.info('---- Processing Subnets')
+        oci_subnets = OCISubnets(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_subnets.list(filter=query_json.get('subnet_filter', None))
     elif artifact == 'Instance':
-        ociInstances = OCIInstances(compartment_id=query_json['compartment_id'])
-        response_json =  ociInstances.list(filter=query_json.get('instance_filter', None))
+        logger.info('---- Processing Instances')
+        oci_instances = OCIInstances(compartment_id=query_json['compartment_id'])
+        instance_json = oci_instances.list(filter=query_json.get('instance_filter', None))
+        oci_instance_vnics = OCIInstanceVnics(compartment_id=query_json['compartment_id'])
+        response_json = []
+        for instance in instance_json:
+            instance['vnics'] = oci_instance_vnics.list(instance_id=instance['id'])
+            instance['subnet_id'] = instance['vnics'][0]['subnet_id']
+            if query_json['subnet_id'] in [vnic['subnet_id'] for vnic in instance['vnics']]:
+                response_json.append(instance)
     elif artifact == 'LoadBalancer':
-        ociLoadBalancers = OCILoadBalancers(compartment_id=query_json['compartment_id'])
-        response_json =  ociLoadBalancers.list(filter=query_json.get('load_balancer_filter', None))
+        logger.info('---- Processing Load Balancers')
+        oci_load_balancers = OCILoadBalancers(compartment_id=query_json['compartment_id'])
+        response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
+        response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
     else:
         return '404'
 
-    logger.info(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))
+    logger.debug(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))
     return json.dumps(standardiseIds(response_json), sort_keys=True)
 
 

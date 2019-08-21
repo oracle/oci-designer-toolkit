@@ -25,6 +25,9 @@ from facades.ociConnection import OCILoadBalancerConnection
 from facades.ociLBHost import OCILBHosts
 from facades.ociBackendSet import OCIBackendSets
 from facades.ociBackend import OCIBackends
+from facades.ociPrivateIps import OCIPrivateIps
+from facades.ociVnicAttachement import OCIVnicAttachments
+
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -38,7 +41,7 @@ class OCILoadBalancers(OCILoadBalancerConnection):
         self.load_balancers_obj = []
         super(OCILoadBalancers, self).__init__(config=config, configfile=configfile)
 
-    def list(self, compartment_id=None, filter=None):
+    def list(self, compartment_id=None, filter=None, **kwargs):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
@@ -57,6 +60,16 @@ class OCILoadBalancers(OCILoadBalancerConnection):
                 filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
             self.load_balancers_json = filtered
         logger.debug(str(self.load_balancers_json))
+        # Find instance ocids associated with the bacjend ip addresses
+        oci_private_ips = OCIPrivateIps(self.config, self.configfile)
+        oci_vnics_attachments = OCIVnicAttachments(self.config, self.configfile, compartment_id=self.compartment_id)
+        for load_balancer in self.load_balancers_json:
+            load_balancer['instance_ids'] = []
+            for key in load_balancer['backend_sets']:
+                for backend in load_balancer['backend_sets'][key]['backends']:
+                    for ip_address in oci_private_ips.list(subnet_id=load_balancer['subnet_ids'][0], ip_address=backend['ip_address']):
+                        vnics_attachments = oci_vnics_attachments.list(vnic_id=ip_address['vnic_id'])
+                        load_balancer['instance_ids'].extend([vnic_attachment['instance_id'] for vnic_attachment in vnics_attachments])
 
         # Build List of Loadbalancer Objects
         self.load_balancers_obj = []
