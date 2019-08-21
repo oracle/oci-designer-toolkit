@@ -7,10 +7,11 @@ console.log('Loaded Internet Gateway Javascript');
 asset_drop_targets["Internet Gateway"] = ["Virtual Cloud Network"];
 asset_connect_targets["Internet Gateway"] = [];
 asset_add_functions["Internet Gateway"] = "addInternetGateway";
+asset_delete_functions["Internet Gateway"] = "deleteInternetGateway";
 
-var internet_gateway_ids = [];
-var internet_gateway_count = 0;
-var internet_gateway_prefix = 'ig';
+let internet_gateway_ids = [];
+let internet_gateway_count = 0;
+let internet_gateway_prefix = 'ig';
 
 /*
 ** Reset variables
@@ -25,12 +26,13 @@ function clearInternetGatewayVariables() {
 ** Add Asset to JSON Model
  */
 function addInternetGateway(vcnid) {
-    var id = 'okit-ig-' + uuidv4();
+    let id = 'okit-ig-' + uuidv4();
+    console.log('Adding Internet Gateway : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('internet_gateways' in OKITJsonObj['compartment'])) {
-        OKITJsonObj['compartment']['internet_gateways'] = [];
+    if (!('internet_gateways' in OKITJsonObj)) {
+        OKITJsonObj['internet_gateways'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -39,12 +41,12 @@ function addInternetGateway(vcnid) {
 
     // Increment Count
     internet_gateway_count += 1;
-    var internet_gateway = {};
+    let internet_gateway = {};
     internet_gateway['vcn_id'] = vcnid;
     internet_gateway['virtual_cloud_network'] = '';
     internet_gateway['id'] = id;
     internet_gateway['display_name'] = generateDefaultName(internet_gateway_prefix, internet_gateway_count);
-    OKITJsonObj['compartment']['internet_gateways'].push(internet_gateway);
+    OKITJsonObj['internet_gateways'].push(internet_gateway);
     okitIdsJsonObj[id] = internet_gateway['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
@@ -53,24 +55,51 @@ function addInternetGateway(vcnid) {
 }
 
 /*
+** Delete From JSON Model
+ */
+
+function deleteInternetGateway(id) {
+    console.log('Delete Internet Gateway ' + id);
+    // Remove SVG Element
+    d3.select("#" + id + "-svg").remove()
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['internet_gateways'].length; i++) {
+        if (OKITJsonObj['internet_gateways'][i]['id'] == id) {
+            OKITJsonObj['internet_gateways'].splice(i, 1);
+        }
+    }
+    // Remove Subnet references
+    if ('route_tables' in OKITJsonObj) {
+        for (route_table of OKITJsonObj['route_tables']) {
+            for (let i = 0; i < route_table['route_rules'].length; i++) {
+                if (route_table['route_rules'][i]['network_entity_id'] == id) {
+                    route_table['route_rules'].splice(i, 1);
+                }
+            }
+        }
+    }
+}
+
+/*
 ** SVG Creation
  */
 function drawInternetGatewaySVG(internet_gateway) {
-    var parent_id = internet_gateway['vcn_id'];
-    var id = internet_gateway['id'];
-    var position = vcn_gateway_icon_position;
-    var translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-    var translate_y = icon_translate_y_start;
-    var svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    var svg_y = (icon_height / 2) * -1;
-    var data_type = "Internet Gateway";
+    let parent_id = internet_gateway['vcn_id'];
+    let id = internet_gateway['id'];
+    console.log('Drawing Internet Gateway : ' + id);
+    let position = vcn_gateway_icon_position;
+    let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
+    let translate_y = icon_translate_y_start;
+    let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
+    let svg_y = (icon_height / 2) * -1;
+    let data_type = "Internet Gateway";
 
     // Increment Icon Position
     vcn_gateway_icon_position += 1;
 
-    //var okitcanvas_svg = d3.select(okitcanvas);
-    var okitcanvas_svg = d3.select('#' + parent_id + "-svg");
-    var svg = okitcanvas_svg.append("svg")
+    //let okitcanvas_svg = d3.select(okitcanvas);
+    let okitcanvas_svg = d3.select('#' + parent_id + "-svg");
+    let svg = okitcanvas_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -79,7 +108,7 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("y", svg_y)
         .attr("width", "100")
         .attr("height", "100");
-    var rect = svg.append("rect")
+    let rect = svg.append("rect")
         .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -96,20 +125,20 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .text("Internet Gateway: " + internet_gateway['display_name']);
-    var g1 = svg.append("g")
+    let g1 = svg.append("g")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-    var g2 = g1.append("g");
-    var g3 = g2.append("g");
-    var g4 = g3.append("g");
+    let g2 = g1.append("g");
+    let g3 = g2.append("g");
+    let g4 = g3.append("g");
     g4.append("path")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("class", "st0")
         .attr("d", "M200.4,104.2c-0.4,0-0.8,0-1.2,0.1c-1.6-5.2-6.5-9-12.3-9c-1.5,0-2.9,0.3-4.2,0.7c-2.6-3.8-7-6.3-12-6.3c-6.9,0-12.7,4.8-14.2,11.2c-0.1,0-0.3,0-0.4,0c-8,0-14.6,6.5-14.6,14.6c0,8,6.5,14.6,14.6,14.6h44.3c7.1,0,12.9-5.8,12.9-12.9C213.3,110,207.5,104.2,200.4,104.2z");
-    var g5 = g3.append("g");
-    var g6 = g5.append("g");
+    let g5 = g3.append("g");
+    let g6 = g5.append("g");
     g6.append("path")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
@@ -127,6 +156,7 @@ function drawInternetGatewaySVG(internet_gateway) {
     // Add dragevent versions
     // Set common attributes on svg element and children
     svg.on("click", function() { loadInternetGatewayProperties(id); })
+        .on("contextmenu", handleContextMenu)
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
@@ -141,10 +171,10 @@ function drawInternetGatewaySVG(internet_gateway) {
  */
 function loadInternetGatewayProperties(id) {
     $("#properties").load("propertysheets/internet_gateway.html", function () {
-        if ('compartment' in OKITJsonObj && 'internet_gateways' in OKITJsonObj['compartment']) {
+        if ('internet_gateways' in OKITJsonObj) {
             console.log('Loading Internet Gateway: ' + id);
-            var json = OKITJsonObj['compartment']['internet_gateways'];
-            for (var i = 0; i < json.length; i++) {
+            let json = OKITJsonObj['internet_gateways'];
+            for (let i = 0; i < json.length; i++) {
                 internet_gateway = json[i];
                 //console.log(JSON.stringify(internet_gateway, null, 2));
                 if (internet_gateway['id'] == id) {

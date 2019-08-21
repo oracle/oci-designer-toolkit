@@ -57,6 +57,16 @@
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
+    {% if okit_query_request_json is defined %}
+        <script type="text/javascript">
+            console.log('Processing Query Javascript');
+            okitQueryRequestJson = {{ okit_query_request_json | safe }};
+            OKITJsonObj = {{ okit_query_response_json | safe }};
+            queryVirtualCloudNetworkAjax();
+            //displayOkitJson();
+            //drawSVGforJson();
+        </script>
+    {% endif %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
@@ -89,7 +99,7 @@
                     </div>
                     <div id="properties" class="property-editor"></div>
                     <div id="json-display" class="source-code hidden">
-                        <textarea id="okitjson" readonly="readonly"></textarea>
+                        <pre id="okitjson" readonly="readonly"></pre>
                     </div>
                 </div>
             </div>
@@ -98,17 +108,12 @@
             <input type="file" id="files" class="file-button toolbar-button" name="file[]">
         </div>
     </div>
+    <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
 {% endblock %}
 
 {% block footerblock %}
 {% endblock %}
 
 {% block footerscripts %}
-    {% if okit_query_json is defined %}
-        <script type="text/javascript">
-            OKITJsonObj = {{ okit_query_json | safe }};
-            drawSVGforJson();
-        </script>
-    {% endif %}
 {% endblock %}
 

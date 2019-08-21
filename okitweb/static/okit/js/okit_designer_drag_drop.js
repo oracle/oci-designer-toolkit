@@ -3,20 +3,21 @@ console.log('Loaded Drag & Drop Javascript');
 /*
 ** Define Connector Drag & Drop functions point manipulation code.
  */
-//var okitcanvasSVGPoint = okitcanvas.createSVGPoint();
-//var okitcanvasScreenCTM = okitcanvas.getScreenCTM();
-var connectorStartElement = null;
-var connectorStartXLeft = 0;
-var connectorStartYTop = 0;
-var connectorContainerSVGPoint = null;
-var connectorContainerScreenCTM = null;
+//let okitcanvasSVGPoint = okitcanvas.createSVGPoint();
+//let okitcanvasScreenCTM = okitcanvas.getScreenCTM();
+let connectorStartElement = null;
+let connectorStartXLeft = 0;
+let connectorStartYTop = 0;
+let connectorContainerSVGPoint = null;
+let connectorContainerScreenCTM = null;
 
 /*
 ** Define Dynamic Add/Update function
  */
 
-var asset_add_functions = {};
-var asset_update_functions = {};
+let asset_add_functions = {};
+let asset_update_functions = {};
+let asset_delete_functions = {};
 
 function addAssetToDropTarget(title, target_id) {
     //console.log('addAssetToDropTarget - Title : ' + title);
@@ -29,6 +30,14 @@ function updateAssetTarget(title, source_type, source_id, target_id) {
     window[asset_update_functions[title]](source_type, source_id, target_id);
 }
 
+function deleteAssetFromSVG(artifact, id) {
+    window[asset_delete_functions[artifact]](id);
+    // Hide Context Menu
+    $("#context-menu").addClass("hidden");
+    // Redraw
+    redrawSVGCanvas();
+}
+
 /*
 ** Drag & Drop Handlers
  */
@@ -37,12 +46,12 @@ function updateAssetTarget(title, source_type, source_id, target_id) {
 ** Define palette Drag & Drop functions
  */
 
-var palatte_source_type = '';
-var asset_drop_targets = {};
-var asset_connect_targets = {};
+let palatte_source_type = '';
+let asset_drop_targets = {};
+let asset_connect_targets = {};
 
 function setDragDropIcon(e) {
-    var type = e.target.getAttribute('data-type');
+    let type = e.target.getAttribute('data-type');
     if (asset_drop_targets[palatte_source_type].indexOf(type) >= 0) {
         e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
@@ -91,9 +100,9 @@ function handleDrop(e) {
     }
 
     //this.innerHTML = e.dataTransfer.getData('text/html');
-    var title = e.dataTransfer.getData('text/plain');
-    var type = e.target.getAttribute('data-type');
-    var target_id = e.target.id;
+    let title = e.dataTransfer.getData('text/plain');
+    let type = e.target.getAttribute('data-type');
+    let target_id = e.target.id;
     // Call Add Function
     addAssetToDropTarget(title, target_id)
 
@@ -118,57 +127,65 @@ function handleDragEnd(e) {
 function handleConnectorDrag(e) {
     if (connectorStartElement) {
         //console.log('Connector Drag : ' + getMousePosition(e).x + ' - ' + getMousePosition(e).y);
-        var mousePos = getMousePosition(d3.event);
+        let mousePos = getMousePosition(d3.event);
         d3.select("#Connector")
             .attr("x2", mousePos.x)
             .attr("y2", mousePos.y);
     }
 }
 
+const left_click = 1;
+const middle_click = 2;
+const right_click = 3;
+
 function handleConnectorDragStart() {
     console.log('Connector Drag Start');
-    var thisid = d3.select(this).attr('id');
-    console.log('This Id : ' + thisid);
-    var source_type = d3.select(this).attr('data-type');
-    if (asset_connect_targets.hasOwnProperty(source_type) && asset_connect_targets[source_type].length > 0) {
-        // Set Start Element to know we are dragging
-        connectorStartElement = this;
-        var parentid = d3.select(this).attr('data-parentid');
-        var parent_svg = document.getElementById(parentid + "-svg");
+    if (d3.event.which == left_click) {
+        let thisid = d3.select(this).attr('id');
+        console.log('This Id : ' + thisid);
+        let source_type = d3.select(this).attr('data-type');
+        if (asset_connect_targets.hasOwnProperty(source_type) && asset_connect_targets[source_type].length > 0) {
+            // Set Start Element to know we are dragging
+            connectorStartElement = this;
+            let parentid = d3.select(this).attr('data-parentid');
+            let parent_svg = document.getElementById(parentid + "-svg");
 
-        console.log('Connector Drag Start Parent Id : ' + parentid);
-        console.log('Connector Drag Start Id : ' + d3.select(this).attr('id'));
-        console.log('Connector Drag Start data-connector-start-y : ' + d3.select(this).attr('data-connector-start-y'));
-        console.log('Connector Drag Start data-connector-start-x : ' + d3.select(this).attr('data-connector-start-x'));
+            console.log('Connector Drag Start Parent Id : ' + parentid);
+            console.log('Connector Drag Start Id : ' + d3.select(this).attr('id'));
+            console.log('Connector Drag Start data-connector-start-y : ' + d3.select(this).attr('data-connector-start-y'));
+            console.log('Connector Drag Start data-connector-start-x : ' + d3.select(this).attr('data-connector-start-x'));
 
-        // Define SVG position manipulation variables
-        connectorContainerSVGPoint = parent_svg.createSVGPoint();
-        connectorContainerScreenCTM = parent_svg.getScreenCTM();
-        connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-start-x');
-        connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-start-y');
+            // Define SVG position manipulation variables
+            connectorContainerSVGPoint = parent_svg.createSVGPoint();
+            connectorContainerScreenCTM = parent_svg.getScreenCTM();
+            connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-start-x');
+            connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-start-y');
 
-        // Convert to SVG Relative positioning
-        var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-        connectorStartXLeft = svgrelative.x;
-        connectorStartYTop = svgrelative.y;
+            // Convert to SVG Relative positioning
+            let svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
+            connectorStartXLeft = svgrelative.x;
+            connectorStartYTop = svgrelative.y;
 
-        // Start Drawing line
-        svg = d3.select('#' + parentid + "-svg");
-        svg.append('line')
-            .attr("id", "Connector")
-            .attr("x1", connectorStartXLeft)
-            .attr("y1", connectorStartYTop)
-            .attr("x2", connectorStartXLeft)
-            .attr("y2", connectorStartYTop)
-            .attr("stroke-width", "2")
-            .attr("stroke-dasharray", "3, 3")
-            .attr("stroke", "darkgray");
-    } else {
-        console.log('Not a drag source : ' + source_type);
-        connectorStartElement = null;
-        connectorStartXLeft = 0;
-        connectorStartYTop = 0;
-        d3.selectAll("#Connector").remove();
+            // Start Drawing line
+            svg = d3.select('#' + parentid + "-svg");
+            svg.append('line')
+                .attr("id", "Connector")
+                .attr("x1", connectorStartXLeft)
+                .attr("y1", connectorStartYTop)
+                .attr("x2", connectorStartXLeft)
+                .attr("y2", connectorStartYTop)
+                .attr("stroke-width", "2")
+                .attr("stroke-dasharray", "3, 3")
+                .attr("stroke", "darkgray");
+        } else {
+            console.log('Not a drag source : ' + source_type);
+            connectorStartElement = null;
+            connectorStartXLeft = 0;
+            connectorStartYTop = 0;
+            d3.selectAll("#Connector").remove();
+        }
+        // Hide Context Menu
+        $("#context-menu").addClass("hidden");
     }
 }
 
@@ -187,16 +204,16 @@ function handleConnectorDragLeave(e) {
 
 function handleConnectorDrop(e) {
     console.log('Connector Drop');
-    var thisid = d3.select(this).attr('id');
+    let thisid = d3.select(this).attr('id');
     console.log('This Id : ' + thisid);
     if (connectorStartElement) {
-        var sourceType = connectorStartElement.getAttribute('data-type');
-        var destinationType = d3.select(this).attr('data-type');
-        var parentid = d3.select(this).attr('data-parentid');
-        var sourceid = connectorStartElement.getAttribute('data-okit-id');
-        var id = d3.select(this).attr('data-okit-id');
-        var connector_source_id = connectorStartElement.getAttribute('data-connector-id');
-        var connector_destination_id = d3.select(this).attr('data-connector-id');
+        let sourceType = connectorStartElement.getAttribute('data-type');
+        let destinationType = d3.select(this).attr('data-type');
+        let parentid = d3.select(this).attr('data-parentid');
+        let sourceid = connectorStartElement.getAttribute('data-okit-id');
+        let id = d3.select(this).attr('data-okit-id');
+        let connector_source_id = connectorStartElement.getAttribute('data-connector-id');
+        let connector_destination_id = d3.select(this).attr('data-connector-id');
 
         console.log('Connector Source Type : ' + sourceType);
         console.log('Connector Destination Type : ' + destinationType);
@@ -217,7 +234,7 @@ function handleConnectorDrop(e) {
             console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
             connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-end-x');
             connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-end-y');
-            var svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
+            let svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
             svg = d3.select("#" + parentid + '-svg');
             svg.append('line')
                 .attr("id", generateConnectorId(sourceid, id))
@@ -242,5 +259,21 @@ function getMousePosition(evt) {
         x: (evt.clientX - connectorContainerScreenCTM.e) / connectorContainerScreenCTM.a,
         y: (evt.clientY - connectorContainerScreenCTM.f) / connectorContainerScreenCTM.d
     };
+}
+
+function handleContextMenu() {
+    let thisid = d3.select(this).attr('id');
+    let okit_id = d3.select(this).attr('data-okit-id');
+    let artifact = d3.select(this).attr('data-type');
+    console.log('Right Click on ' + thisid);
+    d3.event.preventDefault();
+    d3.event.stopPropagation();
+    //alert('Right Click');
+    let element = document.getElementById("context-menu");
+    element.classList.toggle("hidden");
+    element.style.top =  d3.event.clientY + 'px';
+    element.style.left = d3.event.clientX + 'px';
+    $("#context-menu").find("*").off();
+    $("#right-click-delete").on('click', function() {deleteAssetFromSVG(artifact, okit_id);});
 }
 

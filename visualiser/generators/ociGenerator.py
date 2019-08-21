@@ -95,6 +95,16 @@ class OCIGenerator(object):
     def buildIdNameMap(self):
         logger.info("Build Id/Name Map")
         self.id_name_map = {}
+        for key, value in self.visualiser_json.items():
+            if isinstance(value, list):
+                for asset in value:
+                    self.id_name_map[self.formatOcid(asset["id"])] = asset.get("display_name", asset.get("name", "Unknown"))
+        return
+
+    # TODO: Delete
+    def buildIdNameMapDeprecated(self):
+        logger.info("Build Id/Name Map")
+        self.id_name_map = {}
         if "compartment" in self.visualiser_json:
             for key, value in self.visualiser_json["compartment"].items():
                 if isinstance(value, list):
@@ -127,27 +137,27 @@ class OCIGenerator(object):
         # Process keys within the input json file
         compartment = self.visualiser_json.get('compartment', self.visualiser_json)
         # -- Virtual Cloud Networks
-        for virtual_cloud_network in compartment.get('virtual_cloud_networks', []):
+        for virtual_cloud_network in self.visualiser_json.get('virtual_cloud_networks', []):
             self.renderVirtualCloudNetworks(virtual_cloud_network)
         # -- Internet Gateways
-        for internet_gateway in compartment.get('internet_gateways', []):
+        for internet_gateway in self.visualiser_json.get('internet_gateways', []):
             self.renderInternetGateway(internet_gateway)
         # -- NAT Gateways
         # -- Dynamic Routing Gateways
         # -- Security Lists
-        for security_list in compartment.get('security_lists', []):
+        for security_list in self.visualiser_json.get('security_lists', []):
             self.renderSecurityList(security_list)
         # -- Route Tables
-        for route_table in compartment.get('route_tables', []):
+        for route_table in self.visualiser_json.get('route_tables', []):
             self.renderRouteTable(route_table)
         # -- Subnet
-        for subnet in compartment.get('subnets', []):
+        for subnet in self.visualiser_json.get('subnets', []):
             self.renderSubnet(subnet)
         # -- Instances
-        for instance in compartment.get('instances', []):
+        for instance in self.visualiser_json.get('instances', []):
             self.renderInstance(instance)
         # -- Loadbalancers
-        for loadbalancer in compartment.get('load_balancers', []):
+        for loadbalancer in self.visualiser_json.get('load_balancers', []):
             self.renderLoadbalancer(loadbalancer)
 
         return
@@ -292,8 +302,8 @@ class OCIGenerator(object):
             self.run_variables[variableName] = route_rule["network_entity_id"]
             jinja2_route_rule = {
                 #"network_entity_id": self.formatJinja2IdReference(variableName)
-                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
-                #"network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
+                #"network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
+                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             }
             # ------ Destination
             variableName = '{0:s}_route_rule_{1:02d}_destination'.format(standardisedName, rule_number)
@@ -350,7 +360,8 @@ class OCIGenerator(object):
         if 'dhcp_options' in subnet:
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['dhcp_options']))
         else:
-            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['vcn_id']))
+            #self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['vcn_id']))
+            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("subnet.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))

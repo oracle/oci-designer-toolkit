@@ -5,7 +5,7 @@ console.log('Loaded Generation Javascript');
  */
 
 function openInNewTab(url) {
-    var win = window.open(url, '_blank');
+    let win = window.open(url, '_blank');
     win.focus();
 }
 
