@@ -253,6 +253,227 @@ function saveSvg(svgEl, name) {
     document.body.removeChild(downloadLink);
 }
 
+/*
+** Query OCI Ajax Calls to allow async svg build
+ */
+
+function queryVirtualCloudNetworkAjax() {
+    console.log('------------- queryVirtualCloudNetworkAjax --------------------');
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/VirtualCloudNetwork',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(okitQueryRequestJson),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['virtual_cloud_networks'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
+                queryInternetGatewayAjax(response_json[i]['id']);
+                queryRouteTableAjax(response_json[i]['id']);
+                querySecurityListAjax(response_json[i]['id']);
+                querySubnetAjax(response_json[i]['id']);
+            }
+            redrawSVGCanvas();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
+function queryInternetGatewayAjax(vcn_id) {
+    console.log('------------- queryInternetGatewayAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['vcn_id'] = vcn_id;
+    if ('internet_gateway_filter' in okitQueryRequestJson) {
+        request_json['internet_gateway_filter'] = okitQueryRequestJson['internet_gateway_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/InternetGateway',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['internet_gateways'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
+function queryRouteTableAjax(vcn_id) {
+    console.log('------------- queryRouteTableAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['vcn_id'] = vcn_id;
+    if ('route_table_filter' in okitQueryRequestJson) {
+        request_json['route_table_filter'] = okitQueryRequestJson['route_table_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/RouteTable',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['route_tables'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryRouteTableAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
+function querySecurityListAjax(vcn_id) {
+    console.log('------------- querySecurityListAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['vcn_id'] = vcn_id;
+    if ('security_list_filter' in okitQueryRequestJson) {
+        request_json['security_list_filter'] = okitQueryRequestJson['security_list_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/SecurityList',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['security_lists'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('querySecurityListAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
+function querySubnetAjax(vcn_id) {
+    console.log('------------- querySubnetAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['vcn_id'] = vcn_id;
+    if ('subnet_filter' in okitQueryRequestJson) {
+        request_json['subnet_filter'] = okitQueryRequestJson['subnet_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/Subnet',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['subnets'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('querySubnetAjax : ' + response_json[i]['display_name']);
+                queryInstanceAjax(response_json[i]['id']);
+                queryLoadBalancerAjax(response_json[i]['id']);
+            }
+            redrawSVGCanvas();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
+function queryInstanceAjax(subnet_id) {
+    console.log('------------- queryInstanceAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['subnet_id'] = subnet_id;
+    if ('instance_filter' in okitQueryRequestJson) {
+        request_json['instance_filter'] = okitQueryRequestJson['instance_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/Instance',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['instances'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryInstanceAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
+function queryLoadBalancerAjax(subnet_id) {
+    console.log('------------- queryLoadBalancerAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['subnet_id'] = subnet_id;
+    if ('load_balancer_filter' in okitQueryRequestJson) {
+        request_json['load_balancer_filter'] = okitQueryRequestJson['load_balancer_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/LoadBalancer',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['load_balancers'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
 const ro = new ResizeObserver(entries => {
     //for (let entry of entries) {
     //    entry.target.style.borderRadius = Math.max(0, 250 - entry.contentRect.width) + 'px';
@@ -340,9 +561,11 @@ $(document).ready(function(){
     if (okitQueryRequestJson == null) {
         newDiagram();
     } else {
-        displayOkitJson();
-        drawSVGforJson();
-        okitQueryRequestJson = null
+        //displayOkitJson();
+        //drawSVGforJson();
+        //okitQueryRequestJson = null
+        clearSVG();
+        queryVirtualCloudNetworkAjax();
     }
 
     // Remove Busy Icon if set

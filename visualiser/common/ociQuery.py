@@ -86,7 +86,7 @@ def executeQuery(request_json={}, ** kwargs):
     oci_load_balancers = oci_compartment.getLoadBalancerClients()
     response_json['load_balancers'] = oci_load_balancers.list(filter=filter)
 
-    logger.info('Response     : {0:s}'.format(str(response_json)))
+    logger.debug('Response     : {0:s}'.format(str(response_json)))
     logJson(response_json)
     response_json = standardiseJson(response_json)
     logJson(response_json)
