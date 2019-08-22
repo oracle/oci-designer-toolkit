@@ -34,7 +34,13 @@ function addPropertiesEventListeners(json_element, callbacks) {
                     json_element[this.id] = this.value;
                     // If this is the name field copy to the Ids Map
                     if (this.id == 'display_name') {
-                        okitIdsJsonObj[this.id] = this.value;
+                        okitIdsJsonObj[json_element['id']] = this.value;
+                        d3.select('#' + json_element['id'] + '-title')
+                            .text(this.value);
+                        let text = d3.select('#' + json_element['id'] + '-display-name');
+                        if (text && text != null) {
+                            text.text(this.value);
+                        }
                     }
                 } else if (this.type == 'checkbox') {
                     json_element[this.id] = $(this).is(':checked');

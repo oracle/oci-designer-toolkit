@@ -107,6 +107,7 @@ function drawCompartmentSVG(compartment) {
         .attr("width", "100")
         .attr("height", "100");
     svg.append("title")
+        .attr("id", id + '-title')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .text("Internet Gateway: " + compartment['display_name']);

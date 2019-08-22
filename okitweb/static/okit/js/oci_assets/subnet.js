@@ -174,9 +174,17 @@ function drawSubnetSVG(subnet) {
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     rect.append("title")
+        .attr("id", id + '-title')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .text("Subnet: " + subnet['display_name']);
+    let text = svg.append("text")
+        .attr("id", id + '-display-name')
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
+        .attr("x", icon_x + icon_width / 3)
+        .attr("y", icon_y + icon_height / 3)
+        .text(subnet['display_name']);
     let g = svg.append("g")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)

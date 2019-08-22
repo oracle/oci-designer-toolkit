@@ -119,6 +119,7 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");
         rect.append("title")
+            .attr("id", id + '-title')
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
             .text("Load Balancer: " + load_balancer['display_name']);

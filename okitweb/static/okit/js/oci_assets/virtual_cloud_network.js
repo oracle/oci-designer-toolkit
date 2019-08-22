@@ -157,7 +157,15 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("stroke-dasharray", "5, 5")
         .attr("fill", "white");
     rect.append("title")
+        .attr("id", id + '-title')
         .text("Virtual Cloud Network: " + virtual_cloud_network['display_name']);
+    let text = svg.append("text")
+        .attr("id", id + '-display-name')
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
+        .attr("x", icon_x + icon_width / 3)
+        .attr("y", icon_y + icon_height / 3)
+        .text(virtual_cloud_network['display_name']);
     let g = svg.append("g")
         .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
     g.append("path")
