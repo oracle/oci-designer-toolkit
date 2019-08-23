@@ -41,6 +41,15 @@ function addPropertiesEventListeners(json_element, callbacks) {
                         if (text && text != null) {
                             text.text(this.value);
                         }
+                    } else if (this.id == 'name') {
+                        // Compartment Processing
+                        okitIdsJsonObj[json_element['id']] = this.value;
+                        d3.select('#' + json_element['id'] + '-title')
+                            .text(this.value);
+                        let text = d3.select('#' + json_element['id'] + '-tab');
+                        if (text && text != null) {
+                            text.text(this.value);
+                        }
                     }
                 } else if (this.type == 'checkbox') {
                     json_element[this.id] = $(this).is(':checked');

@@ -95,9 +95,6 @@ function drawBlockStorageSVG(block_storage) {
     let svg_y = (icon_height / 2) * -1;
     let data_type = block_storage_artifact;
 
-    // Increment Icon Position
-    vcn_gateway_icon_position += 1;
-
     //let okitcanvas_svg = d3.select(okitcanvas);
     let okitcanvas_svg = d3.select('#' + parent_id + "-svg");
     let svg = okitcanvas_svg.append("svg")

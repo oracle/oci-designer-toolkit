@@ -33,7 +33,7 @@ function clearVirtualCloudNetworkVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addVirtualCloudNetwork(compartmentid) {
+function addVirtualCloudNetwork(compartment_id) {
     let id = 'okit-vcn-' + uuidv4();
     console.log('Adding Virtual Cloud Network : ' + id);
 
@@ -56,6 +56,7 @@ function addVirtualCloudNetwork(compartmentid) {
     virtual_cloud_network_cidr[id] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
     // Build Virtual Cloud Network Object
     let virtual_cloud_network = {};
+    virtual_cloud_network['compartment_id'] = compartment_id;
     virtual_cloud_network['id'] = id;
     virtual_cloud_network['display_name'] = generateDefaultName(virtual_cloud_network_prefix, virtual_cloud_network_count);
     virtual_cloud_network['cidr_block'] = virtual_cloud_network_cidr[id];
@@ -121,14 +122,15 @@ function deleteVirtualCloudNetwork(id) {
 ** SVG Creation
  */
 function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
+    let parent_id = virtual_cloud_network['compartment_id'];
     let id = virtual_cloud_network['id'];
-    let parent_id = ''
     console.log('Drawing Virtual Cloud Network : ' + id);
     let translate_x = 0;
     let translate_y = 0;
     let data_type = 'Virtual Cloud Network';
 
-    let parent_svg = d3.select(okitcanvas);
+    //let parent_svg = d3.select(okitcanvas);
+    let parent_svg = d3.select('#' + parent_id + "-svg");
     let asset_svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)

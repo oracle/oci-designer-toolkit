@@ -21,6 +21,7 @@
                 </span>
             </div>
         </li>
+        <li><a id="file-add-menu-item" class="parent-item" href="#">Add Compartment</a></li>
         <li><a id="file-redraw-menu-item" class="parent-item" href="#">Redraw</a></li>
         <li>
             <div>
@@ -88,7 +89,25 @@
         </div>
         <div id="web-designer-panel" class="web-designer-panel flex-row">
             <div id="canvas-wrapper" class="designer-left-column canvas-wrapper">
-                <svg id="okitcanvas" data-type="Compartment" class="svg-canvas"></svg>
+                <div id="compartment-tabs" class="tab">
+                    <!--button class="tablinks" onclick="openCompartment(event, 'Wizards')" id="defaultOpen">Wizards</--button>
+                    <button class="tablinks" onclick="openCompartment(event, 'Paris')">Paris</button>
+                    <button class="tablinks" onclick="openCompartment(event, 'Tokyo')">Tokyo</button-->
+                </div>
+
+                <!--div id="Wizards" class="tabcontent">
+                    <svg id="okitcanvas" data-type="Compartment" class="svg-canvas"></svg>
+                </div>
+
+                <div id="Paris" class="tabcontent">
+                    <h3>Paris</h3>
+                    <p>Paris is the capital of France.</p>
+                </div>
+
+                <div id="Tokyo" class="tabcontent">
+                    <h3>Tokyo</h3>
+                    <p>Tokyo is the capital of Japan.</p>
+                </div-->
             </div>
             <div id="asset-properties" class="designer-right-column properties-wrapper">
                 <div id="properties-and-source" class="properties-source-wrapper">

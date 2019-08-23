@@ -54,13 +54,26 @@ function handleNew(evt) {
 function newDiagram() {
     console.log('Creating New Diagram');
     OKITJsonObj = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
+    OKITJsonObj = {};
     okitIdsJsonObj = {};
     clearSVG();
+    addCompartment();
+}
+
+function clearTabs() {
+    $('#canvas-wrapper').empty();
+    d3.select('#canvas-wrapper').append('div')
+        .attr("id", "compartment-tabs")
+        .attr("class", "tab");
 }
 
 function clearSVG() {
     console.log('Clearing Diagram');
-    $('#okitcanvas').empty();
+    //$('#okitcanvas').empty();
+    // Tabs
+    clearTabs();
+    // Compartments
+    clearCompartmentVariables();
     // Virtual Cloud Network
     vcn_gateway_icon_position = 0;
     vcn_element_icon_position = 0;
@@ -79,8 +92,8 @@ function clearSVG() {
     clearInstanceVariables();
     // Add Path Style
     //let okitcanvas_svg = d3.select('#okitcanvas');
-    d3.select('#okitcanvas').append('style')
-        .text('.st0{fill:#F80000;}');
+    //d3.select('#okitcanvas').append('style')
+    //    .text('.st0{fill:#F80000;}');
 }
 
 /*
@@ -110,6 +123,13 @@ function drawSVGforJson() {
     clearSVG();
     // Draw SVG
     if ('compartments' in OKITJsonObj) {
+        compartment_ids = [];
+        for (let i = 0; i < OKITJsonObj['compartments'].length; i++) {
+            compartment_ids.push(OKITJsonObj['compartments'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['compartments'][i]['id']] = OKITJsonObj['compartments'][i]['name']
+            compartment_count += 1;
+            drawCompartmentSVG(OKITJsonObj['compartments'][i]);
+        }
     }
     if ('virtual_cloud_networks' in OKITJsonObj) {
         virtual_network_ids = [];
@@ -228,6 +248,15 @@ function saveJson(text, filename){
     a.setAttribute('href', 'data:text/plain;charset=utf-u,'+encodeURIComponent(text));
     a.setAttribute('download', filename);
     a.click()
+}
+
+/*
+** Add Compartment file
+ */
+
+function handleAdd(evt) {
+    hideNavMenu();
+    addCompartment();
 }
 
 /*
@@ -474,6 +503,34 @@ function queryLoadBalancerAjax(subnet_id) {
 }
 
 
+function openCompartment(compartment_id) {
+    //$('.tabcontent').each(function(i, obj) {
+    //    obj.style.display = "none";
+    //});
+    // Clear All
+    $('.tabcontent').hide();
+    $('.tablinks').removeClass('active');
+    // Add to selected
+    $('#' + compartment_id + '-tab-button').addClass('active');
+    $('#' + compartment_id + '-tab-content').show();
+}
+
+
+function openCompartmentOrig(evt, compartment) {
+    let i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(compartment).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+
 const ro = new ResizeObserver(entries => {
     //for (let entry of entries) {
     //    entry.target.style.borderRadius = Math.max(0, 250 - entry.contentRect.width) + 'px';
@@ -498,6 +555,7 @@ $(document).ready(function(){
     /*
     ** Handle drop functionality for canvas
      */
+    /*
     let okitcanvas = document.getElementById('okitcanvas');
     okitcanvas.addEventListener('dragenter', handleDragEnter, false)
     okitcanvas.addEventListener('dragover', handleDragOver, false);
@@ -511,6 +569,7 @@ $(document).ready(function(){
         .attr('y', 0)
         .attr('width', '100%')
         .attr('height', '100%');
+    */
 
     /*
     ** Add button handlers
@@ -526,6 +585,8 @@ $(document).ready(function(){
     document.getElementById('file-load-menu-item').addEventListener('click', handleLoadClick, false);
 
     document.getElementById('file-save-menu-item').addEventListener('click', handleSave, false);
+
+    document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
 
     // Canvas Menu
     document.getElementById('file-export-menu-item').addEventListener('click', handleExport, false);
@@ -557,6 +618,8 @@ $(document).ready(function(){
     /*
     ** Clean and start new diagram
      */
+
+    let compartment_id = addCompartment();
 
     if (okitQueryRequestJson == null) {
         newDiagram();
@@ -590,6 +653,9 @@ $(document).ready(function(){
     });
 
     $("#json-display").slideToggle();
+
+    // Get the element with id="defaultOpen" and click on it
+    //document.getElementById("defaultOpen").click();
 
     // Only observe the canvas
     ro.observe(document.querySelector('#canvas-wrapper'));

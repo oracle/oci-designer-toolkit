@@ -36,7 +36,7 @@ function clearSubnetVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addSubnet(vcnid) {
+function addSubnet(vcn_id) {
     let id = 'okit-sn-' + uuidv4();
     console.log('Adding Subnet : ' + id);
 
@@ -53,11 +53,11 @@ function addSubnet(vcnid) {
     // Increment Count
     subnet_count += 1;
     // Generate Cidr
-    vcn_cidr = virtual_cloud_network_cidr[vcnid].split('/')[0].split('.');
+    vcn_cidr = virtual_cloud_network_cidr[vcn_id].split('/')[0].split('.');
     subnet_cidr[id] = vcn_cidr[0] + '.' + vcn_cidr[1] + '.' + (subnet_count - 1) + '.' + vcn_cidr[3] + '/24';
     // Build Subnet Object
     let subnet = {};
-    subnet['vcn_id'] = vcnid;
+    subnet['vcn_id'] = vcn_id;
     subnet['virtual_cloud_network'] = '';
     subnet['id'] = id;
     subnet['display_name'] = generateDefaultName(subnet_prefix, subnet_count);
