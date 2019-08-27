@@ -111,6 +111,23 @@
         </div>
     </div>
     <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
+    <div id="query-progress" class="hidden query-progress">
+        <table>
+            <thead>
+                <tr><th>Querying Completed</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><input type="checkbox" id="compartment-query-cb">Compartments</td></tr>
+                <tr><td><input type="checkbox" id="vcn-query-cb">Virtual Cloud Networks</td></tr>
+                <tr><td><input type="checkbox" id="internet-gateway-query-cb">Internet Gateways</td></tr>
+                <tr><td><input type="checkbox" id="route-table-query-cb">Route Tables</td></tr>
+                <tr><td><input type="checkbox" id="security-list-query-cb">Security Lists</td></tr>
+                <tr><td><input type="checkbox" id="subnet-query-cb">Subnets</td></tr>
+                <tr><td><input type="checkbox" id="instance-query-cb">Instances</td></tr>
+                <tr><td><input type="checkbox" id="load-balancer-query-cb">Load Balancers</td></tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
 
 {% block footerblock %}

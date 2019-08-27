@@ -247,48 +247,57 @@ function drawSubnetConnectorsSVG(subnet) {
     let parent_id = subnet['vcn_id'];
     let id = subnet['id'];
     let boundingClientRect = d3.select("#" + id).node().getBoundingClientRect();
-    let parent_svg = document.getElementById(parent_id + "-svg");
+    let parent_svg = d3.select('#' + parent_id + "-svg");
+    // Only Draw if parent exists
+    if (parent_svg.node()) {
+        console.log('Parent SVG : ' + parent_svg.node());
+        // Define SVG position manipulation variables
+        let svgPoint = parent_svg.node().createSVGPoint();
+        let screenCTM = parent_svg.node().getScreenCTM();
+        svgPoint.x = boundingClientRect.x + (boundingClientRect.width / 2);
+        svgPoint.y = boundingClientRect.y;
 
-    // Define SVG position manipulation variables
-    let svgPoint = parent_svg.createSVGPoint();
-    let screenCTM = parent_svg.getScreenCTM();
-    svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
-    svgPoint.y = boundingClientRect.y;
+        let subnetrelative = svgPoint.matrixTransform(screenCTM.inverse());
+        let sourcesvg = null;
 
-    let subnetrelative = svgPoint.matrixTransform(screenCTM.inverse());
-    let sourcesvg = null;
+        svg = d3.select('#' + parent_id + "-svg");
 
-    svg = d3.select('#' + parent_id + "-svg");
+        if (subnet['route_table_id'] != '') {
+            let route_table_svg = d3.select("#" + subnet['route_table_id']);
+            if (route_table_svg.node()) {
+                boundingClientRect = route_table_svg.node().getBoundingClientRect();
+                svgPoint.x = boundingClientRect.x + (boundingClientRect.width / 2);
+                svgPoint.y = boundingClientRect.y + boundingClientRect.height;
+                sourcesvg = svgPoint.matrixTransform(screenCTM.inverse());
+                svg.append('line')
+                    .attr("id", generateConnectorId(subnet['route_table_id'], id))
+                    .attr("x1", sourcesvg.x)
+                    .attr("y1", sourcesvg.y)
+                    .attr("x2", subnetrelative.x)
+                    .attr("y2", subnetrelative.y)
+                    .attr("stroke-width", "2")
+                    .attr("stroke", "black");
+            }
+        }
 
-    if (subnet['route_table_id'] != '') {
-        boundingClientRect = d3.select("#" + subnet['route_table_id']).node().getBoundingClientRect();
-        svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
-        svgPoint.y = boundingClientRect.y + boundingClientRect.height;
-        sourcesvg = svgPoint.matrixTransform(screenCTM.inverse());
-        svg.append('line')
-            .attr("id", generateConnectorId(subnet['route_table_id'], id))
-            .attr("x1", sourcesvg.x)
-            .attr("y1", sourcesvg.y)
-            .attr("x2", subnetrelative.x)
-            .attr("y2", subnetrelative.y)
-            .attr("stroke-width", "2")
-            .attr("stroke", "black");
-    }
-
-    if (subnet['security_list_ids'].length > 0) {
-        for (let i = 0; i < subnet['security_list_ids'].length; i++) {
-            boundingClientRect = d3.select("#" + subnet['security_list_ids'][i]).node().getBoundingClientRect();
-            svgPoint.x = boundingClientRect.x + (boundingClientRect.width/2);
-            svgPoint.y = boundingClientRect.y + boundingClientRect.height;
-            sourcesvg = svgPoint.matrixTransform(screenCTM.inverse());
-            svg.append('line')
-                .attr("id", generateConnectorId(subnet['security_list_ids'][i], id))
-                .attr("x1", sourcesvg.x)
-                .attr("y1", sourcesvg.y)
-                .attr("x2", subnetrelative.x)
-                .attr("y2", subnetrelative.y)
-                .attr("stroke-width", "2")
-                .attr("stroke", "black");
+        if (subnet['security_list_ids'].length > 0) {
+            for (let i = 0; i < subnet['security_list_ids'].length; i++) {
+                let security_list_svg = d3.select("#" + subnet['security_list_ids'][i]);
+                if (security_list_svg.node()) {
+                    boundingClientRect = security_list_svg.node().getBoundingClientRect();
+                    svgPoint.x = boundingClientRect.x + (boundingClientRect.width / 2);
+                    svgPoint.y = boundingClientRect.y + boundingClientRect.height;
+                    sourcesvg = svgPoint.matrixTransform(screenCTM.inverse());
+                    svg.append('line')
+                        .attr("id", generateConnectorId(subnet['security_list_ids'][i], id))
+                        .attr("x1", sourcesvg.x)
+                        .attr("y1", sourcesvg.y)
+                        .attr("x2", subnetrelative.x)
+                        .attr("y2", subnetrelative.y)
+                        .attr("stroke-width", "2")
+                        .attr("stroke", "black");
+                }
+            }
         }
     }
 }

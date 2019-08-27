@@ -114,6 +114,16 @@
 
 .context-menu li{ list-style: none; }
 
+.query-progress {
+    z-index:1000;
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    border: black 1px dashed;
+    border-radius: 5px;
+    padding: 5px;
+}
+
 /* Asset Properties */
 
 .properties-source-wrapper {

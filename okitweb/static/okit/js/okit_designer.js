@@ -286,6 +286,22 @@ function saveSvg(svgEl, name) {
 ** Query OCI Ajax Calls to allow async svg build
  */
 
+function showQueryProgress() {
+    let element = document.getElementById("query-progress");
+    element.classList.toggle("hidden");
+    element.style.top =  d3.event.clientY + 'px';
+    element.style.left = d3.event.clientX + 'px';
+}
+
+function hideQueryProgressIfComplete() {
+    let cnt = $('#query-progress input:checkbox:not(:checked)').length
+    console.log('>>>>>>> Unhecked Count : ' + cnt);
+    if (cnt == 0) {
+        unsetBusyIcon();
+        $('#query-progress').toggleClass('hidden');
+    }
+}
+
 function queryCompartmentAjax() {
     console.log('------------- queryCompartmentAjax --------------------');
     $.ajax({
@@ -303,6 +319,8 @@ function queryCompartmentAjax() {
                 queryVirtualCloudNetworkAjax(response_json[i]['id']);
             }
             redrawSVGCanvas();
+            $('#compartment-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -338,6 +356,8 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
                 querySubnetAjax(compartment_id, response_json[i]['id']);
             }
             redrawSVGCanvas();
+            $('#vcn-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -369,6 +389,8 @@ function queryInternetGatewayAjax(compartment_id, vcn_id) {
                 console.log('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#internet-gateway-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -400,6 +422,8 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
                 console.log('queryRouteTableAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#route-table-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -431,6 +455,8 @@ function querySecurityListAjax(compartment_id, vcn_id) {
                 console.log('querySecurityListAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#security-list-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -464,6 +490,8 @@ function querySubnetAjax(compartment_id, vcn_id) {
                 queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
             }
             redrawSVGCanvas();
+            $('#subnet-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -495,6 +523,8 @@ function queryInstanceAjax(compartment_id, subnet_id) {
                 console.log('queryInstanceAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#instance-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -526,6 +556,8 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
                 console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#load-balancer-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -629,6 +661,9 @@ $(document).ready(function(){
     //asset_properties.addEventListener('mousedown', handlePropertiesMouseDown, false);
     //asset_properties.addEventListener('mouseup', handlePropertiesMouseUp, false);
 
+
+    // Remove Busy Icon if set
+    unsetBusyIcon();
     /*
     ** Clean and start new diagram
      */
@@ -638,16 +673,15 @@ $(document).ready(function(){
     if (okitQueryRequestJson == null) {
         newDiagram();
     } else {
+        setBusyIcon();
         //displayOkitJson();
         //drawSVGforJson();
         //okitQueryRequestJson = null
         clearSVG();
         //queryVirtualCloudNetworkAjax();
+        $('#query-progress').removeClass('hidden');
         queryCompartmentAjax();
     }
-
-    // Remove Busy Icon if set
-    unsetBusyIcon();
 
     /*
     $("#show-code").click(function(){
