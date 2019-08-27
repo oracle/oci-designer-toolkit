@@ -20,9 +20,9 @@ let asset_update_functions = {};
 let asset_delete_functions = {};
 
 function addAssetToDropTarget(title, target_id) {
-    //console.log('addAssetToDropTarget - Title : ' + title);
-    //console.log('addAssetToDropTarget - Target Id : ' + target_id);
-    //console.log('addAssetToDropTarget - Add Functions : ' + JSON.stringify(asset_add_functions));
+    console.log('addAssetToDropTarget - Title : ' + title);
+    console.log('addAssetToDropTarget - Target Id : ' + target_id);
+    console.log('addAssetToDropTarget - Add Functions : ' + JSON.stringify(asset_add_functions));
     window[asset_add_functions[title]](target_id);
 }
 
@@ -51,7 +51,11 @@ let asset_drop_targets = {};
 let asset_connect_targets = {};
 
 function setDragDropIcon(e) {
+    if (typeof e == 'undefined') {
+        e = d3.event;
+    }
     let type = e.target.getAttribute('data-type');
+    //console.log('Set Drop Target Icon for ' + palatte_source_type + ' over ' + type);
     if (asset_drop_targets[palatte_source_type].indexOf(type) >= 0) {
         e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
@@ -61,6 +65,9 @@ function setDragDropIcon(e) {
 }
 
 function handleDragStart(e) {
+    if (typeof e == 'undefined') {
+        e = d3.event;
+    }
     console.log('Drag Start');
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('text/plain', this.title);
@@ -71,6 +78,9 @@ function handleDragStart(e) {
 }
 
 function handleDragOver(e) {
+    if (typeof e == 'undefined') {
+        e = d3.event;
+    }
     if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
     }
@@ -79,16 +89,25 @@ function handleDragOver(e) {
 }
 
 function handleDragEnter(e) {
+    if (typeof e == 'undefined') {
+        e = d3.event;
+    }
     // this / e.target is the current hover target.
     //this.classList.add('over');
     setDragDropIcon(e);
 }
 
 function handleDragLeave(e) {
+    if (typeof e == 'undefined') {
+        e = d3.event;
+    }
     //this.classList.remove('over');  // this / e.target is previous target element.
 }
 
 function handleDrop(e) {
+    if (typeof e == 'undefined') {
+        e = d3.event;
+    }
     console.log('Drag Drop (Dynamic)');
     // this/e.target is current target element.
 
@@ -103,6 +122,7 @@ function handleDrop(e) {
     let title = e.dataTransfer.getData('text/plain');
     let type = e.target.getAttribute('data-type');
     let target_id = e.target.id;
+    //target_id = e.target.getAttribute('data-okit-id');
     // Call Add Function
     addAssetToDropTarget(title, target_id)
 
@@ -112,6 +132,9 @@ function handleDrop(e) {
 }
 
 function handleDragEnd(e) {
+    if (typeof e == 'undefined') {
+        e = d3.event;
+    }
     // this/e.target is the source node.
     console.log('Drag End');
 

@@ -26,9 +26,9 @@ function clearCompartmentVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addCompartment(vcnid) {
+function addCompartment() {
     let id = 'okit-compartment-' + uuidv4();
-    console.log('Adding Internet Gateway : ' + id);
+    console.log('Adding ' + compartment_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -51,6 +51,7 @@ function addCompartment(vcnid) {
     displayOkitJson();
     drawCompartmentSVG(compartment);
     loadCompartmentProperties(id);
+    openCompartment(id);
 }
 
 /*
@@ -85,31 +86,60 @@ function deleteCompartment(id) {
 function drawCompartmentSVG(compartment) {
     let parent_id = "canvas-wrapper";
     let id = compartment['id'];
-    console.log('Drawing Compartment : ' + id);
+    console.log('Drawing ' + compartment_artifact + ' : ' + id);
     let position = vcn_gateway_icon_position;
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
     let translate_y = icon_translate_y_start;
-    let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    let svg_y = (icon_height / 2) * -1;
-    let data_type = "Internet Gateway";
+    let svg_x = 0;
+    let svg_y = 0;
+    let data_type = compartment_artifact;
 
-    // Increment Icon Position
-    vcn_gateway_icon_position += 1;
+    // Add tab for canvas
+    let tabwrapper = d3.select('#' + parent_id);
+    let tabbar = d3.select('#compartment-tabs');
+    tabbar.append("button")
+        .on("click", function() { openCompartment(id); })
+        //.on("click", function() { openCompartment(event, compartment['name']); })
+        .attr("class", "tablinks")
+        .attr("id", id + "-tab-button")
+        .text(compartment['name']);
+    let compartment_div = tabwrapper.append("div")
+        .attr("class", "tabcontent")
+        .attr("id", id + "-tab-content");
+        //.attr("id", compartment['name']);
 
-    let okitcanvas_svg = d3.select('#' + parent_id);
-    let svg = okitcanvas_svg.append("svg")
+    //let okitcanvas_svg = d3.select('#' + parent_id);
+    let svg = compartment_div.append("svg")
+        .attr("class", "svg-canvas")
         .attr("id", id + '-svg')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("title", compartment['name'])
         .attr("x", svg_x)
         .attr("y", svg_y)
-        .attr("width", "100")
-        .attr("height", "100");
-    svg.append("title")
+        .attr("width", "100%")
+        .attr("height", "100%");
+    svg.append('style')
+        .text('.st0{fill:#F80000;}');
+    let rect = svg.append("rect")
+        .attr("id", id)
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
-        .text("Internet Gateway: " + compartment['display_name']);
+        .attr("title", compartment['name'])
+        .attr("x", svg_x)
+        .attr("y", svg_x)
+        //.attr("width", vcn_width - (icon_width * 2))
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("stroke-dasharray", "5, 5")
+        .attr("stroke", "red")
+        .attr("fill", "white")
+        .attr("style", "fill-opacity: .25;");
+    rect.append("title")
+        .attr("id", id + '-title')
+        .attr("data-type", data_type)
+        .attr("data-parentid", parent_id)
+        .text(compartment_artifact + ": " + compartment['name']);
 
     //loadCompartmentProperties(id);
     // Add click event to display properties
@@ -117,7 +147,11 @@ function drawCompartmentSVG(compartment) {
     // Add dragevent versions
     // Set common attributes on svg element and children
     svg.on("click", function() { loadCompartmentProperties(id); })
-        .on("contextmenu", handleContextMenu)
+        .on("dragenter", handleDragEnter)
+        .on("dragover", handleDragOver)
+        .on("dragleave", handleDragLeave)
+        .on("drop", handleDrop)
+        .on("dragend", handleDragEnd)
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
@@ -125,6 +159,15 @@ function drawCompartmentSVG(compartment) {
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id);
+
+    /*
+    okitcanvas.addEventListener('dragenter', handleDragEnter, false)
+    okitcanvas.addEventListener('dragover', handleDragOver, false);
+    okitcanvas.addEventListener('dragleave', handleDragLeave, false);
+    okitcanvas.addEventListener('drop', handleDrop, false);
+    okitcanvas.addEventListener('dragend', handleDragEnd, false);
+     */
+    //document.getElementById(id + "-tab").click();
 }
 
 /*
@@ -133,7 +176,7 @@ function drawCompartmentSVG(compartment) {
 function loadCompartmentProperties(id) {
     $("#properties").load("propertysheets/compartment.html", function () {
         if ('compartments' in OKITJsonObj) {
-            console.log('Loading Internet Gateway: ' + id);
+            console.log('Loading ' + compartment_artifact + ' : ' + id);
             let json = OKITJsonObj['compartments'];
             for (let i = 0; i < json.length; i++) {
                 compartment = json[i];

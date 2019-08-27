@@ -21,6 +21,7 @@
                 </span>
             </div>
         </li>
+        <li><a id="file-add-menu-item" class="parent-item" href="#">Add Compartment</a></li>
         <li><a id="file-redraw-menu-item" class="parent-item" href="#">Redraw</a></li>
         <li>
             <div>
@@ -62,7 +63,7 @@
             console.log('Processing Query Javascript');
             okitQueryRequestJson = {{ okit_query_request_json | safe }};
             OKITJsonObj = {{ okit_query_response_json | safe }};
-            queryVirtualCloudNetworkAjax();
+            //queryCompartmentAjax();
             //displayOkitJson();
             //drawSVGforJson();
         </script>
@@ -88,7 +89,8 @@
         </div>
         <div id="web-designer-panel" class="web-designer-panel flex-row">
             <div id="canvas-wrapper" class="designer-left-column canvas-wrapper">
-                <svg id="okitcanvas" data-type="Compartment" class="svg-canvas"></svg>
+                <div id="compartment-tabs" class="tab">
+                </div>
             </div>
             <div id="asset-properties" class="designer-right-column properties-wrapper">
                 <div id="properties-and-source" class="properties-source-wrapper">
@@ -109,6 +111,23 @@
         </div>
     </div>
     <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
+    <div id="query-progress" class="hidden query-progress">
+        <table>
+            <thead>
+                <tr><th>Querying Completed</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><input type="checkbox" id="compartment-query-cb">Compartments</td></tr>
+                <tr><td><input type="checkbox" id="vcn-query-cb">Virtual Cloud Networks</td></tr>
+                <tr><td><input type="checkbox" id="internet-gateway-query-cb">Internet Gateways</td></tr>
+                <tr><td><input type="checkbox" id="route-table-query-cb">Route Tables</td></tr>
+                <tr><td><input type="checkbox" id="security-list-query-cb">Security Lists</td></tr>
+                <tr><td><input type="checkbox" id="subnet-query-cb">Subnets</td></tr>
+                <tr><td><input type="checkbox" id="instance-query-cb">Instances</td></tr>
+                <tr><td><input type="checkbox" id="load-balancer-query-cb">Load Balancers</td></tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
 
 {% block footerblock %}

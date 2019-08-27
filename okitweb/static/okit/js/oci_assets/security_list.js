@@ -124,6 +124,7 @@ function drawSecurityListSVG(security_list) {
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     rect.append("title")
+        .attr("id", id + '-title')
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .text("Security List: " + security_list['display_name']);

@@ -45,8 +45,12 @@ class OCIInstanceVnics(OCIVirtualNetworkConnection):
         vnic_attachments = oci.pagination.list_call_get_all_results(computeclient.client.list_vnic_attachments, compartment_id=compartment_id, instance_id=instance_id).data        
         vnics=[]
         for attachment in vnic_attachments:
-            vnic=self.client.get_vnic(attachment.vnic_id).data
-            vnics.append(vnic)
+            try:
+                vnic=self.client.get_vnic(attachment.vnic_id).data
+                vnics.append(vnic)
+            except Exception as e:
+                logger.exception('Failed to get Vnic Attachment')
+                logger.exception(e)
         vnics_json = self.toJson(vnics)
         logger.debug(str(vnics_json))
   

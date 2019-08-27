@@ -54,13 +54,26 @@ function handleNew(evt) {
 function newDiagram() {
     console.log('Creating New Diagram');
     OKITJsonObj = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
+    OKITJsonObj = {};
     okitIdsJsonObj = {};
     clearSVG();
+    addCompartment();
+}
+
+function clearTabs() {
+    $('#canvas-wrapper').empty();
+    d3.select('#canvas-wrapper').append('div')
+        .attr("id", "compartment-tabs")
+        .attr("class", "tab");
 }
 
 function clearSVG() {
     console.log('Clearing Diagram');
-    $('#okitcanvas').empty();
+    //$('#okitcanvas').empty();
+    // Tabs
+    clearTabs();
+    // Compartments
+    clearCompartmentVariables();
     // Virtual Cloud Network
     vcn_gateway_icon_position = 0;
     vcn_element_icon_position = 0;
@@ -79,8 +92,8 @@ function clearSVG() {
     clearInstanceVariables();
     // Add Path Style
     //let okitcanvas_svg = d3.select('#okitcanvas');
-    d3.select('#okitcanvas').append('style')
-        .text('.st0{fill:#F80000;}');
+    //d3.select('#okitcanvas').append('style')
+    //    .text('.st0{fill:#F80000;}');
 }
 
 /*
@@ -110,6 +123,13 @@ function drawSVGforJson() {
     clearSVG();
     // Draw SVG
     if ('compartments' in OKITJsonObj) {
+        compartment_ids = [];
+        for (let i = 0; i < OKITJsonObj['compartments'].length; i++) {
+            compartment_ids.push(OKITJsonObj['compartments'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['compartments'][i]['id']] = OKITJsonObj['compartments'][i]['name']
+            compartment_count += 1;
+            drawCompartmentSVG(OKITJsonObj['compartments'][i]);
+        }
     }
     if ('virtual_cloud_networks' in OKITJsonObj) {
         virtual_network_ids = [];
@@ -231,6 +251,15 @@ function saveJson(text, filename){
 }
 
 /*
+** Add Compartment file
+ */
+
+function handleAdd(evt) {
+    hideNavMenu();
+    addCompartment();
+}
+
+/*
 ** Export SVG
  */
 
@@ -257,26 +286,41 @@ function saveSvg(svgEl, name) {
 ** Query OCI Ajax Calls to allow async svg build
  */
 
-function queryVirtualCloudNetworkAjax() {
-    console.log('------------- queryVirtualCloudNetworkAjax --------------------');
+function showQueryProgress() {
+    let element = document.getElementById("query-progress");
+    element.classList.toggle("hidden");
+    element.style.top =  d3.event.clientY + 'px';
+    element.style.left = d3.event.clientX + 'px';
+}
+
+function hideQueryProgressIfComplete() {
+    let cnt = $('#query-progress input:checkbox:not(:checked)').length
+    console.log('>>>>>>> Unhecked Count : ' + cnt);
+    if (cnt == 0) {
+        unsetBusyIcon();
+        $('#query-progress').toggleClass('hidden');
+    }
+}
+
+function queryCompartmentAjax() {
+    console.log('------------- queryCompartmentAjax --------------------');
     $.ajax({
         type: 'get',
-        url: 'oci/artifacts/VirtualCloudNetwork',
+        url: 'oci/artifacts/Compartment',
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(okitQueryRequestJson),
         success: function(resp) {
-            let response_json = JSON.parse(resp);
-            OKITJsonObj['virtual_cloud_networks'] = response_json;
+            let response_json = [JSON.parse(resp)];
+            OKITJsonObj['compartments'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
-                queryInternetGatewayAjax(response_json[i]['id']);
-                queryRouteTableAjax(response_json[i]['id']);
-                querySecurityListAjax(response_json[i]['id']);
-                querySubnetAjax(response_json[i]['id']);
+                console.log('queryCompartmentAjax : ' + response_json[i]['name']);
+                queryVirtualCloudNetworkAjax(response_json[i]['id']);
             }
             redrawSVGCanvas();
+            $('#compartment-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -286,10 +330,47 @@ function queryVirtualCloudNetworkAjax() {
 }
 
 
-function queryInternetGatewayAjax(vcn_id) {
+function queryVirtualCloudNetworkAjax(compartment_id) {
+    console.log('------------- queryVirtualCloudNetworkAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
+        request_json['virtual_cloud_network_filter'] = okitQueryRequestJson['virtual_cloud_network_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/VirtualCloudNetwork',
+        dataType: 'text',
+        contentType: 'application/json',
+        //data: JSON.stringify(okitQueryRequestJson),
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['virtual_cloud_networks'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
+                queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
+                queryRouteTableAjax(compartment_id, response_json[i]['id']);
+                querySecurityListAjax(compartment_id, response_json[i]['id']);
+                querySubnetAjax(compartment_id, response_json[i]['id']);
+            }
+            redrawSVGCanvas();
+            $('#vcn-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
+function queryInternetGatewayAjax(compartment_id, vcn_id) {
     console.log('------------- queryInternetGatewayAjax --------------------');
     let request_json = {};
-    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('internet_gateway_filter' in okitQueryRequestJson) {
         request_json['internet_gateway_filter'] = okitQueryRequestJson['internet_gateway_filter'];
@@ -308,6 +389,8 @@ function queryInternetGatewayAjax(vcn_id) {
                 console.log('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#internet-gateway-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -317,10 +400,10 @@ function queryInternetGatewayAjax(vcn_id) {
 }
 
 
-function queryRouteTableAjax(vcn_id) {
+function queryRouteTableAjax(compartment_id, vcn_id) {
     console.log('------------- queryRouteTableAjax --------------------');
     let request_json = {};
-    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('route_table_filter' in okitQueryRequestJson) {
         request_json['route_table_filter'] = okitQueryRequestJson['route_table_filter'];
@@ -339,6 +422,8 @@ function queryRouteTableAjax(vcn_id) {
                 console.log('queryRouteTableAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#route-table-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -348,10 +433,10 @@ function queryRouteTableAjax(vcn_id) {
 }
 
 
-function querySecurityListAjax(vcn_id) {
+function querySecurityListAjax(compartment_id, vcn_id) {
     console.log('------------- querySecurityListAjax --------------------');
     let request_json = {};
-    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('security_list_filter' in okitQueryRequestJson) {
         request_json['security_list_filter'] = okitQueryRequestJson['security_list_filter'];
@@ -370,6 +455,8 @@ function querySecurityListAjax(vcn_id) {
                 console.log('querySecurityListAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#security-list-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -379,10 +466,10 @@ function querySecurityListAjax(vcn_id) {
 }
 
 
-function querySubnetAjax(vcn_id) {
+function querySubnetAjax(compartment_id, vcn_id) {
     console.log('------------- querySubnetAjax --------------------');
     let request_json = {};
-    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('subnet_filter' in okitQueryRequestJson) {
         request_json['subnet_filter'] = okitQueryRequestJson['subnet_filter'];
@@ -399,10 +486,12 @@ function querySubnetAjax(vcn_id) {
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.log('querySubnetAjax : ' + response_json[i]['display_name']);
-                queryInstanceAjax(response_json[i]['id']);
-                queryLoadBalancerAjax(response_json[i]['id']);
+                queryInstanceAjax(compartment_id, response_json[i]['id']);
+                queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
             }
             redrawSVGCanvas();
+            $('#subnet-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -412,10 +501,10 @@ function querySubnetAjax(vcn_id) {
 }
 
 
-function queryInstanceAjax(subnet_id) {
+function queryInstanceAjax(compartment_id, subnet_id) {
     console.log('------------- queryInstanceAjax --------------------');
     let request_json = {};
-    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['compartment_id'] = compartment_id;
     request_json['subnet_id'] = subnet_id;
     if ('instance_filter' in okitQueryRequestJson) {
         request_json['instance_filter'] = okitQueryRequestJson['instance_filter'];
@@ -434,6 +523,8 @@ function queryInstanceAjax(subnet_id) {
                 console.log('queryInstanceAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#instance-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
@@ -443,10 +534,10 @@ function queryInstanceAjax(subnet_id) {
 }
 
 
-function queryLoadBalancerAjax(subnet_id) {
+function queryLoadBalancerAjax(compartment_id, subnet_id) {
     console.log('------------- queryLoadBalancerAjax --------------------');
     let request_json = {};
-    request_json['compartment_id'] = okitQueryRequestJson['compartment_id'];
+    request_json['compartment_id'] = compartment_id;
     request_json['subnet_id'] = subnet_id;
     if ('load_balancer_filter' in okitQueryRequestJson) {
         request_json['load_balancer_filter'] = okitQueryRequestJson['load_balancer_filter'];
@@ -465,12 +556,24 @@ function queryLoadBalancerAjax(subnet_id) {
                 console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
+            $('#load-balancer-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.log('Status : '+ status)
             console.log('Error : '+ error)
         }
     });
+}
+
+
+function openCompartment(compartment_id) {
+    // Clear All
+    $('.tabcontent').hide();
+    $('.tablinks').removeClass('active');
+    // Add to selected
+    $('#' + compartment_id + '-tab-button').addClass('active');
+    $('#' + compartment_id + '-tab-content').show();
 }
 
 
@@ -498,6 +601,7 @@ $(document).ready(function(){
     /*
     ** Handle drop functionality for canvas
      */
+    /*
     let okitcanvas = document.getElementById('okitcanvas');
     okitcanvas.addEventListener('dragenter', handleDragEnter, false)
     okitcanvas.addEventListener('dragover', handleDragOver, false);
@@ -511,6 +615,7 @@ $(document).ready(function(){
         .attr('y', 0)
         .attr('width', '100%')
         .attr('height', '100%');
+    */
 
     /*
     ** Add button handlers
@@ -526,6 +631,8 @@ $(document).ready(function(){
     document.getElementById('file-load-menu-item').addEventListener('click', handleLoadClick, false);
 
     document.getElementById('file-save-menu-item').addEventListener('click', handleSave, false);
+
+    document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
 
     // Canvas Menu
     document.getElementById('file-export-menu-item').addEventListener('click', handleExport, false);
@@ -554,22 +661,27 @@ $(document).ready(function(){
     //asset_properties.addEventListener('mousedown', handlePropertiesMouseDown, false);
     //asset_properties.addEventListener('mouseup', handlePropertiesMouseUp, false);
 
+
+    // Remove Busy Icon if set
+    unsetBusyIcon();
     /*
     ** Clean and start new diagram
      */
 
+    let compartment_id = addCompartment();
+
     if (okitQueryRequestJson == null) {
         newDiagram();
     } else {
+        setBusyIcon();
         //displayOkitJson();
         //drawSVGforJson();
         //okitQueryRequestJson = null
         clearSVG();
-        queryVirtualCloudNetworkAjax();
+        //queryVirtualCloudNetworkAjax();
+        $('#query-progress').removeClass('hidden');
+        queryCompartmentAjax();
     }
-
-    // Remove Busy Icon if set
-    unsetBusyIcon();
 
     /*
     $("#show-code").click(function(){

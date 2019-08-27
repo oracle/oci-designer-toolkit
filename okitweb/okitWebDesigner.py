@@ -78,6 +78,7 @@ def designer():
         for key, value in request.form.items():
             request_json[key] = value
         request_json['virtual_cloud_network_filter'] = {'display_name': request_json.get('virtual_cloud_network_name_filter', '')}
+        logger.info('Request Json {0!s:s}'.format(request_json))
         #response_json = executeQuery(request_json)
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
@@ -151,7 +152,12 @@ def ociArtifacts(artifact):
     logJson(query_json)
     logger.info(json.dumps(query_json, sort_keys=True, indent=2, separators=(',', ': ')))
     response_json = {}
-    if artifact == 'VirtualCloudNetwork':
+    if artifact == 'Compartment':
+        logger.info('---- Processing Compartments')
+        oci_compartments = OCICompartments()
+        #response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
+        response_json = oci_compartments.get(compartment_id=query_json['compartment_id'])
+    elif artifact == 'VirtualCloudNetwork':
         logger.info('---- Processing Virtual Cloud Networks')
         oci_virtual_cloud_networks = OCIVirtualCloudNetworks(compartment_id=query_json['compartment_id'])
         response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
@@ -179,7 +185,7 @@ def ociArtifacts(artifact):
         response_json = []
         for instance in instance_json:
             instance['vnics'] = oci_instance_vnics.list(instance_id=instance['id'])
-            instance['subnet_id'] = instance['vnics'][0]['subnet_id']
+            instance['subnet_id'] = instance['vnics'][0]['subnet_id'] if len(instance['vnics']) > 0 else ''
             if query_json['subnet_id'] in [vnic['subnet_id'] for vnic in instance['vnics']]:
                 response_json.append(instance)
     elif artifact == 'LoadBalancer':

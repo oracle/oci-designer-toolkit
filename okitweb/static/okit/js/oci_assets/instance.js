@@ -131,6 +131,7 @@ function drawInstanceSVG(instance) {
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");
         rect.append("title")
+            .attr("id", id + '-title')
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
             .text("Instance: " + instance['display_name']);

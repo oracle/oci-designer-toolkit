@@ -119,6 +119,7 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");
         rect.append("title")
+            .attr("id", id + '-title')
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
             .text("Load Balancer: " + load_balancer['display_name']);
@@ -188,8 +189,8 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
     let id = load_balancer['id'];
     let parent_svg = d3.select('#' + parent_id + "-svg");
     // Only Draw if parent exists
-    console.log('Parent SVG : ' + parent_svg.node());
-    if (parent_svg.node() != null) {
+    if (parent_svg.node()) {
+        console.log('Parent SVG : ' + parent_svg.node());
         // Define SVG position manipulation variables
         let svgPoint = parent_svg.node().createSVGPoint();
         let screenCTM = parent_svg.node().getScreenCTM();
@@ -201,17 +202,20 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
 
         if (load_balancer['instance_ids'].length > 0) {
             for (let i = 0; i < load_balancer['instance_ids'].length; i++) {
-                svgPoint.x = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-x');
-                svgPoint.y = d3.select('#' + load_balancer['instance_ids'][i]).attr('data-connector-start-y');
-                connector_end = svgPoint.matrixTransform(screenCTM.inverse());
-                parent_svg.append('line')
-                    .attr("id", generateConnectorId(load_balancer['instance_ids'][i], id))
-                    .attr("x1", connector_start.x)
-                    .attr("y1", connector_start.y)
-                    .attr("x2", connector_end.x)
-                    .attr("y2", connector_end.y)
-                    .attr("stroke-width", "2")
-                    .attr("stroke", "black");
+                let instance_svg = d3.select('#' + load_balancer['instance_ids'][i]);
+                if (instance_svg.node()) {
+                    svgPoint.x = instance_svg.attr('data-connector-start-x');
+                    svgPoint.y = instance_svg.attr('data-connector-start-y');
+                    connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                    parent_svg.append('line')
+                        .attr("id", generateConnectorId(load_balancer['instance_ids'][i], id))
+                        .attr("x1", connector_start.x)
+                        .attr("y1", connector_start.y)
+                        .attr("x2", connector_end.x)
+                        .attr("y2", connector_end.y)
+                        .attr("stroke-width", "2")
+                        .attr("stroke", "black");
+                }
             }
         }
     }
