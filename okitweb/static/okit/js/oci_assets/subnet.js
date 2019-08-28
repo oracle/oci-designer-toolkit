@@ -36,7 +36,7 @@ function clearSubnetVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addSubnet(vcn_id) {
+function addSubnet(vcn_id, compartment_id) {
     let id = 'okit-sn-' + uuidv4();
     console.log('Adding Subnet : ' + id);
 
@@ -59,6 +59,7 @@ function addSubnet(vcn_id) {
     let subnet = {};
     subnet['vcn_id'] = vcn_id;
     subnet['virtual_cloud_network'] = '';
+    subnet['compartment_id'] = compartment_id;
     subnet['id'] = id;
     subnet['display_name'] = generateDefaultName(subnet_prefix, subnet_count);
     subnet['cidr_block'] = subnet_cidr[id];
@@ -126,6 +127,7 @@ function deleteSubnet(id) {
 function drawSubnetSVG(subnet) {
     let parent_id = subnet['vcn_id'];
     let id = subnet['id'];
+    let compartment_id = subnet['compartment_id'];
     console.log('Drawing Subnet : ' + id);
     let position = subnet_position_x;
     let vcn_offset_x = (icon_width / 2);
@@ -220,6 +222,7 @@ function drawSubnetSVG(subnet) {
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
+        .attr("data-compartment-id", compartment_id)
         .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
         .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("data-connector-end-y", boundingClientRect.y)
@@ -230,6 +233,7 @@ function drawSubnetSVG(subnet) {
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
             .attr("data-connector-end-y", boundingClientRect.y)

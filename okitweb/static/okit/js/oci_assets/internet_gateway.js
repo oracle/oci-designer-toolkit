@@ -25,7 +25,7 @@ function clearInternetGatewayVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addInternetGateway(vcnid) {
+function addInternetGateway(vcn_id, compartment_id) {
     let id = 'okit-ig-' + uuidv4();
     console.log('Adding Internet Gateway : ' + id);
 
@@ -42,8 +42,9 @@ function addInternetGateway(vcnid) {
     // Increment Count
     internet_gateway_count += 1;
     let internet_gateway = {};
-    internet_gateway['vcn_id'] = vcnid;
+    internet_gateway['vcn_id'] = vcn_id;
     internet_gateway['virtual_cloud_network'] = '';
+    internet_gateway['compartment_id'] = compartment_id;
     internet_gateway['id'] = id;
     internet_gateway['display_name'] = generateDefaultName(internet_gateway_prefix, internet_gateway_count);
     OKITJsonObj['internet_gateways'].push(internet_gateway);
@@ -86,6 +87,7 @@ function deleteInternetGateway(id) {
 function drawInternetGatewaySVG(internet_gateway) {
     let parent_id = internet_gateway['vcn_id'];
     let id = internet_gateway['id'];
+    let compartment_id = internet_gateway['compartment_id'];
     console.log('Drawing Internet Gateway : ' + id);
     let position = vcn_gateway_icon_position;
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -161,10 +163,12 @@ function drawInternetGatewaySVG(internet_gateway) {
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
+        .attr("data-compartment-id", compartment_id)
         .selectAll("*")
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id);
+            .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id);
 }
 
 /*

@@ -25,7 +25,7 @@ function clearSecurityListVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addSecurityList(vcnid) {
+function addSecurityList(vcn_id, compartment_id) {
     let id = 'okit-sl-' + uuidv4();
     console.log('Adding Security List : ' + id);
 
@@ -42,8 +42,9 @@ function addSecurityList(vcnid) {
     // Increment Count
     security_list_count += 1;
     let security_list = {};
-    security_list['vcn_id'] = vcnid;
+    security_list['vcn_id'] = vcn_id;
     security_list['virtual_cloud_network'] = '';
+    security_list['compartment_id'] = compartment_id;
     security_list['id'] = id;
     security_list['display_name'] = generateDefaultName(security_list_prefix, security_list_count);
     security_list['egress_security_rules'] = []
@@ -89,6 +90,7 @@ function deleteSecurityList(id) {
 function drawSecurityListSVG(security_list) {
     let parent_id = security_list['vcn_id'];
     let id = security_list['id'];
+    let compartment_id = security_list['compartment_id'];
     console.log('Drawing Security List : ' + id);
     let position = vcn_element_icon_position;
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -158,6 +160,7 @@ function drawSecurityListSVG(security_list) {
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
+        .attr("data-compartment-id", compartment_id)
         .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
         .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
@@ -168,6 +171,7 @@ function drawSecurityListSVG(security_list) {
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
             .attr("data-connector-end-y", boundingClientRect.y)

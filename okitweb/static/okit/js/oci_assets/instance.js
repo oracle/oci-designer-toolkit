@@ -25,7 +25,7 @@ function clearInstanceVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addInstance(subnetid) {
+function addInstance(subnet_id, compartment_id) {
     let id = 'okit-in-' + uuidv4();
     console.log('Adding Instance : ' + id);
 
@@ -42,8 +42,9 @@ function addInstance(subnetid) {
     // Increment Count
     instance_count += 1;
     let instance = {};
-    instance['subnet_id'] = subnetid;
+    instance['subnet_id'] = subnet_id;
     instance['subnet'] = '';
+    instance['compartment_id'] = compartment_id;
     instance['id'] = id;
     instance['display_name'] = generateDefaultName(instance_prefix, instance_count);
     instance['hostname_label'] = instance['display_name'].toLowerCase();
@@ -92,6 +93,7 @@ function deleteInstance(id) {
 function drawInstanceSVG(instance) {
     let parent_id = instance['subnet_id'];
     let id = instance['id'];
+    let compartment_id = instance['compartment_id'];
     console.log('Drawing Instance : ' + id);
     //console.log('Subnet Id : ' + parent_id);
     //console.log('Subnet Content : ' + JSON.stringify(subnet_content));
@@ -172,6 +174,7 @@ function drawInstanceSVG(instance) {
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y)
@@ -182,6 +185,7 @@ function drawInstanceSVG(instance) {
                 .attr("data-type", data_type)
                 .attr("data-okit-id", id)
                 .attr("data-parentid", parent_id)
+                .attr("data-compartment-id", compartment_id)
                 .attr("data-connector-start-y", boundingClientRect.y)
                 .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
                 .attr("data-connector-end-y", boundingClientRect.y)

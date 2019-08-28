@@ -27,7 +27,7 @@ function clearBlockStorageVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addBlockStorage(compartment_id) {
+function addBlockStorage(parent_id, compartment_id) {
     let id = 'okit-bs-' + uuidv4();
     console.log('Adding ' + block_storage_artifact + ' : ' + id);
 
@@ -44,7 +44,7 @@ function addBlockStorage(compartment_id) {
     // Increment Count
     block_storage_count += 1;
     let block_storage = {};
-    block_storage['compartment_id'] = compartment_id;
+    block_storage['compartment_id'] = parent_id;
     block_storage['id'] = id;
     block_storage['display_name'] = generateDefaultName(block_storage_prefix, block_storage_count);
     OKITJsonObj['block_storages'].push(block_storage);
@@ -87,6 +87,7 @@ function deleteBlockStorage(id) {
 function drawBlockStorageSVG(block_storage) {
     let parent_id = block_storage['vcn_id'];
     let id = block_storage['id'];
+    let compartment_id = block_storage['compartment_id'];
     console.log('Drawing ' + block_storage_artifact + ' : ' + id);
     let position = vcn_gateway_icon_position;
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -158,10 +159,12 @@ function drawBlockStorageSVG(block_storage) {
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
+        .attr("data-compartment-id", compartment_id)
         .selectAll("*")
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id);
+            .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id);
 }
 
 /*

@@ -86,6 +86,7 @@ function deleteCompartment(id) {
 function drawCompartmentSVG(compartment) {
     let parent_id = "canvas-wrapper";
     let id = compartment['id'];
+    let compartment_id = compartment['id'];
     console.log('Drawing ' + compartment_artifact + ' : ' + id);
     let position = vcn_gateway_icon_position;
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -155,10 +156,12 @@ function drawCompartmentSVG(compartment) {
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
+        .attr("data-compartment-id", compartment_id)
         .selectAll("*")
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id);
+            .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id);
 
     /*
     okitcanvas.addEventListener('dragenter', handleDragEnter, false)

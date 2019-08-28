@@ -33,7 +33,7 @@ function clearVirtualCloudNetworkVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addVirtualCloudNetwork(compartment_id) {
+function addVirtualCloudNetwork(compartment_id, comp_id) {
     let id = 'okit-vcn-' + uuidv4();
     console.log('Adding Virtual Cloud Network : ' + id);
 
@@ -124,6 +124,7 @@ function deleteVirtualCloudNetwork(id) {
 function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     let parent_id = virtual_cloud_network['compartment_id'];
     let id = virtual_cloud_network['id'];
+    let compartment_id = virtual_cloud_network['compartment_id'];
     console.log('Drawing Virtual Cloud Network : ' + id);
     let translate_x = 0;
     let translate_y = 0;
@@ -203,10 +204,12 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
+        .attr("data-compartment-id", compartment_id)
         .selectAll("*")
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id);
+            .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id);
 }
 
 /*

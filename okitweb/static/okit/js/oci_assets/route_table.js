@@ -26,7 +26,7 @@ function clearRouteTableVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addRouteTable(vcnid) {
+function addRouteTable(vcn_id, compartment_id) {
     let id = 'okit-rt-' + uuidv4();
     console.log('Adding Route Table : ' + id);
 
@@ -43,8 +43,9 @@ function addRouteTable(vcnid) {
     // Increment Count
     route_table_count += 1;
     let route_table = {};
-    route_table['vcn_id'] = vcnid;
+    route_table['vcn_id'] = vcn_id;
     route_table['virtual_cloud_network'] = '';
+    route_table['compartment_id'] = compartment_id;
     route_table['id'] = id;
     route_table['display_name'] = generateDefaultName(route_table_prefix, route_table_count);
     route_table['route_rules'] = []
@@ -86,6 +87,7 @@ function deleteRouteTable(id) {
 function drawRouteTableSVG(route_table) {
     let parent_id = route_table['vcn_id'];
     let id = route_table['id'];
+    let compartment_id = route_table['compartment_id'];
     console.log('Drawing Route Table : ' + id);
     let position = vcn_element_icon_position;
     let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
@@ -189,6 +191,7 @@ function drawRouteTableSVG(route_table) {
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
+        .attr("data-compartment-id", compartment_id)
         .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
         .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
         .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
@@ -199,6 +202,7 @@ function drawRouteTableSVG(route_table) {
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
             .attr("data-connector-end-y", boundingClientRect.y)

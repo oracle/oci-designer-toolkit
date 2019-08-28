@@ -19,11 +19,12 @@ let asset_add_functions = {};
 let asset_update_functions = {};
 let asset_delete_functions = {};
 
-function addAssetToDropTarget(title, target_id) {
-    console.log('addAssetToDropTarget - Title : ' + title);
-    console.log('addAssetToDropTarget - Target Id : ' + target_id);
-    console.log('addAssetToDropTarget - Add Functions : ' + JSON.stringify(asset_add_functions));
-    window[asset_add_functions[title]](target_id);
+function addAssetToDropTarget(title, target_id, compartment_id) {
+    console.log('addAssetToDropTarget - Title          : ' + title);
+    console.log('addAssetToDropTarget - Target Id      : ' + target_id);
+    console.log('addAssetToDropTarget - Compartment Id : ' + compartment_id);
+    console.log('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
+    window[asset_add_functions[title]](target_id, compartment_id);
 }
 
 function updateAssetTarget(title, source_type, source_id, target_id) {
@@ -121,10 +122,11 @@ function handleDrop(e) {
     //this.innerHTML = e.dataTransfer.getData('text/html');
     let title = e.dataTransfer.getData('text/plain');
     let type = e.target.getAttribute('data-type');
+    let compartment_id = e.target.getAttribute('data-compartment-id');
     let target_id = e.target.id;
     //target_id = e.target.getAttribute('data-okit-id');
     // Call Add Function
-    addAssetToDropTarget(title, target_id)
+    addAssetToDropTarget(title, target_id, compartment_id)
 
     this.classList.remove('over');  // this / e.target is previous target element.
 

@@ -25,7 +25,7 @@ function clearLoadBalancerVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addLoadBalancer(subnetid) {
+function addLoadBalancer(subnet_id, compartment_id) {
     let id = 'okit-lb-' + uuidv4();
     console.log('Adding Load Balancer : ' + id);
 
@@ -42,8 +42,9 @@ function addLoadBalancer(subnetid) {
     // Increment Count
     load_balancer_count += 1;
     let load_balancer = {};
-    load_balancer['subnet_ids'] = [subnetid];
+    load_balancer['subnet_ids'] = [subnet_id];
     load_balancer['subnets'] = [''];
+    load_balancer['compartment_id'] = compartment_id;
     load_balancer['id'] = id;
     load_balancer['display_name'] = generateDefaultName('lb', load_balancer_count);
     load_balancer['is_private'] = false;
@@ -80,6 +81,7 @@ function deleteLoadBalancer(id) {
 function drawLoadBalancerSVG(load_balancer) {
     let parent_id = load_balancer['subnet_ids'][0];
     let id = load_balancer['id'];
+    let compartment_id = load_balancer['compartment_id'];
     console.log('Drawing Load Balancer : ' + id);
     //console.log('Subnet Id : ' + parent_id);
     //console.log('Subnet Content : ' + JSON.stringify(subnet_content));
@@ -160,6 +162,7 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
@@ -170,6 +173,7 @@ function drawLoadBalancerSVG(load_balancer) {
                 .attr("data-type", data_type)
                 .attr("data-okit-id", id)
                 .attr("data-parentid", parent_id)
+                .attr("data-compartment-id", compartment_id)
                 .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
                 .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
                 .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
