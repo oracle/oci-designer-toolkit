@@ -146,7 +146,7 @@ function drawSecurityListSVG(security_list) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     // Set common attributes on svg element and children
-    svg.on("click", function() { loadSecurityListProperties(id); })
+    svg.on("click", function() { loadSecurityListProperties(id); d3.event.stopPropagation(); })
         .on("mousedown", handleConnectorDragStart)
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)

@@ -147,7 +147,7 @@ function drawCompartmentSVG(compartment) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     // Set common attributes on svg element and children
-    svg.on("click", function() { loadCompartmentProperties(id); })
+    svg.on("click", function() { loadCompartmentProperties(id); d3.event.stopPropagation(); })
         .on("dragenter", handleDragEnter)
         .on("dragover", handleDragOver)
         .on("dragleave", handleDragLeave)

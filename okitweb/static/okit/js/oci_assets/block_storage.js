@@ -154,7 +154,7 @@ function drawBlockStorageSVG(block_storage) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     // Set common attributes on svg element and children
-    svg.on("click", function() { loadBlockStorageProperties(id); })
+    svg.on("click", function() { loadBlockStorageProperties(id); d3.event.stopPropagation(); })
         .on("contextmenu", handleContextMenu)
         .attr("data-type", data_type)
         .attr("data-okit-id", id)

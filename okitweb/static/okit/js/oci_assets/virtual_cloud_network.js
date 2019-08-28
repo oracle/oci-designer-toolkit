@@ -195,7 +195,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
     // Add dragevent versions
     // Set common attributes on svg element and children
-    svg.on("click", function() { loadVirtualCloudNetworkProperties(id); })
+    svg.on("click", function() { loadVirtualCloudNetworkProperties(id); d3.event.stopPropagation(); })
         .on("mousemove", handleConnectorDrag)
         .on("mouseup", handleConnectorDrop)
         .on("dragenter", handleConnectorDragEnter)
@@ -215,6 +215,12 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
 /*
 ** Property Sheet Load function
  */
+function handleVirtualCloudNetworkClick(e) {
+    e.stopPropagation();
+    return false;
+}
+
+
 function loadVirtualCloudNetworkProperties(id) {
     $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
         if ('virtual_cloud_networks' in OKITJsonObj) {
