@@ -3,12 +3,13 @@ console.log('Loaded Internet Gateway Javascript');
 /*
 ** Set Valid drop Targets
  */
+let subnet_artifact = 'Subnet';
 
-asset_drop_targets["Subnet"] = ["Virtual Cloud Network"];
-asset_connect_targets["Subnet"] = [];
-asset_add_functions["Subnet"] = "addSubnet";
-asset_update_functions["Subnet"] = "updateSubnet";
-asset_delete_functions["Subnet"] = "deleteSubnet";
+asset_drop_targets[subnet_artifact] = ["Virtual Cloud Network"];
+asset_connect_targets[subnet_artifact] = [];
+asset_add_functions[subnet_artifact] = "addSubnet";
+asset_update_functions[subnet_artifact] = "updateSubnet";
+asset_delete_functions[subnet_artifact] = "deleteSubnet";
 
 let subnet_svg_height = 200;
 let subnet_svg_width = "95%";
@@ -136,7 +137,7 @@ function drawSubnetSVG(subnet) {
     let count_offset_y = ((subnet_svg_height + vcn_icon_spacing) * (subnet_count -1));
     let svg_x = vcn_offset_x + count_offset_x;
     let svg_y = vcn_offset_y + count_offset_y;
-    let data_type = "Subnet";
+    let data_type = subnet_artifact;
 
     initialiseSubnetChildData(id);
 

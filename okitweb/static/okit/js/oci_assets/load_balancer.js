@@ -3,12 +3,13 @@ console.log('Loaded Load Balancer Javascript');
 /*
 ** Set Valid drop Targets
  */
+let load_balancer_artifact = 'Load Balancer';
 
-asset_drop_targets["Load Balancer"] = ["Subnet"];
-//asset_connect_targets["Load Balancer"] = ["Instance"];
-asset_add_functions["Load Balancer"] = "addLoadBalancer";
-asset_update_functions["Load Balancer"] = "updateLoadBalancer";
-asset_delete_functions["Load Balancer"] = "deleteLoadBalancer";
+asset_drop_targets[load_balancer_artifact] = ["Subnet"];
+//asset_connect_targets[load_balancer_artifact] = ["Instance"];
+asset_add_functions[load_balancer_artifact] = "addLoadBalancer";
+asset_update_functions[load_balancer_artifact] = "updateLoadBalancer";
+asset_delete_functions[load_balancer_artifact] = "deleteLoadBalancer";
 
 let load_balancer_ids = [];
 let load_balancer_count = 0;
@@ -91,8 +92,8 @@ function drawLoadBalancerSVG(load_balancer) {
         let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
         let translate_y = icon_translate_y_start;
         let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-        let svg_y = (icon_height / 4);
-        let data_type = "Load Balancer";
+        let svg_y = (icon_height / 3);
+        let data_type = load_balancer_artifact;
 
         // Increment Icon Position
         subnet_content[parent_id]['load_balancer_position'] += 1;

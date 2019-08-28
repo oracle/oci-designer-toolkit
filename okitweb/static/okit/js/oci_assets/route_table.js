@@ -3,11 +3,12 @@ console.log('Loaded Route Table Javascript');
 /*
 ** Set Valid drop Targets
  */
+let route_table_artifact = 'Route Table';
 
-asset_drop_targets["Route Table"] = ["Virtual Cloud Network"];
-asset_connect_targets["Route Table"] = ["Subnet"];
-asset_add_functions["Route Table"] = "addRouteTable";
-asset_delete_functions["Route Table"] = "deleteRouteTable";
+asset_drop_targets[route_table_artifact] = ["Virtual Cloud Network"];
+asset_connect_targets[route_table_artifact] = ["Subnet"];
+asset_add_functions[route_table_artifact] = "addRouteTable";
+asset_delete_functions[route_table_artifact] = "deleteRouteTable";
 
 let route_table_ids = [];
 let route_table_count = 0;
@@ -94,7 +95,7 @@ function drawRouteTableSVG(route_table) {
     let translate_y = icon_translate_y_start;
     let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
     let svg_y = (icon_height / 4) * 3;
-    let data_type = "Route Table";
+    let data_type = route_table_artifact;
 
     // Increment Icon Position
     vcn_element_icon_position += 1;

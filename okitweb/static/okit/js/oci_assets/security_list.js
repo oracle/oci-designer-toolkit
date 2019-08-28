@@ -3,11 +3,12 @@ console.log('Loaded Subnet Javascript');
 /*
 ** Set Valid drop Targets
  */
+let security_list_artifact = 'Security List';
 
-asset_drop_targets["Security List"] = ["Virtual Cloud Network"];
-asset_connect_targets["Security List"] = ["Subnet"];
-asset_add_functions["Security List"] = "addSecurityList";
-asset_delete_functions["Security List"] = "deleteSecurityList";
+asset_drop_targets[security_list_artifact] = ["Virtual Cloud Network"];
+asset_connect_targets[security_list_artifact] = ["Subnet"];
+asset_add_functions[security_list_artifact] = "addSecurityList";
+asset_delete_functions[security_list_artifact] = "deleteSecurityList";
 
 let security_list_ids = [];
 let security_list_count = 0;
@@ -97,7 +98,7 @@ function drawSecurityListSVG(security_list) {
     let translate_y = icon_translate_y_start;
     let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
     let svg_y = (icon_height / 4) * 3;
-    let data_type = "Security List";
+    let data_type = security_list_artifact;
 
     // Increment Icon Position
     vcn_element_icon_position += 1;

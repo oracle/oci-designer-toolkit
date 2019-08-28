@@ -3,11 +3,12 @@ console.log('Loaded Instance Javascript');
 /*
 ** Set Valid drop Targets
  */
+let instance_artifact = 'Instance';
 
-asset_drop_targets["Instance"] = ["Subnet"];
-asset_connect_targets["Instance"] = ["Load Balancer"];
-asset_add_functions["Instance"] = "addInstance";
-asset_delete_functions["Instance"] = "deleteInstance";
+asset_drop_targets[instance_artifact] = ["Subnet"];
+asset_connect_targets[instance_artifact] = ["Load Balancer"];
+asset_add_functions[instance_artifact] = "addInstance";
+asset_delete_functions[instance_artifact] = "deleteInstance";
 
 let instance_ids = [];
 let instance_count = 0;
@@ -104,7 +105,7 @@ function drawInstanceSVG(instance) {
         let translate_y = icon_translate_y_start;
         let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
         let svg_y = (icon_height / 4) * 9;
-        let data_type = "Instance";
+        let data_type = instance_artifact;
 
         // Increment Icon Position
         subnet_content[parent_id]['instance_position'] += 1;

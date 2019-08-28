@@ -5,7 +5,6 @@ console.log('Loaded Block Storage Javascript');
  */
 let block_storage_artifact = 'Block Storage';
 
-
 asset_drop_targets[block_storage_artifact] = ["Compartment"];
 asset_connect_targets[block_storage_artifact] = [];
 asset_add_functions[block_storage_artifact] = "addBlockStorage";
@@ -47,6 +46,9 @@ function addBlockStorage(parent_id, compartment_id) {
     block_storage['compartment_id'] = parent_id;
     block_storage['id'] = id;
     block_storage['display_name'] = generateDefaultName(block_storage_prefix, block_storage_count);
+    block_storage['availability_domain'] = 'AD-1';
+    block_storage['size'] = 1024;
+    block_storage['backup_policy'] = 'bronze';
     OKITJsonObj['block_storages'].push(block_storage);
     okitIdsJsonObj[id] = block_storage['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
@@ -85,7 +87,7 @@ function deleteBlockStorage(id) {
 ** SVG Creation
  */
 function drawBlockStorageSVG(block_storage) {
-    let parent_id = block_storage['vcn_id'];
+    let parent_id = block_storage['compartment_id'];
     let id = block_storage['id'];
     let compartment_id = block_storage['compartment_id'];
     console.log('Drawing ' + block_storage_artifact + ' : ' + id);
@@ -124,30 +126,15 @@ function drawBlockStorageSVG(block_storage) {
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .text(block_storage_artifact + ": " + block_storage['display_name']);
-    let g1 = svg.append("g")
+    let g = svg.append("g")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-    let g2 = g1.append("g");
-    let g3 = g2.append("g");
-    let g4 = g3.append("g");
-    g4.append("path")
+    g.append("path")
         .attr("data-type", data_type)
         .attr("data-parentid", parent_id)
         .attr("class", "st0")
-        .attr("d", "M200.4,104.2c-0.4,0-0.8,0-1.2,0.1c-1.6-5.2-6.5-9-12.3-9c-1.5,0-2.9,0.3-4.2,0.7c-2.6-3.8-7-6.3-12-6.3c-6.9,0-12.7,4.8-14.2,11.2c-0.1,0-0.3,0-0.4,0c-8,0-14.6,6.5-14.6,14.6c0,8,6.5,14.6,14.6,14.6h44.3c7.1,0,12.9-5.8,12.9-12.9C213.3,110,207.5,104.2,200.4,104.2z");
-    let g5 = g3.append("g");
-    let g6 = g5.append("g");
-    g6.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M129,151.8l-3.4-4l3.2-2.7l3.4,4L129,151.8z M135.4,146.4l-3.4-4l3.2-2.7l3.4,4L135.4,146.4z M141.7,141.1l-3.4-4l3.2-2.7l3.4,4L141.7,141.1z M148.1,135.7l-3.4-4l3.2-2.7l3.4,4L148.1,135.7z");
-    g6.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M103.5,140.8c-15.9,0-28.8,12.9-28.8,28.8c0,15.9,12.9,28.8,28.8,28.8c15.9,0,28.8-12.9,28.8-28.8C132.3,153.6,119.4,140.8,103.5,140.8z M82.2,171v-3h7.3v-4.5l10.4,6l-10.4,6V171H82.2z M103.7,190.7l-6-10.4h4.5v-21.6h-4.5l6-10.4l6,10.4h-4.5v21.6h4.5L103.7,190.7z M118.1,171v4.5l-10.4-6l10.4-6v4.5h7.3v3H118.1z");
+        .attr("d", "M172.6,88.4c-13.7-1.6-28-1.6-28.6-1.6c-0.6,0-14.8,0-28.6,1.6c-24,2.8-24.2,7.8-24.2,7.9v95.5c0,0,0.3,5,24.2,7.9c13.7,1.6,28,1.6,28.6,1.6c0.6,0,14.8,0,28.6-1.6c24-2.8,24.2-7.8,24.2-7.9V96.3C196.8,96.2,196.5,91.2,172.6,88.4z M137.2,180.7h-18.9v-18.9h18.9V180.7z M137.2,146.5h-18.9v-18.9h18.9V146.5z M168.1,180.7h-18.9v-18.9h18.9V180.7z M168.1,146.5h-18.9v-18.9h18.9V146.5z M192.8,104.1c-1.8,2.8-18.9,7.5-48.3,7.5c-29.4,0-46.5-4.7-48.3-7.5c0,0,0,0,0,0c1.7-2.8,18.8-7.6,48.3-7.6C174,96.5,191.1,101.2,192.8,104.1C192.8,104.1,192.8,104.1,192.8,104.1z");
 
     //loadBlockStorageProperties(id);
     // Add click event to display properties
@@ -183,6 +170,7 @@ function loadBlockStorageProperties(id) {
                     block_storage['virtual_cloud_network'] = okitIdsJsonObj[block_storage['vcn_id']];
                     $("#virtual_cloud_network").html(block_storage['virtual_cloud_network']);
                     $('#display_name').val(block_storage['display_name']);
+                    $('#size').val(block_storage['size']);
                     // Add Event Listeners
                     addPropertiesEventListeners(block_storage, []);
                     break;

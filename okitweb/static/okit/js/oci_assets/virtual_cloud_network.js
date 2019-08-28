@@ -3,11 +3,12 @@ console.log('Loaded Virtual Cloud Network Javascript');
 /*
 ** Set Valid drop Targets
  */
+let virtual_cloud_network_artifact = 'Virtual Cloud Network';
 
-asset_drop_targets["Virtual Cloud Network"] = ["Compartment"];
-asset_connect_targets["Virtual Cloud Network"] = [];
-asset_add_functions["Virtual Cloud Network"] = "addVirtualCloudNetwork";
-asset_delete_functions["Virtual Cloud Network"] = "deleteVirtualCloudNetwork";
+asset_drop_targets[virtual_cloud_network_artifact] = ["Compartment"];
+asset_connect_targets[virtual_cloud_network_artifact] = [];
+asset_add_functions[virtual_cloud_network_artifact] = "addVirtualCloudNetwork";
+asset_delete_functions[virtual_cloud_network_artifact] = "deleteVirtualCloudNetwork";
 
 let vcn_svg_width = "99%"
 let vcn_svg_height = "70%"
@@ -128,7 +129,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
     console.log('Drawing Virtual Cloud Network : ' + id);
     let translate_x = 0;
     let translate_y = 0;
-    let data_type = 'Virtual Cloud Network';
+    let data_type = virtual_cloud_network_artifact;
 
     //let parent_svg = d3.select(okitcanvas);
     let parent_svg = d3.select('#' + parent_id + "-svg");
