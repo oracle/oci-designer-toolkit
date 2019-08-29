@@ -3,16 +3,13 @@ console.log('Loaded Instance Javascript');
 /*
 ** Set Valid drop Targets
  */
-let instance_artifact = 'Instance';
-
-asset_drop_targets[instance_artifact] = ["Subnet"];
-asset_connect_targets[instance_artifact] = ["Load Balancer"];
+asset_drop_targets[instance_artifact] = [subnet_artifact];
+asset_connect_targets[instance_artifact] = [load_balancer_artifact];
 asset_add_functions[instance_artifact] = "addInstance";
 asset_delete_functions[instance_artifact] = "deleteInstance";
 
 let instance_ids = [];
 let instance_count = 0;
-let instance_prefix = 'in';
 
 /*
 ** Reset variables
@@ -27,12 +24,12 @@ function clearInstanceVariables() {
 ** Add Asset to JSON Model
  */
 function addInstance(subnet_id, compartment_id) {
-    let id = 'okit-in-' + uuidv4();
+    let id = 'okit-' + instance_prefix + '-' + uuidv4();
     console.log('Adding Instance : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('instances' in OKITJsonObj)) {
+    if (!OKITJsonObj.hasOwnProperty('instances')) {
         OKITJsonObj['instances'] = [];
     }
 
@@ -97,10 +94,10 @@ function drawInstanceSVG(instance) {
     let compartment_id = instance['compartment_id'];
     console.log('Drawing Instance : ' + id);
     //console.log('Subnet Id : ' + parent_id);
-    //console.log('Subnet Content : ' + JSON.stringify(subnet_content));
+    //console.log('Subnet Content : ' + JSON.stringify(subnet_bui_sub_artifacts));
     // Only draw the instance if the subnet exists
-    if (parent_id in subnet_content) {
-        let position = subnet_content[parent_id]['instance_position'];
+    if (subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        let position = subnet_bui_sub_artifacts[parent_id]['instance_position'];
         let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
         let translate_y = icon_translate_y_start;
         let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
@@ -108,7 +105,7 @@ function drawInstanceSVG(instance) {
         let data_type = instance_artifact;
 
         // Increment Icon Position
-        subnet_content[parent_id]['instance_position'] += 1;
+        subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
 
         let parent_svg = d3.select('#' + parent_id + "-svg");
         let svg = parent_svg.append("svg")

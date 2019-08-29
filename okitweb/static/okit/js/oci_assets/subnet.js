@@ -3,9 +3,7 @@ console.log('Loaded Internet Gateway Javascript');
 /*
 ** Set Valid drop Targets
  */
-let subnet_artifact = 'Subnet';
-
-asset_drop_targets[subnet_artifact] = ["Virtual Cloud Network"];
+asset_drop_targets[subnet_artifact] = [virtual_cloud_network_artifact];
 asset_connect_targets[subnet_artifact] = [];
 asset_add_functions[subnet_artifact] = "addSubnet";
 asset_update_functions[subnet_artifact] = "updateSubnet";
@@ -17,9 +15,7 @@ let subnet_rect_height = "85%";
 let subnet_rect_width = "95%";
 let subnet_ids = [];
 let subnet_count = 0;
-let subnet_position_x = 0;
-let subnet_content = {};
-let subnet_prefix = 'sn';
+let subnet_bui_sub_artifacts = {};
 let subnet_cidr = {};
 
 /*
@@ -29,8 +25,7 @@ let subnet_cidr = {};
 function clearSubnetVariables() {
     subnet_ids = [];
     subnet_count = 0;
-    subnet_position_x = 0;
-    subnet_content = {};
+    subnet_bui_sub_artifacts = {};
     subnet_cidr = {};
 }
 
@@ -38,12 +33,12 @@ function clearSubnetVariables() {
 ** Add Asset to JSON Model
  */
 function addSubnet(vcn_id, compartment_id) {
-    let id = 'okit-sn-' + uuidv4();
+    let id = 'okit-' + subnet_prefix + '-' + uuidv4();
     console.log('Adding Subnet : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('subnets' in OKITJsonObj)) {
+    if (!OKITJsonObj.hasOwnProperty('subnets')) {
         OKITJsonObj['subnets'] = [];
     }
 
@@ -73,7 +68,7 @@ function addSubnet(vcn_id, compartment_id) {
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     okitIdsJsonObj[id] = subnet['display_name'];
 
-    initialiseSubnetChildData(id);
+    //initialiseSubnetChildData(id);
 
     displayOkitJson();
     drawSubnetSVG(subnet);
@@ -82,11 +77,16 @@ function addSubnet(vcn_id, compartment_id) {
 
 function initialiseSubnetChildData(id) {
     // Set subnet specific positioning variables
-    subnet_content[id] = {}
-    subnet_content[id]['load_balancer_count'] = 0;
-    subnet_content[id]['load_balancer_position'] = 0;
-    subnet_content[id]['instance_count'] = 0;
-    subnet_content[id]['instance_position'] = 0;
+    //subnet_bui_sub_artifacts[id] = {}
+    //subnet_bui_sub_artifacts[id]['load_balancer_count'] = 0;
+    //subnet_bui_sub_artifacts[id]['load_balancer_position'] = 0;
+    //subnet_bui_sub_artifacts[id]['instance_count'] = 0;
+    //subnet_bui_sub_artifacts[id]['instance_position'] = 0;
+    // Add Sub Component positional data
+    subnet_bui_sub_artifacts[id] = {
+        "load_balancer_position": 0,
+        "instance_position": 0
+    };
 }
 
 /*
@@ -130,117 +130,128 @@ function drawSubnetSVG(subnet) {
     let id = subnet['id'];
     let compartment_id = subnet['compartment_id'];
     console.log('Drawing Subnet : ' + id);
-    let position = subnet_position_x;
-    let vcn_offset_x = (icon_width / 2);
-    let vcn_offset_y = ((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1);
-    let count_offset_x = (icon_width * position) + (vcn_icon_spacing * position);
-    let count_offset_y = ((subnet_svg_height + vcn_icon_spacing) * (subnet_count -1));
-    let svg_x = vcn_offset_x + count_offset_x;
-    let svg_y = vcn_offset_y + count_offset_y;
-    let data_type = subnet_artifact;
+    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        let position_x = 0;
+        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'];
+        let vcn_offset_x = (icon_width / 2);
+        let vcn_offset_y = ((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1);
+        let count_offset_x = (icon_width * position_x) + (vcn_icon_spacing * position_x);
+        let count_offset_y = ((subnet_svg_height + vcn_icon_spacing) * position);
+        let svg_x = vcn_offset_x + count_offset_x;
+        let svg_y = vcn_offset_y + count_offset_y;
+        let data_type = subnet_artifact;
 
-    initialiseSubnetChildData(id);
+        // Increment Icon Position
+        virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'] += 1;
 
-    let parent_svg = d3.select('#' + parent_id + "-svg");
-    let asset_svg = parent_svg.append("svg")
-        .attr("id", id + '-svg')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", subnet['display_name'])
-        .attr("x", svg_x)
-        .attr("y", svg_y)
-        .attr("width", subnet_svg_width)
-        .attr("height", subnet_svg_height);
-    let svg = asset_svg.append("svg")
-        .attr("id", id + '-svg')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", subnet['display_name'])
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", "100%")
-        .attr("height", "100%");
-    let rect = svg.append("rect")
-        .attr("id", id)
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", subnet['display_name'])
-        .attr("x", icon_x)
-        .attr("y", icon_y)
-        //.attr("width", vcn_width - (icon_width * 2))
-        .attr("width", subnet_rect_width)
-        .attr("height", subnet_rect_height)
-        .attr("stroke-dasharray", "5, 5")
-        .attr("stroke", "orange")
-        //.attr("stroke", subnet_stroke_colour[(subnet_count % 3)])
-        //.attr("fill", subnet_stroke_colour[(subnet_count % 3)])
-        .attr("fill", "white")
-        .attr("style", "fill-opacity: .25;");
-    rect.append("title")
-        .attr("id", id + '-title')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .text("Subnet: " + subnet['display_name']);
-    let text = svg.append("text")
-        .attr("id", id + '-display-name')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("x", icon_x + icon_width / 3)
-        .attr("y", icon_y + icon_height / 3)
-        .text(subnet['display_name']);
-    let g = svg.append("g")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
-    g.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M142.7,138v-13.5h-8.4v-20.8h20.8v20.8h-8.4V138h52.8c-3-27.4-26.2-48.8-54.4-48.8c-28.2,0-51.4,21.3-54.4,48.8H142.7z")
-    g.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
+        let parent_svg = d3.select('#' + parent_id + "-svg");
+        let asset_svg = parent_svg.append("svg")
+            .attr("id", id + '-svg')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", subnet['display_name'])
+            .attr("x", svg_x)
+            .attr("y", svg_y)
+            .attr("width", subnet_svg_width)
+            .attr("height", subnet_svg_height);
+        let svg = asset_svg.append("svg")
+            .attr("id", id + '-svg')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", subnet['display_name'])
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", "100%")
+            .attr("height", "100%");
+        let rect = svg.append("rect")
+            .attr("id", id)
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", subnet['display_name'])
+            .attr("x", icon_x)
+            .attr("y", icon_y)
+            //.attr("width", vcn_width - (icon_width * 2))
+            .attr("width", subnet_rect_width)
+            .attr("height", subnet_rect_height)
+            .attr("stroke-dasharray", "5, 5")
+            .attr("stroke", "orange")
+            //.attr("stroke", subnet_stroke_colour[(subnet_count % 3)])
+            //.attr("fill", subnet_stroke_colour[(subnet_count % 3)])
+            .attr("fill", "white")
+            .attr("style", "fill-opacity: .25;");
+        rect.append("title")
+            .attr("id", id + '-title')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .text("Subnet: " + subnet['display_name']);
+        let text = svg.append("text")
+            .attr("id", id + '-display-name')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("x", icon_x + icon_width / 3)
+            .attr("y", icon_y + icon_height / 3)
+            .text(subnet['display_name']);
+        let g = svg.append("g")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M142.7,138v-13.5h-8.4v-20.8h20.8v20.8h-8.4V138h52.8c-3-27.4-26.2-48.8-54.4-48.8c-28.2,0-51.4,21.3-54.4,48.8H142.7z")
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M170,142v14.6h8.4v20.8h-20.8v-20.8h8.4V142h-41.5v14.6h8.4v20.8H112v-20.8h8.4V142H90.5c0,0.7-0.1,1.3-0.1,2c0,30.2,24.5,54.7,54.7,54.7c30.2,0,54.7-24.5,54.7-54.7c0-0.7-0.1-1.3-0.1-2H170z")
 
-    //loadSubnetProperties(id);
-    let boundingClientRect = rect.node().getBoundingClientRect();
-    // Add click event to display properties
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    // Add dragevent versions
-    // Set common attributes on svg element and children
-    svg.on("click", function() { loadSubnetProperties(id); d3.event.stopPropagation(); })
-        .on("mousedown", handleConnectorDragStart)
-        .on("mousemove", handleConnectorDrag)
-        .on("mouseup", handleConnectorDrop)
-        .on("mouseover", handleConnectorDragEnter)
-        .on("mouseout", handleConnectorDragLeave)
-        .on("dragstart", handleConnectorDragStart)
-        .on("drop", handleConnectorDrop)
-        .on("dragenter", handleConnectorDragEnter)
-        .on("dragleave", handleConnectorDragLeave)
-        .on("contextmenu", handleContextMenu)
-        .attr("data-type", data_type)
-        .attr("data-okit-id", id)
-        .attr("data-parentid", parent_id)
-        .attr("data-compartment-id", compartment_id)
-        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-end-y", boundingClientRect.y)
-        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-id", id)
-        .attr("dragable", true)
-        .selectAll("*")
+        //loadSubnetProperties(id);
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add click event to display properties
+        // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+        // Add dragevent versions
+        // Set common attributes on svg element and children
+        svg.on("click", function () {
+            loadSubnetProperties(id);
+            d3.event.stopPropagation();
+        })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
             .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-id", id)
-            .attr("dragable", true);
+            .attr("dragable", true)
+            .selectAll("*")
+                .attr("data-type", data_type)
+                .attr("data-okit-id", id)
+                .attr("data-parentid", parent_id)
+                .attr("data-compartment-id", compartment_id)
+                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", id)
+                .attr("dragable", true);
+
+        initialiseSubnetChildData(id);
+    } else {
+        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+    }
 }
 
 function clearSubnetConnectorsSVG(subnet) {
