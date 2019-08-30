@@ -3,38 +3,38 @@
 # ---- Author : {{ author }}
 # ------ Get List OL7 Images
 data "oci_core_images" "{{ resource_name }}Images" {
-    compartment_id           = "{{ compartment_ocid }}"
-    operating_system         = "{{ os }}"
-    operating_system_version = "{{ os_version }}"
-    shape                    = "{{ shape }}"
+    compartment_id           = {{ compartment_ocid }}
+    operating_system         = {{ os }}
+    operating_system_version = {{ os_version }}
+    shape                    = {{ shape }}
 }
 
 # ------ Create Instance
 resource "oci_core_instance" "{{ resource_name }}" {
     # Required
-    compartment_id      = "{{ compartment_ocid }}"
-    shape               = "{{ shape }}"
+    compartment_id      = {{ compartment_ocid }}
+    shape               = {{ shape }}
     # Optional
-    display_name        = "{{ display_name }}"
-    availability_domain = "${lookup(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(0) }}], "name")}"
+    display_name        = {{ display_name }}
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(0) }}]["name"]
 #    agent_config {
 #        # Optional
-#        is_monitoring_disabled = "${var.instance_agent_config_is_monitoring_disabled}"
+#        is_monitoring_disabled = var.instance_agent_config_is_monitoring_disabled}
 #    }
     create_vnic_details {
         # Required
-        subnet_id                  = "{{ subnet_id }}"
+        subnet_id                  = {{ subnet_id }}
         # Optional
-        assign_public_ip           = "{{ assign_public_ip | default('true') }}"
-        display_name               = "{{ display_name }}-vnic"
-        hostname_label             = "{{ hostname }}"
-#        private_ip                = "{{ private_ip }}"
-        skip_source_dest_check     = "{{ skip_source_dest_check | default('false') }}"
+        assign_public_ip           = {{ assign_public_ip | default('true') }}
+        display_name               = {{ display_name_vnic }}
+        hostname_label             = {{ hostname }}
+#        private_ip                = {{ private_ip }}
+        skip_source_dest_check     = {{ skip_source_dest_check | default('false') }}
 {% if defined_tags is defined %}
-        defined_tags               = "{{ defined_tags }}"
+        defined_tags               = {{ defined_tags }}
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags              = "{{ freeform_tags }}"
+        freeform_tags              = {{ freeform_tags }}
 {% endif %}
     }
 #    extended_metadata {
@@ -43,36 +43,46 @@ resource "oci_core_instance" "{{ resource_name }}" {
 #    }
     fault_domain = "{{ fault_domain }}"
     metadata = {
-        ssh_authorized_keys = "{{ authorized_keys }}"
-#        user_data           = "${base64encode(file("${path.module}/cloud_init.yml"))}"
+        ssh_authorized_keys = {{ authorized_keys }}
+#        user_data           = base64encode(file("${path.module}/cloud_init.yml"))
     }
     source_details {
         # Required
-        source_id               = "${lookup(data.oci_core_images.{{ resource_name }}Images.images[0], "id")}"
-        source_type             = "{{ source_type | default('image') }}"
+        source_id               = data.oci_core_images.{{ resource_name }}Images.images[0]["id"]
+        source_type             = {{ source_type | default('"image"') }}
         # Optional
-        boot_volume_size_in_gbs = "{{ boot_volume_size_in_gbs | default(50) }}"
-#        kms_key_id              = "{{ kms_key_id }}"
+        boot_volume_size_in_gbs = {{ boot_volume_size_in_gbs | default(50) }}
+#        kms_key_id              = {{ kms_key_id }}
     }
     preserve_boot_volume = false
 {% if defined_tags is defined %}
-    defined_tags               = "{{ defined_tags }}"
+    defined_tags               = {{ defined_tags }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags              = "{{ freeform_tags }}"
+    freeform_tags              = {{ freeform_tags }}
 {% endif %}
 }
 
 locals {
-    {{ resource_name }}_id            = "${oci_core_instance.{{ resource_name }}.id}"
-    {{ resource_name }}_public_ip     = "${oci_core_instance.{{ resource_name }}.public_ip }"
-    {{ resource_name }}_private_ip    = "${oci_core_instance.{{ resource_name }}.private_ip }"
+    {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
+    {{ resource_name }}_public_ip     = oci_core_instance.{{ resource_name }}.public_ip
+    {{ resource_name }}_private_ip    = oci_core_instance.{{ resource_name }}.private_ip
 }
 
 output "{{ output_name }}PublicIP" {
-    value = "${local.{{ resource_name }}_public_ip}"
+    value = local.{{ resource_name }}_public_ip
 }
 
 output "{{ output_name }}PrivateIP" {
-    value = "${local.{{ resource_name }}_private_ip}"
+    value = local.{{ resource_name }}_private_ip
 }
+
+# ------ Create Block Storage Attachments
+{% for volume in volume_attachments %}
+resource "oci_core_volume_attachment" "{{ resource_name }}VolumeAttachment{{ loop.index }}" {
+    attachment_type = {{ volume.attachment_type | default('"iscsi"') }}
+    instance_id     = local.{{ resource_name }}_id
+    volume_id       = {{ volume.block_storage_volume_id }}
+    display_name    = {{ volume.display_name }}
+}
+{% endfor %}

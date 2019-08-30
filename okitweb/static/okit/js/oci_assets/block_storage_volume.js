@@ -3,29 +3,29 @@ console.log('Loaded Block Storage Javascript');
 /*
 ** Set Valid drop Targets
  */
-asset_drop_targets[block_storage_artifact] = [compartment_artifact];
-asset_connect_targets[block_storage_artifact] = [instance_artifact];
-asset_add_functions[block_storage_artifact] = "addBlockStorage";
-asset_delete_functions[block_storage_artifact] = "deleteBlockStorage";
+asset_drop_targets[block_storage_volume_artifact] = [compartment_artifact];
+asset_connect_targets[block_storage_volume_artifact] = [instance_artifact];
+asset_add_functions[block_storage_volume_artifact] = "addBlockStorageVolume";
+asset_delete_functions[block_storage_volume_artifact] = "deleteBlockStorageVolume";
 
-let block_storage_ids = [];
-let block_storage_count = 0;
+let block_storage_volume_ids = [];
+let block_storage_volume_count = 0;
 
 /*
 ** Reset variables
  */
 
-function clearBlockStorageVariables() {
-    block_storage_ids = [];
-    block_storage_count = 0;
+function clearBlockStorageVolumeVariables() {
+    block_storage_volume_ids = [];
+    block_storage_volume_count = 0;
 }
 
 /*
 ** Add Asset to JSON Model
  */
-function addBlockStorage(parent_id, compartment_id) {
-    let id = 'okit-' + block_storage_prefix + '-' + uuidv4();
-    console.log('Adding ' + block_storage_artifact + ' : ' + id);
+function addBlockStorageVolume(parent_id, compartment_id) {
+    let id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
+    console.log('Adding ' + block_storage_volume_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -35,31 +35,31 @@ function addBlockStorage(parent_id, compartment_id) {
 
     // Add id & empty name to id JSON
     okitIdsJsonObj[id] = '';
-    block_storage_ids.push(id);
+    block_storage_volume_ids.push(id);
 
     // Increment Count
-    block_storage_count += 1;
-    let block_storage = {};
-    block_storage['compartment_id'] = parent_id;
-    block_storage['id'] = id;
-    block_storage['display_name'] = generateDefaultName(block_storage_prefix, block_storage_count);
-    block_storage['availability_domain'] = 'AD-1';
-    block_storage['size'] = 1024;
-    block_storage['backup_policy'] = 'bronze';
-    OKITJsonObj['block_storages'].push(block_storage);
-    okitIdsJsonObj[id] = block_storage['display_name'];
+    block_storage_volume_count += 1;
+    let block_storage_volume = {};
+    block_storage_volume['compartment_id'] = parent_id;
+    block_storage_volume['id'] = id;
+    block_storage_volume['display_name'] = generateDefaultName(block_storage_volume_prefix, block_storage_volume_count);
+    block_storage_volume['availability_domain'] = 'AD-1';
+    block_storage_volume['size'] = 1024;
+    block_storage_volume['backup_policy'] = 'bronze';
+    OKITJsonObj['block_storage_volumes'].push(block_storage_volume);
+    okitIdsJsonObj[id] = block_storage_volume['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
-    drawBlockStorageSVG(block_storage);
-    loadBlockStorageProperties(id);
+    drawBlockStorageVolumeSVG(block_storage_volume);
+    loadBlockStorageVolumeProperties(id);
 }
 
 /*
 ** Delete From JSON Model
  */
 
-function deleteBlockStorage(id) {
-    console.log('Delete ' + block_storage_artifact + ' : ' + id);
+function deleteBlockStorageVolume(id) {
+    console.log('Delete ' + block_storage_volume_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -83,11 +83,11 @@ function deleteBlockStorage(id) {
 /*
 ** SVG Creation
  */
-function drawBlockStorageSVG(block_storage) {
-    let parent_id = block_storage['compartment_id'];
-    let id = block_storage['id'];
-    let compartment_id = block_storage['compartment_id'];
-    console.log('Drawing ' + block_storage_artifact + ' : ' + id);
+function drawBlockStorageVolumeSVG(block_storage_volume) {
+    let parent_id = block_storage_volume['compartment_id'];
+    let id = block_storage_volume['id'];
+    let compartment_id = block_storage_volume['compartment_id'];
+    console.log('Drawing ' + block_storage_volume_artifact + ' : ' + id);
     if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('block_storage_position')) {
             compartment_bui_sub_artifacts[parent_id]['block_storage_position'] = 0;
@@ -97,7 +97,7 @@ function drawBlockStorageSVG(block_storage) {
         let translate_y = icon_translate_y_start;
         let svg_x = 0; //(icon_width / 4);
         let svg_y = (icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position);
-        let data_type = block_storage_artifact;
+        let data_type = block_storage_volume_artifact;
 
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
@@ -108,7 +108,7 @@ function drawBlockStorageSVG(block_storage) {
             .attr("id", id + '-svg')
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
-            .attr("title", block_storage['display_name'])
+            .attr("title", block_storage_volume['display_name'])
             .attr("x", svg_x)
             .attr("y", svg_y)
             .attr("width", "100")
@@ -117,7 +117,7 @@ function drawBlockStorageSVG(block_storage) {
             .attr("id", id)
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
-            .attr("title", block_storage['display_name'])
+            .attr("title", block_storage_volume['display_name'])
             .attr("x", icon_x)
             .attr("y", icon_y)
             .attr("width", icon_width)
@@ -129,7 +129,7 @@ function drawBlockStorageSVG(block_storage) {
         rect.append("title")
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
-            .text(block_storage_artifact + ": " + block_storage['display_name']);
+            .text(block_storage_volume_artifact + ": " + block_storage_volume['display_name']);
         let g = svg.append("g")
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
@@ -148,7 +148,7 @@ function drawBlockStorageSVG(block_storage) {
          Set common attributes on svg element and children
          */
         svg.on("click", function () {
-            loadBlockStorageProperties(id);
+            loadBlockStorageVolumeProperties(id);
             d3.event.stopPropagation();
         })
             .on("mousedown", handleConnectorDragStart)
@@ -190,22 +190,22 @@ function drawBlockStorageSVG(block_storage) {
 /*
 ** Property Sheet Load function
  */
-function loadBlockStorageProperties(id) {
-    $("#properties").load("propertysheets/block_storage.html", function () {
-        if ('block_storages' in OKITJsonObj) {
-            console.log('Loading ' + block_storage_artifact + ' : ' + id);
-            let json = OKITJsonObj['block_storages'];
+function loadBlockStorageVolumeProperties(id) {
+    $("#properties").load("propertysheets/block_storage_volume.html", function () {
+        if ('block_storage_volumes' in OKITJsonObj) {
+            console.log('Loading ' + block_storage_volume_artifact + ' : ' + id);
+            let json = OKITJsonObj['block_storage_volumes'];
             for (let i = 0; i < json.length; i++) {
-                block_storage = json[i];
-                //console.log(JSON.stringify(block_storage, null, 2));
-                if (block_storage['id'] == id) {
-                    //console.log('Found ' + block_storage_artifact + ' : ' + id);
-                    block_storage['virtual_cloud_network'] = okitIdsJsonObj[block_storage['vcn_id']];
-                    $("#virtual_cloud_network").html(block_storage['virtual_cloud_network']);
-                    $('#display_name').val(block_storage['display_name']);
-                    $('#size').val(block_storage['size']);
+                let block_storage_volume = json[i];
+                if (block_storage_volume['id'] == id) {
+                    block_storage_volume['virtual_cloud_network'] = okitIdsJsonObj[block_storage_volume['vcn_id']];
+                    $("#virtual_cloud_network").html(block_storage_volume['virtual_cloud_network']);
+                    $('#display_name').val(block_storage_volume['display_name']);
+                    $('#availability_domain').val(block_storage_volume['availability_domain']);
+                    $('#size_in_gbs').val(block_storage_volume['size_in_gbs']);
+                    $('#backup_policy').val(block_storage_volume['backup_policy']);
                     // Add Event Listeners
-                    addPropertiesEventListeners(block_storage, []);
+                    addPropertiesEventListeners(block_storage_volume, []);
                     break;
                 }
             }
@@ -213,4 +213,4 @@ function loadBlockStorageProperties(id) {
     });
 }
 
-clearBlockStorageVariables();
+clearBlockStorageVolumeVariables();

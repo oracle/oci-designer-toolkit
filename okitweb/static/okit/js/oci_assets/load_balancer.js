@@ -235,7 +235,7 @@ function loadLoadBalancerProperties(id) {
             console.log('Loading Load Balancer: ' + id);
             let json = OKITJsonObj['load_balancers'];
             for (let i = 0; i < json.length; i++) {
-                load_balancer = json[i];
+                let load_balancer = json[i];
                 //console.log(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
                     load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_ids'][0]];

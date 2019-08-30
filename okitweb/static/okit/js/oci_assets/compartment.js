@@ -186,7 +186,7 @@ function loadCompartmentProperties(id) {
             console.log('Loading ' + compartment_artifact + ' : ' + id);
             let json = OKITJsonObj['compartments'];
             for (let i = 0; i < json.length; i++) {
-                compartment = json[i];
+                let compartment = json[i];
                 //console.log(JSON.stringify(compartment, null, 2));
                 if (compartment['id'] == id) {
                     //console.log('Found Internet Gateway: ' + id);

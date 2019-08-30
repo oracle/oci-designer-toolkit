@@ -1,0 +1,23 @@
+
+# -- Copyright: {{ copyright }}
+# ---- Author : {{ author }}
+# ------ Retrieve Regional / Cloud Data
+# -------- Get a list of Availability Domains
+data "oci_identity_availability_domains" "AvailabilityDomains" {
+    compartment_id = "{{ tenancy_ocid }}"
+}
+data "template_file" "AvailabilityDomainNames" {
+    count    = "${length(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains)}"
+    template = "${lookup(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[count.index], "name")}"
+}
+# -------- Get List OL7 Images
+#data "oci_core_images" "OL7Images" {
+#    compartment_id           = "{{ compartment_ocid }}"
+#    operating_system         = "${var.vm_os}"
+#    operating_system_version = "${var.vm_version}"
+#    shape                    = "${var.vm_shape}"
+#}
+# -------- Get List Shapes
+#data "oci_core_shapes" "InstanceShapes" {
+#    compartment_id = "{{ tenancy_ocid }}"
+#}
