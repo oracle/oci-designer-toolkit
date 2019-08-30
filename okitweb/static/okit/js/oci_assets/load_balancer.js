@@ -273,7 +273,7 @@ function updateLoadBalancer(source_type, source_id, id) {
         let load_balancer = load_balancers[i];
         console.log(i + ') ' + JSON.stringify(load_balancer))
         if (load_balancer['id'] == id) {
-            if (source_type == 'Instance') {
+            if (source_type == instance_artifact) {
                 if (load_balancer['instance_ids'].indexOf(source_id) > 0 ) {
                     // Already connected so delete existing line
                     d3.select("#" + generateConnectorId(source_id, id)).remove();

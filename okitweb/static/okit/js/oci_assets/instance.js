@@ -6,6 +6,7 @@ console.log('Loaded Instance Javascript');
 asset_drop_targets[instance_artifact] = [subnet_artifact];
 asset_connect_targets[instance_artifact] = [load_balancer_artifact];
 asset_add_functions[instance_artifact] = "addInstance";
+asset_update_functions[instance_artifact] = "updateInstance";
 asset_delete_functions[instance_artifact] = "deleteInstance";
 
 let instance_ids = [];
@@ -51,6 +52,8 @@ function addInstance(subnet_id, compartment_id) {
     instance['shape'] = 'VM.Standard2.1';
     instance['boot_volume_size_in_gbs'] = '50';
     instance['authorized_keys'] = '';
+    instance['block_storage_ids'] = [];
+    instance['block_storages'] = [];
     OKITJsonObj['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
@@ -193,6 +196,15 @@ function drawInstanceSVG(instance) {
     }
 }
 
+function clearInstanceSVG(instance) {
+    let id = instance['id'];
+    d3.selectAll("line[id*='" + id + "']").remove();
+}
+
+function drawInstanceConnectorsSVG(instance) {
+
+}
+
 /*
 ** Property Sheet Load function
  */
@@ -219,6 +231,32 @@ function loadInstanceProperties(id) {
             }
         }
     });
+}
+
+/*
+** OKIT Json Update Function
+ */
+function updateInstance(source_type, source_id, id) {
+    console.log('Update ' + instance_artifact + ' : ' + id + ' Adding ' + source_type + ' ' + source_id);
+    let instances = OKITJsonObj['instances'];
+    //console.log(JSON.stringify(instances))
+    for (let i = 0; i < instances.length; i++) {
+        let instance = instances[i];
+        console.log(i + ') ' + JSON.stringify(instance))
+        if (instance['id'] == id) {
+            if (source_type == block_storage_artifact) {
+                if (instance['block_storage_ids'].indexOf(source_id) > 0 ) {
+                    // Already connected so delete existing line
+                    d3.select("#" + generateConnectorId(source_id, id)).remove();
+                } else {
+                    instance['block_storage_ids'].push(source_id);
+                    instance['block_storages'].push(okitIdsJsonObj[source_id]);
+                }
+            }
+        }
+    }
+    displayOkitJson();
+    loadInstanceProperties(id);
 }
 
 clearInstanceVariables();

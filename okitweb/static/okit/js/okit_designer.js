@@ -144,8 +144,9 @@ function drawSVGforJson() {
     displayOkitJson();
     // Clear existing
     clearSVG();
-    // Draw SVG
-    if ('compartments' in OKITJsonObj) {
+
+    // Draw Outer SVG
+    if (OKITJsonObj.hasOwnProperty('compartments')) {
         compartment_ids = [];
         for (let i = 0; i < OKITJsonObj['compartments'].length; i++) {
             compartment_ids.push(OKITJsonObj['compartments'][i]['id']);
@@ -154,7 +155,9 @@ function drawSVGforJson() {
             drawCompartmentSVG(OKITJsonObj['compartments'][i]);
         }
     }
-    if ('virtual_cloud_networks' in OKITJsonObj) {
+
+    // Draw Compartment Subcomponents
+    if (OKITJsonObj.hasOwnProperty('virtual_cloud_networks')) {
         virtual_network_ids = [];
         for (let i=0; i < OKITJsonObj['virtual_cloud_networks'].length; i++) {
             virtual_network_ids.push(OKITJsonObj['virtual_cloud_networks'][i]['id']);
@@ -163,7 +166,18 @@ function drawSVGforJson() {
             drawVirtualCloudNetworkSVG(OKITJsonObj['virtual_cloud_networks'][i]);
         }
     }
-    if ('internet_gateways' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('block_storages')) {
+        block_storage_ids = [];
+        for (let i=0; i < OKITJsonObj['block_storages'].length; i++) {
+            block_storage_ids.push(OKITJsonObj['block_storages'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['block_storages'][i]['id']] = OKITJsonObj['block_storages'][i]['display_name'];
+            block_storage_count += 1;
+            drawVirtualCloudNetworkSVG(OKITJsonObj['block_storages'][i]);
+        }
+    }
+
+    // Draw Virtual Cloud Network Subcomponents
+    if (OKITJsonObj.hasOwnProperty('internet_gateways')) {
         internet_gateway_ids = [];
         for (let i=0; i < OKITJsonObj['internet_gateways'].length; i++) {
             internet_gateway_ids.push(OKITJsonObj['internet_gateways'][i]['id']);
@@ -172,7 +186,7 @@ function drawSVGforJson() {
             drawInternetGatewaySVG(OKITJsonObj['internet_gateways'][i]);
         }
     }
-    if ('route_tables' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('route_tables')) {
         route_table_ids = [];
         for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
             route_table_ids.push(OKITJsonObj['route_tables'][i]['id']);
@@ -181,7 +195,7 @@ function drawSVGforJson() {
             drawRouteTableSVG(OKITJsonObj['route_tables'][i]);
         }
     }
-    if ('security_lists' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('security_lists')) {
         security_list_ids = [];
         for (let i=0; i < OKITJsonObj['security_lists'].length; i++) {
             security_list_ids.push(OKITJsonObj['security_lists'][i]['id']);
@@ -190,7 +204,7 @@ function drawSVGforJson() {
             drawSecurityListSVG(OKITJsonObj['security_lists'][i]);
         }
     }
-    if ('subnets' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('subnets')) {
         subnet_ids = [];
         for (let i=0; i < OKITJsonObj['subnets'].length; i++) {
             subnet_ids.push(OKITJsonObj['subnets'][i]['id']);
@@ -201,16 +215,19 @@ function drawSVGforJson() {
             drawSubnetConnectorsSVG(OKITJsonObj['subnets'][i]);
         }
     }
-    if ('instances' in OKITJsonObj) {
+
+    // Draw Subnet Subcomponents
+    if (OKITJsonObj.hasOwnProperty('instances')) {
         instance_ids = [];
         for (let i=0; i < OKITJsonObj['instances'].length; i++) {
             instance_ids.push(OKITJsonObj['instances'][i]['id']);
             okitIdsJsonObj[OKITJsonObj['instances'][i]['id']] = OKITJsonObj['instances'][i]['display_name'];
             instance_count += 1;
             drawInstanceSVG(OKITJsonObj['instances'][i]);
+            drawInstanceConnectorsSVG(OKITJsonObj['instances'][i]);
         }
     }
-    if ('load_balancers' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('load_balancers')) {
         load_balancer_ids = [];
         for (let i=0; i < OKITJsonObj['load_balancers'].length; i++) {
             load_balancer_ids.push(OKITJsonObj['load_balancers'][i]['id']);

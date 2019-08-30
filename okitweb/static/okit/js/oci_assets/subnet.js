@@ -380,7 +380,7 @@ function updateSubnet(sourcetype, sourceid, id) {
         subnet = subnets[i];
         //console.log('Before : ' + JSON.stringify(subnet, null, 2));
         if (subnet['id'] == id) {
-            if (sourcetype == 'Route Table') {
+            if (sourcetype == route_table_artifact) {
                 if (subnet['route_table_id'] != '') {
                     // Only single Route Table allow so delete existing line.
                     console.log('Deleting Connector : ' + generateConnectorId(subnet['route_table_id'], id));
@@ -388,7 +388,7 @@ function updateSubnet(sourcetype, sourceid, id) {
                 }
                 subnet['route_table_id'] = sourceid;
                 subnet['route_table'] = okitIdsJsonObj[sourceid];
-            } else if (sourcetype == 'Security List') {
+            } else if (sourcetype == security_list_artifact) {
                 if (subnet['security_list_ids'].indexOf(sourceid) > 0 ) {
                     // Already connected so delete existing line
                     //console.log('Deleting Connector : ' + generateConnectorId(sourceid, id));

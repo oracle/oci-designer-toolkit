@@ -236,6 +236,7 @@ function handleConnectorDrop(e) {
         let destinationType = d3.select(this).attr('data-type');
         let parentid = d3.select(this).attr('data-parentid');
         let sourceid = connectorStartElement.getAttribute('data-okit-id');
+        let source_parent_id = connectorStartElement.getAttribute('data-parentid');
         let id = d3.select(this).attr('data-okit-id');
         let connector_source_id = connectorStartElement.getAttribute('data-connector-id');
         let connector_destination_id = d3.select(this).attr('data-connector-id');
@@ -244,9 +245,10 @@ function handleConnectorDrop(e) {
         console.log('Connector Destination Type : ' + destinationType);
         console.log('Connector Allowed : ' + JSON.stringify(asset_connect_targets));
 
-        console.log('Connector Drag End Parent Id : ' + parentid);
         console.log('Connector Drag Start Id : ' + sourceid);
+        console.log('Connector Drag Start Parent Id : ' + source_parent_id);
         console.log('Connector Drag End Id : ' + d3.select(this).attr('id'));
+        console.log('Connector Drag End Parent Id : ' + parentid);
         console.log('Connector Drag End data-connector-end-y : ' + d3.select(this).attr('data-connector-end-y'));
         console.log('Connector Drag End data-connector-end-x : ' + d3.select(this).attr('data-connector-end-x'));
         console.log('Connector Source Id : ' + connector_source_id);
@@ -254,13 +256,14 @@ function handleConnectorDrop(e) {
 
         // Check is Connection of
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
-            updateAssetTarget(destinationType, sourceType, sourceid, id)
+            updateAssetTarget(destinationType, sourceType, sourceid, id);
             console.log('Creating Connector Line (' + sourceType + ') - (' + destinationType + ')');
             console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
             connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-end-x');
             connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-end-y');
             let svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-            svg = d3.select("#" + parentid + '-svg');
+            //let svg = d3.select("#" + parentid + '-svg');
+            let svg = d3.select("#" + source_parent_id + '-svg');
             svg.append('line')
                 .attr("id", generateConnectorId(sourceid, id))
                 .attr("x1", connectorStartXLeft)
