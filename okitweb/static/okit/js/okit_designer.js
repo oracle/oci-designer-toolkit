@@ -172,7 +172,7 @@ function drawSVGforJson() {
             block_storage_ids.push(OKITJsonObj['block_storages'][i]['id']);
             okitIdsJsonObj[OKITJsonObj['block_storages'][i]['id']] = OKITJsonObj['block_storages'][i]['display_name'];
             block_storage_count += 1;
-            drawVirtualCloudNetworkSVG(OKITJsonObj['block_storages'][i]);
+            drawBlockStorageSVG(OKITJsonObj['block_storages'][i]);
         }
     }
 
