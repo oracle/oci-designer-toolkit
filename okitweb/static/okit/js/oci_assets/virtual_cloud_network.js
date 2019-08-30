@@ -241,7 +241,7 @@ function loadVirtualCloudNetworkProperties(id) {
             console.log('Loading Virtual Cloud Network: ' + id);
             let json = OKITJsonObj['virtual_cloud_networks'];
             for (let i = 0; i < json.length; i++) {
-                virtual_cloud_network = json[i];
+                let virtual_cloud_network = json[i];
                 //console.log(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {
                     //console.log('Found Virtual Cloud Network: ' + id);

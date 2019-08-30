@@ -29,8 +29,8 @@ const instance_prefix = 'in';
 const load_balancer_artifact = 'Load Balancer';
 const load_balancer_prefix = 'lb';
 // Block Storage
-const block_storage_artifact = 'Block Storage';
-const block_storage_prefix = 'bs';
+const block_storage_volume_artifact = 'Block Storage Volume';
+const block_storage_volume_prefix = 'bsv';
 // SVG Icons
 const icon_width = 45;
 const icon_height = 45;
@@ -113,10 +113,8 @@ function clearSVG() {
     clearLoadBalancerVariables();
     // Instance
     clearInstanceVariables();
-    // Add Path Style
-    //let okitcanvas_svg = d3.select('#okitcanvas');
-    //d3.select('#okitcanvas').append('style')
-    //    .text('.st0{fill:#F80000;}');
+    // Block Storage Volume
+    clearBlockStorageVolumeVariables();
 }
 
 /*
@@ -166,13 +164,13 @@ function drawSVGforJson() {
             drawVirtualCloudNetworkSVG(OKITJsonObj['virtual_cloud_networks'][i]);
         }
     }
-    if (OKITJsonObj.hasOwnProperty('block_storages')) {
-        block_storage_ids = [];
-        for (let i=0; i < OKITJsonObj['block_storages'].length; i++) {
-            block_storage_ids.push(OKITJsonObj['block_storages'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['block_storages'][i]['id']] = OKITJsonObj['block_storages'][i]['display_name'];
-            block_storage_count += 1;
-            drawBlockStorageSVG(OKITJsonObj['block_storages'][i]);
+    if (OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
+        block_storage_volume_ids = [];
+        for (let i=0; i < OKITJsonObj['block_storage_volumes'].length; i++) {
+            block_storage_volume_ids.push(OKITJsonObj['block_storage_volumes'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['block_storage_volumes'][i]['id']] = OKITJsonObj['block_storage_volumes'][i]['display_name'];
+            block_storage_volume_count += 1;
+            drawBlockStorageVolumeSVG(OKITJsonObj['block_storage_volumes'][i]);
         }
     }
 

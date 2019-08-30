@@ -193,7 +193,7 @@ function loadSecurityListProperties(id) {
             console.log('Loading Security List: ' + id);
             let json = OKITJsonObj['security_lists'];
             for (let i = 0; i < json.length; i++) {
-                security_list = json[i];
+                let security_list = json[i];
                 //console.log(JSON.stringify(security_list, null, 2));
                 if (security_list['id'] == id) {
                     //console.log('Found Security List: ' + id);

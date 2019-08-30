@@ -21,8 +21,10 @@ data "template_file" "{{ resource_name }}VolumeBackupPolicyIdx" {
 resource "oci_core_volume" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_ocid }}
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(0) }}]["name"]
     # Optional
     display_name   = {{ display_name }}
+    size_in_gbs    = {{ size_in_gbs }}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags }}
 {% endif %}

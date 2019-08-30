@@ -331,7 +331,7 @@ function loadSubnetProperties(id) {
             console.log('Loading Subnet: ' + id);
             let json = OKITJsonObj['subnets'];
             for (let i = 0; i < json.length; i++) {
-                subnet = json[i];
+                let subnet = json[i];
                 //console.log(JSON.stringify(subnet, null, 2));
                 if (subnet['id'] == id) {
                     //console.log('Found Subnet: ' + id);

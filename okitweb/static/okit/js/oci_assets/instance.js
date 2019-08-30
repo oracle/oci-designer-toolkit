@@ -52,8 +52,8 @@ function addInstance(subnet_id, compartment_id) {
     instance['shape'] = 'VM.Standard2.1';
     instance['boot_volume_size_in_gbs'] = '50';
     instance['authorized_keys'] = '';
-    instance['block_storage_ids'] = [];
-    instance['block_storages'] = [];
+    instance['block_storage_volume_ids'] = [];
+    instance['block_storage_volumes'] = [];
     OKITJsonObj['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
@@ -203,7 +203,7 @@ function clearInstanceSVG(instance) {
 
 function drawInstanceConnectorsSVG(instance) {
     let id = instance['id'];
-    for (let block_storage_id of instance['block_storage_ids']) {
+    for (let block_storage_id of instance['block_storage_volume_ids']) {
         let block_storage_svg = d3.select('#' + block_storage_id);
         if (block_storage_svg.node()) {
             let parent_id = block_storage_svg.attr('data-parentid');
@@ -273,13 +273,13 @@ function updateInstance(source_type, source_id, id) {
         let instance = instances[i];
         console.log(i + ') ' + JSON.stringify(instance))
         if (instance['id'] == id) {
-            if (source_type == block_storage_artifact) {
-                if (instance['block_storage_ids'].indexOf(source_id) > 0 ) {
+            if (source_type == block_storage_volume_artifact) {
+                if (instance['block_storage_volume_ids'].indexOf(source_id) > 0 ) {
                     // Already connected so delete existing line
                     d3.select("#" + generateConnectorId(source_id, id)).remove();
                 } else {
-                    instance['block_storage_ids'].push(source_id);
-                    instance['block_storages'].push(okitIdsJsonObj[source_id]);
+                    instance['block_storage_volume_ids'].push(source_id);
+                    instance['block_storage_volumes'].push(okitIdsJsonObj[source_id]);
                 }
             }
         }

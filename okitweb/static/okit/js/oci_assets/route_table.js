@@ -224,7 +224,7 @@ function loadRouteTableProperties(id) {
             console.log('Loading Route Table: ' + id);
             let json = OKITJsonObj['route_tables'];
             for (let i = 0; i < json.length; i++) {
-                route_table = json[i];
+                let route_table = json[i];
                 //console.log(JSON.stringify(route_table, null, 2));
                 if (route_table['id'] == id) {
                     //console.log('Found Route Table: ' + id);

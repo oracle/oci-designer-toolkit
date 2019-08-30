@@ -182,7 +182,7 @@ function loadInternetGatewayProperties(id) {
             console.log('Loading Internet Gateway: ' + id);
             let json = OKITJsonObj['internet_gateways'];
             for (let i = 0; i < json.length; i++) {
-                internet_gateway = json[i];
+                let internet_gateway = json[i];
                 //console.log(JSON.stringify(internet_gateway, null, 2));
                 if (internet_gateway['id'] == id) {
                     //console.log('Found Internet Gateway: ' + id);
