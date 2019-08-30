@@ -10,7 +10,7 @@ __copyright__ = "Copyright (c) 2013, 2014-2019  Oracle and/or its affiliates. Al
 __version__ = "1.0.0.0"
 __date__ = "@BUILDDATE@"
 __status__ = "@RELEASE@"
-__module__ = "ociTerraformGenerator"
+__module__ = "ociTerraform11Generator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
@@ -35,18 +35,18 @@ from common.ociLogging import getLogger
 # Configure logging
 logger = getLogger()
 
-class OCITerraformGenerator(OCIGenerator):
+class OCITerraform11Generator(OCIGenerator):
     DIRECTORY_SUFFIX = 'terraform'
     MAIN_FILE_NAME = 'main.tf'
     VARIABLES_FILE_NAME = 'variables.tf'
     TERRAFORM_FILE_NAME = 'terraform.tfvars'
     OUTPUTS_FILE_NAME = 'output.tf'
-    JINJA2_VARIABLE_FORMAT = 'var.{0:s}'
+    JINJA2_VARIABLE_FORMAT = '${{var.{0:s}}}'
 
     def __init__(self, template_root, output_root, visualiser_json):
         template_dir = os.path.join(template_root, self.DIRECTORY_SUFFIX)
         output_dir = os.path.join(output_root, self.DIRECTORY_SUFFIX)
-        super(OCITerraformGenerator, self).__init__(template_dir, output_dir, visualiser_json)
+        super(OCITerraform11Generator, self).__init__(template_dir, output_dir, visualiser_json)
 
     def writeFiles(self):
         main_rendered = self.getRenderedMain()
@@ -65,12 +65,12 @@ class OCITerraformGenerator(OCIGenerator):
         return
 
     def formatJinja2Variable(self, variable_name):
-        return 'var.{0:s}'.format(variable_name)
+        return '${{var.{0:s}}}'.format(variable_name)
 
     def formatJinja2IdReference(self, resource_name):
-        return 'local.{0:s}_id'.format(resource_name)
+        return '${{local.{0:s}_id}}'.format(resource_name)
 
     def formatJinja2DhcpReference(self, resource_name):
-        return 'local.{0:s}_dhcp_options_id'.format(resource_name)
+        return '${{local.{0:s}_dhcp_options_id}}'.format(resource_name)
 
 
