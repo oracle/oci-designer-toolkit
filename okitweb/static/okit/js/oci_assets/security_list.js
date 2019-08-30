@@ -3,15 +3,13 @@ console.log('Loaded Subnet Javascript');
 /*
 ** Set Valid drop Targets
  */
-
-asset_drop_targets["Security List"] = ["Virtual Cloud Network"];
-asset_connect_targets["Security List"] = ["Subnet"];
-asset_add_functions["Security List"] = "addSecurityList";
-asset_delete_functions["Security List"] = "deleteSecurityList";
+asset_drop_targets[security_list_artifact] = [virtual_cloud_network_artifact];
+asset_connect_targets[security_list_artifact] = [subnet_artifact];
+asset_add_functions[security_list_artifact] = "addSecurityList";
+asset_delete_functions[security_list_artifact] = "deleteSecurityList";
 
 let security_list_ids = [];
 let security_list_count = 0;
-let security_list_prefix = 'sl';
 
 /*
 ** Reset variables
@@ -25,13 +23,13 @@ function clearSecurityListVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addSecurityList(vcnid) {
-    let id = 'okit-sl-' + uuidv4();
+function addSecurityList(vcn_id, compartment_id) {
+    let id = 'okit-' + security_list_prefix + '-' + uuidv4();
     console.log('Adding Security List : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('security_lists' in OKITJsonObj)) {
+    if (!OKITJsonObj.hasOwnProperty('security_lists')) {
         OKITJsonObj['security_lists'] = [];
     }
 
@@ -42,8 +40,9 @@ function addSecurityList(vcnid) {
     // Increment Count
     security_list_count += 1;
     let security_list = {};
-    security_list['vcn_id'] = vcnid;
+    security_list['vcn_id'] = vcn_id;
     security_list['virtual_cloud_network'] = '';
+    security_list['compartment_id'] = compartment_id;
     security_list['id'] = id;
     security_list['display_name'] = generateDefaultName(security_list_prefix, security_list_count);
     security_list['egress_security_rules'] = []
@@ -89,91 +88,100 @@ function deleteSecurityList(id) {
 function drawSecurityListSVG(security_list) {
     let parent_id = security_list['vcn_id'];
     let id = security_list['id'];
+    let compartment_id = security_list['compartment_id'];
     console.log('Drawing Security List : ' + id);
-    let position = vcn_element_icon_position;
-    let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-    let translate_y = icon_translate_y_start;
-    let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    let svg_y = (icon_height / 4) * 3;
-    let data_type = "Security List";
+    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
+        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
+        let svg_y = (icon_height / 4) * 3;
+        let data_type = security_list_artifact;
 
-    // Increment Icon Position
-    vcn_element_icon_position += 1;
+        // Increment Icon Position
+        virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-    let parent_svg = d3.select('#' + parent_id + "-svg");
-    let svg = parent_svg.append("svg")
-        .attr("id", id + '-svg')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", security_list['display_name'])
-        .attr("x", svg_x)
-        .attr("y", svg_y)
-        .attr("width", "100")
-        .attr("height", "100");
-    let rect = svg.append("rect")
-        .attr("id", id)
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", security_list['display_name'])
-        .attr("x", icon_x)
-        .attr("y", icon_y)
-        .attr("width", icon_width)
-        .attr("height", icon_height)
-        .attr("stroke", icon_stroke_colour)
-        .attr("stroke-dasharray", "1, 1")
-        .attr("fill", "white")
-        .attr("style", "fill-opacity: .25;");
-    rect.append("title")
-        .attr("id", id + '-title')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .text("Security List: " + security_list['display_name']);
-    let g = svg.append("g")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-    g.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M144,85.5l-43.8,18.8v41.8v0.1c1.3,23.2,18.4,43.6,43.8,56.3c25.5-12.7,42.5-33.1,43.8-56.3v-0.1v-41.8L144,85.5z M151.3,161.8h-31.5v-4.3h31.5V161.8z M151.3,144.7h-31.5v-4.3h31.5V144.7z M151.3,126.6h-31.5v-4.3h31.5V126.6zM170.4,155.8l-7.7,7.7l-4.9-4.9c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l2.8,2.8l5.6-5.6c0.6-0.6,1.5-0.6,2,0C171,154.3,171,155.2,170.4,155.8z M159.4,138.6c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l3,3l3-3c0.6-0.6,1.5-0.6,2,0c0.6,0.6,0.6,1.5,0,2l-3,3l3,3c0.6,0.6,0.6,1.5,0,2c-0.3,0.3-0.6,0.4-1,0.4c-0.4,0-0.7-0.1-1-0.4l-3-3l-3,3c-0.3,0.3-0.6,0.4-1,0.4c-0.4,0-0.7-0.1-1-0.4c-0.6-0.6-0.6-1.5,0-2l3-3L159.4,138.6z M170.7,121.9l-7.7,7.7l-4.9-4.9c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l2.8,2.8l5.6-5.6c0.6-0.6,1.5-0.6,2,0C171.2,120.4,171.2,121.3,170.7,121.9z")
+        let parent_svg = d3.select('#' + parent_id + "-svg");
+        let svg = parent_svg.append("svg")
+            .attr("id", id + '-svg')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", security_list['display_name'])
+            .attr("x", svg_x)
+            .attr("y", svg_y)
+            .attr("width", "100")
+            .attr("height", "100");
+        let rect = svg.append("rect")
+            .attr("id", id)
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", security_list['display_name'])
+            .attr("x", icon_x)
+            .attr("y", icon_y)
+            .attr("width", icon_width)
+            .attr("height", icon_height)
+            .attr("stroke", icon_stroke_colour)
+            .attr("stroke-dasharray", "1, 1")
+            .attr("fill", "white")
+            .attr("style", "fill-opacity: .25;");
+        rect.append("title")
+            .attr("id", id + '-title')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .text("Security List: " + security_list['display_name']);
+        let g = svg.append("g")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M144,85.5l-43.8,18.8v41.8v0.1c1.3,23.2,18.4,43.6,43.8,56.3c25.5-12.7,42.5-33.1,43.8-56.3v-0.1v-41.8L144,85.5z M151.3,161.8h-31.5v-4.3h31.5V161.8z M151.3,144.7h-31.5v-4.3h31.5V144.7z M151.3,126.6h-31.5v-4.3h31.5V126.6zM170.4,155.8l-7.7,7.7l-4.9-4.9c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l2.8,2.8l5.6-5.6c0.6-0.6,1.5-0.6,2,0C171,154.3,171,155.2,170.4,155.8z M159.4,138.6c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l3,3l3-3c0.6-0.6,1.5-0.6,2,0c0.6,0.6,0.6,1.5,0,2l-3,3l3,3c0.6,0.6,0.6,1.5,0,2c-0.3,0.3-0.6,0.4-1,0.4c-0.4,0-0.7-0.1-1-0.4l-3-3l-3,3c-0.3,0.3-0.6,0.4-1,0.4c-0.4,0-0.7-0.1-1-0.4c-0.6-0.6-0.6-1.5,0-2l3-3L159.4,138.6z M170.7,121.9l-7.7,7.7l-4.9-4.9c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l2.8,2.8l5.6-5.6c0.6-0.6,1.5-0.6,2,0C171.2,120.4,171.2,121.3,170.7,121.9z")
 
-    //loadSecurityListProperties(id);
-    let boundingClientRect = rect.node().getBoundingClientRect();
-    // Add click event to display properties
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    // Add dragevent versions
-    // Set common attributes on svg element and children
-    svg.on("click", function() { loadSecurityListProperties(id); })
-        .on("mousedown", handleConnectorDragStart)
-        .on("mousemove", handleConnectorDrag)
-        .on("mouseup", handleConnectorDrop)
-        .on("mouseover", handleConnectorDragEnter)
-        .on("mouseout", handleConnectorDragLeave)
-        .on("dragstart", handleConnectorDragStart)
-        .on("drop", handleConnectorDrop)
-        .on("dragenter", handleConnectorDragEnter)
-        .on("dragleave", handleConnectorDragLeave)
-        .on("contextmenu", handleContextMenu)
-        .attr("data-type", data_type)
-        .attr("data-okit-id", id)
-        .attr("data-parentid", parent_id)
-        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-id", id)
-        .attr("dragable", true)
-        .selectAll("*")
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        /*
+         Add click event to display properties
+         Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+         Add dragevent versions
+         Set common attributes on svg element and children
+         */
+        svg.on("click", function () {
+            loadSecurityListProperties(id);
+            d3.event.stopPropagation();
+        })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-id", id)
-            .attr("dragable", true);
+            .attr("dragable", true)
+            .selectAll("*")
+                .attr("data-type", data_type)
+                .attr("data-okit-id", id)
+                .attr("data-parentid", parent_id)
+                .attr("data-compartment-id", compartment_id)
+                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", id)
+                .attr("dragable", true);
+    } else {
+        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+    }
 }
 
 /*

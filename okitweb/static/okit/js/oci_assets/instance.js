@@ -3,15 +3,14 @@ console.log('Loaded Instance Javascript');
 /*
 ** Set Valid drop Targets
  */
-
-asset_drop_targets["Instance"] = ["Subnet"];
-asset_connect_targets["Instance"] = ["Load Balancer"];
-asset_add_functions["Instance"] = "addInstance";
-asset_delete_functions["Instance"] = "deleteInstance";
+asset_drop_targets[instance_artifact] = [subnet_artifact];
+asset_connect_targets[instance_artifact] = [load_balancer_artifact];
+asset_add_functions[instance_artifact] = "addInstance";
+asset_update_functions[instance_artifact] = "updateInstance";
+asset_delete_functions[instance_artifact] = "deleteInstance";
 
 let instance_ids = [];
 let instance_count = 0;
-let instance_prefix = 'in';
 
 /*
 ** Reset variables
@@ -25,13 +24,13 @@ function clearInstanceVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addInstance(subnetid) {
-    let id = 'okit-in-' + uuidv4();
+function addInstance(subnet_id, compartment_id) {
+    let id = 'okit-' + instance_prefix + '-' + uuidv4();
     console.log('Adding Instance : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('instances' in OKITJsonObj)) {
+    if (!OKITJsonObj.hasOwnProperty('instances')) {
         OKITJsonObj['instances'] = [];
     }
 
@@ -42,8 +41,9 @@ function addInstance(subnetid) {
     // Increment Count
     instance_count += 1;
     let instance = {};
-    instance['subnet_id'] = subnetid;
+    instance['subnet_id'] = subnet_id;
     instance['subnet'] = '';
+    instance['compartment_id'] = compartment_id;
     instance['id'] = id;
     instance['display_name'] = generateDefaultName(instance_prefix, instance_count);
     instance['hostname_label'] = instance['display_name'].toLowerCase();
@@ -52,6 +52,8 @@ function addInstance(subnetid) {
     instance['shape'] = 'VM.Standard2.1';
     instance['boot_volume_size_in_gbs'] = '50';
     instance['authorized_keys'] = '';
+    instance['block_storage_ids'] = [];
+    instance['block_storages'] = [];
     OKITJsonObj['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
@@ -92,20 +94,21 @@ function deleteInstance(id) {
 function drawInstanceSVG(instance) {
     let parent_id = instance['subnet_id'];
     let id = instance['id'];
+    let compartment_id = instance['compartment_id'];
     console.log('Drawing Instance : ' + id);
     //console.log('Subnet Id : ' + parent_id);
-    //console.log('Subnet Content : ' + JSON.stringify(subnet_content));
+    //console.log('Subnet Content : ' + JSON.stringify(subnet_bui_sub_artifacts));
     // Only draw the instance if the subnet exists
-    if (parent_id in subnet_content) {
-        let position = subnet_content[parent_id]['instance_position'];
+    if (subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        let position = subnet_bui_sub_artifacts[parent_id]['instance_position'];
         let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
         let translate_y = icon_translate_y_start;
         let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
         let svg_y = (icon_height / 4) * 9;
-        let data_type = "Instance";
+        let data_type = instance_artifact;
 
         // Increment Icon Position
-        subnet_content[parent_id]['instance_position'] += 1;
+        subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
 
         let parent_svg = d3.select('#' + parent_id + "-svg");
         let svg = parent_svg.append("svg")
@@ -158,7 +161,7 @@ function drawInstanceSVG(instance) {
         // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
         // Add dragevent versions
         // Set common attributes on svg element and children
-        svg.on("click", function () {loadInstanceProperties(id);})
+        svg.on("click", function () {loadInstanceProperties(id); d3.event.stopPropagation(); })
             .on("mousedown", handleConnectorDragStart)
             .on("mousemove", handleConnectorDrag)
             .on("mouseup", handleConnectorDrop)
@@ -172,6 +175,7 @@ function drawInstanceSVG(instance) {
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y)
@@ -182,12 +186,51 @@ function drawInstanceSVG(instance) {
                 .attr("data-type", data_type)
                 .attr("data-okit-id", id)
                 .attr("data-parentid", parent_id)
+                .attr("data-compartment-id", compartment_id)
                 .attr("data-connector-start-y", boundingClientRect.y)
                 .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
                 .attr("data-connector-end-y", boundingClientRect.y)
                 .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
                 .attr("data-connector-id", id)
                 .attr("dragable", true);
+    }
+}
+
+function clearInstanceSVG(instance) {
+    let id = instance['id'];
+    d3.selectAll("line[id*='" + id + "']").remove();
+}
+
+function drawInstanceConnectorsSVG(instance) {
+    let id = instance['id'];
+    for (let block_storage_id of instance['block_storage_ids']) {
+        let block_storage_svg = d3.select('#' + block_storage_id);
+        if (block_storage_svg.node()) {
+            let parent_id = block_storage_svg.attr('data-parentid');
+            let parent_svg = d3.select('#' + parent_id + "-svg");
+            if (parent_svg.node()) {
+                console.log('Parent SVG : ' + parent_svg.node());
+                // Define SVG position manipulation variables
+                let svgPoint = parent_svg.node().createSVGPoint();
+                let screenCTM = parent_svg.node().getScreenCTM();
+                // Start
+                svgPoint.x = d3.select('#' + id).attr('data-connector-start-x');
+                svgPoint.y = d3.select('#' + id).attr('data-connector-start-y');
+                let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+                // End
+                svgPoint.x = block_storage_svg.attr('data-connector-start-x');
+                svgPoint.y = block_storage_svg.attr('data-connector-start-y');
+                let connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                parent_svg.append('line')
+                    .attr("id", generateConnectorId(block_storage_id, id))
+                    .attr("x1", connector_start.x)
+                    .attr("y1", connector_start.y)
+                    .attr("x2", connector_end.x)
+                    .attr("y2", connector_end.y)
+                    .attr("stroke-width", "2")
+                    .attr("stroke", "black");
+            }
+        }
     }
 }
 
@@ -217,6 +260,32 @@ function loadInstanceProperties(id) {
             }
         }
     });
+}
+
+/*
+** OKIT Json Update Function
+ */
+function updateInstance(source_type, source_id, id) {
+    console.log('Update ' + instance_artifact + ' : ' + id + ' Adding ' + source_type + ' ' + source_id);
+    let instances = OKITJsonObj['instances'];
+    //console.log(JSON.stringify(instances))
+    for (let i = 0; i < instances.length; i++) {
+        let instance = instances[i];
+        console.log(i + ') ' + JSON.stringify(instance))
+        if (instance['id'] == id) {
+            if (source_type == block_storage_artifact) {
+                if (instance['block_storage_ids'].indexOf(source_id) > 0 ) {
+                    // Already connected so delete existing line
+                    d3.select("#" + generateConnectorId(source_id, id)).remove();
+                } else {
+                    instance['block_storage_ids'].push(source_id);
+                    instance['block_storages'].push(okitIdsJsonObj[source_id]);
+                }
+            }
+        }
+    }
+    displayOkitJson();
+    loadInstanceProperties(id);
 }
 
 clearInstanceVariables();

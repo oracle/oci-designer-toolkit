@@ -1,28 +1,59 @@
 console.log('Loaded Designer Javascript');
-
-// Asset name prefix
-let display_name_prefix = 'okit-';
-
-let okitIdsJsonObj = {};
 /*
-** SVG Creation standard values
+ * Define the OKT Designer Constant that will be used across the subsequent Javascript
  */
-let icon_width = 45;
-let icon_height = 45;
-let icon_x = 25;
-let icon_y = 25;
-let icon_translate_x_start = 60;
-let icon_translate_y_start = 10;
-//let vcn_icon_spacing = 35;
-let vcn_icon_spacing = 10;
+// Asset name prefix
+const display_name_prefix = 'okit-';
+// Compartment
+const compartment_artifact = 'Compartment';
+const compartment_prefix = 'comp';
+// Virtual Cloud Network
+const virtual_cloud_network_artifact = 'Virtual Cloud Network';
+const virtual_cloud_network_prefix = 'vcn';
+// Internet Gateway
+const internet_gateway_artifact = 'Internet Gateway';
+const internet_gateway_prefix = 'ig';
+// Route Table
+const route_table_artifact = 'Route Table';
+const route_table_prefix = 'rt';
+// Security List
+const security_list_artifact = 'Security List';
+const security_list_prefix = 'sl';
+// Subnet
+const subnet_artifact = 'Subnet';
+const subnet_prefix = 'sn';
+// Instance
+const instance_artifact = 'Instance';
+const instance_prefix = 'in';
+// Load Balancer
+const load_balancer_artifact = 'Load Balancer';
+const load_balancer_prefix = 'lb';
+// Block Storage
+const block_storage_artifact = 'Block Storage';
+const block_storage_prefix = 'bs';
+// SVG Icons
+const icon_width = 45;
+const icon_height = 45;
+const icon_x = 25;
+const icon_y = 25;
+const icon_translate_x_start = 60;
+const icon_translate_y_start = 10;
+const vcn_icon_spacing = 10;
+const icon_stroke_colour = "#F80000";
 
-let icon_stroke_colour = "#F80000";
-let subnet_stroke_colour = ["orange", "blue", "green", "black"];
+/*
+ * Define designer working variables
+ */
+// OKIT Json
+let OKITJsonObj = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
+// Common okit id to name mapping
+let okitIdsJsonObj = {};
+// Query Request only set to a value when designer called from query
+let okitQueryRequestJson = null;
 
-let vcn_gateway_icon_position = 0;
-let vcn_element_icon_position = 0;
-
-
+/*
+ * Define Common Functions
+ */
 function generateDefaultName(prefix, count) {
     return display_name_prefix + prefix + ('000' + count).slice(-3);
 }
@@ -35,12 +66,6 @@ function displayOkitJson() {
 function generateConnectorId(sourceid, destinationid) {
     return sourceid + '-' + destinationid;
 }
-
-/*
-** Json Object Processing
- */
-let okitQueryRequestJson = null;
-let OKITJsonObj = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
 
 /*
 ** New File functionality
@@ -75,8 +100,6 @@ function clearSVG() {
     // Compartments
     clearCompartmentVariables();
     // Virtual Cloud Network
-    vcn_gateway_icon_position = 0;
-    vcn_element_icon_position = 0;
     clearVirtualCloudNetworkVariables();
     // Internet Gateway
     clearInternetGatewayVariables();
@@ -121,8 +144,9 @@ function drawSVGforJson() {
     displayOkitJson();
     // Clear existing
     clearSVG();
-    // Draw SVG
-    if ('compartments' in OKITJsonObj) {
+
+    // Draw Outer SVG
+    if (OKITJsonObj.hasOwnProperty('compartments')) {
         compartment_ids = [];
         for (let i = 0; i < OKITJsonObj['compartments'].length; i++) {
             compartment_ids.push(OKITJsonObj['compartments'][i]['id']);
@@ -131,7 +155,9 @@ function drawSVGforJson() {
             drawCompartmentSVG(OKITJsonObj['compartments'][i]);
         }
     }
-    if ('virtual_cloud_networks' in OKITJsonObj) {
+
+    // Draw Compartment Subcomponents
+    if (OKITJsonObj.hasOwnProperty('virtual_cloud_networks')) {
         virtual_network_ids = [];
         for (let i=0; i < OKITJsonObj['virtual_cloud_networks'].length; i++) {
             virtual_network_ids.push(OKITJsonObj['virtual_cloud_networks'][i]['id']);
@@ -140,7 +166,18 @@ function drawSVGforJson() {
             drawVirtualCloudNetworkSVG(OKITJsonObj['virtual_cloud_networks'][i]);
         }
     }
-    if ('internet_gateways' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('block_storages')) {
+        block_storage_ids = [];
+        for (let i=0; i < OKITJsonObj['block_storages'].length; i++) {
+            block_storage_ids.push(OKITJsonObj['block_storages'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['block_storages'][i]['id']] = OKITJsonObj['block_storages'][i]['display_name'];
+            block_storage_count += 1;
+            drawBlockStorageSVG(OKITJsonObj['block_storages'][i]);
+        }
+    }
+
+    // Draw Virtual Cloud Network Subcomponents
+    if (OKITJsonObj.hasOwnProperty('internet_gateways')) {
         internet_gateway_ids = [];
         for (let i=0; i < OKITJsonObj['internet_gateways'].length; i++) {
             internet_gateway_ids.push(OKITJsonObj['internet_gateways'][i]['id']);
@@ -149,7 +186,7 @@ function drawSVGforJson() {
             drawInternetGatewaySVG(OKITJsonObj['internet_gateways'][i]);
         }
     }
-    if ('route_tables' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('route_tables')) {
         route_table_ids = [];
         for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
             route_table_ids.push(OKITJsonObj['route_tables'][i]['id']);
@@ -158,7 +195,7 @@ function drawSVGforJson() {
             drawRouteTableSVG(OKITJsonObj['route_tables'][i]);
         }
     }
-    if ('security_lists' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('security_lists')) {
         security_list_ids = [];
         for (let i=0; i < OKITJsonObj['security_lists'].length; i++) {
             security_list_ids.push(OKITJsonObj['security_lists'][i]['id']);
@@ -167,7 +204,7 @@ function drawSVGforJson() {
             drawSecurityListSVG(OKITJsonObj['security_lists'][i]);
         }
     }
-    if ('subnets' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('subnets')) {
         subnet_ids = [];
         for (let i=0; i < OKITJsonObj['subnets'].length; i++) {
             subnet_ids.push(OKITJsonObj['subnets'][i]['id']);
@@ -178,16 +215,19 @@ function drawSVGforJson() {
             drawSubnetConnectorsSVG(OKITJsonObj['subnets'][i]);
         }
     }
-    if ('instances' in OKITJsonObj) {
+
+    // Draw Subnet Subcomponents
+    if (OKITJsonObj.hasOwnProperty('instances')) {
         instance_ids = [];
         for (let i=0; i < OKITJsonObj['instances'].length; i++) {
             instance_ids.push(OKITJsonObj['instances'][i]['id']);
             okitIdsJsonObj[OKITJsonObj['instances'][i]['id']] = OKITJsonObj['instances'][i]['display_name'];
             instance_count += 1;
             drawInstanceSVG(OKITJsonObj['instances'][i]);
+            drawInstanceConnectorsSVG(OKITJsonObj['instances'][i]);
         }
     }
-    if ('load_balancers' in OKITJsonObj) {
+    if (OKITJsonObj.hasOwnProperty('load_balancers')) {
         load_balancer_ids = [];
         for (let i=0; i < OKITJsonObj['load_balancers'].length; i++) {
             load_balancer_ids.push(OKITJsonObj['load_balancers'][i]['id']);

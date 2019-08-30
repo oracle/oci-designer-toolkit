@@ -19,11 +19,12 @@ let asset_add_functions = {};
 let asset_update_functions = {};
 let asset_delete_functions = {};
 
-function addAssetToDropTarget(title, target_id) {
-    console.log('addAssetToDropTarget - Title : ' + title);
-    console.log('addAssetToDropTarget - Target Id : ' + target_id);
-    console.log('addAssetToDropTarget - Add Functions : ' + JSON.stringify(asset_add_functions));
-    window[asset_add_functions[title]](target_id);
+function addAssetToDropTarget(title, target_id, compartment_id) {
+    console.log('addAssetToDropTarget - Title          : ' + title);
+    console.log('addAssetToDropTarget - Target Id      : ' + target_id);
+    console.log('addAssetToDropTarget - Compartment Id : ' + compartment_id);
+    console.log('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
+    window[asset_add_functions[title]](target_id, compartment_id);
 }
 
 function updateAssetTarget(title, source_type, source_id, target_id) {
@@ -121,10 +122,11 @@ function handleDrop(e) {
     //this.innerHTML = e.dataTransfer.getData('text/html');
     let title = e.dataTransfer.getData('text/plain');
     let type = e.target.getAttribute('data-type');
+    let compartment_id = e.target.getAttribute('data-compartment-id');
     let target_id = e.target.id;
     //target_id = e.target.getAttribute('data-okit-id');
     // Call Add Function
-    addAssetToDropTarget(title, target_id)
+    addAssetToDropTarget(title, target_id, compartment_id)
 
     this.classList.remove('over');  // this / e.target is previous target element.
 
@@ -234,6 +236,7 @@ function handleConnectorDrop(e) {
         let destinationType = d3.select(this).attr('data-type');
         let parentid = d3.select(this).attr('data-parentid');
         let sourceid = connectorStartElement.getAttribute('data-okit-id');
+        let source_parent_id = connectorStartElement.getAttribute('data-parentid');
         let id = d3.select(this).attr('data-okit-id');
         let connector_source_id = connectorStartElement.getAttribute('data-connector-id');
         let connector_destination_id = d3.select(this).attr('data-connector-id');
@@ -242,9 +245,10 @@ function handleConnectorDrop(e) {
         console.log('Connector Destination Type : ' + destinationType);
         console.log('Connector Allowed : ' + JSON.stringify(asset_connect_targets));
 
-        console.log('Connector Drag End Parent Id : ' + parentid);
         console.log('Connector Drag Start Id : ' + sourceid);
+        console.log('Connector Drag Start Parent Id : ' + source_parent_id);
         console.log('Connector Drag End Id : ' + d3.select(this).attr('id'));
+        console.log('Connector Drag End Parent Id : ' + parentid);
         console.log('Connector Drag End data-connector-end-y : ' + d3.select(this).attr('data-connector-end-y'));
         console.log('Connector Drag End data-connector-end-x : ' + d3.select(this).attr('data-connector-end-x'));
         console.log('Connector Source Id : ' + connector_source_id);
@@ -252,13 +256,14 @@ function handleConnectorDrop(e) {
 
         // Check is Connection of
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
-            updateAssetTarget(destinationType, sourceType, sourceid, id)
+            updateAssetTarget(destinationType, sourceType, sourceid, id);
             console.log('Creating Connector Line (' + sourceType + ') - (' + destinationType + ')');
             console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
             connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-end-x');
             connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-end-y');
             let svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-            svg = d3.select("#" + parentid + '-svg');
+            //let svg = d3.select("#" + parentid + '-svg');
+            let svg = d3.select("#" + source_parent_id + '-svg');
             svg.append('line')
                 .attr("id", generateConnectorId(sourceid, id))
                 .attr("x1", connectorStartXLeft)

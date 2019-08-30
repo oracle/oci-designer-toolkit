@@ -3,8 +3,6 @@ console.log('Loaded Internet Gateway Javascript');
 /*
 ** Set Valid drop Targets
  */
-let compartment_artifact = 'Compartment';
-
 asset_drop_targets[compartment_artifact] = [];
 asset_connect_targets[compartment_artifact] = [];
 asset_add_functions[compartment_artifact] = "addCompartment";
@@ -12,7 +10,7 @@ asset_delete_functions[compartment_artifact] = "deleteCompartment";
 
 let compartment_ids = [];
 let compartment_count = 0;
-let compartment_prefix = 'comp';
+let compartment_bui_sub_artifacts = {};
 
 /*
 ** Reset variables
@@ -21,18 +19,19 @@ let compartment_prefix = 'comp';
 function clearCompartmentVariables() {
     compartment_ids = [];
     compartment_count = 0;
+    compartment_bui_sub_artifacts = {};
 }
 
 /*
 ** Add Asset to JSON Model
  */
 function addCompartment() {
-    let id = 'okit-compartment-' + uuidv4();
+    let id = 'okit-' + compartment_prefix + '-' + uuidv4();
     console.log('Adding ' + compartment_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('compartments' in OKITJsonObj)) {
+    if (!OKITJsonObj.hasOwnProperty('compartments')) {
         OKITJsonObj['compartments'] = [];
     }
 
@@ -52,6 +51,16 @@ function addCompartment() {
     drawCompartmentSVG(compartment);
     loadCompartmentProperties(id);
     openCompartment(id);
+}
+
+function initialiseCompartmentChildData(id) {
+    // Add BUI artifact positional information
+    compartment_bui_sub_artifacts[id] = {
+        "virtual_cloud_network_position": 0,
+        "virtual_cloud_network_count": 0,
+        "block_storage_position": 0,
+        "block_storage_count": 0
+    };
 }
 
 /*
@@ -86,10 +95,8 @@ function deleteCompartment(id) {
 function drawCompartmentSVG(compartment) {
     let parent_id = "canvas-wrapper";
     let id = compartment['id'];
+    let compartment_id = compartment['id'];
     console.log('Drawing ' + compartment_artifact + ' : ' + id);
-    let position = vcn_gateway_icon_position;
-    let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-    let translate_y = icon_translate_y_start;
     let svg_x = 0;
     let svg_y = 0;
     let data_type = compartment_artifact;
@@ -141,12 +148,17 @@ function drawCompartmentSVG(compartment) {
         .attr("data-parentid", parent_id)
         .text(compartment_artifact + ": " + compartment['name']);
 
-    //loadCompartmentProperties(id);
-    // Add click event to display properties
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    // Add dragevent versions
-    // Set common attributes on svg element and children
-    svg.on("click", function() { loadCompartmentProperties(id); })
+    let boundingClientRect = rect.node().getBoundingClientRect();
+    /*
+     Add click event to display properties
+     Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+     Add dragevent versions
+     Set common attributes on svg element and children
+     */
+    svg.on("click", function() {
+        loadCompartmentProperties(id);
+        d3.event.stopPropagation();
+    })
         .on("dragenter", handleDragEnter)
         .on("dragover", handleDragOver)
         .on("dragleave", handleDragLeave)
@@ -155,19 +167,14 @@ function drawCompartmentSVG(compartment) {
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parentid", parent_id)
+        .attr("data-compartment-id", compartment_id)
         .selectAll("*")
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id);
+            .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id);
 
-    /*
-    okitcanvas.addEventListener('dragenter', handleDragEnter, false)
-    okitcanvas.addEventListener('dragover', handleDragOver, false);
-    okitcanvas.addEventListener('dragleave', handleDragLeave, false);
-    okitcanvas.addEventListener('drop', handleDrop, false);
-    okitcanvas.addEventListener('dragend', handleDragEnd, false);
-     */
-    //document.getElementById(id + "-tab").click();
+    initialiseCompartmentChildData(id);
 }
 
 /*

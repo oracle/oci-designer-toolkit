@@ -3,12 +3,11 @@ console.log('Loaded Load Balancer Javascript');
 /*
 ** Set Valid drop Targets
  */
-
-asset_drop_targets["Load Balancer"] = ["Subnet"];
-//asset_connect_targets["Load Balancer"] = ["Instance"];
-asset_add_functions["Load Balancer"] = "addLoadBalancer";
-asset_update_functions["Load Balancer"] = "updateLoadBalancer";
-asset_delete_functions["Load Balancer"] = "deleteLoadBalancer";
+asset_drop_targets[load_balancer_artifact] = [subnet_artifact];
+asset_connect_targets[load_balancer_artifact] = [];
+asset_add_functions[load_balancer_artifact] = "addLoadBalancer";
+asset_update_functions[load_balancer_artifact] = "updateLoadBalancer";
+asset_delete_functions[load_balancer_artifact] = "deleteLoadBalancer";
 
 let load_balancer_ids = [];
 let load_balancer_count = 0;
@@ -25,13 +24,13 @@ function clearLoadBalancerVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addLoadBalancer(subnetid) {
-    let id = 'okit-lb-' + uuidv4();
+function addLoadBalancer(subnet_id, compartment_id) {
+    let id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
     console.log('Adding Load Balancer : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('load_balancers' in OKITJsonObj)) {
+    if (!OKITJsonObj.hasOwnProperty('load_balancers')) {
         OKITJsonObj['load_balancers'] = [];
     }
 
@@ -42,10 +41,11 @@ function addLoadBalancer(subnetid) {
     // Increment Count
     load_balancer_count += 1;
     let load_balancer = {};
-    load_balancer['subnet_ids'] = [subnetid];
+    load_balancer['subnet_ids'] = [subnet_id];
     load_balancer['subnets'] = [''];
+    load_balancer['compartment_id'] = compartment_id;
     load_balancer['id'] = id;
-    load_balancer['display_name'] = generateDefaultName('lb', load_balancer_count);
+    load_balancer['display_name'] = generateDefaultName(load_balancer_prefix, load_balancer_count);
     load_balancer['is_private'] = false;
     load_balancer['shape_name'] = '100Mbps';
     load_balancer['instances'] = [];
@@ -80,20 +80,21 @@ function deleteLoadBalancer(id) {
 function drawLoadBalancerSVG(load_balancer) {
     let parent_id = load_balancer['subnet_ids'][0];
     let id = load_balancer['id'];
+    let compartment_id = load_balancer['compartment_id'];
     console.log('Drawing Load Balancer : ' + id);
     //console.log('Subnet Id : ' + parent_id);
-    //console.log('Subnet Content : ' + JSON.stringify(subnet_content));
+    //console.log('Subnet Content : ' + JSON.stringify(subnet_bui_sub_artifacts));
     // Only draw the instance if the subnet exists
-    if (parent_id in subnet_content) {
-        let position = subnet_content[parent_id]['load_balancer_position'];
+    if (parent_id in subnet_bui_sub_artifacts) {
+        let position = subnet_bui_sub_artifacts[parent_id]['load_balancer_position'];
         let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
         let translate_y = icon_translate_y_start;
         let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-        let svg_y = (icon_height / 4);
-        let data_type = "Load Balancer";
+        let svg_y = (icon_height / 3);
+        let data_type = load_balancer_artifact;
 
         // Increment Icon Position
-        subnet_content[parent_id]['load_balancer_position'] += 1;
+        subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] += 1;
 
         let parent_svg = d3.select('#' + parent_id + "-svg");
         let svg = parent_svg.append("svg")
@@ -144,9 +145,7 @@ function drawLoadBalancerSVG(load_balancer) {
         // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
         // Add dragevent versions
         // Set common attributes on svg element and children
-        svg.on("click", function () {
-            loadLoadBalancerProperties(id);
-        })
+        svg.on("click", function () {loadLoadBalancerProperties(id); d3.event.stopPropagation(); })
             .on("mousedown", handleConnectorDragStart)
             .on("mousemove", handleConnectorDrag)
             .on("mouseup", handleConnectorDrop)
@@ -160,6 +159,7 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
@@ -170,6 +170,7 @@ function drawLoadBalancerSVG(load_balancer) {
                 .attr("data-type", data_type)
                 .attr("data-okit-id", id)
                 .attr("data-parentid", parent_id)
+                .attr("data-compartment-id", compartment_id)
                 .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
                 .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
                 .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
@@ -272,7 +273,7 @@ function updateLoadBalancer(source_type, source_id, id) {
         let load_balancer = load_balancers[i];
         console.log(i + ') ' + JSON.stringify(load_balancer))
         if (load_balancer['id'] == id) {
-            if (source_type == 'Instance') {
+            if (source_type == instance_artifact) {
                 if (load_balancer['instance_ids'].indexOf(source_id) > 0 ) {
                     // Already connected so delete existing line
                     d3.select("#" + generateConnectorId(source_id, id)).remove();

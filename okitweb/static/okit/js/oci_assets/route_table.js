@@ -3,15 +3,13 @@ console.log('Loaded Route Table Javascript');
 /*
 ** Set Valid drop Targets
  */
-
-asset_drop_targets["Route Table"] = ["Virtual Cloud Network"];
-asset_connect_targets["Route Table"] = ["Subnet"];
-asset_add_functions["Route Table"] = "addRouteTable";
-asset_delete_functions["Route Table"] = "deleteRouteTable";
+asset_drop_targets[route_table_artifact] = [virtual_cloud_network_artifact];
+asset_connect_targets[route_table_artifact] = [subnet_artifact];
+asset_add_functions[route_table_artifact] = "addRouteTable";
+asset_delete_functions[route_table_artifact] = "deleteRouteTable";
 
 let route_table_ids = [];
 let route_table_count = 0;
-let route_table_prefix = 'rt';
 let propertires_route_table = {}
 
 /*
@@ -26,13 +24,13 @@ function clearRouteTableVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addRouteTable(vcnid) {
-    let id = 'okit-rt-' + uuidv4();
+function addRouteTable(vcn_id, compartment_id) {
+    let id = 'okit-' + route_table_prefix + '-' + uuidv4();
     console.log('Adding Route Table : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!('route_tables' in OKITJsonObj)) {
+    if (!OKITJsonObj.hasOwnProperty('route_tables')) {
         OKITJsonObj['route_tables'] = [];
     }
 
@@ -43,8 +41,9 @@ function addRouteTable(vcnid) {
     // Increment Count
     route_table_count += 1;
     let route_table = {};
-    route_table['vcn_id'] = vcnid;
+    route_table['vcn_id'] = vcn_id;
     route_table['virtual_cloud_network'] = '';
+    route_table['compartment_id'] = compartment_id;
     route_table['id'] = id;
     route_table['display_name'] = generateDefaultName(route_table_prefix, route_table_count);
     route_table['route_rules'] = []
@@ -86,125 +85,134 @@ function deleteRouteTable(id) {
 function drawRouteTableSVG(route_table) {
     let parent_id = route_table['vcn_id'];
     let id = route_table['id'];
+    let compartment_id = route_table['compartment_id'];
     console.log('Drawing Route Table : ' + id);
-    let position = vcn_element_icon_position;
-    let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-    let translate_y = icon_translate_y_start;
-    let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-    let svg_y = (icon_height / 4) * 3;
-    let data_type = "Route Table";
+    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
+        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
+        let svg_y = (icon_height / 4) * 3;
+        let data_type = route_table_artifact;
 
-    // Increment Icon Position
-    vcn_element_icon_position += 1;
+        // Increment Icon Position
+        virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-    let parent_svg = d3.select('#' + parent_id + "-svg");
-    let svg = parent_svg.append("svg")
-        .attr("id", id + '-svg')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", route_table['display_name'])
-        .attr("x", svg_x)
-        .attr("y", svg_y)
-        .attr("width", "100")
-        .attr("height", "100");
-    let rect = svg.append("rect")
-        .attr("id", id)
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("title", route_table['display_name'])
-        .attr("x", icon_x)
-        .attr("y", icon_y)
-        .attr("width", icon_width)
-        .attr("height", icon_height)
-        .attr("stroke", icon_stroke_colour)
-        .attr("stroke-dasharray", "1, 1")
-        .attr("fill", "white")
-        .attr("style", "fill-opacity: .25;");
-    rect.append("title")
-        .attr("id", id + '-title')
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .text("Route Tablet: "+ route_table['display_name']);
-    let g = svg.append("g")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-    g.append("rect")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("x", "99.6")
-        .attr("y", "100.3")
-        .attr("class", "st0")
-        .attr("width", "22.1")
-        .attr("height", "22.9");
-    g.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M188.4,123.3v-22.9h-59.6v22.9H188.4z M171.1,109.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,109.2z M166.1,116.1h2.3v2.5h-2.3V116.1z M153.8,109.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,109.2z M148.8,116.1h2.3v2.5h-2.3V116.1z M139.8,109.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
-    g.append("rect")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("x", "99.6")
-        .attr("y", "132.5")
-        .attr("class", "st0")
-        .attr("width", "22.1")
-        .attr("height", "22.9");
-    g.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M188.4,155.5v-22.9h-59.6v22.9H188.4z M171.1,140.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,140.2z M166.1,147.1h2.3v2.5h-2.3V147.1z M153.8,140.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,140.2z M148.8,147.1h2.3v2.5h-2.3V147.1z M139.8,140.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
-    g.append("rect")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("x", "99.6")
-        .attr("y", "164.7")
-        .attr("class", "st0")
-        .attr("width", "22.1")
-        .attr("height", "22.9");
-    g.append("path")
-        .attr("data-type", data_type)
-        .attr("data-parentid", parent_id)
-        .attr("class", "st0")
-        .attr("d", "M188.4,187.7v-22.9h-59.6v22.9H188.4z M171.1,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,171.2z M166.1,178.1h2.3v2.5h-2.3V178.1z M153.8,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,171.2z M148.8,178.1h2.3v2.5h-2.3V178.1z M139.8,171.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
+        let parent_svg = d3.select('#' + parent_id + "-svg");
+        let svg = parent_svg.append("svg")
+            .attr("id", id + '-svg')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", route_table['display_name'])
+            .attr("x", svg_x)
+            .attr("y", svg_y)
+            .attr("width", "100")
+            .attr("height", "100");
+        let rect = svg.append("rect")
+            .attr("id", id)
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", route_table['display_name'])
+            .attr("x", icon_x)
+            .attr("y", icon_y)
+            .attr("width", icon_width)
+            .attr("height", icon_height)
+            .attr("stroke", icon_stroke_colour)
+            .attr("stroke-dasharray", "1, 1")
+            .attr("fill", "white")
+            .attr("style", "fill-opacity: .25;");
+        rect.append("title")
+            .attr("id", id + '-title')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .text("Route Tablet: " + route_table['display_name']);
+        let g = svg.append("g")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
+        g.append("rect")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("x", "99.6")
+            .attr("y", "100.3")
+            .attr("class", "st0")
+            .attr("width", "22.1")
+            .attr("height", "22.9");
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M188.4,123.3v-22.9h-59.6v22.9H188.4z M171.1,109.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,109.2z M166.1,116.1h2.3v2.5h-2.3V116.1z M153.8,109.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,109.2z M148.8,116.1h2.3v2.5h-2.3V116.1z M139.8,109.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
+        g.append("rect")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("x", "99.6")
+            .attr("y", "132.5")
+            .attr("class", "st0")
+            .attr("width", "22.1")
+            .attr("height", "22.9");
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M188.4,155.5v-22.9h-59.6v22.9H188.4z M171.1,140.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,140.2z M166.1,147.1h2.3v2.5h-2.3V147.1z M153.8,140.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,140.2z M148.8,147.1h2.3v2.5h-2.3V147.1z M139.8,140.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
+        g.append("rect")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("x", "99.6")
+            .attr("y", "164.7")
+            .attr("class", "st0")
+            .attr("width", "22.1")
+            .attr("height", "22.9");
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M188.4,187.7v-22.9h-59.6v22.9H188.4z M171.1,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,171.2z M166.1,178.1h2.3v2.5h-2.3V178.1z M153.8,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,171.2z M148.8,178.1h2.3v2.5h-2.3V178.1z M139.8,171.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
 
-    //loadRouteTableProperties(id);
-    let boundingClientRect = rect.node().getBoundingClientRect();
-    // Add click event to display properties
-    // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-    // Add dragevent versions
-    // Set common attributes on svg element and children
-    svg.on("click", function() { loadRouteTableProperties(id); })
-        .on("mousedown", handleConnectorDragStart)
-        .on("mousemove", handleConnectorDrag)
-        .on("mouseup", handleConnectorDrop)
-        .on("mouseover", handleConnectorDragEnter)
-        .on("mouseout", handleConnectorDragLeave)
-        .on("dragstart", handleConnectorDragStart)
-        .on("drop", handleConnectorDrop)
-        .on("dragenter", handleConnectorDragEnter)
-        .on("dragleave", handleConnectorDragLeave)
-        .on("contextmenu", handleContextMenu)
-        .attr("data-type", data_type)
-        .attr("data-okit-id", id)
-        .attr("data-parentid", parent_id)
-        .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-        .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-        .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-        .attr("data-connector-id", id)
-        .attr("dragable", true)
-        .selectAll("*")
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        /*
+         Add click event to display properties
+         Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+         Add dragevent versions
+         Set common attributes on svg element and children
+         */
+        svg.on("click", function () {
+            loadRouteTableProperties(id);
+            d3.event.stopPropagation();
+        })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
             .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-id", id)
-            .attr("dragable", true);
+            .attr("dragable", true)
+            .selectAll("*")
+                .attr("data-type", data_type)
+                .attr("data-okit-id", id)
+                .attr("data-parentid", parent_id)
+                .attr("data-compartment-id", compartment_id)
+                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", id)
+                .attr("dragable", true);
+    } else {
+        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+    }
 }
 
 /*
