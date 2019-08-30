@@ -202,7 +202,36 @@ function clearInstanceSVG(instance) {
 }
 
 function drawInstanceConnectorsSVG(instance) {
-
+    let id = instance['id'];
+    for (let block_storage_id of instance['block_storage_ids']) {
+        let block_storage_svg = d3.select('#' + block_storage_id);
+        if (block_storage_svg.node()) {
+            let parent_id = block_storage_svg.attr('data-parentid');
+            let parent_svg = d3.select('#' + parent_id + "-svg");
+            if (parent_svg.node()) {
+                console.log('Parent SVG : ' + parent_svg.node());
+                // Define SVG position manipulation variables
+                let svgPoint = parent_svg.node().createSVGPoint();
+                let screenCTM = parent_svg.node().getScreenCTM();
+                // Start
+                svgPoint.x = d3.select('#' + id).attr('data-connector-start-x');
+                svgPoint.y = d3.select('#' + id).attr('data-connector-start-y');
+                let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+                // End
+                svgPoint.x = block_storage_svg.attr('data-connector-start-x');
+                svgPoint.y = block_storage_svg.attr('data-connector-start-y');
+                let connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                parent_svg.append('line')
+                    .attr("id", generateConnectorId(block_storage_id, id))
+                    .attr("x1", connector_start.x)
+                    .attr("y1", connector_start.y)
+                    .attr("x2", connector_end.x)
+                    .attr("y2", connector_end.y)
+                    .attr("stroke-width", "2")
+                    .attr("stroke", "black");
+            }
+        }
+    }
 }
 
 /*
