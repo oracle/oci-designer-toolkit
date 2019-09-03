@@ -41,10 +41,10 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     block_storage_volume_count += 1;
     let block_storage_volume = {};
     block_storage_volume['compartment_id'] = parent_id;
+    block_storage_volume['availability_domain'] = '1';
     block_storage_volume['id'] = id;
     block_storage_volume['display_name'] = generateDefaultName(block_storage_volume_prefix, block_storage_volume_count);
-    block_storage_volume['availability_domain'] = 'AD-1';
-    block_storage_volume['size'] = 1024;
+    block_storage_volume['size_in_gbs'] = 1024;
     block_storage_volume['backup_policy'] = 'bronze';
     OKITJsonObj['block_storage_volumes'].push(block_storage_volume);
     okitIdsJsonObj[id] = block_storage_volume['display_name'];

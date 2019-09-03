@@ -442,6 +442,10 @@ class OCIGenerator(object):
         variableName = '{0:s}_authorized_keys'.format(standardisedName)
         self.jinja2_variables["authorized_keys"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["authorized_keys"]
+        # ---- Cloud Init YAML
+        variableName = '{0:s}_cloud_init_yaml'.format(standardisedName)
+        self.jinja2_variables["cloud_init_yaml"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["cloud_init_yaml"].replace('\n', '\\n').replace('"', '\\"')
         # ---- Volume Attachements
         attachment_number = 1
         jinja2_volume_attachments = []
