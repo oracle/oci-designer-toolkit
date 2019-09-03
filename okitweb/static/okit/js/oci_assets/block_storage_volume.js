@@ -29,8 +29,8 @@ function addBlockStorageVolume(parent_id, compartment_id) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('block_storages')) {
-        OKITJsonObj['block_storages'] = [];
+    if (!OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
+        OKITJsonObj['block_storage_volumes'] = [];
     }
 
     // Add id & empty name to id JSON
