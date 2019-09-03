@@ -244,17 +244,7 @@ function loadLoadBalancerProperties(id) {
                     $('#shape_name').val(load_balancer['shape_name']);
                     $('#is_private').attr('checked', load_balancer['is_private']);
                     let instances_select = $('#instance_ids');
-                    console.log('Instance Ids: ' + instance_ids);
-                    /*
-                    for (let slcnt = 0; slcnt < instance_ids.length; slcnt++) {
-                        let slid = instance_ids[slcnt];
-                        if (load_balancer['instance_ids'].indexOf(slid) >= 0) {
-                            instances_select.append($('<option>').attr('value', slid).attr('selected', 'selected').text(okitIdsJsonObj[slid]));
-                        } else {
-                            instances_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
-                        }
-                    }
-                     */
+                    //console.log('Instance Ids: ' + instance_ids);
                     for (let slid of instance_ids) {
                         instances_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
                     }
