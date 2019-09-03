@@ -14,9 +14,9 @@
             <tr><td>Virtual Cloud Network</td><td><label id="virtual_cloud_network" class="property-value"></label></td></tr>
             <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
             <tr><td>Availability Domain</td><td><select id="availability_domain" class="property-value">
-                <option value="AD-1" selected="selected">AD 1</option>
-                <option value="AD-2" selected="selected">AD 2</option>
-                <option value="AD-3" selected="selected">AD 3</option>
+                <option value="1" selected="selected">AD 1</option>
+                <option value="2">AD 2</option>
+                <option value="3">AD 3</option>
             </select></td></tr>
             <tr><td>Hostname</td><td><input type="text" id="hostname_label" name="hostname_label" class="property-value"></td></tr>
             <tr><td>OS</td><td><select id="os" class="property-value">
@@ -30,6 +30,7 @@
             </select></td></tr>
             <tr><td>Boot Volume Size (in GB)</td><td><input type="text" id="boot_volume_size_in_gbs" name="boot_volume_size_in_gbs" class="property-value"></td></tr>
             <tr><td>Authorised Keys</td><td><input type="text" id="authorized_keys" name="authorized_keys" class="property-value"></td></tr>
+            <tr><td>Block Storage Volumes</td><td><select multiple="multiple" id="block_storage_volume_ids" class="property-value"></select></td></tr>
         </table>
     </div>
 </body>

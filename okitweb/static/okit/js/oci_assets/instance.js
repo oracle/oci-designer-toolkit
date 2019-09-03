@@ -253,6 +253,11 @@ function loadInstanceProperties(id) {
                     $('#hostname_label').val(instance['hostname_label']);
                     $('#boot_volume_size_in_gbs').val(instance['boot_volume_size_in_gbs']);
                     $('#authorized_keys').val(instance['authorized_keys']);
+                    let block_storage_volume_select = $('#block_storage_volume_ids');
+                    for (let bsvid of block_storage_volume_ids) {
+                        block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
+                    }
+                    block_storage_volume_select.val(instance['block_storage_volume_ids']);
                     // Add Event Listeners
                     addPropertiesEventListeners(instance, []);
                     break;
