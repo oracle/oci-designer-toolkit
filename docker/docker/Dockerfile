@@ -116,6 +116,6 @@ RUN yum update -y ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
-    mkdir -p /okit/{ansible,config,terraform,visualiser,okitweb,workspace} \
+    mkdir -p /okit/{ansible,config,terraform,visualiser,okitweb,workspace,python} \
     env | sort
 

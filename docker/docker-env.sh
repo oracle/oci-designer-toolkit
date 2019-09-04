@@ -36,6 +36,7 @@ export VOLUMES="\
        -v ${OCI_CONFIG_DIR}:/root/.oci:Z \
        -v ${ROOT_DIR}/test/terraform:/okit/terraform:Z \
        -v ${ROOT_DIR}/test/ansible:/okit/ansible:Z \
+       -v ${ROOT_DIR}/test/python:/okit/python:Z \
        -v ${ROOT_DIR}/okitweb:/okit/okitweb:Z \
        -v ${ROOT_DIR}/visualiser:/okit/visualiser:Z
 "
