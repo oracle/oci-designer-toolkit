@@ -10,4 +10,6 @@ compartment_ocid: "var.compartment_ocid"
 vm_os: "var.vm_os"
 vm_version: "var.vm_version"
 vm_shape: "var.vm_shape"
+defined_tags: "var.defined_tags"
+freeform_tags: "var.freeform_tags"
 ...

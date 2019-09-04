@@ -75,4 +75,16 @@ function addPropertiesEventListeners(json_element, callbacks) {
             });
         }
     );
+    // Text Areas
+    $('.property-editor-table textarea').each(
+        function(index) {
+            let inputfield = $(this);
+            inputfield.on('change', function() {
+                console.log(this.id + ' Changed !!!!!!');
+                json_element[this.id] = this.value.replace('\n', '\\n');
+                json_element[this.id] = this.value;
+                displayOkitJson();
+            });
+        }
+    );
 }

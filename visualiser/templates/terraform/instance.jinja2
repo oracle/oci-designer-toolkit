@@ -44,7 +44,10 @@ resource "oci_core_instance" "{{ resource_name }}" {
     fault_domain = "{{ fault_domain }}"
     metadata = {
         ssh_authorized_keys = {{ authorized_keys }}
-#        user_data           = base64encode(file("${path.module}/cloud_init.yml"))
+#        user_data           = base64encode(file("path.module/cloud_init.yml"))
+{% if cloud_init_yaml is defined %}
+        user_data           = base64encode({{ cloud_init_yaml }})
+{% endif %}
     }
     source_details {
         # Required

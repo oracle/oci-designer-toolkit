@@ -44,6 +44,7 @@ function addInstance(subnet_id, compartment_id) {
     instance['subnet_id'] = subnet_id;
     instance['subnet'] = '';
     instance['compartment_id'] = compartment_id;
+    instance['availability_domain'] = '1';
     instance['id'] = id;
     instance['display_name'] = generateDefaultName(instance_prefix, instance_count);
     instance['hostname_label'] = instance['display_name'].toLowerCase();
@@ -52,6 +53,7 @@ function addInstance(subnet_id, compartment_id) {
     instance['shape'] = 'VM.Standard2.1';
     instance['boot_volume_size_in_gbs'] = '50';
     instance['authorized_keys'] = '';
+    instance['cloud_init_yaml'] = '';
     instance['block_storage_volume_ids'] = [];
     instance['block_storage_volumes'] = [];
     OKITJsonObj['instances'].push(instance);
@@ -253,6 +255,12 @@ function loadInstanceProperties(id) {
                     $('#hostname_label').val(instance['hostname_label']);
                     $('#boot_volume_size_in_gbs').val(instance['boot_volume_size_in_gbs']);
                     $('#authorized_keys').val(instance['authorized_keys']);
+                    $('#cloud_init_yaml').val(instance['cloud_init_yaml']);
+                    let block_storage_volume_select = $('#block_storage_volume_ids');
+                    for (let bsvid of block_storage_volume_ids) {
+                        block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
+                    }
+                    block_storage_volume_select.val(instance['block_storage_volume_ids']);
                     // Add Event Listeners
                     addPropertiesEventListeners(instance, []);
                     break;

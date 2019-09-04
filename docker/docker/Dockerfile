@@ -109,6 +109,8 @@ RUN yum update -y ; \
     echo "alias lh='ls -lash' "                                                      >> /etc/bashrc ; \
     echo "alias lt='ls -last' "                                                      >> /etc/bashrc ; \
     echo "alias env='/usr/bin/env | sort' "                                          >> /etc/bashrc ; \
+    echo "alias ssh='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10' " >> /etc/bashrc ; \
+    echo "alias sshopc='ssh -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
     echo ''                                                                          >> /etc/bashrc ; \
     echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
     cd ~  \
