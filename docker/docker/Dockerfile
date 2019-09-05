@@ -40,10 +40,13 @@ RUN yum update -y ; \
  && yum update -y && yum install -y \
         ansible \
         asciinema \
-        curl-devel \
-        expat-devel \
+        #curl-devel \
+        curl \
+        #expat-devel \
+        expa \
         gcc \
-        gettext-devel \
+        #gettext-devel \
+        gettext \
         git \
         java \
         jq \
@@ -54,10 +57,13 @@ RUN yum update -y ; \
         make \
         nfs-utils \
         nginx \
-        openssl-devel \
-        python-devel \
-        python36-devel \
-        python36u-devel \
+        #openssl-devel \
+        openssl \
+        #python-devel \
+        python \
+        python36 \
+        #python36-devel \
+        #python36u-devel \
         rpm-build \
         sudo \
         tar \
@@ -65,7 +71,8 @@ RUN yum update -y ; \
         traceroute \
         tree \
         wget \
-        zlib-devel \
+        #zlib-devel \
+        zlib \
  && yum repolist all \
  && yum clean all \
 # Install pip
@@ -102,6 +109,8 @@ RUN yum update -y ; \
     echo "alias lh='ls -lash' "                                                      >> /etc/bashrc ; \
     echo "alias lt='ls -last' "                                                      >> /etc/bashrc ; \
     echo "alias env='/usr/bin/env | sort' "                                          >> /etc/bashrc ; \
+    echo "alias ssh='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10' " >> /etc/bashrc ; \
+    echo "alias sshopc='ssh -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
     echo ''                                                                          >> /etc/bashrc ; \
     echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
     cd ~  \

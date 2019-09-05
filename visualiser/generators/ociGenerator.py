@@ -95,6 +95,16 @@ class OCIGenerator(object):
     def buildIdNameMap(self):
         logger.info("Build Id/Name Map")
         self.id_name_map = {}
+        for key, value in self.visualiser_json.items():
+            if isinstance(value, list):
+                for asset in value:
+                    self.id_name_map[self.formatOcid(asset["id"])] = asset.get("display_name", asset.get("name", "Unknown"))
+        return
+
+    # TODO: Delete
+    def buildIdNameMapDeprecated(self):
+        logger.info("Build Id/Name Map")
+        self.id_name_map = {}
         if "compartment" in self.visualiser_json:
             for key, value in self.visualiser_json["compartment"].items():
                 if isinstance(value, list):
@@ -126,28 +136,36 @@ class OCIGenerator(object):
 
         # Process keys within the input json file
         compartment = self.visualiser_json.get('compartment', self.visualiser_json)
+        # - Compartment Sub Components
         # -- Virtual Cloud Networks
-        for virtual_cloud_network in compartment.get('virtual_cloud_networks', []):
+        for virtual_cloud_network in self.visualiser_json.get('virtual_cloud_networks', []):
             self.renderVirtualCloudNetworks(virtual_cloud_network)
+        # -- Block Storage Volumes
+        for block_storage_volume in self.visualiser_json.get('block_storage_volumes', []):
+            self.renderBlockStorageVolumes(block_storage_volume)
+
+        # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
-        for internet_gateway in compartment.get('internet_gateways', []):
+        for internet_gateway in self.visualiser_json.get('internet_gateways', []):
             self.renderInternetGateway(internet_gateway)
         # -- NAT Gateways
         # -- Dynamic Routing Gateways
         # -- Security Lists
-        for security_list in compartment.get('security_lists', []):
+        for security_list in self.visualiser_json.get('security_lists', []):
             self.renderSecurityList(security_list)
         # -- Route Tables
-        for route_table in compartment.get('route_tables', []):
+        for route_table in self.visualiser_json.get('route_tables', []):
             self.renderRouteTable(route_table)
         # -- Subnet
-        for subnet in compartment.get('subnets', []):
+        for subnet in self.visualiser_json.get('subnets', []):
             self.renderSubnet(subnet)
+
+        # - Subnet Sub components
         # -- Instances
-        for instance in compartment.get('instances', []):
+        for instance in self.visualiser_json.get('instances', []):
             self.renderInstance(instance)
         # -- Loadbalancers
-        for loadbalancer in compartment.get('load_balancers', []):
+        for loadbalancer in self.visualiser_json.get('load_balancers', []):
             self.renderLoadbalancer(loadbalancer)
 
         return
@@ -180,6 +198,33 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         # Generate Reference string for id
         virtual_cloud_network_ocid_ref = self.formatJinja2IdReference(resourceName)
+        return
+
+    def renderBlockStorageVolumes(self, block_storage_volume):
+        # Read Data
+        standardisedName = self.standardiseResourceName(block_storage_volume['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = block_storage_volume['display_name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = block_storage_volume["display_name"]
+        # ---- Backup Policy
+        variableName = '{0:s}_backup_policy'.format(standardisedName)
+        self.jinja2_variables["backup_policy"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = block_storage_volume["backup_policy"]
+        # ---- Size In GBs
+        variableName = '{0:s}_size_in_gbs'.format(standardisedName)
+        self.jinja2_variables["size_in_gbs"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = block_storage_volume["size_in_gbs"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("block_storage_volume.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
         return
 
     def renderInternetGateway(self, internet_gateway):
@@ -292,8 +337,8 @@ class OCIGenerator(object):
             self.run_variables[variableName] = route_rule["network_entity_id"]
             jinja2_route_rule = {
                 #"network_entity_id": self.formatJinja2IdReference(variableName)
-                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
-                #"network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
+                #"network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(route_rule["network_entity_id"]))
+                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             }
             # ------ Destination
             variableName = '{0:s}_route_rule_{1:02d}_destination'.format(standardisedName, rule_number)
@@ -350,7 +395,8 @@ class OCIGenerator(object):
         if 'dhcp_options' in subnet:
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['dhcp_options']))
         else:
-            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['vcn_id']))
+            #self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['vcn_id']))
+            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("subnet.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
@@ -370,7 +416,11 @@ class OCIGenerator(object):
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["display_name"]
-        # ---- Hostame
+        # ---- Display Name (Vnic)
+        variableName = '{0:s}_display_name_vnic'.format(standardisedName)
+        self.jinja2_variables["display_name_vnic"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = '{0!s:s} vnic'.format(instance["display_name"])
+        # ---- Hostname
         variableName = '{0:s}_hostname'.format(standardisedName)
         self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["hostname_label"]
@@ -392,6 +442,29 @@ class OCIGenerator(object):
         variableName = '{0:s}_authorized_keys'.format(standardisedName)
         self.jinja2_variables["authorized_keys"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["authorized_keys"]
+        # ---- Cloud Init YAML
+        variableName = '{0:s}_cloud_init_yaml'.format(standardisedName)
+        self.jinja2_variables["cloud_init_yaml"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["cloud_init_yaml"].replace('\n', '\\n').replace('"', '\\"')
+        # ---- Volume Attachements
+        attachment_number = 1
+        jinja2_volume_attachments = []
+        for block_storage_volume_id in instance.get('block_storage_volume_ids', []):
+            # ------ Block Storage Volume
+            variableName = '{0:s}_volume_attachment_{1:02d}_block_storage_volume_id'.format(standardisedName, attachment_number)
+            self.run_variables[variableName] = block_storage_volume_id
+            jinja2_volume_attachment = {
+                "block_storage_volume_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume_id]))
+            }
+            # ---- Display Name
+            variableName = '{0:s}_volume_attachment_{1:02d}_display_name'.format(standardisedName, attachment_number)
+            self.run_variables[variableName] = '{0!s:s} Volume Attachment {1:02d}'.format(instance["display_name"], attachment_number)
+            jinja2_volume_attachment["display_name"] = self.formatJinja2Variable(variableName)
+            # Add to Volume Attachments used for Jinja template
+            jinja2_volume_attachments.append(jinja2_volume_attachment)
+            # Increment attachment number
+            attachment_number += 1
+        self.jinja2_variables["volume_attachments"] = jinja2_volume_attachments
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("instance.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))

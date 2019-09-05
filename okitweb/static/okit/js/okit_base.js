@@ -6,12 +6,12 @@ document.getElementById('nav-menu-button').addEventListener('click', handleNavMe
 
 function handleNavMenuClick(evt) {
     console.log('Navigation Menu Clicked');
-    var element = document.getElementById("console-nav-menu-panel");
+    let element = document.getElementById("console-nav-menu-panel");
     element.classList.toggle("nav-menu-panel-show");
 }
 
 function hideNavMenu() {
-    var element = document.getElementById("console-nav-menu-panel");
+    let element = document.getElementById("console-nav-menu-panel");
     element.classList.remove("nav-menu-panel-show");
 }
 

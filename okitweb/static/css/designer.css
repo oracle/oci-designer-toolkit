@@ -71,9 +71,9 @@
     border-left: 2px solid black;
     width: 20%;
     overflow: auto;
-    resize: horizontal;
-    direction: rtl;
     display: flex;
+    direction: rtl;
+    resize: horizontal;
 }
 
 
@@ -84,7 +84,7 @@
     border-color: black;
     margin: 0;
     max-height: calc(100vh - 160px);
-    display: flex;
+    display: block;
     overflow: scroll;
 }
 
@@ -92,11 +92,48 @@
     margin: 0;
     max-width: 100%;
     min-height: calc(100vh - 160px);
-    display: flex;
+    display: block;
 }
 
 
+.context-menu {
+    z-index:1000;
+    position: absolute;
+}
+
+.right-click-delete {
+    background-color: slategrey;
+    color: white;
+    font-family: Arial;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    display: block;
+    margin: 10px;
+}
+
+.context-menu li{ list-style: none; }
+
+.query-progress {
+    z-index:1000;
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    border: black 1px dashed;
+    border-radius: 5px;
+    padding: 5px;
+}
+
 /* Asset Properties */
+
+.properties-source-wrapper {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 180px);
+    overflow: scroll;
+    direction: ltr;
+}
 
 .properties-wrapper {
     background-color: ghostwhite;
@@ -164,7 +201,7 @@
 .property-value {
     font-family: Helvetica,  Arial, sans-serif;
     font-size: 12px;
-    width: 99%;
+    width: 95%;
     margin-right: 5px;
 }
 
@@ -188,6 +225,12 @@
 
 .slide-bar {
     display: block;
+    width: 100%;
+    height: 20px;
+    border-bottom: black 2px;
+    font-family: Helvetica,  Arial, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
 }
 
 .hidden {
@@ -198,7 +241,9 @@
 .source-code {
     display: block;
     width: 100%;
-    font-family: Courier, "Courier New", Arial;
+    height: 100%;
+    font-family: "Courier New", Courier, Arial;
+    font-size: 14px;
     font-weight: bold;
     direction: ltr;
 }
@@ -221,10 +266,49 @@
  */
 
 #okitjson {
+    border: none;
     width: 100%;
     height: 100%;
     overflow-scrolling: auto;
-    background: lightskyblue;
+    background: ghostwhite;
+    font-family: "Courier New", Courier, Arial;
+    font-size: 14px;
+}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
 }
 
 

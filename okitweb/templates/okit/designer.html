@@ -21,6 +21,7 @@
                 </span>
             </div>
         </li>
+        <li><a id="file-add-menu-item" class="parent-item" href="#">Add Compartment</a></li>
         <li><a id="file-redraw-menu-item" class="parent-item" href="#">Redraw</a></li>
         <li>
             <div>
@@ -57,6 +58,16 @@
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
+    {% if okit_query_request_json is defined %}
+        <script type="text/javascript">
+            console.log('Processing Query Javascript');
+            okitQueryRequestJson = {{ okit_query_request_json | safe }};
+            OKITJsonObj = {{ okit_query_response_json | safe }};
+            //queryCompartmentAjax();
+            //displayOkitJson();
+            //drawSVGforJson();
+        </script>
+    {% endif %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
@@ -72,26 +83,26 @@
 {% block mainblock %}
     <div id="main-panel" class="main-panel flex-column">
         <div id="icon-palette" class="icons-palette">
-            <!--img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_VCloudNetwork_red.svg') }}" title="Virtual Cloud Network" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_InternetGateway_red.svg') }}" title="Internet Gateway" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_RouteTable_red.svg') }}" title="Route Table" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_SecurityLists_red.svg') }}" title="Security List" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_Backbone_red.svg') }}" title="Subnet" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_LoadBalance_red.svg') }}" title="Load Balancer" draggable="true">
-            <img class="palette-icon" src="{{ url_for('static', filename='svg/OCI_VM_red.svg') }}" title="Instance" draggable="true"-->
             {% for palette_icon in palette_icons %}
             <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true">
             {% endfor %}
         </div>
         <div id="web-designer-panel" class="web-designer-panel flex-row">
             <div id="canvas-wrapper" class="designer-left-column canvas-wrapper">
-                <svg id="okitcanvas" data-type="Compartment" class="svg-canvas"></svg>
+                <div id="compartment-tabs" class="tab">
+                </div>
             </div>
             <div id="asset-properties" class="designer-right-column properties-wrapper">
-                <div id="properties-toggle" class="slide-bar"><button id="show-code"><<</button></div>
-                <div id="properties" class="property-editor"></div>
-                <div id="json-display" class="source-code hidden">
-                    <textarea id="okitjson" readonly="readonly"></textarea>
+                <div id="properties-and-source" class="properties-source-wrapper">
+                    <div id="properties-toggle" class="slide-bar">
+                        <!--button id="show-code">Source</button-->
+                        <input type="radio" name="source-properties" value="source">Source
+                        <input type="radio" name="source-properties" value="properties" checked="checked">Properties
+                    </div>
+                    <div id="properties" class="property-editor"></div>
+                    <div id="json-display" class="source-code hidden">
+                        <pre id="okitjson" readonly="readonly"></pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,17 +110,30 @@
             <input type="file" id="files" class="file-button toolbar-button" name="file[]">
         </div>
     </div>
+    <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
+    <div id="query-progress" class="hidden query-progress">
+        <table>
+            <thead>
+                <tr><th>Searching.....</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Completed</td></tr>
+                <tr><td><input type="checkbox" id="compartment-query-cb">Compartments</td></tr>
+                <tr><td><input type="checkbox" id="vcn-query-cb">Virtual Cloud Networks</td></tr>
+                <tr><td><input type="checkbox" id="internet-gateway-query-cb">Internet Gateways</td></tr>
+                <tr><td><input type="checkbox" id="route-table-query-cb">Route Tables</td></tr>
+                <tr><td><input type="checkbox" id="security-list-query-cb">Security Lists</td></tr>
+                <tr><td><input type="checkbox" id="subnet-query-cb">Subnets</td></tr>
+                <tr><td><input type="checkbox" id="instance-query-cb">Instances</td></tr>
+                <tr><td><input type="checkbox" id="load-balancer-query-cb">Load Balancers</td></tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
 
 {% block footerblock %}
 {% endblock %}
 
 {% block footerscripts %}
-    {% if okit_query_json is defined %}
-        <script type="text/javascript">
-            OKITJsonObj = {{ okit_query_json | safe }};
-            drawSVGforJson();
-        </script>
-    {% endif %}
 {% endblock %}
 
