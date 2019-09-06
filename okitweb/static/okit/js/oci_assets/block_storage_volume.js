@@ -8,6 +8,7 @@ asset_connect_targets[block_storage_volume_artifact] = [instance_artifact];
 asset_add_functions[block_storage_volume_artifact] = "addBlockStorageVolume";
 asset_delete_functions[block_storage_volume_artifact] = "deleteBlockStorageVolume";
 
+const block_storage_volume_stroke_colour = "#F80000";
 let block_storage_volume_ids = [];
 let block_storage_volume_count = 0;
 
@@ -93,10 +94,8 @@ function drawBlockStorageVolumeSVG(block_storage_volume) {
             compartment_bui_sub_artifacts[parent_id]['block_storage_position'] = 0;
         }
         let position = compartment_bui_sub_artifacts[parent_id]['block_storage_position'];
-        let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-        let translate_y = icon_translate_y_start;
         let svg_x = 0; //(icon_width / 4);
-        let svg_y = (icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position);
+        let svg_y = Math.round((icon_height * 3 / 4) + (icon_height * position) + (vcn_icon_spacing * position));
         let data_type = block_storage_volume_artifact;
 
         // Increment Icon Position
@@ -122,7 +121,7 @@ function drawBlockStorageVolumeSVG(block_storage_volume) {
             .attr("y", icon_y)
             .attr("width", icon_width)
             .attr("height", icon_height)
-            .attr("stroke", icon_stroke_colour)
+            .attr("stroke", block_storage_volume_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");

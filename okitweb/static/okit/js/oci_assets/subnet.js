@@ -9,7 +9,8 @@ asset_add_functions[subnet_artifact] = "addSubnet";
 asset_update_functions[subnet_artifact] = "updateSubnet";
 asset_delete_functions[subnet_artifact] = "deleteSubnet";
 
-let subnet_svg_height = 200;
+const subnet_stroke_colour = "orange";
+let subnet_svg_height = 400;
 let subnet_svg_width = "95%";
 let subnet_rect_height = "85%";
 let subnet_rect_width = "95%";
@@ -133,12 +134,14 @@ function drawSubnetSVG(subnet) {
     if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         let position_x = 0;
         let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'];
-        let vcn_offset_x = (icon_width / 2);
-        let vcn_offset_y = ((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1);
-        let count_offset_x = (icon_width * position_x) + (vcn_icon_spacing * position_x);
-        let count_offset_y = ((subnet_svg_height + vcn_icon_spacing) * position);
+        let vcn_offset_x = Math.round(icon_width / 2);
+        let vcn_offset_y = Math.round(((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1));
+        let count_offset_x = Math.round((icon_width * position_x) + (vcn_icon_spacing * position_x));
+        let count_offset_y = Math.round((subnet_svg_height + vcn_icon_spacing) * position);
         let svg_x = vcn_offset_x + count_offset_x;
         let svg_y = vcn_offset_y + count_offset_y;
+        let text_x = Math.round(icon_x + icon_width / 3);
+        let text_y = Math.round(icon_y + icon_height / 3);
         let data_type = subnet_artifact;
 
         // Increment Icon Position
@@ -174,7 +177,7 @@ function drawSubnetSVG(subnet) {
             .attr("width", subnet_rect_width)
             .attr("height", subnet_rect_height)
             .attr("stroke-dasharray", "5, 5")
-            .attr("stroke", "orange")
+            .attr("stroke", subnet_stroke_colour)
             //.attr("stroke", subnet_stroke_colour[(subnet_count % 3)])
             //.attr("fill", subnet_stroke_colour[(subnet_count % 3)])
             .attr("fill", "white")
@@ -188,8 +191,8 @@ function drawSubnetSVG(subnet) {
             .attr("id", id + '-display-name')
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
-            .attr("x", icon_x + icon_width / 3)
-            .attr("y", icon_y + icon_height / 3)
+            .attr("x", text_x)
+            .attr("y", text_y)
             .text(subnet['display_name']);
         let g = svg.append("g")
             .attr("data-type", data_type)

@@ -9,6 +9,11 @@ asset_add_functions[instance_artifact] = "addInstance";
 asset_update_functions[instance_artifact] = "updateInstance";
 asset_delete_functions[instance_artifact] = "deleteInstance";
 
+const instance_stroke_colour = "blue";
+const instance_width = Math.round(icon_width * 4);
+const instance_height = Math.round(icon_height * 2 + icon_height / 2);
+const instance_svg_width = Math.round(instance_width + icon_x * 2);
+const instance_svg_height = Math.round(instance_height + icon_y * 2);
 let instance_ids = [];
 let instance_count = 0;
 
@@ -98,16 +103,22 @@ function drawInstanceSVG(instance) {
     let id = instance['id'];
     let compartment_id = instance['compartment_id'];
     console.log('Drawing Instance : ' + id);
+    console.log('instance_svg_height : ' + instance_svg_height);
+    console.log('instance_svg_width : ' + instance_svg_width);
+    console.log('instance_height : ' + instance_height);
+    console.log('instance_width : ' + instance_width);
     //console.log('Subnet Id : ' + parent_id);
     //console.log('Subnet Content : ' + JSON.stringify(subnet_bui_sub_artifacts));
     // Only draw the instance if the subnet exists
     if (subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         let position = subnet_bui_sub_artifacts[parent_id]['instance_position'];
-        let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-        let translate_y = icon_translate_y_start;
-        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-        let svg_y = (icon_height / 4) * 9;
+        let svg_x = Math.round((icon_width / 2) + (instance_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round((icon_height / 4) * 9);
+        let text_x = Math.round(icon_x + icon_width);
+        let text_y = Math.round(icon_y + icon_height / 2);
         let data_type = instance_artifact;
+        console.log('svg_x : ' + svg_x);
+        console.log('svg_y : ' + svg_y);
 
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
@@ -120,8 +131,8 @@ function drawInstanceSVG(instance) {
             .attr("title", instance['display_name'])
             .attr("x", svg_x)
             .attr("y", svg_y)
-            .attr("width", "100")
-            .attr("height", "100");
+            .attr("width", instance_svg_width)
+            .attr("height", instance_svg_height);
         let rect = svg.append("rect")
             .attr("id", id)
             .attr("data-type", data_type)
@@ -129,9 +140,9 @@ function drawInstanceSVG(instance) {
             .attr("title", instance['display_name'])
             .attr("x", icon_x)
             .attr("y", icon_y)
-            .attr("width", icon_width)
-            .attr("height", icon_height)
-            .attr("stroke", icon_stroke_colour)
+            .attr("width", instance_width)
+            .attr("height", instance_height)
+            .attr("stroke", instance_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");
@@ -140,6 +151,23 @@ function drawInstanceSVG(instance) {
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
             .text("Instance: " + instance['display_name']);
+        let text = svg.append("text")
+            .attr("id", id + '-display-name')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("x", text_x)
+            .attr("y", text_y)
+            .append("tspan")
+                .attr("x", text_x)
+                .text(instance['display_name'])
+            .append("tspan")
+                .attr("x", text_x)
+                .attr("dy", "1.2em")
+                .text(instance['hostname_label'])
+            .append("tspan")
+                .attr("x", text_x)
+                .attr("dy", "1.2em")
+                .text(instance['os'] + " " + instance['version']);
         let g = svg.append("g")
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)

@@ -8,6 +8,7 @@ asset_connect_targets[internet_gateway_artifact] = [];
 asset_add_functions[internet_gateway_artifact] = "addInternetGateway";
 asset_delete_functions[internet_gateway_artifact] = "deleteInternetGateway";
 
+const internet_gateway_stroke_colour = "purple";
 let internet_gateway_ids = [];
 let internet_gateway_count = 0;
 
@@ -89,8 +90,8 @@ function drawInternetGatewaySVG(internet_gateway) {
     console.log('Drawing Internet Gateway : ' + id);
     if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'];
-        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-        let svg_y = (icon_height / 2) * -1;
+        let svg_x = Math.round((icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round((icon_height / 2) * -1);
         let data_type = internet_gateway_artifact;
 
         // Increment Icon Position
@@ -115,7 +116,7 @@ function drawInternetGatewaySVG(internet_gateway) {
             .attr("y", icon_y)
             .attr("width", icon_width)
             .attr("height", icon_height)
-            .attr("stroke", icon_stroke_colour)
+            .attr("stroke", internet_gateway_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");

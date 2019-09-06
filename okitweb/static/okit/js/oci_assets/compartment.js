@@ -8,6 +8,7 @@ asset_connect_targets[compartment_artifact] = [];
 asset_add_functions[compartment_artifact] = "addCompartment";
 asset_delete_functions[compartment_artifact] = "deleteCompartment";
 
+const compartment_stroke_colour = "#F80000";
 let compartment_ids = [];
 let compartment_count = 0;
 let compartment_bui_sub_artifacts = {};
@@ -140,7 +141,7 @@ function drawCompartmentSVG(compartment) {
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("stroke-dasharray", "5, 5")
-        .attr("stroke", "red")
+        .attr("stroke", compartment_stroke_colour)
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     rect.append("title")
