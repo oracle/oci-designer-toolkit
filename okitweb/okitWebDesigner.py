@@ -209,8 +209,8 @@ def ociArtifacts(artifact):
 
 @bp.route('/export/<string:destination>', methods=(['POST']))
 def export(destination):
-    logger.info('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
-    logger.info('JSON     : {0:s}'.format(str(request.json)))
+    logger.debug('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
+    logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
         try:
             destination_dir = tempfile.mkdtemp();
@@ -219,7 +219,7 @@ def export(destination):
             stack['display_name'] = 'nightmare-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
             if destination == 'resourcemanager':
                 # Get Compartment Information
-                export_compartment_index = request.json['open_compartment_index']
+                export_compartment_index = request.json.get('open_compartment_index', 0)
                 export_compartment_name = request.json['compartments'][export_compartment_index]['name']
                 oci_compartments = OCICompartments()
                 compartments = oci_compartments.listTenancy(filter={'name': export_compartment_name})
