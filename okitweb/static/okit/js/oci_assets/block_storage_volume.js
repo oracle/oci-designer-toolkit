@@ -63,17 +63,17 @@ function deleteBlockStorageVolume(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['block_storages'].length; i++) {
-        if (OKITJsonObj['block_storages'][i]['id'] == id) {
-            OKITJsonObj['block_storages'].splice(i, 1);
+    for (let i=0; i < OKITJsonObj['block_storage_volumes'].length; i++) {
+        if (OKITJsonObj['block_storage_volumes'][i]['id'] == id) {
+            OKITJsonObj['block_storage_volumes'].splice(i, 1);
         }
     }
-    // Remove Subnet references
-    if ('route_tables' in OKITJsonObj) {
-        for (route_table of OKITJsonObj['route_tables']) {
-            for (let i = 0; i < route_table['route_rules'].length; i++) {
-                if (route_table['route_rules'][i]['network_entity_id'] == id) {
-                    route_table['route_rules'].splice(i, 1);
+    // Remove Instance references
+    if ('instances' in OKITJsonObj) {
+        for (let instance of OKITJsonObj['instances']) {
+            for (let i=0; i < instance['block_storage_volume_ids'].length; i++) {
+                if (instance['block_storage_volume_ids'][i] == id) {
+                    instance['block_storage_volume_ids'].splice(i, 1);
                 }
             }
         }
