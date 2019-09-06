@@ -36,7 +36,7 @@ from common.ociLogging import getLogger
 logger = getLogger()
 
 class OCITerraform11Generator(OCIGenerator):
-    DIRECTORY_SUFFIX = 'terraform'
+    DIRECTORY_SUFFIX = 'terraform11'
     MAIN_FILE_NAME = 'main.tf'
     VARIABLES_FILE_NAME = 'variables.tf'
     TERRAFORM_FILE_NAME = 'terraform.tfvars'
@@ -46,6 +46,8 @@ class OCITerraform11Generator(OCIGenerator):
     def __init__(self, template_root, output_root, visualiser_json):
         template_dir = os.path.join(template_root, self.DIRECTORY_SUFFIX)
         output_dir = os.path.join(output_root, self.DIRECTORY_SUFFIX)
+        logger.info('OCITerraform11Generator : Template Directory {0!s:s}'.format(template_dir))
+        logger.info('OCITerraform11Generator : Output Directory {0!s:s}'.format(output_dir))
         super(OCITerraform11Generator, self).__init__(template_dir, output_dir, visualiser_json)
 
     def writeFiles(self):

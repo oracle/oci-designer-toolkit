@@ -78,11 +78,11 @@ function handleNew(evt) {
 
 function newDiagram() {
     console.log('Creating New Diagram');
-    OKITJsonObj = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
     OKITJsonObj = {};
     okitIdsJsonObj = {};
     clearSVG();
-    addCompartment();
+    //addCompartment();
+    document.getElementById('file-add-menu-item').click();
 }
 
 function clearTabs() {
@@ -301,7 +301,7 @@ function handleAdd(evt) {
 ** Export SVG
  */
 
-function handleExport(evt) {
+function handleExportToSVG(evt) {
     hideNavMenu();
     saveSvg(okitcanvas, 'okit.svg')
 }
@@ -670,19 +670,23 @@ $(document).ready(function(){
 
     document.getElementById('file-save-menu-item').addEventListener('click', handleSave, false);
 
-    document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
-
     // Canvas Menu
-    document.getElementById('file-export-menu-item').addEventListener('click', handleExport, false);
+    document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
 
     document.getElementById('file-redraw-menu-item').addEventListener('click', handleRedraw, false);
 
-    // Query Menu
+    // Export Menu
+
+    document.getElementById('file-export-svg-menu-item').addEventListener('click', handleExportToSVG, false);
+
+    document.getElementById('file-export-rm-menu-item').addEventListener('click', handleExportToResourceManager, false);
 
     // Generate Menu
     document.getElementById('generate-terraform-menu-item').addEventListener('click', handleGenerateTerraform, false);
 
     document.getElementById('generate-ansible-menu-item').addEventListener('click', handleGenerateAnsible, false);
+
+    //document.getElementById('generate-resource-manager-menu-item').addEventListener('click', handleGenerateTerraform11, false);
 
     // Set Redraw when window resized
     window.addEventListener("resize", handleResize, false);
@@ -692,13 +696,6 @@ $(document).ready(function(){
      */
 
     $("#properties").load("propertysheets/empty.html");
-
-    // Set Properties drag events
-    //let asset_properties = document.getElementById('asset-properties');
-    //asset_properties.addEventListener('dragend', handlePropertiesDragEnd, false);
-    //asset_properties.addEventListener('mousedown', handlePropertiesMouseDown, false);
-    //asset_properties.addEventListener('mouseup', handlePropertiesMouseUp, false);
-
 
     // Remove Busy Icon if set
     unsetBusyIcon();
@@ -712,22 +709,10 @@ $(document).ready(function(){
         newDiagram();
     } else {
         setBusyIcon();
-        //displayOkitJson();
-        //drawSVGforJson();
-        //okitQueryRequestJson = null
         clearSVG();
-        //queryVirtualCloudNetworkAjax();
         $('#query-progress').removeClass('hidden');
         queryCompartmentAjax();
     }
-
-    /*
-    $("#show-code").click(function(){
-        $("#json-display").slideToggle();
-        $("#json-display").removeClass('hidden');
-        $("#properties").slideToggle();
-    });
-    */
 
     $('input[type=radio][name=source-properties]').change(function() {
         if (this.value == 'source') {
