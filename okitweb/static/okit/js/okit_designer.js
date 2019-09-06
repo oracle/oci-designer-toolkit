@@ -686,7 +686,7 @@ $(document).ready(function(){
 
     document.getElementById('generate-ansible-menu-item').addEventListener('click', handleGenerateAnsible, false);
 
-    //document.getElementById('generate-resource-manager-menu-item').addEventListener('click', handleGenerateTerraform11, false);
+    document.getElementById('generate-resource-manager-menu-item').addEventListener('click', handleGenerateTerraform11, false);
 
     // Set Redraw when window resized
     window.addEventListener("resize", handleResize, false);
