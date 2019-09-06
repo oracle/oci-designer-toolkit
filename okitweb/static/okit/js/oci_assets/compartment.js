@@ -51,6 +51,7 @@ function addCompartment() {
     drawCompartmentSVG(compartment);
     loadCompartmentProperties(id);
     openCompartment(id);
+    $('#' + id + "-tab-button").trigger('click');
 }
 
 function initialiseCompartmentChildData(id) {
@@ -107,7 +108,7 @@ function drawCompartmentSVG(compartment) {
     tabbar.append("button")
         .on("click", function() { openCompartment(id); })
         //.on("click", function() { openCompartment(event, compartment['name']); })
-        .attr("class", "tablinks")
+        .attr("class", "tablinks active")
         .attr("id", id + "-tab-button")
         .text(compartment['name']);
     let compartment_div = tabwrapper.append("div")
@@ -194,6 +195,7 @@ function loadCompartmentProperties(id) {
                     $('#name').val(compartment['name']);
                     // Add Event Listeners
                     addPropertiesEventListeners(compartment, []);
+                    OKITJsonObj['open_compartment_index'] = i;
                     break;
                 }
             }
