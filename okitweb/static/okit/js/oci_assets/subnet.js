@@ -9,6 +9,7 @@ asset_add_functions[subnet_artifact] = "addSubnet";
 asset_update_functions[subnet_artifact] = "updateSubnet";
 asset_delete_functions[subnet_artifact] = "deleteSubnet";
 
+const subnet_stroke_colour = "orange";
 let subnet_svg_height = 200;
 let subnet_svg_width = "95%";
 let subnet_rect_height = "85%";
@@ -174,7 +175,7 @@ function drawSubnetSVG(subnet) {
             .attr("width", subnet_rect_width)
             .attr("height", subnet_rect_height)
             .attr("stroke-dasharray", "5, 5")
-            .attr("stroke", "orange")
+            .attr("stroke", subnet_stroke_colour)
             //.attr("stroke", subnet_stroke_colour[(subnet_count % 3)])
             //.attr("fill", subnet_stroke_colour[(subnet_count % 3)])
             .attr("fill", "white")

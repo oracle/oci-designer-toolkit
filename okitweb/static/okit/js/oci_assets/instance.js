@@ -9,6 +9,7 @@ asset_add_functions[instance_artifact] = "addInstance";
 asset_update_functions[instance_artifact] = "updateInstance";
 asset_delete_functions[instance_artifact] = "deleteInstance";
 
+const instance_stroke_colour = "blue";
 let instance_ids = [];
 let instance_count = 0;
 
@@ -131,7 +132,7 @@ function drawInstanceSVG(instance) {
             .attr("y", icon_y)
             .attr("width", icon_width)
             .attr("height", icon_height)
-            .attr("stroke", icon_stroke_colour)
+            .attr("stroke", instance_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");

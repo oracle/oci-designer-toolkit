@@ -8,6 +8,7 @@ asset_connect_targets[block_storage_volume_artifact] = [instance_artifact];
 asset_add_functions[block_storage_volume_artifact] = "addBlockStorageVolume";
 asset_delete_functions[block_storage_volume_artifact] = "deleteBlockStorageVolume";
 
+const block_storage_volume_stroke_colour = "#F80000";
 let block_storage_volume_ids = [];
 let block_storage_volume_count = 0;
 
@@ -122,7 +123,7 @@ function drawBlockStorageVolumeSVG(block_storage_volume) {
             .attr("y", icon_y)
             .attr("width", icon_width)
             .attr("height", icon_height)
-            .attr("stroke", icon_stroke_colour)
+            .attr("stroke", block_storage_volume_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");

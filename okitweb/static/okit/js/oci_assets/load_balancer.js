@@ -9,6 +9,7 @@ asset_add_functions[load_balancer_artifact] = "addLoadBalancer";
 asset_update_functions[load_balancer_artifact] = "updateLoadBalancer";
 asset_delete_functions[load_balancer_artifact] = "deleteLoadBalancer";
 
+const load_balancer_stroke_colour = "#F80000";
 let load_balancer_ids = [];
 let load_balancer_count = 0;
 
@@ -115,7 +116,7 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("y", icon_y)
             .attr("width", icon_width)
             .attr("height", icon_height)
-            .attr("stroke", icon_stroke_colour)
+            .attr("stroke", load_balancer_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");

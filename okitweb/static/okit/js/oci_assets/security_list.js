@@ -8,6 +8,7 @@ asset_connect_targets[security_list_artifact] = [subnet_artifact];
 asset_add_functions[security_list_artifact] = "addSecurityList";
 asset_delete_functions[security_list_artifact] = "deleteSecurityList";
 
+const security_list_stroke_colour = "#F80000";
 let security_list_ids = [];
 let security_list_count = 0;
 
@@ -118,7 +119,7 @@ function drawSecurityListSVG(security_list) {
             .attr("y", icon_y)
             .attr("width", icon_width)
             .attr("height", icon_height)
-            .attr("stroke", icon_stroke_colour)
+            .attr("stroke", security_list_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");
