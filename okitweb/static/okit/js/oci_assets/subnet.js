@@ -140,6 +140,8 @@ function drawSubnetSVG(subnet) {
         let count_offset_y = Math.round((subnet_svg_height + vcn_icon_spacing) * position);
         let svg_x = vcn_offset_x + count_offset_x;
         let svg_y = vcn_offset_y + count_offset_y;
+        let text_x = Math.round(icon_x + icon_width / 3);
+        let text_y = Math.round(icon_y + icon_height / 3);
         let data_type = subnet_artifact;
 
         // Increment Icon Position
@@ -189,8 +191,8 @@ function drawSubnetSVG(subnet) {
             .attr("id", id + '-display-name')
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
-            .attr("x", icon_x + icon_width / 3)
-            .attr("y", icon_y + icon_height / 3)
+            .attr("x", text_x)
+            .attr("y", text_y)
             .text(subnet['display_name']);
         let g = svg.append("g")
             .attr("data-type", data_type)

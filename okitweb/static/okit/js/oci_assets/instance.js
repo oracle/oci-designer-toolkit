@@ -114,6 +114,8 @@ function drawInstanceSVG(instance) {
         let position = subnet_bui_sub_artifacts[parent_id]['instance_position'];
         let svg_x = Math.round((icon_width / 2) + (instance_width * position) + (vcn_icon_spacing * position));
         let svg_y = Math.round((icon_height / 4) * 9);
+        let text_x = Math.round(icon_x + icon_width);
+        let text_y = Math.round(icon_y + icon_height / 2);
         let data_type = instance_artifact;
         console.log('svg_x : ' + svg_x);
         console.log('svg_y : ' + svg_y);
@@ -149,6 +151,23 @@ function drawInstanceSVG(instance) {
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
             .text("Instance: " + instance['display_name']);
+        let text = svg.append("text")
+            .attr("id", id + '-display-name')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("x", text_x)
+            .attr("y", text_y)
+            .append("tspan")
+                .attr("x", text_x)
+                .text(instance['display_name'])
+            .append("tspan")
+                .attr("x", text_x)
+                .attr("dy", "1.2em")
+                .text(instance['hostname_label'])
+            .append("tspan")
+                .attr("x", text_x)
+                .attr("dy", "1.2em")
+                .text(instance['os'] + " " + instance['version']);
         let g = svg.append("g")
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)

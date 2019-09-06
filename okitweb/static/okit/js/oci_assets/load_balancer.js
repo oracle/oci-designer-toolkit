@@ -10,6 +10,10 @@ asset_update_functions[load_balancer_artifact] = "updateLoadBalancer";
 asset_delete_functions[load_balancer_artifact] = "deleteLoadBalancer";
 
 const load_balancer_stroke_colour = "#F80000";
+const load_balancer_width = Math.round(icon_width * 3);
+const load_balancer_height = Math.round(icon_height);
+const load_balancer_svg_width = Math.round(load_balancer_width + icon_x * 2);
+const load_balancer_svg_height = Math.round(load_balancer_height + icon_y * 2);
 let load_balancer_ids = [];
 let load_balancer_count = 0;
 
@@ -88,8 +92,10 @@ function drawLoadBalancerSVG(load_balancer) {
     // Only draw the instance if the subnet exists
     if (parent_id in subnet_bui_sub_artifacts) {
         let position = subnet_bui_sub_artifacts[parent_id]['load_balancer_position'];
-        let svg_x = Math.round((icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_x = Math.round((icon_width / 2) + (load_balancer_width * position) + (vcn_icon_spacing * position));
         let svg_y = Math.round(icon_height / 3);
+        let text_x = Math.round(icon_x + icon_width);
+        let text_y = Math.round(icon_y + icon_height / 2);
         let data_type = load_balancer_artifact;
 
         // Increment Icon Position
@@ -103,8 +109,8 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("title", load_balancer['display_name'])
             .attr("x", svg_x)
             .attr("y", svg_y)
-            .attr("width", "100")
-            .attr("height", "100");
+            .attr("width", load_balancer_svg_width)
+            .attr("height", load_balancer_svg_height);
         let rect = svg.append("rect")
             .attr("id", id)
             .attr("data-type", data_type)
@@ -112,8 +118,8 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("title", load_balancer['display_name'])
             .attr("x", icon_x)
             .attr("y", icon_y)
-            .attr("width", icon_width)
-            .attr("height", icon_height)
+            .attr("width", load_balancer_width)
+            .attr("height", load_balancer_height)
             .attr("stroke", load_balancer_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
@@ -123,6 +129,13 @@ function drawLoadBalancerSVG(load_balancer) {
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
             .text("Load Balancer: " + load_balancer['display_name']);
+        let text = svg.append("text")
+            .attr("id", id + '-display-name')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("x", text_x)
+            .attr("y", text_y)
+            .text(load_balancer['display_name']);
         let g = svg.append("g")
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
