@@ -10,7 +10,7 @@ asset_update_functions[subnet_artifact] = "updateSubnet";
 asset_delete_functions[subnet_artifact] = "deleteSubnet";
 
 const subnet_stroke_colour = "orange";
-let subnet_svg_height = 200;
+let subnet_svg_height = 400;
 let subnet_svg_width = "95%";
 let subnet_rect_height = "85%";
 let subnet_rect_width = "95%";
@@ -134,10 +134,10 @@ function drawSubnetSVG(subnet) {
     if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         let position_x = 0;
         let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'];
-        let vcn_offset_x = (icon_width / 2);
-        let vcn_offset_y = ((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1);
-        let count_offset_x = (icon_width * position_x) + (vcn_icon_spacing * position_x);
-        let count_offset_y = ((subnet_svg_height + vcn_icon_spacing) * position);
+        let vcn_offset_x = Math.round(icon_width / 2);
+        let vcn_offset_y = Math.round(((icon_height / 4) * 8) + ((icon_height + vcn_icon_spacing) * 1));
+        let count_offset_x = Math.round((icon_width * position_x) + (vcn_icon_spacing * position_x));
+        let count_offset_y = Math.round((subnet_svg_height + vcn_icon_spacing) * position);
         let svg_x = vcn_offset_x + count_offset_x;
         let svg_y = vcn_offset_y + count_offset_y;
         let data_type = subnet_artifact;

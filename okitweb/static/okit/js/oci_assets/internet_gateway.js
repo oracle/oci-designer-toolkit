@@ -90,8 +90,8 @@ function drawInternetGatewaySVG(internet_gateway) {
     console.log('Drawing Internet Gateway : ' + id);
     if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'];
-        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-        let svg_y = (icon_height / 2) * -1;
+        let svg_x = Math.round((icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round((icon_height / 2) * -1);
         let data_type = internet_gateway_artifact;
 
         // Increment Icon Position

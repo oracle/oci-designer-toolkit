@@ -90,8 +90,8 @@ function drawRouteTableSVG(route_table) {
     console.log('Drawing Route Table : ' + id);
     if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
-        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-        let svg_y = (icon_height / 4) * 3;
+        let svg_x = Math.round((icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round(icon_height * 3 / 4);
         let data_type = route_table_artifact;
 
         // Increment Icon Position

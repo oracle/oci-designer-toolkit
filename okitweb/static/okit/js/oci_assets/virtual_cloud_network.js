@@ -136,8 +136,8 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
             compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] = 0;
         }
         let position = compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'];
-        let svg_x = (icon_width / 2) * 3;
-        let svg_y = (icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position);
+        let svg_x = Math.round(icon_width * 3 / 2);
+        let svg_y = Math.round((icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position));
         let data_type = virtual_cloud_network_artifact;
 
         // Increment Icon Position

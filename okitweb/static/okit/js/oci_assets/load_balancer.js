@@ -88,10 +88,8 @@ function drawLoadBalancerSVG(load_balancer) {
     // Only draw the instance if the subnet exists
     if (parent_id in subnet_bui_sub_artifacts) {
         let position = subnet_bui_sub_artifacts[parent_id]['load_balancer_position'];
-        let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-        let translate_y = icon_translate_y_start;
-        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-        let svg_y = (icon_height / 3);
+        let svg_x = Math.round((icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round(icon_height / 3);
         let data_type = load_balancer_artifact;
 
         // Increment Icon Position

@@ -94,10 +94,8 @@ function drawBlockStorageVolumeSVG(block_storage_volume) {
             compartment_bui_sub_artifacts[parent_id]['block_storage_position'] = 0;
         }
         let position = compartment_bui_sub_artifacts[parent_id]['block_storage_position'];
-        let translate_x = icon_translate_x_start + icon_width * position + vcn_icon_spacing * position;
-        let translate_y = icon_translate_y_start;
         let svg_x = 0; //(icon_width / 4);
-        let svg_y = (icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position);
+        let svg_y = Math.round((icon_height * 3 / 4) + (icon_height * position) + (vcn_icon_spacing * position));
         let data_type = block_storage_volume_artifact;
 
         // Increment Icon Position
