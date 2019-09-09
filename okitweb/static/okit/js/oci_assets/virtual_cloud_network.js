@@ -8,6 +8,7 @@ asset_connect_targets[virtual_cloud_network_artifact] = [];
 asset_add_functions[virtual_cloud_network_artifact] = "addVirtualCloudNetwork";
 asset_delete_functions[virtual_cloud_network_artifact] = "deleteVirtualCloudNetwork";
 
+const virtual_cloud_network_stroke_colour = "purple";
 let vcn_svg_width = "99%"
 let vcn_svg_height = "70%"
 let vcn_rect_width = "95%"
@@ -135,8 +136,8 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
             compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] = 0;
         }
         let position = compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'];
-        let svg_x = (icon_width / 2) * 3;
-        let svg_y = (icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position);
+        let svg_x = Math.round(icon_width * 3 / 2);
+        let svg_y = Math.round((icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position));
         let data_type = virtual_cloud_network_artifact;
 
         // Increment Icon Position
@@ -168,7 +169,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
             .attr("y", icon_height / 2)
             .attr("width", vcn_rect_width)
             .attr("height", vcn_rect_height)
-            .attr("stroke", "purple")
+            .attr("stroke", virtual_cloud_network_stroke_colour)
             .attr("stroke-dasharray", "5, 5")
             .attr("fill", "white");
         rect.append("title")

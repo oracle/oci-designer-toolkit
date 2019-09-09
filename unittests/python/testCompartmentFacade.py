@@ -11,7 +11,7 @@ from common.ociLogging import getLogger
 logger = getLogger()
 
 
-class CompartmentQuery(unittest.TestCase):
+class CompartmentTests(unittest.TestCase):
     def test_compartment_query(self):
         self.assertEqual(True, False)
 

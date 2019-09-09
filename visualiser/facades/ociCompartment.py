@@ -60,7 +60,6 @@ class OCICompartments(OCIIdentityConnection):
 
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'ACTIVE'
-            #filter['name'] = 'Stefan'
 
         compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
 

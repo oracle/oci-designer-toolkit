@@ -8,6 +8,7 @@ asset_connect_targets[route_table_artifact] = [subnet_artifact];
 asset_add_functions[route_table_artifact] = "addRouteTable";
 asset_delete_functions[route_table_artifact] = "deleteRouteTable";
 
+const route_table_stroke_colour = "#F80000";
 let route_table_ids = [];
 let route_table_count = 0;
 let propertires_route_table = {}
@@ -89,8 +90,8 @@ function drawRouteTableSVG(route_table) {
     console.log('Drawing Route Table : ' + id);
     if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
-        let svg_x = (icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position);
-        let svg_y = (icon_height / 4) * 3;
+        let svg_x = Math.round((icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round(icon_height * 3 / 4);
         let data_type = route_table_artifact;
 
         // Increment Icon Position
@@ -115,7 +116,7 @@ function drawRouteTableSVG(route_table) {
             .attr("y", icon_y)
             .attr("width", icon_width)
             .attr("height", icon_height)
-            .attr("stroke", icon_stroke_colour)
+            .attr("stroke", route_table_stroke_colour)
             .attr("stroke-dasharray", "1, 1")
             .attr("fill", "white")
             .attr("style", "fill-opacity: .25;");

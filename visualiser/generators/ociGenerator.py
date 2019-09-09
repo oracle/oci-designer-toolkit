@@ -516,17 +516,6 @@ class OCIGenerator(object):
         standardised_name = ''.join(name.title().split())
         return standardised_name
 
-    def createZip(self):
-        # Zip Release Directory
-        releasedir = os.path.join(self.jiradir, 'release')
-        logger.info('Generating release zip files for JIRA directory %s.', self.jiradir)
-        archivename = '{0:s}_cm{1:s}_{2:s}'.format(str(self.jirajson["client"]).title().replace(' ','_'), str(self.jirajson['racks'][0]["ak_number"]), str(time.strftime("%Y%m%d-%H%M")))
-        archivename = os.path.join(self.jiradir, archivename.replace(' ', ''))
-        logger.info('Archive Name: %s.zip', archivename)
-        self.createZipArchive(releasedir, archivename)
-        zipname = '{0:s}.zip'.format(str(archivename))
-        return zipname
-
     def createZipArchive(self, dir, archivename):
         shutil.make_archive(archivename, 'zip', dir)
         zipname = '{0:s}.zip'.format(str(archivename))

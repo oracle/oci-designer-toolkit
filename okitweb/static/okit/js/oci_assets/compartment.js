@@ -8,6 +8,7 @@ asset_connect_targets[compartment_artifact] = [];
 asset_add_functions[compartment_artifact] = "addCompartment";
 asset_delete_functions[compartment_artifact] = "deleteCompartment";
 
+const compartment_stroke_colour = "#F80000";
 let compartment_ids = [];
 let compartment_count = 0;
 let compartment_bui_sub_artifacts = {};
@@ -51,6 +52,7 @@ function addCompartment() {
     drawCompartmentSVG(compartment);
     loadCompartmentProperties(id);
     openCompartment(id);
+    $('#' + id + "-tab-button").trigger('click');
 }
 
 function initialiseCompartmentChildData(id) {
@@ -107,7 +109,7 @@ function drawCompartmentSVG(compartment) {
     tabbar.append("button")
         .on("click", function() { openCompartment(id); })
         //.on("click", function() { openCompartment(event, compartment['name']); })
-        .attr("class", "tablinks")
+        .attr("class", "tablinks active")
         .attr("id", id + "-tab-button")
         .text(compartment['name']);
     let compartment_div = tabwrapper.append("div")
@@ -139,7 +141,7 @@ function drawCompartmentSVG(compartment) {
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("stroke-dasharray", "5, 5")
-        .attr("stroke", "red")
+        .attr("stroke", compartment_stroke_colour)
         .attr("fill", "white")
         .attr("style", "fill-opacity: .25;");
     rect.append("title")
@@ -194,6 +196,7 @@ function loadCompartmentProperties(id) {
                     $('#name').val(compartment['name']);
                     // Add Event Listeners
                     addPropertiesEventListeners(compartment, []);
+                    OKITJsonObj['open_compartment_index'] = i;
                     break;
                 }
             }

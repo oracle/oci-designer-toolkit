@@ -49,6 +49,25 @@ function handleGenerateAnsible(e) {
     });
 }
 
+function handleGenerateTerraform11(e) {
+    hideNavMenu();
+    $.ajax({
+        type: 'post',
+        url: 'generate/terraform11',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(OKITJsonObj),
+        success: function(resp) {
+            console.log('Response : ' + resp);
+            window.location = 'generate/terraform11';
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
 function handleExportToResourceManager(e) {
     hideNavMenu();
     $.ajax({
@@ -59,6 +78,7 @@ function handleExportToResourceManager(e) {
         data: JSON.stringify(OKITJsonObj),
         success: function(resp) {
             console.log('Response : ' + resp);
+            alert('Created Stack ' + resp);
             //window.location = 'generate/terraform';
             //openInNewTab('generate/terraform');
         },

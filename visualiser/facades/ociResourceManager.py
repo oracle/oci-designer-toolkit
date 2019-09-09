@@ -17,9 +17,11 @@ __module__ = "ociResourceManager"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
+import base64
 import oci
 import re
 import sys
+import time
 
 from facades.ociConnection import OCIResourceManagerConnection
 from common.ociLogging import getLogger
@@ -29,9 +31,8 @@ logger = getLogger()
 
 
 class OCIResourceManagers(OCIResourceManagerConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
         self.compartment_id = compartment_id
-        self.vcn_id = vcn_id
         self.resource_managers_json = []
         self.resource_managers_obj = []
         super(OCIResourceManagers, self).__init__(config=config, configfile=configfile)
@@ -40,7 +41,8 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        resource_managers = oci.pagination.list_call_get_all_results(self.client.list_resource_managers, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+        resource_managers = oci.pagination.list_call_get_all_results(self.client.list_stacks, compartment_id=compartment_id).data
+        logger.info('Stack Count : {0:02d}'.format(len(resource_managers)))
         # Convert to Json object
         resource_managers_json = self.toJson(resource_managers)
         logger.debug(str(resource_managers_json))
@@ -62,14 +64,36 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         return self.resource_managers_json
 
     def createStack(self, stack):
+        logger.debug('<<<<<<<<<<<<< Stack Detail >>>>>>>>>>>>>: {0!s:s}'.format(str(stack)))
+        with open(stack['zipfile'], "rb") as f:
+            zip_bytes = f.read()
+            encoded_zip = base64.b64encode(zip_bytes).decode('ascii')
+        zip_source = oci.resource_manager.models.CreateZipUploadConfigSourceDetails(zip_file_base64_encoded=encoded_zip)
+        stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'])
+        response = self.client.create_stack(stack_details)
+        logger.info('Create Stack Response : {0!s:s}'.format(str(response.data)))
+        return self.toJson(response.data)
+
+    def createJob(self, stack):
+        job_details = oci.resource_manager.models.CreateJobDetails(stack_id=stack['id'],
+                                                                   display_name='plan-job-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S')),
+                                                                   operation='PLAN')
+        self.client.create_job(job_details)
         return
 
 
-class OCIResourceManager(object):
+class OCIResourceManager(OCIResourceManagerConnection):
     def __init__(self, config=None, configfile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
         self.data = data
+        logger.info(str(data))
+        super(OCIResourceManager, self).__init__(config=config, configfile=configfile)
+
+    def listJobs(self):
+        jobs = oci.pagination.list_call_get_all_results(self.client.list_jobs, stack_id=self.data['id']).data
+        jobs_json = self.toJson(jobs)
+        return jobs_json
 
 
 # Main processing function
