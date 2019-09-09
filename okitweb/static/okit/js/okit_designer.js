@@ -303,7 +303,12 @@ function handleAdd(evt) {
 
 function handleExportToSVG(evt) {
     hideNavMenu();
-    saveSvg(okitcanvas, 'okit.svg')
+    if (!OKITJsonObj.hasOwnProperty('open_compartment_index')) {
+        OKITJsonObj['open_compartment_index'] = 0;
+    }
+    let okitcanvas = document.getElementById(OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['id'] + '-svg');
+    let name = OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['name'];
+    saveSvg(okitcanvas, name + '.svg');
 }
 
 function saveSvg(svgEl, name) {
