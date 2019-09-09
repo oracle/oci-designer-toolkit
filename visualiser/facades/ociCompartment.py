@@ -25,6 +25,7 @@ import json
 from facades.ociConnection import OCIIdentityConnection
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from facades.ociInstance import OCIInstances
+from facades.ociInstance import OCIInstanceVnics
 from facades.ociLoadBalancer import OCILoadBalancers
 from common.ociLogging import getLogger
 
@@ -59,7 +60,6 @@ class OCICompartments(OCIIdentityConnection):
 
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'ACTIVE'
-            #filter['name'] = 'Stefan'
 
         compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
 
@@ -115,6 +115,9 @@ class OCICompartment(object):
 
     def getInstanceClients(self):
         return OCIInstances(self.config, self.configfile, self.data['id'])
+
+    def getInstanceVnicClients(self):
+        return OCIInstanceVnics(self.config, self.configfile, self.data['id'])
 
     def getLoadBalancerClients(self):
         return OCILoadBalancers(self.config, self.configfile, self.data['id'])

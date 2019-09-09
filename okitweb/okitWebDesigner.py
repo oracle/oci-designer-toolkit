@@ -13,10 +13,13 @@ __status__ = "@RELEASE@"
 __module__ = "okitWebDesigner"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import oci
 import json
 import os
 import shutil
 import tempfile
+import time
+import urllib
 
 from flask import Blueprint
 from flask import redirect
@@ -31,10 +34,20 @@ from common.ociCommon import logJson
 from common.ociCommon import standardiseIds
 from common.ociQuery import executeQuery
 from generators.ociTerraformGenerator import OCITerraformGenerator
+from generators.ociTerraform11Generator import OCITerraform11Generator
+from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
 from facades.ociCompartment import OCICompartments
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from facades.ociInternetGateway import OCIInternetGateways
+from facades.ociRouteTable import OCIRouteTables
+from facades.ociSecurityList import OCISecurityLists
+from facades.ociSubnet import OCISubnets
+from facades.ociLoadBalancer import OCILoadBalancers
+from facades.ociInstance import OCIInstances
+from facades.ociInstance import OCIInstanceVnics
+from facades.ociResourceManager import OCIResourceManagers
 
 from common.ociLogging import getLogger
 
@@ -46,96 +59,12 @@ bp = Blueprint('okit', __name__, url_prefix='/okit', static_folder='static/okit'
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 template_root = '/okit/visualiser/templates'
 
-def executeQuery1(request_json={}, ** kwargs):
-    response_json = {}
-    logger.info('Request JSON : {0:s}'.format(str(request_json)))
-    compartment_id = request_json['compartment_id']
-    filter = request_json.get('virtual_cloud_network_filter', None)
-    if filter == '':
-        filter = None
-    oci_compartments = OCICompartments()
-    compartment_json = oci_compartments.get(compartment_id=compartment_id)
-    oci_compartment = oci_compartments.compartments_obj[0]
-    # Build OKIT Response json add compartment information
-    response_json['compartment'] = {}
-    response_json['compartment']['id'] = compartment_json['id']
-    response_json['compartment']['name'] = compartment_json['name']
-    logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['name']))
-    # Query all Virtual Cloud Networks
-    oci_virtual_cloud_networks = oci_compartment.getVirtualCloudNetworkClients()
-    response_json['compartment']["virtual_cloud_networks"] = oci_virtual_cloud_networks.list(filter=filter)
-    # Loop through resulting json
-    for oci_virtual_cloud_network in oci_virtual_cloud_networks.virtual_cloud_networks_obj:
-        logger.info('\tVirtual Cloud Network : {0!s:s}'.format(oci_virtual_cloud_network.data['display_name']))
-        # Internet Gateways
-        oci_internet_gateways = oci_virtual_cloud_network.getInternetGatewayClients()
-        response_json['compartment']['internet_gateways'] = oci_internet_gateways.list()
-        for oci_internet_gateway in oci_internet_gateways.internet_gateways_obj:
-            logger.info('\t\tInternet Gateway : {0!s:s}'.format(oci_internet_gateway.data['display_name']))
-        # Route Tables
-        oci_route_tables = oci_virtual_cloud_network.getRouteTableClients()
-        response_json['compartment']['route_tables'] = oci_route_tables.list()
-        for oci_route_table in oci_route_tables.route_tables_obj:
-            logger.info('\t\tRoute Table : {0!s:s}'.format(oci_route_table.data['display_name']))
-        # Security Lists
-        security_lists = oci_virtual_cloud_network.getSecurityListClients()
-        response_json['compartment']['security_lists'] = security_lists.list()
-        for security_list in security_lists.security_lists_obj:
-            logger.info('\t\tSecurity List : {0!s:s}'.format(security_list.data['display_name']))
-        # Subnets
-        subnets = oci_virtual_cloud_network.getSubnetClients()
-        response_json['compartment']['subnets'] = subnets.list()
-        for subnet in subnets.subnets_obj:
-            logger.info('\t\tSubnet : {0!s:s}'.format(subnet.data['display_name']))
-    logger.info('Response     : {0:s}'.format(str(response_json)))
-    logJson(response_json)
-    response_json = standardiseJson(response_json)
-    logJson(response_json)
-    return response_json
-
 
 def standardiseJson(json_data={}, **kwargs):
     logJson(json_data)
     json_data = standardiseIds(json_data)
     logJson(json_data)
     return json_data
-
-
-# TODO: Delete
-def standardiseJson1(json_data={}, **kwargs):
-    if 'compartment' in json_data:
-        if 'virtual_cloud_networks' in json_data['compartment']:
-            for virtual_network in json_data['compartment']['virtual_cloud_networks']:
-                virtual_network['id'] = standardiseId(virtual_network['id'])
-                virtual_network['compartment_id'] = standardiseId(virtual_network['compartment_id'])
-        if 'internet_gateways'in json_data['compartment']:
-            for internet_gateway in json_data['compartment']['internet_gateways']:
-                internet_gateway['id'] = standardiseId(internet_gateway['id'])
-                internet_gateway['vcn_id'] = standardiseId(internet_gateway['vcn_id'])
-                internet_gateway['compartment_id'] = standardiseId(internet_gateway['compartment_id'])
-        if 'route_tables'in json_data['compartment']:
-            for route_table in json_data['compartment']['route_tables']:
-                route_table['id'] = standardiseId(route_table['id'])
-                route_table['vcn_id'] = standardiseId(route_table['vcn_id'])
-                route_table['compartment_id'] = standardiseId(route_table['compartment_id'])
-        if 'security_lists'in json_data['compartment']:
-            for security_list in json_data['compartment']['security_lists']:
-                security_list['id'] = standardiseId(security_list['id'])
-                security_list['vcn_id'] = standardiseId(security_list['vcn_id'])
-                security_list['compartment_id'] = standardiseId(security_list['compartment_id'])
-        if 'subnets'in json_data['compartment']:
-            for subnet in json_data['compartment']['subnets']:
-                subnet['id'] = standardiseId(subnet['id'])
-                subnet['vcn_id'] = standardiseId(subnet['vcn_id'])
-                subnet['compartment_id'] = standardiseId(subnet['compartment_id'])
-                subnet['route_table_id'] = standardiseId(subnet['route_table_id'])
-                subnet['security_list_ids'] = [standardiseId(id) for id in subnet['security_list_ids']]
-    return json_data
-
-
-# TODO: Delete
-def standardiseId(id, from_char='.', to_char='-'):
-    return id.replace(from_char, to_char)
 
 
 @bp.route('/designer', methods=(['GET', 'POST']))
@@ -150,13 +79,15 @@ def designer():
     logger.info('Palette Icons : {0!s:s}'.format(palette_icons))
     if request.method == 'POST':
         request_json = {}
+        response_json = {}
         for key, value in request.form.items():
             request_json[key] = value
         request_json['virtual_cloud_network_filter'] = {'display_name': request_json.get('virtual_cloud_network_name_filter', '')}
-        response_json = executeQuery(request_json)
+        logger.info('Request Json {0!s:s}'.format(request_json))
+        #response_json = executeQuery(request_json)
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_query_json=response_string)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
         return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons)
 
@@ -177,6 +108,8 @@ def generate(language):
                 generator = OCITerraformGenerator(template_root, destination_dir, request.json)
             elif language == 'ansible':
                 generator = OCIAnsibleGenerator(template_root, destination_dir, request.json)
+            elif language == 'terraform11':
+                generator = OCITerraform11Generator(template_root, destination_dir, request.json)
             generator.generate()
             generator.writeFiles()
             zipname = generator.createZipArchive(os.path.join(destination_dir, language), "/tmp/okit-{0:s}".format(str(language)))
@@ -217,20 +150,102 @@ def ociQuery(cloud):
         return '404'
 
 
+@bp.route('/oci/artifacts/<string:artifact>', methods=(['GET']))
+def ociArtifacts(artifact):
+    logger.info('Artifact : {0:s}'.format(str(artifact)))
+    query_string = request.query_string
+    parsed_query_string = urllib.parse.unquote(query_string.decode())
+    query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+    logJson(query_json)
+    logger.info(json.dumps(query_json, sort_keys=True, indent=2, separators=(',', ': ')))
+    response_json = {}
+    if artifact == 'Compartment':
+        logger.info('---- Processing Compartments')
+        oci_compartments = OCICompartments()
+        #response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
+        response_json = oci_compartments.get(compartment_id=query_json['compartment_id'])
+    elif artifact == 'VirtualCloudNetwork':
+        logger.info('---- Processing Virtual Cloud Networks')
+        oci_virtual_cloud_networks = OCIVirtualCloudNetworks(compartment_id=query_json['compartment_id'])
+        response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
+    elif artifact == 'InternetGateway':
+        logger.info('---- Processing Internet Gateways')
+        oci_internet_gateways = OCIInternetGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
+    elif artifact == 'RouteTable':
+        logger.info('---- Processing Route Tables')
+        oci_route_tables = OCIRouteTables(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_route_tables.list(filter=query_json.get('route_table_filter', None))
+    elif artifact == 'SecurityList':
+        logger.info('---- Processing Security Lists')
+        oci_security_lists = OCISecurityLists(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_security_lists.list(filter=query_json.get('security_list_filter', None))
+    elif artifact == 'Subnet':
+        logger.info('---- Processing Subnets')
+        oci_subnets = OCISubnets(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_subnets.list(filter=query_json.get('subnet_filter', None))
+    elif artifact == 'Instance':
+        logger.info('---- Processing Instances')
+        oci_instances = OCIInstances(compartment_id=query_json['compartment_id'])
+        instance_json = oci_instances.list(filter=query_json.get('instance_filter', None))
+        oci_instance_vnics = OCIInstanceVnics(compartment_id=query_json['compartment_id'])
+        response_json = []
+        for instance in instance_json:
+            instance['vnics'] = oci_instance_vnics.list(instance_id=instance['id'])
+            instance['subnet_id'] = instance['vnics'][0]['subnet_id'] if len(instance['vnics']) > 0 else ''
+            if query_json['subnet_id'] in [vnic['subnet_id'] for vnic in instance['vnics']]:
+                response_json.append(instance)
+    elif artifact == 'LoadBalancer':
+        logger.info('---- Processing Load Balancers')
+        oci_load_balancers = OCILoadBalancers(compartment_id=query_json['compartment_id'])
+        response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
+        response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
+    else:
+        return '404'
+
+    logger.debug(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))
+    return json.dumps(standardiseIds(response_json), sort_keys=True)
+
+
 @bp.route('/export/<string:destination>', methods=(['POST']))
 def export(destination):
-    logger.info('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
-    logger.info('JSON     : {0:s}'.format(str(request.json)))
+    logger.debug('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
+    logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
         try:
             destination_dir = tempfile.mkdtemp();
+            stack = {}
+            stack['display_name'] = 'okit-stack-export-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
+            stack['display_name'] = 'nightmare-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
             if destination == 'resourcemanager':
-                generator = OCITerraformGenerator(template_root, destination_dir, request.json)
-            generator.generate()
-            generator.writeFiles()
-            zipname = generator.createZipArchive(os.path.join(destination_dir, 'terraform'), "/tmp/okit-resource-manager")
-            logger.info('Zipfile : {0:s}'.format(str(zipname)))
+                # Get Compartment Information
+                export_compartment_index = request.json.get('open_compartment_index', 0)
+                export_compartment_name = request.json['compartments'][export_compartment_index]['name']
+                oci_compartments = OCICompartments()
+                compartments = oci_compartments.listTenancy(filter={'name': export_compartment_name})
+                # If we find a compartment
+                if len(compartments) > 0:
+                    # Generate Resource Manager Terraform zip
+                    generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json,
+                                                            tenancy_ocid=oci_compartments.config['tenancy'],
+                                                            region=oci_compartments.config['region'],
+                                                            compartment_ocid=compartments[0]['id'])
+                    generator.generate()
+                    generator.writeFiles()
+                    zipname = generator.createZipArchive(os.path.join(destination_dir, 'resource-manager'), "/tmp/okit-resource-manager")
+                    logger.info('Zipfile : {0:s}'.format(str(zipname)))
+                    # Upload to Resource manager
+                    stack['compartment_id'] = compartments[0]['id']
+                    stack['zipfile'] = zipname
+                    stack['variables'] = generator.getVariables()
+                    resource_manager = OCIResourceManagers(compartment_id=compartments[0]['id'])
+                    stack_json = resource_manager.createStack(stack)
+                    resource_manager.createJob(stack_json)
+                    return_code = 200
+                else:
+                    return_code = 400
             shutil.rmtree(destination_dir)
+            return stack['display_name'], return_code
         except Exception as e:
             logger.exception(e)
             return str(e), 500

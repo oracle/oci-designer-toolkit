@@ -2,7 +2,7 @@ console.log('Loaded Query Javascript');
 
 function handleSubmitQuery(e) {
     $('*').css('cursor', 'wait');
-    var queryJsonBody = {};
+    let queryJsonBody = {};
     queryJsonBody['compartment_id'] = $('#compartment').val();
     queryJsonBody['virtual_cloud_network_filter'] = {'display_name': $('#virtual_cloud_network_filter').val()};
     $.ajax({

@@ -21,40 +21,48 @@ import oci
 import re
 import sys
 
-from facades.ociConnection import OCIComputeConnection
+from facades.ociConnection import OCIComputeConnection,OCIVirtualNetworkConnection
 from common.ociLogging import getLogger
 
 # Configure logging
 logger = getLogger()
 
-class OCIInstanceVnicAttachments(OCIComputeConnection):
+class OCIInstanceVnics(OCIVirtualNetworkConnection):
     def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None, **kwargs):
         self.compartment_id = compartment_id
         self.instance_id = instance_id
-        self.vnic_attachments_json = []
-        self.vnic_attachments_obj = []
-        super(OCIInstanceVnicAttachments, self).__init__(config=config, configfile=configfile)
+        self.vnics_json = []
+        self.vnics_obj = []
+        super(OCIInstanceVnics, self).__init__(config=config, configfile=configfile)
 
     def list(self, compartment_id=None, instance_id=None):
+        computeclient=OCIComputeConnection()
         if compartment_id is None:
             compartment_id = self.compartment_id
         if instance_id is None:
             instance_id = self.instance_id
 
-        vnic_attachments = oci.pagination.list_call_get_all_results(self.client.list_vnic_attachments, compartment_id=compartment_id, instance_id=instance_id).data
-        # Convert to Json object
-        vnic_attachments_json = self.toJson(vnic_attachments)
-        logger.debug(str(vnic_attachments_json))
+        vnic_attachments = oci.pagination.list_call_get_all_results(computeclient.client.list_vnic_attachments, compartment_id=compartment_id, instance_id=instance_id).data        
+        vnics=[]
+        for attachment in vnic_attachments:
+            try:
+                vnic=self.client.get_vnic(attachment.vnic_id).data
+                vnics.append(vnic)
+            except Exception as e:
+                logger.exception('Failed to get Vnic Attachment')
+                logger.exception(e)
+        vnics_json = self.toJson(vnics)
+        logger.debug(str(vnics_json))
   
-        self.vnic_attachments_json=vnic_attachments_json
-        logger.debug(str(self.vnic_attachments_json))
+        self.vnics_json=vnics_json
+        logger.debug(str(self.vnics_json))
 
-        for vnic_attachment in self.vnic_attachments_json:
-            self.vnic_attachments_obj.append(OCIInstanceVnicAttachment(self.config, self.configfile, vnic_attachment))
+        for vnic in self.vnics_json:
+            self.vnics_obj.append(OCIInstanceVnic(self.config, self.configfile, vnic))
 
-        return self.vnic_attachments_json
+        return self.vnics_json
 
-class OCIInstanceVnicAttachment(object):
+class OCIInstanceVnic(object):
     def __init__(self, config=None, configfile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
@@ -75,16 +83,6 @@ class OCIInstances(OCIComputeConnection):
         # Convert to Json object
         instances_json = self.toJson(instances)
         logger.debug(str(instances_json))
-
-        # Check if the results should be filtered
-        # Stefan: No filtering here so far...
-        #if filter is None:
-            #self.instances_json = instances_json
-        #else:
-            #filtered = instances_json[:]
-            #for key, val in filter.items():
-                #filtered = [instance for instance in filtered if re.compile(val).search(instance[key])]
-            #self.instances_json = filtered
  
         self.instances_json=instances_json
         logger.debug(str(self.instances_json))
@@ -94,15 +92,14 @@ class OCIInstances(OCIComputeConnection):
 
         return self.instances_json
 
-
 class OCIInstance(object):
     def __init__(self, config=None, configfile=None, data=None, id=None):
         self.config = config
         self.configfile = configfile
         self.data = data
         
-    def getInstanceVnicAttachmentClients(self):
-        return OCIInstanceVnicAttachments(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+    def getInstanceVnicClients(self):
+        return OCIInstanceVnics(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
         
 
 # Main processing function

@@ -105,7 +105,7 @@ def writeJsonFile(jsonData, filename, sortKeys=True, **kwargs):
 
 def logJson(jsonObj, sortKeys=True, indent=2, **kwargs):
     if jsonObj is not None:
-        logger.info(json.dumps(jsonObj, sort_keys=sortKeys, indent=indent, separators=(',', ': ')))
+        logger.debug(json.dumps(jsonObj, sort_keys=sortKeys, indent=indent, separators=(',', ': ')))
     return
 
 
