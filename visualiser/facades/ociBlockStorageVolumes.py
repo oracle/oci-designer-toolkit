@@ -32,52 +32,41 @@ import oci
 import re
 import sys
 
-from facades.ociConnection import OCIVirtualNetworkConnection
+from facades.ociConnection import OCIBlockStorageVolumeConnection
 from common.ociLogging import getLogger
 
 # Configure logging
 logger = getLogger()
 
 
-class OCIBlockStorageVolumes(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, subnet_id=None, vnic_id=None, ip_address=None, **kwargs):
-        self.subnet_id = subnet_id
-        self.vnic_id = vnic_id
-        self.ip_address = ip_address
-        self.private_ips_json = []
-        self.private_ips_obj = []
+class OCIBlockStorageVolumes(OCIBlockStorageVolumeConnection):
+    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+        self.compartment_id = compartment_id
+        self.block_storage_volumes_json = []
+        self.block_storage_volumes_obj = []
         super(OCIBlockStorageVolumes, self).__init__(config=config, configfile=configfile)
 
-    def list(self, subnet_id=None, vnic_id=None, ip_address=None, filter=None):
-        if subnet_id is None:
-            subnet_id = self.subnet_id
-        if vnic_id is None:
-            vnic_id = self.vnic_id
-        if ip_address is None:
-            ip_address = self.ip_address
+    def list(self, compartment_id=None, filter=None):
+        if compartment_id is None:
+            compartment_id = self.compartment_id
 
-        private_ips = oci.pagination.list_call_get_all_results(self.client.list_private_ips, subnet_id=subnet_id, vnic_id=vnic_id, ip_address=ip_address).data
+        block_storage_volumes = oci.pagination.list_call_get_all_results(self.client.list_volumes, compartment_id=compartment_id).data
         # Convert to Json object
-        private_ips_json = self.toJson(private_ips)
-        logger.debug(str(private_ips_json))
+        block_storage_volumes_json = self.toJson(block_storage_volumes)
+        logger.debug(str(block_storage_volumes_json))
 
         # Check if the results should be filtered
         if filter is None:
-            self.private_ips_json = private_ips_json
+            self.block_storage_volumes_json = block_storage_volumes_json
         else:
-            filtered = self.private_ips_json[:]
+            filtered = block_storage_volumes_json[:]
             for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            self.private_ips_json = filtered
-        logger.debug('--------------------- Private IPs ----------------------')
-        logger.debug(str(self.private_ips_json))
+                logger.info('{0!s:s} = {1!s:s}'.format(key, val))
+                filtered = [bs for bs in filtered if re.compile(val).search(bs[key])]
+            self.block_storage_volumes_json = filtered
+        logger.debug(str(self.block_storage_volumes_json))
 
-        # Build List of Subnet Objects
-        self.private_ips_obj = []
-        for private_ip in self.private_ips_json:
-            self.private_ips_obj.append(OCIBlockStorageVolume(self.config, self.configfile, private_ip))
-
-        return self.private_ips_json
+        return self.block_storage_volumes_json
 
 
 class OCIBlockStorageVolume(object):

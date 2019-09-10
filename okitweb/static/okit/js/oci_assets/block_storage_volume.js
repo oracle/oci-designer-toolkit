@@ -221,8 +221,8 @@ function queryBlockStorageVolumeAjax(compartment_id) {
     console.log('------------- queryBlockStorageVolumeAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
-    if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
-        request_json['virtual_cloud_network_filter'] = okitQueryRequestJson['virtual_cloud_network_filter'];
+    if ('block_storage_volume_filter' in okitQueryRequestJson) {
+        request_json['block_storage_volume_filter'] = okitQueryRequestJson['block_storage_volume_filter'];
     }
     $.ajax({
         type: 'get',

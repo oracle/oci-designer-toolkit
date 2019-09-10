@@ -301,19 +301,20 @@ to the system.
 - New Files
     - Frontend
         - **[Palette SVG](#palette-svg)**                             : [okitweb/static/okit/palette/*Block_Storage_Volume*.svg](okitweb/static/okit/palette/Block_Storage_Volume.svg)
-        - **[Artifact Javascript](#artifact-javascript)**             : okitweb/static/okit/js/oci_assets/*block_storage_volume*.js
-        - **[Properties HTML](#properties-html)**                     : okitweb/templates/okit/propertysheets/*block_storage_volume*.html
+        - **[Artifact Javascript](#artifact-javascript)**             : [okitweb/static/okit/js/oci_assets/*block_storage_volume*.js](okitweb/static/okit/js/oci_assets/block_storage_volume.js)
+        - **[Properties HTML](#properties-html)**                     : [okitweb/templates/okit/propertysheets/*block_storage_volume*.html](okitweb/templates/okit/propertysheets/block_storage_volume.html)
     - Backend
-        - **[Python OCI Facade](#python-oci-facade)**                 : visualiser/facades/oci*BlockStorageVolume*.py
-        - **[Terraform Jinja2 Template](#terraform-jinja2-template)** : visualiser/templates/terraform/*block_storage_volume*.jinja2
-        - **[Ansible Jinja2 Template](#ansible-jinja2-template)**     : visualiser/templates/ansible/*block_storage_volume*.jinja2
+        - **[Python OCI Facade](#python-oci-facade)**                 : [visualiser/facades/oci*BlockStorageVolume*.py](visualiser/facades/ociBlockStorageVolume.py)
+        - **[Terraform Jinja2 Template](#terraform-jinja2-template)** : [visualiser/templates/terraform/*block_storage_volume*.jinja2](visualiser/templates/terraform/block_storage_volume.jinja2)
+        - **[Ansible Jinja2 Template](#ansible-jinja2-template)**     : [visualiser/templates/ansible/*block_storage_volume*.jinja2](visualiser/templates/ansible/block_storage_volume.jinja2)
 - Updated Files
     - Frontend
-        - **[Designer Javascript](#designer-javascript)**             : okitweb/static/okit/js/okit_designer.js
-        - **[Flask Web Designer Python](#flask-web-designer-python)** : okitweb/okitWebDesigner.py
+        - **[Designer Javascript](#designer-javascript)**             : [okitweb/static/okit/js/okit_designer.js](okitweb/static/okit/js/okit_designer.js)
+        - **[Flask Web Designer Python](#flask-web-designer-python)** : [okitweb/okitWebDesigner.py](okitweb/okitWebDesigner.py)
     - Backend
-        - **[Python OCI Query](#python-oci-query)**                   : visualiser/common/ociQuery.py
-        - **[Python Generator](#python-generator)**                   : visualiser/generators/ociGenerator.py
+        - **[Connection Facade](#connection-facade)**                 : [visualiser/facades/ociConnection.py](visualiser/facades/ociConnection.py)
+        - **[Python OCI Query](#python-oci-query)**                   : [visualiser/common/ociQuery.py](visualiser/common/ociQuery.py)
+        - **[Python Generator](#python-generator)**                   : [visualiser/generators/ociGenerator.py](visualiser/generators/ociGenerator.py)
 
 #### Naming Convention
 All files associated with an artifict will have file names based on the artifact. If we take the ***Block Storage Volume***
@@ -595,8 +596,8 @@ function queryBlockStorageVolumeAjax(compartment_id) {
     console.log('------------- queryBlockStorageVolumeAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
-    if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
-        request_json['virtual_cloud_network_filter'] = okitQueryRequestJson['virtual_cloud_network_filter'];
+    if ('block_storage_volume_filter' in okitQueryRequestJson) {
+        request_json['block_storage_volume_filter'] = okitQueryRequestJson['block_storage_volume_filter'];
     }
     $.ajax({
         type: 'get',
@@ -680,12 +681,299 @@ edit.
 ```
 
 #### Python OCI Facade
+The python oci facade provides, at a minimum, the functionality to list and filter artifact. All facades have the following
+basic processing and provide the key "list" method to retrieve the artifacts during a query.
+
+```python
+#!/usr/bin/python
+# Copyright (c) 2013, 2014-2019 Oracle and/or its affiliates. All rights reserved.
+
+
+"""Provide Module Description
+"""
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+__author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
+__copyright__ = "Copyright (c) 2013, 2014-2019  Oracle and/or its affiliates. All rights reserved."
+__ekitversion__ = "@VERSION@"
+__ekitrelease__ = "@RELEASE@"
+__version__ = "1.0.0.0"
+__date__ = "@BUILDDATE@"
+__status__ = "@RELEASE@"
+__module__ = "ociBlockStorageVolumes"
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+import datetime
+import getopt
+import json
+import locale
+import logging
+import operator
+import os
+import requests
+import sys
+
+
+import oci
+import re
+import sys
+
+from facades.ociConnection import OCIBlockStorageVolumeConnection
+from common.ociLogging import getLogger
+
+# Configure logging
+logger = getLogger()
+
+
+class OCIBlockStorageVolumes(OCIBlockStorageVolumeConnection):
+    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+        self.compartment_id = compartment_id
+        self.block_storage_volumes_json = []
+        self.block_storage_volumes_obj = []
+        super(OCIBlockStorageVolumes, self).__init__(config=config, configfile=configfile)
+
+    def list(self, compartment_id=None, filter=None):
+        if compartment_id is None:
+            compartment_id = self.compartment_id
+
+        block_storage_volumes = oci.pagination.list_call_get_all_results(self.client.list_vcns, compartment_id=compartment_id).data
+        # Convert to Json object
+        block_storage_volumes_json = self.toJson(block_storage_volumes)
+        logger.debug(str(block_storage_volumes_json))
+
+        # Check if the results should be filtered
+        if filter is None:
+            self.block_storage_volumes_json = block_storage_volumes_json
+        else:
+            filtered = block_storage_volumes_json[:]
+            for key, val in filter.items():
+                filtered = [bs for bs in filtered if re.compile(val).search(bs[key])]
+            self.block_storage_volumes_json = filtered
+        logger.debug(str(self.block_storage_volumes_json))
+
+        return self.block_storage_volumes_json
+
+
+class OCIBlockStorageVolume(object):
+    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+        self.config = config
+        self.configfile = configfile
+        self.data = data
+
+
+# Main processing function
+def main(argv):
+
+    return
+
+
+# Main function to kick off processing
+if __name__ == "__main__":
+
+```
 #### Terraform Jinja2 Template
+The terraform jinja2 template essentially consists of all actions that would need to occur to create the artifact using
+terraform. It will consist of a number of data based statements to convert names to ids as well as the terraform data source.
+
+Finally the Ids (ocids) returned by the data source will be assigned to local variables in a specific format {{resource_name}}_id
+this will allow it to be referenced other artifacts. The {{resource_name}} will be generated from the display name into a 
+known format.
+```jinja2
+# -- Copyright: {{ copyright }}
+# ---- Author : {{ author }}
+# ------ Get List Volume Backup Policies
+data "oci_core_volume_backup_policies" "{{ resource_name }}VolumeBackupPolicies" {
+}
+data "template_file" "{{ resource_name }}VolumeBackupPolicyIds" {
+    count    = length(data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies)
+    template = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[count.index]["id"]
+}
+data "template_file" "{{ resource_name }}VolumeBackupPolicyNames" {
+    count    = length(data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies)
+    template = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[count.index]["display_name"]
+}
+data "template_file" "{{ resource_name }}VolumeBackupPolicyIdx" {
+    count    = length(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered)
+    template = index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy }})
+}
+
+# ------ Create Internet Gateway
+resource "oci_core_volume" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_ocid }}
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(0) }}]["name"]
+    # Optional
+    display_name   = {{ display_name }}
+    size_in_gbs    = {{ size_in_gbs }}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id = oci_core_volume.{{ resource_name }}.id
+}
+
+# ------ Create Block Storage Backup Policy
+resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPolicy" {
+    asset_id  = local.{{ resource_name }}_id
+    policy_id = data.template_file.{{ resource_name }}VolumeBackupPolicyIds.*.rendered[index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy }})]
+}
+
+```
 #### Ansible Jinja2 Template
 #### Designer Javascript
+To allow access to artifact standard names a number of constants need to be added to the okit_designer.js that specify the
+artifact name and prefix.
+
+```javascript
+// Block Storage
+const block_storage_volume_artifact = 'Block Storage Volume';
+const block_storage_volume_prefix = 'bsv';
+```
+
+These can then be used within all artifact javascript without exceptions being thrown.
+In addition the clearSVG() functions needs to be updated to include a call to the artifact clear code.
+
+```javascript
+function clearSVG() {
+    console.log('Clearing Diagram');
+    //$('#okitcanvas').empty();
+    // Tabs
+    clearTabs();
+    // Compartments
+    clearCompartmentVariables();
+    // Virtual Cloud Network
+    clearVirtualCloudNetworkVariables();
+    // Internet Gateway
+    clearInternetGatewayVariables();
+    // Route Table
+    clearRouteTableVariables();
+    // Security List
+    clearSecurityListVariables();
+    // Subnet
+    clearSubnetVariables();
+    // Load Balancer
+    clearLoadBalancerVariables();
+    // Instance
+    clearInstanceVariables();
+    // Block Storage Volume
+    clearBlockStorageVolumeVariables();
+}
+```
 #### Flask Web Designer Python
+The main flask python contains all the end points defined for the blueprint and to facilitate querying the @bp.route('/oci/artifacts/<string:artifact>', methods=(['GET'])) 
+must be updated to add an additional "elif" clause to create the Artifact facade and execute the list function.
+
+```python
+@bp.route('/oci/artifacts/<string:artifact>', methods=(['GET']))
+def ociArtifacts(artifact):
+    logger.info('Artifact : {0:s}'.format(str(artifact)))
+    query_string = request.query_string
+    parsed_query_string = urllib.parse.unquote(query_string.decode())
+    query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+    logJson(query_json)
+    logger.info(json.dumps(query_json, sort_keys=True, indent=2, separators=(',', ': ')))
+    response_json = {}
+    if ...........:
+
+    elif artifact == 'BlockStorageVolume':
+        logger.info('---- Processing Block Storage Volumes')
+        oci_block_storage_volumes = OCIBlockStorageVolumes(compartment_id=query_json['compartment_id'])
+        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
+    else:
+        return '404'
+
+    logger.debug(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))
+    return json.dumps(standardiseIds(response_json), sort_keys=True)
+```
+
+#### Connection Facade
+The OCI python library should be checked to see if the artifact has a specific client, that does not already exist, and
+if so a new Connection class should be created.
+
+```python
+
+class OCIBlockStorageVolumeConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, **kwargs):
+        super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile)
+
+def connect(self):
+    if self.config is None:
+        if self.configfile is None:
+            self.config = oci.config.from_file()
+        else:
+            self.config = oci.config.from_file(self.configfile)
+    self.client = oci.core.BlockstorageClient(self.config)
+    return
+```
 #### Python OCI Query
 #### Python Generator
+The ociGenerator python code will need to be edited to include a call to render the artifact template. Although the sequence 
+in which this occurs does not matter for terraform it does for other language such as ansible, python or bash. Therefore 
+the new call needs to be placed before any artifact that will link to / use the new artifact. To this end the calls to 
+render have been split into logical sections based on which artifacts they are contained within. In our example the Block
+Storage Volume must exist before an Instance can use it hence it occurs before the instance processing.
+
+```python
+    def generate(self):
+        # Validate input json
+        validateVisualiserJson(self.visualiser_json)
+        #logger.info('Input JSON : {0:s}'.format(str(self.visualiser_json)))
+        # Build the Id to Name Map
+        self.buildIdNameMap()
+        # Process Provider Connection information
+        logger.info("Processing Provider Information")
+        jinja2_template = self.jinja2_environment.get_template("provider.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+
+        # Process Regional Data
+        logger.info("Processing Region Information")
+        jinja2_template = self.jinja2_environment.get_template("region_data.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+
+        # Process keys within the input json file
+        compartment = self.visualiser_json.get('compartment', self.visualiser_json)
+        # - Compartment Sub Components
+        # -- Virtual Cloud Networks
+        for virtual_cloud_network in self.visualiser_json.get('virtual_cloud_networks', []):
+            self.renderVirtualCloudNetworks(virtual_cloud_network)
+        # -- Block Storage Volumes
+        for block_storage_volume in self.visualiser_json.get('block_storage_volumes', []):
+            self.renderBlockStorageVolumes(block_storage_volume)
+
+        # - Virtual Cloud Network Sub Components
+        # -- Internet Gateways
+        for internet_gateway in self.visualiser_json.get('internet_gateways', []):
+            self.renderInternetGateway(internet_gateway)
+        # -- NAT Gateways
+        # -- Dynamic Routing Gateways
+        # -- Security Lists
+        for security_list in self.visualiser_json.get('security_lists', []):
+            self.renderSecurityList(security_list)
+        # -- Route Tables
+        for route_table in self.visualiser_json.get('route_tables', []):
+            self.renderRouteTable(route_table)
+        # -- Subnet
+        for subnet in self.visualiser_json.get('subnets', []):
+            self.renderSubnet(subnet)
+
+        # - Subnet Sub components
+        # -- Instances
+        for instance in self.visualiser_json.get('instances', []):
+            self.renderInstance(instance)
+        # -- Loadbalancers
+        for loadbalancer in self.visualiser_json.get('load_balancers', []):
+            self.renderLoadbalancer(loadbalancer)
+
+        return
+```
 
 ## Contributing
 
