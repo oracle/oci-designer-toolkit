@@ -362,3 +362,41 @@ function handleDeleteRouteRulesRow(btn) {
 
 
 clearSecurityListVariables();
+
+/*
+** Query OCI
+ */
+
+function querySecurityListAjax(compartment_id, vcn_id) {
+    console.log('------------- querySecurityListAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    request_json['vcn_id'] = vcn_id;
+    if ('security_list_filter' in okitQueryRequestJson) {
+        request_json['security_list_filter'] = okitQueryRequestJson['security_list_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/SecurityList',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['security_lists'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('querySecurityListAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#security-list-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+

@@ -205,3 +205,36 @@ function loadCompartmentProperties(id) {
 }
 
 clearCompartmentVariables();
+
+/*
+** Query OCI
+ */
+
+function queryCompartmentAjax() {
+    console.log('------------- queryCompartmentAjax --------------------');
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/Compartment',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(okitQueryRequestJson),
+        success: function(resp) {
+            let response_json = [JSON.parse(resp)];
+            OKITJsonObj['compartments'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryCompartmentAjax : ' + response_json[i]['name']);
+                queryVirtualCloudNetworkAjax(response_json[i]['id']);
+            }
+            redrawSVGCanvas();
+            $('#compartment-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+

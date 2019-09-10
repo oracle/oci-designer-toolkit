@@ -233,6 +233,11 @@ function clearInstanceSVG(instance) {
 
 function drawInstanceConnectorsSVG(instance) {
     let id = instance['id'];
+    // If Block Storage Volumes Ids are missing then initialise.
+    // This may occur during a query
+    if (!instance.hasOwnProperty('block_storage_volume_ids')) {
+        instance['block_storage_volume_ids'] = [];
+    }
     for (let block_storage_id of instance['block_storage_volume_ids']) {
         let block_storage_svg = d3.select('#' + block_storage_id);
         if (block_storage_svg.node()) {
@@ -325,3 +330,41 @@ function updateInstance(source_type, source_id, id) {
 }
 
 clearInstanceVariables();
+
+/*
+** Query OCI
+ */
+
+function queryInstanceAjax(compartment_id, subnet_id) {
+    console.log('------------- queryInstanceAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    request_json['subnet_id'] = subnet_id;
+    if ('instance_filter' in okitQueryRequestJson) {
+        request_json['instance_filter'] = okitQueryRequestJson['instance_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/Instance',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['instances'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryInstanceAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#instance-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+

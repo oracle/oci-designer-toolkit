@@ -297,3 +297,41 @@ function updateLoadBalancer(source_type, source_id, id) {
 }
 
 clearLoadBalancerVariables();
+
+/*
+** Query OCI
+ */
+
+function queryLoadBalancerAjax(compartment_id, subnet_id) {
+    console.log('------------- queryLoadBalancerAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    request_json['subnet_id'] = subnet_id;
+    if ('load_balancer_filter' in okitQueryRequestJson) {
+        request_json['load_balancer_filter'] = okitQueryRequestJson['load_balancer_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/LoadBalancer',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['load_balancers'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#load-balancer-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+

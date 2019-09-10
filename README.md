@@ -282,6 +282,33 @@ python3 ./generateTFfromOCI.py -d . -c Stefan
 ```
 
 ## Development
+All currently active / planned development is documented / being tracked in the internal Jira ticket 
+[OKIT OCI Capture / DevOps / Visualisation Tool](http://ateam-engage.us.oracle.com/jira/browse/INT-2168). 
+Before starting any new development work the Jira should be checked to see if anyone else is working on the same area. 
+If this is new development then a new sub task should be created to document the artifact being added.
+
+The following worked example will take you through the required steps to add a new artifact to OKIT. This will be based 
+on adding Block Storage Volumes to OKIT. Adding an artifact to OKIT will require a number files to be created and a few 
+modified the following steps will document the procedure specifying where the files will need to be created and the names 
+to be used.
+
+### Adding an Artifact
+#### New Files
+The following files will need to be created and the directories specified are relative to the project root.
+
+- Frontend
+    - **Palette SVG**               : okitweb/static/okit/palette/*Block_Storage_Volume*.svg
+    - **Artifact Javascript**       : okitweb/static/okit/js/oci_assets/*block_storage_volume*.js
+    - **Properties HTML**           : okitweb/templates/okit/propertysheets/*block_storage_volume*.html
+- Backend
+    - **Python OCI Facade**         : visualiser/facades/oci*BlockStorageVolume*.py
+    - **Terraform Jinja2 Template** : visualiser/templates/terraform/*block_storage_volume*.jinja2
+    - **Ansible Jinja2 Template**   : visualiser/templates/ansible/*block_storage_volume*.jinja2
+    
+#### Updated Files
+
+- Frontend
+    - **
 
 ## Contributing
 

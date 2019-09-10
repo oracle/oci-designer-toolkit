@@ -200,3 +200,41 @@ function loadInternetGatewayProperties(id) {
 }
 
 clearInternetGatewayVariables();
+
+/*
+** Query OCI
+ */
+
+function queryInternetGatewayAjax(compartment_id, vcn_id) {
+    console.log('------------- queryInternetGatewayAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    request_json['vcn_id'] = vcn_id;
+    if ('internet_gateway_filter' in okitQueryRequestJson) {
+        request_json['internet_gateway_filter'] = okitQueryRequestJson['internet_gateway_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/InternetGateway',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['internet_gateways'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#internet-gateway-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
