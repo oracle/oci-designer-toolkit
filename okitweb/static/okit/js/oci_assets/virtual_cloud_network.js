@@ -9,6 +9,7 @@ asset_add_functions[virtual_cloud_network_artifact] = "addVirtualCloudNetwork";
 asset_delete_functions[virtual_cloud_network_artifact] = "deleteVirtualCloudNetwork";
 
 const virtual_cloud_network_stroke_colour = "purple";
+const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 let vcn_svg_width = "99%"
 let vcn_svg_height = "70%"
 let vcn_rect_width = "95%"
@@ -258,9 +259,6 @@ function loadVirtualCloudNetworkProperties(id) {
     });
 }
 
-
-clearVirtualCloudNetworkVariables();
-
 /*
 ** Query OCI
  */
@@ -291,7 +289,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
                 querySubnetAjax(compartment_id, response_json[i]['id']);
             }
             redrawSVGCanvas();
-            $('#vcn-query-cb').prop('checked', true);
+            $('#' + virtual_cloud_network_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
@@ -301,4 +299,15 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
     });
 }
 
+$(document).ready(function() {
+    clearVirtualCloudNetworkVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', virtual_cloud_network_query_cb);
+    cell.append('label').text(virtual_cloud_network_artifact);
+});
 

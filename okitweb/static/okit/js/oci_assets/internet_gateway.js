@@ -9,6 +9,7 @@ asset_add_functions[internet_gateway_artifact] = "addInternetGateway";
 asset_delete_functions[internet_gateway_artifact] = "deleteInternetGateway";
 
 const internet_gateway_stroke_colour = "purple";
+const internet_gateway_query_cb = "internet-gateway-query-cb";
 let internet_gateway_ids = [];
 let internet_gateway_count = 0;
 
@@ -199,8 +200,6 @@ function loadInternetGatewayProperties(id) {
     });
 }
 
-clearInternetGatewayVariables();
-
 /*
 ** Query OCI
  */
@@ -227,7 +226,7 @@ function queryInternetGatewayAjax(compartment_id, vcn_id) {
                 console.log('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
-            $('#internet-gateway-query-cb').prop('checked', true);
+            $('#' + internet_gateway_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
@@ -237,4 +236,15 @@ function queryInternetGatewayAjax(compartment_id, vcn_id) {
     });
 }
 
+$(document).ready(function() {
+    clearInternetGatewayVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', internet_gateway_query_cb);
+    cell.append('label').text(internet_gateway_artifact);
+});
 

@@ -293,22 +293,363 @@ modified the following steps will document the procedure specifying where the fi
 to be used.
 
 ### Adding an Artifact
-#### New Files
-The following files will need to be created and the directories specified are relative to the project root.
+The following files will need to be created and the directories specified are relative to the project root. You will notice 
+that the files have a specfic naming convention and this is important because it allows the wrapper code to work with the
+minimum of cross file editing / multi developer editing. As a result it greatly simplifies the addition of new artifacts 
+to the system. 
 
-- Frontend
-    - **Palette SVG**               : okitweb/static/okit/palette/*Block_Storage_Volume*.svg
-    - **Artifact Javascript**       : okitweb/static/okit/js/oci_assets/*block_storage_volume*.js
-    - **Properties HTML**           : okitweb/templates/okit/propertysheets/*block_storage_volume*.html
-- Backend
-    - **Python OCI Facade**         : visualiser/facades/oci*BlockStorageVolume*.py
-    - **Terraform Jinja2 Template** : visualiser/templates/terraform/*block_storage_volume*.jinja2
-    - **Ansible Jinja2 Template**   : visualiser/templates/ansible/*block_storage_volume*.jinja2
-    
-#### Updated Files
+- New Files
+    - Frontend
+        - **[Palette SVG](palette-svg)**                             : okitweb/static/okit/palette/*Block_Storage_Volume*.svg
+        - **[Artifact Javascript](artifact-javascript)**             : okitweb/static/okit/js/oci_assets/*block_storage_volume*.js
+        - **[Properties HTML](properties-html)**                     : okitweb/templates/okit/propertysheets/*block_storage_volume*.html
+    - Backend
+        - **[Python OCI Facade](python-oci-facade)**                 : visualiser/facades/oci*BlockStorageVolume*.py
+        - **[Terraform Jinja2 Template](terraform-jinja2-template)** : visualiser/templates/terraform/*block_storage_volume*.jinja2
+        - **[Ansible Jinja2 Template](ansible-jinja2-template)**     : visualiser/templates/ansible/*block_storage_volume*.jinja2
+- Updated Files
+    - Frontend
+        - **[Designer Javascript](designer-javascript)**             : okitweb/static/okit/js/okit_designer.js
+        - **[Flask Web Dersiner Python](flask-web-designer-python)** : okitweb/okitWebDesigner.py
+    - Backend
+        - **[Python OCI Query](python-oci-query)**                   : visualiser/common/ociQuery.py
+        - **[Python Generator](python-generator)**                   : visualiser/generators/ociGenerator.py
 
-- Frontend
-    - **
+#### Naming Convention
+All files associated with an artifict will have file names based on the artifact. If we take the ***Block Storage Volume***
+artifact as an example it can be seen, from above, that all files are named in the same fashion with the exception of the
+palette SVG file. 
+
+All files must be named as per artifact name with the spaces replaced by underscores and converted to lowercase. The exception 
+to this is the palette SVG where title case should be used rether than lower case. The reason for this is that the palette
+file name will be manipulated (removing the underscore) and used to dynamically reference all Javascript function names.  
+
+#### Palette SVG
+The palette svg defines the icon that will be displayed in the Drag & Drop palette. A number of existing SVG files can be
+downloaded from the confluence page [OCI Icon Set draw.io Stencils](https://confluence.oci.oraclecorp.com/pages/viewpage.action?spaceKey=~scross&title=OCI+Icon+Set+draw.io+Stencils).
+
+#### Artifact Javascript
+The artifact javascript file is the key files for the BUI specifying all core code for the creation, drawing and querying 
+of the artifact. Each file has a standard set of variable definitions and function definitions which again are based on 
+the name of the artifact as follows.
+
+##### Standard Definitions
+```javascript
+console.log('Loaded Block Storage Javascript');
+
+/*
+** Set Valid drop Targets
+ */
+asset_drop_targets[block_storage_volume_artifact] = [compartment_artifact];
+asset_connect_targets[block_storage_volume_artifact] = [instance_artifact];
+asset_add_functions[block_storage_volume_artifact] = "addBlockStorageVolume";
+asset_delete_functions[block_storage_volume_artifact] = "deleteBlockStorageVolume";
+
+const block_storage_volume_stroke_colour = "#F80000";
+const block_storage_volume_query_cb = "block-storage-volume-query-cb";
+let block_storage_volume_ids = [];
+let block_storage_volume_count = 0;
+```
+Within this section we will define the target artifact where the new can be dropped, connected to and functions defining how the 
+artifact can be added, deleted and updated. For example the **Block Storage Volume** can be dropped on the *Compartment*
+and connected to an *Instance*. 
+
+***Note***: The block_storage_volume_artifact, compartment_artifact and instance_artifact constants are defined in the Designer Javascript.  
+
+Additionally we define the stroke colour for the bounding rectangle used to display the artifact.
+
+##### Clear Function
+```javascript
+/*
+** Reset variables
+ */
+
+function clearBlockStorageVolumeVariables() {
+    block_storage_volume_ids = [];
+    block_storage_volume_count = 0;
+}
+```
+Simple function to reset artifact specific variables.
+
+##### Add Function
+```javascript
+/*
+** Add Asset to JSON Model
+ */
+function addBlockStorageVolume(parent_id, compartment_id) {
+    let id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
+    console.log('Adding ' + block_storage_volume_artifact + ' : ' + id);
+
+    // Add Virtual Cloud Network to JSON
+
+    if (!OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
+        OKITJsonObj['block_storage_volumes'] = [];
+    }
+
+    // Add id & empty name to id JSON
+    okitIdsJsonObj[id] = '';
+    block_storage_volume_ids.push(id);
+
+    // Increment Count
+    block_storage_volume_count += 1;
+    let block_storage_volume = {};
+    block_storage_volume['compartment_id'] = parent_id;
+    block_storage_volume['availability_domain'] = '1';
+    block_storage_volume['id'] = id;
+    block_storage_volume['display_name'] = generateDefaultName(block_storage_volume_prefix, block_storage_volume_count);
+    block_storage_volume['size_in_gbs'] = 1024;
+    block_storage_volume['backup_policy'] = 'bronze';
+    OKITJsonObj['block_storage_volumes'].push(block_storage_volume);
+    okitIdsJsonObj[id] = block_storage_volume['display_name'];
+    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    displayOkitJson();
+    drawBlockStorageVolumeSVG(block_storage_volume);
+    loadBlockStorageVolumeProperties(id);
+}
+```
+This function is used to add a new json element to the OKIT json structure. The elements within this json will match those 
+that are returned from querying OCI. All artifacts will be contained within a top level list with a name that matches that
+of the artifact (e.g. block_storage_volumes). Once that new json element has been added it will be drawn on the SVG canvas.
+
+##### Delete Function
+```javascript
+/*
+** Delete From JSON Model
+ */
+
+function deleteBlockStorageVolume(id) {
+    console.log('Delete ' + block_storage_volume_artifact + ' : ' + id);
+    // Remove SVG Element
+    d3.select("#" + id + "-svg").remove()
+    // Remove Data Entry
+    for (let i=0; i < OKITJsonObj['block_storage_volumes'].length; i++) {
+        if (OKITJsonObj['block_storage_volumes'][i]['id'] == id) {
+            OKITJsonObj['block_storage_volumes'].splice(i, 1);
+        }
+    }
+    // Remove Instance references
+    if ('instances' in OKITJsonObj) {
+        for (let instance of OKITJsonObj['instances']) {
+            for (let i=0; i < instance['block_storage_volume_ids'].length; i++) {
+                if (instance['block_storage_volume_ids'][i] == id) {
+                    instance['block_storage_volume_ids'].splice(i, 1);
+                }
+            }
+        }
+    }
+}
+```
+Function used to remove artifact and delete any references within linked artifacts.
+
+##### Draw SVG
+```javascript
+/*
+** SVG Creation
+ */
+function drawBlockStorageVolumeSVG(block_storage_volume) {
+    let parent_id = block_storage_volume['compartment_id'];
+    let id = block_storage_volume['id'];
+    let compartment_id = block_storage_volume['compartment_id'];
+    console.log('Drawing ' + block_storage_volume_artifact + ' : ' + id);
+    if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('block_storage_position')) {
+            compartment_bui_sub_artifacts[parent_id]['block_storage_position'] = 0;
+        }
+        let position = compartment_bui_sub_artifacts[parent_id]['block_storage_position'];
+        let svg_x = 0; //(icon_width / 4);
+        let svg_y = Math.round((icon_height * 3 / 4) + (icon_height * position) + (vcn_icon_spacing * position));
+        let data_type = block_storage_volume_artifact;
+
+        // Increment Icon Position
+        compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
+
+        let parent_svg = d3.select('#' + parent_id + "-svg");
+        let svg = parent_svg.append("svg")
+            .attr("id", id + '-svg')
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", block_storage_volume['display_name'])
+            .attr("x", svg_x)
+            .attr("y", svg_y)
+            .attr("width", "100")
+            .attr("height", "100");
+        let rect = svg.append("rect")
+            .attr("id", id)
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("title", block_storage_volume['display_name'])
+            .attr("x", icon_x)
+            .attr("y", icon_y)
+            .attr("width", icon_width)
+            .attr("height", icon_height)
+            .attr("stroke", block_storage_volume_stroke_colour)
+            .attr("stroke-dasharray", "1, 1")
+            .attr("fill", "white")
+            .attr("style", "fill-opacity: .25;");
+        rect.append("title")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .text(block_storage_volume_artifact + ": " + block_storage_volume['display_name']);
+        let g = svg.append("g")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
+        g.append("path")
+            .attr("data-type", data_type)
+            .attr("data-parentid", parent_id)
+            .attr("class", "st0")
+            .attr("d", "M172.6,88.4c-13.7-1.6-28-1.6-28.6-1.6c-0.6,0-14.8,0-28.6,1.6c-24,2.8-24.2,7.8-24.2,7.9v95.5c0,0,0.3,5,24.2,7.9c13.7,1.6,28,1.6,28.6,1.6c0.6,0,14.8,0,28.6-1.6c24-2.8,24.2-7.8,24.2-7.9V96.3C196.8,96.2,196.5,91.2,172.6,88.4z M137.2,180.7h-18.9v-18.9h18.9V180.7z M137.2,146.5h-18.9v-18.9h18.9V146.5z M168.1,180.7h-18.9v-18.9h18.9V180.7z M168.1,146.5h-18.9v-18.9h18.9V146.5z M192.8,104.1c-1.8,2.8-18.9,7.5-48.3,7.5c-29.4,0-46.5-4.7-48.3-7.5c0,0,0,0,0,0c1.7-2.8,18.8-7.6,48.3-7.6C174,96.5,191.1,101.2,192.8,104.1C192.8,104.1,192.8,104.1,192.8,104.1z");
+
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        /*
+         Add click event to display properties
+         Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+         Add dragevent versions
+         Set common attributes on svg element and children
+         */
+        svg.on("click", function () {
+            loadBlockStorageVolumeProperties(id);
+            d3.event.stopPropagation();
+        })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
+            .attr("data-type", data_type)
+            .attr("data-okit-id", id)
+            .attr("data-parentid", parent_id)
+            .attr("data-compartment-id", compartment_id)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true)
+            .selectAll("*")
+                .attr("data-type", data_type)
+                .attr("data-okit-id", id)
+                .attr("data-parentid", parent_id)
+                .attr("data-compartment-id", compartment_id)
+                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+                .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+                .attr("data-connector-id", id)
+                .attr("dragable", true);
+    } else {
+        console.log(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
+    }
+}
+``` 
+Draws the artifact on the SVG canvas as parted of the dropped component. All artifacts are contained within there own svg
+element because we can then drop, where appropriate, other arifacts on them and they become self contained. Once draw we
+will add a click event to display the properties associated with this artifact. If the artifact can be connected to another
+then we will also add the standard drag & drop handlers (Mouse Handlers are added as well because SVG does not support
+standard HTML drag & drop events).
+
+##### Load Property Sheet
+```javascript
+/*
+** Property Sheet Load function
+ */
+function loadBlockStorageVolumeProperties(id) {
+    $("#properties").load("propertysheets/block_storage_volume.html", function () {
+        if ('block_storage_volumes' in OKITJsonObj) {
+            console.log('Loading ' + block_storage_volume_artifact + ' : ' + id);
+            let json = OKITJsonObj['block_storage_volumes'];
+            for (let i = 0; i < json.length; i++) {
+                let block_storage_volume = json[i];
+                if (block_storage_volume['id'] == id) {
+                    block_storage_volume['virtual_cloud_network'] = okitIdsJsonObj[block_storage_volume['vcn_id']];
+                    $("#virtual_cloud_network").html(block_storage_volume['virtual_cloud_network']);
+                    $('#display_name').val(block_storage_volume['display_name']);
+                    $('#availability_domain').val(block_storage_volume['availability_domain']);
+                    $('#size_in_gbs').val(block_storage_volume['size_in_gbs']);
+                    $('#backup_policy').val(block_storage_volume['backup_policy']);
+                    // Add Event Listeners
+                    addPropertiesEventListeners(block_storage_volume, []);
+                    break;
+                }
+            }
+        }
+    });
+}
+```
+When the user clicks on the drawn SVG artifact this load function will be called. It will load the artifact specific 
+properties sheet into the "properties" pane and then load each of the form fields with the data from the appropriate 
+json element.
+
+##### Query OCI
+```javascript
+/*
+** Query OCI
+ */
+
+function queryBlockStorageVolumeAjax(compartment_id) {
+    console.log('------------- queryBlockStorageVolumeAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
+        request_json['virtual_cloud_network_filter'] = okitQueryRequestJson['virtual_cloud_network_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/BlockStorageVolume',
+        dataType: 'text',
+        contentType: 'application/json',
+        //data: JSON.stringify(okitQueryRequestJson),
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['block_storage_volumes'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#block-storage-volume-query-cb').prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+```
+Uses Ajax to call the flask url to initiate an asynchronous query of OCI to retrieve all artifacts and then redraw the 
+svg canvas. On completion it will set the query progress for this artifact as complete.
+
+##### Read Function
+```javascript
+$(document).ready(function() {
+    clearBlockStorageVolumeVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', block_storage_volume_query_cb);
+    cell.append('label').text(block_storage_volume_artifact);
+});
+```
+Clear the artifact variables and add the query checkbox to the query progress table.
+
+#### Properties HTML
+#### Python OCI Facade
+#### Terraform Jinja2 Template
+#### Ansible Jinja2 Template
+#### Designer Javascript
+#### Flask Web Dersiner Python
+#### Python OCI Query
+#### Python Generator
 
 ## Contributing
 

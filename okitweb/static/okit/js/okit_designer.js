@@ -386,25 +386,6 @@ $(document).ready(function(){
     });
 
     /*
-    ** Handle drop functionality for canvas
-     */
-    /*
-    let okitcanvas = document.getElementById('okitcanvas');
-    okitcanvas.addEventListener('dragenter', handleDragEnter, false)
-    okitcanvas.addEventListener('dragover', handleDragOver, false);
-    okitcanvas.addEventListener('dragleave', handleDragLeave, false);
-    okitcanvas.addEventListener('drop', handleDrop, false);
-    okitcanvas.addEventListener('dragend', handleDragEnd, false);
-
-    // Set SVG Attributes
-    d3.select('#okitcanvas')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', '100%')
-        .attr('height', '100%');
-    */
-
-    /*
     ** Add button handlers
      */
     document.getElementById('files').addEventListener('change', handleFileSelect, false);

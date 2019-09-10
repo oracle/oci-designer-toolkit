@@ -9,6 +9,7 @@ asset_add_functions[route_table_artifact] = "addRouteTable";
 asset_delete_functions[route_table_artifact] = "deleteRouteTable";
 
 const route_table_stroke_colour = "#F80000";
+const route_table_query_cb = "route-table-query-cb";
 let route_table_ids = [];
 let route_table_count = 0;
 let propertires_route_table = {}
@@ -344,8 +345,6 @@ function handleDeleteRouteRulesRow(btn) {
 }
 
 
-clearRouteTableVariables();
-
 /*
 ** Query OCI
  */
@@ -372,7 +371,7 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
                 console.log('queryRouteTableAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
-            $('#route-table-query-cb').prop('checked', true);
+            $('#' + route_table_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
@@ -382,4 +381,15 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
     });
 }
 
+$(document).ready(function() {
+    clearRouteTableVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', route_table_query_cb);
+    cell.append('label').text(route_table_artifact);
+});
 

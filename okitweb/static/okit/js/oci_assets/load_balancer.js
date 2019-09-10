@@ -10,6 +10,7 @@ asset_update_functions[load_balancer_artifact] = "updateLoadBalancer";
 asset_delete_functions[load_balancer_artifact] = "deleteLoadBalancer";
 
 const load_balancer_stroke_colour = "#F80000";
+const load_balancer_query_cb = "load-balancer-query-cb";
 const load_balancer_width = Math.round(icon_width * 3);
 const load_balancer_height = Math.round(icon_height);
 const load_balancer_svg_width = Math.round(load_balancer_width + icon_x * 2);
@@ -296,8 +297,6 @@ function updateLoadBalancer(source_type, source_id, id) {
     loadLoadBalancerProperties(id);
 }
 
-clearLoadBalancerVariables();
-
 /*
 ** Query OCI
  */
@@ -324,7 +323,7 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
                 console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
-            $('#load-balancer-query-cb').prop('checked', true);
+            $('#' + load_balancer_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
@@ -333,5 +332,17 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
         }
     });
 }
+
+$(document).ready(function() {
+    clearLoadBalancerVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', load_balancer_query_cb);
+    cell.append('label').text(load_balancer_artifact);
+});
 
 

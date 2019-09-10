@@ -9,6 +9,7 @@ asset_add_functions[security_list_artifact] = "addSecurityList";
 asset_delete_functions[security_list_artifact] = "deleteSecurityList";
 
 const security_list_stroke_colour = "#F80000";
+const security_list_query_cb = "security-list-query-cb";
 let security_list_ids = [];
 let security_list_count = 0;
 
@@ -361,8 +362,6 @@ function handleDeleteRouteRulesRow(btn) {
 }
 
 
-clearSecurityListVariables();
-
 /*
 ** Query OCI
  */
@@ -389,7 +388,7 @@ function querySecurityListAjax(compartment_id, vcn_id) {
                 console.log('querySecurityListAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
-            $('#security-list-query-cb').prop('checked', true);
+            $('#' + security_list_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
@@ -399,4 +398,15 @@ function querySecurityListAjax(compartment_id, vcn_id) {
     });
 }
 
+$(document).ready(function() {
+    clearSecurityListVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', security_list_query_cb);
+    cell.append('label').text(security_list_artifact);
+});
 

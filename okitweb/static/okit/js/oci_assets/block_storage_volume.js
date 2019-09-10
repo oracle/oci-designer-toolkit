@@ -9,6 +9,7 @@ asset_add_functions[block_storage_volume_artifact] = "addBlockStorageVolume";
 asset_delete_functions[block_storage_volume_artifact] = "deleteBlockStorageVolume";
 
 const block_storage_volume_stroke_colour = "#F80000";
+const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 let block_storage_volume_ids = [];
 let block_storage_volume_count = 0;
 
@@ -212,4 +213,52 @@ function loadBlockStorageVolumeProperties(id) {
     });
 }
 
-clearBlockStorageVolumeVariables();
+/*
+** Query OCI
+ */
+
+function queryBlockStorageVolumeAjax(compartment_id) {
+    console.log('------------- queryBlockStorageVolumeAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
+        request_json['virtual_cloud_network_filter'] = okitQueryRequestJson['virtual_cloud_network_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/BlockStorageVolume',
+        dataType: 'text',
+        contentType: 'application/json',
+        //data: JSON.stringify(okitQueryRequestJson),
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['block_storage_volumes'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#' + block_storage_volume_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+
+$(document).ready(function() {
+    clearBlockStorageVolumeVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', block_storage_volume_query_cb);
+    cell.append('label').text(block_storage_volume_artifact);
+});
+

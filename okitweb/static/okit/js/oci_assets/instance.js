@@ -10,6 +10,7 @@ asset_update_functions[instance_artifact] = "updateInstance";
 asset_delete_functions[instance_artifact] = "deleteInstance";
 
 const instance_stroke_colour = "blue";
+const instance_query_cb = "instance-query-cb";
 const instance_width = Math.round(icon_width * 4);
 const instance_height = Math.round(icon_height * 2 + icon_height / 2);
 const instance_svg_width = Math.round(instance_width + icon_x * 2);
@@ -329,8 +330,6 @@ function updateInstance(source_type, source_id, id) {
     loadInstanceProperties(id);
 }
 
-clearInstanceVariables();
-
 /*
 ** Query OCI
  */
@@ -357,7 +356,7 @@ function queryInstanceAjax(compartment_id, subnet_id) {
                 console.log('queryInstanceAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
-            $('#instance-query-cb').prop('checked', true);
+            $('#' + instance_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
@@ -366,5 +365,18 @@ function queryInstanceAjax(compartment_id, subnet_id) {
         }
     });
 }
+
+$(document).ready(function() {
+    clearInstanceVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', instance_query_cb);
+    cell.append('label').text(instance_artifact);
+});
+
 
 

@@ -10,6 +10,7 @@ asset_update_functions[subnet_artifact] = "updateSubnet";
 asset_delete_functions[subnet_artifact] = "deleteSubnet";
 
 const subnet_stroke_colour = "orange";
+const subnet_query_cb = "subnet-query-cb";
 let subnet_svg_height = 400;
 let subnet_svg_width = "95%";
 let subnet_rect_height = "85%";
@@ -399,8 +400,6 @@ function updateSubnet(sourcetype, sourceid, id) {
     loadSubnetProperties(id);
 }
 
-clearSubnetVariables();
-
 /*
 ** Query OCI
  */
@@ -429,7 +428,7 @@ function querySubnetAjax(compartment_id, vcn_id) {
                 queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
             }
             redrawSVGCanvas();
-            $('#subnet-query-cb').prop('checked', true);
+            $('#' + subnet_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
@@ -439,4 +438,15 @@ function querySubnetAjax(compartment_id, vcn_id) {
     });
 }
 
+$(document).ready(function() {
+    clearSubnetVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', subnet_query_cb);
+    cell.append('label').text(subnet_artifact);
+});
 
