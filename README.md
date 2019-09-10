@@ -643,6 +643,42 @@ $(document).ready(function() {
 Clear the artifact variables and add the query checkbox to the query progress table.
 
 #### Properties HTML
+The properties html is a simple piece of html that displays the properties associated with the artifact and as a minimum
+all required properties must be displayed. The htmi 'id' and 'name' attributes of the input will match the property they
+edit.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Block Storage</title>
+</head>
+<body>
+    <div id="property-editor" class="property-editor">
+        <div class="property-editor-title">
+            <label>Block Storage</label>
+        </div>
+        <table id="block_storage" class="property-editor-table">
+            <tr><th>Property</th><th>Value</th></tr>
+            <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
+            <tr><td>Availability Domain</td><td><select id="availability_domain" class="property-value">
+                <option value="1" selected="selected">AD 1</option>
+                <option value="2">AD 2</option>
+                <option value="3">AD 3</option>
+            </select></td></tr>
+            <tr><td>Size (in GB)</td><td><input type="text" id="size_in_gbs" name="size_in_gbs" class="property-value"></td></tr>
+            <tr><td>Backup Policy</td><td><select id="backup_policy" class="property-value">
+                <option value="bronze" selected="selected">Bronze</option>
+                <option value="silver">Silver</option>
+                <option value="gold">Gold</option>
+            </select></td></tr>
+        </table>
+    </div>
+</body>
+</html>
+```
+
 #### Python OCI Facade
 #### Terraform Jinja2 Template
 #### Ansible Jinja2 Template
