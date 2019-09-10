@@ -300,20 +300,20 @@ to the system.
 
 - New Files
     - Frontend
-        - **[Palette SVG](palette-svg)**                             : okitweb/static/okit/palette/*Block_Storage_Volume*.svg
-        - **[Artifact Javascript](artifact-javascript)**             : okitweb/static/okit/js/oci_assets/*block_storage_volume*.js
-        - **[Properties HTML](properties-html)**                     : okitweb/templates/okit/propertysheets/*block_storage_volume*.html
+        - **[Palette SVG](#palette-svg)**                             : [okitweb/static/okit/palette/*Block_Storage_Volume*.svg](okitweb/static/okit/palette/Block_Storage_Volume.svg)
+        - **[Artifact Javascript](#artifact-javascript)**             : okitweb/static/okit/js/oci_assets/*block_storage_volume*.js
+        - **[Properties HTML](#properties-html)**                     : okitweb/templates/okit/propertysheets/*block_storage_volume*.html
     - Backend
-        - **[Python OCI Facade](python-oci-facade)**                 : visualiser/facades/oci*BlockStorageVolume*.py
-        - **[Terraform Jinja2 Template](terraform-jinja2-template)** : visualiser/templates/terraform/*block_storage_volume*.jinja2
-        - **[Ansible Jinja2 Template](ansible-jinja2-template)**     : visualiser/templates/ansible/*block_storage_volume*.jinja2
+        - **[Python OCI Facade](#python-oci-facade)**                 : visualiser/facades/oci*BlockStorageVolume*.py
+        - **[Terraform Jinja2 Template](#terraform-jinja2-template)** : visualiser/templates/terraform/*block_storage_volume*.jinja2
+        - **[Ansible Jinja2 Template](#ansible-jinja2-template)**     : visualiser/templates/ansible/*block_storage_volume*.jinja2
 - Updated Files
     - Frontend
-        - **[Designer Javascript](designer-javascript)**             : okitweb/static/okit/js/okit_designer.js
-        - **[Flask Web Dersiner Python](flask-web-designer-python)** : okitweb/okitWebDesigner.py
+        - **[Designer Javascript](#designer-javascript)**             : okitweb/static/okit/js/okit_designer.js
+        - **[Flask Web Designer Python](#flask-web-designer-python)** : okitweb/okitWebDesigner.py
     - Backend
-        - **[Python OCI Query](python-oci-query)**                   : visualiser/common/ociQuery.py
-        - **[Python Generator](python-generator)**                   : visualiser/generators/ociGenerator.py
+        - **[Python OCI Query](#python-oci-query)**                   : visualiser/common/ociQuery.py
+        - **[Python Generator](#python-generator)**                   : visualiser/generators/ociGenerator.py
 
 #### Naming Convention
 All files associated with an artifict will have file names based on the artifact. If we take the ***Block Storage Volume***
@@ -683,7 +683,7 @@ edit.
 #### Terraform Jinja2 Template
 #### Ansible Jinja2 Template
 #### Designer Javascript
-#### Flask Web Dersiner Python
+#### Flask Web Designer Python
 #### Python OCI Query
 #### Python Generator
 
