@@ -192,13 +192,14 @@ Instances fronted by a Load Balancer can be seen below.
 The hamburger menu in the top left will display a slide out menu with all available actions (described below).
 
 ##### Palette
-- <img src="okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true" width="30" height="30"/> Virtual Cloud Network 
-- <img src="okitweb/static/okit/palette/Internet_Gateway.svg?sanitize=true" width="30" height="30"/> Internet Gateway
-- <img src="okitweb/static/okit/palette/Route_Table.svg.svg?sanitize=true" width="30" height="30"/> Route Table
-- <img src="okitweb/static/okit/palette/Security_List.svg.svg?sanitize=true" width="30" height="30"/> Security List
-- <img src="okitweb/static/okit/palette/Subnet.svg.svg?sanitize=true" width="30" height="30"/> Subnet
-- <img src="okitweb/static/okit/palette/Instance.svg.svg?sanitize=true" width="30" height="30"/> Instance
-- <img src="okitweb/static/okit/palette/Load_Balancer.svg.svg?sanitize=true" width="30" height="30"/> Load Balancer
+- <img src="https://orahub.oraclecorp.com/andrew.hopkinson/okit.oci.web.designer/tree/master/okitweb/static/okit/palette/Virtual_Cloud_Network.svg" width="30" height="30"/> Virtual Cloud Network 
+- <img src="./okitweb/static/okit/palette/Internet_Gateway.svg?sanitize=true" width="30" height="30"/> Internet Gateway
+- <img src="./okitweb/static/okit/palette/Route_Table.svg?sanitize=true" width="30" height="30"/> Route Table
+- <img src="./okitweb/static/okit/palette/Security_List.svg?sanitize=true" width="30" height="30"/> Security List
+- <img src="./okitweb/static/okit/palette/Subnet.svg?sanitize=true" width="30" height="30"/> Subnet
+- <img src="./okitweb/static/okit/palette/Instance.svg?sanitize=true" width="30" height="30"/> Instance
+- <img src="./okitweb/static/okit/palette/Load_Balancer.svg?sanitize=true" width="30" height="30"/> Load Balancer
+- <img src="./okitweb/static/okit/palette/Block_Storage_Volume.svg?sanitize=true" width="30" height="30"/> Block Storage Volume
 
 ##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
