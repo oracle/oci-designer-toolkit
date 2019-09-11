@@ -192,14 +192,16 @@ Instances fronted by a Load Balancer can be seen below.
 The hamburger menu in the top left will display a slide out menu with all available actions (described below).
 
 ##### Palette
-- <img src="https://orahub.oraclecorp.com/andrew.hopkinson/okit.oci.web.designer/tree/master/okitweb/static/okit/palette/Virtual_Cloud_Network.svg" width="30" height="30"/> Virtual Cloud Network 
-- <img src="./okitweb/static/okit/palette/Internet_Gateway.svg?sanitize=true" width="30" height="30"/> Internet Gateway
-- <img src="./okitweb/static/okit/palette/Route_Table.svg?sanitize=true" width="30" height="30"/> Route Table
-- <img src="./okitweb/static/okit/palette/Security_List.svg?sanitize=true" width="30" height="30"/> Security List
-- <img src="./okitweb/static/okit/palette/Subnet.svg?sanitize=true" width="30" height="30"/> Subnet
-- <img src="./okitweb/static/okit/palette/Instance.svg?sanitize=true" width="30" height="30"/> Instance
-- <img src="./okitweb/static/okit/palette/Load_Balancer.svg?sanitize=true" width="30" height="30"/> Load Balancer
-- <img src="./okitweb/static/okit/palette/Block_Storage_Volume.svg?sanitize=true" width="30" height="30"/> Block Storage Volume
+![](okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true&s=30)
+[[https://orahub.oraclecorp.com/andrew.hopkinson/okit.oci.web.designer/tree/master/okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true|width=30px]]
+- <img src="okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true" width="30" height="30"/> Virtual Cloud Network 
+- <img src="okitweb/static/okit/palette/Internet_Gateway.svg?sanitize=true" width="30" height="30"/> Internet Gateway
+- <img src="okitweb/static/okit/palette/Route_Table.svg?sanitize=true" width="30" height="30"/> Route Table
+- <img src="okitweb/static/okit/palette/Security_List.svg?sanitize=true" width="30" height="30"/> Security List
+- <img src="okitweb/static/okit/palette/Subnet.svg?sanitize=true" width="30" height="30"/> Subnet
+- <img src="okitweb/static/okit/palette/Instance.svg?sanitize=true" width="30" height="30"/> Instance
+- <img src="okitweb/static/okit/palette/Load_Balancer.svg?sanitize=true" width="30" height="30"/> Load Balancer
+- <img src="okitweb/static/okit/palette/Block_Storage_Volume.svg?sanitize=true" width="30" height="30"/> Block Storage Volume
 
 ##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
@@ -231,7 +233,8 @@ Redraws the existing canvas this will have the effect of grouping similar assets
 ###### Export/SVG
 Will export the current diagram as an SVG object that can be distributed.
 ###### Export/Resource Manager
-***(WIP)*** Will generate Terraform code and export the resulting zip file into the OCI Resource Manager.
+Will generate Terraform code and export the resulting zip file into the OCI Resource Manager. Once uploaded it will initiate
+a plan job.
 ###### Export/Orca
 ***(WIP)*** Convert the OKIT JSON format to Orca input format.
 ##### Query/OCI
