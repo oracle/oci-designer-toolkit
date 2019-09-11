@@ -192,16 +192,16 @@ Instances fronted by a Load Balancer can be seen below.
 The hamburger menu in the top left will display a slide out menu with all available actions (described below).
 
 ##### Palette
-![](okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true&s=30)
-[[https://orahub.oraclecorp.com/andrew.hopkinson/okit.oci.web.designer/tree/master/okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true|width=30px]]
-- <img src="okitweb/static/okit/palette/Virtual_Cloud_Network.svg?sanitize=true" width="30" height="30"/> Virtual Cloud Network 
-- <img src="okitweb/static/okit/palette/Internet_Gateway.svg?sanitize=true" width="30" height="30"/> Internet Gateway
-- <img src="okitweb/static/okit/palette/Route_Table.svg?sanitize=true" width="30" height="30"/> Route Table
-- <img src="okitweb/static/okit/palette/Security_List.svg?sanitize=true" width="30" height="30"/> Security List
-- <img src="okitweb/static/okit/palette/Subnet.svg?sanitize=true" width="30" height="30"/> Subnet
-- <img src="okitweb/static/okit/palette/Instance.svg?sanitize=true" width="30" height="30"/> Instance
-- <img src="okitweb/static/okit/palette/Load_Balancer.svg?sanitize=true" width="30" height="30"/> Load Balancer
+- ![](documentation/images/Virtual_Cloud_Network.png?raw=true|height=30px) Virtual Cloud Network 
+- ![](documentation/images/Internet_Gateway.png?raw=true|height=30px) Internet Gateway
+- ![](documentation/images/Route_Table.png?raw=true|height=30px) Route Table
+- ![](documentation/images/Security_List.png?raw=true|height=30px) Security List
+- ![](documentation/images/Subnet.png?raw=true|height=30px) Subnet
+- ![](documentation/images/Instance.png?raw=true|height=30px) Instance
+- ![](documentation/images/Load_Balancer.png?raw=true|height=30px) Load Balancer
 - <img src="okitweb/static/okit/palette/Block_Storage_Volume.svg?sanitize=true" width="30" height="30"/> Block Storage Volume
+- <img src="documentation/images/Block_Storage_Volume.png?raw=true" width="30" height="30"/> Block Storage Volume
+- ![](documentation/images/Block_Storage_Volume.png?raw=true"|height=30px) Block Storage Volume
 
 ##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
