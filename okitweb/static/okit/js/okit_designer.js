@@ -97,6 +97,12 @@ function clearSVG() {
     //$('#okitcanvas').empty();
     // Tabs
     clearTabs();
+    // Loop through Clear Artifact Routines
+    for (let clear_function of asset_clear_functions) {
+        console.log('Calling ' + clear_function);
+        window[clear_function]();
+    }
+    /*
     // Compartments
     clearCompartmentVariables();
     // Virtual Cloud Network
@@ -115,6 +121,7 @@ function clearSVG() {
     clearInstanceVariables();
     // Block Storage Volume
     clearBlockStorageVolumeVariables();
+     */
 }
 
 /*

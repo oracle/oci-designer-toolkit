@@ -7,6 +7,7 @@ asset_drop_targets[security_list_artifact] = [virtual_cloud_network_artifact];
 asset_connect_targets[security_list_artifact] = [subnet_artifact];
 asset_add_functions[security_list_artifact] = "addSecurityList";
 asset_delete_functions[security_list_artifact] = "deleteSecurityList";
+asset_clear_functions.push("clearSecurityListVariables");
 
 const security_list_stroke_colour = "#F80000";
 const security_list_query_cb = "security-list-query-cb";

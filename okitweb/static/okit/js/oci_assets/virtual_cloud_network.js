@@ -7,6 +7,7 @@ asset_drop_targets[virtual_cloud_network_artifact] = [compartment_artifact];
 asset_connect_targets[virtual_cloud_network_artifact] = [];
 asset_add_functions[virtual_cloud_network_artifact] = "addVirtualCloudNetwork";
 asset_delete_functions[virtual_cloud_network_artifact] = "deleteVirtualCloudNetwork";
+asset_clear_functions.push("clearVirtualCloudNetworkVariables");
 
 const virtual_cloud_network_stroke_colour = "purple";
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";

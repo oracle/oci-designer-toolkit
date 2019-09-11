@@ -7,6 +7,7 @@ asset_drop_targets[route_table_artifact] = [virtual_cloud_network_artifact];
 asset_connect_targets[route_table_artifact] = [subnet_artifact];
 asset_add_functions[route_table_artifact] = "addRouteTable";
 asset_delete_functions[route_table_artifact] = "deleteRouteTable";
+asset_clear_functions.push("clearRouteTableVariables");
 
 const route_table_stroke_colour = "#F80000";
 const route_table_query_cb = "route-table-query-cb";

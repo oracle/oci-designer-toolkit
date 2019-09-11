@@ -8,6 +8,7 @@ asset_connect_targets[subnet_artifact] = [];
 asset_add_functions[subnet_artifact] = "addSubnet";
 asset_update_functions[subnet_artifact] = "updateSubnet";
 asset_delete_functions[subnet_artifact] = "deleteSubnet";
+asset_clear_functions.push("clearSubnetVariables");
 
 const subnet_stroke_colour = "orange";
 const subnet_query_cb = "subnet-query-cb";

@@ -345,6 +345,7 @@ asset_drop_targets[block_storage_volume_artifact] = [compartment_artifact];
 asset_connect_targets[block_storage_volume_artifact] = [instance_artifact];
 asset_add_functions[block_storage_volume_artifact] = "addBlockStorageVolume";
 asset_delete_functions[block_storage_volume_artifact] = "deleteBlockStorageVolume";
+asset_clear_functions.push("clearBlockStorageVolumeVariables");
 
 const block_storage_volume_stroke_colour = "#F80000";
 const block_storage_volume_query_cb = "block-storage-volume-query-cb";
@@ -836,35 +837,6 @@ const block_storage_volume_artifact = 'Block Storage Volume';
 const block_storage_volume_prefix = 'bsv';
 ```
 
-These can then be used within all artifact javascript without exceptions being thrown.
-In addition the clearSVG() functions needs to be updated to include a call to the artifact clear code.
-
-```javascript
-function clearSVG() {
-    console.log('Clearing Diagram');
-    //$('#okitcanvas').empty();
-    // Tabs
-    clearTabs();
-    // Compartments
-    clearCompartmentVariables();
-    // Virtual Cloud Network
-    clearVirtualCloudNetworkVariables();
-    // Internet Gateway
-    clearInternetGatewayVariables();
-    // Route Table
-    clearRouteTableVariables();
-    // Security List
-    clearSecurityListVariables();
-    // Subnet
-    clearSubnetVariables();
-    // Load Balancer
-    clearLoadBalancerVariables();
-    // Instance
-    clearInstanceVariables();
-    // Block Storage Volume
-    clearBlockStorageVolumeVariables();
-}
-```
 #### Flask Web Designer Python
 The main flask python contains all the end points defined for the blueprint and to facilitate querying the @bp.route('/oci/artifacts/<string:artifact>', methods=(['GET'])) 
 must be updated to add an additional "elif" clause to create the Artifact facade and execute the list function.

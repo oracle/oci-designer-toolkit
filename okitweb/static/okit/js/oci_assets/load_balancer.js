@@ -8,6 +8,7 @@ asset_connect_targets[load_balancer_artifact] = [];
 asset_add_functions[load_balancer_artifact] = "addLoadBalancer";
 asset_update_functions[load_balancer_artifact] = "updateLoadBalancer";
 asset_delete_functions[load_balancer_artifact] = "deleteLoadBalancer";
+asset_clear_functions.push("clearLoadBalancerVariables");
 
 const load_balancer_stroke_colour = "#F80000";
 const load_balancer_query_cb = "load-balancer-query-cb";

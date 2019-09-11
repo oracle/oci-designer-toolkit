@@ -7,6 +7,7 @@ asset_drop_targets[internet_gateway_artifact] = [virtual_cloud_network_artifact]
 asset_connect_targets[internet_gateway_artifact] = [];
 asset_add_functions[internet_gateway_artifact] = "addInternetGateway";
 asset_delete_functions[internet_gateway_artifact] = "deleteInternetGateway";
+asset_clear_functions.push("clearInternetGatewayVariables");
 
 const internet_gateway_stroke_colour = "purple";
 const internet_gateway_query_cb = "internet-gateway-query-cb";

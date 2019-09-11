@@ -7,6 +7,7 @@ asset_drop_targets[compartment_artifact] = [];
 asset_connect_targets[compartment_artifact] = [];
 asset_add_functions[compartment_artifact] = "addCompartment";
 asset_delete_functions[compartment_artifact] = "deleteCompartment";
+asset_clear_functions.push("clearCompartmentVariables");
 
 const compartment_stroke_colour = "#F80000";
 const compartment_query_cb = "compartment-query-cb";

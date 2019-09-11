@@ -8,6 +8,7 @@ asset_connect_targets[instance_artifact] = [load_balancer_artifact];
 asset_add_functions[instance_artifact] = "addInstance";
 asset_update_functions[instance_artifact] = "updateInstance";
 asset_delete_functions[instance_artifact] = "deleteInstance";
+asset_clear_functions.push("clearInstanceVariables");
 
 const instance_stroke_colour = "blue";
 const instance_query_cb = "instance-query-cb";

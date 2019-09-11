@@ -7,6 +7,7 @@ asset_drop_targets[block_storage_volume_artifact] = [compartment_artifact];
 asset_connect_targets[block_storage_volume_artifact] = [instance_artifact];
 asset_add_functions[block_storage_volume_artifact] = "addBlockStorageVolume";
 asset_delete_functions[block_storage_volume_artifact] = "deleteBlockStorageVolume";
+asset_clear_functions.push("clearBlockStorageVolumeVariables");
 
 const block_storage_volume_stroke_colour = "#F80000";
 const block_storage_volume_query_cb = "block-storage-volume-query-cb";
