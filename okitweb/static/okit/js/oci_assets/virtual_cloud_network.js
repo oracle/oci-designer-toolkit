@@ -50,14 +50,13 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
 
     // Increment Count
     virtual_cloud_network_count += 1;
-    // Generate Cidr
-    virtual_cloud_network_cidr[id] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
     // Build Virtual Cloud Network Object
     let virtual_cloud_network = {};
     virtual_cloud_network['compartment_id'] = compartment_id;
     virtual_cloud_network['id'] = id;
     virtual_cloud_network['display_name'] = generateDefaultName(virtual_cloud_network_prefix, virtual_cloud_network_count);
-    virtual_cloud_network['cidr_block'] = virtual_cloud_network_cidr[id];
+    // Generate Cidr
+    virtual_cloud_network['cidr_block'] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
     virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase().slice(-6);
     OKITJsonObj['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
@@ -282,8 +281,9 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
             let response_json = JSON.parse(resp);
             OKITJsonObj['virtual_cloud_networks'] = response_json;
             let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
+            for(let i=0;i<len;i++ ) {
                 console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
+                virtual_cloud_network_count += 1;
                 queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
                 queryRouteTableAjax(compartment_id, response_json[i]['id']);
                 querySecurityListAjax(compartment_id, response_json[i]['id']);

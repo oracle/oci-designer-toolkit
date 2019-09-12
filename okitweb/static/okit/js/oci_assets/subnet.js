@@ -52,8 +52,15 @@ function addSubnet(vcn_id, compartment_id) {
     // Increment Count
     subnet_count += 1;
     // Generate Cidr
-    vcn_cidr = virtual_cloud_network_cidr[vcn_id].split('/')[0].split('.');
-    subnet_cidr[id] = vcn_cidr[0] + '.' + vcn_cidr[1] + '.' + (subnet_count - 1) + '.' + vcn_cidr[3] + '/24';
+    let vcn_cidr = '10.0.0.0/16';
+    for (let virtual_cloud_network of OKITJsonObj['virtual_cloud_networks']) {
+        if (virtual_cloud_network['id'] == vcn_id) {
+            vcn_cidr = virtual_cloud_network['cidr_block'];
+            break;
+        }
+    }
+    let vcn_octets = vcn_cidr.split('/')[0].split('.');
+    subnet_cidr[id] = vcn_octets[0] + '.' + vcn_octets[1] + '.' + (subnet_count - 1) + '.' + vcn_octets[3] + '/24';
     // Build Subnet Object
     let subnet = {};
     subnet['vcn_id'] = vcn_id;
