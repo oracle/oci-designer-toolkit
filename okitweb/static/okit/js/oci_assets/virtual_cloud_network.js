@@ -139,6 +139,10 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         let position = compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'];
         let svg_x = Math.round(icon_width * 3 / 2);
         let svg_y = Math.round((icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position));
+        let name_x = Math.round(icon_x + icon_width / 3);
+        let name_y = Math.round(icon_y + icon_height * 7 / 8);
+        let label_x = Math.round(icon_x + icon_width / 3);
+        let label_y = Math.round(icon_y + icon_height * 14);
         let data_type = virtual_cloud_network_artifact;
 
         // Increment Icon Position
@@ -176,13 +180,24 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         rect.append("title")
             .attr("id", id + '-title')
             .text("Virtual Cloud Network: " + virtual_cloud_network['display_name']);
-        let text = svg.append("text")
+        let name = svg.append("text")
             .attr("id", id + '-display-name')
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
-            .attr("x", icon_x + icon_width / 3)
-            .attr("y", icon_y + icon_height / 3)
+            .attr("x", name_x)
+            .attr("y", name_y)
             .text(virtual_cloud_network['display_name']);
+        let label_svg = svg.append('svg')
+            .attr('viewbox', '0 0 100 100')
+            .attr("x", label_x)
+            .attr("y", label_y);
+        let label = label_svg.append("text")
+            .attr("id", id + '-display-name')
+            .attr("x", 1)
+            .attr("y", 1)
+            .style('font-weight', 'bold')
+            .style('fill', virtual_cloud_network_stroke_colour)
+            .text('VCN');
         let g = svg.append("g")
             .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
         g.append("path")
