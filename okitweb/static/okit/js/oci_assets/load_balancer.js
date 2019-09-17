@@ -8,8 +8,10 @@ asset_connect_targets[load_balancer_artifact] = [];
 asset_add_functions[load_balancer_artifact] = "addLoadBalancer";
 asset_update_functions[load_balancer_artifact] = "updateLoadBalancer";
 asset_delete_functions[load_balancer_artifact] = "deleteLoadBalancer";
+asset_clear_functions.push("clearLoadBalancerVariables");
 
 const load_balancer_stroke_colour = "#F80000";
+const load_balancer_query_cb = "load-balancer-query-cb";
 const load_balancer_width = Math.round(icon_width * 3);
 const load_balancer_height = Math.round(icon_height);
 const load_balancer_svg_width = Math.round(load_balancer_width + icon_x * 2);
@@ -296,4 +298,52 @@ function updateLoadBalancer(source_type, source_id, id) {
     loadLoadBalancerProperties(id);
 }
 
-clearLoadBalancerVariables();
+/*
+** Query OCI
+ */
+
+function queryLoadBalancerAjax(compartment_id, subnet_id) {
+    console.log('------------- queryLoadBalancerAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    request_json['subnet_id'] = subnet_id;
+    if ('load_balancer_filter' in okitQueryRequestJson) {
+        request_json['load_balancer_filter'] = okitQueryRequestJson['load_balancer_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/LoadBalancer',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['load_balancers'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#' + load_balancer_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+$(document).ready(function() {
+    clearLoadBalancerVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', load_balancer_query_cb);
+    cell.append('label').text(load_balancer_artifact);
+});
+
+

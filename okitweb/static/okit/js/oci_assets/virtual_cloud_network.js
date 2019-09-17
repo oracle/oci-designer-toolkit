@@ -7,8 +7,10 @@ asset_drop_targets[virtual_cloud_network_artifact] = [compartment_artifact];
 asset_connect_targets[virtual_cloud_network_artifact] = [];
 asset_add_functions[virtual_cloud_network_artifact] = "addVirtualCloudNetwork";
 asset_delete_functions[virtual_cloud_network_artifact] = "deleteVirtualCloudNetwork";
+asset_clear_functions.push("clearVirtualCloudNetworkVariables");
 
 const virtual_cloud_network_stroke_colour = "purple";
+const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 let vcn_svg_width = "99%"
 let vcn_svg_height = "70%"
 let vcn_rect_width = "95%"
@@ -48,14 +50,13 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
 
     // Increment Count
     virtual_cloud_network_count += 1;
-    // Generate Cidr
-    virtual_cloud_network_cidr[id] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
     // Build Virtual Cloud Network Object
     let virtual_cloud_network = {};
     virtual_cloud_network['compartment_id'] = compartment_id;
     virtual_cloud_network['id'] = id;
     virtual_cloud_network['display_name'] = generateDefaultName(virtual_cloud_network_prefix, virtual_cloud_network_count);
-    virtual_cloud_network['cidr_block'] = virtual_cloud_network_cidr[id];
+    // Generate Cidr
+    virtual_cloud_network['cidr_block'] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
     virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase().slice(-6);
     OKITJsonObj['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
@@ -138,6 +139,10 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         let position = compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'];
         let svg_x = Math.round(icon_width * 3 / 2);
         let svg_y = Math.round((icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position));
+        let name_x = Math.round(icon_x + icon_width / 3);
+        let name_y = Math.round(icon_y + icon_height * 7 / 8);
+        let label_x = Math.round(icon_x + icon_width / 3);
+        let label_y = Math.round(icon_y + icon_height * 14);
         let data_type = virtual_cloud_network_artifact;
 
         // Increment Icon Position
@@ -175,13 +180,24 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         rect.append("title")
             .attr("id", id + '-title')
             .text("Virtual Cloud Network: " + virtual_cloud_network['display_name']);
-        let text = svg.append("text")
+        let name = svg.append("text")
             .attr("id", id + '-display-name')
             .attr("data-type", data_type)
             .attr("data-parentid", parent_id)
-            .attr("x", icon_x + icon_width / 3)
-            .attr("y", icon_y + icon_height / 3)
+            .attr("x", name_x)
+            .attr("y", name_y)
             .text(virtual_cloud_network['display_name']);
+        let label_svg = svg.append('svg')
+            .attr('viewbox', '0 0 100 100')
+            .attr("x", label_x)
+            .attr("y", label_y);
+        let label = label_svg.append("text")
+            .attr("id", id + '-display-name')
+            .attr("x", 1)
+            .attr("y", 1)
+            .style('font-weight', 'bold')
+            .style('fill', virtual_cloud_network_stroke_colour)
+            .text('VCN');
         let g = svg.append("g")
             .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
         g.append("path")
@@ -258,5 +274,56 @@ function loadVirtualCloudNetworkProperties(id) {
     });
 }
 
+/*
+** Query OCI
+ */
 
-clearVirtualCloudNetworkVariables();
+function queryVirtualCloudNetworkAjax(compartment_id) {
+    console.log('------------- queryVirtualCloudNetworkAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
+        request_json['virtual_cloud_network_filter'] = okitQueryRequestJson['virtual_cloud_network_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/VirtualCloudNetwork',
+        dataType: 'text',
+        contentType: 'application/json',
+        //data: JSON.stringify(okitQueryRequestJson),
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['virtual_cloud_networks'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ) {
+                console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
+                virtual_cloud_network_count += 1;
+                queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
+                queryRouteTableAjax(compartment_id, response_json[i]['id']);
+                querySecurityListAjax(compartment_id, response_json[i]['id']);
+                querySubnetAjax(compartment_id, response_json[i]['id']);
+            }
+            redrawSVGCanvas();
+            $('#' + virtual_cloud_network_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+$(document).ready(function() {
+    clearVirtualCloudNetworkVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', virtual_cloud_network_query_cb);
+    cell.append('label').text(virtual_cloud_network_artifact);
+});
+

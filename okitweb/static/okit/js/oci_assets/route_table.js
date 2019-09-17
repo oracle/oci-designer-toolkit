@@ -7,8 +7,10 @@ asset_drop_targets[route_table_artifact] = [virtual_cloud_network_artifact];
 asset_connect_targets[route_table_artifact] = [subnet_artifact];
 asset_add_functions[route_table_artifact] = "addRouteTable";
 asset_delete_functions[route_table_artifact] = "deleteRouteTable";
+asset_clear_functions.push("clearRouteTableVariables");
 
 const route_table_stroke_colour = "#F80000";
+const route_table_query_cb = "route-table-query-cb";
 let route_table_ids = [];
 let route_table_count = 0;
 let propertires_route_table = {}
@@ -344,4 +346,51 @@ function handleDeleteRouteRulesRow(btn) {
 }
 
 
-clearRouteTableVariables();
+/*
+** Query OCI
+ */
+
+function queryRouteTableAjax(compartment_id, vcn_id) {
+    console.log('------------- queryRouteTableAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    request_json['vcn_id'] = vcn_id;
+    if ('route_table_filter' in okitQueryRequestJson) {
+        request_json['route_table_filter'] = okitQueryRequestJson['route_table_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/RouteTable',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['route_tables'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryRouteTableAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#' + route_table_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+$(document).ready(function() {
+    clearRouteTableVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', route_table_query_cb);
+    cell.append('label').text(route_table_artifact);
+});
+
