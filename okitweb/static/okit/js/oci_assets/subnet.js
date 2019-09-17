@@ -8,8 +8,10 @@ asset_connect_targets[subnet_artifact] = [];
 asset_add_functions[subnet_artifact] = "addSubnet";
 asset_update_functions[subnet_artifact] = "updateSubnet";
 asset_delete_functions[subnet_artifact] = "deleteSubnet";
+asset_clear_functions.push("clearSubnetVariables");
 
 const subnet_stroke_colour = "orange";
+const subnet_query_cb = "subnet-query-cb";
 let subnet_svg_height = 400;
 let subnet_svg_width = "95%";
 let subnet_rect_height = "85%";
@@ -50,8 +52,15 @@ function addSubnet(vcn_id, compartment_id) {
     // Increment Count
     subnet_count += 1;
     // Generate Cidr
-    vcn_cidr = virtual_cloud_network_cidr[vcn_id].split('/')[0].split('.');
-    subnet_cidr[id] = vcn_cidr[0] + '.' + vcn_cidr[1] + '.' + (subnet_count - 1) + '.' + vcn_cidr[3] + '/24';
+    let vcn_cidr = '10.0.0.0/16';
+    for (let virtual_cloud_network of OKITJsonObj['virtual_cloud_networks']) {
+        if (virtual_cloud_network['id'] == vcn_id) {
+            vcn_cidr = virtual_cloud_network['cidr_block'];
+            break;
+        }
+    }
+    let vcn_octets = vcn_cidr.split('/')[0].split('.');
+    subnet_cidr[id] = vcn_octets[0] + '.' + vcn_octets[1] + '.' + (subnet_count - 1) + '.' + vcn_octets[3] + '/24';
     // Build Subnet Object
     let subnet = {};
     subnet['vcn_id'] = vcn_id;
@@ -399,4 +408,53 @@ function updateSubnet(sourcetype, sourceid, id) {
     loadSubnetProperties(id);
 }
 
-clearSubnetVariables();
+/*
+** Query OCI
+ */
+
+function querySubnetAjax(compartment_id, vcn_id) {
+    console.log('------------- querySubnetAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    request_json['vcn_id'] = vcn_id;
+    if ('subnet_filter' in okitQueryRequestJson) {
+        request_json['subnet_filter'] = okitQueryRequestJson['subnet_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/Subnet',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['subnets'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('querySubnetAjax : ' + response_json[i]['display_name']);
+                queryInstanceAjax(compartment_id, response_json[i]['id']);
+                queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
+            }
+            redrawSVGCanvas();
+            $('#' + subnet_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+$(document).ready(function() {
+    clearSubnetVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', subnet_query_cb);
+    cell.append('label').text(subnet_artifact);
+});
+

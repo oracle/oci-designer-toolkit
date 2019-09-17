@@ -7,8 +7,10 @@ asset_drop_targets[compartment_artifact] = [];
 asset_connect_targets[compartment_artifact] = [];
 asset_add_functions[compartment_artifact] = "addCompartment";
 asset_delete_functions[compartment_artifact] = "deleteCompartment";
+asset_clear_functions.push("clearCompartmentVariables");
 
 const compartment_stroke_colour = "#F80000";
+const compartment_query_cb = "compartment-query-cb";
 let compartment_ids = [];
 let compartment_count = 0;
 let compartment_bui_sub_artifacts = {};
@@ -204,4 +206,46 @@ function loadCompartmentProperties(id) {
     });
 }
 
-clearCompartmentVariables();
+/*
+** Query OCI
+ */
+
+function queryCompartmentAjax() {
+    console.log('------------- queryCompartmentAjax --------------------');
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/Compartment',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(okitQueryRequestJson),
+        success: function(resp) {
+            let response_json = [JSON.parse(resp)];
+            OKITJsonObj['compartments'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryCompartmentAjax : ' + response_json[i]['name']);
+                queryVirtualCloudNetworkAjax(response_json[i]['id']);
+                queryBlockStorageVolumeAjax(response_json[i]['id'])            }
+            redrawSVGCanvas();
+            $('#' + compartment_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+$(document).ready(function() {
+    clearCompartmentVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', compartment_query_cb);
+    cell.append('label').text(compartment_artifact);
+});
+
