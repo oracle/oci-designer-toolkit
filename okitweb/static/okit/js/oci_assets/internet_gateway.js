@@ -7,8 +7,10 @@ asset_drop_targets[internet_gateway_artifact] = [virtual_cloud_network_artifact]
 asset_connect_targets[internet_gateway_artifact] = [];
 asset_add_functions[internet_gateway_artifact] = "addInternetGateway";
 asset_delete_functions[internet_gateway_artifact] = "deleteInternetGateway";
+asset_clear_functions.push("clearInternetGatewayVariables");
 
 const internet_gateway_stroke_colour = "purple";
+const internet_gateway_query_cb = "internet-gateway-query-cb";
 let internet_gateway_ids = [];
 let internet_gateway_count = 0;
 
@@ -199,4 +201,51 @@ function loadInternetGatewayProperties(id) {
     });
 }
 
-clearInternetGatewayVariables();
+/*
+** Query OCI
+ */
+
+function queryInternetGatewayAjax(compartment_id, vcn_id) {
+    console.log('------------- queryInternetGatewayAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    request_json['vcn_id'] = vcn_id;
+    if ('internet_gateway_filter' in okitQueryRequestJson) {
+        request_json['internet_gateway_filter'] = okitQueryRequestJson['internet_gateway_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/InternetGateway',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            OKITJsonObj['internet_gateways'] = response_json;
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.log('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#' + internet_gateway_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+}
+
+$(document).ready(function() {
+    clearInternetGatewayVariables();
+
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', internet_gateway_query_cb);
+    cell.append('label').text(internet_gateway_artifact);
+});
+

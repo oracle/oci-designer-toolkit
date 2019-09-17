@@ -18,6 +18,8 @@ let connectorContainerScreenCTM = null;
 let asset_add_functions = {};
 let asset_update_functions = {};
 let asset_delete_functions = {};
+let asset_query_functions = {};
+let asset_clear_functions = [];
 
 function addAssetToDropTarget(title, target_id, compartment_id) {
     console.log('addAssetToDropTarget - Title          : ' + title);

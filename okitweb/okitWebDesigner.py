@@ -48,6 +48,7 @@ from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociInstance import OCIInstances
 from facades.ociInstance import OCIInstanceVnics
 from facades.ociResourceManager import OCIResourceManagers
+from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 
 from common.ociLogging import getLogger
 
@@ -83,6 +84,7 @@ def designer():
         for key, value in request.form.items():
             request_json[key] = value
         request_json['virtual_cloud_network_filter'] = {'display_name': request_json.get('virtual_cloud_network_name_filter', '')}
+        request_json['block_storage_volume_filter'] = {'display_name': request_json.get('block_storage_volume_name_filter', '')}
         logger.info('Request Json {0!s:s}'.format(request_json))
         #response_json = executeQuery(request_json)
         logJson(response_json)
@@ -200,6 +202,10 @@ def ociArtifacts(artifact):
         oci_load_balancers = OCILoadBalancers(compartment_id=query_json['compartment_id'])
         response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
         response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
+    elif artifact == 'BlockStorageVolume':
+        logger.info('---- Processing Block Storage Volumes')
+        oci_block_storage_volumes = OCIBlockStorageVolumes(compartment_id=query_json['compartment_id'])
+        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
     else:
         return '404'
 

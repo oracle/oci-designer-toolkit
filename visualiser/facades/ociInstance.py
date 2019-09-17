@@ -22,6 +22,8 @@ import re
 import sys
 
 from facades.ociConnection import OCIComputeConnection,OCIVirtualNetworkConnection
+from facades.ociVolumeAttachment import OCIVolumeAttachments
+from facades.ociVnicAttachement import OCIVnicAttachments
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -84,10 +86,14 @@ class OCIInstances(OCIComputeConnection):
         instances_json = self.toJson(instances)
         logger.debug(str(instances_json))
  
-        self.instances_json=instances_json
+        self.instances_json = instances_json
         logger.debug(str(self.instances_json))
 
         for instance in self.instances_json:
+            # Check if any Block Storage has been Attached
+            volume_attachments = OCIVolumeAttachments(config=self.config, configfile=self.configfile, compartment_id=compartment_id, instance_id=instance['id']).list()
+            instance['block_storage_volume_ids'] = [va['volume_id'] for va in volume_attachments]
+            # Build object list
             self.instances_obj.append(OCIInstance(self.config, self.configfile, instance))
 
         return self.instances_json
@@ -97,10 +103,16 @@ class OCIInstance(object):
         self.config = config
         self.configfile = configfile
         self.data = data
-        
+
     def getInstanceVnicClients(self):
         return OCIInstanceVnics(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
-        
+
+    def getVolumeAttachments(self):
+        return OCIVolumeAttachments(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
+    def getVnicAttachments(self):
+        return OCIVnicAttachments(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
 
 # Main processing function
 def main(argv):
