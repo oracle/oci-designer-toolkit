@@ -85,7 +85,78 @@ function deleteRouteTable(id) {
 /*
 ** SVG Creation
  */
-function drawRouteTableSVG(route_table) {
+function drawRouteTableSVG(artifact) {
+    let parent_id = artifact['vcn_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.log('Drawing ' + route_table_artifact + ' : ' + id + ' [' + parent_id + ']');
+
+    if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
+    }
+
+    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        if (!virtual_cloud_network_bui_sub_artifacts[parent_id].hasOwnProperty('element_position')) {
+            virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] = 0;
+        }
+        // Calculate Position
+        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
+        // Increment Icon Position
+        virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
+
+        let svg_x = Math.round(icon_width + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round(icon_height * 3 / 2);
+        let svg_width = icon_width;
+        let svg_height = icon_height;
+        let data_type = route_table_artifact;
+        let stroke_colour = route_table_stroke_colour;
+        let stroke_dash = 1;
+
+        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+
+        let rect = d3.select('#' + id);
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        /*
+         Add click event to display properties
+         Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+         Add dragevent versions
+         Set common attributes on svg element and children
+         */
+        svg.on("click", function () {
+            loadRouteTableProperties(id);
+            d3.event.stopPropagation();
+        })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
+    } else {
+        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+    }
+}
+
+// TODO: Delete
+function drawRouteTableSVGOrig(route_table) {
     let parent_id = route_table['vcn_id'];
     let id = route_table['id'];
     let compartment_id = route_table['compartment_id'];

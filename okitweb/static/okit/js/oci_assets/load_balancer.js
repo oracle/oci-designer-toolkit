@@ -12,8 +12,8 @@ asset_clear_functions.push("clearLoadBalancerVariables");
 
 const load_balancer_stroke_colour = "#F80000";
 const load_balancer_query_cb = "load-balancer-query-cb";
-const load_balancer_width = Math.round(icon_width * 3);
-const load_balancer_height = Math.round(icon_height);
+const load_balancer_width = Math.round(icon_width * 6);
+const load_balancer_height = Math.round(icon_height * 3 / 2);
 const load_balancer_svg_width = Math.round(load_balancer_width + icon_x * 2);
 const load_balancer_svg_height = Math.round(load_balancer_height + icon_y * 2);
 let load_balancer_ids = [];
@@ -84,7 +84,75 @@ function deleteLoadBalancer(id) {
 /*
 ** SVG Creation
  */
-function drawLoadBalancerSVG(load_balancer) {
+function drawLoadBalancerSVG(artifact) {
+    let parent_id = artifact['subnet_ids'][0];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.log('Drawing ' + load_balancer_artifact + ' : ' + id + ' [' + parent_id + ']');
+
+    if (!subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        subnet_bui_sub_artifacts[parent_id] = {};
+    }
+
+    // Only draw the instance if the subnet exists
+    if (parent_id in subnet_bui_sub_artifacts) {
+        if (!subnet_bui_sub_artifacts[parent_id].hasOwnProperty('load_balancer_position')) {
+            subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] = 0;
+        }
+        // Calculate Position
+        let position = subnet_bui_sub_artifacts[parent_id]['load_balancer_position'];
+        // Increment Icon Position
+        subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] += 1;
+
+        let svg_x = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round(icon_height * 3 / 2);
+        let svg_width = load_balancer_width;
+        let svg_height = load_balancer_height;
+        let data_type = load_balancer_artifact;
+        let stroke_colour = load_balancer_stroke_colour;
+        let stroke_dash = 1;
+
+        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
+            stroke_dash, true, false);
+
+        //loadLoadBalancerProperties(id);
+        let rect = d3.select('#' + id);
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add click event to display properties
+        // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+        // Add dragevent versions
+        // Set common attributes on svg element and children
+        svg.on("click", function () {loadLoadBalancerProperties(id); d3.event.stopPropagation(); })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-type", data_type)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
+    }
+}
+
+// TODO: Delete
+function drawLoadBalancerSVGOrig(load_balancer) {
     let parent_id = load_balancer['subnet_ids'][0];
     let id = load_balancer['id'];
     let compartment_id = load_balancer['compartment_id'];

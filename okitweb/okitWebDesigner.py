@@ -220,6 +220,7 @@ def export(destination):
     if request.method == 'POST':
         try:
             destination_dir = tempfile.mkdtemp();
+            logger.debug(">>>>>>>>>>>>> {0!s:s}".format(destination_dir))
             stack = {}
             stack['display_name'] = 'okit-stack-export-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
             stack['display_name'] = 'nightmare-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))

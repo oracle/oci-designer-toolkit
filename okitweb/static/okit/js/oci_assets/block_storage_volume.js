@@ -86,7 +86,78 @@ function deleteBlockStorageVolume(id) {
 /*
 ** SVG Creation
  */
-function drawBlockStorageVolumeSVG(block_storage_volume) {
+function drawBlockStorageVolumeSVG(artifact) {
+    let parent_id = artifact['compartment_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.log('Drawing ' + block_storage_volume_artifact + ' : ' + id);
+
+    if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        compartment_bui_sub_artifacts[parent_id] = {};
+    }
+
+    if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('block_storage_position')) {
+            compartment_bui_sub_artifacts[parent_id]['block_storage_position'] = 0;
+        }
+        // Calculate Position
+        let position = compartment_bui_sub_artifacts[parent_id]['block_storage_position'];
+        // Increment Icon Position
+        compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
+
+        let svg_x = (icon_width / 4);
+        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (vcn_icon_spacing * position));
+        let svg_width = icon_width;
+        let svg_height = icon_height;
+        let data_type = block_storage_volume_artifact;
+        let stroke_colour = block_storage_volume_stroke_colour;
+        let stroke_dash = 1;
+
+        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+
+        let rect = d3.select('#' + id);
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        /*
+         Add click event to display properties
+         Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+         Add dragevent versions
+         Set common attributes on svg element and children
+         */
+        svg.on("click", function () {
+            loadBlockStorageVolumeProperties(id);
+            d3.event.stopPropagation();
+        })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
+    } else {
+        console.log(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
+    }
+}
+
+// TODO: Delete
+function drawBlockStorageVolumeSVGOrig(block_storage_volume) {
     let parent_id = block_storage_volume['compartment_id'];
     let id = block_storage_volume['id'];
     let compartment_id = block_storage_volume['compartment_id'];

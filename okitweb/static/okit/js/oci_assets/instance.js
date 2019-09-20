@@ -12,8 +12,8 @@ asset_clear_functions.push("clearInstanceVariables");
 
 const instance_stroke_colour = "blue";
 const instance_query_cb = "instance-query-cb";
-const instance_width = Math.round(icon_width * 4);
-const instance_height = Math.round(icon_height * 2 + icon_height / 2);
+const instance_width = Math.round(icon_width * 3);
+const instance_height = Math.round(icon_height * 2);
 const instance_svg_width = Math.round(instance_width + icon_x * 2);
 const instance_svg_height = Math.round(instance_height + icon_y * 2);
 let instance_ids = [];
@@ -100,7 +100,77 @@ function deleteInstance(id) {
 /*
 ** SVG Creation
  */
-function drawInstanceSVG(instance) {
+function drawInstanceSVG(artifact) {
+    let parent_id = artifact['subnet_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.log('Drawing ' + instance_artifact + ' : ' + id + ' [' + parent_id + ']');
+
+    if (!subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        subnet_bui_sub_artifacts[parent_id] = {};
+    }
+
+    // Only draw the instance if the subnet exists
+    if (subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        if (!subnet_bui_sub_artifacts[parent_id].hasOwnProperty('instance_position')) {
+            subnet_bui_sub_artifacts[parent_id]['instance_position'] = 0;
+        }
+        // Calculate Position
+        let position = subnet_bui_sub_artifacts[parent_id]['instance_position'];
+        // Increment Icon Position
+        subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
+
+        let svg_x = Math.round((icon_width * 3 / 2) + (instance_width * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round(icon_height * 4);
+        let svg_width = instance_width;
+        let svg_height = instance_height;
+        let data_type = instance_artifact;
+        let stroke_colour = instance_stroke_colour;
+        let stroke_dash = 1;
+        console.log('svg_x : ' + svg_x);
+        console.log('svg_y : ' + svg_y);
+
+        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
+            stroke_dash, true, false);
+
+        //loadInstanceProperties(id);
+        let rect = d3.select('#' + id);
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add click event to display properties
+        // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+        // Add dragevent versions
+        // Set common attributes on svg element and children
+        svg.on("click", function () {loadInstanceProperties(id); d3.event.stopPropagation(); })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
+            .attr("data-compartment-id", compartment_id)
+            .attr("data-connector-start-y", boundingClientRect.y)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-connector-start-y", boundingClientRect.y)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
+    }
+}
+
+// TODO: Delete
+function drawInstanceSVGOrig(instance) {
     let parent_id = instance['subnet_id'];
     let id = instance['id'];
     let compartment_id = instance['compartment_id'];

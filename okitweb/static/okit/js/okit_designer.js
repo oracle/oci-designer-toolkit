@@ -31,15 +31,6 @@ const load_balancer_prefix = 'lb';
 // Block Storage
 const block_storage_volume_artifact = 'Block Storage Volume';
 const block_storage_volume_prefix = 'bsv';
-// SVG Icons
-const icon_width = 45;
-const icon_height = 45;
-const icon_x = 25;
-const icon_y = 25;
-const icon_translate_x_start = 60;
-const icon_translate_y_start = 10;
-const vcn_icon_spacing = 10;
-const icon_stroke_colour = "#F80000";
 
 /*
  * Define designer working variables
@@ -313,7 +304,7 @@ function handleExportToSVG(evt) {
     if (!OKITJsonObj.hasOwnProperty('open_compartment_index')) {
         OKITJsonObj['open_compartment_index'] = 0;
     }
-    let okitcanvas = document.getElementById(OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['id'] + '-svg');
+    let okitcanvas = document.getElementById(OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['id'] + '-canvas-svg');
     let name = OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['name'];
     saveSvg(okitcanvas, name + '.svg');
 }
@@ -425,8 +416,10 @@ $(document).ready(function(){
 
     document.getElementById('generate-resource-manager-menu-item').addEventListener('click', handleGenerateTerraform11, false);
 
+    //document.getElementById('Example-tab-button').addEventListener('click', function() { openCompartment('Example'); }, false);
+
     // Set Redraw when window resized
-    window.addEventListener("resize", handleResize, false);
+    //window.addEventListener("resize", handleResize, false);
 
     /*
     ** Set Empty Properties Sheet
@@ -440,9 +433,10 @@ $(document).ready(function(){
     ** Clean and start new diagram
      */
 
-    let compartment_id = addCompartment();
+    //let compartment_id = addCompartment();
 
     if (okitQueryRequestJson == null) {
+        console.log('<<<<<<<<<<<<<New Page>>>>>>>>>>>>>')
         newDiagram();
     } else {
         setBusyIcon();
@@ -464,7 +458,7 @@ $(document).ready(function(){
     $("#json-display").slideToggle();
 
     // Only observe the canvas
-    ro.observe(document.querySelector('#canvas-wrapper'));
+    //ro.observe(document.querySelector('#canvas-wrapper'));
 
 });
 

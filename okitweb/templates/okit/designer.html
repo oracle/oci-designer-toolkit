@@ -59,6 +59,27 @@
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
+    <script type="text/javascript">
+        let palette_svg = {}
+        let xmlSerialiser = new XMLSerializer();
+        {% for palette_icon in palette_icons %}
+            palette_svg["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
+            $.ajax({
+                type: 'get',
+                url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
+                dataType: 'xml',
+                success: function(xml) {
+                    console.log('load SVG Success');
+                    let g = $(xml).find("g");
+                    palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
+                },
+                error: function(xhr, status, error) {
+                    console.log('load SVG Error : '+ error)
+                    console.log('load SVG Status : '+ status)
+                }
+            });
+        {% endfor %}
+    </script>
     {% if okit_query_request_json is defined %}
         <script type="text/javascript">
             console.log('Processing Query Javascript');
@@ -69,6 +90,7 @@
             //drawSVGforJson();
         </script>
     {% endif %}
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
@@ -91,7 +113,57 @@
         <div id="web-designer-panel" class="web-designer-panel flex-row">
             <div id="canvas-wrapper" class="designer-left-column canvas-wrapper">
                 <div id="compartment-tabs" class="tab">
+                    <!--button-- class="tablinks active" id="Example-tab-button">Example</button-->
                 </div>
+                <!--div class="tabcontent" id="Example-tab-content">
+                    <svg x="0" y="0" width="100%" height="100%" viewBox="0 0 3440 1300" xmlns="http://www.w3.org/2000/svg">
+                        <svg x="0" y="0" width="100%" height="100%">
+                            <rect x="0" y="0" width="100%" height="100%" stroke-dasharray="5, 5" stroke="orange" fill="grey" style="fill-opacity: .25;"></rect>
+                            <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMin meet">
+                                <text x="1" y="20">okit-comp001</text>
+                            </svg>
+                            <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMax meet">
+                                <text x="10" y="80" style="fill: orange;">Compartment</text>
+                            </svg>
+                            <svg x="10" y="50" width="2000" height="500" viewBox="0 0 2000 500" preserveAspectRatio="xMinYMin meet">
+                                <rect x="0" y="0" width="100%" height="100%" stroke-dasharray="5, 5" stroke="purple" fill="white" style="fill-opacity: .25;"></rect>
+                                <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMin meet">
+                                    <text x="1" y="20" vector-effects="non-scaling-size">okit-vcn001</text>
+                                </svg>
+                                <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMax meet">
+                                    <text x="1" y="80" style="fill: purple;">VCN</text>
+                                </svg>
+                                <svg x="10" y="100" width="1000" height="300" viewBox="0 0 1000 300" preserveAspectRatio="xMinYMin meet">
+                                    <rect x="0" y="0" width="100%" height="100%" stroke-dasharray="5, 5" stroke="red" fill="white" style="fill-opacity: .25;"></rect>
+                                    <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMin meet">
+                                        <text x="1" y="20">okit-sn001</text>
+                                    </svg>
+                                    <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMax meet">
+                                        <text x="1" y="80" style="fill: red;">Subnet</text>
+                                    </svg>
+                                </svg>
+                            </svg>
+                            <svg x="10" y="600" width="2000" height="500" viewBox="0 0 2000 500" preserveAspectRatio="xMinYMin meet">
+                                <rect x="0" y="0" width="100%" height="100%" stroke-dasharray="5, 5" stroke="purple" fill="white" style="fill-opacity: .25;"></rect>
+                                <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMin meet">
+                                    <text x="1" y="20">okit-vcn002</text>
+                                </svg>
+                                <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMax meet">
+                                    <text x="1" y="80" style="fill: purple;">VCN</text>
+                                </svg>
+                                <svg x="10" y="100" width="1000" height="300" viewBox="0 0 1000 300" preserveAspectRatio="xMinYMin meet">
+                                    <rect x="0" y="0" width="100%" height="100%" stroke-dasharray="5, 5" stroke="red" fill="white" style="fill-opacity: .25;"></rect>
+                                    <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMin meet">
+                                        <text x="1" y="20">okit-sn002</text>
+                                    </svg>
+                                    <svg x="1" y="1" width="200" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMinYMax meet">
+                                        <text x="1" y="80" style="fill: red;">Subnet</text>
+                                    </svg>
+                                </svg>
+                            </svg>
+                        </svg>
+                    </svg>
+                </div-->
             </div>
             <div id="asset-properties" class="designer-right-column properties-wrapper">
                 <div id="properties-and-source" class="properties-source-wrapper">

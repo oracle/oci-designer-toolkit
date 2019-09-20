@@ -135,7 +135,80 @@ function deleteSubnet(id) {
 /*
 ** SVG Creation
  */
-function drawSubnetSVG(subnet) {
+function drawSubnetSVG(artifact) {
+    let parent_id = artifact['vcn_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.log('Drawing ' + subnet_artifact + ' : ' + id + ' [' + parent_id + ']');
+
+    if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
+    }
+
+    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        if (!virtual_cloud_network_bui_sub_artifacts[parent_id].hasOwnProperty('subnet_position')) {
+            virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'] = 0;
+        }
+        // Calculate Position
+        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'];
+        // Increment Icon Position
+        virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'] += 1;
+
+        let svg_x = Math.round(icon_width * 3 / 2);
+        let svg_y = Math.round((icon_height * 3) + (icon_height * position) + (vcn_icon_spacing * position));
+        let svg_width = 1800;
+        let svg_height = 300;
+        let data_type = subnet_artifact;
+        let stroke_colour = subnet_stroke_colour;
+        let stroke_dash = 5;
+
+        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
+            stroke_dash, true, true, icon_translate_x_start, icon_translate_y_start);
+
+        //loadSubnetProperties(id);
+        let rect = d3.select('#' + id);
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add click event to display properties
+        // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
+        // Add dragevent versions
+        // Set common attributes on svg element and children
+        svg.on("click", function () {
+            loadSubnetProperties(id);
+            d3.event.stopPropagation();
+        })
+            .on("mousedown", handleConnectorDragStart)
+            .on("mousemove", handleConnectorDrag)
+            .on("mouseup", handleConnectorDrop)
+            .on("mouseover", handleConnectorDragEnter)
+            .on("mouseout", handleConnectorDragLeave)
+            .on("dragstart", handleConnectorDragStart)
+            .on("drop", handleConnectorDrop)
+            .on("dragenter", handleConnectorDragEnter)
+            .on("dragleave", handleConnectorDragLeave)
+            .on("contextmenu", handleContextMenu)
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true)
+            .selectAll("*")
+                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", id)
+                .attr("dragable", true);
+
+        initialiseSubnetChildData(id);
+    } else {
+        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+    }
+}
+
+// TODO: Delete
+function drawSubnetSVGOrig(subnet) {
     let parent_id = subnet['vcn_id'];
     let id = subnet['id'];
     let compartment_id = subnet['compartment_id'];
