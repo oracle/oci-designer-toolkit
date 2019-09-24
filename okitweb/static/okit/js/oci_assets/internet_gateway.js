@@ -105,7 +105,7 @@ function drawInternetGatewaySVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'] += 1;
 
-        let svg_x = Math.round(icon_width * 2 + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_x = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
         let svg_y = 0;
         let svg_width = icon_width;
         let svg_height = icon_height;

@@ -108,7 +108,7 @@ function drawSecurityListSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-        let svg_x = Math.round(icon_width + (icon_width * position) + (vcn_icon_spacing * position));
+        let svg_x = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
         let svg_y = Math.round(icon_height * 3 / 2);
         let svg_width = icon_width;
         let svg_height = icon_height;

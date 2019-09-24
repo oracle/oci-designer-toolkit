@@ -7,7 +7,7 @@ const icon_x = 25;
 const icon_y = 25;
 const icon_translate_x_start = -20;
 const icon_translate_y_start = -20;
-const vcn_icon_spacing = 10;
+const icon_spacing = 10;
 const icon_stroke_colour = "#F80000";
 const viewbox_height = 1500;
 const viewbox_width = 2500;
@@ -19,7 +19,8 @@ const text_viewbox_width = 200;
  */
 
 function drawArtifactSVG(artifact, data_type, svg_x=0, svg_y=0, svg_width=45, svg_height=45, stroke_colour="#F80000",
-                         stroke_dash=5, show_name=false, show_label=false, icon_translate_x=0, icon_translate_y=0) {
+                         stroke_dash=5, show_name=false, show_label=false, icon_translate_x=0, icon_translate_y=0,
+                         rect_width_adjust=0, rect_height_adjust = 0) {
     let id = artifact['id'];
     let parent_id = artifact['parent_id'];
     let compartment_id = artifact['compartment_id'];
@@ -31,8 +32,8 @@ function drawArtifactSVG(artifact, data_type, svg_x=0, svg_y=0, svg_width=45, sv
     console.log('<<<<<<<<<<<<<<<<<< Compartment Id : ' + compartment_id + ' >>>>>>>>>>>>>>>>>>')
     let rect_x = 0;
     let rect_y = 0;
-    let rect_width = svg_width;
-    let rect_height = svg_height;
+    let rect_width = svg_width + rect_width_adjust;
+    let rect_height = svg_height + rect_height_adjust;
     if (icon_translate_y < 0) {
         rect_y = Math.abs(icon_translate_y);
         rect_height -= rect_y;

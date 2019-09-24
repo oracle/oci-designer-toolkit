@@ -12,10 +12,8 @@ asset_clear_functions.push("clearSubnetVariables");
 
 const subnet_stroke_colour = "orange";
 const subnet_query_cb = "subnet-query-cb";
-let subnet_svg_height = 400;
-let subnet_svg_width = "95%";
-let subnet_rect_height = "85%";
-let subnet_rect_width = "95%";
+let subnet_svg_height = 300;
+let subnet_svg_width = 1500;
 let subnet_ids = [];
 let subnet_count = 0;
 let subnet_bui_sub_artifacts = {};
@@ -155,10 +153,10 @@ function drawSubnetSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'] += 1;
 
-        let svg_x = Math.round(icon_width * 3 / 2);
-        let svg_y = Math.round((icon_height * 3) + (icon_height * position) + (vcn_icon_spacing * position));
-        let svg_width = 1800;
-        let svg_height = 300;
+        let svg_x = Math.round(icon_width);
+        let svg_y = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));
+        let svg_width = subnet_svg_width;
+        let svg_height = subnet_svg_height;
         let data_type = subnet_artifact;
         let stroke_colour = subnet_stroke_colour;
         let stroke_dash = 5;

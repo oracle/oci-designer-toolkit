@@ -12,10 +12,8 @@ asset_clear_functions.push("clearInstanceVariables");
 
 const instance_stroke_colour = "blue";
 const instance_query_cb = "instance-query-cb";
-const instance_width = Math.round(icon_width * 3);
-const instance_height = Math.round(icon_height * 2);
-const instance_svg_width = Math.round(instance_width + icon_x * 2);
-const instance_svg_height = Math.round(instance_height + icon_y * 2);
+const instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
+const instance_height = Math.round(icon_height * 5 / 2);
 let instance_ids = [];
 let instance_count = 0;
 
@@ -67,7 +65,8 @@ function addInstance(subnet_id, compartment_id) {
     okitIdsJsonObj[id] = instance['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
-    drawInstanceSVG(instance);
+    //drawInstanceSVG(instance);
+    redrawSVGCanvas();
     loadInstanceProperties(id);
 }
 
@@ -121,7 +120,7 @@ function drawInstanceSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
 
-        let svg_x = Math.round((icon_width * 3 / 2) + (instance_width * position) + (vcn_icon_spacing * position));
+        let svg_x = Math.round((icon_width * 3 / 2) + (instance_width * position) + (icon_spacing * position));
         let svg_y = Math.round(icon_height * 4);
         let svg_width = instance_width;
         let svg_height = instance_height;
@@ -132,7 +131,8 @@ function drawInstanceSVG(artifact) {
         console.log('svg_y : ' + svg_y);
 
         let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
-            stroke_dash, true, false);
+            stroke_dash, true, false, 0, 0, 0,
+            (Math.round(icon_height / 2) * -1));
 
         //loadInstanceProperties(id);
         let rect = d3.select('#' + id);
@@ -167,6 +167,8 @@ function drawInstanceSVG(artifact) {
             .attr("data-connector-id", id)
             .attr("dragable", true);
     }
+    // Draw any connected artifacts
+    drawInstanceConnectionsSVG(artifact);
 }
 
 function clearInstanceSVG(instance) {
@@ -176,6 +178,7 @@ function clearInstanceSVG(instance) {
 
 function drawInstanceConnectorsSVG(instance) {
     let id = instance['id'];
+    console.log('>>>> Drawing ' + instance_artifact + ' : ' + id + ' Connectors');
     // If Block Storage Volumes Ids are missing then initialise.
     // This may occur during a query
     if (!instance.hasOwnProperty('block_storage_volume_ids')) {
@@ -210,6 +213,45 @@ function drawInstanceConnectorsSVG(instance) {
             }
         }
     }
+}
+
+function drawInstanceConnectionsSVG(instance) {
+    let id = instance['id'];
+    console.log('Drawing ' + instance_artifact + ' : ' + id + ' Connections');
+    // If Block Storage Volumes Ids are missing then initialise.
+    // This may occur during a query
+    if (!instance.hasOwnProperty('block_storage_volume_ids')) {
+        instance['block_storage_volume_ids'] = [];
+    }
+    let bs_count = 0;
+    for (let block_storage_id of instance['block_storage_volume_ids']) {
+        for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
+            if (block_storage_id == block_storage_volume['id']) {
+                let artifact_clone = JSON.parse(JSON.stringify(block_storage_volume));
+                artifact_clone['parent_id'] = instance['id'];
+                drawAttachedBlockStorageVolume(artifact_clone, bs_count);
+            }
+        }
+        bs_count += 1;
+    }
+}
+
+function drawAttachedBlockStorageVolume(artifact, bs_count) {
+    console.log('Drawing ' + instance_artifact  + ' Block Storage Volume : ' + artifact['id']);
+    let svg_x = icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count);
+    let svg_y = Math.round(instance_height - icon_height);
+    let svg_width = icon_width;
+    let svg_height = icon_height;
+    let data_type = block_storage_volume_artifact;
+    let stroke_colour = block_storage_volume_stroke_colour;
+    let stroke_dash = 1;
+    // Draw Block Storage Volume
+    let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+    // Add click event to display properties
+    svg.on("click", function () {
+        loadBlockStorageVolumeProperties(artifact['id']);
+        d3.event.stopPropagation();
+    });
 }
 
 /*
@@ -263,7 +305,7 @@ function updateInstance(source_type, source_id, id) {
                     d3.select("#" + generateConnectorId(source_id, id)).remove();
                 } else {
                     instance['block_storage_volume_ids'].push(source_id);
-                    instance['block_storage_volumes'].push(okitIdsJsonObj[source_id]);
+                    //instance['block_storage_volumes'].push(okitIdsJsonObj[source_id]);
                 }
             }
         }

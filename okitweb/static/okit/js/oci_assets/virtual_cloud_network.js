@@ -149,7 +149,7 @@ function drawVirtualCloudNetworkSVG(artifact) {
         compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] += 1;
 
         let svg_x = Math.round(icon_width * 3 / 2);
-        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
         let svg_width = 2000;
         let svg_height = 500;
         let data_type = virtual_cloud_network_artifact;

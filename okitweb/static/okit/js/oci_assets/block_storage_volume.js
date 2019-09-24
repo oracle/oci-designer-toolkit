@@ -53,7 +53,8 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     okitIdsJsonObj[id] = block_storage_volume['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
-    drawBlockStorageVolumeSVG(block_storage_volume);
+    //drawBlockStorageVolumeSVG(block_storage_volume);
+    redrawSVGCanvas();
     loadBlockStorageVolumeProperties(id);
 }
 
@@ -87,8 +88,22 @@ function deleteBlockStorageVolume(id) {
 ** SVG Creation
  */
 function drawBlockStorageVolumeSVG(artifact) {
-    let parent_id = artifact['compartment_id'];
-    artifact['parent_id'] = parent_id;
+    // Check if this Block Storage Volume has been attached to an Instance and if so do not draw because it will be done
+    // as part of the instance
+    if (OKITJsonObj.hasOwnProperty('instances')) {
+        for (let instance of OKITJsonObj['instances']) {
+            if (instance.hasOwnProperty('block_storage_volume_ids')) {
+                if (instance['block_storage_volume_ids'].includes(artifact['id'])) {
+                    console.log(artifact['display_name'] + ' attached to instance '+ instance['display_name']);
+                    return;
+                }
+            }
+        }
+    }
+    if (!artifact.hasOwnProperty('parent_id')) {
+        artifact['parent_id'] = artifact['compartment_id'];
+    }
+    let parent_id = artifact['parent_id'];
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
     console.log('Drawing ' + block_storage_volume_artifact + ' : ' + id);
@@ -107,7 +122,7 @@ function drawBlockStorageVolumeSVG(artifact) {
         compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
 
         let svg_x = (icon_width / 4);
-        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
         let svg_width = icon_width;
         let svg_height = icon_height;
         let data_type = block_storage_volume_artifact;

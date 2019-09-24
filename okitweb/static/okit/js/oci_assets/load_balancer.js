@@ -105,7 +105,7 @@ function drawLoadBalancerSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] += 1;
 
-        let svg_x = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (vcn_icon_spacing * position));
+        let svg_x = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
         let svg_y = Math.round(icon_height * 3 / 2);
         let svg_width = load_balancer_width;
         let svg_height = load_balancer_height;

@@ -495,7 +495,7 @@ function drawBlockStorageVolumeSVG(artifact) {
         compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
 
         let svg_x = (icon_width / 4);
-        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (vcn_icon_spacing * position));
+        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
         let svg_width = icon_width;
         let svg_height = icon_height;
         let data_type = block_storage_volume_artifact;
