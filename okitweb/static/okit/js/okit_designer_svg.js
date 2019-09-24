@@ -197,7 +197,7 @@ function drawSVGforJson() {
             initialiseSubnetChildData(OKITJsonObj['subnets'][i]['id']);
             subnet_count += 1;
             drawSubnetSVG(OKITJsonObj['subnets'][i]);
-            drawSubnetConnectorsSVG(OKITJsonObj['subnets'][i]);
+            //drawSubnetConnectorsSVG(OKITJsonObj['subnets'][i]);
         }
     }
 

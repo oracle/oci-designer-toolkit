@@ -204,6 +204,8 @@ function drawSubnetSVG(artifact) {
     } else {
         console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    // Draw any connected artifacts
+    drawSubnetAttachmentsSVG(artifact);
 }
 
 function clearSubnetConnectorsSVG(subnet) {
@@ -268,6 +270,76 @@ function drawSubnetConnectorsSVG(subnet) {
             }
         }
     }
+}
+
+function drawSubnetAttachmentsSVG(subnet) {
+    let id = subnet['id'];
+    console.log('Drawing ' + subnet_artifact + ' : ' + id + ' Attachments');
+    let attachment_count = 0;
+    // Draw Route Table
+    if (!OKITJsonObj.hasOwnProperty('route_tables')) {
+        OKITJsonObj['route_tables'] = [];
+    }
+    if (OKITJsonObj.hasOwnProperty('route_tables')) {
+        for (let route_table of OKITJsonObj['route_tables']) {
+            if (subnet['route_table_id'] == route_table['id']) {
+                let artifact_clone = JSON.parse(JSON.stringify(route_table));
+                artifact_clone['parent_id'] = subnet['id'];
+                drawAttachedRouteTable(artifact_clone, attachment_count);
+            }
+        }
+    }
+    attachment_count += 1;
+    // Security Lists
+    if (!OKITJsonObj.hasOwnProperty('security_lists')) {
+        OKITJsonObj['security_lists'] = [];
+    }
+    for (let security_list_id of subnet['security_list_ids']) {
+        for (let security_list of OKITJsonObj['security_lists']) {
+            if (security_list_id == security_list['id']) {
+                let artifact_clone = JSON.parse(JSON.stringify(security_list));
+                artifact_clone['parent_id'] = subnet['id'];
+                drawAttachedSecurityList(artifact_clone, attachment_count);
+            }
+        }
+        attachment_count += 1;
+    }
+}
+
+function drawAttachedRouteTable(artifact, attachment_count) {
+    console.log('Drawing ' + subnet_artifact  + ' Route Table : ' + artifact['display_name']);
+    let svg_x = (icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count);
+    let svg_y = 0;
+    let svg_width = icon_width;
+    let svg_height = icon_height;
+    let data_type = route_table_artifact;
+    let stroke_colour = route_table_stroke_colour;
+    let stroke_dash = 1;
+    // Draw Block Storage Volume
+    let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+    // Add click event to display properties
+    svg.on("click", function () {
+        loadRouteTableProperties(artifact['id']);
+        d3.event.stopPropagation();
+    });
+}
+
+function drawAttachedSecurityList(artifact, attachment_count) {
+    console.log('Drawing ' + subnet_artifact  + ' Security List : ' + artifact['display_name']);
+    let svg_x = (icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count);
+    let svg_y = 0;
+    let svg_width = icon_width;
+    let svg_height = icon_height;
+    let data_type = security_list_artifact;
+    let stroke_colour = security_list_stroke_colour;
+    let stroke_dash = 1;
+    // Draw Block Storage Volume
+    let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+    // Add click event to display properties
+    svg.on("click", function () {
+        loadSecurityListProperties(artifact['id']);
+        d3.event.stopPropagation();
+    });
 }
 
 /*

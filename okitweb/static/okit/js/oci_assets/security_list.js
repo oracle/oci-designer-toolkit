@@ -89,6 +89,16 @@ function deleteSecurityList(id) {
 ** SVG Creation
  */
 function drawSecurityListSVG(artifact) {
+    // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
+    // the subnet draw.
+    if (OKITJsonObj.hasOwnProperty('subnets')) {
+        for (let subnet of OKITJsonObj['subnets']) {
+            if (subnet['security_list_ids'].includes(artifact['id'])) {
+                console.log(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
+                return;
+            }
+        }
+    }
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];

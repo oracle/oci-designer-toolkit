@@ -168,7 +168,7 @@ function drawInstanceSVG(artifact) {
             .attr("dragable", true);
     }
     // Draw any connected artifacts
-    drawInstanceConnectionsSVG(artifact);
+    drawInstanceAttachmentsSVG(artifact);
 }
 
 function clearInstanceSVG(instance) {
@@ -215,24 +215,24 @@ function drawInstanceConnectorsSVG(instance) {
     }
 }
 
-function drawInstanceConnectionsSVG(instance) {
+function drawInstanceAttachmentsSVG(instance) {
     let id = instance['id'];
-    console.log('Drawing ' + instance_artifact + ' : ' + id + ' Connections');
+    console.log('Drawing ' + instance_artifact + ' : ' + id + ' Attachments');
     // If Block Storage Volumes Ids are missing then initialise.
     // This may occur during a query
     if (!instance.hasOwnProperty('block_storage_volume_ids')) {
         instance['block_storage_volume_ids'] = [];
     }
-    let bs_count = 0;
+    let attachment_count = 0;
     for (let block_storage_id of instance['block_storage_volume_ids']) {
         for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
             if (block_storage_id == block_storage_volume['id']) {
                 let artifact_clone = JSON.parse(JSON.stringify(block_storage_volume));
                 artifact_clone['parent_id'] = instance['id'];
-                drawAttachedBlockStorageVolume(artifact_clone, bs_count);
+                drawAttachedBlockStorageVolume(artifact_clone, attachment_count);
             }
         }
-        bs_count += 1;
+        attachment_count += 1;
     }
 }
 
