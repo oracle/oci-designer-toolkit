@@ -112,12 +112,12 @@ function drawArtifactSVG(artifact, data_type, svg_x=0, svg_y=0, svg_width=45, sv
     svg.on("contextmenu", handleContextMenu)
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
-        .attr("data-parentid", parent_id)
+        .attr("data-parent-id", parent_id)
         .attr("data-compartment-id", compartment_id)
         .selectAll("*")
             .attr("data-type", data_type)
             .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id)
+            .attr("data-parent-id", parent_id)
             .attr("data-compartment-id", compartment_id);
 
     return svg;

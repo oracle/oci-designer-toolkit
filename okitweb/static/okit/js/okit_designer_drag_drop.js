@@ -174,7 +174,7 @@ function handleConnectorDragStart() {
         if (asset_connect_targets.hasOwnProperty(source_type) && asset_connect_targets[source_type].length > 0) {
             // Set Start Element to know we are dragging
             connectorStartElement = this;
-            let parentid = d3.select(this).attr('data-parentid');
+            let parentid = d3.select(this).attr('data-parent-id');
             let parent_svg = document.getElementById(parentid + "-svg");
 
             console.log('Connector Drag Start Parent Id : ' + parentid);
@@ -236,9 +236,9 @@ function handleConnectorDrop(e) {
     if (connectorStartElement) {
         let sourceType = connectorStartElement.getAttribute('data-type');
         let destinationType = d3.select(this).attr('data-type');
-        let parentid = d3.select(this).attr('data-parentid');
+        let parentid = d3.select(this).attr('data-parent-id');
         let sourceid = connectorStartElement.getAttribute('data-okit-id');
-        let source_parent_id = connectorStartElement.getAttribute('data-parentid');
+        let source_parent_id = connectorStartElement.getAttribute('data-parent-id');
         let id = d3.select(this).attr('data-okit-id');
         let connector_source_id = connectorStartElement.getAttribute('data-connector-id');
         let connector_destination_id = d3.select(this).attr('data-connector-id');

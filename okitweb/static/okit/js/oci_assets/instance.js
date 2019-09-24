@@ -187,7 +187,7 @@ function drawInstanceConnectorsSVG(instance) {
     for (let block_storage_id of instance['block_storage_volume_ids']) {
         let block_storage_svg = d3.select('#' + block_storage_id);
         if (block_storage_svg.node()) {
-            let parent_id = block_storage_svg.attr('data-parentid');
+            let parent_id = block_storage_svg.attr('data-parent-id');
             let parent_svg = d3.select('#' + parent_id + "-svg");
             if (parent_svg.node()) {
                 console.log('Parent SVG : ' + parent_svg.node());
