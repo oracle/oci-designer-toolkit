@@ -66,7 +66,7 @@ function addInstance(subnet_id, compartment_id) {
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     //drawInstanceSVG(instance);
-    redrawSVGCanvas();
+    drawSVGCanvas();
     loadInstanceProperties(id);
 }
 

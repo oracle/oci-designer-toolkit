@@ -54,7 +54,7 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
     //drawBlockStorageVolumeSVG(block_storage_volume);
-    redrawSVGCanvas();
+    drawSVGCanvas();
     loadBlockStorageVolumeProperties(id);
 }
 

@@ -122,3 +122,105 @@ function drawArtifactSVG(artifact, data_type, svg_x=0, svg_y=0, svg_width=45, sv
 
     return svg;
 }
+
+
+function drawSVGforJson() {
+    console.log('******** Drawing SVG *********');
+    displayOkitJson();
+    // Clear existing
+    clearSVG();
+
+    // Draw Outer SVG
+    if (OKITJsonObj.hasOwnProperty('compartments')) {
+        compartment_ids = [];
+        for (let i = 0; i < OKITJsonObj['compartments'].length; i++) {
+            compartment_ids.push(OKITJsonObj['compartments'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['compartments'][i]['id']] = OKITJsonObj['compartments'][i]['name']
+            compartment_count += 1;
+            drawCompartmentSVG(OKITJsonObj['compartments'][i]);
+        }
+    }
+
+    // Draw Compartment Subcomponents
+    if (OKITJsonObj.hasOwnProperty('virtual_cloud_networks')) {
+        virtual_network_ids = [];
+        for (let i=0; i < OKITJsonObj['virtual_cloud_networks'].length; i++) {
+            virtual_network_ids.push(OKITJsonObj['virtual_cloud_networks'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['virtual_cloud_networks'][i]['id']] = OKITJsonObj['virtual_cloud_networks'][i]['display_name'];
+            virtual_cloud_network_count += 1;
+            drawVirtualCloudNetworkSVG(OKITJsonObj['virtual_cloud_networks'][i]);
+        }
+    }
+    if (OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
+        block_storage_volume_ids = [];
+        for (let i=0; i < OKITJsonObj['block_storage_volumes'].length; i++) {
+            block_storage_volume_ids.push(OKITJsonObj['block_storage_volumes'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['block_storage_volumes'][i]['id']] = OKITJsonObj['block_storage_volumes'][i]['display_name'];
+            block_storage_volume_count += 1;
+            drawBlockStorageVolumeSVG(OKITJsonObj['block_storage_volumes'][i]);
+        }
+    }
+
+    // Draw Virtual Cloud Network Subcomponents
+    if (OKITJsonObj.hasOwnProperty('internet_gateways')) {
+        internet_gateway_ids = [];
+        for (let i=0; i < OKITJsonObj['internet_gateways'].length; i++) {
+            internet_gateway_ids.push(OKITJsonObj['internet_gateways'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['internet_gateways'][i]['id']] = OKITJsonObj['internet_gateways'][i]['display_name'];
+            internet_gateway_count += 1;
+            drawInternetGatewaySVG(OKITJsonObj['internet_gateways'][i]);
+        }
+    }
+    if (OKITJsonObj.hasOwnProperty('route_tables')) {
+        route_table_ids = [];
+        for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
+            route_table_ids.push(OKITJsonObj['route_tables'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['route_tables'][i]['id']] = OKITJsonObj['route_tables'][i]['display_name'];
+            route_table_count += 1;
+            drawRouteTableSVG(OKITJsonObj['route_tables'][i]);
+        }
+    }
+    if (OKITJsonObj.hasOwnProperty('security_lists')) {
+        security_list_ids = [];
+        for (let i=0; i < OKITJsonObj['security_lists'].length; i++) {
+            security_list_ids.push(OKITJsonObj['security_lists'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['security_lists'][i]['id']] = OKITJsonObj['security_lists'][i]['display_name'];
+            security_list_count += 1;
+            drawSecurityListSVG(OKITJsonObj['security_lists'][i]);
+        }
+    }
+    if (OKITJsonObj.hasOwnProperty('subnets')) {
+        subnet_ids = [];
+        for (let i=0; i < OKITJsonObj['subnets'].length; i++) {
+            subnet_ids.push(OKITJsonObj['subnets'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['subnets'][i]['id']] = OKITJsonObj['subnets'][i]['display_name'];
+            initialiseSubnetChildData(OKITJsonObj['subnets'][i]['id']);
+            subnet_count += 1;
+            drawSubnetSVG(OKITJsonObj['subnets'][i]);
+            drawSubnetConnectorsSVG(OKITJsonObj['subnets'][i]);
+        }
+    }
+
+    // Draw Subnet Subcomponents
+    if (OKITJsonObj.hasOwnProperty('instances')) {
+        instance_ids = [];
+        for (let i=0; i < OKITJsonObj['instances'].length; i++) {
+            instance_ids.push(OKITJsonObj['instances'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['instances'][i]['id']] = OKITJsonObj['instances'][i]['display_name'];
+            instance_count += 1;
+            drawInstanceSVG(OKITJsonObj['instances'][i]);
+            //drawInstanceConnectorsSVG(OKITJsonObj['instances'][i]);
+        }
+    }
+    if (OKITJsonObj.hasOwnProperty('load_balancers')) {
+        load_balancer_ids = [];
+        for (let i=0; i < OKITJsonObj['load_balancers'].length; i++) {
+            load_balancer_ids.push(OKITJsonObj['load_balancers'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['load_balancers'][i]['id']] = OKITJsonObj['load_balancers'][i]['display_name'];
+            load_balancer_count += 1;
+            drawLoadBalancerSVG(OKITJsonObj['load_balancers'][i]);
+            drawLoadBalancerConnectorsSVG(OKITJsonObj['load_balancers'][i]);
+        }
+    }
+}
+
