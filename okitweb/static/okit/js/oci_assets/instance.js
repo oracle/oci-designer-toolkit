@@ -127,8 +127,8 @@ function drawInstanceSVG(artifact) {
         let data_type = instance_artifact;
         let stroke_colour = instance_stroke_colour;
         let stroke_dash = 1;
-        console.log('svg_x : ' + svg_x);
-        console.log('svg_y : ' + svg_y);
+        //console.log('svg_x : ' + svg_x);
+        //console.log('svg_y : ' + svg_y);
 
         let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
             stroke_dash, true, false, 0, 0, 0,
