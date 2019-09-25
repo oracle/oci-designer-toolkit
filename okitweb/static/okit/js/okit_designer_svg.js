@@ -110,6 +110,11 @@ function drawArtifactSVG(artifact, data_type, svg_x=0, svg_y=0, svg_width=45, sv
 
     // Set common attributes on svg element and children
     svg.on("contextmenu", handleContextMenu)
+        .on("dragenter", handleDragEnter)
+        .on("dragover", handleDragOver)
+        .on("dragleave", handleDragLeave)
+        .on("drop", handleDrop)
+        .on("dragend", handleDragEnd)
         .attr("data-type", data_type)
         .attr("data-okit-id", id)
         .attr("data-parent-id", parent_id)
@@ -124,7 +129,7 @@ function drawArtifactSVG(artifact, data_type, svg_x=0, svg_y=0, svg_width=45, sv
 }
 
 
-function drawSVGforJson() {
+function drawSVGforJson(artifact={}) {
     console.log('******** Drawing SVG *********');
     displayOkitJson();
     // Clear existing

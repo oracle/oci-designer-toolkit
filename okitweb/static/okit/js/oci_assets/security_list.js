@@ -139,7 +139,8 @@ function drawSecurityListSVG(artifact) {
         svg.on("click", function () {
             loadSecurityListProperties(id);
             d3.event.stopPropagation();
-        })
+        });
+        /*
             .on("mousedown", handleConnectorDragStart)
             .on("mousemove", handleConnectorDrag)
             .on("mouseup", handleConnectorDrop)
@@ -164,6 +165,7 @@ function drawSecurityListSVG(artifact) {
             .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-id", id)
             .attr("dragable", true);
+        */
     } else {
         console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }

@@ -174,12 +174,14 @@ function drawCompartmentSVG(artifact) {
     svg.on("click", function() {
         loadCompartmentProperties(id);
         d3.event.stopPropagation();
-    })
+    });
+    /*
         .on("dragenter", handleDragEnter)
         .on("dragover", handleDragOver)
         .on("dragleave", handleDragLeave)
         .on("drop", handleDrop)
         .on("dragend", handleDragEnd);
+    */
 
     initialiseCompartmentChildData(id);
 }

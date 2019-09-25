@@ -167,12 +167,14 @@ function drawVirtualCloudNetworkSVG(artifact) {
         svg.on("click", function () {
             loadVirtualCloudNetworkProperties(id);
             d3.event.stopPropagation();
-        })
+        });
+        /*
             .on("mousemove", handleConnectorDrag)
             .on("mouseup", handleConnectorDrop)
             .on("dragenter", handleConnectorDragEnter)
             .on("dragleave", handleConnectorDragLeave)
             .on("contextmenu", handleContextMenu);
+        */
 
         initialiseVirtualCloudNetworkChildData(id);
     } else {

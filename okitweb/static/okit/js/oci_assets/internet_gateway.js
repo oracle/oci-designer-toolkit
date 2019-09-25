@@ -123,8 +123,8 @@ function drawInternetGatewaySVG(artifact) {
         svg.on("click", function () {
             loadInternetGatewayProperties(id);
             d3.event.stopPropagation();
-        })
-            .on("contextmenu", handleContextMenu);
+        });
+        //    .on("contextmenu", handleContextMenu);
     } else {
         console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }

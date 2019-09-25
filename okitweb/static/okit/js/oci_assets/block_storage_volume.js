@@ -142,7 +142,8 @@ function drawBlockStorageVolumeSVG(artifact) {
         svg.on("click", function () {
             loadBlockStorageVolumeProperties(id);
             d3.event.stopPropagation();
-        })
+        });
+        /*
             .on("mousedown", handleConnectorDragStart)
             .on("mousemove", handleConnectorDrag)
             .on("mouseup", handleConnectorDrop)
@@ -166,6 +167,7 @@ function drawBlockStorageVolumeSVG(artifact) {
             .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
             .attr("data-connector-id", id)
             .attr("dragable", true);
+        */
     } else {
         console.log(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
     }

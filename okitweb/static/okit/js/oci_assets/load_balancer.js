@@ -74,7 +74,7 @@ function deleteLoadBalancer(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['load_balancers'].length; i++) {
+    for (let i = 0; i < OKITJsonObj['load_balancers'].length; i++) {
         if (OKITJsonObj['load_balancers'][i]['id'] == id) {
             OKITJsonObj['load_balancers'].splice(i, 1);
         }
@@ -123,7 +123,11 @@ function drawLoadBalancerSVG(artifact) {
         // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
         // Add dragevent versions
         // Set common attributes on svg element and children
-        svg.on("click", function () {loadLoadBalancerProperties(id); d3.event.stopPropagation(); })
+        svg.on("click", function () {
+            loadLoadBalancerProperties(id);
+            d3.event.stopPropagation();
+        });
+        /*
             .on("mousedown", handleConnectorDragStart)
             .on("mousemove", handleConnectorDrag)
             .on("mouseup", handleConnectorDrop)
@@ -134,7 +138,8 @@ function drawLoadBalancerSVG(artifact) {
             .on("dragenter", handleConnectorDragEnter)
             .on("dragleave", handleConnectorDragLeave)
             .on("contextmenu", handleContextMenu)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+        */
+        svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
@@ -221,7 +226,9 @@ function loadLoadBalancerProperties(id) {
                     }
                     instances_select.val(load_balancer['instance_ids']);
                     // Add Event Listeners
-                    addPropertiesEventListeners(load_balancer, [clearLoadBalancerConnectorsSVG, drawLoadBalancerConnectorsSVG]);
+                    //addPropertiesEventListeners(load_balancer, [clearLoadBalancerConnectorsSVG, drawLoadBalancerConnectorsSVG]);
+                    //addPropertiesEventListeners(load_balancer, [drawLoadBalancerAttachmentsSVG]);
+                    addPropertiesEventListeners(load_balancer, [drawSVGforJson]);
                     break;
                 }
             }
@@ -241,7 +248,7 @@ function updateLoadBalancer(source_type, source_id, id) {
         console.log(i + ') ' + JSON.stringify(load_balancer))
         if (load_balancer['id'] == id) {
             if (source_type == instance_artifact) {
-                if (load_balancer['instance_ids'].indexOf(source_id) > 0 ) {
+                if (load_balancer['instance_ids'].indexOf(source_id) > 0) {
                     // Already connected so delete existing line
                     d3.select("#" + generateConnectorId(source_id, id)).remove();
                 } else {
@@ -273,25 +280,25 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(request_json),
-        success: function(resp) {
+        success: function (resp) {
             let response_json = JSON.parse(resp);
             OKITJsonObj['load_balancers'] = response_json;
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
+            let len = response_json.length;
+            for (let i = 0; i < len; i++) {
                 console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + load_balancer_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
-        error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+        error: function (xhr, status, error) {
+            console.log('Status : ' + status)
+            console.log('Error : ' + error)
         }
     });
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     clearLoadBalancerVariables();
 
     let body = d3.select('#query-progress-tbody');

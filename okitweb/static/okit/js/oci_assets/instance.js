@@ -79,7 +79,7 @@ function deleteInstance(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['instances'].length; i++) {
+    for (let i = 0; i < OKITJsonObj['instances'].length; i++) {
         if (OKITJsonObj['instances'][i]['id'] == id) {
             OKITJsonObj['instances'].splice(i, 1);
         }
@@ -87,7 +87,7 @@ function deleteInstance(id) {
     // Remove Load Balancer references
     if ('load_balancers' in OKITJsonObj) {
         for (load_balancer of OKITJsonObj['load_balancers']) {
-            for (let i=0; i < load_balancer['instance_ids'].length; i++) {
+            for (let i = 0; i < load_balancer['instance_ids'].length; i++) {
                 if (load_balancer['instance_ids'][i] == id) {
                     load_balancer['instance_ids'].splice(i, 1);
                 }
@@ -141,7 +141,11 @@ function drawInstanceSVG(artifact) {
         // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
         // Add dragevent versions
         // Set common attributes on svg element and children
-        svg.on("click", function () {loadInstanceProperties(id); d3.event.stopPropagation(); })
+        svg.on("click", function () {
+            loadInstanceProperties(id);
+            d3.event.stopPropagation();
+        });
+        /*
             .on("mousedown", handleConnectorDragStart)
             .on("mousemove", handleConnectorDrag)
             .on("mouseup", handleConnectorDrop)
@@ -152,7 +156,8 @@ function drawInstanceSVG(artifact) {
             .on("dragenter", handleConnectorDragEnter)
             .on("dragleave", handleConnectorDragLeave)
             .on("contextmenu", handleContextMenu)
-            .attr("data-compartment-id", compartment_id)
+        */
+        svg.attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y)
@@ -237,7 +242,7 @@ function drawInstanceAttachmentsSVG(instance) {
 }
 
 function drawAttachedBlockStorageVolume(artifact, bs_count) {
-    console.log('Drawing ' + instance_artifact  + ' Block Storage Volume : ' + artifact['id']);
+    console.log('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
     let svg_x = icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count);
     let svg_y = Math.round(instance_height - icon_height);
     let svg_width = icon_width;
@@ -280,7 +285,8 @@ function loadInstanceProperties(id) {
                     }
                     block_storage_volume_select.val(instance['block_storage_volume_ids']);
                     // Add Event Listeners
-                    addPropertiesEventListeners(instance, []);
+                    //addPropertiesEventListeners(instance, [drawInstanceAttachmentsSVG]);
+                    addPropertiesEventListeners(instance, [drawSVGforJson]);
                     break;
                 }
             }
@@ -300,7 +306,7 @@ function updateInstance(source_type, source_id, id) {
         console.log(i + ') ' + JSON.stringify(instance))
         if (instance['id'] == id) {
             if (source_type == block_storage_volume_artifact) {
-                if (instance['block_storage_volume_ids'].indexOf(source_id) > 0 ) {
+                if (instance['block_storage_volume_ids'].indexOf(source_id) > 0) {
                     // Already connected so delete existing line
                     d3.select("#" + generateConnectorId(source_id, id)).remove();
                 } else {
@@ -332,25 +338,25 @@ function queryInstanceAjax(compartment_id, subnet_id) {
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(request_json),
-        success: function(resp) {
+        success: function (resp) {
             let response_json = JSON.parse(resp);
             OKITJsonObj['instances'] = response_json;
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
+            let len = response_json.length;
+            for (let i = 0; i < len; i++) {
                 console.log('queryInstanceAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + instance_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
-        error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+        error: function (xhr, status, error) {
+            console.log('Status : ' + status)
+            console.log('Error : ' + error)
         }
     });
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     clearInstanceVariables();
 
     let body = d3.select('#query-progress-tbody');
