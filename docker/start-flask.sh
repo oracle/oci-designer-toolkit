@@ -24,6 +24,7 @@ docker run \
        --rm \
        -it \
        ${DOCKERIMAGE} \
-       /bin/bash -c "pwd;env;python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger"
+       /bin/bash -c "pwd;env;/root/lib/oracle-cli/bin/python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger"
+#       /bin/bash -c "pwd;env;/root/lib/oracle-cli/bin/python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger"
 
 docker ps -l
