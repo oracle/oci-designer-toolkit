@@ -121,37 +121,37 @@ RUN yum update -y ; \
     env | sort
 
 # Add preview cli
-ADD "oci-cli-full-install-2.6.1+preview.1.2863.zip" /okit/preview
+#ADD "oci-cli-full-install-2.6.1+preview.1.2863.zip" /okit/preview
 # Install OCI cli
-RUN if [[ -n "${PREVIEW}" ]] ; then cd /okit/preview ; \
-    unzip oci-cli-full-install-2.6.1+preview.1.2863.zip -d oci-cli ; \
-    cd oci-cli ; \
-    sed -i '0,/< \$_TTY/s///' /okit/preview/oci-cli/install.sh ; \
-    sed -i '/< \$_TTY/s///' /okit/preview/oci-cli/install.sh ; \
-    chmod 777 /okit/preview/oci-cli/install.sh ; \
-    /okit/preview/oci-cli/install.sh --accept-all-defaults ; \
-    echo 'export PATH=/root/lib/oracle-cli/bin:${PATH} '                             >> /etc/bashrc ; \
-    cd /tmp  \
-    /root/lib/oracle-cli/bin/pip3 install \
-        ansible \
-        asciinema \
-        configparser \
-        flask \
-        flask-cors \
-        flask_restful \
-        gunicorn \
-        ipaddress \
-        ipcalc \
-        jinja2 \
-        oci \
-        pexpect \
-        pyyaml \
-        requests \
-        simplejson \
-        six \
-        wtforms \
-        xlrd ; \
-    fi
+#RUN if [[ -n "${PREVIEW}" ]] ; then cd /okit/preview ; \
+#    unzip oci-cli-full-install-2.6.1+preview.1.2863.zip -d oci-cli ; \
+#    cd oci-cli ; \
+#    sed -i '0,/< \$_TTY/s///' /okit/preview/oci-cli/install.sh ; \
+#    sed -i '/< \$_TTY/s///' /okit/preview/oci-cli/install.sh ; \
+#    chmod 777 /okit/preview/oci-cli/install.sh ; \
+#    /okit/preview/oci-cli/install.sh --accept-all-defaults ; \
+#    echo 'export PATH=/root/lib/oracle-cli/bin:${PATH} '                             >> /etc/bashrc ; \
+#    cd /tmp  \
+#    /root/lib/oracle-cli/bin/pip3 install \
+#        ansible \
+#        asciinema \
+#        configparser \
+#        flask \
+#        flask-cors \
+#        flask_restful \
+#        gunicorn \
+#        ipaddress \
+#        ipcalc \
+#        jinja2 \
+#        oci \
+#        pexpect \
+#        pyyaml \
+#        requests \
+#        simplejson \
+#        six \
+#        wtforms \
+#        xlrd ; \
+#    fi
 
-ENV PATH=${PREVIEW:+/root/lib/oracle-cli/bin:}${PATH}
+#ENV PATH=${PREVIEW:+/root/lib/oracle-cli/bin:}${PATH}
 

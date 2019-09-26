@@ -69,7 +69,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
             zip_bytes = f.read()
             encoded_zip = base64.b64encode(zip_bytes).decode('ascii')
         zip_source = oci.resource_manager.models.CreateZipUploadConfigSourceDetails(zip_file_base64_encoded=encoded_zip)
-        stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'])
+        stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x')
         response = self.client.create_stack(stack_details)
         logger.info('Create Stack Response : {0!s:s}'.format(str(response.data)))
         return self.toJson(response.data)

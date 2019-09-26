@@ -37,7 +37,7 @@ from common.ociLogging import getLogger
 # Configure logging
 logger = getLogger()
 
-class OCIResourceManagerGenerator(OCITerraform11Generator):
+class OCIResourceManagerGenerator(OCITerraformGenerator):
 
     def __init__(self, template_root, output_root, visualiser_json, tenancy_ocid=None, region=None, compartment_ocid=None, **kwargs):
         DIRECTORY_SUFFIX = 'resource-manager'

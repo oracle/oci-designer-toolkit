@@ -370,14 +370,20 @@ function loadSubnetProperties(id) {
                     $('#dns_label').val(subnet['dns_label']);
                     let route_table_select = $('#route_table_id');
                     //console.log('Route Table Ids: ' + route_table_ids);
-                    for (let rtid of route_table_ids) {
-                        route_table_select.append($('<option>').attr('value', rtid).text(okitIdsJsonObj[rtid]));
+                    //for (let rtid of route_table_ids) {
+                    //    route_table_select.append($('<option>').attr('value', rtid).text(okitIdsJsonObj[rtid]));
+                    //}
+                    for (let route_table of OKITJsonObj['route_tables']) {
+                        route_table_select.append($('<option>').attr('value', route_table['id']).text(route_table['display_name']));
                     }
                     route_table_select.val(subnet['route_table_id']);
                     let security_lists_select = $('#security_list_ids');
                     //console.log('Security List Ids: ' + security_list_ids);
-                    for (let slid of security_list_ids) {
-                        security_lists_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
+                    //for (let slid of security_list_ids) {
+                    //    security_lists_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
+                    //}
+                    for (let security_list of OKITJsonObj['security_lists']) {
+                        security_lists_select.append($('<option>').attr('value', security_list['id']).text(security_list['display_name']));
                     }
                     security_lists_select.val(subnet['security_list_ids']);
                     // Add Event Listeners

@@ -91,6 +91,7 @@ def designer():
         response_string = json.dumps(response_json, separators=(',', ': '))
         return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
+        logger.info('>>>>>>>>> oci version {0!s:s}'.format(oci.__version__))
         return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons)
 
 

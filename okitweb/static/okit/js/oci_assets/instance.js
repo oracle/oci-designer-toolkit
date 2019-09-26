@@ -280,8 +280,11 @@ function loadInstanceProperties(id) {
                     $('#authorized_keys').val(instance['authorized_keys']);
                     $('#cloud_init_yaml').val(instance['cloud_init_yaml']);
                     let block_storage_volume_select = $('#block_storage_volume_ids');
-                    for (let bsvid of block_storage_volume_ids) {
-                        block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
+                    //for (let bsvid of block_storage_volume_ids) {
+                    //    block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
+                    //}
+                    for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
+                        block_storage_volume_select.append($('<option>').attr('value', block_storage_volume['id']).text(block_storage_volume['display_name']));
                     }
                     block_storage_volume_select.val(instance['block_storage_volume_ids']);
                     // Add Event Listeners
