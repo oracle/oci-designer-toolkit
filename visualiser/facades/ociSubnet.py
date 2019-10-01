@@ -45,15 +45,6 @@ class OCISubnets(OCIVirtualNetworkConnection):
         subnets_json = self.toJson(subnets)
         logger.debug(str(subnets_json))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    self.subnets_json = subnets_json
-        #else:
-        #    filtered = self.subnets_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    self.subnets_json = filtered
-
         # Filter results
         self.subnets_json = self.filterJsonObjectList(subnets_json, filter)
         logger.debug(str(self.subnets_json))

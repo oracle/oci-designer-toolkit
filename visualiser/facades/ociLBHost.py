@@ -46,15 +46,6 @@ class OCILBHosts(OCILoadBalancerConnection):
         lb_hosts_json = self.toJson(lb_hosts)
         logger.debug(str(lb_hosts_json))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    return self.lb_hosts_json
-        #else:
-        #    filtered = self.lb_hosts_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    return filtered
-
         # Filter results
         self.lb_hosts_json = self.filterJsonObjectList(lb_hosts_json, filter)
         logger.debug(str(self.lb_hosts_json))

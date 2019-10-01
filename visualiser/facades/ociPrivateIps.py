@@ -61,15 +61,6 @@ class OCIPrivateIps(OCIVirtualNetworkConnection):
         private_ips_json = self.toJson(private_ips)
         logger.debug(str(private_ips_json))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    self.private_ips_json = private_ips_json
-        #else:
-        #    filtered = self.private_ips_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    self.private_ips_json = filtered
-
         # Filter results
         self.private_ips_json = self.filterJsonObjectList(private_ips_json, filter)
         logger.debug('--------------------- Private IPs ----------------------')

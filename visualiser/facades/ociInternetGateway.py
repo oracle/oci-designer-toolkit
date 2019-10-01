@@ -53,15 +53,6 @@ class OCIInternetGateways(OCIVirtualNetworkConnection):
         internet_gateways_json = self.toJson(internet_gateways)
         logger.debug(str(internet_gateways_json))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    self.internet_gateways_json = internet_gateways_json
-        #else:
-        #    filtered = self.internet_gateways_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    self.internet_gateways_json = filtered
-
         # Filter results
         self.internet_gateways_json = self.filterJsonObjectList(internet_gateways_json, filter)
         logger.debug(str(self.internet_gateways_json))

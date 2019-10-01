@@ -55,15 +55,6 @@ class OCIBackends(OCILoadBalancerConnection):
         for backend in self.backends_json:
             self.backends_obj.append(OCIBackend(self.config, self.configfile, backend))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    return self.backends_json
-        #else:
-        #    filtered = self.backends_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    return filtered
-
         return self.backends_json
 
 

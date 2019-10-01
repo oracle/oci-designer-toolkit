@@ -51,15 +51,6 @@ class OCILoadBalancers(OCILoadBalancerConnection):
         load_balancers_json = self.toJson(load_balancers)
         logger.debug(str(load_balancers_json))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    self.load_balancers_json = load_balancers_json
-        #else:
-        #    filtered = self.load_balancers_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    self.load_balancers_json = filtered
-
         # Filter results
         self.load_balancers_json = self.filterJsonObjectList(load_balancers_json, filter)
         logger.debug(str(self.load_balancers_json))

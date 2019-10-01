@@ -52,16 +52,6 @@ class OCINATGateways(OCIVirtualNetworkConnection):
         nat_gateways_json = self.toJson(nat_gateways)
         logger.debug(str(nat_gateways_json))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    self.nat_gateways_json = nat_gateways_json
-        #else:
-        #    filtered = self.nat_gateways_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    self.nat_gateways_json = filtered
-        #logger.debug(str(self.nat_gateways_json))
-
         # Filter results
         self.nat_gateways_json = self.filterJsonObjectList(nat_gateways_json, filter)
         logger.debug(str(self.nat_gateways_json))

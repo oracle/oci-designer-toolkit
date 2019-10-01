@@ -67,15 +67,6 @@ class OCICompartments(OCIIdentityConnection):
         compartments_json = self.toJson(compartments)
         logger.debug(str(compartments_json))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    self.compartments_json = compartments_json
-        #else:
-            #filtered = compartments_json[:]
-            #for key, val in filter.items():
-            #    filtered = [comp for comp in filtered if re.compile(val).search(comp[key])]
-            #self.compartments_json = filtered
-
         # Filter results
         self.compartments_json = self.filterJsonObjectList(compartments_json, filter)
         logger.debug(str(self.compartments_json))

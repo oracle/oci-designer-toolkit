@@ -61,15 +61,6 @@ class OCIVnicAttachments(OCIComputeConnection):
         vnic_attachments_json = self.toJson(vnic_attachments)
         logger.debug(str(vnic_attachments_json))
 
-        # Check if the results should be filtered
-        #if filter is None:
-        #    self.vnic_attachments_json = vnic_attachments_json
-        #else:
-        #    filtered = self.vnic_attachments_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    self.vnic_attachments_json = filtered
-
         # Filter results
         self.vnic_attachments_json = self.filterJsonObjectList(vnic_attachments_json, filter)
         logger.debug('--------------------- Vnics ----------------------')

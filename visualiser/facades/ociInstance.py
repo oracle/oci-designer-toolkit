@@ -94,9 +94,6 @@ class OCIInstances(OCIComputeConnection):
         instances_json = self.toJson(instances)
         logger.debug(str(instances_json))
  
-        #self.instances_json = instances_json
-        #logger.debug(str(self.instances_json))
-
         # Filter results
         self.instances_json = self.filterJsonObjectList(instances_json, filter)
         logger.debug(str(self.instances_json))
