@@ -149,6 +149,8 @@ class OCIGenerator(object):
         for internet_gateway in self.visualiser_json.get('internet_gateways', []):
             self.renderInternetGateway(internet_gateway)
         # -- NAT Gateways
+        for nat_gateway in self.visualiser_json.get('nat_gateways', []):
+            self.renderNATGateway(nat_gateway)
         # -- Dynamic Routing Gateways
         # -- Security Lists
         for security_list in self.visualiser_json.get('security_lists', []):
@@ -245,6 +247,28 @@ class OCIGenerator(object):
         self.run_variables[variableName] = internet_gateway["display_name"]
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("internet_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderNATGateway(self, nat_gateway):
+        # Read Data
+        standardisedName = self.standardiseResourceName(nat_gateway['display_name'])
+        # resourceName = 'NATGateway_{0:s}'.format(standardisedName)
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = nat_gateway['display_name']
+        # Process NAT Gateway Data
+        logger.info('Processing NAT Gateway Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[nat_gateway['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = nat_gateway["display_name"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("nat_gateway.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

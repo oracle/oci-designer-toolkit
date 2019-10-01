@@ -41,6 +41,7 @@ from generators.ociPythonGenerator import OCIPythonGenerator
 from facades.ociCompartment import OCICompartments
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from facades.ociInternetGateway import OCIInternetGateways
+from facades.ociNATGateway import OCINATGateways
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
 from facades.ociSubnet import OCISubnets
@@ -175,6 +176,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Internet Gateways')
         oci_internet_gateways = OCIInternetGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
+    elif artifact == 'NATGateway':
+        logger.info('---- Processing NAT Gateways')
+        oci_nat_gateways = OCINATGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
     elif artifact == 'RouteTable':
         logger.info('---- Processing Route Tables')
         oci_route_tables = OCIRouteTables(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])

@@ -233,6 +233,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
                 console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
                 virtual_cloud_network_count += 1;
                 queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
+                queryNATGatewayAjax(compartment_id, response_json[i]['id']);
                 queryRouteTableAjax(compartment_id, response_json[i]['id']);
                 querySecurityListAjax(compartment_id, response_json[i]['id']);
                 querySubnetAjax(compartment_id, response_json[i]['id']);

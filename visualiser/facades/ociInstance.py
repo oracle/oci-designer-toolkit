@@ -81,12 +81,24 @@ class OCIInstances(OCIComputeConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
+        # Add filter to only return "RUNNING", "STARTING", "STOPPING", "STOPPED" Compartments
+        if filter is None:
+            filter = {}
+
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = ["RUNNING", "STARTING", "STOPPING", "STOPPED"]
+
         instances = oci.pagination.list_call_get_all_results(self.client.list_instances, compartment_id=compartment_id).data
+
         # Convert to Json object
         instances_json = self.toJson(instances)
         logger.debug(str(instances_json))
  
-        self.instances_json = instances_json
+        #self.instances_json = instances_json
+        #logger.debug(str(self.instances_json))
+
+        # Filter results
+        self.instances_json = self.filterJsonObjectList(instances_json, filter)
         logger.debug(str(self.instances_json))
 
         for instance in self.instances_json:

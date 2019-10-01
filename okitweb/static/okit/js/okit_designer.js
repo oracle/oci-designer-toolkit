@@ -13,6 +13,9 @@ const virtual_cloud_network_prefix = 'vcn';
 // Internet Gateway
 const internet_gateway_artifact = 'Internet Gateway';
 const internet_gateway_prefix = 'ig';
+// NAT Gateway
+const nat_gateway_artifact = 'NAT Gateway';
+const nat_gateway_prefix = 'ng';
 // Route Table
 const route_table_artifact = 'Route Table';
 const route_table_prefix = 'rt';

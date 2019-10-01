@@ -68,19 +68,23 @@ class OCICompartments(OCIIdentityConnection):
         logger.debug(str(compartments_json))
 
         # Check if the results should be filtered
-        if filter is None:
-            self.compartments_json = compartments_json
-        else:
-            filtered = compartments_json[:]
-            for key, val in filter.items():
-                filtered = [comp for comp in filtered if re.compile(val).search(comp[key])]
-            self.compartments_json = filtered
+        #if filter is None:
+        #    self.compartments_json = compartments_json
+        #else:
+            #filtered = compartments_json[:]
+            #for key, val in filter.items():
+            #    filtered = [comp for comp in filtered if re.compile(val).search(comp[key])]
+            #self.compartments_json = filtered
+
+        # Filter results
+        self.compartments_json = self.filterJsonObjectList(compartments_json, filter)
         logger.debug(str(self.compartments_json))
 
         # Generate Name / Id mappings
         for compartment in self.compartments_json:
             self.names[compartment['id']] = compartment['name']
             self.parents[compartment['id']] = compartment['compartment_id']
+
         # Build List of Compartment Objects that have methods for getting VCN / Security Lists / Route Tables etc
         self.compartments_obj = []
         for compartment in self.compartments_json:

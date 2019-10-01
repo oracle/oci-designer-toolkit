@@ -146,7 +146,7 @@ function drawCompartmentSVG(artifact) {
     canvas_svg.append('style')
         .attr("type", "text/css")
         //.text('.st0{fill:#F80000;}');
-        .text('.st0{fill:#F80000;} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+        .text('.st0{fill:#F80000;} .st1{fill:#939699;} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
     //.text('.st0{fill:#F80000;} text{font-weight: bold; font-size: 10pt; font-family: Ariel} rect{height: 100%; width: 100%; fill: white; fill-opacity: .25;}');
     let defs = canvas_svg.append('defs');
     for (let key in palette_svg) {

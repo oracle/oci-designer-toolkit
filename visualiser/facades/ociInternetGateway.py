@@ -40,33 +40,36 @@ class OCIInternetGateways(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
+        # Add filter to only return AVAILABLE Compartments
+        if filter is None:
+            filter = {}
+
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = 'AVAILABLE'
+
         internet_gateways = oci.pagination.list_call_get_all_results(self.client.list_internet_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+
         # Convert to Json object
         internet_gateways_json = self.toJson(internet_gateways)
         logger.debug(str(internet_gateways_json))
 
         # Check if the results should be filtered
-        if filter is None:
-            self.internet_gateways_json = internet_gateways_json
-        else:
-            filtered = self.internet_gateways_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            self.internet_gateways_json = filtered
+        #if filter is None:
+        #    self.internet_gateways_json = internet_gateways_json
+        #else:
+        #    filtered = self.internet_gateways_json[:]
+        #    for key, val in filter.items():
+        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+        #    self.internet_gateways_json = filtered
+
+        # Filter results
+        self.internet_gateways_json = self.filterJsonObjectList(internet_gateways_json, filter)
         logger.debug(str(self.internet_gateways_json))
 
         # Build List of InternetGateway Objects
         self.internet_gateways_obj = []
         for internet_gateway in self.internet_gateways_json:
             self.internet_gateways_obj.append(OCIInternetGateway(self.config, self.configfile, internet_gateway))
-        # Check if the results should be filtered
-        #if filter is None:
-        #    return self.internet_gateways_json
-        #else:
-        #    filtered = self.internet_gateways_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    return filtered
         return self.internet_gateways_json
 
 

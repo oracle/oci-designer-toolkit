@@ -43,21 +43,28 @@ class OCILBHosts(OCILoadBalancerConnection):
 
         lb_hosts = oci.pagination.list_call_get_all_results(self.client.list_hostnames, load_balancer_id=self.lb_id).data
         # Convert to Json object
-        self.lb_hosts_json = self.toJson(lb_hosts)
+        lb_hosts_json = self.toJson(lb_hosts)
+        logger.debug(str(lb_hosts_json))
 
+        # Check if the results should be filtered
+        #if filter is None:
+        #    return self.lb_hosts_json
+        #else:
+        #    filtered = self.lb_hosts_json[:]
+        #    for key, val in filter.items():
+        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+        #    return filtered
+
+        # Filter results
+        self.lb_hosts_json = self.filterJsonObjectList(lb_hosts_json, filter)
         logger.debug(str(self.lb_hosts_json))
+
         # Build List of LoadBalancer Host Objects
         self.lb_hosts_obj = []
         for lb_host in self.lb_hosts_json:
             self.lb_hosts_obj.append(OCILBHost(self.config, self.configfile, lb_host))
-        # Check if the results should be filtered
-        if filter is None:
-            return self.lb_hosts_json
-        else:
-            filtered = self.lb_hosts_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            return filtered
+
+        return self.lb_hosts_json
 
 
 class OCILBHost(object):

@@ -176,6 +176,15 @@ function drawSVGforJson(artifact={}) {
             drawInternetGatewaySVG(OKITJsonObj['internet_gateways'][i]);
         }
     }
+    if (OKITJsonObj.hasOwnProperty('nat_gateways')) {
+        nat_gateway_ids = [];
+        for (let i=0; i < OKITJsonObj['nat_gateways'].length; i++) {
+            nat_gateway_ids.push(OKITJsonObj['nat_gateways'][i]['id']);
+            okitIdsJsonObj[OKITJsonObj['nat_gateways'][i]['id']] = OKITJsonObj['nat_gateways'][i]['display_name'];
+            nat_gateway_count += 1;
+            drawNATGatewaySVG(OKITJsonObj['nat_gateways'][i]);
+        }
+    }
     if (OKITJsonObj.hasOwnProperty('route_tables')) {
         route_table_ids = [];
         for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {

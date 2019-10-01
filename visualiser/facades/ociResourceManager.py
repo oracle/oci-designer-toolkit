@@ -48,13 +48,16 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         logger.debug(str(resource_managers_json))
 
         # Check if the results should be filtered
-        if filter is None:
-            self.resource_managers_json = resource_managers_json
-        else:
-            filtered = self.resource_managers_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            self.resource_managers_json = filtered
+        #if filter is None:
+        #    self.resource_managers_json = resource_managers_json
+        #else:
+        #    filtered = self.resource_managers_json[:]
+        #    for key, val in filter.items():
+        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
+        #    self.resource_managers_json = filtered
+
+        # Filter results
+        self.resource_managers_json = self.filterJsonObjectList(resource_managers_json, filter)
         logger.debug(str(self.resource_managers_json))
 
         # Build List of ResourceManager Objects
