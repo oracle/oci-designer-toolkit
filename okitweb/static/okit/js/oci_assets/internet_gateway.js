@@ -194,6 +194,7 @@ function queryInternetGatewayAjax(compartment_id, vcn_id) {
 $(document).ready(function() {
     clearInternetGatewayVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -201,5 +202,17 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', internet_gateway_query_cb);
     cell.append('label').text(internet_gateway_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(internet_gateway_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'internet_gateway_name_filter')
+        .attr('name', 'internet_gateway_name_filter');
 });
 

@@ -37,7 +37,35 @@ function handleQueryAjax(e) {
 }
 
 function handleQueryOci(e) {
-    window.location = 'oci/query/oci';
+    //window.location = 'oci/query/oci';
+
+    // Hide Menu
+    hideNavMenu();
+    // Get Compartments
+    $.ajax({
+        type: 'get',
+        url: 'oci/compartment',
+        dataType: 'text',
+        contentType: 'application/json',
+        success: function(resp) {
+            console.log('Response : ' + resp);
+            let jsonBody = JSON.parse(resp)
+            $('#query-compartment-id').empty();
+            let compartment_select = d3.select('#query-compartment-id');
+            for(let compartment of jsonBody ){
+                console.log(compartment['display_name']);
+                compartment_select.append('option')
+                    .attr('value', compartment['id'])
+                    .text(compartment['display_name']);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('Status : '+ status)
+            console.log('Error : '+ error)
+        }
+    });
+    // Show Query Box
+    $('#query-oci').removeClass('hidden');
 }
 
 /*

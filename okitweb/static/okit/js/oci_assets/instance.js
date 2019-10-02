@@ -377,6 +377,7 @@ function queryInstanceAjax(compartment_id, subnet_id) {
 $(document).ready(function () {
     clearInstanceVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -384,6 +385,18 @@ $(document).ready(function () {
         .attr('type', 'checkbox')
         .attr('id', instance_query_cb);
     cell.append('label').text(instance_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(instance_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'instance_name_filter')
+        .attr('name', 'instance_name_filter');
 });
 
 

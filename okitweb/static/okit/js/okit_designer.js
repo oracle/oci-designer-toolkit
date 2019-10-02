@@ -311,6 +311,10 @@ $(document).ready(function(){
 
     document.getElementById('file-export-rm-menu-item').addEventListener('click', handleExportToResourceManager, false);
 
+    // Query Menu
+
+    document.getElementById('query-oci-menu-item').addEventListener('click', handleQueryOci, false);
+
     // Generate Menu
     document.getElementById('generate-terraform-menu-item').addEventListener('click', handleGenerateTerraform, false);
 

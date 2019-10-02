@@ -123,6 +123,22 @@
     padding: 5px;
 }
 
+.query-oci {
+    z-index:1000;
+    position: absolute;
+    left: 30%;
+    top: 20%;
+    border: black 1px dashed;
+    border-radius: 5px;
+    padding: 5px;
+    opacity: 50%;
+}
+
+.query-filter {
+    width: 100%;
+    margin-right: 2em;
+}
+
 /* Asset Properties */
 
 .properties-source-wrapper {

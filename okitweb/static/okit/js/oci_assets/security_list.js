@@ -386,6 +386,7 @@ function querySecurityListAjax(compartment_id, vcn_id) {
 $(document).ready(function() {
     clearSecurityListVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -393,5 +394,17 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', security_list_query_cb);
     cell.append('label').text(security_list_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(security_list_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'security_list_name_filter')
+        .attr('name', 'security_list_name_filter');
 });
 
