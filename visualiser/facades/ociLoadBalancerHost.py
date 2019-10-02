@@ -29,13 +29,13 @@ from common.ociLogging import getLogger
 logger = getLogger()
 
 
-class OCILBHosts(OCILoadBalancerConnection):
+class OCILoadBalancerHosts(OCILoadBalancerConnection):
     def __init__(self, config=None, configfile=None, compartment_id=None, lb_id=None, **kwargs):
         self.compartment_id = compartment_id
         self.lb_id = lb_id
         self.lb_hosts_json = []
         self.lb_hosts_obj = []
-        super(OCILBHosts, self).__init__(config=config, configfile=configfile)
+        super(OCILoadBalancerHosts, self).__init__(config=config, configfile=configfile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -53,12 +53,12 @@ class OCILBHosts(OCILoadBalancerConnection):
         # Build List of LoadBalancer Host Objects
         self.lb_hosts_obj = []
         for lb_host in self.lb_hosts_json:
-            self.lb_hosts_obj.append(OCILBHost(self.config, self.configfile, lb_host))
+            self.lb_hosts_obj.append(OCILoadBalancerHost(self.config, self.configfile, lb_host))
 
         return self.lb_hosts_json
 
 
-class OCILBHost(object):
+class OCILoadBalancerHost(object):
     def __init__(self, config=None, configfile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
