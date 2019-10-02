@@ -22,7 +22,7 @@ import re
 import sys
 
 from facades.ociConnection import OCILoadBalancerConnection
-from facades.ociLBHost import OCILBHosts
+from facades.ociLoadBalancerHost import OCILoadBalancerHosts
 from facades.ociBackendSet import OCIBackendSets
 from facades.ociBackend import OCIBackends
 from facades.ociPrivateIps import OCIPrivateIps
@@ -81,7 +81,7 @@ class OCILoadBalancer(object):
         self.data = data
 
     def getLBHostClients(self):
-        return OCILBHosts(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCILoadBalancerHosts(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
     def getBackendSetClients(self):
         return OCIBackendSets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])

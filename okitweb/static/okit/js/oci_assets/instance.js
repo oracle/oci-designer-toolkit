@@ -106,6 +106,21 @@ function drawInstanceSVG(artifact) {
     let compartment_id = artifact['compartment_id'];
     console.log('Drawing ' + instance_artifact + ' : ' + id + ' [' + parent_id + ']');
 
+    // Test if parent exists
+    let parent_exists = false;
+    if (OKITJsonObj.hasOwnProperty('subnets')) {
+        for (subnet of OKITJsonObj['subnets']) {
+            if (parent_id == subnet['id']) {
+                parent_exists = true;
+                break;
+            }
+        }
+    }
+    if (!parent_exists) {
+        console.log('Parent ' + parent_id + ' not found.');
+        return
+    }
+
     if (!subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         subnet_bui_sub_artifacts[parent_id] = {};
     }

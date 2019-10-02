@@ -195,14 +195,15 @@ def ociArtifacts(artifact):
     elif artifact == 'Instance':
         logger.info('---- Processing Instances')
         oci_instances = OCIInstances(compartment_id=query_json['compartment_id'])
-        instance_json = oci_instances.list(filter=query_json.get('instance_filter', None))
-        oci_instance_vnics = OCIInstanceVnics(compartment_id=query_json['compartment_id'])
-        response_json = []
-        for instance in instance_json:
-            instance['vnics'] = oci_instance_vnics.list(instance_id=instance['id'])
-            instance['subnet_id'] = instance['vnics'][0]['subnet_id'] if len(instance['vnics']) > 0 else ''
-            if query_json['subnet_id'] in [vnic['subnet_id'] for vnic in instance['vnics']]:
-                response_json.append(instance)
+        response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
+        #instance_json = oci_instances.list(filter=query_json.get('instance_filter', None))
+        #oci_instance_vnics = OCIInstanceVnics(compartment_id=query_json['compartment_id'])
+        #response_json = []
+        #for instance in instance_json:
+        #    instance['vnics'] = oci_instance_vnics.list(instance_id=instance['id'])
+        #    instance['subnet_id'] = instance['vnics'][0]['subnet_id'] if len(instance['vnics']) > 0 else ''
+        #    if query_json['subnet_id'] in [vnic['subnet_id'] for vnic in instance['vnics']]:
+        #        response_json.append(instance)
     elif artifact == 'LoadBalancer':
         logger.info('---- Processing Load Balancers')
         oci_load_balancers = OCILoadBalancers(compartment_id=query_json['compartment_id'])
