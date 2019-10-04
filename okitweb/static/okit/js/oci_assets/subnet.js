@@ -68,6 +68,7 @@ function addSubnet(vcn_id, compartment_id) {
     subnet['display_name'] = generateDefaultName(subnet_prefix, subnet_count);
     subnet['cidr_block'] = subnet_cidr[id];
     subnet['dns_label'] = subnet['display_name'].toLowerCase().slice(-5);
+    subnet['prohibit_public_ip_on_vnic'] = false;
     subnet['route_table'] = '';
     subnet['route_table_id'] = '';
     subnet['security_lists'] = [];
@@ -154,6 +155,26 @@ function drawSubnetSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'] += 1;
 
+        let artifact_definition = newArtifactSVGDefinition(artifact, subnet_artifact);
+        artifact_definition['svg']['x'] = Math.round(icon_width);
+        artifact_definition['svg']['y'] = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));
+        artifact_definition['svg']['width'] = subnet_svg_width;
+        artifact_definition['svg']['height'] = subnet_svg_height;
+        artifact_definition['rect']['stroke']['colour'] = subnet_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 5;
+        artifact_definition['icon']['x_translation'] = icon_translate_x_start;
+        artifact_definition['icon']['y_translation'] = icon_translate_y_start;
+        artifact_definition['name']['show'] = true;
+        artifact_definition['label']['show'] = true;
+        if (artifact['prohibit_public_ip_on_vnic']) {
+            artifact_definition['label']['text'] = 'Private ' + subnet_artifact;
+        } else  {
+            artifact_definition['label']['text'] = 'Public ' + subnet_artifact;
+        }
+
+        let svg = drawArtifact(artifact_definition);
+
+        /*
         let svg_x = Math.round(icon_width);
         let svg_y = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));
         let svg_width = subnet_svg_width;
@@ -161,9 +182,20 @@ function drawSubnetSVG(artifact) {
         let data_type = subnet_artifact;
         let stroke_colour = subnet_stroke_colour;
         let stroke_dash = 5;
+        let label_text = data_type;
+        if (artifact['prohibit_public_ip_on_vnic']) {
+            label_text = 'Private ' + data_type;
+        } else  {
+            label_text = 'Public ' + data_type;
+        }
 
-        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
-            stroke_dash, true, true, icon_translate_x_start, icon_translate_y_start);
+        let svg = drawArtifactSVG(artifact, data_type,
+            svg_x, svg_y, svg_width, svg_height,
+            stroke_colour, stroke_dash,
+            true,
+            true, label_text,
+            true, icon_translate_x_start, icon_translate_y_start);
+        */
 
         //loadSubnetProperties(id);
         let rect = d3.select('#' + id);
@@ -176,31 +208,6 @@ function drawSubnetSVG(artifact) {
             loadSubnetProperties(id);
             d3.event.stopPropagation();
         });
-        /*
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true);
-        */
 
         initialiseSubnetChildData(id);
     } else {
@@ -368,6 +375,7 @@ function loadSubnetProperties(id) {
                     $('#display_name').val(subnet['display_name']);
                     $('#cidr_block').val(subnet['cidr_block']);
                     $('#dns_label').val(subnet['dns_label']);
+                    $('#prohibit_public_ip_on_vnic').attr('checked', subnet['prohibit_public_ip_on_vnic']);
                     let route_table_select = $('#route_table_id');
                     //console.log('Route Table Ids: ' + route_table_ids);
                     //for (let rtid of route_table_ids) {

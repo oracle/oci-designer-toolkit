@@ -158,8 +158,19 @@ function drawCompartmentSVG(artifact) {
     }
 
     artifact['display_name'] = artifact['name'];
-    let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
-        stroke_dash, true, true);
+
+    let artifact_definition = newArtifactSVGDefinition(artifact, compartment_artifact);
+    artifact_definition['svg']['width'] = 2150;
+    artifact_definition['svg']['height'] = 1500;
+    artifact_definition['rect']['stroke']['colour'] = compartment_stroke_colour;
+    artifact_definition['rect']['stroke']['dash'] = 5;
+    artifact_definition['name']['show'] = true;
+    artifact_definition['label']['show'] = true;
+
+    let svg = drawArtifact(artifact_definition);
+
+    //let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
+    //    stroke_dash, true, true);
 
     //let rect = svg.select("rect[id='" + id + "']");
     let rect = svg.select("rect[id='" + id + "']");

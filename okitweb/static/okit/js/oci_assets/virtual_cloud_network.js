@@ -148,6 +148,20 @@ function drawVirtualCloudNetworkSVG(artifact) {
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] += 1;
 
+        let artifact_definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
+        artifact_definition['svg']['x'] = Math.round(icon_width * 3 / 2);
+        artifact_definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+        artifact_definition['svg']['width'] = 2000;
+        artifact_definition['svg']['height'] = 500;
+        artifact_definition['rect']['stroke']['colour'] = virtual_cloud_network_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 5;
+        artifact_definition['icon']['x_translation'] = icon_translate_x_start;
+        artifact_definition['icon']['y_translation'] = icon_translate_y_start;
+        artifact_definition['name']['show'] = true;
+        artifact_definition['label']['show'] = true;
+
+        let svg = drawArtifact(artifact_definition);
+        /*
         let svg_x = Math.round(icon_width * 3 / 2);
         let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
         let svg_width = 2000;
@@ -156,8 +170,13 @@ function drawVirtualCloudNetworkSVG(artifact) {
         let stroke_colour = virtual_cloud_network_stroke_colour;
         let stroke_dash = 5;
 
-        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
-            stroke_dash, true, true, icon_translate_x_start, icon_translate_y_start);
+        let svg = drawArtifactSVG(artifact, data_type,
+            svg_x, svg_y, svg_width, svg_height,
+            stroke_colour, stroke_dash,
+            true,
+            true, data_type,
+            true, icon_translate_x_start, icon_translate_y_start);
+        */
 
         //loadVirtualCloudNetworkProperties(id);
         // Add click event to display properties
@@ -168,13 +187,6 @@ function drawVirtualCloudNetworkSVG(artifact) {
             loadVirtualCloudNetworkProperties(id);
             d3.event.stopPropagation();
         });
-        /*
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu);
-        */
 
         initialiseVirtualCloudNetworkChildData(id);
     } else {

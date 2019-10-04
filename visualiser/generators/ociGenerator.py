@@ -152,6 +152,8 @@ class OCIGenerator(object):
         for nat_gateway in self.visualiser_json.get('nat_gateways', []):
             self.renderNATGateway(nat_gateway)
         # -- Dynamic Routing Gateways
+        for dynamic_routing_gateway in self.visualiser_json.get('dynamic_routing_gateways', []):
+            self.renderDynamicRoutingGateway(dynamic_routing_gateway)
         # -- Security Lists
         for security_list in self.visualiser_json.get('security_lists', []):
             self.renderSecurityList(security_list)
@@ -269,6 +271,28 @@ class OCIGenerator(object):
         self.run_variables[variableName] = nat_gateway["display_name"]
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("nat_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderDynamicRoutingGateway(self, dynamic_routing_gateway):
+        # Read Data
+        standardisedName = self.standardiseResourceName(dynamic_routing_gateway['display_name'])
+        # resourceName = 'NATGateway_{0:s}'.format(standardisedName)
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = dynamic_routing_gateway['display_name']
+        # Process NAT Gateway Data
+        logger.info('Processing NAT Gateway Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = dynamic_routing_gateway["display_name"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("dynamic_routing_gateway.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

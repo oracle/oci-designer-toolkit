@@ -105,6 +105,18 @@ function drawLoadBalancerSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] += 1;
 
+        let artifact_definition = newArtifactSVGDefinition(artifact, load_balancer_artifact);
+        artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
+        artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+        artifact_definition['svg']['width'] = load_balancer_width;
+        artifact_definition['svg']['height'] = load_balancer_height;
+        artifact_definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 1;
+        artifact_definition['name']['show'] = true;
+
+        let svg = drawArtifact(artifact_definition);
+
+        /*
         let svg_x = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
         let svg_y = Math.round(icon_height * 3 / 2);
         let svg_width = load_balancer_width;
@@ -113,8 +125,12 @@ function drawLoadBalancerSVG(artifact) {
         let stroke_colour = load_balancer_stroke_colour;
         let stroke_dash = 1;
 
-        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
-            stroke_dash, true, false);
+        let svg = drawArtifactSVG(artifact, data_type,
+            svg_x, svg_y, svg_width, svg_height,
+            stroke_colour, stroke_dash,
+            true,
+            false);
+        */
 
         //loadLoadBalancerProperties(id);
         let rect = d3.select('#' + id);
@@ -127,18 +143,6 @@ function drawLoadBalancerSVG(artifact) {
             loadLoadBalancerProperties(id);
             d3.event.stopPropagation();
         });
-        /*
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-        */
         svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
@@ -146,7 +150,6 @@ function drawLoadBalancerSVG(artifact) {
             .attr("data-connector-id", id)
             .attr("dragable", true)
             .selectAll("*")
-            .attr("data-type", data_type)
             .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)

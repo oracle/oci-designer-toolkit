@@ -135,6 +135,18 @@ function drawInstanceSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
 
+        let artifact_definition = newArtifactSVGDefinition(artifact, instance_artifact);
+        artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (instance_width * position) + (icon_spacing * position));
+        artifact_definition['svg']['y'] = Math.round(icon_height * 4);
+        artifact_definition['svg']['width'] = instance_width;
+        artifact_definition['svg']['height'] = instance_height;
+        artifact_definition['rect']['stroke']['colour'] = instance_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 1;
+        artifact_definition['name']['show'] = true;
+
+        let svg = drawArtifact(artifact_definition);
+
+        /*
         let svg_x = Math.round((icon_width * 3 / 2) + (instance_width * position) + (icon_spacing * position));
         let svg_y = Math.round(icon_height * 4);
         let svg_width = instance_width;
@@ -145,9 +157,15 @@ function drawInstanceSVG(artifact) {
         //console.log('svg_x : ' + svg_x);
         //console.log('svg_y : ' + svg_y);
 
-        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
-            stroke_dash, true, false, 0, 0, 0,
+        let svg = drawArtifactSVG(artifact, data_type,
+            svg_x, svg_y, svg_width, svg_height,
+            stroke_colour, stroke_dash,
+            true,
+            false, '',
+            true, 0,
+            0, 0,
             (Math.round(icon_height / 2) * -1));
+        */
 
         //loadInstanceProperties(id);
         let rect = d3.select('#' + id);
@@ -160,18 +178,6 @@ function drawInstanceSVG(artifact) {
             loadInstanceProperties(id);
             d3.event.stopPropagation();
         });
-        /*
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-        */
         svg.attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
@@ -298,8 +304,10 @@ function loadInstanceProperties(id) {
                     //for (let bsvid of block_storage_volume_ids) {
                     //    block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
                     //}
-                    for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
-                        block_storage_volume_select.append($('<option>').attr('value', block_storage_volume['id']).text(block_storage_volume['display_name']));
+                    if (OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
+                        for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
+                            block_storage_volume_select.append($('<option>').attr('value', block_storage_volume['id']).text(block_storage_volume['display_name']));
+                        }
                     }
                     block_storage_volume_select.val(instance['block_storage_volume_ids']);
                     // Add Event Listeners

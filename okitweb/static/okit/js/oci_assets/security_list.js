@@ -118,6 +118,17 @@ function drawSecurityListSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
+        let artifact_definition = newArtifactSVGDefinition(artifact, security_list_artifact);
+        artifact_definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
+        artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+        artifact_definition['svg']['width'] = icon_width;
+        artifact_definition['svg']['height'] = icon_height;
+        artifact_definition['rect']['stroke']['colour'] = security_list_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 1;
+
+        let svg = drawArtifact(artifact_definition);
+
+        /*
         let svg_x = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
         let svg_y = Math.round(icon_height * 3 / 2);
         let svg_width = icon_width;
@@ -126,7 +137,10 @@ function drawSecurityListSVG(artifact) {
         let stroke_colour = security_list_stroke_colour;
         let stroke_dash = 1;
 
-        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+        let svg = drawArtifactSVG(artifact, data_type,
+            svg_x, svg_y, svg_width, svg_height,
+            stroke_colour, stroke_dash);
+        */
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
@@ -140,32 +154,6 @@ function drawSecurityListSVG(artifact) {
             loadSecurityListProperties(id);
             d3.event.stopPropagation();
         });
-        /*
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-type", data_type)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true);
-        */
     } else {
         console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
