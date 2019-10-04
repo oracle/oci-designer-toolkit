@@ -128,20 +128,6 @@ function drawSecurityListSVG(artifact) {
 
         let svg = drawArtifact(artifact_definition);
 
-        /*
-        let svg_x = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
-        let svg_y = Math.round(icon_height * 3 / 2);
-        let svg_width = icon_width;
-        let svg_height = icon_height;
-        let data_type = security_list_artifact;
-        let stroke_colour = security_list_stroke_colour;
-        let stroke_dash = 1;
-
-        let svg = drawArtifactSVG(artifact, data_type,
-            svg_x, svg_y, svg_width, svg_height,
-            stroke_colour, stroke_dash);
-        */
-
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
         /*

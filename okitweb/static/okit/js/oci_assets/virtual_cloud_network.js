@@ -161,22 +161,6 @@ function drawVirtualCloudNetworkSVG(artifact) {
         artifact_definition['label']['show'] = true;
 
         let svg = drawArtifact(artifact_definition);
-        /*
-        let svg_x = Math.round(icon_width * 3 / 2);
-        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
-        let svg_width = 2000;
-        let svg_height = 500;
-        let data_type = virtual_cloud_network_artifact;
-        let stroke_colour = virtual_cloud_network_stroke_colour;
-        let stroke_dash = 5;
-
-        let svg = drawArtifactSVG(artifact, data_type,
-            svg_x, svg_y, svg_width, svg_height,
-            stroke_colour, stroke_dash,
-            true,
-            true, data_type,
-            true, icon_translate_x_start, icon_translate_y_start);
-        */
 
         //loadVirtualCloudNetworkProperties(id);
         // Add click event to display properties

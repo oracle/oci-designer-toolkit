@@ -169,9 +169,6 @@ function drawCompartmentSVG(artifact) {
 
     let svg = drawArtifact(artifact_definition);
 
-    //let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour,
-    //    stroke_dash, true, true);
-
     //let rect = svg.select("rect[id='" + id + "']");
     let rect = svg.select("rect[id='" + id + "']");
     console.log(rect);

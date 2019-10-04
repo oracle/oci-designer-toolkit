@@ -174,29 +174,6 @@ function drawSubnetSVG(artifact) {
 
         let svg = drawArtifact(artifact_definition);
 
-        /*
-        let svg_x = Math.round(icon_width);
-        let svg_y = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));
-        let svg_width = subnet_svg_width;
-        let svg_height = subnet_svg_height;
-        let data_type = subnet_artifact;
-        let stroke_colour = subnet_stroke_colour;
-        let stroke_dash = 5;
-        let label_text = data_type;
-        if (artifact['prohibit_public_ip_on_vnic']) {
-            label_text = 'Private ' + data_type;
-        } else  {
-            label_text = 'Public ' + data_type;
-        }
-
-        let svg = drawArtifactSVG(artifact, data_type,
-            svg_x, svg_y, svg_width, svg_height,
-            stroke_colour, stroke_dash,
-            true,
-            true, label_text,
-            true, icon_translate_x_start, icon_translate_y_start);
-        */
-
         //loadSubnetProperties(id);
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
