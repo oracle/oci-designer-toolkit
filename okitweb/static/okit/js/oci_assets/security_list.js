@@ -247,7 +247,6 @@ function addAccessRuleHtml(access_rule, access_type) {
     rule_cell = rule_row.append('td');
     rule_cell.append('input')
         .attr("type", "checkbox")
-        .attr("class", "property-value")
         .attr("id", "is_stateless")
         .attr("name", "is_stateless")
         .on("change", function() {

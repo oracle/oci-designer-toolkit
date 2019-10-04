@@ -220,6 +220,11 @@
     margin-right: 5px;
 }
 
+.checkbox-property {
+    display: block;
+    width: 100%;
+}
+
 .add-button {
     background-color: lime;
     border-width: 1px;
