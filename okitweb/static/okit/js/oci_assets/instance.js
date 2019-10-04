@@ -142,6 +142,7 @@ function drawInstanceSVG(artifact) {
         artifact_definition['svg']['height'] = instance_height;
         artifact_definition['rect']['stroke']['colour'] = instance_stroke_colour;
         artifact_definition['rect']['stroke']['dash'] = 1;
+        artifact_definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
         artifact_definition['name']['show'] = true;
 
         let svg = drawArtifact(artifact_definition);
@@ -243,6 +244,13 @@ function drawInstanceAttachmentsSVG(instance) {
 
 function drawAttachedBlockStorageVolume(artifact, bs_count) {
     console.log('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
+    let artifact_definition = newBlockStorageVolumeSVGDefinition(artifact, bs_count);
+    artifact_definition['svg']['x'] = Math.round(icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count));
+    artifact_definition['svg']['y'] = Math.round(instance_height - icon_height);
+
+    let svg = drawArtifact(artifact_definition);
+
+    /*
     let svg_x = icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count);
     let svg_y = Math.round(instance_height - icon_height);
     let svg_width = icon_width;
@@ -252,6 +260,7 @@ function drawAttachedBlockStorageVolume(artifact, bs_count) {
     let stroke_dash = 1;
     // Draw Block Storage Volume
     let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+    */
     // Add click event to display properties
     svg.on("click", function () {
         loadBlockStorageVolumeProperties(artifact['id']);

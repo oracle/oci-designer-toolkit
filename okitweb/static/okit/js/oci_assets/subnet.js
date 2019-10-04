@@ -294,6 +294,13 @@ function drawSubnetAttachmentsSVG(subnet) {
 
 function drawAttachedRouteTable(artifact, attachment_count) {
     console.log('Drawing ' + subnet_artifact + ' Route Table : ' + artifact['display_name']);
+    let artifact_definition = newRouteTableSVGDefinition(artifact, attachment_count);
+    artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
+    artifact_definition['svg']['y'] = 0;
+
+    let svg = drawArtifact(artifact_definition);
+
+    /*
     let svg_x = (icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count);
     let svg_y = 0;
     let svg_width = icon_width;
@@ -303,6 +310,7 @@ function drawAttachedRouteTable(artifact, attachment_count) {
     let stroke_dash = 1;
     // Draw Block Storage Volume
     let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+    */
     // Add click event to display properties
     svg.on("click", function () {
         loadRouteTableProperties(artifact['id']);
@@ -312,6 +320,13 @@ function drawAttachedRouteTable(artifact, attachment_count) {
 
 function drawAttachedSecurityList(artifact, attachment_count) {
     console.log('Drawing ' + subnet_artifact + ' Security List : ' + artifact['display_name']);
+    let artifact_definition = newSecurityListSVGDefinition(artifact, attachment_count);
+    artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
+    artifact_definition['svg']['y'] = 0;
+
+    let svg = drawArtifact(artifact_definition);
+
+    /*
     let svg_x = (icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count);
     let svg_y = 0;
     let svg_width = icon_width;
@@ -321,6 +336,7 @@ function drawAttachedSecurityList(artifact, attachment_count) {
     let stroke_dash = 1;
     // Draw Block Storage Volume
     let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+    */
     // Add click event to display properties
     svg.on("click", function () {
         loadSecurityListProperties(artifact['id']);

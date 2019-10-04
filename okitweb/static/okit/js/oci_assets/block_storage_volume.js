@@ -87,6 +87,17 @@ function deleteBlockStorageVolume(id) {
 /*
 ** SVG Creation
  */
+function newBlockStorageVolumeSVGDefinition(artifact, position=0) {
+    let definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
+    definition['svg']['x'] = Math.round(icon_width / 4);
+    definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+    definition['svg']['width'] = icon_width;
+    definition['svg']['height'] = icon_height;
+    definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    return definition;
+}
+
 function drawBlockStorageVolumeSVG(artifact) {
     // Check if this Block Storage Volume has been attached to an Instance and if so do not draw because it will be done
     // as part of the instance
@@ -121,6 +132,7 @@ function drawBlockStorageVolumeSVG(artifact) {
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
 
+        /*
         let artifact_definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
         artifact_definition['svg']['x'] = Math.round(icon_width / 4);
         artifact_definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
@@ -128,8 +140,9 @@ function drawBlockStorageVolumeSVG(artifact) {
         artifact_definition['svg']['height'] = icon_height;
         artifact_definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
         artifact_definition['rect']['stroke']['dash'] = 1;
+        */
 
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newBlockStorageVolumeSVGDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();

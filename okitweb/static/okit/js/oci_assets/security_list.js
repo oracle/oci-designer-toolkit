@@ -88,6 +88,17 @@ function deleteSecurityList(id) {
 /*
 ** SVG Creation
  */
+function newSecurityListSVGDefinition(artifact, position=0) {
+    let definition = newArtifactSVGDefinition(artifact, security_list_artifact);
+    definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
+    definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+    definition['svg']['width'] = icon_width;
+    definition['svg']['height'] = icon_height;
+    definition['rect']['stroke']['colour'] = security_list_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    return definition;
+}
+
 function drawSecurityListSVG(artifact) {
     // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
     // the subnet draw.
@@ -118,6 +129,7 @@ function drawSecurityListSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
+        /*
         let artifact_definition = newArtifactSVGDefinition(artifact, security_list_artifact);
         artifact_definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
         artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
@@ -125,8 +137,9 @@ function drawSecurityListSVG(artifact) {
         artifact_definition['svg']['height'] = icon_height;
         artifact_definition['rect']['stroke']['colour'] = security_list_stroke_colour;
         artifact_definition['rect']['stroke']['dash'] = 1;
+        */
 
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newSecurityListSVGDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
