@@ -99,26 +99,6 @@ function clearSVG() {
         console.log('Calling ' + clear_function);
         window[clear_function]();
     }
-    /*
-    // Compartments
-    clearCompartmentVariables();
-    // Virtual Cloud Network
-    clearVirtualCloudNetworkVariables();
-    // Internet Gateway
-    clearInternetGatewayVariables();
-    // Route Table
-    clearRouteTableVariables();
-    // Security List
-    clearSecurityListVariables();
-    // Subnet
-    clearSubnetVariables();
-    // Load Balancer
-    clearLoadBalancerVariables();
-    // Instance
-    clearInstanceVariables();
-    // Block Storage Volume
-    clearBlockStorageVolumeVariables();
-     */
 }
 
 /*

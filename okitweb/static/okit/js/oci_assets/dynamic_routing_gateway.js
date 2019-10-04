@@ -105,6 +105,17 @@ function drawDynamicRoutingGatewaySVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'] += 1;
 
+        let artifact_definition = newArtifactSVGDefinition(artifact, dynamic_routing_gateway_artifact);
+        artifact_definition['svg']['x'] = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
+        artifact_definition['svg']['y'] = 0;
+        artifact_definition['svg']['width'] = icon_width;
+        artifact_definition['svg']['height'] = icon_height;
+        artifact_definition['rect']['stroke']['colour'] = dynamic_routing_gateway_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 1;
+
+        let svg = drawArtifact(artifact_definition);
+
+        /*
         let svg_x = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
         let svg_y = 0;
         let svg_width = icon_width;
@@ -114,6 +125,7 @@ function drawDynamicRoutingGatewaySVG(artifact) {
         let stroke_dash = 1;
 
         let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+        */
 
         //loadDynamicRoutingGatewayProperties(id);
         // Add click event to display properties
