@@ -132,16 +132,6 @@ function drawBlockStorageVolumeSVG(artifact) {
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
 
-        /*
-        let artifact_definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
-        artifact_definition['svg']['x'] = Math.round(icon_width / 4);
-        artifact_definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
-        artifact_definition['svg']['width'] = icon_width;
-        artifact_definition['svg']['height'] = icon_height;
-        artifact_definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
-        artifact_definition['rect']['stroke']['dash'] = 1;
-        */
-
         let svg = drawArtifact(newBlockStorageVolumeSVGDefinition(artifact, position));
 
         let rect = d3.select('#' + id);

@@ -129,16 +129,6 @@ function drawSecurityListSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-        /*
-        let artifact_definition = newArtifactSVGDefinition(artifact, security_list_artifact);
-        artifact_definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
-        artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
-        artifact_definition['svg']['width'] = icon_width;
-        artifact_definition['svg']['height'] = icon_height;
-        artifact_definition['rect']['stroke']['colour'] = security_list_stroke_colour;
-        artifact_definition['rect']['stroke']['dash'] = 1;
-        */
-
         let svg = drawArtifact(newSecurityListSVGDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
