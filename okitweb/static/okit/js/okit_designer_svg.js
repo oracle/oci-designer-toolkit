@@ -18,6 +18,47 @@ const text_viewbox_width = 200;
 ** SVG Drawing / Manipulating SVG Canvas
  */
 
+function createSVGDefinitions(canvas_svg) {
+    // Add Palette Icons
+    let defs = canvas_svg.append('defs');
+    for (let key in palette_svg) {
+        let defid = key.replace(/ /g, '') + 'Svg';
+        defs.append('g')
+            .attr("id", defid)
+            .attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
+            .html(palette_svg[key]);
+    }
+    // Add Connector Markers
+    // Pointer
+    let marker = defs.append('marker')
+            .attr("id", "connector-end-triangle")
+            .attr("viewBox", "0 0 100 100")
+            .attr("refX", "1")
+            .attr("refY", "5")
+            .attr("markerUnits", "strokeWidth")
+            .attr("markerWidth", "35")
+            .attr("markerHeight", "35")
+            .attr("orient", "auto");
+    marker.append('path')
+        .attr("d", "M 0 0 L 10 5 L 0 10 z")
+        .attr("fill", "black");
+    // Circle
+    marker = defs.append('marker')
+        .attr("id", "connector-end-circle")
+        .attr("viewBox", "0 0 100 100")
+        .attr("refX", "5")
+        .attr("refY", "5")
+        .attr("markerUnits", "strokeWidth")
+        .attr("markerWidth", "35")
+        .attr("markerHeight", "35")
+        .attr("orient", "auto");
+    marker.append('circle')
+        .attr("cx", "5")
+        .attr("cy", "5")
+        .attr("r", "5")
+        .attr("fill", "black");
+}
+
 function newArtifactSVGDefinition(artifact, data_type) {
     let definition = {};
     definition['artifact'] = artifact;
@@ -143,7 +184,6 @@ function drawArtifact(definition) {
     return svg;
 }
 
-
 function drawSVGforJson(artifact={}) {
     console.log('******** Drawing SVG *********');
     displayOkitJson();
@@ -253,5 +293,27 @@ function drawSVGforJson(artifact={}) {
     }
 }
 
+function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
+    // Calculate Polyline points
+    let ydiff = end['y'] - start['y'];
+    let ymid = Math.round(start['y'] + ydiff / 2);
+    let mid1 = {x:start['x'], y:ymid};
+    let mid2 = {x:end['x'],   y:ymid};
+    let points = coordString(start) + " " + coordString(mid1) + " " + coordString(mid2) + " " + coordString(end);
+    let polyline = parent_svg.append('polyline')
+        .attr("id", id)
+        .attr("points", points)
+        .attr("stroke-width", "2")
+        .attr("stroke", "black")
+        .attr("fill", "none")
+        .attr("marker-start", "url(#connector-end-circle)")
+        .attr("marker-end", "url(#connector-end-circle)");
+    return polyline;
+}
 
+function coordString(coord) {
+    let coord_str = coord['x'] + ',' + coord['y'];
+    console.log('Coord String : ' + coord_str);
+    return coord_str;
+}
 

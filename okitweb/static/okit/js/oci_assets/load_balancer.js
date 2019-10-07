@@ -171,6 +171,9 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
                     svgPoint.x = instance_svg.attr('data-connector-start-x');
                     svgPoint.y = instance_svg.attr('data-connector-start-y');
                     connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                    let polyline = drawConnector(parent_svg, generateConnectorId(load_balancer['instance_ids'][i], id),
+                        {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y});
+                    /*
                     parent_svg.append('line')
                         .attr("id", generateConnectorId(load_balancer['instance_ids'][i], id))
                         .attr("x1", connector_start.x)
@@ -178,7 +181,10 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
                         .attr("x2", connector_end.x)
                         .attr("y2", connector_end.y)
                         .attr("stroke-width", "2")
-                        .attr("stroke", "black");
+                        .attr("stroke", "black")
+                        .attr("marker-start", "url(#connector-end-circle)")
+                        .attr("marker-end", "url(#connector-end-circle)");
+                    */
                 }
             }
         }
