@@ -254,8 +254,8 @@
 }
 
 .hidden {
-    visibility: hidden;
-    display: none;
+    visibility: hidden !important;
+    display: none !important;
 }
 
 .source-code {
@@ -309,9 +309,9 @@
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    padding: 4px 6px;
     transition: 0.3s;
-    font-size: 17px;
+    font-size: 14pt;
 }
 
 /* Change background color of buttons on hover */

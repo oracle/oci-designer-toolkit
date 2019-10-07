@@ -113,6 +113,8 @@ function drawCompartmentSVG(artifact) {
 
     // Add tab for canvas
     let tabwrapper = d3.select('#' + parent_id);
+    /*
+    ** Currently not using multi tabs for compartments
     let tabbar = d3.select('#compartment-tabs');
     tabbar.append("button")
         .on("click", function() { openCompartment(id); })
@@ -120,6 +122,7 @@ function drawCompartmentSVG(artifact) {
         .attr("class", "tablinks active")
         .attr("id", id + "-tab-button")
         .text(artifact['name']);
+    */
     let compartment_div = tabwrapper.append("div")
         .attr("class", "tabcontent")
         .attr("id", id + "-tab-content");

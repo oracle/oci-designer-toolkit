@@ -78,8 +78,8 @@ function newDiagram() {
     OKITJsonObj = {};
     okitIdsJsonObj = {};
     clearSVG();
-    //addCompartment();
-    document.getElementById('file-add-menu-item').click();
+    addCompartment();
+    //document.getElementById('file-add-menu-item').click();
 }
 
 function clearTabs() {
@@ -284,7 +284,7 @@ $(document).ready(function(){
     document.getElementById('file-save-menu-item').addEventListener('click', handleSave, false);
 
     // Canvas Menu
-    document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
+    //document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
 
     document.getElementById('file-redraw-menu-item').addEventListener('click', handleRedraw, false);
 
