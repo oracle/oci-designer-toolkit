@@ -13,6 +13,12 @@ const virtual_cloud_network_prefix = 'vcn';
 // Internet Gateway
 const internet_gateway_artifact = 'Internet Gateway';
 const internet_gateway_prefix = 'ig';
+// NAT Gateway
+const nat_gateway_artifact = 'NAT Gateway';
+const nat_gateway_prefix = 'ng';
+// Dynamic Routing Gateway
+const dynamic_routing_gateway_artifact = 'Dynamic Routing Gateway';
+const dynamic_routing_gateway_prefix = 'dg';
 // Route Table
 const route_table_artifact = 'Route Table';
 const route_table_prefix = 'rt';
@@ -31,15 +37,6 @@ const load_balancer_prefix = 'lb';
 // Block Storage
 const block_storage_volume_artifact = 'Block Storage Volume';
 const block_storage_volume_prefix = 'bsv';
-// SVG Icons
-const icon_width = 45;
-const icon_height = 45;
-const icon_x = 25;
-const icon_y = 25;
-const icon_translate_x_start = 60;
-const icon_translate_y_start = 10;
-const vcn_icon_spacing = 10;
-const icon_stroke_colour = "#F80000";
 
 /*
  * Define designer working variables
@@ -102,26 +99,6 @@ function clearSVG() {
         console.log('Calling ' + clear_function);
         window[clear_function]();
     }
-    /*
-    // Compartments
-    clearCompartmentVariables();
-    // Virtual Cloud Network
-    clearVirtualCloudNetworkVariables();
-    // Internet Gateway
-    clearInternetGatewayVariables();
-    // Route Table
-    clearRouteTableVariables();
-    // Security List
-    clearSecurityListVariables();
-    // Subnet
-    clearSubnetVariables();
-    // Load Balancer
-    clearLoadBalancerVariables();
-    // Instance
-    clearInstanceVariables();
-    // Block Storage Volume
-    clearBlockStorageVolumeVariables();
-     */
 }
 
 /*
@@ -142,106 +119,6 @@ function loaded(evt) {
     OKITJsonObj = JSON.parse(fileString);
     displayOkitJson();
     drawSVGforJson();
-}
-
-function drawSVGforJson() {
-    console.log('******** Drawing SVG *********');
-    displayOkitJson();
-    // Clear existing
-    clearSVG();
-
-    // Draw Outer SVG
-    if (OKITJsonObj.hasOwnProperty('compartments')) {
-        compartment_ids = [];
-        for (let i = 0; i < OKITJsonObj['compartments'].length; i++) {
-            compartment_ids.push(OKITJsonObj['compartments'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['compartments'][i]['id']] = OKITJsonObj['compartments'][i]['name']
-            compartment_count += 1;
-            drawCompartmentSVG(OKITJsonObj['compartments'][i]);
-        }
-    }
-
-    // Draw Compartment Subcomponents
-    if (OKITJsonObj.hasOwnProperty('virtual_cloud_networks')) {
-        virtual_network_ids = [];
-        for (let i=0; i < OKITJsonObj['virtual_cloud_networks'].length; i++) {
-            virtual_network_ids.push(OKITJsonObj['virtual_cloud_networks'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['virtual_cloud_networks'][i]['id']] = OKITJsonObj['virtual_cloud_networks'][i]['display_name'];
-            virtual_cloud_network_count += 1;
-            drawVirtualCloudNetworkSVG(OKITJsonObj['virtual_cloud_networks'][i]);
-        }
-    }
-    if (OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
-        block_storage_volume_ids = [];
-        for (let i=0; i < OKITJsonObj['block_storage_volumes'].length; i++) {
-            block_storage_volume_ids.push(OKITJsonObj['block_storage_volumes'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['block_storage_volumes'][i]['id']] = OKITJsonObj['block_storage_volumes'][i]['display_name'];
-            block_storage_volume_count += 1;
-            drawBlockStorageVolumeSVG(OKITJsonObj['block_storage_volumes'][i]);
-        }
-    }
-
-    // Draw Virtual Cloud Network Subcomponents
-    if (OKITJsonObj.hasOwnProperty('internet_gateways')) {
-        internet_gateway_ids = [];
-        for (let i=0; i < OKITJsonObj['internet_gateways'].length; i++) {
-            internet_gateway_ids.push(OKITJsonObj['internet_gateways'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['internet_gateways'][i]['id']] = OKITJsonObj['internet_gateways'][i]['display_name'];
-            internet_gateway_count += 1;
-            drawInternetGatewaySVG(OKITJsonObj['internet_gateways'][i]);
-        }
-    }
-    if (OKITJsonObj.hasOwnProperty('route_tables')) {
-        route_table_ids = [];
-        for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
-            route_table_ids.push(OKITJsonObj['route_tables'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['route_tables'][i]['id']] = OKITJsonObj['route_tables'][i]['display_name'];
-            route_table_count += 1;
-            drawRouteTableSVG(OKITJsonObj['route_tables'][i]);
-        }
-    }
-    if (OKITJsonObj.hasOwnProperty('security_lists')) {
-        security_list_ids = [];
-        for (let i=0; i < OKITJsonObj['security_lists'].length; i++) {
-            security_list_ids.push(OKITJsonObj['security_lists'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['security_lists'][i]['id']] = OKITJsonObj['security_lists'][i]['display_name'];
-            security_list_count += 1;
-            drawSecurityListSVG(OKITJsonObj['security_lists'][i]);
-        }
-    }
-    if (OKITJsonObj.hasOwnProperty('subnets')) {
-        subnet_ids = [];
-        for (let i=0; i < OKITJsonObj['subnets'].length; i++) {
-            subnet_ids.push(OKITJsonObj['subnets'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['subnets'][i]['id']] = OKITJsonObj['subnets'][i]['display_name'];
-            initialiseSubnetChildData(OKITJsonObj['subnets'][i]['id']);
-            subnet_count += 1;
-            drawSubnetSVG(OKITJsonObj['subnets'][i]);
-            drawSubnetConnectorsSVG(OKITJsonObj['subnets'][i]);
-        }
-    }
-
-    // Draw Subnet Subcomponents
-    if (OKITJsonObj.hasOwnProperty('instances')) {
-        instance_ids = [];
-        for (let i=0; i < OKITJsonObj['instances'].length; i++) {
-            instance_ids.push(OKITJsonObj['instances'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['instances'][i]['id']] = OKITJsonObj['instances'][i]['display_name'];
-            instance_count += 1;
-            drawInstanceSVG(OKITJsonObj['instances'][i]);
-            drawInstanceConnectorsSVG(OKITJsonObj['instances'][i]);
-        }
-    }
-    if (OKITJsonObj.hasOwnProperty('load_balancers')) {
-        load_balancer_ids = [];
-        for (let i=0; i < OKITJsonObj['load_balancers'].length; i++) {
-            load_balancer_ids.push(OKITJsonObj['load_balancers'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['load_balancers'][i]['id']] = OKITJsonObj['load_balancers'][i]['display_name'];
-            load_balancer_count += 1;
-            drawLoadBalancerSVG(OKITJsonObj['load_balancers'][i]);
-            drawLoadBalancerConnectorsSVG(OKITJsonObj['load_balancers'][i]);
-        }
-    }
 }
 
 function errorHandler(evt) {
@@ -275,7 +152,6 @@ function handleResize(evt) {
 
 function redrawSVGCanvas() {
     hideNavMenu();
-    //clearSVG();
     drawSVGforJson();
 }
 
@@ -313,7 +189,7 @@ function handleExportToSVG(evt) {
     if (!OKITJsonObj.hasOwnProperty('open_compartment_index')) {
         OKITJsonObj['open_compartment_index'] = 0;
     }
-    let okitcanvas = document.getElementById(OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['id'] + '-svg');
+    let okitcanvas = document.getElementById(OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['id'] + '-canvas-svg');
     let name = OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['name'];
     saveSvg(okitcanvas, name + '.svg');
 }
@@ -418,6 +294,10 @@ $(document).ready(function(){
 
     document.getElementById('file-export-rm-menu-item').addEventListener('click', handleExportToResourceManager, false);
 
+    // Query Menu
+
+    document.getElementById('query-oci-menu-item').addEventListener('click', handleQueryOci, false);
+
     // Generate Menu
     document.getElementById('generate-terraform-menu-item').addEventListener('click', handleGenerateTerraform, false);
 
@@ -425,8 +305,10 @@ $(document).ready(function(){
 
     document.getElementById('generate-resource-manager-menu-item').addEventListener('click', handleGenerateTerraform11, false);
 
+    //document.getElementById('Example-tab-button').addEventListener('click', function() { openCompartment('Example'); }, false);
+
     // Set Redraw when window resized
-    window.addEventListener("resize", handleResize, false);
+    //window.addEventListener("resize", handleResize, false);
 
     /*
     ** Set Empty Properties Sheet
@@ -440,9 +322,10 @@ $(document).ready(function(){
     ** Clean and start new diagram
      */
 
-    let compartment_id = addCompartment();
+    //let compartment_id = addCompartment();
 
     if (okitQueryRequestJson == null) {
+        console.log('<<<<<<<<<<<<<New Page>>>>>>>>>>>>>')
         newDiagram();
     } else {
         setBusyIcon();
@@ -464,7 +347,7 @@ $(document).ready(function(){
     $("#json-display").slideToggle();
 
     // Only observe the canvas
-    ro.observe(document.querySelector('#canvas-wrapper'));
+    //ro.observe(document.querySelector('#canvas-wrapper'));
 
 });
 

@@ -12,8 +12,8 @@ asset_clear_functions.push("clearLoadBalancerVariables");
 
 const load_balancer_stroke_colour = "#F80000";
 const load_balancer_query_cb = "load-balancer-query-cb";
-const load_balancer_width = Math.round(icon_width * 3);
-const load_balancer_height = Math.round(icon_height);
+const load_balancer_width = Math.round(icon_width * 6);
+const load_balancer_height = Math.round(icon_height * 3 / 2);
 const load_balancer_svg_width = Math.round(load_balancer_width + icon_x * 2);
 const load_balancer_svg_height = Math.round(load_balancer_height + icon_y * 2);
 let load_balancer_ids = [];
@@ -74,7 +74,7 @@ function deleteLoadBalancer(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['load_balancers'].length; i++) {
+    for (let i = 0; i < OKITJsonObj['load_balancers'].length; i++) {
         if (OKITJsonObj['load_balancers'][i]['id'] == id) {
             OKITJsonObj['load_balancers'].splice(i, 1);
         }
@@ -84,113 +84,62 @@ function deleteLoadBalancer(id) {
 /*
 ** SVG Creation
  */
-function drawLoadBalancerSVG(load_balancer) {
-    let parent_id = load_balancer['subnet_ids'][0];
-    let id = load_balancer['id'];
-    let compartment_id = load_balancer['compartment_id'];
-    console.log('Drawing Load Balancer : ' + id);
-    //console.log('Subnet Id : ' + parent_id);
-    //console.log('Subnet Content : ' + JSON.stringify(subnet_bui_sub_artifacts));
+function drawLoadBalancerSVG(artifact) {
+    let parent_id = artifact['subnet_ids'][0];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.log('Drawing ' + load_balancer_artifact + ' : ' + id + ' [' + parent_id + ']');
+
+    if (!subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        subnet_bui_sub_artifacts[parent_id] = {};
+    }
+
     // Only draw the instance if the subnet exists
     if (parent_id in subnet_bui_sub_artifacts) {
+        if (!subnet_bui_sub_artifacts[parent_id].hasOwnProperty('load_balancer_position')) {
+            subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] = 0;
+        }
+        // Calculate Position
         let position = subnet_bui_sub_artifacts[parent_id]['load_balancer_position'];
-        let svg_x = Math.round((icon_width / 2) + (load_balancer_width * position) + (vcn_icon_spacing * position));
-        let svg_y = Math.round(icon_height / 3);
-        let text_x = Math.round(icon_x + icon_width);
-        let text_y = Math.round(icon_y + icon_height / 2);
-        let data_type = load_balancer_artifact;
-
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] += 1;
 
-        let parent_svg = d3.select('#' + parent_id + "-svg");
-        let svg = parent_svg.append("svg")
-            .attr("id", id + '-svg')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", load_balancer['display_name'])
-            .attr("x", svg_x)
-            .attr("y", svg_y)
-            .attr("width", load_balancer_svg_width)
-            .attr("height", load_balancer_svg_height);
-        let rect = svg.append("rect")
-            .attr("id", id)
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", load_balancer['display_name'])
-            .attr("x", icon_x)
-            .attr("y", icon_y)
-            .attr("width", load_balancer_width)
-            .attr("height", load_balancer_height)
-            .attr("stroke", load_balancer_stroke_colour)
-            .attr("stroke-dasharray", "1, 1")
-            .attr("fill", "white")
-            .attr("style", "fill-opacity: .25;");
-        rect.append("title")
-            .attr("id", id + '-title')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .text("Load Balancer: " + load_balancer['display_name']);
-        let text = svg.append("text")
-            .attr("id", id + '-display-name')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("x", text_x)
-            .attr("y", text_y)
-            .text(load_balancer['display_name']);
-        let g = svg.append("g")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-        g.append("path")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v54.3h18.2v-23.9c0-5.2,4.2-9.3,9.3-9.3h20.1c5.2,0,9.3,4.2,9.3,9.3v20.9l22.7-21.8l-3-3.1l12.7-3.1l-3.6,12.6l-3-3.1l-22.4,21.6h28.7v-4.4l11.3,6.5l-11.3,6.5v-4.4h-28.7l22.4,21.6l3-3.1l3.6,12.6l-12.7-3.1l3-3.1l-22.7-21.8v20.9c0,5.2-4.2,9.3-9.3,9.3h-20.1c-5.2,0-9.3-4.2-9.3-9.3v-23.9H87.1v53c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z");
-        g.append("path")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("d", "M109.8,146.8v23.9c0,2.7,2.2,5,5,5h20.1c2.7,0,5-2.2,5-5v-52.1c0-2.7-2.2-5-5-5h-20.1c-2.7,0-5,2.2-5,5v23.9h16.1v-4.4l11.3,6.5l-11.3,6.5v-4.4H109.8z");
+        let artifact_definition = newArtifactSVGDefinition(artifact, load_balancer_artifact);
+        artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
+        artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+        artifact_definition['svg']['width'] = load_balancer_width;
+        artifact_definition['svg']['height'] = load_balancer_height;
+        artifact_definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 1;
+        artifact_definition['name']['show'] = true;
+
+        let svg = drawArtifact(artifact_definition);
 
         //loadLoadBalancerProperties(id);
+        let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
         // Add click event to display properties
         // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
         // Add dragevent versions
         // Set common attributes on svg element and children
-        svg.on("click", function () {loadLoadBalancerProperties(id); d3.event.stopPropagation(); })
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-type", data_type)
-            .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id)
-            .attr("data-compartment-id", compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+        svg.on("click", function () {
+            loadLoadBalancerProperties(id);
+            d3.event.stopPropagation();
+        });
+        svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
             .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-id", id)
             .attr("dragable", true)
             .selectAll("*")
-                .attr("data-type", data_type)
-                .attr("data-okit-id", id)
-                .attr("data-parentid", parent_id)
-                .attr("data-compartment-id", compartment_id)
-                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-id", id)
-                .attr("dragable", true);
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
     }
 }
 
@@ -222,6 +171,9 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
                     svgPoint.x = instance_svg.attr('data-connector-start-x');
                     svgPoint.y = instance_svg.attr('data-connector-start-y');
                     connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                    let polyline = drawConnector(parent_svg, generateConnectorId(load_balancer['instance_ids'][i], id),
+                        {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y});
+                    /*
                     parent_svg.append('line')
                         .attr("id", generateConnectorId(load_balancer['instance_ids'][i], id))
                         .attr("x1", connector_start.x)
@@ -229,7 +181,10 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
                         .attr("x2", connector_end.x)
                         .attr("y2", connector_end.y)
                         .attr("stroke-width", "2")
-                        .attr("stroke", "black");
+                        .attr("stroke", "black")
+                        .attr("marker-start", "url(#connector-end-circle)")
+                        .attr("marker-end", "url(#connector-end-circle)");
+                    */
                 }
             }
         }
@@ -264,7 +219,9 @@ function loadLoadBalancerProperties(id) {
                     }
                     instances_select.val(load_balancer['instance_ids']);
                     // Add Event Listeners
-                    addPropertiesEventListeners(load_balancer, [clearLoadBalancerConnectorsSVG, drawLoadBalancerConnectorsSVG]);
+                    //addPropertiesEventListeners(load_balancer, [clearLoadBalancerConnectorsSVG, drawLoadBalancerConnectorsSVG]);
+                    //addPropertiesEventListeners(load_balancer, [drawLoadBalancerAttachmentsSVG]);
+                    addPropertiesEventListeners(load_balancer, [drawSVGforJson]);
                     break;
                 }
             }
@@ -284,7 +241,7 @@ function updateLoadBalancer(source_type, source_id, id) {
         console.log(i + ') ' + JSON.stringify(load_balancer))
         if (load_balancer['id'] == id) {
             if (source_type == instance_artifact) {
-                if (load_balancer['instance_ids'].indexOf(source_id) > 0 ) {
+                if (load_balancer['instance_ids'].indexOf(source_id) > 0) {
                     // Already connected so delete existing line
                     d3.select("#" + generateConnectorId(source_id, id)).remove();
                 } else {
@@ -316,27 +273,28 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(request_json),
-        success: function(resp) {
+        success: function (resp) {
             let response_json = JSON.parse(resp);
             OKITJsonObj['load_balancers'] = response_json;
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
+            let len = response_json.length;
+            for (let i = 0; i < len; i++) {
                 console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + load_balancer_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
-        error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+        error: function (xhr, status, error) {
+            console.log('Status : ' + status)
+            console.log('Error : ' + error)
         }
     });
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     clearLoadBalancerVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -344,6 +302,18 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', load_balancer_query_cb);
     cell.append('label').text(load_balancer_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(load_balancer_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'load_balancer_name_filter')
+        .attr('name', 'load_balancer_name_filter');
 });
 
 

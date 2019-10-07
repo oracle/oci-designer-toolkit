@@ -21,7 +21,7 @@ function handlePropertiesMouseUp(e) {
     }
 }
 
-function addPropertiesEventListeners(json_element, callbacks) {
+function addPropertiesEventListeners(json_element, callbacks=[]) {
     // Default callbacks if not passed
     callbacks = (typeof callbacks !== 'undefined') ? callbacks : [];
     // Add Event Listeners

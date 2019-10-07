@@ -41,6 +41,7 @@ from generators.ociPythonGenerator import OCIPythonGenerator
 from facades.ociCompartment import OCICompartments
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from facades.ociInternetGateway import OCIInternetGateways
+from facades.ociNATGateway import OCINATGateways
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
 from facades.ociSubnet import OCISubnets
@@ -91,6 +92,7 @@ def designer():
         response_string = json.dumps(response_json, separators=(',', ': '))
         return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
+        logger.info('>>>>>>>>> oci version {0!s:s}'.format(oci.__version__))
         return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons)
 
 
@@ -174,6 +176,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Internet Gateways')
         oci_internet_gateways = OCIInternetGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
+    elif artifact == 'NATGateway':
+        logger.info('---- Processing NAT Gateways')
+        oci_nat_gateways = OCINATGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
     elif artifact == 'RouteTable':
         logger.info('---- Processing Route Tables')
         oci_route_tables = OCIRouteTables(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
@@ -189,14 +195,7 @@ def ociArtifacts(artifact):
     elif artifact == 'Instance':
         logger.info('---- Processing Instances')
         oci_instances = OCIInstances(compartment_id=query_json['compartment_id'])
-        instance_json = oci_instances.list(filter=query_json.get('instance_filter', None))
-        oci_instance_vnics = OCIInstanceVnics(compartment_id=query_json['compartment_id'])
-        response_json = []
-        for instance in instance_json:
-            instance['vnics'] = oci_instance_vnics.list(instance_id=instance['id'])
-            instance['subnet_id'] = instance['vnics'][0]['subnet_id'] if len(instance['vnics']) > 0 else ''
-            if query_json['subnet_id'] in [vnic['subnet_id'] for vnic in instance['vnics']]:
-                response_json.append(instance)
+        response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
     elif artifact == 'LoadBalancer':
         logger.info('---- Processing Load Balancers')
         oci_load_balancers = OCILoadBalancers(compartment_id=query_json['compartment_id'])
@@ -220,6 +219,7 @@ def export(destination):
     if request.method == 'POST':
         try:
             destination_dir = tempfile.mkdtemp();
+            logger.debug(">>>>>>>>>>>>> {0!s:s}".format(destination_dir))
             stack = {}
             stack['display_name'] = 'okit-stack-export-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
             stack['display_name'] = 'nightmare-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))

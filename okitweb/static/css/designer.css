@@ -61,7 +61,7 @@
 
 .designer-left-column {
     flex-grow: 1;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
 }
 
@@ -85,7 +85,6 @@
     margin: 0;
     max-height: calc(100vh - 160px);
     display: block;
-    overflow: scroll;
 }
 
 .svg-canvas {
@@ -122,6 +121,22 @@
     border: black 1px dashed;
     border-radius: 5px;
     padding: 5px;
+}
+
+.query-oci {
+    z-index:1000;
+    position: absolute;
+    left: 30%;
+    top: 20%;
+    border: black 1px dashed;
+    border-radius: 5px;
+    padding: 5px;
+    opacity: 50%;
+}
+
+.query-filter {
+    width: 100%;
+    margin-right: 2em;
 }
 
 /* Asset Properties */
@@ -203,6 +218,11 @@
     font-size: 12px;
     width: 95%;
     margin-right: 5px;
+}
+
+.checkbox-property {
+    display: block;
+    width: 100%;
 }
 
 .add-button {
@@ -309,6 +329,10 @@
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
 }
 
 

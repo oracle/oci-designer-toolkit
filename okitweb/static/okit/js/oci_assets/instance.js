@@ -12,10 +12,8 @@ asset_clear_functions.push("clearInstanceVariables");
 
 const instance_stroke_colour = "blue";
 const instance_query_cb = "instance-query-cb";
-const instance_width = Math.round(icon_width * 4);
-const instance_height = Math.round(icon_height * 2 + icon_height / 2);
-const instance_svg_width = Math.round(instance_width + icon_x * 2);
-const instance_svg_height = Math.round(instance_height + icon_y * 2);
+const instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
+const instance_height = Math.round(icon_height * 5 / 2);
 let instance_ids = [];
 let instance_count = 0;
 
@@ -67,7 +65,8 @@ function addInstance(subnet_id, compartment_id) {
     okitIdsJsonObj[id] = instance['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
-    drawInstanceSVG(instance);
+    //drawInstanceSVG(instance);
+    drawSVGforJson();
     loadInstanceProperties(id);
 }
 
@@ -80,7 +79,7 @@ function deleteInstance(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['instances'].length; i++) {
+    for (let i = 0; i < OKITJsonObj['instances'].length; i++) {
         if (OKITJsonObj['instances'][i]['id'] == id) {
             OKITJsonObj['instances'].splice(i, 1);
         }
@@ -88,7 +87,7 @@ function deleteInstance(id) {
     // Remove Load Balancer references
     if ('load_balancers' in OKITJsonObj) {
         for (load_balancer of OKITJsonObj['load_balancers']) {
-            for (let i=0; i < load_balancer['instance_ids'].length; i++) {
+            for (let i = 0; i < load_balancer['instance_ids'].length; i++) {
                 if (load_balancer['instance_ids'][i] == id) {
                     load_balancer['instance_ids'].splice(i, 1);
                 }
@@ -100,114 +99,66 @@ function deleteInstance(id) {
 /*
 ** SVG Creation
  */
-function drawInstanceSVG(instance) {
-    let parent_id = instance['subnet_id'];
-    let id = instance['id'];
-    let compartment_id = instance['compartment_id'];
-    console.log('Drawing Instance : ' + id);
-    console.log('instance_svg_height : ' + instance_svg_height);
-    console.log('instance_svg_width : ' + instance_svg_width);
-    console.log('instance_height : ' + instance_height);
-    console.log('instance_width : ' + instance_width);
-    //console.log('Subnet Id : ' + parent_id);
-    //console.log('Subnet Content : ' + JSON.stringify(subnet_bui_sub_artifacts));
+function drawInstanceSVG(artifact) {
+    let parent_id = artifact['subnet_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.log('Drawing ' + instance_artifact + ' : ' + id + ' [' + parent_id + ']');
+
+    // Test if parent exists
+    let parent_exists = false;
+    if (OKITJsonObj.hasOwnProperty('subnets')) {
+        for (subnet of OKITJsonObj['subnets']) {
+            if (parent_id == subnet['id']) {
+                parent_exists = true;
+                break;
+            }
+        }
+    }
+    if (!parent_exists) {
+        console.log('Parent ' + parent_id + ' not found.');
+        return
+    }
+
+    if (!subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        subnet_bui_sub_artifacts[parent_id] = {};
+    }
+
     // Only draw the instance if the subnet exists
     if (subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        if (!subnet_bui_sub_artifacts[parent_id].hasOwnProperty('instance_position')) {
+            subnet_bui_sub_artifacts[parent_id]['instance_position'] = 0;
+        }
+        // Calculate Position
         let position = subnet_bui_sub_artifacts[parent_id]['instance_position'];
-        let svg_x = Math.round((icon_width / 2) + (instance_width * position) + (vcn_icon_spacing * position));
-        let svg_y = Math.round((icon_height / 4) * 9);
-        let text_x = Math.round(icon_x + icon_width);
-        let text_y = Math.round(icon_y + icon_height / 2);
-        let data_type = instance_artifact;
-        console.log('svg_x : ' + svg_x);
-        console.log('svg_y : ' + svg_y);
-
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
 
-        let parent_svg = d3.select('#' + parent_id + "-svg");
-        let svg = parent_svg.append("svg")
-            .attr("id", id + '-svg')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", instance['display_name'])
-            .attr("x", svg_x)
-            .attr("y", svg_y)
-            .attr("width", instance_svg_width)
-            .attr("height", instance_svg_height);
-        let rect = svg.append("rect")
-            .attr("id", id)
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", instance['display_name'])
-            .attr("x", icon_x)
-            .attr("y", icon_y)
-            .attr("width", instance_width)
-            .attr("height", instance_height)
-            .attr("stroke", instance_stroke_colour)
-            .attr("stroke-dasharray", "1, 1")
-            .attr("fill", "white")
-            .attr("style", "fill-opacity: .25;");
-        rect.append("title")
-            .attr("id", id + '-title')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .text("Instance: " + instance['display_name']);
-        let text = svg.append("text")
-            .attr("id", id + '-display-name')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("x", text_x)
-            .attr("y", text_y)
-            .append("tspan")
-                .attr("x", text_x)
-                .text(instance['display_name'])
-            .append("tspan")
-                .attr("x", text_x)
-                .attr("dy", "1.2em")
-                .text(instance['hostname_label'])
-            .append("tspan")
-                .attr("x", text_x)
-                .attr("dy", "1.2em")
-                .text(instance['os'] + " " + instance['version']);
-        let g = svg.append("g")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-        g.append("circle")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("cx", "173")
-            .attr("cy", "171.9")
-            .attr("r", "3.8");
-        g.append("path")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("d", "M194.6,81.8H93.4c-3.5,0-6.3,2.8-6.3,6.3v111.8c0,3.5,2.8,6.3,6.3,6.3h101.1c3.5,0,6.3-2.8,6.3-6.3V88.1C200.9,84.7,198,81.8,194.6,81.8z M132.4,114.5v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V114.5z M132.4,142.6v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V142.6z M105.1,114.5v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V114.5zM105.1,142.6v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7v6.6v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7V142.6z M182.9,180.2c0,1.9-1.6,3.5-3.5,3.5h-70.7c-1.9,0-3.5-1.6-3.5-3.5v-19.6h77.8V180.2z M182.9,141.8v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7v-10.7v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7V141.8z M182.9,113.8v0.8v10.7c0,1.5-1.2,2.7-2.7,2.7h-17.8c-1.5,0-2.7-1.2-2.7-2.7v-10.7v-0.8v-6.6c0-1.5,1.2-2.7,2.7-2.7h17.8c1.5,0,2.7,1.2,2.7,2.7V113.8z")
+        let artifact_definition = newArtifactSVGDefinition(artifact, instance_artifact);
+        artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (instance_width * position) + (icon_spacing * position));
+        artifact_definition['svg']['y'] = Math.round(icon_height * 4);
+        artifact_definition['svg']['width'] = instance_width;
+        artifact_definition['svg']['height'] = instance_height;
+        artifact_definition['rect']['stroke']['colour'] = instance_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 1;
+        artifact_definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
+        artifact_definition['name']['show'] = true;
+
+        let svg = drawArtifact(artifact_definition);
 
         //loadInstanceProperties(id);
+        let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
         // Add click event to display properties
         // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
         // Add dragevent versions
         // Set common attributes on svg element and children
-        svg.on("click", function () {loadInstanceProperties(id); d3.event.stopPropagation(); })
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-type", data_type)
-            .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id)
-            .attr("data-compartment-id", compartment_id)
+        svg.on("click", function () {
+            loadInstanceProperties(id);
+            d3.event.stopPropagation();
+        });
+        svg.attr("data-compartment-id", compartment_id)
             .attr("data-connector-start-y", boundingClientRect.y)
             .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
             .attr("data-connector-end-y", boundingClientRect.y)
@@ -215,17 +166,15 @@ function drawInstanceSVG(instance) {
             .attr("data-connector-id", id)
             .attr("dragable", true)
             .selectAll("*")
-                .attr("data-type", data_type)
-                .attr("data-okit-id", id)
-                .attr("data-parentid", parent_id)
-                .attr("data-compartment-id", compartment_id)
-                .attr("data-connector-start-y", boundingClientRect.y)
-                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-end-y", boundingClientRect.y)
-                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-id", id)
-                .attr("dragable", true);
+            .attr("data-connector-start-y", boundingClientRect.y)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", id)
+            .attr("dragable", true);
     }
+    // Draw any connected artifacts
+    drawInstanceAttachmentsSVG(artifact);
 }
 
 function clearInstanceSVG(instance) {
@@ -235,6 +184,7 @@ function clearInstanceSVG(instance) {
 
 function drawInstanceConnectorsSVG(instance) {
     let id = instance['id'];
+    console.log('>>>> Drawing ' + instance_artifact + ' : ' + id + ' Connectors');
     // If Block Storage Volumes Ids are missing then initialise.
     // This may occur during a query
     if (!instance.hasOwnProperty('block_storage_volume_ids')) {
@@ -243,7 +193,7 @@ function drawInstanceConnectorsSVG(instance) {
     for (let block_storage_id of instance['block_storage_volume_ids']) {
         let block_storage_svg = d3.select('#' + block_storage_id);
         if (block_storage_svg.node()) {
-            let parent_id = block_storage_svg.attr('data-parentid');
+            let parent_id = block_storage_svg.attr('data-parent-id');
             let parent_svg = d3.select('#' + parent_id + "-svg");
             if (parent_svg.node()) {
                 console.log('Parent SVG : ' + parent_svg.node());
@@ -271,6 +221,53 @@ function drawInstanceConnectorsSVG(instance) {
     }
 }
 
+function drawInstanceAttachmentsSVG(instance) {
+    let id = instance['id'];
+    console.log('Drawing ' + instance_artifact + ' : ' + id + ' Attachments');
+    // If Block Storage Volumes Ids are missing then initialise.
+    // This may occur during a query
+    if (!instance.hasOwnProperty('block_storage_volume_ids')) {
+        instance['block_storage_volume_ids'] = [];
+    }
+    let attachment_count = 0;
+    for (let block_storage_id of instance['block_storage_volume_ids']) {
+        for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
+            if (block_storage_id == block_storage_volume['id']) {
+                let artifact_clone = JSON.parse(JSON.stringify(block_storage_volume));
+                artifact_clone['parent_id'] = instance['id'];
+                drawAttachedBlockStorageVolume(artifact_clone, attachment_count);
+            }
+        }
+        attachment_count += 1;
+    }
+}
+
+function drawAttachedBlockStorageVolume(artifact, bs_count) {
+    console.log('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
+    let artifact_definition = newBlockStorageVolumeSVGDefinition(artifact, bs_count);
+    artifact_definition['svg']['x'] = Math.round(icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count));
+    artifact_definition['svg']['y'] = Math.round(instance_height - icon_height);
+
+    let svg = drawArtifact(artifact_definition);
+
+    /*
+    let svg_x = icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count);
+    let svg_y = Math.round(instance_height - icon_height);
+    let svg_width = icon_width;
+    let svg_height = icon_height;
+    let data_type = block_storage_volume_artifact;
+    let stroke_colour = block_storage_volume_stroke_colour;
+    let stroke_dash = 1;
+    // Draw Block Storage Volume
+    let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+    */
+    // Add click event to display properties
+    svg.on("click", function () {
+        loadBlockStorageVolumeProperties(artifact['id']);
+        d3.event.stopPropagation();
+    });
+}
+
 /*
 ** Property Sheet Load function
  */
@@ -292,12 +289,18 @@ function loadInstanceProperties(id) {
                     $('#authorized_keys').val(instance['authorized_keys']);
                     $('#cloud_init_yaml').val(instance['cloud_init_yaml']);
                     let block_storage_volume_select = $('#block_storage_volume_ids');
-                    for (let bsvid of block_storage_volume_ids) {
-                        block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
+                    //for (let bsvid of block_storage_volume_ids) {
+                    //    block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
+                    //}
+                    if (OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
+                        for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
+                            block_storage_volume_select.append($('<option>').attr('value', block_storage_volume['id']).text(block_storage_volume['display_name']));
+                        }
                     }
                     block_storage_volume_select.val(instance['block_storage_volume_ids']);
                     // Add Event Listeners
-                    addPropertiesEventListeners(instance, []);
+                    //addPropertiesEventListeners(instance, [drawInstanceAttachmentsSVG]);
+                    addPropertiesEventListeners(instance, [drawSVGforJson]);
                     break;
                 }
             }
@@ -317,12 +320,12 @@ function updateInstance(source_type, source_id, id) {
         console.log(i + ') ' + JSON.stringify(instance))
         if (instance['id'] == id) {
             if (source_type == block_storage_volume_artifact) {
-                if (instance['block_storage_volume_ids'].indexOf(source_id) > 0 ) {
+                if (instance['block_storage_volume_ids'].indexOf(source_id) > 0) {
                     // Already connected so delete existing line
                     d3.select("#" + generateConnectorId(source_id, id)).remove();
                 } else {
                     instance['block_storage_volume_ids'].push(source_id);
-                    instance['block_storage_volumes'].push(okitIdsJsonObj[source_id]);
+                    //instance['block_storage_volumes'].push(okitIdsJsonObj[source_id]);
                 }
             }
         }
@@ -349,27 +352,28 @@ function queryInstanceAjax(compartment_id, subnet_id) {
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(request_json),
-        success: function(resp) {
+        success: function (resp) {
             let response_json = JSON.parse(resp);
             OKITJsonObj['instances'] = response_json;
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
+            let len = response_json.length;
+            for (let i = 0; i < len; i++) {
                 console.log('queryInstanceAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + instance_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
-        error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+        error: function (xhr, status, error) {
+            console.log('Status : ' + status)
+            console.log('Error : ' + error)
         }
     });
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     clearInstanceVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -377,6 +381,18 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', instance_query_cb);
     cell.append('label').text(instance_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(instance_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'instance_name_filter')
+        .attr('name', 'instance_name_filter');
 });
 
 

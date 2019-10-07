@@ -50,14 +50,8 @@ class OCIRegions(OCIIdentityConnection):
         regions_json = self.toJson(regions)
         logger.debug(str(regions_json))
 
-        # Check if the results should be filtered
-        if filter is None:
-            self.regions_json = regions_json
-        else:
-            filtered = regions_json[:]
-            for key, val in filter.items():
-                filtered = [comp for comp in filtered if re.compile(val).search(comp[key])]
-            self.regions_json = filtered
+        # Filter results
+        self.regions_json = self.filterJsonObjectList(regions_json, filter)
         logger.debug(str(self.regions_json))
 
         # Generate Name / Id mappings

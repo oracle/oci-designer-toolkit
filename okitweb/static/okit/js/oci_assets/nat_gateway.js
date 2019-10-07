@@ -1,73 +1,73 @@
-console.log('Loaded Internet Gateway Javascript');
+console.log('Loaded NAT Gateway Javascript');
 
 /*
 ** Set Valid drop Targets
  */
-asset_drop_targets[internet_gateway_artifact] = [virtual_cloud_network_artifact];
-asset_connect_targets[internet_gateway_artifact] = [];
-asset_add_functions[internet_gateway_artifact] = "addInternetGateway";
-asset_delete_functions[internet_gateway_artifact] = "deleteInternetGateway";
-asset_clear_functions.push("clearInternetGatewayVariables");
+asset_drop_targets[nat_gateway_artifact] = [virtual_cloud_network_artifact];
+asset_connect_targets[nat_gateway_artifact] = [];
+asset_add_functions[nat_gateway_artifact] = "addNATGateway";
+asset_delete_functions[nat_gateway_artifact] = "deleteNATGateway";
+asset_clear_functions.push("clearNATGatewayVariables");
 
-const internet_gateway_stroke_colour = "purple";
-const internet_gateway_query_cb = "internet-gateway-query-cb";
-let internet_gateway_ids = [];
-let internet_gateway_count = 0;
+const nat_gateway_stroke_colour = "purple";
+const nat_gateway_query_cb = "nat-gateway-query-cb";
+let nat_gateway_ids = [];
+let nat_gateway_count = 0;
 
 /*
 ** Reset variables
  */
 
-function clearInternetGatewayVariables() {
-    internet_gateway_ids = [];
-    internet_gateway_count = 0;
+function clearNATGatewayVariables() {
+    nat_gateway_ids = [];
+    nat_gateway_count = 0;
 }
 
 /*
 ** Add Asset to JSON Model
  */
-function addInternetGateway(vcn_id, compartment_id) {
-    let id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
-    console.log('Adding Internet Gateway : ' + id);
+function addNATGateway(vcn_id, compartment_id) {
+    let id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
+    console.log('Adding NAT Gateway : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('internet_gateways')) {
-        OKITJsonObj['internet_gateways'] = [];
+    if (!OKITJsonObj.hasOwnProperty('nat_gateways')) {
+        OKITJsonObj['nat_gateways'] = [];
     }
 
     // Add id & empty name to id JSON
     okitIdsJsonObj[id] = '';
-    internet_gateway_ids.push(id);
+    nat_gateway_ids.push(id);
 
     // Increment Count
-    internet_gateway_count += 1;
-    let internet_gateway = {};
-    internet_gateway['vcn_id'] = vcn_id;
-    internet_gateway['virtual_cloud_network'] = '';
-    internet_gateway['compartment_id'] = compartment_id;
-    internet_gateway['id'] = id;
-    internet_gateway['display_name'] = generateDefaultName(internet_gateway_prefix, internet_gateway_count);
-    OKITJsonObj['internet_gateways'].push(internet_gateway);
-    okitIdsJsonObj[id] = internet_gateway['display_name'];
+    nat_gateway_count += 1;
+    let nat_gateway = {};
+    nat_gateway['vcn_id'] = vcn_id;
+    nat_gateway['virtual_cloud_network'] = '';
+    nat_gateway['compartment_id'] = compartment_id;
+    nat_gateway['id'] = id;
+    nat_gateway['display_name'] = generateDefaultName(nat_gateway_prefix, nat_gateway_count);
+    OKITJsonObj['nat_gateways'].push(nat_gateway);
+    okitIdsJsonObj[id] = nat_gateway['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
-    drawInternetGatewaySVG(internet_gateway);
-    loadInternetGatewayProperties(id);
+    drawNATGatewaySVG(nat_gateway);
+    loadNATGatewayProperties(id);
 }
 
 /*
 ** Delete From JSON Model
  */
 
-function deleteInternetGateway(id) {
-    console.log('Delete Internet Gateway ' + id);
+function deleteNATGateway(id) {
+    console.log('Delete NAT Gateway ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['internet_gateways'].length; i++) {
-        if (OKITJsonObj['internet_gateways'][i]['id'] == id) {
-            OKITJsonObj['internet_gateways'].splice(i, 1);
+    for (let i=0; i < OKITJsonObj['nat_gateways'].length; i++) {
+        if (OKITJsonObj['nat_gateways'][i]['id'] == id) {
+            OKITJsonObj['nat_gateways'].splice(i, 1);
         }
     }
     // Remove Subnet references
@@ -85,12 +85,12 @@ function deleteInternetGateway(id) {
 /*
 ** SVG Creation
  */
-function drawInternetGatewaySVG(artifact) {
+function drawNATGatewaySVG(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + internet_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.log('Drawing ' + nat_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -105,23 +105,23 @@ function drawInternetGatewaySVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'] += 1;
 
-        let artifact_definition = newArtifactSVGDefinition(artifact, internet_gateway_artifact);
+        let artifact_definition = newArtifactSVGDefinition(artifact, nat_gateway_artifact);
         artifact_definition['svg']['x'] = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
         artifact_definition['svg']['y'] = 0;
         artifact_definition['svg']['width'] = icon_width;
         artifact_definition['svg']['height'] = icon_height;
-        artifact_definition['rect']['stroke']['colour'] = internet_gateway_stroke_colour;
+        artifact_definition['rect']['stroke']['colour'] = nat_gateway_stroke_colour;
         artifact_definition['rect']['stroke']['dash'] = 1;
 
         let svg = drawArtifact(artifact_definition);
 
-        //loadInternetGatewayProperties(id);
+        //loadNATGatewayProperties(id);
         // Add click event to display properties
         // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
         // Add dragevent versions
         // Set common attributes on svg element and children
         svg.on("click", function () {
-            loadInternetGatewayProperties(id);
+            loadNATGatewayProperties(id);
             d3.event.stopPropagation();
         });
         //    .on("contextmenu", handleContextMenu);
@@ -133,21 +133,21 @@ function drawInternetGatewaySVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadInternetGatewayProperties(id) {
-    $("#properties").load("propertysheets/internet_gateway.html", function () {
-        if ('internet_gateways' in OKITJsonObj) {
-            console.log('Loading Internet Gateway: ' + id);
-            let json = OKITJsonObj['internet_gateways'];
+function loadNATGatewayProperties(id) {
+    $("#properties").load("propertysheets/nat_gateway.html", function () {
+        if ('nat_gateways' in OKITJsonObj) {
+            console.log('Loading NAT Gateway: ' + id);
+            let json = OKITJsonObj['nat_gateways'];
             for (let i = 0; i < json.length; i++) {
-                let internet_gateway = json[i];
-                //console.log(JSON.stringify(internet_gateway, null, 2));
-                if (internet_gateway['id'] == id) {
-                    //console.log('Found Internet Gateway: ' + id);
-                    internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['vcn_id']];
-                    $("#virtual_cloud_network").html(internet_gateway['virtual_cloud_network']);
-                    $('#display_name').val(internet_gateway['display_name']);
+                let nat_gateway = json[i];
+                //console.log(JSON.stringify(nat_gateway, null, 2));
+                if (nat_gateway['id'] == id) {
+                    //console.log('Found NAT Gateway: ' + id);
+                    nat_gateway['virtual_cloud_network'] = okitIdsJsonObj[nat_gateway['vcn_id']];
+                    $("#virtual_cloud_network").html(nat_gateway['virtual_cloud_network']);
+                    $('#display_name').val(nat_gateway['display_name']);
                     // Add Event Listeners
-                    addPropertiesEventListeners(internet_gateway, []);
+                    addPropertiesEventListeners(nat_gateway, []);
                     break;
                 }
             }
@@ -159,29 +159,29 @@ function loadInternetGatewayProperties(id) {
 ** Query OCI
  */
 
-function queryInternetGatewayAjax(compartment_id, vcn_id) {
-    console.log('------------- queryInternetGatewayAjax --------------------');
+function queryNATGatewayAjax(compartment_id, vcn_id) {
+    console.log('------------- queryNATGatewayAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
-    if ('internet_gateway_filter' in okitQueryRequestJson) {
-        request_json['internet_gateway_filter'] = okitQueryRequestJson['internet_gateway_filter'];
+    if ('nat_gateway_filter' in okitQueryRequestJson) {
+        request_json['nat_gateway_filter'] = okitQueryRequestJson['nat_gateway_filter'];
     }
     $.ajax({
         type: 'get',
-        url: 'oci/artifacts/InternetGateway',
+        url: 'oci/artifacts/NATGateway',
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['internet_gateways'] = response_json;
+            OKITJsonObj['nat_gateways'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
+                console.log('queryNATGatewayAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
-            $('#' + internet_gateway_query_cb).prop('checked', true);
+            $('#' + nat_gateway_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
@@ -192,7 +192,7 @@ function queryInternetGatewayAjax(compartment_id, vcn_id) {
 }
 
 $(document).ready(function() {
-    clearInternetGatewayVariables();
+    clearNATGatewayVariables();
 
     // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
@@ -200,19 +200,19 @@ $(document).ready(function() {
     let cell = row.append('td');
     cell.append('input')
         .attr('type', 'checkbox')
-        .attr('id', internet_gateway_query_cb);
-    cell.append('label').text(internet_gateway_artifact);
+        .attr('id', nat_gateway_query_cb);
+    cell.append('label').text(nat_gateway_artifact);
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(internet_gateway_artifact);
+        .text(nat_gateway_artifact);
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
         .attr('class', 'query-filter')
-        .attr('id', 'internet_gateway_name_filter')
-        .attr('name', 'internet_gateway_name_filter');
+        .attr('id', 'nat_gateway_name_filter')
+        .attr('name', 'nat_gateway_name_filter');
 });
 

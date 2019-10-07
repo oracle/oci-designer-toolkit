@@ -45,28 +45,15 @@ class OCIRouteTables(OCIVirtualNetworkConnection):
         route_tables_json = self.toJson(route_tables)
         logger.debug(str(route_tables_json))
 
-        # Check if the results should be filtered
-        if filter is None:
-            self.route_tables_json = route_tables_json
-        else:
-            filtered = self.route_tables_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            self.route_tables_json = filtered
+        # Filter results
+        self.route_tables_json = self.filterJsonObjectList(route_tables_json, filter)
         logger.debug(str(self.route_tables_json))
 
         # Build List of RouteTable Objects
         self.route_tables_obj = []
         for route_table in self.route_tables_json:
             self.route_tables_obj.append(OCIRouteTable(self.config, self.configfile, route_table))
-        # Check if the results should be filtered
-        #if filter is None:
-        #    return self.route_tables_json
-        #else:
-        #    filtered = self.route_tables_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    return filtered
+
         return self.route_tables_json
 
 

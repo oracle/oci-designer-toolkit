@@ -31,6 +31,7 @@ function addAssetToDropTarget(title, target_id, compartment_id) {
 
 function updateAssetTarget(title, source_type, source_id, target_id) {
     window[asset_update_functions[title]](source_type, source_id, target_id);
+    drawSVGforJson();
 }
 
 function deleteAssetFromSVG(artifact, id) {
@@ -174,7 +175,7 @@ function handleConnectorDragStart() {
         if (asset_connect_targets.hasOwnProperty(source_type) && asset_connect_targets[source_type].length > 0) {
             // Set Start Element to know we are dragging
             connectorStartElement = this;
-            let parentid = d3.select(this).attr('data-parentid');
+            let parentid = d3.select(this).attr('data-parent-id');
             let parent_svg = document.getElementById(parentid + "-svg");
 
             console.log('Connector Drag Start Parent Id : ' + parentid);
@@ -236,9 +237,9 @@ function handleConnectorDrop(e) {
     if (connectorStartElement) {
         let sourceType = connectorStartElement.getAttribute('data-type');
         let destinationType = d3.select(this).attr('data-type');
-        let parentid = d3.select(this).attr('data-parentid');
+        let parentid = d3.select(this).attr('data-parent-id');
         let sourceid = connectorStartElement.getAttribute('data-okit-id');
-        let source_parent_id = connectorStartElement.getAttribute('data-parentid');
+        let source_parent_id = connectorStartElement.getAttribute('data-parent-id');
         let id = d3.select(this).attr('data-okit-id');
         let connector_source_id = connectorStartElement.getAttribute('data-connector-id');
         let connector_destination_id = d3.select(this).attr('data-connector-id');
@@ -259,6 +260,7 @@ function handleConnectorDrop(e) {
         // Check is Connection of
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
             updateAssetTarget(destinationType, sourceType, sourceid, id);
+            /*
             console.log('Creating Connector Line (' + sourceType + ') - (' + destinationType + ')');
             console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
             connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-end-x');
@@ -274,6 +276,7 @@ function handleConnectorDrop(e) {
                 .attr("y2", svgrelative.y)
                 .attr("stroke-width", "2")
                 .attr("stroke", "black");
+            */
         }
     }
 

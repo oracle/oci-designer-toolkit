@@ -127,97 +127,40 @@ function deleteVirtualCloudNetwork(id) {
 /*
 ** SVG Creation
  */
-function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
-    let parent_id = virtual_cloud_network['compartment_id'];
-    let id = virtual_cloud_network['id'];
-    let compartment_id = virtual_cloud_network['compartment_id'];
-    console.log('Drawing Virtual Cloud Network : ' + id);
+function drawVirtualCloudNetworkSVG(artifact) {
+    let parent_id = artifact['compartment_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.log('Drawing Virtual Cloud Network : ' + id + ' [' + parent_id + ']');
+    console.log(JSON.stringify(compartment_bui_sub_artifacts));
+
+    if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        compartment_bui_sub_artifacts[parent_id] = {};
+    }
+
     if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('virtual_cloud_network_position')) {
             compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] = 0;
         }
+        // Calculate Position
         let position = compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'];
-        let svg_x = Math.round(icon_width * 3 / 2);
-        let svg_y = Math.round((icon_height / 4) * 3 + (icon_height * position) + (vcn_icon_spacing * position));
-        let name_x = Math.round(icon_x + icon_width / 3);
-        let name_y = Math.round(icon_y + icon_height * 7 / 8);
-        let label_x = Math.round(icon_x + icon_width / 3);
-        let label_y = Math.round(icon_y + icon_height * 14);
-        let data_type = virtual_cloud_network_artifact;
-
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] += 1;
 
-        //let parent_svg = d3.select(okitcanvas);
-        let parent_svg = d3.select('#' + parent_id + "-svg");
-        let asset_svg = parent_svg.append("svg")
-            .attr("id", id + '-svg')
-            .attr("data-type", data_type)
-            .attr("title", virtual_cloud_network['display_name'])
-            .attr("x", svg_x)
-            .attr("y", svg_y)
-            .attr("width", vcn_svg_width)
-            .attr("height", vcn_svg_height);
-        let svg = asset_svg.append("svg")
-            .attr("id", id + '-asset-svg')
-            .attr("data-type", data_type)
-            .attr("title", virtual_cloud_network['display_name'])
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", "100%")
-            .attr("height", "100%");
-        let rect = svg.append("rect")
-            .attr("id", id)
-            .attr("data-type", data_type)
-            .attr("title", virtual_cloud_network['display_name'])
-            .attr("x", icon_width / 2)
-            .attr("y", icon_height / 2)
-            .attr("width", vcn_rect_width)
-            .attr("height", vcn_rect_height)
-            .attr("stroke", virtual_cloud_network_stroke_colour)
-            .attr("stroke-dasharray", "5, 5")
-            .attr("fill", "white");
-        rect.append("title")
-            .attr("id", id + '-title')
-            .text("Virtual Cloud Network: " + virtual_cloud_network['display_name']);
-        let name = svg.append("text")
-            .attr("id", id + '-display-name')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("x", name_x)
-            .attr("y", name_y)
-            .text(virtual_cloud_network['display_name']);
-        let label_svg = svg.append('svg')
-            .attr('viewbox', '0 0 100 100')
-            .attr("x", label_x)
-            .attr("y", label_y);
-        let label = label_svg.append("text")
-            .attr("id", id + '-display-name')
-            .attr("x", 1)
-            .attr("y", 1)
-            .style('font-weight', 'bold')
-            .style('fill', virtual_cloud_network_stroke_colour)
-            .text('VCN');
-        let g = svg.append("g")
-            .attr("transform", "translate(-20, -20) scale(0.3, 0.3)");
-        g.append("path")
-            .attr("class", "st0")
-            .attr("d", "M143.4,154.1c-0.4,0.8-0.9,1.5-1.5,2l6,15.2c0.1,0,0.2,0,0.3,0c0.9,0,1.8,0.3,2.6,0.7l14.7-14.3c-0.2-0.4-0.4-0.8-0.5-1.3L143.4,154.1z")
-        g.append("path")
-            .attr("class", "st0")
-            .attr("d", "M138.2,157.5c-2.2,0-4-1.2-5-3l-10.2,1.7c0,0.3-0.1,0.5-0.2,0.8l21.6,15.2l-5.8-14.7C138.4,157.4,138.3,157.5,138.2,157.5z")
-        g.append("path")
-            .attr("class", "st0")
-            .attr("d", "M134.4,147.7l-8.6-18.7c-0.1,0-0.1,0-0.2,0l-5.2,21.4c0.9,0.5,1.6,1.3,2,2.2l10.2-1.7C132.9,149.7,133.5,148.5,134.4,147.7z")
-        g.append("path")
-            .attr("class", "st0")
-            .attr("d", "M138.2,146.2c0.9,0,1.8,0.2,2.5,0.6l19.9-20c-0.1-0.3-0.3-0.6-0.4-0.9l-29.9-0.6c-0.3,0.9-0.8,1.6-1.5,2.3l8.6,18.7C137.8,146.2,138,146.2,138.2,146.2z")
-        g.append("path")
-            .attr("class", "st0")
-            .attr("d", "M163.2,129.3l-19.9,20c0.2,0.4,0.4,0.9,0.5,1.4l21.7,2.3c0.5-1.2,1.4-2.1,2.6-2.7l-3.2-20.4C164.2,129.7,163.7,129.5,163.2,129.3z")
-        g.append("path")
-            .attr("class", "st0")
-            .attr("d", "M144,87.8c-31,0-56.2,25.2-56.2,56.2c0,31,25.2,56.2,56.2,56.2s56.2-25.2,56.2-56.2C200.2,113,175,87.8,144,87.8z M170.6,160.9c-0.9,0-1.8-0.3-2.6-0.7l-14.7,14.3c0.4,0.7,0.6,1.6,0.6,2.5c0,3.1-2.5,5.6-5.6,5.6s-5.6-2.5-5.6-5.6c0-0.6,0.1-1.1,0.3-1.7l-22-15.5c-0.9,0.7-2.1,1.1-3.4,1.1c-3.1,0-5.6-2.5-5.6-5.6c0-3,2.3-5.4,5.2-5.6l5.2-21.4c-1.6-1-2.7-2.8-2.7-4.8c0-3.1,2.5-5.6,5.6-5.6c2.5,0,4.7,1.7,5.4,4l29.9,0.6c0.8-2.2,2.8-3.8,5.3-3.8c3.1,0,5.6,2.5,5.6,5.6c0,2.2-1.3,4.1-3.1,5l3.2,20.4c2.7,0.4,4.7,2.7,4.7,5.6C176.2,158.4,173.7,160.9,170.6,160.9z");
+        let artifact_definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
+        artifact_definition['svg']['x'] = Math.round(icon_width * 3 / 2);
+        artifact_definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+        artifact_definition['svg']['width'] = 2000;
+        artifact_definition['svg']['height'] = 500;
+        artifact_definition['rect']['stroke']['colour'] = virtual_cloud_network_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 5;
+        artifact_definition['icon']['x_translation'] = icon_translate_x_start;
+        artifact_definition['icon']['y_translation'] = icon_translate_y_start;
+        artifact_definition['name']['show'] = true;
+        artifact_definition['label']['show'] = true;
+
+        let svg = drawArtifact(artifact_definition);
 
         //loadVirtualCloudNetworkProperties(id);
         // Add click event to display properties
@@ -227,21 +170,7 @@ function drawVirtualCloudNetworkSVG(virtual_cloud_network) {
         svg.on("click", function () {
             loadVirtualCloudNetworkProperties(id);
             d3.event.stopPropagation();
-        })
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-type", data_type)
-            .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id)
-            .attr("data-compartment-id", compartment_id)
-            .selectAll("*")
-                .attr("data-type", data_type)
-                .attr("data-okit-id", id)
-                .attr("data-parentid", parent_id)
-                .attr("data-compartment-id", compartment_id);
+        });
 
         initialiseVirtualCloudNetworkChildData(id);
     } else {
@@ -300,6 +229,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
                 console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
                 virtual_cloud_network_count += 1;
                 queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
+                queryNATGatewayAjax(compartment_id, response_json[i]['id']);
                 queryRouteTableAjax(compartment_id, response_json[i]['id']);
                 querySecurityListAjax(compartment_id, response_json[i]['id']);
                 querySubnetAjax(compartment_id, response_json[i]['id']);
@@ -318,6 +248,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
 $(document).ready(function() {
     clearVirtualCloudNetworkVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -325,5 +256,17 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', virtual_cloud_network_query_cb);
     cell.append('label').text(virtual_cloud_network_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(virtual_cloud_network_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'virtual_cloud_network_name_filter')
+        .attr('name', 'virtual_cloud_network_name_filter');
 });
 

@@ -26,6 +26,7 @@ import locale
 import logging
 import logging.handlers
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -192,3 +193,5 @@ def standardiseIds(json_data={}, from_char='.', to_char='-', **kwargs):
     elif isinstance(json_data, list):
         json_data = [standardiseIds(element, from_char, to_char) for element in json_data]
     return json_data
+
+

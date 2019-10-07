@@ -26,6 +26,7 @@ import requests
 import sys
 
 from generators.ociTerraform11Generator import OCITerraform11Generator
+from generators.ociTerraformGenerator import OCITerraformGenerator
 
 from common.ociCommon import logJson
 from common.ociCommon import readJsonFile
@@ -36,7 +37,7 @@ from common.ociLogging import getLogger
 # Configure logging
 logger = getLogger()
 
-class OCIResourceManagerGenerator(OCITerraform11Generator):
+class OCIResourceManagerGenerator(OCITerraformGenerator):
 
     def __init__(self, template_root, output_root, visualiser_json, tenancy_ocid=None, region=None, compartment_ocid=None, **kwargs):
         DIRECTORY_SUFFIX = 'resource-manager'
@@ -68,7 +69,8 @@ class OCIResourceManagerGenerator(OCITerraform11Generator):
         self.run_variables['region'] = self.resource_manager_keys['region']
         self.run_variables['compartment_ocid'] = self.resource_manager_keys['compartment_ocid']
         for key, value in self.getVariables().items():
-            logger.info('key : {0!s:s}'.format(key))
+            # Convert to string
+            self.run_variables[key] = str(value)
             variable_definitions.append('variable "{0!s:s}" {{}}'.format(key))
         writeTerraformFile(os.path.join(self.output_dir, self.VARIABLES_FILE_NAME), variable_definitions)
 

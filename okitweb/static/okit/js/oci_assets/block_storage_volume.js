@@ -53,7 +53,8 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     okitIdsJsonObj[id] = block_storage_volume['display_name'];
     //console.log(JSON.stringify(OKITJsonObj, null, 2));
     displayOkitJson();
-    drawBlockStorageVolumeSVG(block_storage_volume);
+    //drawBlockStorageVolumeSVG(block_storage_volume);
+    drawSVGforJson();
     loadBlockStorageVolumeProperties(id);
 }
 
@@ -86,61 +87,64 @@ function deleteBlockStorageVolume(id) {
 /*
 ** SVG Creation
  */
-function drawBlockStorageVolumeSVG(block_storage_volume) {
-    let parent_id = block_storage_volume['compartment_id'];
-    let id = block_storage_volume['id'];
-    let compartment_id = block_storage_volume['compartment_id'];
+function newBlockStorageVolumeSVGDefinition(artifact, position=0) {
+    let definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
+    definition['svg']['x'] = Math.round(icon_width / 4);
+    definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+    definition['svg']['width'] = icon_width;
+    definition['svg']['height'] = icon_height;
+    definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    return definition;
+}
+
+function drawBlockStorageVolumeSVG(artifact) {
+    // Check if this Block Storage Volume has been attached to an Instance and if so do not draw because it will be done
+    // as part of the instance
+    if (OKITJsonObj.hasOwnProperty('instances')) {
+        for (let instance of OKITJsonObj['instances']) {
+            if (instance.hasOwnProperty('block_storage_volume_ids')) {
+                if (instance['block_storage_volume_ids'].includes(artifact['id'])) {
+                    console.log(artifact['display_name'] + ' attached to instance '+ instance['display_name']);
+                    return;
+                }
+            }
+        }
+    }
+    if (!artifact.hasOwnProperty('parent_id')) {
+        artifact['parent_id'] = artifact['compartment_id'];
+    }
+    let parent_id = artifact['parent_id'];
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
     console.log('Drawing ' + block_storage_volume_artifact + ' : ' + id);
+
+    if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        compartment_bui_sub_artifacts[parent_id] = {};
+    }
+
     if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('block_storage_position')) {
             compartment_bui_sub_artifacts[parent_id]['block_storage_position'] = 0;
         }
+        // Calculate Position
         let position = compartment_bui_sub_artifacts[parent_id]['block_storage_position'];
-        let svg_x = 0; //(icon_width / 4);
-        let svg_y = Math.round((icon_height * 3 / 4) + (icon_height * position) + (vcn_icon_spacing * position));
-        let data_type = block_storage_volume_artifact;
-
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
 
-        //let okitcanvas_svg = d3.select(okitcanvas);
-        let parent_svg = d3.select('#' + parent_id + "-svg");
-        let svg = parent_svg.append("svg")
-            .attr("id", id + '-svg')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", block_storage_volume['display_name'])
-            .attr("x", svg_x)
-            .attr("y", svg_y)
-            .attr("width", "100")
-            .attr("height", "100");
-        let rect = svg.append("rect")
-            .attr("id", id)
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", block_storage_volume['display_name'])
-            .attr("x", icon_x)
-            .attr("y", icon_y)
-            .attr("width", icon_width)
-            .attr("height", icon_height)
-            .attr("stroke", block_storage_volume_stroke_colour)
-            .attr("stroke-dasharray", "1, 1")
-            .attr("fill", "white")
-            .attr("style", "fill-opacity: .25;");
-        rect.append("title")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .text(block_storage_volume_artifact + ": " + block_storage_volume['display_name']);
-        let g = svg.append("g")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-        g.append("path")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("d", "M172.6,88.4c-13.7-1.6-28-1.6-28.6-1.6c-0.6,0-14.8,0-28.6,1.6c-24,2.8-24.2,7.8-24.2,7.9v95.5c0,0,0.3,5,24.2,7.9c13.7,1.6,28,1.6,28.6,1.6c0.6,0,14.8,0,28.6-1.6c24-2.8,24.2-7.8,24.2-7.9V96.3C196.8,96.2,196.5,91.2,172.6,88.4z M137.2,180.7h-18.9v-18.9h18.9V180.7z M137.2,146.5h-18.9v-18.9h18.9V146.5z M168.1,180.7h-18.9v-18.9h18.9V180.7z M168.1,146.5h-18.9v-18.9h18.9V146.5z M192.8,104.1c-1.8,2.8-18.9,7.5-48.3,7.5c-29.4,0-46.5-4.7-48.3-7.5c0,0,0,0,0,0c1.7-2.8,18.8-7.6,48.3-7.6C174,96.5,191.1,101.2,192.8,104.1C192.8,104.1,192.8,104.1,192.8,104.1z");
+        /*
+        let artifact_definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
+        artifact_definition['svg']['x'] = Math.round(icon_width / 4);
+        artifact_definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+        artifact_definition['svg']['width'] = icon_width;
+        artifact_definition['svg']['height'] = icon_height;
+        artifact_definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
+        artifact_definition['rect']['stroke']['dash'] = 1;
+        */
 
+        let svg = drawArtifact(newBlockStorageVolumeSVGDefinition(artifact, position));
+
+        let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
         /*
          Add click event to display properties
@@ -151,38 +155,7 @@ function drawBlockStorageVolumeSVG(block_storage_volume) {
         svg.on("click", function () {
             loadBlockStorageVolumeProperties(id);
             d3.event.stopPropagation();
-        })
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-type", data_type)
-            .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id)
-            .attr("data-compartment-id", compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true)
-            .selectAll("*")
-                .attr("data-type", data_type)
-                .attr("data-okit-id", id)
-                .attr("data-parentid", parent_id)
-                .attr("data-compartment-id", compartment_id)
-                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-                .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-                .attr("data-connector-id", id)
-                .attr("dragable", true);
+        });
     } else {
         console.log(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
     }
@@ -254,6 +227,7 @@ function queryBlockStorageVolumeAjax(compartment_id) {
 $(document).ready(function() {
     clearBlockStorageVolumeVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -261,5 +235,17 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', block_storage_volume_query_cb);
     cell.append('label').text(block_storage_volume_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(block_storage_volume_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'block_storage_volume_name_filter')
+        .attr('name', 'block_storage_volume_name_filter');
 });
 
