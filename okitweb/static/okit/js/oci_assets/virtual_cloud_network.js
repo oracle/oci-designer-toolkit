@@ -128,7 +128,7 @@ function deleteVirtualCloudNetwork(id) {
 ** SVG Creation
  */
 function getVirtualCloudNetworkDimensions(id='') {
-    return {width:2000, height:500};
+    return {width:2000, height:800};
 }
 
 function newVirtualCloudNetworkDefinition(artifact, position=0) {

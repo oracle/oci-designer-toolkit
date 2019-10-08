@@ -254,8 +254,8 @@
 }
 
 .hidden {
-    visibility: hidden !important;
-    display: none !important;
+    visibility: hidden;
+    display: none;
 }
 
 .source-code {

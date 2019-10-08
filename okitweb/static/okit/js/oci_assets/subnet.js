@@ -136,11 +136,50 @@ function deleteSubnet(id) {
 ** SVG Creation
  */
 function getSubnetDimensions(id='') {
-    return {width:subnet_svg_width, height:subnet_svg_height};
+    let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
+    let max_load_balancer_dimensions = {width:0, height: 0, count:0};
+    let max_instance_dimensions = {width:0, height: 0, count:0};
+    if (OKITJsonObj.hasOwnProperty('load_balancers')) {
+        for (let load_balancer of OKITJsonObj['load_balancers']) {
+            if (load_balancer['subnet_ids'][0] == id) {
+                let load_balancer_dimensions = getLoadBalancerDimensions(load_balancer['id']);
+                max_load_balancer_dimensions['width'] += load_balancer_dimensions['width'];
+                max_load_balancer_dimensions['height'] = Math.max(max_load_balancer_dimensions['height'], load_balancer_dimensions['height']);
+                max_load_balancer_dimensions['count'] += 1;
+            }
+        }
+    }
+    if (OKITJsonObj.hasOwnProperty('instances')) {
+        for (let instance of OKITJsonObj['instances']) {
+            if (instance['subnet_id'] == id) {
+                let instance_dimensions = getInstanceDimensions(instance['id']);
+                max_instance_dimensions['width'] += instance_dimensions['width'];
+                max_instance_dimensions['height'] = Math.max(max_instance_dimensions['height'], instance_dimensions['height']);
+                max_instance_dimensions['count'] += 1;
+            }
+        }
+    }
+    // Calculate Width which will be the largest based on load balancers or instances
+    if ((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']) >
+        (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count'])) {
+        dimensions['width'] += (max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']);
+    } else {
+        dimensions['width'] += (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']);
+    }
+    // Add load balancer and instance height to size of subnet
+    dimensions['height'] += max_load_balancer_dimensions['height'];
+    dimensions['height'] += max_instance_dimensions['height'];
+    dimensions['height'] += icon_height;
+    console.log('Load Balancer Dimensions : ' + JSON.stringify(max_load_balancer_dimensions));
+    console.log('Instance Dimensions      : ' + JSON.stringify(max_instance_dimensions));
+    console.log('Overall Dimensions       : ' + JSON.stringify(dimensions));
+
+    //return {width:subnet_svg_width, height:subnet_svg_height};
+    return dimensions;
 }
 
 function newSubnetDefinition(artifact, position=0) {
-    let dimensions = getSubnetDimensions();
+    let dimensions = getSubnetDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, subnet_artifact);
     definition['svg']['x'] = Math.round(icon_width);
     definition['svg']['y'] = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));

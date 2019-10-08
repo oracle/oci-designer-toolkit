@@ -14,6 +14,9 @@ const viewbox_width = 2500;
 const text_viewbox_height = 1000;
 const text_viewbox_width = 200;
 const connector_colour = "black";
+const container_artifact_x_padding = Math.round(icon_width  * 3 / 2);
+const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
+const container_artifact_label_width = 300;
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
@@ -128,7 +131,7 @@ function drawArtifact(definition) {
         let name_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
-            .attr("width", "200")
+            .attr("width", container_artifact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", "0 0 200 " + definition['svg']['height']);
@@ -144,7 +147,7 @@ function drawArtifact(definition) {
         let name_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
-            .attr("width", "300")
+            .attr("width", container_artifact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMax meet")
             .attr("viewBox", "0 0 300 " + definition['svg']['height']);
