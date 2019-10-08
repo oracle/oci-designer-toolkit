@@ -64,7 +64,6 @@ function addInstance(subnet_id, compartment_id) {
     okitJson['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
-    displayOkitJson();
     //drawInstanceSVG(instance);
     drawSVGforJson();
     loadInstanceProperties(id);

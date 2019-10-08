@@ -53,7 +53,6 @@ function addRouteTable(vcn_id, compartment_id) {
     okitJson['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
-    displayOkitJson();
     //drawRouteTableSVG(route_table);
     drawSVGforJson();
     loadRouteTableProperties(id);

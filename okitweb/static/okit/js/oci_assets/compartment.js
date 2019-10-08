@@ -51,11 +51,11 @@ function addCompartment(compartment_id='') {
     okitJson['compartments'].push(compartment);
     okitIdsJsonObj[id] = compartment['name'];
     //console.log(JSON.stringify(okitJson, null, 2));
-    displayOkitJson();
-    drawCompartmentSVG(compartment);
+    //drawCompartmentSVG(compartment);
+    drawSVGforJson();
     loadCompartmentProperties(id);
-    openCompartment(id);
-    $('#' + id + "-tab-button").trigger('click');
+    //openCompartment(id);
+    //$('#' + id + "-tab-button").trigger('click');
 }
 
 function initialiseCompartmentChildData(id) {

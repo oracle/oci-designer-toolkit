@@ -78,8 +78,6 @@ function addSubnet(vcn_id, compartment_id) {
     okitIdsJsonObj[id] = subnet['display_name'];
 
     //initialiseSubnetChildData(id);
-
-    displayOkitJson();
     //drawSubnetSVG(subnet);
     drawSVGforJson();
     loadSubnetProperties(id);

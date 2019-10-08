@@ -60,7 +60,6 @@ function addLoadBalancer(subnet_id, compartment_id) {
     okitJson['load_balancers'].push(load_balancer);
     okitIdsJsonObj[id] = load_balancer['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
-    displayOkitJson();
     //drawLoadBalancerSVG(load_balancer);
     drawSVGforJson();
     loadLoadBalancerProperties(id);

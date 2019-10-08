@@ -61,7 +61,6 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     okitJson['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
-    displayOkitJson();
     //drawVirtualCloudNetworkSVG(virtual_cloud_network);
     drawSVGforJson();
     loadVirtualCloudNetworkProperties(id);

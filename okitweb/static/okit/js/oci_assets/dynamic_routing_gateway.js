@@ -3,7 +3,7 @@ console.log('Loaded Dynamic Routing Gateway Javascript');
 /*
 ** Set Valid drop Targets
  */
-asset_drop_targets[dynamic_routing_gateway_artifact] = [virtual_cloud_network_artifact];
+asset_drop_targets[dynamic_routing_gateway_artifact] = [compartment_artifact];
 asset_connect_targets[dynamic_routing_gateway_artifact] = [];
 asset_add_functions[dynamic_routing_gateway_artifact] = "addDynamicRoutingGateway";
 asset_delete_functions[dynamic_routing_gateway_artifact] = "deleteDynamicRoutingGateway";
@@ -26,7 +26,7 @@ function clearDynamicRoutingGatewayVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addDynamicRoutingGateway(vcn_id, compartment_id) {
+function addDynamicRoutingGateway(compartment_id) {
     let id = 'okit-' + dynamic_routing_gateway_prefix + '-' + uuidv4();
     console.log('Adding Dynamic Routing Gateway : ' + id);
 
@@ -43,15 +43,12 @@ function addDynamicRoutingGateway(vcn_id, compartment_id) {
     // Increment Count
     dynamic_routing_gateway_count += 1;
     let dynamic_routing_gateway = {};
-    dynamic_routing_gateway['vcn_id'] = vcn_id;
-    dynamic_routing_gateway['virtual_cloud_network'] = '';
     dynamic_routing_gateway['compartment_id'] = compartment_id;
     dynamic_routing_gateway['id'] = id;
     dynamic_routing_gateway['display_name'] = generateDefaultName(dynamic_routing_gateway_prefix, dynamic_routing_gateway_count);
     okitJson['dynamic_routing_gateways'].push(dynamic_routing_gateway);
     okitIdsJsonObj[id] = dynamic_routing_gateway['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
-    displayOkitJson();
     //drawDynamicRoutingGatewaySVG(dynamic_routing_gateway);
     drawSVGforJson();
     loadDynamicRoutingGatewayProperties(id);

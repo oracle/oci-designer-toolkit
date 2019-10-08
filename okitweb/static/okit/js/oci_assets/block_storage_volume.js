@@ -52,7 +52,6 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     okitJson['block_storage_volumes'].push(block_storage_volume);
     okitIdsJsonObj[id] = block_storage_volume['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
-    displayOkitJson();
     //drawBlockStorageVolumeSVG(block_storage_volume);
     drawSVGforJson();
     loadBlockStorageVolumeProperties(id);

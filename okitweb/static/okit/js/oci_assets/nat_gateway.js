@@ -51,7 +51,6 @@ function addNATGateway(vcn_id, compartment_id) {
     okitJson['nat_gateways'].push(nat_gateway);
     okitIdsJsonObj[id] = nat_gateway['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
-    displayOkitJson();
     //drawNATGatewaySVG(nat_gateway);
     drawSVGforJson();
     loadNATGatewayProperties(id);

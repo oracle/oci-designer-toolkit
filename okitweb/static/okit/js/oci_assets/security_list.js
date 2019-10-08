@@ -54,7 +54,6 @@ function addSecurityList(vcn_id, compartment_id) {
     okitIdsJsonObj[id] = security_list['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
     //console.log(security_list_ids);
-    displayOkitJson();
     //drawSecurityListSVG(security_list);
     drawSVGforJson();
     loadSecurityListProperties(id);
