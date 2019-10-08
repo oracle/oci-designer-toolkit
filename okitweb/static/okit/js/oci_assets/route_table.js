@@ -33,8 +33,8 @@ function addRouteTable(vcn_id, compartment_id) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('route_tables')) {
-        OKITJsonObj['route_tables'] = [];
+    if (!okitJson.hasOwnProperty('route_tables')) {
+        okitJson['route_tables'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -50,9 +50,9 @@ function addRouteTable(vcn_id, compartment_id) {
     route_table['id'] = id;
     route_table['display_name'] = generateDefaultName(route_table_prefix, route_table_count);
     route_table['route_rules'] = []
-    OKITJsonObj['route_tables'].push(route_table);
+    okitJson['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(okitJson, null, 2));
     displayOkitJson();
     drawRouteTableSVG(route_table);
     loadRouteTableProperties(id);
@@ -67,14 +67,14 @@ function deleteRouteTable(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
-        if (OKITJsonObj['route_tables'][i]['id'] == id) {
-            OKITJsonObj['route_tables'].splice(i, 1);
+    for (let i=0; i < okitJson['route_tables'].length; i++) {
+        if (okitJson['route_tables'][i]['id'] == id) {
+            okitJson['route_tables'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('subnets' in OKITJsonObj) {
-        for (subnet of OKITJsonObj['subnets']) {
+    if ('subnets' in okitJson) {
+        for (subnet of okitJson['subnets']) {
             if (subnet['route_table_id'] == id) {
                 subnet['route_table_id'] = '';
             }
@@ -104,8 +104,8 @@ function newRouteTableDefinition(artifact, position=0) {
 function drawRouteTableSVG(artifact) {
     // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
     // the subnet draw.
-    if (OKITJsonObj.hasOwnProperty('subnets')) {
-        for (let subnet of OKITJsonObj['subnets']) {
+    if (okitJson.hasOwnProperty('subnets')) {
+        for (let subnet of okitJson['subnets']) {
             if (subnet['route_table_id'] == artifact['id']) {
                 console.log(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
                 return;
@@ -155,9 +155,9 @@ function drawRouteTableSVG(artifact) {
  */
 function loadRouteTableProperties(id) {
     $("#properties").load("propertysheets/route_table.html", function () {
-        if ('route_tables' in OKITJsonObj) {
+        if ('route_tables' in okitJson) {
             console.log('Loading Route Table: ' + id);
-            let json = OKITJsonObj['route_tables'];
+            let json = okitJson['route_tables'];
             for (let i = 0; i < json.length; i++) {
                 let route_table = json[i];
                 //console.log(JSON.stringify(route_table, null, 2));
@@ -298,7 +298,7 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['route_tables'] = response_json;
+            okitJson['route_tables'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.log('queryRouteTableAjax : ' + response_json[i]['display_name']);

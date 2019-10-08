@@ -42,7 +42,7 @@ const block_storage_volume_prefix = 'bsv';
  * Define designer working variables
  */
 // OKIT Json
-let OKITJsonObj = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
+let okitJson = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
 // Common okit id to name mapping
 let okitIdsJsonObj = {};
 // Query Request only set to a value when designer called from query
@@ -56,8 +56,8 @@ function generateDefaultName(prefix, count) {
 }
 
 function displayOkitJson() {
-    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    $('#okitjson').html(JSON.stringify(okitJson, null, 2));
+    //console.log(JSON.stringify(okitJson, null, 2));
 }
 
 function generateConnectorId(sourceid, destinationid) {
@@ -75,7 +75,7 @@ function handleNew(evt) {
 
 function newDiagram() {
     console.log('Creating New Diagram');
-    OKITJsonObj = {};
+    okitJson = {};
     okitIdsJsonObj = {};
     clearSVG();
     addCompartment();
@@ -116,7 +116,7 @@ function loaded(evt) {
     // Obtain the read file data
     let fileString = evt.target.result;
     console.log('Loaded: ' + fileString);
-    OKITJsonObj = JSON.parse(fileString);
+    okitJson = JSON.parse(fileString);
     displayOkitJson();
     drawSVGforJson();
 }
@@ -161,7 +161,7 @@ function redrawSVGCanvas() {
 
 function handleSave(evt) {
     hideNavMenu();
-    saveJson(JSON.stringify(OKITJsonObj, null, 2), "okit.json");
+    saveJson(JSON.stringify(okitJson, null, 2), "okit.json");
 }
 
 function saveJson(text, filename){
@@ -186,11 +186,11 @@ function handleAdd(evt) {
 
 function handleExportToSVG(evt) {
     hideNavMenu();
-    if (!OKITJsonObj.hasOwnProperty('open_compartment_index')) {
-        OKITJsonObj['open_compartment_index'] = 0;
+    if (!okitJson.hasOwnProperty('open_compartment_index')) {
+        okitJson['open_compartment_index'] = 0;
     }
-    let okitcanvas = document.getElementById(OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['id'] + '-canvas-svg');
-    let name = OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['name'];
+    let okitcanvas = document.getElementById(okitJson.compartments[okitJson['open_compartment_index']]['id'] + '-canvas-svg');
+    let name = okitJson.compartments[okitJson['open_compartment_index']]['name'];
     saveSvg(okitcanvas, name + '.svg');
 }
 
@@ -237,9 +237,9 @@ function openCompartment(compartment_id) {
     $('#' + compartment_id + '-tab-button').addClass('active');
     $('#' + compartment_id + '-tab-content').show();
     // Set Open Compartment Index
-    for (let i=0; i < OKITJsonObj['compartments'].length; i++) {
-        if (OKITJsonObj['compartments'][i]['id'] == compartment_id) {
-            OKITJsonObj['open_compartment_index'] = i;
+    for (let i=0; i < okitJson['compartments'].length; i++) {
+        if (okitJson['compartments'][i]['id'] == compartment_id) {
+            okitJson['open_compartment_index'] = i;
             break;
         }
     }

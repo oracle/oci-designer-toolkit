@@ -39,8 +39,8 @@ function addSubnet(vcn_id, compartment_id) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('subnets')) {
-        OKITJsonObj['subnets'] = [];
+    if (!okitJson.hasOwnProperty('subnets')) {
+        okitJson['subnets'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -51,7 +51,7 @@ function addSubnet(vcn_id, compartment_id) {
     subnet_count += 1;
     // Generate Cidr
     let vcn_cidr = '10.0.0.0/16';
-    for (let virtual_cloud_network of OKITJsonObj['virtual_cloud_networks']) {
+    for (let virtual_cloud_network of okitJson['virtual_cloud_networks']) {
         if (virtual_cloud_network['id'] == vcn_id) {
             vcn_cidr = virtual_cloud_network['cidr_block'];
             break;
@@ -73,8 +73,8 @@ function addSubnet(vcn_id, compartment_id) {
     subnet['route_table_id'] = '';
     subnet['security_lists'] = [];
     subnet['security_list_ids'] = [];
-    OKITJsonObj['subnets'].push(subnet);
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    okitJson['subnets'].push(subnet);
+    //console.log(JSON.stringify(okitJson, null, 2));
     okitIdsJsonObj[id] = subnet['display_name'];
 
     //initialiseSubnetChildData(id);
@@ -108,23 +108,23 @@ function deleteSubnet(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i = 0; i < OKITJsonObj['subnets'].length; i++) {
-        if (OKITJsonObj['subnets'][i]['id'] == id) {
-            OKITJsonObj['subnets'].splice(i, 1);
+    for (let i = 0; i < okitJson['subnets'].length; i++) {
+        if (okitJson['subnets'][i]['id'] == id) {
+            okitJson['subnets'].splice(i, 1);
         }
     }
     // Remove Sub Components
-    if ('instances' in OKITJsonObj) {
-        for (let i = OKITJsonObj['instances'].length - 1; i >= 0; i--) {
-            let instance = OKITJsonObj['instances'][i];
+    if ('instances' in okitJson) {
+        for (let i = okitJson['instances'].length - 1; i >= 0; i--) {
+            let instance = okitJson['instances'][i];
             if (instance['subnet_id'] == id) {
                 deleteInstance(instance['id']);
             }
         }
     }
-    if ('load_balancers' in OKITJsonObj) {
-        for (let i = OKITJsonObj['load_balancers'].length - 1; i >= 0; i--) {
-            let load_balancer = OKITJsonObj['load_balancers'][i];
+    if ('load_balancers' in okitJson) {
+        for (let i = okitJson['load_balancers'].length - 1; i >= 0; i--) {
+            let load_balancer = okitJson['load_balancers'][i];
             if (load_balancer['subnet_ids'].length > 0 && load_balancer['subnet_ids'][0] == id) {
                 deleteLoadBalancer(load_balancer['id']);
             }
@@ -139,8 +139,8 @@ function getSubnetDimensions(id='') {
     let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
     let max_load_balancer_dimensions = {width:0, height: 0, count:0};
     let max_instance_dimensions = {width:0, height: 0, count:0};
-    if (OKITJsonObj.hasOwnProperty('load_balancers')) {
-        for (let load_balancer of OKITJsonObj['load_balancers']) {
+    if (okitJson.hasOwnProperty('load_balancers')) {
+        for (let load_balancer of okitJson['load_balancers']) {
             if (load_balancer['subnet_ids'][0] == id) {
                 let load_balancer_dimensions = getLoadBalancerDimensions(load_balancer['id']);
                 max_load_balancer_dimensions['width'] += load_balancer_dimensions['width'];
@@ -149,8 +149,8 @@ function getSubnetDimensions(id='') {
             }
         }
     }
-    if (OKITJsonObj.hasOwnProperty('instances')) {
-        for (let instance of OKITJsonObj['instances']) {
+    if (okitJson.hasOwnProperty('instances')) {
+        for (let instance of okitJson['instances']) {
             if (instance['subnet_id'] == id) {
                 let instance_dimensions = getInstanceDimensions(instance['id']);
                 max_instance_dimensions['width'] += instance_dimensions['width'];
@@ -310,11 +310,11 @@ function drawSubnetAttachmentsSVG(subnet) {
     console.log('Drawing ' + subnet_artifact + ' : ' + id + ' Attachments');
     let attachment_count = 0;
     // Draw Route Table
-    if (!OKITJsonObj.hasOwnProperty('route_tables')) {
-        OKITJsonObj['route_tables'] = [];
+    if (!okitJson.hasOwnProperty('route_tables')) {
+        okitJson['route_tables'] = [];
     }
-    if (OKITJsonObj.hasOwnProperty('route_tables')) {
-        for (let route_table of OKITJsonObj['route_tables']) {
+    if (okitJson.hasOwnProperty('route_tables')) {
+        for (let route_table of okitJson['route_tables']) {
             if (subnet['route_table_id'] == route_table['id']) {
                 let artifact_clone = JSON.parse(JSON.stringify(route_table));
                 artifact_clone['parent_id'] = subnet['id'];
@@ -324,11 +324,11 @@ function drawSubnetAttachmentsSVG(subnet) {
     }
     attachment_count += 1;
     // Security Lists
-    if (!OKITJsonObj.hasOwnProperty('security_lists')) {
-        OKITJsonObj['security_lists'] = [];
+    if (!okitJson.hasOwnProperty('security_lists')) {
+        okitJson['security_lists'] = [];
     }
     for (let security_list_id of subnet['security_list_ids']) {
-        for (let security_list of OKITJsonObj['security_lists']) {
+        for (let security_list of okitJson['security_lists']) {
             if (security_list_id == security_list['id']) {
                 let artifact_clone = JSON.parse(JSON.stringify(security_list));
                 artifact_clone['parent_id'] = subnet['id'];
@@ -402,9 +402,9 @@ function loadSubnetProperties(id) {
             "route_table": "route_table_id",
             "route_table_id": "route_table"
         };
-        if ('subnets' in OKITJsonObj) {
+        if ('subnets' in okitJson) {
             console.log('Loading Subnet: ' + id);
-            let json = OKITJsonObj['subnets'];
+            let json = okitJson['subnets'];
             for (let i = 0; i < json.length; i++) {
                 let subnet = json[i];
                 //console.log(JSON.stringify(subnet, null, 2));
@@ -421,7 +421,7 @@ function loadSubnetProperties(id) {
                     //for (let rtid of route_table_ids) {
                     //    route_table_select.append($('<option>').attr('value', rtid).text(okitIdsJsonObj[rtid]));
                     //}
-                    for (let route_table of OKITJsonObj['route_tables']) {
+                    for (let route_table of okitJson['route_tables']) {
                         route_table_select.append($('<option>').attr('value', route_table['id']).text(route_table['display_name']));
                     }
                     route_table_select.val(subnet['route_table_id']);
@@ -430,7 +430,7 @@ function loadSubnetProperties(id) {
                     //for (let slid of security_list_ids) {
                     //    security_lists_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
                     //}
-                    for (let security_list of OKITJsonObj['security_lists']) {
+                    for (let security_list of okitJson['security_lists']) {
                         security_lists_select.append($('<option>').attr('value', security_list['id']).text(security_list['display_name']));
                     }
                     security_lists_select.val(subnet['security_list_ids']);
@@ -449,7 +449,7 @@ function loadSubnetProperties(id) {
 ** OKIT Json Update Function
  */
 function updateSubnet(sourcetype, sourceid, id) {
-    let subnets = OKITJsonObj['subnets'];
+    let subnets = okitJson['subnets'];
     console.log('Updating Subnet ' + id + ' Adding ' + sourcetype + ' ' + sourceid);
     for (let i = 0; i < subnets.length; i++) {
         subnet = subnets[i];
@@ -500,7 +500,7 @@ function querySubnetAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function (resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['subnets'] = response_json;
+            okitJson['subnets'] = response_json;
             let len = response_json.length;
             for (let i = 0; i < len; i++) {
                 console.log('querySubnetAjax : ' + response_json[i]['display_name']);

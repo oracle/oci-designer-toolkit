@@ -16,7 +16,7 @@ function handleGenerateTerraform(e) {
         url: 'generate/terraform',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(OKITJsonObj),
+        data: JSON.stringify(okitJson),
         success: function(resp) {
             console.log('Response : ' + resp);
             window.location = 'generate/terraform';
@@ -36,7 +36,7 @@ function handleGenerateAnsible(e) {
         url: 'generate/ansible',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(OKITJsonObj),
+        data: JSON.stringify(okitJson),
         success: function(resp) {
             console.log('REST Response : ' + resp);
             window.location = 'generate/ansible';
@@ -56,7 +56,7 @@ function handleGenerateTerraform11(e) {
         url: 'generate/terraform11',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(OKITJsonObj),
+        data: JSON.stringify(okitJson),
         success: function(resp) {
             console.log('Response : ' + resp);
             window.location = 'generate/terraform11';
@@ -75,7 +75,7 @@ function handleExportToResourceManager(e) {
         url: 'export/resourcemanager',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(OKITJsonObj),
+        data: JSON.stringify(okitJson),
         success: function(resp) {
             console.log('Response : ' + resp);
             alert('Created Stack ' + resp);

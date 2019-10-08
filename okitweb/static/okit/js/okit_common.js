@@ -20,7 +20,7 @@ function handleQueryAjax(e) {
         url: 'oci/compartment',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(OKITJsonObj),
+        data: JSON.stringify(okitJson),
         success: function(resp) {
             console.log('Response : ' + resp);
             let jsonBody = JSON.parse(resp)

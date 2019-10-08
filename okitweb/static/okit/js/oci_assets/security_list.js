@@ -32,8 +32,8 @@ function addSecurityList(vcn_id, compartment_id) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('security_lists')) {
-        OKITJsonObj['security_lists'] = [];
+    if (!okitJson.hasOwnProperty('security_lists')) {
+        okitJson['security_lists'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -50,9 +50,9 @@ function addSecurityList(vcn_id, compartment_id) {
     security_list['display_name'] = generateDefaultName(security_list_prefix, security_list_count);
     security_list['egress_security_rules'] = []
     security_list['ingress_security_rules'] = []
-    OKITJsonObj['security_lists'].push(security_list);
+    okitJson['security_lists'].push(security_list);
     okitIdsJsonObj[id] = security_list['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(okitJson, null, 2));
     //console.log(security_list_ids);
     displayOkitJson();
     drawSecurityListSVG(security_list);
@@ -68,14 +68,14 @@ function deleteSecurityList(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['security_lists'].length; i++) {
-        if (OKITJsonObj['security_lists'][i]['id'] == id) {
-            OKITJsonObj['security_lists'].splice(i, 1);
+    for (let i=0; i < okitJson['security_lists'].length; i++) {
+        if (okitJson['security_lists'][i]['id'] == id) {
+            okitJson['security_lists'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('subnets' in OKITJsonObj) {
-        for (subnet of OKITJsonObj['subnets']) {
+    if ('subnets' in okitJson) {
+        for (subnet of okitJson['subnets']) {
             for (let i=0; i < subnet['security_list_ids'].length; i++) {
                 if (subnet['security_list_ids'][i] == id) {
                     subnet['security_list_ids'].splice(i, 1);
@@ -107,8 +107,8 @@ function newSecurityListDefinition(artifact, position=0) {
 function drawSecurityListSVG(artifact) {
     // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
     // the subnet draw.
-    if (OKITJsonObj.hasOwnProperty('subnets')) {
-        for (let subnet of OKITJsonObj['subnets']) {
+    if (okitJson.hasOwnProperty('subnets')) {
+        for (let subnet of okitJson['subnets']) {
             if (subnet['security_list_ids'].includes(artifact['id'])) {
                 console.log(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
                 return;
@@ -158,9 +158,9 @@ function drawSecurityListSVG(artifact) {
  */
 function loadSecurityListProperties(id) {
     $("#properties").load("propertysheets/security_list.html", function () {
-        if ('security_lists' in OKITJsonObj) {
+        if ('security_lists' in okitJson) {
             console.log('Loading Security List: ' + id);
-            let json = OKITJsonObj['security_lists'];
+            let json = okitJson['security_lists'];
             for (let i = 0; i < json.length; i++) {
                 let security_list = json[i];
                 //console.log(JSON.stringify(security_list, null, 2));
@@ -348,7 +348,7 @@ function querySecurityListAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['security_lists'] = response_json;
+            okitJson['security_lists'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.log('querySecurityListAjax : ' + response_json[i]['display_name']);

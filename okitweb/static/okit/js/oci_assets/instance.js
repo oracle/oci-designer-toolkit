@@ -35,8 +35,8 @@ function addInstance(subnet_id, compartment_id) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('instances')) {
-        OKITJsonObj['instances'] = [];
+    if (!okitJson.hasOwnProperty('instances')) {
+        okitJson['instances'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -61,9 +61,9 @@ function addInstance(subnet_id, compartment_id) {
     instance['cloud_init_yaml'] = '';
     instance['block_storage_volume_ids'] = [];
     instance['block_storage_volumes'] = [];
-    OKITJsonObj['instances'].push(instance);
+    okitJson['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(okitJson, null, 2));
     displayOkitJson();
     //drawInstanceSVG(instance);
     drawSVGforJson();
@@ -79,14 +79,14 @@ function deleteInstance(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i = 0; i < OKITJsonObj['instances'].length; i++) {
-        if (OKITJsonObj['instances'][i]['id'] == id) {
-            OKITJsonObj['instances'].splice(i, 1);
+    for (let i = 0; i < okitJson['instances'].length; i++) {
+        if (okitJson['instances'][i]['id'] == id) {
+            okitJson['instances'].splice(i, 1);
         }
     }
     // Remove Load Balancer references
-    if ('load_balancers' in OKITJsonObj) {
-        for (load_balancer of OKITJsonObj['load_balancers']) {
+    if ('load_balancers' in okitJson) {
+        for (load_balancer of okitJson['load_balancers']) {
             for (let i = 0; i < load_balancer['instance_ids'].length; i++) {
                 if (load_balancer['instance_ids'][i] == id) {
                     load_balancer['instance_ids'].splice(i, 1);
@@ -126,8 +126,8 @@ function drawInstanceSVG(artifact) {
 
     // Test if parent exists
     let parent_exists = false;
-    if (OKITJsonObj.hasOwnProperty('subnets')) {
-        for (subnet of OKITJsonObj['subnets']) {
+    if (okitJson.hasOwnProperty('subnets')) {
+        for (subnet of okitJson['subnets']) {
             if (parent_id == subnet['id']) {
                 parent_exists = true;
                 break;
@@ -239,7 +239,7 @@ function drawInstanceAttachmentsSVG(instance) {
     }
     let attachment_count = 0;
     for (let block_storage_id of instance['block_storage_volume_ids']) {
-        for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
+        for (let block_storage_volume of okitJson['block_storage_volumes']) {
             if (block_storage_id == block_storage_volume['id']) {
                 let artifact_clone = JSON.parse(JSON.stringify(block_storage_volume));
                 artifact_clone['parent_id'] = instance['id'];
@@ -281,9 +281,9 @@ function drawAttachedBlockStorageVolume(artifact, bs_count) {
  */
 function loadInstanceProperties(id) {
     $("#properties").load("propertysheets/instance.html", function () {
-        if ('instances' in OKITJsonObj) {
+        if ('instances' in okitJson) {
             console.log('Loading Instance: ' + id);
-            let json = OKITJsonObj['instances'];
+            let json = okitJson['instances'];
             for (let i = 0; i < json.length; i++) {
                 instance = json[i];
                 //console.log(JSON.stringify(instance, null, 2));
@@ -300,8 +300,8 @@ function loadInstanceProperties(id) {
                     //for (let bsvid of block_storage_volume_ids) {
                     //    block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
                     //}
-                    if (OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
-                        for (let block_storage_volume of OKITJsonObj['block_storage_volumes']) {
+                    if (okitJson.hasOwnProperty('block_storage_volumes')) {
+                        for (let block_storage_volume of okitJson['block_storage_volumes']) {
                             block_storage_volume_select.append($('<option>').attr('value', block_storage_volume['id']).text(block_storage_volume['display_name']));
                         }
                     }
@@ -321,7 +321,7 @@ function loadInstanceProperties(id) {
  */
 function updateInstance(source_type, source_id, id) {
     console.log('Update ' + instance_artifact + ' : ' + id + ' Adding ' + source_type + ' ' + source_id);
-    let instances = OKITJsonObj['instances'];
+    let instances = okitJson['instances'];
     //console.log(JSON.stringify(instances))
     for (let i = 0; i < instances.length; i++) {
         let instance = instances[i];
@@ -362,7 +362,7 @@ function queryInstanceAjax(compartment_id, subnet_id) {
         data: JSON.stringify(request_json),
         success: function (resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['instances'] = response_json;
+            okitJson['instances'] = response_json;
             let len = response_json.length;
             for (let i = 0; i < len; i++) {
                 console.log('queryInstanceAjax : ' + response_json[i]['display_name']);

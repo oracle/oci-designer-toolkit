@@ -32,8 +32,8 @@ function addNATGateway(vcn_id, compartment_id) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('nat_gateways')) {
-        OKITJsonObj['nat_gateways'] = [];
+    if (!okitJson.hasOwnProperty('nat_gateways')) {
+        okitJson['nat_gateways'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -48,9 +48,9 @@ function addNATGateway(vcn_id, compartment_id) {
     nat_gateway['compartment_id'] = compartment_id;
     nat_gateway['id'] = id;
     nat_gateway['display_name'] = generateDefaultName(nat_gateway_prefix, nat_gateway_count);
-    OKITJsonObj['nat_gateways'].push(nat_gateway);
+    okitJson['nat_gateways'].push(nat_gateway);
     okitIdsJsonObj[id] = nat_gateway['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(okitJson, null, 2));
     displayOkitJson();
     drawNATGatewaySVG(nat_gateway);
     loadNATGatewayProperties(id);
@@ -65,14 +65,14 @@ function deleteNATGateway(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['nat_gateways'].length; i++) {
-        if (OKITJsonObj['nat_gateways'][i]['id'] == id) {
-            OKITJsonObj['nat_gateways'].splice(i, 1);
+    for (let i=0; i < okitJson['nat_gateways'].length; i++) {
+        if (okitJson['nat_gateways'][i]['id'] == id) {
+            okitJson['nat_gateways'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('route_tables' in OKITJsonObj) {
-        for (route_table of OKITJsonObj['route_tables']) {
+    if ('route_tables' in okitJson) {
+        for (route_table of okitJson['route_tables']) {
             for (let i = 0; i < route_table['route_rules'].length; i++) {
                 if (route_table['route_rules'][i]['network_entity_id'] == id) {
                     route_table['route_rules'].splice(i, 1);
@@ -143,9 +143,9 @@ function drawNATGatewaySVG(artifact) {
  */
 function loadNATGatewayProperties(id) {
     $("#properties").load("propertysheets/nat_gateway.html", function () {
-        if ('nat_gateways' in OKITJsonObj) {
+        if ('nat_gateways' in okitJson) {
             console.log('Loading NAT Gateway: ' + id);
-            let json = OKITJsonObj['nat_gateways'];
+            let json = okitJson['nat_gateways'];
             for (let i = 0; i < json.length; i++) {
                 let nat_gateway = json[i];
                 //console.log(JSON.stringify(nat_gateway, null, 2));
@@ -183,7 +183,7 @@ function queryNATGatewayAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['nat_gateways'] = response_json;
+            okitJson['nat_gateways'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.log('queryNATGatewayAjax : ' + response_json[i]['display_name']);

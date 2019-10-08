@@ -34,8 +34,8 @@ function addCompartment() {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('compartments')) {
-        OKITJsonObj['compartments'] = [];
+    if (!okitJson.hasOwnProperty('compartments')) {
+        okitJson['compartments'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -47,9 +47,9 @@ function addCompartment() {
     let compartment = {};
     compartment['id'] = id;
     compartment['name'] = generateDefaultName(compartment_prefix, compartment_count);
-    OKITJsonObj['compartments'].push(compartment);
+    okitJson['compartments'].push(compartment);
     okitIdsJsonObj[id] = compartment['name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(okitJson, null, 2));
     displayOkitJson();
     drawCompartmentSVG(compartment);
     loadCompartmentProperties(id);
@@ -76,14 +76,14 @@ function deleteCompartment(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['compartments'].length; i++) {
-        if (OKITJsonObj['compartments'][i]['id'] == id) {
-            OKITJsonObj['compartments'].splice(i, 1);
+    for (let i=0; i < okitJson['compartments'].length; i++) {
+        if (okitJson['compartments'][i]['id'] == id) {
+            okitJson['compartments'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('route_tables' in OKITJsonObj) {
-        for (route_table of OKITJsonObj['route_tables']) {
+    if ('route_tables' in okitJson) {
+        for (route_table of okitJson['route_tables']) {
             for (let i = 0; i < route_table['route_rules'].length; i++) {
                 if (route_table['route_rules'][i]['network_entity_id'] == id) {
                     route_table['route_rules'].splice(i, 1);
@@ -213,9 +213,9 @@ function drawCompartmentSVG(artifact) {
  */
 function loadCompartmentProperties(id) {
     $("#properties").load("propertysheets/compartment.html", function () {
-        if ('compartments' in OKITJsonObj) {
+        if ('compartments' in okitJson) {
             console.log('Loading ' + compartment_artifact + ' : ' + id);
-            let json = OKITJsonObj['compartments'];
+            let json = okitJson['compartments'];
             for (let i = 0; i < json.length; i++) {
                 let compartment = json[i];
                 //console.log(JSON.stringify(compartment, null, 2));
@@ -225,7 +225,7 @@ function loadCompartmentProperties(id) {
                     $('#name').val(compartment['name']);
                     // Add Event Listeners
                     addPropertiesEventListeners(compartment, []);
-                    OKITJsonObj['open_compartment_index'] = i;
+                    okitJson['open_compartment_index'] = i;
                     break;
                 }
             }
@@ -247,7 +247,7 @@ function queryCompartmentAjax() {
         data: JSON.stringify(okitQueryRequestJson),
         success: function(resp) {
             let response_json = [JSON.parse(resp)];
-            OKITJsonObj['compartments'] = response_json;
+            okitJson['compartments'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.log('queryCompartmentAjax : ' + response_json[i]['name']);

@@ -40,8 +40,8 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('virtual_cloud_networks')) {
-        OKITJsonObj['virtual_cloud_networks'] = [];
+    if (!okitJson.hasOwnProperty('virtual_cloud_networks')) {
+        okitJson['virtual_cloud_networks'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -58,9 +58,9 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     // Generate Cidr
     virtual_cloud_network['cidr_block'] = '10.' + (virtual_cloud_network_count - 1) + '.0.0/16';
     virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase().slice(-6);
-    OKITJsonObj['virtual_cloud_networks'].push(virtual_cloud_network);
+    okitJson['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    //console.log(JSON.stringify(okitJson, null, 2));
     displayOkitJson();
     drawVirtualCloudNetworkSVG(virtual_cloud_network);
     loadVirtualCloudNetworkProperties(id);
@@ -84,39 +84,39 @@ function deleteVirtualCloudNetwork(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['virtual_cloud_networks'].length; i++) {
-        if (OKITJsonObj['virtual_cloud_networks'][i]['id'] == id) {
-            OKITJsonObj['virtual_cloud_networks'].splice(i, 1);
+    for (let i=0; i < okitJson['virtual_cloud_networks'].length; i++) {
+        if (okitJson['virtual_cloud_networks'][i]['id'] == id) {
+            okitJson['virtual_cloud_networks'].splice(i, 1);
         }
     }
     // Remove Sub Components
-    if ('internet_gateways' in OKITJsonObj) {
-        for (let i = OKITJsonObj['internet_gateways'].length - 1; i >= 0; i--) {
-            let internet_gateway = OKITJsonObj['internet_gateways'][i];
+    if ('internet_gateways' in okitJson) {
+        for (let i = okitJson['internet_gateways'].length - 1; i >= 0; i--) {
+            let internet_gateway = okitJson['internet_gateways'][i];
             if (internet_gateway['vcn_id'] == id) {
                 deleteInternetGateway(internet_gateway['id']);
             }
         }
     }
-    if ('subnets' in OKITJsonObj) {
-        for (let i = OKITJsonObj['subnets'].length - 1; i >= 0; i--) {
-            let subnet = OKITJsonObj['subnets'][i];
+    if ('subnets' in okitJson) {
+        for (let i = okitJson['subnets'].length - 1; i >= 0; i--) {
+            let subnet = okitJson['subnets'][i];
             if (subnet['vcn_id'] == id) {
                 deleteSubnet(subnet['id']);
             }
         }
     }
-    if ('route_tables' in OKITJsonObj) {
-        for (let i = OKITJsonObj['route_tables'].length - 1; i >= 0; i--) {
-            let route_table = OKITJsonObj['route_tables'][i];
+    if ('route_tables' in okitJson) {
+        for (let i = okitJson['route_tables'].length - 1; i >= 0; i--) {
+            let route_table = okitJson['route_tables'][i];
             if (route_table['vcn_id'] == id) {
                 deleteRouteTable(route_table['id']);
             }
         }
     }
-    if ('security_lists' in OKITJsonObj) {
-        for (let i = OKITJsonObj['security_lists'].length - 1; i >= 0; i--) {
-            let security_list = OKITJsonObj['security_lists'][i];
+    if ('security_lists' in okitJson) {
+        for (let i = okitJson['security_lists'].length - 1; i >= 0; i--) {
+            let security_list = okitJson['security_lists'][i];
             if (security_list['vcn_id'] == id) {
                 deleteSecurityList(security_list['id']);
             }
@@ -191,9 +191,9 @@ function drawVirtualCloudNetworkSVG(artifact) {
  */
 function loadVirtualCloudNetworkProperties(id) {
     $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
-        if ('virtual_cloud_networks' in OKITJsonObj) {
+        if ('virtual_cloud_networks' in okitJson) {
             console.log('Loading Virtual Cloud Network: ' + id);
-            let json = OKITJsonObj['virtual_cloud_networks'];
+            let json = okitJson['virtual_cloud_networks'];
             for (let i = 0; i < json.length; i++) {
                 let virtual_cloud_network = json[i];
                 //console.log(JSON.stringify(virtual_cloud_network, null, 2));
@@ -231,7 +231,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['virtual_cloud_networks'] = response_json;
+            okitJson['virtual_cloud_networks'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ) {
                 console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
