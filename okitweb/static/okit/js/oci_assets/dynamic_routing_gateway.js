@@ -52,7 +52,8 @@ function addDynamicRoutingGateway(vcn_id, compartment_id) {
     okitIdsJsonObj[id] = dynamic_routing_gateway['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
     displayOkitJson();
-    drawDynamicRoutingGatewaySVG(dynamic_routing_gateway);
+    //drawDynamicRoutingGatewaySVG(dynamic_routing_gateway);
+    drawSVGforJson();
     loadDynamicRoutingGatewayProperties(id);
 }
 

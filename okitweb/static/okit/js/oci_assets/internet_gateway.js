@@ -52,7 +52,8 @@ function addInternetGateway(vcn_id, compartment_id) {
     okitIdsJsonObj[id] = internet_gateway['display_name'];
     //console.log(JSON.stringify(okitJson, null, 2));
     displayOkitJson();
-    drawInternetGatewaySVG(internet_gateway);
+    //drawInternetGatewaySVG(internet_gateway);
+    drawSVGforJson();
     loadInternetGatewayProperties(id);
 }
 
