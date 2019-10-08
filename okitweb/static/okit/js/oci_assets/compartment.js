@@ -96,6 +96,22 @@ function deleteCompartment(id) {
 /*
 ** SVG Creation
  */
+function getCompartmentDimensions(id='') {
+    return {width:2150, height:1500};
+}
+
+function newCompartmentDefinition(artifact, position=0) {
+    let definition = newArtifactSVGDefinition(artifact, compartment_artifact);
+    let dimensions = getCompartmentDimensions();
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = compartment_stroke_colour;
+    definition['rect']['stroke']['dash'] = 5;
+    definition['name']['show'] = true;
+    definition['label']['show'] = true;
+    return definition;
+}
+
 function drawCompartmentSVG(artifact) {
     let id = artifact['id'];
     let parent_id = "canvas-wrapper";
@@ -165,6 +181,7 @@ function drawCompartmentSVG(artifact) {
 
     artifact['display_name'] = artifact['name'];
 
+    /*
     let artifact_definition = newArtifactSVGDefinition(artifact, compartment_artifact);
     artifact_definition['svg']['width'] = 2150;
     artifact_definition['svg']['height'] = 1500;
@@ -172,8 +189,9 @@ function drawCompartmentSVG(artifact) {
     artifact_definition['rect']['stroke']['dash'] = 5;
     artifact_definition['name']['show'] = true;
     artifact_definition['label']['show'] = true;
+    */
 
-    let svg = drawArtifact(artifact_definition);
+    let svg = drawArtifact(newCompartmentDefinition(artifact));
 
     //let rect = svg.select("rect[id='" + id + "']");
     let rect = svg.select("rect[id='" + id + "']");

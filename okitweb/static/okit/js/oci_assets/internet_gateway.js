@@ -85,6 +85,22 @@ function deleteInternetGateway(id) {
 /*
 ** SVG Creation
  */
+function getInternetGatewayDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
+
+function newInternetGatewayDefinition(artifact, position=0) {
+    let dimensions = getInternetGatewayDimensions();
+    let definition = newArtifactSVGDefinition(artifact, internet_gateway_artifact);
+    definition['svg']['x'] = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
+    definition['svg']['y'] = 0;
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = internet_gateway_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    return definition;
+}
+
 function drawInternetGatewaySVG(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
@@ -105,6 +121,7 @@ function drawInternetGatewaySVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'] += 1;
 
+        /*
         let artifact_definition = newArtifactSVGDefinition(artifact, internet_gateway_artifact);
         artifact_definition['svg']['x'] = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
         artifact_definition['svg']['y'] = 0;
@@ -112,8 +129,9 @@ function drawInternetGatewaySVG(artifact) {
         artifact_definition['svg']['height'] = icon_height;
         artifact_definition['rect']['stroke']['colour'] = internet_gateway_stroke_colour;
         artifact_definition['rect']['stroke']['dash'] = 1;
+        */
 
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newInternetGatewayDefinition(artifact, position));
 
         //loadInternetGatewayProperties(id);
         // Add click event to display properties

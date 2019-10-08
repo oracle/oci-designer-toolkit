@@ -127,6 +127,26 @@ function deleteVirtualCloudNetwork(id) {
 /*
 ** SVG Creation
  */
+function getVirtualCloudNetworkDimensions(id='') {
+    return {width:2000, height:500};
+}
+
+function newVirtualCloudNetworkDefinition(artifact, position=0) {
+    let dimensions = getVirtualCloudNetworkDimensions();
+    let definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
+    definition['svg']['x'] = Math.round(icon_width * 3 / 2);
+    definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+    definition['svg']['width'] = 2000;
+    definition['svg']['height'] = 500;
+    definition['rect']['stroke']['colour'] = virtual_cloud_network_stroke_colour;
+    definition['rect']['stroke']['dash'] = 5;
+    definition['icon']['x_translation'] = icon_translate_x_start;
+    definition['icon']['y_translation'] = icon_translate_y_start;
+    definition['name']['show'] = true;
+    definition['label']['show'] = true;
+    return definition;
+}
+
 function drawVirtualCloudNetworkSVG(artifact) {
     let parent_id = artifact['compartment_id'];
     artifact['parent_id'] = parent_id;
@@ -148,6 +168,7 @@ function drawVirtualCloudNetworkSVG(artifact) {
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] += 1;
 
+        /*
         let artifact_definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
         artifact_definition['svg']['x'] = Math.round(icon_width * 3 / 2);
         artifact_definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
@@ -159,8 +180,9 @@ function drawVirtualCloudNetworkSVG(artifact) {
         artifact_definition['icon']['y_translation'] = icon_translate_y_start;
         artifact_definition['name']['show'] = true;
         artifact_definition['label']['show'] = true;
+        */
 
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newVirtualCloudNetworkDefinition(artifact, position));
 
         //loadVirtualCloudNetworkProperties(id);
         // Add click event to display properties

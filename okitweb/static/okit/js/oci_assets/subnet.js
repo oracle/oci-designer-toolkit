@@ -135,6 +135,31 @@ function deleteSubnet(id) {
 /*
 ** SVG Creation
  */
+function getSubnetDimensions(id='') {
+    return {width:subnet_svg_width, height:subnet_svg_height};
+}
+
+function newSubnetDefinition(artifact, position=0) {
+    let dimensions = getSubnetDimensions();
+    let definition = newArtifactSVGDefinition(artifact, subnet_artifact);
+    definition['svg']['x'] = Math.round(icon_width);
+    definition['svg']['y'] = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = subnet_stroke_colour;
+    definition['rect']['stroke']['dash'] = 5;
+    definition['icon']['x_translation'] = icon_translate_x_start;
+    definition['icon']['y_translation'] = icon_translate_y_start;
+    definition['name']['show'] = true;
+    definition['label']['show'] = true;
+    if (artifact['prohibit_public_ip_on_vnic']) {
+        definition['label']['text'] = 'Private ' + subnet_artifact;
+    } else  {
+        definition['label']['text'] = 'Public ' + subnet_artifact;
+    }
+    return definition;
+}
+
 function drawSubnetSVG(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
@@ -155,6 +180,7 @@ function drawSubnetSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'] += 1;
 
+        /*
         let artifact_definition = newArtifactSVGDefinition(artifact, subnet_artifact);
         artifact_definition['svg']['x'] = Math.round(icon_width);
         artifact_definition['svg']['y'] = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));
@@ -171,8 +197,9 @@ function drawSubnetSVG(artifact) {
         } else  {
             artifact_definition['label']['text'] = 'Public ' + subnet_artifact;
         }
+        */
 
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newSubnetDefinition(artifact, position));
 
         //loadSubnetProperties(id);
         let rect = d3.select('#' + id);
@@ -294,7 +321,7 @@ function drawSubnetAttachmentsSVG(subnet) {
 
 function drawAttachedRouteTable(artifact, attachment_count) {
     console.log('Drawing ' + subnet_artifact + ' Route Table : ' + artifact['display_name']);
-    let artifact_definition = newRouteTableSVGDefinition(artifact, attachment_count);
+    let artifact_definition = newRouteTableDefinition(artifact, attachment_count);
     artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
     artifact_definition['svg']['y'] = 0;
 
@@ -320,7 +347,7 @@ function drawAttachedRouteTable(artifact, attachment_count) {
 
 function drawAttachedSecurityList(artifact, attachment_count) {
     console.log('Drawing ' + subnet_artifact + ' Security List : ' + artifact['display_name']);
-    let artifact_definition = newSecurityListSVGDefinition(artifact, attachment_count);
+    let artifact_definition = newSecurityListDefinition(artifact, attachment_count);
     artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
     artifact_definition['svg']['y'] = 0;
 

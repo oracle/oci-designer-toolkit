@@ -84,6 +84,23 @@ function deleteLoadBalancer(id) {
 /*
 ** SVG Creation
  */
+function getLoadBalancerDimensions(id='') {
+    return {width:load_balancer_width, height:load_balancer_height};
+}
+
+function newLoadBalancerDefinition(artifact, position=0) {
+    let dimensions = getLoadBalancerDimensions();
+    let definition = newArtifactSVGDefinition(artifact, load_balancer_artifact);
+    definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
+    definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    definition['name']['show'] = true;
+    return definition;
+}
+
 function drawLoadBalancerSVG(artifact) {
     let parent_id = artifact['subnet_ids'][0];
     artifact['parent_id'] = parent_id;
@@ -105,6 +122,7 @@ function drawLoadBalancerSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] += 1;
 
+        /*
         let artifact_definition = newArtifactSVGDefinition(artifact, load_balancer_artifact);
         artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
         artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
@@ -113,8 +131,9 @@ function drawLoadBalancerSVG(artifact) {
         artifact_definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
         artifact_definition['rect']['stroke']['dash'] = 1;
         artifact_definition['name']['show'] = true;
+        */
 
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newLoadBalancerDefinition(artifact, position));
 
         //loadLoadBalancerProperties(id);
         let rect = d3.select('#' + id);

@@ -13,6 +13,7 @@ const viewbox_height = 1500;
 const viewbox_width = 2500;
 const text_viewbox_height = 1000;
 const text_viewbox_width = 200;
+const connector_colour = "black";
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
@@ -56,7 +57,7 @@ function createSVGDefinitions(canvas_svg) {
         .attr("cx", "5")
         .attr("cy", "5")
         .attr("r", "5")
-        .attr("fill", "black");
+        .attr("fill", connector_colour);
 }
 
 function newArtifactSVGDefinition(artifact, data_type) {
@@ -304,7 +305,7 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
         .attr("id", id)
         .attr("points", points)
         .attr("stroke-width", "2")
-        .attr("stroke", "black")
+        .attr("stroke", connector_colour)
         .attr("fill", "none")
         .attr("marker-start", "url(#connector-end-circle)")
         .attr("marker-end", "url(#connector-end-circle)");
@@ -313,7 +314,7 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
 
 function coordString(coord) {
     let coord_str = coord['x'] + ',' + coord['y'];
-    console.log('Coord String : ' + coord_str);
+    //console.log('Coord String : ' + coord_str);
     return coord_str;
 }
 

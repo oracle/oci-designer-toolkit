@@ -88,12 +88,17 @@ function deleteSecurityList(id) {
 /*
 ** SVG Creation
  */
-function newSecurityListSVGDefinition(artifact, position=0) {
+function getSecurityListDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
+
+function newSecurityListDefinition(artifact, position=0) {
+    let dimensions = getSecurityListDimensions();
     let definition = newArtifactSVGDefinition(artifact, security_list_artifact);
     definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
     definition['svg']['y'] = Math.round(icon_height * 3 / 2);
-    definition['svg']['width'] = icon_width;
-    definition['svg']['height'] = icon_height;
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = security_list_stroke_colour;
     definition['rect']['stroke']['dash'] = 1;
     return definition;
@@ -129,7 +134,7 @@ function drawSecurityListSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-        let svg = drawArtifact(newSecurityListSVGDefinition(artifact, position));
+        let svg = drawArtifact(newSecurityListDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();

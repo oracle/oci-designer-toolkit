@@ -99,6 +99,24 @@ function deleteInstance(id) {
 /*
 ** SVG Creation
  */
+function getInstanceDimensions(id='') {
+    return {width:instance_width, height:instance_height};
+}
+
+function newInstanceDefinition(artifact, position=0) {
+    let dimensions = getInstanceDimensions();
+    let definition = newArtifactSVGDefinition(artifact, instance_artifact);
+    definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (instance_width * position) + (icon_spacing * position));
+    definition['svg']['y'] = Math.round(icon_height * 4);
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = instance_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
+    definition['name']['show'] = true;
+    return definition;
+}
+
 function drawInstanceSVG(artifact) {
     let parent_id = artifact['subnet_id'];
     artifact['parent_id'] = parent_id;
@@ -135,6 +153,7 @@ function drawInstanceSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
 
+        /*
         let artifact_definition = newArtifactSVGDefinition(artifact, instance_artifact);
         artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (instance_width * position) + (icon_spacing * position));
         artifact_definition['svg']['y'] = Math.round(icon_height * 4);
@@ -144,8 +163,9 @@ function drawInstanceSVG(artifact) {
         artifact_definition['rect']['stroke']['dash'] = 1;
         artifact_definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
         artifact_definition['name']['show'] = true;
+        */
 
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newInstanceDefinition(artifact, position));
 
         //loadInstanceProperties(id);
         let rect = d3.select('#' + id);
@@ -244,7 +264,7 @@ function drawInstanceAttachmentsSVG(instance) {
 
 function drawAttachedBlockStorageVolume(artifact, bs_count) {
     console.log('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
-    let artifact_definition = newBlockStorageVolumeSVGDefinition(artifact, bs_count);
+    let artifact_definition = newBlockStorageVolumeDefinition(artifact, bs_count);
     artifact_definition['svg']['x'] = Math.round(icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count));
     artifact_definition['svg']['y'] = Math.round(instance_height - icon_height);
 

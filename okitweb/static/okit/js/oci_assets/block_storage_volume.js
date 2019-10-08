@@ -87,12 +87,17 @@ function deleteBlockStorageVolume(id) {
 /*
 ** SVG Creation
  */
-function newBlockStorageVolumeSVGDefinition(artifact, position=0) {
+function getBlockStorageVolumeDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
+
+function newBlockStorageVolumeDefinition(artifact, position=0) {
+    let dimensions = getBlockStorageVolumeDimensions();
     let definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
     definition['svg']['x'] = Math.round(icon_width / 4);
     definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
-    definition['svg']['width'] = icon_width;
-    definition['svg']['height'] = icon_height;
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
     definition['rect']['stroke']['dash'] = 1;
     return definition;
@@ -132,7 +137,7 @@ function drawBlockStorageVolumeSVG(artifact) {
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
 
-        let svg = drawArtifact(newBlockStorageVolumeSVGDefinition(artifact, position));
+        let svg = drawArtifact(newBlockStorageVolumeDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();

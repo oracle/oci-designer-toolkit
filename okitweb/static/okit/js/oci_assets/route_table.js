@@ -85,12 +85,17 @@ function deleteRouteTable(id) {
 /*
 ** SVG Creation
  */
-function newRouteTableSVGDefinition(artifact, position=0) {
+function getRouteTableDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
+
+function newRouteTableDefinition(artifact, position=0) {
+    let dimensions = getRouteTableDimensions();
     let definition = newArtifactSVGDefinition(artifact, route_table_artifact);
     definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
     definition['svg']['y'] = Math.round(icon_height * 3 / 2);
-    definition['svg']['width'] = icon_width;
-    definition['svg']['height'] = icon_height;
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = route_table_stroke_colour;
     definition['rect']['stroke']['dash'] = 1;
     return definition;
@@ -126,7 +131,7 @@ function drawRouteTableSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-        let svg = drawArtifact(newRouteTableSVGDefinition(artifact, position));
+        let svg = drawArtifact(newRouteTableDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
