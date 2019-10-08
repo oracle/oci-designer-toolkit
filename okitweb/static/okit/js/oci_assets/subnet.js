@@ -219,25 +219,6 @@ function drawSubnetSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['subnet_position'] += 1;
 
-        /*
-        let artifact_definition = newArtifactSVGDefinition(artifact, subnet_artifact);
-        artifact_definition['svg']['x'] = Math.round(icon_width);
-        artifact_definition['svg']['y'] = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));
-        artifact_definition['svg']['width'] = subnet_svg_width;
-        artifact_definition['svg']['height'] = subnet_svg_height;
-        artifact_definition['rect']['stroke']['colour'] = subnet_stroke_colour;
-        artifact_definition['rect']['stroke']['dash'] = 5;
-        artifact_definition['icon']['x_translation'] = icon_translate_x_start;
-        artifact_definition['icon']['y_translation'] = icon_translate_y_start;
-        artifact_definition['name']['show'] = true;
-        artifact_definition['label']['show'] = true;
-        if (artifact['prohibit_public_ip_on_vnic']) {
-            artifact_definition['label']['text'] = 'Private ' + subnet_artifact;
-        } else  {
-            artifact_definition['label']['text'] = 'Public ' + subnet_artifact;
-        }
-        */
-
         let svg = drawArtifact(newSubnetDefinition(artifact, position));
 
         //loadSubnetProperties(id);

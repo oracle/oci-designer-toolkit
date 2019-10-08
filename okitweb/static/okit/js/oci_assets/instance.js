@@ -153,18 +153,6 @@ function drawInstanceSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['instance_position'] += 1;
 
-        /*
-        let artifact_definition = newArtifactSVGDefinition(artifact, instance_artifact);
-        artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (instance_width * position) + (icon_spacing * position));
-        artifact_definition['svg']['y'] = Math.round(icon_height * 4);
-        artifact_definition['svg']['width'] = instance_width;
-        artifact_definition['svg']['height'] = instance_height;
-        artifact_definition['rect']['stroke']['colour'] = instance_stroke_colour;
-        artifact_definition['rect']['stroke']['dash'] = 1;
-        artifact_definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
-        artifact_definition['name']['show'] = true;
-        */
-
         let svg = drawArtifact(newInstanceDefinition(artifact, position));
 
         //loadInstanceProperties(id);

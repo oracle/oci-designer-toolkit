@@ -122,17 +122,6 @@ function drawLoadBalancerSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] += 1;
 
-        /*
-        let artifact_definition = newArtifactSVGDefinition(artifact, load_balancer_artifact);
-        artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
-        artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
-        artifact_definition['svg']['width'] = load_balancer_width;
-        artifact_definition['svg']['height'] = load_balancer_height;
-        artifact_definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
-        artifact_definition['rect']['stroke']['dash'] = 1;
-        artifact_definition['name']['show'] = true;
-        */
-
         let svg = drawArtifact(newLoadBalancerDefinition(artifact, position));
 
         //loadLoadBalancerProperties(id);
