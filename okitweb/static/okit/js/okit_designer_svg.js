@@ -192,7 +192,7 @@ function drawSVGforJson(artifact={}) {
     console.log('******** Drawing SVG *********');
     displayOkitJson();
     // Clear existing
-    clearSVG();
+    clearDiagram();
 
     // Draw Outer SVG
     if (okitJson.hasOwnProperty('compartments')) {
@@ -321,3 +321,6 @@ function coordString(coord) {
     return coord_str;
 }
 
+function clearCanvas() {
+    $('#canvas-wrapper').empty();
+}

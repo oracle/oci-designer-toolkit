@@ -168,16 +168,6 @@ function drawCompartmentSVG(artifact) {
         .text('.st0{fill:#F80000;} .st1{fill:#939699;} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
     //.text('.st0{fill:#F80000;} text{font-weight: bold; font-size: 10pt; font-family: Ariel} rect{height: 100%; width: 100%; fill: white; fill-opacity: .25;}');
     createSVGDefinitions(canvas_svg);
-    /*
-    let defs = canvas_svg.append('defs');
-    for (let key in palette_svg) {
-        let defid = key.replace(/ /g, '') + 'Svg';
-        defs.append('g')
-            .attr("id", defid)
-            .attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
-            .html(palette_svg[key]);
-    }
-    */
 
     artifact['display_name'] = artifact['name'];
 

@@ -77,7 +77,7 @@ function newDiagram() {
     console.log('Creating New Diagram');
     okitJson = {};
     okitIdsJsonObj = {};
-    clearSVG();
+    clearDiagram();
     addCompartment();
     //document.getElementById('file-add-menu-item').click();
 }
@@ -89,7 +89,7 @@ function clearTabs() {
         .attr("class", "tab");
 }
 
-function clearSVG() {
+function clearDiagram() {
     console.log('Clearing Diagram');
     //$('#okitcanvas').empty();
     // Tabs
@@ -329,7 +329,7 @@ $(document).ready(function(){
         newDiagram();
     } else {
         setBusyIcon();
-        clearSVG();
+        clearDiagram();
         $('#query-progress').removeClass('hidden');
         queryCompartmentAjax();
     }
