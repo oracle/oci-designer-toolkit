@@ -167,11 +167,10 @@ function loadDynamicRoutingGatewayProperties(id) {
 ** Query OCI
  */
 
-function queryDynamicRoutingGatewayAjax(compartment_id, vcn_id) {
+function queryDynamicRoutingGatewayAjax(compartment_id) {
     console.log('------------- queryDynamicRoutingGatewayAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
     if ('dynamic_routing_gateway_filter' in okitQueryRequestJson) {
         request_json['dynamic_routing_gateway_filter'] = okitQueryRequestJson['dynamic_routing_gateway_filter'];
     }

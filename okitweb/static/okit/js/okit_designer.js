@@ -75,8 +75,7 @@ function handleNew(evt) {
 
 function newDiagram() {
     console.log('Creating New Diagram');
-    okitJson = {};
-    okitIdsJsonObj = {};
+    clearCoreData();
     clearArtifactData();
     newCanvas();
     addCompartment();
@@ -104,6 +103,11 @@ function clearArtifactData() {
         console.log('Calling ' + clear_function);
         window[clear_function]();
     }
+}
+
+function clearCoreData() {
+    okitJson = {};
+    okitIdsJsonObj = {};
 }
 
 /*
@@ -217,6 +221,15 @@ function saveSvg(svgEl, name) {
 /*
 ** Query OCI Ajax Calls to allow async svg build
  */
+function showQueryResults() {
+    console.log('Generating Query Results');
+    clearCoreData();
+    clearArtifactData();
+    newCanvas();
+    setBusyIcon();
+    $('#query-progress').removeClass('hidden');
+    queryCompartmentAjax();
+}
 
 function showQueryProgress() {
     let element = document.getElementById("query-progress");
@@ -330,14 +343,11 @@ $(document).ready(function(){
     //let compartment_id = addCompartment();
 
     if (okitQueryRequestJson == null) {
-        console.log('<<<<<<<<<<<<< New Canvas >>>>>>>>>>>>>')
+        console.log('<<<<<<<<<<<<< New Canvas >>>>>>>>>>>>>');
         newDiagram();
     } else {
-        console.log('<<<<<<<<<<<<< Query Results Canvas >>>>>>>>>>>>>')
-        setBusyIcon();
-        clearDiagram();
-        $('#query-progress').removeClass('hidden');
-        queryCompartmentAjax();
+        console.log('<<<<<<<<<<<<< Query Results Canvas >>>>>>>>>>>>>');
+        showQueryResults();
     }
 
     $('input[type=radio][name=source-properties]').change(function() {

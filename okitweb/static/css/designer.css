@@ -133,7 +133,8 @@
     border: black 1px dashed;
     border-radius: 5px;
     padding: 5px;
-    opacity: 50%;
+    background-color: lightgrey;
+    opacity: 5%;
 }
 
 .query-filter {

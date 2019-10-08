@@ -193,10 +193,12 @@ function queryCompartmentAjax() {
             let response_json = [JSON.parse(resp)];
             okitJson['compartments'] = response_json;
             let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
+            for(let i=0;i<len;i++ ) {
                 console.log('queryCompartmentAjax : ' + response_json[i]['name']);
                 queryVirtualCloudNetworkAjax(response_json[i]['id']);
-                queryBlockStorageVolumeAjax(response_json[i]['id'])            }
+                queryBlockStorageVolumeAjax(response_json[i]['id']);
+                queryDynamicRoutingGatewayAjax(response_json[i]['id']);
+            }
             redrawSVGCanvas();
             $('#' + compartment_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
