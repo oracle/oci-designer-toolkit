@@ -83,8 +83,10 @@
     border-width: 1px;
     border-color: black;
     margin: 0;
-    max-height: calc(100vh - 160px);
+    padding: 5px;
+    max-height: calc(100vh - 180px);
     display: block;
+    overflow: scroll;
 }
 
 .svg-canvas {

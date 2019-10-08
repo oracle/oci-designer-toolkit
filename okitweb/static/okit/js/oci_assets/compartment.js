@@ -28,7 +28,7 @@ function clearCompartmentVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addCompartment() {
+function addCompartment(compartment_id='') {
     let id = 'okit-' + compartment_prefix + '-' + uuidv4();
     console.log('Adding ' + compartment_artifact + ' : ' + id);
 
@@ -47,6 +47,7 @@ function addCompartment() {
     let compartment = {};
     compartment['id'] = id;
     compartment['name'] = generateDefaultName(compartment_prefix, compartment_count);
+    compartment['compartment_id'] = compartment_id;
     okitJson['compartments'].push(compartment);
     okitIdsJsonObj[id] = compartment['name'];
     //console.log(JSON.stringify(okitJson, null, 2));
@@ -97,12 +98,14 @@ function deleteCompartment(id) {
 ** SVG Creation
  */
 function getCompartmentDimensions(id='') {
-    return {width:2150, height:1500};
+    let dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()}
+    //return {width:2150, height:1500};
+    return dimensions;
 }
 
 function newCompartmentDefinition(artifact, position=0) {
-    let definition = newArtifactSVGDefinition(artifact, compartment_artifact);
     let dimensions = getCompartmentDimensions();
+    let definition = newArtifactSVGDefinition(artifact, compartment_artifact);
     definition['svg']['width'] = dimensions['width'];
     definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = compartment_stroke_colour;
@@ -114,60 +117,11 @@ function newCompartmentDefinition(artifact, position=0) {
 
 function drawCompartmentSVG(artifact) {
     let id = artifact['id'];
-    let parent_id = "canvas-wrapper";
+    let parent_id = "canvas";
     let compartment_id = artifact['id'];
-    artifact['parent_id'] = id + '-canvas';
+    artifact['parent_id'] = parent_id;
     artifact['compartment_id'] = id;
     console.log('Drawing ' + compartment_artifact + ' : ' + id);
-    let svg_x = 0;
-    let svg_y = 0;
-    let svg_width = 2150;
-    let svg_height = 1500;
-    let data_type = compartment_artifact;
-    let stroke_colour = compartment_stroke_colour;
-    let stroke_dash = 5;
-
-    // Add tab for canvas
-    let tabwrapper = d3.select('#' + parent_id);
-    /*
-    ** Currently not using multi tabs for compartments
-    let tabbar = d3.select('#compartment-tabs');
-    tabbar.append("button")
-        .on("click", function() { openCompartment(id); })
-        //.on("click", function() { openCompartment(event, compartment['name']); })
-        .attr("class", "tablinks active")
-        .attr("id", id + "-tab-button")
-        .text(artifact['name']);
-    */
-    let compartment_div = tabwrapper.append("div")
-        .attr("class", "tabcontent")
-        .attr("id", id + "-tab-content");
-    //.attr("id", compartment['name']);
-
-    /*
-    let canvas_div = compartment_div.append("div")
-        .attr("width", svg_width * 2)
-        .attr("height", svg_height + 100)
-        .attr("display", "block");
-
-     */
-
-    // Wrapper SVG Element to define ViewBox etc
-    let canvas_svg = compartment_div.append("svg")
-    //.attr("class", "svg-canvas")
-        .attr("id", id + '-canvas-svg')
-        .attr("x", svg_x)
-        .attr("y", svg_y)
-        .attr("width", svg_width + 100)
-        .attr("height", svg_height + 100)
-        //.attr("viewBox", "0 0 " + viewbox_width + " " + viewbox_height)
-        .attr("preserveAspectRatio", "xMinYMin meet");
-    canvas_svg.append('style')
-        .attr("type", "text/css")
-        //.text('.st0{fill:#F80000;}');
-        .text('.st0{fill:#F80000;} .st1{fill:#939699;} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
-    //.text('.st0{fill:#F80000;} text{font-weight: bold; font-size: 10pt; font-family: Ariel} rect{height: 100%; width: 100%; fill: white; fill-opacity: .25;}');
-    createSVGDefinitions(canvas_svg);
 
     artifact['display_name'] = artifact['name'];
 

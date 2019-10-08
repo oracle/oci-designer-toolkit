@@ -22,6 +22,12 @@ const container_artifact_label_width = 300;
 ** SVG Drawing / Manipulating SVG Canvas
  */
 
+function styleCanvas(canvas_svg) {
+    canvas_svg.append('style')
+        .attr("type", "text/css")
+        .text('.st0{fill:#F80000;} .st1{fill:#939699;} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+}
+
 function createSVGDefinitions(canvas_svg) {
     // Add Palette Icons
     let defs = canvas_svg.append('defs');
@@ -322,5 +328,33 @@ function coordString(coord) {
 }
 
 function clearCanvas() {
-    $('#canvas-wrapper').empty();
+    let canvas_svg = d3.select('#canvas-svg');
+    canvas_svg.selectAll('*').remove();
+    styleCanvas(canvas_svg);
+    createSVGDefinitions(canvas_svg);
+}
+
+function newCanvas(parent_id="canvas-wrapper") {
+    let compartment_div = d3.select('#' + parent_id);
+    //console.log('JQuery Width  : ' + $('#' + parent_id).width());
+    //console.log('JQuery Height : ' + $('#' + parent_id).height());
+    //console.log('Client Width  : ' + document.getElementById(parent_id).clientWidth);
+    //console.log('Client Height : ' + document.getElementById(parent_id).clientHeight);
+    // Empty existing Canvas
+    compartment_div.selectAll('*').remove();
+    // Wrapper SVG Element to define ViewBox etc
+    let canvas_svg = compartment_div.append("svg")
+    //.attr("class", "svg-canvas")
+        .attr("id", 'canvas-svg')
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", $('#' + parent_id).width())
+        .attr("height", $('#' + parent_id).height())
+        .attr("viewBox", "0 0 " + $('#' + parent_id).width() + " " + $('#' + parent_id).height())
+        //.attr("viewBox", "0 0 " + viewbox_width + " " + viewbox_height)
+        .attr("preserveAspectRatio", "xMinYMin meet");
+
+    clearCanvas();
+
+    return canvas_svg;
 }

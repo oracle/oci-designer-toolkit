@@ -77,7 +77,8 @@ function newDiagram() {
     console.log('Creating New Diagram');
     okitJson = {};
     okitIdsJsonObj = {};
-    clearDiagram();
+    clearArtifactData();
+    newCanvas();
     addCompartment();
     //document.getElementById('file-add-menu-item').click();
 }
@@ -91,10 +92,14 @@ function clearTabs() {
 
 function clearDiagram() {
     console.log('Clearing Diagram');
-    //$('#okitcanvas').empty();
-    // Tabs
-    clearTabs();
-    // Loop through Clear Artifact Routines
+    // Clear Artifact
+    clearArtifactData();
+    // Clear Canvas
+    clearCanvas();
+}
+
+function clearArtifactData() {
+    console.log('Clearing Artifact Data');
     for (let clear_function of asset_clear_functions) {
         console.log('Calling ' + clear_function);
         window[clear_function]();
@@ -325,9 +330,10 @@ $(document).ready(function(){
     //let compartment_id = addCompartment();
 
     if (okitQueryRequestJson == null) {
-        console.log('<<<<<<<<<<<<<New Page>>>>>>>>>>>>>')
+        console.log('<<<<<<<<<<<<< New Canvas >>>>>>>>>>>>>')
         newDiagram();
     } else {
+        console.log('<<<<<<<<<<<<< Query Results Canvas >>>>>>>>>>>>>')
         setBusyIcon();
         clearDiagram();
         $('#query-progress').removeClass('hidden');
