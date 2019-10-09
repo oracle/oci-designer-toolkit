@@ -192,24 +192,6 @@ function getSubnetDimensions(id='') {
     dimensions['width'] += Math.max((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']),
         (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']),
         (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']));
-    /*
-    if (
-        ((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']) >
-            (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']))
-        &&
-        ((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']) >
-            (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']))
-        ) {
-        dimensions['width'] += (max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']);
-    } else if (
-        (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']) >
-            (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count'])
-        ) {
-        dimensions['width'] += (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']);
-    } else {
-        dimensions['width'] += (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']);
-    }
-    */
     // Add load balancer and instance height to size of subnet
     dimensions['height'] += max_load_balancer_dimensions['height'];
     dimensions['height'] += max_instance_dimensions['height'];

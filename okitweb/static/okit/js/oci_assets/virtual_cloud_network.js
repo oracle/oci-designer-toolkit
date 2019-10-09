@@ -161,19 +161,19 @@ function getVirtualCloudNetworkDimensions(id='') {
             max_subnet_dimensions['count'] += 1;
         }
     }
-    // Calculate largest Width & Height
-    if (
-        (max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']) >
-            (max_gateway_dimensions['width'] + icon_spacing * max_gateway_dimensions['count'])
-    ) {
-        dimensions['width'] += (max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']);
-    } else {
-        dimensions['width'] += (max_gateway_dimensions['width'] + icon_spacing * max_gateway_dimensions['count']);
-    }
+    // Calculate largest Width
+    dimensions['width'] += Math.max((max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']),
+        (max_gateway_dimensions['width'] + icon_spacing * max_gateway_dimensions['count']));
+    // Calculate largest  Height
+    dimensions['height'] += max_subnet_dimensions['height'];
+    dimensions['height'] += icon_height;
+
     console.log('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
+    console.log('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
     console.log('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
-    return {width:2000, height:800};
+    //return {width:2000, height:800};
+    return dimensions;
 }
 
 function newVirtualCloudNetworkDefinition(artifact, position=0) {
@@ -181,8 +181,8 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     let definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
     definition['svg']['x'] = Math.round(icon_width * 3 / 2);
     definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
-    definition['svg']['width'] = 2000;
-    definition['svg']['height'] = 500;
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = virtual_cloud_network_stroke_colour;
     definition['rect']['stroke']['dash'] = 5;
     definition['icon']['x_translation'] = icon_translate_x_start;
