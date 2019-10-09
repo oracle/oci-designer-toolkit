@@ -336,6 +336,8 @@ function clearCanvas() {
 
 function newCanvas(parent_id="canvas-wrapper") {
     let compartment_div = d3.select('#' + parent_id);
+    let window_width = $(window).width();
+    let window_height = $(window).height();
     //console.log('JQuery Width  : ' + $('#' + parent_id).width());
     //console.log('JQuery Height : ' + $('#' + parent_id).height());
     //console.log('Client Width  : ' + document.getElementById(parent_id).clientWidth);
@@ -348,9 +350,9 @@ function newCanvas(parent_id="canvas-wrapper") {
         .attr("id", 'canvas-svg')
         .attr("x", 0)
         .attr("y", 0)
-        .attr("width", $('#' + parent_id).width())
-        .attr("height", $('#' + parent_id).height())
-        .attr("viewBox", "0 0 " + $('#' + parent_id).width() + " " + $('#' + parent_id).height())
+        .attr("width", window_width)
+        .attr("height", window_height)
+        .attr("viewBox", "0 0 " + window_width + " " + window_height)
         //.attr("viewBox", "0 0 " + viewbox_width + " " + viewbox_height)
         .attr("preserveAspectRatio", "xMinYMin meet");
 

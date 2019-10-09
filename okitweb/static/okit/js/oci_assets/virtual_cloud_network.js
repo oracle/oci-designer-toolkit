@@ -128,8 +128,9 @@ function deleteVirtualCloudNetwork(id) {
 ** SVG Creation
  */
 function getVirtualCloudNetworkDimensions(id='') {
-    let dimensions = {width:2000 * 2, height:800};
+    let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
     let max_gateway_dimensions = {width:0, height: 0, count:0};
+    let max_subnet_dimensions = {width:0, height: 0, count:0};
     // Process Gateways
     if (okitJson.hasOwnProperty('internet_gateways')) {
         for (let internet_gateway of okitJson['internet_gateways']) {
@@ -150,6 +151,24 @@ function getVirtualCloudNetworkDimensions(id='') {
                 max_gateway_dimensions['count'] += 1;
             }
         }
+    }
+    // Process Subnet Widths
+    if (okitJson.hasOwnProperty('subnets')) {
+        for (let subnet of okitJson['subnets']) {
+            let subnet_dimensions = getSubnetDimensions(subnet['id']);
+            max_subnet_dimensions['width'] = Math.max(max_subnet_dimensions['width'], subnet_dimensions['width']);
+            max_subnet_dimensions['height'] += subnet_dimensions['height'];
+            max_subnet_dimensions['count'] += 1;
+        }
+    }
+    // Calculate largest Width & Height
+    if (
+        (max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']) >
+            (max_gateway_dimensions['width'] + icon_spacing * max_gateway_dimensions['count'])
+    ) {
+        dimensions['width'] += (max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']);
+    } else {
+        dimensions['width'] += (max_gateway_dimensions['width'] + icon_spacing * max_gateway_dimensions['count']);
     }
     console.log('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
     console.log('Overall Dimensions       : ' + JSON.stringify(dimensions));
