@@ -85,12 +85,12 @@ function deleteNATGateway(id) {
 /*
 ** SVG Creation
  */
-function getNATDimensions(id='') {
+function getNATGatewayDimensions(id='') {
     return {width:icon_width, height:icon_height};
 }
 
-function newNATDefinition(artifact, position=0) {
-    let dimensions = getNATDimensions();
+function newNATGatewayDefinition(artifact, position=0) {
+    let dimensions = getNATGatewayDimensions();
     let definition = newArtifactSVGDefinition(artifact, nat_gateway_artifact);
     definition['svg']['x'] = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
     definition['svg']['y'] = 0;
@@ -121,7 +121,7 @@ function drawNATGatewaySVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'] += 1;
 
-        let svg = drawArtifact(newNATDefinition(artifact, position));
+        let svg = drawArtifact(newNATGatewayDefinition(artifact, position));
 
         //loadNATGatewayProperties(id);
         // Add click event to display properties

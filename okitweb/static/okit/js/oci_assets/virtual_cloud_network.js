@@ -128,6 +128,32 @@ function deleteVirtualCloudNetwork(id) {
 ** SVG Creation
  */
 function getVirtualCloudNetworkDimensions(id='') {
+    let dimensions = {width:2000 * 2, height:800};
+    let max_gateway_dimensions = {width:0, height: 0, count:0};
+    // Process Gateways
+    if (okitJson.hasOwnProperty('internet_gateways')) {
+        for (let internet_gateway of okitJson['internet_gateways']) {
+            if (internet_gateway['vcn_id'] == id) {
+                let gateway_dimensions = getInternetGatewayDimensions(internet_gateway['id']);
+                max_gateway_dimensions['width'] += gateway_dimensions['width'];
+                max_gateway_dimensions['height'] = Math.max(max_gateway_dimensions['height'], gateway_dimensions['height']);
+                max_gateway_dimensions['count'] += 1;
+            }
+        }
+    }
+    if (okitJson.hasOwnProperty('nat_gateways')) {
+        for (let nat_gateway of okitJson['nat_gateways']) {
+            if (nat_gateway['vcn_id'] == id) {
+                let gateway_dimensions = getNATGatewayDimensions(nat_gateway['id']);
+                max_gateway_dimensions['width'] += gateway_dimensions['width'];
+                max_gateway_dimensions['height'] = Math.max(max_gateway_dimensions['height'], gateway_dimensions['height']);
+                max_gateway_dimensions['count'] += 1;
+            }
+        }
+    }
+    console.log('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
+    console.log('Overall Dimensions       : ' + JSON.stringify(dimensions));
+
     return {width:2000, height:800};
 }
 

@@ -137,6 +137,36 @@ function getSubnetDimensions(id='') {
     let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
     let max_load_balancer_dimensions = {width:0, height: 0, count:0};
     let max_instance_dimensions = {width:0, height: 0, count:0};
+    let max_edge_dimensions = {width:0, height: 0, count:0};
+    // Get Subnet Details
+    let subnet = {};
+    for (subnet of okitJson['subnets']) {
+        if (id == subnet['id']) {
+            break;
+        }
+    }
+    // Process Edge Artifacts
+    if (okitJson.hasOwnProperty('security_lists')) {
+        for (let security_list of okitJson['security_lists']) {
+            if (subnet['security_list_ids'].indexOf(security_list['id']) >= 0) {
+                let edge_dimensions = getSecurityListDimensions(security_list['id']);
+                max_edge_dimensions['width'] += edge_dimensions['width'];
+                max_edge_dimensions['height'] = Math.max(max_edge_dimensions['height'], edge_dimensions['height']);
+                max_edge_dimensions['count'] += 1;
+            }
+        }
+    }
+    if (okitJson.hasOwnProperty('route_tables')) {
+        for (let route_table of okitJson['route_tables']) {
+            if (subnet['route_table_id'] == route_table['id']) {
+                let edge_dimensions = getRouteTableDimensions(route_table['id']);
+                max_edge_dimensions['width'] += edge_dimensions['width'];
+                max_edge_dimensions['height'] = Math.max(max_edge_dimensions['height'], edge_dimensions['height']);
+                max_edge_dimensions['count'] += 1;
+            }
+        }
+    }
+    // Process Load Balancer Widths
     if (okitJson.hasOwnProperty('load_balancers')) {
         for (let load_balancer of okitJson['load_balancers']) {
             if (load_balancer['subnet_ids'][0] == id) {
@@ -147,6 +177,7 @@ function getSubnetDimensions(id='') {
             }
         }
     }
+    // Process Instances
     if (okitJson.hasOwnProperty('instances')) {
         for (let instance of okitJson['instances']) {
             if (instance['subnet_id'] == id) {
@@ -158,9 +189,19 @@ function getSubnetDimensions(id='') {
         }
     }
     // Calculate Width which will be the largest based on load balancers or instances
-    if ((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']) >
-        (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count'])) {
+    if (
+        ((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']) >
+            (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']))
+        &&
+        ((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']) >
+            (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']))
+        ) {
         dimensions['width'] += (max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']);
+    } else if (
+        ((max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']) >
+            (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']))
+        ) {
+        dimensions['width'] += (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']);
     } else {
         dimensions['width'] += (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']);
     }
@@ -170,6 +211,7 @@ function getSubnetDimensions(id='') {
     dimensions['height'] += icon_height;
     console.log('Load Balancer Dimensions : ' + JSON.stringify(max_load_balancer_dimensions));
     console.log('Instance Dimensions      : ' + JSON.stringify(max_instance_dimensions));
+    console.log('Edges Dimensions         : ' + JSON.stringify(max_edge_dimensions));
     console.log('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
     //return {width:subnet_svg_width, height:subnet_svg_height};

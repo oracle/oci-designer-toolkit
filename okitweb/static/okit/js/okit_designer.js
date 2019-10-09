@@ -266,9 +266,6 @@ function openCompartment(compartment_id) {
 
 
 const ro = new ResizeObserver(entries => {
-    //for (let entry of entries) {
-    //    entry.target.style.borderRadius = Math.max(0, 250 - entry.contentRect.width) + 'px';
-    //}
     redrawSVGCanvas();
 });
 
@@ -363,7 +360,7 @@ $(document).ready(function(){
     $("#json-display").slideToggle();
 
     // Only observe the canvas
-    //ro.observe(document.querySelector('#canvas-wrapper'));
+    ro.observe(document.querySelector('#canvas-wrapper'));
 
 });
 
