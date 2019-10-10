@@ -117,7 +117,7 @@ function drawArtifact(definition) {
         .attr("y",         definition['svg']['y'])
         .attr("width",     definition['svg']['width'])
         .attr("height",    definition['svg']['height'])
-        //.attr("viewBox", "0 0 " + svg_width + " " + svg_height)
+        .attr("viewBox", "0 0 " + definition['svg']['width'] + " " + definition['svg']['height'])
         .attr("preserveAspectRatio", "xMinYMax meet");
     let rect = svg.append("rect")
         .attr("id", id)
@@ -338,6 +338,8 @@ function newCanvas(parent_id="canvas-wrapper") {
     let compartment_div = d3.select('#' + parent_id);
     let window_width = $(window).width();
     let window_height = $(window).height();
+    let parent_width = $('#' + parent_id).width();
+    let parent_height = $('#' + parent_id).height();
     //console.log('JQuery Width  : ' + $('#' + parent_id).width());
     //console.log('JQuery Height : ' + $('#' + parent_id).height());
     //console.log('Client Width  : ' + document.getElementById(parent_id).clientWidth);
@@ -353,7 +355,7 @@ function newCanvas(parent_id="canvas-wrapper") {
         .attr("width", window_width)
         .attr("height", window_height)
         .attr("viewBox", "0 0 " + window_width + " " + window_height)
-        //.attr("viewBox", "0 0 " + viewbox_width + " " + viewbox_height)
+        //.attr("viewBox", "0 0 " + parent_width + " " + parent_height)
         .attr("preserveAspectRatio", "xMinYMin meet");
 
     clearCanvas();

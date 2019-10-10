@@ -11,10 +11,7 @@ asset_clear_functions.push("clearVirtualCloudNetworkVariables");
 
 const virtual_cloud_network_stroke_colour = "purple";
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
-let vcn_svg_width = "99%"
-let vcn_svg_height = "70%"
-let vcn_rect_width = "95%"
-let vcn_rect_height = "85%"
+const min_virtual_cloud_network_dimensions = {width:400, height:300};
 let virtual_network_ids = [];
 let virtual_cloud_network_count = 0;
 let virtual_cloud_network_cidr = {};
@@ -190,6 +187,9 @@ function getVirtualCloudNetworkDimensions(id='') {
     // Calculate largest  Height
     dimensions['height'] += max_subnet_dimensions['height'];
     dimensions['height'] += icon_height;
+    // Check size against minimum
+    dimensions['width'] = Math.max(dimensions['width'], min_virtual_cloud_network_dimensions['width']);
+    dimensions['height'] = Math.max(dimensions['height'], min_virtual_cloud_network_dimensions['height']);
 
     console.log('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
     console.log('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
@@ -212,6 +212,10 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     definition['icon']['y_translation'] = icon_translate_y_start;
     definition['name']['show'] = true;
     definition['label']['show'] = true;
+    if (!okitJson['canvas']['virtual_cloud_networks'].hasOwnProperty(artifact['id'])) {
+        okitJson['canvas']['virtual_cloud_networks'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
+    }
+    okitJson['canvas']['virtual_cloud_networks'][artifact['id']]['svg'] = definition['svg'];
     return definition;
 }
 

@@ -12,8 +12,7 @@ asset_clear_functions.push("clearSubnetVariables");
 
 const subnet_stroke_colour = "orange";
 const subnet_query_cb = "subnet-query-cb";
-let subnet_svg_height = 300;
-let subnet_svg_width = 1500;
+const min_subnet_dimensions = {width:400, height:300};
 let subnet_ids = [];
 let subnet_count = 0;
 let subnet_bui_sub_artifacts = {};
@@ -196,6 +195,10 @@ function getSubnetDimensions(id='') {
     dimensions['height'] += max_load_balancer_dimensions['height'];
     dimensions['height'] += max_instance_dimensions['height'];
     dimensions['height'] += icon_height;
+    // Check size against minimum
+    dimensions['width'] = Math.max(dimensions['width'], min_subnet_dimensions['width']);
+    dimensions['height'] = Math.max(dimensions['height'], min_subnet_dimensions['height']);
+
     console.log('Load Balancer Dimensions : ' + JSON.stringify(max_load_balancer_dimensions));
     console.log('Instance Dimensions      : ' + JSON.stringify(max_instance_dimensions));
     console.log('Edges Dimensions         : ' + JSON.stringify(max_edge_dimensions));
@@ -223,6 +226,10 @@ function newSubnetDefinition(artifact, position=0) {
     } else  {
         definition['label']['text'] = 'Public ' + subnet_artifact;
     }
+    if (!okitJson['canvas']['subnets'].hasOwnProperty(artifact['id'])) {
+        okitJson['canvas']['subnets'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
+    }
+    okitJson['canvas']['subnets'][artifact['id']]['svg'] = definition['svg'];
     return definition;
 }
 

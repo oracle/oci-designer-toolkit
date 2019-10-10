@@ -64,8 +64,10 @@ function initialiseJson() {
         security_lists: [],
         subnets: [],
         virtual_cloud_networks: [],
-        svg : {
-            compartments: {}
+        canvas : {
+            compartments: {},
+            subnets: {},
+            virtual_cloud_networks: {}
         }
     }
 }
