@@ -360,3 +360,4 @@ function newCanvas(parent_id="canvas-wrapper") {
 
     return canvas_svg;
 }
+

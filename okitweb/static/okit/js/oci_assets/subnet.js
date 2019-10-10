@@ -166,7 +166,7 @@ function getSubnetDimensions(id='') {
             }
         }
     }
-    // Process Load Balancer Widths
+    // Process Load Balancers
     if (okitJson.hasOwnProperty('load_balancers')) {
         for (let load_balancer of okitJson['load_balancers']) {
             if (load_balancer['subnet_ids'][0] == id) {

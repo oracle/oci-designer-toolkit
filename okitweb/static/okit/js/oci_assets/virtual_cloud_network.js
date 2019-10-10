@@ -131,6 +131,7 @@ function getVirtualCloudNetworkDimensions(id='') {
     let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
     let max_gateway_dimensions = {width:0, height: 0, count:0};
     let max_subnet_dimensions = {width:0, height: 0, count:0};
+    let max_edge_dimensions = {width:0, height: 0, count:0};
     // Process Gateways
     if (okitJson.hasOwnProperty('internet_gateways')) {
         for (let internet_gateway of okitJson['internet_gateways']) {
@@ -152,6 +153,27 @@ function getVirtualCloudNetworkDimensions(id='') {
             }
         }
     }
+    // Process Edge Artifacts
+    if (okitJson.hasOwnProperty('security_lists')) {
+        for (let security_list of okitJson['security_lists']) {
+            if (security_list['vcn_id'] == id) {
+                let edge_dimensions = getSecurityListDimensions(security_list['id']);
+                max_edge_dimensions['width'] += edge_dimensions['width'];
+                max_edge_dimensions['height'] = Math.max(max_edge_dimensions['height'], edge_dimensions['height']);
+                max_edge_dimensions['count'] += 1;
+            }
+        }
+    }
+    if (okitJson.hasOwnProperty('route_tables')) {
+        for (let route_table of okitJson['route_tables']) {
+            if (route_table['vcn_id'] == id) {
+                let edge_dimensions = getRouteTableDimensions(route_table['id']);
+                max_edge_dimensions['width'] += edge_dimensions['width'];
+                max_edge_dimensions['height'] = Math.max(max_edge_dimensions['height'], edge_dimensions['height']);
+                max_edge_dimensions['count'] += 1;
+            }
+        }
+    }
     // Process Subnet Widths
     if (okitJson.hasOwnProperty('subnets')) {
         for (let subnet of okitJson['subnets']) {
@@ -163,7 +185,8 @@ function getVirtualCloudNetworkDimensions(id='') {
     }
     // Calculate largest Width
     dimensions['width'] += Math.max((max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']),
-        (max_gateway_dimensions['width'] + icon_spacing * max_gateway_dimensions['count']));
+        (max_gateway_dimensions['width'] + icon_spacing * max_gateway_dimensions['count']),
+        (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']));
     // Calculate largest  Height
     dimensions['height'] += max_subnet_dimensions['height'];
     dimensions['height'] += icon_height;
@@ -177,7 +200,7 @@ function getVirtualCloudNetworkDimensions(id='') {
 }
 
 function newVirtualCloudNetworkDefinition(artifact, position=0) {
-    let dimensions = getVirtualCloudNetworkDimensions();
+    let dimensions = getVirtualCloudNetworkDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
     definition['svg']['x'] = Math.round(icon_width * 3 / 2);
     definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));

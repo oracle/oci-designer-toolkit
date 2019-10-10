@@ -49,6 +49,28 @@ let okitIdsJsonObj = {};
 let okitQueryRequestJson = null;
 
 /*
+ * Variable Initialisation
+ */
+function initialiseJson() {
+    okitJson = {
+        compartments: [],
+        block_storage_volumes: [],
+        dynamic_routing_gateways: [],
+        instances: [],
+        internet_gateways: [],
+        load_balancers: [],
+        nat_gateways: [],
+        route_tables: [],
+        security_lists: [],
+        subnets: [],
+        virtual_cloud_networks: [],
+        svg : {
+            compartments: {}
+        }
+    }
+}
+
+/*
  * Define Common Functions
  */
 function generateDefaultName(prefix, count) {
@@ -75,7 +97,7 @@ function handleNew(evt) {
 
 function newDiagram() {
     console.log('Creating New Diagram');
-    clearCoreData();
+    initialiseJson();
     clearArtifactData();
     newCanvas();
     addCompartment();
