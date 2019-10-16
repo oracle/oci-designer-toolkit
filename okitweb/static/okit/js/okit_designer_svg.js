@@ -17,6 +17,10 @@ const connector_colour = "black";
 const container_artifact_x_padding = Math.round(icon_width  * 3 / 2);
 const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
 const container_artifact_label_width = 300;
+const positional_adjustments = {
+    padding: {x: Math.round(icon_width),   y: Math.round(icon_height + icon_spacing)},
+    spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
+};
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
@@ -337,7 +341,7 @@ function clearCanvas() {
 function newCanvas(parent_id="canvas-wrapper") {
     let compartment_div = d3.select('#' + parent_id);
     let window_width = $(window).width();
-    let window_height = $(window).height();
+    let window_height = $(window).height() * 2;
     let parent_width = $('#' + parent_id).width();
     let parent_height = $('#' + parent_id).height();
     //console.log('JQuery Width  : ' + $('#' + parent_id).width());

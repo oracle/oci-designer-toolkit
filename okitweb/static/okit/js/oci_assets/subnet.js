@@ -211,8 +211,21 @@ function getSubnetDimensions(id='') {
 function newSubnetDefinition(artifact, position=0) {
     let dimensions = getSubnetDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, subnet_artifact);
-    definition['svg']['x'] = Math.round(icon_width);
-    definition['svg']['y'] = Math.round((icon_height * 3) + (icon_height * position) + (icon_spacing * position));
+    definition['svg']['x'] = positional_adjustments.padding.x;
+    //definition['svg']['y'] = Math.round((icon_height * 3) + ((icon_height / 2) * position) + (icon_spacing * position));
+    definition['svg']['y'] = Math.round(positional_adjustments.padding.y  + (positional_adjustments.spacing.y * position));
+    // Check if the VCN has Security Lists or Route Tables Attached if so leave space
+    if (hasUnattachedSecurityList(artifact['vcn_id']) || hasUnattachedRouteTable(artifact['vcn_id'])) {
+        // Add Space for Security List / Route Table
+        definition['svg']['y'] += positional_adjustments.padding.y + positional_adjustments.spacing.y;
+    }
+    // Retrieve all Subnets in the parent svg and calculate vertical position
+    $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + subnet_artifact + '"]').each(
+        function() {
+            console.info('Width  : ' + $(this).attr('width'));
+            console.info('Height : ' + $(this).attr('height'));
+            definition['svg']['y'] += Number($(this).attr('height'));
+        });
     definition['svg']['width'] = dimensions['width'];
     definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = subnet_stroke_colour;
@@ -230,6 +243,7 @@ function newSubnetDefinition(artifact, position=0) {
         okitJson['canvas']['subnets'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }
     okitJson['canvas']['subnets'][artifact['id']]['svg'] = definition['svg'];
+    console.info(JSON.stringify(definition));
     return definition;
 }
 

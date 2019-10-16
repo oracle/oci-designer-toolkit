@@ -11,6 +11,7 @@ asset_clear_functions.push("clearCompartmentVariables");
 
 const compartment_stroke_colour = "#F80000";
 const compartment_query_cb = "compartment-query-cb";
+//const min_compartment_dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()};
 let compartment_ids = [];
 let compartment_count = 0;
 let compartment_bui_sub_artifacts = {};
@@ -98,13 +99,41 @@ function deleteCompartment(id) {
 ** SVG Creation
  */
 function getCompartmentDimensions(id='') {
-    let dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()}
-    //return {width:2150, height:1500};
+    console.warn('Getting Dimensions of Compartment ' + id);
+    const min_compartment_dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()};
+    let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
+    let max_sub_container_dimensions = {width:0, height: 0, count:0};
+    let max_virtual_cloud_network_dimensions = {width:0, height: 0, count:0};
+    // Virtual Cloud Networks
+    if (okitJson.hasOwnProperty('virtual_cloud_networks')) {
+        for (let virtual_cloud_network of okitJson['virtual_cloud_networks']) {
+            if (virtual_cloud_network['compartment_id'] == id) {
+                let virtual_cloud_network_dimensions = getVirtualCloudNetworkDimensions(virtual_cloud_network['id']);
+                max_virtual_cloud_network_dimensions['width'] = Math.max(virtual_cloud_network_dimensions['width'], max_virtual_cloud_network_dimensions['width']);
+                max_virtual_cloud_network_dimensions['height'] += virtual_cloud_network_dimensions['height'];
+                max_virtual_cloud_network_dimensions['count'] += 1;
+            }
+        }
+    }
+    // Calculate Largest Width
+    dimensions['width'] = Math.max(max_virtual_cloud_network_dimensions['width'], max_sub_container_dimensions['width']);
+    // Calculate Height
+    dimensions['height'] += max_sub_container_dimensions['height'];
+    dimensions['height'] += max_virtual_cloud_network_dimensions['height'];
+    // Check size against minimum
+    dimensions['width'] = Math.max(dimensions['width'], min_compartment_dimensions['width']);
+    dimensions['height'] = Math.max(dimensions['height'], min_compartment_dimensions['height']);
+
+    console.log('Sub Container Dimensions         : ' + JSON.stringify(max_sub_container_dimensions));
+    console.log('Virtual Cloud Network Dimensions : ' + JSON.stringify(max_virtual_cloud_network_dimensions));
+    console.log('Overall Dimensions               : ' + JSON.stringify(dimensions));
+
+    console.warn('Compartment ' + id + ' Dimensions ' + JSON.stringify(dimensions));
     return dimensions;
 }
 
 function newCompartmentDefinition(artifact, position=0) {
-    let dimensions = getCompartmentDimensions();
+    let dimensions = getCompartmentDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, compartment_artifact);
     definition['svg']['width'] = dimensions['width'];
     definition['svg']['height'] = dimensions['height'];
