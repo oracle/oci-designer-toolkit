@@ -1,4 +1,4 @@
-console.log('Loaded Designer Javascript');
+console.info('Loaded Designer Javascript');
 /*
  * Define the OKT Designer Constant that will be used across the subsequent Javascript
  */
@@ -81,7 +81,7 @@ function generateDefaultName(prefix, count) {
 
 function displayOkitJson() {
     $('#okitjson').html(JSON.stringify(okitJson, null, 2));
-    //console.log(JSON.stringify(okitJson, null, 2));
+    //console.info(JSON.stringify(okitJson, null, 2));
 }
 
 function generateConnectorId(sourceid, destinationid) {
@@ -98,7 +98,7 @@ function handleNew(evt) {
 }
 
 function newDiagram() {
-    console.log('Creating New Diagram');
+    console.info('Creating New Diagram');
     initialiseJson();
     clearArtifactData();
     newCanvas();
@@ -114,7 +114,7 @@ function clearTabs() {
 }
 
 function clearDiagram() {
-    console.log('Clearing Diagram');
+    console.info('Clearing Diagram');
     // Clear Artifact
     clearArtifactData();
     // Clear Canvas
@@ -122,9 +122,9 @@ function clearDiagram() {
 }
 
 function clearArtifactData() {
-    console.log('Clearing Artifact Data');
+    console.info('Clearing Artifact Data');
     for (let clear_function of asset_clear_functions) {
-        console.log('Calling ' + clear_function);
+        console.info('Calling ' + clear_function);
         window[clear_function]();
     }
 }
@@ -148,14 +148,14 @@ function getAsJson(readFile) {
 function loaded(evt) {
     // Obtain the read file data
     let fileString = evt.target.result;
-    console.log('Loaded: ' + fileString);
+    console.info('Loaded: ' + fileString);
     okitJson = JSON.parse(fileString);
     displayOkitJson();
     drawSVGforJson();
 }
 
 function errorHandler(evt) {
-    console.log('Error: ' + evt.target.error.name);
+    console.info('Error: ' + evt.target.error.name);
 }
 
 function handleFileSelect(evt) {
@@ -246,7 +246,7 @@ function saveSvg(svgEl, name) {
 ** Query OCI Ajax Calls to allow async svg build
  */
 function showQueryResults() {
-    console.log('Generating Query Results');
+    console.info('Generating Query Results');
     clearCoreData();
     clearArtifactData();
     newCanvas();
@@ -264,7 +264,7 @@ function showQueryProgress() {
 
 function hideQueryProgressIfComplete() {
     let cnt = $('#query-progress input:checkbox:not(:checked)').length
-    console.log('>>>>>>> Unhecked Count : ' + cnt);
+    console.info('>>>>>>> Unhecked Count : ' + cnt);
     if (cnt == 0) {
         unsetBusyIcon();
         $('#query-progress').toggleClass('hidden');
@@ -297,7 +297,7 @@ $(document).ready(function(){
     /*
     ** Add handler functionality
      */
-    console.log('Adding Designer Handlers');
+    console.info('Adding Designer Handlers');
 
     /*
     ** Drag start for all pallet icons
@@ -364,10 +364,10 @@ $(document).ready(function(){
     //let compartment_id = addCompartment();
 
     if (okitQueryRequestJson == null) {
-        console.log('<<<<<<<<<<<<< New Canvas >>>>>>>>>>>>>');
+        console.info('<<<<<<<<<<<<< New Canvas >>>>>>>>>>>>>');
         newDiagram();
     } else {
-        console.log('<<<<<<<<<<<<< Query Results Canvas >>>>>>>>>>>>>');
+        console.info('<<<<<<<<<<<<< Query Results Canvas >>>>>>>>>>>>>');
         showQueryResults();
     }
 

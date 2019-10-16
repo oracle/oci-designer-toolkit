@@ -1,4 +1,4 @@
-console.log('Loaded Internet Gateway Javascript');
+console.info('Loaded Internet Gateway Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -31,7 +31,7 @@ function clearCompartmentVariables() {
  */
 function addCompartment(compartment_id='') {
     let id = 'okit-' + compartment_prefix + '-' + uuidv4();
-    console.log('Adding ' + compartment_artifact + ' : ' + id);
+    console.info('Adding ' + compartment_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -51,7 +51,7 @@ function addCompartment(compartment_id='') {
     compartment['compartment_id'] = compartment_id;
     okitJson['compartments'].push(compartment);
     okitIdsJsonObj[id] = compartment['name'];
-    //console.log(JSON.stringify(okitJson, null, 2));
+    //console.info(JSON.stringify(okitJson, null, 2));
     //drawCompartmentSVG(compartment);
     drawSVGforJson();
     loadCompartmentProperties(id);
@@ -74,7 +74,7 @@ function initialiseCompartmentChildData(id) {
  */
 
 function deleteCompartment(id) {
-    console.log('Delete Compartment ' + id);
+    console.info('Delete Compartment ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -124,9 +124,9 @@ function getCompartmentDimensions(id='') {
     dimensions['width'] = Math.max(dimensions['width'], min_compartment_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_compartment_dimensions['height']);
 
-    console.log('Sub Container Dimensions         : ' + JSON.stringify(max_sub_container_dimensions));
-    console.log('Virtual Cloud Network Dimensions : ' + JSON.stringify(max_virtual_cloud_network_dimensions));
-    console.log('Overall Dimensions               : ' + JSON.stringify(dimensions));
+    console.info('Sub Container Dimensions         : ' + JSON.stringify(max_sub_container_dimensions));
+    console.info('Virtual Cloud Network Dimensions : ' + JSON.stringify(max_virtual_cloud_network_dimensions));
+    console.info('Overall Dimensions               : ' + JSON.stringify(dimensions));
 
     console.warn('Compartment ' + id + ' Dimensions ' + JSON.stringify(dimensions));
     return dimensions;
@@ -150,7 +150,7 @@ function drawCompartmentSVG(artifact) {
     let compartment_id = artifact['id'];
     artifact['parent_id'] = parent_id;
     artifact['compartment_id'] = id;
-    console.log('Drawing ' + compartment_artifact + ' : ' + id);
+    console.info('Drawing ' + compartment_artifact + ' : ' + id);
 
     artifact['display_name'] = artifact['name'];
 
@@ -158,7 +158,7 @@ function drawCompartmentSVG(artifact) {
 
     //let rect = svg.select("rect[id='" + id + "']");
     let rect = svg.select("rect[id='" + id + "']");
-    console.log(rect);
+    console.info(rect);
     let boundingClientRect = rect.node().getBoundingClientRect();
     /*
      Add click event to display properties
@@ -187,13 +187,13 @@ function drawCompartmentSVG(artifact) {
 function loadCompartmentProperties(id) {
     $("#properties").load("propertysheets/compartment.html", function () {
         if ('compartments' in okitJson) {
-            console.log('Loading ' + compartment_artifact + ' : ' + id);
+            console.info('Loading ' + compartment_artifact + ' : ' + id);
             let json = okitJson['compartments'];
             for (let i = 0; i < json.length; i++) {
                 let compartment = json[i];
-                //console.log(JSON.stringify(compartment, null, 2));
+                //console.info(JSON.stringify(compartment, null, 2));
                 if (compartment['id'] == id) {
-                    //console.log('Found Internet Gateway: ' + id);
+                    //console.info('Found Internet Gateway: ' + id);
                     compartment['virtual_cloud_network'] = okitIdsJsonObj[compartment['vcn_id']];
                     $('#name').val(compartment['name']);
                     // Add Event Listeners
@@ -211,7 +211,7 @@ function loadCompartmentProperties(id) {
  */
 
 function queryCompartmentAjax() {
-    console.log('------------- queryCompartmentAjax --------------------');
+    console.info('------------- queryCompartmentAjax --------------------');
     $.ajax({
         type: 'get',
         url: 'oci/artifacts/Compartment',
@@ -223,7 +223,7 @@ function queryCompartmentAjax() {
             okitJson['compartments'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ) {
-                console.log('queryCompartmentAjax : ' + response_json[i]['name']);
+                console.info('queryCompartmentAjax : ' + response_json[i]['name']);
                 queryVirtualCloudNetworkAjax(response_json[i]['id']);
                 queryBlockStorageVolumeAjax(response_json[i]['id']);
                 queryDynamicRoutingGatewayAjax(response_json[i]['id']);
@@ -233,30 +233,30 @@ function queryCompartmentAjax() {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }
 
 // TODO: Delete
 function loadCompartmentPaletteIconSVG() {
-    console.log('------------- queryCompartmentAjax --------------------');
+    console.info('------------- queryCompartmentAjax --------------------');
     $.ajax({
         type: 'get',
         url: palette_svg[compartment_artifact],
         dataType: 'xml',
         success: function(response) {
-            console.log('loadCompartmentPaletteIconSVG Success');
-            console.log(response);
+            console.info('loadCompartmentPaletteIconSVG Success');
+            console.info(response);
             let xml = $(response);
-            console.log("XML : " + xml.text());
+            console.info("XML : " + xml.text());
             let g = xml.find("g");
-            console.log("g : " + g.text());
+            console.info("g : " + g.text());
         },
         error: function(xhr, status, error) {
-            console.log('loadCompartmentPaletteIconSVG Error : '+ error)
-            console.log('loadCompartmentPaletteIconSVG Status : '+ status)
+            console.info('loadCompartmentPaletteIconSVG Error : '+ error)
+            console.info('loadCompartmentPaletteIconSVG Status : '+ status)
         }
     });
 }

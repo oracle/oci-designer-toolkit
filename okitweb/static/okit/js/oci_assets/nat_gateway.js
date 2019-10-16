@@ -1,4 +1,4 @@
-console.log('Loaded NAT Gateway Javascript');
+console.info('Loaded NAT Gateway Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -28,7 +28,7 @@ function clearNATGatewayVariables() {
  */
 function addNATGateway(vcn_id, compartment_id) {
     let id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
-    console.log('Adding NAT Gateway : ' + id);
+    console.info('Adding NAT Gateway : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -50,7 +50,7 @@ function addNATGateway(vcn_id, compartment_id) {
     nat_gateway['display_name'] = generateDefaultName(nat_gateway_prefix, nat_gateway_count);
     okitJson['nat_gateways'].push(nat_gateway);
     okitIdsJsonObj[id] = nat_gateway['display_name'];
-    //console.log(JSON.stringify(okitJson, null, 2));
+    //console.info(JSON.stringify(okitJson, null, 2));
     //drawNATGatewaySVG(nat_gateway);
     drawSVGforJson();
     loadNATGatewayProperties(id);
@@ -61,7 +61,7 @@ function addNATGateway(vcn_id, compartment_id) {
  */
 
 function deleteNATGateway(id) {
-    console.log('Delete NAT Gateway ' + id);
+    console.info('Delete NAT Gateway ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -106,7 +106,7 @@ function drawNATGatewaySVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + nat_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.info('Drawing ' + nat_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -134,7 +134,7 @@ function drawNATGatewaySVG(artifact) {
         });
         //    .on("contextmenu", handleContextMenu);
     } else {
-        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.info(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
 }
 
@@ -144,13 +144,13 @@ function drawNATGatewaySVG(artifact) {
 function loadNATGatewayProperties(id) {
     $("#properties").load("propertysheets/nat_gateway.html", function () {
         if ('nat_gateways' in okitJson) {
-            console.log('Loading NAT Gateway: ' + id);
+            console.info('Loading NAT Gateway: ' + id);
             let json = okitJson['nat_gateways'];
             for (let i = 0; i < json.length; i++) {
                 let nat_gateway = json[i];
-                //console.log(JSON.stringify(nat_gateway, null, 2));
+                //console.info(JSON.stringify(nat_gateway, null, 2));
                 if (nat_gateway['id'] == id) {
-                    //console.log('Found NAT Gateway: ' + id);
+                    //console.info('Found NAT Gateway: ' + id);
                     nat_gateway['virtual_cloud_network'] = okitIdsJsonObj[nat_gateway['vcn_id']];
                     $("#virtual_cloud_network").html(nat_gateway['virtual_cloud_network']);
                     $('#display_name').val(nat_gateway['display_name']);
@@ -168,7 +168,7 @@ function loadNATGatewayProperties(id) {
  */
 
 function queryNATGatewayAjax(compartment_id, vcn_id) {
-    console.log('------------- queryNATGatewayAjax --------------------');
+    console.info('------------- queryNATGatewayAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
@@ -186,15 +186,15 @@ function queryNATGatewayAjax(compartment_id, vcn_id) {
             okitJson['nat_gateways'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('queryNATGatewayAjax : ' + response_json[i]['display_name']);
+                console.info('queryNATGatewayAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + nat_gateway_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }

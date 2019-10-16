@@ -1,4 +1,4 @@
-console.log('Loaded SVG Javascript');
+console.info('Loaded SVG Javascript');
 
 // SVG Icons
 const icon_width = 45;
@@ -95,10 +95,10 @@ function drawArtifact(definition) {
     let parent_id      = definition['artifact']['parent_id'];
     let compartment_id = definition['artifact']['compartment_id'];
     let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
-    console.log('<<<<<<<<<<<<<<<<<< Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'] + ' >>>>>>>>>>>>>>>>>>')
-    console.log('<<<<<<<<<<<<<<<<<< Id : ' + id + ' >>>>>>>>>>>>>>>>>>')
-    console.log('<<<<<<<<<<<<<<<<<< Parent Id : ' + parent_id + ' >>>>>>>>>>>>>>>>>>')
-    console.log('<<<<<<<<<<<<<<<<<< Compartment Id : ' + compartment_id + ' >>>>>>>>>>>>>>>>>>')
+    console.info('<<<<<<<<<<<<<<<<<< Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'] + ' >>>>>>>>>>>>>>>>>>')
+    console.info('<<<<<<<<<<<<<<<<<< Id : ' + id + ' >>>>>>>>>>>>>>>>>>')
+    console.info('<<<<<<<<<<<<<<<<<< Parent Id : ' + parent_id + ' >>>>>>>>>>>>>>>>>>')
+    console.info('<<<<<<<<<<<<<<<<<< Compartment Id : ' + compartment_id + ' >>>>>>>>>>>>>>>>>>')
     let rect_x         = definition['rect']['x'];
     let rect_y         = definition['rect']['y'];
     let rect_width     = definition['svg']['width']  + definition['rect']['width_adjust'];
@@ -199,7 +199,7 @@ function drawArtifact(definition) {
 }
 
 function drawSVGforJson(artifact={}) {
-    console.log('******** Drawing SVG *********');
+    console.info('******** Drawing SVG *********');
     displayOkitJson();
     // Clear existing
     clearDiagram();
@@ -327,7 +327,7 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
 
 function coordString(coord) {
     let coord_str = coord['x'] + ',' + coord['y'];
-    //console.log('Coord String : ' + coord_str);
+    //console.info('Coord String : ' + coord_str);
     return coord_str;
 }
 
@@ -344,10 +344,10 @@ function newCanvas(parent_id="canvas-wrapper") {
     let window_height = $(window).height() * 2;
     let parent_width = $('#' + parent_id).width();
     let parent_height = $('#' + parent_id).height();
-    //console.log('JQuery Width  : ' + $('#' + parent_id).width());
-    //console.log('JQuery Height : ' + $('#' + parent_id).height());
-    //console.log('Client Width  : ' + document.getElementById(parent_id).clientWidth);
-    //console.log('Client Height : ' + document.getElementById(parent_id).clientHeight);
+    //console.info('JQuery Width  : ' + $('#' + parent_id).width());
+    //console.info('JQuery Height : ' + $('#' + parent_id).height());
+    //console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
+    //console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
     // Empty existing Canvas
     compartment_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc

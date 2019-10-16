@@ -1,4 +1,4 @@
-console.log('Loaded Virtual Cloud Network Javascript');
+console.info('Loaded Virtual Cloud Network Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -33,7 +33,7 @@ function clearVirtualCloudNetworkVariables() {
  */
 function addVirtualCloudNetwork(compartment_id, comp_id) {
     let id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
-    console.log('Adding Virtual Cloud Network : ' + id);
+    console.info('Adding Virtual Cloud Network : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -57,7 +57,7 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     virtual_cloud_network['dns_label'] = virtual_cloud_network['display_name'].toLowerCase().slice(-6);
     okitJson['virtual_cloud_networks'].push(virtual_cloud_network);
     okitIdsJsonObj[id] = virtual_cloud_network['display_name'];
-    //console.log(JSON.stringify(okitJson, null, 2));
+    //console.info(JSON.stringify(okitJson, null, 2));
     //drawVirtualCloudNetworkSVG(virtual_cloud_network);
     drawSVGforJson();
     loadVirtualCloudNetworkProperties(id);
@@ -77,7 +77,7 @@ function initialiseVirtualCloudNetworkChildData(id) {
  */
 
 function deleteVirtualCloudNetwork(id) {
-    console.log('Delete Virtual Cloud Network ' + id);
+    console.info('Delete Virtual Cloud Network ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -218,9 +218,9 @@ function getVirtualCloudNetworkDimensions(id='') {
     dimensions['width']  = Math.max(dimensions['width'],  min_virtual_cloud_network_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_virtual_cloud_network_dimensions['height']);
 
-    console.log('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
-    console.log('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
-    console.log('Overall Dimensions       : ' + JSON.stringify(dimensions));
+    console.info('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
+    console.info('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
+    console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
     //return {width:2000, height:800};
     return dimensions;
@@ -258,8 +258,8 @@ function drawVirtualCloudNetworkSVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing Virtual Cloud Network : ' + id + ' [' + parent_id + ']');
-    console.log(JSON.stringify(compartment_bui_sub_artifacts));
+    console.info('Drawing Virtual Cloud Network : ' + id + ' [' + parent_id + ']');
+    console.info(JSON.stringify(compartment_bui_sub_artifacts));
 
     if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         compartment_bui_sub_artifacts[parent_id] = {};
@@ -288,7 +288,7 @@ function drawVirtualCloudNetworkSVG(artifact) {
 
         initialiseVirtualCloudNetworkChildData(id);
     } else {
-        console.log(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
+        console.info(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
     }
 }
 
@@ -298,13 +298,13 @@ function drawVirtualCloudNetworkSVG(artifact) {
 function loadVirtualCloudNetworkProperties(id) {
     $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
         if ('virtual_cloud_networks' in okitJson) {
-            console.log('Loading Virtual Cloud Network: ' + id);
+            console.info('Loading Virtual Cloud Network: ' + id);
             let json = okitJson['virtual_cloud_networks'];
             for (let i = 0; i < json.length; i++) {
                 let virtual_cloud_network = json[i];
-                //console.log(JSON.stringify(virtual_cloud_network, null, 2));
+                //console.info(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {
-                    //console.log('Found Virtual Cloud Network: ' + id);
+                    //console.info('Found Virtual Cloud Network: ' + id);
                     $('#display_name').val(virtual_cloud_network['display_name']);
                     $('#cidr_block').val(virtual_cloud_network['cidr_block']);
                     $('#dns_label').val(virtual_cloud_network['dns_label']);
@@ -322,7 +322,7 @@ function loadVirtualCloudNetworkProperties(id) {
  */
 
 function queryVirtualCloudNetworkAjax(compartment_id) {
-    console.log('------------- queryVirtualCloudNetworkAjax --------------------');
+    console.info('------------- queryVirtualCloudNetworkAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
@@ -340,7 +340,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
             okitJson['virtual_cloud_networks'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ) {
-                console.log('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
+                console.info('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
                 virtual_cloud_network_count += 1;
                 queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
                 queryNATGatewayAjax(compartment_id, response_json[i]['id']);
@@ -353,8 +353,8 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }

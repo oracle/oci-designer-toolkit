@@ -1,4 +1,4 @@
-console.log('Loaded Load Balancer Javascript');
+console.info('Loaded Load Balancer Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -33,7 +33,7 @@ function clearLoadBalancerVariables() {
  */
 function addLoadBalancer(subnet_id, compartment_id) {
     let id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
-    console.log('Adding Load Balancer : ' + id);
+    console.info('Adding Load Balancer : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -59,7 +59,7 @@ function addLoadBalancer(subnet_id, compartment_id) {
     load_balancer['instance_ids'] = [];
     okitJson['load_balancers'].push(load_balancer);
     okitIdsJsonObj[id] = load_balancer['display_name'];
-    //console.log(JSON.stringify(okitJson, null, 2));
+    //console.info(JSON.stringify(okitJson, null, 2));
     //drawLoadBalancerSVG(load_balancer);
     drawSVGforJson();
     loadLoadBalancerProperties(id);
@@ -70,7 +70,7 @@ function addLoadBalancer(subnet_id, compartment_id) {
  */
 
 function deleteLoadBalancer(id) {
-    console.log('Delete Load Balancer ' + id);
+    console.info('Delete Load Balancer ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -106,7 +106,7 @@ function drawLoadBalancerSVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + load_balancer_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.info('Drawing ' + load_balancer_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         subnet_bui_sub_artifacts[parent_id] = {};
@@ -162,7 +162,7 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
     let parent_svg = d3.select('#' + parent_id + "-svg");
     // Only Draw if parent exists
     if (parent_svg.node()) {
-        console.log('Parent SVG : ' + parent_svg.node());
+        console.info('Parent SVG : ' + parent_svg.node());
         // Define SVG position manipulation variables
         let svgPoint = parent_svg.node().createSVGPoint();
         let screenCTM = parent_svg.node().getScreenCTM();
@@ -209,11 +209,11 @@ function loadLoadBalancerProperties(id) {
             "instance_ids": "instances"
         };
         if ('load_balancers' in okitJson) {
-            console.log('Loading Load Balancer: ' + id);
+            console.info('Loading Load Balancer: ' + id);
             let json = okitJson['load_balancers'];
             for (let i = 0; i < json.length; i++) {
                 let load_balancer = json[i];
-                //console.log(JSON.stringify(load_balancer, null, 2));
+                //console.info(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
                     load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_ids'][0]];
                     $("#virtual_cloud_network").html(load_balancer['virtual_cloud_network']);
@@ -221,7 +221,7 @@ function loadLoadBalancerProperties(id) {
                     $('#shape_name').val(load_balancer['shape_name']);
                     $('#is_private').attr('checked', load_balancer['is_private']);
                     let instances_select = $('#instance_ids');
-                    //console.log('Instance Ids: ' + instance_ids);
+                    //console.info('Instance Ids: ' + instance_ids);
                     for (let slid of instance_ids) {
                         instances_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
                     }
@@ -241,12 +241,12 @@ function loadLoadBalancerProperties(id) {
 ** OKIT Json Update Function
  */
 function updateLoadBalancer(source_type, source_id, id) {
-    console.log('Update Load Balancer : ' + id + ' Adding ' + source_type + ' ' + source_id);
+    console.info('Update Load Balancer : ' + id + ' Adding ' + source_type + ' ' + source_id);
     let load_balancers = okitJson['load_balancers'];
-    console.log(JSON.stringify(load_balancers))
+    console.info(JSON.stringify(load_balancers))
     for (let i = 0; i < load_balancers.length; i++) {
         let load_balancer = load_balancers[i];
-        console.log(i + ') ' + JSON.stringify(load_balancer))
+        console.info(i + ') ' + JSON.stringify(load_balancer))
         if (load_balancer['id'] == id) {
             if (source_type == instance_artifact) {
                 if (load_balancer['instance_ids'].indexOf(source_id) > 0) {
@@ -268,7 +268,7 @@ function updateLoadBalancer(source_type, source_id, id) {
  */
 
 function queryLoadBalancerAjax(compartment_id, subnet_id) {
-    console.log('------------- queryLoadBalancerAjax --------------------');
+    console.info('------------- queryLoadBalancerAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['subnet_id'] = subnet_id;
@@ -286,15 +286,15 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
             okitJson['load_balancers'] = response_json;
             let len = response_json.length;
             for (let i = 0; i < len; i++) {
-                console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
+                console.info('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + load_balancer_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function (xhr, status, error) {
-            console.log('Status : ' + status)
-            console.log('Error : ' + error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
         }
     });
 }

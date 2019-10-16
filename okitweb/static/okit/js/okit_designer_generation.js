@@ -1,4 +1,4 @@
-console.log('Loaded Generation Javascript');
+console.info('Loaded Generation Javascript');
 
 /*
 ** Generate Button handlers
@@ -18,13 +18,13 @@ function handleGenerateTerraform(e) {
         contentType: 'application/json',
         data: JSON.stringify(okitJson),
         success: function(resp) {
-            console.log('Response : ' + resp);
+            console.info('Response : ' + resp);
             window.location = 'generate/terraform';
             //openInNewTab('generate/terraform');
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }
@@ -38,13 +38,13 @@ function handleGenerateAnsible(e) {
         contentType: 'application/json',
         data: JSON.stringify(okitJson),
         success: function(resp) {
-            console.log('REST Response : ' + resp);
+            console.info('REST Response : ' + resp);
             window.location = 'generate/ansible';
             //openInNewTab('generate/ansible');
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }
@@ -58,12 +58,12 @@ function handleGenerateTerraform11(e) {
         contentType: 'application/json',
         data: JSON.stringify(okitJson),
         success: function(resp) {
-            console.log('Response : ' + resp);
+            console.info('Response : ' + resp);
             window.location = 'generate/terraform11';
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }
@@ -77,14 +77,14 @@ function handleExportToResourceManager(e) {
         contentType: 'application/json',
         data: JSON.stringify(okitJson),
         success: function(resp) {
-            console.log('Response : ' + resp);
+            console.info('Response : ' + resp);
             alert('Created Stack ' + resp);
             //window.location = 'generate/terraform';
             //openInNewTab('generate/terraform');
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }

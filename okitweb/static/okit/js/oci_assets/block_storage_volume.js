@@ -1,4 +1,4 @@
-console.log('Loaded Block Storage Javascript');
+console.info('Loaded Block Storage Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -28,7 +28,7 @@ function clearBlockStorageVolumeVariables() {
  */
 function addBlockStorageVolume(parent_id, compartment_id) {
     let id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
-    console.log('Adding ' + block_storage_volume_artifact + ' : ' + id);
+    console.info('Adding ' + block_storage_volume_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -51,7 +51,7 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     block_storage_volume['backup_policy'] = 'bronze';
     okitJson['block_storage_volumes'].push(block_storage_volume);
     okitIdsJsonObj[id] = block_storage_volume['display_name'];
-    //console.log(JSON.stringify(okitJson, null, 2));
+    //console.info(JSON.stringify(okitJson, null, 2));
     //drawBlockStorageVolumeSVG(block_storage_volume);
     drawSVGforJson();
     loadBlockStorageVolumeProperties(id);
@@ -62,7 +62,7 @@ function addBlockStorageVolume(parent_id, compartment_id) {
  */
 
 function deleteBlockStorageVolume(id) {
-    console.log('Delete ' + block_storage_volume_artifact + ' : ' + id);
+    console.info('Delete ' + block_storage_volume_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -109,7 +109,7 @@ function drawBlockStorageVolumeSVG(artifact) {
         for (let instance of okitJson['instances']) {
             if (instance.hasOwnProperty('block_storage_volume_ids')) {
                 if (instance['block_storage_volume_ids'].includes(artifact['id'])) {
-                    console.log(artifact['display_name'] + ' attached to instance '+ instance['display_name']);
+                    console.info(artifact['display_name'] + ' attached to instance '+ instance['display_name']);
                     return;
                 }
             }
@@ -121,7 +121,7 @@ function drawBlockStorageVolumeSVG(artifact) {
     let parent_id = artifact['parent_id'];
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + block_storage_volume_artifact + ' : ' + id);
+    console.info('Drawing ' + block_storage_volume_artifact + ' : ' + id);
 
     if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         compartment_bui_sub_artifacts[parent_id] = {};
@@ -151,7 +151,7 @@ function drawBlockStorageVolumeSVG(artifact) {
             d3.event.stopPropagation();
         });
     } else {
-        console.log(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
+        console.info(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
     }
 }
 
@@ -161,7 +161,7 @@ function drawBlockStorageVolumeSVG(artifact) {
 function loadBlockStorageVolumeProperties(id) {
     $("#properties").load("propertysheets/block_storage_volume.html", function () {
         if ('block_storage_volumes' in okitJson) {
-            console.log('Loading ' + block_storage_volume_artifact + ' : ' + id);
+            console.info('Loading ' + block_storage_volume_artifact + ' : ' + id);
             let json = okitJson['block_storage_volumes'];
             for (let i = 0; i < json.length; i++) {
                 let block_storage_volume = json[i];
@@ -186,7 +186,7 @@ function loadBlockStorageVolumeProperties(id) {
  */
 
 function queryBlockStorageVolumeAjax(compartment_id) {
-    console.log('------------- queryBlockStorageVolumeAjax --------------------');
+    console.info('------------- queryBlockStorageVolumeAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     if ('block_storage_volume_filter' in okitQueryRequestJson) {
@@ -204,15 +204,15 @@ function queryBlockStorageVolumeAjax(compartment_id) {
             okitJson['block_storage_volumes'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
+                console.info('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + block_storage_volume_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }

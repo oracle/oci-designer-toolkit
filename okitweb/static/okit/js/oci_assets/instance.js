@@ -1,4 +1,4 @@
-console.log('Loaded Instance Javascript');
+console.info('Loaded Instance Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -31,7 +31,7 @@ function clearInstanceVariables() {
  */
 function addInstance(subnet_id, compartment_id) {
     let id = 'okit-' + instance_prefix + '-' + uuidv4();
-    console.log('Adding Instance : ' + id);
+    console.info('Adding Instance : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -63,7 +63,7 @@ function addInstance(subnet_id, compartment_id) {
     instance['block_storage_volumes'] = [];
     okitJson['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
-    //console.log(JSON.stringify(okitJson, null, 2));
+    //console.info(JSON.stringify(okitJson, null, 2));
     //drawInstanceSVG(instance);
     drawSVGforJson();
     loadInstanceProperties(id);
@@ -74,7 +74,7 @@ function addInstance(subnet_id, compartment_id) {
  */
 
 function deleteInstance(id) {
-    console.log('Delete Instance ' + id);
+    console.info('Delete Instance ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -121,7 +121,7 @@ function drawInstanceSVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + instance_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.info('Drawing ' + instance_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     // Test if parent exists
     let parent_exists = false;
@@ -134,7 +134,7 @@ function drawInstanceSVG(artifact) {
         }
     }
     if (!parent_exists) {
-        console.log('Parent ' + parent_id + ' not found.');
+        console.info('Parent ' + parent_id + ' not found.');
         return
     }
 
@@ -191,7 +191,7 @@ function clearInstanceSVG(instance) {
 
 function drawInstanceConnectorsSVG(instance) {
     let id = instance['id'];
-    console.log('>>>> Drawing ' + instance_artifact + ' : ' + id + ' Connectors');
+    console.info('>>>> Drawing ' + instance_artifact + ' : ' + id + ' Connectors');
     // If Block Storage Volumes Ids are missing then initialise.
     // This may occur during a query
     if (!instance.hasOwnProperty('block_storage_volume_ids')) {
@@ -203,7 +203,7 @@ function drawInstanceConnectorsSVG(instance) {
             let parent_id = block_storage_svg.attr('data-parent-id');
             let parent_svg = d3.select('#' + parent_id + "-svg");
             if (parent_svg.node()) {
-                console.log('Parent SVG : ' + parent_svg.node());
+                console.info('Parent SVG : ' + parent_svg.node());
                 // Define SVG position manipulation variables
                 let svgPoint = parent_svg.node().createSVGPoint();
                 let screenCTM = parent_svg.node().getScreenCTM();
@@ -230,7 +230,7 @@ function drawInstanceConnectorsSVG(instance) {
 
 function drawInstanceAttachmentsSVG(instance) {
     let id = instance['id'];
-    console.log('Drawing ' + instance_artifact + ' : ' + id + ' Attachments');
+    console.info('Drawing ' + instance_artifact + ' : ' + id + ' Attachments');
     // If Block Storage Volumes Ids are missing then initialise.
     // This may occur during a query
     if (!instance.hasOwnProperty('block_storage_volume_ids')) {
@@ -250,7 +250,7 @@ function drawInstanceAttachmentsSVG(instance) {
 }
 
 function drawAttachedBlockStorageVolume(artifact, bs_count) {
-    console.log('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
+    console.info('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
     let artifact_definition = newBlockStorageVolumeDefinition(artifact, bs_count);
     artifact_definition['svg']['x'] = Math.round(icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count));
     artifact_definition['svg']['y'] = Math.round(instance_height - icon_height);
@@ -281,13 +281,13 @@ function drawAttachedBlockStorageVolume(artifact, bs_count) {
 function loadInstanceProperties(id) {
     $("#properties").load("propertysheets/instance.html", function () {
         if ('instances' in okitJson) {
-            console.log('Loading Instance: ' + id);
+            console.info('Loading Instance: ' + id);
             let json = okitJson['instances'];
             for (let i = 0; i < json.length; i++) {
                 instance = json[i];
-                //console.log(JSON.stringify(instance, null, 2));
+                //console.info(JSON.stringify(instance, null, 2));
                 if (instance['id'] == id) {
-                    //console.log('Found Route Table: ' + id);
+                    //console.info('Found Route Table: ' + id);
                     instance['virtual_cloud_network'] = okitIdsJsonObj[instance['subnet_id']];
                     $("#virtual_cloud_network").html(instance['virtual_cloud_network']);
                     $('#display_name').val(instance['display_name']);
@@ -319,12 +319,12 @@ function loadInstanceProperties(id) {
 ** OKIT Json Update Function
  */
 function updateInstance(source_type, source_id, id) {
-    console.log('Update ' + instance_artifact + ' : ' + id + ' Adding ' + source_type + ' ' + source_id);
+    console.info('Update ' + instance_artifact + ' : ' + id + ' Adding ' + source_type + ' ' + source_id);
     let instances = okitJson['instances'];
-    //console.log(JSON.stringify(instances))
+    //console.info(JSON.stringify(instances))
     for (let i = 0; i < instances.length; i++) {
         let instance = instances[i];
-        console.log(i + ') ' + JSON.stringify(instance))
+        console.info(i + ') ' + JSON.stringify(instance))
         if (instance['id'] == id) {
             if (source_type == block_storage_volume_artifact) {
                 if (instance['block_storage_volume_ids'].indexOf(source_id) > 0) {
@@ -346,7 +346,7 @@ function updateInstance(source_type, source_id, id) {
  */
 
 function queryInstanceAjax(compartment_id, subnet_id) {
-    console.log('------------- queryInstanceAjax --------------------');
+    console.info('------------- queryInstanceAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['subnet_id'] = subnet_id;
@@ -364,15 +364,15 @@ function queryInstanceAjax(compartment_id, subnet_id) {
             okitJson['instances'] = response_json;
             let len = response_json.length;
             for (let i = 0; i < len; i++) {
-                console.log('queryInstanceAjax : ' + response_json[i]['display_name']);
+                console.info('queryInstanceAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + instance_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function (xhr, status, error) {
-            console.log('Status : ' + status)
-            console.log('Error : ' + error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
         }
     });
 }

@@ -1,4 +1,4 @@
-console.log('Loaded Query Javascript');
+console.info('Loaded Query Javascript');
 
 function handleSubmitQuery(e) {
     $('*').css('cursor', 'wait');
@@ -13,15 +13,15 @@ function handleSubmitQuery(e) {
         data: JSON.stringify(queryJsonBody),
         success: function(resp) {
             $('*').css('cursor', 'auto');
-            //console.log('Response : ' + resp);
+            //console.info('Response : ' + resp);
             $('#okitjson').html(resp);
             //window.location = 'generate/terraform';
             //openInNewTab('generate/terraform');
         },
         error: function(xhr, status, error) {
             $('*').css('cursor', 'auto');
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }

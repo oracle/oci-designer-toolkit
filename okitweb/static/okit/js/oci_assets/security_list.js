@@ -1,4 +1,4 @@
-console.log('Loaded Subnet Javascript');
+console.info('Loaded Subnet Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -28,7 +28,7 @@ function clearSecurityListVariables() {
  */
 function addSecurityList(vcn_id, compartment_id) {
     let id = 'okit-' + security_list_prefix + '-' + uuidv4();
-    console.log('Adding Security List : ' + id);
+    console.info('Adding Security List : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -52,8 +52,8 @@ function addSecurityList(vcn_id, compartment_id) {
     security_list['ingress_security_rules'] = []
     okitJson['security_lists'].push(security_list);
     okitIdsJsonObj[id] = security_list['display_name'];
-    //console.log(JSON.stringify(okitJson, null, 2));
-    //console.log(security_list_ids);
+    //console.info(JSON.stringify(okitJson, null, 2));
+    //console.info(security_list_ids);
     //drawSecurityListSVG(security_list);
     drawSVGforJson();
     loadSecurityListProperties(id);
@@ -64,7 +64,7 @@ function addSecurityList(vcn_id, compartment_id) {
  */
 
 function deleteSecurityList(id) {
-    console.log('Delete Security List ' + id);
+    console.info('Delete Security List ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -110,7 +110,7 @@ function drawSecurityListSVG(artifact) {
     if (okitJson.hasOwnProperty('subnets')) {
         for (let subnet of okitJson['subnets']) {
             if (subnet['security_list_ids'].includes(artifact['id'])) {
-                console.log(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
+                console.info(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
                 return;
             }
         }
@@ -119,7 +119,7 @@ function drawSecurityListSVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + security_list_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.info('Drawing ' + security_list_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -149,7 +149,7 @@ function drawSecurityListSVG(artifact) {
             d3.event.stopPropagation();
         });
     } else {
-        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.info(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
 }
 
@@ -159,13 +159,13 @@ function drawSecurityListSVG(artifact) {
 function loadSecurityListProperties(id) {
     $("#properties").load("propertysheets/security_list.html", function () {
         if ('security_lists' in okitJson) {
-            console.log('Loading Security List: ' + id);
+            console.info('Loading Security List: ' + id);
             let json = okitJson['security_lists'];
             for (let i = 0; i < json.length; i++) {
                 let security_list = json[i];
-                //console.log(JSON.stringify(security_list, null, 2));
+                //console.info(JSON.stringify(security_list, null, 2));
                 if (security_list['id'] == id) {
-                    //console.log('Found Security List: ' + id);
+                    //console.info('Found Security List: ' + id);
                     security_list['virtual_cloud_network'] = okitIdsJsonObj[security_list['vcn_id']];
                     $("#virtual_cloud_network").html(security_list['virtual_cloud_network']);
                     $('#display_name').val(security_list['display_name']);
@@ -246,7 +246,7 @@ function addAccessRuleHtml(access_rule, access_type) {
         .attr("name", "is_stateless")
         .on("change", function() {
             access_rule['is_stateless'] = this.checked;
-            console.log('Changed is_stateless: ' + this.checked);
+            console.info('Changed is_stateless: ' + this.checked);
             displayOkitJson();
         });
     if (access_rule['is_stateless']) {
@@ -268,7 +268,7 @@ function addAccessRuleHtml(access_rule, access_type) {
         .attr("value", access_rule[source_dest])
         .on("change", function() {
             access_rule[source_dest] = this.value;
-            console.log('Changed destination: ' + this.value);
+            console.info('Changed destination: ' + this.value);
             displayOkitJson();
         });
     // Add Protocol
@@ -281,7 +281,7 @@ function addAccessRuleHtml(access_rule, access_type) {
         .attr("id", "protocol")
         .on("change", function() {
             access_rule['protocol'] = this.options[this.selectedIndex].value;
-            console.log('Changed network_entity_id ' + this.selectedIndex);
+            console.info('Changed network_entity_id ' + this.selectedIndex);
             displayOkitJson();
         });
     // Add Protocol Options
@@ -307,7 +307,7 @@ function addAccessRuleHtml(access_rule, access_type) {
 }
 
 function handleAddAccessRule(evt) {
-    console.log('Adding access rule');
+    console.info('Adding access rule');
     let new_rule = { "protocol": "all", "is_stateless": false}
     if (evt.target.id == 'egress_add_button') {
         new_rule["destination_type"] = "CIDR_BLOCK";
@@ -333,7 +333,7 @@ function handleDeleteRouteRulesRow(btn) {
  */
 
 function querySecurityListAjax(compartment_id, vcn_id) {
-    console.log('------------- querySecurityListAjax --------------------');
+    console.info('------------- querySecurityListAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
@@ -351,15 +351,15 @@ function querySecurityListAjax(compartment_id, vcn_id) {
             okitJson['security_lists'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('querySecurityListAjax : ' + response_json[i]['display_name']);
+                console.info('querySecurityListAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + security_list_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }
