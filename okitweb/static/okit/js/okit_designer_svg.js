@@ -199,7 +199,7 @@ function drawArtifact(definition) {
 }
 
 function drawSVGforJson(artifact={}) {
-    console.info('******** Drawing SVG *********');
+    console.groupCollapsed('Drawing SVG Canvas');
     displayOkitJson();
     // Clear existing
     clearDiagram();
@@ -305,6 +305,7 @@ function drawSVGforJson(artifact={}) {
             drawLoadBalancerConnectorsSVG(okitJson['load_balancers'][i]);
         }
     }
+    console.groupEnd();
 }
 
 function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {

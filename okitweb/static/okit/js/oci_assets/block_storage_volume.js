@@ -28,7 +28,7 @@ function clearBlockStorageVolumeVariables() {
  */
 function addBlockStorageVolume(parent_id, compartment_id) {
     let id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
-    console.info('Adding ' + block_storage_volume_artifact + ' : ' + id);
+    console.groupCollapsed('Adding ' + block_storage_volume_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -55,6 +55,7 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     //drawBlockStorageVolumeSVG(block_storage_volume);
     drawSVGforJson();
     loadBlockStorageVolumeProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -62,7 +63,7 @@ function addBlockStorageVolume(parent_id, compartment_id) {
  */
 
 function deleteBlockStorageVolume(id) {
-    console.info('Delete ' + block_storage_volume_artifact + ' : ' + id);
+    console.groupCollapsed('Delete ' + block_storage_volume_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -81,6 +82,7 @@ function deleteBlockStorageVolume(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
@@ -103,6 +105,10 @@ function newBlockStorageVolumeDefinition(artifact, position=0) {
 }
 
 function drawBlockStorageVolumeSVG(artifact) {
+    let parent_id = artifact['parent_id'];
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.groupCollapsed('Drawing ' + block_storage_volume_artifact + ' : ' + id);
     // Check if this Block Storage Volume has been attached to an Instance and if so do not draw because it will be done
     // as part of the instance
     if (okitJson.hasOwnProperty('instances')) {
@@ -118,10 +124,6 @@ function drawBlockStorageVolumeSVG(artifact) {
     if (!artifact.hasOwnProperty('parent_id')) {
         artifact['parent_id'] = artifact['compartment_id'];
     }
-    let parent_id = artifact['parent_id'];
-    let id = artifact['id'];
-    let compartment_id = artifact['compartment_id'];
-    console.info('Drawing ' + block_storage_volume_artifact + ' : ' + id);
 
     if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         compartment_bui_sub_artifacts[parent_id] = {};
@@ -151,8 +153,9 @@ function drawBlockStorageVolumeSVG(artifact) {
             d3.event.stopPropagation();
         });
     } else {
-        console.info(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*

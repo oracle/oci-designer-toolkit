@@ -28,7 +28,7 @@ function clearDynamicRoutingGatewayVariables() {
  */
 function addDynamicRoutingGateway(compartment_id) {
     let id = 'okit-' + dynamic_routing_gateway_prefix + '-' + uuidv4();
-    console.info('Adding Dynamic Routing Gateway : ' + id);
+    console.groupCollapsed('Adding Dynamic Routing Gateway : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -52,6 +52,7 @@ function addDynamicRoutingGateway(compartment_id) {
     //drawDynamicRoutingGatewaySVG(dynamic_routing_gateway);
     drawSVGforJson();
     loadDynamicRoutingGatewayProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -59,7 +60,7 @@ function addDynamicRoutingGateway(compartment_id) {
  */
 
 function deleteDynamicRoutingGateway(id) {
-    console.info('Delete DynamicRouting Gateway ' + id);
+    console.groupCollapsed('Delete ' + dynamic_routing_gateway_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -78,6 +79,7 @@ function deleteDynamicRoutingGateway(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
@@ -104,7 +106,7 @@ function drawDynamicRoutingGatewaySVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.info('Drawing ' + dynamic_routing_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + dynamic_routing_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -132,8 +134,9 @@ function drawDynamicRoutingGatewaySVG(artifact) {
         });
         //    .on("contextmenu", handleContextMenu);
     } else {
-        console.info(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*

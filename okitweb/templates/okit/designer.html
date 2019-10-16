@@ -70,25 +70,24 @@
                 url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
                 dataType: 'xml',
                 success: function(xml) {
-                    console.log('load SVG Success');
+                    console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
                     let g = $(xml).find("g");
                     palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
                 },
                 error: function(xhr, status, error) {
-                    console.log('load SVG Error : '+ error)
-                    console.log('load SVG Status : '+ status)
+                    console.groupCollapsed("{{ 'Error Loading ' + palette_icon['svg'] }}");
+                    console.error('Error  : ' + error);
+                    console.error('Status : ' + status);
+                    console.groupEnd();
                 }
             });
         {% endfor %}
     </script>
     {% if okit_query_request_json is defined %}
         <script type="text/javascript">
-            console.log('Processing Query Javascript');
+            console.info('Processing Query Javascript');
             okitQueryRequestJson = {{ okit_query_request_json | safe }};
             okitJson = {{ okit_query_response_json | safe }};
-            //queryCompartmentAjax();
-            //displayOkitJson();
-            //drawSVGforJson();
         </script>
     {% endif %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>

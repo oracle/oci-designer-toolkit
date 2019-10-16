@@ -31,7 +31,7 @@ function clearInstanceVariables() {
  */
 function addInstance(subnet_id, compartment_id) {
     let id = 'okit-' + instance_prefix + '-' + uuidv4();
-    console.info('Adding Instance : ' + id);
+    console.groupCollapsed('Adding ' + instance_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -67,6 +67,7 @@ function addInstance(subnet_id, compartment_id) {
     //drawInstanceSVG(instance);
     drawSVGforJson();
     loadInstanceProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -74,7 +75,7 @@ function addInstance(subnet_id, compartment_id) {
  */
 
 function deleteInstance(id) {
-    console.info('Delete Instance ' + id);
+    console.groupCollapsed('Delete ' + instance_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -93,6 +94,7 @@ function deleteInstance(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
@@ -121,7 +123,7 @@ function drawInstanceSVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.info('Drawing ' + instance_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     // Test if parent exists
     let parent_exists = false;
@@ -182,6 +184,7 @@ function drawInstanceSVG(artifact) {
     }
     // Draw any connected artifacts
     drawInstanceAttachmentsSVG(artifact);
+    console.groupEnd();
 }
 
 function clearInstanceSVG(instance) {
@@ -230,7 +233,7 @@ function drawInstanceConnectorsSVG(instance) {
 
 function drawInstanceAttachmentsSVG(instance) {
     let id = instance['id'];
-    console.info('Drawing ' + instance_artifact + ' : ' + id + ' Attachments');
+    console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + id + ' Attachments');
     // If Block Storage Volumes Ids are missing then initialise.
     // This may occur during a query
     if (!instance.hasOwnProperty('block_storage_volume_ids')) {
@@ -247,6 +250,7 @@ function drawInstanceAttachmentsSVG(instance) {
         }
         attachment_count += 1;
     }
+    console.groupEnd();
 }
 
 function drawAttachedBlockStorageVolume(artifact, bs_count) {
@@ -319,7 +323,7 @@ function loadInstanceProperties(id) {
 ** OKIT Json Update Function
  */
 function updateInstance(source_type, source_id, id) {
-    console.info('Update ' + instance_artifact + ' : ' + id + ' Adding ' + source_type + ' ' + source_id);
+    console.groupCollapsed('Update ' + instance_artifact + ' : ' + id + ' Adding ' + source_type + ' ' + source_id);
     let instances = okitJson['instances'];
     //console.info(JSON.stringify(instances))
     for (let i = 0; i < instances.length; i++) {
@@ -339,6 +343,7 @@ function updateInstance(source_type, source_id, id) {
     }
     displayOkitJson();
     loadInstanceProperties(id);
+    console.groupEnd();
 }
 
 /*

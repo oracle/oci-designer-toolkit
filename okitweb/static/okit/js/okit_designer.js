@@ -64,12 +64,18 @@ function initialiseJson() {
         security_lists: [],
         subnets: [],
         virtual_cloud_networks: [],
-        canvas : {
-            compartments: {},
-            subnets: {},
-            virtual_cloud_networks: {}
-        }
+        canvas : initialiseCanvasJson()
     }
+}
+
+function initialiseCanvasJson() {
+    let canvasJson = {
+        compartments: {},
+        subnets: {},
+        virtual_cloud_networks: {}
+    };
+
+    return canvasJson
 }
 
 /*
@@ -98,12 +104,13 @@ function handleNew(evt) {
 }
 
 function newDiagram() {
-    console.info('Creating New Diagram');
+    console.groupCollapsed('Creating New Diagram');
     initialiseJson();
     clearArtifactData();
     newCanvas();
     addCompartment();
     //document.getElementById('file-add-menu-item').click();
+    console.groupEnd();
 }
 
 function clearTabs() {
@@ -114,19 +121,21 @@ function clearTabs() {
 }
 
 function clearDiagram() {
-    console.info('Clearing Diagram');
+    console.groupCollapsed('Clearing Diagram');
     // Clear Artifact
     clearArtifactData();
     // Clear Canvas
     clearCanvas();
+    console.groupEnd();
 }
 
 function clearArtifactData() {
-    console.info('Clearing Artifact Data');
+    console.groupCollapsed('Clearing Artifact Data');
     for (let clear_function of asset_clear_functions) {
         console.info('Calling ' + clear_function);
         window[clear_function]();
     }
+    console.groupEnd();
 }
 
 function clearCoreData() {
@@ -150,6 +159,9 @@ function loaded(evt) {
     let fileString = evt.target.result;
     console.info('Loaded: ' + fileString);
     okitJson = JSON.parse(fileString);
+    if (!okitJson.hasOwnProperty('canvas')) {
+        okitJson['canvas'] = initialiseCanvasJson();
+    }
     displayOkitJson();
     drawSVGforJson();
 }

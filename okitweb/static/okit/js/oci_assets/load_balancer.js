@@ -33,7 +33,7 @@ function clearLoadBalancerVariables() {
  */
 function addLoadBalancer(subnet_id, compartment_id) {
     let id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
-    console.info('Adding Load Balancer : ' + id);
+    console.groupCollapsed('Adding ' + load_balancer_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -63,6 +63,7 @@ function addLoadBalancer(subnet_id, compartment_id) {
     //drawLoadBalancerSVG(load_balancer);
     drawSVGforJson();
     loadLoadBalancerProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -70,7 +71,7 @@ function addLoadBalancer(subnet_id, compartment_id) {
  */
 
 function deleteLoadBalancer(id) {
-    console.info('Delete Load Balancer ' + id);
+    console.groupCollapsed('Delete ' + load_balancer_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -79,6 +80,7 @@ function deleteLoadBalancer(id) {
             okitJson['load_balancers'].splice(i, 1);
         }
     }
+    console.groupEnd();
 }
 
 /*
@@ -106,7 +108,7 @@ function drawLoadBalancerSVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.info('Drawing ' + load_balancer_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + load_balancer_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         subnet_bui_sub_artifacts[parent_id] = {};
@@ -149,6 +151,7 @@ function drawLoadBalancerSVG(artifact) {
             .attr("data-connector-id", id)
             .attr("dragable", true);
     }
+    console.groupEnd();
 }
 
 function clearLoadBalancerConnectorsSVG(load_balancer) {

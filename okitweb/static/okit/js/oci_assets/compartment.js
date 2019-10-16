@@ -1,4 +1,4 @@
-console.info('Loaded Internet Gateway Javascript');
+console.info('Loaded Compartment Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -31,7 +31,7 @@ function clearCompartmentVariables() {
  */
 function addCompartment(compartment_id='') {
     let id = 'okit-' + compartment_prefix + '-' + uuidv4();
-    console.info('Adding ' + compartment_artifact + ' : ' + id);
+    console.groupCollapsed('Adding ' + compartment_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -57,6 +57,7 @@ function addCompartment(compartment_id='') {
     loadCompartmentProperties(id);
     //openCompartment(id);
     //$('#' + id + "-tab-button").trigger('click');
+    console.groupEnd();
 }
 
 function initialiseCompartmentChildData(id) {
@@ -74,7 +75,7 @@ function initialiseCompartmentChildData(id) {
  */
 
 function deleteCompartment(id) {
-    console.info('Delete Compartment ' + id);
+    console.groupCollapsed('Delete ' + compartment_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -93,13 +94,14 @@ function deleteCompartment(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
 ** SVG Creation
  */
 function getCompartmentDimensions(id='') {
-    console.warn('Getting Dimensions of Compartment ' + id);
+    console.groupCollapsed('Getting Dimensions of ' + compartment_artifact + ' : ' + id);
     const min_compartment_dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()};
     let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
     let max_sub_container_dimensions = {width:0, height: 0, count:0};
@@ -128,7 +130,7 @@ function getCompartmentDimensions(id='') {
     console.info('Virtual Cloud Network Dimensions : ' + JSON.stringify(max_virtual_cloud_network_dimensions));
     console.info('Overall Dimensions               : ' + JSON.stringify(dimensions));
 
-    console.warn('Compartment ' + id + ' Dimensions ' + JSON.stringify(dimensions));
+    console.groupEnd();
     return dimensions;
 }
 
@@ -150,7 +152,7 @@ function drawCompartmentSVG(artifact) {
     let compartment_id = artifact['id'];
     artifact['parent_id'] = parent_id;
     artifact['compartment_id'] = id;
-    console.info('Drawing ' + compartment_artifact + ' : ' + id);
+    console.groupCollapsed('Drawing ' + compartment_artifact + ' : ' + id);
 
     artifact['display_name'] = artifact['name'];
 
@@ -179,6 +181,7 @@ function drawCompartmentSVG(artifact) {
     */
 
     initialiseCompartmentChildData(id);
+    console.groupEnd();
 }
 
 /*
@@ -233,8 +236,8 @@ function queryCompartmentAjax() {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.error('Status : '+ status);
+            console.error('Error  : '+ error);
         }
     });
 }

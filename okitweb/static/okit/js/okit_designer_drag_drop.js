@@ -72,12 +72,12 @@ function handleDragStart(e) {
     if (typeof e == 'undefined') {
         e = d3.event;
     }
-    console.info('Drag Start');
+    console.groupCollapsed('Drag Start - ' + this.title);
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('text/plain', this.title);
     palatte_source_type = this.title;
     //e.dataTransfer.setData('text/html', this.src);
-    console.info(this.title);
+    console.info('Data Type : ' + this.title);
     //console.info(this.src);
 }
 
@@ -132,7 +132,7 @@ function handleDrop(e) {
     addAssetToDropTarget(title, target_id, compartment_id)
 
     this.classList.remove('over');  // this / e.target is previous target element.
-
+    console.groupEnd();
     return false;
 }
 

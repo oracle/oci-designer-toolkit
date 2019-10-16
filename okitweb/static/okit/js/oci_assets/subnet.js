@@ -1,4 +1,4 @@
-console.info('Loaded Internet Gateway Javascript');
+console.info('Loaded Subnet Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -34,7 +34,7 @@ function clearSubnetVariables() {
  */
 function addSubnet(vcn_id, compartment_id) {
     let id = 'okit-' + subnet_prefix + '-' + uuidv4();
-    console.info('Adding Subnet : ' + id);
+    console.groupCollapsed('Adding ' + subnet_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -80,6 +80,7 @@ function addSubnet(vcn_id, compartment_id) {
     //drawSubnetSVG(subnet);
     drawSVGforJson();
     loadSubnetProperties(id);
+    console.groupEnd();
 }
 
 function initialiseSubnetChildData(id) {
@@ -101,7 +102,7 @@ function initialiseSubnetChildData(id) {
  */
 
 function deleteSubnet(id) {
-    console.info('Delete Subnet ' + id);
+    console.groupCollapsed('Delete ' + subnet_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -127,12 +128,14 @@ function deleteSubnet(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
 ** SVG Creation
  */
 function getSubnetDimensions(id='') {
+    console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
     let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
     let max_load_balancer_dimensions = {width:0, height: 0, count:0};
     let max_instance_dimensions = {width:0, height: 0, count:0};
@@ -204,7 +207,7 @@ function getSubnetDimensions(id='') {
     console.info('Edges Dimensions         : ' + JSON.stringify(max_edge_dimensions));
     console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
-    //return {width:subnet_svg_width, height:subnet_svg_height};
+    console.groupEnd();
     return dimensions;
 }
 
@@ -252,7 +255,7 @@ function drawSubnetSVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.info('Drawing ' + subnet_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + subnet_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -283,10 +286,11 @@ function drawSubnetSVG(artifact) {
 
         initialiseSubnetChildData(id);
     } else {
-        console.info(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
     // Draw any connected artifacts
     drawSubnetAttachmentsSVG(artifact);
+    console.groupEnd();
 }
 
 function clearSubnetConnectorsSVG(subnet) {

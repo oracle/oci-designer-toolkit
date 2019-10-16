@@ -33,7 +33,7 @@ function clearVirtualCloudNetworkVariables() {
  */
 function addVirtualCloudNetwork(compartment_id, comp_id) {
     let id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
-    console.info('Adding Virtual Cloud Network : ' + id);
+    console.groupCollapsed('Adding ' + virtual_cloud_network_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -61,6 +61,7 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     //drawVirtualCloudNetworkSVG(virtual_cloud_network);
     drawSVGforJson();
     loadVirtualCloudNetworkProperties(id);
+    console.groupEnd();
 }
 
 function initialiseVirtualCloudNetworkChildData(id) {
@@ -77,7 +78,7 @@ function initialiseVirtualCloudNetworkChildData(id) {
  */
 
 function deleteVirtualCloudNetwork(id) {
-    console.info('Delete Virtual Cloud Network ' + id);
+    console.groupCollapsed('Delete ' + virtual_cloud_network_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -119,6 +120,7 @@ function deleteVirtualCloudNetwork(id) {
             }
         }
     }
+    console.groupEnd();
 }
 /*
 ** Tests
@@ -149,6 +151,7 @@ function hasUnattachedRouteTable(id='') {
 ** SVG Creation
  */
 function getVirtualCloudNetworkDimensions(id='') {
+    console.groupCollapsed('Getting Dimensions of ' + virtual_cloud_network_artifact + ' : ' + id);
     let dimensions = {width:positional_adjustments.padding.x * 2, height:positional_adjustments.padding.y * 2};
     let max_gateway_dimensions = {width:0, height: 0, count:0};
     let max_subnet_dimensions = {width:0, height: 0, count:0};
@@ -222,7 +225,7 @@ function getVirtualCloudNetworkDimensions(id='') {
     console.info('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
     console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
-    //return {width:2000, height:800};
+    console.groupEnd();
     return dimensions;
 }
 
@@ -235,7 +238,7 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + virtual_cloud_network_artifact + '"]').each(
         function() {
             console.info('Width  : ' + $(this).attr('width'));
-            console.warn('Height : ' + $(this).attr('height'));
+            console.info('Height : ' + $(this).attr('height'));
             definition['svg']['y'] += Number($(this).attr('height'));
         });
     definition['svg']['width'] = dimensions['width'];
@@ -258,7 +261,7 @@ function drawVirtualCloudNetworkSVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.info('Drawing Virtual Cloud Network : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + virtual_cloud_network_artifact + ' : ' + id + ' [' + parent_id + ']');
     console.info(JSON.stringify(compartment_bui_sub_artifacts));
 
     if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
@@ -290,6 +293,7 @@ function drawVirtualCloudNetworkSVG(artifact) {
     } else {
         console.info(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*

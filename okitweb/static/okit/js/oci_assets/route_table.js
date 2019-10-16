@@ -29,7 +29,7 @@ function clearRouteTableVariables() {
  */
 function addRouteTable(vcn_id, compartment_id) {
     let id = 'okit-' + route_table_prefix + '-' + uuidv4();
-    console.info('Adding Route Table : ' + id);
+    console.groupCollapsed('Adding ' + route_table_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -49,13 +49,14 @@ function addRouteTable(vcn_id, compartment_id) {
     route_table['compartment_id'] = compartment_id;
     route_table['id'] = id;
     route_table['display_name'] = generateDefaultName(route_table_prefix, route_table_count);
-    route_table['route_rules'] = []
+    route_table['route_rules'] = [];
     okitJson['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['display_name'];
     //console.info(JSON.stringify(okitJson, null, 2));
     //drawRouteTableSVG(route_table);
     drawSVGforJson();
     loadRouteTableProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -63,9 +64,9 @@ function addRouteTable(vcn_id, compartment_id) {
  */
 
 function deleteRouteTable(id) {
-    console.info('Delete Route Table ' + id);
+    console.groupCollapsed('Delete ' + route_table_artifact + ' : ' + id);
     // Remove SVG Element
-    d3.select("#" + id + "-svg").remove()
+    d3.select("#" + id + "-svg").remove();
     // Remove Data Entry
     for (let i=0; i < okitJson['route_tables'].length; i++) {
         if (okitJson['route_tables'][i]['id'] == id) {
@@ -80,6 +81,7 @@ function deleteRouteTable(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
@@ -102,6 +104,11 @@ function newRouteTableDefinition(artifact, position=0) {
 }
 
 function drawRouteTableSVG(artifact) {
+    let parent_id = artifact['vcn_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.groupCollapsed('Drawing ' + route_table_artifact + ' : ' + id + ' [' + parent_id + ']');
     // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
     // the subnet draw.
     if (okitJson.hasOwnProperty('subnets')) {
@@ -112,11 +119,6 @@ function drawRouteTableSVG(artifact) {
             }
         }
     }
-    let parent_id = artifact['vcn_id'];
-    artifact['parent_id'] = parent_id;
-    let id = artifact['id'];
-    let compartment_id = artifact['compartment_id'];
-    console.info('Drawing ' + route_table_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -146,8 +148,9 @@ function drawRouteTableSVG(artifact) {
             d3.event.stopPropagation();
         });
     } else {
-        console.info(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*

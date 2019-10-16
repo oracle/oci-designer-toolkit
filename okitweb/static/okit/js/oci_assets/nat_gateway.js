@@ -28,7 +28,7 @@ function clearNATGatewayVariables() {
  */
 function addNATGateway(vcn_id, compartment_id) {
     let id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
-    console.info('Adding NAT Gateway : ' + id);
+    console.groupCollapsed('Adding ' + nat_gateway_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -54,6 +54,7 @@ function addNATGateway(vcn_id, compartment_id) {
     //drawNATGatewaySVG(nat_gateway);
     drawSVGforJson();
     loadNATGatewayProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -61,7 +62,7 @@ function addNATGateway(vcn_id, compartment_id) {
  */
 
 function deleteNATGateway(id) {
-    console.info('Delete NAT Gateway ' + id);
+    console.groupCollapsed('Delete ' + nat_gateway_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -80,6 +81,7 @@ function deleteNATGateway(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
@@ -106,7 +108,7 @@ function drawNATGatewaySVG(artifact) {
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.info('Drawing ' + nat_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + nat_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -134,8 +136,9 @@ function drawNATGatewaySVG(artifact) {
         });
         //    .on("contextmenu", handleContextMenu);
     } else {
-        console.info(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*

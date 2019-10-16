@@ -1,4 +1,4 @@
-console.info('Loaded Subnet Javascript');
+console.info('Loaded Security List Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -28,7 +28,7 @@ function clearSecurityListVariables() {
  */
 function addSecurityList(vcn_id, compartment_id) {
     let id = 'okit-' + security_list_prefix + '-' + uuidv4();
-    console.info('Adding Security List : ' + id);
+    console.groupCollapsed('Adding ' + security_list_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -57,6 +57,7 @@ function addSecurityList(vcn_id, compartment_id) {
     //drawSecurityListSVG(security_list);
     drawSVGforJson();
     loadSecurityListProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -64,7 +65,7 @@ function addSecurityList(vcn_id, compartment_id) {
  */
 
 function deleteSecurityList(id) {
-    console.info('Delete Security List ' + id);
+    console.groupCollapsed('Delete ' + security_list_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
@@ -83,6 +84,7 @@ function deleteSecurityList(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
@@ -105,6 +107,11 @@ function newSecurityListDefinition(artifact, position=0) {
 }
 
 function drawSecurityListSVG(artifact) {
+    let parent_id = artifact['vcn_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.groupCollapsed('Drawing ' + security_list_artifact + ' : ' + id + ' [' + parent_id + ']');
     // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
     // the subnet draw.
     if (okitJson.hasOwnProperty('subnets')) {
@@ -115,11 +122,6 @@ function drawSecurityListSVG(artifact) {
             }
         }
     }
-    let parent_id = artifact['vcn_id'];
-    artifact['parent_id'] = parent_id;
-    let id = artifact['id'];
-    let compartment_id = artifact['compartment_id'];
-    console.info('Drawing ' + security_list_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -149,8 +151,9 @@ function drawSecurityListSVG(artifact) {
             d3.event.stopPropagation();
         });
     } else {
-        console.info(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*
