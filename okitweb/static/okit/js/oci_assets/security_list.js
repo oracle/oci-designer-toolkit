@@ -118,6 +118,7 @@ function drawSecurityListSVG(artifact) {
         for (let subnet of okitJson['subnets']) {
             if (subnet['security_list_ids'].includes(artifact['id'])) {
                 console.info(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
+                console.groupEnd();
                 return;
             }
         }
@@ -154,6 +155,7 @@ function drawSecurityListSVG(artifact) {
         console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
     console.groupEnd();
+    return;
 }
 
 /*

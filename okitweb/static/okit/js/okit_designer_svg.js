@@ -21,6 +21,7 @@ const positional_adjustments = {
     padding: {x: Math.round(icon_width),   y: Math.round(icon_height + icon_spacing)},
     spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
 };
+const path_connector = true;
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
@@ -302,28 +303,100 @@ function drawSVGforJson(artifact={}) {
             okitIdsJsonObj[okitJson['load_balancers'][i]['id']] = okitJson['load_balancers'][i]['display_name'];
             load_balancer_count += 1;
             drawLoadBalancerSVG(okitJson['load_balancers'][i]);
-            drawLoadBalancerConnectorsSVG(okitJson['load_balancers'][i]);
+            //drawLoadBalancerConnectorsSVG(okitJson['load_balancers'][i]);
         }
     }
     console.groupEnd();
 }
 
+function generateArc(radius, clockwise, xmod, ymod) {
+    let arc = 'a' + radius + ',' + radius + ' 0 0 ' + clockwise + ' ' + xmod + radius + ',' + ymod + radius;
+    return arc;
+}
+
 function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
-    // Calculate Polyline points
-    let ydiff = end['y'] - start['y'];
-    let ymid = Math.round(start['y'] + ydiff / 2);
-    let mid1 = {x:start['x'], y:ymid};
-    let mid2 = {x:end['x'],   y:ymid};
-    let points = coordString(start) + " " + coordString(mid1) + " " + coordString(mid2) + " " + coordString(end);
-    let polyline = parent_svg.append('polyline')
-        .attr("id", id)
-        .attr("points", points)
-        .attr("stroke-width", "2")
-        .attr("stroke", connector_colour)
-        .attr("fill", "none")
-        .attr("marker-start", "url(#connector-end-circle)")
-        .attr("marker-end", "url(#connector-end-circle)");
-    return polyline;
+    console.groupCollapsed('Generating Connector');
+    if (path_connector) {
+        let radius = 5;
+        let dy = Math.round((end['y'] - start['y']) / 2);
+        let dx = end['x'] - start['x'];
+        let arc1 = '';
+        let arc2 = '';
+        if (dy > 0 && dx > 0) {
+            // First turn down and right with counter clockwise arc
+            arc1 = 'a5,5 0 0 0 5,5';
+            arc1 = generateArc(radius, 0, '', '');
+            // Second turn right and down with clockwise arc
+            arc2 = 'a5,5 0 0 1 5,5';
+            arc2 = generateArc(radius, 1, '', '');
+            // Reduce dy by radius
+            dy -= radius;
+            // Reduce dx by 2 * radius
+            dx -= radius * 2;
+        } else if (dy > 0 && dx < 0) {
+            // First turn down and left with counter clockwise arc
+            arc1 = 'a5,5 0 0 1 -5,5';
+            arc1 = generateArc(radius, 1, '-', '');
+            // Second turn left and down with clockwise arc
+            arc2 = 'a5,5 0 0 0 -5,5';
+            arc2 = generateArc(radius, 0, '-', '');
+            // Reduce dy by radius
+            dy -= radius;
+            // Increase dx by 2 * radius
+            dx += radius * 2;
+        } else if (dy < 0 && dx < 0) {
+            // First turn up and left with counter clockwise arc
+            arc1 = 'a5,5 0 0 1 -5,-5';
+            arc1 = generateArc(radius, 1, '-', '-');
+            // Second turn left and up with clockwise arc
+            arc2 = 'a5,5 0 0 0 -5,-5';
+            arc2 = generateArc(radius, 0, '-', '-');
+            // Reduce dy by radius
+            dy += radius;
+            // Reduce dx by 2 * radius
+            dx -= radius * 2;
+        } else if (dy < 0 && dx > 0) {
+            // First turn up and right with counter clockwise arc
+            arc1 = 'a5,5 0 0 0 5,-5';
+            arc1 = generateArc(radius, 0, '', '-');
+            // Second turn right and up with clockwise arc
+            arc2 = 'a5,5 0 0 1 5,-5';
+            arc2 = generateArc(radius, 1, '', '-');
+            // Reduce dy by radius
+            dy += radius;
+            // Increase dx by 2 * radius
+            dx -= radius * 2;
+        }
+        let points = "m" + coordString(start) + " v" + dy + " " + arc1 + " h" + dx + " " + arc2 + " v" + dy;
+        let path = parent_svg.append('path')
+            .attr("id", id)
+            .attr("d", points)
+            //.attr("d", "M100,100 h50 a5,5 0 0 0 5,5 v50 a5,5 0 0 1 -5,5 h-50 a5,5 0 0 1 -5,-5 v-50 a5,5 0 0 1 5,-5 z")
+            .attr("stroke-width", "2")
+            .attr("stroke", connector_colour)
+            .attr("fill", "none")
+            .attr("marker-start", "url(#connector-end-circle)")
+            .attr("marker-end", "url(#connector-end-circle)");
+        //return path;
+    } else {
+        // Calculate Polyline points
+        let ydiff = end['y'] - start['y'];
+        let ymid = Math.round(start['y'] + ydiff / 2);
+        let mid1 = {x: start['x'], y: ymid};
+        let mid2 = {x: end['x'], y: ymid};
+        let points = coordString(start) + " " + coordString(mid1) + " " + coordString(mid2) + " " + coordString(end);
+        let polyline = parent_svg.append('polyline')
+            .attr("id", id)
+            .attr("points", points)
+            .attr("stroke-width", "2")
+            .attr("stroke", connector_colour)
+            .attr("fill", "none")
+            .attr("marker-start", "url(#connector-end-circle)")
+            .attr("marker-end", "url(#connector-end-circle)");
+        //return polyline;
+    }
+    console.groupEnd();
+    return;
 }
 
 function coordString(coord) {
