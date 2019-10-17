@@ -43,21 +43,19 @@ class OCIBackendSets(OCILoadBalancerConnection):
 
         backendsets = oci.pagination.list_call_get_all_results(self.client.list_backend_sets, load_balancer_id=self.lb_id).data
         # Convert to Json object
-        self.backendsets_json = self.toJson(backendsets)
+        backendsets_json = self.toJson(backendsets)
+        logger.debug(str(backendsets_json))
 
+        # Filter results
+        self.backendsets_json = self.filterJsonObjectList(backendsets_json, filter)
         logger.debug(str(self.backendsets_json))
+
         # Build List of Backendset Objects
         self.backendsets_obj = []
         for backendset in self.backendsets_json:
             self.backendsets_obj.append(OCIBackendSet(self.config, self.configfile, backendset))
-        # Check if the results should be filtered
-        if filter is None:
-            return self.backendsets_json
-        else:
-            filtered = self.backendsets_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            return filtered
+
+        return self.backendsets_json
 
 
 class OCIBackendSet(object):

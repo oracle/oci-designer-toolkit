@@ -19,7 +19,13 @@ __module__ = "ociConnection"
 import oci
 import json
 import os
+import re
 import sys
+
+from common.ociLogging import getLogger
+
+# Configure logging
+logger = getLogger()
 
 
 class OCIConnection(object):
@@ -33,6 +39,17 @@ class OCIConnection(object):
 
     def toJson(self, data):
         return json.loads(str(data))
+
+    def filterJsonObjectList(self, json_list=[], filter={}, **kwargs):
+        if filter is not None and json_list is not None:
+            for key, val in filter.items():
+                logger.info('{0!s:s} = {1!s:s}'.format(key, val))
+                # Check if filter is a list of strings and jloin as or
+                if isinstance(val, list):
+                    val = '|'.join(val)
+                    logger.info('{0!s:s} = {1!s:s}'.format(key, val))
+                json_list = [bs for bs in json_list if re.compile(val).search(bs[key])]
+        return json_list
 
 
 class OCIIdentityConnection(OCIConnection):

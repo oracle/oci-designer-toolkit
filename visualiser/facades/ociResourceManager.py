@@ -47,14 +47,8 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         resource_managers_json = self.toJson(resource_managers)
         logger.debug(str(resource_managers_json))
 
-        # Check if the results should be filtered
-        if filter is None:
-            self.resource_managers_json = resource_managers_json
-        else:
-            filtered = self.resource_managers_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            self.resource_managers_json = filtered
+        # Filter results
+        self.resource_managers_json = self.filterJsonObjectList(resource_managers_json, filter)
         logger.debug(str(self.resource_managers_json))
 
         # Build List of ResourceManager Objects
@@ -69,7 +63,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
             zip_bytes = f.read()
             encoded_zip = base64.b64encode(zip_bytes).decode('ascii')
         zip_source = oci.resource_manager.models.CreateZipUploadConfigSourceDetails(zip_file_base64_encoded=encoded_zip)
-        stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'])
+        stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x')
         response = self.client.create_stack(stack_details)
         logger.info('Create Stack Response : {0!s:s}'.format(str(response.data)))
         return self.toJson(response.data)

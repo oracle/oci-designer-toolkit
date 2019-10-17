@@ -52,7 +52,7 @@ resource "oci_load_balancer_backend_set" "{{ resource_name }}BackendSet" {
         url_path            = "{{ health_check_url | default('/') }}"
     }
     load_balancer_id = "${local.{{ resource_name }}_id}"
-    name             = "${substr(local.{{ resource_name }}_backend_set_name, 0, 32)}"
+    name             = "${local.{{ resource_name }}_backend_set_name}"
     policy           = "{{ backend_policy | default('ROUND_ROBIN') }}"
 {% if persistence_cookie_name is defined %}
     # Optional
@@ -100,7 +100,7 @@ resource "oci_load_balancer_listener" "{{ resource_name }}Listener" {
     # Required
     default_backend_set_name = "${local.{{ resource_name }}BackendSet_name}"
     load_balancer_id         = "${local.{{ resource_name }}_id}"
-    name                     = "${substr(local.{{ resource_name }}_listener_name, 0, 32)}"
+    name                     = "${local.{{ resource_name }}_listener_name}"
     port                     = "{{ port | default(80) }}"
     protocol                 = "{{ protocol | default('HTTP') }}"
     # Optional

@@ -48,28 +48,15 @@ class OCIVirtualCloudNetworks(OCIVirtualNetworkConnection):
         virtual_cloud_networks_json = self.toJson(virtual_cloud_networks)
         logger.debug(str(virtual_cloud_networks_json))
 
-        # Check if the results should be filtered
-        if filter is None:
-            self.virtual_cloud_networks_json = virtual_cloud_networks_json
-        else:
-            filtered = virtual_cloud_networks_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            self.virtual_cloud_networks_json = filtered
+        # Filter results
+        self.virtual_cloud_networks_json = self.filterJsonObjectList(virtual_cloud_networks_json, filter)
         logger.debug(str(self.virtual_cloud_networks_json))
 
         # Build List of Subnet Objects
         self.virtual_cloud_networks_obj = []
         for virtual_cloud_network in self.virtual_cloud_networks_json:
             self.virtual_cloud_networks_obj.append(OCIVirtualCloudNetwork(self.config, self.configfile, virtual_cloud_network))
-        # Check if the results should be filtered
-        #if filter is None:
-        #    return self.virtual_cloud_networks_json
-        #else:
-        #    filtered = self.virtual_cloud_networks_json[:]
-        #    for key, val in filter.items():
-        #        filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-        #    return filtered
+
         return self.virtual_cloud_networks_json
 
 

@@ -61,14 +61,8 @@ class OCIVolumeAttachments(OCIComputeConnection):
         volume_attachments_json = self.toJson(volume_attachments)
         logger.debug(str(volume_attachments_json))
 
-        # Check if the results should be filtered
-        if filter is None:
-            self.volume_attachments_json = volume_attachments_json
-        else:
-            filtered = self.volume_attachments_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            self.volume_attachments_json = filtered
+        # Filter results
+        self.volume_attachments_json = self.filterJsonObjectList(volume_attachments_json, filter)
         logger.debug('--------------------- Volumes ----------------------')
         logger.debug(str(self.volume_attachments_json))
 
