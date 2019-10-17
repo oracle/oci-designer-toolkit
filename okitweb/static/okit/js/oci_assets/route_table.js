@@ -115,6 +115,7 @@ function drawRouteTableSVG(artifact) {
         for (let subnet of okitJson['subnets']) {
             if (subnet['route_table_id'] == artifact['id']) {
                 console.info(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
+                console.groupEnd();
                 return;
             }
         }

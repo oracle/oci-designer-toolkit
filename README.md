@@ -406,7 +406,7 @@ Simple function to reset artifact specific variables.
  */
 function addBlockStorageVolume(parent_id, compartment_id) {
     let id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
-    console.log('Adding ' + block_storage_volume_artifact + ' : ' + id);
+    console.groupCollapsed('Adding ' + block_storage_volume_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
@@ -429,10 +429,11 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     block_storage_volume['backup_policy'] = 'bronze';
     okitJson['block_storage_volumes'].push(block_storage_volume);
     okitIdsJsonObj[id] = block_storage_volume['display_name'];
-    okitJson
-    displayOkitJson();
-    drawBlockStorageVolumeSVG(block_storage_volume);
+    //console.info(JSON.stringify(okitJson, null, 2));
+    //drawBlockStorageVolumeSVG(block_storage_volume);
+    drawSVGforJson();
     loadBlockStorageVolumeProperties(id);
+    console.groupEnd();
 }
 ```
 This function is used to add a new json element to the OKIT json structure. The elements within this json will match those 
@@ -469,17 +470,43 @@ function deleteBlockStorageVolume(id) {
 ```
 Function used to remove artifact and delete any references within linked artifacts.
 
+##### Artifact Dimensions Function
+```javascript
+function getBlockStorageVolumeDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
+```
+
+The function is used to calculate the dimensions of the artifact and will be called by container function to determine 
+how much space to reserve for drawing this artifact. If you are building a container artifact (e.g. subnet) then this
+function will call the dimensions function for all contained artifacts to calculate it's dimensions.
+
 ##### Draw SVG
 ```javascript
 /*
 ** SVG Creation
  */
 function drawBlockStorageVolumeSVG(artifact) {
-    let parent_id = artifact['compartment_id'];
-    artifact['parent_id'] = parent_id;
+    let parent_id = artifact['parent_id'];
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + block_storage_volume_artifact + ' : ' + id);
+    console.groupCollapsed('Drawing ' + block_storage_volume_artifact + ' : ' + id);
+    // Check if this Block Storage Volume has been attached to an Instance and if so do not draw because it will be done
+    // as part of the instance
+    if (okitJson.hasOwnProperty('instances')) {
+        for (let instance of okitJson['instances']) {
+            if (instance.hasOwnProperty('block_storage_volume_ids')) {
+                if (instance['block_storage_volume_ids'].includes(artifact['id'])) {
+                    console.info(artifact['display_name'] + ' attached to instance '+ instance['display_name']);
+                    console.groupEnd();
+                    return;
+                }
+            }
+        }
+    }
+    if (!artifact.hasOwnProperty('parent_id')) {
+        artifact['parent_id'] = artifact['compartment_id'];
+    }
 
     if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         compartment_bui_sub_artifacts[parent_id] = {};
@@ -494,15 +521,7 @@ function drawBlockStorageVolumeSVG(artifact) {
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
 
-        let svg_x = (icon_width / 4);
-        let svg_y = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
-        let svg_width = icon_width;
-        let svg_height = icon_height;
-        let data_type = block_storage_volume_artifact;
-        let stroke_colour = block_storage_volume_stroke_colour;
-        let stroke_dash = 1;
-
-        let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
+        let svg = drawArtifact(newBlockStorageVolumeDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
@@ -515,33 +534,11 @@ function drawBlockStorageVolumeSVG(artifact) {
         svg.on("click", function () {
             loadBlockStorageVolumeProperties(id);
             d3.event.stopPropagation();
-        })
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width/2))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width/2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true);
+        });
     } else {
-        console.log(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 ``` 
 Draws the artifact on the SVG canvas as parted of the dropped component. All artifacts are contained within there own svg

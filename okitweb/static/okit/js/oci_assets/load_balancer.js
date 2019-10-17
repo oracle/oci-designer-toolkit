@@ -151,7 +151,10 @@ function drawLoadBalancerSVG(artifact) {
             .attr("data-connector-id", id)
             .attr("dragable", true);
     }
+    // Draw Connectors
+    drawLoadBalancerConnectorsSVG(artifact);
     console.groupEnd();
+    return;
 }
 
 function clearLoadBalancerConnectorsSVG(load_balancer) {

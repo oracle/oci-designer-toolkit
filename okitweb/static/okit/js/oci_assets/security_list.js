@@ -118,6 +118,7 @@ function drawSecurityListSVG(artifact) {
         for (let subnet of okitJson['subnets']) {
             if (subnet['security_list_ids'].includes(artifact['id'])) {
                 console.info(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
+                console.groupEnd();
                 return;
             }
         }
