@@ -6,34 +6,27 @@
             <div>
                 <span class="header-item">
                     <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
-                    <span>File</span>
+                    <span>Canvas</span>
                 </span>
             </div>
         </li>
         <li><a id="file-new-menu-item" class="parent-item" href="{{ url_for('okit.designer') }}">New</a></li>
         <li><a id="file-load-menu-item" class="parent-item" href="#">Load</a></li>
         <li><a id="file-save-menu-item" class="parent-item" href="#">Save</a></li>
-        <li>
-            <div>
-                <span class="header-item">
-                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
-                    <span>Canvas</span>
-                </span>
-            </div>
-        </li>
-        <!--li><a id="file-add-menu-item" class="parent-item" href="#">Add Compartment</a></li-->
         <li><a id="file-redraw-menu-item" class="parent-item" href="#">Redraw</a></li>
+        <!--li><a id="file-add-menu-item" class="parent-item" href="#">Add Compartment</a></li-->
         <li>
             <div>
                 <span class="header-item">
                     <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
-                    <span>Export</span>
+                    <span>Templates</span>
                 </span>
             </div>
         </li>
-        <li><a id="file-export-svg-menu-item" class="parent-item" href="#">SVG</a></li>
-        <li><a id="file-export-rm-menu-item" class="parent-item" href="#">Resource Manager</a></li>
-        <li><a id="file-export-orca-menu-item" class="parent-item" href="#">Orca</a></li>
+        {% for okit_template in okit_templates %}
+            <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="#"
+                   onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+        {% endfor %}
         <li>
             <div>
                 <span class="header-item">
@@ -55,6 +48,17 @@
         <li><a id="generate-terraform-menu-item" class="parent-item" href="#">Terraform</a></li>
         <li><a id="generate-ansible-menu-item" class="parent-item" href="#">Ansible</a></li>
         <li><a id="generate-resource-manager-menu-item" class="parent-item" href="#">Terraform 0.11</a></li>
+        <li>
+            <div>
+                <span class="header-item">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <span>Export</span>
+                </span>
+            </div>
+        </li>
+        <li><a id="file-export-svg-menu-item" class="parent-item" href="#">SVG</a></li>
+        <li><a id="file-export-rm-menu-item" class="parent-item" href="#">Resource Manager</a></li>
+        <li><a id="file-export-orca-menu-item" class="parent-item" href="#">Orca</a></li>
     </ul>
 {% endblock %}
 

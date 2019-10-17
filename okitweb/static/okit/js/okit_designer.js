@@ -2,41 +2,6 @@ console.info('Loaded Designer Javascript');
 /*
  * Define the OKT Designer Constant that will be used across the subsequent Javascript
  */
-// Asset name prefix
-const display_name_prefix = 'okit-';
-// Compartment
-const compartment_artifact = 'Compartment';
-const compartment_prefix = 'comp';
-// Virtual Cloud Network
-const virtual_cloud_network_artifact = 'Virtual Cloud Network';
-const virtual_cloud_network_prefix = 'vcn';
-// Internet Gateway
-const internet_gateway_artifact = 'Internet Gateway';
-const internet_gateway_prefix = 'ig';
-// NAT Gateway
-const nat_gateway_artifact = 'NAT Gateway';
-const nat_gateway_prefix = 'ng';
-// Dynamic Routing Gateway
-const dynamic_routing_gateway_artifact = 'Dynamic Routing Gateway';
-const dynamic_routing_gateway_prefix = 'dg';
-// Route Table
-const route_table_artifact = 'Route Table';
-const route_table_prefix = 'rt';
-// Security List
-const security_list_artifact = 'Security List';
-const security_list_prefix = 'sl';
-// Subnet
-const subnet_artifact = 'Subnet';
-const subnet_prefix = 'sn';
-// Instance
-const instance_artifact = 'Instance';
-const instance_prefix = 'in';
-// Load Balancer
-const load_balancer_artifact = 'Load Balancer';
-const load_balancer_prefix = 'lb';
-// Block Storage
-const block_storage_volume_artifact = 'Block Storage Volume';
-const block_storage_volume_prefix = 'bsv';
 
 /*
  * Define designer working variables
@@ -53,6 +18,8 @@ let okitQueryRequestJson = null;
  */
 function initialiseJson() {
     okitJson = {
+        title: "",
+        description: "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......",
         compartments: [],
         block_storage_volumes: [],
         dynamic_routing_gateways: [],
@@ -179,6 +146,31 @@ function handleLoadClick(evt) {
     hideNavMenu();
     let fileinput = document.getElementById("files");
     fileinput.click();
+}
+
+/*
+** Load Templates
+ */
+function loadTemplate(template_url) {
+    hideNavMenu();
+    $.ajax({
+        type: 'get',
+        url: template_url,
+        dataType: 'text',
+        contentType: 'application/json',
+        success: function(resp) {
+            okitJson = JSON.parse(resp);
+            if (!okitJson.hasOwnProperty('canvas')) {
+                okitJson['canvas'] = initialiseCanvasJson();
+            }
+            displayOkitJson();
+            drawSVGforJson();
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status);
+            console.error('Error  : '+ error);
+        }
+    });
 }
 
 /*
