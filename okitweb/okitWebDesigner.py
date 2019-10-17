@@ -32,6 +32,7 @@ from flask import url_for
 
 from common.ociCommon import logJson
 from common.ociCommon import standardiseIds
+from common.ociCommon import readJsonFile
 from common.ociQuery import executeQuery
 from generators.ociTerraformGenerator import OCITerraformGenerator
 from generators.ociTerraform11Generator import OCITerraform11Generator
@@ -72,7 +73,7 @@ def standardiseJson(json_data={}, **kwargs):
 
 @bp.route('/designer', methods=(['GET', 'POST']))
 def designer():
-    oci_assets_js = os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets'))
+    oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets')))
     palette_icons_svg = os.listdir(os.path.join(bp.static_folder, 'palette'))
     palette_icons = []
     for palette_svg in sorted(palette_icons_svg):
@@ -80,6 +81,18 @@ def designer():
         palette_icon['title'] = palette_svg.split('.')[0].replace('_', ' ')
         palette_icons.append(palette_icon)
     logger.info('Palette Icons : {0!s:s}'.format(palette_icons))
+    template_files = os.listdir(os.path.join(bp.static_folder, 'templates'))
+    okit_templates = []
+    for template_file in sorted(template_files):
+        logger.info('Template : {0!s:s}'.format(template_file))
+        logger.info('Template full : {0!s:s}'.format(os.path.join(bp.static_folder, 'templates', template_file)))
+        okit_template = {'json': template_file, 'id': template_file.replace('.', '_')}
+        template_json = readJsonFile(os.path.join(bp.static_folder, 'templates', template_file))
+        logger.info('Template Json : {0!s:s}'.format(template_json))
+        okit_template['title'] = template_json['title']
+        okit_template['description'] = template_json.get('description', template_json['title'])
+        okit_templates.append(okit_template)
+    logger.info('Templates : {0!s:s}'.format(okit_templates))
     if request.method == 'POST':
         request_json = {}
         response_json = {}
@@ -91,10 +104,10 @@ def designer():
         #response_json = executeQuery(request_json)
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_templates=okit_templates, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
         logger.info('>>>>>>>>> oci version {0!s:s}'.format(oci.__version__))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_templates=okit_templates)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
