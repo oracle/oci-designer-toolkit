@@ -21,7 +21,7 @@
                 </span>
             </div>
         </li>
-        <li><a id="file-add-menu-item" class="parent-item" href="#">Add Compartment</a></li>
+        <!--li><a id="file-add-menu-item" class="parent-item" href="#">Add Compartment</a></li-->
         <li><a id="file-redraw-menu-item" class="parent-item" href="#">Redraw</a></li>
         <li>
             <div>
@@ -70,25 +70,24 @@
                 url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
                 dataType: 'xml',
                 success: function(xml) {
-                    console.log('load SVG Success');
+                    console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
                     let g = $(xml).find("g");
                     palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
                 },
                 error: function(xhr, status, error) {
-                    console.log('load SVG Error : '+ error)
-                    console.log('load SVG Status : '+ status)
+                    console.groupCollapsed("{{ 'Error Loading ' + palette_icon['svg'] }}");
+                    console.error('Error  : ' + error);
+                    console.error('Status : ' + status);
+                    console.groupEnd();
                 }
             });
         {% endfor %}
     </script>
     {% if okit_query_request_json is defined %}
         <script type="text/javascript">
-            console.log('Processing Query Javascript');
+            console.info('Processing Query Javascript');
             okitQueryRequestJson = {{ okit_query_request_json | safe }};
-            OKITJsonObj = {{ okit_query_response_json | safe }};
-            //queryCompartmentAjax();
-            //displayOkitJson();
-            //drawSVGforJson();
+            okitJson = {{ okit_query_response_json | safe }};
         </script>
     {% endif %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
@@ -113,13 +112,10 @@
         </div>
         <div id="web-designer-panel" class="web-designer-panel flex-row">
             <div id="canvas-wrapper" class="designer-left-column canvas-wrapper">
-                <div id="compartment-tabs" class="tab">
-                </div>
             </div>
             <div id="asset-properties" class="designer-right-column properties-wrapper">
                 <div id="properties-and-source" class="properties-source-wrapper">
                     <div id="properties-toggle" class="slide-bar">
-                        <!--button id="show-code">Source</button-->
                         <input type="radio" name="source-properties" value="source">Source
                         <input type="radio" name="source-properties" value="properties" checked="checked">Properties
                     </div>

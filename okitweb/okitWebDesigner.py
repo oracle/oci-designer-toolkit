@@ -39,6 +39,7 @@ from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
 from facades.ociCompartment import OCICompartments
+from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociNATGateway import OCINATGateways
@@ -180,6 +181,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing NAT Gateways')
         oci_nat_gateways = OCINATGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
+    elif artifact == 'DynamicRoutingGateway':
+        logger.info('---- Processing Dynamic Routing Gateways')
+        oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(compartment_id=query_json['compartment_id'])
+        response_json = oci_dynamic_routing_gateways.list(filter=query_json.get('dynamic_routing_gateway_filter', None))
     elif artifact == 'RouteTable':
         logger.info('---- Processing Route Tables')
         oci_route_tables = OCIRouteTables(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])

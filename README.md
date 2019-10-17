@@ -410,8 +410,8 @@ function addBlockStorageVolume(parent_id, compartment_id) {
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
-        OKITJsonObj['block_storage_volumes'] = [];
+    if (!okitJson.hasOwnProperty('block_storage_volumes')) {
+        okitJson['block_storage_volumes'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -427,9 +427,9 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     block_storage_volume['display_name'] = generateDefaultName(block_storage_volume_prefix, block_storage_volume_count);
     block_storage_volume['size_in_gbs'] = 1024;
     block_storage_volume['backup_policy'] = 'bronze';
-    OKITJsonObj['block_storage_volumes'].push(block_storage_volume);
+    okitJson['block_storage_volumes'].push(block_storage_volume);
     okitIdsJsonObj[id] = block_storage_volume['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    okitJson
     displayOkitJson();
     drawBlockStorageVolumeSVG(block_storage_volume);
     loadBlockStorageVolumeProperties(id);
@@ -450,14 +450,14 @@ function deleteBlockStorageVolume(id) {
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['block_storage_volumes'].length; i++) {
-        if (OKITJsonObj['block_storage_volumes'][i]['id'] == id) {
-            OKITJsonObj['block_storage_volumes'].splice(i, 1);
+    for (let i=0; i < okitJson['block_storage_volumes'].length; i++) {
+        if (okitJson['block_storage_volumes'][i]['id'] == id) {
+            okitJson['block_storage_volumes'].splice(i, 1);
         }
     }
     // Remove Instance references
-    if ('instances' in OKITJsonObj) {
-        for (let instance of OKITJsonObj['instances']) {
+    if ('instances' in okitJson) {
+        for (let instance of okitJson['instances']) {
             for (let i=0; i < instance['block_storage_volume_ids'].length; i++) {
                 if (instance['block_storage_volume_ids'][i] == id) {
                     instance['block_storage_volume_ids'].splice(i, 1);
@@ -557,9 +557,9 @@ standard HTML drag & drop events).
  */
 function loadBlockStorageVolumeProperties(id) {
     $("#properties").load("propertysheets/block_storage_volume.html", function () {
-        if ('block_storage_volumes' in OKITJsonObj) {
+        if ('block_storage_volumes' in okitJson) {
             console.log('Loading ' + block_storage_volume_artifact + ' : ' + id);
-            let json = OKITJsonObj['block_storage_volumes'];
+            let json = okitJson['block_storage_volumes'];
             for (let i = 0; i < json.length; i++) {
                 let block_storage_volume = json[i];
                 if (block_storage_volume['id'] == id) {
@@ -604,7 +604,7 @@ function queryBlockStorageVolumeAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['block_storage_volumes'] = response_json;
+            okitJson['block_storage_volumes'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.log('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);

@@ -1,21 +1,21 @@
-console.log('Loaded Properties Javascript');
+console.info('Loaded Properties Javascript');
 
 /*
 ** Property Sheet Load function
  */
 
 function handlePropertiesDragEnd(e) {
-    console.log('Properties Drag End');
+    console.info('Properties Drag End');
 }
 
 let asset_propereties_width = 0;
 function handlePropertiesMouseDown(e) {
-    console.log('Properties Mouse Down : ' + e.target.clientWidth);
+    console.info('Properties Mouse Down : ' + e.target.clientWidth);
     asset_propereties_width = e.target.clientWidth;
 }
 
 function handlePropertiesMouseUp(e) {
-    console.log('Properties Mouse Up : ' + e.target.clientWidth);
+    console.info('Properties Mouse Up : ' + e.target.clientWidth);
     if (asset_propereties_width != e.target.clientWidth) {
         redrawSVGCanvas();
     }
@@ -54,7 +54,7 @@ function addPropertiesEventListeners(json_element, callbacks=[]) {
                 } else if (this.type == 'checkbox') {
                     json_element[this.id] = $(this).is(':checked');
                 } else {
-                    console.log('Unknown input type ' + $(this).attr('type'));
+                    console.info('Unknown input type ' + $(this).attr('type'));
                 }
                 displayOkitJson();
             });
@@ -80,7 +80,7 @@ function addPropertiesEventListeners(json_element, callbacks=[]) {
         function(index) {
             let inputfield = $(this);
             inputfield.on('change', function() {
-                console.log(this.id + ' Changed !!!!!!');
+                console.info(this.id + ' Changed !!!!!!');
                 json_element[this.id] = this.value.replace('\n', '\\n');
                 json_element[this.id] = this.value;
                 displayOkitJson();

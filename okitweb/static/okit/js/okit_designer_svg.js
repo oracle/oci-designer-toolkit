@@ -1,4 +1,4 @@
-console.log('Loaded SVG Javascript');
+console.info('Loaded SVG Javascript');
 
 // SVG Icons
 const icon_width = 45;
@@ -13,10 +13,24 @@ const viewbox_height = 1500;
 const viewbox_width = 2500;
 const text_viewbox_height = 1000;
 const text_viewbox_width = 200;
+const connector_colour = "black";
+const container_artifact_x_padding = Math.round(icon_width  * 3 / 2);
+const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
+const container_artifact_label_width = 300;
+const positional_adjustments = {
+    padding: {x: Math.round(icon_width),   y: Math.round(icon_height + icon_spacing)},
+    spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
+};
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
  */
+
+function styleCanvas(canvas_svg) {
+    canvas_svg.append('style')
+        .attr("type", "text/css")
+        .text('.st0{fill:#F80000;} .st1{fill:#939699;} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+}
 
 function createSVGDefinitions(canvas_svg) {
     // Add Palette Icons
@@ -56,7 +70,7 @@ function createSVGDefinitions(canvas_svg) {
         .attr("cx", "5")
         .attr("cy", "5")
         .attr("r", "5")
-        .attr("fill", "black");
+        .attr("fill", connector_colour);
 }
 
 function newArtifactSVGDefinition(artifact, data_type) {
@@ -81,10 +95,10 @@ function drawArtifact(definition) {
     let parent_id      = definition['artifact']['parent_id'];
     let compartment_id = definition['artifact']['compartment_id'];
     let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
-    console.log('<<<<<<<<<<<<<<<<<< Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'] + ' >>>>>>>>>>>>>>>>>>')
-    console.log('<<<<<<<<<<<<<<<<<< Id : ' + id + ' >>>>>>>>>>>>>>>>>>')
-    console.log('<<<<<<<<<<<<<<<<<< Parent Id : ' + parent_id + ' >>>>>>>>>>>>>>>>>>')
-    console.log('<<<<<<<<<<<<<<<<<< Compartment Id : ' + compartment_id + ' >>>>>>>>>>>>>>>>>>')
+    console.info('<<<<<<<<<<<<<<<<<< Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'] + ' >>>>>>>>>>>>>>>>>>')
+    console.info('<<<<<<<<<<<<<<<<<< Id : ' + id + ' >>>>>>>>>>>>>>>>>>')
+    console.info('<<<<<<<<<<<<<<<<<< Parent Id : ' + parent_id + ' >>>>>>>>>>>>>>>>>>')
+    console.info('<<<<<<<<<<<<<<<<<< Compartment Id : ' + compartment_id + ' >>>>>>>>>>>>>>>>>>')
     let rect_x         = definition['rect']['x'];
     let rect_y         = definition['rect']['y'];
     let rect_width     = definition['svg']['width']  + definition['rect']['width_adjust'];
@@ -107,7 +121,7 @@ function drawArtifact(definition) {
         .attr("y",         definition['svg']['y'])
         .attr("width",     definition['svg']['width'])
         .attr("height",    definition['svg']['height'])
-        //.attr("viewBox", "0 0 " + svg_width + " " + svg_height)
+        .attr("viewBox", "0 0 " + definition['svg']['width'] + " " + definition['svg']['height'])
         .attr("preserveAspectRatio", "xMinYMax meet");
     let rect = svg.append("rect")
         .attr("id", id)
@@ -127,7 +141,7 @@ function drawArtifact(definition) {
         let name_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
-            .attr("width", "200")
+            .attr("width", container_artifact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", "0 0 200 " + definition['svg']['height']);
@@ -143,7 +157,7 @@ function drawArtifact(definition) {
         let name_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
-            .attr("width", "300")
+            .attr("width", container_artifact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMax meet")
             .attr("viewBox", "0 0 300 " + definition['svg']['height']);
@@ -185,112 +199,113 @@ function drawArtifact(definition) {
 }
 
 function drawSVGforJson(artifact={}) {
-    console.log('******** Drawing SVG *********');
+    console.groupCollapsed('Drawing SVG Canvas');
     displayOkitJson();
     // Clear existing
-    clearSVG();
+    clearDiagram();
 
     // Draw Outer SVG
-    if (OKITJsonObj.hasOwnProperty('compartments')) {
+    if (okitJson.hasOwnProperty('compartments')) {
         compartment_ids = [];
-        for (let i = 0; i < OKITJsonObj['compartments'].length; i++) {
-            compartment_ids.push(OKITJsonObj['compartments'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['compartments'][i]['id']] = OKITJsonObj['compartments'][i]['name']
+        for (let i = 0; i < okitJson['compartments'].length; i++) {
+            compartment_ids.push(okitJson['compartments'][i]['id']);
+            okitIdsJsonObj[okitJson['compartments'][i]['id']] = okitJson['compartments'][i]['name']
             compartment_count += 1;
-            drawCompartmentSVG(OKITJsonObj['compartments'][i]);
+            drawCompartmentSVG(okitJson['compartments'][i]);
         }
     }
 
     // Draw Compartment Subcomponents
-    if (OKITJsonObj.hasOwnProperty('virtual_cloud_networks')) {
+    if (okitJson.hasOwnProperty('virtual_cloud_networks')) {
         virtual_network_ids = [];
-        for (let i=0; i < OKITJsonObj['virtual_cloud_networks'].length; i++) {
-            virtual_network_ids.push(OKITJsonObj['virtual_cloud_networks'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['virtual_cloud_networks'][i]['id']] = OKITJsonObj['virtual_cloud_networks'][i]['display_name'];
+        for (let i=0; i < okitJson['virtual_cloud_networks'].length; i++) {
+            virtual_network_ids.push(okitJson['virtual_cloud_networks'][i]['id']);
+            okitIdsJsonObj[okitJson['virtual_cloud_networks'][i]['id']] = okitJson['virtual_cloud_networks'][i]['display_name'];
             virtual_cloud_network_count += 1;
-            drawVirtualCloudNetworkSVG(OKITJsonObj['virtual_cloud_networks'][i]);
+            drawVirtualCloudNetworkSVG(okitJson['virtual_cloud_networks'][i]);
         }
     }
-    if (OKITJsonObj.hasOwnProperty('block_storage_volumes')) {
+    if (okitJson.hasOwnProperty('block_storage_volumes')) {
         block_storage_volume_ids = [];
-        for (let i=0; i < OKITJsonObj['block_storage_volumes'].length; i++) {
-            block_storage_volume_ids.push(OKITJsonObj['block_storage_volumes'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['block_storage_volumes'][i]['id']] = OKITJsonObj['block_storage_volumes'][i]['display_name'];
+        for (let i=0; i < okitJson['block_storage_volumes'].length; i++) {
+            block_storage_volume_ids.push(okitJson['block_storage_volumes'][i]['id']);
+            okitIdsJsonObj[okitJson['block_storage_volumes'][i]['id']] = okitJson['block_storage_volumes'][i]['display_name'];
             block_storage_volume_count += 1;
-            drawBlockStorageVolumeSVG(OKITJsonObj['block_storage_volumes'][i]);
+            drawBlockStorageVolumeSVG(okitJson['block_storage_volumes'][i]);
         }
     }
 
     // Draw Virtual Cloud Network Subcomponents
-    if (OKITJsonObj.hasOwnProperty('internet_gateways')) {
+    if (okitJson.hasOwnProperty('internet_gateways')) {
         internet_gateway_ids = [];
-        for (let i=0; i < OKITJsonObj['internet_gateways'].length; i++) {
-            internet_gateway_ids.push(OKITJsonObj['internet_gateways'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['internet_gateways'][i]['id']] = OKITJsonObj['internet_gateways'][i]['display_name'];
+        for (let i=0; i < okitJson['internet_gateways'].length; i++) {
+            internet_gateway_ids.push(okitJson['internet_gateways'][i]['id']);
+            okitIdsJsonObj[okitJson['internet_gateways'][i]['id']] = okitJson['internet_gateways'][i]['display_name'];
             internet_gateway_count += 1;
-            drawInternetGatewaySVG(OKITJsonObj['internet_gateways'][i]);
+            drawInternetGatewaySVG(okitJson['internet_gateways'][i]);
         }
     }
-    if (OKITJsonObj.hasOwnProperty('nat_gateways')) {
+    if (okitJson.hasOwnProperty('nat_gateways')) {
         nat_gateway_ids = [];
-        for (let i=0; i < OKITJsonObj['nat_gateways'].length; i++) {
-            nat_gateway_ids.push(OKITJsonObj['nat_gateways'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['nat_gateways'][i]['id']] = OKITJsonObj['nat_gateways'][i]['display_name'];
+        for (let i=0; i < okitJson['nat_gateways'].length; i++) {
+            nat_gateway_ids.push(okitJson['nat_gateways'][i]['id']);
+            okitIdsJsonObj[okitJson['nat_gateways'][i]['id']] = okitJson['nat_gateways'][i]['display_name'];
             nat_gateway_count += 1;
-            drawNATGatewaySVG(OKITJsonObj['nat_gateways'][i]);
+            drawNATGatewaySVG(okitJson['nat_gateways'][i]);
         }
     }
-    if (OKITJsonObj.hasOwnProperty('route_tables')) {
+    if (okitJson.hasOwnProperty('route_tables')) {
         route_table_ids = [];
-        for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
-            route_table_ids.push(OKITJsonObj['route_tables'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['route_tables'][i]['id']] = OKITJsonObj['route_tables'][i]['display_name'];
+        for (let i=0; i < okitJson['route_tables'].length; i++) {
+            route_table_ids.push(okitJson['route_tables'][i]['id']);
+            okitIdsJsonObj[okitJson['route_tables'][i]['id']] = okitJson['route_tables'][i]['display_name'];
             route_table_count += 1;
-            drawRouteTableSVG(OKITJsonObj['route_tables'][i]);
+            drawRouteTableSVG(okitJson['route_tables'][i]);
         }
     }
-    if (OKITJsonObj.hasOwnProperty('security_lists')) {
+    if (okitJson.hasOwnProperty('security_lists')) {
         security_list_ids = [];
-        for (let i=0; i < OKITJsonObj['security_lists'].length; i++) {
-            security_list_ids.push(OKITJsonObj['security_lists'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['security_lists'][i]['id']] = OKITJsonObj['security_lists'][i]['display_name'];
+        for (let i=0; i < okitJson['security_lists'].length; i++) {
+            security_list_ids.push(okitJson['security_lists'][i]['id']);
+            okitIdsJsonObj[okitJson['security_lists'][i]['id']] = okitJson['security_lists'][i]['display_name'];
             security_list_count += 1;
-            drawSecurityListSVG(OKITJsonObj['security_lists'][i]);
+            drawSecurityListSVG(okitJson['security_lists'][i]);
         }
     }
-    if (OKITJsonObj.hasOwnProperty('subnets')) {
+    if (okitJson.hasOwnProperty('subnets')) {
         subnet_ids = [];
-        for (let i=0; i < OKITJsonObj['subnets'].length; i++) {
-            subnet_ids.push(OKITJsonObj['subnets'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['subnets'][i]['id']] = OKITJsonObj['subnets'][i]['display_name'];
-            initialiseSubnetChildData(OKITJsonObj['subnets'][i]['id']);
+        for (let i=0; i < okitJson['subnets'].length; i++) {
+            subnet_ids.push(okitJson['subnets'][i]['id']);
+            okitIdsJsonObj[okitJson['subnets'][i]['id']] = okitJson['subnets'][i]['display_name'];
+            initialiseSubnetChildData(okitJson['subnets'][i]['id']);
             subnet_count += 1;
-            drawSubnetSVG(OKITJsonObj['subnets'][i]);
-            //drawSubnetConnectorsSVG(OKITJsonObj['subnets'][i]);
+            drawSubnetSVG(okitJson['subnets'][i]);
+            //drawSubnetConnectorsSVG(okitJson['subnets'][i]);
         }
     }
 
     // Draw Subnet Subcomponents
-    if (OKITJsonObj.hasOwnProperty('instances')) {
+    if (okitJson.hasOwnProperty('instances')) {
         instance_ids = [];
-        for (let i=0; i < OKITJsonObj['instances'].length; i++) {
-            instance_ids.push(OKITJsonObj['instances'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['instances'][i]['id']] = OKITJsonObj['instances'][i]['display_name'];
+        for (let i=0; i < okitJson['instances'].length; i++) {
+            instance_ids.push(okitJson['instances'][i]['id']);
+            okitIdsJsonObj[okitJson['instances'][i]['id']] = okitJson['instances'][i]['display_name'];
             instance_count += 1;
-            drawInstanceSVG(OKITJsonObj['instances'][i]);
-            //drawInstanceConnectorsSVG(OKITJsonObj['instances'][i]);
+            drawInstanceSVG(okitJson['instances'][i]);
+            //drawInstanceConnectorsSVG(okitJson['instances'][i]);
         }
     }
-    if (OKITJsonObj.hasOwnProperty('load_balancers')) {
+    if (okitJson.hasOwnProperty('load_balancers')) {
         load_balancer_ids = [];
-        for (let i=0; i < OKITJsonObj['load_balancers'].length; i++) {
-            load_balancer_ids.push(OKITJsonObj['load_balancers'][i]['id']);
-            okitIdsJsonObj[OKITJsonObj['load_balancers'][i]['id']] = OKITJsonObj['load_balancers'][i]['display_name'];
+        for (let i=0; i < okitJson['load_balancers'].length; i++) {
+            load_balancer_ids.push(okitJson['load_balancers'][i]['id']);
+            okitIdsJsonObj[okitJson['load_balancers'][i]['id']] = okitJson['load_balancers'][i]['display_name'];
             load_balancer_count += 1;
-            drawLoadBalancerSVG(OKITJsonObj['load_balancers'][i]);
-            drawLoadBalancerConnectorsSVG(OKITJsonObj['load_balancers'][i]);
+            drawLoadBalancerSVG(okitJson['load_balancers'][i]);
+            drawLoadBalancerConnectorsSVG(okitJson['load_balancers'][i]);
         }
     }
+    console.groupEnd();
 }
 
 function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
@@ -304,7 +319,7 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
         .attr("id", id)
         .attr("points", points)
         .attr("stroke-width", "2")
-        .attr("stroke", "black")
+        .attr("stroke", connector_colour)
         .attr("fill", "none")
         .attr("marker-start", "url(#connector-end-circle)")
         .attr("marker-end", "url(#connector-end-circle)");
@@ -313,7 +328,43 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
 
 function coordString(coord) {
     let coord_str = coord['x'] + ',' + coord['y'];
-    console.log('Coord String : ' + coord_str);
+    //console.info('Coord String : ' + coord_str);
     return coord_str;
+}
+
+function clearCanvas() {
+    let canvas_svg = d3.select('#canvas-svg');
+    canvas_svg.selectAll('*').remove();
+    styleCanvas(canvas_svg);
+    createSVGDefinitions(canvas_svg);
+}
+
+function newCanvas(parent_id="canvas-wrapper") {
+    let compartment_div = d3.select('#' + parent_id);
+    let window_width = $(window).width();
+    let window_height = $(window).height() * 2;
+    let parent_width = $('#' + parent_id).width();
+    let parent_height = $('#' + parent_id).height();
+    //console.info('JQuery Width  : ' + $('#' + parent_id).width());
+    //console.info('JQuery Height : ' + $('#' + parent_id).height());
+    //console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
+    //console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
+    // Empty existing Canvas
+    compartment_div.selectAll('*').remove();
+    // Wrapper SVG Element to define ViewBox etc
+    let canvas_svg = compartment_div.append("svg")
+    //.attr("class", "svg-canvas")
+        .attr("id", 'canvas-svg')
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", window_width)
+        .attr("height", window_height)
+        .attr("viewBox", "0 0 " + window_width + " " + window_height)
+        //.attr("viewBox", "0 0 " + parent_width + " " + parent_height)
+        .attr("preserveAspectRatio", "xMinYMin meet");
+
+    clearCanvas();
+
+    return canvas_svg;
 }
 

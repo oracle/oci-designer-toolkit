@@ -83,8 +83,10 @@
     border-width: 1px;
     border-color: black;
     margin: 0;
-    max-height: calc(100vh - 160px);
+    padding: 5px;
+    max-height: calc(100vh - 180px);
     display: block;
+    overflow: scroll;
 }
 
 .svg-canvas {
@@ -131,7 +133,8 @@
     border: black 1px dashed;
     border-radius: 5px;
     padding: 5px;
-    opacity: 50%;
+    background-color: lightgrey;
+    opacity: 5%;
 }
 
 .query-filter {
@@ -309,9 +312,9 @@
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    padding: 4px 6px;
     transition: 0.3s;
-    font-size: 17px;
+    font-size: 14pt;
 }
 
 /* Change background color of buttons on hover */

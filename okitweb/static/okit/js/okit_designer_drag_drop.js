@@ -1,4 +1,4 @@
-console.log('Loaded Drag & Drop Javascript');
+console.info('Loaded Drag & Drop Javascript');
 
 /*
 ** Define Connector Drag & Drop functions point manipulation code.
@@ -22,10 +22,10 @@ let asset_query_functions = {};
 let asset_clear_functions = [];
 
 function addAssetToDropTarget(title, target_id, compartment_id) {
-    console.log('addAssetToDropTarget - Title          : ' + title);
-    console.log('addAssetToDropTarget - Target Id      : ' + target_id);
-    console.log('addAssetToDropTarget - Compartment Id : ' + compartment_id);
-    console.log('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
+    console.info('addAssetToDropTarget - Title          : ' + title);
+    console.info('addAssetToDropTarget - Target Id      : ' + target_id);
+    console.info('addAssetToDropTarget - Compartment Id : ' + compartment_id);
+    console.info('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
     window[asset_add_functions[title]](target_id, compartment_id);
 }
 
@@ -59,7 +59,7 @@ function setDragDropIcon(e) {
         e = d3.event;
     }
     let type = e.target.getAttribute('data-type');
-    //console.log('Set Drop Target Icon for ' + palatte_source_type + ' over ' + type);
+    //console.info('Set Drop Target Icon for ' + palatte_source_type + ' over ' + type);
     if (asset_drop_targets[palatte_source_type].indexOf(type) >= 0) {
         e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
@@ -72,13 +72,13 @@ function handleDragStart(e) {
     if (typeof e == 'undefined') {
         e = d3.event;
     }
-    console.log('Drag Start');
+    console.groupCollapsed('Drag Start - ' + this.title);
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('text/plain', this.title);
     palatte_source_type = this.title;
     //e.dataTransfer.setData('text/html', this.src);
-    console.log(this.title);
-    //console.log(this.src);
+    console.info('Data Type : ' + this.title);
+    //console.info(this.src);
 }
 
 function handleDragOver(e) {
@@ -112,7 +112,7 @@ function handleDrop(e) {
     if (typeof e == 'undefined') {
         e = d3.event;
     }
-    console.log('Drag Drop (Dynamic)');
+    console.info('Drag Drop (Dynamic)');
     // this/e.target is current target element.
 
     if (e.stopPropagation) {
@@ -132,7 +132,7 @@ function handleDrop(e) {
     addAssetToDropTarget(title, target_id, compartment_id)
 
     this.classList.remove('over');  // this / e.target is previous target element.
-
+    console.groupEnd();
     return false;
 }
 
@@ -141,7 +141,7 @@ function handleDragEnd(e) {
         e = d3.event;
     }
     // this/e.target is the source node.
-    console.log('Drag End');
+    console.info('Drag End');
 
     [].forEach.call(cols, function (col) {
         col.classList.remove('over');
@@ -154,7 +154,7 @@ function handleDragEnd(e) {
 
 function handleConnectorDrag(e) {
     if (connectorStartElement) {
-        //console.log('Connector Drag : ' + getMousePosition(e).x + ' - ' + getMousePosition(e).y);
+        //console.info('Connector Drag : ' + getMousePosition(e).x + ' - ' + getMousePosition(e).y);
         let mousePos = getMousePosition(d3.event);
         d3.select("#Connector")
             .attr("x2", mousePos.x)
@@ -167,10 +167,10 @@ const middle_click = 2;
 const right_click = 3;
 
 function handleConnectorDragStart() {
-    console.log('Connector Drag Start');
+    console.info('Connector Drag Start');
     if (d3.event.which == left_click) {
         let thisid = d3.select(this).attr('id');
-        console.log('This Id : ' + thisid);
+        console.info('This Id : ' + thisid);
         let source_type = d3.select(this).attr('data-type');
         if (asset_connect_targets.hasOwnProperty(source_type) && asset_connect_targets[source_type].length > 0) {
             // Set Start Element to know we are dragging
@@ -178,10 +178,10 @@ function handleConnectorDragStart() {
             let parentid = d3.select(this).attr('data-parent-id');
             let parent_svg = document.getElementById(parentid + "-svg");
 
-            console.log('Connector Drag Start Parent Id : ' + parentid);
-            console.log('Connector Drag Start Id : ' + d3.select(this).attr('id'));
-            console.log('Connector Drag Start data-connector-start-y : ' + d3.select(this).attr('data-connector-start-y'));
-            console.log('Connector Drag Start data-connector-start-x : ' + d3.select(this).attr('data-connector-start-x'));
+            console.info('Connector Drag Start Parent Id : ' + parentid);
+            console.info('Connector Drag Start Id : ' + d3.select(this).attr('id'));
+            console.info('Connector Drag Start data-connector-start-y : ' + d3.select(this).attr('data-connector-start-y'));
+            console.info('Connector Drag Start data-connector-start-x : ' + d3.select(this).attr('data-connector-start-x'));
 
             // Define SVG position manipulation variables
             connectorContainerSVGPoint = parent_svg.createSVGPoint();
@@ -206,7 +206,7 @@ function handleConnectorDragStart() {
                 .attr("stroke-dasharray", "3, 3")
                 .attr("stroke", "darkgray");
         } else {
-            console.log('Not a drag source : ' + source_type);
+            console.info('Not a drag source : ' + source_type);
             connectorStartElement = null;
             connectorStartXLeft = 0;
             connectorStartYTop = 0;
@@ -220,20 +220,20 @@ function handleConnectorDragStart() {
 
 function handleConnectorDragEnter(e) {
     if (connectorStartElement) {
-        //console.log('Connector Drag Enter : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+        //console.info('Connector Drag Enter : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
     }
 }
 
 function handleConnectorDragLeave(e) {
     if (connectorStartElement) {
-        //console.log('Connector Drag Leave : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
+        //console.info('Connector Drag Leave : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
     }
 }
 
 function handleConnectorDrop(e) {
-    console.log('Connector Drop');
+    console.info('Connector Drop');
     let thisid = d3.select(this).attr('id');
-    console.log('This Id : ' + thisid);
+    console.info('This Id : ' + thisid);
     if (connectorStartElement) {
         let sourceType = connectorStartElement.getAttribute('data-type');
         let destinationType = d3.select(this).attr('data-type');
@@ -244,25 +244,25 @@ function handleConnectorDrop(e) {
         let connector_source_id = connectorStartElement.getAttribute('data-connector-id');
         let connector_destination_id = d3.select(this).attr('data-connector-id');
 
-        console.log('Connector Source Type : ' + sourceType);
-        console.log('Connector Destination Type : ' + destinationType);
-        console.log('Connector Allowed : ' + JSON.stringify(asset_connect_targets));
+        console.info('Connector Source Type : ' + sourceType);
+        console.info('Connector Destination Type : ' + destinationType);
+        console.info('Connector Allowed : ' + JSON.stringify(asset_connect_targets));
 
-        console.log('Connector Drag Start Id : ' + sourceid);
-        console.log('Connector Drag Start Parent Id : ' + source_parent_id);
-        console.log('Connector Drag End Id : ' + d3.select(this).attr('id'));
-        console.log('Connector Drag End Parent Id : ' + parentid);
-        console.log('Connector Drag End data-connector-end-y : ' + d3.select(this).attr('data-connector-end-y'));
-        console.log('Connector Drag End data-connector-end-x : ' + d3.select(this).attr('data-connector-end-x'));
-        console.log('Connector Source Id : ' + connector_source_id);
-        console.log('Connector Destination Id : ' + connector_destination_id);
+        console.info('Connector Drag Start Id : ' + sourceid);
+        console.info('Connector Drag Start Parent Id : ' + source_parent_id);
+        console.info('Connector Drag End Id : ' + d3.select(this).attr('id'));
+        console.info('Connector Drag End Parent Id : ' + parentid);
+        console.info('Connector Drag End data-connector-end-y : ' + d3.select(this).attr('data-connector-end-y'));
+        console.info('Connector Drag End data-connector-end-x : ' + d3.select(this).attr('data-connector-end-x'));
+        console.info('Connector Source Id : ' + connector_source_id);
+        console.info('Connector Destination Id : ' + connector_destination_id);
 
         // Check is Connection of
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
             updateAssetTarget(destinationType, sourceType, sourceid, id);
             /*
-            console.log('Creating Connector Line (' + sourceType + ') - (' + destinationType + ')');
-            console.log('Creating Connector Line (' + sourceid + ') - (' + id + ')');
+            console.info('Creating Connector Line (' + sourceType + ') - (' + destinationType + ')');
+            console.info('Creating Connector Line (' + sourceid + ') - (' + id + ')');
             connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-end-x');
             connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-end-y');
             let svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
@@ -298,7 +298,7 @@ function handleContextMenu() {
     let thisid = d3.select(this).attr('id');
     let okit_id = d3.select(this).attr('data-okit-id');
     let artifact = d3.select(this).attr('data-type');
-    console.log('Right Click on ' + thisid);
+    console.info('Right Click on ' + thisid);
     d3.event.preventDefault();
     d3.event.stopPropagation();
     //alert('Right Click');

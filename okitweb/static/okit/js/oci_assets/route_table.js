@@ -1,4 +1,4 @@
-console.log('Loaded Route Table Javascript');
+console.info('Loaded Route Table Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -29,12 +29,12 @@ function clearRouteTableVariables() {
  */
 function addRouteTable(vcn_id, compartment_id) {
     let id = 'okit-' + route_table_prefix + '-' + uuidv4();
-    console.log('Adding Route Table : ' + id);
+    console.groupCollapsed('Adding ' + route_table_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('route_tables')) {
-        OKITJsonObj['route_tables'] = [];
+    if (!okitJson.hasOwnProperty('route_tables')) {
+        okitJson['route_tables'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -49,13 +49,14 @@ function addRouteTable(vcn_id, compartment_id) {
     route_table['compartment_id'] = compartment_id;
     route_table['id'] = id;
     route_table['display_name'] = generateDefaultName(route_table_prefix, route_table_count);
-    route_table['route_rules'] = []
-    OKITJsonObj['route_tables'].push(route_table);
+    route_table['route_rules'] = [];
+    okitJson['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
-    displayOkitJson();
-    drawRouteTableSVG(route_table);
+    //console.info(JSON.stringify(okitJson, null, 2));
+    //drawRouteTableSVG(route_table);
+    drawSVGforJson();
     loadRouteTableProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -63,55 +64,61 @@ function addRouteTable(vcn_id, compartment_id) {
  */
 
 function deleteRouteTable(id) {
-    console.log('Delete Route Table ' + id);
+    console.groupCollapsed('Delete ' + route_table_artifact + ' : ' + id);
     // Remove SVG Element
-    d3.select("#" + id + "-svg").remove()
+    d3.select("#" + id + "-svg").remove();
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
-        if (OKITJsonObj['route_tables'][i]['id'] == id) {
-            OKITJsonObj['route_tables'].splice(i, 1);
+    for (let i=0; i < okitJson['route_tables'].length; i++) {
+        if (okitJson['route_tables'][i]['id'] == id) {
+            okitJson['route_tables'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('subnets' in OKITJsonObj) {
-        for (subnet of OKITJsonObj['subnets']) {
+    if ('subnets' in okitJson) {
+        for (subnet of okitJson['subnets']) {
             if (subnet['route_table_id'] == id) {
                 subnet['route_table_id'] = '';
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
 ** SVG Creation
  */
-function newRouteTableSVGDefinition(artifact, position=0) {
+function getRouteTableDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
+
+function newRouteTableDefinition(artifact, position=0) {
+    let dimensions = getRouteTableDimensions();
     let definition = newArtifactSVGDefinition(artifact, route_table_artifact);
     definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
     definition['svg']['y'] = Math.round(icon_height * 3 / 2);
-    definition['svg']['width'] = icon_width;
-    definition['svg']['height'] = icon_height;
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = route_table_stroke_colour;
     definition['rect']['stroke']['dash'] = 1;
     return definition;
 }
 
 function drawRouteTableSVG(artifact) {
-    // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
-    // the subnet draw.
-    if (OKITJsonObj.hasOwnProperty('subnets')) {
-        for (let subnet of OKITJsonObj['subnets']) {
-            if (subnet['route_table_id'] == artifact['id']) {
-                console.log(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
-                return;
-            }
-        }
-    }
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + route_table_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + route_table_artifact + ' : ' + id + ' [' + parent_id + ']');
+    // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
+    // the subnet draw.
+    if (okitJson.hasOwnProperty('subnets')) {
+        for (let subnet of okitJson['subnets']) {
+            if (subnet['route_table_id'] == artifact['id']) {
+                console.info(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
+                return;
+            }
+        }
+    }
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -126,17 +133,7 @@ function drawRouteTableSVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-        /*
-        let artifact_definition = newArtifactSVGDefinition(artifact, route_table_artifact);
-        artifact_definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
-        artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
-        artifact_definition['svg']['width'] = icon_width;
-        artifact_definition['svg']['height'] = icon_height;
-        artifact_definition['rect']['stroke']['colour'] = route_table_stroke_colour;
-        artifact_definition['rect']['stroke']['dash'] = 1;
-        */
-
-        let svg = drawArtifact(newRouteTableSVGDefinition(artifact, position));
+        let svg = drawArtifact(newRouteTableDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
@@ -151,8 +148,9 @@ function drawRouteTableSVG(artifact) {
             d3.event.stopPropagation();
         });
     } else {
-        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*
@@ -160,14 +158,14 @@ function drawRouteTableSVG(artifact) {
  */
 function loadRouteTableProperties(id) {
     $("#properties").load("propertysheets/route_table.html", function () {
-        if ('route_tables' in OKITJsonObj) {
-            console.log('Loading Route Table: ' + id);
-            let json = OKITJsonObj['route_tables'];
+        if ('route_tables' in okitJson) {
+            console.info('Loading Route Table: ' + id);
+            let json = okitJson['route_tables'];
             for (let i = 0; i < json.length; i++) {
                 let route_table = json[i];
-                //console.log(JSON.stringify(route_table, null, 2));
+                //console.info(JSON.stringify(route_table, null, 2));
                 if (route_table['id'] == id) {
-                    //console.log('Found Route Table: ' + id);
+                    //console.info('Found Route Table: ' + id);
                     route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['vcn_id']];
                     $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
                     $('#display_name').val(route_table['display_name']);
@@ -237,7 +235,7 @@ function addRouteRuleHtml(route_rule) {
         .attr("value", route_rule['destination'])
         .on("change", function() {
             route_rule['destination'] = this.value;
-            console.log('Changed destination: ' + this.value);
+            console.info('Changed destination: ' + this.value);
             displayOkitJson();
         });
     // Network Entity
@@ -250,7 +248,7 @@ function addRouteRuleHtml(route_rule) {
         .attr("id", "network_entity_id")
         .on("change", function() {
             route_rule['network_entity_id'] = this.options[this.selectedIndex].value;
-            console.log('Changed network_entity_id ' + this.selectedIndex);
+            console.info('Changed network_entity_id ' + this.selectedIndex);
             displayOkitJson();
         });
     // Add Internet gateways
@@ -262,7 +260,7 @@ function addRouteRuleHtml(route_rule) {
             opt.attr("selected", "selected");
         }
     }
-    //console.log('Selected Index: ' + network_entity_id_select.node().selectedIndex);
+    //console.info('Selected Index: ' + network_entity_id_select.node().selectedIndex);
     if (route_rule['network_entity_id'] == '') {
         route_rule['network_entity_id'] = network_entity_id_select.node().options[network_entity_id_select.node().selectedIndex].value;
     }
@@ -270,7 +268,7 @@ function addRouteRuleHtml(route_rule) {
 
 function handleAddRouteRule(evt) {
     //route_table = evt.target.route_table;
-    console.log('Adding route rule to : ' + route_table);
+    console.info('Adding route rule to : ' + route_table);
     let new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity_id: ""}
     evt.target.route_table['route_rules'].push(new_rule)
     addRouteRuleHtml(new_rule);
@@ -288,7 +286,7 @@ function handleDeleteRouteRulesRow(btn) {
  */
 
 function queryRouteTableAjax(compartment_id, vcn_id) {
-    console.log('------------- queryRouteTableAjax --------------------');
+    console.info('------------- queryRouteTableAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
@@ -303,18 +301,18 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['route_tables'] = response_json;
+            okitJson['route_tables'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('queryRouteTableAjax : ' + response_json[i]['display_name']);
+                console.info('queryRouteTableAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + route_table_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }

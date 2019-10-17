@@ -1,4 +1,4 @@
-console.log('Loaded Load Balancer Javascript');
+console.info('Loaded Load Balancer Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -33,12 +33,12 @@ function clearLoadBalancerVariables() {
  */
 function addLoadBalancer(subnet_id, compartment_id) {
     let id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
-    console.log('Adding Load Balancer : ' + id);
+    console.groupCollapsed('Adding ' + load_balancer_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('load_balancers')) {
-        OKITJsonObj['load_balancers'] = [];
+    if (!okitJson.hasOwnProperty('load_balancers')) {
+        okitJson['load_balancers'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -57,12 +57,13 @@ function addLoadBalancer(subnet_id, compartment_id) {
     load_balancer['shape_name'] = '100Mbps';
     load_balancer['instances'] = [];
     load_balancer['instance_ids'] = [];
-    OKITJsonObj['load_balancers'].push(load_balancer);
+    okitJson['load_balancers'].push(load_balancer);
     okitIdsJsonObj[id] = load_balancer['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
-    displayOkitJson();
-    drawLoadBalancerSVG(load_balancer);
+    //console.info(JSON.stringify(okitJson, null, 2));
+    //drawLoadBalancerSVG(load_balancer);
+    drawSVGforJson();
     loadLoadBalancerProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -70,26 +71,44 @@ function addLoadBalancer(subnet_id, compartment_id) {
  */
 
 function deleteLoadBalancer(id) {
-    console.log('Delete Load Balancer ' + id);
+    console.groupCollapsed('Delete ' + load_balancer_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i = 0; i < OKITJsonObj['load_balancers'].length; i++) {
-        if (OKITJsonObj['load_balancers'][i]['id'] == id) {
-            OKITJsonObj['load_balancers'].splice(i, 1);
+    for (let i = 0; i < okitJson['load_balancers'].length; i++) {
+        if (okitJson['load_balancers'][i]['id'] == id) {
+            okitJson['load_balancers'].splice(i, 1);
         }
     }
+    console.groupEnd();
 }
 
 /*
 ** SVG Creation
  */
+function getLoadBalancerDimensions(id='') {
+    return {width:load_balancer_width, height:load_balancer_height};
+}
+
+function newLoadBalancerDefinition(artifact, position=0) {
+    let dimensions = getLoadBalancerDimensions();
+    let definition = newArtifactSVGDefinition(artifact, load_balancer_artifact);
+    definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
+    definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    definition['name']['show'] = true;
+    return definition;
+}
+
 function drawLoadBalancerSVG(artifact) {
     let parent_id = artifact['subnet_ids'][0];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + load_balancer_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + load_balancer_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!subnet_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         subnet_bui_sub_artifacts[parent_id] = {};
@@ -105,16 +124,7 @@ function drawLoadBalancerSVG(artifact) {
         // Increment Icon Position
         subnet_bui_sub_artifacts[parent_id]['load_balancer_position'] += 1;
 
-        let artifact_definition = newArtifactSVGDefinition(artifact, load_balancer_artifact);
-        artifact_definition['svg']['x'] = Math.round((icon_width * 3 / 2) + (load_balancer_width * position) + (icon_spacing * position));
-        artifact_definition['svg']['y'] = Math.round(icon_height * 3 / 2);
-        artifact_definition['svg']['width'] = load_balancer_width;
-        artifact_definition['svg']['height'] = load_balancer_height;
-        artifact_definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
-        artifact_definition['rect']['stroke']['dash'] = 1;
-        artifact_definition['name']['show'] = true;
-
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newLoadBalancerDefinition(artifact, position));
 
         //loadLoadBalancerProperties(id);
         let rect = d3.select('#' + id);
@@ -141,6 +151,7 @@ function drawLoadBalancerSVG(artifact) {
             .attr("data-connector-id", id)
             .attr("dragable", true);
     }
+    console.groupEnd();
 }
 
 function clearLoadBalancerConnectorsSVG(load_balancer) {
@@ -154,7 +165,7 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
     let parent_svg = d3.select('#' + parent_id + "-svg");
     // Only Draw if parent exists
     if (parent_svg.node()) {
-        console.log('Parent SVG : ' + parent_svg.node());
+        console.info('Parent SVG : ' + parent_svg.node());
         // Define SVG position manipulation variables
         let svgPoint = parent_svg.node().createSVGPoint();
         let screenCTM = parent_svg.node().getScreenCTM();
@@ -200,12 +211,12 @@ function loadLoadBalancerProperties(id) {
             "instances": "instance_ids",
             "instance_ids": "instances"
         };
-        if ('load_balancers' in OKITJsonObj) {
-            console.log('Loading Load Balancer: ' + id);
-            let json = OKITJsonObj['load_balancers'];
+        if ('load_balancers' in okitJson) {
+            console.info('Loading Load Balancer: ' + id);
+            let json = okitJson['load_balancers'];
             for (let i = 0; i < json.length; i++) {
                 let load_balancer = json[i];
-                //console.log(JSON.stringify(load_balancer, null, 2));
+                //console.info(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
                     load_balancer['virtual_cloud_network'] = okitIdsJsonObj[load_balancer['subnet_ids'][0]];
                     $("#virtual_cloud_network").html(load_balancer['virtual_cloud_network']);
@@ -213,7 +224,7 @@ function loadLoadBalancerProperties(id) {
                     $('#shape_name').val(load_balancer['shape_name']);
                     $('#is_private').attr('checked', load_balancer['is_private']);
                     let instances_select = $('#instance_ids');
-                    //console.log('Instance Ids: ' + instance_ids);
+                    //console.info('Instance Ids: ' + instance_ids);
                     for (let slid of instance_ids) {
                         instances_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
                     }
@@ -233,12 +244,12 @@ function loadLoadBalancerProperties(id) {
 ** OKIT Json Update Function
  */
 function updateLoadBalancer(source_type, source_id, id) {
-    console.log('Update Load Balancer : ' + id + ' Adding ' + source_type + ' ' + source_id);
-    let load_balancers = OKITJsonObj['load_balancers'];
-    console.log(JSON.stringify(load_balancers))
+    console.info('Update Load Balancer : ' + id + ' Adding ' + source_type + ' ' + source_id);
+    let load_balancers = okitJson['load_balancers'];
+    console.info(JSON.stringify(load_balancers))
     for (let i = 0; i < load_balancers.length; i++) {
         let load_balancer = load_balancers[i];
-        console.log(i + ') ' + JSON.stringify(load_balancer))
+        console.info(i + ') ' + JSON.stringify(load_balancer))
         if (load_balancer['id'] == id) {
             if (source_type == instance_artifact) {
                 if (load_balancer['instance_ids'].indexOf(source_id) > 0) {
@@ -260,7 +271,7 @@ function updateLoadBalancer(source_type, source_id, id) {
  */
 
 function queryLoadBalancerAjax(compartment_id, subnet_id) {
-    console.log('------------- queryLoadBalancerAjax --------------------');
+    console.info('------------- queryLoadBalancerAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['subnet_id'] = subnet_id;
@@ -275,18 +286,18 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
         data: JSON.stringify(request_json),
         success: function (resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['load_balancers'] = response_json;
+            okitJson['load_balancers'] = response_json;
             let len = response_json.length;
             for (let i = 0; i < len; i++) {
-                console.log('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
+                console.info('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + load_balancer_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function (xhr, status, error) {
-            console.log('Status : ' + status)
-            console.log('Error : ' + error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
         }
     });
 }

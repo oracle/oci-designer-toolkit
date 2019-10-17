@@ -1,4 +1,4 @@
-console.log('Loaded Designer Javascript');
+console.info('Loaded Designer Javascript');
 /*
  * Define the OKT Designer Constant that will be used across the subsequent Javascript
  */
@@ -42,11 +42,41 @@ const block_storage_volume_prefix = 'bsv';
  * Define designer working variables
  */
 // OKIT Json
-let OKITJsonObj = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
+let okitJson = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
 // Common okit id to name mapping
 let okitIdsJsonObj = {};
 // Query Request only set to a value when designer called from query
 let okitQueryRequestJson = null;
+
+/*
+ * Variable Initialisation
+ */
+function initialiseJson() {
+    okitJson = {
+        compartments: [],
+        block_storage_volumes: [],
+        dynamic_routing_gateways: [],
+        instances: [],
+        internet_gateways: [],
+        load_balancers: [],
+        nat_gateways: [],
+        route_tables: [],
+        security_lists: [],
+        subnets: [],
+        virtual_cloud_networks: [],
+        canvas : initialiseCanvasJson()
+    }
+}
+
+function initialiseCanvasJson() {
+    let canvasJson = {
+        compartments: {},
+        subnets: {},
+        virtual_cloud_networks: {}
+    };
+
+    return canvasJson
+}
 
 /*
  * Define Common Functions
@@ -56,8 +86,8 @@ function generateDefaultName(prefix, count) {
 }
 
 function displayOkitJson() {
-    $('#okitjson').html(JSON.stringify(OKITJsonObj, null, 2));
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
+    $('#okitjson').html(JSON.stringify(okitJson, null, 2));
+    //console.info(JSON.stringify(okitJson, null, 2));
 }
 
 function generateConnectorId(sourceid, destinationid) {
@@ -74,12 +104,13 @@ function handleNew(evt) {
 }
 
 function newDiagram() {
-    console.log('Creating New Diagram');
-    OKITJsonObj = {};
-    okitIdsJsonObj = {};
-    clearSVG();
-    //addCompartment();
-    document.getElementById('file-add-menu-item').click();
+    console.groupCollapsed('Creating New Diagram');
+    initialiseJson();
+    clearArtifactData();
+    newCanvas();
+    addCompartment();
+    //document.getElementById('file-add-menu-item').click();
+    console.groupEnd();
 }
 
 function clearTabs() {
@@ -89,16 +120,27 @@ function clearTabs() {
         .attr("class", "tab");
 }
 
-function clearSVG() {
-    console.log('Clearing Diagram');
-    //$('#okitcanvas').empty();
-    // Tabs
-    clearTabs();
-    // Loop through Clear Artifact Routines
+function clearDiagram() {
+    console.groupCollapsed('Clearing Diagram');
+    // Clear Artifact
+    clearArtifactData();
+    // Clear Canvas
+    clearCanvas();
+    console.groupEnd();
+}
+
+function clearArtifactData() {
+    console.groupCollapsed('Clearing Artifact Data');
     for (let clear_function of asset_clear_functions) {
-        console.log('Calling ' + clear_function);
+        console.info('Calling ' + clear_function);
         window[clear_function]();
     }
+    console.groupEnd();
+}
+
+function clearCoreData() {
+    okitJson = {};
+    okitIdsJsonObj = {};
 }
 
 /*
@@ -115,14 +157,17 @@ function getAsJson(readFile) {
 function loaded(evt) {
     // Obtain the read file data
     let fileString = evt.target.result;
-    console.log('Loaded: ' + fileString);
-    OKITJsonObj = JSON.parse(fileString);
+    console.info('Loaded: ' + fileString);
+    okitJson = JSON.parse(fileString);
+    if (!okitJson.hasOwnProperty('canvas')) {
+        okitJson['canvas'] = initialiseCanvasJson();
+    }
     displayOkitJson();
     drawSVGforJson();
 }
 
 function errorHandler(evt) {
-    console.log('Error: ' + evt.target.error.name);
+    console.info('Error: ' + evt.target.error.name);
 }
 
 function handleFileSelect(evt) {
@@ -161,7 +206,7 @@ function redrawSVGCanvas() {
 
 function handleSave(evt) {
     hideNavMenu();
-    saveJson(JSON.stringify(OKITJsonObj, null, 2), "okit.json");
+    saveJson(JSON.stringify(okitJson, null, 2), "okit.json");
 }
 
 function saveJson(text, filename){
@@ -186,11 +231,11 @@ function handleAdd(evt) {
 
 function handleExportToSVG(evt) {
     hideNavMenu();
-    if (!OKITJsonObj.hasOwnProperty('open_compartment_index')) {
-        OKITJsonObj['open_compartment_index'] = 0;
+    if (!okitJson.hasOwnProperty('open_compartment_index')) {
+        okitJson['open_compartment_index'] = 0;
     }
-    let okitcanvas = document.getElementById(OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['id'] + '-canvas-svg');
-    let name = OKITJsonObj.compartments[OKITJsonObj['open_compartment_index']]['name'];
+    let okitcanvas = document.getElementById(okitJson.compartments[okitJson['open_compartment_index']]['id'] + '-canvas-svg');
+    let name = okitJson.compartments[okitJson['open_compartment_index']]['name'];
     saveSvg(okitcanvas, name + '.svg');
 }
 
@@ -212,6 +257,15 @@ function saveSvg(svgEl, name) {
 /*
 ** Query OCI Ajax Calls to allow async svg build
  */
+function showQueryResults() {
+    console.info('Generating Query Results');
+    clearCoreData();
+    clearArtifactData();
+    newCanvas();
+    setBusyIcon();
+    $('#query-progress').removeClass('hidden');
+    queryCompartmentAjax();
+}
 
 function showQueryProgress() {
     let element = document.getElementById("query-progress");
@@ -222,7 +276,7 @@ function showQueryProgress() {
 
 function hideQueryProgressIfComplete() {
     let cnt = $('#query-progress input:checkbox:not(:checked)').length
-    console.log('>>>>>>> Unhecked Count : ' + cnt);
+    console.info('>>>>>>> Unhecked Count : ' + cnt);
     if (cnt == 0) {
         unsetBusyIcon();
         $('#query-progress').toggleClass('hidden');
@@ -237,9 +291,9 @@ function openCompartment(compartment_id) {
     $('#' + compartment_id + '-tab-button').addClass('active');
     $('#' + compartment_id + '-tab-content').show();
     // Set Open Compartment Index
-    for (let i=0; i < OKITJsonObj['compartments'].length; i++) {
-        if (OKITJsonObj['compartments'][i]['id'] == compartment_id) {
-            OKITJsonObj['open_compartment_index'] = i;
+    for (let i=0; i < okitJson['compartments'].length; i++) {
+        if (okitJson['compartments'][i]['id'] == compartment_id) {
+            okitJson['open_compartment_index'] = i;
             break;
         }
     }
@@ -248,9 +302,6 @@ function openCompartment(compartment_id) {
 
 
 const ro = new ResizeObserver(entries => {
-    //for (let entry of entries) {
-    //    entry.target.style.borderRadius = Math.max(0, 250 - entry.contentRect.width) + 'px';
-    //}
     redrawSVGCanvas();
 });
 
@@ -258,7 +309,7 @@ $(document).ready(function(){
     /*
     ** Add handler functionality
      */
-    console.log('Adding Designer Handlers');
+    console.info('Adding Designer Handlers');
 
     /*
     ** Drag start for all pallet icons
@@ -284,7 +335,7 @@ $(document).ready(function(){
     document.getElementById('file-save-menu-item').addEventListener('click', handleSave, false);
 
     // Canvas Menu
-    document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
+    //document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
 
     document.getElementById('file-redraw-menu-item').addEventListener('click', handleRedraw, false);
 
@@ -325,13 +376,11 @@ $(document).ready(function(){
     //let compartment_id = addCompartment();
 
     if (okitQueryRequestJson == null) {
-        console.log('<<<<<<<<<<<<<New Page>>>>>>>>>>>>>')
+        console.info('<<<<<<<<<<<<< New Canvas >>>>>>>>>>>>>');
         newDiagram();
     } else {
-        setBusyIcon();
-        clearSVG();
-        $('#query-progress').removeClass('hidden');
-        queryCompartmentAjax();
+        console.info('<<<<<<<<<<<<< Query Results Canvas >>>>>>>>>>>>>');
+        showQueryResults();
     }
 
     $('input[type=radio][name=source-properties]').change(function() {
@@ -347,7 +396,7 @@ $(document).ready(function(){
     $("#json-display").slideToggle();
 
     // Only observe the canvas
-    //ro.observe(document.querySelector('#canvas-wrapper'));
+    ro.observe(document.querySelector('#canvas-wrapper'));
 
 });
 

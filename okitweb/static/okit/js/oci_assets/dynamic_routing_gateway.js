@@ -1,9 +1,9 @@
-console.log('Loaded Dynamic Routing Gateway Javascript');
+console.info('Loaded Dynamic Routing Gateway Javascript');
 
 /*
 ** Set Valid drop Targets
  */
-asset_drop_targets[dynamic_routing_gateway_artifact] = [virtual_cloud_network_artifact];
+asset_drop_targets[dynamic_routing_gateway_artifact] = [compartment_artifact];
 asset_connect_targets[dynamic_routing_gateway_artifact] = [];
 asset_add_functions[dynamic_routing_gateway_artifact] = "addDynamicRoutingGateway";
 asset_delete_functions[dynamic_routing_gateway_artifact] = "deleteDynamicRoutingGateway";
@@ -26,14 +26,14 @@ function clearDynamicRoutingGatewayVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addDynamicRoutingGateway(vcn_id, compartment_id) {
+function addDynamicRoutingGateway(compartment_id) {
     let id = 'okit-' + dynamic_routing_gateway_prefix + '-' + uuidv4();
-    console.log('Adding Dynamic Routing Gateway : ' + id);
+    console.groupCollapsed('Adding Dynamic Routing Gateway : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('dynamic_routing_gateways')) {
-        OKITJsonObj['dynamic_routing_gateways'] = [];
+    if (!okitJson.hasOwnProperty('dynamic_routing_gateways')) {
+        okitJson['dynamic_routing_gateways'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -43,17 +43,16 @@ function addDynamicRoutingGateway(vcn_id, compartment_id) {
     // Increment Count
     dynamic_routing_gateway_count += 1;
     let dynamic_routing_gateway = {};
-    dynamic_routing_gateway['vcn_id'] = vcn_id;
-    dynamic_routing_gateway['virtual_cloud_network'] = '';
     dynamic_routing_gateway['compartment_id'] = compartment_id;
     dynamic_routing_gateway['id'] = id;
     dynamic_routing_gateway['display_name'] = generateDefaultName(dynamic_routing_gateway_prefix, dynamic_routing_gateway_count);
-    OKITJsonObj['dynamic_routing_gateways'].push(dynamic_routing_gateway);
+    okitJson['dynamic_routing_gateways'].push(dynamic_routing_gateway);
     okitIdsJsonObj[id] = dynamic_routing_gateway['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
-    displayOkitJson();
-    drawDynamicRoutingGatewaySVG(dynamic_routing_gateway);
+    //console.info(JSON.stringify(okitJson, null, 2));
+    //drawDynamicRoutingGatewaySVG(dynamic_routing_gateway);
+    drawSVGforJson();
     loadDynamicRoutingGatewayProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -61,18 +60,18 @@ function addDynamicRoutingGateway(vcn_id, compartment_id) {
  */
 
 function deleteDynamicRoutingGateway(id) {
-    console.log('Delete DynamicRouting Gateway ' + id);
+    console.groupCollapsed('Delete ' + dynamic_routing_gateway_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['dynamic_routing_gateways'].length; i++) {
-        if (OKITJsonObj['dynamic_routing_gateways'][i]['id'] == id) {
-            OKITJsonObj['dynamic_routing_gateways'].splice(i, 1);
+    for (let i=0; i < okitJson['dynamic_routing_gateways'].length; i++) {
+        if (okitJson['dynamic_routing_gateways'][i]['id'] == id) {
+            okitJson['dynamic_routing_gateways'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('route_tables' in OKITJsonObj) {
-        for (route_table of OKITJsonObj['route_tables']) {
+    if ('route_tables' in okitJson) {
+        for (route_table of okitJson['route_tables']) {
             for (let i = 0; i < route_table['route_rules'].length; i++) {
                 if (route_table['route_rules'][i]['network_entity_id'] == id) {
                     route_table['route_rules'].splice(i, 1);
@@ -80,17 +79,34 @@ function deleteDynamicRoutingGateway(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
 ** SVG Creation
  */
+function getDynamicRoutingGatewayDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
+
+function newDynamicRoutingGatewayDefinition(artifact, position=0) {
+    let definition = newArtifactSVGDefinition(artifact, dynamic_routing_gateway_artifact);
+    let dimensions = getDynamicRoutingGatewayDimensions();
+    definition['svg']['x'] = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
+    definition['svg']['y'] = 0;
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = dynamic_routing_gateway_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    return definition;
+}
+
 function drawDynamicRoutingGatewaySVG(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
-    console.log('Drawing ' + dynamic_routing_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.groupCollapsed('Drawing ' + dynamic_routing_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
 
     if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
         virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
@@ -105,15 +121,7 @@ function drawDynamicRoutingGatewaySVG(artifact) {
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'] += 1;
 
-        let artifact_definition = newArtifactSVGDefinition(artifact, dynamic_routing_gateway_artifact);
-        artifact_definition['svg']['x'] = Math.round(icon_width * 2 + (icon_width * position) + (icon_spacing * position));
-        artifact_definition['svg']['y'] = 0;
-        artifact_definition['svg']['width'] = icon_width;
-        artifact_definition['svg']['height'] = icon_height;
-        artifact_definition['rect']['stroke']['colour'] = dynamic_routing_gateway_stroke_colour;
-        artifact_definition['rect']['stroke']['dash'] = 1;
-
-        let svg = drawArtifact(artifact_definition);
+        let svg = drawArtifact(newDynamicRoutingGatewayDefinition(artifact, position));
 
         //loadDynamicRoutingGatewayProperties(id);
         // Add click event to display properties
@@ -126,8 +134,9 @@ function drawDynamicRoutingGatewaySVG(artifact) {
         });
         //    .on("contextmenu", handleContextMenu);
     } else {
-        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*
@@ -135,14 +144,14 @@ function drawDynamicRoutingGatewaySVG(artifact) {
  */
 function loadDynamicRoutingGatewayProperties(id) {
     $("#properties").load("propertysheets/dynamic_routing_gateway.html", function () {
-        if ('dynamic_routing_gateways' in OKITJsonObj) {
-            console.log('Loading DynamicRouting Gateway: ' + id);
-            let json = OKITJsonObj['dynamic_routing_gateways'];
+        if ('dynamic_routing_gateways' in okitJson) {
+            console.info('Loading DynamicRouting Gateway: ' + id);
+            let json = okitJson['dynamic_routing_gateways'];
             for (let i = 0; i < json.length; i++) {
                 let dynamic_routing_gateway = json[i];
-                //console.log(JSON.stringify(dynamic_routing_gateway, null, 2));
+                //console.info(JSON.stringify(dynamic_routing_gateway, null, 2));
                 if (dynamic_routing_gateway['id'] == id) {
-                    //console.log('Found DynamicRouting Gateway: ' + id);
+                    //console.info('Found DynamicRouting Gateway: ' + id);
                     dynamic_routing_gateway['virtual_cloud_network'] = okitIdsJsonObj[dynamic_routing_gateway['vcn_id']];
                     $("#virtual_cloud_network").html(dynamic_routing_gateway['virtual_cloud_network']);
                     $('#display_name').val(dynamic_routing_gateway['display_name']);
@@ -159,11 +168,10 @@ function loadDynamicRoutingGatewayProperties(id) {
 ** Query OCI
  */
 
-function queryDynamicRoutingGatewayAjax(compartment_id, vcn_id) {
-    console.log('------------- queryDynamicRoutingGatewayAjax --------------------');
+function queryDynamicRoutingGatewayAjax(compartment_id) {
+    console.info('------------- queryDynamicRoutingGatewayAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
     if ('dynamic_routing_gateway_filter' in okitQueryRequestJson) {
         request_json['dynamic_routing_gateway_filter'] = okitQueryRequestJson['dynamic_routing_gateway_filter'];
     }
@@ -175,18 +183,18 @@ function queryDynamicRoutingGatewayAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['dynamic_routing_gateways'] = response_json;
+            okitJson['dynamic_routing_gateways'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('queryDynamicRoutingGatewayAjax : ' + response_json[i]['display_name']);
+                console.info('queryDynamicRoutingGatewayAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }
