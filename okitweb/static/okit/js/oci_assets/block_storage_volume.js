@@ -116,6 +116,7 @@ function drawBlockStorageVolumeSVG(artifact) {
             if (instance.hasOwnProperty('block_storage_volume_ids')) {
                 if (instance['block_storage_volume_ids'].includes(artifact['id'])) {
                     console.info(artifact['display_name'] + ' attached to instance '+ instance['display_name']);
+                    console.groupEnd();
                     return;
                 }
             }

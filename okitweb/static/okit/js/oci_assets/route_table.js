@@ -152,7 +152,6 @@ function drawRouteTableSVG(artifact) {
         console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
     console.groupEnd();
-    return;
 }
 
 /*
