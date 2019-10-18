@@ -47,20 +47,24 @@ class OCIInternetGateways(OCIVirtualNetworkConnection):
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'AVAILABLE'
 
-        internet_gateways = oci.pagination.list_call_get_all_results(self.client.list_internet_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+        if self.vcn_id is not None:
+            internet_gateways = oci.pagination.list_call_get_all_results(self.client.list_internet_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
 
-        # Convert to Json object
-        internet_gateways_json = self.toJson(internet_gateways)
-        logger.debug(str(internet_gateways_json))
+            # Convert to Json object
+            internet_gateways_json = self.toJson(internet_gateways)
+            logger.debug(str(internet_gateways_json))
 
-        # Filter results
-        self.internet_gateways_json = self.filterJsonObjectList(internet_gateways_json, filter)
-        logger.debug(str(self.internet_gateways_json))
+            # Filter results
+            self.internet_gateways_json = self.filterJsonObjectList(internet_gateways_json, filter)
+            logger.debug(str(self.internet_gateways_json))
 
-        # Build List of InternetGateway Objects
-        self.internet_gateways_obj = []
-        for internet_gateway in self.internet_gateways_json:
-            self.internet_gateways_obj.append(OCIInternetGateway(self.config, self.configfile, internet_gateway))
+            # Build List of InternetGateway Objects
+            self.internet_gateways_obj = []
+            for internet_gateway in self.internet_gateways_json:
+                self.internet_gateways_obj.append(OCIInternetGateway(self.config, self.configfile, internet_gateway))
+        else:
+            logger.warn('Virtual Cloud Network Id has not been specified.')
+
         return self.internet_gateways_json
 
 

@@ -47,19 +47,25 @@ class OCINATGateways(OCIVirtualNetworkConnection):
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'AVAILABLE'
 
-        nat_gateways = oci.pagination.list_call_get_all_results(self.client.list_nat_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
-        # Convert to Json object
-        nat_gateways_json = self.toJson(nat_gateways)
-        logger.debug(str(nat_gateways_json))
+        logger.info('Compartment Id : {0!s:s}'.format(compartment_id))
+        logger.info('VCN Id         : {0!s:s}'.format(self.vcn_id))
 
-        # Filter results
-        self.nat_gateways_json = self.filterJsonObjectList(nat_gateways_json, filter)
-        logger.debug(str(self.nat_gateways_json))
+        if self.vcn_id is not None:
+            nat_gateways = oci.pagination.list_call_get_all_results(self.client.list_nat_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+            # Convert to Json object
+            nat_gateways_json = self.toJson(nat_gateways)
+            logger.debug(str(nat_gateways_json))
 
-        # Build List of NATGateway Objects
-        self.nat_gateways_obj = []
-        for nat_gateway in self.nat_gateways_json:
-            self.nat_gateways_obj.append(OCINATGateway(self.config, self.configfile, nat_gateway))
+            # Filter results
+            self.nat_gateways_json = self.filterJsonObjectList(nat_gateways_json, filter)
+            logger.debug(str(self.nat_gateways_json))
+
+            # Build List of NATGateway Objects
+            self.nat_gateways_obj = []
+            for nat_gateway in self.nat_gateways_json:
+                self.nat_gateways_obj.append(OCINATGateway(self.config, self.configfile, nat_gateway))
+        else:
+            logger.warn('Virtual Cloud Network Id has not been specified.')
 
         return self.nat_gateways_json
 

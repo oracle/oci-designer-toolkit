@@ -343,14 +343,22 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
             let response_json = JSON.parse(resp);
             okitJson['virtual_cloud_networks'] = response_json;
             let len =  response_json.length;
-            for(let i=0;i<len;i++ ) {
-                console.info('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
-                virtual_cloud_network_count += 1;
-                queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
-                queryNATGatewayAjax(compartment_id, response_json[i]['id']);
-                queryRouteTableAjax(compartment_id, response_json[i]['id']);
-                querySecurityListAjax(compartment_id, response_json[i]['id']);
-                querySubnetAjax(compartment_id, response_json[i]['id']);
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    console.info('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
+                    virtual_cloud_network_count += 1;
+                    /*
+                    queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
+                    queryNATGatewayAjax(compartment_id, response_json[i]['id']);
+                    queryRouteTableAjax(compartment_id, response_json[i]['id']);
+                    querySecurityListAjax(compartment_id, response_json[i]['id']);
+                    querySubnetAjax(compartment_id, response_json[i]['id']);
+                    */
+                    initiateVirtualCloudNetworkSubQueries(compartment_id, response_json[i]['id']);
+                }
+            } else {
+                // Do this to clear check boxes
+                initiateVirtualCloudNetworkSubQueries(compartment_id, null);
             }
             redrawSVGCanvas();
             $('#' + virtual_cloud_network_query_cb).prop('checked', true);
@@ -358,9 +366,17 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Error  : '+ error)
         }
     });
+}
+
+function initiateVirtualCloudNetworkSubQueries(compartment_id, id='') {
+    queryInternetGatewayAjax(compartment_id, id);
+    queryNATGatewayAjax(compartment_id, id);
+    queryRouteTableAjax(compartment_id, id);
+    querySecurityListAjax(compartment_id, id);
+    querySubnetAjax(compartment_id, id);
 }
 
 $(document).ready(function() {
