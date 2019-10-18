@@ -1,4 +1,4 @@
-console.log('Loaded Subnet Javascript');
+console.info('Loaded Security List Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -28,12 +28,12 @@ function clearSecurityListVariables() {
  */
 function addSecurityList(vcn_id, compartment_id) {
     let id = 'okit-' + security_list_prefix + '-' + uuidv4();
-    console.log('Adding Security List : ' + id);
+    console.groupCollapsed('Adding ' + security_list_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('security_lists')) {
-        OKITJsonObj['security_lists'] = [];
+    if (!okitJson.hasOwnProperty('security_lists')) {
+        okitJson['security_lists'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -50,13 +50,14 @@ function addSecurityList(vcn_id, compartment_id) {
     security_list['display_name'] = generateDefaultName(security_list_prefix, security_list_count);
     security_list['egress_security_rules'] = []
     security_list['ingress_security_rules'] = []
-    OKITJsonObj['security_lists'].push(security_list);
+    okitJson['security_lists'].push(security_list);
     okitIdsJsonObj[id] = security_list['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
-    //console.log(security_list_ids);
-    displayOkitJson();
-    drawSecurityListSVG(security_list);
+    //console.info(JSON.stringify(okitJson, null, 2));
+    //console.info(security_list_ids);
+    //drawSecurityListSVG(security_list);
+    drawSVGforJson();
     loadSecurityListProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -64,18 +65,18 @@ function addSecurityList(vcn_id, compartment_id) {
  */
 
 function deleteSecurityList(id) {
-    console.log('Delete Security List ' + id);
+    console.groupCollapsed('Delete ' + security_list_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['security_lists'].length; i++) {
-        if (OKITJsonObj['security_lists'][i]['id'] == id) {
-            OKITJsonObj['security_lists'].splice(i, 1);
+    for (let i=0; i < okitJson['security_lists'].length; i++) {
+        if (okitJson['security_lists'][i]['id'] == id) {
+            okitJson['security_lists'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('subnets' in OKITJsonObj) {
-        for (subnet of OKITJsonObj['subnets']) {
+    if ('subnets' in okitJson) {
+        for (subnet of okitJson['subnets']) {
             for (let i=0; i < subnet['security_list_ids'].length; i++) {
                 if (subnet['security_list_ids'][i] == id) {
                     subnet['security_list_ids'].splice(i, 1);
@@ -83,63 +84,62 @@ function deleteSecurityList(id) {
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
 ** SVG Creation
  */
-function drawSecurityListSVG(security_list) {
-    let parent_id = security_list['vcn_id'];
-    let id = security_list['id'];
-    let compartment_id = security_list['compartment_id'];
-    console.log('Drawing Security List : ' + id);
-    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
-        let svg_x = Math.round((icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position));
-        let svg_y = Math.round(icon_height * 3 / 4);
-        let data_type = security_list_artifact;
+function getSecurityListDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
 
+function newSecurityListDefinition(artifact, position=0) {
+    let dimensions = getSecurityListDimensions();
+    let definition = newArtifactSVGDefinition(artifact, security_list_artifact);
+    definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
+    definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = security_list_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    return definition;
+}
+
+function drawSecurityListSVG(artifact) {
+    let parent_id = artifact['vcn_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.groupCollapsed('Drawing ' + security_list_artifact + ' : ' + id + ' [' + parent_id + ']');
+    // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
+    // the subnet draw.
+    if (okitJson.hasOwnProperty('subnets')) {
+        for (let subnet of okitJson['subnets']) {
+            if (subnet['security_list_ids'].includes(artifact['id'])) {
+                console.info(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
+                console.groupEnd();
+                return;
+            }
+        }
+    }
+
+    if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
+    }
+
+    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        if (!virtual_cloud_network_bui_sub_artifacts[parent_id].hasOwnProperty('element_position')) {
+            virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] = 0;
+        }
+        // Calculate Position
+        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-        let parent_svg = d3.select('#' + parent_id + "-svg");
-        let svg = parent_svg.append("svg")
-            .attr("id", id + '-svg')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", security_list['display_name'])
-            .attr("x", svg_x)
-            .attr("y", svg_y)
-            .attr("width", "100")
-            .attr("height", "100");
-        let rect = svg.append("rect")
-            .attr("id", id)
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", security_list['display_name'])
-            .attr("x", icon_x)
-            .attr("y", icon_y)
-            .attr("width", icon_width)
-            .attr("height", icon_height)
-            .attr("stroke", security_list_stroke_colour)
-            .attr("stroke-dasharray", "1, 1")
-            .attr("fill", "white")
-            .attr("style", "fill-opacity: .25;");
-        rect.append("title")
-            .attr("id", id + '-title')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .text("Security List: " + security_list['display_name']);
-        let g = svg.append("g")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-        g.append("path")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("d", "M144,85.5l-43.8,18.8v41.8v0.1c1.3,23.2,18.4,43.6,43.8,56.3c25.5-12.7,42.5-33.1,43.8-56.3v-0.1v-41.8L144,85.5z M151.3,161.8h-31.5v-4.3h31.5V161.8z M151.3,144.7h-31.5v-4.3h31.5V144.7z M151.3,126.6h-31.5v-4.3h31.5V126.6zM170.4,155.8l-7.7,7.7l-4.9-4.9c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l2.8,2.8l5.6-5.6c0.6-0.6,1.5-0.6,2,0C171,154.3,171,155.2,170.4,155.8z M159.4,138.6c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l3,3l3-3c0.6-0.6,1.5-0.6,2,0c0.6,0.6,0.6,1.5,0,2l-3,3l3,3c0.6,0.6,0.6,1.5,0,2c-0.3,0.3-0.6,0.4-1,0.4c-0.4,0-0.7-0.1-1-0.4l-3-3l-3,3c-0.3,0.3-0.6,0.4-1,0.4c-0.4,0-0.7-0.1-1-0.4c-0.6-0.6-0.6-1.5,0-2l3-3L159.4,138.6z M170.7,121.9l-7.7,7.7l-4.9-4.9c-0.6-0.6-0.6-1.5,0-2c0.6-0.6,1.5-0.6,2,0l2.8,2.8l5.6-5.6c0.6-0.6,1.5-0.6,2,0C171.2,120.4,171.2,121.3,170.7,121.9z")
+        let svg = drawArtifact(newSecurityListDefinition(artifact, position));
 
+        let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
         /*
          Add click event to display properties
@@ -150,41 +150,11 @@ function drawSecurityListSVG(security_list) {
         svg.on("click", function () {
             loadSecurityListProperties(id);
             d3.event.stopPropagation();
-        })
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-type", data_type)
-            .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id)
-            .attr("data-compartment-id", compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true)
-            .selectAll("*")
-                .attr("data-type", data_type)
-                .attr("data-okit-id", id)
-                .attr("data-parentid", parent_id)
-                .attr("data-compartment-id", compartment_id)
-                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-end-y", boundingClientRect.y)
-                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-id", id)
-                .attr("dragable", true);
+        });
     } else {
-        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*
@@ -192,14 +162,14 @@ function drawSecurityListSVG(security_list) {
  */
 function loadSecurityListProperties(id) {
     $("#properties").load("propertysheets/security_list.html", function () {
-        if ('security_lists' in OKITJsonObj) {
-            console.log('Loading Security List: ' + id);
-            let json = OKITJsonObj['security_lists'];
+        if ('security_lists' in okitJson) {
+            console.info('Loading Security List: ' + id);
+            let json = okitJson['security_lists'];
             for (let i = 0; i < json.length; i++) {
                 let security_list = json[i];
-                //console.log(JSON.stringify(security_list, null, 2));
+                //console.info(JSON.stringify(security_list, null, 2));
                 if (security_list['id'] == id) {
-                    //console.log('Found Security List: ' + id);
+                    //console.info('Found Security List: ' + id);
                     security_list['virtual_cloud_network'] = okitIdsJsonObj[security_list['vcn_id']];
                     $("#virtual_cloud_network").html(security_list['virtual_cloud_network']);
                     $('#display_name').val(security_list['display_name']);
@@ -276,12 +246,11 @@ function addAccessRuleHtml(access_rule, access_type) {
     rule_cell = rule_row.append('td');
     rule_cell.append('input')
         .attr("type", "checkbox")
-        .attr("class", "property-value")
         .attr("id", "is_stateless")
         .attr("name", "is_stateless")
         .on("change", function() {
             access_rule['is_stateless'] = this.checked;
-            console.log('Changed is_stateless: ' + this.checked);
+            console.info('Changed is_stateless: ' + this.checked);
             displayOkitJson();
         });
     if (access_rule['is_stateless']) {
@@ -303,7 +272,7 @@ function addAccessRuleHtml(access_rule, access_type) {
         .attr("value", access_rule[source_dest])
         .on("change", function() {
             access_rule[source_dest] = this.value;
-            console.log('Changed destination: ' + this.value);
+            console.info('Changed destination: ' + this.value);
             displayOkitJson();
         });
     // Add Protocol
@@ -316,7 +285,7 @@ function addAccessRuleHtml(access_rule, access_type) {
         .attr("id", "protocol")
         .on("change", function() {
             access_rule['protocol'] = this.options[this.selectedIndex].value;
-            console.log('Changed network_entity_id ' + this.selectedIndex);
+            console.info('Changed network_entity_id ' + this.selectedIndex);
             displayOkitJson();
         });
     // Add Protocol Options
@@ -342,7 +311,7 @@ function addAccessRuleHtml(access_rule, access_type) {
 }
 
 function handleAddAccessRule(evt) {
-    console.log('Adding access rule');
+    console.info('Adding access rule');
     let new_rule = { "protocol": "all", "is_stateless": false}
     if (evt.target.id == 'egress_add_button') {
         new_rule["destination_type"] = "CIDR_BLOCK";
@@ -368,7 +337,7 @@ function handleDeleteRouteRulesRow(btn) {
  */
 
 function querySecurityListAjax(compartment_id, vcn_id) {
-    console.log('------------- querySecurityListAjax --------------------');
+    console.info('------------- querySecurityListAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
@@ -383,18 +352,18 @@ function querySecurityListAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['security_lists'] = response_json;
+            okitJson['security_lists'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('querySecurityListAjax : ' + response_json[i]['display_name']);
+                console.info('querySecurityListAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + security_list_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }
@@ -402,6 +371,7 @@ function querySecurityListAjax(compartment_id, vcn_id) {
 $(document).ready(function() {
     clearSecurityListVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -409,5 +379,17 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', security_list_query_cb);
     cell.append('label').text(security_list_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(security_list_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'security_list_name_filter')
+        .attr('name', 'security_list_name_filter');
 });
 

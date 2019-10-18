@@ -50,20 +50,21 @@ class OCIBlockStorageVolumes(OCIBlockStorageVolumeConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
+        # Add filter to only return AVAILABLE Compartments
+        if filter is None:
+            filter = {}
+
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = 'AVAILABLE'
+
         block_storage_volumes = oci.pagination.list_call_get_all_results(self.client.list_volumes, compartment_id=compartment_id).data
+
         # Convert to Json object
         block_storage_volumes_json = self.toJson(block_storage_volumes)
         logger.debug(str(block_storage_volumes_json))
 
-        # Check if the results should be filtered
-        if filter is None:
-            self.block_storage_volumes_json = block_storage_volumes_json
-        else:
-            filtered = block_storage_volumes_json[:]
-            for key, val in filter.items():
-                logger.info('{0!s:s} = {1!s:s}'.format(key, val))
-                filtered = [bs for bs in filtered if re.compile(val).search(bs[key])]
-            self.block_storage_volumes_json = filtered
+        # Filter results
+        self.block_storage_volumes_json = self.filterJsonObjectList(block_storage_volumes_json, filter)
         logger.debug(str(self.block_storage_volumes_json))
 
         return self.block_storage_volumes_json

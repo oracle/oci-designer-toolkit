@@ -81,18 +81,36 @@ class OCIInstances(OCIComputeConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
+        # Add filter to only return "RUNNING", "STARTING", "STOPPING", "STOPPED" Compartments
+        if filter is None:
+            filter = {}
+
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = ["RUNNING", "STARTING", "STOPPING", "STOPPED"]
+
         instances = oci.pagination.list_call_get_all_results(self.client.list_instances, compartment_id=compartment_id).data
+
         # Convert to Json object
         instances_json = self.toJson(instances)
         logger.debug(str(instances_json))
  
-        self.instances_json = instances_json
+        # Filter results
+        self.instances_json = self.filterJsonObjectList(instances_json, filter)
         logger.debug(str(self.instances_json))
 
+        # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
+        volume_attachments = OCIVolumeAttachments(config=self.config, configfile=self.configfile, compartment_id=compartment_id).list()
+
+        # Get VNic Attachments as a single call and loop through them to see if they are associated with the instance.
+        vnic_attachments = OCIVnicAttachments(onfig=self.config, configfile=self.configfile, compartment_id=compartment_id).list()
+
         for instance in self.instances_json:
-            # Check if any Block Storage has been Attached
-            volume_attachments = OCIVolumeAttachments(config=self.config, configfile=self.configfile, compartment_id=compartment_id, instance_id=instance['id']).list()
-            instance['block_storage_volume_ids'] = [va['volume_id'] for va in volume_attachments]
+            # Add Attached Block Storage Volumes
+            instance['block_storage_volume_ids'] = [va['volume_id'] for va in volume_attachments if va['instance_id'] == instance['id']]
+            # Add Vnic Attachments
+            instance['vnics'] = [va for va in vnic_attachments if va['instance_id'] == instance['id']]
+            # Add first vnic as the default subnet
+            instance['subnet_id'] = instance['vnics'][0]['subnet_id'] if len(instance['vnics']) > 0 else ''
             # Build object list
             self.instances_obj.append(OCIInstance(self.config, self.configfile, instance))
 

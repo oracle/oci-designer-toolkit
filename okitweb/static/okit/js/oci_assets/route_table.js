@@ -1,4 +1,4 @@
-console.log('Loaded Route Table Javascript');
+console.info('Loaded Route Table Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -29,12 +29,12 @@ function clearRouteTableVariables() {
  */
 function addRouteTable(vcn_id, compartment_id) {
     let id = 'okit-' + route_table_prefix + '-' + uuidv4();
-    console.log('Adding Route Table : ' + id);
+    console.groupCollapsed('Adding ' + route_table_artifact + ' : ' + id);
 
     // Add Virtual Cloud Network to JSON
 
-    if (!OKITJsonObj.hasOwnProperty('route_tables')) {
-        OKITJsonObj['route_tables'] = [];
+    if (!okitJson.hasOwnProperty('route_tables')) {
+        okitJson['route_tables'] = [];
     }
 
     // Add id & empty name to id JSON
@@ -49,13 +49,14 @@ function addRouteTable(vcn_id, compartment_id) {
     route_table['compartment_id'] = compartment_id;
     route_table['id'] = id;
     route_table['display_name'] = generateDefaultName(route_table_prefix, route_table_count);
-    route_table['route_rules'] = []
-    OKITJsonObj['route_tables'].push(route_table);
+    route_table['route_rules'] = [];
+    okitJson['route_tables'].push(route_table);
     okitIdsJsonObj[id] = route_table['display_name'];
-    //console.log(JSON.stringify(OKITJsonObj, null, 2));
-    displayOkitJson();
-    drawRouteTableSVG(route_table);
+    //console.info(JSON.stringify(okitJson, null, 2));
+    //drawRouteTableSVG(route_table);
+    drawSVGforJson();
     loadRouteTableProperties(id);
+    console.groupEnd();
 }
 
 /*
@@ -63,114 +64,79 @@ function addRouteTable(vcn_id, compartment_id) {
  */
 
 function deleteRouteTable(id) {
-    console.log('Delete Route Table ' + id);
+    console.groupCollapsed('Delete ' + route_table_artifact + ' : ' + id);
     // Remove SVG Element
-    d3.select("#" + id + "-svg").remove()
+    d3.select("#" + id + "-svg").remove();
     // Remove Data Entry
-    for (let i=0; i < OKITJsonObj['route_tables'].length; i++) {
-        if (OKITJsonObj['route_tables'][i]['id'] == id) {
-            OKITJsonObj['route_tables'].splice(i, 1);
+    for (let i=0; i < okitJson['route_tables'].length; i++) {
+        if (okitJson['route_tables'][i]['id'] == id) {
+            okitJson['route_tables'].splice(i, 1);
         }
     }
     // Remove Subnet references
-    if ('subnets' in OKITJsonObj) {
-        for (subnet of OKITJsonObj['subnets']) {
+    if ('subnets' in okitJson) {
+        for (subnet of okitJson['subnets']) {
             if (subnet['route_table_id'] == id) {
                 subnet['route_table_id'] = '';
             }
         }
     }
+    console.groupEnd();
 }
 
 /*
 ** SVG Creation
  */
-function drawRouteTableSVG(route_table) {
-    let parent_id = route_table['vcn_id'];
-    let id = route_table['id'];
-    let compartment_id = route_table['compartment_id'];
-    console.log('Drawing Route Table : ' + id);
-    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
-        let svg_x = Math.round((icon_width / 2) + (icon_width * position) + (vcn_icon_spacing * position));
-        let svg_y = Math.round(icon_height * 3 / 4);
-        let data_type = route_table_artifact;
+function getRouteTableDimensions(id='') {
+    return {width:icon_width, height:icon_height};
+}
 
+function newRouteTableDefinition(artifact, position=0) {
+    let dimensions = getRouteTableDimensions();
+    let definition = newArtifactSVGDefinition(artifact, route_table_artifact);
+    definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
+    definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+    definition['svg']['width'] = dimensions['width'];
+    definition['svg']['height'] = dimensions['height'];
+    definition['rect']['stroke']['colour'] = route_table_stroke_colour;
+    definition['rect']['stroke']['dash'] = 1;
+    return definition;
+}
+
+function drawRouteTableSVG(artifact) {
+    let parent_id = artifact['vcn_id'];
+    artifact['parent_id'] = parent_id;
+    let id = artifact['id'];
+    let compartment_id = artifact['compartment_id'];
+    console.groupCollapsed('Drawing ' + route_table_artifact + ' : ' + id + ' [' + parent_id + ']');
+    // Check if this Route Table has been attached to a Subnet and if so do not draw because it will be done as part of
+    // the subnet draw.
+    if (okitJson.hasOwnProperty('subnets')) {
+        for (let subnet of okitJson['subnets']) {
+            if (subnet['route_table_id'] == artifact['id']) {
+                console.info(artifact['display_name'] + ' attached to subnet '+ subnet['display_name']);
+                console.groupEnd();
+                return;
+            }
+        }
+    }
+
+    if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
+    }
+
+    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
+        if (!virtual_cloud_network_bui_sub_artifacts[parent_id].hasOwnProperty('element_position')) {
+            virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] = 0;
+        }
+        // Calculate Position
+        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'];
         // Increment Icon Position
         virtual_cloud_network_bui_sub_artifacts[parent_id]['element_position'] += 1;
 
-        let parent_svg = d3.select('#' + parent_id + "-svg");
-        let svg = parent_svg.append("svg")
-            .attr("id", id + '-svg')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", route_table['display_name'])
-            .attr("x", svg_x)
-            .attr("y", svg_y)
-            .attr("width", "100")
-            .attr("height", "100");
-        let rect = svg.append("rect")
-            .attr("id", id)
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("title", route_table['display_name'])
-            .attr("x", icon_x)
-            .attr("y", icon_y)
-            .attr("width", icon_width)
-            .attr("height", icon_height)
-            .attr("stroke", route_table_stroke_colour)
-            .attr("stroke-dasharray", "1, 1")
-            .attr("fill", "white")
-            .attr("style", "fill-opacity: .25;");
-        rect.append("title")
-            .attr("id", id + '-title')
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .text("Route Tablet: " + route_table['display_name']);
-        let g = svg.append("g")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("transform", "translate(5, 5) scale(0.3, 0.3)");
-        g.append("rect")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("x", "99.6")
-            .attr("y", "100.3")
-            .attr("class", "st0")
-            .attr("width", "22.1")
-            .attr("height", "22.9");
-        g.append("path")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("d", "M188.4,123.3v-22.9h-59.6v22.9H188.4z M171.1,109.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,109.2z M166.1,116.1h2.3v2.5h-2.3V116.1z M153.8,109.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,109.2z M148.8,116.1h2.3v2.5h-2.3V116.1z M139.8,109.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
-        g.append("rect")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("x", "99.6")
-            .attr("y", "132.5")
-            .attr("class", "st0")
-            .attr("width", "22.1")
-            .attr("height", "22.9");
-        g.append("path")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("d", "M188.4,155.5v-22.9h-59.6v22.9H188.4z M171.1,140.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,140.2z M166.1,147.1h2.3v2.5h-2.3V147.1z M153.8,140.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,140.2z M148.8,147.1h2.3v2.5h-2.3V147.1z M139.8,140.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
-        g.append("rect")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("x", "99.6")
-            .attr("y", "164.7")
-            .attr("class", "st0")
-            .attr("width", "22.1")
-            .attr("height", "22.9");
-        g.append("path")
-            .attr("data-type", data_type)
-            .attr("data-parentid", parent_id)
-            .attr("class", "st0")
-            .attr("d", "M188.4,187.7v-22.9h-59.6v22.9H188.4z M171.1,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4H171l3.1-5L171.1,171.2z M166.1,178.1h2.3v2.5h-2.3V178.1z M153.8,171.2h3.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5L153.8,171.2z M148.8,178.1h2.3v2.5h-2.3V178.1z M139.8,171.2l1.8,3.1l1.8-3.1h2.8l-3,4.6l3.1,4.8h-3.2l-1.9-3.4l-1.9,3.4h-2.9l3.1-5l-3-4.3H139.8z")
+        let svg = drawArtifact(newRouteTableDefinition(artifact, position));
 
+        let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
         /*
          Add click event to display properties
@@ -181,41 +147,11 @@ function drawRouteTableSVG(route_table) {
         svg.on("click", function () {
             loadRouteTableProperties(id);
             d3.event.stopPropagation();
-        })
-            .on("mousedown", handleConnectorDragStart)
-            .on("mousemove", handleConnectorDrag)
-            .on("mouseup", handleConnectorDrop)
-            .on("mouseover", handleConnectorDragEnter)
-            .on("mouseout", handleConnectorDragLeave)
-            .on("dragstart", handleConnectorDragStart)
-            .on("drop", handleConnectorDrop)
-            .on("dragenter", handleConnectorDragEnter)
-            .on("dragleave", handleConnectorDragLeave)
-            .on("contextmenu", handleContextMenu)
-            .attr("data-type", data_type)
-            .attr("data-okit-id", id)
-            .attr("data-parentid", parent_id)
-            .attr("data-compartment-id", compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", id)
-            .attr("dragable", true)
-            .selectAll("*")
-                .attr("data-type", data_type)
-                .attr("data-okit-id", id)
-                .attr("data-parentid", parent_id)
-                .attr("data-compartment-id", compartment_id)
-                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
-                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
-                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-id", id)
-                .attr("dragable", true);
+        });
     } else {
-        console.log(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
+        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
     }
+    console.groupEnd();
 }
 
 /*
@@ -223,14 +159,14 @@ function drawRouteTableSVG(route_table) {
  */
 function loadRouteTableProperties(id) {
     $("#properties").load("propertysheets/route_table.html", function () {
-        if ('route_tables' in OKITJsonObj) {
-            console.log('Loading Route Table: ' + id);
-            let json = OKITJsonObj['route_tables'];
+        if ('route_tables' in okitJson) {
+            console.info('Loading Route Table: ' + id);
+            let json = okitJson['route_tables'];
             for (let i = 0; i < json.length; i++) {
                 let route_table = json[i];
-                //console.log(JSON.stringify(route_table, null, 2));
+                //console.info(JSON.stringify(route_table, null, 2));
                 if (route_table['id'] == id) {
-                    //console.log('Found Route Table: ' + id);
+                    //console.info('Found Route Table: ' + id);
                     route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['vcn_id']];
                     $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
                     $('#display_name').val(route_table['display_name']);
@@ -300,7 +236,7 @@ function addRouteRuleHtml(route_rule) {
         .attr("value", route_rule['destination'])
         .on("change", function() {
             route_rule['destination'] = this.value;
-            console.log('Changed destination: ' + this.value);
+            console.info('Changed destination: ' + this.value);
             displayOkitJson();
         });
     // Network Entity
@@ -313,7 +249,7 @@ function addRouteRuleHtml(route_rule) {
         .attr("id", "network_entity_id")
         .on("change", function() {
             route_rule['network_entity_id'] = this.options[this.selectedIndex].value;
-            console.log('Changed network_entity_id ' + this.selectedIndex);
+            console.info('Changed network_entity_id ' + this.selectedIndex);
             displayOkitJson();
         });
     // Add Internet gateways
@@ -325,7 +261,7 @@ function addRouteRuleHtml(route_rule) {
             opt.attr("selected", "selected");
         }
     }
-    //console.log('Selected Index: ' + network_entity_id_select.node().selectedIndex);
+    //console.info('Selected Index: ' + network_entity_id_select.node().selectedIndex);
     if (route_rule['network_entity_id'] == '') {
         route_rule['network_entity_id'] = network_entity_id_select.node().options[network_entity_id_select.node().selectedIndex].value;
     }
@@ -333,7 +269,7 @@ function addRouteRuleHtml(route_rule) {
 
 function handleAddRouteRule(evt) {
     //route_table = evt.target.route_table;
-    console.log('Adding route rule to : ' + route_table);
+    console.info('Adding route rule to : ' + route_table);
     let new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity_id: ""}
     evt.target.route_table['route_rules'].push(new_rule)
     addRouteRuleHtml(new_rule);
@@ -351,7 +287,7 @@ function handleDeleteRouteRulesRow(btn) {
  */
 
 function queryRouteTableAjax(compartment_id, vcn_id) {
-    console.log('------------- queryRouteTableAjax --------------------');
+    console.info('------------- queryRouteTableAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
@@ -366,18 +302,18 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            OKITJsonObj['route_tables'] = response_json;
+            okitJson['route_tables'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('queryRouteTableAjax : ' + response_json[i]['display_name']);
+                console.info('queryRouteTableAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + route_table_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }
@@ -385,6 +321,7 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
 $(document).ready(function() {
     clearRouteTableVariables();
 
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -392,5 +329,17 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', route_table_query_cb);
     cell.append('label').text(route_table_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(route_table_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'route_table_name_filter')
+        .attr('name', 'route_table_name_filter');
 });
 

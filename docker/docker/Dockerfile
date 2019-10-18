@@ -42,6 +42,7 @@ RUN yum update -y ; \
         asciinema \
         #curl-devel \
         curl \
+        dcfldd \
         #expat-devel \
         expa \
         gcc \
@@ -113,9 +114,14 @@ RUN yum update -y ; \
     echo "alias sshopc='ssh -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
     echo ''                                                                          >> /etc/bashrc ; \
     echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
+    echo "alias ta='terraform apply da.plan' "                                                   >> /etc/bashrc ; \
+    echo "alias td='terraform destroy -var-file=/okit/config/connection.tfvars -auto-approve' "  >> /etc/bashrc ; \
+    echo "alias tp='terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan' "      >> /etc/bashrc ; \
+    echo "alias ti='terraform init' "                                                            >> /etc/bashrc ; \
+    echo "alias tg='terraform get --update' "                                                    >> /etc/bashrc ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
-    mkdir -p /okit/{ansible,config,terraform,visualiser,okitweb,workspace,python,unittests} \
+    mkdir -p /okit/{ansible,config,terraform,visualiser,okitweb,workspace,python,unittests,preview}; \
     env | sort
 

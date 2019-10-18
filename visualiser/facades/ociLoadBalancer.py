@@ -22,7 +22,7 @@ import re
 import sys
 
 from facades.ociConnection import OCILoadBalancerConnection
-from facades.ociLBHost import OCILBHosts
+from facades.ociLoadBalancerHost import OCILoadBalancerHosts
 from facades.ociBackendSet import OCIBackendSets
 from facades.ociBackend import OCIBackends
 from facades.ociPrivateIps import OCIPrivateIps
@@ -51,16 +51,11 @@ class OCILoadBalancers(OCILoadBalancerConnection):
         load_balancers_json = self.toJson(load_balancers)
         logger.debug(str(load_balancers_json))
 
-        # Check if the results should be filtered
-        if filter is None:
-            self.load_balancers_json = load_balancers_json
-        else:
-            filtered = self.load_balancers_json[:]
-            for key, val in filter.items():
-                filtered = [vcn for vcn in filtered if re.compile(val).search(vcn[key])]
-            self.load_balancers_json = filtered
+        # Filter results
+        self.load_balancers_json = self.filterJsonObjectList(load_balancers_json, filter)
         logger.debug(str(self.load_balancers_json))
-        # Find instance ocids associated with the bacjend ip addresses
+
+        # Find instance ocids associated with the backend ip addresses
         oci_private_ips = OCIPrivateIps(self.config, self.configfile)
         oci_vnics_attachments = OCIVnicAttachments(self.config, self.configfile, compartment_id=self.compartment_id)
         for load_balancer in self.load_balancers_json:
@@ -86,7 +81,7 @@ class OCILoadBalancer(object):
         self.data = data
 
     def getLBHostClients(self):
-        return OCILBHosts(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCILoadBalancerHosts(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
     def getBackendSetClients(self):
         return OCIBackendSets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
