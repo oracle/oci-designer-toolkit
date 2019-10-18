@@ -160,7 +160,6 @@ function drawCompartmentSVG(artifact) {
 
     //let rect = svg.select("rect[id='" + id + "']");
     let rect = svg.select("rect[id='" + id + "']");
-    console.info(rect);
     let boundingClientRect = rect.node().getBoundingClientRect();
     /*
      Add click event to display properties
@@ -225,11 +224,18 @@ function queryCompartmentAjax() {
             let response_json = [JSON.parse(resp)];
             okitJson['compartments'] = response_json;
             let len =  response_json.length;
-            for(let i=0;i<len;i++ ) {
-                console.info('queryCompartmentAjax : ' + response_json[i]['name']);
-                queryVirtualCloudNetworkAjax(response_json[i]['id']);
-                queryBlockStorageVolumeAjax(response_json[i]['id']);
-                queryDynamicRoutingGatewayAjax(response_json[i]['id']);
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    console.info('queryCompartmentAjax : ' + response_json[i]['name']);
+                    /*
+                    queryVirtualCloudNetworkAjax(response_json[i]['id']);
+                    queryBlockStorageVolumeAjax(response_json[i]['id']);
+                    queryDynamicRoutingGatewayAjax(response_json[i]['id']);
+                    */
+                    initiateCompartmentSubQueries(response_json[i]['id']);
+                }
+            } else {
+                initiateCompartmentSubQueries(null);
             }
             redrawSVGCanvas();
             $('#' + compartment_query_cb).prop('checked', true);
@@ -240,6 +246,12 @@ function queryCompartmentAjax() {
             console.error('Error  : '+ error);
         }
     });
+}
+
+function initiateCompartmentSubQueries(id='') {
+    queryVirtualCloudNetworkAjax(id);
+    queryBlockStorageVolumeAjax(id);
+    queryDynamicRoutingGatewayAjax(id);
 }
 
 // TODO: Delete

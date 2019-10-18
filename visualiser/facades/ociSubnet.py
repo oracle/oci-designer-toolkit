@@ -40,19 +40,22 @@ class OCISubnets(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        subnets = oci.pagination.list_call_get_all_results(self.client.list_subnets, compartment_id=compartment_id, vcn_id=self.vcn_id).data
-        # Convert to Json object
-        subnets_json = self.toJson(subnets)
-        logger.debug(str(subnets_json))
+        if self.vcn_id is not None:
+            subnets = oci.pagination.list_call_get_all_results(self.client.list_subnets, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+            # Convert to Json object
+            subnets_json = self.toJson(subnets)
+            logger.debug(str(subnets_json))
 
-        # Filter results
-        self.subnets_json = self.filterJsonObjectList(subnets_json, filter)
-        logger.debug(str(self.subnets_json))
+            # Filter results
+            self.subnets_json = self.filterJsonObjectList(subnets_json, filter)
+            logger.debug(str(self.subnets_json))
 
-        # Build List of Subnet Objects
-        self.subnets_obj = []
-        for subnet in self.subnets_json:
-            self.subnets_obj.append(OCISubnet(self.config, self.configfile, subnet))
+            # Build List of Subnet Objects
+            self.subnets_obj = []
+            for subnet in self.subnets_json:
+                self.subnets_obj.append(OCISubnet(self.config, self.configfile, subnet))
+        else:
+            logger.warn('Virtual Cloud Network Id has not been specified.')
 
         return self.subnets_json
 

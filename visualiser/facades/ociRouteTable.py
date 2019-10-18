@@ -40,19 +40,22 @@ class OCIRouteTables(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        route_tables = oci.pagination.list_call_get_all_results(self.client.list_route_tables, compartment_id=compartment_id, vcn_id=self.vcn_id).data
-        # Convert to Json object
-        route_tables_json = self.toJson(route_tables)
-        logger.debug(str(route_tables_json))
+        if self.vcn_id is not None:
+            route_tables = oci.pagination.list_call_get_all_results(self.client.list_route_tables, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+            # Convert to Json object
+            route_tables_json = self.toJson(route_tables)
+            logger.debug(str(route_tables_json))
 
-        # Filter results
-        self.route_tables_json = self.filterJsonObjectList(route_tables_json, filter)
-        logger.debug(str(self.route_tables_json))
+            # Filter results
+            self.route_tables_json = self.filterJsonObjectList(route_tables_json, filter)
+            logger.debug(str(self.route_tables_json))
 
-        # Build List of RouteTable Objects
-        self.route_tables_obj = []
-        for route_table in self.route_tables_json:
-            self.route_tables_obj.append(OCIRouteTable(self.config, self.configfile, route_table))
+            # Build List of RouteTable Objects
+            self.route_tables_obj = []
+            for route_table in self.route_tables_json:
+                self.route_tables_obj.append(OCIRouteTable(self.config, self.configfile, route_table))
+        else:
+            logger.warn('Virtual Cloud Network Id has not been specified.')
 
         return self.route_tables_json
 

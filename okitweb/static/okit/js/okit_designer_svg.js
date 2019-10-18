@@ -96,10 +96,10 @@ function drawArtifact(definition) {
     let parent_id      = definition['artifact']['parent_id'];
     let compartment_id = definition['artifact']['compartment_id'];
     let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
-    console.info('<<<<<<<<<<<<<<<<<< Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'] + ' >>>>>>>>>>>>>>>>>>')
-    console.info('<<<<<<<<<<<<<<<<<< Id : ' + id + ' >>>>>>>>>>>>>>>>>>')
-    console.info('<<<<<<<<<<<<<<<<<< Parent Id : ' + parent_id + ' >>>>>>>>>>>>>>>>>>')
-    console.info('<<<<<<<<<<<<<<<<<< Compartment Id : ' + compartment_id + ' >>>>>>>>>>>>>>>>>>')
+    console.info('Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'])
+    console.info('Id             : ' + id )
+    console.info('Parent Id      : ' + parent_id)
+    console.info('Compartment Id : ' + compartment_id)
     let rect_x         = definition['rect']['x'];
     let rect_y         = definition['rect']['y'];
     let rect_width     = definition['svg']['width']  + definition['rect']['width_adjust'];

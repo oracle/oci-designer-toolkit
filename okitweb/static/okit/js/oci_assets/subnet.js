@@ -554,10 +554,17 @@ function querySubnetAjax(compartment_id, vcn_id) {
             let response_json = JSON.parse(resp);
             okitJson['subnets'] = response_json;
             let len = response_json.length;
-            for (let i = 0; i < len; i++) {
-                console.info('querySubnetAjax : ' + response_json[i]['display_name']);
-                queryInstanceAjax(compartment_id, response_json[i]['id']);
-                queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    console.info('querySubnetAjax : ' + response_json[i]['display_name']);
+                    /*
+                    queryInstanceAjax(compartment_id, response_json[i]['id']);
+                    queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
+                    */
+                    initiateSubnetSubQueries(compartment_id, response_json[i]['id']);
+                }
+            } else {
+                initiateSubnetSubQueries(compartment_id, null);
             }
             redrawSVGCanvas();
             $('#' + subnet_query_cb).prop('checked', true);
@@ -568,6 +575,11 @@ function querySubnetAjax(compartment_id, vcn_id) {
             console.info('Error : ' + error)
         }
     });
+}
+
+function initiateSubnetSubQueries(compartment_id, id='') {
+    queryInstanceAjax(compartment_id, id);
+    queryLoadBalancerAjax(compartment_id, id);
 }
 
 $(document).ready(function () {
