@@ -106,7 +106,7 @@ function clearArtifactData() {
 }
 
 function clearCoreData() {
-    okitJson = {};
+    initialiseJson();
     okitIdsJsonObj = {};
 }
 
@@ -251,8 +251,8 @@ function saveSvg(svgEl, name) {
  */
 function showQueryResults() {
     console.info('Generating Query Results');
-    clearCoreData();
     clearArtifactData();
+    initialiseJson();
     newCanvas();
     setBusyIcon();
     $('#query-progress').removeClass('hidden');
