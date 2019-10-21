@@ -35,3 +35,6 @@ const load_balancer_prefix = 'lb';
 // Block Storage
 const block_storage_volume_artifact = 'Block Storage Volume';
 const block_storage_volume_prefix = 'bsv';
+// Autonomous Database
+const autonomous_database_artifact = 'Autonomous Database';
+const autonomous_database_prefix = 'ad';

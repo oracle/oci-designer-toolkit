@@ -438,15 +438,16 @@ function clearCanvas() {
 }
 
 function newCanvas(parent_id="canvas-wrapper") {
+    console.groupCollapsed('New Canvas');
     let compartment_div = d3.select('#' + parent_id);
     let window_width = $(window).width();
     let window_height = $(window).height() * 2;
     let parent_width = $('#' + parent_id).width();
     let parent_height = $('#' + parent_id).height();
-    //console.info('JQuery Width  : ' + $('#' + parent_id).width());
-    //console.info('JQuery Height : ' + $('#' + parent_id).height());
-    //console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
-    //console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
+    console.info('JQuery Width  : ' + $('#' + parent_id).width());
+    console.info('JQuery Height : ' + $('#' + parent_id).height());
+    console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
+    console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
     // Empty existing Canvas
     compartment_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc
@@ -462,6 +463,7 @@ function newCanvas(parent_id="canvas-wrapper") {
         .attr("preserveAspectRatio", "xMinYMin meet");
 
     clearCanvas();
+    console.groupEnd();
 
     return canvas_svg;
 }
