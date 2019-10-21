@@ -242,6 +242,8 @@ function newSubnetDefinition(artifact, position=0) {
     } else  {
         definition['label']['text'] = 'Public ' + subnet_artifact;
     }
+    definition['info']['show'] = true;
+    definition['info']['text'] = artifact['cidr_block'];
     if (!okitJson['canvas']['subnets'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['subnets'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }

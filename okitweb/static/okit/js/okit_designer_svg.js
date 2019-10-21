@@ -13,10 +13,15 @@ const viewbox_height = 1500;
 const viewbox_width = 2500;
 const text_viewbox_height = 1000;
 const text_viewbox_width = 200;
-const connector_colour = "black";
+//const connector_colour = "black";
+//const connector_colour = "#6699cc";
+const connector_colour = "#336699";
+//const connector_colour = "#204060";
+const corner_radius = 10;
 const container_artifact_x_padding = Math.round(icon_width  * 3 / 2);
 const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
 const container_artifact_label_width = 300;
+const container_artifact_info_width = 100;
 const positional_adjustments = {
     padding: {x: Math.round(icon_width),   y: Math.round(icon_height + icon_spacing)},
     spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
@@ -80,6 +85,7 @@ function newArtifactSVGDefinition(artifact, data_type) {
     definition['data_type'] = data_type;
     definition['name'] = {show: false, text: artifact['display_name']};
     definition['label'] = {show: false, text: data_type};
+    definition['info'] = {show: false, text: data_type};
     definition['svg'] = {x: 0, y: 0, width: icon_width, height: icon_height};
     definition['rect'] = {x: 0, y: 0,
         width: icon_width, height: icon_height,
@@ -128,6 +134,8 @@ function drawArtifact(definition) {
         .attr("id", id)
         .attr("x",      rect_x)
         .attr("y",      rect_y)
+        .attr("rx",     corner_radius)
+        .attr("ry",     corner_radius)
         .attr("width",  rect_width)
         .attr("height", rect_height)
         .attr("fill",   definition['rect']['fill'])
@@ -145,7 +153,7 @@ function drawArtifact(definition) {
             .attr("width", container_artifact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 200 " + definition['svg']['height']);
+            .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
         let name = name_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-display-name')
@@ -155,14 +163,14 @@ function drawArtifact(definition) {
             .text(definition['name']['text']);
     }
     if (definition['label']['show']) {
-        let name_svg = svg.append('svg')
+        let label_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
             .attr("width", container_artifact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMax meet")
-            .attr("viewBox", "0 0 300 " + definition['svg']['height']);
-        let name = name_svg.append("text")
+            .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
+        let name = label_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-label')
             .attr("x", rect_x)
@@ -170,6 +178,23 @@ function drawArtifact(definition) {
             .attr("fill", definition['rect']['stroke']['colour'])
             .attr("vector-effects", "non-scaling-size")
             .text(definition['label']['text']);
+    }
+    if (definition['info']['show']) {
+        let info_svg = svg.append('svg')
+            .attr("x", Math.round(definition['svg']['width'] - container_artifact_info_width))
+            .attr("y", "0")
+            .attr("width", container_artifact_info_width)
+            .attr("height", definition['svg']['height'])
+            .attr("preserveAspectRatio", "xMinYMax meet")
+            .attr("viewBox", "0 0 " + container_artifact_info_width + " " + definition['svg']['height']);
+        let name = info_svg.append("text")
+            .attr("class", "svg-text")
+            .attr("id", id + '-info')
+            .attr("x", rect_x)
+            .attr("y", definition['svg']['height'] - 10)
+            .attr("fill", definition['rect']['stroke']['colour'])
+            .attr("vector-effects", "non-scaling-size")
+            .text(definition['info']['text']);
     }
 
     svg.append('g')
@@ -317,7 +342,7 @@ function generateArc(radius, clockwise, xmod, ymod) {
 function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
     console.groupCollapsed('Generating Connector');
     if (path_connector) {
-        let radius = 5;
+        let radius = corner_radius;
         let dy = Math.round((end['y'] - start['y']) / 2);
         let dx = end['x'] - start['x'];
         let arc1 = '';

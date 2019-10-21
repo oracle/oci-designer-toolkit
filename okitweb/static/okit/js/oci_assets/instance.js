@@ -10,7 +10,8 @@ asset_update_functions[instance_artifact] = "updateInstance";
 asset_delete_functions[instance_artifact] = "deleteInstance";
 asset_clear_functions.push("clearInstanceVariables");
 
-const instance_stroke_colour = "blue";
+//const instance_stroke_colour = "blue";
+const instance_stroke_colour = "#6699cc";
 const instance_query_cb = "instance-query-cb";
 const instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
 const instance_height = Math.round(icon_height * 5 / 2);

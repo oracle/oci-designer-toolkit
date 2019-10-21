@@ -249,6 +249,8 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     definition['icon']['y_translation'] = icon_translate_y_start;
     definition['name']['show'] = true;
     definition['label']['show'] = true;
+    definition['info']['show'] = true;
+    definition['info']['text'] = artifact['cidr_block'];
     if (!okitJson['canvas']['virtual_cloud_networks'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['virtual_cloud_networks'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }
