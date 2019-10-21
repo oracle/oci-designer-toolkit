@@ -7,41 +7,33 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/d3.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_common.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_base.js') }}"></script>
     {% block headscripts %}{% endblock %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/okit_console.css') }}">
     {% block headcss %}{% endblock %}
 </head>
 <body>
-    <div id="console-wrapper" class="one-console">
-        <div id="console-header-wrapper">
-            <div id="console-header-container">
-                <div class="header-gradient"></div>
-                <header class="console-branding-bar">
-                    <div id="console-nav-container" class="nav-container">
-                        <div class="nav-menu-button">
-                            <img id="nav-menu-button" class="nav-menu-button-icon" src="{{ url_for('static', filename='svg/hamburger.svg') }}">
-                        </div>
-                        <div id="console-nav-menu-container" class="nav-menu-container">
-                            <div id="console-nav-menu-panel" class="nav-menu-panel">
-                                {% block navmenublock %}{% endblock %}
-                            </div>
-                        </div>
+    <div id="console-wrapper" class="console-wrapper one-console">
+        <header class="console-branding-bar">
+            <div class="header-gradient"></div>
+            <div id="console-nav-container" class="console-nav-container">
+                <div class="nav-menu-button">
+                    <img id="nav-menu-button" class="nav-menu-button-icon" src="{{ url_for('static', filename='svg/hamburger.svg') }}">
+                </div>
+                <div id="console-nav-menu-container" class="nav-menu-container">
+                    <div id="console-nav-menu-panel" class="nav-menu-panel">
+                        {% block navmenublock %}{% endblock %}
                     </div>
-                </header>
+                </div>
             </div>
-        </div>
-        <div id="console-content-wrapper">
-            <main id="baseplate">
-                {% block mainblock %}{% endblock %}
-            </main>
-        </div>
-    </div>
-    <div id="console-footer-wrapper" class="one-console">
-        <footer class="footer-container">
+        </header>
+        <main id="baseplate" class="console-main-content">
+            {% block mainblock %}{% endblock %}
+        </main>
+        <footer class="console-footer-content">
             {% block footerblock %}{% endblock %}
         </footer>
     </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_base.js') }}"></script>
     {% block footerscripts %}{% endblock %}
 </body>
 </html>

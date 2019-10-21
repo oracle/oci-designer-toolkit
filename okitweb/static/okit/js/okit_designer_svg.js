@@ -260,6 +260,15 @@ function drawSVGforJson(artifact={}) {
             drawBlockStorageVolumeSVG(okitJson['block_storage_volumes'][i]);
         }
     }
+    if (okitJson.hasOwnProperty('autonomous_databases')) {
+        autonomous_database_ids = [];
+        for (let i=0; i < okitJson['autonomous_databases'].length; i++) {
+            autonomous_database_ids.push(okitJson['autonomous_databases'][i]['id']);
+            okitIdsJsonObj[okitJson['autonomous_databases'][i]['id']] = okitJson['autonomous_databases'][i]['display_name'];
+            autonomous_database_count += 1;
+            drawAutonomousDatabaseSVG(okitJson['autonomous_databases'][i]);
+        }
+    }
 
     // Draw Virtual Cloud Network Subcomponents
     if (okitJson.hasOwnProperty('internet_gateways')) {

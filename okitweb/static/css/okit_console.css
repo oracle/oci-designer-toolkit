@@ -2,13 +2,38 @@ div {
     display: block;
 }
 
+/*
 footer, header, main, nav, section, summary {
     display: block;
+}
+ */
+
+header {
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    background: lightslategray;
+}
+
+main {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+footer {
+    width: 100%;
+    min-height: 30px;
+    background-color: darkslategray;
+    display: flex;
+    color: white;
 }
 
 body {
     margin: 0;
     padding: 0;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
 }
 
 ul {
@@ -29,35 +54,36 @@ ul {
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
 }
 
-#console-wrapper>* {
-    flex-shrink: 0;
+.console-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
 /*
 ** Header
  */
 
-#console-header-wrapper {
-    z-index: 100;
-    position: relative;
-    height: 56px;
-}
-
-#console-header-container {
-    position: fixed;
-    width: 100%;
-    height: 56px;
-}
-
-.header-gradient {
-    height: 4px;
-    width: 100%;
-    background: linear-gradient(90deg,#b4ec51 0,#53a0fd);
-}
-
 .console-branding-bar {
     background: #1d2733;
     color: #fff;
-    height: 56px;
+    flex-direction: column;
+}
+
+.header-gradient {
+    width: 100%;
+    min-width: 100%;
+    height: 4px;
+    display: block;
+    background: linear-gradient(90deg,#b4ec51 0,#53a0fd);
+}
+
+.console-nav-container {
+    width: 100%;
+    min-width: 100%;
+    height: 46px;
+    display: block;
 }
 
 .nav-menu-button {
@@ -216,26 +242,14 @@ ul.nav-list li a:hover {background-color: #F80000;border-left-width: 5px; border
 ** Body
  */
 
-#console-content-wrapper {
-    flex: 1;
-    overflow-y: none;
-}
-
-#console-content-wrapper>* {
-    flex-shrink: 0;
-}
-
-#baseplate {
-    height: 100%;
+.console-main-content {
 }
 
 /*
 ** Footer
  */
 
-.footer-container {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+.console-footer-content {
+    background: #1d2733;
 }
 

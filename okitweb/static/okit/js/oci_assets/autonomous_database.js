@@ -5,9 +5,9 @@ console.info('Loaded Autonomous Database Javascript');
  */
 asset_drop_targets[autonomous_database_artifact] = [compartment_artifact];
 asset_connect_targets[autonomous_database_artifact] = [instance_artifact];
-asset_add_functions[autonomous_database_artifact] = "addAutonomousDatabaseVolume";
-asset_delete_functions[autonomous_database_artifact] = "deleteAutonomousDatabaseVolume";
-asset_clear_functions.push("clearAutonomousDatabaseVolumeVariables");
+asset_add_functions[autonomous_database_artifact] = "addAutonomousDatabase";
+asset_delete_functions[autonomous_database_artifact] = "deleteAutonomousDatabase";
+asset_clear_functions.push("clearAutonomousDatabaseVariables");
 
 const autonomous_database_stroke_colour = "#F80000";
 const autonomous_database_query_cb = "autonomous-database-query-cb";
@@ -18,7 +18,7 @@ let autonomous_database_count = 0;
 ** Reset variables
  */
 
-function clearAutonomousDatabaseVolumeVariables() {
+function clearAutonomousDatabaseVariables() {
     autonomous_database_ids = [];
     autonomous_database_count = 0;
 }
@@ -26,7 +26,7 @@ function clearAutonomousDatabaseVolumeVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addAutonomousDatabaseVolume(parent_id, compartment_id) {
+function addAutonomousDatabase(parent_id, compartment_id) {
     let id = 'okit-' + autonomous_database_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + autonomous_database_artifact + ' : ' + id);
 
@@ -53,7 +53,7 @@ function addAutonomousDatabaseVolume(parent_id, compartment_id) {
     okitIdsJsonObj[id] = autonomous_database['display_name'];
     //console.info(JSON.stringify(okitJson, null, 2));
     drawSVGforJson();
-    loadAutonomousDatabaseVolumeProperties(id);
+    loadAutonomousDatabaseProperties(id);
     console.groupEnd();
 }
 
@@ -61,7 +61,7 @@ function addAutonomousDatabaseVolume(parent_id, compartment_id) {
 ** Delete From JSON Model
  */
 
-function deleteAutonomousDatabaseVolume(id) {
+function deleteAutonomousDatabase(id) {
     console.groupCollapsed('Delete ' + autonomous_database_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -87,12 +87,12 @@ function deleteAutonomousDatabaseVolume(id) {
 /*
 ** SVG Creation
  */
-function getAutonomousDatabaseVolumeDimensions(id='') {
+function getAutonomousDatabaseDimensions(id='') {
     return {width:icon_width, height:icon_height};
 }
 
-function newAutonomousDatabaseVolumeDefinition(artifact, position=0) {
-    let dimensions = getAutonomousDatabaseVolumeDimensions();
+function newAutonomousDatabaseDefinition(artifact, position=0) {
+    let dimensions = getAutonomousDatabaseDimensions();
     let definition = newArtifactSVGDefinition(artifact, autonomous_database_artifact);
     definition['svg']['x'] = Math.round(icon_width / 4);
     definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
@@ -103,7 +103,7 @@ function newAutonomousDatabaseVolumeDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawAutonomousDatabaseVolumeSVG(artifact) {
+function drawAutonomousDatabaseSVG(artifact) {
     let parent_id = artifact['parent_id'];
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
@@ -138,7 +138,7 @@ function drawAutonomousDatabaseVolumeSVG(artifact) {
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['autonomous_database_position'] += 1;
 
-        let svg = drawArtifact(newAutonomousDatabaseVolumeDefinition(artifact, position));
+        let svg = drawArtifact(newAutonomousDatabaseDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
@@ -149,7 +149,7 @@ function drawAutonomousDatabaseVolumeSVG(artifact) {
          Set common attributes on svg element and children
          */
         svg.on("click", function () {
-            loadAutonomousDatabaseVolumeProperties(id);
+            loadAutonomousDatabaseProperties(id);
             d3.event.stopPropagation();
         });
     } else {
@@ -161,7 +161,7 @@ function drawAutonomousDatabaseVolumeSVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadAutonomousDatabaseVolumeProperties(id) {
+function loadAutonomousDatabaseProperties(id) {
     $("#properties").load("propertysheets/autonomous_database.html", function () {
         if ('autonomous_databases' in okitJson) {
             console.info('Loading ' + autonomous_database_artifact + ' : ' + id);
@@ -188,8 +188,8 @@ function loadAutonomousDatabaseVolumeProperties(id) {
 ** Query OCI
  */
 
-function queryAutonomousDatabaseVolumeAjax(compartment_id) {
-    console.info('------------- queryAutonomousDatabaseVolumeAjax --------------------');
+function queryAutonomousDatabaseAjax(compartment_id) {
+    console.info('------------- queryAutonomousDatabaseAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     if ('autonomous_database_filter' in okitQueryRequestJson) {
@@ -197,7 +197,7 @@ function queryAutonomousDatabaseVolumeAjax(compartment_id) {
     }
     $.ajax({
         type: 'get',
-        url: 'oci/artifacts/AutonomousDatabaseVolume',
+        url: 'oci/artifacts/AutonomousDatabase',
         dataType: 'text',
         contentType: 'application/json',
         //data: JSON.stringify(okitQueryRequestJson),
@@ -207,7 +207,7 @@ function queryAutonomousDatabaseVolumeAjax(compartment_id) {
             okitJson['autonomous_databases'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.info('queryAutonomousDatabaseVolumeAjax : ' + response_json[i]['display_name']);
+                console.info('queryAutonomousDatabaseAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + autonomous_database_query_cb).prop('checked', true);
@@ -222,7 +222,7 @@ function queryAutonomousDatabaseVolumeAjax(compartment_id) {
 
 
 $(document).ready(function() {
-    clearAutonomousDatabaseVolumeVariables();
+    clearAutonomousDatabaseVariables();
 
     // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
