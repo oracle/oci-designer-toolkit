@@ -46,15 +46,16 @@
     overflow: auto;
 }
 
-.icons-palette-bar {
+.icons-palette {
     border-width: 1px;
     border-color: black;
     background-color: #f0f5f5;
 }
 
 .palette-icon {
-    width: 70px;
-    height: 70px;
+    width: 35px;
+    height: 35px;
+    margin: 2px;
     float: left;
 }
 

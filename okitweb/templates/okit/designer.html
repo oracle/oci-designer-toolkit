@@ -76,6 +76,7 @@
                 success: function(xml) {
                     console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
                     let g = $(xml).find("g");
+                    g[0].removeAttribute('transform');
                     palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
                 },
                 error: function(xhr, status, error) {

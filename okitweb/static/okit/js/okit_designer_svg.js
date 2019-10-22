@@ -27,6 +27,8 @@ const positional_adjustments = {
     spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
 };
 const path_connector = true;
+const small_grid_size = 8;
+const grid_size = small_grid_size * 10;
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
@@ -77,6 +79,31 @@ function createSVGDefinitions(canvas_svg) {
         .attr("cy", "5")
         .attr("r", "5")
         .attr("fill", connector_colour);
+    // Grid
+    let small_grid = defs.append('pattern')
+        .attr("id", "small-grid")
+        .attr("width", small_grid_size)
+        .attr("height", small_grid_size)
+        .attr("patternUnits", "userSpaceOnUse");
+    small_grid.append('path')
+        .attr("d", "M "+ small_grid_size + " 0 L 0 0 0 " + small_grid_size)
+        .attr("fill", "none")
+        .attr("stroke", "gray")
+        .attr("stroke-width", "0.5");
+    let grid = defs.append('pattern')
+        .attr("id", "grid")
+        .attr("width", grid_size)
+        .attr("height", grid_size)
+        .attr("patternUnits", "userSpaceOnUse");
+    grid.append('rect')
+        .attr("width", grid_size)
+        .attr("height", grid_size)
+        .attr("fill", "url(#small-grid)");
+    grid.append('path')
+        .attr("d", "M " + grid_size + " 0 L 0 0 0 " + grid_size)
+        .attr("fill", "none")
+        .attr("stroke", "darkgray")
+        .attr("stroke-width", "1");
 }
 
 function newArtifactSVGDefinition(artifact, data_type) {
@@ -444,19 +471,31 @@ function clearCanvas() {
     canvas_svg.selectAll('*').remove();
     styleCanvas(canvas_svg);
     createSVGDefinitions(canvas_svg);
+    addGrid(canvas_svg);
+}
+
+function addGrid(canvas_svg) {
+    canvas_svg.append('rect')
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("fill", "url(#grid)");
 }
 
 function newCanvas(parent_id="canvas-wrapper") {
     console.groupCollapsed('New Canvas');
     let compartment_div = d3.select('#' + parent_id);
-    let window_width = $(window).width();
-    let window_height = $(window).height() * 2;
+    let canvas_width = Math.round($(window).width() / 10) * 10;
+    let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
     let parent_width = $('#' + parent_id).width();
     let parent_height = $('#' + parent_id).height();
     console.info('JQuery Width  : ' + $('#' + parent_id).width());
     console.info('JQuery Height : ' + $('#' + parent_id).height());
     console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
     console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
+    console.info('Window Width  : ' + $(window).width());
+    console.info('Window Height : ' + $(window).height());
+    console.info('Canvas Width  : ' + canvas_width);
+    console.info('Canvas Height : ' + canvas_height);
     // Empty existing Canvas
     compartment_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc
@@ -465,9 +504,9 @@ function newCanvas(parent_id="canvas-wrapper") {
         .attr("id", 'canvas-svg')
         .attr("x", 0)
         .attr("y", 0)
-        .attr("width", window_width)
-        .attr("height", window_height)
-        .attr("viewBox", "0 0 " + window_width + " " + window_height)
+        .attr("width", canvas_width)
+        .attr("height", canvas_height)
+        .attr("viewBox", "0 0 " + canvas_width + " " + canvas_height)
         //.attr("viewBox", "0 0 " + parent_width + " " + parent_height)
         .attr("preserveAspectRatio", "xMinYMin meet");
 
