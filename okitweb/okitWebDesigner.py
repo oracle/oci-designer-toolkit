@@ -52,6 +52,7 @@ from facades.ociInstance import OCIInstances
 from facades.ociInstance import OCIInstanceVnics
 from facades.ociResourceManager import OCIResourceManagers
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
+from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 
 from common.ociLogging import getLogger
 
@@ -223,6 +224,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Block Storage Volumes')
         oci_block_storage_volumes = OCIBlockStorageVolumes(compartment_id=query_json['compartment_id'])
         response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
+    elif artifact == 'AutonomousDatabase':
+        logger.info('---- Processing Autonomous Databases')
+        oci_autonomous_databases = OCIAutonomousDatabases(compartment_id=query_json['compartment_id'])
+        response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
     else:
         return '404'
 

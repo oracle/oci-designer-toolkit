@@ -252,6 +252,7 @@ function initiateCompartmentSubQueries(id='') {
     queryVirtualCloudNetworkAjax(id);
     queryBlockStorageVolumeAjax(id);
     queryDynamicRoutingGatewayAjax(id);
+    queryAutonomousDatabaseAjax(id);
 }
 
 // TODO: Delete
