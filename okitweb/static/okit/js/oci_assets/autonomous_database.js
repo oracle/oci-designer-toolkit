@@ -44,11 +44,14 @@ function addAutonomousDatabase(parent_id, compartment_id) {
     autonomous_database_count += 1;
     let autonomous_database = {};
     autonomous_database['compartment_id'] = parent_id;
-    autonomous_database['availability_domain'] = '1';
     autonomous_database['id'] = id;
     autonomous_database['display_name'] = generateDefaultName(autonomous_database_prefix, autonomous_database_count);
-    autonomous_database['size_in_gbs'] = 1024;
-    autonomous_database['backup_policy'] = 'bronze';
+    autonomous_database['db_name'] = autonomous_database['display_name']
+    autonomous_database['data_storage_size_in_tbs'] = 1;
+    autonomous_database['cpu_core_count'] = 1;
+    autonomous_database['db_workload'] = 'OLTP';
+    autonomous_database['is_auto_scaling_enabled'] = true;
+    autonomous_database['is_free_tier'] = false;
     okitJson['autonomous_databases'].push(autonomous_database);
     okitIdsJsonObj[id] = autonomous_database['display_name'];
     //console.info(JSON.stringify(okitJson, null, 2));
@@ -169,12 +172,8 @@ function loadAutonomousDatabaseProperties(id) {
             for (let i = 0; i < json.length; i++) {
                 let autonomous_database = json[i];
                 if (autonomous_database['id'] == id) {
-                    autonomous_database['virtual_cloud_network'] = okitIdsJsonObj[autonomous_database['vcn_id']];
-                    $("#virtual_cloud_network").html(autonomous_database['virtual_cloud_network']);
-                    $('#display_name').val(autonomous_database['display_name']);
-                    $('#availability_domain').val(autonomous_database['availability_domain']);
-                    $('#size_in_gbs').val(autonomous_database['size_in_gbs']);
-                    $('#backup_policy').val(autonomous_database['backup_policy']);
+                    // Load Properties
+                    loadProperties(autonomous_database);
                     // Add Event Listeners
                     addPropertiesEventListeners(autonomous_database, []);
                     break;

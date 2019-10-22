@@ -21,6 +21,29 @@ function handlePropertiesMouseUp(e) {
     }
 }
 
+function loadProperties(json_element) {
+    console.groupCollapsed('Loading Properties');
+    $.each(json_element, function(key, val) {
+        //console.info('Key : ' + key + ' = ' + val);
+        if ($('#' + key).is("input:text")) {
+            console.info(key + ' is input:text.')
+            $('#' + key).val(val);
+        } else if ($('#' + key).is("input:checkbox")) {
+            console.info(key + ' is input:checkbox.')
+            $('#' + key).attr('checked', val);
+        } else if ($('#' + key).is("select")) {
+            console.info(key + ' is select.')
+            $('#' + key).val(val);
+        } else if ($('#' + key).is("label")) {
+            console.info(key + ' is label.')
+            $('#' + key).html(val);
+        } else {
+            console.warn(key + ' type unknown')
+        }
+    });
+    console.groupEnd();
+}
+
 function addPropertiesEventListeners(json_element, callbacks=[]) {
     // Default callbacks if not passed
     callbacks = (typeof callbacks !== 'undefined') ? callbacks : [];

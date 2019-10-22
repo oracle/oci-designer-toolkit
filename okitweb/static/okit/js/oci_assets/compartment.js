@@ -195,9 +195,9 @@ function loadCompartmentProperties(id) {
                 let compartment = json[i];
                 //console.info(JSON.stringify(compartment, null, 2));
                 if (compartment['id'] == id) {
-                    //console.info('Found Internet Gateway: ' + id);
-                    compartment['virtual_cloud_network'] = okitIdsJsonObj[compartment['vcn_id']];
-                    $('#name').val(compartment['name']);
+                    //$('#name').val(compartment['name']);
+                    // Load Properties
+                    loadProperties(compartment);
                     // Add Event Listeners
                     addPropertiesEventListeners(compartment, []);
                     okitJson['open_compartment_index'] = i;
