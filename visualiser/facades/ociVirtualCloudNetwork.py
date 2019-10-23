@@ -69,6 +69,9 @@ class OCIVirtualCloudNetwork(object):
     def getInternetGatewayClients(self):
         return OCIInternetGateways(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
+    def getServiceGatewayClients(self):
+        return OCIServiceGateways(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+
     def getRouteTableClients(self):
         return OCIRouteTables(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
