@@ -310,12 +310,6 @@ function loadVirtualCloudNetworkProperties(id) {
                 let virtual_cloud_network = json[i];
                 //console.info(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {
-                    //console.info('Found Virtual Cloud Network: ' + id);
-                    /*
-                    $('#display_name').val(virtual_cloud_network['display_name']);
-                    $('#cidr_block').val(virtual_cloud_network['cidr_block']);
-                    $('#dns_label').val(virtual_cloud_network['dns_label']);
-                    */
                     // Load Properties
                     loadProperties(virtual_cloud_network);
                     // Add Event Listeners

@@ -168,10 +168,6 @@ function loadRouteTableProperties(id) {
                 if (route_table['id'] == id) {
                     //console.info('Found Route Table: ' + id);
                     route_table['virtual_cloud_network'] = okitIdsJsonObj[route_table['vcn_id']];
-                    /*
-                    $("#virtual_cloud_network").html(route_table['virtual_cloud_network']);
-                    $('#display_name').val(route_table['display_name']);
-                    */
                     // Load Properties
                     loadProperties(route_table);
                     // Add Event Listeners

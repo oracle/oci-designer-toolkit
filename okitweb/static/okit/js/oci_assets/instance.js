@@ -295,28 +295,15 @@ function loadInstanceProperties(id) {
                     //console.info('Found Route Table: ' + id);
                     //instance['virtual_cloud_network'] = okitIdsJsonObj[instance['vcn_id']];
                     instance['subnet'] = okitIdsJsonObj[instance['subnet_id']];
-                    /*
-                    $("#virtual_cloud_network").html(instance['virtual_cloud_network']);
-                    $('#display_name').val(instance['display_name']);
-                    $('#hostname_label').val(instance['hostname_label']);
-                    $('#boot_volume_size_in_gbs').val(instance['boot_volume_size_in_gbs']);
-                    $('#authorized_keys').val(instance['authorized_keys']);
-                    $('#cloud_init_yaml').val(instance['cloud_init_yaml']);
-                    */
                     let block_storage_volume_select = $('#block_storage_volume_ids');
-                    //for (let bsvid of block_storage_volume_ids) {
-                    //    block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
-                    //}
                     if (okitJson.hasOwnProperty('block_storage_volumes')) {
                         for (let block_storage_volume of okitJson['block_storage_volumes']) {
                             block_storage_volume_select.append($('<option>').attr('value', block_storage_volume['id']).text(block_storage_volume['display_name']));
                         }
                     }
-                    //block_storage_volume_select.val(instance['block_storage_volume_ids']);
                     // Load Properties
                     loadProperties(instance);
                     // Add Event Listeners
-                    //addPropertiesEventListeners(instance, [drawInstanceAttachmentsSVG]);
                     addPropertiesEventListeners(instance, [drawSVGforJson]);
                     break;
                 }
