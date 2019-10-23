@@ -195,7 +195,6 @@ function loadCompartmentProperties(id) {
                 let compartment = json[i];
                 //console.info(JSON.stringify(compartment, null, 2));
                 if (compartment['id'] == id) {
-                    //$('#name').val(compartment['name']);
                     // Load Properties
                     loadProperties(compartment);
                     // Add Event Listeners

@@ -222,23 +222,14 @@ function loadLoadBalancerProperties(id) {
                 //console.info(JSON.stringify(load_balancer, null, 2));
                 if (load_balancer['id'] == id) {
                     load_balancer['subnet'] = okitIdsJsonObj[load_balancer['subnet_ids'][0]];
-                    /*
-                    $("#virtual_cloud_network").html(load_balancer['virtual_cloud_network']);
-                    $('#display_name').val(load_balancer['display_name']);
-                    $('#shape_name').val(load_balancer['shape_name']);
-                    $('#is_private').attr('checked', load_balancer['is_private']);
-                    */
                     let instances_select = $('#instance_ids');
                     //console.info('Instance Ids: ' + instance_ids);
                     for (let slid of instance_ids) {
                         instances_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
                     }
-                    //instances_select.val(load_balancer['instance_ids']);
                     // Load Properties
                     loadProperties(load_balancer);
                     // Add Event Listeners
-                    //addPropertiesEventListeners(load_balancer, [clearLoadBalancerConnectorsSVG, drawLoadBalancerConnectorsSVG]);
-                    //addPropertiesEventListeners(load_balancer, [drawLoadBalancerAttachmentsSVG]);
                     addPropertiesEventListeners(load_balancer, [drawSVGforJson]);
                     break;
                 }

@@ -171,10 +171,6 @@ function loadSecurityListProperties(id) {
                 if (security_list['id'] == id) {
                     //console.info('Found Security List: ' + id);
                     security_list['virtual_cloud_network'] = okitIdsJsonObj[security_list['vcn_id']];
-                    /*
-                    $("#virtual_cloud_network").html(security_list['virtual_cloud_network']);
-                    $('#display_name').val(security_list['display_name']);
-                    */
                     // Load Properties
                     loadProperties(security_list);
                     // Add Event Listeners

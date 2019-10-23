@@ -153,10 +153,6 @@ function loadDynamicRoutingGatewayProperties(id) {
                 if (dynamic_routing_gateway['id'] == id) {
                     //console.info('Found DynamicRouting Gateway: ' + id);
                     dynamic_routing_gateway['virtual_cloud_network'] = okitIdsJsonObj[dynamic_routing_gateway['vcn_id']];
-                    /*
-                    $("#virtual_cloud_network").html(dynamic_routing_gateway['virtual_cloud_network']);
-                    $('#display_name').val(dynamic_routing_gateway['display_name']);
-                    */
                     // Load Properties
                     loadProperties(dynamic_routing_gateway);
                     // Add Event Listeners

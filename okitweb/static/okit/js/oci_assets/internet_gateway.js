@@ -155,10 +155,6 @@ function loadInternetGatewayProperties(id) {
                 if (internet_gateway['id'] == id) {
                     //console.info('Found Internet Gateway: ' + id);
                     internet_gateway['virtual_cloud_network'] = okitIdsJsonObj[internet_gateway['vcn_id']];
-                    /*
-                    $("#virtual_cloud_network").html(internet_gateway['virtual_cloud_network']);
-                    $('#display_name').val(internet_gateway['display_name']);
-                    */
                     // Load Properties
                     loadProperties(internet_gateway);
                     // Add Event Listeners
