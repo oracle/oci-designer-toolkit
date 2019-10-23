@@ -59,6 +59,30 @@
     float: left;
 }
 
+.palette-icon-group {
+    min-width: 100%;
+    display: block;
+    float: left;
+    margin-top: 1px;
+    margin-bottom: 10px;
+}
+
+.palette-icon-group-header {
+    min-width: 100%;
+    display: block;
+    border-bottom: solid black 1px;
+}
+
+.palette-icon-group-header label {
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.palette-icon-group-icons {
+    min-width: 100%;
+    display: block;
+}
 
 /* Web Designer Panel */
 .web-designer-panel {
@@ -74,7 +98,6 @@
     background-color: #f0f5f5;
     width: 250px;
     min-width: 220px;
-    overflow: auto;
 }
 
 .designer-centre-column {
