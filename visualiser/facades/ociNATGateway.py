@@ -60,7 +60,7 @@ class OCINATGateways(OCIVirtualNetworkConnection):
             self.nat_gateways_json = self.filterJsonObjectList(nat_gateways_json, filter)
             logger.debug(str(self.nat_gateways_json))
 
-            # Build List of NATGateway Objects
+            # Build List of NAT Gateway Objects
             self.nat_gateways_obj = []
             for nat_gateway in self.nat_gateways_json:
                 self.nat_gateways_obj.append(OCINATGateway(self.config, self.configfile, nat_gateway))
