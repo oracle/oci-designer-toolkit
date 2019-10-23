@@ -53,12 +53,35 @@
 }
 
 .palette-icon {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     margin: 2px;
     float: left;
 }
 
+.palette-icon-group {
+    min-width: 100%;
+    display: block;
+    float: left;
+    margin-top: 1px;
+    margin-bottom: 10px;
+}
+
+.palette-icon-group-header {
+    min-width: 100%;
+    display: block;
+    border-bottom: solid black 1px;
+}
+
+.palette-icon-group-header label {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: smaller;
+}
+
+.palette-icon-group-icons {
+    min-width: 100%;
+    display: block;
+}
 
 /* Web Designer Panel */
 .web-designer-panel {
@@ -74,7 +97,6 @@
     background-color: #f0f5f5;
     width: 250px;
     min-width: 220px;
-    overflow: auto;
 }
 
 .designer-centre-column {
@@ -87,6 +109,7 @@
     padding-left: 10px;
     padding-left: 5px;
     border-left: 2px solid black;
+    background-color: #f0f5f5;
     width: 20%;
     overflow: auto;
     display: flex;
@@ -172,7 +195,6 @@
 }
 
 .properties-wrapper {
-    background-color: ghostwhite;
     border-width: 1px;
     border-color: black;
     margin: 0;
@@ -182,7 +204,6 @@
 }
 
 .property-sheet {
-    background: ghostwhite;
     margin-top: 10px;
     margin-right: 5px;
     width: 100%;
@@ -192,7 +213,6 @@
 }
 
 .property-editor {
-    background: ghostwhite;
     margin-top: 10px;
     margin-right: 5px;
     width: 100%;
@@ -201,7 +221,7 @@
 }
 
 .property-editor-title {
-    color: #F80000;
+    color: #3d5c5c;
     font-weight: bold;
     font-family: "Times New Roman";
     min-height: 20px;
@@ -226,7 +246,7 @@
     padding-top: 5px;
     padding-bottom: 5px;
     text-align: center;
-    background-color: #4CAF50;
+    background-color: #669999;
     color: white;
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -258,7 +278,7 @@
 }
 
 .add-button {
-    background-color: lime;
+    background-color: #00b300;
     border-width: 1px;
     border-color: black;
     border-radius: 4px;
@@ -267,7 +287,7 @@
 }
 
 .delete-button {
-    background-color: red;
+    background-color: #e60000;
     border-width: 1px;
     border-color: black;
     border-radius: 4px;

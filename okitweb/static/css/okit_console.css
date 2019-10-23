@@ -135,9 +135,9 @@ ul {
 
 .nav-menu-container {
     position: fixed;
-    top: 56px;
+    top: 50px;
     left: 0;
-    bottom: 32px;
+    bottom: 30px;
     right: 0;
     z-index: 1000;
     pointer-events: none;
@@ -157,7 +157,7 @@ ul {
     top: 0;
     left: 0;
     pointer-events: auto;
-    width: 315px;
+    width: 250px;
     height: 100%;
     transition: all .25s;
     visibility: hidden;

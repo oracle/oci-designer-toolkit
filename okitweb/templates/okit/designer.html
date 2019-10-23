@@ -110,15 +110,22 @@
 
 {% block mainblock %}
     <div id="main-panel" class="main-panel flex-column">
-        <!--div id="icon-palette-bar" class="icons-palette-bar hidden">
-            {% for palette_icon in palette_icons %}
-            <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true">
-            {% endfor %}
-        </div-->
         <div id="web-designer-panel" class="web-designer-panel flex-row">
             <div id="icon-palette" class="designer-left-column icons-palette">
                 {% for palette_icon in palette_icons %}
-                    <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true">
+                    <!--img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true"-->
+                {% endfor %}
+                {% for palette_icon_group in palette_icon_groups %}
+                    <div id="{{ palette_icon_group['name'] }}" class="palette-icon-group">
+                        <div class="palette-icon-group-header">
+                            <label>{{ palette_icon_group['name'] }}</label>
+                        </div>
+                        <div class="palette-icon-group-icons">
+                            {% for palette_icon in palette_icon_group['icons'] %}
+                                <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true">
+                            {% endfor %}
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
             <div id="canvas-wrapper" class="designer-centre-column canvas-wrapper">

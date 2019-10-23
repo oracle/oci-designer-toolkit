@@ -37,6 +37,9 @@ function loadProperties(json_element) {
         } else if ($('#' + key).is("label")) {
             console.info(key + ' is label.')
             $('#' + key).html(val);
+        } else if ($('#' + key).is("textarea")) {
+            console.info(key + ' is textarea.')
+            $('#' + key).val(val);
         } else {
             console.warn(key + ' type unknown')
         }

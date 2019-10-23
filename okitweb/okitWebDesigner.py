@@ -44,6 +44,7 @@ from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociNATGateway import OCINATGateways
+from facades.ociServiceGateway import OCIServiceGateways
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
 from facades.ociSubnet import OCISubnets
@@ -75,13 +76,41 @@ def standardiseJson(json_data={}, **kwargs):
 @bp.route('/designer', methods=(['GET', 'POST']))
 def designer():
     oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets')))
-    palette_icons_svg = os.listdir(os.path.join(bp.static_folder, 'palette'))
+    #palette_icons_svg = os.listdir(os.path.join(bp.static_folder, 'palette'))
+    #logger.info('Basic List Dir : {0!s:s}'.format(palette_icons_svg))
+    #palette_icons_svg = [f for f in os.listdir(os.path.join(bp.static_folder, 'palette')) if os.path.isfile(os.path.join(bp.static_folder, 'palette', f))]
+    #logger.info('Files List Dir : {0!s:s}'.format(palette_icons_svg))
+    svg_files = []
+    svg_icon_groups = {}
+    for (dirpath, dirnames, filenames) in os.walk(os.path.join(bp.static_folder, 'palette')):
+        logger.info('dirpath : {0!s:s}'.format(dirpath))
+        logger.info('dirnames : {0!s:s}'.format(dirnames))
+        logger.info('filenames : {0!s:s}'.format(filenames))
+        if os.path.basename(dirpath) != 'palette':
+            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
+            svg_icon_groups[os.path.basename(dirpath)] = filenames;
+        else:
+            svg_files.extend(filenames)
+    logger.info('Files Walk : {0!s:s}'.format(svg_files))
+    logger.info('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
+    palette_icons_svg = svg_files
+
     palette_icons = []
     for palette_svg in sorted(palette_icons_svg):
-        palette_icon = {'svg': palette_svg}
-        palette_icon['title'] = palette_svg.split('.')[0].replace('_', ' ')
+        palette_icon = {'svg': palette_svg, 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
         palette_icons.append(palette_icon)
     logger.info('Palette Icons : {0!s:s}'.format(palette_icons))
+
+    palette_icon_groups = []
+    for key in svg_icon_groups:
+        palette_icon_group = {'name': str(key).title(), 'icons': []}
+        for palette_svg in sorted(svg_icon_groups[key]):
+            palette_icon = {'svg': os.path.join(key, palette_svg), 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
+            palette_icon_group['icons'].append(palette_icon)
+        palette_icon_groups.append(palette_icon_group)
+    logger.info('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
+    logJson(palette_icon_groups)
+
     template_files = os.listdir(os.path.join(bp.static_folder, 'templates'))
     okit_templates = []
     for template_file in sorted(template_files):
@@ -105,10 +134,10 @@ def designer():
         #response_json = executeQuery(request_json)
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_templates=okit_templates, okit_query_request_json=request_json, okit_query_response_json=response_string)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates=okit_templates, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
         logger.info('>>>>>>>>> oci version {0!s:s}'.format(oci.__version__))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, okit_templates=okit_templates)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates=okit_templates)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
