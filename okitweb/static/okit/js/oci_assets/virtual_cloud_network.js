@@ -374,6 +374,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
 function initiateVirtualCloudNetworkSubQueries(compartment_id, id='') {
     queryInternetGatewayAjax(compartment_id, id);
     queryNATGatewayAjax(compartment_id, id);
+    queryServiceGatewayAjax(compartment_id, id);
     queryRouteTableAjax(compartment_id, id);
     querySecurityListAjax(compartment_id, id);
     querySubnetAjax(compartment_id, id);

@@ -44,6 +44,7 @@ from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociNATGateway import OCINATGateways
+from facades.ociServiceGateway import OCIServiceGateways
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
 from facades.ociSubnet import OCISubnets
@@ -223,6 +224,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing NAT Gateways')
         oci_nat_gateways = OCINATGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
+    elif artifact == 'ServiceGateway':
+        logger.info('---- Processing Service Gateways')
+        oci_service_gateways = OCIServiceGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_service_gateways.list(filter=query_json.get('service_gateway_filter', None))
     elif artifact == 'DynamicRoutingGateway':
         logger.info('---- Processing Dynamic Routing Gateways')
         oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(compartment_id=query_json['compartment_id'])

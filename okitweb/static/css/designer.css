@@ -74,9 +74,8 @@
 }
 
 .palette-icon-group-header label {
-    font-family: Arial;
-    font-weight: bold;
-    font-size: 10px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: smaller;
 }
 
 .palette-icon-group-icons {
