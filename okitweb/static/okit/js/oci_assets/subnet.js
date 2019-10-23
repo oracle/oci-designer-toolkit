@@ -465,36 +465,17 @@ function loadSubnetProperties(id) {
                 if (subnet['id'] == id) {
                     //console.info('Found Subnet: ' + id);
                     subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['vcn_id']];
-                    /*
-                    $("#virtual_cloud_network").html(subnet['virtual_cloud_network']);
-                    $('#display_name').val(subnet['display_name']);
-                    $('#cidr_block').val(subnet['cidr_block']);
-                    $('#dns_label').val(subnet['dns_label']);
-                    $('#prohibit_public_ip_on_vnic').attr('checked', subnet['prohibit_public_ip_on_vnic']);
-                    */
                     let route_table_select = $('#route_table_id');
-                    //console.info('Route Table Ids: ' + route_table_ids);
-                    //for (let rtid of route_table_ids) {
-                    //    route_table_select.append($('<option>').attr('value', rtid).text(okitIdsJsonObj[rtid]));
-                    //}
                     for (let route_table of okitJson['route_tables']) {
                         route_table_select.append($('<option>').attr('value', route_table['id']).text(route_table['display_name']));
                     }
-                    //route_table_select.val(subnet['route_table_id']);
                     let security_lists_select = $('#security_list_ids');
-                    //console.info('Security List Ids: ' + security_list_ids);
-                    //for (let slid of security_list_ids) {
-                    //    security_lists_select.append($('<option>').attr('value', slid).text(okitIdsJsonObj[slid]));
-                    //}
                     for (let security_list of okitJson['security_lists']) {
                         security_lists_select.append($('<option>').attr('value', security_list['id']).text(security_list['display_name']));
                     }
-                    //security_lists_select.val(subnet['security_list_ids']);
                     // Load Properties
                     loadProperties(subnet);
                     // Add Event Listeners
-                    //addPropertiesEventListeners(subnet, [clearSubnetConnectorsSVG, drawSubnetConnectorsSVG]);
-                    //addPropertiesEventListeners(subnet, [drawSubnetAttachmentsSVG]);
                     addPropertiesEventListeners(subnet, [drawSVGforJson]);
                     break;
                 }

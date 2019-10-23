@@ -14,6 +14,9 @@ const internet_gateway_prefix = 'ig';
 // NAT Gateway
 const nat_gateway_artifact = 'NAT Gateway';
 const nat_gateway_prefix = 'ng';
+// Service Gateway
+const service_gateway_artifact = 'Service Gateway';
+const service_gateway_prefix = 'sg';
 // Dynamic Routing Gateway
 const dynamic_routing_gateway_artifact = 'Dynamic Routing Gateway';
 const dynamic_routing_gateway_prefix = 'dg';

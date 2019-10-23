@@ -155,10 +155,6 @@ function loadNATGatewayProperties(id) {
                 if (nat_gateway['id'] == id) {
                     //console.info('Found NAT Gateway: ' + id);
                     nat_gateway['virtual_cloud_network'] = okitIdsJsonObj[nat_gateway['vcn_id']];
-                    /*
-                    $("#virtual_cloud_network").html(nat_gateway['virtual_cloud_network']);
-                    $('#display_name').val(nat_gateway['display_name']);
-                    */
                     // Load Properties
                     loadProperties(nat_gateway);
                     // Add Event Listeners
