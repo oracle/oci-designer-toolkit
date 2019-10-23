@@ -155,8 +155,8 @@ function loadServiceGatewayProperties(id) {
                 if (service_gateway['id'] == id) {
                     //console.info('Found Service Gateway: ' + id);
                     service_gateway['virtual_cloud_network'] = okitIdsJsonObj[service_gateway['vcn_id']];
-                    $("#virtual_cloud_network").html(service_gateway['virtual_cloud_network']);
-                    $('#display_name').val(service_gateway['display_name']);
+                    // Load Properties
+                    loadProperties(service_gateway);
                     // Add Event Listeners
                     addPropertiesEventListeners(service_gateway, []);
                     break;
