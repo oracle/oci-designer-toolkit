@@ -10,7 +10,8 @@ asset_update_functions[instance_artifact] = "updateInstance";
 asset_delete_functions[instance_artifact] = "deleteInstance";
 asset_clear_functions.push("clearInstanceVariables");
 
-const instance_stroke_colour = "blue";
+//const instance_stroke_colour = "blue";
+const instance_stroke_colour = "#6699cc";
 const instance_query_cb = "instance-query-cb";
 const instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
 const instance_height = Math.round(icon_height * 5 / 2);
@@ -288,17 +289,20 @@ function loadInstanceProperties(id) {
             console.info('Loading Instance: ' + id);
             let json = okitJson['instances'];
             for (let i = 0; i < json.length; i++) {
-                instance = json[i];
+                let instance = json[i];
                 //console.info(JSON.stringify(instance, null, 2));
                 if (instance['id'] == id) {
                     //console.info('Found Route Table: ' + id);
-                    instance['virtual_cloud_network'] = okitIdsJsonObj[instance['subnet_id']];
+                    //instance['virtual_cloud_network'] = okitIdsJsonObj[instance['vcn_id']];
+                    instance['subnet'] = okitIdsJsonObj[instance['subnet_id']];
+                    /*
                     $("#virtual_cloud_network").html(instance['virtual_cloud_network']);
                     $('#display_name').val(instance['display_name']);
                     $('#hostname_label').val(instance['hostname_label']);
                     $('#boot_volume_size_in_gbs').val(instance['boot_volume_size_in_gbs']);
                     $('#authorized_keys').val(instance['authorized_keys']);
                     $('#cloud_init_yaml').val(instance['cloud_init_yaml']);
+                    */
                     let block_storage_volume_select = $('#block_storage_volume_ids');
                     //for (let bsvid of block_storage_volume_ids) {
                     //    block_storage_volume_select.append($('<option>').attr('value', bsvid).text(okitIdsJsonObj[bsvid]));
@@ -308,7 +312,9 @@ function loadInstanceProperties(id) {
                             block_storage_volume_select.append($('<option>').attr('value', block_storage_volume['id']).text(block_storage_volume['display_name']));
                         }
                     }
-                    block_storage_volume_select.val(instance['block_storage_volume_ids']);
+                    //block_storage_volume_select.val(instance['block_storage_volume_ids']);
+                    // Load Properties
+                    loadProperties(instance);
                     // Add Event Listeners
                     //addPropertiesEventListeners(instance, [drawInstanceAttachmentsSVG]);
                     addPropertiesEventListeners(instance, [drawSVGforJson]);

@@ -13,15 +13,22 @@ const viewbox_height = 1500;
 const viewbox_width = 2500;
 const text_viewbox_height = 1000;
 const text_viewbox_width = 200;
-const connector_colour = "black";
+//const connector_colour = "black";
+//const connector_colour = "#6699cc";
+const connector_colour = "#336699";
+//const connector_colour = "#204060";
+const corner_radius = 10;
 const container_artifact_x_padding = Math.round(icon_width  * 3 / 2);
 const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
 const container_artifact_label_width = 300;
+const container_artifact_info_width = 100;
 const positional_adjustments = {
     padding: {x: Math.round(icon_width),   y: Math.round(icon_height + icon_spacing)},
     spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
 };
 const path_connector = true;
+const small_grid_size = 8;
+const grid_size = small_grid_size * 10;
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
@@ -72,6 +79,31 @@ function createSVGDefinitions(canvas_svg) {
         .attr("cy", "5")
         .attr("r", "5")
         .attr("fill", connector_colour);
+    // Grid
+    let small_grid = defs.append('pattern')
+        .attr("id", "small-grid")
+        .attr("width", small_grid_size)
+        .attr("height", small_grid_size)
+        .attr("patternUnits", "userSpaceOnUse");
+    small_grid.append('path')
+        .attr("d", "M "+ small_grid_size + " 0 L 0 0 0 " + small_grid_size)
+        .attr("fill", "none")
+        .attr("stroke", "gray")
+        .attr("stroke-width", "0.5");
+    let grid = defs.append('pattern')
+        .attr("id", "grid")
+        .attr("width", grid_size)
+        .attr("height", grid_size)
+        .attr("patternUnits", "userSpaceOnUse");
+    grid.append('rect')
+        .attr("width", grid_size)
+        .attr("height", grid_size)
+        .attr("fill", "url(#small-grid)");
+    grid.append('path')
+        .attr("d", "M " + grid_size + " 0 L 0 0 0 " + grid_size)
+        .attr("fill", "none")
+        .attr("stroke", "darkgray")
+        .attr("stroke-width", "1");
 }
 
 function newArtifactSVGDefinition(artifact, data_type) {
@@ -80,6 +112,7 @@ function newArtifactSVGDefinition(artifact, data_type) {
     definition['data_type'] = data_type;
     definition['name'] = {show: false, text: artifact['display_name']};
     definition['label'] = {show: false, text: data_type};
+    definition['info'] = {show: false, text: data_type};
     definition['svg'] = {x: 0, y: 0, width: icon_width, height: icon_height};
     definition['rect'] = {x: 0, y: 0,
         width: icon_width, height: icon_height,
@@ -96,10 +129,10 @@ function drawArtifact(definition) {
     let parent_id      = definition['artifact']['parent_id'];
     let compartment_id = definition['artifact']['compartment_id'];
     let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
-    console.info('<<<<<<<<<<<<<<<<<< Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'] + ' >>>>>>>>>>>>>>>>>>')
-    console.info('<<<<<<<<<<<<<<<<<< Id : ' + id + ' >>>>>>>>>>>>>>>>>>')
-    console.info('<<<<<<<<<<<<<<<<<< Parent Id : ' + parent_id + ' >>>>>>>>>>>>>>>>>>')
-    console.info('<<<<<<<<<<<<<<<<<< Compartment Id : ' + compartment_id + ' >>>>>>>>>>>>>>>>>>')
+    console.info('Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'])
+    console.info('Id             : ' + id )
+    console.info('Parent Id      : ' + parent_id)
+    console.info('Compartment Id : ' + compartment_id)
     let rect_x         = definition['rect']['x'];
     let rect_y         = definition['rect']['y'];
     let rect_width     = definition['svg']['width']  + definition['rect']['width_adjust'];
@@ -128,6 +161,8 @@ function drawArtifact(definition) {
         .attr("id", id)
         .attr("x",      rect_x)
         .attr("y",      rect_y)
+        .attr("rx",     corner_radius)
+        .attr("ry",     corner_radius)
         .attr("width",  rect_width)
         .attr("height", rect_height)
         .attr("fill",   definition['rect']['fill'])
@@ -145,7 +180,7 @@ function drawArtifact(definition) {
             .attr("width", container_artifact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 200 " + definition['svg']['height']);
+            .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
         let name = name_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-display-name')
@@ -155,14 +190,14 @@ function drawArtifact(definition) {
             .text(definition['name']['text']);
     }
     if (definition['label']['show']) {
-        let name_svg = svg.append('svg')
+        let label_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
             .attr("width", container_artifact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMax meet")
-            .attr("viewBox", "0 0 300 " + definition['svg']['height']);
-        let name = name_svg.append("text")
+            .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
+        let name = label_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-label')
             .attr("x", rect_x)
@@ -170,6 +205,23 @@ function drawArtifact(definition) {
             .attr("fill", definition['rect']['stroke']['colour'])
             .attr("vector-effects", "non-scaling-size")
             .text(definition['label']['text']);
+    }
+    if (definition['info']['show']) {
+        let info_svg = svg.append('svg')
+            .attr("x", Math.round(definition['svg']['width'] - container_artifact_info_width))
+            .attr("y", "0")
+            .attr("width", container_artifact_info_width)
+            .attr("height", definition['svg']['height'])
+            .attr("preserveAspectRatio", "xMinYMax meet")
+            .attr("viewBox", "0 0 " + container_artifact_info_width + " " + definition['svg']['height']);
+        let name = info_svg.append("text")
+            .attr("class", "svg-text")
+            .attr("id", id + '-info')
+            .attr("x", rect_x)
+            .attr("y", definition['svg']['height'] - 10)
+            .attr("fill", definition['rect']['stroke']['colour'])
+            .attr("vector-effects", "non-scaling-size")
+            .text(definition['info']['text']);
     }
 
     svg.append('g')
@@ -233,6 +285,15 @@ function drawSVGforJson(artifact={}) {
             okitIdsJsonObj[okitJson['block_storage_volumes'][i]['id']] = okitJson['block_storage_volumes'][i]['display_name'];
             block_storage_volume_count += 1;
             drawBlockStorageVolumeSVG(okitJson['block_storage_volumes'][i]);
+        }
+    }
+    if (okitJson.hasOwnProperty('autonomous_databases')) {
+        autonomous_database_ids = [];
+        for (let i=0; i < okitJson['autonomous_databases'].length; i++) {
+            autonomous_database_ids.push(okitJson['autonomous_databases'][i]['id']);
+            okitIdsJsonObj[okitJson['autonomous_databases'][i]['id']] = okitJson['autonomous_databases'][i]['display_name'];
+            autonomous_database_count += 1;
+            drawAutonomousDatabaseSVG(okitJson['autonomous_databases'][i]);
         }
     }
 
@@ -317,7 +378,7 @@ function generateArc(radius, clockwise, xmod, ymod) {
 function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
     console.groupCollapsed('Generating Connector');
     if (path_connector) {
-        let radius = 5;
+        let radius = corner_radius;
         let dy = Math.round((end['y'] - start['y']) / 2);
         let dx = end['x'] - start['x'];
         let arc1 = '';
@@ -410,18 +471,31 @@ function clearCanvas() {
     canvas_svg.selectAll('*').remove();
     styleCanvas(canvas_svg);
     createSVGDefinitions(canvas_svg);
+    addGrid(canvas_svg);
+}
+
+function addGrid(canvas_svg) {
+    canvas_svg.append('rect')
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("fill", "url(#grid)");
 }
 
 function newCanvas(parent_id="canvas-wrapper") {
+    console.groupCollapsed('New Canvas');
     let compartment_div = d3.select('#' + parent_id);
-    let window_width = $(window).width();
-    let window_height = $(window).height() * 2;
+    let canvas_width = Math.round($(window).width() / 10) * 10;
+    let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
     let parent_width = $('#' + parent_id).width();
     let parent_height = $('#' + parent_id).height();
-    //console.info('JQuery Width  : ' + $('#' + parent_id).width());
-    //console.info('JQuery Height : ' + $('#' + parent_id).height());
-    //console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
-    //console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
+    console.info('JQuery Width  : ' + $('#' + parent_id).width());
+    console.info('JQuery Height : ' + $('#' + parent_id).height());
+    console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
+    console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
+    console.info('Window Width  : ' + $(window).width());
+    console.info('Window Height : ' + $(window).height());
+    console.info('Canvas Width  : ' + canvas_width);
+    console.info('Canvas Height : ' + canvas_height);
     // Empty existing Canvas
     compartment_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc
@@ -430,13 +504,14 @@ function newCanvas(parent_id="canvas-wrapper") {
         .attr("id", 'canvas-svg')
         .attr("x", 0)
         .attr("y", 0)
-        .attr("width", window_width)
-        .attr("height", window_height)
-        .attr("viewBox", "0 0 " + window_width + " " + window_height)
+        .attr("width", canvas_width)
+        .attr("height", canvas_height)
+        .attr("viewBox", "0 0 " + canvas_width + " " + canvas_height)
         //.attr("viewBox", "0 0 " + parent_width + " " + parent_height)
         .attr("preserveAspectRatio", "xMinYMin meet");
 
     clearCanvas();
+    console.groupEnd();
 
     return canvas_svg;
 }

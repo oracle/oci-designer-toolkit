@@ -242,6 +242,8 @@ function newSubnetDefinition(artifact, position=0) {
     } else  {
         definition['label']['text'] = 'Public ' + subnet_artifact;
     }
+    definition['info']['show'] = true;
+    definition['info']['text'] = artifact['cidr_block'];
     if (!okitJson['canvas']['subnets'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['subnets'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }
@@ -463,11 +465,13 @@ function loadSubnetProperties(id) {
                 if (subnet['id'] == id) {
                     //console.info('Found Subnet: ' + id);
                     subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['vcn_id']];
+                    /*
                     $("#virtual_cloud_network").html(subnet['virtual_cloud_network']);
                     $('#display_name').val(subnet['display_name']);
                     $('#cidr_block').val(subnet['cidr_block']);
                     $('#dns_label').val(subnet['dns_label']);
                     $('#prohibit_public_ip_on_vnic').attr('checked', subnet['prohibit_public_ip_on_vnic']);
+                    */
                     let route_table_select = $('#route_table_id');
                     //console.info('Route Table Ids: ' + route_table_ids);
                     //for (let rtid of route_table_ids) {
@@ -476,7 +480,7 @@ function loadSubnetProperties(id) {
                     for (let route_table of okitJson['route_tables']) {
                         route_table_select.append($('<option>').attr('value', route_table['id']).text(route_table['display_name']));
                     }
-                    route_table_select.val(subnet['route_table_id']);
+                    //route_table_select.val(subnet['route_table_id']);
                     let security_lists_select = $('#security_list_ids');
                     //console.info('Security List Ids: ' + security_list_ids);
                     //for (let slid of security_list_ids) {
@@ -485,7 +489,9 @@ function loadSubnetProperties(id) {
                     for (let security_list of okitJson['security_lists']) {
                         security_lists_select.append($('<option>').attr('value', security_list['id']).text(security_list['display_name']));
                     }
-                    security_lists_select.val(subnet['security_list_ids']);
+                    //security_lists_select.val(subnet['security_list_ids']);
+                    // Load Properties
+                    loadProperties(subnet);
                     // Add Event Listeners
                     //addPropertiesEventListeners(subnet, [clearSubnetConnectorsSVG, drawSubnetConnectorsSVG]);
                     //addPropertiesEventListeners(subnet, [drawSubnetAttachmentsSVG]);
@@ -554,10 +560,17 @@ function querySubnetAjax(compartment_id, vcn_id) {
             let response_json = JSON.parse(resp);
             okitJson['subnets'] = response_json;
             let len = response_json.length;
-            for (let i = 0; i < len; i++) {
-                console.info('querySubnetAjax : ' + response_json[i]['display_name']);
-                queryInstanceAjax(compartment_id, response_json[i]['id']);
-                queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    console.info('querySubnetAjax : ' + response_json[i]['display_name']);
+                    /*
+                    queryInstanceAjax(compartment_id, response_json[i]['id']);
+                    queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
+                    */
+                    initiateSubnetSubQueries(compartment_id, response_json[i]['id']);
+                }
+            } else {
+                initiateSubnetSubQueries(compartment_id, null);
             }
             redrawSVGCanvas();
             $('#' + subnet_query_cb).prop('checked', true);
@@ -568,6 +581,11 @@ function querySubnetAjax(compartment_id, vcn_id) {
             console.info('Error : ' + error)
         }
     });
+}
+
+function initiateSubnetSubQueries(compartment_id, id='') {
+    queryInstanceAjax(compartment_id, id);
+    queryLoadBalancerAjax(compartment_id, id);
 }
 
 $(document).ready(function () {

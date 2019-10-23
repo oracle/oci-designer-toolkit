@@ -40,19 +40,22 @@ class OCISecurityLists(OCIVirtualNetworkConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        security_lists = oci.pagination.list_call_get_all_results(self.client.list_security_lists, compartment_id=compartment_id, vcn_id=self.vcn_id).data
-        # Convert to Json object
-        security_lists_json = self.toJson(security_lists)
-        logger.debug(str(security_lists_json))
+        if self.vcn_id is not None:
+            security_lists = oci.pagination.list_call_get_all_results(self.client.list_security_lists, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+            # Convert to Json object
+            security_lists_json = self.toJson(security_lists)
+            logger.debug(str(security_lists_json))
 
-        # Filter results
-        self.security_lists_json = self.filterJsonObjectList(security_lists_json, filter)
-        logger.debug(str(self.security_lists_json))
+            # Filter results
+            self.security_lists_json = self.filterJsonObjectList(security_lists_json, filter)
+            logger.debug(str(self.security_lists_json))
 
-        # Build List of SecurityList Objects
-        self.security_lists_obj = []
-        for security_list in self.security_lists_json:
-            self.security_lists_obj.append(OCISecurityList(self.config, self.configfile, security_list))
+            # Build List of SecurityList Objects
+            self.security_lists_obj = []
+            for security_list in self.security_lists_json:
+                self.security_lists_obj.append(OCISecurityList(self.config, self.configfile, security_list))
+        else:
+            logger.warn('Virtual Cloud Network Id has not been specified.')
 
         return self.security_lists_json
 

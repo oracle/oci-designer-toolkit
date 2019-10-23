@@ -249,6 +249,8 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     definition['icon']['y_translation'] = icon_translate_y_start;
     definition['name']['show'] = true;
     definition['label']['show'] = true;
+    definition['info']['show'] = true;
+    definition['info']['text'] = artifact['cidr_block'];
     if (!okitJson['canvas']['virtual_cloud_networks'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['virtual_cloud_networks'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }
@@ -309,9 +311,13 @@ function loadVirtualCloudNetworkProperties(id) {
                 //console.info(JSON.stringify(virtual_cloud_network, null, 2));
                 if (virtual_cloud_network['id'] == id) {
                     //console.info('Found Virtual Cloud Network: ' + id);
+                    /*
                     $('#display_name').val(virtual_cloud_network['display_name']);
                     $('#cidr_block').val(virtual_cloud_network['cidr_block']);
                     $('#dns_label').val(virtual_cloud_network['dns_label']);
+                    */
+                    // Load Properties
+                    loadProperties(virtual_cloud_network);
                     // Add Event Listeners
                     addPropertiesEventListeners(virtual_cloud_network, []);
                     break;
@@ -343,14 +349,22 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
             let response_json = JSON.parse(resp);
             okitJson['virtual_cloud_networks'] = response_json;
             let len =  response_json.length;
-            for(let i=0;i<len;i++ ) {
-                console.info('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
-                virtual_cloud_network_count += 1;
-                queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
-                queryNATGatewayAjax(compartment_id, response_json[i]['id']);
-                queryRouteTableAjax(compartment_id, response_json[i]['id']);
-                querySecurityListAjax(compartment_id, response_json[i]['id']);
-                querySubnetAjax(compartment_id, response_json[i]['id']);
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    console.info('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
+                    virtual_cloud_network_count += 1;
+                    /*
+                    queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
+                    queryNATGatewayAjax(compartment_id, response_json[i]['id']);
+                    queryRouteTableAjax(compartment_id, response_json[i]['id']);
+                    querySecurityListAjax(compartment_id, response_json[i]['id']);
+                    querySubnetAjax(compartment_id, response_json[i]['id']);
+                    */
+                    initiateVirtualCloudNetworkSubQueries(compartment_id, response_json[i]['id']);
+                }
+            } else {
+                // Do this to clear check boxes
+                initiateVirtualCloudNetworkSubQueries(compartment_id, null);
             }
             redrawSVGCanvas();
             $('#' + virtual_cloud_network_query_cb).prop('checked', true);
@@ -358,9 +372,17 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Error  : '+ error)
         }
     });
+}
+
+function initiateVirtualCloudNetworkSubQueries(compartment_id, id='') {
+    queryInternetGatewayAjax(compartment_id, id);
+    queryNATGatewayAjax(compartment_id, id);
+    queryRouteTableAjax(compartment_id, id);
+    querySecurityListAjax(compartment_id, id);
+    querySubnetAjax(compartment_id, id);
 }
 
 $(document).ready(function() {

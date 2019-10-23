@@ -18,9 +18,10 @@ let okitQueryRequestJson = null;
  */
 function initialiseJson() {
     okitJson = {
-        title: "",
+        title: "OKIT OCI Visualiser Json",
         description: "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......",
         compartments: [],
+        autonomous_databases: [],
         block_storage_volumes: [],
         dynamic_routing_gateways: [],
         instances: [],
@@ -106,7 +107,7 @@ function clearArtifactData() {
 }
 
 function clearCoreData() {
-    okitJson = {};
+    initialiseJson();
     okitIdsJsonObj = {};
 }
 
@@ -251,8 +252,8 @@ function saveSvg(svgEl, name) {
  */
 function showQueryResults() {
     console.info('Generating Query Results');
-    clearCoreData();
     clearArtifactData();
+    initialiseJson();
     newCanvas();
     setBusyIcon();
     $('#query-progress').removeClass('hidden');

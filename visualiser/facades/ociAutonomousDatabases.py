@@ -13,28 +13,38 @@ __ekitrelease__ = "@RELEASE@"
 __version__ = "1.0.0.0"
 __date__ = "@BUILDDATE@"
 __status__ = "@RELEASE@"
-__module__ = "ociInternetGateway"
+__module__ = "ociAutonomousDatabases"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+import datetime
+import getopt
+import json
+import locale
+import logging
+import operator
+import os
+import requests
+import sys
 
 
 import oci
 import re
 import sys
 
-from facades.ociConnection import OCIVirtualNetworkConnection
+from facades.ociConnection import OCIAutonomousDatabaseConnection
 from common.ociLogging import getLogger
 
 # Configure logging
 logger = getLogger()
 
 
-class OCIInternetGateways(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None, **kwargs):
+class OCIAutonomousDatabases(OCIAutonomousDatabaseConnection):
+    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
         self.compartment_id = compartment_id
-        self.vcn_id = vcn_id
-        self.internet_gateways_json = []
-        self.internet_gateways_obj = []
-        super(OCIInternetGateways, self).__init__(config=config, configfile=configfile)
+        self.autonomous_databases_json = []
+        self.autonomous_databases_obj = []
+        super(OCIAutonomousDatabases, self).__init__(config=config, configfile=configfile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -47,28 +57,20 @@ class OCIInternetGateways(OCIVirtualNetworkConnection):
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'AVAILABLE'
 
-        if self.vcn_id is not None:
-            internet_gateways = oci.pagination.list_call_get_all_results(self.client.list_internet_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+        autonomous_databases = oci.pagination.list_call_get_all_results(self.client.list_autonomous_databases, compartment_id=compartment_id).data
 
-            # Convert to Json object
-            internet_gateways_json = self.toJson(internet_gateways)
-            logger.debug(str(internet_gateways_json))
+        # Convert to Json object
+        autonomous_databases_json = self.toJson(autonomous_databases)
+        logger.debug(str(autonomous_databases_json))
 
-            # Filter results
-            self.internet_gateways_json = self.filterJsonObjectList(internet_gateways_json, filter)
-            logger.debug(str(self.internet_gateways_json))
+        # Filter results
+        self.autonomous_databases_json = self.filterJsonObjectList(autonomous_databases_json, filter)
+        logger.debug(str(self.autonomous_databases_json))
 
-            # Build List of InternetGateway Objects
-            self.internet_gateways_obj = []
-            for internet_gateway in self.internet_gateways_json:
-                self.internet_gateways_obj.append(OCIInternetGateway(self.config, self.configfile, internet_gateway))
-        else:
-            logger.warn('Virtual Cloud Network Id has not been specified.')
-
-        return self.internet_gateways_json
+        return self.autonomous_databases_json
 
 
-class OCIInternetGateway(object):
+class OCIAutonomousDatabase(object):
     def __init__(self, config=None, configfile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile

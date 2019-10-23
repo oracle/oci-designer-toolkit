@@ -136,3 +136,17 @@ class OCIBlockStorageVolumeConnection(OCIConnection):
                 self.config = oci.config.from_file(self.configfile)
         self.client = oci.core.BlockstorageClient(self.config)
         return
+
+
+class OCIAutonomousDatabaseConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, **kwargs):
+        super(OCIAutonomousDatabaseConnection, self).__init__(config=config, configfile=configfile)
+
+    def connect(self):
+        if self.config is None:
+            if self.configfile is None:
+                self.config = oci.config.from_file()
+            else:
+                self.config = oci.config.from_file(self.configfile)
+        self.client = oci.database.DatabaseClient(self.config)
+        return

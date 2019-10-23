@@ -26,6 +26,7 @@ python modules are installed and in addition provide a simple flask server that 
 
 Therefore these installation instructions will describe the docker based implementation.
 
+##### 1. Clone Repository
 ```bash
 anhopki-mac:tmp anhopki$ git clone git@orahub.oraclecorp.com:andrew.hopkinson/okit.oci.web.designer.git
 
@@ -45,7 +46,9 @@ remote: Compressing objects: 100% (208/208), done.
 remote: Total 1455 (delta 287), reused 376 (delta 229)00 KiB/s
 Receiving objects: 100% (1455/1455), 604.46 KiB | 798.00 KiB/s, done.
 Resolving deltas: 100% (859/859), done.
-
+```
+##### 2. Change Directory into docker directory
+```bash
 anhopki-mac:tmp anhopki$ cd okit.oci.web.designer/docker/
 anhopki-mac:docker anhopki$ lh
 
@@ -60,7 +63,9 @@ total 56
 8 -rwxr-xr-x   1 anhopki  staff   512B 15 Aug 10:08 start-bash-shell.sh
 8 -rwxr-xr-x   1 anhopki  staff   621B 15 Aug 10:08 start-flask.sh
 8 -rwxr-xr-x   1 anhopki  staff   654B 15 Aug 10:08 start-gunicorn.sh
-
+```
+##### 3. Execute Build Script
+```bash
 anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
 
@@ -169,8 +174,8 @@ _=/usr/bin/env
 [2019-08-15 14:32:05 +0000] [10] [INFO] Booting worker with pid: 10
 [2019-08-15 14:32:05 +0000] [11] [INFO] Booting worker with pid: 11
 ```
-#### Designer
-The Designer consists of 3 main areas.
+#### Designer BUI
+The Designer BUI can be accessed on [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer) and consists of 3 main areas.
 1. Palette
 2. Canvas
 3. Properties Sheet
@@ -205,11 +210,10 @@ The hamburger menu in the top left will display a slide out menu with all availa
 ##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
 
-- File
+- Canvas
     - New
     - Load
     - Save
-- Canvas
     - Redraw
 - Export
     - SVG
@@ -221,11 +225,11 @@ The hamburger menu in the top left will display a slide out menu with all availa
     - Terraform
     - Ansible
 
-###### File/New
+###### Canvas/New
 Creates a new clear canvas.
-###### File/Load
+###### Canvas/Load
 Allows the user to select a previously saved or command line generated json file.
-###### File/Save
+###### Canvas/Save
 Saves the current diagram as a json representation.
 ###### Canvas/Redraw
 Redraws the existing canvas this will have the effect of grouping similar assets.
