@@ -28,6 +28,7 @@ function initialiseJson() {
         internet_gateways: [],
         load_balancers: [],
         nat_gateways: [],
+        service_gateways: [],
         route_tables: [],
         security_lists: [],
         subnets: [],
