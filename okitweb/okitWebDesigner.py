@@ -104,7 +104,7 @@ def designer():
     for key in svg_icon_groups:
         palette_icon_group = {'name': str(key).title(), 'icons': []}
         for palette_svg in sorted(svg_icon_groups[key]):
-            palette_icon = {'svg': palette_svg, 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
+            palette_icon = {'svg': os.path.join(key, palette_svg), 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
             palette_icon_group['icons'].append(palette_icon)
         palette_icon_groups.append(palette_icon_group)
     logger.info('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
