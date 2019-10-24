@@ -316,6 +316,15 @@ function drawSVGforJson(artifact={}) {
             drawNATGatewaySVG(okitJson['nat_gateways'][i]);
         }
     }
+    if (okitJson.hasOwnProperty('service_gateways')) {
+        service_gateway_ids = [];
+        for (let i=0; i < okitJson['service_gateways'].length; i++) {
+            service_gateway_ids.push(okitJson['service_gateways'][i]['id']);
+            okitIdsJsonObj[okitJson['service_gateways'][i]['id']] = okitJson['service_gateways'][i]['display_name'];
+            service_gateway_count += 1;
+            drawServiceGatewaySVG(okitJson['service_gateways'][i]);
+        }
+    }
     if (okitJson.hasOwnProperty('route_tables')) {
         route_table_ids = [];
         for (let i=0; i < okitJson['route_tables'].length; i++) {
