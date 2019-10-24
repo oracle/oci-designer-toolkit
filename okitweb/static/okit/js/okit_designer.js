@@ -298,6 +298,8 @@ const ro = new ResizeObserver(entries => {
     redrawSVGCanvas();
 });
 
+let dragging_drag_bar = false;
+
 $(document).ready(function(){
     /*
     ** Add handler functionality
@@ -390,6 +392,46 @@ $(document).ready(function(){
 
     // Only observe the canvas
     ro.observe(document.querySelector('#canvas-wrapper'));
+
+    // Add Drag Bar Functionality
+    $('#dragbar').mousedown(function(e) {
+        e.preventDefault();
+
+        dragging_drag_bar = true;
+        let web_designer_panel = $('#web-designer-panel');
+        let ghostbar = $('<div>',
+            {
+                id: 'ghostbar',
+                css: {
+                    height: web_designer_panel.outerHeight(),
+                    top: web_designer_panel.offset().top,
+                    left: web_designer_panel.offset().left
+                },
+                class: 'vertical-ghost-bar'
+            }).appendTo('body');
+
+        $(document).mousemove(function(e) {
+            ghostbar.css("left",e.pageX+2);
+        });
+    });
+
+    $(document).mouseup(function(e) {
+        if (dragging_drag_bar) {
+            let palette_width = $('#icon-palette').width();
+            let web_disigner_panel_width = $('#web-designer-panel').width();
+            let properties_width = web_disigner_panel_width - e.pageX;
+            console.groupCollapsed('Drag Bar Up');
+            console.info('Ghost Drag Bar X Position ' + e.pageX);
+            console.info('Web Designer Panel Width ' + web_disigner_panel_width);
+            console.info('Palette Width ' + palette_width);
+            console.info('Properties Width ' + properties_width);
+            $('#asset-properties').css("min-width", properties_width);
+            $('#ghostbar').remove();
+            $(document).unbind('mousemove');
+            dragging_drag_bar = false;
+            console.groupEnd();
+        }
+    });
 
 });
 

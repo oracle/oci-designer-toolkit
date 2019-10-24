@@ -92,7 +92,6 @@
 
 .designer-left-column {
     padding-left: 5px;
-    padding-left: 5px;
     border-right: 1px solid black;
     background-color: #f0f5f5;
     width: 220px;
@@ -106,13 +105,16 @@
 }
 
 .designer-right-column {
-    padding-left: 10px;
-    padding-left: 5px;
+    padding-left: 1px;
     border-left: 2px solid black;
     background-color: #f0f5f5;
-    width: 20%;
+    width: 300px;
+    min-width: 300px;
     overflow: auto;
     display: flex;
+}
+
+.drc {
     direction: rtl;
     resize: horizontal;
 }
@@ -185,6 +187,23 @@
 
 /* Asset Properties */
 
+.vertical-left-drag-bar {
+    background-color: black;
+    height: 100%;
+    float: left;
+    width: 3px;
+    cursor: col-resize !important;
+}
+
+.vertical-ghost-bar {
+    width: 3px;
+    background-color: #000;
+    opacity: 0.5;
+    position: absolute;
+    cursor: col-resize !important;
+    z-index: 999
+}
+
 .properties-source-wrapper {
     display: block;
     width: 100%;
@@ -192,6 +211,7 @@
     max-height: 100%;
     overflow: scroll;
     direction: ltr;
+    float: right;
 }
 
 .properties-wrapper {
