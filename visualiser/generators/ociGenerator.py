@@ -143,6 +143,9 @@ class OCIGenerator(object):
         # -- Block Storage Volumes
         for block_storage_volume in self.visualiser_json.get('block_storage_volumes', []):
             self.renderBlockStorageVolumes(block_storage_volume)
+        # -- Autonomous Databases
+        for autonomous_database in self.visualiser_json.get('autonomous_databases', []):
+            self.renderAutonomousDatabases(autonomous_database)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
@@ -227,6 +230,53 @@ class OCIGenerator(object):
         self.run_variables[variableName] = block_storage_volume["size_in_gbs"]
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("block_storage_volume.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderAutonomousDatabases(self, autonomous_database):
+        # Read Data
+        standardisedName = self.standardiseResourceName(autonomous_database['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = autonomous_database['display_name']
+        # Process Autonomous Databases Data
+        logger.info('Processing Autonomous Database Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = autonomous_database["display_name"]
+        # ---- DB Name
+        variableName = '{0:s}_db_name'.format(standardisedName)
+        self.jinja2_variables["db_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = autonomous_database["db_name"]
+        # ---- Admin Password
+        variableName = '{0:s}_admin_password'.format(standardisedName)
+        self.jinja2_variables["admin_password"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = autonomous_database["admin_password"]
+        # ---- Storage Size In TBs
+        variableName = '{0:s}_data_storage_size_in_tbs'.format(standardisedName)
+        self.jinja2_variables["data_storage_size_in_tbs"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = autonomous_database["data_storage_size_in_tbs"]
+        # ---- Core Count
+        variableName = '{0:s}_cpu_core_count'.format(standardisedName)
+        self.jinja2_variables["cpu_core_count"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = autonomous_database["cpu_core_count"]
+        # ---- Work Load
+        variableName = '{0:s}_db_workload'.format(standardisedName)
+        self.jinja2_variables["db_workload"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = autonomous_database["db_workload"]
+        # ---- Auto Scaling
+        variableName = '{0:s}_is_auto_scaling_enabled'.format(standardisedName)
+        self.jinja2_variables["is_auto_scaling_enabled"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = autonomous_database["is_auto_scaling_enabled"]
+        # ---- Free Tier
+        variableName = '{0:s}_is_free_tier'.format(standardisedName)
+        self.jinja2_variables["is_free_tier"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = autonomous_database["is_free_tier"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("autonomous_database.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
@@ -435,7 +485,10 @@ class OCIGenerator(object):
         self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['route_table_id']]))
         # ---- Security Lists
         jinja2_security_list_ids = []
-        for security_list in subnet.get('security_lists', []):
+        #for security_list in subnet.get('security_lists', []):
+        #    jinja2_security_list_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(security_list)))
+        for security_list_id in subnet.get('security_list_ids', []):
+            security_list = self.id_name_map[security_list_id]
             jinja2_security_list_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(security_list)))
         self.jinja2_variables["security_list_ids"] = ','.join(jinja2_security_list_ids)
         self.jinja2_variables["security_list_ids"] = jinja2_security_list_ids
