@@ -559,17 +559,14 @@ standard HTML drag & drop events).
 function loadBlockStorageVolumeProperties(id) {
     $("#properties").load("propertysheets/block_storage_volume.html", function () {
         if ('block_storage_volumes' in okitJson) {
-            console.log('Loading ' + block_storage_volume_artifact + ' : ' + id);
+            console.info('Loading ' + block_storage_volume_artifact + ' : ' + id);
             let json = okitJson['block_storage_volumes'];
             for (let i = 0; i < json.length; i++) {
                 let block_storage_volume = json[i];
                 if (block_storage_volume['id'] == id) {
                     block_storage_volume['virtual_cloud_network'] = okitIdsJsonObj[block_storage_volume['vcn_id']];
-                    $("#virtual_cloud_network").html(block_storage_volume['virtual_cloud_network']);
-                    $('#display_name').val(block_storage_volume['display_name']);
-                    $('#availability_domain').val(block_storage_volume['availability_domain']);
-                    $('#size_in_gbs').val(block_storage_volume['size_in_gbs']);
-                    $('#backup_policy').val(block_storage_volume['backup_policy']);
+                    // Load Properties
+                    loadProperties(block_storage_volume);
                     // Add Event Listeners
                     addPropertiesEventListeners(block_storage_volume, []);
                     break;
