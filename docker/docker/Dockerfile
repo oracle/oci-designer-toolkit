@@ -103,6 +103,8 @@ RUN yum update -y ; \
         requests \
         simplejson \
         six \
+        svglib \
+        svg.path \
         wtforms \
         xlrd \
 # Set-up env
@@ -122,6 +124,6 @@ RUN yum update -y ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
-    mkdir -p /okit/{ansible,config,terraform,visualiser,okitweb,workspace,python,unittests,preview}; \
+    mkdir -p /okit/{ansible,config,converter,terraform,visualiser,okitweb,workspace,python,unittests,preview}; \
     env | sort
 
