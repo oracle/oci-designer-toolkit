@@ -150,14 +150,15 @@ ul {
 }
 
 .nav-menu-panel {
-    background-color: #242526;
+    background: #1d2733;
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
     top: 0;
     left: 0;
     pointer-events: auto;
-    width: 250px;
+    width: 230px;
+    min-width: 230px;
     height: 100%;
     transition: all .25s;
     visibility: hidden;
