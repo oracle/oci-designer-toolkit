@@ -26,6 +26,14 @@
 .st1{fill:#F80000;}
 .st0{fill:lightgray;}
 
+.title {
+    font-weight: bold;
+}
+
+.key {
+    text-transform: capitalize;
+}
+
 /*
 ** Main Panel (Main Block) CSS
  */

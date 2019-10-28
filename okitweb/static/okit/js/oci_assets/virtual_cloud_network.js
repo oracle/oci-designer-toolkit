@@ -263,6 +263,7 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     definition['label']['show'] = true;
     definition['info']['show'] = true;
     definition['info']['text'] = artifact['cidr_block'];
+    //definition['title_keys'] = ['dns_label', 'cidr_block'];
     if (!okitJson['canvas']['virtual_cloud_networks'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['virtual_cloud_networks'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }
