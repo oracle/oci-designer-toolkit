@@ -228,13 +228,15 @@ function handleExportToSVG(evt) {
     if (!okitJson.hasOwnProperty('open_compartment_index')) {
         okitJson['open_compartment_index'] = 0;
     }
-    let okitcanvas = document.getElementById(okitJson.compartments[okitJson['open_compartment_index']]['id'] + '-canvas-svg');
+    // let okitcanvas = document.getElementById(okitJson.compartments[okitJson['open_compartment_index']]['id'] + '-canvas-svg');
+    let okitcanvas = document.getElementById("canvas-svg");
     let name = okitJson.compartments[okitJson['open_compartment_index']]['name'];
     saveSvg(okitcanvas, name + '.svg');
 }
 
 function saveSvg(svgEl, name) {
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    svgEl.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
     let svgData = svgEl.outerHTML;
     let preface = '<?xml version="1.0" standalone="no"?>\r\n';
     let svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
