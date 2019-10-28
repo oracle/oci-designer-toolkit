@@ -370,78 +370,7 @@ function querySecurityListAjax(compartment_id, vcn_id) {
 }
 
 function addDefaultSecurityListRules(id, vcn_cidr_block='10.0.0.0/16') {
-    /*
-          "egress_security_rules": [
-        {
-          "destination": "0.0.0.0/0",
-          "destination_type": "CIDR_BLOCK",
-          "icmp_options": null,
-          "is_stateless": false,
-          "protocol": "all",
-          "tcp_options": null,
-          "udp_options": null
-        }
-      ],
-      "ingress_security_rules": [
-        {
-          "icmp_options": null,
-          "is_stateless": false,
-          "protocol": "6",
-          "source": "0.0.0.0/0",
-          "source_type": "CIDR_BLOCK",
-          "tcp_options": {
-            "destination_port_range": {
-              "max": 22,
-              "min": 22
-            },
-            "source_port_range": null
-          },
-          "udp_options": null
-        },
-        {
-          "icmp_options": {
-            "code": 4,
-            "type": 3
-          },
-          "is_stateless": false,
-          "protocol": "1",
-          "source": "0.0.0.0/0",
-          "source_type": "CIDR_BLOCK",
-          "tcp_options": null,
-          "udp_options": null
-        },
-        {
-          "icmp_options": {
-            "code": null,
-            "type": 3
-          },
-          "is_stateless": false,
-          "protocol": "1",
-          "source": "10.0.0.0/16",
-          "source_type": "CIDR_BLOCK",
-          "tcp_options": null,
-          "udp_options": null
-        }
-      ],
-
-      "egress_security_rules": [
-        {
-          "protocol": "all",
-          "is_stateless": false,
-          "destination_type": "CIDR_BLOCK",
-          "destination": "0.0.0.0/0"
-        }
-      ],
-      "ingress_security_rules": [
-        {
-          "protocol": "all",
-          "is_stateless": false,
-          "source_type": "CIDR_BLOCK",
-          "source": "0.0.0.0/0"
-        }
-      ],
-
-     */
+    console.info('Adding Default Security List Rules for ' + id);
     for (let security_list of okitJson['security_lists']) {
         if (id == security_list.id) {
             // Add Egress Rule
