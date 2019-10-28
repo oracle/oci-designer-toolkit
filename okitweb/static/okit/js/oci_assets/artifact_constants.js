@@ -41,3 +41,9 @@ const block_storage_volume_prefix = 'bsv';
 // Autonomous Database
 const autonomous_database_artifact = 'Autonomous Database';
 const autonomous_database_prefix = 'ad';
+
+// Automation details
+let okitAutomation = {
+    create_default_security_list: true,
+    create_default_route_table: true
+};
