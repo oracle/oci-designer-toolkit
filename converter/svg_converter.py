@@ -37,9 +37,13 @@ logger = getLogger()
 XML           = '<?xml version="1.0" encoding="utf-8"?>\n'
 DOCTYPE       = '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n'
 SVG_START_TAG = '<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="{0!s:s}">\n'
-STYLE         = '   <style type="text/css">.st0{fill:#F80000;}</style>\n'
+STYLE         = '   <style type="text/css">{0!s:s}</style>\n'
 G_START_TAG   = '   <g transform="translate(-140, -140) scale(2, 2)">\n'
-PATH_TAG      = '      <path class="st0" d="{0!s:s}"/>\n'
+LINE_TAG      = '      <line     class="{0!s:s}" x1="{1!s:s}" y1="{2!s:s}" x2="{3!s:s}" y2="{4!s:s}"/>\n'
+POLYLINE_TAG  = '      <polyline class="{0!s:s}" points="{1!s:s}"/>\n'
+CIRCLE_TAG    = '      <circle   class="{0!s:s}" cx="{1!s:s}" cy="{2!s:s}" r="{3!s:s}"/>\n'
+RECT_TAG      = '      <rect     class="{0!s:s}" x="{1!s:s}" y="{2!s:s}" width="{3!s:s}" height="{4!s:s}"/>\n'
+PATH_TAG      = '      <path     class="{0!s:s}" d="{1!s:s}"/>\n'
 G_END_TAG     = '   </g>\n'
 SVG_END_TAG   = '</svg>\n'
 
@@ -53,47 +57,131 @@ def processWorkflow(args):
     for svg_file in svg_files:
         logger.info('Converting SVG File {0!s:s}'.format(os.path.join(args['sourcedir'], svg_file)))
         svg_doc = minidom.parse(os.path.join(args['sourcedir'], svg_file))
+        style_tags = svg_doc.getElementsByTagName('style')
+        styles = []
+        for style_tag in style_tags:
+            styles.append(style_tag.firstChild.nodeValue)
+        logger.debug('Styles : {0!s:s}'.format(styles))
+        styles_string = ';'.join(styles)
+        logger.debug('Styles String : {0!s:s}'.format(styles_string))
         svg_tags = svg_doc.getElementsByTagName('svg')
-        #logger.info('svg Tags')
-        #for svg_tag in svg_tags:
-        #    logger.info(svg_tag.getAttribute('id'))
-        #    logger.info(svg_tag.getAttribute('viewBox'))
-        #    logger.info(svg_tag.getAttribute('width'))
-        #    logger.info(svg_tag.getAttribute('height'))
-        #    logger.info(svg_tag.getAttribute('style'))
-        #logger.info('g Tags')
-        #g_tags = svg_doc.getElementsByTagName('g')
-        #for g_tag in g_tags:
-        #    logger.info(g_tag.firstChild.nodeValue)
-        logger.info('Retrieving Path Tags')
+        logger.debug('svg Tags')
+        for svg_tag in svg_tags:
+            logger.debug(svg_tag.getAttribute('id'))
+            logger.debug(svg_tag.getAttribute('viewBox'))
+            logger.debug(svg_tag.getAttribute('width'))
+            logger.debug(svg_tag.getAttribute('height'))
+            logger.debug(svg_tag.getAttribute('style'))
+        logger.debug('g Tags')
+        g_tags = svg_doc.getElementsByTagName('g')
+        for g_tag in g_tags:
+            logger.debug(g_tag.firstChild.nodeValue)
+        logger.debug('Retrieving Path Tags')
         path_tags = svg_doc.getElementsByTagName('path')
-        logger.info('Adjusting Paths')
+        logger.debug('Adjusting Paths')
         viewBox = svg_tags[0].getAttribute('viewBox')
-        logger.info('Current View Box {0!s:s}'.format(viewBox))
+        logger.debug('Current View Box {0!s:s}'.format(viewBox))
 
         # Get Current View Box x/y for adjustment
         viewBox_points = viewBox.split()
         vbx = float(viewBox_points[0]) * -1
         vby = float(viewBox_points[1]) * -1
-        logger.info('Adjustments x: {0!s:s} y: {1!s:s}'.format(vbx, vby))
+        logger.debug('Adjustments x: {0!s:s} y: {1!s:s}'.format(vbx, vby))
         # Set View Box x/y to 0
         viewBox_points[0] = '0'
         viewBox_points[1] = '0'
-
+        # Need to modify this to walk the child Hierarchy of the first g looking for path, line, polyline, circle & rect
         with closing(open(os.path.join(args['destdir'], svg_file), 'w')) as f:
             f.write(XML)
             f.write(DOCTYPE)
             f.write(SVG_START_TAG.format(' '.join(viewBox_points)))
-            f.write(STYLE)
+            f.write(STYLE.format(styles_string))
             f.write(G_START_TAG)
-            for path_tag in path_tags:
-                command_list = parsePath(path_tag.getAttribute('d'))
-                command_list = updatePath(command_list, vbx, vby)
-                f.write(PATH_TAG.format(pathToString(command_list)))
+            if len(g_tags) > 0:
+                processGTag(g_tags[0], f, vbx, vby)
+            else:
+                for path_tag in path_tags:
+                    processPathTag(path_tag, f, vbx, vby)
+                    #command_list = parsePath(path_tag.getAttribute('d'))
+                    #command_list = updatePath(command_list, vbx, vby)
+                    #f.write(PATH_TAG.format(pathToString(command_list)))
             f.write(G_END_TAG)
             f.write(SVG_END_TAG)
-        logger.info('Written SVG File {0!s:s}'.format(os.path.join(args['destdir'], svg_file)))
+        logger.info('   Written SVG File {0!s:s}\n'.format(os.path.join(args['destdir'], generateOutputFilename(svg_file))))
 
+    return
+
+
+def processGTag(node, file, vbx, vby):
+    for child in node.childNodes:
+        if child.nodeName == 'line':
+            processLineTag(child, file, vbx, vby)
+        elif child.nodeName == 'polyline':
+            processPolylineTag(child, file, vbx, vby)
+        elif child.nodeName == 'circle':
+            processCircleTag(child, file, vbx, vby)
+        elif child.nodeName == 'rect':
+            processRectTag(child, file, vbx, vby)
+        elif child.nodeName == 'path':
+            processPathTag(child, file, vbx, vby)
+        elif child.nodeName == 'g':
+            processGTag(child, file, vbx, vby)
+    return
+
+
+def processLineTag(node, file, vbx, vby):
+    style_class = node.getAttribute('class')
+    x1 = float(node.getAttribute('x1'))
+    y1 = float(node.getAttribute('y1'))
+    x2 = float(node.getAttribute('x2'))
+    y2 = float(node.getAttribute('y2'))
+    # Adjust
+    x1 += vbx
+    y1 += vby
+    x2 += vbx
+    y2 += vby
+    file.write(LINE_TAG.format(style_class, x1, y1, x2, y2))
+    return
+
+
+def processPolylineTag(node, file, vbx, vby):
+    style_class = node.getAttribute('class')
+    points = parsePolyline(node.getAttribute('points'))
+    points = updatePolyline(points, vbx, vby)
+    file.write(POLYLINE_TAG.format(style_class, polylineToString(points)))
+    return
+
+
+def processCircleTag(node, file, vbx, vby):
+    style_class = node.getAttribute('class')
+    cx = float(node.getAttribute('cx'))
+    cy = float(node.getAttribute('cy'))
+    r = float(node.getAttribute('r'))
+    # Adjust
+    cx += vbx
+    cy += vby
+    file.write(CIRCLE_TAG.format(style_class, cx, cy, r))
+    return
+
+
+def processRectTag(node, file, vbx, vby):
+    style_class = node.getAttribute('class')
+    x = float(node.getAttribute('x'))
+    y = float(node.getAttribute('y'))
+    width = float(node.getAttribute('width'))
+    height = float(node.getAttribute('height'))
+    # Adjust
+    x += vbx
+    y += vby
+    file.write(RECT_TAG.format(style_class, x, y, width, height))
+    return
+
+
+def processPathTag(node, file, vbx, vby):
+    style_class = node.getAttribute('class')
+    command_list = parsePath(node.getAttribute('d'))
+    command_list = updatePath(command_list, vbx, vby)
+    file.write(PATH_TAG.format(style_class, pathToString(command_list)))
     return
 
 
@@ -102,33 +190,33 @@ COMMAND_RE = re.compile("([{0!s:s}])".format(COMMANDS))
 
 
 def parsePath(path):
-    #logger.info('Passed Path : {0!s:s}'.format(path))
+    logger.debug('Passed Path : {0!s:s}'.format(path))
     path = ''.join(path.split())
-    #logger.info('Split & Joined Path : {0!s:s}'.format(path))
+    logger.debug('Split & Joined Path : {0!s:s}'.format(path))
     #path = path.replace(' ', '').replace('\n', '').replace('\t', '')
-    #logger.info('Replaced Path : {0!s:s}'.format(path))
+    #logger.debug('Replaced Path : {0!s:s}'.format(path))
     split_path = COMMAND_RE.split(path)
     #for x in split_path:
-    #    logger.info('x = {0!s:s}'.format(x))
+    #    logger.debug('x = {0!s:s}'.format(x))
 
-    #logger.info('Split Path : {0!s:s}'.format(split_path))
+    logger.debug('Split Path : {0!s:s}'.format(split_path))
     i = 1
     command_list = []
     while i < len(split_path):
-        #logger.info('{0:02d}) {1!s:s}'.format(i, split_path[i]))
+        logger.debug('{0:02d}) {1!s:s}'.format(i, split_path[i]))
         if split_path[i] in COMMANDS:
             command = {'command': split_path[i], 'points': [float(e) for e in split_path[i + 1].replace('-', ',-').split(',') if e != '']}
             command_list.append(command)
             i += 1
         i += 1
-    #logger.info('Commands : {0!s:s}'.format(command_list))
+    logger.debug('Commands : {0!s:s}'.format(command_list))
     return command_list
 
 
 def updatePath(command_list, vbx, vby):
     for command in command_list:
         if command['command'].isupper():
-            #logger.info('Updating Command {0!s:s} : {1!s:s}'.format(command['command'], command['points']))
+            logger.debug('Updating Command {0!s:s} : {1!s:s}'.format(command['command'], command['points']))
             if command['command'] in 'V':
                 command['points'][0] += vby
             elif command['command'] in 'H':
@@ -139,20 +227,48 @@ def updatePath(command_list, vbx, vby):
                     command['points'][i] += vbx
                     command['points'][i + 1] += vby
                     i += 2
-            #logger.info('Updated Command {0!s:s} : {1!s:s}'.format(command['command'], command['points']))
+            logger.debug('Updated Command {0!s:s} : {1!s:s}'.format(command['command'], command['points']))
 
     return command_list
 
 
 def pathToString(command_list):
     path_d = ' '.join(['{0!s:s}{1!s:s}'.format(cmd['command'], ','.join(format(p, "0.1f") for p in cmd['points'])) for cmd in command_list])
-    #logger.info('Path.d {0!s:s}'.format(path_d))
+    logger.debug('Path.d {0!s:s}'.format(path_d))
     #return '<path class="st0" d="{0!s:s}"/>'.format(path_d)
     return path_d
 
 
+def parsePolyline(polyline):
+    logger.debug('Passed Polyline : {0!s:s}'.format(polyline))
+    points = [float(p) for p in polyline.replace(' ', ',').split(',') if p != '']
+    logger.debug('Replace & Split Polyline : {0!s:s}'.format(points))
+    return points
+
+
+def updatePolyline(points, vbx, vby):
+    logger.debug('Polyline Points : {0!s:s}'.format(points))
+    i = 0;
+    while i < len(points):
+        points[i] += vbx
+        points[i + 1] += vby
+        i += 2
+    logger.debug('Updated Polyline Points : {0!s:s}'.format(points))
+    return points
+
+
+def polylineToString(points):
+    polyline_points = ','.join(format(p, "0.1f") for p in points)
+    logger.debug('Polyline.points {0!s:s}'.format(polyline_points))
+    return polyline_points
+
 def writeFile():
     return
+
+
+def generateOutputFilename(filename):
+    return filename.replace('OCI_', '')
+
 
 # Set default values for Args
 def defaultArgs():
