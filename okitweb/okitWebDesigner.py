@@ -283,8 +283,10 @@ def export(destination):
                 # Get Compartment Information
                 export_compartment_index = request.json.get('open_compartment_index', 0)
                 export_compartment_name = request.json['compartments'][export_compartment_index]['name']
+                logger.info("Compartment Name {0!s:s}".format(export_compartment_name))
                 oci_compartments = OCICompartments()
                 compartments = oci_compartments.listTenancy(filter={'name': export_compartment_name})
+                logger.debug("Compartments {0!s:s}".format(compartments))
                 # If we find a compartment
                 if len(compartments) > 0:
                     # Generate Resource Manager Terraform zip
@@ -305,6 +307,7 @@ def export(destination):
                     resource_manager.createJob(stack_json)
                     return_code = 200
                 else:
+                    logger.warn('Unknown Compartment {0!s:s}'.format(export_compartment_name))
                     return_code = 400
             shutil.rmtree(destination_dir)
             return stack['display_name'], return_code
