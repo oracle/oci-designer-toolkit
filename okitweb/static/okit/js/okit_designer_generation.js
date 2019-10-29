@@ -70,6 +70,7 @@ function handleGenerateTerraform11(e) {
 
 function handleExportToResourceManager(e) {
     hideNavMenu();
+    setBusyIcon();
     $.ajax({
         type: 'post',
         url: 'export/resourcemanager',
@@ -78,6 +79,7 @@ function handleExportToResourceManager(e) {
         data: JSON.stringify(okitJson),
         success: function(resp) {
             console.info('Response : ' + resp);
+            unsetBusyIcon();
             alert('Created Stack ' + resp);
             //window.location = 'generate/terraform';
             //openInNewTab('generate/terraform');
@@ -85,6 +87,8 @@ function handleExportToResourceManager(e) {
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
             console.info('Error : '+ error)
+            unsetBusyIcon();
+            alert('Compartment ' + okitJson.compartments[0].name + ' does not exist.');
         }
     });
 }

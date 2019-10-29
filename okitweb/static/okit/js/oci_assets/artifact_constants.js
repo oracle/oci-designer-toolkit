@@ -41,3 +41,4 @@ const block_storage_volume_prefix = 'bsv';
 // Autonomous Database
 const autonomous_database_artifact = 'Autonomous Database';
 const autonomous_database_prefix = 'ad';
+

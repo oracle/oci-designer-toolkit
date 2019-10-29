@@ -120,6 +120,7 @@ function newArtifactSVGDefinition(artifact, data_type) {
         stroke: {colour: '#F80000', dash: 5},
         fill: 'white', style: 'fill-opacity: .25;'};
     definition['icon'] = {show: true, x_translation: 0, y_translation: 0};
+    definition['title_keys'] = [];
 
     return definition
 }
@@ -170,9 +171,21 @@ function drawArtifact(definition) {
         .attr("stroke", definition['rect']['stroke']['colour'])
         .attr("stroke-dasharray",
             definition['rect']['stroke']['dash'] + ", " + definition['rect']['stroke']['dash']);
-    rect.append("title")
+    let title = rect.append("title")
         .attr("id", id + '-title')
         .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
+    /*
+    for (let key of definition['title_keys']) {
+        title.append("tspan")
+            .attr("class", 'key')
+            .attr("dy", 25)
+            .text("\n" + key.replace('_', ' ') + " : ");
+        title.append("tspan")
+            .attr("class", 'text')
+            .attr("dy", 25)
+            .text(definition['artifact'][key]);
+    }
+    */
     if (definition['name']['show']) {
         let name_svg = svg.append('svg')
             .attr("x", "10")

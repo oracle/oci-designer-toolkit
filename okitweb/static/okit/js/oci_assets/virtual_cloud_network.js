@@ -61,7 +61,19 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     //drawVirtualCloudNetworkSVG(virtual_cloud_network);
     drawSVGforJson();
     loadVirtualCloudNetworkProperties(id);
+    console.groupCollapsed('Check if default Security List & Route Table Should be created.');
+    if (okitSettings.is_default_route_table) {
+        console.info('Creating Default Route Table');
+        addRouteTable(id, compartment_id);
+    }
+    if (okitSettings.is_default_security_list) {
+        console.info('Creating Default Security List');
+        security_list_id = addSecurityList(id, compartment_id);
+        addDefaultSecurityListRules(security_list_id, virtual_cloud_network['cidr_block']);
+    }
     console.groupEnd();
+    console.groupEnd();
+    return id;
 }
 
 function initialiseVirtualCloudNetworkChildData(id) {
@@ -251,6 +263,7 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     definition['label']['show'] = true;
     definition['info']['show'] = true;
     definition['info']['text'] = artifact['cidr_block'];
+    //definition['title_keys'] = ['dns_label', 'cidr_block'];
     if (!okitJson['canvas']['virtual_cloud_networks'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['virtual_cloud_networks'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }

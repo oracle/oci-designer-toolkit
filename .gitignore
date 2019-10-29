@@ -7,7 +7,7 @@ venv/
 *.pyc
 __pycache__/
 
-instance/
+instance
 
 .pytest_cache/
 .coverage
@@ -18,3 +18,11 @@ build/
 *.egg-info/
 
 okit.wpr
+
+**/OCI_Icons_SVG.zip
+converter/source
+converter/OCI_Icons_SVG
+converter/dist
+converter/dest
+
+output
