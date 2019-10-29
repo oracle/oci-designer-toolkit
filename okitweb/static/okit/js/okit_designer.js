@@ -34,7 +34,7 @@ function readOkitSettings() {
 }
 
 // Automation details
-let okitAutomation = readOkitSettings();
+let okitSettings = readOkitSettings();
 
 /*
  * Variable Initialisation
