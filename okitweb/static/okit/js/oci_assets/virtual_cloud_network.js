@@ -62,11 +62,11 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     drawSVGforJson();
     loadVirtualCloudNetworkProperties(id);
     console.groupCollapsed('Check if default Security List & Route Table Should be created.');
-    if (okitSettings.create_default_route_table) {
+    if (okitSettings.is_default_route_table) {
         console.info('Creating Default Route Table');
         addRouteTable(id, compartment_id);
     }
-    if (okitSettings.create_default_security_list) {
+    if (okitSettings.is_default_security_list) {
         console.info('Creating Default Security List');
         security_list_id = addSecurityList(id, compartment_id);
         addDefaultSecurityListRules(security_list_id, virtual_cloud_network['cidr_block']);

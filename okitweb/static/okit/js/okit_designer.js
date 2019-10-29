@@ -14,6 +14,7 @@ let okitIdsJsonObj = {};
 let okitQueryRequestJson = null;
 
 function saveOkitSettings(settings) {
+    console.info('Saving OKIT Settings To Cookie.');
     setCookie('okit-settings', settings);
 }
 
@@ -22,8 +23,8 @@ function readOkitSettings() {
     if (cookie_value == '') {
         console.info('OKIT Settings Cookie Was Not Found.');
         let settings = {
-            create_default_security_list: true,
-            create_default_route_table: true
+            is_default_security_list: true,
+            is_default_route_table: true
         };
         cookie_value = JSON.stringify(settings);
         saveOkitSettings(cookie_value);
@@ -319,6 +320,14 @@ function openCompartment(compartment_id) {
     displayOkitJson();
 }
 
+function loadSettings() {
+    $("#settings").load("propertysheets/settings.html", function() {
+        console.info('Loading Settings');
+        loadProperties(okitSettings);
+        addPropertiesEventListeners(okitSettings, []);
+    });
+}
+
 
 const ro = new ResizeObserver(entries => {
     redrawSVGCanvas();
@@ -404,17 +413,37 @@ $(document).ready(function(){
         showQueryResults();
     }
 
+    /*
+    ** Load Settings
+     */
+
+    loadSettings();
+
     $('input[type=radio][name=source-properties]').change(function() {
         if (this.value == 'source') {
+            $("#json-display").slideDown();
+            $("#settings").slideUp();
+            $("#properties").slideUp();
         }
         else if (this.value == 'properties') {
+            $("#properties").slideDown();
+            $("#settings").slideUp();
+            $("#json-display").slideUp();
         }
-        $("#json-display").slideToggle();
+        else if (this.value == 'settings') {
+            $("#settings").slideDown();
+            $("#json-display").slideUp();
+            $("#properties").slideUp();
+        }
+        //$("#json-display").slideToggle();
+        $("#settings").removeClass('hidden');
         $("#json-display").removeClass('hidden');
-        $("#properties").slideToggle();
+        $("#properties").removeClass('hidden');
+        //$("#properties").slideToggle();
     });
 
     $("#json-display").slideToggle();
+    $("#settings").slideToggle();
 
     // Only observe the canvas
     ro.observe(document.querySelector('#canvas-wrapper'));
