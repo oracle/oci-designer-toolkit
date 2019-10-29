@@ -13,6 +13,29 @@ let okitIdsJsonObj = {};
 // Query Request only set to a value when designer called from query
 let okitQueryRequestJson = null;
 
+function saveOkitSettings(settings) {
+    setCookie('okit-settings', settings);
+}
+
+function readOkitSettings() {
+    let cookie_value = getCookie('okit-settings');
+    if (cookie_value == '') {
+        console.info('OKIT Settings Cookie Was Not Found.');
+        let settings = {
+            create_default_security_list: true,
+            create_default_route_table: true
+        };
+        cookie_value = JSON.stringify(settings);
+        saveOkitSettings(cookie_value);
+    } else {
+        console.info('OKIT Settings Cookie Found.');
+    }
+    return JSON.parse(cookie_value);
+}
+
+// Automation details
+let okitAutomation = readOkitSettings();
+
 /*
  * Variable Initialisation
  */
