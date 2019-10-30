@@ -1,9 +1,17 @@
 
+# ------ Get List Service OCIDs
+data "oci_core_services" "{{ resource_name }}Services" {
+services                    = {{ services }}
+}
+
 # ------ Create Service Gateway
 resource "oci_core_service_gateway" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_ocid }}
     vcn_id         = {{ vcn_id }}
+    services {
+        service_id = {{ services }}
+    }
     # Optional
     display_name   = {{ display_name }}
 {% if defined_tags is defined %}
