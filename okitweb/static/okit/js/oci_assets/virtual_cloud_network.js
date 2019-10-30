@@ -170,6 +170,14 @@ function getVirtualCloudNetworkFirstChildOffset() {
     return offset;
 }
 
+function getVirtualCloudNetworkFirstChildGatewayOffset() {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+    };
+    return offset;
+}
+
 function getVirtualCloudNetworkFirstChildContainerOffset(id='') {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
@@ -186,6 +194,7 @@ function getVirtualCloudNetworkDimensions(id='') {
     console.groupCollapsed('Getting Dimensions of ' + virtual_cloud_network_artifact + ' : ' + id);
     // Add Standard Padding and Spacing
     let first_container_child = getVirtualCloudNetworkFirstChildContainerOffset(id);
+    let first_gateway_child = getVirtualCloudNetworkFirstChildGatewayOffset();
     let first_child = getVirtualCloudNetworkFirstChildOffset();
     let dimensions = {width:first_container_child.dx, height:first_container_child.dy};
     // Add right padding
@@ -194,9 +203,9 @@ function getVirtualCloudNetworkDimensions(id='') {
     dimensions['height'] += positional_adjustments.padding.y;
     // Initialise Child dimensions
     let max_gateway_dimensions = {width:0, height: 0, count:0};
-    //let max_subnet_dimensions = {width:0, height: 0, count:0};
     let max_edge_dimensions = {width:0, height: 0, count:0};
     console.info('Base Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Gateways
     if (okitJson.hasOwnProperty('internet_gateways')) {
         for (let internet_gateway of okitJson['internet_gateways']) {
@@ -218,7 +227,11 @@ function getVirtualCloudNetworkDimensions(id='') {
             }
         }
     }
+    dimensions['width'] = Math.max(dimensions['width'],
+        Math.round(first_gateway_child.dx + positional_adjustments.spacing.x + max_gateway_dimensions['width'] + (max_gateway_dimensions['count'] - 1) * positional_adjustments.spacing.x)
+    );
     console.info('Post Gateway Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Edge Artifacts
     if (hasUnattachedSecurityList(id)) {
         for (let security_list of okitJson['security_lists']) {
@@ -244,6 +257,7 @@ function getVirtualCloudNetworkDimensions(id='') {
         Math.round(first_child.dx + positional_adjustments.spacing.x + max_edge_dimensions['width'] + (max_edge_dimensions['count'] - 1) * positional_adjustments.spacing.x)
     );
     console.info('Post Edge Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Subnet Widths
     if (okitJson.hasOwnProperty('subnets')) {
         for (let subnet of okitJson['subnets']) {
@@ -260,14 +274,6 @@ function getVirtualCloudNetworkDimensions(id='') {
         }
     }
     console.info('Post Subnets Dimensions : '+ JSON.stringify(dimensions));
-    // Calculate largest Width
-    //dimensions['width'] += Math.max((max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']),
-    //dimensions['width'] += Math.max(max_subnet_dimensions['width'],
-    //    (max_gateway_dimensions['width'] + positional_adjustments.spacing.x * max_gateway_dimensions['count']),
-    //    (max_edge_dimensions['width']    + positional_adjustments.spacing.x * max_edge_dimensions['count']));
-    // Calculate largest  Height
-    //dimensions['height'] += max_subnet_dimensions['height'] + positional_adjustments.spacing.y * max_gateway_dimensions['count'];
-    //dimensions['height'] += icon_height;
 
     // Check size against minimum
     dimensions['width']  = Math.max(dimensions['width'],  min_virtual_cloud_network_dimensions['width']);
@@ -275,7 +281,6 @@ function getVirtualCloudNetworkDimensions(id='') {
 
     console.info('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
     console.info('Edge Dimensions          : ' + JSON.stringify(max_edge_dimensions));
-    //console.info('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
     console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
     console.groupEnd();
