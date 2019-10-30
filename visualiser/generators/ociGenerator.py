@@ -278,7 +278,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderServiceGateway(self, nat_gateway):
+    def renderServiceGateway(self, service_gateway):
         # Read Data
         standardisedName = self.standardiseResourceName(service_gateway['display_name'])
         # resourceName = 'ServiceGateway_{0:s}'.format(standardisedName)
