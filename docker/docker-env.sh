@@ -39,7 +39,8 @@ export VOLUMES="\
        -v ${ROOT_DIR}/output/ansible:/okit/ansible:Z \
        -v ${ROOT_DIR}/output/python:/okit/python:Z \
        -v ${ROOT_DIR}/okitweb:/okit/okitweb:Z \
-       -v ${ROOT_DIR}/visualiser:/okit/visualiser:Z
+       -v ${ROOT_DIR}/visualiser:/okit/visualiser:Z \
+       -v ${ROOT_DIR}/converter:/okit/converter:Z
 "
 
 export ENVIRONMENT="\
