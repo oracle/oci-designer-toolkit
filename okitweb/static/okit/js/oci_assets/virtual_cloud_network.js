@@ -173,7 +173,7 @@ function getVirtualCloudNetworkFirstChildOffset() {
 function getVirtualCloudNetworkFirstChildGatewayOffset() {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
-        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+        dy: 0
     };
     return offset;
 }
