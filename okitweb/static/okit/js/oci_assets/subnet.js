@@ -214,14 +214,22 @@ function getSubnetDimensions(id='') {
 function newSubnetDefinition(artifact, position=0) {
     let dimensions = getSubnetDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, subnet_artifact);
-    definition['svg']['x'] = positional_adjustments.padding.x;
+    // Get Parents First Child Container Offset
+    let parent_first_child = getVirtualCloudNetworkFirstChildContainerOffset(artifact['vcn_id']);
+    definition['svg']['x'] = parent_first_child.dx;
+    definition['svg']['y'] = parent_first_child.dy;
+    // Add positioning offset
+    definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
+
+    //definition['svg']['x'] = positional_adjustments.padding.x;
     //definition['svg']['y'] = Math.round((icon_height * 3) + ((icon_height / 2) * position) + (icon_spacing * position));
-    definition['svg']['y'] = Math.round(positional_adjustments.padding.y  + (positional_adjustments.spacing.y * position));
+    //definition['svg']['y'] = Math.round(positional_adjustments.padding.y  + (positional_adjustments.spacing.y * position));
+
     // Check if the VCN has Security Lists or Route Tables Attached if so leave space
-    if (hasUnattachedSecurityList(artifact['vcn_id']) || hasUnattachedRouteTable(artifact['vcn_id'])) {
-        // Add Space for Security List / Route Table
-        definition['svg']['y'] += positional_adjustments.padding.y + positional_adjustments.spacing.y;
-    }
+    //if (hasUnattachedSecurityList(artifact['vcn_id']) || hasUnattachedRouteTable(artifact['vcn_id'])) {
+    //    // Add Space for Security List / Route Table
+    //    definition['svg']['y'] += positional_adjustments.padding.y + positional_adjustments.spacing.y;
+    //}
     // Retrieve all Subnets in the parent svg and calculate vertical position
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + subnet_artifact + '"]').each(
         function() {
@@ -467,11 +475,15 @@ function loadSubnetProperties(id) {
                     subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['vcn_id']];
                     let route_table_select = $('#route_table_id');
                     for (let route_table of okitJson['route_tables']) {
-                        route_table_select.append($('<option>').attr('value', route_table['id']).text(route_table['display_name']));
+                        if (subnet.vcn_id == route_table.vcn_id) {
+                            route_table_select.append($('<option>').attr('value', route_table['id']).text(route_table['display_name']));
+                        }
                     }
                     let security_lists_select = $('#security_list_ids');
                     for (let security_list of okitJson['security_lists']) {
-                        security_lists_select.append($('<option>').attr('value', security_list['id']).text(security_list['display_name']));
+                        if (subnet.vcn_id == security_list.vcn_id) {
+                            security_lists_select.append($('<option>').attr('value', security_list['id']).text(security_list['display_name']));
+                        }
                     }
                     // Load Properties
                     loadProperties(subnet);

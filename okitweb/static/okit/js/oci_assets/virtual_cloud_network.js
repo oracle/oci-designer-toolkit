@@ -162,12 +162,41 @@ function hasUnattachedRouteTable(id='') {
 /*
 ** SVG Creation
  */
+function getVirtualCloudNetworkFirstChildOffset() {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+    };
+    return offset;
+}
+
+function getVirtualCloudNetworkFirstChildContainerOffset(id='') {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+    };
+    if (hasUnattachedRouteTable(id) || hasUnattachedSecurityList(id)) {
+        let first_child = getVirtualCloudNetworkFirstChildOffset();
+        offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
+    }
+    return offset;
+}
+
 function getVirtualCloudNetworkDimensions(id='') {
     console.groupCollapsed('Getting Dimensions of ' + virtual_cloud_network_artifact + ' : ' + id);
-    let dimensions = {width:positional_adjustments.padding.x * 2, height:positional_adjustments.padding.y * 2};
+    // Add Standard Padding and Spacing
+    let first_container_child = getVirtualCloudNetworkFirstChildContainerOffset(id);
+    let first_child = getVirtualCloudNetworkFirstChildOffset();
+    let dimensions = {width:first_container_child.dx, height:first_container_child.dy};
+    // Add right padding
+    dimensions['width'] += positional_adjustments.padding.x;
+    // Add Bottom padding
+    dimensions['height'] += positional_adjustments.padding.y;
+    // Initialise Child dimensions
     let max_gateway_dimensions = {width:0, height: 0, count:0};
-    let max_subnet_dimensions = {width:0, height: 0, count:0};
+    //let max_subnet_dimensions = {width:0, height: 0, count:0};
     let max_edge_dimensions = {width:0, height: 0, count:0};
+    console.info('Base Dimensions : '+ JSON.stringify(dimensions));
     // Process Gateways
     if (okitJson.hasOwnProperty('internet_gateways')) {
         for (let internet_gateway of okitJson['internet_gateways']) {
@@ -189,6 +218,7 @@ function getVirtualCloudNetworkDimensions(id='') {
             }
         }
     }
+    console.info('Post Gateway Dimensions : '+ JSON.stringify(dimensions));
     // Process Edge Artifacts
     if (hasUnattachedSecurityList(id)) {
         for (let security_list of okitJson['security_lists']) {
@@ -210,31 +240,42 @@ function getVirtualCloudNetworkDimensions(id='') {
             }
         }
     }
+    dimensions['width'] = Math.max(dimensions['width'],
+        Math.round(first_child.dx + positional_adjustments.spacing.x + max_edge_dimensions['width'] + (max_edge_dimensions['count'] - 1) * positional_adjustments.spacing.x)
+    );
+    console.info('Post Edge Dimensions : '+ JSON.stringify(dimensions));
     // Process Subnet Widths
     if (okitJson.hasOwnProperty('subnets')) {
         for (let subnet of okitJson['subnets']) {
             if (subnet['vcn_id'] == id) {
                 let subnet_dimensions = getSubnetDimensions(subnet['id']);
-                max_subnet_dimensions['width'] = Math.max(max_subnet_dimensions['width'], subnet_dimensions['width']);
-                max_subnet_dimensions['height'] += subnet_dimensions['height'];
-                max_subnet_dimensions['count'] += 1;
+                //max_subnet_dimensions['width'] = Math.max(max_subnet_dimensions['width'], subnet_dimensions['width']);
+                //max_subnet_dimensions['height'] += subnet_dimensions['height'];
+                //max_subnet_dimensions['count'] += 1;
+                // Test if current width is greater than the Subnet Width + appropriate padding
+                dimensions['width'] = Math.max(dimensions['width'], (first_container_child.dx + positional_adjustments.padding.x + subnet_dimensions['width']));
+                // Add Subnet Height to current height and spacing for between subnets
+                dimensions['height'] += Math.round(subnet_dimensions['height'] + positional_adjustments.spacing.y);
             }
         }
     }
+    console.info('Post Subnets Dimensions : '+ JSON.stringify(dimensions));
     // Calculate largest Width
     //dimensions['width'] += Math.max((max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']),
-    dimensions['width'] += Math.max(max_subnet_dimensions['width'],
-        (max_gateway_dimensions['width'] + positional_adjustments.spacing.x * max_gateway_dimensions['count']),
-        (max_edge_dimensions['width']    + positional_adjustments.spacing.x * max_edge_dimensions['count']));
+    //dimensions['width'] += Math.max(max_subnet_dimensions['width'],
+    //    (max_gateway_dimensions['width'] + positional_adjustments.spacing.x * max_gateway_dimensions['count']),
+    //    (max_edge_dimensions['width']    + positional_adjustments.spacing.x * max_edge_dimensions['count']));
     // Calculate largest  Height
-    dimensions['height'] += max_subnet_dimensions['height'] + positional_adjustments.spacing.y * max_gateway_dimensions['count'];
-    dimensions['height'] += icon_height;
+    //dimensions['height'] += max_subnet_dimensions['height'] + positional_adjustments.spacing.y * max_gateway_dimensions['count'];
+    //dimensions['height'] += icon_height;
+
     // Check size against minimum
     dimensions['width']  = Math.max(dimensions['width'],  min_virtual_cloud_network_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_virtual_cloud_network_dimensions['height']);
 
     console.info('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
-    console.info('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
+    console.info('Edge Dimensions          : ' + JSON.stringify(max_edge_dimensions));
+    //console.info('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
     console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
     console.groupEnd();
@@ -244,8 +285,8 @@ function getVirtualCloudNetworkDimensions(id='') {
 function newVirtualCloudNetworkDefinition(artifact, position=0) {
     let dimensions = getVirtualCloudNetworkDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
-    definition['svg']['x'] = Math.round(icon_width * 3 / 2);
-    definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+    definition['svg']['x'] = Math.round(positional_adjustments.padding.x + (2 * positional_adjustments.spacing.y));
+    definition['svg']['y'] = Math.round((positional_adjustments.padding.y * 2) + (positional_adjustments.spacing.y * position));
     // Retrieve all Virtual Cloud Networks in the parent svg and calculate vertical position
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + virtual_cloud_network_artifact + '"]').each(
         function() {
