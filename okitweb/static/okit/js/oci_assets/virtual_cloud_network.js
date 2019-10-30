@@ -165,7 +165,7 @@ function hasUnattachedRouteTable(id='') {
 function getVirtualCloudNetworkFirstChildOffset() {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
     };
     return offset;
 }
