@@ -227,8 +227,6 @@ function getSubnetDimensions(id='') {
             if (load_balancer['subnet_ids'][0] == id) {
                 let load_balancer_dimensions = getLoadBalancerDimensions(load_balancer['id']);
                 max_load_balancer_dimensions['width'] += Math.round(load_balancer_dimensions['width'] + positional_adjustments.spacing.x);
-                //max_load_balancer_dimensions['height'] = Math.max(max_load_balancer_dimensions['height'], load_balancer_dimensions['height']);
-                //max_load_balancer_dimensions['count'] += 1;
                 dimensions['height'] = Math.max(dimensions['height'], (first_load_balancer_child.dy + positional_adjustments.spacing.y + load_balancer_dimensions['height'] + positional_adjustments.padding.y));
             }
         }
@@ -236,11 +234,6 @@ function getSubnetDimensions(id='') {
     dimensions['width'] = Math.max(dimensions['width'],
         Math.round(first_load_balancer_child.dx + positional_adjustments.spacing.x + max_load_balancer_dimensions['width'] + positional_adjustments.padding.x)
     );
-    /*
-    dimensions['height'] = Math.max(dimensions['height'],
-        Math.round(first_load_balancer_child.dy + positional_adjustments.spacing.y + max_load_balancer_dimensions['height'] + positional_adjustments.padding.y)
-    );
-    */
     console.info('Load Balancer Offsets         : '+ JSON.stringify(first_load_balancer_child));
     console.info('Post Load Balancer Dimensions : '+ JSON.stringify(dimensions));
 
@@ -250,8 +243,6 @@ function getSubnetDimensions(id='') {
             if (instance['subnet_id'] == id) {
                 let instance_dimensions = getInstanceDimensions(instance['id']);
                 max_instance_dimensions['width'] += Math.round(instance_dimensions['width'] + positional_adjustments.spacing.x);
-                //max_instance_dimensions['height'] = Math.max(max_instance_dimensions['height'], instance_dimensions['height']);
-                //max_instance_dimensions['count'] += 1;
                 dimensions['height'] = Math.max(dimensions['height'], (first_instance_child.dy + positional_adjustments.padding.y + instance_dimensions['height']));
             }
         }
@@ -259,11 +250,6 @@ function getSubnetDimensions(id='') {
     dimensions['width'] = Math.max(dimensions['width'],
         Math.round(first_instance_child.dx + positional_adjustments.spacing.x + max_instance_dimensions['width'] + positional_adjustments.padding.x)
     );
-    /*
-    dimensions['height'] = Math.max(dimensions['height'],
-        Math.round(first_instance_child.dy + positional_adjustments.spacing.y + max_instance_dimensions['height'] + positional_adjustments.padding.y)
-    );
-    */
     console.info('Instance Offsets              : '+ JSON.stringify(first_instance_child));
     console.info('Post Instance Dimensions      : '+ JSON.stringify(dimensions));
 
