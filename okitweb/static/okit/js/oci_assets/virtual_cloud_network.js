@@ -263,9 +263,6 @@ function getVirtualCloudNetworkDimensions(id='') {
         for (let subnet of okitJson['subnets']) {
             if (subnet['vcn_id'] == id) {
                 let subnet_dimensions = getSubnetDimensions(subnet['id']);
-                //max_subnet_dimensions['width'] = Math.max(max_subnet_dimensions['width'], subnet_dimensions['width']);
-                //max_subnet_dimensions['height'] += subnet_dimensions['height'];
-                //max_subnet_dimensions['count'] += 1;
                 // Test if current width is greater than the Subnet Width + appropriate padding
                 dimensions['width'] = Math.max(dimensions['width'], (first_container_child.dx + positional_adjustments.padding.x + subnet_dimensions['width']));
                 // Add Subnet Height to current height and spacing for between subnets
@@ -279,8 +276,6 @@ function getVirtualCloudNetworkDimensions(id='') {
     dimensions['width']  = Math.max(dimensions['width'],  min_virtual_cloud_network_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_virtual_cloud_network_dimensions['height']);
 
-    console.info('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
-    console.info('Edge Dimensions          : ' + JSON.stringify(max_edge_dimensions));
     console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
     console.groupEnd();

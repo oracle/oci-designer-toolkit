@@ -12,7 +12,7 @@ asset_clear_functions.push("clearSubnetVariables");
 
 const subnet_stroke_colour = "orange";
 const subnet_query_cb = "subnet-query-cb";
-const min_subnet_dimensions = {width:400, height:300};
+const min_subnet_dimensions = {width:400, height:150};
 let subnet_ids = [];
 let subnet_count = 0;
 let subnet_bui_sub_artifacts = {};
@@ -172,20 +172,20 @@ function getSubnetFirstChildInstanceOffset(id='') {
     if (hasLoadBalancer(id)) {
         let first_child = getSubnetFirstChildLoadBalancerOffset();
         let dimensions = getLoadBalancerDimensions();
-        offset.dy += Math.round(dimensions.height + positional_adjustments.spacing.y);
+        offset.dy += Math.round(dimensions.height + positional_adjustments.padding.y);
     }
     return offset;
 }
 
 function getSubnetDimensions(id='') {
     console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
-    let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
+    let first_edge_child = getSubnetFirstChildEdgeOffset();
+    let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset();
+    let first_instance_child = getSubnetFirstChildInstanceOffset(id);
+    let dimensions = {width:first_instance_child.dx, height:first_instance_child.dy};
     let max_load_balancer_dimensions = {width:0, height: 0, count:0};
     let max_instance_dimensions = {width:0, height: 0, count:0};
     let max_edge_dimensions = {width:0, height: 0, count:0};
-    let first_edge_child = getSubnetFirstChildEdgeOffset();
-    let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset();
-    let first_instance_child = getSubnetFirstChildInstanceOffset();
     // Get Subnet Details
     let subnet = {};
     for (subnet of okitJson['subnets']) {
@@ -227,14 +227,21 @@ function getSubnetDimensions(id='') {
             if (load_balancer['subnet_ids'][0] == id) {
                 let load_balancer_dimensions = getLoadBalancerDimensions(load_balancer['id']);
                 max_load_balancer_dimensions['width'] += Math.round(load_balancer_dimensions['width'] + positional_adjustments.spacing.x);
-                max_load_balancer_dimensions['height'] = Math.max(max_load_balancer_dimensions['height'], load_balancer_dimensions['height']);
-                max_load_balancer_dimensions['count'] += 1;
+                //max_load_balancer_dimensions['height'] = Math.max(max_load_balancer_dimensions['height'], load_balancer_dimensions['height']);
+                //max_load_balancer_dimensions['count'] += 1;
+                dimensions['height'] = Math.max(dimensions['height'], (first_load_balancer_child.dy + positional_adjustments.spacing.y + load_balancer_dimensions['height'] + positional_adjustments.padding.y));
             }
         }
     }
     dimensions['width'] = Math.max(dimensions['width'],
         Math.round(first_load_balancer_child.dx + positional_adjustments.spacing.x + max_load_balancer_dimensions['width'] + positional_adjustments.padding.x)
     );
+    /*
+    dimensions['height'] = Math.max(dimensions['height'],
+        Math.round(first_load_balancer_child.dy + positional_adjustments.spacing.y + max_load_balancer_dimensions['height'] + positional_adjustments.padding.y)
+    );
+    */
+    console.info('Load Balancer Offsets         : '+ JSON.stringify(first_load_balancer_child));
     console.info('Post Load Balancer Dimensions : '+ JSON.stringify(dimensions));
 
     // Process Instances
@@ -243,34 +250,27 @@ function getSubnetDimensions(id='') {
             if (instance['subnet_id'] == id) {
                 let instance_dimensions = getInstanceDimensions(instance['id']);
                 max_instance_dimensions['width'] += Math.round(instance_dimensions['width'] + positional_adjustments.spacing.x);
-                max_instance_dimensions['height'] = Math.max(max_instance_dimensions['height'], instance_dimensions['height']);
-                max_instance_dimensions['count'] += 1;
+                //max_instance_dimensions['height'] = Math.max(max_instance_dimensions['height'], instance_dimensions['height']);
+                //max_instance_dimensions['count'] += 1;
+                dimensions['height'] = Math.max(dimensions['height'], (first_instance_child.dy + positional_adjustments.padding.y + instance_dimensions['height']));
             }
         }
     }
     dimensions['width'] = Math.max(dimensions['width'],
         Math.round(first_instance_child.dx + positional_adjustments.spacing.x + max_instance_dimensions['width'] + positional_adjustments.padding.x)
     );
-    console.info('Post Instance Dimensions : '+ JSON.stringify(dimensions));
-
-    // Calculate Width which will be the largest based on load balancers or instances
     /*
-    dimensions['width'] += Math.max((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']),
-        (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']),
-        (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']));
-    // Add load balancer and instance height to size of subnet
-    dimensions['height'] += max_load_balancer_dimensions['height'];
-    dimensions['height'] += max_instance_dimensions['height'];
-    dimensions['height'] += icon_height;
+    dimensions['height'] = Math.max(dimensions['height'],
+        Math.round(first_instance_child.dy + positional_adjustments.spacing.y + max_instance_dimensions['height'] + positional_adjustments.padding.y)
+    );
     */
+    console.info('Instance Offsets              : '+ JSON.stringify(first_instance_child));
+    console.info('Post Instance Dimensions      : '+ JSON.stringify(dimensions));
 
     // Check size against minimum
     dimensions['width'] = Math.max(dimensions['width'], min_subnet_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_subnet_dimensions['height']);
 
-    console.info('Load Balancer Dimensions : ' + JSON.stringify(max_load_balancer_dimensions));
-    console.info('Instance Dimensions      : ' + JSON.stringify(max_instance_dimensions));
-    console.info('Edges Dimensions         : ' + JSON.stringify(max_edge_dimensions));
     console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
     console.groupEnd();
