@@ -23,7 +23,7 @@ const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
 const container_artifact_label_width = 300;
 const container_artifact_info_width = 100;
 const positional_adjustments = {
-    padding: {x: Math.round(icon_width),   y: Math.round(icon_height + icon_spacing)},
+    padding: {x: Math.round(icon_width),   y: Math.round(icon_height)},
     spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
 };
 const path_connector = true;
