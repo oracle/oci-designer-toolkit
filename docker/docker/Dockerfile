@@ -107,6 +107,11 @@ RUN yum update -y ; \
         svg.path \
         wtforms \
         xlrd \
+# Install oci ansible module
+ && cd /tmp ; \
+    git clone https://github.com/oracle/oci-ansible-modules.git ; \
+    cd oci-ansible-modules ; \
+    python3 ./install.py \
 # Set-up env
  && echo ''                                                                          >> /etc/bashrc ; \
     echo "alias lh='ls -lash' "                                                      >> /etc/bashrc ; \
