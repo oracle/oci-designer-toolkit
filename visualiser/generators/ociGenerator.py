@@ -219,6 +219,10 @@ class OCIGenerator(object):
         # Process Virtual Cloud Networks Data
         logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Availability Domain
+        variableName = '{0:s}_availability_domain'.format(standardisedName)
+        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = block_storage_volume["availability_domain"]
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
@@ -639,7 +643,7 @@ class OCIGenerator(object):
 
     def standardiseResourceName(self, name):
         # split() will generate a list with no empty values thus join of this will remove all whitespace
-        standardised_name = ''.join(name.title().split())
+        standardised_name = ''.join(name.title().split()).replace('-', '_')
         return standardised_name
 
     def createZipArchive(self, dir, archivename):
