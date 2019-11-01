@@ -15,7 +15,7 @@ data "template_file" "{{ resource_name }}VolumeBackupPolicyIdx" {
     template = index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy }})
 }
 
-# ------ Create Internet Gateway
+# ------ Create Block Storage Volume
 resource "oci_core_volume" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_ocid }}
