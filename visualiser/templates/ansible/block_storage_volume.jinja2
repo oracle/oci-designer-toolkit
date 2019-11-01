@@ -1,5 +1,10 @@
 
-# ------ Create Block Storage Volume
+# ------ Get List Volume Backup Policies
+    - name: Get information of all available volume backup policies
+      oci_volume_backup_policy_facts:
+      register: {{ resource_name }}VolumeBackupPolicyIds
+
+# ------ Create Block Storage Volume {{ output_name }}
     - name: Create Block Storage Volume {{ output_name }}
       oci_volume:
         state: "present"
@@ -19,4 +24,11 @@
     - set_fact:
         {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
         {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
+
+# ------ Create Block Storage Backup Policy For {{ output_name }}
+    - name: Create Volume Backup Policy Assignment {{ output_name }}
+      oci_volume_backup_policy_assignment:
+        asset_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
+        policy_id: "{{ '{{' }} ({{ resource_name }}VolumeBackupPolicyIds.volume_backup_policies | selectattr('display_name', 'equalto', {{ backup_policy | replace('{{', '') | replace('}}', '') }}) | map(attribute='id') | list)[0] {{ '}}' }}"
+      register: {{ resource_name }}BackupPolicy
 
