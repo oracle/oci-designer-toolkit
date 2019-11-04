@@ -13,6 +13,7 @@
         availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
         # Optional
         display_name: "{{ display_name }}"
+        size_in_gbs: "{{ size_in_gbs }}"
 {% if defined_tags is defined %}
         defined_tags: "{{ defined_tags }}"
 {% endif %}

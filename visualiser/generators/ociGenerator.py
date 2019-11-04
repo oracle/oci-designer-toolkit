@@ -234,7 +234,7 @@ class OCIGenerator(object):
         # ---- Size In GBs
         variableName = '{0:s}_size_in_gbs'.format(standardisedName)
         self.jinja2_variables["size_in_gbs"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = block_storage_volume["size_in_gbs"]
+        self.run_variables[variableName] = int(block_storage_volume["size_in_gbs"])
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("block_storage_volume.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
@@ -542,6 +542,10 @@ class OCIGenerator(object):
         # Process Subnet Data
         logger.info('Processing Instance Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Availability Domain
+        variableName = '{0:s}_availability_domain'.format(standardisedName)
+        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["availability_domain"]
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
@@ -566,6 +570,10 @@ class OCIGenerator(object):
         variableName = '{0:s}_os_version'.format(standardisedName)
         self.jinja2_variables["os_version"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["version"]
+        # ---- Boot Volume Size
+        variableName = '{0:s}_boot_volume_size_in_gbs'.format(standardisedName)
+        self.jinja2_variables["boot_volume_size_in_gbs"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = int(instance["boot_volume_size_in_gbs"])
         # ---- Network OCID
         self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance['subnet_id']]))
         # ---- Authorised Public SSH Keys

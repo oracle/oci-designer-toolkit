@@ -1,6 +1,6 @@
 
 # ------ Create Subnet
-    - name: Create a regional subnet
+    - name: Create Regional Subnet {{ output_name }}
       oci_subnet:
         state: "present"
         # Required
@@ -17,6 +17,9 @@
         route_table_id: "{{ route_table_id }}"
 {% endif %}
         display_name: "{{ display_name }}"
+{% if dns_label is defined %}
+        dns_label: "{{ dns_label }}"
+{% endif %}
 {% if defined_tags is defined %}
         defined_tags: "{{ my_defined_tags }}"
 {% endif %}
