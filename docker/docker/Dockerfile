@@ -121,11 +121,12 @@ RUN yum update -y ; \
     echo "alias sshopc='ssh -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
     echo ''                                                                          >> /etc/bashrc ; \
     echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
-    echo "alias ta='terraform apply da.plan' "                                                   >> /etc/bashrc ; \
-    echo "alias td='terraform destroy -var-file=/okit/config/connection.tfvars -auto-approve' "  >> /etc/bashrc ; \
-    echo "alias tp='terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan' "      >> /etc/bashrc ; \
-    echo "alias ti='terraform init' "                                                            >> /etc/bashrc ; \
-    echo "alias tg='terraform get --update' "                                                    >> /etc/bashrc ; \
+    echo "alias ta='terraform apply da.plan' "                                                     >> /etc/bashrc ; \
+    echo "alias td='terraform destroy -var-file=/okit/config/connection.tfvars -auto-approve' "    >> /etc/bashrc ; \
+    echo "alias tp='terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan' "        >> /etc/bashrc ; \
+    echo "alias ti='terraform init' "                                                              >> /etc/bashrc ; \
+    echo "alias tg='terraform get --update' "                                                      >> /etc/bashrc ; \
+    echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connection.yml\" ' "   >> /etc/bashrc ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
