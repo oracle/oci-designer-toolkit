@@ -1,2 +1,84 @@
 
-# ------ Create Instance
+# ------ Get List OL7 Images
+    - name: List images
+      oci_image_facts:
+        compartment_id: "{{ compartment_ocid }}"
+        operating_system: "{{ os }}"
+        operating_system_version: "{{ os_version }}"
+        shape: "{{ shape }}"
+      register: {{ resource_name }}Images
+
+# ------ Create Instance {{ output_name }}
+    - name: Create Instance {{ output_name }}
+      oci_instance:
+        state: "present"
+        # Required
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        compartment_id: "{{ compartment_ocid }}"
+        shape: "{{ shape }}"
+        # Optional
+        display_name: "{{ display_name }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+        metadata:
+            ssh_authorized_keys: "{{ authorized_keys }}"
+{% if cloud_init_yaml is defined %}
+            user_data: "{{ cloud_init_yaml | replace(' }}', '') }} | b64encode {{ '}}' }}"
+{% endif %}
+        source_details:
+            # Required
+            source_type: "{{ source_type | default('image') }}"
+            image_id: "{{ '{{' }} ({{ resource_name }}Images.images | map(attribute='id') | list)[0] {{ '}}' }}"
+            # Optional
+{% if boot_volume_size_in_gbs is defined %}
+            boot_volume_size_in_gbs: "{{ boot_volume_size_in_gbs }}"
+{% endif %}
+        create_vnic_details:
+            # Required
+            subnet_id: "{{ subnet_id }}"
+            # Optional
+{% if assign_public_ip is defined %}
+            assign_public_ip: "{{ assign_public_ip }}"
+{% endif %}
+            name: "{{ display_name_vnic }}"
+            hostname_label: "{{ hostname }}"
+            #private_ip: "{{ private_ip }}"
+{% if skip_source_dest_check is defined %}
+            skip_source_dest_check: "{{ skip_source_dest_check }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.instance.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.instance.id {{ '}}' }}"
+
+# ------ Get Vnic Attachments for Instance {{ output_name }}
+    - name: Get VNIC Attachments for {{ ouput_name }}
+      oci_vnic_attachment_facts:
+        compartment_id: "{{ compartment_ocid }}"
+        instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
+      register: {{ resource_name }}VnicAttachments
+
+# ------ Get Primary Vnic for Instance {{ output_name }}
+    - name: Get Primary VNIC for {{ ouput_name }}
+      oci_vnic_facts:
+        id: "{{ '{{' }} ({{ resource_name }}VnicAttachments.vnic_attachments | map(attribute='vnic_id') | list)[0] {{ '}}' }}"
+      register: {{ resource_name }}PrimaryVnic
+
+    - set_fact:
+        {{ resource_name }}_public_ip: "{{ '{{' }} {{ resource_name }}PrimaryVnic.vnic.public_ip {{ '}}' }}"
+        {{ resource_name }}_private_ip: "{{ '{{' }} {{ resource_name }}PrimaryVnic.vnic.private_ip {{ '}}' }}"
+
+# ------ Create Block Storage Attachments for Instance {{ output_name }}
+{% for volume in volume_attachments %}
+    - name: Attach a volume to an instance
+      oci_volume_attachment:
+        instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
+        type: "{{ volume.attachment_type | default('iscsi') }}"
+        volume_id: "{{ volume.block_storage_volume_id }}"
+        display_name: "{{ volume.display_name }}"
+{% endfor %}

@@ -46,7 +46,7 @@ function addAutonomousDatabase(parent_id, compartment_id) {
     autonomous_database['compartment_id'] = parent_id;
     autonomous_database['id'] = id;
     autonomous_database['display_name'] = generateDefaultName(autonomous_database_prefix, autonomous_database_count);
-    autonomous_database['db_name'] = autonomous_database['display_name'];
+    autonomous_database['db_name'] = autonomous_database['display_name'].replace('-', '');
     autonomous_database['admin_password'] = generatePassword();
     autonomous_database['data_storage_size_in_tbs'] = 1;
     autonomous_database['cpu_core_count'] = 1;
