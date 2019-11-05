@@ -9,7 +9,7 @@ asset_add_functions[virtual_cloud_network_artifact] = "addVirtualCloudNetwork";
 asset_delete_functions[virtual_cloud_network_artifact] = "deleteVirtualCloudNetwork";
 asset_clear_functions.push("clearVirtualCloudNetworkVariables");
 
-const virtual_cloud_network_stroke_colour = "purple";
+const virtual_cloud_network_stroke_colour = "#400080";
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 const min_virtual_cloud_network_dimensions = {width:400, height:300};
 let virtual_network_ids = [];

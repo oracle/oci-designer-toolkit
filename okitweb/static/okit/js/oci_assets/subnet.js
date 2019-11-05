@@ -10,7 +10,7 @@ asset_update_functions[subnet_artifact] = "updateSubnet";
 asset_delete_functions[subnet_artifact] = "deleteSubnet";
 asset_clear_functions.push("clearSubnetVariables");
 
-const subnet_stroke_colour = "orange";
+const subnet_stroke_colour = "#ff6600";
 const subnet_query_cb = "subnet-query-cb";
 const min_subnet_dimensions = {width:400, height:150};
 let subnet_ids = [];
