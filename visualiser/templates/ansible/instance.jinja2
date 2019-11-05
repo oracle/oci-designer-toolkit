@@ -8,7 +8,7 @@
         shape: "{{ shape }}"
       register: {{ resource_name }}Images
 
-# ------ Create Instance
+# ------ Create Instance {{ output_name }}
     - name: Create Instance {{ output_name }}
       oci_instance:
         state: "present"
@@ -56,14 +56,14 @@
         {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.instance.id {{ '}}' }}"
         {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.instance.id {{ '}}' }}"
 
-# ------ Get Vnic Attachments for Instance
+# ------ Get Vnic Attachments for Instance {{ output_name }}
     - name: Get VNIC Attachments for {{ ouput_name }}
       oci_vnic_attachment_facts:
         compartment_id: "{{ compartment_ocid }}"
         instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
       register: {{ resource_name }}VnicAttachments
 
-# ------ Get Primary Vnic
+# ------ Get Primary Vnic for Instance {{ output_name }}
     - name: Get Primary VNIC for {{ ouput_name }}
       oci_vnic_facts:
         id: "{{ '{{' }} ({{ resource_name }}VnicAttachments.vnic_attachments | map(attribute='vnic_id') | list)[0] {{ '}}' }}"
@@ -73,7 +73,7 @@
         {{ resource_name }}_public_ip: "{{ '{{' }} {{ resource_name }}PrimaryVnic.vnic.public_ip {{ '}}' }}"
         {{ resource_name }}_private_ip: "{{ '{{' }} {{ resource_name }}PrimaryVnic.vnic.private_ip {{ '}}' }}"
 
-# ------ Create Block Storage Attachments
+# ------ Create Block Storage Attachments for Instance {{ output_name }}
 {% for volume in volume_attachments %}
     - name: Attach a volume to an instance
       oci_volume_attachment:

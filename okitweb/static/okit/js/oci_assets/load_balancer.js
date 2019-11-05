@@ -55,6 +55,8 @@ function addLoadBalancer(subnet_id, compartment_id) {
     load_balancer['display_name'] = generateDefaultName(load_balancer_prefix, load_balancer_count);
     load_balancer['is_private'] = false;
     load_balancer['shape_name'] = '100Mbps';
+    load_balancer['protocol'] = 'HTTP';
+    load_balancer['port'] = '80';
     load_balancer['instances'] = [];
     load_balancer['instance_ids'] = [];
     okitJson['load_balancers'].push(load_balancer);
