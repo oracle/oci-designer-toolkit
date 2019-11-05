@@ -22,7 +22,7 @@
         is_private: "{{ private }}"
 {% endif %}
         backend_sets:
-            backend1:
+            {{ resource_name }}BackendSet:
                 backends:
 {% for backend_instance in backend_instances %}
                    - ip_address: "{{ '{{' }} {{ backend_instance }}_private_ip {{ '}}' }}"
@@ -55,8 +55,8 @@
                     url_path: "{{ health_check_url | default('/') }}"
                 policy: "{{ backend_policy | default('ROUND_ROBIN') }}"
         listeners:
-            listerner1:
-                default_backend_set_name: "backend1"
+            {{ resource_name }}Listener:
+                default_backend_set_name: "{{ resource_name }}BackendSet"
 {% if port is defined %}
                 port: "{{ port }}"
 {% else %}
