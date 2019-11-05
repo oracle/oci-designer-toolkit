@@ -37,7 +37,7 @@ const grid_size = small_grid_size * 10;
 function styleCanvas(canvas_svg) {
     canvas_svg.append('style')
         .attr("type", "text/css")
-        .text('.st0{fill:#F80000;} .st1{fill:#939699;} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+        .text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
 }
 
 function createSVGDefinitions(canvas_svg) {
