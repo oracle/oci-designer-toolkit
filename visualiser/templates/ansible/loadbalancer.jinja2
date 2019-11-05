@@ -13,10 +13,10 @@
         # Optional
         display_name: "{{ display_name }}"
 {% if defined_tags is defined %}
-            defined_tags: "{{ my_defined_tags }}"
+            defined_tags: "{{ defined_tags }}"
 {% endif %}
 {% if freeform_tags is defined %}
-            freeform_tags: "{{ my_freeform_tags }}"
+            freeform_tags: "{{ freeform_tags }}"
 {% endif %}
 {% if private is defined %}
         is_private: "{{ private }}"
