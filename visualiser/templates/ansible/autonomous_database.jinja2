@@ -1,5 +1,6 @@
 
 # ------ Create Autonomous Database
+# -------- If Workload OLTP
     - name: Create Autonomous OLTP Database
       oci_autonomous_database:
         state:  "{{ '{{' }} state | default('present') {{ '}}' }}"
@@ -23,6 +24,12 @@
       when: {{ db_workload | replace('{{ ', '') | replace(' }}', '') }} == "OLTP"
       register: {{ resource_name }}
 
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.autonomous_database.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.autonomous_database.id {{ '}}' }}"
+      when: {{ db_workload | replace('{{ ', '') | replace(' }}', '') }} == "OLTP"
+
+# -------- If Workload DW
     - name: Create Autonomous Database Warehouse
       oci_autonomous_database:
         state:  "{{ '{{' }} state | default('present') {{ '}}' }}"
@@ -45,11 +52,6 @@
 {% endif %}
       when: {{ db_workload | replace('{{ ', '') | replace(' }}', '') }} != "OLTP"
       register: {{ resource_name }}
-
-    - set_fact:
-        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.autonomous_database.id {{ '}}' }}"
-        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.autonomous_database.id {{ '}}' }}"
-      when: {{ db_workload | replace('{{ ', '') | replace(' }}', '') }} == "OLTP"
 
     - set_fact:
         {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.autonomous_data_warehouse.id {{ '}}' }}"
