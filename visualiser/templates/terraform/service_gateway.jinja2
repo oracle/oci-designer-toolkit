@@ -10,7 +10,7 @@ resource "oci_core_service_gateway" "{{ resource_name }}" {
     compartment_id = {{ compartment_ocid }}
     vcn_id         = {{ vcn_id }}
     services {
-        service_id = {{ services }}
+        service_id = data.oci_core_services.{{ resource_name }}Services.services[0]["id"]
     }
     # Optional
     display_name   = {{ display_name }}
