@@ -101,8 +101,6 @@ function newBlockStorageVolumeDefinition(artifact, position=0) {
     // Add positioning offset
     definition['svg']['y'] += Math.round(positional_adjustments.padding.y * position);
     definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
-    //definition['svg']['x'] = Math.round(icon_width / 4);
-    //definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
     definition['svg']['width'] = dimensions['width'];
     definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
