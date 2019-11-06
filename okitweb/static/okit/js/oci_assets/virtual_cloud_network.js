@@ -285,8 +285,11 @@ function getVirtualCloudNetworkDimensions(id='') {
 function newVirtualCloudNetworkDefinition(artifact, position=0) {
     let dimensions = getVirtualCloudNetworkDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
-    definition['svg']['x'] = Math.round(positional_adjustments.padding.x + (2 * positional_adjustments.spacing.y));
-    definition['svg']['y'] = Math.round((positional_adjustments.padding.y * 2) + (positional_adjustments.spacing.y * position));
+    let parent_first_child = getVirtualCloudNetworkFirstChildContainerOffset(artifact['compartment_id']);
+    definition['svg']['x'] = parent_first_child.dx;
+    definition['svg']['y'] = parent_first_child.dy;
+    // Add positioning offset
+    definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
     // Retrieve all Virtual Cloud Networks in the parent svg and calculate vertical position
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + virtual_cloud_network_artifact + '"]').each(
         function() {

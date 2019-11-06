@@ -172,8 +172,10 @@ function drawInstanceSVG(artifact) {
             }
         }
     }
+
     if (!parent_exists) {
-        console.info('Parent ' + parent_id + ' not found.');
+        console.warn('Parent ' + parent_id + ' not found.');
+        console.groupEnd();
         return
     }
 
@@ -321,7 +323,7 @@ function drawAttachedSubnetVnic(artifact, bs_count) {
     console.info('Drawing ' + instance_artifact + ' Subnet Vnic : ' + artifact['id']);
     let first_child = getInstanceFirstChildEdgeOffset();
     let dimensions = getInstanceDimensions(artifact['parent_id']);
-    let artifact_definition = newVirtualNetworkInterfaceVolumeDefinition(artifact, bs_count);
+    let artifact_definition = newVirtualNetworkInterfaceDefinition(artifact, bs_count);
     artifact_definition['svg']['x'] = Math.round(first_child.dx + (positional_adjustments.padding.x * bs_count) + (positional_adjustments.spacing.x * bs_count));
     artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
     artifact_definition['rect']['stroke']['colour'] = stroke_colours.svg_orange;
