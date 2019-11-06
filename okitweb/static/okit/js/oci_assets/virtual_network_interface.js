@@ -5,9 +5,9 @@ console.info('Loaded Virtual Network Interface Javascript');
  */
 asset_drop_targets[virtual_network_interface_artifact] = [compartment_artifact];
 asset_connect_targets[virtual_network_interface_artifact] = [instance_artifact];
-asset_add_functions[virtual_network_interface_artifact] = "addVirtualNetworkInterfaceVolume";
-asset_delete_functions[virtual_network_interface_artifact] = "deleteVirtualNetworkInterfaceVolume";
-asset_clear_functions.push("clearVirtualNetworkInterfaceVolumeVariables");
+asset_add_functions[virtual_network_interface_artifact] = "addVirtualNetworkInterface";
+asset_delete_functions[virtual_network_interface_artifact] = "deleteVirtualNetworkInterface";
+asset_clear_functions.push("clearVirtualNetworkInterfaceVariables");
 
 const virtual_network_interface_stroke_colour = stroke_colours.svg_red;
 const virtual_network_interface_query_cb = "virtual-network-interface-query-cb";
@@ -18,7 +18,7 @@ let virtual_network_interface_count = 0;
 ** Reset variables
  */
 
-function clearVirtualNetworkInterfaceVolumeVariables() {
+function clearVirtualNetworkInterfaceVariables() {
     virtual_network_interface_ids = [];
     virtual_network_interface_count = 0;
 }
@@ -26,7 +26,7 @@ function clearVirtualNetworkInterfaceVolumeVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addVirtualNetworkInterfaceVolume(parent_id, compartment_id) {
+function addVirtualNetworkInterface(parent_id, compartment_id) {
     let id = 'okit-' + virtual_network_interface_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + virtual_network_interface_artifact + ' : ' + id);
 
@@ -49,9 +49,9 @@ function addVirtualNetworkInterfaceVolume(parent_id, compartment_id) {
     okitJson['virtual_network_interfaces'].push(virtual_network_interface);
     okitIdsJsonObj[id] = virtual_network_interface['display_name'];
     //console.info(JSON.stringify(okitJson, null, 2));
-    //drawVirtualNetworkInterfaceVolumeSVG(virtual_network_interface);
+    //drawVirtualNetworkInterfaceSVG(virtual_network_interface);
     drawSVGforJson();
-    loadVirtualNetworkInterfaceVolumeProperties(id);
+    loadVirtualNetworkInterfaceProperties(id);
     console.groupEnd();
 }
 
@@ -59,7 +59,7 @@ function addVirtualNetworkInterfaceVolume(parent_id, compartment_id) {
 ** Delete From JSON Model
  */
 
-function deleteVirtualNetworkInterfaceVolume(id) {
+function deleteVirtualNetworkInterface(id) {
     console.groupCollapsed('Delete ' + virtual_network_interface_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -85,12 +85,12 @@ function deleteVirtualNetworkInterfaceVolume(id) {
 /*
 ** SVG Creation
  */
-function getVirtualNetworkInterfaceVolumeDimensions(id='') {
+function getVirtualNetworkInterfaceDimensions(id='') {
     return {width:icon_width, height:icon_height};
 }
 
-function newVirtualNetworkInterfaceVolumeDefinition(artifact, position=0) {
-    let dimensions = getVirtualNetworkInterfaceVolumeDimensions();
+function newVirtualNetworkInterfaceDefinition(artifact, position=0) {
+    let dimensions = getVirtualNetworkInterfaceDimensions();
     let definition = newArtifactSVGDefinition(artifact, virtual_network_interface_artifact);
     definition['svg']['x'] = Math.round(icon_width / 4);
     definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
@@ -101,7 +101,7 @@ function newVirtualNetworkInterfaceVolumeDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawVirtualNetworkInterfaceVolumeSVG(artifact) {
+function drawVirtualNetworkInterfaceSVG(artifact) {
     let parent_id = artifact['parent_id'];
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
@@ -136,7 +136,7 @@ function drawVirtualNetworkInterfaceVolumeSVG(artifact) {
         // Increment Icon Position
         compartment_bui_sub_artifacts[parent_id]['virtual_network_interface_position'] += 1;
 
-        let svg = drawArtifact(newVirtualNetworkInterfaceVolumeDefinition(artifact, position));
+        let svg = drawArtifact(newVirtualNetworkInterfaceDefinition(artifact, position));
 
         let rect = d3.select('#' + id);
         let boundingClientRect = rect.node().getBoundingClientRect();
@@ -147,7 +147,7 @@ function drawVirtualNetworkInterfaceVolumeSVG(artifact) {
          Set common attributes on svg element and children
          */
         svg.on("click", function () {
-            loadVirtualNetworkInterfaceVolumeProperties(id);
+            loadVirtualNetworkInterfaceProperties(id);
             d3.event.stopPropagation();
         });
     } else {
@@ -159,7 +159,7 @@ function drawVirtualNetworkInterfaceVolumeSVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadVirtualNetworkInterfaceVolumeProperties(id) {
+function loadVirtualNetworkInterfaceProperties(id) {
     $("#properties").load("propertysheets/virtual_network_interface.html", function () {
         if ('virtual_network_interfaces' in okitJson) {
             console.info('Loading ' + virtual_network_interface_artifact + ' : ' + id);
@@ -183,8 +183,8 @@ function loadVirtualNetworkInterfaceVolumeProperties(id) {
 ** Query OCI
  */
 
-function queryVirtualNetworkInterfaceVolumeAjax(compartment_id) {
-    console.info('------------- queryVirtualNetworkInterfaceVolumeAjax --------------------');
+function queryVirtualNetworkInterfaceAjax(compartment_id) {
+    console.info('------------- queryVirtualNetworkInterfaceAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
     if ('virtual_network_interface_filter' in okitQueryRequestJson) {
@@ -192,7 +192,7 @@ function queryVirtualNetworkInterfaceVolumeAjax(compartment_id) {
     }
     $.ajax({
         type: 'get',
-        url: 'oci/artifacts/VirtualNetworkInterfaceVolume',
+        url: 'oci/artifacts/VirtualNetworkInterface',
         dataType: 'text',
         contentType: 'application/json',
         //data: JSON.stringify(okitQueryRequestJson),
@@ -202,7 +202,7 @@ function queryVirtualNetworkInterfaceVolumeAjax(compartment_id) {
             okitJson['virtual_network_interfaces'] = response_json;
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.info('queryVirtualNetworkInterfaceVolumeAjax : ' + response_json[i]['display_name']);
+                console.info('queryVirtualNetworkInterfaceAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
             $('#' + virtual_network_interface_query_cb).prop('checked', true);
@@ -217,7 +217,7 @@ function queryVirtualNetworkInterfaceVolumeAjax(compartment_id) {
 
 
 $(document).ready(function() {
-    clearVirtualNetworkInterfaceVolumeVariables();
+    clearVirtualNetworkInterfaceVariables();
 
     // Setup Search Checkbox
     /*
