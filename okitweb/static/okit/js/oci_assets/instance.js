@@ -172,8 +172,10 @@ function drawInstanceSVG(artifact) {
             }
         }
     }
+
     if (!parent_exists) {
-        console.info('Parent ' + parent_id + ' not found.');
+        console.warn('Parent ' + parent_id + ' not found.');
+        console.groupEnd();
         return
     }
 
