@@ -820,6 +820,47 @@ resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPo
 
 ```
 #### Ansible Jinja2 Template
+The ansible jinja2 template consists of all the ansible modules / actions the need to occur to create the artifact using
+an ansible playbook. In consists of a number of ansible module statement (note the indentation) that are modified using
+jinja2. Because ansible uses jinja2 as its templating language we will see escape sequences for {{ and }} and examples of
+this can be found in the various, existing, ansible templates.
+```jinja2
+
+# ------ Get List Volume Backup Policies
+    - name: Get information of all available volume backup policies
+      oci_volume_backup_policy_facts:
+      register: {{ resource_name }}VolumeBackupPolicyIds
+
+# ------ Create Block Storage Volume {{ output_name }}
+    - name: Create Block Storage Volume {{ output_name }}
+      oci_volume:
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        # Optional
+        display_name: "{{ display_name }}"
+        size_in_gbs: "{{ size_in_gbs }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
+
+# ------ Create Block Storage Backup Policy For {{ output_name }}
+    - name: Create Volume Backup Policy Assignment {{ output_name }}
+      oci_volume_backup_policy_assignment:
+        asset_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
+        policy_id: "{{ '{{' }} ({{ resource_name }}VolumeBackupPolicyIds.volume_backup_policies | selectattr('display_name', 'equalto', {{ backup_policy | replace('{{', '') | replace('}}', '') }}) | map(attribute='id') | list)[0] {{ '}}' }}"
+      register: {{ resource_name }}BackupPolicy
+
+``` 
 #### Designer Javascript
 To allow access to artifact standard names a number of constants need to be added to the okit_designer.js that specify the
 artifact name and prefix.

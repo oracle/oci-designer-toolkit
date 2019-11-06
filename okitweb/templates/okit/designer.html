@@ -116,6 +116,7 @@
                     <!--img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true"-->
                 {% endfor %}
                 {% for palette_icon_group in palette_icon_groups %}
+                    {% if palette_icon_group['name'] != 'Hidden' %}
                     <div id="{{ palette_icon_group['name'] }}" class="palette-icon-group">
                         <div class="palette-icon-group-header">
                             <label>{{ palette_icon_group['name'] }}</label>
@@ -126,6 +127,7 @@
                             {% endfor %}
                         </div>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
             <div id="canvas-wrapper" class="designer-centre-column canvas-wrapper">

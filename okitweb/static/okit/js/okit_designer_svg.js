@@ -29,15 +29,27 @@ const positional_adjustments = {
 const path_connector = true;
 const small_grid_size = 8;
 const grid_size = small_grid_size * 10;
+const stroke_colours = {
+    svg_red: "#F80000",
+    svg_gray: "#939699",
+    svg_blue: "#0066cc",
+    svg_orange: "#ff6600",
+    svg_purple: "#400080"
+};
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
  */
 
 function styleCanvas(canvas_svg) {
+    let colours = '';
+    for (let key in stroke_colours) {
+        colours += '.' + key.replace('_', '-') + '{fill:' + stroke_colours[key] + ';} ';
+    }
     canvas_svg.append('style')
         .attr("type", "text/css")
-        .text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+        .text(colours + ' text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+        //.text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
 }
 
 function createSVGDefinitions(canvas_svg) {

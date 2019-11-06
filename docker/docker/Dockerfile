@@ -117,8 +117,11 @@ RUN yum update -y ; \
     echo "alias lh='ls -lash' "                                                      >> /etc/bashrc ; \
     echo "alias lt='ls -last' "                                                      >> /etc/bashrc ; \
     echo "alias env='/usr/bin/env | sort' "                                          >> /etc/bashrc ; \
+    echo "alias ips='ip -f inet address' "                                           >> /etc/bashrc ; \
     echo "alias ssh='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10' " >> /etc/bashrc ; \
+    echo "alias scp='/usr/bin/scp -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10' " >> /etc/bashrc ; \
     echo "alias sshopc='ssh -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
+    echo "alias scpopc='scp -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
     echo ''                                                                          >> /etc/bashrc ; \
     echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
     echo "alias ta='terraform apply da.plan' "                                                     >> /etc/bashrc ; \

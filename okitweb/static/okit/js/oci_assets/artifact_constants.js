@@ -41,4 +41,6 @@ const block_storage_volume_prefix = 'bsv';
 // Autonomous Database
 const autonomous_database_artifact = 'Autonomous Database';
 const autonomous_database_prefix = 'ad';
-
+// Virtual Network Interface
+const virtual_network_interface_artifact = 'Virtual Network Interface';
+const virtual_network_interface_prefix = 'vnic';

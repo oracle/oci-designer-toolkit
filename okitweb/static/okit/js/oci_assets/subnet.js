@@ -85,11 +85,6 @@ function addSubnet(vcn_id, compartment_id) {
 
 function initialiseSubnetChildData(id) {
     // Set subnet specific positioning variables
-    //subnet_bui_sub_artifacts[id] = {}
-    //subnet_bui_sub_artifacts[id]['load_balancer_count'] = 0;
-    //subnet_bui_sub_artifacts[id]['load_balancer_position'] = 0;
-    //subnet_bui_sub_artifacts[id]['instance_count'] = 0;
-    //subnet_bui_sub_artifacts[id]['instance_position'] = 0;
     // Add Sub Component positional data
     subnet_bui_sub_artifacts[id] = {
         "load_balancer_position": 0,
@@ -273,15 +268,6 @@ function newSubnetDefinition(artifact, position=0) {
     // Add positioning offset
     definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
 
-    //definition['svg']['x'] = positional_adjustments.padding.x;
-    //definition['svg']['y'] = Math.round((icon_height * 3) + ((icon_height / 2) * position) + (icon_spacing * position));
-    //definition['svg']['y'] = Math.round(positional_adjustments.padding.y  + (positional_adjustments.spacing.y * position));
-
-    // Check if the VCN has Security Lists or Route Tables Attached if so leave space
-    //if (hasUnattachedSecurityList(artifact['vcn_id']) || hasUnattachedRouteTable(artifact['vcn_id'])) {
-    //    // Add Space for Security List / Route Table
-    //    definition['svg']['y'] += positional_adjustments.padding.y + positional_adjustments.spacing.y;
-    //}
     // Retrieve all Subnets in the parent svg and calculate vertical position
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + subnet_artifact + '"]').each(
         function() {
