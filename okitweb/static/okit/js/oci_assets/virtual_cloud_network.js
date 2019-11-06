@@ -290,8 +290,6 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     definition['svg']['y'] = parent_first_child.dy;
     // Add positioning offset
     definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
-    //definition['svg']['x'] = Math.round(positional_adjustments.padding.x + (2 * positional_adjustments.spacing.y));
-    //definition['svg']['y'] = Math.round((positional_adjustments.padding.y * 2) + (positional_adjustments.spacing.y * position));
     // Retrieve all Virtual Cloud Networks in the parent svg and calculate vertical position
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + virtual_cloud_network_artifact + '"]').each(
         function() {
