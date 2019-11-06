@@ -55,7 +55,10 @@ class OCIAnsibleGenerator(OCIGenerator):
         variable_definitions = []
         variable_values = []
         for key, value in self.getVariables().items():
-            variable_values.append('{0!s:s}: "{1}"'.format(key, value))
+            if isinstance(value, (int, float, bool)):
+                variable_values.append('{0!s:s}: {1}'.format(key, value))
+            else:
+                variable_values.append('{0!s:s}: "{1}"'.format(key, value))
         writeAnsibleFile(os.path.join(self.output_dir, self.VARIABLES_FILE_NAME), variable_values)
 
         return

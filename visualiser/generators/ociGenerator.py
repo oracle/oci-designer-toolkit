@@ -219,6 +219,10 @@ class OCIGenerator(object):
         # Process Virtual Cloud Networks Data
         logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Availability Domain
+        variableName = '{0:s}_availability_domain'.format(standardisedName)
+        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = block_storage_volume["availability_domain"]
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
@@ -230,7 +234,7 @@ class OCIGenerator(object):
         # ---- Size In GBs
         variableName = '{0:s}_size_in_gbs'.format(standardisedName)
         self.jinja2_variables["size_in_gbs"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = block_storage_volume["size_in_gbs"]
+        self.run_variables[variableName] = int(block_storage_volume["size_in_gbs"])
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("block_storage_volume.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
@@ -328,7 +332,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderServiceGateway(self, nat_gateway):
+    def renderServiceGateway(self, service_gateway):
         # Read Data
         standardisedName = self.standardiseResourceName(service_gateway['display_name'])
         # resourceName = 'ServiceGateway_{0:s}'.format(standardisedName)
@@ -538,6 +542,10 @@ class OCIGenerator(object):
         # Process Subnet Data
         logger.info('Processing Instance Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Availability Domain
+        variableName = '{0:s}_availability_domain'.format(standardisedName)
+        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["availability_domain"]
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
@@ -562,6 +570,10 @@ class OCIGenerator(object):
         variableName = '{0:s}_os_version'.format(standardisedName)
         self.jinja2_variables["os_version"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["version"]
+        # ---- Boot Volume Size
+        variableName = '{0:s}_boot_volume_size_in_gbs'.format(standardisedName)
+        self.jinja2_variables["boot_volume_size_in_gbs"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = int(instance["boot_volume_size_in_gbs"])
         # ---- Network OCID
         self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance['subnet_id']]))
         # ---- Authorised Public SSH Keys
@@ -591,6 +603,25 @@ class OCIGenerator(object):
             # Increment attachment number
             attachment_number += 1
         self.jinja2_variables["volume_attachments"] = jinja2_volume_attachments
+        # ---- Vnic Attachements
+        attachment_number = 1
+        jinja2_vnic_attachments = []
+        for subnet_id in instance.get('subnet_ids', []):
+            # ------ Subnet Vnic
+            variableName = '{0:s}_vnic_attachment_{1:02d}_subnet_id'.format(standardisedName, attachment_number)
+            self.run_variables[variableName] = subnet_id
+            jinja2_vnic_attachment = {
+                "subnet_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet_id]))
+            }
+            # ---- Display Name
+            variableName = '{0:s}_vnic_attachment_{1:02d}_display_name'.format(standardisedName, attachment_number)
+            self.run_variables[variableName] = '{0!s:s} Vnic Attachment {1:02d}'.format(instance["display_name"], attachment_number)
+            jinja2_vnic_attachment["display_name"] = self.formatJinja2Variable(variableName)
+            # Add to Vnic Attachments used for Jinja template
+            jinja2_vnic_attachments.append(jinja2_vnic_attachment)
+            # Increment attachment number
+            attachment_number += 1
+        self.jinja2_variables["vnic_attachments"] = jinja2_vnic_attachments
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("instance.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
@@ -639,7 +670,7 @@ class OCIGenerator(object):
 
     def standardiseResourceName(self, name):
         # split() will generate a list with no empty values thus join of this will remove all whitespace
-        standardised_name = ''.join(name.title().split())
+        standardised_name = ''.join(name.title().split()).replace('-', '_')
         return standardised_name
 
     def createZipArchive(self, dir, archivename):
