@@ -295,7 +295,6 @@ function drawInstanceAttachmentsSVG(instance) {
             if (subnet_id == subnet['id']) {
                 let artifact_clone = JSON.parse(JSON.stringify(subnet));
                 artifact_clone['parent_id'] = instance['id'];
-                artifact_clone['id'] += '-vnic';
                 drawAttachedSubnetVnic(artifact_clone, attachment_count);
             }
         }
@@ -330,11 +329,24 @@ function drawAttachedSubnetVnic(artifact, bs_count) {
     artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
     artifact_definition['rect']['stroke']['colour'] = stroke_colours.svg_orange;
 
+    let id = artifact['id'];
+    // Update id so it does not conflict with actual subnet
+    artifact['id'] += '-vnic';
+
     let svg = drawArtifact(artifact_definition);
 
     // Add click event to display properties
     svg.on("click", function () {
-        loadSubnetProperties(artifact['id']);
+        loadSubnetProperties(id);
+        d3.event.stopPropagation();
+    });
+    let fill = d3.select('#' + id).attr('fill');
+    svg.on("mouseover", function () {
+        d3.select('#' + id).attr('fill', svg_highlight_colour);
+        d3.event.stopPropagation();
+    });
+    svg.on("mouseout", function () {
+        d3.select('#' + id).attr('fill', fill);
         d3.event.stopPropagation();
     });
 }
