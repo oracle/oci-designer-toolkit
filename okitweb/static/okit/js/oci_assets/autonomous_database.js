@@ -108,7 +108,8 @@ function newAutonomousDatabaseDefinition(artifact, position=0) {
 }
 
 function drawAutonomousDatabaseSVG(artifact) {
-    let parent_id = artifact['parent_id'];
+    let parent_id = artifact['compartment_id'];
+    artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
     console.groupCollapsed('Drawing ' + autonomous_database_artifact + ' : ' + id);
