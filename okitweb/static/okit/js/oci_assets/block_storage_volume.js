@@ -95,6 +95,7 @@ function getBlockStorageVolumeDimensions(id='') {
 function newBlockStorageVolumeDefinition(artifact, position=0) {
     let dimensions = getBlockStorageVolumeDimensions();
     let definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
+    let first_child = getCompartmentFirstChildOffset();
     definition['svg']['x'] = Math.round(icon_width / 4);
     definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
     definition['svg']['width'] = dimensions['width'];
