@@ -161,6 +161,7 @@ function drawInstanceSVG(artifact) {
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
     console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + id + ' [' + parent_id + ']');
+    console.info('Name : ' + artifact['display_name']);
 
     // Test if parent exists
     let parent_exists = false;
@@ -294,6 +295,7 @@ function drawInstanceAttachmentsSVG(instance) {
             if (subnet_id == subnet['id']) {
                 let artifact_clone = JSON.parse(JSON.stringify(subnet));
                 artifact_clone['parent_id'] = instance['id'];
+                artifact_clone['id'] += '-vnic';
                 drawAttachedSubnetVnic(artifact_clone, attachment_count);
             }
         }
