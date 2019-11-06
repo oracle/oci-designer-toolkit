@@ -85,11 +85,6 @@ function addSubnet(vcn_id, compartment_id) {
 
 function initialiseSubnetChildData(id) {
     // Set subnet specific positioning variables
-    //subnet_bui_sub_artifacts[id] = {}
-    //subnet_bui_sub_artifacts[id]['load_balancer_count'] = 0;
-    //subnet_bui_sub_artifacts[id]['load_balancer_position'] = 0;
-    //subnet_bui_sub_artifacts[id]['instance_count'] = 0;
-    //subnet_bui_sub_artifacts[id]['instance_position'] = 0;
     // Add Sub Component positional data
     subnet_bui_sub_artifacts[id] = {
         "load_balancer_position": 0,

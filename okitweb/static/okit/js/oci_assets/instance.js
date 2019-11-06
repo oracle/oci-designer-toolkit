@@ -13,8 +13,8 @@ asset_clear_functions.push("clearInstanceVariables");
 //const instance_stroke_colour = "blue";
 const instance_stroke_colour = "#6699cc";
 const instance_query_cb = "instance-query-cb";
-const instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
-const instance_height = Math.round(icon_height * 5 / 2);
+const min_instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
+const min_instance_height = Math.round(icon_height * 5 / 2);
 let instance_ids = [];
 let instance_count = 0;
 
@@ -102,15 +102,49 @@ function deleteInstance(id) {
 /*
 ** SVG Creation
  */
+function getInstanceFirstChildEdgeOffset() {
+    let offset = {
+        dx: Math.round(positional_adjustments.spacing.x),
+        dy: 0
+    };
+    return offset;
+}
 function getInstanceDimensions(id='') {
-    return {width:instance_width, height:instance_height};
+    let dimensions = {width:getInstanceFirstChildEdgeOffset().dx, height:min_instance_height};
+    console.groupCollapsed('Processing Instance ' + id);
+    if (okitJson.hasOwnProperty('instances')) {
+        for (let instance of okitJson['instances']) {
+            console.info('Processing ' + instance.id);
+            if (instance['id'] == id) {
+                //dimensions['width'] = getInstanceFirstChildEdgeOffset();
+                if (instance.hasOwnProperty('block_storage_volume_ids')) {
+                    console.info('Found ' + instance['block_storage_volume_ids'].length + ' Attached Block Storage Volumes' )
+                    dimensions['width'] += instance['block_storage_volume_ids'].length * positional_adjustments.padding.x;
+                    dimensions['width'] += instance['block_storage_volume_ids'].length * positional_adjustments.spacing.x;
+                }
+                if (instance.hasOwnProperty('subnet_ids')) {
+                    console.info('Found ' + instance['subnet_ids'].length + ' Attached Vnics' )
+                    dimensions['width'] += instance['subnet_ids'].length * positional_adjustments.padding.x;
+                    dimensions['width'] += instance['subnet_ids'].length * positional_adjustments.spacing.x;
+                }
+                break;
+            }
+        }
+    } else {
+        console.warn('Instances List not found');
+    }
+    console.info('Instance Dimensions ' + JSON.stringify(dimensions));
+    dimensions['width'] = Math.max(dimensions['width'], min_instance_width);
+    console.info('Instance Dimensions ' + JSON.stringify(dimensions));
+    console.groupEnd();
+    return dimensions;
 }
 
 function newInstanceDefinition(artifact, position=0) {
-    let dimensions = getInstanceDimensions();
+    let dimensions = getInstanceDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, instance_artifact);
     let first_child = getSubnetFirstChildInstanceOffset(artifact['subnet_id']);
-    definition['svg']['x'] = Math.round(first_child.dx + (instance_width * position) + (positional_adjustments.spacing.x * position));
+    definition['svg']['x'] = Math.round(first_child.dx + (min_instance_width * position) + (positional_adjustments.spacing.x * position));
     definition['svg']['y'] = Math.round(first_child.dy);
     definition['svg']['width'] = dimensions['width'];
     definition['svg']['height'] = dimensions['height'];
@@ -268,9 +302,11 @@ function drawInstanceAttachmentsSVG(instance) {
 
 function drawAttachedBlockStorageVolume(artifact, bs_count) {
     console.info('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
+    let first_child = getInstanceFirstChildEdgeOffset();
+    let dimensions = getInstanceDimensions(artifact['parent_id']);
     let artifact_definition = newBlockStorageVolumeDefinition(artifact, bs_count);
-    artifact_definition['svg']['x'] = Math.round(icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count));
-    artifact_definition['svg']['y'] = Math.round(instance_height - icon_height);
+    artifact_definition['svg']['x'] = Math.round(first_child.dx + (positional_adjustments.padding.x * bs_count) + (positional_adjustments.spacing.x * bs_count));
+    artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
 
     let svg = drawArtifact(artifact_definition);
 
@@ -283,9 +319,11 @@ function drawAttachedBlockStorageVolume(artifact, bs_count) {
 
 function drawAttachedSubnetVnic(artifact, bs_count) {
     console.info('Drawing ' + instance_artifact + ' Subnet Vnic : ' + artifact['id']);
+    let first_child = getInstanceFirstChildEdgeOffset();
+    let dimensions = getInstanceDimensions(artifact['parent_id']);
     let artifact_definition = newVirtualNetworkInterfaceVolumeDefinition(artifact, bs_count);
-    artifact_definition['svg']['x'] = Math.round(icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count));
-    artifact_definition['svg']['y'] = Math.round(instance_height - icon_height);
+    artifact_definition['svg']['x'] = Math.round(first_child.dx + (positional_adjustments.padding.x * bs_count) + (positional_adjustments.spacing.x * bs_count));
+    artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
     artifact_definition['rect']['stroke']['colour'] = stroke_colours.svg_orange;
 
     let svg = drawArtifact(artifact_definition);
