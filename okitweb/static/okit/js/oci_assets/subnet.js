@@ -273,15 +273,6 @@ function newSubnetDefinition(artifact, position=0) {
     // Add positioning offset
     definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
 
-    //definition['svg']['x'] = positional_adjustments.padding.x;
-    //definition['svg']['y'] = Math.round((icon_height * 3) + ((icon_height / 2) * position) + (icon_spacing * position));
-    //definition['svg']['y'] = Math.round(positional_adjustments.padding.y  + (positional_adjustments.spacing.y * position));
-
-    // Check if the VCN has Security Lists or Route Tables Attached if so leave space
-    //if (hasUnattachedSecurityList(artifact['vcn_id']) || hasUnattachedRouteTable(artifact['vcn_id'])) {
-    //    // Add Space for Security List / Route Table
-    //    definition['svg']['y'] += positional_adjustments.padding.y + positional_adjustments.spacing.y;
-    //}
     // Retrieve all Subnets in the parent svg and calculate vertical position
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + subnet_artifact + '"]').each(
         function() {

@@ -62,6 +62,7 @@ function addInstance(subnet_id, compartment_id) {
     instance['cloud_init_yaml'] = '';
     instance['block_storage_volume_ids'] = [];
     instance['block_storage_volumes'] = [];
+    instance['subnet_ids'] = [];
     okitJson['instances'].push(instance);
     okitIdsJsonObj[id] = instance['display_name'];
     //console.info(JSON.stringify(okitJson, null, 2));
@@ -252,6 +253,16 @@ function drawInstanceAttachmentsSVG(instance) {
         }
         attachment_count += 1;
     }
+    for (let subnet_id of instance['subnet_ids']) {
+        for (let subnet of okitJson['subnets']) {
+            if (subnet_id == subnet['id']) {
+                let artifact_clone = JSON.parse(JSON.stringify(subnet));
+                artifact_clone['parent_id'] = instance['id'];
+                drawAttachedSubnetVnic(artifact_clone, attachment_count);
+            }
+        }
+        attachment_count += 1;
+    }
     console.groupEnd();
 }
 
@@ -263,20 +274,25 @@ function drawAttachedBlockStorageVolume(artifact, bs_count) {
 
     let svg = drawArtifact(artifact_definition);
 
-    /*
-    let svg_x = icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count);
-    let svg_y = Math.round(instance_height - icon_height);
-    let svg_width = icon_width;
-    let svg_height = icon_height;
-    let data_type = block_storage_volume_artifact;
-    let stroke_colour = block_storage_volume_stroke_colour;
-    let stroke_dash = 1;
-    // Draw Block Storage Volume
-    let svg = drawArtifactSVG(artifact, data_type, svg_x, svg_y, svg_width, svg_height, stroke_colour, stroke_dash);
-    */
     // Add click event to display properties
     svg.on("click", function () {
         loadBlockStorageVolumeProperties(artifact['id']);
+        d3.event.stopPropagation();
+    });
+}
+
+function drawAttachedSubnetVnic(artifact, bs_count) {
+    console.info('Drawing ' + instance_artifact + ' Subnet Vnic : ' + artifact['id']);
+    let artifact_definition = newVirtualNetworkInterfaceVolumeDefinition(artifact, bs_count);
+    artifact_definition['svg']['x'] = Math.round(icon_spacing + (icon_width * bs_count) + (icon_spacing * bs_count));
+    artifact_definition['svg']['y'] = Math.round(instance_height - icon_height);
+    artifact_definition['rect']['stroke']['colour'] = stroke_colours.svg_orange;
+
+    let svg = drawArtifact(artifact_definition);
+
+    // Add click event to display properties
+    svg.on("click", function () {
+        loadSubnetProperties(artifact['id']);
         d3.event.stopPropagation();
     });
 }
@@ -296,10 +312,20 @@ function loadInstanceProperties(id) {
                     //console.info('Found Route Table: ' + id);
                     //instance['virtual_cloud_network'] = okitIdsJsonObj[instance['vcn_id']];
                     instance['subnet'] = okitIdsJsonObj[instance['subnet_id']];
+                    // Build Block Storage Select
                     let block_storage_volume_select = $('#block_storage_volume_ids');
                     if (okitJson.hasOwnProperty('block_storage_volumes')) {
                         for (let block_storage_volume of okitJson['block_storage_volumes']) {
                             block_storage_volume_select.append($('<option>').attr('value', block_storage_volume['id']).text(block_storage_volume['display_name']));
+                        }
+                    }
+                    // Build Vnic / Subnet List
+                    let subnet_select = $('#subnet_ids');
+                    if (okitJson.hasOwnProperty('subnets')) {
+                        for (let subnet of okitJson['subnets']) {
+                            if (subnet['id'] != instance['subnet_id']) {
+                                subnet_select.append($('<option>').attr('value', subnet['id']).text(subnet['display_name']));
+                            }
                         }
                     }
                     // Load Properties

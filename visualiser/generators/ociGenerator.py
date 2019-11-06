@@ -603,6 +603,25 @@ class OCIGenerator(object):
             # Increment attachment number
             attachment_number += 1
         self.jinja2_variables["volume_attachments"] = jinja2_volume_attachments
+        # ---- Vnic Attachements
+        attachment_number = 1
+        jinja2_vnic_attachments = []
+        for subnet_id in instance.get('subnet_ids', []):
+            # ------ Subnet Vnic
+            variableName = '{0:s}_vnic_attachment_{1:02d}_subnet_id'.format(standardisedName, attachment_number)
+            self.run_variables[variableName] = subnet_id
+            jinja2_vnic_attachment = {
+                "subnet_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet_id]))
+            }
+            # ---- Display Name
+            variableName = '{0:s}_vnic_attachment_{1:02d}_display_name'.format(standardisedName, attachment_number)
+            self.run_variables[variableName] = '{0!s:s} Vnic Attachment {1:02d}'.format(instance["display_name"], attachment_number)
+            jinja2_vnic_attachment["display_name"] = self.formatJinja2Variable(variableName)
+            # Add to Vnic Attachments used for Jinja template
+            jinja2_vnic_attachments.append(jinja2_vnic_attachment)
+            # Increment attachment number
+            attachment_number += 1
+        self.jinja2_variables["vnic_attachments"] = jinja2_vnic_attachments
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("instance.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
