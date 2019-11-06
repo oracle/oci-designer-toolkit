@@ -36,6 +36,7 @@ const stroke_colours = {
     svg_orange: "#ff6600",
     svg_purple: "#400080"
 };
+const svg_highlight_colour = "#00cc00";
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas

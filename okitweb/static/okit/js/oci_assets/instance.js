@@ -340,6 +340,15 @@ function drawAttachedSubnetVnic(artifact, bs_count) {
         loadSubnetProperties(id);
         d3.event.stopPropagation();
     });
+    let fill = d3.select('#' + id).attr('fill');
+    svg.on("mouseover", function () {
+        d3.select('#' + id).attr('fill', svg_highlight_colour);
+        d3.event.stopPropagation();
+    });
+    svg.on("mouseout", function () {
+        d3.select('#' + id).attr('fill', fill);
+        d3.event.stopPropagation();
+    });
 }
 
 /*
