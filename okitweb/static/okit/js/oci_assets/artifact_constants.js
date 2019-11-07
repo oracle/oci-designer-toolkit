@@ -29,18 +29,21 @@ const security_list_prefix = 'sl';
 // Subnet
 const subnet_artifact = 'Subnet';
 const subnet_prefix = 'sn';
+// Virtual Network Interface
+const virtual_network_interface_artifact = 'Virtual Network Interface';
+const virtual_network_interface_prefix = 'vnic';
 // Instance
 const instance_artifact = 'Instance';
 const instance_prefix = 'in';
 // Load Balancer
 const load_balancer_artifact = 'Load Balancer';
 const load_balancer_prefix = 'lb';
-// Block Storage
+// Block Storage Volume
 const block_storage_volume_artifact = 'Block Storage Volume';
 const block_storage_volume_prefix = 'bsv';
+// Object Storage Bucket
+const object_storage_bucket_artifact = 'Object Storage Bucket';
+const object_storage_bucket_prefix = 'osb';
 // Autonomous Database
 const autonomous_database_artifact = 'Autonomous Database';
 const autonomous_database_prefix = 'ad';
-// Virtual Network Interface
-const virtual_network_interface_artifact = 'Virtual Network Interface';
-const virtual_network_interface_prefix = 'vnic';

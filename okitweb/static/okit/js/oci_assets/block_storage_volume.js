@@ -1,4 +1,4 @@
-console.info('Loaded Block Storage Javascript');
+console.info('Loaded Block Storage Volume Javascript');
 
 /*
 ** Set Valid drop Targets

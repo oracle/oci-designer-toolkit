@@ -54,6 +54,7 @@ from facades.ociInstance import OCIInstanceVnics
 from facades.ociResourceManager import OCIResourceManagers
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
+from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
 
 from common.ociLogging import getLogger
 
@@ -179,6 +180,8 @@ def generate(language):
 def ociCompartment():
     ociCompartments = OCICompartments()
     compartments = ociCompartments.listTenancy()
+    compartments = [{'display_name': c['display_name'], 'id': c['id']} for c in compartments]
+    compartments.sort(key=lambda x: x['display_name'])
     #logger.info("Compartments: {0!s:s}".format(compartments))
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
 
@@ -261,6 +264,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Autonomous Databases')
         oci_autonomous_databases = OCIAutonomousDatabases(compartment_id=query_json['compartment_id'])
         response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
+    elif artifact == 'ObjectStorageBucket':
+        logger.info('---- Processing Object Storage Buckets')
+        oci_object_storage_buckets = OCIObjectStorageBuckets(compartment_id=query_json['compartment_id'])
+        response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
     else:
         return '404'
 

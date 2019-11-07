@@ -272,6 +272,7 @@ function initiateCompartmentSubQueries(id='') {
     queryBlockStorageVolumeAjax(id);
     queryDynamicRoutingGatewayAjax(id);
     queryAutonomousDatabaseAjax(id);
+    queryObjectStorageBucketAjax(id);
 }
 
 // TODO: Delete

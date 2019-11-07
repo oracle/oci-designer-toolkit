@@ -52,9 +52,10 @@ function initialiseJson() {
         internet_gateways: [],
         load_balancers: [],
         nat_gateways: [],
-        service_gateways: [],
+        object_storage_buckets: [],
         route_tables: [],
         security_lists: [],
+        service_gateways: [],
         subnets: [],
         virtual_cloud_networks: [],
         canvas : initialiseCanvasJson()

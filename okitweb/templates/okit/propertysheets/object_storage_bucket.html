@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Object Storage Bucket</title>
+</head>
+<body>
+    <div id="property-editor" class="property-editor">
+        <div class="property-editor-title">
+            <label>Object Storage Bucket</label>
+        </div>
+        <table id="object_storage_bucket" class="property-editor-table">
+            <tr><th>Property</th><th>Value</th></tr>
+            <tr><td>Name</td><td><input type="text" id="name" name="name" class="property-value"></td></tr>
+            <!--tr><td>Namespace</td><td><input type="text" id="namespace" name="namespace" class="property-value"></td></tr-->
+            <tr><td>Namespace</td><td><label id="namespace" class="property-value property-label"></label></td></tr>
+            <tr><td>Storage Tier</td><td><select id="storage_tier" class="property-value">
+                <option value="Standard" selected="selected">Standard</option>
+                <option value="Archive">Archive</option>
+            </select></td></tr>
+            <tr><td>Public Access</td><td><select id="public_access_type" class="property-value">
+                <option value="NoPublicAccess" selected="selected">No Public Access</option>
+                <option value="ObjectRead">Read & List</option>
+                <option value="ObjectReadWithoutList">Read Only</option>
+            </select></td></tr>
+        </table>
+    </div>
+</body>
+</html>
