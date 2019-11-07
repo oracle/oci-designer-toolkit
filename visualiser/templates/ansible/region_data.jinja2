@@ -1,3 +1,8 @@
 
 # ------ Retrieve Regional / Cloud Data
 # -------- Get a list of Availability Domains
+    - name: Get details of all the availability domains in your tenancy for a specified non-default region
+      oci_ad_facts:
+        compartment_id: "{{ compartment_ocid }}"
+        region: "{{ region }}"
+      register: AvailabilityDomains

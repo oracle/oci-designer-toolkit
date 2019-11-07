@@ -2,6 +2,8 @@
 # -- Copyright: {{ copyright }}
 # ---- Author : {{ author }}
 - name: Create / Update / Destroy Nat Instance Infrastructure
-  hosts: nat-instance-ha
+  hosts: localhost
   connection: local
+  vars_files:
+    - variables.yml
   tasks:

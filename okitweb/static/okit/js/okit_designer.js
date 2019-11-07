@@ -13,6 +13,30 @@ let okitIdsJsonObj = {};
 // Query Request only set to a value when designer called from query
 let okitQueryRequestJson = null;
 
+function saveOkitSettings(settings) {
+    console.info('Saving OKIT Settings To Cookie.');
+    setCookie('okit-settings', settings);
+}
+
+function readOkitSettings() {
+    let cookie_value = getCookie('okit-settings');
+    if (cookie_value == '') {
+        console.info('OKIT Settings Cookie Was Not Found.');
+        let settings = {
+            is_default_security_list: true,
+            is_default_route_table: true
+        };
+        cookie_value = JSON.stringify(settings);
+        saveOkitSettings(cookie_value);
+    } else {
+        console.info('OKIT Settings Cookie Found.');
+    }
+    return JSON.parse(cookie_value);
+}
+
+// Automation details
+let okitSettings = readOkitSettings();
+
 /*
  * Variable Initialisation
  */
@@ -228,13 +252,15 @@ function handleExportToSVG(evt) {
     if (!okitJson.hasOwnProperty('open_compartment_index')) {
         okitJson['open_compartment_index'] = 0;
     }
-    let okitcanvas = document.getElementById(okitJson.compartments[okitJson['open_compartment_index']]['id'] + '-canvas-svg');
+    // let okitcanvas = document.getElementById(okitJson.compartments[okitJson['open_compartment_index']]['id'] + '-canvas-svg');
+    let okitcanvas = document.getElementById("canvas-svg");
     let name = okitJson.compartments[okitJson['open_compartment_index']]['name'];
     saveSvg(okitcanvas, name + '.svg');
 }
 
 function saveSvg(svgEl, name) {
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    svgEl.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
     let svgData = svgEl.outerHTML;
     let preface = '<?xml version="1.0" standalone="no"?>\r\n';
     let svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
@@ -292,6 +318,14 @@ function openCompartment(compartment_id) {
         }
     }
     displayOkitJson();
+}
+
+function loadSettings() {
+    $("#settings").load("propertysheets/settings.html", function() {
+        console.info('Loading Settings');
+        loadProperties(okitSettings);
+        addPropertiesEventListeners(okitSettings, []);
+    });
 }
 
 
@@ -379,17 +413,37 @@ $(document).ready(function(){
         showQueryResults();
     }
 
+    /*
+    ** Load Settings
+     */
+
+    loadSettings();
+
     $('input[type=radio][name=source-properties]').change(function() {
         if (this.value == 'source') {
+            $("#json-display").slideDown();
+            $("#settings").slideUp();
+            $("#properties").slideUp();
         }
         else if (this.value == 'properties') {
+            $("#properties").slideDown();
+            $("#settings").slideUp();
+            $("#json-display").slideUp();
         }
-        $("#json-display").slideToggle();
+        else if (this.value == 'settings') {
+            $("#settings").slideDown();
+            $("#json-display").slideUp();
+            $("#properties").slideUp();
+        }
+        //$("#json-display").slideToggle();
+        $("#settings").removeClass('hidden');
         $("#json-display").removeClass('hidden');
-        $("#properties").slideToggle();
+        $("#properties").removeClass('hidden');
+        //$("#properties").slideToggle();
     });
 
     $("#json-display").slideToggle();
+    $("#settings").slideToggle();
 
     // Only observe the canvas
     ro.observe(document.querySelector('#canvas-wrapper'));

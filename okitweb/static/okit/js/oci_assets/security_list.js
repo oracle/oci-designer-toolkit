@@ -58,6 +58,7 @@ function addSecurityList(vcn_id, compartment_id) {
     drawSVGforJson();
     loadSecurityListProperties(id);
     console.groupEnd();
+    return id;
 }
 
 /*
@@ -97,8 +98,9 @@ function getSecurityListDimensions(id='') {
 function newSecurityListDefinition(artifact, position=0) {
     let dimensions = getSecurityListDimensions();
     let definition = newArtifactSVGDefinition(artifact, security_list_artifact);
-    definition['svg']['x'] = Math.round(icon_width + (icon_width * position) + (icon_spacing * position));
-    definition['svg']['y'] = Math.round(icon_height * 3 / 2);
+    let first_child = getVirtualCloudNetworkFirstChildOffset();
+    definition['svg']['x'] = Math.round(first_child.dx + (icon_width * position) + (positional_adjustments.spacing.x * position));
+    definition['svg']['y'] = Math.round(first_child.dy);
     definition['svg']['width'] = dimensions['width'];
     definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = security_list_stroke_colour;
@@ -366,6 +368,73 @@ function querySecurityListAjax(compartment_id, vcn_id) {
             console.info('Error : '+ error)
         }
     });
+}
+
+function addDefaultSecurityListRules(id, vcn_cidr_block='10.0.0.0/16') {
+    console.info('Adding Default Security List Rules for ' + id);
+    for (let security_list of okitJson['security_lists']) {
+        if (id == security_list.id) {
+            // Add Egress Rule
+            security_list.egress_security_rules.push(
+                {
+                    "destination": "0.0.0.0/0",
+                    "destination_type": "CIDR_BLOCK",
+                    "icmp_options": null,
+                    "is_stateless": false,
+                    "protocol": "all",
+                    "tcp_options": null,
+                    "udp_options": null
+                }
+            );
+            // Ingress Rules
+            security_list.ingress_security_rules.push(
+                {
+                    "icmp_options": null,
+                    "is_stateless": false,
+                    "protocol": "6",
+                    "source": "0.0.0.0/0",
+                    "source_type": "CIDR_BLOCK",
+                    "tcp_options": {
+                        "destination_port_range": {
+                            "max": 22,
+                            "min": 22
+                        },
+                        "source_port_range": null
+                    },
+                    "udp_options": null
+                }
+            );
+            security_list.ingress_security_rules.push(
+                {
+                    "icmp_options": {
+                        "code": 4,
+                        "type": 3
+                    },
+                    "is_stateless": false,
+                    "protocol": "1",
+                    "source": "0.0.0.0/0",
+                    "source_type": "CIDR_BLOCK",
+                    "tcp_options": null,
+                    "udp_options": null
+                }
+            );
+            security_list.ingress_security_rules.push(
+                {
+                    "icmp_options": {
+                        "code": null,
+                        "type": 3
+                    },
+                    "is_stateless": false,
+                    "protocol": "1",
+                    "source": vcn_cidr_block,
+                    "source_type": "CIDR_BLOCK",
+                    "tcp_options": null,
+                    "udp_options": null
+                }
+            );
+            break;
+        }
+    }
 }
 
 $(document).ready(function() {

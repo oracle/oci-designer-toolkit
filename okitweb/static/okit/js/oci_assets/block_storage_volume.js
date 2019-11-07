@@ -95,8 +95,12 @@ function getBlockStorageVolumeDimensions(id='') {
 function newBlockStorageVolumeDefinition(artifact, position=0) {
     let dimensions = getBlockStorageVolumeDimensions();
     let definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
-    definition['svg']['x'] = Math.round(icon_width / 4);
-    definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+    let first_child = getCompartmentFirstChildOffset();
+    definition['svg']['x'] = first_child.dx;
+    definition['svg']['y'] = first_child.dy;
+    // Add positioning offset
+    definition['svg']['y'] += Math.round(positional_adjustments.padding.y * position);
+    definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
     definition['svg']['width'] = dimensions['width'];
     definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
@@ -105,7 +109,8 @@ function newBlockStorageVolumeDefinition(artifact, position=0) {
 }
 
 function drawBlockStorageVolumeSVG(artifact) {
-    let parent_id = artifact['parent_id'];
+    let parent_id = artifact['compartment_id'];
+    artifact['parent_id'] = parent_id;
     let id = artifact['id'];
     let compartment_id = artifact['compartment_id'];
     console.groupCollapsed('Drawing ' + block_storage_volume_artifact + ' : ' + id);

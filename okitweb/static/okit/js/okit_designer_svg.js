@@ -23,21 +23,34 @@ const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
 const container_artifact_label_width = 300;
 const container_artifact_info_width = 100;
 const positional_adjustments = {
-    padding: {x: Math.round(icon_width),   y: Math.round(icon_height + icon_spacing)},
+    padding: {x: Math.round(icon_width),   y: Math.round(icon_height)},
     spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
 };
 const path_connector = true;
 const small_grid_size = 8;
 const grid_size = small_grid_size * 10;
+const stroke_colours = {
+    svg_red: "#F80000",
+    svg_gray: "#939699",
+    svg_blue: "#0066cc",
+    svg_orange: "#ff6600",
+    svg_purple: "#400080"
+};
+const svg_highlight_colour = "#00cc00";
 
 /*
 ** SVG Drawing / Manipulating SVG Canvas
  */
 
 function styleCanvas(canvas_svg) {
+    let colours = '';
+    for (let key in stroke_colours) {
+        colours += '.' + key.replace('_', '-') + '{fill:' + stroke_colours[key] + ';} ';
+    }
     canvas_svg.append('style')
         .attr("type", "text/css")
-        .text('.st0{fill:#F80000;} .st1{fill:#939699;} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+        .text(colours + ' text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+        //.text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
 }
 
 function createSVGDefinitions(canvas_svg) {
@@ -120,6 +133,7 @@ function newArtifactSVGDefinition(artifact, data_type) {
         stroke: {colour: '#F80000', dash: 5},
         fill: 'white', style: 'fill-opacity: .25;'};
     definition['icon'] = {show: true, x_translation: 0, y_translation: 0};
+    definition['title_keys'] = [];
 
     return definition
 }
@@ -170,9 +184,21 @@ function drawArtifact(definition) {
         .attr("stroke", definition['rect']['stroke']['colour'])
         .attr("stroke-dasharray",
             definition['rect']['stroke']['dash'] + ", " + definition['rect']['stroke']['dash']);
-    rect.append("title")
+    let title = rect.append("title")
         .attr("id", id + '-title')
         .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
+    /*
+    for (let key of definition['title_keys']) {
+        title.append("tspan")
+            .attr("class", 'key')
+            .attr("dy", 25)
+            .text("\n" + key.replace('_', ' ') + " : ");
+        title.append("tspan")
+            .attr("class", 'text')
+            .attr("dy", 25)
+            .text(definition['artifact'][key]);
+    }
+    */
     if (definition['name']['show']) {
         let name_svg = svg.append('svg')
             .attr("x", "10")

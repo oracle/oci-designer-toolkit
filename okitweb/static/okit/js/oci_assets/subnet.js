@@ -10,9 +10,9 @@ asset_update_functions[subnet_artifact] = "updateSubnet";
 asset_delete_functions[subnet_artifact] = "deleteSubnet";
 asset_clear_functions.push("clearSubnetVariables");
 
-const subnet_stroke_colour = "orange";
+const subnet_stroke_colour = "#ff6600";
 const subnet_query_cb = "subnet-query-cb";
-const min_subnet_dimensions = {width:400, height:300};
+const min_subnet_dimensions = {width:400, height:150};
 let subnet_ids = [];
 let subnet_count = 0;
 let subnet_bui_sub_artifacts = {};
@@ -85,11 +85,6 @@ function addSubnet(vcn_id, compartment_id) {
 
 function initialiseSubnetChildData(id) {
     // Set subnet specific positioning variables
-    //subnet_bui_sub_artifacts[id] = {}
-    //subnet_bui_sub_artifacts[id]['load_balancer_count'] = 0;
-    //subnet_bui_sub_artifacts[id]['load_balancer_position'] = 0;
-    //subnet_bui_sub_artifacts[id]['instance_count'] = 0;
-    //subnet_bui_sub_artifacts[id]['instance_position'] = 0;
     // Add Sub Component positional data
     subnet_bui_sub_artifacts[id] = {
         "load_balancer_position": 0,
@@ -132,11 +127,57 @@ function deleteSubnet(id) {
 }
 
 /*
+** Tests
+ */
+function hasLoadBalancer(id='') {
+    if (okitJson.hasOwnProperty('load_balancers')) {
+        for (let load_balancer of okitJson['load_balancers']) {
+            if (load_balancer['subnet_ids'][0] == id) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/*
 ** SVG Creation
  */
+function getSubnetFirstChildEdgeOffset() {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+        dy: 0
+    };
+    return offset;
+}
+
+function getSubnetFirstChildLoadBalancerOffset() {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+    };
+    return offset;
+}
+
+function getSubnetFirstChildInstanceOffset(id='') {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+    };
+    if (hasLoadBalancer(id)) {
+        let first_child = getSubnetFirstChildLoadBalancerOffset();
+        let dimensions = getLoadBalancerDimensions();
+        offset.dy += Math.round(dimensions.height + positional_adjustments.padding.y);
+    }
+    return offset;
+}
+
 function getSubnetDimensions(id='') {
     console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
-    let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
+    let first_edge_child = getSubnetFirstChildEdgeOffset();
+    let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset();
+    let first_instance_child = getSubnetFirstChildInstanceOffset(id);
+    let dimensions = {width:first_instance_child.dx, height:first_instance_child.dy};
     let max_load_balancer_dimensions = {width:0, height: 0, count:0};
     let max_instance_dimensions = {width:0, height: 0, count:0};
     let max_edge_dimensions = {width:0, height: 0, count:0};
@@ -147,6 +188,8 @@ function getSubnetDimensions(id='') {
             break;
         }
     }
+    console.info('Base Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Edge Artifacts
     if (okitJson.hasOwnProperty('security_lists')) {
         for (let security_list of okitJson['security_lists']) {
@@ -168,43 +211,47 @@ function getSubnetDimensions(id='') {
             }
         }
     }
+    dimensions['width'] = Math.max(dimensions['width'],
+        Math.round(first_edge_child.dx + positional_adjustments.spacing.x + max_edge_dimensions['width'] + (max_edge_dimensions['count'] - 1) * positional_adjustments.spacing.x)
+    );
+    console.info('Post Edge Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Load Balancers
     if (okitJson.hasOwnProperty('load_balancers')) {
         for (let load_balancer of okitJson['load_balancers']) {
             if (load_balancer['subnet_ids'][0] == id) {
                 let load_balancer_dimensions = getLoadBalancerDimensions(load_balancer['id']);
-                max_load_balancer_dimensions['width'] += load_balancer_dimensions['width'];
-                max_load_balancer_dimensions['height'] = Math.max(max_load_balancer_dimensions['height'], load_balancer_dimensions['height']);
-                max_load_balancer_dimensions['count'] += 1;
+                max_load_balancer_dimensions['width'] += Math.round(load_balancer_dimensions['width'] + positional_adjustments.spacing.x);
+                dimensions['height'] = Math.max(dimensions['height'], (first_load_balancer_child.dy + positional_adjustments.spacing.y + load_balancer_dimensions['height'] + positional_adjustments.padding.y));
             }
         }
     }
+    dimensions['width'] = Math.max(dimensions['width'],
+        Math.round(first_load_balancer_child.dx + positional_adjustments.spacing.x + max_load_balancer_dimensions['width'] + positional_adjustments.padding.x)
+    );
+    console.info('Load Balancer Offsets         : '+ JSON.stringify(first_load_balancer_child));
+    console.info('Post Load Balancer Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Instances
     if (okitJson.hasOwnProperty('instances')) {
         for (let instance of okitJson['instances']) {
             if (instance['subnet_id'] == id) {
                 let instance_dimensions = getInstanceDimensions(instance['id']);
-                max_instance_dimensions['width'] += instance_dimensions['width'];
-                max_instance_dimensions['height'] = Math.max(max_instance_dimensions['height'], instance_dimensions['height']);
-                max_instance_dimensions['count'] += 1;
+                max_instance_dimensions['width'] += Math.round(instance_dimensions['width'] + positional_adjustments.spacing.x);
+                dimensions['height'] = Math.max(dimensions['height'], (first_instance_child.dy + positional_adjustments.padding.y + instance_dimensions['height']));
             }
         }
     }
-    // Calculate Width which will be the largest based on load balancers or instances
-    dimensions['width'] += Math.max((max_instance_dimensions['width'] + icon_spacing * max_instance_dimensions['count']),
-        (max_load_balancer_dimensions['width'] + icon_spacing * max_load_balancer_dimensions['count']),
-        (max_edge_dimensions['width'] + icon_spacing * max_edge_dimensions['count']));
-    // Add load balancer and instance height to size of subnet
-    dimensions['height'] += max_load_balancer_dimensions['height'];
-    dimensions['height'] += max_instance_dimensions['height'];
-    dimensions['height'] += icon_height;
+    dimensions['width'] = Math.max(dimensions['width'],
+        Math.round(first_instance_child.dx + positional_adjustments.spacing.x + max_instance_dimensions['width'] + positional_adjustments.padding.x)
+    );
+    console.info('Instance Offsets              : '+ JSON.stringify(first_instance_child));
+    console.info('Post Instance Dimensions      : '+ JSON.stringify(dimensions));
+
     // Check size against minimum
     dimensions['width'] = Math.max(dimensions['width'], min_subnet_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_subnet_dimensions['height']);
 
-    console.info('Load Balancer Dimensions : ' + JSON.stringify(max_load_balancer_dimensions));
-    console.info('Instance Dimensions      : ' + JSON.stringify(max_instance_dimensions));
-    console.info('Edges Dimensions         : ' + JSON.stringify(max_edge_dimensions));
     console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
     console.groupEnd();
@@ -214,14 +261,13 @@ function getSubnetDimensions(id='') {
 function newSubnetDefinition(artifact, position=0) {
     let dimensions = getSubnetDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, subnet_artifact);
-    definition['svg']['x'] = positional_adjustments.padding.x;
-    //definition['svg']['y'] = Math.round((icon_height * 3) + ((icon_height / 2) * position) + (icon_spacing * position));
-    definition['svg']['y'] = Math.round(positional_adjustments.padding.y  + (positional_adjustments.spacing.y * position));
-    // Check if the VCN has Security Lists or Route Tables Attached if so leave space
-    if (hasUnattachedSecurityList(artifact['vcn_id']) || hasUnattachedRouteTable(artifact['vcn_id'])) {
-        // Add Space for Security List / Route Table
-        definition['svg']['y'] += positional_adjustments.padding.y + positional_adjustments.spacing.y;
-    }
+    // Get Parents First Child Container Offset
+    let parent_first_child = getVirtualCloudNetworkFirstChildContainerOffset(artifact['vcn_id']);
+    definition['svg']['x'] = parent_first_child.dx;
+    definition['svg']['y'] = parent_first_child.dy;
+    // Add positioning offset
+    definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
+
     // Retrieve all Subnets in the parent svg and calculate vertical position
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + subnet_artifact + '"]').each(
         function() {
@@ -283,6 +329,15 @@ function drawSubnetSVG(artifact) {
         // Set common attributes on svg element and children
         svg.on("click", function () {
             loadSubnetProperties(id);
+            d3.event.stopPropagation();
+        });
+        let fill = d3.select('#' + id).attr('fill');
+        svg.on("mouseover", function () {
+            d3.selectAll('#' + id + '-vnic').attr('fill', svg_highlight_colour);
+            d3.event.stopPropagation();
+        });
+        svg.on("mouseout", function () {
+            d3.selectAll('#' + id + '-vnic').attr('fill', fill);
             d3.event.stopPropagation();
         });
 
@@ -467,11 +522,15 @@ function loadSubnetProperties(id) {
                     subnet['virtual_cloud_network'] = okitIdsJsonObj[subnet['vcn_id']];
                     let route_table_select = $('#route_table_id');
                     for (let route_table of okitJson['route_tables']) {
-                        route_table_select.append($('<option>').attr('value', route_table['id']).text(route_table['display_name']));
+                        if (subnet.vcn_id == route_table.vcn_id) {
+                            route_table_select.append($('<option>').attr('value', route_table['id']).text(route_table['display_name']));
+                        }
                     }
                     let security_lists_select = $('#security_list_ids');
                     for (let security_list of okitJson['security_lists']) {
-                        security_lists_select.append($('<option>').attr('value', security_list['id']).text(security_list['display_name']));
+                        if (subnet.vcn_id == security_list.vcn_id) {
+                            security_lists_select.append($('<option>').attr('value', security_list['id']).text(security_list['display_name']));
+                        }
                     }
                     // Load Properties
                     loadProperties(subnet);

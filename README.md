@@ -820,6 +820,47 @@ resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPo
 
 ```
 #### Ansible Jinja2 Template
+The ansible jinja2 template consists of all the ansible modules / actions the need to occur to create the artifact using
+an ansible playbook. In consists of a number of ansible module statement (note the indentation) that are modified using
+jinja2. Because ansible uses jinja2 as its templating language we will see escape sequences for {{ and }} and examples of
+this can be found in the various, existing, ansible templates.
+```jinja2
+
+# ------ Get List Volume Backup Policies
+    - name: Get information of all available volume backup policies
+      oci_volume_backup_policy_facts:
+      register: {{ resource_name }}VolumeBackupPolicyIds
+
+# ------ Create Block Storage Volume {{ output_name }}
+    - name: Create Block Storage Volume {{ output_name }}
+      oci_volume:
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        # Optional
+        display_name: "{{ display_name }}"
+        size_in_gbs: "{{ size_in_gbs }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
+
+# ------ Create Block Storage Backup Policy For {{ output_name }}
+    - name: Create Volume Backup Policy Assignment {{ output_name }}
+      oci_volume_backup_policy_assignment:
+        asset_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
+        policy_id: "{{ '{{' }} ({{ resource_name }}VolumeBackupPolicyIds.volume_backup_policies | selectattr('display_name', 'equalto', {{ backup_policy | replace('{{', '') | replace('}}', '') }}) | map(attribute='id') | list)[0] {{ '}}' }}"
+      register: {{ resource_name }}BackupPolicy
+
+``` 
 #### Designer Javascript
 To allow access to artifact standard names a number of constants need to be added to the okit_designer.js that specify the
 artifact name and prefix.
@@ -945,6 +986,65 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 Bug reports, enhancement request and pull requests are welcome on the OraHub at [okit.oci.web.designer/issues](https://orahub.oraclecorp.com/cloud-tools-ateam/okit.oci.web.designer/issues)
 
 ## Examples
+### Terraform Generation & Execution
+For a given diagram you are able to select the menu option Generate->Terraform and this will generate a oci_terraform.zip 
+that can be saved and extracted to produce 3 files that can be used by terraform. If we assume that the export have been
+generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
+
+#### Unzip Generated File
+```bash
+[root@start-flask terraform]# lh
+total 20K
+   0 drwxr-xr-x 4 root root  128 Oct 31 16:20 .
+4.0K drwxr-xr-x 1 root root 4.0K Oct 28 18:00 ..
+8.0K -rw-r--r-- 1 root root 6.1K Oct 31 16:20 .DS_Store
+8.0K -rw-r--r-- 1 root root 5.4K Oct 31 16:20 okit-terraform.zip
+[root@start-flask terraform]#
+[root@start-flask terraform]# unzip okit-terraform.zip -d okit-terraform
+Archive:  okit-terraform.zip
+  inflating: okit-terraform/variables.tf
+  inflating: okit-terraform/main.tf
+  inflating: okit-terraform/terraform.tfvars
+```
+
+#### Plan Terraform Build
+```bash
+[root@start-flask terraform]# cd okit-terraform
+[root@start-flask okit-terraform]# terraform init
+
+..........
+
+[root@start-flask okit-terraform]# terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan
+Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+..........
+```
+
+#### Apply Terraform Plan
+```bash
+[root@start-flask okit-terraform]#
+[root@start-flask okit-terraform]# terraform apply da.plan
+oci_core_vcn.Okit-Vcn001: Creating...
+oci_core_volume.Okit-Bsv001: Creating...
+..........
+```
+
+### Ansible Generation & Execution
+For a given diagram you are able to select the menu option Generate->Ansible and this will generate a oci_ansible.zip 
+that can be saved and extracted to produce 2 files that can be used by ansible. If we assume that the export have been
+generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
+
+#### Unzip Generated File
+```bash
+[root@start-flask ansible]# unzip okit-ansible.zip -d okit-ansible
+Archive:  okit-ansible.zip
+```
+
+#### Run Playbook
+```bash
+ansible-playbook main.yml --extra-vars "@/okit/config/connection.yml" 
+```
 
 ## Cleanup
 
