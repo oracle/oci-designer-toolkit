@@ -107,20 +107,29 @@ RUN yum update -y ; \
         svg.path \
         wtforms \
         xlrd \
+# Install oci ansible module
+ && cd /tmp ; \
+    git clone https://github.com/oracle/oci-ansible-modules.git ; \
+    cd oci-ansible-modules ; \
+    python3 ./install.py \
 # Set-up env
  && echo ''                                                                          >> /etc/bashrc ; \
     echo "alias lh='ls -lash' "                                                      >> /etc/bashrc ; \
     echo "alias lt='ls -last' "                                                      >> /etc/bashrc ; \
     echo "alias env='/usr/bin/env | sort' "                                          >> /etc/bashrc ; \
+    echo "alias ips='ip -f inet address' "                                           >> /etc/bashrc ; \
     echo "alias ssh='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10' " >> /etc/bashrc ; \
+    echo "alias scp='/usr/bin/scp -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10' " >> /etc/bashrc ; \
     echo "alias sshopc='ssh -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
+    echo "alias scpopc='scp -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
     echo ''                                                                          >> /etc/bashrc ; \
     echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
-    echo "alias ta='terraform apply da.plan' "                                                   >> /etc/bashrc ; \
-    echo "alias td='terraform destroy -var-file=/okit/config/connection.tfvars -auto-approve' "  >> /etc/bashrc ; \
-    echo "alias tp='terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan' "      >> /etc/bashrc ; \
-    echo "alias ti='terraform init' "                                                            >> /etc/bashrc ; \
-    echo "alias tg='terraform get --update' "                                                    >> /etc/bashrc ; \
+    echo "alias ta='terraform apply da.plan' "                                                     >> /etc/bashrc ; \
+    echo "alias td='terraform destroy -var-file=/okit/config/connection.tfvars -auto-approve' "    >> /etc/bashrc ; \
+    echo "alias tp='terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan' "        >> /etc/bashrc ; \
+    echo "alias ti='terraform init' "                                                              >> /etc/bashrc ; \
+    echo "alias tg='terraform get --update' "                                                      >> /etc/bashrc ; \
+    echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connection.yml\" ' "   >> /etc/bashrc ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \

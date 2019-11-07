@@ -9,7 +9,7 @@ asset_add_functions[virtual_cloud_network_artifact] = "addVirtualCloudNetwork";
 asset_delete_functions[virtual_cloud_network_artifact] = "deleteVirtualCloudNetwork";
 asset_clear_functions.push("clearVirtualCloudNetworkVariables");
 
-const virtual_cloud_network_stroke_colour = "purple";
+const virtual_cloud_network_stroke_colour = "#400080";
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 const min_virtual_cloud_network_dimensions = {width:400, height:300};
 let virtual_network_ids = [];
@@ -61,7 +61,19 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     //drawVirtualCloudNetworkSVG(virtual_cloud_network);
     drawSVGforJson();
     loadVirtualCloudNetworkProperties(id);
+    console.groupCollapsed('Check if default Security List & Route Table Should be created.');
+    if (okitSettings.is_default_route_table) {
+        console.info('Creating Default Route Table');
+        addRouteTable(id, compartment_id);
+    }
+    if (okitSettings.is_default_security_list) {
+        console.info('Creating Default Security List');
+        security_list_id = addSecurityList(id, compartment_id);
+        addDefaultSecurityListRules(security_list_id, virtual_cloud_network['cidr_block']);
+    }
     console.groupEnd();
+    console.groupEnd();
+    return id;
 }
 
 function initialiseVirtualCloudNetworkChildData(id) {
@@ -150,12 +162,50 @@ function hasUnattachedRouteTable(id='') {
 /*
 ** SVG Creation
  */
+function getVirtualCloudNetworkFirstChildOffset() {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+    };
+    return offset;
+}
+
+function getVirtualCloudNetworkFirstChildGatewayOffset() {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+        dy: 0
+    };
+    return offset;
+}
+
+function getVirtualCloudNetworkFirstChildContainerOffset(id='') {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+    };
+    if (hasUnattachedRouteTable(id) || hasUnattachedSecurityList(id)) {
+        let first_child = getVirtualCloudNetworkFirstChildOffset();
+        offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
+    }
+    return offset;
+}
+
 function getVirtualCloudNetworkDimensions(id='') {
     console.groupCollapsed('Getting Dimensions of ' + virtual_cloud_network_artifact + ' : ' + id);
-    let dimensions = {width:positional_adjustments.padding.x * 2, height:positional_adjustments.padding.y * 2};
+    // Add Standard Padding and Spacing
+    let first_container_child = getVirtualCloudNetworkFirstChildContainerOffset(id);
+    let first_gateway_child = getVirtualCloudNetworkFirstChildGatewayOffset();
+    let first_child = getVirtualCloudNetworkFirstChildOffset();
+    let dimensions = {width:first_container_child.dx, height:first_container_child.dy};
+    // Add right padding
+    dimensions['width'] += positional_adjustments.padding.x;
+    // Add Bottom padding
+    dimensions['height'] += positional_adjustments.padding.y;
+    // Initialise Child dimensions
     let max_gateway_dimensions = {width:0, height: 0, count:0};
-    let max_subnet_dimensions = {width:0, height: 0, count:0};
     let max_edge_dimensions = {width:0, height: 0, count:0};
+    console.info('Base Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Gateways
     if (okitJson.hasOwnProperty('internet_gateways')) {
         for (let internet_gateway of okitJson['internet_gateways']) {
@@ -177,6 +227,11 @@ function getVirtualCloudNetworkDimensions(id='') {
             }
         }
     }
+    dimensions['width'] = Math.max(dimensions['width'],
+        Math.round(first_gateway_child.dx + positional_adjustments.spacing.x + max_gateway_dimensions['width'] + (max_gateway_dimensions['count'] - 1) * positional_adjustments.spacing.x)
+    );
+    console.info('Post Gateway Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Edge Artifacts
     if (hasUnattachedSecurityList(id)) {
         for (let security_list of okitJson['security_lists']) {
@@ -198,31 +253,29 @@ function getVirtualCloudNetworkDimensions(id='') {
             }
         }
     }
+    dimensions['width'] = Math.max(dimensions['width'],
+        Math.round(first_child.dx + positional_adjustments.spacing.x + max_edge_dimensions['width'] + (max_edge_dimensions['count'] - 1) * positional_adjustments.spacing.x)
+    );
+    console.info('Post Edge Dimensions : '+ JSON.stringify(dimensions));
+
     // Process Subnet Widths
     if (okitJson.hasOwnProperty('subnets')) {
         for (let subnet of okitJson['subnets']) {
             if (subnet['vcn_id'] == id) {
                 let subnet_dimensions = getSubnetDimensions(subnet['id']);
-                max_subnet_dimensions['width'] = Math.max(max_subnet_dimensions['width'], subnet_dimensions['width']);
-                max_subnet_dimensions['height'] += subnet_dimensions['height'];
-                max_subnet_dimensions['count'] += 1;
+                // Test if current width is greater than the Subnet Width + appropriate padding
+                dimensions['width'] = Math.max(dimensions['width'], (first_container_child.dx + positional_adjustments.padding.x + subnet_dimensions['width']));
+                // Add Subnet Height to current height and spacing for between subnets
+                dimensions['height'] += Math.round(subnet_dimensions['height'] + positional_adjustments.spacing.y);
             }
         }
     }
-    // Calculate largest Width
-    //dimensions['width'] += Math.max((max_subnet_dimensions['width'] + icon_spacing * max_subnet_dimensions['count']),
-    dimensions['width'] += Math.max(max_subnet_dimensions['width'],
-        (max_gateway_dimensions['width'] + positional_adjustments.spacing.x * max_gateway_dimensions['count']),
-        (max_edge_dimensions['width']    + positional_adjustments.spacing.x * max_edge_dimensions['count']));
-    // Calculate largest  Height
-    dimensions['height'] += max_subnet_dimensions['height'] + positional_adjustments.spacing.y * max_gateway_dimensions['count'];
-    dimensions['height'] += icon_height;
+    console.info('Post Subnets Dimensions : '+ JSON.stringify(dimensions));
+
     // Check size against minimum
     dimensions['width']  = Math.max(dimensions['width'],  min_virtual_cloud_network_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_virtual_cloud_network_dimensions['height']);
 
-    console.info('Gateways Dimensions      : ' + JSON.stringify(max_gateway_dimensions));
-    console.info('Subnets Dimensions       : ' + JSON.stringify(max_subnet_dimensions));
     console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
     console.groupEnd();
@@ -232,8 +285,11 @@ function getVirtualCloudNetworkDimensions(id='') {
 function newVirtualCloudNetworkDefinition(artifact, position=0) {
     let dimensions = getVirtualCloudNetworkDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
-    definition['svg']['x'] = Math.round(icon_width * 3 / 2);
-    definition['svg']['y'] = Math.round((icon_height * 2) + (icon_height * position) + (icon_spacing * position));
+    let parent_first_child = getVirtualCloudNetworkFirstChildContainerOffset(artifact['compartment_id']);
+    definition['svg']['x'] = parent_first_child.dx;
+    definition['svg']['y'] = parent_first_child.dy;
+    // Add positioning offset
+    definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
     // Retrieve all Virtual Cloud Networks in the parent svg and calculate vertical position
     $('#' + artifact['parent_id'] + '-svg').children('svg[data-type="' + virtual_cloud_network_artifact + '"]').each(
         function() {
@@ -251,6 +307,7 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     definition['label']['show'] = true;
     definition['info']['show'] = true;
     definition['info']['text'] = artifact['cidr_block'];
+    //definition['title_keys'] = ['dns_label', 'cidr_block'];
     if (!okitJson['canvas']['virtual_cloud_networks'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['virtual_cloud_networks'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }

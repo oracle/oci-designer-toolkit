@@ -1,2 +1,70 @@
 
 # ------ Create Loadbalancer
+    - name: Create Load Balancer
+      oci_load_balancer:
+        state: 'present'
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        shape_name: "{{ shape | default('100Mbps') }}"
+        subnet_ids:
+{% for subnet_id in loadbalancer_subnet_ids %}
+            - "{{ subnet_id }}"
+{% endfor %}
+        # Optional
+        display_name: "{{ display_name }}"
+{% if defined_tags is defined %}
+            defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+            freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+{% if private is defined %}
+        is_private: "{{ private }}"
+{% endif %}
+        backend_sets:
+            {{ resource_name }}BackendSet:
+                backends:
+{% for backend_instance in backend_instances %}
+                   - ip_address: "{{ '{{' }} {{ backend_instance }}_private_ip {{ '}}' }}"
+    {% if port is defined %}
+                     port: "{{ port }}"
+    {% else %}
+                     port: 80
+    {% endif %}
+{% endfor %}
+                health_checker:
+{% if health_check_interval is defined %}
+                    interval_in_millis: "{{ health_check_interval }}"
+{% else %}
+                    interval_in_millis: 1000
+{% endif %}
+{% if port is defined %}
+                    port: "{{ port }}"
+{% else %}
+                    port: 80
+{% endif %}
+                    protocol: "{{ protocol | default('HTTP') }}"
+                    #response_body_regex: "{{ health_check_response_regex }}"
+{% if health_check_retries is defined %}
+                    retries: "{{ health_check_retries }}"
+{% else %}
+                    retries: 1000
+{% endif %}
+                    #timeout_in_millis: "{{ health_check_timeout | default(3000) }}"
+                    #return_code: "{{ health_check_return_code | default(200) }}"
+                    url_path: "{{ health_check_url | default('/') }}"
+                policy: "{{ backend_policy | default('ROUND_ROBIN') }}"
+        listeners:
+            {{ resource_name }}Listener:
+                default_backend_set_name: "{{ resource_name }}BackendSet"
+{% if port is defined %}
+                port: "{{ port }}"
+{% else %}
+                port: 80
+{% endif %}
+                protocol: "{{ protocol | default('HTTP') }}"
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.load_balancer.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.load_balancer.id {{ '}}' }}"

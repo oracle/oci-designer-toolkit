@@ -100,6 +100,22 @@ function deleteCompartment(id) {
 /*
 ** SVG Creation
  */
+function getCompartmentFirstChildOffset() {
+    let offset = {
+        dx: Math.round(positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y * 2)
+    };
+    return offset;
+}
+
+function getCompartmentFirstChildContainerOffset(id='') {
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.y * 2),
+        dy: Math.round(positional_adjustments.padding.y * 2)
+    };
+    return offset;
+}
+
 function getCompartmentDimensions(id='') {
     console.groupCollapsed('Getting Dimensions of ' + compartment_artifact + ' : ' + id);
     const min_compartment_dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()};
@@ -118,10 +134,14 @@ function getCompartmentDimensions(id='') {
         }
     }
     // Calculate Largest Width
-    dimensions['width'] = Math.max(max_virtual_cloud_network_dimensions['width'], max_sub_container_dimensions['width']);
+    // User 3 * positional_adjustments.spacing.y because positioning of vcn uses x-left of 2 * positional_adjustments.spacing.y and we want a space on the right.
+    dimensions['width'] = Math.max((max_virtual_cloud_network_dimensions['width'] + positional_adjustments.padding.x + (3 * positional_adjustments.spacing.x)),
+        max_sub_container_dimensions['width']);
     // Calculate Height
     dimensions['height'] += max_sub_container_dimensions['height'];
+    dimensions['height'] += max_sub_container_dimensions['count'] + positional_adjustments.spacing.y;
     dimensions['height'] += max_virtual_cloud_network_dimensions['height'];
+    dimensions['height'] += max_virtual_cloud_network_dimensions['count'] + positional_adjustments.spacing.y;
     // Check size against minimum
     dimensions['width'] = Math.max(dimensions['width'], min_compartment_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_compartment_dimensions['height']);
