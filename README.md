@@ -220,7 +220,7 @@ The hamburger menu in the top left will display a slide out menu with all availa
 - <img src="documentation/images/Instance.png?raw=true" width="30" height="30"/>              Instance
 - <img src="documentation/images/Load_Balancer.png?raw=true" width="30" height="30"/>         Load Balancer
 - <img src="documentation/images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
-- <img src="documentation/images/Object_Storage_Block.png?raw=true" width="30" height="30"/>  Object Storage Block
+- <img src="documentation/images/Object_Storage_Bucket.png?raw=true" width="30" height="30"/> Object Storage Bucket
 - <img src="documentation/images/Autonomous_Database.png?raw=true" width="30" height="30"/>   Autonomous Database
 
 ##### Menu 
