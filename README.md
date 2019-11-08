@@ -92,6 +92,10 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Subnet
 - Instance
 - Load Balancer
+- Vnics
+- Autonomous Database
+- Block Storage Volumes
+- Object Storage Buckets
 
 ### Prerequisites
 Before executing any of the docker container scripts we OKIT requires that a OCI connection configuration file be created.
@@ -216,7 +220,8 @@ The hamburger menu in the top left will display a slide out menu with all availa
 - <img src="documentation/images/Instance.png?raw=true" width="30" height="30"/>              Instance
 - <img src="documentation/images/Load_Balancer.png?raw=true" width="30" height="30"/>         Load Balancer
 - <img src="documentation/images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
-- <img src="okitweb/static/okit/palette/Block_Storage_Volume.svg?sanitize=true" width="30" height="30"/> Block Storage Volume
+- <img src="documentation/images/Object_Storage_Block.png?raw=true" width="30" height="30"/>  Object Storage Block
+- <img src="documentation/images/Autonomous_Database.png?raw=true" width="30" height="30"/>   Autonomous Database
 
 ##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
