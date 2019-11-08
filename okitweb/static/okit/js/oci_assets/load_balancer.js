@@ -169,15 +169,20 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
     let parent_id = load_balancer['subnet_ids'][0];
     let id = load_balancer['id'];
     let parent_svg = d3.select('#' + parent_id + "-svg");
+    let parent_rect = d3.select('#' + parent_id);
     // Only Draw if parent exists
     if (parent_svg.node()) {
-        console.info('Parent SVG : ' + parent_svg.node());
+        console.info('Parent SVG     : ' + parent_svg.attr('id'));
         // Define SVG position manipulation variables
         let svgPoint = parent_svg.node().createSVGPoint();
-        let screenCTM = parent_svg.node().getScreenCTM();
+        let screenCTM = parent_rect.node().getScreenCTM();
         svgPoint.x = d3.select('#' + id).attr('data-connector-start-x');
         svgPoint.y = d3.select('#' + id).attr('data-connector-start-y');
         let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+        console.info('Start svgPoint.x : ' + svgPoint.x);
+        console.info('Start svgPoint.y : ' + svgPoint.y);
+        console.info('Start matrixTransform.x : ' + connector_start.x);
+        console.info('Start matrixTransform.y : ' + connector_start.y);
 
         let connector_end = null;
 
@@ -188,6 +193,10 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
                     svgPoint.x = instance_svg.attr('data-connector-start-x');
                     svgPoint.y = instance_svg.attr('data-connector-start-y');
                     connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                    console.info('End svgPoint.x   : ' + svgPoint.x);
+                    console.info('End svgPoint.y   : ' + svgPoint.y);
+                    console.info('End matrixTransform.x : ' + connector_end.x);
+                    console.info('End matrixTransform.y : ' + connector_end.y);
                     let polyline = drawConnector(parent_svg, generateConnectorId(load_balancer['instance_ids'][i], id),
                         {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y});
                     /*

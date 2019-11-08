@@ -425,6 +425,8 @@ function generateArc(radius, clockwise, xmod, ymod) {
 
 function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
     console.groupCollapsed('Generating Connector');
+    console.info('Start Coordinates : ' + JSON.stringify(start));
+    console.info('End Coordinates   : ' + JSON.stringify(end));
     if (path_connector) {
         let radius = corner_radius;
         let dy = Math.round((end['y'] - start['y']) / 2);
