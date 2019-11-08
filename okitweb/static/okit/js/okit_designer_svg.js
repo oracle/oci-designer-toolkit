@@ -159,6 +159,10 @@ function drawArtifact(definition) {
         rect_x = Math.abs(definition['icon']['x_translation']);
         rect_width -= rect_x;
     }
+    // Check for Artifact Display Name and if it does not exist set it to Artifact Name
+    if (!definition['artifact'].hasOwnProperty('display_name')) {
+        definition['artifact']['display_name'] = definition['artifact']['name'];
+    }
     // Get Parent SVG
     let parent_svg = d3.select('#' + parent_id + "-svg");
     // Wrapper SVG Element to define ViewBox etc
@@ -311,6 +315,15 @@ function drawSVGforJson(artifact={}) {
             okitIdsJsonObj[okitJson['block_storage_volumes'][i]['id']] = okitJson['block_storage_volumes'][i]['display_name'];
             block_storage_volume_count += 1;
             drawBlockStorageVolumeSVG(okitJson['block_storage_volumes'][i]);
+        }
+    }
+    if (okitJson.hasOwnProperty('object_storage_buckets')) {
+        object_storage_bucket_ids = [];
+        for (let i=0; i < okitJson['object_storage_buckets'].length; i++) {
+            object_storage_bucket_ids.push(okitJson['object_storage_buckets'][i]['id']);
+            okitIdsJsonObj[okitJson['object_storage_buckets'][i]['id']] = okitJson['object_storage_buckets'][i]['display_name'];
+            object_storage_bucket_count += 1;
+            drawObjectStorageBucketSVG(okitJson['object_storage_buckets'][i]);
         }
     }
     if (okitJson.hasOwnProperty('autonomous_databases')) {

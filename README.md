@@ -70,6 +70,17 @@ anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
 
 ## Usage
+### Supported Browsers
+At present not all browsers are fully supported the following is a list of supported browsers and status.
+- Supported
+   - Chrome
+   - Brave
+   - Chromium Based Browsers
+- Partially Supported
+   - Firefox (Minor connector drawing issues.)
+- Unsupported
+   - Safari
+   - IE
 ### Currently Implemented Artifacts
 In the present release the following OCI artifacts have been implemented. The information captured in the properties may 
 only be the minimum to create the artifacts but will be extended in the future.

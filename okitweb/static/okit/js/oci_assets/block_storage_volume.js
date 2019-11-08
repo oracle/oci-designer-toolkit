@@ -1,4 +1,4 @@
-console.info('Loaded Block Storage Javascript');
+console.info('Loaded Block Storage Volume Javascript');
 
 /*
 ** Set Valid drop Targets
@@ -136,13 +136,13 @@ function drawBlockStorageVolumeSVG(artifact) {
     }
 
     if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('block_storage_position')) {
-            compartment_bui_sub_artifacts[parent_id]['block_storage_position'] = 0;
+        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('artifact_position')) {
+            compartment_bui_sub_artifacts[parent_id]['artifact_position'] = 0;
         }
         // Calculate Position
-        let position = compartment_bui_sub_artifacts[parent_id]['block_storage_position'];
+        let position = compartment_bui_sub_artifacts[parent_id]['artifact_position'];
         // Increment Icon Position
-        compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
+        compartment_bui_sub_artifacts[parent_id]['artifact_position'] += 1;
 
         let svg = drawArtifact(newBlockStorageVolumeDefinition(artifact, position));
 

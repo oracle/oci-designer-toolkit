@@ -150,3 +150,17 @@ class OCIAutonomousDatabaseConnection(OCIConnection):
                 self.config = oci.config.from_file(self.configfile)
         self.client = oci.database.DatabaseClient(self.config)
         return
+
+
+class OCIObjectStorageBucketConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, **kwargs):
+        super(OCIObjectStorageBucketConnection, self).__init__(config=config, configfile=configfile)
+
+    def connect(self):
+        if self.config is None:
+            if self.configfile is None:
+                self.config = oci.config.from_file()
+            else:
+                self.config = oci.config.from_file(self.configfile)
+        self.client = oci.object_storage.ObjectStorageClient(self.config)
+        return

@@ -52,9 +52,10 @@ function initialiseJson() {
         internet_gateways: [],
         load_balancers: [],
         nat_gateways: [],
-        service_gateways: [],
+        object_storage_buckets: [],
         route_tables: [],
         security_lists: [],
+        service_gateways: [],
         subnets: [],
         virtual_cloud_networks: [],
         canvas : initialiseCanvasJson()
@@ -384,7 +385,7 @@ $(document).ready(function(){
 
     document.getElementById('generate-ansible-menu-item').addEventListener('click', handleGenerateAnsible, false);
 
-    document.getElementById('generate-resource-manager-menu-item').addEventListener('click', handleGenerateTerraform11, false);
+    //document.getElementById('generate-resource-manager-menu-item').addEventListener('click', handleGenerateTerraform11, false);
 
     //document.getElementById('Example-tab-button').addEventListener('click', function() { openCompartment('Example'); }, false);
 

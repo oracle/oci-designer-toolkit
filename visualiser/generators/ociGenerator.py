@@ -143,6 +143,9 @@ class OCIGenerator(object):
         # -- Block Storage Volumes
         for block_storage_volume in self.visualiser_json.get('block_storage_volumes', []):
             self.renderBlockStorageVolumes(block_storage_volume)
+        # -- Object Storage Buckets
+        for object_storage_bucket in self.visualiser_json.get('object_storage_buckets', []):
+            self.renderObjectStorageBuckets(object_storage_bucket)
         # -- Autonomous Databases
         for autonomous_database in self.visualiser_json.get('autonomous_databases', []):
             self.renderAutonomousDatabases(autonomous_database)
@@ -237,6 +240,41 @@ class OCIGenerator(object):
         self.run_variables[variableName] = int(block_storage_volume["size_in_gbs"])
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("block_storage_volume.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderObjectStorageBuckets(self, object_storage_bucket):
+        # Read Data
+        standardisedName = self.standardiseResourceName(object_storage_bucket['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = object_storage_bucket['display_name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Object Storage Bucket Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["display_name"]
+        # ---- Namespace
+        variableName = '{0:s}_namespace'.format(standardisedName)
+        self.jinja2_variables["namespace"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["namespace"]
+        # ---- Name
+        variableName = '{0:s}_name'.format(standardisedName)
+        self.jinja2_variables["name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["name"]
+        # ---- Storage Tier
+        variableName = '{0:s}_storage_tier'.format(standardisedName)
+        self.jinja2_variables["storage_tier"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["storage_tier"]
+        # ---- Public Access Type
+        variableName = '{0:s}_public_access_type'.format(standardisedName)
+        self.jinja2_variables["public_access_type"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["public_access_type"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("object_storage_bucket.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

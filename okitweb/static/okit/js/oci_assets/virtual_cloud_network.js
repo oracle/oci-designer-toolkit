@@ -328,13 +328,13 @@ function drawVirtualCloudNetworkSVG(artifact) {
     }
 
     if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('virtual_cloud_network_position')) {
-            compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] = 0;
+        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('compartment_position')) {
+            compartment_bui_sub_artifacts[parent_id]['compartment_position'] = 0;
         }
         // Calculate Position
-        let position = compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'];
+        let position = compartment_bui_sub_artifacts[parent_id]['compartment_position'];
         // Increment Icon Position
-        compartment_bui_sub_artifacts[parent_id]['virtual_cloud_network_position'] += 1;
+        compartment_bui_sub_artifacts[parent_id]['compartment_position'] += 1;
 
         let svg = drawArtifact(newVirtualCloudNetworkDefinition(artifact, position));
 

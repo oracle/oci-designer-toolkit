@@ -54,6 +54,7 @@ from facades.ociInstance import OCIInstanceVnics
 from facades.ociResourceManager import OCIResourceManagers
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
+from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
 
 from common.ociLogging import getLogger
 
@@ -83,23 +84,23 @@ def designer():
     svg_files = []
     svg_icon_groups = {}
     for (dirpath, dirnames, filenames) in os.walk(os.path.join(bp.static_folder, 'palette')):
-        logger.info('dirpath : {0!s:s}'.format(dirpath))
-        logger.info('dirnames : {0!s:s}'.format(dirnames))
-        logger.info('filenames : {0!s:s}'.format(filenames))
+        logger.debug('dirpath : {0!s:s}'.format(dirpath))
+        logger.debug('dirnames : {0!s:s}'.format(dirnames))
+        logger.debug('filenames : {0!s:s}'.format(filenames))
         if os.path.basename(dirpath) != 'palette':
             svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
             svg_icon_groups[os.path.basename(dirpath)] = filenames;
         else:
             svg_files.extend(filenames)
-    logger.info('Files Walk : {0!s:s}'.format(svg_files))
-    logger.info('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
+    logger.debug('Files Walk : {0!s:s}'.format(svg_files))
+    logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
     palette_icons_svg = svg_files
 
     palette_icons = []
     for palette_svg in sorted(palette_icons_svg):
         palette_icon = {'svg': palette_svg, 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
         palette_icons.append(palette_icon)
-    logger.info('Palette Icons : {0!s:s}'.format(palette_icons))
+    logger.debug('Palette Icons : {0!s:s}'.format(palette_icons))
 
     palette_icon_groups = []
     for key in sorted(svg_icon_groups.keys()):
@@ -108,21 +109,21 @@ def designer():
             palette_icon = {'svg': os.path.join(key, palette_svg), 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
             palette_icon_group['icons'].append(palette_icon)
         palette_icon_groups.append(palette_icon_group)
-    logger.info('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
+    logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
     logJson(palette_icon_groups)
 
     template_files = os.listdir(os.path.join(bp.static_folder, 'templates'))
     okit_templates = []
     for template_file in sorted(template_files):
-        logger.info('Template : {0!s:s}'.format(template_file))
-        logger.info('Template full : {0!s:s}'.format(os.path.join(bp.static_folder, 'templates', template_file)))
+        logger.debug('Template : {0!s:s}'.format(template_file))
+        logger.debug('Template full : {0!s:s}'.format(os.path.join(bp.static_folder, 'templates', template_file)))
         okit_template = {'json': template_file, 'id': template_file.replace('.', '_')}
         template_json = readJsonFile(os.path.join(bp.static_folder, 'templates', template_file))
-        logger.info('Template Json : {0!s:s}'.format(template_json))
+        logger.debug('Template Json : {0!s:s}'.format(template_json))
         okit_template['title'] = template_json['title']
         okit_template['description'] = template_json.get('description', template_json['title'])
         okit_templates.append(okit_template)
-    logger.info('Templates : {0!s:s}'.format(okit_templates))
+    logger.debug('Templates : {0!s:s}'.format(okit_templates))
     if request.method == 'POST':
         request_json = {}
         response_json = {}
@@ -148,7 +149,7 @@ def propertysheets(sheet):
 @bp.route('/generate/<string:language>', methods=(['GET', 'POST']))
 def generate(language):
     logger.info('Language : {0:s} - {1:s}'.format(str(language), str(request.method)))
-    logger.info('JSON     : {0:s}'.format(str(request.json)))
+    logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
         try:
             destination_dir = tempfile.mkdtemp();
@@ -179,6 +180,8 @@ def generate(language):
 def ociCompartment():
     ociCompartments = OCICompartments()
     compartments = ociCompartments.listTenancy()
+    compartments = [{'display_name': c['display_name'], 'id': c['id']} for c in compartments]
+    compartments.sort(key=lambda x: x['display_name'])
     #logger.info("Compartments: {0!s:s}".format(compartments))
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
 
@@ -261,6 +264,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Autonomous Databases')
         oci_autonomous_databases = OCIAutonomousDatabases(compartment_id=query_json['compartment_id'])
         response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
+    elif artifact == 'ObjectStorageBucket':
+        logger.info('---- Processing Object Storage Buckets')
+        oci_object_storage_buckets = OCIObjectStorageBuckets(compartment_id=query_json['compartment_id'])
+        response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
     else:
         return '404'
 

@@ -313,6 +313,12 @@
     margin-right: 5px;
 }
 
+.property-label {
+    padding: 2px;
+    border: lightgrey solid 1px;
+    display: block;
+}
+
 .checkbox-property {
     display: block;
     width: 100%;
