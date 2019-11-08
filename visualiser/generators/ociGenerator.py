@@ -261,6 +261,18 @@ class OCIGenerator(object):
         variableName = '{0:s}_namespace'.format(standardisedName)
         self.jinja2_variables["namespace"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = object_storage_bucket["namespace"]
+        # ---- Name
+        variableName = '{0:s}_name'.format(standardisedName)
+        self.jinja2_variables["name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["name"]
+        # ---- Storage Tier
+        variableName = '{0:s}_storage_tier'.format(standardisedName)
+        self.jinja2_variables["storage_tier"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["storage_tier"]
+        # ---- Public Access Type
+        variableName = '{0:s}_public_access_type'.format(standardisedName)
+        self.jinja2_variables["public_access_type"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["public_access_type"]
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("object_storage_bucket.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))

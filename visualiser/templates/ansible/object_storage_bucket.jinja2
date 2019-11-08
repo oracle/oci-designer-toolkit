@@ -1,0 +1,31 @@
+
+# ------ Get Namespace for Compartment
+    - name: Get the object storage namespace using the optional compartment id parameter
+      oci_namespace_facts:
+        compartment_id: "{{ compartment_ocid }}"
+      register: {{ resource_name }}Namespace
+
+# ------ Create Object Storage Bucket {{ output_name }}
+    - name: Create Object Storage Bucket {{ output_name }}
+      oci_bucket:
+        state: 'present'
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        name: "{{ name }}"
+        namespace_name: "{{ '{{' }} {{ resource_name }}Namespace.namespaces[0] {{ '}}' }}"
+        # Optional
+        storage_tier: "{{ storage_tier }}"
+        public_access_type: "{{ public_access_type }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+        #metadata:
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.bucket.namespace {{ '}}' }}-{{ '{{' }} {{ resource_name }}.bucket.name {{ '}}' }}"
+        {{ resource_name }}_namespace: "{{ '{{' }} {{ resource_name }}.bucket.namespace {{ '}}' }}"
+        {{ resource_name }}_name: "{{ '{{' }} {{ resource_name }}.bucket.name {{ '}}' }}"

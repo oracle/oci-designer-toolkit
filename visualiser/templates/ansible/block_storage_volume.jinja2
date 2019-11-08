@@ -32,4 +32,3 @@
         asset_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
         policy_id: "{{ '{{' }} ({{ resource_name }}VolumeBackupPolicyIds.volume_backup_policies | selectattr('display_name', 'equalto', {{ backup_policy | replace('{{', '') | replace('}}', '') }}) | map(attribute='id') | list)[0] {{ '}}' }}"
       register: {{ resource_name }}BackupPolicy
-
