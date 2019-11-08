@@ -3,9 +3,19 @@
  */
 
 function handleNavMenuClick(evt) {
-    console.info('Navigation Menu Clicked');
+    //console.info('Navigation Menu Clicked');
     let element = document.getElementById("console-nav-menu-panel");
     element.classList.toggle("nav-menu-panel-show");
+}
+
+function handleNavMenuMouseEnter(evt) {
+    //console.info('Mouse Enter');
+    this.classList.add("nav-menu-panel-show");
+}
+
+function handleNavMenuMouseLeave(evt) {
+    //console.info('Mouse Leave');
+    this.classList.remove("nav-menu-panel-show");
 }
 
 function hideNavMenu() {
@@ -15,4 +25,7 @@ function hideNavMenu() {
 
 $(document).ready(function() {
     document.getElementById('nav-menu-button').addEventListener('click', handleNavMenuClick, false);
+    document.getElementById('console-nav-menu-panel').addEventListener('mouseleave', handleNavMenuMouseLeave, false);
+    document.getElementById('console-nav-menu-panel').addEventListener('mouseenter', handleNavMenuMouseEnter, false);
 });
+
