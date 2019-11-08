@@ -135,13 +135,13 @@ function drawAutonomousDatabaseSVG(artifact) {
     }
 
     if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('autonomous_database_position')) {
-            compartment_bui_sub_artifacts[parent_id]['autonomous_database_position'] = 0;
+        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('artifact_position')) {
+            compartment_bui_sub_artifacts[parent_id]['artifact_position'] = 0;
         }
         // Calculate Position
-        let position = compartment_bui_sub_artifacts[parent_id]['autonomous_database_position'];
+        let position = compartment_bui_sub_artifacts[parent_id]['artifact_position'];
         // Increment Icon Position
-        compartment_bui_sub_artifacts[parent_id]['autonomous_database_position'] += 1;
+        compartment_bui_sub_artifacts[parent_id]['artifact_position'] += 1;
 
         let svg = drawArtifact(newAutonomousDatabaseDefinition(artifact, position));
 

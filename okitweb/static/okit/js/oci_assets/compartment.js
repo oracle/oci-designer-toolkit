@@ -63,10 +63,10 @@ function addCompartment(compartment_id='') {
 function initialiseCompartmentChildData(id) {
     // Add BUI artifact positional information
     compartment_bui_sub_artifacts[id] = {
-        "virtual_cloud_network_position": 0,
-        "virtual_cloud_network_count": 0,
-        "block_storage_position": 0,
-        "block_storage_count": 0
+        "compartment_position": 0,
+        "compartment_count": 0,
+        "artifact_position": 0,
+        "artifact_count": 0
     };
 }
 
