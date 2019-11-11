@@ -1,7 +1,7 @@
 
 # ------ Get List Service OCIDs
 data "oci_core_services" "{{ resource_name }}Services" {
-services                    = {{ services }}
+services                    = {{ service_name }}
 }
 
 # ------ Create Service Gateway
