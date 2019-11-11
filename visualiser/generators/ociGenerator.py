@@ -139,16 +139,16 @@ class OCIGenerator(object):
         # - Compartment Sub Components
         # -- Virtual Cloud Networks
         for virtual_cloud_network in self.visualiser_json.get('virtual_cloud_networks', []):
-            self.renderVirtualCloudNetworks(virtual_cloud_network)
+            self.renderVirtualCloudNetwork(virtual_cloud_network)
         # -- Block Storage Volumes
         for block_storage_volume in self.visualiser_json.get('block_storage_volumes', []):
-            self.renderBlockStorageVolumes(block_storage_volume)
+            self.renderBlockStorageVolume(block_storage_volume)
         # -- Object Storage Buckets
         for object_storage_bucket in self.visualiser_json.get('object_storage_buckets', []):
-            self.renderObjectStorageBuckets(object_storage_bucket)
+            self.renderObjectStorageBucket(object_storage_bucket)
         # -- Autonomous Databases
         for autonomous_database in self.visualiser_json.get('autonomous_databases', []):
-            self.renderAutonomousDatabases(autonomous_database)
+            self.renderAutonomousDatabase(autonomous_database)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
@@ -174,6 +174,9 @@ class OCIGenerator(object):
             self.renderSubnet(subnet)
 
         # - Subnet Sub components
+        # -- File Storage System
+        for file_storage_system in self.visualiser_json.get('file_storage_systems', []):
+            self.renderFileStorageSystem(file_storage_system)
         # -- Instances
         for instance in self.visualiser_json.get('instances', []):
             self.renderInstance(instance)
@@ -183,7 +186,7 @@ class OCIGenerator(object):
 
         return
 
-    def renderVirtualCloudNetworks(self, virtual_cloud_network):
+    def renderVirtualCloudNetwork(self, virtual_cloud_network):
         # Read Data
         standardisedName = self.standardiseResourceName(virtual_cloud_network['display_name'])
         # resourceName = 'VirtualCloudNetwork_{0:s}'.format(standardisedName)
@@ -213,7 +216,7 @@ class OCIGenerator(object):
         virtual_cloud_network_ocid_ref = self.formatJinja2IdReference(resourceName)
         return
 
-    def renderBlockStorageVolumes(self, block_storage_volume):
+    def renderBlockStorageVolume(self, block_storage_volume):
         # Read Data
         standardisedName = self.standardiseResourceName(block_storage_volume['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -244,7 +247,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderObjectStorageBuckets(self, object_storage_bucket):
+    def renderObjectStorageBucket(self, object_storage_bucket):
         # Read Data
         standardisedName = self.standardiseResourceName(object_storage_bucket['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -279,7 +282,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderAutonomousDatabases(self, autonomous_database):
+    def renderAutonomousDatabase(self, autonomous_database):
         # Read Data
         standardisedName = self.standardiseResourceName(autonomous_database['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -567,6 +570,47 @@ class OCIGenerator(object):
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("subnet.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderFileStorageSystem(self, file_storage_system):
+        # Read Data
+        standardisedName = self.standardiseResourceName(file_storage_system['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = file_storage_system['display_name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Availability Domain
+        variableName = '{0:s}_availability_domain'.format(standardisedName)
+        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system["availability_domain"]
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system["display_name"]
+        # ---- Network OCID
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['subnet_id']]))
+        # ---- Source (CIDR)
+        variableName = '{0:s}_source'.format(standardisedName)
+        self.jinja2_variables["source"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system["source"]
+        # ---- Hostname
+        variableName = '{0:s}_hostname'.format(standardisedName)
+        self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system["hostname_label"]
+        # ---- (Mount) Path
+        variableName = '{0:s}_path'.format(standardisedName)
+        self.jinja2_variables["path"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system["path"]
+        # ---- Access
+        variableName = '{0:s}_access'.format(standardisedName)
+        self.jinja2_variables["access"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system["access"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("file_storage_system.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

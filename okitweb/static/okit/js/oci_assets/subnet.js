@@ -14,7 +14,6 @@ const subnet_stroke_colour = "#ff6600";
 const subnet_query_cb = "subnet-query-cb";
 const min_subnet_dimensions = {width:400, height:150};
 let subnet_ids = [];
-let subnet_count = 0;
 let subnet_bui_sub_artifacts = {};
 let subnet_cidr = {};
 
@@ -24,9 +23,24 @@ let subnet_cidr = {};
 
 function clearSubnetVariables() {
     subnet_ids = [];
-    subnet_count = 0;
     subnet_bui_sub_artifacts = {};
     subnet_cidr = {};
+}
+
+/*
+** Get Artifact by id
+ */
+function getSubnet(id='') {
+    if (!okitJson.hasOwnProperty('subnets')) {
+        okitJson['subnets'] = [];
+    }
+
+    for (let subnet of okitJson['subnets']) {
+        if (subnet['id'] == id) {
+            return subnet;
+        }
+    }
+    return null;
 }
 
 /*
@@ -47,7 +61,7 @@ function addSubnet(vcn_id, compartment_id) {
     subnet_ids.push(id);
 
     // Increment Count
-    subnet_count += 1;
+    let subnet_count = okitJson['subnets'].length + 1;
     // Generate Cidr
     let vcn_cidr = '10.0.0.0/16';
     for (let virtual_cloud_network of okitJson['virtual_cloud_networks']) {

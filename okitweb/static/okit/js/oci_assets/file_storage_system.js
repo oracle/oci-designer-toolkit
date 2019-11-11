@@ -46,8 +46,12 @@ function addFileStorageSystem(subnet_id, compartment_id) {
     file_storage_system['compartment_id'] = compartment_id;
     file_storage_system['availability_domain'] = '1';
     file_storage_system['id'] = id;
+    file_storage_system['subnet_id'] = subnet_id;
+    file_storage_system['source'] = getSubnet(subnet_id)['cidr_block'];
     file_storage_system['display_name'] = generateDefaultName(file_storage_system_prefix, file_storage_system_count);
     file_storage_system['hostname_label'] = file_storage_system['display_name'].toLowerCase();
+    file_storage_system['path'] = '/mnt';
+    file_storage_system['access'] = 'READ_ONLY';
     okitJson['file_storage_systems'].push(file_storage_system);
     okitIdsJsonObj[id] = file_storage_system['display_name'];
     //console.info(JSON.stringify(okitJson, null, 2));
