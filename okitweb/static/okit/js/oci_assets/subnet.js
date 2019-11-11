@@ -140,6 +140,17 @@ function hasLoadBalancer(id='') {
     return false;
 }
 
+function hasFileStorageSystem(id='') {
+    if (okitJson.hasOwnProperty('file_storage_systems')) {
+        for (let file_storage_system of okitJson['file_storage_systems']) {
+            if (file_storage_system['subnet_id'] == id) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /*
 ** SVG Creation
  */
@@ -151,19 +162,38 @@ function getSubnetFirstChildEdgeOffset() {
     return offset;
 }
 
-function getSubnetFirstChildLoadBalancerOffset() {
+function getSubnetFirstChildOffset() {
     let offset = {
-        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dx: Math.round(positional_adjustments.padding.x),
         dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
     };
     return offset;
 }
 
+function getSubnetFirstChildLoadBalancerOffset(id='') {
+    let offset = getSubnetFirstChildOffset();
+    if (hasFileStorageSystem(id)) {
+        offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+    }
+    /*
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+    }; */
+    return offset;
+}
+
 function getSubnetFirstChildInstanceOffset(id='') {
+    let offset = getSubnetFirstChildOffset();
+    if (hasFileStorageSystem(id)) {
+        offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+    }
+    /*
     let offset = {
         dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
         dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
     };
+    */
     if (hasLoadBalancer(id)) {
         let first_child = getSubnetFirstChildLoadBalancerOffset();
         let dimensions = getLoadBalancerDimensions();
@@ -290,10 +320,12 @@ function newSubnetDefinition(artifact, position=0) {
     }
     definition['info']['show'] = true;
     definition['info']['text'] = artifact['cidr_block'];
+    /*
     if (!okitJson['canvas']['subnets'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['subnets'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }
     okitJson['canvas']['subnets'][artifact['id']]['svg'] = definition['svg'];
+    */
     console.info(JSON.stringify(definition));
     return definition;
 }

@@ -395,6 +395,16 @@ function drawSVGforJson(artifact={}) {
     }
 
     // Draw Subnet Subcomponents
+    if (okitJson.hasOwnProperty('file_storage_systems')) {
+        file_storage_system_ids = [];
+        for (let i=0; i < okitJson['file_storage_systems'].length; i++) {
+            file_storage_system_ids.push(okitJson['file_storage_systems'][i]['id']);
+            okitIdsJsonObj[okitJson['file_storage_systems'][i]['id']] = okitJson['file_storage_systems'][i]['display_name'];
+            instance_count += 1;
+            drawFileStorageSystemSVG(okitJson['file_storage_systems'][i]);
+            //drawInstanceConnectorsSVG(okitJson['instances'][i]);
+        }
+    }
     if (okitJson.hasOwnProperty('instances')) {
         instance_ids = [];
         for (let i=0; i < okitJson['instances'].length; i++) {

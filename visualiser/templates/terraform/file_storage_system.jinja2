@@ -1,0 +1,60 @@
+
+# ------ Create File Storage System
+resource "oci_file_storage_file_system" "test_file_system" {
+    #Required
+    availability_domain = "${var.file_system_availability_domain}"
+    compartment_id = "${var.compartment_id}"
+
+    #Optional
+    defined_tags = {"Operations.CostCenter"= "42"}
+    display_name = "${var.file_system_display_name}"
+    freeform_tags = {"Department"= "Finance"}
+    kms_key_id = "${oci_kms_key.test_key.id}"
+}
+
+# ------ Create File Storage Mount Target
+resource "oci_file_storage_mount_target" "test_mount_target" {
+    #Required
+    availability_domain = "${var.mount_target_availability_domain}"
+    compartment_id = "${var.compartment_id}"
+    subnet_id = "${oci_core_subnet.test_subnet.id}"
+
+    #Optional
+    defined_tags = {"Operations.CostCenter"= "42"}
+    display_name = "${var.mount_target_display_name}"
+    freeform_tags = {"Department"= "Finance"}
+    hostname_label = "${var.mount_target_hostname_label}"
+    ip_address = "${var.mount_target_ip_address}"
+}
+
+# ------ Create File Storage Export Set
+resource "oci_file_storage_export_set" "test_export_set" {
+    #Required
+    mount_target_id = "${oci_file_storage_mount_target.test_mount_target.id}"
+
+    #Optional
+    display_name = "${var.export_set_name}"
+    max_fs_stat_bytes = 23843202333
+    max_fs_stat_files = 223442
+}
+
+# ------ Create File Storage Export
+resource "oci_file_storage_export" "test_export" {
+    #Required
+    export_set_id = "${oci_file_storage_export_set.test_export_set.id}"
+    file_system_id = "${oci_file_storage_file_system.test_file_system.id}"
+    path = "${var.export_path}"
+
+    #Optional
+    export_options {
+        #Required
+        source = "${var.export_export_options_source}"
+
+        #Optional
+        access = "${var.export_export_options_access}"
+        anonymous_gid = "${var.export_export_options_anonymous_gid}"
+        anonymous_uid = "${var.export_export_options_anonymous_uid}"
+        identity_squash = "${var.export_export_options_identity_squash}"
+        require_privileged_source_port = "${var.export_export_options_require_privileged_source_port}"
+    }
+}
