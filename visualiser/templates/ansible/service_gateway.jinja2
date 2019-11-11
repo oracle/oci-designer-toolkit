@@ -1,0 +1,28 @@
+
+    - name: Get all the service gateways in a compartment
+      oci_service_facts:
+        name: "{{ service_name }}"
+      register: {{ resource_name }}Service
+
+# ------ Create Service Gateway
+    - name: Create Service Gateway {{ output_name }}
+      oci_service_gateway:
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        vcn_id: "{{ vcn_id }}"
+        services:
+            - service_id: "{{ '{{' }} ({{ resource_name }}Service.services | map(attribute='id') | list)[0] {{ '}}' }}"
+        # Optional
+        display_name: "{{ display_name }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.internet_gateway.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.internet_gateway.id {{ '}}' }}"
