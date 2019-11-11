@@ -12,7 +12,6 @@ asset_clear_functions.push("clearNATGatewayVariables");
 const nat_gateway_stroke_colour = "purple";
 const nat_gateway_query_cb = "nat-gateway-query-cb";
 let nat_gateway_ids = [];
-let nat_gateway_count = 0;
 
 /*
 ** Reset variables
@@ -20,7 +19,6 @@ let nat_gateway_count = 0;
 
 function clearNATGatewayVariables() {
     nat_gateway_ids = [];
-    nat_gateway_count = 0;
 }
 
 /*
@@ -41,7 +39,7 @@ function addNATGateway(vcn_id, compartment_id) {
     nat_gateway_ids.push(id);
 
     // Increment Count
-    nat_gateway_count += 1;
+    let nat_gateway_count = okitJson['nat_gateways'].length + 1;
     let nat_gateway = {};
     nat_gateway['vcn_id'] = vcn_id;
     nat_gateway['virtual_cloud_network'] = '';

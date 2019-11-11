@@ -17,7 +17,6 @@ const load_balancer_height = Math.round(icon_height * 3 / 2);
 const load_balancer_svg_width = Math.round(load_balancer_width + icon_x * 2);
 const load_balancer_svg_height = Math.round(load_balancer_height + icon_y * 2);
 let load_balancer_ids = [];
-let load_balancer_count = 0;
 
 /*
 ** Reset variables
@@ -25,7 +24,6 @@ let load_balancer_count = 0;
 
 function clearLoadBalancerVariables() {
     load_balancer_ids = [];
-    load_balancer_count = 0;
 }
 
 /*
@@ -46,7 +44,7 @@ function addLoadBalancer(subnet_id, compartment_id) {
     load_balancer_ids.push(id);
 
     // Increment Count
-    load_balancer_count += 1;
+    let load_balancer_count = okitJson['load_balancers'].length + 1;
     let load_balancer = {};
     load_balancer['subnet_ids'] = [subnet_id];
     load_balancer['subnets'] = [''];

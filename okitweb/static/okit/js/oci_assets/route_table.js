@@ -12,7 +12,6 @@ asset_clear_functions.push("clearRouteTableVariables");
 const route_table_stroke_colour = "#F80000";
 const route_table_query_cb = "route-table-query-cb";
 let route_table_ids = [];
-let route_table_count = 0;
 let propertires_route_table = {}
 
 /*
@@ -21,7 +20,6 @@ let propertires_route_table = {}
 
 function clearRouteTableVariables() {
     route_table_ids = [];
-    route_table_count = 0;
 }
 
 /*
@@ -42,7 +40,7 @@ function addRouteTable(vcn_id, compartment_id) {
     route_table_ids.push(id);
 
     // Increment Count
-    route_table_count += 1;
+    let route_table_count = okitJson['route_tables'].length + 1;
     let route_table = {};
     route_table['vcn_id'] = vcn_id;
     route_table['virtual_cloud_network'] = '';

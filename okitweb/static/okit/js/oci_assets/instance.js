@@ -16,7 +16,6 @@ const instance_query_cb = "instance-query-cb";
 const min_instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
 const min_instance_height = Math.round(icon_height * 5 / 2);
 let instance_ids = [];
-let instance_count = 0;
 
 /*
 ** Reset variables
@@ -24,7 +23,6 @@ let instance_count = 0;
 
 function clearInstanceVariables() {
     instance_ids = [];
-    instance_count = 0;
 }
 
 /*
@@ -45,7 +43,7 @@ function addInstance(subnet_id, compartment_id) {
     instance_ids.push(id);
 
     // Increment Count
-    instance_count += 1;
+    let instance_count = okitJson['instances'].length + 1;
     let instance = {};
     instance['subnet_id'] = subnet_id;
     instance['subnet'] = '';

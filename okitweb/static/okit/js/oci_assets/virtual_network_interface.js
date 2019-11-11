@@ -12,7 +12,6 @@ asset_clear_functions.push("clearVirtualNetworkInterfaceVariables");
 const virtual_network_interface_stroke_colour = stroke_colours.svg_red;
 const virtual_network_interface_query_cb = "virtual-network-interface-query-cb";
 let virtual_network_interface_ids = [];
-let virtual_network_interface_count = 0;
 
 /*
 ** Reset variables
@@ -20,7 +19,6 @@ let virtual_network_interface_count = 0;
 
 function clearVirtualNetworkInterfaceVariables() {
     virtual_network_interface_ids = [];
-    virtual_network_interface_count = 0;
 }
 
 /*
@@ -41,7 +39,7 @@ function addVirtualNetworkInterface(parent_id, compartment_id) {
     virtual_network_interface_ids.push(id);
 
     // Increment Count
-    virtual_network_interface_count += 1;
+    let virtual_network_interface_count = okitJson['virtual_network_interfaces'].length + 1;
     let virtual_network_interface = {};
     virtual_network_interface['compartment_id'] = parent_id;
     virtual_network_interface['id'] = id;

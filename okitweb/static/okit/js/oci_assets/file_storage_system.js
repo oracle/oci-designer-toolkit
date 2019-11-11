@@ -12,7 +12,6 @@ asset_clear_functions.push("clearFileStorageSystemVariables");
 const file_storage_system_stroke_colour = "#F80000";
 const file_storage_system_query_cb = "file-storage-system-query-cb";
 let file_storage_system_ids = [];
-let file_storage_system_count = 0;
 let propertires_file_storage_system = {}
 
 /*
@@ -21,7 +20,6 @@ let propertires_file_storage_system = {}
 
 function clearFileStorageSystemVariables() {
     file_storage_system_ids = [];
-    file_storage_system_count = 0;
 }
 
 /*
@@ -42,7 +40,7 @@ function addFileStorageSystem(subnet_id, compartment_id) {
     file_storage_system_ids.push(id);
 
     // Increment Count
-    file_storage_system_count += 1;
+    let file_storage_system_count = okitJson['file_storage_systems'].length + 1;
     let file_storage_system = {};
     file_storage_system['subnet_id'] = subnet_id;
     file_storage_system['compartment_id'] = compartment_id;
@@ -96,8 +94,8 @@ function newFileStorageSystemDefinition(artifact, position=0) {
     let dimensions = getFileStorageSystemDimensions();
     let definition = newArtifactSVGDefinition(artifact, file_storage_system_artifact);
     let first_child = getSubnetFirstChildOffset();
-    definition['svg']['x'] = Math.round(first_child.dx + (icon_width * position) + (positional_adjustments.spacing.x * position));
-    definition['svg']['y'] = Math.round(first_child.dy);
+    definition['svg']['x'] = Math.round(first_child.dx);
+    definition['svg']['y'] = Math.round(first_child.dy + (icon_width * position) + (positional_adjustments.spacing.y * position));
     definition['svg']['width'] = dimensions['width'];
     definition['svg']['height'] = dimensions['height'];
     definition['rect']['stroke']['colour'] = file_storage_system_stroke_colour;

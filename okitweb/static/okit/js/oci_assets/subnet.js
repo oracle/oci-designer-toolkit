@@ -205,12 +205,14 @@ function getSubnetFirstChildInstanceOffset(id='') {
 function getSubnetDimensions(id='') {
     console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
     let first_edge_child = getSubnetFirstChildEdgeOffset();
-    let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset();
+    let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset(id);
     let first_instance_child = getSubnetFirstChildInstanceOffset(id);
+    let first_child = getSubnetFirstChildOffset();
     let dimensions = {width:first_instance_child.dx, height:first_instance_child.dy};
     let max_load_balancer_dimensions = {width:0, height: 0, count:0};
     let max_instance_dimensions = {width:0, height: 0, count:0};
     let max_edge_dimensions = {width:0, height: 0, count:0};
+    let max_file_storage_dimensions = {width:0, height: 0, count:0};
     // Get Subnet Details
     let subnet = {};
     for (subnet of okitJson['subnets']) {
@@ -277,6 +279,19 @@ function getSubnetDimensions(id='') {
     );
     console.info('Instance Offsets              : '+ JSON.stringify(first_instance_child));
     console.info('Post Instance Dimensions      : '+ JSON.stringify(dimensions));
+
+    // File Storage Systems
+    if (okitJson.hasOwnProperty('file_storage_systems')) {
+        for (let file_storage_system of okitJson['file_storage_systems']) {
+            if (file_storage_system['subnet_id'] == id) {
+                let file_storage_dimensions = getFileStorageSystemDimensions(file_storage_system['id']);
+                max_file_storage_dimensions['height'] += Math.round(file_storage_dimensions['height'] + positional_adjustments.spacing.y);
+            }
+        }
+    }
+    dimensions['height'] = Math.max(dimensions['height'],
+        Math.round(first_child.dy + positional_adjustments.spacing.y + max_file_storage_dimensions['height'] + positional_adjustments.padding.y));
+    console.info('Post File System Dimensions   : '+ JSON.stringify(dimensions));
 
     // Check size against minimum
     dimensions['width'] = Math.max(dimensions['width'], min_subnet_dimensions['width']);

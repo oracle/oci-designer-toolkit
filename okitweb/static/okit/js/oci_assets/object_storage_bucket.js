@@ -12,7 +12,6 @@ asset_clear_functions.push("clearObjectStorageBucketVariables");
 const object_storage_bucket_stroke_colour = "#F80000";
 const object_storage_bucket_query_cb = "object-storage-bucket-query-cb";
 let object_storage_bucket_ids = [];
-let object_storage_bucket_count = 0;
 
 /*
 ** Reset variables
@@ -20,7 +19,6 @@ let object_storage_bucket_count = 0;
 
 function clearObjectStorageBucketVariables() {
     object_storage_bucket_ids = [];
-    object_storage_bucket_count = 0;
 }
 
 /*
@@ -41,7 +39,7 @@ function addObjectStorageBucket(parent_id, compartment_id) {
     object_storage_bucket_ids.push(id);
 
     // Increment Count
-    object_storage_bucket_count += 1;
+    let object_storage_bucket_count = okitJson['object_storage_buckets'].length + 1;
     let object_storage_bucket = {};
     object_storage_bucket['compartment_id'] = parent_id;
     object_storage_bucket['id'] = id;
