@@ -1,7 +1,7 @@
 
-    - name: Get all the service gateways in a compartment
+    - name: Get all the services in a region
       oci_service_facts:
-        name: "{{ service_name }}"
+        #name: "{{ service_name }}"
       register: {{ resource_name }}Service
 
 # ------ Create Service Gateway
@@ -24,5 +24,5 @@
       register: {{ resource_name }}
 
     - set_fact:
-        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.internet_gateway.id {{ '}}' }}"
-        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.internet_gateway.id {{ '}}' }}"
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.service_gateway.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.service_gateway.id {{ '}}' }}"
