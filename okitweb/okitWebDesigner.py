@@ -55,6 +55,7 @@ from facades.ociResourceManager import OCIResourceManagers
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
+from facades.ociFileStorageSystems import OCIFileStorageSystems
 
 from common.ociLogging import getLogger
 
@@ -268,6 +269,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Object Storage Buckets')
         oci_object_storage_buckets = OCIObjectStorageBuckets(compartment_id=query_json['compartment_id'])
         response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
+    elif artifact == 'FileStorageSystem':
+        logger.info('---- Processing File Storage Systems')
+        oci_file_storage_systems = OCIFileStorageSystems(compartment_id=query_json['compartment_id'])
+        response_json = oci_file_storage_systems.list(filter=query_json.get('file_storage_system_filter', None))
     else:
         return '404'
 

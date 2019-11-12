@@ -137,6 +137,14 @@ function deleteSubnet(id) {
             }
         }
     }
+    if ('file_storage_systems' in okitJson) {
+        for (let i = okitJson['file_storage_systems'].length - 1; i >= 0; i--) {
+            let file_storage_system = okitJson['file_storage_systems'][i];
+            if (file_storage_system['subnet_id'] == id) {
+                deleteFileStorageSystem(file_storage_system['id']);
+            }
+        }
+    }
     console.groupEnd();
 }
 
@@ -664,10 +672,6 @@ function querySubnetAjax(compartment_id, vcn_id) {
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     console.info('querySubnetAjax : ' + response_json[i]['display_name']);
-                    /*
-                    queryInstanceAjax(compartment_id, response_json[i]['id']);
-                    queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
-                    */
                     initiateSubnetSubQueries(compartment_id, response_json[i]['id']);
                 }
             } else {
@@ -687,6 +691,7 @@ function querySubnetAjax(compartment_id, vcn_id) {
 function initiateSubnetSubQueries(compartment_id, id='') {
     queryInstanceAjax(compartment_id, id);
     queryLoadBalancerAjax(compartment_id, id);
+    queryFileStorageSystemAjax(compartment_id, id);
 }
 
 $(document).ready(function () {

@@ -189,11 +189,11 @@ function loadFileStorageSystemProperties(id) {
 ** Query OCI
  */
 
-function queryFileStorageSystemAjax(compartment_id, vcn_id) {
+function queryFileStorageSystemAjax(compartment_id, subnet_id) {
     console.info('------------- queryFileStorageSystemAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
+    request_json['subnet_id'] = subnet_id;
     if ('file_storage_system_filter' in okitQueryRequestJson) {
         request_json['file_storage_system_filter'] = okitQueryRequestJson['file_storage_system_filter'];
     }
@@ -215,8 +215,8 @@ function queryFileStorageSystemAjax(compartment_id, vcn_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.warn('Status : '+ status)
+            console.warn('Error : '+ error)
         }
     });
 }

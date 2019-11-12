@@ -403,14 +403,6 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     console.info('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
-                    virtual_cloud_network_count += 1;
-                    /*
-                    queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
-                    queryNATGatewayAjax(compartment_id, response_json[i]['id']);
-                    queryRouteTableAjax(compartment_id, response_json[i]['id']);
-                    querySecurityListAjax(compartment_id, response_json[i]['id']);
-                    querySubnetAjax(compartment_id, response_json[i]['id']);
-                    */
                     initiateVirtualCloudNetworkSubQueries(compartment_id, response_json[i]['id']);
                 }
             } else {
