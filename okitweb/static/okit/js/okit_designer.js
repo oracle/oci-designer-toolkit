@@ -48,6 +48,7 @@ function initialiseJson() {
         autonomous_databases: [],
         block_storage_volumes: [],
         dynamic_routing_gateways: [],
+        file_storage_systems: [],
         instances: [],
         internet_gateways: [],
         load_balancers: [],
@@ -57,8 +58,7 @@ function initialiseJson() {
         security_lists: [],
         service_gateways: [],
         subnets: [],
-        virtual_cloud_networks: [],
-        canvas : initialiseCanvasJson()
+        virtual_cloud_networks: []
     }
 }
 

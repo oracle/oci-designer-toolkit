@@ -12,7 +12,6 @@ asset_clear_functions.push("clearBlockStorageVolumeVariables");
 const block_storage_volume_stroke_colour = "#F80000";
 const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 let block_storage_volume_ids = [];
-let block_storage_volume_count = 0;
 
 /*
 ** Reset variables
@@ -20,7 +19,6 @@ let block_storage_volume_count = 0;
 
 function clearBlockStorageVolumeVariables() {
     block_storage_volume_ids = [];
-    block_storage_volume_count = 0;
 }
 
 /*
@@ -41,7 +39,7 @@ function addBlockStorageVolume(parent_id, compartment_id) {
     block_storage_volume_ids.push(id);
 
     // Increment Count
-    block_storage_volume_count += 1;
+    let block_storage_volume_count = okitJson['block_storage_volumes'].length + 1;
     let block_storage_volume = {};
     block_storage_volume['compartment_id'] = parent_id;
     block_storage_volume['availability_domain'] = '1';

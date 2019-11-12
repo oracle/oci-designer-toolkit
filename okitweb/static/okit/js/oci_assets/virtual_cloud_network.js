@@ -13,7 +13,6 @@ const virtual_cloud_network_stroke_colour = "#400080";
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 const min_virtual_cloud_network_dimensions = {width:400, height:300};
 let virtual_network_ids = [];
-let virtual_cloud_network_count = 0;
 let virtual_cloud_network_cidr = {};
 let virtual_cloud_network_bui_sub_artifacts = {};
 
@@ -23,7 +22,6 @@ let virtual_cloud_network_bui_sub_artifacts = {};
 
 function clearVirtualCloudNetworkVariables() {
     virtual_network_ids = [];
-    virtual_cloud_network_count = 0;
     virtual_cloud_network_cidr = {};
     virtual_cloud_network_bui_sub_artifacts = {};
 }
@@ -46,7 +44,7 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     virtual_network_ids.push(id);
 
     // Increment Count
-    virtual_cloud_network_count += 1;
+    let virtual_cloud_network_count = okitJson['virtual_cloud_networks'].length + 1;
     // Build Virtual Cloud Network Object
     let virtual_cloud_network = {};
     virtual_cloud_network['compartment_id'] = compartment_id;
@@ -285,7 +283,7 @@ function getVirtualCloudNetworkDimensions(id='') {
 function newVirtualCloudNetworkDefinition(artifact, position=0) {
     let dimensions = getVirtualCloudNetworkDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
-    let parent_first_child = getVirtualCloudNetworkFirstChildContainerOffset(artifact['compartment_id']);
+    let parent_first_child = getCompartmentFirstChildContainerOffset(artifact['compartment_id']);
     definition['svg']['x'] = parent_first_child.dx;
     definition['svg']['y'] = parent_first_child.dy;
     // Add positioning offset
@@ -308,10 +306,12 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     definition['info']['show'] = true;
     definition['info']['text'] = artifact['cidr_block'];
     //definition['title_keys'] = ['dns_label', 'cidr_block'];
+    /*
     if (!okitJson['canvas']['virtual_cloud_networks'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['virtual_cloud_networks'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }
     okitJson['canvas']['virtual_cloud_networks'][artifact['id']]['svg'] = definition['svg'];
+    */
     return definition;
 }
 
@@ -403,14 +403,6 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     console.info('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
-                    virtual_cloud_network_count += 1;
-                    /*
-                    queryInternetGatewayAjax(compartment_id, response_json[i]['id']);
-                    queryNATGatewayAjax(compartment_id, response_json[i]['id']);
-                    queryRouteTableAjax(compartment_id, response_json[i]['id']);
-                    querySecurityListAjax(compartment_id, response_json[i]['id']);
-                    querySubnetAjax(compartment_id, response_json[i]['id']);
-                    */
                     initiateVirtualCloudNetworkSubQueries(compartment_id, response_json[i]['id']);
                 }
             } else {

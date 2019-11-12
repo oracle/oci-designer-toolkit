@@ -14,7 +14,6 @@ const subnet_stroke_colour = "#ff6600";
 const subnet_query_cb = "subnet-query-cb";
 const min_subnet_dimensions = {width:400, height:150};
 let subnet_ids = [];
-let subnet_count = 0;
 let subnet_bui_sub_artifacts = {};
 let subnet_cidr = {};
 
@@ -24,9 +23,24 @@ let subnet_cidr = {};
 
 function clearSubnetVariables() {
     subnet_ids = [];
-    subnet_count = 0;
     subnet_bui_sub_artifacts = {};
     subnet_cidr = {};
+}
+
+/*
+** Get Artifact by id
+ */
+function getSubnet(id='') {
+    if (!okitJson.hasOwnProperty('subnets')) {
+        okitJson['subnets'] = [];
+    }
+
+    for (let subnet of okitJson['subnets']) {
+        if (subnet['id'] == id) {
+            return subnet;
+        }
+    }
+    return null;
 }
 
 /*
@@ -47,7 +61,7 @@ function addSubnet(vcn_id, compartment_id) {
     subnet_ids.push(id);
 
     // Increment Count
-    subnet_count += 1;
+    let subnet_count = okitJson['subnets'].length + 1;
     // Generate Cidr
     let vcn_cidr = '10.0.0.0/16';
     for (let virtual_cloud_network of okitJson['virtual_cloud_networks']) {
@@ -123,6 +137,14 @@ function deleteSubnet(id) {
             }
         }
     }
+    if ('file_storage_systems' in okitJson) {
+        for (let i = okitJson['file_storage_systems'].length - 1; i >= 0; i--) {
+            let file_storage_system = okitJson['file_storage_systems'][i];
+            if (file_storage_system['subnet_id'] == id) {
+                deleteFileStorageSystem(file_storage_system['id']);
+            }
+        }
+    }
     console.groupEnd();
 }
 
@@ -133,6 +155,17 @@ function hasLoadBalancer(id='') {
     if (okitJson.hasOwnProperty('load_balancers')) {
         for (let load_balancer of okitJson['load_balancers']) {
             if (load_balancer['subnet_ids'][0] == id) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function hasFileStorageSystem(id='') {
+    if (okitJson.hasOwnProperty('file_storage_systems')) {
+        for (let file_storage_system of okitJson['file_storage_systems']) {
+            if (file_storage_system['subnet_id'] == id) {
                 return true;
             }
         }
@@ -151,19 +184,38 @@ function getSubnetFirstChildEdgeOffset() {
     return offset;
 }
 
-function getSubnetFirstChildLoadBalancerOffset() {
+function getSubnetFirstChildOffset() {
     let offset = {
-        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dx: Math.round(positional_adjustments.padding.x),
         dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
     };
     return offset;
 }
 
+function getSubnetFirstChildLoadBalancerOffset(id='') {
+    let offset = getSubnetFirstChildOffset();
+    if (hasFileStorageSystem(id)) {
+        offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+    }
+    /*
+    let offset = {
+        dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+        dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+    }; */
+    return offset;
+}
+
 function getSubnetFirstChildInstanceOffset(id='') {
+    let offset = getSubnetFirstChildOffset();
+    if (hasFileStorageSystem(id)) {
+        offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+    }
+    /*
     let offset = {
         dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
         dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
     };
+    */
     if (hasLoadBalancer(id)) {
         let first_child = getSubnetFirstChildLoadBalancerOffset();
         let dimensions = getLoadBalancerDimensions();
@@ -175,12 +227,14 @@ function getSubnetFirstChildInstanceOffset(id='') {
 function getSubnetDimensions(id='') {
     console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
     let first_edge_child = getSubnetFirstChildEdgeOffset();
-    let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset();
+    let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset(id);
     let first_instance_child = getSubnetFirstChildInstanceOffset(id);
+    let first_child = getSubnetFirstChildOffset();
     let dimensions = {width:first_instance_child.dx, height:first_instance_child.dy};
     let max_load_balancer_dimensions = {width:0, height: 0, count:0};
     let max_instance_dimensions = {width:0, height: 0, count:0};
     let max_edge_dimensions = {width:0, height: 0, count:0};
+    let max_file_storage_dimensions = {width:0, height: 0, count:0};
     // Get Subnet Details
     let subnet = {};
     for (subnet of okitJson['subnets']) {
@@ -248,6 +302,19 @@ function getSubnetDimensions(id='') {
     console.info('Instance Offsets              : '+ JSON.stringify(first_instance_child));
     console.info('Post Instance Dimensions      : '+ JSON.stringify(dimensions));
 
+    // File Storage Systems
+    if (okitJson.hasOwnProperty('file_storage_systems')) {
+        for (let file_storage_system of okitJson['file_storage_systems']) {
+            if (file_storage_system['subnet_id'] == id) {
+                let file_storage_dimensions = getFileStorageSystemDimensions(file_storage_system['id']);
+                max_file_storage_dimensions['height'] += Math.round(file_storage_dimensions['height'] + positional_adjustments.spacing.y);
+            }
+        }
+    }
+    dimensions['height'] = Math.max(dimensions['height'],
+        Math.round(first_child.dy + positional_adjustments.spacing.y + max_file_storage_dimensions['height'] + positional_adjustments.padding.y));
+    console.info('Post File System Dimensions   : '+ JSON.stringify(dimensions));
+
     // Check size against minimum
     dimensions['width'] = Math.max(dimensions['width'], min_subnet_dimensions['width']);
     dimensions['height'] = Math.max(dimensions['height'], min_subnet_dimensions['height']);
@@ -290,10 +357,12 @@ function newSubnetDefinition(artifact, position=0) {
     }
     definition['info']['show'] = true;
     definition['info']['text'] = artifact['cidr_block'];
+    /*
     if (!okitJson['canvas']['subnets'].hasOwnProperty(artifact['id'])) {
         okitJson['canvas']['subnets'][artifact['id']] = {svg:{x:0, y:0, width:0, height:0}};
     }
     okitJson['canvas']['subnets'][artifact['id']]['svg'] = definition['svg'];
+    */
     console.info(JSON.stringify(definition));
     return definition;
 }
@@ -603,10 +672,6 @@ function querySubnetAjax(compartment_id, vcn_id) {
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     console.info('querySubnetAjax : ' + response_json[i]['display_name']);
-                    /*
-                    queryInstanceAjax(compartment_id, response_json[i]['id']);
-                    queryLoadBalancerAjax(compartment_id, response_json[i]['id']);
-                    */
                     initiateSubnetSubQueries(compartment_id, response_json[i]['id']);
                 }
             } else {
@@ -626,6 +691,7 @@ function querySubnetAjax(compartment_id, vcn_id) {
 function initiateSubnetSubQueries(compartment_id, id='') {
     queryInstanceAjax(compartment_id, id);
     queryLoadBalancerAjax(compartment_id, id);
+    queryFileStorageSystemAjax(compartment_id, id);
 }
 
 $(document).ready(function () {

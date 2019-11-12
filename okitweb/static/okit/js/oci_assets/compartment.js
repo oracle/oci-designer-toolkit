@@ -13,7 +13,6 @@ const compartment_stroke_colour = "#F80000";
 const compartment_query_cb = "compartment-query-cb";
 //const min_compartment_dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()};
 let compartment_ids = [];
-let compartment_count = 0;
 let compartment_bui_sub_artifacts = {};
 
 /*
@@ -22,7 +21,6 @@ let compartment_bui_sub_artifacts = {};
 
 function clearCompartmentVariables() {
     compartment_ids = [];
-    compartment_count = 0;
     compartment_bui_sub_artifacts = {};
 }
 
@@ -44,7 +42,7 @@ function addCompartment(compartment_id='') {
     compartment_ids.push(id);
 
     // Increment Count
-    compartment_count += 1;
+    let compartment_count = okitJson['compartments'].length + 1;
     let compartment = {};
     compartment['id'] = id;
     compartment['name'] = generateDefaultName(compartment_prefix, compartment_count);

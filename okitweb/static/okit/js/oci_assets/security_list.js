@@ -12,7 +12,6 @@ asset_clear_functions.push("clearSecurityListVariables");
 const security_list_stroke_colour = "#F80000";
 const security_list_query_cb = "security-list-query-cb";
 let security_list_ids = [];
-let security_list_count = 0;
 
 /*
 ** Reset variables
@@ -20,7 +19,6 @@ let security_list_count = 0;
 
 function clearSecurityListVariables() {
     security_list_ids = [];
-    security_list_count = 0;
 }
 
 /*
@@ -41,7 +39,7 @@ function addSecurityList(vcn_id, compartment_id) {
     security_list_ids.push(id);
 
     // Increment Count
-    security_list_count += 1;
+    let security_list_count = okitJson['security_lists'].length + 1;
     let security_list = {};
     security_list['vcn_id'] = vcn_id;
     security_list['virtual_cloud_network'] = '';

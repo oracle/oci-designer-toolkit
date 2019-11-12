@@ -12,7 +12,6 @@ asset_clear_functions.push("clearAutonomousDatabaseVariables");
 const autonomous_database_stroke_colour = "#F80000";
 const autonomous_database_query_cb = "autonomous-database-query-cb";
 let autonomous_database_ids = [];
-let autonomous_database_count = 0;
 
 /*
 ** Reset variables
@@ -20,7 +19,6 @@ let autonomous_database_count = 0;
 
 function clearAutonomousDatabaseVariables() {
     autonomous_database_ids = [];
-    autonomous_database_count = 0;
 }
 
 /*
@@ -41,7 +39,7 @@ function addAutonomousDatabase(parent_id, compartment_id) {
     autonomous_database_ids.push(id);
 
     // Increment Count
-    autonomous_database_count += 1;
+    let autonomous_database_count = okitJson['autonomous_databases'].length + 1;
     let autonomous_database = {};
     autonomous_database['compartment_id'] = parent_id;
     autonomous_database['id'] = id;

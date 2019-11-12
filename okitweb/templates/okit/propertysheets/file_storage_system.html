@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Storage</title>
+</head>
+<body>
+    <div id="property-editor" class="property-editor">
+        <div class="property-editor-title">
+            <label>File Storage</label>
+        </div>
+        <table id="block_storage" class="property-editor-table">
+            <tr><th>Property</th><th>Value</th></tr>
+            <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
+            <tr><td>Availability Domain</td><td><select id="availability_domain" class="property-value">
+                <option value="1" selected="selected">AD 1</option>
+                <option value="2">AD 2</option>
+                <option value="3">AD 3</option>
+            </select></td></tr>
+            <tr><td>Source Cidr</td><td><input type="text" id="source" name="source" class="property-value"></td></tr>
+            <tr><td>Mount Path</td><td><input type="text" id="path" name="path" class="property-value"></td></tr>
+            <tr><td>Access</td><td><select id="access" class="property-value">
+                <option value="READ_ONLY" selected="selected">Read Only</option>
+                <option value="READ_WRITE">Read/Write</option>
+            </select></td></tr>
+        </table>
+    </div>
+</body>
+</html>

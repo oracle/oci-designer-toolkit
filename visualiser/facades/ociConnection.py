@@ -164,3 +164,17 @@ class OCIObjectStorageBucketConnection(OCIConnection):
                 self.config = oci.config.from_file(self.configfile)
         self.client = oci.object_storage.ObjectStorageClient(self.config)
         return
+
+
+class OCIFileStorageSystemConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, **kwargs):
+        super(OCIFileStorageSystemConnection, self).__init__(config=config, configfile=configfile)
+
+    def connect(self):
+        if self.config is None:
+            if self.configfile is None:
+                self.config = oci.config.from_file()
+            else:
+                self.config = oci.config.from_file(self.configfile)
+        self.client = oci.file_storage.FileStorageClient(self.config)
+        return

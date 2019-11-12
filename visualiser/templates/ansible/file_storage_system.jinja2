@@ -1,0 +1,71 @@
+
+# ------ Create File Storage System
+    - name: Create File System
+      oci_file_system:
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        # Optional
+        display_name: "{{ display_name }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.file_system.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.file_system.id {{ '}}' }}"
+
+# ------ Create File Storage Mount Target
+    - name: Create Mount Target
+      oci_mount_target:
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_ocid }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        subnet_id: "{{ subnet_id }}"
+        # Optional
+        display_name: "{{ display_name }}"
+        hostname_label: "{{ hostname }}"
+        #ip_address: "{{ ip_address }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags }}"
+{% endif %}
+      register: {{ resource_name }}MountTarget
+
+    - set_fact:
+        {{ resource_name }}MountTarget_id: "{{ '{{' }} {{ resource_name }}MountTarget.mount_target.id {{ '}}' }}"
+        {{ resource_name }}MountTarget_ocid: "{{ '{{' }} {{ resource_name }}MountTarget.mount_target.id {{ '}}' }}"
+        {{ resource_name }}MountTarget_export_set_id: "{{ '{{' }} {{ resource_name }}MountTarget.mount_target.export_set_id {{ '}}' }}"
+
+# ------ Create File Storage Export Set
+    - name: List all Export Set in a compartment and availability domain
+      oci_export_set_facts:
+#        compartment_id: "{{ compartment_ocid }}"
+#        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        export_set_id: "{{ '{{' }} {{ resource_name }}MountTarget_export_set_id {{ '}}' }}"
+      register: {{ resource_name }}ExportSet
+
+    - debug:
+        msg: "{{ '{{' }} {{ resource_name }}ExportSet.export_sets {{ '}}' }}"
+
+# ------ Create File Storage Export
+    - name: Create Export
+      oci_export:
+        state: 'present'
+        file_system_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
+        export_set_id: "{{ '{{' }} {{ resource_name }}MountTarget_export_set_id {{ '}}' }}"
+        path: "{{ path }}"
+        export_options:
+            - source: "{{ source }}"
+              access: "{{ access }}"
+#              require_privileged_source_port: False
+#              identity_squash: 'NONE'
+      register: {{ resource_name }}Export

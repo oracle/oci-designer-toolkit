@@ -44,6 +44,9 @@ const block_storage_volume_prefix = 'bsv';
 // Object Storage Bucket
 const object_storage_bucket_artifact = 'Object Storage Bucket';
 const object_storage_bucket_prefix = 'osb';
+// File Storage
+const file_storage_system_artifact = 'File Storage System';
+const file_storage_system_prefix = 'fss';
 // Autonomous Database
 const autonomous_database_artifact = 'Autonomous Database';
 const autonomous_database_prefix = 'ad';

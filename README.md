@@ -76,8 +76,7 @@ At present not all browsers are fully supported the following is a list of suppo
    - Chrome
    - Brave
    - Chromium Based Browsers
-- Partially Supported
-   - Firefox (Minor connector drawing issues.)
+   - Firefox 
 - Unsupported
    - Safari
    - IE
@@ -965,10 +964,10 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
         # - Compartment Sub Components
         # -- Virtual Cloud Networks
         for virtual_cloud_network in self.visualiser_json.get('virtual_cloud_networks', []):
-            self.renderVirtualCloudNetworks(virtual_cloud_network)
+            self.renderVirtualCloudNetwork(virtual_cloud_network)
         # -- Block Storage Volumes
         for block_storage_volume in self.visualiser_json.get('block_storage_volumes', []):
-            self.renderBlockStorageVolumes(block_storage_volume)
+            self.renderBlockStorageVolume(block_storage_volume)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways

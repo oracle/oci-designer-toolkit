@@ -12,7 +12,6 @@ asset_clear_functions.push("clearInternetGatewayVariables");
 const internet_gateway_stroke_colour = "purple";
 const internet_gateway_query_cb = "internet-gateway-query-cb";
 let internet_gateway_ids = [];
-let internet_gateway_count = 0;
 
 /*
 ** Reset variables
@@ -20,7 +19,6 @@ let internet_gateway_count = 0;
 
 function clearInternetGatewayVariables() {
     internet_gateway_ids = [];
-    internet_gateway_count = 0;
 }
 
 /*
@@ -41,7 +39,7 @@ function addInternetGateway(vcn_id, compartment_id) {
     internet_gateway_ids.push(id);
 
     // Increment Count
-    internet_gateway_count += 1;
+    let internet_gateway_count = okitJson['internet_gateways'].length + 1;
     let internet_gateway = {};
     internet_gateway['vcn_id'] = vcn_id;
     internet_gateway['virtual_cloud_network'] = '';

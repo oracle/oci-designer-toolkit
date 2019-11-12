@@ -12,7 +12,6 @@ asset_clear_functions.push("clearDynamicRoutingGatewayVariables");
 const dynamic_routing_gateway_stroke_colour = "purple";
 const dynamic_routing_gateway_query_cb = "dynamic_routing-gateway-query-cb";
 let dynamic_routing_gateway_ids = [];
-let dynamic_routing_gateway_count = 0;
 
 /*
 ** Reset variables
@@ -20,7 +19,6 @@ let dynamic_routing_gateway_count = 0;
 
 function clearDynamicRoutingGatewayVariables() {
     dynamic_routing_gateway_ids = [];
-    dynamic_routing_gateway_count = 0;
 }
 
 /*
@@ -41,7 +39,7 @@ function addDynamicRoutingGateway(compartment_id) {
     dynamic_routing_gateway_ids.push(id);
 
     // Increment Count
-    dynamic_routing_gateway_count += 1;
+    let dynamic_routing_gateway_count = okitJson['dynamic_routing_gateways'].length + 1;
     let dynamic_routing_gateway = {};
     dynamic_routing_gateway['compartment_id'] = compartment_id;
     dynamic_routing_gateway['id'] = id;
