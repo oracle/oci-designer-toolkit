@@ -389,6 +389,12 @@ class OCIGenerator(object):
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = service_gateway["display_name"]
+
+        # ---- Service Name
+        variableName = '{0:s}_service_name'.format(standardisedName)
+        self.jinja2_variables["service_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = service_gateway["service_name"]
+
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("service_gateway.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))

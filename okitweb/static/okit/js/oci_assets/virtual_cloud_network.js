@@ -106,6 +106,14 @@ function deleteVirtualCloudNetwork(id) {
             }
         }
     }
+    if ('service_gateways' in okitJson) {
+        for (let i = okitJson['service_gateways'].length - 1; i >= 0; i--) {
+            let service_gateway = okitJson['service_gateways'][i];
+            if (service_gateway['vcn_id'] == id) {
+                deleteServiceGateway(internet_gateway['id']);
+            }
+        }
+    }
     if ('subnets' in okitJson) {
         for (let i = okitJson['subnets'].length - 1; i >= 0; i--) {
             let subnet = okitJson['subnets'][i];

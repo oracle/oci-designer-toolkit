@@ -48,6 +48,7 @@ function addServiceGateway(vcn_id, compartment_id) {
     service_gateway['compartment_id'] = compartment_id;
     service_gateway['id'] = id;
     service_gateway['display_name'] = generateDefaultName(service_gateway_prefix, service_gateway_count);
+    service_gateway['service_name'] = 'All Services';
     okitJson['service_gateways'].push(service_gateway);
     okitIdsJsonObj[id] = service_gateway['display_name'];
     //console.info(JSON.stringify(okitJson, null, 2));
