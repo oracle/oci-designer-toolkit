@@ -130,9 +130,13 @@ RUN yum update -y ; \
     echo "alias ti='terraform init' "                                                              >> /etc/bashrc ; \
     echo "alias tg='terraform get --update' "                                                      >> /etc/bashrc ; \
     echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connection.yml\" ' "   >> /etc/bashrc ; \
+    echo "alias wtd='terraform destroy -var-file=/okit/config/wizards.tfvars -auto-approve' "    >> /etc/bashrc ; \
+    echo "alias wtp='terraform plan -var-file=/okit/config/wizards.tfvars -out=da.plan' "        >> /etc/bashrc ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
     mkdir -p /okit/{ansible,config,converter,terraform,visualiser,okitweb,workspace,python,unittests,preview}; \
     env | sort
-
+# Copy nginx conf information
+COPY okit_nginx.conf /etc/nginx/conf.d/okit.conf
+COPY nginx.conf /etc/nginx/nginx.conf

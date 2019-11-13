@@ -16,9 +16,12 @@ __status__ = "@RELEASE@"
 __module__ = "wsgi"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from __init__ import create_app
+#from __init__ import create_app
+#from okitweb.__init__ import create_app
+from okitweb import create_app
+
+app = create_app()
 
 # Main function to kick off processing
 if __name__ == "__main__":
-    app = create_app()
     app.run()
