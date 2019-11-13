@@ -21,10 +21,9 @@ docker run \
        ${ENVIRONMENT} \
        -w /okit/okitweb \
        -p 8080:8080 \
-       -p 80:80 \
        --rm \
        -it \
        ${DOCKERIMAGE} \
-       /bin/bash -c "pwd;env;gunicorn --bind=0.0.0.0:8080 --workers=2 --limit-request-line 0 'okitweb:create_app()';bash"
+       /bin/bash -c "pwd;env;nginx;gunicorn --bind=0.0.0.0:5000 --workers=2 --limit-request-line 0 okitweb.wsgi:app"
 
 docker ps -l

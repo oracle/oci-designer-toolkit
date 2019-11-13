@@ -138,4 +138,5 @@ RUN yum update -y ; \
     mkdir -p /okit/{ansible,config,converter,terraform,visualiser,okitweb,workspace,python,unittests,preview}; \
     env | sort
 # Copy nginx conf information
-COPY nginx.conf /etc/nginx/conf.d/okit.conf
+COPY okit_nginx.conf /etc/nginx/conf.d/okit.conf
+COPY nginx.conf /etc/nginx/nginx.conf
