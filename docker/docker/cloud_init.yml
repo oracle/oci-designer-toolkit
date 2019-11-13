@@ -52,8 +52,8 @@ write_files:
           access_log  /var/log/nginx/wsgi-app.access.log;
           error_log   /var/log/nginx/wsgi-app.error.log;
 
-          location /designer {
-              proxy_pass http://127.0.0.1:5000/designer;
+          location / {
+              proxy_pass http://127.0.0.1:5000/;
               proxy_redirect   off;
               proxy_set_header Host $http_host;
               proxy_set_header X-Real-IP $remote_addr;
