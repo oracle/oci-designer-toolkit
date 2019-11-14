@@ -24,6 +24,7 @@ docker run \
        --rm \
        -it \
        ${DOCKERIMAGE} \
-       /bin/bash -c "pwd;env;nginx;gunicorn --bind=0.0.0.0:5000 --workers=2 --limit-request-line 0 okitweb.wsgi:app"
+       /bin/bash -c "pwd;env;nginx;gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app"
+#       /bin/bash -c "pwd;env;nginx;gunicorn --bind=0.0.0.0:5000 --workers=2 --limit-request-line 0 okitweb.wsgi:app"
 
 docker ps -l
