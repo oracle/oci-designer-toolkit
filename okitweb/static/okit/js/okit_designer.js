@@ -15,6 +15,9 @@ let okitQueryRequestJson = null;
 
 function saveOkitSettings(settings) {
     console.info('Saving OKIT Settings To Cookie.');
+    if (settings === undefined) {
+        settings = JSON.stringify(okitSettings);
+    }
     setCookie('okit-settings', settings);
 }
 
@@ -24,7 +27,8 @@ function readOkitSettings() {
         console.info('OKIT Settings Cookie Was Not Found.');
         let settings = {
             is_default_security_list: true,
-            is_default_route_table: true
+            is_default_route_table: true,
+            is_timestamp_files: false
         };
         cookie_value = JSON.stringify(settings);
         saveOkitSettings(cookie_value);
@@ -225,7 +229,11 @@ function redrawSVGCanvas() {
 
 function handleSave(evt) {
     hideNavMenu();
-    saveJson(JSON.stringify(okitJson, null, 2), "okit.json");
+    let filename = "okit.json";
+    if (okitSettings.is_timestamp_files) {
+        filename = 'okit-' + getTimestamp() + '.json'
+    }
+    saveJson(JSON.stringify(okitJson, null, 2), filename);
 }
 
 function saveJson(text, filename){
@@ -325,7 +333,7 @@ function loadSettings() {
     $("#settings").load("propertysheets/settings.html", function() {
         console.info('Loading Settings');
         loadProperties(okitSettings);
-        addPropertiesEventListeners(okitSettings, []);
+        addPropertiesEventListeners(okitSettings, [], true);
     });
 }
 
