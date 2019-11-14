@@ -16,27 +16,6 @@ write_files:
       alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'
       export PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit"
 
-  # Create okit nginx Config
-  - path: /etc/nginx/conf.d/okit.conf
-    permissions: '0644'
-    content: |
-      server {
-          listen 8080;
-          server_name okitdesigner;
-
-          access_log  /var/log/nginx/wsgi-app.access.log;
-          error_log   /var/log/nginx/wsgi-app.error.log;
-
-          location / {
-              proxy_pass http://127.0.0.1:5000/;
-              proxy_redirect   off;
-              proxy_set_header Host $http_host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-          }
-      }
-
   # Change Default nginx Config
   - path: /etc/nginx/nginx.conf
     permissions: '0644'
@@ -102,25 +81,6 @@ write_files:
           }
       }
 
-  # Write GUnicorn Wsgi Service
-  - path: /etc/systemd/system/wsgi-app.service
-    permissions: '0755'
-    content: |
-      [Unit]
-      Description=Gunicorn instance to serve flask app
-      After=network.target
-
-      [Service]
-      User=opc
-      Group=opc
-      WorkingDirectory=/okit/okitweb
-      Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/opc/.local/bin:/home/opc/bin"
-      Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
-      ExecStart=/usr/local/bin/gunicorn --bind=0.0.0.0:5000 --workers=4 --limit-request-line 0 okitweb.wsgi:app
-
-      [Install]
-      WantedBy=multi-user.target
-
   # Write GUnicorn Service
   - path: /etc/systemd/system/gunicorn.service
     permissions: '0755'
@@ -135,6 +95,7 @@ write_files:
       # the specific user that our service will run as
       User=nginx
       Group=nginx
+      Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/opc/.local/bin:/home/opc/bin"
       Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
       RuntimeDirectory=gunicorn
       WorkingDirectory=/okit
