@@ -334,7 +334,8 @@ const ro = new ResizeObserver(entries => {
     redrawSVGCanvas();
 });
 
-let dragging_drag_bar = false;
+let dragging_palette_drag_bar = false;
+let dragging_properties_drag_bar = false;
 
 $(document).ready(function(){
     /*
@@ -450,10 +451,31 @@ $(document).ready(function(){
     ro.observe(document.querySelector('#canvas-wrapper'));
 
     // Add Drag Bar Functionality
-    $('#dragbar').mousedown(function(e) {
+    $('#properties-dragbar').mousedown(function(e) {
         e.preventDefault();
 
-        dragging_drag_bar = true;
+        dragging_properties_drag_bar = true;
+        let web_designer_panel = $('#web-designer-panel');
+        let ghostbar = $('<div>',
+            {
+                id: 'ghostbar',
+                css: {
+                    height: web_designer_panel.outerHeight(),
+                    top: web_designer_panel.offset().top,
+                    left: web_designer_panel.offset().left
+                },
+                class: 'vertical-ghost-bar'
+            }).appendTo('body');
+
+        $(document).mousemove(function(e) {
+            ghostbar.css("left",e.pageX+2);
+        });
+    });
+
+    $('#palette-dragbar').mousedown(function(e) {
+        e.preventDefault();
+
+        dragging_palette_drag_bar = true;
         let web_designer_panel = $('#web-designer-panel');
         let ghostbar = $('<div>',
             {
@@ -472,19 +494,33 @@ $(document).ready(function(){
     });
 
     $(document).mouseup(function(e) {
-        if (dragging_drag_bar) {
+        if (dragging_palette_drag_bar || dragging_properties_drag_bar) {
+            console.groupCollapsed('Document MouseUp (Drag Bar Up)');
             let palette_width = $('#icon-palette').width();
-            let web_disigner_panel_width = $('#web-designer-panel').width();
-            let properties_width = web_disigner_panel_width - e.pageX;
-            console.groupCollapsed('Drag Bar Up');
-            console.info('Ghost Drag Bar X Position ' + e.pageX);
-            console.info('Web Designer Panel Width ' + web_disigner_panel_width);
-            console.info('Palette Width ' + palette_width);
-            console.info('Properties Width ' + properties_width);
+            let web_designer_panel_width = $('#web-designer-panel').width();
+            let properties_width = $('#asset-properties').width();
+            console.info('Palette Width             : ' + palette_width);
+            console.info('Web Designer Panel Width  : ' + web_designer_panel_width);
+            console.info('Properties Width          : ' + properties_width);
+            console.info('Ghost Drag Bar X Position : ' + e.pageX);
+            if (dragging_palette_drag_bar) {
+                palette_width = e.pageX;
+            } else if (dragging_properties_drag_bar) {
+                properties_width = web_designer_panel_width - e.pageX;
+            }
+            // Set Palette Bar Width
+            console.info('Palette Width             : ' + palette_width);
+            $('#icon-palette').css("min-width", palette_width);
+            $('#icon-palette').css("width", palette_width);
+            // Set Properties Width
+            console.info('Properties Width          : ' + properties_width);
             $('#asset-properties').css("min-width", properties_width);
+            $('#asset-properties').css("width", properties_width);
+            // Remove Bar artifacts
             $('#ghostbar').remove();
             $(document).unbind('mousemove');
-            dragging_drag_bar = false;
+            dragging_palette_drag_bar = false;
+            dragging_properties_drag_bar = false;
             console.groupEnd();
         }
     });

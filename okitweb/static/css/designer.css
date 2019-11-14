@@ -202,6 +202,14 @@
     cursor: col-resize !important;
 }
 
+.vertical-right-drag-bar {
+    background-color: black;
+    height: 100%;
+    float: right;
+    width: 3px;
+    cursor: col-resize !important;
+}
+
 .vertical-ghost-bar {
     width: 3px;
     background-color: #000;
