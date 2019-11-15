@@ -155,11 +155,11 @@ function getAsJson(readFile) {
 function loaded(evt) {
     // Obtain the read file data
     let fileString = evt.target.result;
-    console.info('Loaded: ' + fileString);
+    //console.info('Loaded: ' + fileString);
     okitJson = JSON.parse(fileString);
-    if (!okitJson.hasOwnProperty('canvas')) {
-        okitJson['canvas'] = initialiseCanvasJson();
-    }
+    //if (!okitJson.hasOwnProperty('canvas')) {
+    //    okitJson['canvas'] = initialiseCanvasJson();
+    //}
     displayOkitJson();
     drawSVGforJson();
 }

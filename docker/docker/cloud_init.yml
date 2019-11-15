@@ -14,10 +14,10 @@ write_files:
       alias lt='ls -last'
       alias env='/usr/bin/env | sort'
       alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'
-      export PYTHONPATH=":/home/opc/okit.oci.web.designer/okit/visualiser:/home/opc/okit.oci.web.designer/okit/okitweb:/home/opc/okit.oci.web.designer/okit"
+      export PYTHONPATH=":/home/opc/okit/visualiser:/home/opc/okit/okitweb:/home/opc/okit"
 
-  # Change Default nginx Config
-  - path: /etc/nginx/nginx.conf
+  # Change Default nginx Config (Simple Gunicorn)
+  - path: /etc/nginx/nginx.conf.simple.gunicorn
     permissions: '0644'
     content: |
       user nginx;
@@ -80,8 +80,8 @@ write_files:
           }
       }
 
-  # Write GUnicorn Service
-  - path: /etc/systemd/system/gunicorn.service
+  # Write GUnicorn Service (Simple Gunicorn)
+  - path: /etc/systemd/system/gunicorn.simple.service
     permissions: '0755'
     content: |
       [Unit]
@@ -94,9 +94,9 @@ write_files:
       User=opc
       Group=opc
       Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/opc/.local/bin:/home/opc/bin"
-      Environment="PYTHONPATH=:/home/opc/okit.oci.web.designer/okit/visualiser:/home/opc/okit.oci.web.designer/okit/okitweb:/home/opc/okit.oci.web.designer/okit"
+      Environment="PYTHONPATH=:/home/opc/okit/visualiser:/home/opc/okit/okitweb:/home/opc/okit"
       RuntimeDirectory=gunicorn
-      WorkingDirectory=/home/opc/okit.oci.web.designer
+      WorkingDirectory=/home/opc/okit
       ExecStart=/usr/local/bin/gunicorn --workers=4 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app
       ExecReload=/bin/kill -s HUP $MAINPID
       KillMode=mixed
@@ -106,8 +106,8 @@ write_files:
       [Install]
       WantedBy=multi-user.target
 
-  # Change Default nginx Config
-  - path: /etc/nginx/nginx.conf.socket
+  # Change Default nginx Config (Socket)
+  - path: /etc/nginx/nginx.conf
     permissions: '0644'
     content: |
       user nginx;
@@ -153,7 +153,7 @@ write_files:
 
               location / {
                   #proxy_pass http://127.0.0.1:5000/;
-                  proxy_pass http://unix:/okit/gunicorn.sock;
+                  proxy_pass http://unix:/var/run/gunicorn.sock;
                   proxy_redirect   off;
                   proxy_set_header Host $http_host;
                   proxy_set_header X-Real-IP $remote_addr;
@@ -171,8 +171,8 @@ write_files:
           }
       }
 
-  # Write GUnicorn Service
-  - path: /etc/systemd/system/gunicorn.socket.service
+  # Write GUnicorn Service (Socket)
+  - path: /etc/systemd/system/gunicorn.service
     permissions: '0755'
     content: |
       [Unit]
@@ -183,12 +183,12 @@ write_files:
       [Service]
       Type=notify
       # the specific user that our service will run as
-      User=nginx
-      Group=nginx
+      User=opc
+      Group=opc
       Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/opc/.local/bin:/home/opc/bin"
-      Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
+      Environment="PYTHONPATH=:/home/opc/okit/visualiser:/home/opc/okit/okitweb:/home/opc/okit"
       RuntimeDirectory=gunicorn
-      WorkingDirectory=/okit
+      WorkingDirectory=/home/opc/okit
       ExecStart=/usr/local/bin/gunicorn okitweb.wsgi:app
       ExecReload=/bin/kill -s HUP $MAINPID
       KillMode=mixed
@@ -206,7 +206,7 @@ write_files:
       Description=gunicorn socket
 
       [Socket]
-      ListenStream=/okit/gunicorn.sock
+      ListenStream=/var/run/gunicorn.sock
       # Our service won't need permissions for the socket, since it
       # inherits the file descriptor by socket activation
       # only the nginx daemon will need access to the socket
@@ -217,10 +217,39 @@ write_files:
       [Install]
       WantedBy=sockets.target
 
+  # Write nginx.te for SELinux
+  - path: /home/nginx/nginx.te
+    permissions: '0664'
+    content: |
+      module nginx 1.0;
+
+      require {
+      	type unconfined_t;
+      	type user_home_t;
+      	type httpd_t;
+      	type var_run_t;
+      	class file { read open };
+      	class sock_file write;
+      	class unix_stream_socket connectto;
+      }
+
+      #============= httpd_t ==============
+
+      allow httpd_t unconfined_t:unix_stream_socket connectto;
+      allow httpd_t var_run_t:sock_file write;
+      allow httpd_t user_home_t:file { read open };
+
 runcmd:
   # Create okit directory
-  - mkdir -p /home/opc/okit.oci.web.designer
-  - chmod -R 777 /home/opc/okit.oci.web.designer
+  - mkdir -p /home/opc/okit
+  - chmod -R 777 /home/opc/okit
+  # Config SELinux
+  - sudo checkmodule -M -m -o /home/nginx/nginx.mod /home/nginx/nginx.te
+  - sudo semodule_package -o /home/nginx/nginx.pp -m /home/nginx/nginx.mod
+  - sudo semodule -i /home/nginx/nginx.pp
+  #- sudo setsebool -P httpd_can_network_connect 1
+  # Reload
+  - systemctl daemon-reload
   # Enable nginx
   - sudo systemctl enable nginx.service
   - sudo systemctl start nginx.service
@@ -228,11 +257,12 @@ runcmd:
   - sudo pip3 install configparser flask flask-cors flask_restful gunicorn ipaddress ipcalc jinja2 oci pexpect pyyaml
   - sudo pip3 install requests simplejson six svglib svg.path wtforms xlrd
   - sudo systemctl enable gunicorn.service
-  #- sudo systemctl enable gunicorn.socket
-  #- sudo systemctl start gunicorn.socket
+  - sudo systemctl enable gunicorn.socket
+  - sudo systemctl start gunicorn.socket
+  - sudo systemctl restart gunicorn.service
   # Set Firewall Rules
-  - sudo firewall-offline-cmd  --add-port=8080/tcp
-  - sudo firewall-offline-cmd  --add-port=5000/tcp
+  - sudo firewall-offline-cmd  --add-port=80/tcp
+  #- sudo firewall-offline-cmd  --add-port=5000/tcp
   - sudo systemctl restart firewalld
   # Add additional environment information because append does not appear to work in write_file
   - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
