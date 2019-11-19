@@ -53,7 +53,7 @@ function addInstance(subnet_id, compartment_id) {
     instance['display_name'] = generateDefaultName(instance_prefix, instance_count);
     instance['hostname_label'] = instance['display_name'].toLowerCase();
     instance['os'] = 'Oracle Linux';
-    instance['version'] = '7.6';
+    instance['version'] = '7.7';
     instance['shape'] = 'VM.Standard2.1';
     instance['boot_volume_size_in_gbs'] = '50';
     instance['authorized_keys'] = '';
@@ -107,6 +107,7 @@ function getInstanceFirstChildEdgeOffset() {
     };
     return offset;
 }
+
 function getInstanceDimensions(id='') {
     let dimensions = {width:getInstanceFirstChildEdgeOffset().dx, height:min_instance_height};
     console.groupCollapsed('Processing Instance ' + id);
@@ -288,15 +289,17 @@ function drawInstanceAttachmentsSVG(instance) {
         }
         attachment_count += 1;
     }
-    for (let subnet_id of instance['subnet_ids']) {
-        for (let subnet of okitJson['subnets']) {
-            if (subnet_id == subnet['id']) {
-                let artifact_clone = JSON.parse(JSON.stringify(subnet));
-                artifact_clone['parent_id'] = instance['id'];
-                drawAttachedSubnetVnic(artifact_clone, attachment_count);
+    if (instance.hasOwnProperty('subnet_ids')) {
+        for (let subnet_id of instance['subnet_ids']) {
+            for (let subnet of okitJson['subnets']) {
+                if (subnet_id == subnet['id']) {
+                    let artifact_clone = JSON.parse(JSON.stringify(subnet));
+                    artifact_clone['parent_id'] = instance['id'];
+                    drawAttachedSubnetVnic(artifact_clone, attachment_count);
+                }
             }
+            attachment_count += 1;
         }
-        attachment_count += 1;
     }
     console.groupEnd();
 }

@@ -191,9 +191,6 @@ function loadTemplate(template_url) {
         contentType: 'application/json',
         success: function(resp) {
             okitJson = JSON.parse(resp);
-            if (!okitJson.hasOwnProperty('canvas')) {
-                okitJson['canvas'] = initialiseCanvasJson();
-            }
             displayOkitJson();
             drawSVGforJson();
         },
@@ -357,6 +354,13 @@ $(document).ready(function(){
     let palatteicons = document.querySelectorAll('#icon-palette .palette-icon');
     [].forEach.call(palatteicons, function (palatteicon) {
         palatteicon.addEventListener('dragstart', handleDragStart, false);
+    });
+    /*
+    ** Drag start for all pallet fragmentd
+     */
+    let fragmenticons = document.querySelectorAll('#icon-palette .fragment-icon');
+    [].forEach.call(fragmenticons, function (fragmenticon) {
+        fragmenticon.addEventListener('dragstart', handleFragmentDragStart, false);
     });
 
     /*

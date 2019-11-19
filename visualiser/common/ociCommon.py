@@ -18,23 +18,11 @@ __module__ = "ociCommon"
 
 
 from contextlib import closing
-import copy
-import itertools
 import jinja2
 import json
-import locale
-import logging
-import logging.handlers
 import os
-import re
-import shutil
-import subprocess
-import sys
-import tempfile
 import xml.etree.ElementTree as ET
-import xml.dom.minidom as minidom
 import yaml
-import zipfile
 
 from common.ociLogging import getLogger
 

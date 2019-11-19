@@ -41,6 +41,7 @@ STYLE         = '   <style type="text/css">{0!s:s}</style>\n'
 G_START_TAG   = '   <g transform="translate(-140, -140) scale(2, 2)">\n'
 LINE_TAG      = '      <line     class="{0!s:s}" x1="{1!s:s}" y1="{2!s:s}" x2="{3!s:s}" y2="{4!s:s}"/>\n'
 POLYLINE_TAG  = '      <polyline class="{0!s:s}" points="{1!s:s}"/>\n'
+POLYGON_TAG   = '      <polygon  class="{0!s:s}" points="{1!s:s}"/>\n'
 CIRCLE_TAG    = '      <circle   class="{0!s:s}" cx="{1!s:s}" cy="{2!s:s}" r="{3!s:s}"/>\n'
 RECT_TAG      = '      <rect     class="{0!s:s}" x="{1!s:s}" y="{2!s:s}" width="{3!s:s}" height="{4!s:s}"/>\n'
 PATH_TAG      = '      <path     class="{0!s:s}" d="{1!s:s}"/>\n'
@@ -118,6 +119,8 @@ def processGTag(node, file, vbx, vby):
             processLineTag(child, file, vbx, vby)
         elif child.nodeName == 'polyline':
             processPolylineTag(child, file, vbx, vby)
+        elif child.nodeName == 'polygon':
+            processPolygonTag(child, file, vbx, vby)
         elif child.nodeName == 'circle':
             processCircleTag(child, file, vbx, vby)
         elif child.nodeName == 'rect':
@@ -149,6 +152,14 @@ def processPolylineTag(node, file, vbx, vby):
     points = parsePolyline(node.getAttribute('points'))
     points = updatePolyline(points, vbx, vby)
     file.write(POLYLINE_TAG.format(style_class, polylineToString(points)))
+    return
+
+
+def processPolygonTag(node, file, vbx, vby):
+    style_class = node.getAttribute('class')
+    points = parsePolygon(node.getAttribute('points'))
+    points = updatePolygon(points, vbx, vby)
+    file.write(POLYGON_TAG.format(style_class, polygonToString(points)))
     return
 
 
@@ -261,6 +272,31 @@ def polylineToString(points):
     polyline_points = ','.join(format(p, "0.1f") for p in points)
     logger.debug('Polyline.points {0!s:s}'.format(polyline_points))
     return polyline_points
+
+
+def parsePolygon(polygon):
+    logger.debug('Passed Polygon : {0!s:s}'.format(polygon))
+    points = [float(p) for p in polygon.replace(' ', ',').split(',') if p != '']
+    logger.debug('Replace & Split Polygon : {0!s:s}'.format(points))
+    return points
+
+
+def updatePolygon(points, vbx, vby):
+    logger.debug('Polygon Points : {0!s:s}'.format(points))
+    i = 0;
+    #while i < len(points):
+    #    points[i] += vbx
+    #    points[i + 1] += vby
+    #    i += 2
+    logger.debug('Updated Polygon Points : {0!s:s}'.format(points))
+    return points
+
+
+def polygonToString(points):
+    polygon_points = ','.join(format(p, "0.1f") for p in points)
+    logger.debug('Polygon.points {0!s:s}'.format(polygon_points))
+    return polygon_points
+
 
 def writeFile():
     return

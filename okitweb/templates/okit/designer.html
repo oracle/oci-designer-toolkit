@@ -58,7 +58,7 @@
         </li>
         <li><a id="file-export-svg-menu-item" class="parent-item" href="#">SVG</a></li>
         <li><a id="file-export-rm-menu-item" class="parent-item" href="#">Resource Manager</a></li>
-        <li><a id="file-export-orca-menu-item" class="parent-item" href="#">Orca</a></li>
+        <!--li><a id="file-export-orca-menu-item" class="parent-item" href="#">Orca</a></li-->
     </ul>
 {% endblock %}
 
@@ -102,6 +102,7 @@
     {% for oci_asset_js in oci_assets_js %}
         <script type="text/javascript" src="{{ url_for('static', filename='okit/js/oci_assets/' + oci_asset_js) }}"></script>
     {% endfor %}
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_fragments.js') }}"></script>
 {% endblock %}
 
 {% block headcss %}
@@ -129,6 +130,16 @@
                     </div>
                     {% endif %}
                 {% endfor %}
+                <div id="fragments" class="palette-icon-group">
+                    <div class="palette-icon-group-header">
+                        <label>Fragments</label>
+                    </div>
+                    <div class="palette-icon-group-icons">
+                        {% for fragment_icon in fragment_icons %}
+                            <img class="fragment-icon" src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}" title="{{ fragment_icon['title'] }}" draggable="true">
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
             <div id="palette-dragbar" class="vertical-right-drag-bar"></div>
             <div id="canvas-wrapper" class="designer-centre-column canvas-wrapper">

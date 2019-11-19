@@ -21,12 +21,13 @@ let asset_delete_functions = {};
 let asset_query_functions = {};
 let asset_clear_functions = [];
 
-function addAssetToDropTarget(title, target_id, compartment_id) {
+function addAssetToDropTarget(artifact, title, target_id, compartment_id) {
+    console.info('addAssetToDropTarget - Artifact       : ' + artifact);
     console.info('addAssetToDropTarget - Title          : ' + title);
     console.info('addAssetToDropTarget - Target Id      : ' + target_id);
     console.info('addAssetToDropTarget - Compartment Id : ' + compartment_id);
     console.info('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
-    window[asset_add_functions[title]](target_id, compartment_id);
+    window[asset_add_functions[artifact]](target_id, compartment_id, title);
 }
 
 function updateAssetTarget(title, source_type, source_id, target_id) {
@@ -50,17 +51,20 @@ function deleteAssetFromSVG(artifact, id) {
 ** Define palette Drag & Drop functions
  */
 
-let palatte_source_type = '';
 let asset_drop_targets = {};
 let asset_connect_targets = {};
+let palette_artifact_data = {artifact: ''};
 
 function setDragDropIcon(e) {
     if (typeof e == 'undefined') {
         e = d3.event;
     }
     let type = e.target.getAttribute('data-type');
-    //console.info('Set Drop Target Icon for ' + palatte_source_type + ' over ' + type);
-    if (asset_drop_targets[palatte_source_type].indexOf(type) >= 0) {
+    let data_string = e.dataTransfer.getData('text/plain');
+    //console.info('Data String : ' + data_string);
+    //let data = JSON.parse(data_string);
+    //console.info('Set Drop Target Icon for ' + palette_artifact_data.artifact + ' over ' + type);
+    if (palette_artifact_data.artifact !== undefined && asset_drop_targets[palette_artifact_data.artifact].indexOf(type) >= 0) {
         e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
         e.dataTransfer.effectAllowed = "none";
@@ -73,16 +77,29 @@ function handleDragStart(e) {
         e = d3.event;
     }
     console.groupCollapsed('Drag Start - ' + this.title);
+    palette_artifact_data = {artifact: this.title, title: this.title};
+    let data_string = JSON.stringify(palette_artifact_data);
+    console.info('Tranfer Data : ' + data_string);
     e.dataTransfer.effectAllowed = 'copy';
-    e.dataTransfer.setData('text/plain', this.title);
-    palatte_source_type = this.title;
-    //e.dataTransfer.setData('text/html', this.src);
-    console.info('Data Type : ' + this.title);
-    //console.info(this.src);
+    e.dataTransfer.setData('text/plain', data_string);
+    console.info('Data Type   : ' + this.title);
+}
+
+function handleFragmentDragStart(e) {
+    if (typeof e == 'undefined') {
+        e = d3.event;
+    }
+    console.groupCollapsed('Drag Start - ' + this.title);
+    palette_artifact_data = {artifact: fragment_artifact, title: this.title};
+    let data_string = JSON.stringify(palette_artifact_data);
+    console.info('Tranfer Data : ' + data_string);
+    e.dataTransfer.effectAllowed = 'copy';
+    e.dataTransfer.setData('text/plain', data_string);
+    console.info('Data Type    : ' + this.title);
 }
 
 function handleDragOver(e) {
-    if (typeof e == 'undefined') {
+    if (typeof e === 'undefined') {
         e = d3.event;
     }
     if (e.preventDefault) {
@@ -123,13 +140,13 @@ function handleDrop(e) {
     }
 
     //this.innerHTML = e.dataTransfer.getData('text/html');
-    let title = e.dataTransfer.getData('text/plain');
+    let data = JSON.parse(e.dataTransfer.getData('text/plain'));
     let type = e.target.getAttribute('data-type');
     let compartment_id = e.target.getAttribute('data-compartment-id');
     let target_id = e.target.id;
     //target_id = e.target.getAttribute('data-okit-id');
     // Call Add Function
-    addAssetToDropTarget(title, target_id, compartment_id)
+    addAssetToDropTarget(data.artifact, data.title, target_id, compartment_id)
 
     this.classList.remove('over');  // this / e.target is previous target element.
     console.groupEnd();
