@@ -50,7 +50,11 @@ class Fragment {
                                     element['compartment_id'] = compartment_id
                                 }
                             }
-                            okitJson[key] = okitJson[key].concat(fragment_json[key]);
+                            if (okitJson.hasOwnProperty(key)) {
+                                okitJson[key] = okitJson[key].concat(fragment_json[key]);
+                            } else {
+                                okitJson[key] = fragment_json[key];
+                            }
                         } else if (parent_type === virtual_cloud_network_artifact && key !== 'compartments' && key !== 'virtual_cloud_networks') {
                             for (let element of fragment_json[key]) {
                                 if (element.hasOwnProperty('compartment_id')) {
@@ -60,7 +64,11 @@ class Fragment {
                                     element['vcn_id'] = parent_id
                                 }
                             }
-                            okitJson[key] = okitJson[key].concat(fragment_json[key]);
+                            if (okitJson.hasOwnProperty(key)) {
+                                okitJson[key] = okitJson[key].concat(fragment_json[key]);
+                            } else {
+                                okitJson[key] = fragment_json[key];
+                            }
                         }
                     }
                 }
