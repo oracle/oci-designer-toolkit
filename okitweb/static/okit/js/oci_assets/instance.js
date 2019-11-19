@@ -107,6 +107,7 @@ function getInstanceFirstChildEdgeOffset() {
     };
     return offset;
 }
+
 function getInstanceDimensions(id='') {
     let dimensions = {width:getInstanceFirstChildEdgeOffset().dx, height:min_instance_height};
     console.groupCollapsed('Processing Instance ' + id);
