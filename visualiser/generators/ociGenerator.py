@@ -14,24 +14,13 @@ __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
-import getopt
 import jinja2
-import json
-import locale
-import logging
-import operator
 import os
-import requests
 import shutil
-import sys
 
-from common.ociValidation import validateVisualiserJson
-from common.ociExceptions import ValidationException
-from common.ociCommon import readJsonFile
 from common.ociCommon import readYamlFile
-from common.ociCommon import writeTerraformFile
 from common.ociLogging import getLogger
+from common.ociValidation import validateVisualiserJson
 
 # Configure logging
 logger = getLogger()
