@@ -26,3 +26,6 @@ converter/dist
 converter/dest
 
 output
+
+.scannerworks
+sonar-project.properties

@@ -84,6 +84,7 @@ def designer():
     #logger.info('Files List Dir : {0!s:s}'.format(palette_icons_svg))
     svg_files = []
     svg_icon_groups = {}
+    # Get Palette Icon Groups / Icons
     for (dirpath, dirnames, filenames) in os.walk(os.path.join(bp.static_folder, 'palette')):
         logger.debug('dirpath : {0!s:s}'.format(dirpath))
         logger.debug('dirnames : {0!s:s}'.format(dirnames))
@@ -113,6 +114,7 @@ def designer():
     logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
     logJson(palette_icon_groups)
 
+    # Read Template Files
     template_files = os.listdir(os.path.join(bp.static_folder, 'templates'))
     okit_templates = []
     for template_file in sorted(template_files):
@@ -125,6 +127,17 @@ def designer():
         okit_template['description'] = template_json.get('description', template_json['title'])
         okit_templates.append(okit_template)
     logger.debug('Templates : {0!s:s}'.format(okit_templates))
+
+    # Read Fragment Files
+    fragment_files = os.listdir(os.path.join(bp.static_folder, 'fragments', 'svg'))
+    fragment_icons = []
+    for fragment_svg in sorted(fragment_files):
+        logger.info('Fragment : {0!s:s}'.format(fragment_svg))
+        logger.info('Fragment full : {0!s:s}'.format(os.path.join(bp.static_folder, 'fragments', 'svg', fragment_svg)))
+        fragment_icon = {'svg': fragment_svg, 'title': os.path.basename(fragment_svg).split('.')[0].replace('_', ' ').title()}
+        logger.info('Icon : {0!s:s}'.format(fragment_icon))
+        fragment_icons.append(fragment_icon)
+
     if request.method == 'POST':
         request_json = {}
         response_json = {}
@@ -136,10 +149,10 @@ def designer():
         #response_json = executeQuery(request_json)
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates=okit_templates, okit_query_request_json=request_json, okit_query_response_json=response_string)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates=okit_templates, fragment_icons=fragment_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
         logger.info('>>>>>>>>> oci version {0!s:s}'.format(oci.__version__))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates=okit_templates)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates=okit_templates, fragment_icons=fragment_icons)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
