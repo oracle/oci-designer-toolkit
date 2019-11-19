@@ -14,25 +14,11 @@ __module__ = "ociTerraform11Generator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
-import getopt
-import jinja2
-import json
-import locale
-import logging
-import operator
 import os
-import requests
-import sys
 
-from generators.ociTerraform11Generator import OCITerraform11Generator
-from generators.ociTerraformGenerator import OCITerraformGenerator
-
-from common.ociCommon import logJson
-from common.ociCommon import readJsonFile
-from common.ociCommon import readYamlFile
 from common.ociCommon import writeTerraformFile
 from common.ociLogging import getLogger
+from generators.ociTerraformGenerator import OCITerraformGenerator
 
 # Configure logging
 logger = getLogger()
