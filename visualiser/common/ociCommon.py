@@ -17,13 +17,13 @@ __module__ = "ociCommon"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-from contextlib import closing
 import jinja2
-import json
 import os
 import xml.etree.ElementTree as ET
 import yaml
+from contextlib import closing
 
+import json
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -47,11 +47,12 @@ def parseJsonString(jsonstring):
         return jsonData
     except json.decoder.JSONDecodeError as err:
         # Silently ignore and return the string because it is not json.
+        logger.debug(err)
         return jsonstring
 
 
 # Read JSON file
-def readJsonFile(filename, varsyaml=None, templates='/pcma/templates', **kwargs):
+def readJsonFile(filename, varsyaml=None, templates='/pcma/templates'):
     jsonData = None
     logger.info('Reading Json File : {0!s:s}'.format(filename))
     logger.debug('Templates : {0!s:s}'.format(templates))
@@ -81,7 +82,7 @@ def readJsonFile(filename, varsyaml=None, templates='/pcma/templates', **kwargs)
     return jsonData
 
 
-def writeJsonFile(jsonData, filename, sortKeys=True, **kwargs):
+def writeJsonFile(jsonData, filename, sortKeys=True):
     logger.info('Writing Json File : {0!s:s}'.format(filename))
     dir = os.path.dirname(filename)
     if len(dir) > 0 and not os.path.exists(dir):
@@ -92,14 +93,14 @@ def writeJsonFile(jsonData, filename, sortKeys=True, **kwargs):
     return
 
 
-def logJson(jsonObj, sortKeys=True, indent=2, **kwargs):
+def logJson(jsonObj, sortKeys=True, indent=2):
     if jsonObj is not None:
         #logger.debug(json.dumps(jsonObj, sort_keys=sortKeys, indent=indent, separators=(',', ': ')))
         logger.debug(jsonToFormattedString(jsonObj, sortKeys=sortKeys, indent=indent))
     return
 
 
-def jsonToFormattedString(jsonObj, sortKeys=True, indent=2, **kwargs):
+def jsonToFormattedString(jsonObj, sortKeys=True, indent=2):
     return json.dumps(jsonObj, sort_keys=sortKeys, indent=indent, separators=(',', ': '))
 
 
@@ -114,14 +115,14 @@ def readYamlFile(filename):
     return yamlData
 
 
-def writeYamlFile(yamlData, filename, allowUnicode=True, defaultFlowStyle=False, defaultStyle='"', **kwargs):
+def writeYamlFile(yamlData, filename, allowUnicode=True, defaultFlowStyle=False, defaultStyle='"'):
     logger.info('Writing Yaml File : {0!s:s}'.format(filename))
     with closing(open(filename, 'w')) as stream:
         stream.write(yaml.safe_dump(yamlData, allow_unicode=allowUnicode, default_flow_style=defaultFlowStyle, default_style=defaultStyle))
     return
 
 
-def logYaml(yamlObj, allowUnicode=True, defaultFlowStyle=False, **kwargs):
+def logYaml(yamlObj, allowUnicode=True, defaultFlowStyle=False):
     if yamlObj is not None:
         logger.debug(yaml.safe_dump(yamlObj, allow_unicode=allowUnicode, default_flow_style=defaultFlowStyle))
     return
@@ -142,7 +143,7 @@ def writeXmlFile(tree, filename):
     tree.write(filename)
 
 
-def writeTerraformFile(terraform_file, contents, **kwargs):
+def writeTerraformFile(terraform_file, contents):
     logger.info('Writing Terraform File: {0:s}'.format(terraform_file))
     with closing(open(terraform_file, 'w')) as f:
         for resource in contents:
@@ -150,7 +151,7 @@ def writeTerraformFile(terraform_file, contents, **kwargs):
     return
 
 
-def writeAnsibleFile(ansible_file, contents, **kwargs):
+def writeAnsibleFile(ansible_file, contents):
     logger.info('Writing Ansible File: {0:s}'.format(ansible_file))
     with closing(open(ansible_file, 'w')) as f:
         for resource in contents:
@@ -158,14 +159,14 @@ def writeAnsibleFile(ansible_file, contents, **kwargs):
     return
 
 
-def writePythonFile(python_file, contents, **kwargs):
+def writePythonFile(python_file, contents):
     logger.info('Writing Python File: {0:s}'.format(python_file))
     with closing(open(python_file, 'w')) as f:
         f.write('{0:s}\n'.format(contents))
     return
 
 
-def standardiseIds(json_data={}, from_char='.', to_char='-', **kwargs):
+def standardiseIds(json_data={}, from_char='.', to_char='-'):
     if isinstance(json_data, dict):
         for key, val in json_data.items():
             logger.debug('{0!s:s} : {1!s:s}'.format(key, val))

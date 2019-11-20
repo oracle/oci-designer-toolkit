@@ -17,10 +17,9 @@ __module__ = "ociConnection"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import oci
-import json
 import re
-import sys
 
+import json
 from common.ociLogging import getLogger
 
 # Configure logging
@@ -30,7 +29,7 @@ logger = getLogger()
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000;
 
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         self.config = config
         self.configfile = configfile
         self.client = None
@@ -39,7 +38,7 @@ class OCIConnection(object):
     def toJson(self, data):
         return json.loads(str(data))
 
-    def filterJsonObjectList(self, json_list=[], filter={}, **kwargs):
+    def filterJsonObjectList(self, json_list=[], filter={}):
         if filter is not None and json_list is not None:
             for key, val in filter.items():
                 logger.info('{0!s:s} = {1!s:s}'.format(key, val))
@@ -52,7 +51,7 @@ class OCIConnection(object):
 
 
 class OCIIdentityConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         self.compartment_ocid = None
         super(OCIIdentityConnection, self).__init__(config=config, configfile=configfile)
 
@@ -68,7 +67,7 @@ class OCIIdentityConnection(OCIConnection):
 
 
 class OCIVirtualNetworkConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         super(OCIVirtualNetworkConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):
@@ -82,7 +81,7 @@ class OCIVirtualNetworkConnection(OCIConnection):
 
 
 class OCILoadBalancerConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):
@@ -96,7 +95,7 @@ class OCILoadBalancerConnection(OCIConnection):
 
 
 class OCIComputeConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         super(OCIComputeConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):
@@ -110,7 +109,7 @@ class OCIComputeConnection(OCIConnection):
 
 
 class OCIResourceManagerConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):
@@ -124,7 +123,7 @@ class OCIResourceManagerConnection(OCIConnection):
 
 
 class OCIBlockStorageVolumeConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):
@@ -138,7 +137,7 @@ class OCIBlockStorageVolumeConnection(OCIConnection):
 
 
 class OCIAutonomousDatabaseConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         super(OCIAutonomousDatabaseConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):
@@ -152,7 +151,7 @@ class OCIAutonomousDatabaseConnection(OCIConnection):
 
 
 class OCIObjectStorageBucketConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         super(OCIObjectStorageBucketConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):
@@ -166,7 +165,7 @@ class OCIObjectStorageBucketConnection(OCIConnection):
 
 
 class OCIFileStorageSystemConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         super(OCIFileStorageSystemConnection, self).__init__(config=config, configfile=configfile)
 
     def connect(self):

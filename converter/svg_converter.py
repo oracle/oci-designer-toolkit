@@ -18,7 +18,6 @@ __module__ = "svg_converter"
 
 
 from contextlib import closing
-import datetime
 import getopt
 import os
 import re
@@ -26,8 +25,6 @@ import sys
 
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-from svg.path import parse_path
-from svg.path import Path, Line, Arc, CubicBezier, QuadraticBezier, Move
 
 from common.ociLogging import getLogger
 
@@ -50,10 +47,6 @@ SVG_END_TAG   = '</svg>\n'
 
 # Execute workflow
 def processWorkflow(args):
-    ns_array = {
-        'svg': 'http://www.w3.org/2000/svg',
-        'xlink': 'http://www.w3.org/1999/xlink'
-    }
     svg_files = [f for f in os.listdir(args['sourcedir']) if os.path.isfile(os.path.join(args['sourcedir'], f))]
     for svg_file in svg_files:
         logger.info('Converting SVG File {0!s:s}'.format(os.path.join(args['sourcedir'], svg_file)))
@@ -103,9 +96,6 @@ def processWorkflow(args):
             else:
                 for path_tag in path_tags:
                     processPathTag(path_tag, f, vbx, vby)
-                    #command_list = parsePath(path_tag.getAttribute('d'))
-                    #command_list = updatePath(command_list, vbx, vby)
-                    #f.write(PATH_TAG.format(pathToString(command_list)))
             f.write(G_END_TAG)
             f.write(SVG_END_TAG)
         logger.info('   Written SVG File {0!s:s}\n'.format(os.path.join(args['destdir'], generateOutputFilename(svg_file))))
@@ -204,11 +194,7 @@ def parsePath(path):
     logger.debug('Passed Path : {0!s:s}'.format(path))
     path = ''.join(path.split())
     logger.debug('Split & Joined Path : {0!s:s}'.format(path))
-    #path = path.replace(' ', '').replace('\n', '').replace('\t', '')
-    #logger.debug('Replaced Path : {0!s:s}'.format(path))
     split_path = COMMAND_RE.split(path)
-    #for x in split_path:
-    #    logger.debug('x = {0!s:s}'.format(x))
 
     logger.debug('Split Path : {0!s:s}'.format(split_path))
     i = 1
@@ -246,7 +232,6 @@ def updatePath(command_list, vbx, vby):
 def pathToString(command_list):
     path_d = ' '.join(['{0!s:s}{1!s:s}'.format(cmd['command'], ','.join(format(p, "0.1f") for p in cmd['points'])) for cmd in command_list])
     logger.debug('Path.d {0!s:s}'.format(path_d))
-    #return '<path class="st0" d="{0!s:s}"/>'.format(path_d)
     return path_d
 
 
@@ -283,11 +268,6 @@ def parsePolygon(polygon):
 
 def updatePolygon(points, vbx, vby):
     logger.debug('Polygon Points : {0!s:s}'.format(points))
-    i = 0;
-    #while i < len(points):
-    #    points[i] += vbx
-    #    points[i + 1] += vby
-    #    i += 2
     logger.debug('Updated Polygon Points : {0!s:s}'.format(points))
     return points
 

@@ -18,18 +18,16 @@ __module__ = "ociPrivateIps"
 
 
 import oci
-import re
-import sys
 
-from facades.ociConnection import OCIVirtualNetworkConnection
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIVirtualNetworkConnection
 
 # Configure logging
 logger = getLogger()
 
 
 class OCIPrivateIps(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, subnet_id=None, vnic_id=None, ip_address=None, **kwargs):
+    def __init__(self, config=None, configfile=None, subnet_id=None, vnic_id=None, ip_address=None):
         self.subnet_id = subnet_id
         self.vnic_id = vnic_id
         self.ip_address = ip_address
@@ -64,18 +62,8 @@ class OCIPrivateIps(OCIVirtualNetworkConnection):
 
 
 class OCIPrivateIp(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, data=None):
         self.config = config
         self.configfile = configfile
         self.data = data
 
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])

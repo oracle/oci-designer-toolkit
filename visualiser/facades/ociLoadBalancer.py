@@ -18,29 +18,27 @@ __module__ = "ociNetwork"
 
 
 import oci
-import sys
-
-from facades.ociConnection import OCILoadBalancerConnection
-from facades.ociLoadBalancerHost import OCILoadBalancerHosts
-from facades.ociBackendSet import OCIBackendSets
-from facades.ociBackend import OCIBackends
-from facades.ociPrivateIps import OCIPrivateIps
-from facades.ociVnicAttachement import OCIVnicAttachments
 
 from common.ociLogging import getLogger
+from facades.ociBackend import OCIBackends
+from facades.ociBackendSet import OCIBackendSets
+from facades.ociConnection import OCILoadBalancerConnection
+from facades.ociLoadBalancerHost import OCILoadBalancerHosts
+from facades.ociPrivateIps import OCIPrivateIps
+from facades.ociVnicAttachement import OCIVnicAttachments
 
 # Configure logging
 logger = getLogger()
 
 
 class OCILoadBalancers(OCILoadBalancerConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.load_balancers_json = []
         self.load_balancers_obj = []
         super(OCILoadBalancers, self).__init__(config=config, configfile=configfile)
 
-    def list(self, compartment_id=None, filter=None, **kwargs):
+    def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
@@ -74,7 +72,7 @@ class OCILoadBalancers(OCILoadBalancerConnection):
 
 
 class OCILoadBalancer(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, data=None):
         self.config = config
         self.configfile = configfile
         self.data = data
@@ -88,14 +86,3 @@ class OCILoadBalancer(object):
     def getBackendClients(self, backend_set_name=None):
         return OCIBackends(self.config, self.configfile, self.data['id'], backend_set_name)
 
-
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])

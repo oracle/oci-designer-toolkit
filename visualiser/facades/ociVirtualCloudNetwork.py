@@ -18,21 +18,20 @@ __module__ = "ociNetwork"
 
 
 import oci
-import sys
 
+from common.ociLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
 from facades.ociSubnet import OCISubnets
-from common.ociLogging import getLogger
 
 # Configure logging
 logger = getLogger()
 
 
 class OCIVirtualCloudNetworks(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.virtual_cloud_networks_json = []
         self.virtual_cloud_networks_obj = []
@@ -80,14 +79,3 @@ class OCIVirtualCloudNetwork(object):
     def getSubnetClients(self):
         return OCISubnets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
-
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])

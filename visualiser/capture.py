@@ -17,16 +17,13 @@ __module__ = "capture"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
 import getopt
-import json
-import locale
-import logging
-import operator
-import os
-import requests
 import sys
 
+from common.ociLogging import getLogger
+
+# Configure logging
+logger = getLogger()
 
 # Execute workflow
 def processWorkflow(args):

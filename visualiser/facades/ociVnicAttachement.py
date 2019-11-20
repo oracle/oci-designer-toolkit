@@ -18,18 +18,16 @@ __module__ = "ociVnicAttachments"
 
 
 import oci
-import re
-import sys
 
-from facades.ociConnection import OCIComputeConnection
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIComputeConnection
 
 # Configure logging
 logger = getLogger()
 
 
 class OCIVnicAttachments(OCIComputeConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None, vnic_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None, vnic_id=None):
         self.compartment_id = compartment_id
         self.instance_id = instance_id
         self.vnic_id = vnic_id
@@ -37,7 +35,7 @@ class OCIVnicAttachments(OCIComputeConnection):
         self.vnic_attachments_obj = []
         super(OCIVnicAttachments, self).__init__(config=config, configfile=configfile)
 
-    def list(self, compartment_id=None, instance_id=None, vnic_id=None, filter=None, **kwargs):
+    def list(self, compartment_id=None, instance_id=None, vnic_id=None, filter=None):
         if compartment_id is None:
             compartment_id = self.compartment_id
         if instance_id is None:
@@ -64,18 +62,8 @@ class OCIVnicAttachments(OCIComputeConnection):
 
 
 class OCIVnicAttachment(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, data=None):
         self.config = config
         self.configfile = configfile
         self.data = data
 
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])
