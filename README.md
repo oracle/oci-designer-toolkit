@@ -1012,6 +1012,7 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 | jinja2     | BSD        | [PyPi Jinja2](https://pypi.org/project/Jinja2/)         |
 | pyyaml     | MIT        | [PyPi PyYAML](https://pypi.org/project/simplejson/)     |
 | simplejson | MIT        | [PyPi simplejson](https://pypi.org/project/simplejson/) |
+| werkzeug   | BSD        | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)     |
 
 ## Contributing
 

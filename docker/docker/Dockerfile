@@ -39,24 +39,24 @@ RUN yum update -y ; \
 # Install additional packages
  && yum update -y && yum install -y \
         ansible \
-        asciinema \
+        #asciinema \
         #curl-devel \
         curl \
-        dcfldd \
+        #dcfldd \
         #expat-devel \
-        expa \
-        gcc \
+        #expa \
+        #gcc \
         #gettext-devel \
-        gettext \
+        #gettext \
         git \
-        java \
-        jq \
-        kpartx \
-        libffi-devel \
-        libssl-dev \
-        lvm2 \
+        #java \
+        #jq \
+        #kpartx \
+        #libffi-devel \
+        #libssl-dev \
+        #lvm2 \
         make \
-        nfs-utils \
+        #nfs-utils \
         nginx \
         #openssl-devel \
         openssl \
@@ -65,15 +65,15 @@ RUN yum update -y ; \
         python36 \
         #python36-devel \
         #python36u-devel \
-        rpm-build \
+        #rpm-build \
         sudo \
         tar \
         terraform \
-        traceroute \
+        #traceroute \
         tree \
         wget \
         #zlib-devel \
-        zlib \
+        #zlib \
  && yum repolist all \
  && yum clean all \
 # Install pip
@@ -105,6 +105,7 @@ RUN yum update -y ; \
         #six \
         #svglib \
         #svg.path \
+        werkzeug \
         #wtforms \
         #xlrd \
 # Install oci ansible module
