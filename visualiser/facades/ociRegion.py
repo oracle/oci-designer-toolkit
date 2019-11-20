@@ -18,19 +18,16 @@ __module__ = "ociRegion"
 
 
 import oci
-import re
-import sys
 
-from facades.ociConnection import OCIIdentityConnection
-from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIIdentityConnection
 
 # Configure logging
 logger = getLogger()
 
 
 class OCIRegions(OCIIdentityConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None):
         self.regions_obj = []
         self.regions_json = []
         self.names = {}
@@ -44,7 +41,7 @@ class OCIRegions(OCIIdentityConnection):
         self.regions_obj = [OCIRegion(self.config, self.configfile, self.regions_json[0])]
         return self.regions_json[0]
 
-    def list(self, filter={}, **kwargs):
+    def list(self, filter={}):
         regions = oci.pagination.list_call_get_all_results(self.client.list_regions).data
         # Convert to Json object
         regions_json = self.toJson(regions)
@@ -72,14 +69,3 @@ class OCIRegion(object):
         self.configfile = configfile
         self.data = data
 
-
-# Main processing function
-def main(argv):
-    oci_regions = OCIRegions()
-    oci_regions.list()
-
-    return
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])

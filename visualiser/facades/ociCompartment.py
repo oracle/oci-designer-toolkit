@@ -18,16 +18,13 @@ __module__ = "ociCompartment"
 
 
 import oci
-import re
-import sys
-import json
 
-from facades.ociConnection import OCIIdentityConnection
-from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
-from facades.ociInstance import OCIInstances
-from facades.ociInstance import OCIInstanceVnics
-from facades.ociLoadBalancer import OCILoadBalancers
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIIdentityConnection
+from facades.ociInstance import OCIInstanceVnics
+from facades.ociInstance import OCIInstances
+from facades.ociLoadBalancer import OCILoadBalancers
+from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 
 # Configure logging
 logger = getLogger()
@@ -48,7 +45,7 @@ class OCICompartments(OCIIdentityConnection):
         self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
         return self.compartments_json[0]
 
-    def list(self, id=None, filter={}, recursive=False, **kwargs):
+    def list(self, id=None, filter={}, recursive=False):
         if id is None:
             id = self.compartment_ocid
         # Recursive only valid if we are querying the root / tenancy
@@ -83,13 +80,13 @@ class OCICompartments(OCIIdentityConnection):
             self.compartments_obj.append(OCICompartment(self.config, self.configfile, compartment))
         return self.compartments_json
 
-    def listTenancy(self, filter={}, **kwargs):
+    def listTenancy(self, filter={}):
         return self.list(id=self.config['tenancy'], filter=filter, recursive=True)
 
-    def listHierarchicalNames(self, filter={}, **kwargs):
+    def listHierarchicalNames(self, filter={}):
         compartments = self.listTenancy(filter=filter)
         for compartment in sorted(compartments, key=lambda k: k['time_created']):
-                self.canonicalnames.append(self.getCanonicalName(compartment['id']))
+            self.canonicalnames.append(self.getCanonicalName(compartment['id']))
         return sorted(self.canonicalnames)
 
     def getCanonicalName(self, compartment_id):
@@ -117,12 +114,3 @@ class OCICompartment(object):
     def getLoadBalancerClients(self):
         return OCILoadBalancers(self.config, self.configfile, self.data['id'])
 
-
-# Main processing function
-def main(argv):
-
-    return
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])

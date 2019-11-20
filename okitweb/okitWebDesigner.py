@@ -38,7 +38,6 @@ from generators.ociTerraformGenerator import OCITerraformGenerator
 from generators.ociTerraform11Generator import OCITerraform11Generator
 from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
-from generators.ociPythonGenerator import OCIPythonGenerator
 from facades.ociCompartment import OCICompartments
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks

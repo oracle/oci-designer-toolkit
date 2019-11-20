@@ -17,31 +17,18 @@ __module__ = "ociFileStorageSystems"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
-import getopt
-import json
-import locale
-import logging
-import operator
-import os
-import requests
-import sys
-
-
 import oci
-import re
-import sys
 
-from facades.ociConnection import OCIFileStorageSystemConnection
-from facades.ociAvailabilityDomains import OCIAvailabilityDomains
 from common.ociLogging import getLogger
+from facades.ociAvailabilityDomains import OCIAvailabilityDomains
+from facades.ociConnection import OCIFileStorageSystemConnection
 
 # Configure logging
 logger = getLogger()
 
 
 class OCIFileStorageSystems(OCIFileStorageSystemConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.file_storage_systems_json = []
         self.file_storage_systems_obj = []
@@ -112,18 +99,8 @@ class OCIFileStorageSystems(OCIFileStorageSystemConnection):
         return self.toJson(mount_targets)
 
 class OCIFileStorageSystem(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, data=None):
         self.config = config
         self.configfile = configfile
         self.data = data
 
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])
