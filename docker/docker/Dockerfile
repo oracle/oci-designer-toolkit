@@ -87,26 +87,26 @@ RUN yum update -y ; \
 # Install required python modules
  && cd /tmp ; \
     pip3 install \
-        ansible \
-        asciinema \
-        configparser \
+        #ansible \
+        #asciinema \
+        #configparser \
         flask \
-        flask-cors \
-        flask_restful \
+        #flask-cors \
+        #flask_restful \
         gunicorn \
-        ipaddress \
-        ipcalc \
+        #ipaddress \
+        #ipcalc \
         jinja2 \
         oci \
-        pexpect \
+        #pexpect \
         pyyaml \
-        requests \
+        #requests \
         simplejson \
-        six \
-        svglib \
-        svg.path \
-        wtforms \
-        xlrd \
+        #six \
+        #svglib \
+        #svg.path \
+        #wtforms \
+        #xlrd \
 # Install oci ansible module
  && cd /tmp ; \
     git clone https://github.com/oracle/oci-ansible-modules.git ; \

@@ -19,7 +19,6 @@ __module__ = "ociResourceManager"
 
 import base64
 import oci
-import re
 import sys
 import time
 

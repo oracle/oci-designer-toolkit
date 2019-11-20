@@ -18,7 +18,6 @@ __module__ = "ociInternetGateway"
 
 
 import oci
-import re
 import sys
 import json
 

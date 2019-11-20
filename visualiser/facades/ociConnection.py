@@ -18,7 +18,6 @@ __module__ = "ociConnection"
 
 import oci
 import json
-import os
 import re
 import sys
 

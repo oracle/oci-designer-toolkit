@@ -40,14 +40,18 @@ class OkitJson {
     load(okit_json) {
         console.groupCollapsed('Load OKT Json');
         // Compartments
-        for (let compartment of okit_json['compartments']) {
-            let comp = this.newCompartment(compartment);
-            console.info(comp);
+        if (okit_json.hasOwnProperty('compartments')) {
+            for (let compartment of okit_json['compartments']) {
+                let comp = this.newCompartment(compartment);
+                console.info(comp);
+            }
         }
         // Virtual Cloud Networks
-        for (let virtual_cloud_network of okit_json['virtual_cloud_networks']) {
-            let vcn = this.newVirtualCloudNetwork(virtual_cloud_network);
-            console.info(vcn);
+        if (okit_json.hasOwnProperty('virtual_cloud_networks')) {
+            for (let virtual_cloud_network of okit_json['virtual_cloud_networks']) {
+                let vcn = this.newVirtualCloudNetwork(virtual_cloud_network);
+                console.info(vcn);
+            }
         }
         console.groupEnd();
     }

@@ -17,17 +17,6 @@ __module__ = "ociVolumeAttachments"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
-import getopt
-import json
-import locale
-import logging
-import operator
-import os
-import requests
-import sys
-
-
 import oci
 import re
 import sys

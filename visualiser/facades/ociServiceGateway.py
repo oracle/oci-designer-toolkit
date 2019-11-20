@@ -18,7 +18,6 @@ __module__ = "ociServiceGateway"
 
 
 import oci
-import re
 import sys
 
 from facades.ociConnection import OCIVirtualNetworkConnection

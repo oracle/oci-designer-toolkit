@@ -18,7 +18,6 @@ __module__ = "ociNetwork"
 
 
 import oci
-import re
 import sys
 
 from facades.ociConnection import OCILoadBalancerConnection

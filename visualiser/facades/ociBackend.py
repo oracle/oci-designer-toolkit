@@ -18,7 +18,6 @@ __module__ = "ociBackends"
 
 
 import oci
-import re
 import sys
 import json
 

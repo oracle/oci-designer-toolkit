@@ -18,7 +18,6 @@ __module__ = "ociCompartment"
 
 
 import oci
-import re
 import sys
 import json
 

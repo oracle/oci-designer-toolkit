@@ -995,6 +995,23 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 
         return
 ```
+## 3rd Party Libraries
+### Javascript
+
+| Library    | License    | Home Page                                               |
+| ---------- | ---------- | ------------------------------------------------------- |
+| jQuery     | MIT        | 
+| d3         | BSD        |
+
+### Python
+
+| Library    | License    | Home Page                                               |
+| ---------- | ---------- | ------------------------------------------------------- |
+| flask      | BSD        | [PyPi Flask](https://pypi.org/project/Flask/)           |
+| gunicorn   | MIT        | [PyPi gunicorn](https://pypi.org/project/gunicorn/)     |
+| jinja2     | BSD        | [PyPi Jinja2](https://pypi.org/project/Jinja2/)         |
+| pyyaml     | MIT        | [PyPi PyYAML](https://pypi.org/project/simplejson/)     |
+| simplejson | MIT        | [PyPi simplejson](https://pypi.org/project/simplejson/) |
 
 ## Contributing
 
