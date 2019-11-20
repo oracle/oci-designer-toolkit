@@ -164,7 +164,7 @@
 .right-click-delete {
     background-color: slategrey;
     color: white;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     border: 1px solid black;
     border-radius: 5px;
     padding: 5px;
@@ -281,7 +281,7 @@
 .property-editor-title {
     color: #3d5c5c;
     font-weight: bold;
-    font-family: "Times New Roman";
+    font-family: "Times New Roman", Arial, sans-serif;
     min-height: 20px;
     display: block;
     vertical-align: top;
@@ -380,7 +380,7 @@
 }
 
 .source-code pre {
-    font-family: "Courier New", Courier, Arial;
+    font-family: "Courier New", Courier, Arial, sans-serif;
     font-size: 14px;
     font-weight: bold;
 }
@@ -390,7 +390,7 @@
     flex-grow: 1;
     width: 100%;
     height: 100%;
-    font-family: "Courier New", Courier, Arial;
+    font-family: "Courier New", Courier, Arial, sans-serif;
     font-size: 14px;
     font-weight: bold;
     direction: ltr;
@@ -401,7 +401,7 @@
     flex-grow: 1;
     width: 100%;
     height: 100%;
-    font-family: "Courier New", Courier, Arial;
+    font-family: "Courier New", Courier, Arial, sans-serif;
     font-size: 14px;
     font-weight: bold;
     direction: ltr;
@@ -423,16 +423,6 @@
 /*
 ** Footer Panel (Footer Block) CSS
  */
-
-#okitjson111 {
-    border: none;
-    width: 100%;
-    height: 100%;
-    overflow-scrolling: auto;
-    background: ghostwhite;
-    font-family: "Courier New", Courier, Arial;
-    font-size: 14px;
-}
 
 /* Style the tab */
 .tab {

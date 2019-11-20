@@ -179,7 +179,6 @@ ul {
     overflow-wrap: break-word;
     display: block;
     font: normal 14px/20px Helvetica Neue,Helvetica,Arial,sans-serif;
-    color: #fff;
     text-decoration: none;
     outline: 0;
     user-select: none;
@@ -227,7 +226,6 @@ ul.nav-list li .header-item {
     outline: 0;
     user-select: none;
     padding: 12.5px 30px;
-    display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: nowrap;
