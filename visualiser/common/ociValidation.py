@@ -17,17 +17,6 @@ __module__ = "ociJsonValidator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
-import getopt
-import json
-import locale
-import logging
-import operator
-import os
-import requests
-import sys
-
-from common.ociExceptions import ValidationException
 from common.ociLogging import getLogger
 
 # Configure logging

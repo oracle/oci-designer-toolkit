@@ -87,7 +87,7 @@ RUN yum update -y ; \
 # Install required python modules
  && cd /tmp ; \
     pip3 install \
-        #ansible \
+        ansible \
         #asciinema \
         #configparser \
         flask \
