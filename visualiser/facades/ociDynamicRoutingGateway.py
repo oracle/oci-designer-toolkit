@@ -13,7 +13,7 @@ __ekitrelease__ = "@RELEASE@"
 __version__ = "1.0.0.0"
 __date__ = "@BUILDDATE@"
 __status__ = "@RELEASE@"
-__module__ = "ociInternetGateway"
+__module__ = "ociDynamicRoutingGateway"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
