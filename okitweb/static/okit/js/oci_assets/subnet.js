@@ -719,3 +719,48 @@ $(document).ready(function () {
         .attr('name', 'subnet_name_filter');
 });
 
+
+
+/*
+** Define Subnet Artifact Class
+ */
+class Subnet extends OkitSvgArtifact {
+
+    constructor (data={}, okitjson={}) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + subnet_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(subnet_prefix, okitjson.subnets.length + 1);
+        this.compartment_id = '';
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+    }
+
+    // CRUD Processing
+    add(title='') {
+        this.title = title;
+        let id = 'okit-' + subnet_prefix + '-' + uuidv4();
+        console.groupCollapsed('Adding ' + subnet_prefix + ' : ' + id);
+        console.groupEnd();
+    }
+
+    delete() {
+        console.groupCollapsed('Delete ' + subnet_prefix + ' : ' + id);
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    // SVG Processing
+    draw() {
+
+    }
+
+    getTargets() {
+        return [compartment_artifact];
+    }
+
+}
+

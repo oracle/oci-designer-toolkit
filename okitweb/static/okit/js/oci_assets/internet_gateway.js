@@ -226,3 +226,48 @@ $(document).ready(function() {
         .attr('name', 'internet_gateway_name_filter');
 });
 
+
+
+/*
+** Define Subnet Artifact Class
+ */
+class InternetGateway extends OkitSvgArtifact {
+
+    constructor (data={}, okitjson={}) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(internet_gateway_prefix, okitjson.internet_gateways.length + 1);
+        this.compartment_id = '';
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+    }
+
+    // CRUD Processing
+    add(title='') {
+        this.title = title;
+        let id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
+        console.groupCollapsed('Adding ' + internet_gateway_prefix + ' : ' + id);
+        console.groupEnd();
+    }
+
+    delete() {
+        console.groupCollapsed('Delete ' + internet_gateway_prefix + ' : ' + id);
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    // SVG Processing
+    draw() {
+
+    }
+
+    getTargets() {
+        return [virtual_cloud_gateway_artifact];
+    }
+
+}
+

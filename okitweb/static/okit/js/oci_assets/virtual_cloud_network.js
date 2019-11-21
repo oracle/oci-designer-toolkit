@@ -463,14 +463,24 @@ $(document).ready(function() {
 });
 
 
+
 /*
 ** Define Virtual Cloud Network Artifact Class
  */
-class VirtualCloudNetwork {
+class VirtualCloudNetwork extends OkitSvgArtifact {
 
-    constructor (json={}) {
-        for (let key in json) {
-            this[key] = json[key];
+    constructor (data={}, okitjson={}) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(virtual_cloud_network_prefix, okitjson.virtual_cloud_networks.length + 1);
+        this.compartment_id = '';
+        // Generate Cidr
+        this.cidr_block = '10.' + okitjson.virtual_cloud_networks.length + '.0.0/16';
+        this.dns_label = this.display_name.toLowerCase().slice(-6);
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
         }
     }
 
@@ -478,8 +488,8 @@ class VirtualCloudNetwork {
     add(title='') {
         this.title = title;
         let id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
-        console.groupCollapsed('Adding ' + this.artifact + ' : ' + id);
-
+        console.groupCollapsed('Adding ' + virtual_cloud_network_prefix + ' : ' + id);
+        console.groupEnd();
     }
 
     delete() {

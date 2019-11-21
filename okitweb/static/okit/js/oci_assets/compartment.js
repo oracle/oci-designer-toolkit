@@ -303,24 +303,27 @@ $(document).ready(function() {
 /*
 ** Define Compartment Artifact Class
  */
-class Compartment {
+class Compartment extends OkitSvgArtifact {
 
-    constructor (json={}) {
-        this.id = 'okit-' + compartment_prefix + '-' + uuidv4();;
-        this.name = generateDefaultName(compartment_prefix);
+    constructor (data={}, okitjson={}) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + compartment_prefix + '-' + uuidv4();
+        this.name = generateDefaultName(compartment_prefix, okitjson.compartments.length + 1);
+        this.display_name = this.name;
         this.compartment_id = '';
-
-        for (let key in json) {
-            this[key] = json[key];
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
         }
     }
 
     // CRUD Processing
-    create(title='') {
+    add(title='') {
         this.title = title;
         let id = 'okit-' + compartment_prefix + '-' + uuidv4();
         console.groupCollapsed('Adding ' + compartment_artifact + ' : ' + id);
-
+        console.groupEnd();
     }
 
     delete() {

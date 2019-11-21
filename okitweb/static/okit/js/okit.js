@@ -11,8 +11,32 @@ class OkitSvg {
     }
 }
 
-class OkitJson {
+class OkitSvgArtifact {
+    constructor (okitjson) {
+        this.getOkitJson = function() {return okitjson};
+    }
+    newSVGDefinition(artifact, data_type) {
+        let definition = {};
+        definition['artifact'] = artifact;
+        definition['data_type'] = data_type;
+        definition['name'] = {show: false, text: artifact['display_name']};
+        definition['label'] = {show: false, text: data_type};
+        definition['info'] = {show: false, text: data_type};
+        definition['svg'] = {x: 0, y: 0, width: icon_width, height: icon_height};
+        definition['rect'] = {x: 0, y: 0,
+            width: icon_width, height: icon_height,
+            width_adjust: 0, height_adjust: 0,
+            stroke: {colour: '#F80000', dash: 5},
+            fill: 'white', style: 'fill-opacity: .25;'};
+        definition['icon'] = {show: true, x_translation: 0, y_translation: 0};
+        definition['title_keys'] = [];
 
+        return definition
+    }
+
+}
+
+class OkitJson {
     constructor(okit_json_string = '') {
         this.title = "OKIT OCI Visualiser Json";
         this.description = "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......";
@@ -78,9 +102,13 @@ class OkitJson {
         console.groupEnd();
     }
 
+    test() {
+        console.info('Test Call.........')
+    }
+
     // Compartments
     newCompartment(data = {}) {
-        this['compartments'].push(new Compartment(data));
+        this['compartments'].push(new Compartment(data, this));
         return this['compartments'][this['compartments'].length - 1];
     }
 
@@ -104,7 +132,7 @@ class OkitJson {
 
     // Virtual Cloud Networks
     newVirtualCloudNetwork(data) {
-        this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data));
+        this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this));
         return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
     }
 
@@ -127,7 +155,17 @@ class OkitJson {
 }
 
 $(document).ready(function() {
+    /*
     let oj = new OkitJson(JSON.stringify({"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]}));
     console.info(oj);
     console.info(JSON.stringify(oj, null, 2));
+    for (let compartment of oj.compartments) {
+        console.info('getOkitJson : ' + compartment.getOkitJson());
+        console.info('getOkitJson String : ' + JSON.stringify(compartment.getOkitJson()));
+        compartment.getOkitJson().test();
+        compartment.getOkitJson()['instances'] = [{id: 'okit-instance'}];
+    }
+    console.info(oj);
+    console.info(JSON.stringify(oj, null, 2));
+    */
 });
