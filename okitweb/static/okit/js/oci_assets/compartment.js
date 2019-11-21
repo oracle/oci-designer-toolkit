@@ -82,16 +82,6 @@ function deleteCompartment(id) {
             okitJson['compartments'].splice(i, 1);
         }
     }
-    // Remove Subnet references
-    if ('route_tables' in okitJson) {
-        for (route_table of okitJson['route_tables']) {
-            for (let i = 0; i < route_table['route_rules'].length; i++) {
-                if (route_table['route_rules'][i]['network_entity_id'] == id) {
-                    route_table['route_rules'].splice(i, 1);
-                }
-            }
-        }
-    }
     console.groupEnd();
 }
 
@@ -308,3 +298,45 @@ $(document).ready(function() {
     //loadCompartmentPaletteIconSVG();
 });
 
+
+
+/*
+** Define Compartment Artifact Class
+ */
+class Compartment {
+
+    constructor (json={}) {
+        this.id = 'okit-' + compartment_prefix + '-' + uuidv4();;
+        this.name = generateDefaultName(compartment_prefix);
+        this.compartment_id = '';
+
+        for (let key in json) {
+            this[key] = json[key];
+        }
+    }
+
+    // CRUD Processing
+    create(title='') {
+        this.title = title;
+        let id = 'okit-' + compartment_prefix + '-' + uuidv4();
+        console.groupCollapsed('Adding ' + compartment_artifact + ' : ' + id);
+
+    }
+
+    delete() {
+        console.groupCollapsed('Delete ' + compartment_artifact + ' : ' + id);
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    // SVG Processing
+    draw() {
+
+    }
+
+    getTargets() {
+        return [compartment_artifact];
+    }
+
+}

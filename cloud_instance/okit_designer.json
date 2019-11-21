@@ -1,0 +1,166 @@
+{
+  "title": "OKIT OCI Visualiser Json",
+  "description": "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......",
+  "compartments": [
+    {
+      "id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0",
+      "name": "okit-comp001",
+      "compartment_id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0",
+      "parent_id": "canvas",
+      "display_name": "okit-comp001"
+    }
+  ],
+  "autonomous_databases": [],
+  "block_storage_volumes": [],
+  "dynamic_routing_gateways": [],
+  "file_storage_systems": [],
+  "instances": [
+    {
+      "subnet_id": "okit-sn-4d6f6017-f0a3-41a1-a000-9ee2e84bd714",
+      "subnet": "OKITDesignerSn",
+      "compartment_id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0",
+      "availability_domain": "1",
+      "id": "okit-in-cdca1b4e-646a-45cf-9d00-7ea5b80f2ac8",
+      "display_name": "OKITDesigner",
+      "hostname_label": "okit-in001",
+      "os": "Oracle Linux",
+      "version": "7.7",
+      "shape": "VM.Standard2.4",
+      "boot_volume_size_in_gbs": "50",
+      "authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwIFalMQVOp7gjpBIpJF14CsFLGvP7VbGQdsYkToNSJeiF38Y6TNUtUnotdAuyU6nM85+rvWAgk1wIwYXrZZwloGmnwTfN0jLiU99Ep18IiA8ON1WZhQejbAYR+K16R7XMDAwoKVYnlwpyqfsSwrOBqhHsRpZVgu5T477GHdrbD4z9eQszNJLfUEmGFkfh+TLEqwONmkf2O3Pf8bkY5wIUWGvFSmaGMd253VIG52oZDm65OxyzsmHAgJhQuSoajOiIKwbwmDMF6ghbt4ohnde7OC72StUMIuKzGFwI3tQdY4S3D8UoiA/Ey6pLqN/7PL2GLnnZB6cM4cStktkZMHdf Terraform OCI Test Key",
+      "cloud_init_yaml": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n      export PYTHONPATH=\":/home/opc/okit/visualiser:/home/opc/okit/okitweb:/home/opc/okit\"\n\n  # Change Default nginx Config (Socket)\n  - path: /etc/nginx/nginx.conf\n    permissions: '0644'\n    content: |\n      user nginx;\n      worker_processes auto;\n      error_log /var/log/nginx/error.log;\n      pid /run/nginx.pid;\n\n      # Load dynamic modules. See /usr/share/nginx/README.dynamic.\n      include /usr/share/nginx/modules/*.conf;\n\n      events {\n        worker_connections 1024;\n      }\n\n      http {\n          log_format  main  '$remote_addr - $remote_user [$time_local] \"$request\" '\n                            '$status $body_bytes_sent \"$http_referer\" '\n                            '\"$http_user_agent\" \"$http_x_forwarded_for\"';\n\n          access_log  /var/log/nginx/access.log  main;\n\n          sendfile            on;\n          tcp_nopush          on;\n          tcp_nodelay         on;\n          keepalive_timeout   65;\n          types_hash_max_size 2048;\n\n          include             /etc/nginx/mime.types;\n          default_type        application/octet-stream;\n\n          # Load modular configuration files from the /etc/nginx/conf.d directory.\n          # See http://nginx.org/en/docs/ngx_core_module.html#include\n          # for more information.\n          include /etc/nginx/conf.d/*.conf;\n\n          server {\n              listen       80 default_server;\n              server_name  _;\n              root         /usr/share/nginx/html;\n\n              # Load configuration files for the default server block.\n              include /etc/nginx/default.d/*.conf;\n\n              location / {\n                  #proxy_pass http://127.0.0.1:5000/;\n                  proxy_pass http://unix:/var/run/gunicorn.sock;\n                  proxy_redirect   off;\n                  proxy_set_header Host $http_host;\n                  proxy_set_header X-Real-IP $remote_addr;\n                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n                  proxy_set_header X-Forwarded-Proto $scheme;\n              }\n\n              error_page 404 /404.html;\n                  location = /40x.html {\n              }\n\n              error_page 500 502 503 504 /50x.html;\n                  location = /50x.html {\n              }\n          }\n      }\n\n  # Write GUnicorn Service (Socket)\n  - path: /etc/systemd/system/gunicorn.service\n    permissions: '0755'\n    content: |\n      [Unit]\n      Description=gunicorn daemon\n      Requires=gunicorn.socket\n      After=network.target\n\n      [Service]\n      Type=notify\n      # the specific user that our service will run as\n      User=opc\n      Group=opc\n      Environment=\"PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/opc/.local/bin:/home/opc/bin\"\n      Environment=\"PYTHONPATH=:/home/opc/okit/visualiser:/home/opc/okit/okitweb:/home/opc/okit\"\n      RuntimeDirectory=gunicorn\n      WorkingDirectory=/home/opc/okit\n      ExecStart=/usr/local/bin/gunicorn okitweb.wsgi:app\n      ExecReload=/bin/kill -s HUP $MAINPID\n      KillMode=mixed\n      TimeoutStopSec=5\n      PrivateTmp=true\n\n      [Install]\n      WantedBy=multi-user.target\n\n  # Write GUnicorn Socket\n  - path: /etc/systemd/system/gunicorn.socket\n    permissions: '0755'\n    content: |\n      [Unit]\n      Description=gunicorn socket\n\n      [Socket]\n      ListenStream=/var/run/gunicorn.sock\n      # Our service won't need permissions for the socket, since it\n      # inherits the file descriptor by socket activation\n      # only the nginx daemon will need access to the socket\n      User=nginx\n      # Optionally restrict the socket permissions even more.\n      # Mode=600\n\n      [Install]\n      WantedBy=sockets.target\n\n  # Write nginx.te for SELinux\n  - path: /home/nginx/nginx.te\n    permissions: '0664'\n    content: |\n      module nginx 1.0;\n\n      require {\n      \ttype unconfined_t;\n      \ttype user_home_t;\n      \ttype httpd_t;\n      \ttype var_run_t;\n      \tclass file { read open };\n      \tclass sock_file write;\n      \tclass unix_stream_socket connectto;\n      }\n\n      #============= httpd_t ==============\n\n      allow httpd_t unconfined_t:unix_stream_socket connectto;\n      allow httpd_t var_run_t:sock_file write;\n      allow httpd_t user_home_t:file { read open };\n\nruncmd:\n  # Create okit directory\n  - mkdir -p /home/opc/okit\n  - chmod -R 777 /home/opc/okit\n  # Config SELinux\n  - sudo checkmodule -M -m -o /home/nginx/nginx.mod /home/nginx/nginx.te\n  - sudo semodule_package -o /home/nginx/nginx.pp -m /home/nginx/nginx.mod\n  - sudo semodule -i /home/nginx/nginx.pp\n  #- sudo setsebool -P httpd_can_network_connect 1\n  # Reload\n  - systemctl daemon-reload\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo systemctl start nginx.service\n  # Enable GUnicorn\n  - sudo pip3 install configparser flask flask-cors flask_restful gunicorn ipaddress ipcalc jinja2 oci pexpect pyyaml\n  - sudo pip3 install requests simplejson six svglib svg.path wtforms xlrd\n  - sudo systemctl enable gunicorn.service\n  - sudo systemctl enable gunicorn.socket\n  - sudo systemctl start gunicorn.socket\n  - sudo systemctl restart gunicorn.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  #- sudo firewall-offline-cmd  --add-port=5000/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n",
+      "block_storage_volume_ids": [],
+      "block_storage_volumes": [],
+      "subnet_ids": [],
+      "parent_id": "okit-sn-4d6f6017-f0a3-41a1-a000-9ee2e84bd714"
+    }
+  ],
+  "internet_gateways": [
+    {
+      "vcn_id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e",
+      "virtual_cloud_network": "okit-vcn001",
+      "compartment_id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0",
+      "id": "okit-ig-92ed9a72-b44d-4604-830e-d638b95ebe57",
+      "display_name": "OKITDesignerIg",
+      "parent_id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e"
+    }
+  ],
+  "load_balancers": [],
+  "nat_gateways": [],
+  "object_storage_buckets": [],
+  "route_tables": [
+    {
+      "vcn_id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e",
+      "virtual_cloud_network": "okit-vcn001",
+      "compartment_id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0",
+      "id": "okit-rt-473c2223-fcff-410a-8437-4908c6a0dea9",
+      "display_name": "OKITDesignerRt",
+      "route_rules": [
+        {
+          "destination_type": "CIDR_BLOCK",
+          "destination": "0.0.0.0/0",
+          "network_entity_id": "okit-ig-92ed9a72-b44d-4604-830e-d638b95ebe57"
+        }
+      ],
+      "parent_id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e"
+    }
+  ],
+  "security_lists": [
+    {
+      "vcn_id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e",
+      "virtual_cloud_network": "OKITDesignerVcn",
+      "compartment_id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0",
+      "id": "okit-sl-be0ee67b-cdd3-4497-8afa-0a91a0effa0c",
+      "display_name": "OKITDesignerSl",
+      "egress_security_rules": [
+        {
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "icmp_options": null,
+          "is_stateless": false,
+          "protocol": "all",
+          "tcp_options": null,
+          "udp_options": null
+        }
+      ],
+      "ingress_security_rules": [
+        {
+          "icmp_options": null,
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": 22,
+              "min": 22
+            },
+            "source_port_range": null
+          },
+          "udp_options": null
+        },
+        {
+          "icmp_options": {
+            "code": 4,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": null,
+          "udp_options": null
+        },
+        {
+          "icmp_options": {
+            "code": null,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "10.0.0.0/16",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": null,
+          "udp_options": null
+        }
+      ],
+      "parent_id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e"
+    }
+  ],
+  "service_gateways": [],
+  "subnets": [
+    {
+      "vcn_id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e",
+      "virtual_cloud_network": "OKITDesignerVcn",
+      "compartment_id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0",
+      "id": "okit-sn-4d6f6017-f0a3-41a1-a000-9ee2e84bd714",
+      "display_name": "OKITDesignerSn",
+      "cidr_block": "10.0.0.0/24",
+      "dns_label": "designersn",
+      "prohibit_public_ip_on_vnic": false,
+      "route_table": "",
+      "route_table_id": "okit-rt-473c2223-fcff-410a-8437-4908c6a0dea9",
+      "security_lists": [],
+      "security_list_ids": [
+        "okit-sl-be0ee67b-cdd3-4497-8afa-0a91a0effa0c"
+      ],
+      "parent_id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e"
+    }
+  ],
+  "virtual_cloud_networks": [
+    {
+      "compartment_id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0",
+      "id": "okit-vcn-c0dd4e53-f533-4334-9f27-9c2b23ae6b2e",
+      "display_name": "OKITDesignerVcn",
+      "cidr_block": "10.0.0.0/16",
+      "dns_label": "desginervcn",
+      "parent_id": "okit-comp-1152f05c-7a90-4084-a60b-288f59327fe0"
+    }
+  ],
+  "open_compartment_index": 0,
+  "canvas": {
+    "compartments": {},
+    "subnets": {},
+    "virtual_cloud_networks": {}
+  }
+}

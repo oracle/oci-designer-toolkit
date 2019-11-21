@@ -39,41 +39,18 @@ RUN yum update -y ; \
 # Install additional packages
  && yum update -y && yum install -y \
         ansible \
-        asciinema \
-        #curl-devel \
         curl \
-        dcfldd \
-        #expat-devel \
-        expa \
-        gcc \
-        #gettext-devel \
-        gettext \
         git \
-        java \
-        jq \
-        kpartx \
-        libffi-devel \
-        libssl-dev \
-        lvm2 \
         make \
-        nfs-utils \
         nginx \
-        #openssl-devel \
         openssl \
-        #python-devel \
-        python \
+        #python \
         python36 \
-        #python36-devel \
-        #python36u-devel \
-        rpm-build \
         sudo \
         tar \
         terraform \
-        traceroute \
         tree \
         wget \
-        #zlib-devel \
-        zlib \
  && yum repolist all \
  && yum clean all \
 # Install pip
@@ -87,26 +64,14 @@ RUN yum update -y ; \
 # Install required python modules
  && cd /tmp ; \
     pip3 install \
-        ansible \
-        asciinema \
-        configparser \
+        #ansible \
         flask \
-        flask-cors \
-        flask_restful \
         gunicorn \
-        ipaddress \
-        ipcalc \
         jinja2 \
         oci \
-        pexpect \
         pyyaml \
-        requests \
         simplejson \
-        six \
-        svglib \
-        svg.path \
-        wtforms \
-        xlrd \
+        werkzeug \
 # Install oci ansible module
  && cd /tmp ; \
     git clone https://github.com/oracle/oci-ansible-modules.git ; \

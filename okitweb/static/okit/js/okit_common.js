@@ -13,6 +13,7 @@ function shuffle(array) {
     }
     return array;
 }
+
 function generatePassword(length=30, lowercase=1, uppercase=1, numeric=1, special=0) {
     let min_length = 12;
     let lowercase_chars = 'abcdefghijklmnopqrstuvwxyz';
@@ -38,6 +39,27 @@ function generatePassword(length=30, lowercase=1, uppercase=1, numeric=1, specia
 
 function standardiseId(id) {
     return id.r.replace(/\./g, '-');
+}
+
+function getTimestamp() {
+    console.groupCollapsed('Get TimeStamp');
+    let dateTimeNow = new Date();
+    let year   = '' + dateTimeNow.getFullYear();
+    let month  = ('00' + dateTimeNow.getMonth()).slice(-2);
+    let day    = ('00' + dateTimeNow.getDay()).slice(-2);
+    let hour   = ('00' + dateTimeNow.getHours()).slice(-2);
+    let minute = ('00' + dateTimeNow.getMinutes()).slice(-2);
+    let second = ('00' + dateTimeNow.getSeconds()).slice(-2);
+    console.info('Year      : ' + year);
+    console.info('Month     : ' + month);
+    console.info('Day       : ' + day);
+    console.info('Hour      : ' + hour);
+    console.info('Minute    : ' + minute);
+    console.info('Second    : ' + second);
+    let timestamp = year + month + day + '-' + hour + minute + second;
+    console.info('Timestamp : ' + timestamp);
+    console.groupEnd();
+    return timestamp;
 }
 
 /*
@@ -108,6 +130,10 @@ function setBusyIcon() {
 function unsetBusyIcon() {
     $('*').css('cursor', 'auto');
 }
+
+/*
+** Cookie Processing
+ */
 
 function setCookie(cname, cvalue, exdays=180) {
     var d = new Date();

@@ -19,19 +19,17 @@ __module__ = "ociResourceManager"
 
 import base64
 import oci
-import re
-import sys
 import time
 
-from facades.ociConnection import OCIResourceManagerConnection
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIResourceManagerConnection
 
 # Configure logging
 logger = getLogger()
 
 
 class OCIResourceManagers(OCIResourceManagerConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.resource_managers_json = []
         self.resource_managers_obj = []
@@ -77,7 +75,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
 
 
 class OCIResourceManager(OCIResourceManagerConnection):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, data=None):
         self.config = config
         self.configfile = configfile
         self.data = data
@@ -89,13 +87,3 @@ class OCIResourceManager(OCIResourceManagerConnection):
         jobs_json = self.toJson(jobs)
         return jobs_json
 
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])

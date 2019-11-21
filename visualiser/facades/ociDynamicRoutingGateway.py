@@ -18,18 +18,16 @@ __module__ = "ociDynamicRoutingGateway"
 
 
 import oci
-import re
-import sys
 
-from facades.ociConnection import OCIVirtualNetworkConnection
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIVirtualNetworkConnection
 
 # Configure logging
 logger = getLogger()
 
 
 class OCIDynamicRoutingGateways(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.dynamic_routing_gateways_json = []
         self.dynamic_routing_gateways_obj = []
@@ -64,18 +62,8 @@ class OCIDynamicRoutingGateways(OCIVirtualNetworkConnection):
 
 
 class OCIDynamicRoutingGateway(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, data=None):
         self.config = config
         self.configfile = configfile
         self.data = data
 
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])

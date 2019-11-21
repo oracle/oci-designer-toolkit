@@ -462,3 +462,40 @@ $(document).ready(function() {
         .attr('name', 'virtual_cloud_network_name_filter');
 });
 
+
+/*
+** Define Virtual Cloud Network Artifact Class
+ */
+class VirtualCloudNetwork {
+
+    constructor (json={}) {
+        for (let key in json) {
+            this[key] = json[key];
+        }
+    }
+
+    // CRUD Processing
+    add(title='') {
+        this.title = title;
+        let id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
+        console.groupCollapsed('Adding ' + this.artifact + ' : ' + id);
+
+    }
+
+    delete() {
+        console.groupCollapsed('Delete ' + virtual_cloud_network_artifact + ' : ' + id);
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    // SVG Processing
+    draw() {
+
+    }
+
+    getTargets() {
+        return [compartment_artifact];
+    }
+
+}

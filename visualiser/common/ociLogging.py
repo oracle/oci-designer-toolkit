@@ -17,21 +17,10 @@ __module__ = "ekitLogging"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-from contextlib import closing
-import copy
-import itertools
-import jinja2
-import json
-import locale
 import logging
 import logging.handlers
 import os
-import shutil
-import subprocess
 import sys
-import tempfile
-import yaml
-import zipfile
 
 
 logger = None

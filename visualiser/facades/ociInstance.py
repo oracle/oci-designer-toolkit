@@ -18,19 +18,17 @@ __module__ = "ociNetwork"
 
 
 import oci
-import re
-import sys
 
-from facades.ociConnection import OCIComputeConnection,OCIVirtualNetworkConnection
-from facades.ociVolumeAttachment import OCIVolumeAttachments
-from facades.ociVnicAttachement import OCIVnicAttachments
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIComputeConnection, OCIVirtualNetworkConnection
+from facades.ociVnicAttachement import OCIVnicAttachments
+from facades.ociVolumeAttachment import OCIVolumeAttachments
 
 # Configure logging
 logger = getLogger()
 
 class OCIInstanceVnics(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None):
         self.compartment_id = compartment_id
         self.instance_id = instance_id
         self.vnics_json = []
@@ -102,7 +100,7 @@ class OCIInstances(OCIComputeConnection):
         volume_attachments = OCIVolumeAttachments(config=self.config, configfile=self.configfile, compartment_id=compartment_id).list()
 
         # Get VNic Attachments as a single call and loop through them to see if they are associated with the instance.
-        vnic_attachments = OCIVnicAttachments(onfig=self.config, configfile=self.configfile, compartment_id=compartment_id).list()
+        vnic_attachments = OCIVnicAttachments(config=self.config, configfile=self.configfile, compartment_id=compartment_id).list()
 
         for instance in self.instances_json:
             # Add Attached Block Storage Volumes
@@ -117,7 +115,7 @@ class OCIInstances(OCIComputeConnection):
         return self.instances_json
 
 class OCIInstance(object):
-    def __init__(self, config=None, configfile=None, data=None, id=None):
+    def __init__(self, config=None, configfile=None, data=None):
         self.config = config
         self.configfile = configfile
         self.data = data
@@ -131,13 +129,3 @@ class OCIInstance(object):
     def getVnicAttachments(self):
         return OCIVnicAttachments(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
 
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])
