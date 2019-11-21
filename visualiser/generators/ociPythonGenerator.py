@@ -14,23 +14,11 @@ __module__ = "ociAnsibleGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
-import getopt
-import jinja2
-import json
-import locale
-import logging
-import operator
 import os
-import requests
-import sys
 
-from generators.ociGenerator import OCIGenerator
-
-from common.ociCommon import readJsonFile
-from common.ociCommon import readYamlFile
 from common.ociCommon import writePythonFile
 from common.ociLogging import getLogger
+from generators.ociGenerator import OCIGenerator
 
 # Configure logging
 logger = getLogger()

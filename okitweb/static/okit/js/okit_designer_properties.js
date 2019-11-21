@@ -47,7 +47,7 @@ function loadProperties(json_element) {
     console.groupEnd();
 }
 
-function addPropertiesEventListeners(json_element, callbacks=[]) {
+function addPropertiesEventListeners(json_element, callbacks=[], settings=false) {
     // Default callbacks if not passed
     callbacks = (typeof callbacks !== 'undefined') ? callbacks : [];
     // Add Event Listeners
@@ -79,6 +79,7 @@ function addPropertiesEventListeners(json_element, callbacks=[]) {
                     }
                 } else if (this.type == 'checkbox') {
                     json_element[this.id] = $(this).is(':checked');
+                    saveOkitSettings();
                 } else {
                     console.info('Unknown input type ' + $(this).attr('type'));
                 }

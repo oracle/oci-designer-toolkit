@@ -14,32 +14,18 @@ __module__ = "ociTerraform11Generator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
-import getopt
-import jinja2
-import json
-import locale
-import logging
-import operator
 import os
-import requests
-import sys
 
-from generators.ociTerraform11Generator import OCITerraform11Generator
-from generators.ociTerraformGenerator import OCITerraformGenerator
-
-from common.ociCommon import logJson
-from common.ociCommon import readJsonFile
-from common.ociCommon import readYamlFile
 from common.ociCommon import writeTerraformFile
 from common.ociLogging import getLogger
+from generators.ociTerraformGenerator import OCITerraformGenerator
 
 # Configure logging
 logger = getLogger()
 
 class OCIResourceManagerGenerator(OCITerraformGenerator):
 
-    def __init__(self, template_root, output_root, visualiser_json, tenancy_ocid=None, region=None, compartment_ocid=None, **kwargs):
+    def __init__(self, template_root, output_root, visualiser_json, tenancy_ocid=None, region=None, compartment_ocid=None):
         DIRECTORY_SUFFIX = 'resource-manager'
         super(OCIResourceManagerGenerator, self).__init__(template_root, output_root, visualiser_json)
         self.output_dir = os.path.join(output_root, DIRECTORY_SUFFIX)

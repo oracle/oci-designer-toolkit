@@ -15,6 +15,9 @@ let okitQueryRequestJson = null;
 
 function saveOkitSettings(settings) {
     console.info('Saving OKIT Settings To Cookie.');
+    if (settings === undefined) {
+        settings = JSON.stringify(okitSettings);
+    }
     setCookie('okit-settings', settings);
 }
 
@@ -24,7 +27,8 @@ function readOkitSettings() {
         console.info('OKIT Settings Cookie Was Not Found.');
         let settings = {
             is_default_security_list: true,
-            is_default_route_table: true
+            is_default_route_table: true,
+            is_timestamp_files: false
         };
         cookie_value = JSON.stringify(settings);
         saveOkitSettings(cookie_value);
@@ -151,11 +155,11 @@ function getAsJson(readFile) {
 function loaded(evt) {
     // Obtain the read file data
     let fileString = evt.target.result;
-    console.info('Loaded: ' + fileString);
+    //console.info('Loaded: ' + fileString);
     okitJson = JSON.parse(fileString);
-    if (!okitJson.hasOwnProperty('canvas')) {
-        okitJson['canvas'] = initialiseCanvasJson();
-    }
+    //if (!okitJson.hasOwnProperty('canvas')) {
+    //    okitJson['canvas'] = initialiseCanvasJson();
+    //}
     displayOkitJson();
     drawSVGforJson();
 }
@@ -187,9 +191,6 @@ function loadTemplate(template_url) {
         contentType: 'application/json',
         success: function(resp) {
             okitJson = JSON.parse(resp);
-            if (!okitJson.hasOwnProperty('canvas')) {
-                okitJson['canvas'] = initialiseCanvasJson();
-            }
             displayOkitJson();
             drawSVGforJson();
         },
@@ -225,7 +226,11 @@ function redrawSVGCanvas() {
 
 function handleSave(evt) {
     hideNavMenu();
-    saveJson(JSON.stringify(okitJson, null, 2), "okit.json");
+    let filename = "okit.json";
+    if (okitSettings.is_timestamp_files) {
+        filename = 'okit-' + getTimestamp() + '.json'
+    }
+    saveJson(JSON.stringify(okitJson, null, 2), filename);
 }
 
 function saveJson(text, filename){
@@ -325,7 +330,7 @@ function loadSettings() {
     $("#settings").load("propertysheets/settings.html", function() {
         console.info('Loading Settings');
         loadProperties(okitSettings);
-        addPropertiesEventListeners(okitSettings, []);
+        addPropertiesEventListeners(okitSettings, [], true);
     });
 }
 
@@ -349,6 +354,13 @@ $(document).ready(function(){
     let palatteicons = document.querySelectorAll('#icon-palette .palette-icon');
     [].forEach.call(palatteicons, function (palatteicon) {
         palatteicon.addEventListener('dragstart', handleDragStart, false);
+    });
+    /*
+    ** Drag start for all pallet fragmentd
+     */
+    let fragmenticons = document.querySelectorAll('#icon-palette .fragment-icon');
+    [].forEach.call(fragmenticons, function (fragmenticon) {
+        fragmenticon.addEventListener('dragstart', handleFragmentDragStart, false);
     });
 
     /*

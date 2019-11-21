@@ -18,7 +18,6 @@ __module__ = "svg_converter"
 
 
 from contextlib import closing
-import datetime
 import getopt
 import os
 import re
@@ -26,8 +25,6 @@ import sys
 
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-from svg.path import parse_path
-from svg.path import Path, Line, Arc, CubicBezier, QuadraticBezier, Move
 
 from common.ociLogging import getLogger
 
@@ -41,6 +38,7 @@ STYLE         = '   <style type="text/css">{0!s:s}</style>\n'
 G_START_TAG   = '   <g transform="translate(-140, -140) scale(2, 2)">\n'
 LINE_TAG      = '      <line     class="{0!s:s}" x1="{1!s:s}" y1="{2!s:s}" x2="{3!s:s}" y2="{4!s:s}"/>\n'
 POLYLINE_TAG  = '      <polyline class="{0!s:s}" points="{1!s:s}"/>\n'
+POLYGON_TAG   = '      <polygon  class="{0!s:s}" points="{1!s:s}"/>\n'
 CIRCLE_TAG    = '      <circle   class="{0!s:s}" cx="{1!s:s}" cy="{2!s:s}" r="{3!s:s}"/>\n'
 RECT_TAG      = '      <rect     class="{0!s:s}" x="{1!s:s}" y="{2!s:s}" width="{3!s:s}" height="{4!s:s}"/>\n'
 PATH_TAG      = '      <path     class="{0!s:s}" d="{1!s:s}"/>\n'
@@ -49,10 +47,6 @@ SVG_END_TAG   = '</svg>\n'
 
 # Execute workflow
 def processWorkflow(args):
-    ns_array = {
-        'svg': 'http://www.w3.org/2000/svg',
-        'xlink': 'http://www.w3.org/1999/xlink'
-    }
     svg_files = [f for f in os.listdir(args['sourcedir']) if os.path.isfile(os.path.join(args['sourcedir'], f))]
     for svg_file in svg_files:
         logger.info('Converting SVG File {0!s:s}'.format(os.path.join(args['sourcedir'], svg_file)))
@@ -102,9 +96,6 @@ def processWorkflow(args):
             else:
                 for path_tag in path_tags:
                     processPathTag(path_tag, f, vbx, vby)
-                    #command_list = parsePath(path_tag.getAttribute('d'))
-                    #command_list = updatePath(command_list, vbx, vby)
-                    #f.write(PATH_TAG.format(pathToString(command_list)))
             f.write(G_END_TAG)
             f.write(SVG_END_TAG)
         logger.info('   Written SVG File {0!s:s}\n'.format(os.path.join(args['destdir'], generateOutputFilename(svg_file))))
@@ -118,6 +109,8 @@ def processGTag(node, file, vbx, vby):
             processLineTag(child, file, vbx, vby)
         elif child.nodeName == 'polyline':
             processPolylineTag(child, file, vbx, vby)
+        elif child.nodeName == 'polygon':
+            processPolygonTag(child, file, vbx, vby)
         elif child.nodeName == 'circle':
             processCircleTag(child, file, vbx, vby)
         elif child.nodeName == 'rect':
@@ -149,6 +142,14 @@ def processPolylineTag(node, file, vbx, vby):
     points = parsePolyline(node.getAttribute('points'))
     points = updatePolyline(points, vbx, vby)
     file.write(POLYLINE_TAG.format(style_class, polylineToString(points)))
+    return
+
+
+def processPolygonTag(node, file, vbx, vby):
+    style_class = node.getAttribute('class')
+    points = parsePolygon(node.getAttribute('points'))
+    points = updatePolygon(points, vbx, vby)
+    file.write(POLYGON_TAG.format(style_class, polygonToString(points)))
     return
 
 
@@ -193,11 +194,7 @@ def parsePath(path):
     logger.debug('Passed Path : {0!s:s}'.format(path))
     path = ''.join(path.split())
     logger.debug('Split & Joined Path : {0!s:s}'.format(path))
-    #path = path.replace(' ', '').replace('\n', '').replace('\t', '')
-    #logger.debug('Replaced Path : {0!s:s}'.format(path))
     split_path = COMMAND_RE.split(path)
-    #for x in split_path:
-    #    logger.debug('x = {0!s:s}'.format(x))
 
     logger.debug('Split Path : {0!s:s}'.format(split_path))
     i = 1
@@ -235,7 +232,6 @@ def updatePath(command_list, vbx, vby):
 def pathToString(command_list):
     path_d = ' '.join(['{0!s:s}{1!s:s}'.format(cmd['command'], ','.join(format(p, "0.1f") for p in cmd['points'])) for cmd in command_list])
     logger.debug('Path.d {0!s:s}'.format(path_d))
-    #return '<path class="st0" d="{0!s:s}"/>'.format(path_d)
     return path_d
 
 
@@ -261,6 +257,26 @@ def polylineToString(points):
     polyline_points = ','.join(format(p, "0.1f") for p in points)
     logger.debug('Polyline.points {0!s:s}'.format(polyline_points))
     return polyline_points
+
+
+def parsePolygon(polygon):
+    logger.debug('Passed Polygon : {0!s:s}'.format(polygon))
+    points = [float(p) for p in polygon.replace(' ', ',').split(',') if p != '']
+    logger.debug('Replace & Split Polygon : {0!s:s}'.format(points))
+    return points
+
+
+def updatePolygon(points, vbx, vby):
+    logger.debug('Polygon Points : {0!s:s}'.format(points))
+    logger.debug('Updated Polygon Points : {0!s:s}'.format(points))
+    return points
+
+
+def polygonToString(points):
+    polygon_points = ','.join(format(p, "0.1f") for p in points)
+    logger.debug('Polygon.points {0!s:s}'.format(polygon_points))
+    return polygon_points
+
 
 def writeFile():
     return

@@ -19,8 +19,9 @@ docker run \
        ${HOSTINFO} \
        ${VOLUMES} \
        ${ENVIRONMENT} \
-       -w /okit/okitweb \
+       -w /okit \
        -p 8080:8080 \
+       -p 80:80 \
        --rm \
        -it \
        ${DOCKERIMAGE} \

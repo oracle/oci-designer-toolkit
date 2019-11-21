@@ -18,25 +18,23 @@ __module__ = "ociSubnet"
 
 
 import oci
-import re
-import sys
 
-from facades.ociConnection import OCIVirtualNetworkConnection
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIVirtualNetworkConnection
 
 # Configure logging
 logger = getLogger()
 
 
 class OCISubnets(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None):
         self.compartment_id = compartment_id
         self.vcn_id = vcn_id
         self.subnets_json = []
         self.subnets_obj = []
         super(OCISubnets, self).__init__(config=config, configfile=configfile)
 
-    def list(self, compartment_id=None, filter=None, **kwargs):
+    def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
@@ -66,13 +64,3 @@ class OCISubnet(object):
         self.configfile = configfile
         self.data = data
 
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-    main(sys.argv[1:])

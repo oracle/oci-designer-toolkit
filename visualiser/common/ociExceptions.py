@@ -17,16 +17,6 @@ __module__ = "ociExceptions"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
-import getopt
-import json
-import locale
-import logging
-import operator
-import os
-import requests
-import sys
-
 class ValidationException(Exception):
     def __init__(self, message):
         self.message = message
