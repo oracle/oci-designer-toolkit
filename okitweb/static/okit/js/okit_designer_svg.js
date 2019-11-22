@@ -364,6 +364,14 @@ function drawSVGforJson(artifact={}) {
             drawDynamicRoutingGatewaySVG(okitJson['dynamic_routing_gateways'][i]);
         }
     }
+    if (okitJson.hasOwnProperty('fast_connects')) {
+        fast_connect_ids = [];
+        for (let i=0; i < okitJson['fast_connects'].length; i++) {
+            fast_connect_ids.push(okitJson['fast_connects'][i]['id']);
+            okitIdsJsonObj[okitJson['fast_connects'][i]['id']] = okitJson['fast_connects'][i]['display_name'];
+            drawFastConnectSVG(okitJson['fast_connects'][i]);
+        }
+    }
     if (okitJson.hasOwnProperty('route_tables')) {
         route_table_ids = [];
         for (let i=0; i < okitJson['route_tables'].length; i++) {
