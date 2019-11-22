@@ -27,7 +27,8 @@ function clearCompartmentVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addCompartment(compartment_id='') {
+// TODO: Delete
+function addCompartmentDeprecated(compartment_id='') {
     let id = 'okit-' + compartment_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + compartment_artifact + ' : ' + id);
 
@@ -58,7 +59,8 @@ function addCompartment(compartment_id='') {
     console.groupEnd();
 }
 
-function initialiseCompartmentChildData(id) {
+// TODO: Delete
+function initialiseCompartmentChildDataDeprecated(id) {
     // Add BUI artifact positional information
     compartment_bui_sub_artifacts[id] = {
         "compartment_position": 0,
@@ -72,7 +74,8 @@ function initialiseCompartmentChildData(id) {
 ** Delete From JSON Model
  */
 
-function deleteCompartment(id) {
+// TODO: Delete
+function deleteCompartmentDeprecated(id) {
     console.groupCollapsed('Delete ' + compartment_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -88,7 +91,8 @@ function deleteCompartment(id) {
 /*
 ** SVG Creation
  */
-function getCompartmentFirstChildOffset() {
+// TODO: Delete
+function getCompartmentFirstChildOffsetDeprecated() {
     let offset = {
         dx: Math.round(positional_adjustments.spacing.x),
         dy: Math.round(positional_adjustments.padding.y * 2)
@@ -96,7 +100,8 @@ function getCompartmentFirstChildOffset() {
     return offset;
 }
 
-function getCompartmentFirstChildContainerOffset(id='') {
+// TODO: Delete
+function getCompartmentFirstChildContainerOffsetDeprecated(id='') {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.y * 2),
         dy: Math.round(positional_adjustments.padding.y * 2)
@@ -104,7 +109,8 @@ function getCompartmentFirstChildContainerOffset(id='') {
     return offset;
 }
 
-function getCompartmentDimensions(id='') {
+// TODO: Delete
+function getCompartmentDimensionsDeprecated(id='') {
     console.groupCollapsed('Getting Dimensions of ' + compartment_artifact + ' : ' + id);
     const min_compartment_dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()};
     let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
@@ -142,7 +148,8 @@ function getCompartmentDimensions(id='') {
     return dimensions;
 }
 
-function newCompartmentDefinition(artifact, position=0) {
+// TODO: Delete
+function newCompartmentDefinitionDeprecated(artifact, position=0) {
     let dimensions = getCompartmentDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, compartment_artifact);
     definition['svg']['width'] = dimensions['width'];
@@ -154,7 +161,8 @@ function newCompartmentDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawCompartmentSVG(artifact) {
+// TODO: Delete
+function drawCompartmentSVGDeprecated(artifact) {
     let id = artifact['id'];
     let parent_id = "canvas";
     let compartment_id = artifact['id'];
@@ -194,7 +202,8 @@ function drawCompartmentSVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadCompartmentProperties(id) {
+// TODO: Delete
+function loadCompartmentPropertiesDeprecated(id) {
     $("#properties").load("propertysheets/compartment.html", function () {
         if ('compartments' in okitJson) {
             console.info('Loading ' + compartment_artifact + ' : ' + id);
@@ -300,11 +309,25 @@ $(document).ready(function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 ** Define Compartment Artifact Class
  */
 class Compartment extends OkitSvgArtifact {
-
+    /*
+    ** Create
+     */
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
@@ -319,23 +342,37 @@ class Compartment extends OkitSvgArtifact {
         }
     }
 
+
     /*
-     ** Delete Processing
+    ** Clone Functionality
      */
-    // TODO: Delete
-    add(title='') {
-        this.title = title;
-        let id = 'okit-' + compartment_prefix + '-' + uuidv4();
-        console.groupCollapsed('Adding ' + compartment_artifact + ' : ' + id);
-        console.groupEnd();
+    clone() {
+        return new Compartment(this, this.getOkitJson());
     }
 
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return compartment_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
     delete() {
-        console.groupCollapsed('Delete ' + compartment_artifact + ' : ' + id);
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + id);
+        // Delete Child Artifacts
+        this.deleteChildren();
         // Remove SVG Element
         d3.select("#" + this.id + "-svg").remove()
         console.groupEnd();
     }
+
+    deleteChildren() {}
+
 
     /*
      ** SVG Processing
@@ -366,15 +403,15 @@ class Compartment extends OkitSvgArtifact {
 
     getDimensions(id='') {
         console.groupCollapsed('Getting Dimensions of ' + compartment_artifact + ' : ' + id);
-        const min_compartment_dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()};
+        const min_compartment_dimensions = this.getMinimumDimensions();
         let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
         let max_sub_container_dimensions = {width:0, height: 0, count:0};
         let max_virtual_cloud_network_dimensions = {width:0, height: 0, count:0};
         // Virtual Cloud Networks
-        if (okitJson.hasOwnProperty('virtual_cloud_networks')) {
-            for (let virtual_cloud_network of okitJson['virtual_cloud_networks']) {
+        if (this.getOkitJson().hasOwnProperty('virtual_cloud_networks')) {
+            for (let virtual_cloud_network of this.getOkitJson().virtual_cloud_networks) {
                 if (virtual_cloud_network['compartment_id'] == id) {
-                    let virtual_cloud_network_dimensions = getVirtualCloudNetworkDimensions(virtual_cloud_network['id']);
+                    let virtual_cloud_network_dimensions = virtual_cloud_network.getDimensions();
                     max_virtual_cloud_network_dimensions['width'] = Math.max(virtual_cloud_network_dimensions['width'], max_virtual_cloud_network_dimensions['width']);
                     max_virtual_cloud_network_dimensions['height'] += virtual_cloud_network_dimensions['height'];
                     max_virtual_cloud_network_dimensions['count'] += 1;
@@ -402,6 +439,16 @@ class Compartment extends OkitSvgArtifact {
         return dimensions;
     }
 
+    getMinimumDimensions() {
+        // Check if this is the top level container
+        if (this.id === this.compartment_id) {
+            return {width: $('#canvas-wrapper').width(), height: $('#canvas-wrapper').height()};
+        } else {
+            return {width: container_artifact_x_padding * 2, height: container_artifact_y_padding * 2};
+        }
+    }
+
+
     /*
     ** Property Sheet Load function
      */
@@ -417,6 +464,43 @@ class Compartment extends OkitSvgArtifact {
     }
 
 
+    /*
+    ** Child Offset Functions
+     */
+    getFirstChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
+    getFirstContainerChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+        };
+        return offset;
+    }
+
+    getFirstTopEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dy: 0
+        };
+        return offset;
+    }
+
+    getFirstBottomEdgeChildOffset() {}
+
+    getFirstLeftEdgeChildOffset() {}
+
+    getFirstRightEdgeChildOffset() {}
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
     getTargets() {
         return [compartment_artifact];
     }

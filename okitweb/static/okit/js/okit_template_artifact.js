@@ -26,12 +26,24 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
             }
         }
     }
+
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        return new OkitTemplateArtifact(this, this.getOkitJson());
+    }
+
+
     /*
     ** Get the Artifact name this Artifact will be know by.
      */
     getArtifactReference() {
         return template_artifact_artifact;
     }
+
+
     /*
     ** Delete Processing
      */
@@ -43,7 +55,10 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
         d3.select("#" + this.id + "-svg").remove()
         console.groupEnd();
     }
+
     deleteChildren() {}
+
+
     /*
      ** SVG Processing
      */
@@ -84,9 +99,12 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
         console.groupEnd();
         return dimensions;
     }
+
     getMinimumDimensions() {
         return {width: icon_width, height:icon_height};
     }
+
+
     /*
     ** Property Sheet Load function
      */
@@ -101,6 +119,41 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
             addPropertiesEventListeners(me, [okitJson.draw]);
         });
     }
+
+
+    /*
+    ** Child Offset Functions
+     */
+    getFirstChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
+    getFirstContainerChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+        };
+        return offset;
+    }
+
+    getFirstTopEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dy: 0
+        };
+        return offset;
+    }
+    getFirstBottomEdgeChildOffset() {}
+
+    getFirstLeftEdgeChildOffset() {}
+
+    getFirstRightEdgeChildOffset() {}
+
+
     /*
     ** Define Allowable SVG Drop Targets
      */

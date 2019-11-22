@@ -46,7 +46,8 @@ function getSubnet(id='') {
 /*
 ** Add Asset to JSON Model
  */
-function addSubnet(vcn_id, compartment_id) {
+// TODO: Delete
+function addSubnetDeprecated(vcn_id, compartment_id) {
     let id = 'okit-' + subnet_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + subnet_artifact + ' : ' + id);
 
@@ -97,7 +98,8 @@ function addSubnet(vcn_id, compartment_id) {
     console.groupEnd();
 }
 
-function initialiseSubnetChildData(id) {
+// TODO: Delete
+function initialiseSubnetChildDataDeprecated(id) {
     // Set subnet specific positioning variables
     // Add Sub Component positional data
     subnet_bui_sub_artifacts[id] = {
@@ -110,7 +112,8 @@ function initialiseSubnetChildData(id) {
 ** Delete From JSON Model
  */
 
-function deleteSubnet(id) {
+// TODO: Delete
+function deleteSubnetDeprecated(id) {
     console.groupCollapsed('Delete ' + subnet_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -151,7 +154,8 @@ function deleteSubnet(id) {
 /*
 ** Tests
  */
-function hasLoadBalancer(id='') {
+// TODO: Delete
+function hasLoadBalancerDeprecated(id='') {
     if (okitJson.hasOwnProperty('load_balancers')) {
         for (let load_balancer of okitJson['load_balancers']) {
             if (load_balancer['subnet_ids'][0] == id) {
@@ -162,7 +166,8 @@ function hasLoadBalancer(id='') {
     return false;
 }
 
-function hasFileStorageSystem(id='') {
+// TODO: Delete
+function hasFileStorageSystemDeprecated(id='') {
     if (okitJson.hasOwnProperty('file_storage_systems')) {
         for (let file_storage_system of okitJson['file_storage_systems']) {
             if (file_storage_system['subnet_id'] == id) {
@@ -176,7 +181,8 @@ function hasFileStorageSystem(id='') {
 /*
 ** SVG Creation
  */
-function getSubnetFirstChildEdgeOffset() {
+// TODO: Delete
+function getSubnetFirstChildEdgeOffsetDeprecated() {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
         dy: 0
@@ -184,7 +190,8 @@ function getSubnetFirstChildEdgeOffset() {
     return offset;
 }
 
-function getSubnetFirstChildOffset() {
+// TODO: Delete
+function getSubnetFirstChildOffsetDeprecated() {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x),
         dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
@@ -192,7 +199,8 @@ function getSubnetFirstChildOffset() {
     return offset;
 }
 
-function getSubnetFirstChildLoadBalancerOffset(id='') {
+// TODO: Delete
+function getSubnetFirstChildLoadBalancerOffsetDeprecated(id='') {
     let offset = getSubnetFirstChildOffset();
     if (hasFileStorageSystem(id)) {
         offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
@@ -205,7 +213,8 @@ function getSubnetFirstChildLoadBalancerOffset(id='') {
     return offset;
 }
 
-function getSubnetFirstChildInstanceOffset(id='') {
+// TODO: Delete
+function getSubnetFirstChildInstanceOffsetDeprecated(id='') {
     let offset = getSubnetFirstChildOffset();
     if (hasFileStorageSystem(id)) {
         offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
@@ -224,7 +233,8 @@ function getSubnetFirstChildInstanceOffset(id='') {
     return offset;
 }
 
-function getSubnetDimensions(id='') {
+// TODO: Delete
+function getSubnetDimensionsDeprecated(id='') {
     console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
     let first_edge_child = getSubnetFirstChildEdgeOffset();
     let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset(id);
@@ -325,7 +335,8 @@ function getSubnetDimensions(id='') {
     return dimensions;
 }
 
-function newSubnetDefinition(artifact, position=0) {
+// TODO: Delete
+function newSubnetDefinitionDeprecated(artifact, position=0) {
     let dimensions = getSubnetDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, subnet_artifact);
     // Get Parents First Child Container Offset
@@ -367,7 +378,8 @@ function newSubnetDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawSubnetSVG(artifact) {
+// TODO: Delete
+function drawSubnetSVGDeprecated(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -419,11 +431,13 @@ function drawSubnetSVG(artifact) {
     console.groupEnd();
 }
 
+// TODO: Delete
 function clearSubnetConnectorsSVG(subnet) {
     let id = subnet['id'];
     d3.selectAll("line[id*='" + id + "']").remove();
 }
 
+// TODO: Delete
 function drawSubnetConnectorsSVG(subnet) {
     let parent_id = subnet['vcn_id'];
     let id = subnet['id'];
@@ -483,7 +497,8 @@ function drawSubnetConnectorsSVG(subnet) {
     }
 }
 
-function drawSubnetAttachmentsSVG(subnet) {
+// TODO: Delete
+function drawSubnetAttachmentsSVGDeprecated(subnet) {
     let id = subnet['id'];
     console.info('Drawing ' + subnet_artifact + ' : ' + id + ' Attachments');
     let attachment_count = 0;
@@ -517,7 +532,8 @@ function drawSubnetAttachmentsSVG(subnet) {
     }
 }
 
-function drawAttachedRouteTable(artifact, attachment_count) {
+// TODO: Delete
+function drawAttachedRouteTableDeprecated(artifact, attachment_count) {
     console.info('Drawing ' + subnet_artifact + ' Route Table : ' + artifact['display_name']);
     let artifact_definition = newRouteTableDefinition(artifact, attachment_count);
     artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
@@ -543,7 +559,8 @@ function drawAttachedRouteTable(artifact, attachment_count) {
     });
 }
 
-function drawAttachedSecurityList(artifact, attachment_count) {
+// TODO: Delete
+function drawAttachedSecurityListDeprecated(artifact, attachment_count) {
     console.info('Drawing ' + subnet_artifact + ' Security List : ' + artifact['display_name']);
     let artifact_definition = newSecurityListDefinition(artifact, attachment_count);
     artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
@@ -572,6 +589,7 @@ function drawAttachedSecurityList(artifact, attachment_count) {
 /*
 ** Property Sheet Load function
  */
+// TODO: Delete
 function loadSubnetProperties(id) {
     $("#properties").load("propertysheets/subnet.html", function () {
         let name_id_mapping = {
@@ -721,11 +739,25 @@ $(document).ready(function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 ** Define Subnet Artifact Class
  */
 class Subnet extends OkitSvgArtifact {
-
+    /*
+    ** Create
+     */
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
@@ -740,22 +772,80 @@ class Subnet extends OkitSvgArtifact {
         this.route_table_id = '';
         this.security_lists = [];
         this.security_list_ids = [];
-
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
         }
+        // Add Get Parent function
+        this.parent_id = this.vcn_id;
+        for (let parent of okitjson.virtual_cloud_networks) {
+            if (parent.id === this.parent_id) {
+                this.getParent = function() {return parent};
+                break;
+            }
+        }
     }
 
+
     /*
-     ** Delete Processing
+    ** Clone Functionality
+     */
+    clone() {
+        return new Subnet(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return subnet_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
      */
     delete() {
-        console.groupCollapsed('Delete ' + subnet_prefix + ' : ' + id);
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + id);
+        // Delete Child Artifacts
+        this.deleteChildren();
         // Remove SVG Element
         d3.select("#" + this.id + "-svg").remove()
         console.groupEnd();
     }
+
+    deleteChildren() {
+        // Remove Instances
+        for (let child of this.getOkitJson().instances) {
+            if (child.subnet_id === this.id) {
+                child.delete();
+            }
+        }
+        // Remove Load Balancers
+        for (let child of this.getOkitJson().load_balancers) {
+            if (child.subnet_id === this.id) {
+                child.delete();
+            }
+        }
+        // Remove File Storrage Systems
+        for (let child of this.getOkitJson().file_storage_systems) {
+            if (child.subnet_id === this.id) {
+                child.delete();
+            }
+        }
+    }
+
+    getChildren(artifact) {
+        let children = [];
+        for (let child of this.getOkitJson()[artifact]) {
+            if (child.subnet_id === this.id) {
+                children.push(child);
+            }
+        }
+        return children;
+    }
+
 
     /*
      ** SVG Processing
@@ -781,8 +871,64 @@ class Subnet extends OkitSvgArtifact {
             d3.selectAll('#' + me.id + '-vnic').attr('fill', fill);
             d3.event.stopPropagation();
         });
-        drawSubnetAttachmentsSVG(this);
+        this.drawAttachments();
         console.groupEnd();
+    }
+
+    drawAttachments() {
+        let id = this.id;
+        console.info('Drawing ' + subnet_artifact + ' : ' + id + ' Attachments');
+        let attachment_count = 0;
+        // Draw Route Table
+        for (let route_table of this.getOkitJson()['route_tables']) {
+            if (this.route_table_id === route_table['id']) {
+                let artifact_clone = new route_table.clone();
+                artifact_clone['parent_id'] = subnet['id'];
+                this.drawAttachedRouteTable(artifact_clone, attachment_count);
+            }
+        }
+        attachment_count += 1;
+        // Security Lists
+        for (let security_list_id of this.security_list_ids) {
+            for (let security_list of this.getOkitJson()['security_lists']) {
+                if (security_list_id == security_list['id']) {
+                    let artifact_clone = security_list.clone();
+                    artifact_clone['parent_id'] = subnet['id'];
+                    this.drawAttachedSecurityList(artifact_clone, attachment_count);
+                }
+            }
+            attachment_count += 1;
+        }
+    }
+
+    drawAttachedRouteTable(artifact, attachment_count) {
+        console.info('Drawing ' + subnet_artifact + ' Route Table : ' + artifact['display_name']);
+        let artifact_definition = newRouteTableDefinition(artifact, attachment_count);
+        artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
+        artifact_definition['svg']['y'] = 0;
+
+        let svg = drawArtifact(artifact_definition);
+
+        // Add click event to display properties
+        svg.on("click", function () {
+            loadRouteTableProperties(artifact['id']);
+            d3.event.stopPropagation();
+        });
+    }
+
+    drawAttachedSecurityList(artifact, attachment_count) {
+        console.info('Drawing ' + subnet_artifact + ' Security List : ' + artifact['display_name']);
+        let artifact_definition = newSecurityListDefinition(artifact, attachment_count);
+        artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
+        artifact_definition['svg']['y'] = 0;
+
+        let svg = drawArtifact(artifact_definition);
+
+        // Add click event to display properties
+        svg.on("click", function () {
+            loadSecurityListProperties(artifact['id']);
+            d3.event.stopPropagation();
+        });
     }
 
     getSvgDefinition() {
@@ -790,7 +936,8 @@ class Subnet extends OkitSvgArtifact {
         let dimensions = this.getDimensions(this.id);
         let definition = this.newSVGDefinition(this, subnet_artifact);
         // Get Parents First Child Container Offset
-        let parent_first_child = getVirtualCloudNetworkFirstChildContainerOffset(this.vcn_id);
+        //let parent_first_child = getVirtualCloudNetworkFirstChildContainerOffset(this.vcn_id);
+        let parent_first_child = this.getParent().getFirstContainerChildOffset();
         definition['svg']['x'] = parent_first_child.dx;
         definition['svg']['y'] = parent_first_child.dy;
         // Add positioning offset
@@ -824,10 +971,10 @@ class Subnet extends OkitSvgArtifact {
 
     getDimensions(id='') {
         console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
-        let first_edge_child = getSubnetFirstChildEdgeOffset();
-        let first_load_balancer_child = getSubnetFirstChildLoadBalancerOffset(id);
-        let first_instance_child = getSubnetFirstChildInstanceOffset(id);
-        let first_child = getSubnetFirstChildOffset();
+        let first_edge_child = this.getFirstTopEdgeChildOffset();
+        let first_load_balancer_child = this.getFirstLoadBalancerChildOffset(id);
+        let first_instance_child = this.getFirstInstanceChildOffset(id);
+        let first_child = this.getFirstChildOffset();
         let dimensions = {width:first_instance_child.dx, height:first_instance_child.dy};
         let max_load_balancer_dimensions = {width:0, height: 0, count:0};
         let max_instance_dimensions = {width:0, height: 0, count:0};
@@ -951,6 +1098,7 @@ class Subnet extends OkitSvgArtifact {
         });
     }
 
+
     /*
     ** Utility Methods
      */
@@ -966,8 +1114,88 @@ class Subnet extends OkitSvgArtifact {
         return vcn_octets[0] + '.' + vcn_octets[1] + '.' + this.getOkitJson().subnets.length + '.' + vcn_octets[3] + '/24';
     }
 
+
+    /*
+    ** Child Offset Functions
+     */
+    getFirstChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
+    getFirstContainerChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+        };
+        return offset;
+    }
+
+    getFirstTopEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dy: 0
+        };
+        return offset;
+    }
+
+    getFirstBottomEdgeChildOffset() {}
+
+    getFirstLeftEdgeChildOffset() {}
+
+    getFirstRightEdgeChildOffset() {}
+
+    getFirstLoadBalancerChildOffset() {
+        let offset = this.getFirstChildOffset();
+        if (this.hasFileStorageSystem()) {
+            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+        }
+        return offset;
+    }
+
+    getFirstInstanceChildOffset() {
+        let offset = this.getFirstChildOffset();
+        if (this.hasFileStorageSystem()) {
+            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+        }
+        if (this.hasLoadBalancer()) {
+            let dimensions = getLoadBalancerDimensions();
+            offset.dy += Math.round(dimensions.height + positional_adjustments.padding.y);
+        }
+        return offset;
+    }
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
     getTargets() {
         return [compartment_artifact];
+    }
+
+
+    /*
+    ** Artifact Specific Functions
+     */
+    hasLoadBalancer() {
+        for (let load_balancer of this.getOkitJson().load_balancers) {
+            if (load_balancer.subnet_ids[0] === this.id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    hasFileStorageSystem() {
+        for (let file_storage_system of this.getOkitJson().file_storage_systems) {
+            if (file_storage_system.subnet_id === this.id) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -29,7 +29,8 @@ function clearVirtualCloudNetworkVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addVirtualCloudNetwork(compartment_id, comp_id) {
+// TODO: Delete
+function addVirtualCloudNetworkDeprecated(compartment_id, comp_id) {
     let id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + virtual_cloud_network_artifact + ' : ' + id);
 
@@ -74,7 +75,8 @@ function addVirtualCloudNetwork(compartment_id, comp_id) {
     return id;
 }
 
-function initialiseVirtualCloudNetworkChildData(id) {
+// TODO: Delete
+function initialiseVirtualCloudNetworkChildDataDeprecated(id) {
     // Add Sub Component positional data
     virtual_cloud_network_bui_sub_artifacts[id] = {
         "gateway_position": 0,
@@ -87,7 +89,8 @@ function initialiseVirtualCloudNetworkChildData(id) {
 ** Delete From JSON Model
  */
 
-function deleteVirtualCloudNetwork(id) {
+// TODO: Delete
+function deleteVirtualCloudNetworkDeprecated(id) {
     console.groupCollapsed('Delete ' + virtual_cloud_network_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -143,7 +146,8 @@ function deleteVirtualCloudNetwork(id) {
 /*
 ** Tests
  */
-function hasUnattachedSecurityList(id='') {
+// TODO: Delete
+function hasUnattachedSecurityListDeprecated(id='') {
     if (okitJson.hasOwnProperty('security_lists')) {
         for (let security_list of okitJson['security_lists']) {
             if (security_list['vcn_id'] == id) {
@@ -154,7 +158,8 @@ function hasUnattachedSecurityList(id='') {
     return false;
 }
 
-function hasUnattachedRouteTable(id='') {
+// TODO: Delete
+function hasUnattachedRouteTableDeprecated(id='') {
     if (okitJson.hasOwnProperty('route_tables')) {
         for (let route_table of okitJson['route_tables']) {
             if (route_table['vcn_id'] == id) {
@@ -168,7 +173,8 @@ function hasUnattachedRouteTable(id='') {
 /*
 ** SVG Creation
  */
-function getVirtualCloudNetworkFirstChildOffset() {
+// TODO: Delete
+function getVirtualCloudNetworkFirstChildOffsetDeprecated() {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
         dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
@@ -176,7 +182,8 @@ function getVirtualCloudNetworkFirstChildOffset() {
     return offset;
 }
 
-function getVirtualCloudNetworkFirstChildGatewayOffset() {
+// TODO: Delete
+function getVirtualCloudNetworkFirstChildGatewayOffsetDeprecated() {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
         dy: 0
@@ -184,7 +191,8 @@ function getVirtualCloudNetworkFirstChildGatewayOffset() {
     return offset;
 }
 
-function getVirtualCloudNetworkFirstChildContainerOffset(id='') {
+// TODO: Delete
+function getVirtualCloudNetworkFirstChildContainerOffsetDeprecated(id='') {
     let offset = {
         dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
         dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
@@ -196,7 +204,8 @@ function getVirtualCloudNetworkFirstChildContainerOffset(id='') {
     return offset;
 }
 
-function getVirtualCloudNetworkDimensions(id='') {
+// TODO: Delete
+function getVirtualCloudNetworkDimensionsDeprecated(id='') {
     console.groupCollapsed('Getting Dimensions of ' + virtual_cloud_network_artifact + ' : ' + id);
     // Add Standard Padding and Spacing
     let first_container_child = getVirtualCloudNetworkFirstChildContainerOffset(id);
@@ -288,7 +297,8 @@ function getVirtualCloudNetworkDimensions(id='') {
     return dimensions;
 }
 
-function newVirtualCloudNetworkDefinition(artifact, position=0) {
+// TODO: Delete
+function newVirtualCloudNetworkDefinitionDeprecated(artifact, position=0) {
     let dimensions = getVirtualCloudNetworkDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, virtual_cloud_network_artifact);
     let parent_first_child = getCompartmentFirstChildContainerOffset(artifact['compartment_id']);
@@ -323,7 +333,8 @@ function newVirtualCloudNetworkDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawVirtualCloudNetworkSVG(artifact) {
+// TODO: Delete
+function drawVirtualCloudNetworkSVGDeprecated(artifact) {
     let parent_id = artifact['compartment_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -366,7 +377,8 @@ function drawVirtualCloudNetworkSVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadVirtualCloudNetworkProperties(id) {
+// TODO: Delete
+function loadVirtualCloudNetworkPropertiesDeprecated(id) {
     $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
         if ('virtual_cloud_networks' in okitJson) {
             console.info('Loading Virtual Cloud Network: ' + id);
@@ -464,17 +476,31 @@ $(document).ready(function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 ** Define Virtual Cloud Network Artifact Class
  */
 class VirtualCloudNetwork extends OkitSvgArtifact {
-
+    /*
+    ** Create
+     */
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
         this.id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(virtual_cloud_network_prefix, okitjson.virtual_cloud_networks.length + 1);
-        this.compartment_id = '';
+        this.compartment_id = data.parent_id;
         // Generate Cidr
         this.cidr_block = '10.' + okitjson.virtual_cloud_networks.length + '.0.0/16';
         this.dns_label = this.display_name.toLowerCase().slice(-6);
@@ -482,17 +508,84 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         for (let key in data) {
             this[key] = data[key];
         }
+        // Add Get Parent function
+        this.parent_id = this.compartment_id;
+        for (let parent of okitjson.compartments) {
+            if (parent.id === this.parent_id) {
+                this.getParent = function() {return parent};
+                break;
+            }
+        }
     }
 
+
     /*
-     ** Delete Processing
+    ** Clone Functionality
+     */
+    clone() {
+        return new VirtualCloudNetwork(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return virtual_cloud_network_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
      */
     delete() {
-        console.groupCollapsed('Delete ' + virtual_cloud_network_artifact + ' : ' + id);
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + id);
+        // Delete Child Artifacts
+        this.deleteChildren();
         // Remove SVG Element
         d3.select("#" + this.id + "-svg").remove()
         console.groupEnd();
     }
+
+    deleteChildren() {
+        // Remove Subnets
+        for (let child of this.getOkitJson().subnets) {
+            if (child.vcn_id === this.id) {
+                child.delete();
+            }
+        }
+        // Remove Route_tables
+        for (let child of this.getOkitJson().route_tables) {
+            if (child.vcn_id === this.id) {
+                child.delete();
+            }
+        }
+        // Remove Security Lists
+        for (let child of this.getOkitJson().security_lists) {
+            if (child.vcn_id === this.id) {
+                child.delete();
+            }
+        }
+        // Remove Internet Gateways
+        for (let child of this.getOkitJson().internet_gateways) {
+            if (child.vcn_id === this.id) {
+                child.delete();
+            }
+        }
+        // Remove NAT Gateways
+        for (let child of this.getOkitJson().nat_gateways) {
+            if (child.vcn_id === this.id) {
+                child.delete();
+            }
+        }
+        // Remove Service Gateways
+        for (let child of this.getOkitJson().service_gateways) {
+            if (child.vcn_id === this.id) {
+                child.delete();
+            }
+        }
+    }
+
 
     /*
      ** SVG Processing
@@ -514,7 +607,8 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         let position = 1;
         let dimensions = this.getDimensions(this.id);
         let definition = this.newSVGDefinition(this, virtual_cloud_network_artifact);
-        let parent_first_child = getCompartmentFirstChildContainerOffset(this.compartment_id);
+        //let parent_first_child = getCompartmentFirstChildContainerOffset(this.compartment_id);
+        let parent_first_child = this.getParent().getFirstContainerChildOffset();
         definition['svg']['x'] = parent_first_child.dx;
         definition['svg']['y'] = parent_first_child.dy;
         // Add positioning offset
@@ -542,10 +636,10 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
     getDimensions(id='') {
         console.groupCollapsed('Getting Dimensions of ' + virtual_cloud_network_artifact + ' : ' + id);
         // Add Standard Padding and Spacing
-        let first_container_child = getVirtualCloudNetworkFirstChildContainerOffset(id);
-        let first_gateway_child = getVirtualCloudNetworkFirstChildGatewayOffset();
-        let first_child = getVirtualCloudNetworkFirstChildOffset();
-        let dimensions = {width:first_container_child.dx, height:first_container_child.dy};
+        let first_container_child = this.getFirstContainerChildOffset(id);
+        let first_gateway_child = this.getFirstTopEdgeChildOffset();
+        let first_child = this.getFirstChildOffset();
+        let dimensions = {width: first_container_child.dx, height: first_container_child.dy};
         // Add right padding
         dimensions['width'] += positional_adjustments.padding.x;
         // Add Bottom padding
@@ -556,20 +650,20 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         console.info('Base Dimensions : '+ JSON.stringify(dimensions));
 
         // Process Gateways
-        if (okitJson.hasOwnProperty('internet_gateways')) {
-            for (let internet_gateway of okitJson['internet_gateways']) {
+        if (this.getOkitJson().hasOwnProperty('internet_gateways')) {
+            for (let internet_gateway of this.getOkitJson()['internet_gateways']) {
                 if (internet_gateway['vcn_id'] == id) {
-                    let gateway_dimensions = getInternetGatewayDimensions(internet_gateway['id']);
+                    let gateway_dimensions = internet_gateway.getDimensions();
                     max_gateway_dimensions['width'] += gateway_dimensions['width'];
                     max_gateway_dimensions['height'] = Math.max(max_gateway_dimensions['height'], gateway_dimensions['height']);
                     max_gateway_dimensions['count'] += 1;
                 }
             }
         }
-        if (okitJson.hasOwnProperty('nat_gateways')) {
-            for (let nat_gateway of okitJson['nat_gateways']) {
+        if (this.getOkitJson().hasOwnProperty('nat_gateways')) {
+            for (let nat_gateway of this.getOkitJson()['nat_gateways']) {
                 if (nat_gateway['vcn_id'] == id) {
-                    let gateway_dimensions = getNATGatewayDimensions(nat_gateway['id']);
+                    let gateway_dimensions = nat_gateway.getDimensions();
                     max_gateway_dimensions['width'] += gateway_dimensions['width'];
                     max_gateway_dimensions['height'] = Math.max(max_gateway_dimensions['height'], gateway_dimensions['height']);
                     max_gateway_dimensions['count'] += 1;
@@ -582,20 +676,20 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         console.info('Post Gateway Dimensions : '+ JSON.stringify(dimensions));
 
         // Process Edge Artifacts
-        if (hasUnattachedSecurityList(id)) {
-            for (let security_list of okitJson['security_lists']) {
+        if (this.hasUnattachedSecurityList()) {
+            for (let security_list of this.getOkitJson()['security_lists']) {
                 if (security_list['vcn_id'] == id) {
-                    let edge_dimensions = getSecurityListDimensions(security_list['id']);
+                    let edge_dimensions = security_list.getDimensions();
                     max_edge_dimensions['width'] += edge_dimensions['width'];
                     max_edge_dimensions['height'] = Math.max(max_edge_dimensions['height'], edge_dimensions['height'] + positional_adjustments.spacing.y);
                     max_edge_dimensions['count'] += 1;
                 }
             }
         }
-        if (hasUnattachedRouteTable(id)) {
-            for (let route_table of okitJson['route_tables']) {
+        if (this.hasUnattachedRouteTable()) {
+            for (let route_table of this.getOkitJson()['route_tables']) {
                 if (route_table['vcn_id'] == id) {
-                    let edge_dimensions = getRouteTableDimensions(route_table['id']);
+                    let edge_dimensions = route_table.getDimensions();
                     max_edge_dimensions['width'] += edge_dimensions['width'];
                     max_edge_dimensions['height'] = Math.max(max_edge_dimensions['height'], edge_dimensions['height'] + positional_adjustments.spacing.y);
                     max_edge_dimensions['count'] += 1;
@@ -608,10 +702,10 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         console.info('Post Edge Dimensions : '+ JSON.stringify(dimensions));
 
         // Process Subnet Widths
-        if (okitJson.hasOwnProperty('subnets')) {
-            for (let subnet of okitJson['subnets']) {
+        if (this.getOkitJson().hasOwnProperty('subnets')) {
+            for (let subnet of this.getOkitJson()['subnets']) {
                 if (subnet['vcn_id'] == id) {
-                    let subnet_dimensions = getSubnetDimensions(subnet['id']);
+                    let subnet_dimensions = subnet.getDimensions();
                     // Test if current width is greater than the Subnet Width + appropriate padding
                     dimensions['width'] = Math.max(dimensions['width'], (first_container_child.dx + positional_adjustments.padding.x + subnet_dimensions['width']));
                     // Add Subnet Height to current height and spacing for between subnets
@@ -622,13 +716,17 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         console.info('Post Subnets Dimensions : '+ JSON.stringify(dimensions));
 
         // Check size against minimum
-        dimensions['width']  = Math.max(dimensions['width'],  min_virtual_cloud_network_dimensions['width']);
-        dimensions['height'] = Math.max(dimensions['height'], min_virtual_cloud_network_dimensions['height']);
+        dimensions['width']  = Math.max(dimensions['width'],  this.getMinimumDimensions().width);
+        dimensions['height'] = Math.max(dimensions['height'], this.getMinimumDimensions().height);
 
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
         console.groupEnd();
         return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: 400, height: 300};
     }
 
 
@@ -647,8 +745,70 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
     }
 
 
+    /*
+    ** Child Offset Functions
+     */
+    getFirstChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
+    getFirstContainerChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+        };
+        if (this.hasUnattachedRouteTable() || this.hasUnattachedSecurityList()) {
+            let first_child = this.getFirstChildOffset();
+            offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
+        }
+        return offset;
+    }
+
+    getFirstTopEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dy: 0
+        };
+        return offset;
+    }
+
+    getFirstBottomEdgeChildOffset() {}
+
+    getFirstLeftEdgeChildOffset() {}
+
+    getFirstRightEdgeChildOffset() {}
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
     getTargets() {
         return [compartment_artifact];
     }
 
+
+    /*
+    ** Artifact Specific Functions
+     */
+    hasUnattachedSecurityList() {
+        for (let security_list of this.getOkitJson().security_lists) {
+            if (security_list.vcn_id === this.id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    hasUnattachedRouteTable() {
+         for (let route_table of this.getOkitJson().route_tables) {
+            if (route_table.vcn_id === this.id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
