@@ -20,6 +20,9 @@ const service_gateway_prefix = 'sg';
 // Dynamic Routing Gateway
 const dynamic_routing_gateway_artifact = 'Dynamic Routing Gateway';
 const dynamic_routing_gateway_prefix = 'dg';
+// Fast Connect
+const fast_connect_artifact = 'Fast Connect';
+const fast_connect_prefix = 'fc';
 // Route Table
 const route_table_artifact = 'Route Table';
 const route_table_prefix = 'rt';
