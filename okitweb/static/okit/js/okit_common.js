@@ -120,6 +120,11 @@ function handleQueryOci(e) {
     $('#query-oci').removeClass('hidden');
 }
 
+function handleCancelQuery(e) {
+    // Hide Query Box
+    $('#query-oci').addClass('hidden');
+}
+
 /*
 ** Set cursor icons
  */
