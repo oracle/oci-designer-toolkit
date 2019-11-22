@@ -64,7 +64,7 @@
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer2.js') }}"></script>
     <script type="text/javascript">
         let palette_svg = {}
         let xmlSerialiser = new XMLSerializer();
@@ -96,8 +96,8 @@
             okitJson = {{ okit_query_response_json | safe }};
         </script>
     {% endif %}
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop2.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
     {% for oci_asset_js in oci_assets_js %}

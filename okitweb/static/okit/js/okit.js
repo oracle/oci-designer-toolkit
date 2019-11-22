@@ -95,10 +95,74 @@ class OkitJson {
         displayOkitJson();
         // Clear existing
         clearDiagram();
+
         // Draw Compartments
         for (let compartment of this.compartments) {
             compartment.draw();
         }
+
+        // Draw Compartment Sub Components
+        // Virtual Cloud Networks
+        for (let virtual_cloud_network of this.virtual_cloud_networks) {
+            virtual_cloud_network.draw();
+        }
+        // Block Storage Volumes
+        for (let block_storage_volume of this.block_storage_volumes) {
+            block_storage_volume.draw();
+        }
+        // Object Storage Buckets
+        for (let object_storage_bucket of this.object_storage_buckets) {
+            object_storage_bucket.draw();
+        }
+        // Autonomous Databases
+        for (let autonomous_database of this.autonomous_databases) {
+            autonomous_database.draw();
+        }
+
+        // Draw Virtual Cloud Network Sub Components
+        // Internet Gateways
+        for (let internet_gateway of this.internet_gateways) {
+            internet_gateway.draw();
+        }
+        // NAT Gateways
+        for (let nat_gateway of this.nat_gateways) {
+            nat_gateway.draw();
+        }
+        // Service Gateways
+        for (let service_gateway of this.service_gateways) {
+            service_gateway.draw();
+        }
+        // Dynamic Routing Gateways
+        for (let dynamic_routing_gateway of this.dynamic_routing_gateways) {
+            dynamic_routing_gateway.draw();
+        }
+        // Route Tables
+        for (let route_table of this.route_tables) {
+            route_table.draw();
+        }
+        // Security Lists
+        for (let security_list of this.security_lists) {
+            security_list.draw();
+        }
+        // Subnets
+        for (let subnet of this.subnets) {
+            subnet.draw();
+        }
+
+        // Draw Subnet Sub Components
+        // File Storage System
+        for (let file_storage_system of this.file_storage_systems) {
+            file_storage_system.draw();
+        }
+        // Instances
+        for (let instance of this.instances) {
+            instance.draw();
+        }
+        // Load Balancers
+        for (let load_balancer of this.load_balancers) {
+            load_balancer.draw();
+        }
+
         console.groupEnd();
     }
 
@@ -132,6 +196,7 @@ class OkitJson {
 
     // Virtual Cloud Networks
     newVirtualCloudNetwork(data) {
+        console.info('New Virtual Cloud Network');
         this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this));
         return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
     }
@@ -151,6 +216,20 @@ class OkitJson {
                 break;
             }
         }
+    }
+
+    // Subnets
+    newSubnet(data) {
+        console.info('New Subnet');
+        this['subnets'].push(new Subnet(data, this));
+        return this['subnets'][this['subnets'].length - 1];
+    }
+
+    // Internet Gateways
+    newInternetGateway(data) {
+        console.info('New Internet Gateway');
+        this['internet_gateways'].push(new InternetGateway(data, this));
+        return this['internet_gateways'][this['internet_gateways'].length - 1];
     }
 }
 

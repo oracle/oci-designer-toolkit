@@ -484,14 +484,9 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         }
     }
 
-    // CRUD Processing
-    add(title='') {
-        this.title = title;
-        let id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
-        console.groupCollapsed('Adding ' + virtual_cloud_network_prefix + ' : ' + id);
-        console.groupEnd();
-    }
-
+    /*
+     ** Delete Processing
+     */
     delete() {
         console.groupCollapsed('Delete ' + virtual_cloud_network_artifact + ' : ' + id);
         // Remove SVG Element
@@ -499,10 +494,158 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         console.groupEnd();
     }
 
-    // SVG Processing
+    /*
+     ** SVG Processing
+     */
     draw() {
-
+        this.parent_id = this.compartment_id;
+        console.groupCollapsed('Drawing ' + virtual_cloud_network_artifact + ' : ' + this.id + ' [' + this.parent_id + ']');
+        let svg = drawArtifact(this.getSvgDefinition());
+        // Add Properties Load Event to created svg
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
     }
+
+    getSvgDefinition() {
+        let position = 1;
+        let dimensions = this.getDimensions(this.id);
+        let definition = this.newSVGDefinition(this, virtual_cloud_network_artifact);
+        let parent_first_child = getCompartmentFirstChildContainerOffset(this.compartment_id);
+        definition['svg']['x'] = parent_first_child.dx;
+        definition['svg']['y'] = parent_first_child.dy;
+        // Add positioning offset
+        definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
+        // Retrieve all Virtual Cloud Networks in the parent svg and calculate vertical position
+        $('#' + this.parent_id + '-svg').children('svg[data-type="' + virtual_cloud_network_artifact + '"]').each(
+            function() {
+                console.info('Width  : ' + $(this).attr('width'));
+                console.info('Height : ' + $(this).attr('height'));
+                definition['svg']['y'] += Number($(this).attr('height'));
+            });
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = virtual_cloud_network_stroke_colour;
+        definition['rect']['stroke']['dash'] = 5;
+        definition['icon']['x_translation'] = icon_translate_x_start;
+        definition['icon']['y_translation'] = icon_translate_y_start;
+        definition['name']['show'] = true;
+        definition['label']['show'] = true;
+        definition['info']['show'] = true;
+        definition['info']['text'] = this.cidr_block;
+        return definition;
+    }
+
+    getDimensions(id='') {
+        console.groupCollapsed('Getting Dimensions of ' + virtual_cloud_network_artifact + ' : ' + id);
+        // Add Standard Padding and Spacing
+        let first_container_child = getVirtualCloudNetworkFirstChildContainerOffset(id);
+        let first_gateway_child = getVirtualCloudNetworkFirstChildGatewayOffset();
+        let first_child = getVirtualCloudNetworkFirstChildOffset();
+        let dimensions = {width:first_container_child.dx, height:first_container_child.dy};
+        // Add right padding
+        dimensions['width'] += positional_adjustments.padding.x;
+        // Add Bottom padding
+        dimensions['height'] += positional_adjustments.padding.y;
+        // Initialise Child dimensions
+        let max_gateway_dimensions = {width:0, height: 0, count:0};
+        let max_edge_dimensions = {width:0, height: 0, count:0};
+        console.info('Base Dimensions : '+ JSON.stringify(dimensions));
+
+        // Process Gateways
+        if (okitJson.hasOwnProperty('internet_gateways')) {
+            for (let internet_gateway of okitJson['internet_gateways']) {
+                if (internet_gateway['vcn_id'] == id) {
+                    let gateway_dimensions = getInternetGatewayDimensions(internet_gateway['id']);
+                    max_gateway_dimensions['width'] += gateway_dimensions['width'];
+                    max_gateway_dimensions['height'] = Math.max(max_gateway_dimensions['height'], gateway_dimensions['height']);
+                    max_gateway_dimensions['count'] += 1;
+                }
+            }
+        }
+        if (okitJson.hasOwnProperty('nat_gateways')) {
+            for (let nat_gateway of okitJson['nat_gateways']) {
+                if (nat_gateway['vcn_id'] == id) {
+                    let gateway_dimensions = getNATGatewayDimensions(nat_gateway['id']);
+                    max_gateway_dimensions['width'] += gateway_dimensions['width'];
+                    max_gateway_dimensions['height'] = Math.max(max_gateway_dimensions['height'], gateway_dimensions['height']);
+                    max_gateway_dimensions['count'] += 1;
+                }
+            }
+        }
+        dimensions['width'] = Math.max(dimensions['width'],
+            Math.round(first_gateway_child.dx + positional_adjustments.spacing.x + max_gateway_dimensions['width'] + (max_gateway_dimensions['count'] - 1) * positional_adjustments.spacing.x)
+        );
+        console.info('Post Gateway Dimensions : '+ JSON.stringify(dimensions));
+
+        // Process Edge Artifacts
+        if (hasUnattachedSecurityList(id)) {
+            for (let security_list of okitJson['security_lists']) {
+                if (security_list['vcn_id'] == id) {
+                    let edge_dimensions = getSecurityListDimensions(security_list['id']);
+                    max_edge_dimensions['width'] += edge_dimensions['width'];
+                    max_edge_dimensions['height'] = Math.max(max_edge_dimensions['height'], edge_dimensions['height'] + positional_adjustments.spacing.y);
+                    max_edge_dimensions['count'] += 1;
+                }
+            }
+        }
+        if (hasUnattachedRouteTable(id)) {
+            for (let route_table of okitJson['route_tables']) {
+                if (route_table['vcn_id'] == id) {
+                    let edge_dimensions = getRouteTableDimensions(route_table['id']);
+                    max_edge_dimensions['width'] += edge_dimensions['width'];
+                    max_edge_dimensions['height'] = Math.max(max_edge_dimensions['height'], edge_dimensions['height'] + positional_adjustments.spacing.y);
+                    max_edge_dimensions['count'] += 1;
+                }
+            }
+        }
+        dimensions['width'] = Math.max(dimensions['width'],
+            Math.round(first_child.dx + positional_adjustments.spacing.x + max_edge_dimensions['width'] + (max_edge_dimensions['count'] - 1) * positional_adjustments.spacing.x)
+        );
+        console.info('Post Edge Dimensions : '+ JSON.stringify(dimensions));
+
+        // Process Subnet Widths
+        if (okitJson.hasOwnProperty('subnets')) {
+            for (let subnet of okitJson['subnets']) {
+                if (subnet['vcn_id'] == id) {
+                    let subnet_dimensions = getSubnetDimensions(subnet['id']);
+                    // Test if current width is greater than the Subnet Width + appropriate padding
+                    dimensions['width'] = Math.max(dimensions['width'], (first_container_child.dx + positional_adjustments.padding.x + subnet_dimensions['width']));
+                    // Add Subnet Height to current height and spacing for between subnets
+                    dimensions['height'] += Math.round(subnet_dimensions['height'] + positional_adjustments.spacing.y);
+                }
+            }
+        }
+        console.info('Post Subnets Dimensions : '+ JSON.stringify(dimensions));
+
+        // Check size against minimum
+        dimensions['width']  = Math.max(dimensions['width'],  min_virtual_cloud_network_dimensions['width']);
+        dimensions['height'] = Math.max(dimensions['height'], min_virtual_cloud_network_dimensions['height']);
+
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+
+        console.groupEnd();
+        return dimensions;
+    }
+
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, [okitJson.draw]);
+        });
+    }
+
 
     getTargets() {
         return [compartment_artifact];

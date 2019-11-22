@@ -308,17 +308,21 @@ class Compartment extends OkitSvgArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
+        this.parent_id = 'canvas';
         this.id = 'okit-' + compartment_prefix + '-' + uuidv4();
+        this.compartment_id = this.id;
         this.name = generateDefaultName(compartment_prefix, okitjson.compartments.length + 1);
         this.display_name = this.name;
-        this.compartment_id = '';
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
         }
     }
 
-    // CRUD Processing
+    /*
+     ** Delete Processing
+     */
+    // TODO: Delete
     add(title='') {
         this.title = title;
         let id = 'okit-' + compartment_prefix + '-' + uuidv4();
@@ -333,10 +337,85 @@ class Compartment extends OkitSvgArtifact {
         console.groupEnd();
     }
 
-    // SVG Processing
+    /*
+     ** SVG Processing
+     */
     draw() {
-
+        console.groupCollapsed('Drawing ' + compartment_artifact + ' : ' + this.id);
+        let svg = drawArtifact(this.getSvgDefinition());
+        // Add Properties Load Event to created svg
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
     }
+
+    getSvgDefinition() {
+        let dimensions = this.getDimensions(this.id);
+        let definition = this.newSVGDefinition(this, compartment_artifact);
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = compartment_stroke_colour;
+        definition['rect']['stroke']['dash'] = 5;
+        definition['name']['show'] = true;
+        definition['label']['show'] = true;
+        return definition;
+    }
+
+    getDimensions(id='') {
+        console.groupCollapsed('Getting Dimensions of ' + compartment_artifact + ' : ' + id);
+        const min_compartment_dimensions = {width:$('#canvas-wrapper').width(), height:$('#canvas-wrapper').height()};
+        let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
+        let max_sub_container_dimensions = {width:0, height: 0, count:0};
+        let max_virtual_cloud_network_dimensions = {width:0, height: 0, count:0};
+        // Virtual Cloud Networks
+        if (okitJson.hasOwnProperty('virtual_cloud_networks')) {
+            for (let virtual_cloud_network of okitJson['virtual_cloud_networks']) {
+                if (virtual_cloud_network['compartment_id'] == id) {
+                    let virtual_cloud_network_dimensions = getVirtualCloudNetworkDimensions(virtual_cloud_network['id']);
+                    max_virtual_cloud_network_dimensions['width'] = Math.max(virtual_cloud_network_dimensions['width'], max_virtual_cloud_network_dimensions['width']);
+                    max_virtual_cloud_network_dimensions['height'] += virtual_cloud_network_dimensions['height'];
+                    max_virtual_cloud_network_dimensions['count'] += 1;
+                }
+            }
+        }
+        // Calculate Largest Width
+        // User 3 * positional_adjustments.spacing.y because positioning of vcn uses x-left of 2 * positional_adjustments.spacing.y and we want a space on the right.
+        dimensions['width'] = Math.max((max_virtual_cloud_network_dimensions['width'] + positional_adjustments.padding.x + (3 * positional_adjustments.spacing.x)),
+            max_sub_container_dimensions['width']);
+        // Calculate Height
+        dimensions['height'] += max_sub_container_dimensions['height'];
+        dimensions['height'] += max_sub_container_dimensions['count'] + positional_adjustments.spacing.y;
+        dimensions['height'] += max_virtual_cloud_network_dimensions['height'];
+        dimensions['height'] += max_virtual_cloud_network_dimensions['count'] + positional_adjustments.spacing.y;
+        // Check size against minimum
+        dimensions['width'] = Math.max(dimensions['width'], min_compartment_dimensions['width']);
+        dimensions['height'] = Math.max(dimensions['height'], min_compartment_dimensions['height']);
+
+        console.info('Sub Container Dimensions         : ' + JSON.stringify(max_sub_container_dimensions));
+        console.info('Virtual Cloud Network Dimensions : ' + JSON.stringify(max_virtual_cloud_network_dimensions));
+        console.info('Overall Dimensions               : ' + JSON.stringify(dimensions));
+
+        console.groupEnd();
+        return dimensions;
+    }
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/compartment.html", function () {
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, [okitJson.draw]);
+        });
+    }
+
 
     getTargets() {
         return [compartment_artifact];
