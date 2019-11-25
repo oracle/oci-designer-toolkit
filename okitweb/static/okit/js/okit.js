@@ -12,9 +12,84 @@ class OkitSvg {
 }
 
 class OkitSvgArtifact {
+    /*
+    ** Create
+     */
     constructor (okitjson) {
         this.getOkitJson = function() {return okitjson};
     }
+
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        alert('Clone function "clone()" has not been implemented.')
+        return;
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.')
+        return;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete (Default) ' + this.getArtifactReference() + ' : ' + id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {
+        console.info('Default empty deleteChildren()');
+    }
+
+
+    /*
+     ** SVG Processing
+     */
+    draw() {
+        console.groupCollapsed('Drawing (Default) ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+    }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.')
+        return;
+    }
+
+    // Return Artifact Dimentions
+    getDimensions() {
+        alert('Get Dimension function "getDimensions()" has not been implemented.')
+        return;
+    }
+
+    getMinimumDimensions() {
+        return {width: icon_width, height:icon_height};
+    }
+
     newSVGDefinition(artifact, data_type) {
         let definition = {};
         definition['artifact'] = artifact;
@@ -34,6 +109,56 @@ class OkitSvgArtifact {
         return definition
     }
 
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        alert('Load Properties function "loadProperties()" has not been implemented.')
+        return;
+    }
+
+
+    /*
+    ** Child Offset Functions
+     */
+    getFirstChildOffset() {
+        alert('Get First Child function "getFirstChildOffset()" has not been implemented.')
+        return;
+    }
+
+    getFirstContainerChildOffset() {
+        alert('Get First Container Child function "getFirstContainerChildOffset()" has not been implemented.')
+        return;
+    }
+
+    getFirstTopEdgeChildOffset() {
+        alert('Get First Top Edge Child function "getFirstTopEdgeChildOffset()" has not been implemented.')
+        return;
+    }
+    getFirstBottomEdgeChildOffset() {
+        alert('Get First Bottom Edge Child function "getFirstBottomEdgeChildOffset()" has not been implemented.')
+        return;
+    }
+
+    getFirstLeftEdgeChildOffset() {
+        alert('Get First Left Edge Child function "getFirstLeftEdgeChildOffset()" has not been implemented.')
+        return;
+    }
+
+    getFirstRightEdgeChildOffset() {
+        alert('Get First Right Edge Child function "getFirstRightEdgeChildOffset()" has not been implemented.')
+        return;
+    }
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
+    getTargets() {
+        // Return list of Artifact names
+        return [];
+    }
 }
 
 class OkitJson {

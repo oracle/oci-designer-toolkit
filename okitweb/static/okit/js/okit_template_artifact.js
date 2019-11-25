@@ -11,7 +11,7 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
         super(okitjson);
         // Configure default values
         this.id = 'okit-' + template_artifact_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(template_artifact_prefix, okitjson.template_artifact_prefix.length + 1);
+        this.display_name = generateDefaultName(template_artifact_prefix, okitjson.template_artifacts.length + 1);
         this.compartment_id = '';
         // Update with any passed data
         for (let key in data) {
