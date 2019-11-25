@@ -296,7 +296,7 @@ class InternetGateway extends OkitSvgArtifact {
     ** Delete Processing
      */
     delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + id);
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
         // Delete Child Artifacts
         this.deleteChildren();
         // Remove SVG Element
@@ -304,7 +304,16 @@ class InternetGateway extends OkitSvgArtifact {
         console.groupEnd();
     }
 
-    deleteChildren() {}
+    deleteChildren() {
+        // Remove Internet Gateway references
+        for (route_table of this.getOkitJson().route_tables) {
+            for (let i = 0; i < route_table.route_rules.length; i++) {
+                if (route_table.route_rules[i]['network_entity_id'] === this.id) {
+                    route_table.route_rules.splice(i, 1);
+                }
+            }
+        }
+    }
 
 
     /*

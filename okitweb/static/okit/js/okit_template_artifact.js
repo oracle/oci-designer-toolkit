@@ -48,7 +48,7 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
     ** Delete Processing
      */
     delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + id);
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
         // Delete Child Artifacts
         this.deleteChildren();
         // Remove SVG Element

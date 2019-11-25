@@ -17,6 +17,7 @@ let nat_gateway_ids = [];
 ** Reset variables
  */
 
+// TODO: Delete
 function clearNATGatewayVariables() {
     nat_gateway_ids = [];
 }
@@ -24,7 +25,8 @@ function clearNATGatewayVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addNATGateway(vcn_id, compartment_id) {
+// TODO: Delete
+function addNATGatewayDeprecated(vcn_id, compartment_id) {
     let id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + nat_gateway_artifact + ' : ' + id);
 
@@ -59,7 +61,8 @@ function addNATGateway(vcn_id, compartment_id) {
 ** Delete From JSON Model
  */
 
-function deleteNATGateway(id) {
+// TODO: Delete
+function deleteNATGatewayDeprecated(id) {
     console.groupCollapsed('Delete ' + nat_gateway_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -85,11 +88,13 @@ function deleteNATGateway(id) {
 /*
 ** SVG Creation
  */
-function getNATGatewayDimensions(id='') {
+// TODO: Delete
+function getNATGatewayDimensionsDeprecated(id='') {
     return {width:icon_width, height:icon_height};
 }
 
-function newNATGatewayDefinition(artifact, position=0) {
+// TODO: Delete
+function newNATGatewayDefinitionDeprecated(artifact, position=0) {
     let dimensions = getNATGatewayDimensions();
     let definition = newArtifactSVGDefinition(artifact, nat_gateway_artifact);
     let first_child = getVirtualCloudNetworkFirstChildGatewayOffset();
@@ -102,7 +107,8 @@ function newNATGatewayDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawNATGatewaySVG(artifact) {
+// TODO: Delete
+function drawNATGatewaySVGDeprecated(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -143,7 +149,8 @@ function drawNATGatewaySVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadNATGatewayProperties(id) {
+// TODO: Delete
+function loadNATGatewayPropertiesDeprecated(id) {
     $("#properties").load("propertysheets/nat_gateway.html", function () {
         if ('nat_gateways' in okitJson) {
             console.info('Loading NAT Gateway: ' + id);
@@ -225,4 +232,168 @@ $(document).ready(function() {
         .attr('id', 'nat_gateway_name_filter')
         .attr('name', 'nat_gateway_name_filter');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+** Define NAT Gateway Class
+ */
+class NATGateway extends OkitSvgArtifact {
+    /*
+    ** Create
+     */
+    constructor (data={}, okitjson={}) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(nat_gateway_prefix, okitjson.nat_gateways.length + 1);
+        this.compartment_id = '';
+        this.vcn_id = data.parent_id;
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+        // Add Get Parent function
+        this.parent_id = this.vcn_id;
+        for (let parent of okitjson.virtual_cloud_networks) {
+            if (parent.id === this.parent_id) {
+                this.getParent = function() {return parent};
+                break;
+            }
+        }
+    }
+
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        return new NATGateway(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return nat_gateway_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {
+        // Remove Internet Gateway references
+        for (route_table of this.getOkitJson().route_tables) {
+            for (let i = 0; i < route_table.route_rules.length; i++) {
+                if (route_table.route_rules[i]['network_entity_id'] === this.id) {
+                    route_table.route_rules.splice(i, 1);
+                }
+            }
+        }
+    }
+
+
+    /*
+     ** SVG Processing
+     */
+    draw() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+    }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let position = 1;
+        let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        let dimensions = this.getDimensions();
+        //let first_child = this.getParent().getFirstTopEdgeChildOffset();
+        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = nat_gateway_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
+        console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
+        return definition;
+    }
+
+    // Return Artifact Dimensions
+    getDimensions() {
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let dimensions = this.getMinimumDimensions();
+        // Calculate Size based on Child Artifacts
+        // Check size against minimum
+        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
+        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: icon_width, height:icon_height};
+    }
+
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/nat_gateway.html", function () {
+            // Load Referenced Ids
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, [okitJson.draw]);
+        });
+    }
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
+    getTargets() {
+        // Return list of Artifact names
+        return [virtual_cloud_gateway_artifact];
+    }
+}
 

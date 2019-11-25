@@ -356,6 +356,13 @@ class OkitJson {
         this['internet_gateways'].push(new InternetGateway(data, this));
         return this['internet_gateways'][this['internet_gateways'].length - 1];
     }
+
+    // NAT Gateways
+    newNATGateway(data) {
+        console.info('New NAT Gateway');
+        this['nat_gateways'].push(new NATGateway(data, this));
+        return this['nat_gateways'][this['nat_gateways'].length - 1];
+    }
 }
 
 $(document).ready(function() {
