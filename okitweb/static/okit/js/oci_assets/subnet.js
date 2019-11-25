@@ -937,20 +937,9 @@ class Subnet extends OkitSvgArtifact {
         let dimensions = this.getDimensions(this.id);
         let definition = this.newSVGDefinition(this, subnet_artifact);
         // Get Parents First Child Container Offset
-        //let parent_first_child = getVirtualCloudNetworkFirstChildContainerOffset(this.vcn_id);
-        let parent_first_child = this.getParent().getFirstContainerChildOffset();
+        let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = parent_first_child.dx;
         definition['svg']['y'] = parent_first_child.dy;
-        // Add positioning offset
-        definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
-
-        // Retrieve all Subnets in the parent svg and calculate vertical position
-        $('#' + this.parent_id + '-svg').children('svg[data-type="' + subnet_artifact + '"]').each(
-            function() {
-                console.info('Width  : ' + $(this).attr('width'));
-                console.info('Height : ' + $(this).attr('height'));
-                definition['svg']['y'] += Number($(this).attr('height'));
-            });
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
         definition['rect']['stroke']['colour'] = subnet_stroke_colour;

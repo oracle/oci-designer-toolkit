@@ -749,12 +749,15 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
     ** Child Offset Functions
      */
     getChildOffset(child_type) {
+        console.groupCollapsed('Getting Offset for ' + child_type);
+        let offset = {dx: 0, dy: 0};
         if (this.getTopEdgeArtifacts().includes(child_type)) {
-            return this.getFirstTopEdgeChildOffset();
+            offset = this.getFirstTopEdgeChildOffset();
         } else if (this.getContainerArtifacts().includes(child_type)) {
-            return this.getFirstContainerChildOffset();
+            offset = this.getFirstContainerChildOffset();
         }
-        return {dx: 0, dy: 0};
+        console.groupEnd();
+        return offset
     }
 
     getFirstChildOffset() {
@@ -771,9 +774,20 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
             dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
         };
         if (this.hasUnattachedRouteTable() || this.hasUnattachedSecurityList()) {
-            let first_child = this.getFirstChildOffset();
+            //let first_child = this.getFirstChildOffset();
             offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
         }
+        // Count how many top edge children and adjust.
+        for (let child of this.getContainerArtifacts()) {
+            //count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
+            $('#' + this.id + '-svg').children('svg[data-type="' + child + '"]').each(
+                function() {
+                    console.info('Width  : ' + $(this).attr('width'));
+                    console.info('Height : ' + $(this).attr('height'));
+                    offset.dy += Math.round(Number($(this).attr('height')) + positional_adjustments.spacing.y);
+                });
+        }
+        console.info('Offset : ' + JSON.stringify(offset));
         return offset;
     }
 
@@ -788,8 +802,8 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
             count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
         }
         console.info('Top Edge Count : ' + count);
-        // Increment based on count
-        offset.dx += Math.round(icon_width * count) + (positional_adjustments.spacing.x * count);
+        // Increment x position based on count
+        offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
         return offset;
     }
 
