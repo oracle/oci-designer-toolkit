@@ -932,6 +932,7 @@ class Subnet extends OkitSvgArtifact {
     }
 
     getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let position = 1;
         let dimensions = this.getDimensions(this.id);
         let definition = this.newSVGDefinition(this, subnet_artifact);
@@ -966,6 +967,7 @@ class Subnet extends OkitSvgArtifact {
         definition['info']['show'] = true;
         definition['info']['text'] = this.cidr_block;
         console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
         return definition;
     }
 

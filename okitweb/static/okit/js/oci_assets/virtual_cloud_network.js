@@ -748,6 +748,15 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
     /*
     ** Child Offset Functions
      */
+    getChildOffset(child_type) {
+        if (this.getTopEdgeArtifacts().includes(child_type)) {
+            return this.getFirstTopEdgeChildOffset();
+        } else if (this.getContainerArtifacts().includes(child_type)) {
+            return this.getFirstContainerChildOffset();
+        }
+        return {dx: 0, dy: 0};
+    }
+
     getFirstChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
@@ -773,6 +782,14 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
             dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
             dy: 0
         };
+        // Count how many top edge children and adjust.
+        let count = 0;
+        for (let child of this.getTopEdgeArtifacts()) {
+            count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
+        }
+        console.info('Top Edge Count : ' + count);
+        // Increment based on count
+        offset.dx += Math.round(icon_width * count) + (positional_adjustments.spacing.x * count);
         return offset;
     }
 
@@ -810,5 +827,17 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
             }
         }
         return false;
+    }
+
+
+    /*
+    ** Child Type Functions
+     */
+    getTopEdgeArtifacts() {
+        return [internet_gateway_artifact, nat_gateway_artifact, security_list_artifact, dynamic_routing_gateway_artifact];
+    }
+
+    getContainerArtifacts() {
+        return [subnet_artifact];
     }
 }

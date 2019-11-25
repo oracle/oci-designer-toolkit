@@ -17,6 +17,7 @@ let internet_gateway_ids = [];
 ** Reset variables
  */
 
+// TODO: Delete
 function clearInternetGatewayVariables() {
     internet_gateway_ids = [];
 }
@@ -24,7 +25,8 @@ function clearInternetGatewayVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addInternetGateway(vcn_id, compartment_id) {
+// TODO: Delete
+function addInternetGatewayDeprecated(vcn_id, compartment_id) {
     let id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + internet_gateway_artifact + ' : ' + id);
 
@@ -59,7 +61,8 @@ function addInternetGateway(vcn_id, compartment_id) {
 ** Delete From JSON Model
  */
 
-function deleteInternetGateway(id) {
+// TODO: Delete
+function deleteInternetGatewayDeprecated(id) {
     console.groupCollapsed('Delete ' + internet_gateway_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -85,11 +88,13 @@ function deleteInternetGateway(id) {
 /*
 ** SVG Creation
  */
-function getInternetGatewayDimensions(id='') {
+// TODO: Delete
+function getInternetGatewayDimensionsDeprecated(id='') {
     return {width:icon_width, height:icon_height};
 }
 
-function newInternetGatewayDefinition(artifact, position=0) {
+// TODO: Delete
+function newInternetGatewayDefinitionDeprecated(artifact, position=0) {
     let dimensions = getInternetGatewayDimensions();
     let definition = newArtifactSVGDefinition(artifact, internet_gateway_artifact);
     let first_child = getVirtualCloudNetworkFirstChildGatewayOffset();
@@ -102,7 +107,8 @@ function newInternetGatewayDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawInternetGatewaySVG(artifact) {
+// TODO: Delete
+function drawInternetGatewaySVGDeprecated(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -143,7 +149,8 @@ function drawInternetGatewaySVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadInternetGatewayProperties(id) {
+// TODO: Delete
+function loadInternetGatewayPropertiesDeprecated(id) {
     $("#properties").load("propertysheets/internet_gateway.html", function () {
         if ('internet_gateways' in okitJson) {
             console.info('Loading Internet Gateway: ' + id);
@@ -252,14 +259,15 @@ class InternetGateway extends OkitSvgArtifact {
         // Configure default values
         this.id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(internet_gateway_prefix, okitjson.internet_gateways.length + 1);
-        this.compartment_id = '';
+        this.compartment_id = data.compartment_id;
+        this.vcn_id = data.parent_id;
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.parent_type_id;
-        for (let parent of okitjson.parent_type_list) {
+        this.parent_id = this.vcn_id;
+        for (let parent of okitjson.virtual_cloud_networks) {
             if (parent.id === this.parent_id) {
                 this.getParent = function() {return parent};
                 break;
@@ -320,16 +328,26 @@ class InternetGateway extends OkitSvgArtifact {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + id);
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let position = 1;
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let dimensions = this.getDimensions();
+        //let first_child = this.getParent().getFirstTopEdgeChildOffset();
+        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = internet_gateway_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();
         return definition;
     }
-    // Return Artifact Dimentions
+
+    // Return Artifact Dimensions
     getDimensions() {
-        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + id);
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getMinimumDimensions();
         // Calculate Size based on Child Artifacts
         // Check size against minimum
@@ -359,39 +377,6 @@ class InternetGateway extends OkitSvgArtifact {
             addPropertiesEventListeners(me, [okitJson.draw]);
         });
     }
-
-
-    /*
-    ** Child Offset Functions
-     */
-    getFirstChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
-        return offset;
-    }
-
-    getFirstContainerChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
-        };
-        return offset;
-    }
-
-    getFirstTopEdgeChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
-            dy: 0
-        };
-        return offset;
-    }
-    getFirstBottomEdgeChildOffset() {}
-
-    getFirstLeftEdgeChildOffset() {}
-
-    getFirstRightEdgeChildOffset() {}
 
 
     /*
