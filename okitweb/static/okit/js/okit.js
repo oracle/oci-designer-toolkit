@@ -127,27 +127,27 @@ class OkitSvgArtifact {
         return;
     }
 
-    getFirstContainerChildOffset() {
-        alert('Get First Container Child function "getFirstContainerChildOffset()" has not been implemented.')
+    getContainerChildOffset() {
+        alert('Get First Container Child function "getContainerChildOffset()" has not been implemented.')
         return;
     }
 
-    getFirstTopEdgeChildOffset() {
-        alert('Get First Top Edge Child function "getFirstTopEdgeChildOffset()" has not been implemented.')
+    getTopEdgeChildOffset() {
+        alert('Get First Top Edge Child function "getTopEdgeChildOffset()" has not been implemented.')
         return;
     }
-    getFirstBottomEdgeChildOffset() {
-        alert('Get First Bottom Edge Child function "getFirstBottomEdgeChildOffset()" has not been implemented.')
-        return;
-    }
-
-    getFirstLeftEdgeChildOffset() {
-        alert('Get First Left Edge Child function "getFirstLeftEdgeChildOffset()" has not been implemented.')
+    getBottomEdgeChildOffset() {
+        alert('Get First Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.')
         return;
     }
 
-    getFirstRightEdgeChildOffset() {
-        alert('Get First Right Edge Child function "getFirstRightEdgeChildOffset()" has not been implemented.')
+    getLeftEdgeChildOffset() {
+        alert('Get First Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.')
+        return;
+    }
+
+    getRightEdgeChildOffset() {
+        alert('Get First Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.')
         return;
     }
 

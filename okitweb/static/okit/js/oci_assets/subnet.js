@@ -962,7 +962,7 @@ class Subnet extends OkitSvgArtifact {
 
     getDimensions(id='') {
         console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
-        let first_edge_child = this.getFirstTopEdgeChildOffset();
+        let first_edge_child = this.getTopEdgeChildOffset();
         let first_load_balancer_child = this.getFirstLoadBalancerChildOffset(id);
         let first_instance_child = this.getFirstInstanceChildOffset(id);
         let first_child = this.getFirstChildOffset();
@@ -1117,7 +1117,7 @@ class Subnet extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstContainerChildOffset() {
+    getContainerChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
             dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
@@ -1125,7 +1125,7 @@ class Subnet extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstTopEdgeChildOffset() {
+    getTopEdgeChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
             dy: 0
@@ -1133,11 +1133,11 @@ class Subnet extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstBottomEdgeChildOffset() {}
+    getBottomEdgeChildOffset() {}
 
-    getFirstLeftEdgeChildOffset() {}
+    getLeftEdgeChildOffset() {}
 
-    getFirstRightEdgeChildOffset() {}
+    getRightEdgeChildOffset() {}
 
     getFirstLoadBalancerChildOffset() {
         let offset = this.getFirstChildOffset();

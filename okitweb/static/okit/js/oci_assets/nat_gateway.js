@@ -341,7 +341,7 @@ class NATGateway extends OkitSvgArtifact {
         let position = 1;
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let dimensions = this.getDimensions();
-        //let first_child = this.getParent().getFirstTopEdgeChildOffset();
+        //let first_child = this.getParent().getTopEdgeChildOffset();
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
         definition['svg']['y'] = first_child.dy;

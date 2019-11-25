@@ -636,8 +636,8 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
     getDimensions(id='') {
         console.groupCollapsed('Getting Dimensions of ' + virtual_cloud_network_artifact + ' : ' + id);
         // Add Standard Padding and Spacing
-        let first_container_child = this.getFirstContainerChildOffset(id);
-        let first_gateway_child = this.getFirstTopEdgeChildOffset();
+        let first_container_child = this.getContainerChildOffset(id);
+        let first_gateway_child = this.getTopEdgeChildOffset();
         let first_child = this.getFirstChildOffset();
         let dimensions = {width: first_container_child.dx, height: first_container_child.dy};
         // Add right padding
@@ -752,9 +752,9 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         console.groupCollapsed('Getting Offset for ' + child_type);
         let offset = {dx: 0, dy: 0};
         if (this.getTopEdgeArtifacts().includes(child_type)) {
-            offset = this.getFirstTopEdgeChildOffset();
+            offset = this.getTopEdgeChildOffset();
         } else if (this.getContainerArtifacts().includes(child_type)) {
-            offset = this.getFirstContainerChildOffset();
+            offset = this.getContainerChildOffset();
         }
         console.groupEnd();
         return offset
@@ -768,7 +768,7 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstContainerChildOffset() {
+    getContainerChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
             dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
@@ -791,7 +791,7 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstTopEdgeChildOffset() {
+    getTopEdgeChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
             dy: 0
@@ -807,11 +807,11 @@ class VirtualCloudNetwork extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstBottomEdgeChildOffset() {}
+    getBottomEdgeChildOffset() {}
 
-    getFirstLeftEdgeChildOffset() {}
+    getLeftEdgeChildOffset() {}
 
-    getFirstRightEdgeChildOffset() {}
+    getRightEdgeChildOffset() {}
 
 
     /*

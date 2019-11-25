@@ -475,7 +475,7 @@ class Compartment extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstContainerChildOffset() {
+    getContainerChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
             dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
@@ -483,7 +483,7 @@ class Compartment extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstTopEdgeChildOffset() {
+    getTopEdgeChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
             dy: 0
@@ -491,11 +491,11 @@ class Compartment extends OkitSvgArtifact {
         return offset;
     }
 
-    getFirstBottomEdgeChildOffset() {}
+    getBottomEdgeChildOffset() {}
 
-    getFirstLeftEdgeChildOffset() {}
+    getLeftEdgeChildOffset() {}
 
-    getFirstRightEdgeChildOffset() {}
+    getRightEdgeChildOffset() {}
 
 
     /*
