@@ -17,6 +17,7 @@ let security_list_ids = [];
 ** Reset variables
  */
 
+// TODO: Delete
 function clearSecurityListVariables() {
     security_list_ids = [];
 }
@@ -24,7 +25,8 @@ function clearSecurityListVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addSecurityList(vcn_id, compartment_id) {
+// TODO: Delete
+function addSecurityListDeprecated(vcn_id, compartment_id) {
     let id = 'okit-' + security_list_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + security_list_artifact + ' : ' + id);
 
@@ -63,7 +65,8 @@ function addSecurityList(vcn_id, compartment_id) {
 ** Delete From JSON Model
  */
 
-function deleteSecurityList(id) {
+// TODO: Delete
+function deleteSecurityListDeprecated(id) {
     console.groupCollapsed('Delete ' + security_list_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -89,11 +92,13 @@ function deleteSecurityList(id) {
 /*
 ** SVG Creation
  */
-function getSecurityListDimensions(id='') {
+// TODO: Delete
+function getSecurityListDimensionsDeprecated(id='') {
     return {width:icon_width, height:icon_height};
 }
 
-function newSecurityListDefinition(artifact, position=0) {
+// TODO: Delete
+function newSecurityListDefinitionDeprecated(artifact, position=0) {
     let dimensions = getSecurityListDimensions();
     let definition = newArtifactSVGDefinition(artifact, security_list_artifact);
     let first_child = getVirtualCloudNetworkFirstChildOffset();
@@ -106,7 +111,8 @@ function newSecurityListDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawSecurityListSVG(artifact) {
+// TODO: Delete
+function drawSecurityListSVGDeprecated(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -160,7 +166,8 @@ function drawSecurityListSVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadSecurityListProperties(id) {
+// TODO: Delete
+function loadSecurityListPropertiesDeprecated(id) {
     $("#properties").load("propertysheets/security_list.html", function () {
         if ('security_lists' in okitJson) {
             console.info('Loading Security List: ' + id);
@@ -368,7 +375,8 @@ function querySecurityListAjax(compartment_id, vcn_id) {
     });
 }
 
-function addDefaultSecurityListRules(id, vcn_cidr_block='10.0.0.0/16') {
+// TODO: Delete
+function addDefaultSecurityListRulesDeprecated(id, vcn_cidr_block='10.0.0.0/16') {
     console.info('Adding Default Security List Rules for ' + id);
     for (let security_list of okitJson['security_lists']) {
         if (id == security_list.id) {
@@ -459,4 +467,201 @@ $(document).ready(function() {
         .attr('id', 'security_list_name_filter')
         .attr('name', 'security_list_name_filter');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+** Define Security List Class
+ */
+class SecurityList extends OkitSvgArtifact {
+    /*
+    ** Create
+     */
+    constructor (data={}, okitjson={}) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + security_list_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(security_list_prefix, okitjson.security_lists.length + 1);
+        this.compartment_id = '';
+        this.vcn_id = data.parent_id;
+        this.egress_security_rules = [];
+        this.ingress_security_rules = [];
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+        // Add Get Parent function
+        this.parent_id = this.vcn_id;
+        for (let parent of okitjson.virtual_cloud_networks) {
+            if (parent.id === this.parent_id) {
+                this.getParent = function() {return parent};
+                break;
+            }
+        }
+    }
+
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        return new SecurityList(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return security_list_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {
+        // Remove Subnet references
+        for (let subnet of this.getOkitJson().subnets) {
+            for (let i=0; i < subnet.security_list_ids.length; i++) {
+                if (subnet.security_list_ids[i] == this.id) {
+                    subnet.security_list_ids.splice(i, 1);
+                }
+            }
+        }
+    }
+
+
+    /*
+     ** SVG Processing
+     */
+    draw() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+    }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let first_child = this.getParent().getTopChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = security_list_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
+        console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
+        return definition;
+    }
+
+    // Return Artifact Dimensions
+    getDimensions() {
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let dimensions = this.getMinimumDimensions();
+        // Calculate Size based on Child Artifacts
+        // Check size against minimum
+        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
+        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: icon_width, height:icon_height};
+    }
+
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/security_list.html", function () {
+            // Load Referenced Ids
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, [okitJson.draw]);
+        });
+    }
+
+
+    /*
+    ** Child Offset Functions
+     */
+    getFirstChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
+    getContainerChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
+        };
+        return offset;
+    }
+
+    getTopEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dy: 0
+        };
+        return offset;
+    }
+    getBottomEdgeChildOffset() {}
+
+    getLeftEdgeChildOffset() {}
+
+    getRightEdgeChildOffset() {}
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
+    getTargets() {
+        // Return list of Artifact names
+        return [];
+    }
+}
 

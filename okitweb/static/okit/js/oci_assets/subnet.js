@@ -754,7 +754,7 @@ $(document).ready(function () {
 /*
 ** Define Subnet Artifact Class
  */
-class Subnet extends OkitSvgArtifact {
+class Subnet extends OkitContainerArtifact {
     /*
     ** Create
      */
@@ -933,7 +933,6 @@ class Subnet extends OkitSvgArtifact {
 
     getSvgDefinition() {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let position = 1;
         let dimensions = this.getDimensions(this.id);
         let definition = this.newSVGDefinition(this, subnet_artifact);
         // Get Parents First Child Container Offset
@@ -960,11 +959,15 @@ class Subnet extends OkitSvgArtifact {
         return definition;
     }
 
-    getDimensions(id='') {
-        console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + id);
+    getDimensions() {
+        return super.getDimensions('subnet_id');
+    }
+    // TODO: Delete
+    getDimensions1() {
+        console.groupCollapsed('Getting Dimensions of ' + subnet_artifact + ' : ' + this.id);
         let first_edge_child = this.getTopEdgeChildOffset();
-        let first_load_balancer_child = this.getFirstLoadBalancerChildOffset(id);
-        let first_instance_child = this.getFirstInstanceChildOffset(id);
+        let first_load_balancer_child = this.getFirstLoadBalancerChildOffset(this.id);
+        let first_instance_child = this.getFirstInstanceChildOffset(this.id);
         let first_child = this.getFirstChildOffset();
         let dimensions = {width:first_instance_child.dx, height:first_instance_child.dy};
         let max_load_balancer_dimensions = {width:0, height: 0, count:0};
@@ -1052,13 +1055,17 @@ class Subnet extends OkitSvgArtifact {
         console.info('Post File System Dimensions   : '+ JSON.stringify(dimensions));
 
         // Check size against minimum
-        dimensions['width'] = Math.max(dimensions['width'], min_subnet_dimensions['width']);
-        dimensions['height'] = Math.max(dimensions['height'], min_subnet_dimensions['height']);
+        dimensions['width']  = Math.max(dimensions['width'],  this.getMinimumDimensions().width);
+        dimensions['height'] = Math.max(dimensions['height'], this.getMinimumDimensions().height);
 
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
 
         console.groupEnd();
         return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: 400, height: 150};
     }
 
 
@@ -1107,60 +1114,6 @@ class Subnet extends OkitSvgArtifact {
 
 
     /*
-    ** Child Offset Functions
-     */
-    getFirstChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
-        return offset;
-    }
-
-    getContainerChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
-        };
-        return offset;
-    }
-
-    getTopEdgeChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
-            dy: 0
-        };
-        return offset;
-    }
-
-    getBottomEdgeChildOffset() {}
-
-    getLeftEdgeChildOffset() {}
-
-    getRightEdgeChildOffset() {}
-
-    getFirstLoadBalancerChildOffset() {
-        let offset = this.getFirstChildOffset();
-        if (this.hasFileStorageSystem()) {
-            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
-        }
-        return offset;
-    }
-
-    getFirstInstanceChildOffset() {
-        let offset = this.getFirstChildOffset();
-        if (this.hasFileStorageSystem()) {
-            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
-        }
-        if (this.hasLoadBalancer()) {
-            let dimensions = getLoadBalancerDimensions();
-            offset.dy += Math.round(dimensions.height + positional_adjustments.padding.y);
-        }
-        return offset;
-    }
-
-
-    /*
     ** Define Allowable SVG Drop Targets
      */
     getTargets() {
@@ -1189,5 +1142,19 @@ class Subnet extends OkitSvgArtifact {
         return false;
     }
 
+    /*
+    ** Child Artifact Functions
+     */
+    getTopArtifacts() {
+        return [load_balancer_artifact];
+    }
+
+    getBottomArtifacts() {
+        return [instance_artifact];
+    }
+
+    getLeftEdgeArtifacts() {
+        return [file_storage_system_artifact];
+    }
 }
 

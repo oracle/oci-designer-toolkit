@@ -324,7 +324,7 @@ $(document).ready(function() {
 /*
 ** Define Compartment Artifact Class
  */
-class Compartment extends OkitSvgArtifact {
+class Compartment extends OkitContainerArtifact {
     /*
     ** Create
      */
@@ -401,7 +401,11 @@ class Compartment extends OkitSvgArtifact {
         return definition;
     }
 
-    getDimensions(id='') {
+    getDimensions() {
+        return super.getDimensions('compartment_id');
+    }
+    // TODO: Delete
+    getDimensions1(id='') {
         console.groupCollapsed('Getting Dimensions of ' + compartment_artifact + ' : ' + id);
         const min_compartment_dimensions = this.getMinimumDimensions();
         let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
@@ -465,44 +469,17 @@ class Compartment extends OkitSvgArtifact {
 
 
     /*
-    ** Child Offset Functions
-     */
-    getFirstChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
-        return offset;
-    }
-
-    getContainerChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
-        };
-        return offset;
-    }
-
-    getTopEdgeChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
-            dy: 0
-        };
-        return offset;
-    }
-
-    getBottomEdgeChildOffset() {}
-
-    getLeftEdgeChildOffset() {}
-
-    getRightEdgeChildOffset() {}
-
-
-    /*
     ** Define Allowable SVG Drop Targets
      */
     getTargets() {
         return [compartment_artifact];
     }
 
+
+    /*
+    ** Child Type Functions
+     */
+    getContainerArtifacts() {
+        return [virtual_cloud_network_artifact];
+    }
 }

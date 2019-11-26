@@ -134,25 +134,30 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
     }
 
     getContainerChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
-        };
+        let offset = this.getFirstContainerChildOffset();
         return offset;
     }
 
     getTopEdgeChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
-            dy: 0
-        };
+        let offset = this.getFirstTopEdgeChildOffset();
         return offset;
     }
+
     getBottomEdgeChildOffset() {}
 
     getLeftEdgeChildOffset() {}
 
     getRightEdgeChildOffset() {}
+
+    getTopChildOffset() {
+        let offset = this.getTopEdgeChildOffset();
+        return offset;
+    }
+    getBottomChildOffset() {}
+
+    getLeftChildOffset() {}
+
+    getRightChildOffset() {}
 
 
     /*
