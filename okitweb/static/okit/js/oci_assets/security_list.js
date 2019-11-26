@@ -619,6 +619,19 @@ class SecurityList extends OkitSvgArtifact {
             loadProperties(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, [okitJson.draw]);
+            // Egress Rules
+            for (let security_rule of me.egress_security_rules) {
+                addAccessRuleHtml(security_rule, 'egress');
+            }
+            // Ingress Rules
+            for (let security_rule of me.ingress_security_rules) {
+                addAccessRuleHtml(security_rule, 'ingress');
+            }
+            // Add Handler to Add Button
+            document.getElementById('egress_add_button').addEventListener('click', handleAddAccessRule, false);
+            document.getElementById('egress_add_button').security_list = me;
+            document.getElementById('ingress_add_button').addEventListener('click', handleAddAccessRule, false);
+            document.getElementById('ingress_add_button').security_list = me;
         });
     }
 

@@ -782,6 +782,35 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         return false;
     }
 
+    getGateways() {
+        let gateways = [];
+        // Internet Gateways
+        for (let gateway of this.getOkitJson().internet_gateways) {
+            if (gateway.vcn_id === this.id) {
+                gateways.push(gateway);
+            }
+        }
+        // NAT Gateways
+        for (let gateway of this.getOkitJson().nat_gateways) {
+            if (gateway.vcn_id === this.id) {
+                gateways.push(gateway);
+            }
+        }
+        // Service Gateways
+        for (let gateway of this.getOkitJson().service_gateways) {
+            if (gateway.vcn_id === this.id) {
+                gateways.push(gateway);
+            }
+        }
+        // Dynamic Routing Gateways
+        for (let gateway of this.getOkitJson().dynamic_routing_gateways) {
+            if (gateway.vcn_id === this.id) {
+                gateways.push(gateway);
+            }
+        }
+        return gateways;
+    }
+
 
     /*
     ** Child Artifact Functions

@@ -26,7 +26,7 @@ function clearRouteTableVariables() {
 ** Add Asset to JSON Model
  */
 // TODO: Delete
-function addRouteTable(vcn_id, compartment_id) {
+function addRouteTableDeprecated(vcn_id, compartment_id) {
     let id = 'okit-' + route_table_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + route_table_artifact + ' : ' + id);
 
@@ -62,7 +62,7 @@ function addRouteTable(vcn_id, compartment_id) {
 ** Delete From JSON Model
  */
 // TODO: Delete
-function deleteRouteTable(id) {
+function deleteRouteTableDeprecated(id) {
     console.groupCollapsed('Delete ' + route_table_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove();
@@ -87,12 +87,12 @@ function deleteRouteTable(id) {
 ** SVG Creation
  */
 // TODO: Delete
-function getRouteTableDimensions(id='') {
+function getRouteTableDimensionsDeprecated(id='') {
     return {width:icon_width, height:icon_height};
 }
 
 // TODO: Delete
-function newRouteTableDefinition(artifact, position=0) {
+function newRouteTableDefinitionDeprecated(artifact, position=0) {
     let dimensions = getRouteTableDimensions();
     let definition = newArtifactSVGDefinition(artifact, route_table_artifact);
     let first_child = getVirtualCloudNetworkFirstChildOffset();
@@ -106,7 +106,7 @@ function newRouteTableDefinition(artifact, position=0) {
 }
 
 // TODO: Delete
-function drawRouteTableSVG(artifact) {
+function drawRouteTableSVGDeprecated(artifact) {
     let parent_id = artifact['vcn_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -161,7 +161,7 @@ function drawRouteTableSVG(artifact) {
 ** Property Sheet Load function
  */
 // TODO: Delete
-function loadRouteTableProperties(id) {
+function loadRouteTablePropertiesDeprecated(id) {
     $("#properties").load("propertysheets/route_table.html", function () {
         if ('route_tables' in okitJson) {
             console.info('Loading Route Table: ' + id);
@@ -191,7 +191,8 @@ function loadRouteTableProperties(id) {
     });
 }
 
-function addRouteRuleHtml(route_rule) {
+// TODO: Delete
+function addRouteRuleHtmlDeprecated(route_rule, gateways=[]) {
     let rules_table_body = d3.select('#route_rules_table_body');
     let rules_count = $('#route_rules_table_body > tr').length;
     let rule_num = rules_count + 1;
@@ -257,6 +258,16 @@ function addRouteRuleHtml(route_rule) {
             displayOkitJson();
         });
     // Add Internet gateways
+    for (let gateway of gateways) {
+        let opt = network_entity_id_select.append('option')
+            .attr("value", gateway.id)
+            .text(gateway.display_name);
+    }
+    if (route_rule.network_entity_id === '' && gateways.length > 0) {
+        route_rule.network_entity_id = gateways[0].id;
+    }
+    network_entity_id_select.property('value', route_rule.network_entity_id);
+    /*
     for (let igcnt=0; igcnt < internet_gateway_ids.length; igcnt++) {
         let opt = network_entity_id_select.append('option')
             .attr("value", internet_gateway_ids[igcnt])
@@ -269,9 +280,11 @@ function addRouteRuleHtml(route_rule) {
     if (route_rule['network_entity_id'] == '') {
         route_rule['network_entity_id'] = network_entity_id_select.node().options[network_entity_id_select.node().selectedIndex].value;
     }
+    */
 }
 
-function handleAddRouteRule(evt) {
+// TODO: Delete
+function handleAddRouteRuleDeprecated(evt) {
     //route_table = evt.target.route_table;
     console.info('Adding route rule to : ' + route_table);
     let new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity_id: ""}
@@ -280,7 +293,8 @@ function handleAddRouteRule(evt) {
     displayOkitJson();
 }
 
-function handleDeleteRouteRulesRow(btn) {
+// TODO: Delete
+function handleDeleteRouteRulesRowDeprecated(btn) {
     let row = btn.parentNode.parentNode.parentNode.parentNode.parentNode;
     row.parentNode.removeChild(row);
 }
@@ -495,8 +509,112 @@ class RouteTable extends OkitSvgArtifact {
             loadProperties(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, [okitJson.draw]);
+            // Route Rules
+            for (let route_rule of me.route_rules) {
+                me.addRouteRuleHtml(route_rule);
+            }
+            // Add Handler to Add Button
+            document.getElementById('add_button').addEventListener('click', me.handleAddRouteRule, false);
+            document.getElementById('add_button').route_table = me;
         });
     }
+
+    handleAddRouteRule(evt) {
+        //route_table = evt.target.route_table;
+        console.info('Adding route rule to : ' + evt.target.route_table);
+        let new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity_id: ""}
+        evt.target.route_table.route_rules.push(new_rule);
+        evt.target.route_table.addRouteRuleHtml(new_rule);
+        displayOkitJson();
+    }
+
+    handleDeleteRouteRulesRow(evt) {
+        let row = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        evt.target.route_table.route_rules.splice(evt.target.route_table.rule_num, 1);
+        displayOkitJson();
+    }
+
+    addRouteRuleHtml(route_rule) {
+        let rules_table_body = d3.select('#route_rules_table_body');
+        let rules_count = $('#route_rules_table_body > tr').length;
+        let rule_num = rules_count + 1;
+        let row = rules_table_body.append('tr');
+        let cell = row.append('td')
+            .attr("id", "rule_" + rule_num)
+            .attr("colspan", "2");
+        let rule_table = cell.append('table')
+            .attr("id", "rule_table_" + rule_num)
+            .attr("class", "property-editor-table");
+        // First Row with Delete Button
+        let rule_row = rule_table.append('tr');
+        let rule_cell = rule_row.append('td')
+            .attr("colspan", "2");
+        let delete_btn = rule_cell.append('input')
+            .attr("type", "button")
+            .attr("class", "delete-button")
+            .attr("value", "-");
+        delete_btn.node().addEventListener("click", this.handleDeleteRouteRulesRow, false);
+        delete_btn.node().route_table = this;
+        delete_btn.node().rule_num = rule_num;
+        // Destination Type
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td')
+            .text("Destination Type");
+        rule_cell = rule_row.append('td');
+        rule_cell.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value")
+            .attr("readonly", "readonly")
+            .attr("id", "destination_type")
+            .attr("name", "destination_type")
+            .attr("value", route_rule['destination_type'])
+            .on("change", function() {
+                route_rule['destination_type'] = this.value;
+                displayOkitJson();
+            });
+        // Destination
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td')
+            .text("Destination");
+        rule_cell = rule_row.append('td');
+        rule_cell.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value")
+            .attr("id", "destination")
+            .attr("name", "destination")
+            .attr("value", route_rule['destination'])
+            .on("change", function() {
+                route_rule['destination'] = this.value;
+                console.info('Changed destination: ' + this.value);
+                displayOkitJson();
+            });
+        // Network Entity
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td')
+            .text("Network Entity");
+        rule_cell = rule_row.append('td');
+        let network_entity_id_select = rule_cell.append('select')
+            .attr("class", "property-value")
+            .attr("id", "network_entity_id")
+            .on("change", function() {
+                route_rule['network_entity_id'] = this.options[this.selectedIndex].value;
+                console.info('Changed network_entity_id ' + this.selectedIndex);
+                displayOkitJson();
+            });
+        // Add Internet gateways
+        let gateways = this.getParent().getGateways();
+        for (let gateway of gateways) {
+            let opt = network_entity_id_select.append('option')
+                .attr("value", gateway.id)
+                .text(gateway.display_name);
+        }
+        if (route_rule.network_entity_id === '' && gateways.length > 0) {
+            route_rule.network_entity_id = gateways[0].id;
+        }
+        network_entity_id_select.property('value', route_rule.network_entity_id);
+    }
+
 
 
     /*
