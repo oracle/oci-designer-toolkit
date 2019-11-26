@@ -624,39 +624,6 @@ class SecurityList extends OkitSvgArtifact {
 
 
     /*
-    ** Child Offset Functions
-     */
-    getFirstChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
-        return offset;
-    }
-
-    getContainerChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y)
-        };
-        return offset;
-    }
-
-    getTopEdgeChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
-            dy: 0
-        };
-        return offset;
-    }
-    getBottomEdgeChildOffset() {}
-
-    getLeftEdgeChildOffset() {}
-
-    getRightEdgeChildOffset() {}
-
-
-    /*
     ** Define Allowable SVG Drop Targets
      */
     getTargets() {

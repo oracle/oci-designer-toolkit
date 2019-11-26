@@ -590,7 +590,7 @@ function drawAttachedSecurityListDeprecated(artifact, attachment_count) {
 ** Property Sheet Load function
  */
 // TODO: Delete
-function loadSubnetProperties(id) {
+function loadSubnetPropertiesDeprecated(id) {
     $("#properties").load("propertysheets/subnet.html", function () {
         let name_id_mapping = {
             "security_lists": "security_list_ids",
