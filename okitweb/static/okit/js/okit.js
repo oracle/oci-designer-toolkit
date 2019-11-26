@@ -598,6 +598,20 @@ class OkitJson {
         this.security_lists.push(new SecurityList(data, this, parent));
         return this.security_lists[this.security_lists.length - 1];
     }
+
+    // Load Balancer
+    newLoadBalancer(data, parent=null) {
+        console.info('New Load Balancer');
+        this.load_balancers.push(new LoadBalancer(data, this, parent));
+        return this.load_balancers[this.load_balancers.length - 1];
+    }
+
+    // Instance
+    newInstance(data, parent=null) {
+        console.info('New Instance');
+        this.instances.push(new Instance(data, this, parent));
+        return this.instances[this.instances.length - 1];
+    }
 }
 
 $(document).ready(function() {

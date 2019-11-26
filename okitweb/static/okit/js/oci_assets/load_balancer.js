@@ -29,7 +29,8 @@ function clearLoadBalancerVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addLoadBalancer(subnet_id, compartment_id) {
+// TODO: Delete
+function addLoadBalancerDeprecated(subnet_id, compartment_id) {
     let id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + load_balancer_artifact + ' : ' + id);
 
@@ -70,7 +71,8 @@ function addLoadBalancer(subnet_id, compartment_id) {
 ** Delete From JSON Model
  */
 
-function deleteLoadBalancer(id) {
+// TODO: Delete
+function deleteLoadBalancerDeprecated(id) {
     console.groupCollapsed('Delete ' + load_balancer_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -86,11 +88,13 @@ function deleteLoadBalancer(id) {
 /*
 ** SVG Creation
  */
-function getLoadBalancerDimensions(id='') {
+// TODO: Delete
+function getLoadBalancerDimensionsDeprecated(id='') {
     return {width:load_balancer_width, height:load_balancer_height};
 }
 
-function newLoadBalancerDefinition(artifact, position=0) {
+// TODO: Delete
+function newLoadBalancerDefinitionDeprecated(artifact, position=0) {
     let dimensions = getLoadBalancerDimensions();
     let definition = newArtifactSVGDefinition(artifact, load_balancer_artifact);
     let first_child = getSubnetFirstChildLoadBalancerOffset(artifact['subnet_ids'][0]);
@@ -104,7 +108,8 @@ function newLoadBalancerDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawLoadBalancerSVG(artifact) {
+// TODO: Delete
+function drawLoadBalancerSVGDeprecated(artifact) {
     let parent_id = artifact['subnet_ids'][0];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -158,12 +163,14 @@ function drawLoadBalancerSVG(artifact) {
     return;
 }
 
-function clearLoadBalancerConnectorsSVG(load_balancer) {
+// TODO: Delete
+function clearLoadBalancerConnectorsSVGDeprecated(load_balancer) {
     let id = load_balancer['id'];
     d3.selectAll("line[id*='" + id + "']").remove();
 }
 
-function drawLoadBalancerConnectorsSVG(load_balancer) {
+// TODO: Delete
+function drawLoadBalancerConnectorsSVGDeprecated(load_balancer) {
     let parent_id = load_balancer['subnet_ids'][0];
     let id = load_balancer['id'];
     let parent_svg = d3.select('#' + parent_id + "-svg");
@@ -218,7 +225,8 @@ function drawLoadBalancerConnectorsSVG(load_balancer) {
 /*
 ** Property Sheet Load function
  */
-function loadLoadBalancerProperties(id) {
+// TODO: Delete
+function loadLoadBalancerPropertiesDeprecated(id) {
     $("#properties").load("propertysheets/load_balancer.html", function () {
         let name_id_mapping = {
             "instances": "instance_ids",
@@ -335,4 +343,209 @@ $(document).ready(function () {
         .attr('name', 'load_balancer_name_filter');
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+** Define Load Balancer Class
+ */
+class LoadBalancer extends OkitSvgArtifact {
+    /*
+    ** Create
+     */
+    constructor (data={}, okitjson={}, parent=null) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(load_balancer_prefix, okitjson.load_balancers.length + 1);
+        this.compartment_id = '';
+        this.subnet_id = data.parent_id;
+        this.subnet_ids = [data.parent_id];
+        this.is_private = false;
+        this.shape_name = '100Mbps';
+        this.protocol = 'HTTP';
+        this.port = '80';
+        this.instance_ids = [];
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+        // Add Get Parent function
+        this.parent_id = this.subnet_id;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.subnets) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function () {return parent};
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        return new LoadBalancer(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return load_balancer_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {}
+
+
+    /*
+     ** SVG Processing
+     */
+    draw() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+    }
+
+    drawLoadBalancerConnectorsSVG() {
+        let parent_svg = d3.select('#' + this.parent_id + "-svg");
+        let parent_rect = d3.select('#' + this.parent_id);
+        // Only Draw if parent exists
+        if (parent_svg.node()) {
+            console.info('Parent SVG     : ' + parent_svg.attr('id'));
+            // Define SVG position manipulation variables
+            let svgPoint = parent_svg.node().createSVGPoint();
+            let screenCTM = parent_rect.node().getScreenCTM();
+            svgPoint.x = d3.select('#' + this.id).attr('data-connector-start-x');
+            svgPoint.y = d3.select('#' + this.id).attr('data-connector-start-y');
+            let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+            console.info('Start svgPoint.x : ' + svgPoint.x);
+            console.info('Start svgPoint.y : ' + svgPoint.y);
+            console.info('Start matrixTransform.x : ' + connector_start.x);
+            console.info('Start matrixTransform.y : ' + connector_start.y);
+
+            let connector_end = null;
+
+            if (this.instance_ids.length > 0) {
+                for (let i = 0; i < this.instance_ids.length; i++) {
+                    let instance_svg = d3.select('#' + this.instance_ids[i]);
+                    if (instance_svg.node()) {
+                        svgPoint.x = instance_svg.attr('data-connector-start-x');
+                        svgPoint.y = instance_svg.attr('data-connector-start-y');
+                        connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                        console.info('End svgPoint.x   : ' + svgPoint.x);
+                        console.info('End svgPoint.y   : ' + svgPoint.y);
+                        console.info('End matrixTransform.x : ' + connector_end.x);
+                        console.info('End matrixTransform.y : ' + connector_end.y);
+                        let polyline = drawConnector(parent_svg, generateConnectorId(this.instance_ids[i], this.id),
+                            {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y});
+                    }
+                }
+            }
+        }
+    }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
+        definition['name']['show'] = true;
+        console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
+        return definition;
+    }
+
+    // Return Artifact Dimensions
+    getDimensions() {
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let dimensions = this.getMinimumDimensions();
+        // Calculate Size based on Child Artifacts
+        // Check size against minimum
+        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
+        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: load_balancer_width, height:load_balancer_height};
+    }
+
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/load_balancer.html", function () {
+            // Load Referenced Ids
+            let instances_select = $('#instance_ids');
+            for (let instance of okitJson.instances) {
+                instances_select.append($('<option>').attr('value', instance.id).text(instance.display_name));
+            }
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, [okitJson.draw]);
+        });
+    }
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
+    getTargets() {
+        // Return list of Artifact names
+        return [];
+    }
+}
 
