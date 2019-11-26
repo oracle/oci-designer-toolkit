@@ -46,6 +46,9 @@ function addDynamicRoutingGateway(vcn_id, compartment_id) {
     dynamic_routing_gateway['compartment_id'] = compartment_id;
     dynamic_routing_gateway['id'] = id;
     dynamic_routing_gateway['display_name'] = generateDefaultName(dynamic_routing_gateway_prefix, dynamic_routing_gateway_count);
+    dynamic_routing_gateway['fast_connect_ids'] = [];
+    dynamic_routing_gateway['ipsec_connection_ids'] = [];
+    dynamic_routing_gateway['remote_peering_connection_ids'] = [];
     okitJson['dynamic_routing_gateways'].push(dynamic_routing_gateway);
     okitIdsJsonObj[id] = dynamic_routing_gateway['display_name'];
     console.info(JSON.stringify(okitJson, null, 2));
