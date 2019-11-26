@@ -202,7 +202,8 @@ function loadSecurityListPropertiesDeprecated(id) {
     });
 }
 
-function addAccessRuleHtml(access_rule, access_type) {
+// TODO: Delete
+function addAccessRuleHtmlDeprecated(access_rule, access_type) {
     // default to ingress rules
     let rules_table_body = d3.select('#ingress_rules_table_body');
     let rules_count = $('#ingress_rules_table_body > tr').length;
@@ -317,7 +318,8 @@ function addAccessRuleHtml(access_rule, access_type) {
     }
 }
 
-function handleAddAccessRule(evt) {
+// TODO: Delete
+function handleAddAccessRuleDeprecated(evt) {
     console.info('Adding access rule');
     let new_rule = { "protocol": "all", "is_stateless": false}
     if (evt.target.id == 'egress_add_button') {
@@ -333,7 +335,8 @@ function handleAddAccessRule(evt) {
     displayOkitJson();
 }
 
-function handleDeleteRouteRulesRow(btn) {
+// TODO: Delete
+function handleDeleteRouteRulesRowDeprecated(btn) {
     let row = btn.parentNode.parentNode.parentNode.parentNode.parentNode;
     row.parentNode.removeChild(row);
 }
@@ -628,11 +631,166 @@ class SecurityList extends OkitSvgArtifact {
                 addAccessRuleHtml(security_rule, 'ingress');
             }
             // Add Handler to Add Button
-            document.getElementById('egress_add_button').addEventListener('click', handleAddAccessRule, false);
+            document.getElementById('egress_add_button').addEventListener('click', me.handleAddEgressRule, false);
             document.getElementById('egress_add_button').security_list = me;
-            document.getElementById('ingress_add_button').addEventListener('click', handleAddAccessRule, false);
+            document.getElementById('ingress_add_button').addEventListener('click', me.handleAddIngressRule, false);
             document.getElementById('ingress_add_button').security_list = me;
         });
+    }
+
+    handleAddEgressRule(evt) {
+        console.info('Adding Egress rule');
+        let new_rule = { "protocol": "all", "is_stateless": false}
+        new_rule["destination_type"] = "CIDR_BLOCK";
+        new_rule["destination"] = "0.0.0.0/0";
+        evt.target.security_list.egress_security_rules.push(new_rule)
+        evt.target.security_list.addAccessRuleHtml(new_rule, 'egress');
+        displayOkitJson();
+    }
+
+    handleAddIngressRule(evt) {
+        console.info('Adding Ingress rule');
+        let new_rule = { "protocol": "all", "is_stateless": false}
+        new_rule["source_type"] = "CIDR_BLOCK";
+        new_rule["source"] = "0.0.0.0/0";
+        evt.target.security_list.ingress_security_rules.push(new_rule)
+        evt.target.security_list.addAccessRuleHtml(new_rule, 'ingress');
+        displayOkitJson();
+    }
+
+    handleDeleteEgressRulesRow(evt) {
+        let row = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        evt.target.security_list.egress_security_rules.splice(evt.target.security_list.rule_num, 1);
+        displayOkitJson();
+    }
+
+    handleDeleteIngressRulesRow(evt) {
+        let row = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        evt.target.security_list.ingress_security_rules.splice(evt.target.security_list.rule_num, 1);
+        displayOkitJson();
+    }
+
+    addAccessRuleHtml(access_rule, access_type) {
+        // default to ingress rules
+        let rules_table_body = d3.select('#ingress_rules_table_body');
+        let rules_count = $('#ingress_rules_table_body > tr').length;
+        let source_dest = 'source';
+        let source_dest_title = 'Source';
+        if (access_type === 'egress') {
+            rules_table_body = d3.select('#egress_rules_table_body');
+            rules_count = $('#egress_rules_table_body > tr').length;
+            source_dest = 'destination';
+            source_dest_title = 'Destination';
+        }
+        let rule_num = rules_count + 1;
+        let row = rules_table_body.append('tr');
+        let cell = row.append('td')
+            .attr("id", "rule_" + rule_num)
+            .attr("colspan", "2");
+        let rule_table = cell.append('table')
+            .attr("id", "rule_table_" + rule_num)
+            .attr("class", "property-editor-table");
+        // First Row with Delete Button
+        let rule_row = rule_table.append('tr');
+        let rule_cell = rule_row.append('td')
+            .attr("colspan", "2");
+        let delete_btn = rule_cell.append('input')
+            .attr("type", "button")
+            .attr("class", "delete-button")
+            .attr("value", "-");
+        if (access_type === 'egress') {
+            delete_btn.node().addEventListener("click", this.handleDeleteEgressRulesRow, false);
+        } else {
+            delete_btn.node().addEventListener("click", this.handleDeleteIngressRulesRow, false);
+        }
+        delete_btn.node().security_list = this;
+        delete_btn.node().rule_num = rule_num;
+        // Destination / Source Type
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td')
+            .text(source_dest_title + " Type");
+        rule_cell = rule_row.append('td');
+        rule_cell.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value")
+            .attr("readonly", "readonly")
+            .attr("id", source_dest + "_type")
+            .attr("name", source_dest + "_type")
+            .attr("value", access_rule[source_dest + '_type'])
+            .on("change", function() {
+                access_rule[source_dest + '_type'] = this.value;
+                displayOkitJson();
+            });
+        // Stateful
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td');
+        rule_cell = rule_row.append('td');
+        rule_cell.append('input')
+            .attr("type", "checkbox")
+            .attr("id", "is_stateless")
+            .attr("name", "is_stateless")
+            .on("change", function() {
+                access_rule['is_stateless'] = this.checked;
+                console.info('Changed is_stateless: ' + this.checked);
+                displayOkitJson();
+            });
+        if (access_rule['is_stateless']) {
+            rule_cell.attr("checked", access_rule['is_stateless']);
+        }
+        rule_cell.append('label')
+            .attr("class", "property-value")
+            .text('Stateless');
+        // Destination / Source
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td')
+            .text(source_dest_title);
+        rule_cell = rule_row.append('td');
+        rule_cell.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value")
+            .attr("id", source_dest)
+            .attr("name", source_dest)
+            .attr("value", access_rule[source_dest])
+            .on("change", function() {
+                access_rule[source_dest] = this.value;
+                console.info('Changed destination: ' + this.value);
+                displayOkitJson();
+            });
+        // Add Protocol
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td')
+            .text("Protocol");
+        rule_cell = rule_row.append('td');
+        let protocol_select = rule_cell.append('select')
+            .attr("class", "property-value")
+            .attr("id", "protocol")
+            .on("change", function() {
+                access_rule['protocol'] = this.options[this.selectedIndex].value;
+                console.info('Changed network_entity_id ' + this.selectedIndex);
+                displayOkitJson();
+            });
+        // Add Protocol Options
+        let protocols = {
+            'All': 'all',
+            'ICMP': '1',
+            'TCP': '6',
+            'UDP': '17'
+        };
+        for (let key in protocols) {
+            if (protocols.hasOwnProperty(key)) {
+                let opt = protocol_select.append('option')
+                    .attr("value", protocols[key])
+                    .text(key);
+                if (access_rule['protocol'] == protocols[key]) {
+                    opt.attr("selected", "selected");
+                }
+            }
+        }
+        if (access_rule['protocol'] == '') {
+            access_rule['protocol'] = protocol_select.node().options[protocol_select.node().selectedIndex].value;
+        }
     }
 
 
