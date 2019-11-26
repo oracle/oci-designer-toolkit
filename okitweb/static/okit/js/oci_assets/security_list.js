@@ -492,7 +492,7 @@ class SecurityList extends OkitSvgArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         // Configure default values
         this.id = 'okit-' + security_list_prefix + '-' + uuidv4();
@@ -507,10 +507,14 @@ class SecurityList extends OkitSvgArtifact {
         }
         // Add Get Parent function
         this.parent_id = this.vcn_id;
-        for (let parent of okitjson.virtual_cloud_networks) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.virtual_cloud_networks) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function() {return parent};
+                    break;
+                }
             }
         }
     }
@@ -624,11 +628,11 @@ class SecurityList extends OkitSvgArtifact {
             addPropertiesEventListeners(me, [okitJson.draw]);
             // Egress Rules
             for (let security_rule of me.egress_security_rules) {
-                addAccessRuleHtml(security_rule, 'egress');
+                me.addAccessRuleHtml(security_rule, 'egress');
             }
             // Ingress Rules
             for (let security_rule of me.ingress_security_rules) {
-                addAccessRuleHtml(security_rule, 'ingress');
+                me.addAccessRuleHtml(security_rule, 'ingress');
             }
             // Add Handler to Add Button
             document.getElementById('egress_add_button').addEventListener('click', me.handleAddEgressRule, false);
@@ -800,6 +804,72 @@ class SecurityList extends OkitSvgArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+
+
+    /*
+    ** Artifact Specific Functions
+     */
+    addDefaultSecurityListRules(vcn_cidr_block='10.0.0.0/16') {
+        console.info('Adding Default Security List Rules for ' + this.id);
+        // Add Egress Rule
+        this.egress_security_rules.push(
+            {
+                "destination": "0.0.0.0/0",
+                "destination_type": "CIDR_BLOCK",
+                "icmp_options": null,
+                "is_stateless": false,
+                "protocol": "all",
+                "tcp_options": null,
+                "udp_options": null
+            }
+        );
+        // Ingress Rules
+        this.ingress_security_rules.push(
+            {
+                "icmp_options": null,
+                "is_stateless": false,
+                "protocol": "6",
+                "source": "0.0.0.0/0",
+                "source_type": "CIDR_BLOCK",
+                "tcp_options": {
+                    "destination_port_range": {
+                        "max": 22,
+                        "min": 22
+                    },
+                    "source_port_range": null
+                },
+                "udp_options": null
+            }
+        );
+        this.ingress_security_rules.push(
+            {
+                "icmp_options": {
+                    "code": 4,
+                    "type": 3
+                },
+                "is_stateless": false,
+                "protocol": "1",
+                "source": "0.0.0.0/0",
+                "source_type": "CIDR_BLOCK",
+                "tcp_options": null,
+                "udp_options": null
+            }
+        );
+        this.ingress_security_rules.push(
+            {
+                "icmp_options": {
+                    "code": null,
+                    "type": 3
+                },
+                "is_stateless": false,
+                "protocol": "1",
+                "source": vcn_cidr_block,
+                "source_type": "CIDR_BLOCK",
+                "tcp_options": null,
+                "udp_options": null
+            }
+        );
     }
 }
 

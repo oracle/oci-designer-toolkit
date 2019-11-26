@@ -382,7 +382,7 @@ class RouteTable extends OkitSvgArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         // Configure default values
         this.id = 'okit-' + route_table_prefix + '-' + uuidv4();
@@ -396,10 +396,14 @@ class RouteTable extends OkitSvgArtifact {
         }
         // Add Get Parent function
         this.parent_id = this.vcn_id;
-        for (let parent of okitjson.virtual_cloud_networks) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.virtual_cloud_networks) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function() {return parent};
+                    break;
+                }
             }
         }
     }

@@ -7,7 +7,7 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         // Configure default values
         this.id = 'okit-' + template_artifact_prefix + '-' + uuidv4();
@@ -19,10 +19,16 @@ class OkitTemplateArtifact extends OkitSvgArtifact {
         }
         // Add Get Parent function
         this.parent_id = this.parent_type_id;
-        for (let parent of okitjson.parent_type_list) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.parent_type_list) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function () {
+                        return parent
+                    };
+                    break;
+                }
             }
         }
     }

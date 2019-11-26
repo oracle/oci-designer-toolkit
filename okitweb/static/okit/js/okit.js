@@ -517,8 +517,8 @@ class OkitJson {
     }
 
     // Compartment
-    newCompartment(data = {}) {
-        this['compartments'].push(new Compartment(data, this));
+    newCompartment(data = {}, parent=null) {
+        this['compartments'].push(new Compartment(data, this, parent));
         return this['compartments'][this['compartments'].length - 1];
     }
 
@@ -541,9 +541,9 @@ class OkitJson {
     }
 
     // Virtual Cloud Network
-    newVirtualCloudNetwork(data) {
+    newVirtualCloudNetwork(data, parent=null) {
         console.info('New Virtual Cloud Network');
-        this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this));
+        this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this, parent));
         return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
     }
 
@@ -565,37 +565,37 @@ class OkitJson {
     }
 
     // Subnet
-    newSubnet(data) {
+    newSubnet(data, parent=null) {
         console.info('New Subnet');
-        this['subnets'].push(new Subnet(data, this));
+        this['subnets'].push(new Subnet(data, this, parent));
         return this['subnets'][this['subnets'].length - 1];
     }
 
     // Internet Gateway
-    newInternetGateway(data) {
+    newInternetGateway(data, parent=null) {
         console.info('New Internet Gateway');
-        this['internet_gateways'].push(new InternetGateway(data, this));
+        this['internet_gateways'].push(new InternetGateway(data, this, parent));
         return this['internet_gateways'][this['internet_gateways'].length - 1];
     }
 
     // NAT Gateway
-    newNATGateway(data) {
+    newNATGateway(data, parent=null) {
         console.info('New NAT Gateway');
-        this['nat_gateways'].push(new NATGateway(data, this));
+        this['nat_gateways'].push(new NATGateway(data, this, parent));
         return this['nat_gateways'][this['nat_gateways'].length - 1];
     }
 
     // Route Table
-    newRouteTable(data) {
+    newRouteTable(data, parent=null) {
         console.info('New Route Table');
-        this.route_tables.push(new RouteTable(data, this));
+        this.route_tables.push(new RouteTable(data, this, parent));
         return this.route_tables[this.route_tables.length - 1];
     }
 
     // Security List
-    newSecurityList(data) {
+    newSecurityList(data, parent=null) {
         console.info('New Security List');
-        this.security_lists.push(new SecurityList(data, this));
+        this.security_lists.push(new SecurityList(data, this, parent));
         return this.security_lists[this.security_lists.length - 1];
     }
 }

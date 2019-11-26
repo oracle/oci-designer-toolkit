@@ -516,6 +516,17 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
                 break;
             }
         }
+        console.groupCollapsed('Check if default Security List & Route Table Should be created.');
+        if (okitSettings.is_default_route_table) {
+            console.info('Creating Default Route Table');
+            this.getOkitJson().newRouteTable({parent_id: this.id, vcn_id: this.id, compartment_id: this.compartment_id}, this);
+        }
+        if (okitSettings.is_default_security_list) {
+            console.info('Creating Default Security List');
+            let security_list = this.getOkitJson().newSecurityList({parent_id: this.id, vcn_id: this.id, compartment_id: this.compartment_id}, this);
+            security_list.addDefaultSecurityListRules(this.cidr_block);
+        }
+        console.groupEnd();
     }
 
 
