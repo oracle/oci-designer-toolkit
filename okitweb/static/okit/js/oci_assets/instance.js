@@ -28,7 +28,8 @@ function clearInstanceVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addInstance(subnet_id, compartment_id) {
+// TODO: Delete
+function addInstanceDeprecated(subnet_id, compartment_id) {
     let id = 'okit-' + instance_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + instance_artifact + ' : ' + id);
 
@@ -74,7 +75,8 @@ function addInstance(subnet_id, compartment_id) {
 ** Delete From JSON Model
  */
 
-function deleteInstance(id) {
+// TODO: Delete
+function deleteInstanceDeprecated(id) {
     console.groupCollapsed('Delete ' + instance_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -100,7 +102,8 @@ function deleteInstance(id) {
 /*
 ** SVG Creation
  */
-function getInstanceFirstChildEdgeOffset() {
+// TODO: Delete
+function getInstanceFirstChildEdgeOffsetDeprecated() {
     let offset = {
         dx: Math.round(positional_adjustments.spacing.x),
         dy: 0
@@ -108,7 +111,8 @@ function getInstanceFirstChildEdgeOffset() {
     return offset;
 }
 
-function getInstanceDimensions(id='') {
+// TODO: Delete
+function getInstanceDimensionsDeprecated(id='') {
     let dimensions = {width:getInstanceFirstChildEdgeOffset().dx, height:min_instance_height};
     console.groupCollapsed('Processing Instance ' + id);
     if (okitJson.hasOwnProperty('instances')) {
@@ -139,7 +143,8 @@ function getInstanceDimensions(id='') {
     return dimensions;
 }
 
-function newInstanceDefinition(artifact, position=0) {
+// TODO: Delete
+function newInstanceDefinitionDeprecated(artifact, position=0) {
     let dimensions = getInstanceDimensions(artifact['id']);
     let definition = newArtifactSVGDefinition(artifact, instance_artifact);
     let first_child = getSubnetFirstChildInstanceOffset(artifact['subnet_id']);
@@ -154,7 +159,8 @@ function newInstanceDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawInstanceSVG(artifact) {
+// TODO: Delete
+function drawInstanceSVGDeprecated(artifact) {
     let parent_id = artifact['subnet_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -226,12 +232,14 @@ function drawInstanceSVG(artifact) {
     console.groupEnd();
 }
 
-function clearInstanceSVG(instance) {
+// TODO: Delete
+function clearInstanceSVGDeprecated(instance) {
     let id = instance['id'];
     d3.selectAll("line[id*='" + id + "']").remove();
 }
 
-function drawInstanceConnectorsSVG(instance) {
+// TODO: Delete
+function drawInstanceConnectorsSVGDeprecated(instance) {
     let id = instance['id'];
     console.info('>>>> Drawing ' + instance_artifact + ' : ' + id + ' Connectors');
     // If Block Storage Volumes Ids are missing then initialise.
@@ -270,6 +278,7 @@ function drawInstanceConnectorsSVG(instance) {
     }
 }
 
+// TODO: Delete
 function drawInstanceAttachmentsSVG(instance) {
     let id = instance['id'];
     console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + id + ' Attachments');
@@ -304,6 +313,7 @@ function drawInstanceAttachmentsSVG(instance) {
     console.groupEnd();
 }
 
+// TODO: Delete
 function drawAttachedBlockStorageVolume(artifact, bs_count) {
     console.info('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
     let first_child = getInstanceFirstChildEdgeOffset();
@@ -321,6 +331,7 @@ function drawAttachedBlockStorageVolume(artifact, bs_count) {
     });
 }
 
+// TODO: Delete
 function drawAttachedSubnetVnic(artifact, bs_count) {
     console.info('Drawing ' + instance_artifact + ' Subnet Vnic : ' + artifact['id']);
     let first_child = getInstanceFirstChildEdgeOffset();
@@ -355,7 +366,8 @@ function drawAttachedSubnetVnic(artifact, bs_count) {
 /*
 ** Property Sheet Load function
  */
-function loadInstanceProperties(id) {
+// TODO: Delete
+function loadInstancePropertiesDeprecated(id) {
     $("#properties").load("propertysheets/instance.html", function () {
         if ('instances' in okitJson) {
             console.info('Loading Instance: ' + id);
@@ -483,4 +495,193 @@ $(document).ready(function () {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+** Define Instance Class
+ */
+class Instance extends OkitSvgArtifact {
+    /*
+    ** Create
+     */
+    constructor (data={}, okitjson={}, parent=null) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + instance_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(instance_prefix, okitjson.instances.length + 1);
+        this.compartment_id = '';
+        this.subnet_id = data.parent_id;
+        this.availability_domain = '1';
+        this.hostname_label = this.display_name.toLowerCase();
+        this.os = 'Oracle Linux';
+        this.version = '7.7';
+        this.shape = 'VM.Standard2.1';
+        this.boot_volume_size_in_gbs = '50';
+        this.authorized_keys = '';
+        this.cloud_init_yaml = '';
+        this.block_storage_volume_ids = [];
+        this.subnet_ids = [];
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+        // Add Get Parent function
+        this.parent_id = this.subnet_id;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.subnets) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function () {
+                        return parent
+                    };
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        return new Instance(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return instance_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {
+        // Remove Load Balancer references
+        for (load_balancer of this.getOkitJson().load_balancers) {
+            for (let i = 0; i < load_balancer.instance_ids.length; i++) {
+                if (load_balancer.instance_ids[i] === this.id) {
+                    load_balancer.instance_ids.splice(i, 1);
+                }
+            }
+        }
+    }
+
+
+    /*
+     ** SVG Processing
+     */
+    draw() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+    }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = instance_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
+        definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
+        definition['name']['show'] = true;
+        console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
+        return definition;
+    }
+
+    // Return Artifact Dimensions
+    getDimensions() {
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let dimensions = this.getMinimumDimensions();
+        // Calculate Size based on Child Artifacts
+        // Process Bottom Edge Artifacts
+        let offset = this.getFirstBottomEdgeChildOffset();
+        let bottom_edge_dimensions = {width: offset.dx, height: offset.dy};
+        // Block Storage
+        bottom_edge_dimensions.width += Math.round(this.block_storage_volume_ids.length * positional_adjustments.padding.x);
+        bottom_edge_dimensions.width += Math.round(this.block_storage_volume_ids.length * positional_adjustments.spacing.x);
+        // Virtual Network Interface Cards
+        bottom_edge_dimensions.width += Math.round(this.subnet_ids.length * positional_adjustments.padding.x);
+        bottom_edge_dimensions.width += Math.round(this.subnet_ids.length * positional_adjustments.spacing.x);
+        dimensions.width  = Math.max(dimensions.width, bottom_edge_dimensions.width);
+        dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
+        // Check size against minimum
+        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
+        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: min_instance_width, height:min_instance_height};
+    }
+
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/instance.html", function () {
+            // Load Referenced Ids
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, [okitJson.draw]);
+        });
+    }
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
+    getTargets() {
+        // Return list of Artifact names
+        return [];
+    }
+}
 

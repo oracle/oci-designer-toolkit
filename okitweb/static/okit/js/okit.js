@@ -151,6 +151,14 @@ class OkitSvgArtifact {
         return;
     }
 
+    getFirstBottomEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dy: 0
+        };
+        return offset;
+    }
+
     getBottomEdgeChildOffset() {
         alert('Get First Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.')
         return;
@@ -177,6 +185,14 @@ class OkitSvgArtifact {
     getTopChildOffset() {
         alert('Get First Top Child function "getTopEdgeChildOffset()" has not been implemented.')
         return;
+    }
+
+    getFirstBottomChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
     }
 
     getBottomChildOffset() {
@@ -235,7 +251,7 @@ class OkitContainerArtifact extends OkitSvgArtifact {
         dimensions.width  = Math.max(dimensions.width, top_edge_dimensions.width);
         dimensions.height = Math.max(dimensions.height, top_edge_dimensions.height);
         // Process Bottom Edge Artifacts
-        offset = this.getFirstTopEdgeChildOffset();
+        offset = this.getFirstBottomEdgeChildOffset();
         let bottom_edge_dimensions = {width: offset.dx, height: offset.dy};
         for (let group of this.getBottomEdgeArtifacts()) {
             for (let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
@@ -296,14 +312,61 @@ class OkitContainerArtifact extends OkitSvgArtifact {
         console.groupCollapsed('Getting Offset for ' + child_type);
         let offset = {dx: 0, dy: 0};
         if (this.getTopEdgeArtifacts().includes(child_type)) {
+            console.info('Top Edge Artifact');
             offset = this.getTopEdgeChildOffset();
         } else if (this.getTopArtifacts().includes(child_type)) {
+            console.info('Top Artifact');
             offset = this.getTopChildOffset();
         } else if (this.getContainerArtifacts().includes(child_type)) {
+            console.info('Container Artifact');
             offset = this.getContainerChildOffset();
+        } else if (this.getBottomArtifacts().includes(child_type)) {
+            console.info('Bottom Artifact');
+            offset = this.getBottomChildOffset();
+        } else if (this.getBottomEdgeArtifacts().includes(child_type)) {
+            console.info('Bottom Edge Artifact');
+            offset = this.getBottomEdgeChildOffset();
+        } else if (this.getLeftEdgeArtifacts().includes(child_type)) {
+            console.info('Left Edge Artifact');
+            offset = this.getLeftEdgeChildOffset();
+        } else if (this.getLeftArtifacts().includes(child_type)) {
+            console.info('Left Artifact');
+            offset = this.getLeftChildOffset();
+        } else if (this.getRightArtifacts().includes(child_type)) {
+            console.info('Right Artifact');
+            offset = this.getRightChildOffset();
+        } else if (this.getRightEdgeArtifacts().includes(child_type)) {
+            console.info('Right Edge Artifact');
+            offset = this.getRightEdgeChildOffset();
+        } else {
+            console.warn(child_type + ' Not Found for ' + this.display_name);
         }
         console.groupEnd();
         return offset
+    }
+
+    getTopEdgeChildOffset() {
+        let offset = this.getFirstTopEdgeChildOffset();
+        // Count how many top edge children and adjust.
+        let count = 0;
+        for (let child of this.getTopEdgeArtifacts()) {
+            count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
+        }
+        console.info('Top Edge Count : ' + count);
+        // Increment x position based on count
+        offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
+        return offset;
+    }
+
+    getTopChildOffset() {
+        let offset = this.getFirstTopChildOffset();
+        for (let child of this.getTopArtifacts()) {
+            $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
+                function() {
+                    offset.dx += Math.round(icon_width + positional_adjustments.spacing.x);
+                });
+        }
+        return offset;
     }
 
     getContainerChildOffset() {
@@ -322,28 +385,9 @@ class OkitContainerArtifact extends OkitSvgArtifact {
         return offset;
     }
 
-    getTopEdgeChildOffset() {
-        let offset = this.getFirstTopEdgeChildOffset();
-        // Count how many top edge children and adjust.
-        let count = 0;
-        for (let child of this.getTopEdgeArtifacts()) {
-            count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
-        }
-        console.info('Top Edge Count : ' + count);
-        // Increment x position based on count
-        offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
-        return offset;
-    }
-
-    getBottomEdgeChildOffset() {}
-
-    getLeftEdgeChildOffset() {}
-
-    getRightEdgeChildOffset() {}
-
-    getTopChildOffset() {
-        let offset = this.getFirstTopChildOffset();
-        for (let child of this.getTopArtifacts()) {
+    getBottomChildOffset() {
+        let offset = this.getFirstBottomChildOffset();
+        for (let child of this.getBottomArtifacts()) {
             $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
                 function() {
                     offset.dx += Math.round(icon_width + positional_adjustments.spacing.x);
@@ -352,11 +396,15 @@ class OkitContainerArtifact extends OkitSvgArtifact {
         return offset;
     }
 
-    getBottomChildOffset() {}
+    getBottomEdgeChildOffset() {}
+
+    getLeftEdgeChildOffset() {}
 
     getLeftChildOffset() {}
 
     getRightChildOffset() {}
+
+    getRightEdgeChildOffset() {}
 
 
     /*
@@ -366,15 +414,35 @@ class OkitContainerArtifact extends OkitSvgArtifact {
         return [];
     }
 
-    getBottomEdgeArtifacts() {
-        return [];
-    }
-
     getTopArtifacts() {
         return [];
     }
 
     getContainerArtifacts() {
+        return [];
+    }
+
+    getBottomArtifacts() {
+        return [];
+    }
+
+    getBottomEdgeArtifacts() {
+        return [];
+    }
+
+    getLeftEdgeArtifacts() {
+        return [];
+    }
+
+    getLeftArtifacts() {
+        return [];
+    }
+
+    getRightArtifacts() {
+        return [];
+    }
+
+    getRightEdgeArtifacts() {
         return [];
     }
 }
