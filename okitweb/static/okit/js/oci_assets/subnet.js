@@ -1153,7 +1153,7 @@ class Subnet extends OkitContainerArtifact {
         return [instance_artifact];
     }
 
-    getLeftEdgeArtifacts() {
+    getLeftArtifacts() {
         return [file_storage_system_artifact];
     }
 }

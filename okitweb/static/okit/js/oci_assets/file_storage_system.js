@@ -18,6 +18,7 @@ let propertires_file_storage_system = {}
 ** Reset variables
  */
 
+// TODO: Delete
 function clearFileStorageSystemVariables() {
     file_storage_system_ids = [];
 }
@@ -25,7 +26,8 @@ function clearFileStorageSystemVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addFileStorageSystem(subnet_id, compartment_id) {
+// TODO: Delete
+function addFileStorageSystemDeprecated(subnet_id, compartment_id) {
     let id = 'okit-' + file_storage_system_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + file_storage_system_artifact + ' : ' + id);
 
@@ -65,7 +67,8 @@ function addFileStorageSystem(subnet_id, compartment_id) {
 ** Delete From JSON Model
  */
 
-function deleteFileStorageSystem(id) {
+// TODO: Delete
+function deleteFileStorageSystemDeprecated(id) {
     console.groupCollapsed('Delete ' + file_storage_system_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove();
@@ -89,11 +92,13 @@ function deleteFileStorageSystem(id) {
 /*
 ** SVG Creation
  */
-function getFileStorageSystemDimensions(id='') {
+// TODO: Delete
+function getFileStorageSystemDimensionsDeprecated(id='') {
     return {width:icon_width, height:icon_height};
 }
 
-function newFileStorageSystemDefinition(artifact, position=0) {
+// TODO: Delete
+function newFileStorageSystemDefinitionDeprecated(artifact, position=0) {
     console.info('New ' + file_storage_system_artifact + ' Definition for ' + JSON.stringify(artifact));
     let dimensions = getFileStorageSystemDimensions();
     let definition = newArtifactSVGDefinition(artifact, file_storage_system_artifact);
@@ -108,7 +113,8 @@ function newFileStorageSystemDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawFileStorageSystemSVG(artifact) {
+// TODO: Delete
+function drawFileStorageSystemSVGDeprecated(artifact) {
     let parent_id = artifact['subnet_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -162,7 +168,8 @@ function drawFileStorageSystemSVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadFileStorageSystemProperties(id) {
+// TODO: Delete
+function loadFileStorageSystemPropertiesDeprecated(id) {
     $("#properties").load("propertysheets/file_storage_system.html", function () {
         if ('file_storage_systems' in okitJson) {
             console.info('Loading File Storage System: ' + id);
@@ -245,4 +252,206 @@ $(document).ready(function() {
         .attr('id', 'file_storage_system_name_filter')
         .attr('name', 'file_storage_system_name_filter');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+** Define File Storage System Class
+ */
+class FileStorageSystem extends OkitSvgArtifact {
+    /*
+    ** Create
+     */
+    constructor (data={}, okitjson={}, parent=null) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + file_storage_system_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(file_storage_system_prefix, okitjson.file_storage_systems.length + 1);
+        this.compartment_id = '';
+        this.subnet_id = data.parent_id;
+        this.availability_domain = '1';
+        this.source = this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'];
+        this.hostname_label = this.display_name.toLowerCase();
+        this.path = '/mnt';
+        this.access = 'READ_ONLY';
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+        // Add Get Parent function
+        this.parent_id = this.subnet_id;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.subnets) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function () {
+                        return parent
+                    };
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        return new FileStorageSystem(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return file_storage_system_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {}
+
+
+    /*
+     ** SVG Processing
+     */
+    draw() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+    }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = file_storage_system_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
+        console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
+        return definition;
+    }
+
+    // Return Artifact Dimensions
+    getDimensions() {
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let dimensions = this.getMinimumDimensions();
+        // Calculate Size based on Child Artifacts
+        // Check size against minimum
+        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
+        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: icon_width, height:icon_height};
+    }
+
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/file_storage_system.html", function () {
+            // Load Referenced Ids
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, []);
+        });
+    }
+
+
+    /*
+    ** Child Offset Functions
+     */
+    getFirstChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
+    getContainerChildOffset() {
+        let offset = this.getFirstContainerChildOffset();
+        return offset;
+    }
+
+    getTopEdgeChildOffset() {
+        let offset = this.getFirstTopEdgeChildOffset();
+        return offset;
+    }
+
+    getBottomEdgeChildOffset() {}
+
+    getLeftEdgeChildOffset() {}
+
+    getRightEdgeChildOffset() {}
+
+    getTopChildOffset() {
+        let offset = this.getTopEdgeChildOffset();
+        return offset;
+    }
+    getBottomChildOffset() {}
+
+    getLeftChildOffset() {}
+
+    getRightChildOffset() {}
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
+    getTargets() {
+        // Return list of Artifact names
+        return [subnet_artifact];
+    }
+}
 

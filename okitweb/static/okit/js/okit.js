@@ -202,7 +202,7 @@ class OkitSvgArtifact {
 
     getFirstLeftChildOffset() {
         let offset = {
-            dx: Math.round(positional_adjustments.spacing.x),
+            dx: Math.round(positional_adjustments.padding.x),
             dy: Math.round(positional_adjustments.padding.y * 2)
         };
         return offset;
@@ -603,28 +603,14 @@ class OkitJson {
         console.info('Test Call.........')
     }
 
+    /*
+    ** New Artifact Processing
+     */
+
     // Compartment
     newCompartment(data = {}, parent=null) {
         this['compartments'].push(new Compartment(data, this, parent));
         return this['compartments'][this['compartments'].length - 1];
-    }
-
-    deleteCompartment(id) {
-        for (let i = 0; i < this.compartments.length; i++) {
-            if (this.compartments[i].id === id) {
-                // Remove Children
-                // Virtual Cloud networks
-                for (let j = this.virtual_cloud_networks.length; j >= 0; j--) {
-                    if (this.virtual_cloud_networks[j].compartment_id === id) {
-                        this.deleteVirtualCloudNetwork(this.virtual_cloud_networks[j].id);
-                    }
-                }
-                // Remove Compartment
-                this.compartments[i].delete();
-                this.compartments.splice(i, 1);
-                break;
-            }
-        }
     }
 
     // Virtual Cloud Network
@@ -632,23 +618,6 @@ class OkitJson {
         console.info('New Virtual Cloud Network');
         this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this, parent));
         return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
-    }
-
-    deleteVirtualCloudNetwork(id) {
-        for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
-            if (this.virtual_cloud_networks[i].id === id) {
-                // Remove Children
-                // Remove Internet Gateways
-                // Remove NAT Gateways
-                // Remove Service Gateways
-                // Remove Subnets
-                // Remove Route Tables
-                // Remove Security Lists
-                this.virtual_cloud_networks[i].delete();
-                this.virtual_cloud_networks.splice(i, 1);
-                break;
-            }
-        }
     }
 
     // Subnet
@@ -726,6 +695,62 @@ class OkitJson {
         console.info('New Autonomous Database');
         this.autonomous_databases.push(new AutonomousDatabase(data, this, parent));
         return this.autonomous_databases[this.autonomous_databases.length - 1];
+    }
+
+    /*
+    ** Get Artifact Processing
+     */
+
+    getSubnet(id='') {
+        for (let artifact of this.subnets) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
+    /*
+    ** Delete Artifact Processing
+     */
+
+    deleteCompartment(id) {
+        for (let i = 0; i < this.compartments.length; i++) {
+            if (this.compartments[i].id === id) {
+                // Remove Children
+                // Compartments
+                // Virtual Cloud networks
+                for (let j = this.virtual_cloud_networks.length; j >= 0; j--) {
+                    if (this.virtual_cloud_networks[j].compartment_id === id) {
+                        this.deleteVirtualCloudNetwork(this.virtual_cloud_networks[j].id);
+                    }
+                }
+                // Object Storage Buckets
+                // Block Storage Volumes
+                // Autonomous Databases
+                // Remove Compartment
+                this.compartments[i].delete();
+                this.compartments.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    deleteVirtualCloudNetwork(id) {
+        for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
+            if (this.virtual_cloud_networks[i].id === id) {
+                // Remove Children
+                // Remove Internet Gateways
+                // Remove NAT Gateways
+                // Remove Service Gateways
+                // Remove Subnets
+                // Remove Route Tables
+                // Remove Security Lists
+                this.virtual_cloud_networks[i].delete();
+                this.virtual_cloud_networks.splice(i, 1);
+                break;
+            }
+        }
     }
 }
 
