@@ -876,15 +876,16 @@ class Subnet extends OkitContainerArtifact {
     }
 
     drawAttachments() {
-        let id = this.id;
-        console.info('Drawing ' + subnet_artifact + ' : ' + id + ' Attachments');
+        console.info('Drawing ' + subnet_artifact + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         // Draw Route Table
         for (let route_table of this.getOkitJson()['route_tables']) {
             if (this.route_table_id === route_table['id']) {
-                let artifact_clone = new route_table.clone();
-                artifact_clone['parent_id'] = subnet['id'];
-                this.drawAttachedRouteTable(artifact_clone, attachment_count);
+                let artifact_clone = new RouteTable(route_table, this.getOkitJson(), this);
+                artifact_clone['parent_id'] = this.id;
+                console.info('Drawing ' + this.getArtifactReference() + ' Route Table : ' + artifact_clone.display_name);
+                artifact_clone.draw();
+                //this.drawAttachedRouteTable(artifact_clone, attachment_count);
             }
         }
         attachment_count += 1;
@@ -892,9 +893,11 @@ class Subnet extends OkitContainerArtifact {
         for (let security_list_id of this.security_list_ids) {
             for (let security_list of this.getOkitJson()['security_lists']) {
                 if (security_list_id == security_list['id']) {
-                    let artifact_clone = security_list.clone();
-                    artifact_clone['parent_id'] = subnet['id'];
-                    this.drawAttachedSecurityList(artifact_clone, attachment_count);
+                    let artifact_clone = new SecurityList(security_list, this.getOkitJson(), this);
+                    artifact_clone['parent_id'] = this.id;
+                    console.info('Drawing ' + this.getArtifactReference() + ' Security List : ' + artifact_clone.display_name);
+                    artifact_clone.draw();
+                    //this.drawAttachedSecurityList(artifact_clone, attachment_count);
                 }
             }
             attachment_count += 1;
@@ -902,7 +905,9 @@ class Subnet extends OkitContainerArtifact {
     }
 
     drawAttachedRouteTable(artifact, attachment_count) {
-        console.info('Drawing ' + subnet_artifact + ' Route Table : ' + artifact['display_name']);
+        console.info('Drawing ' + subnet_artifact + ' Route Table : ' + artifact.display_name);
+        artifact.draw();
+        /*
         let artifact_definition = newRouteTableDefinition(artifact, attachment_count);
         artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
         artifact_definition['svg']['y'] = 0;
@@ -914,10 +919,13 @@ class Subnet extends OkitContainerArtifact {
             loadRouteTableProperties(artifact['id']);
             d3.event.stopPropagation();
         });
+        */
     }
 
     drawAttachedSecurityList(artifact, attachment_count) {
-        console.info('Drawing ' + subnet_artifact + ' Security List : ' + artifact['display_name']);
+        console.info('Drawing ' + subnet_artifact + ' Security List : ' + artifact.display_name);
+        artifact.draw();
+        /*
         let artifact_definition = newSecurityListDefinition(artifact, attachment_count);
         artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
         artifact_definition['svg']['y'] = 0;
@@ -929,6 +937,7 @@ class Subnet extends OkitContainerArtifact {
             loadSecurityListProperties(artifact['id']);
             d3.event.stopPropagation();
         });
+        */
     }
 
     getSvgDefinition() {
@@ -1145,6 +1154,10 @@ class Subnet extends OkitContainerArtifact {
     /*
     ** Child Artifact Functions
      */
+    getTopEdgeArtifacts() {
+        return [route_table_artifact, security_list_artifact];
+    }
+
     getTopArtifacts() {
         return [load_balancer_artifact];
     }

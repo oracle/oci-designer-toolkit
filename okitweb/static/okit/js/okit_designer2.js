@@ -200,7 +200,8 @@ function loadTemplate(template_url) {
         dataType: 'text',
         contentType: 'application/json',
         success: function(resp) {
-            okitJson = JSON.parse(resp);
+            okitJson = new OkitJson(resp);
+            //okitJson.load(JSON.parse(resp));
             displayOkitJson();
             drawSVGforJson();
         },
