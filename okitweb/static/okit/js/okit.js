@@ -122,6 +122,43 @@ class OkitSvgArtifact {
     /*
     ** Child Offset Functions
      */
+    getChildOffset(child_type) {
+        console.groupCollapsed('Getting Offset for ' + child_type);
+        let offset = {dx: 0, dy: 0};
+        if (this.getTopEdgeArtifacts().includes(child_type)) {
+            console.info('Top Edge Artifact');
+            offset = this.getTopEdgeChildOffset();
+        } else if (this.getTopArtifacts().includes(child_type)) {
+            console.info('Top Artifact');
+            offset = this.getTopChildOffset();
+        } else if (this.getContainerArtifacts().includes(child_type)) {
+            console.info('Container Artifact');
+            offset = this.getContainerChildOffset();
+        } else if (this.getBottomArtifacts().includes(child_type)) {
+            console.info('Bottom Artifact');
+            offset = this.getBottomChildOffset();
+        } else if (this.getBottomEdgeArtifacts().includes(child_type)) {
+            console.info('Bottom Edge Artifact');
+            offset = this.getBottomEdgeChildOffset();
+        } else if (this.getLeftEdgeArtifacts().includes(child_type)) {
+            console.info('Left Edge Artifact');
+            offset = this.getLeftEdgeChildOffset();
+        } else if (this.getLeftArtifacts().includes(child_type)) {
+            console.info('Left Artifact');
+            offset = this.getLeftChildOffset();
+        } else if (this.getRightArtifacts().includes(child_type)) {
+            console.info('Right Artifact');
+            offset = this.getRightChildOffset();
+        } else if (this.getRightEdgeArtifacts().includes(child_type)) {
+            console.info('Right Edge Artifact');
+            offset = this.getRightEdgeChildOffset();
+        } else {
+            console.warn(child_type + ' Not Found for ' + this.display_name);
+        }
+        console.groupEnd();
+        return offset
+    }
+
     getFirstChildOffset() {
         alert('Get First Child function "getFirstChildOffset()" has not been implemented.')
         return;
@@ -151,7 +188,7 @@ class OkitSvgArtifact {
     }
 
     getTopChildOffset() {
-        alert('Get First Top Child function "getTopEdgeChildOffset()" has not been implemented.')
+        alert('Get Top Child function "getTopEdgeChildOffset()" has not been implemented.')
         return;
     }
 
@@ -163,7 +200,7 @@ class OkitSvgArtifact {
     }
 
     getContainerChildOffset() {
-        alert('Get First Container Child function "getContainerChildOffset()" has not been implemented.')
+        alert('Get Container Child function "getContainerChildOffset()" has not been implemented.')
         return;
     }
 
@@ -175,7 +212,7 @@ class OkitSvgArtifact {
     }
 
     getBottomChildOffset() {
-        alert('Get First Bottom Child function "getBottomEdgeChildOffset()" has not been implemented.')
+        alert('Get Bottom Child function "getBottomEdgeChildOffset()" has not been implemented.')
         return;
     }
 
@@ -189,13 +226,13 @@ class OkitSvgArtifact {
     }
 
     getBottomEdgeChildOffset() {
-        alert('Get First Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.')
+        alert('Get Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.')
         return;
     }
 
     // Left Edge
     getLeftEdgeChildOffset() {
-        alert('Get First Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.')
+        alert('Get Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.')
         return;
     }
 
@@ -209,20 +246,60 @@ class OkitSvgArtifact {
     }
 
     getLeftChildOffset() {
-        alert('Get First Left Child function "getLeftEdgeChildOffset()" has not been implemented.')
+        alert('Get Left Child function "getLeftEdgeChildOffset()" has not been implemented.')
         return;
     }
 
     // Right
     getRightChildOffset() {
-        alert('Get First Right Child function "getRightEdgeChildOffset()" has not been implemented.')
+        alert('Get Right Child function "getRightEdgeChildOffset()" has not been implemented.')
         return;
     }
 
     // Right Edge
     getRightEdgeChildOffset() {
-        alert('Get First Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.')
+        alert('Get Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.')
         return;
+    }
+
+
+    /*
+    ** Child Type Functions
+     */
+    getTopEdgeArtifacts() {
+        return [];
+    }
+
+    getTopArtifacts() {
+        return [];
+    }
+
+    getContainerArtifacts() {
+        return [];
+    }
+
+    getBottomArtifacts() {
+        return [];
+    }
+
+    getBottomEdgeArtifacts() {
+        return [];
+    }
+
+    getLeftEdgeArtifacts() {
+        return [];
+    }
+
+    getLeftArtifacts() {
+        return [];
+    }
+
+    getRightArtifacts() {
+        return [];
+    }
+
+    getRightEdgeArtifacts() {
+        return [];
     }
 
 
@@ -336,43 +413,6 @@ class OkitContainerArtifact extends OkitSvgArtifact {
     /*
     ** Child Offset Functions
      */
-    getChildOffset(child_type) {
-        console.groupCollapsed('Getting Offset for ' + child_type);
-        let offset = {dx: 0, dy: 0};
-        if (this.getTopEdgeArtifacts().includes(child_type)) {
-            console.info('Top Edge Artifact');
-            offset = this.getTopEdgeChildOffset();
-        } else if (this.getTopArtifacts().includes(child_type)) {
-            console.info('Top Artifact');
-            offset = this.getTopChildOffset();
-        } else if (this.getContainerArtifacts().includes(child_type)) {
-            console.info('Container Artifact');
-            offset = this.getContainerChildOffset();
-        } else if (this.getBottomArtifacts().includes(child_type)) {
-            console.info('Bottom Artifact');
-            offset = this.getBottomChildOffset();
-        } else if (this.getBottomEdgeArtifacts().includes(child_type)) {
-            console.info('Bottom Edge Artifact');
-            offset = this.getBottomEdgeChildOffset();
-        } else if (this.getLeftEdgeArtifacts().includes(child_type)) {
-            console.info('Left Edge Artifact');
-            offset = this.getLeftEdgeChildOffset();
-        } else if (this.getLeftArtifacts().includes(child_type)) {
-            console.info('Left Artifact');
-            offset = this.getLeftChildOffset();
-        } else if (this.getRightArtifacts().includes(child_type)) {
-            console.info('Right Artifact');
-            offset = this.getRightChildOffset();
-        } else if (this.getRightEdgeArtifacts().includes(child_type)) {
-            console.info('Right Edge Artifact');
-            offset = this.getRightEdgeChildOffset();
-        } else {
-            console.warn(child_type + ' Not Found for ' + this.display_name);
-        }
-        console.groupEnd();
-        return offset
-    }
-
     getTopEdgeChildOffset() {
         let offset = this.getFirstTopEdgeChildOffset();
         // Count how many top edge children and adjust.
@@ -442,46 +482,6 @@ class OkitContainerArtifact extends OkitSvgArtifact {
     getRightChildOffset() {}
 
     getRightEdgeChildOffset() {}
-
-
-    /*
-    ** Child Type Functions
-     */
-    getTopEdgeArtifacts() {
-        return [];
-    }
-
-    getTopArtifacts() {
-        return [];
-    }
-
-    getContainerArtifacts() {
-        return [];
-    }
-
-    getBottomArtifacts() {
-        return [];
-    }
-
-    getBottomEdgeArtifacts() {
-        return [];
-    }
-
-    getLeftEdgeArtifacts() {
-        return [];
-    }
-
-    getLeftArtifacts() {
-        return [];
-    }
-
-    getRightArtifacts() {
-        return [];
-    }
-
-    getRightEdgeArtifacts() {
-        return [];
-    }
 }
 
 class OkitJson {
@@ -723,10 +723,6 @@ class OkitJson {
         console.groupEnd();
     }
 
-    test() {
-        console.info('Test Call.........')
-    }
-
     /*
     ** New Artifact Processing
      */
@@ -825,6 +821,24 @@ class OkitJson {
     ** Get Artifact Processing
      */
 
+    getBlockStorageVolume(id='') {
+        for (let artifact of this.block_storage_volumes) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
+    getInstance(id='') {
+        for (let artifact of this.instances) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
     getSubnet(id='') {
         for (let artifact of this.subnets) {
             if (artifact.id === id) {
@@ -841,17 +855,6 @@ class OkitJson {
     deleteCompartment(id) {
         for (let i = 0; i < this.compartments.length; i++) {
             if (this.compartments[i].id === id) {
-                // Remove Children
-                // Compartments
-                // Virtual Cloud networks
-                for (let j = this.virtual_cloud_networks.length; j >= 0; j--) {
-                    if (this.virtual_cloud_networks[j].compartment_id === id) {
-                        this.deleteVirtualCloudNetwork(this.virtual_cloud_networks[j].id);
-                    }
-                }
-                // Object Storage Buckets
-                // Block Storage Volumes
-                // Autonomous Databases
                 // Remove Compartment
                 this.compartments[i].delete();
                 this.compartments.splice(i, 1);
@@ -863,13 +866,7 @@ class OkitJson {
     deleteVirtualCloudNetwork(id) {
         for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
             if (this.virtual_cloud_networks[i].id === id) {
-                // Remove Children
-                // Remove Internet Gateways
-                // Remove NAT Gateways
-                // Remove Service Gateways
-                // Remove Subnets
-                // Remove Route Tables
-                // Remove Security Lists
+                // Remove Virtual Cloud Network
                 this.virtual_cloud_networks[i].delete();
                 this.virtual_cloud_networks.splice(i, 1);
                 break;

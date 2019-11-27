@@ -287,10 +287,11 @@ class BlockStorageVolume extends OkitSvgArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.compartment_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
+            this.parent_id = parent.id;
         } else {
+            this.parent_id = this.compartment_id;
             for (let parent of okitjson.compartments) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {

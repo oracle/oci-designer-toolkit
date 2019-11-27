@@ -885,7 +885,6 @@ class Subnet extends OkitContainerArtifact {
                 artifact_clone['parent_id'] = this.id;
                 console.info('Drawing ' + this.getArtifactReference() + ' Route Table : ' + artifact_clone.display_name);
                 artifact_clone.draw();
-                //this.drawAttachedRouteTable(artifact_clone, attachment_count);
             }
         }
         attachment_count += 1;
@@ -897,7 +896,6 @@ class Subnet extends OkitContainerArtifact {
                     artifact_clone['parent_id'] = this.id;
                     console.info('Drawing ' + this.getArtifactReference() + ' Security List : ' + artifact_clone.display_name);
                     artifact_clone.draw();
-                    //this.drawAttachedSecurityList(artifact_clone, attachment_count);
                 }
             }
             attachment_count += 1;
@@ -1114,6 +1112,7 @@ class Subnet extends OkitContainerArtifact {
         }
         return false;
     }
+
 
     /*
     ** Child Artifact Functions

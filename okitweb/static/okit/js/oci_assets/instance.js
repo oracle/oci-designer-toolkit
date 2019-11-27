@@ -279,7 +279,7 @@ function drawInstanceConnectorsSVGDeprecated(instance) {
 }
 
 // TODO: Delete
-function drawInstanceAttachmentsSVG(instance) {
+function drawInstanceAttachmentsSVGDeprecated(instance) {
     let id = instance['id'];
     console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + id + ' Attachments');
     // If Block Storage Volumes Ids are missing then initialise.
@@ -314,7 +314,7 @@ function drawInstanceAttachmentsSVG(instance) {
 }
 
 // TODO: Delete
-function drawAttachedBlockStorageVolume(artifact, bs_count) {
+function drawAttachedBlockStorageVolumeDeprecated(artifact, bs_count) {
     console.info('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact['id']);
     let first_child = getInstanceFirstChildEdgeOffset();
     let dimensions = getInstanceDimensions(artifact['parent_id']);
@@ -332,7 +332,7 @@ function drawAttachedBlockStorageVolume(artifact, bs_count) {
 }
 
 // TODO: Delete
-function drawAttachedSubnetVnic(artifact, bs_count) {
+function drawAttachedSubnetVnicDeprecated(artifact, bs_count) {
     console.info('Drawing ' + instance_artifact + ' Subnet Vnic : ' + artifact['id']);
     let first_child = getInstanceFirstChildEdgeOffset();
     let dimensions = getInstanceDimensions(artifact['parent_id']);
@@ -630,29 +630,37 @@ class Instance extends OkitSvgArtifact {
             .attr("data-connector-id", this.id)
             .attr("dragable", true);
         // Draw Attachments
-        //this.drawInstanceAttachments();
+        this.drawAttachments();
         console.groupEnd();
     }
 
-    drawInstanceAttachments() {
+    drawAttachments() {
         console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
+            let artifact_clone = new BlockStorageVolume(this.getOkitJson().getBlockStorageVolume(block_storage_id), this.getOkitJson(), this);
+            artifact_clone['parent_id'] = this.id;
+            console.info('Drawing ' + this.getArtifactReference() + ' Block Storage Volume : ' + artifact_clone.display_name);
+            artifact_clone.draw();
+            /*
             for (let block_storage_volume of this.getOkitJson().block_storage_volumes) {
-                if (block_storage_id == block_storage_volume['id']) {
-                    let artifact_clone = this.getOkitJson().newBlockStorage(block_storage_volume, this.getOkitJson(), this);
+                if (block_storage_id === block_storage_volume['id']) {
+                    let artifact_clone = this.getOkitJson().newBlockStorageVolume(block_storage_volume, this.getOkitJson(), this);
                     artifact_clone['parent_id'] = this.id;
-                    this.drawAttachedBlockStorageVolume(artifact_clone, attachment_count);
+                    artifact_clone.draw();
+                    //this.drawAttachedBlockStorageVolume(artifact_clone, attachment_count);
                 }
             }
+            */
             attachment_count += 1;
         }
         for (let subnet_id of this.subnet_ids) {
             for (let subnet of this.getOkitJson().subnets) {
                 if (subnet_id == subnet['id']) {
-                    let artifact_clone = this.getOkitJson().newVirtualNetworkInterface(subnet, this.getOkitJson(), this);
+                    let artifact_clone = new VirtualNetworkInterface(subnet, this.getOkitJson(), this);
                     artifact_clone['parent_id'] = this.id;
-                    this.drawAttachedSubnetVnic(artifact_clone, attachment_count);
+                    artifact_clone.draw();
+                    //this.drawAttachedSubnetVnic(artifact_clone, attachment_count);
                 }
             }
             attachment_count += 1;
@@ -778,6 +786,33 @@ class Instance extends OkitSvgArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+
+
+    /*
+    ** Child Offset Functions
+     */
+    getBottomEdgeChildOffset() {
+        let offset = this.getFirstBottomEdgeChildOffset();
+        // Count how many top edge children and adjust.
+        let count = 0;
+        for (let child of this.getBottomEdgeArtifacts()) {
+            count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
+        }
+        console.info('Bottom Edge Count : ' + count);
+        let dimensions = this.getDimensions();
+        // Increment x position based on count
+        offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
+        offset.dy = Math.round(dimensions.height - positional_adjustments.padding.y);
+        return offset;
+    }
+
+
+    /*
+    ** Child Artifact Functions
+     */
+    getBottomEdgeArtifacts() {
+        return [block_storage_volume_artifact, virtual_network_interface_artifact];
     }
 }
 
