@@ -839,6 +839,24 @@ class OkitJson {
         return {};
     }
 
+    getRouteTable(id='') {
+        for (let artifact of this.route_tables) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
+    getSecurityList(id='') {
+        for (let artifact of this.security_lists) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
     getSubnet(id='') {
         for (let artifact of this.subnets) {
             if (artifact.id === id) {

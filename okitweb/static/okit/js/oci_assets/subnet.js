@@ -879,6 +879,11 @@ class Subnet extends OkitContainerArtifact {
         console.info('Drawing ' + subnet_artifact + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         // Draw Route Table
+        let artifact_clone = new RouteTable(this.getOkitJson().getRouteTable(this.route_table_id), this.getOkitJson(), this);
+        artifact_clone['parent_id'] = this.id;
+        console.info('Drawing ' + this.getArtifactReference() + ' Route Table : ' + artifact_clone.display_name);
+        artifact_clone.draw();
+        /*
         for (let route_table of this.getOkitJson()['route_tables']) {
             if (this.route_table_id === route_table['id']) {
                 let artifact_clone = new RouteTable(route_table, this.getOkitJson(), this);
@@ -887,9 +892,15 @@ class Subnet extends OkitContainerArtifact {
                 artifact_clone.draw();
             }
         }
+        */
         attachment_count += 1;
         // Security Lists
         for (let security_list_id of this.security_list_ids) {
+            let artifact_clone = new SecurityList(this.getOkitJson().getSecurityList(security_list_id), this.getOkitJson(), this);
+            artifact_clone['parent_id'] = this.id;
+            console.info('Drawing ' + this.getArtifactReference() + ' Security List : ' + artifact_clone.display_name);
+            artifact_clone.draw();
+            /*
             for (let security_list of this.getOkitJson()['security_lists']) {
                 if (security_list_id == security_list['id']) {
                     let artifact_clone = new SecurityList(security_list, this.getOkitJson(), this);
@@ -898,6 +909,7 @@ class Subnet extends OkitContainerArtifact {
                     artifact_clone.draw();
                 }
             }
+            */
             attachment_count += 1;
         }
     }

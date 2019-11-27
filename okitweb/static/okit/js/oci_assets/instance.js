@@ -642,16 +642,6 @@ class Instance extends OkitSvgArtifact {
             artifact_clone['parent_id'] = this.id;
             console.info('Drawing ' + this.getArtifactReference() + ' Block Storage Volume : ' + artifact_clone.display_name);
             artifact_clone.draw();
-            /*
-            for (let block_storage_volume of this.getOkitJson().block_storage_volumes) {
-                if (block_storage_id === block_storage_volume['id']) {
-                    let artifact_clone = this.getOkitJson().newBlockStorageVolume(block_storage_volume, this.getOkitJson(), this);
-                    artifact_clone['parent_id'] = this.id;
-                    artifact_clone.draw();
-                    //this.drawAttachedBlockStorageVolume(artifact_clone, attachment_count);
-                }
-            }
-            */
             attachment_count += 1;
         }
         for (let subnet_id of this.subnet_ids) {
