@@ -645,6 +645,11 @@ class Instance extends OkitSvgArtifact {
             attachment_count += 1;
         }
         for (let subnet_id of this.subnet_ids) {
+            let artifact_clone = new VirtualNetworkInterface(this.getOkitJson().getSubnet(subnet_id), this.getOkitJson(), this);
+            artifact_clone['parent_id'] = this.id;
+            console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + artifact_clone.display_name);
+            artifact_clone.draw();
+            /*
             for (let subnet of this.getOkitJson().subnets) {
                 if (subnet_id == subnet['id']) {
                     let artifact_clone = new VirtualNetworkInterface(subnet, this.getOkitJson(), this);
@@ -653,6 +658,7 @@ class Instance extends OkitSvgArtifact {
                     //this.drawAttachedSubnetVnic(artifact_clone, attachment_count);
                 }
             }
+            */
             attachment_count += 1;
         }
         console.groupEnd();
