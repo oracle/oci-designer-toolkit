@@ -401,10 +401,13 @@ class BlockStorageVolume extends OkitSvgArtifact {
     }
 
     isAttached() {
-        for (let instance of this.getOkitJson().instances) {
-            if (instance.block_storage_volume_ids.includes(this.id)) {
-                console.info(this.display_name + ' attached to instance '+ instance.display_name);
-                return true;
+        // Check if this is attached but exclude when parent is the attachment type.
+        if (this.getParent().getArtifactReference() !== instance_artifact) {
+            for (let instance of this.getOkitJson().instances) {
+                if (instance.block_storage_volume_ids.includes(this.id)) {
+                    console.info(this.display_name + ' attached to instance ' + instance.display_name);
+                    return true;
+                }
             }
         }
         return false;

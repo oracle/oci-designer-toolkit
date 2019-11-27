@@ -452,6 +452,10 @@ class RouteTable extends OkitSvgArtifact {
      */
     draw() {
         console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        if (this.isAttached()) {
+            console.groupEnd();
+            return;
+        }
         let svg = drawArtifact(this.getSvgDefinition());
         /*
         ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
@@ -498,6 +502,19 @@ class RouteTable extends OkitSvgArtifact {
 
     getMinimumDimensions() {
         return {width: icon_width, height:icon_height};
+    }
+
+    isAttached() {
+        // Check if this is attached but exclude when parent is the attachment type.
+        if (this.getParent().getArtifactReference() !== subnet_artifact) {
+            for (let subnet of this.getOkitJson().subnets) {
+                if (subnet.route_table_id === this.id) {
+                    console.info(this.display_name + ' attached to subnet ' + subnet.display_name);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
