@@ -250,7 +250,7 @@ $(document).ready(function() {
 /*
 ** Define Internet Gateway Artifact Class
  */
-class InternetGateway extends OkitSvgArtifact {
+class InternetGateway extends OkitArtifact {
     /*
     ** Create
      */

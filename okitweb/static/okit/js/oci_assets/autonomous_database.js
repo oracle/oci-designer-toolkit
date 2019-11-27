@@ -269,7 +269,7 @@ $(document).ready(function() {
 /*
 ** Define Autonomous Database Class
  */
-class AutonomousDatabase extends OkitSvgArtifact {
+class AutonomousDatabase extends OkitArtifact {
     /*
     ** Create
      */

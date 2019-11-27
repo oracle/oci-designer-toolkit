@@ -488,7 +488,7 @@ $(document).ready(function() {
 /*
 ** Define Security List Class
  */
-class SecurityList extends OkitSvgArtifact {
+class SecurityList extends OkitArtifact {
     /*
     ** Create
      */

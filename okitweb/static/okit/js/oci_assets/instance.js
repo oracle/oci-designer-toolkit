@@ -511,7 +511,7 @@ $(document).ready(function () {
 /*
 ** Define Instance Class
  */
-class Instance extends OkitSvgArtifact {
+class Instance extends OkitArtifact {
     /*
     ** Create
      */

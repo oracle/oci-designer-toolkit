@@ -250,7 +250,7 @@ $(document).ready(function() {
 /*
 ** Define NAT Gateway Class
  */
-class NATGateway extends OkitSvgArtifact {
+class NATGateway extends OkitArtifact {
     /*
     ** Create
      */

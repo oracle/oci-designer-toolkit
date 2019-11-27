@@ -11,7 +11,7 @@ class OkitSvg {
     }
 }
 
-class OkitSvgArtifact {
+class OkitArtifact {
     /*
     ** Create
      */
@@ -312,7 +312,7 @@ class OkitSvgArtifact {
     }
 }
 
-class OkitContainerArtifact extends OkitSvgArtifact {
+class OkitContainerArtifact extends OkitArtifact {
     /*
     ** Create
      */
@@ -893,18 +893,3 @@ class OkitJson {
     }
 }
 
-$(document).ready(function() {
-    /*
-    let oj = new OkitJson(JSON.stringify({"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]}));
-    console.info(oj);
-    console.info(JSON.stringify(oj, null, 2));
-    for (let compartment of oj.compartments) {
-        console.info('getOkitJson : ' + compartment.getOkitJson());
-        console.info('getOkitJson String : ' + JSON.stringify(compartment.getOkitJson()));
-        compartment.getOkitJson().test();
-        compartment.getOkitJson()['instances'] = [{id: 'okit-instance'}];
-    }
-    console.info(oj);
-    console.info(JSON.stringify(oj, null, 2));
-    */
-});

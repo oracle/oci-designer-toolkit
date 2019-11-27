@@ -360,7 +360,7 @@ $(document).ready(function () {
 /*
 ** Define Load Balancer Class
  */
-class LoadBalancer extends OkitSvgArtifact {
+class LoadBalancer extends OkitArtifact {
     /*
     ** Create
      */

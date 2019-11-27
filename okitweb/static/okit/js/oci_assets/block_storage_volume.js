@@ -269,7 +269,7 @@ $(document).ready(function() {
 /*
 ** Define Block Storage Volume Class
  */
-class BlockStorageVolume extends OkitSvgArtifact {
+class BlockStorageVolume extends OkitArtifact {
     /*
     ** Create
      */

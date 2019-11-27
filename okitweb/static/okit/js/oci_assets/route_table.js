@@ -378,7 +378,7 @@ $(document).ready(function() {
 /*
 ** Define Route Table Class
  */
-class RouteTable extends OkitSvgArtifact {
+class RouteTable extends OkitArtifact {
     /*
     ** Create
      */

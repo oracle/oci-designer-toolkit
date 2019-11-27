@@ -3,7 +3,7 @@ console.info('Loaded OkitTemplateArtifact Javascript');
 /*
 ** Define Okit Template Artifact Class
  */
-class OkitTemplateArtifact extends OkitSvgArtifact {
+class OkitTemplateArtifact extends OkitArtifact {
     /*
     ** Create
      */

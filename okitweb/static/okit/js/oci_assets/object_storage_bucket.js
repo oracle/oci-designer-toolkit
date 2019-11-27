@@ -260,7 +260,7 @@ $(document).ready(function() {
 /*
 ** Define Object Storage Bucket Class
  */
-class ObjectStorageBucket extends OkitSvgArtifact {
+class ObjectStorageBucket extends OkitArtifact {
     /*
     ** Create
      */

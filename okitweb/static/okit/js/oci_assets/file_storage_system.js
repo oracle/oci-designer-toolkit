@@ -270,7 +270,7 @@ $(document).ready(function() {
 /*
 ** Define File Storage System Class
  */
-class FileStorageSystem extends OkitSvgArtifact {
+class FileStorageSystem extends OkitArtifact {
     /*
     ** Create
      */
