@@ -169,10 +169,8 @@ class OkitSvgArtifact {
 
     // Bottom
     getFirstBottomChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
+        let offset = this.getFirstContainerChildOffset();
+        offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
         return offset;
     }
 
@@ -309,6 +307,19 @@ class OkitContainerArtifact extends OkitSvgArtifact {
         dimensions.width   = Math.max(dimensions.width, container_dimensions.width);
         dimensions.height += container_dimensions.height;
         // Process Bottom Artifacts
+        offset = this.getFirstBottomChildOffset();
+        let bottom_dimensions = {width: offset.dx, height: offset.dy};
+        for (let group of this.getBottomArtifacts()) {
+            for (let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[id_key] === this.id) {
+                    let artifact_dimension = artifact.getDimensions();
+                    bottom_dimensions.width += artifact_dimension.width + positional_adjustments.spacing.x;
+                    bottom_dimensions.height = Math.max(bottom_dimensions.height, artifact_dimension.height + positional_adjustments.spacing.y);
+                }
+            }
+        }
+        dimensions.width   = Math.max(dimensions.width, top_dimensions.width);
+        dimensions.height += top_dimensions.height;
         // Process Left Edge Artifacts
         // Process Right Edge Artifacts
         // Process Left Artifacts

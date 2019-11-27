@@ -904,42 +904,6 @@ class Subnet extends OkitContainerArtifact {
         }
     }
 
-    drawAttachedRouteTable(artifact, attachment_count) {
-        console.info('Drawing ' + subnet_artifact + ' Route Table : ' + artifact.display_name);
-        artifact.draw();
-        /*
-        let artifact_definition = newRouteTableDefinition(artifact, attachment_count);
-        artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
-        artifact_definition['svg']['y'] = 0;
-
-        let svg = drawArtifact(artifact_definition);
-
-        // Add click event to display properties
-        svg.on("click", function () {
-            loadRouteTableProperties(artifact['id']);
-            d3.event.stopPropagation();
-        });
-        */
-    }
-
-    drawAttachedSecurityList(artifact, attachment_count) {
-        console.info('Drawing ' + subnet_artifact + ' Security List : ' + artifact.display_name);
-        artifact.draw();
-        /*
-        let artifact_definition = newSecurityListDefinition(artifact, attachment_count);
-        artifact_definition['svg']['x'] = Math.round((icon_width * 2) + (icon_width * attachment_count) + (icon_spacing * attachment_count));
-        artifact_definition['svg']['y'] = 0;
-
-        let svg = drawArtifact(artifact_definition);
-
-        // Add click event to display properties
-        svg.on("click", function () {
-            loadSecurityListProperties(artifact['id']);
-            d3.event.stopPropagation();
-        });
-        */
-    }
-
     getSvgDefinition() {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getDimensions(this.id);
