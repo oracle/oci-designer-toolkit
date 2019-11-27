@@ -127,17 +127,7 @@ class OkitSvgArtifact {
         return;
     }
 
-    getFirstContainerChildOffset() {
-        let offset = this.getFirstTopChildOffset();
-        offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
-        return offset;
-    }
-
-    getContainerChildOffset() {
-        alert('Get First Container Child function "getContainerChildOffset()" has not been implemented.')
-        return;
-    }
-
+    // Top Edge
     getFirstTopEdgeChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
@@ -151,32 +141,10 @@ class OkitSvgArtifact {
         return;
     }
 
-    getFirstBottomEdgeChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
-            dy: 0
-        };
-        return offset;
-    }
-
-    getBottomEdgeChildOffset() {
-        alert('Get First Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.')
-        return;
-    }
-
-    getLeftEdgeChildOffset() {
-        alert('Get First Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.')
-        return;
-    }
-
-    getRightEdgeChildOffset() {
-        alert('Get First Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.')
-        return;
-    }
-
+    // Top
     getFirstTopChildOffset() {
         let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x * 3),
             dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
         };
         return offset;
@@ -187,6 +155,19 @@ class OkitSvgArtifact {
         return;
     }
 
+    // Container
+    getFirstContainerChildOffset() {
+        let offset = this.getFirstTopChildOffset();
+        offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
+        return offset;
+    }
+
+    getContainerChildOffset() {
+        alert('Get First Container Child function "getContainerChildOffset()" has not been implemented.')
+        return;
+    }
+
+    // Bottom
     getFirstBottomChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
@@ -200,9 +181,30 @@ class OkitSvgArtifact {
         return;
     }
 
+    // Bottom Edge
+    getFirstBottomEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dy: 0
+        };
+        return offset;
+    }
+
+    getBottomEdgeChildOffset() {
+        alert('Get First Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.')
+        return;
+    }
+
+    // Left Edge
+    getLeftEdgeChildOffset() {
+        alert('Get First Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.')
+        return;
+    }
+
+    // Left
     getFirstLeftChildOffset() {
         let offset = {
-            dx: Math.round(positional_adjustments.padding.x),
+            dx: Math.round(positional_adjustments.spacing.x * 3),
             dy: Math.round(positional_adjustments.padding.y * 2)
         };
         return offset;
@@ -213,8 +215,15 @@ class OkitSvgArtifact {
         return;
     }
 
+    // Right
     getRightChildOffset() {
         alert('Get First Right Child function "getRightEdgeChildOffset()" has not been implemented.')
+        return;
+    }
+
+    // Right Edge
+    getRightEdgeChildOffset() {
+        alert('Get First Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.')
         return;
     }
 

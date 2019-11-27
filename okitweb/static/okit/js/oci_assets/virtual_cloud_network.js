@@ -622,17 +622,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = parent_first_child.dx;
         definition['svg']['y'] = parent_first_child.dy;
-        /*
-        // Add positioning offset
-        definition['svg']['y'] += Math.round(positional_adjustments.spacing.y * position);
-        // Retrieve all Virtual Cloud Networks in the parent svg and calculate vertical position
-        $('#' + this.parent_id + '-svg').children('svg[data-type="' + virtual_cloud_network_artifact + '"]').each(
-            function() {
-                console.info('Width  : ' + $(this).attr('width'));
-                console.info('Height : ' + $(this).attr('height'));
-                definition['svg']['y'] += Number($(this).attr('height'));
-            });
-        */
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
         definition['rect']['stroke']['colour'] = virtual_cloud_network_stroke_colour;
