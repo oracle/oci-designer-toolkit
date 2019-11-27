@@ -371,7 +371,38 @@ class Compartment extends OkitContainerArtifact {
         console.groupEnd();
     }
 
-    deleteChildren() {}
+    deleteChildren() {
+        // Remove Compartments
+        for (let child of this.getOkitJson().compartments) {
+            if (child.compartment_id === this.id && child.id !== this.id) {
+                child.delete();
+            }
+        }
+        // Virtual Cloud Networks
+        for (let child of this.getOkitJson().virtual_cloud_networks) {
+            if (child.compartment_id === this.id) {
+                child.delete();
+            }
+        }
+        // Block Storage Volumes
+        for (let child of this.getOkitJson().block_storage_volumes) {
+            if (child.compartment_id === this.id) {
+                child.delete();
+            }
+        }
+        // Object Storage Buckets
+        for (let child of this.getOkitJson().object_storage_buckets) {
+            if (child.compartment_id === this.id) {
+                child.delete();
+            }
+        }
+        // Autonomous Databases
+        for (let child of this.getOkitJson().autonomous_databases) {
+            if (child.compartment_id === this.id) {
+                child.delete();
+            }
+        }
+    }
 
 
     /*

@@ -828,7 +828,7 @@ class Subnet extends OkitContainerArtifact {
                 child.delete();
             }
         }
-        // Remove File Storrage Systems
+        // Remove File Storage Systems
         for (let child of this.getOkitJson().file_storage_systems) {
             if (child.subnet_id === this.id) {
                 child.delete();
