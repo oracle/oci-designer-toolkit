@@ -1092,7 +1092,7 @@ class Subnet extends OkitContainerArtifact {
             // Load Properties
             loadProperties(me);
             // Add Event Listeners
-            addPropertiesEventListeners(me, [okitJson.draw]);
+            addPropertiesEventListeners(me, []);
         });
     }
 

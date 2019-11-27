@@ -17,6 +17,7 @@ let block_storage_volume_ids = [];
 ** Reset variables
  */
 
+// TODO: Delete
 function clearBlockStorageVolumeVariables() {
     block_storage_volume_ids = [];
 }
@@ -24,7 +25,8 @@ function clearBlockStorageVolumeVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addBlockStorageVolume(parent_id, compartment_id) {
+// TODO: Delete
+function addBlockStorageVolumeDeprecated(parent_id, compartment_id) {
     let id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding ' + block_storage_volume_artifact + ' : ' + id);
 
@@ -59,8 +61,8 @@ function addBlockStorageVolume(parent_id, compartment_id) {
 /*
 ** Delete From JSON Model
  */
-
-function deleteBlockStorageVolume(id) {
+// TODO: Delete
+function deleteBlockStorageVolumeDeprecated(id) {
     console.groupCollapsed('Delete ' + block_storage_volume_artifact + ' : ' + id);
     // Remove SVG Element
     d3.select("#" + id + "-svg").remove()
@@ -86,11 +88,13 @@ function deleteBlockStorageVolume(id) {
 /*
 ** SVG Creation
  */
-function getBlockStorageVolumeDimensions(id='') {
+// TODO: Delete
+function getBlockStorageVolumeDimensionsDeprecated(id='') {
     return {width:icon_width, height:icon_height};
 }
 
-function newBlockStorageVolumeDefinition(artifact, position=0) {
+// TODO: Delete
+function newBlockStorageVolumeDefinitionDeprecated(artifact, position=0) {
     let dimensions = getBlockStorageVolumeDimensions();
     let definition = newArtifactSVGDefinition(artifact, block_storage_volume_artifact);
     let first_child = getCompartmentFirstChildOffset();
@@ -106,7 +110,8 @@ function newBlockStorageVolumeDefinition(artifact, position=0) {
     return definition;
 }
 
-function drawBlockStorageVolumeSVG(artifact) {
+// TODO: Delete
+function drawBlockStorageVolumeSVGDeprecated(artifact) {
     let parent_id = artifact['compartment_id'];
     artifact['parent_id'] = parent_id;
     let id = artifact['id'];
@@ -165,7 +170,8 @@ function drawBlockStorageVolumeSVG(artifact) {
 /*
 ** Property Sheet Load function
  */
-function loadBlockStorageVolumeProperties(id) {
+// TODO: Delete
+function loadBlockStorageVolumePropertiesDeprecated(id) {
     $("#properties").load("propertysheets/block_storage_volume.html", function () {
         if ('block_storage_volumes' in okitJson) {
             console.info('Loading ' + block_storage_volume_artifact + ' : ' + id);
@@ -246,4 +252,188 @@ $(document).ready(function() {
         .attr('id', 'block_storage_volume_name_filter')
         .attr('name', 'block_storage_volume_name_filter');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+** Define Block Storage Volume Class
+ */
+class BlockStorageVolume extends OkitSvgArtifact {
+    /*
+    ** Create
+     */
+    constructor (data={}, okitjson={}, parent=null) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(block_storage_volume_prefix, okitjson.block_storage_volumes.length + 1);
+        this.compartment_id = data.parent_id;
+        this.availability_domain = '1';
+        this.size_in_gbs = 1024;
+        this.backup_policy = 'bronze';
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+        // Add Get Parent function
+        this.parent_id = this.compartment_id;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.compartments) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function () {
+                        return parent
+                    };
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        return new BlockStorageVolume(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return block_storage_volume_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {
+        // Remove Instance references
+        for (let instance of this.getOkitJson().instances) {
+            for (let i=0; i < instance.block_storage_volume_ids.length; i++) {
+                if (instance.block_storage_volume_ids[i] === this.id) {
+                    instance.block_storage_volume_ids.splice(i, 1);
+                }
+            }
+        }
+    }
+
+
+    /*
+     ** SVG Processing
+     */
+    draw() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        if (this.isAttached()) {
+            console.groupEnd();
+            return;
+        }
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+    }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = block_storage_volume_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
+        console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
+        return definition;
+    }
+
+    // Return Artifact Dimensions
+    getDimensions() {
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let dimensions = this.getMinimumDimensions();
+        // Calculate Size based on Child Artifacts
+        // Check size against minimum
+        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
+        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: icon_width, height:icon_height};
+    }
+
+    isAttached() {
+        for (let instance of this.getOkitJson().instances) {
+            if (instance.block_storage_volume_ids.includes(this.id)) {
+                console.info(this.display_name + ' attached to instance '+ instance.display_name);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/block_storage_volume.html", function () {
+            // Load Referenced Ids
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, []);
+        });
+    }
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
+    getTargets() {
+        // Return list of Artifact names
+        return [compartment_artifact];
+    }
+}
+
 

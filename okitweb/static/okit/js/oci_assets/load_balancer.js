@@ -443,10 +443,31 @@ class LoadBalancer extends OkitSvgArtifact {
             me.loadProperties();
             d3.event.stopPropagation();
         });
+        // Get Inner Rect to attach Connectors
+        //let rect = d3.select('#' + this.id);
+        let rect = svg.select("rect[id='" + this.id + "']");
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add Connector Data
+        svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true);
+        // Draw Connectors
+        this.drawConnectors();
         console.groupEnd();
     }
 
-    drawLoadBalancerConnectorsSVG() {
+    drawConnectors() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let parent_svg = d3.select('#' + this.parent_id + "-svg");
         let parent_rect = d3.select('#' + this.parent_id);
         // Only Draw if parent exists
@@ -482,6 +503,7 @@ class LoadBalancer extends OkitSvgArtifact {
                 }
             }
         }
+        console.groupEnd();
     }
 
     // Return Artifact Specific Definition.
@@ -535,7 +557,7 @@ class LoadBalancer extends OkitSvgArtifact {
             // Load Properties
             loadProperties(me);
             // Add Event Listeners
-            addPropertiesEventListeners(me, [okitJson.draw]);
+            addPropertiesEventListeners(me, []);
         });
     }
 

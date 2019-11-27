@@ -759,7 +759,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             // Load Properties
             loadProperties(me);
             // Add Event Listeners
-            addPropertiesEventListeners(me, [okitJson.draw]);
+            addPropertiesEventListeners(me, []);
         });
     }
 
@@ -827,7 +827,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {
-        return [internet_gateway_artifact, nat_gateway_artifact, security_list_artifact, dynamic_routing_gateway_artifact];
+        return [internet_gateway_artifact, nat_gateway_artifact, service_gateway_artifact, dynamic_routing_gateway_artifact];
     }
 
     getTopArtifacts() {

@@ -383,7 +383,7 @@ class NATGateway extends OkitSvgArtifact {
             // Load Properties
             loadProperties(me);
             // Add Event Listeners
-            addPropertiesEventListeners(me, [okitJson.draw]);
+            addPropertiesEventListeners(me, []);
         });
     }
 

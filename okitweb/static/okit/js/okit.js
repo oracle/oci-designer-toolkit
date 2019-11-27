@@ -200,6 +200,14 @@ class OkitSvgArtifact {
         return;
     }
 
+    getFirstLeftChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y * 2)
+        };
+        return offset;
+    }
+
     getLeftChildOffset() {
         alert('Get First Left Child function "getLeftEdgeChildOffset()" has not been implemented.')
         return;
@@ -400,7 +408,16 @@ class OkitContainerArtifact extends OkitSvgArtifact {
 
     getLeftEdgeChildOffset() {}
 
-    getLeftChildOffset() {}
+    getLeftChildOffset() {
+        let offset = this.getFirstLeftChildOffset();
+        for (let child of this.getLeftArtifacts()) {
+            $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
+                function() {
+                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
+                });
+        }
+        return offset;
+    }
 
     getRightChildOffset() {}
 
@@ -509,6 +526,8 @@ class OkitJson {
         displayOkitJson();
         // Clear existing
         clearDiagram();
+
+        console.log(JSON.stringify(this, null, 2));
 
         // Draw Compartments
         for (let compartment of this.compartments) {
@@ -667,6 +686,13 @@ class OkitJson {
         return this.security_lists[this.security_lists.length - 1];
     }
 
+    // Instance
+    newInstance(data, parent=null) {
+        console.info('New Instance');
+        this.instances.push(new Instance(data, this, parent));
+        return this.instances[this.instances.length - 1];
+    }
+
     // Load Balancer
     newLoadBalancer(data, parent=null) {
         console.info('New Load Balancer');
@@ -674,11 +700,32 @@ class OkitJson {
         return this.load_balancers[this.load_balancers.length - 1];
     }
 
-    // Instance
-    newInstance(data, parent=null) {
-        console.info('New Instance');
-        this.instances.push(new Instance(data, this, parent));
-        return this.instances[this.instances.length - 1];
+    // Block Storage Volume
+    newBlockStorageVolume(data, parent=null) {
+        console.info('New Block Storage Volume');
+        this.block_storage_volumes.push(new BlockStorageVolume(data, this, parent));
+        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
+    }
+
+    // Object Storage Bucket
+    newObjectStorageBucket(data, parent=null) {
+        console.info('New Object Storage Bucket');
+        this.object_storage_buckets.push(new ObjectStorageBucket(data, this, parent));
+        return this.object_storage_buckets[this.object_storage_buckets.length - 1];
+    }
+
+    // File Storage System
+    newFileStorageSystem(data, parent=null) {
+        console.info('New File Storage System');
+        this.file_storage_systems.push(new FileStorageSystem(data, this, parent));
+        return this.file_storage_systems[this.file_storage_systems.length - 1];
+    }
+
+    // Autonomous Database
+    newAutonomousDatabase(data, parent=null) {
+        console.info('New Autonomous Database');
+        this.autonomous_databases.push(new AutonomousDatabase(data, this, parent));
+        return this.autonomous_databases[this.autonomous_databases.length - 1];
     }
 }
 

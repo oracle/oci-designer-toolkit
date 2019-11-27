@@ -531,6 +531,8 @@ class Instance extends OkitSvgArtifact {
         this.authorized_keys = '';
         this.cloud_init_yaml = '';
         this.block_storage_volume_ids = [];
+        this.object_storage_bucket_ids = [];
+        this.autonomous_database_ids = [];
         this.subnet_ids = [];
         // Update with any passed data
         for (let key in data) {
@@ -609,7 +611,101 @@ class Instance extends OkitSvgArtifact {
             me.loadProperties();
             d3.event.stopPropagation();
         });
+        // Get Inner Rect to attach Connectors
+        let rect = svg.select("rect[id='" + this.id + "']");
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add Connector Data
+        svg.attr("data-compartment-id", this.compartment_id)
+            .attr("data-connector-start-y", boundingClientRect.y)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-connector-start-y", boundingClientRect.y)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-end-y", boundingClientRect.y)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true);
+        // Draw Attachments
+        //this.drawInstanceAttachments();
         console.groupEnd();
+    }
+
+    drawInstanceAttachments() {
+        console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + this.id + ' Attachments');
+        let attachment_count = 0;
+        for (let block_storage_id of this.block_storage_volume_ids) {
+            for (let block_storage_volume of this.getOkitJson().block_storage_volumes) {
+                if (block_storage_id == block_storage_volume['id']) {
+                    let artifact_clone = this.getOkitJson().newBlockStorage(block_storage_volume, this.getOkitJson(), this);
+                    artifact_clone['parent_id'] = this.id;
+                    this.drawAttachedBlockStorageVolume(artifact_clone, attachment_count);
+                }
+            }
+            attachment_count += 1;
+        }
+        for (let subnet_id of this.subnet_ids) {
+            for (let subnet of this.getOkitJson().subnets) {
+                if (subnet_id == subnet['id']) {
+                    let artifact_clone = this.getOkitJson().newVirtualNetworkInterface(subnet, this.getOkitJson(), this);
+                    artifact_clone['parent_id'] = this.id;
+                    this.drawAttachedSubnetVnic(artifact_clone, attachment_count);
+                }
+            }
+            attachment_count += 1;
+        }
+        console.groupEnd();
+    }
+
+    drawAttachedBlockStorageVolume(artifact, bs_count) {
+        console.info('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact.id);
+        let first_child = this.getParent().getChildOffset(artifact.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let artifact_definition = newBlockStorageVolumeDefinition(artifact, bs_count);
+        artifact_definition['svg']['x'] = Math.round(first_child.dx + (positional_adjustments.padding.x * bs_count) + (positional_adjustments.spacing.x * bs_count));
+        artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
+
+        let svg = drawArtifact(artifact_definition);
+
+        // Add click event to display properties
+        svg.on("click", function () {
+            loadBlockStorageVolumeProperties(artifact['id']);
+            d3.event.stopPropagation();
+        });
+    }
+
+    drawAttachedSubnetVnic(artifact, bs_count) {
+        console.info('Drawing ' + instance_artifact + ' Subnet Vnic : ' + artifact.id);
+        let first_child = this.getParent().getChildOffset(artifact.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let artifact_definition = newVirtualNetworkInterfaceDefinition(artifact, bs_count);
+        artifact_definition['svg']['x'] = Math.round(first_child.dx + (positional_adjustments.padding.x * bs_count) + (positional_adjustments.spacing.x * bs_count));
+        artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
+        artifact_definition['rect']['stroke']['colour'] = stroke_colours.svg_orange;
+
+        let id = artifact['id'];
+        // Update id so it does not conflict with actual subnet
+        artifact['id'] += '-vnic';
+
+        let svg = drawArtifact(artifact_definition);
+
+        // Add click event to display properties
+        svg.on("click", function () {
+            loadSubnetProperties(id);
+            d3.event.stopPropagation();
+        });
+        let fill = d3.select('#' + id).attr('fill');
+        svg.on("mouseover", function () {
+            d3.select('#' + id).attr('fill', svg_highlight_colour);
+            d3.event.stopPropagation();
+        });
+        svg.on("mouseout", function () {
+            d3.select('#' + id).attr('fill', fill);
+            d3.event.stopPropagation();
+        });
     }
 
     // Return Artifact Specific Definition.
@@ -671,7 +767,7 @@ class Instance extends OkitSvgArtifact {
             // Load Properties
             loadProperties(me);
             // Add Event Listeners
-            addPropertiesEventListeners(me, [okitJson.draw]);
+            addPropertiesEventListeners(me, []);
         });
     }
 

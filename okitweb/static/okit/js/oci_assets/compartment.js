@@ -463,7 +463,7 @@ class Compartment extends OkitContainerArtifact {
             // Load Properties
             loadProperties(me);
             // Add Event Listeners
-            addPropertiesEventListeners(me, [okitJson.draw]);
+            addPropertiesEventListeners(me, []);
         });
     }
 
@@ -481,5 +481,9 @@ class Compartment extends OkitContainerArtifact {
      */
     getContainerArtifacts() {
         return [virtual_cloud_network_artifact];
+    }
+
+    getLeftArtifacts() {
+        return [block_storage_volume_artifact, autonomous_database_artifact, object_storage_bucket_artifact];
     }
 }
