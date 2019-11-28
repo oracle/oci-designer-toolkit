@@ -399,6 +399,15 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     getContainerArtifacts() {
         return [subnet_artifact];
     }
+
+
+    /*
+    ** Container Specific Overrides
+     */
+    // return the name of the element used by the child to reference this artifact
+    getParentKey() {
+        return 'vcn_id';
+    }
 }
 
 $(document).ready(function() {

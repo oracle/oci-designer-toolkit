@@ -837,16 +837,6 @@ class Subnet extends OkitContainerArtifact {
         }
     }
 
-    getChildren(artifact) {
-        let children = [];
-        for (let child of this.getOkitJson()[artifact]) {
-            if (child.subnet_id === this.id) {
-                children.push(child);
-            }
-        }
-        return children;
-    }
-
 
     /*
      ** SVG Processing
@@ -880,11 +870,13 @@ class Subnet extends OkitContainerArtifact {
         console.info('Drawing ' + subnet_artifact + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         // Draw Route Table
-        let artifact_clone = new RouteTable(this.getOkitJson().getRouteTable(this.route_table_id), this.getOkitJson(), this);
-        artifact_clone['parent_id'] = this.id;
-        console.info('Drawing ' + this.getArtifactReference() + ' Route Table : ' + artifact_clone.display_name);
-        artifact_clone.draw();
-        attachment_count += 1;
+        if (this.route_table_id !== '') {
+            let artifact_clone = new RouteTable(this.getOkitJson().getRouteTable(this.route_table_id), this.getOkitJson(), this);
+            artifact_clone['parent_id'] = this.id;
+            console.info('Drawing ' + this.getArtifactReference() + ' Route Table : ' + artifact_clone.display_name);
+            artifact_clone.draw();
+            attachment_count += 1;
+        }
         // Security Lists
         for (let security_list_id of this.security_list_ids) {
             let artifact_clone = new SecurityList(this.getOkitJson().getSecurityList(security_list_id), this.getOkitJson(), this);
@@ -1124,6 +1116,15 @@ class Subnet extends OkitContainerArtifact {
 
     getLeftArtifacts() {
         return [file_storage_system_artifact];
+    }
+
+
+    /*
+    ** Container Specific Overrides
+     */
+    // return the name of the element used by the child to reference this artifact
+    getParentKey() {
+        return 'subnet_id';
     }
 }
 

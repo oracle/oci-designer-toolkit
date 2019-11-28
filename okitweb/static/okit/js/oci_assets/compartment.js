@@ -251,6 +251,15 @@ class Compartment extends OkitContainerArtifact {
     getLeftArtifacts() {
         return [block_storage_volume_artifact, autonomous_database_artifact, object_storage_bucket_artifact];
     }
+
+
+    /*
+    ** Container Specific Overrides
+     */
+    // return the name of the element used by the child to reference this artifact
+    getParentKey() {
+        return 'compartment_id';
+    }
 }
 
 $(document).ready(function() {

@@ -37,6 +37,10 @@ class OkitArtifact {
         return;
     }
 
+    artifactToElement(name) {
+        return name.toLowerCase().split(' ').join('_') + 's';
+    }
+
 
     /*
     ** Delete Processing
@@ -52,6 +56,17 @@ class OkitArtifact {
 
     deleteChildren() {
         console.info('Default empty deleteChildren()');
+    }
+
+    getChildren(artifact) {
+        let children = [];
+        let key = this.getParentKey();
+        for (let child of this.getOkitJson()[this.artifactToElement(artifact)]) {
+            if (child[key] === this.id) {
+                children.push(child);
+            }
+        }
+        return children;
     }
 
 
@@ -122,6 +137,10 @@ class OkitArtifact {
     /*
     ** Child Offset Functions
      */
+    getParentKey() {
+        alert('Function "getParentKey()" has not been implemented for ' + this.getArtifactReference() + '.');
+    }
+
     getChildOffset(child_type) {
         console.groupCollapsed('Getting Offset for ' + child_type);
         let offset = {dx: 0, dy: 0};
@@ -160,11 +179,39 @@ class OkitArtifact {
     }
 
     getFirstChildOffset() {
-        alert('Get First Child function "getFirstChildOffset()" has not been implemented.')
-        return;
+        alert('Get First Child function "getFirstChildOffset()" has not been implemented.');
     }
 
     // Top Edge
+    hasTopEdgeChildren() {
+        let children = false;
+        let key = this.getParentKey();
+        for (let group of this.getTopEdgeArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getTopEdgeChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.getParentKey();
+        for (let group of this.getTopEdgeArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
     getFirstTopEdgeChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
@@ -174,49 +221,171 @@ class OkitArtifact {
     }
 
     getTopEdgeChildOffset() {
-        alert('Get First Top Edge Child function "getTopEdgeChildOffset()" has not been implemented.')
-        return;
+        alert('Get First Top Edge Child function "getTopEdgeChildOffset()" has not been implemented.');
     }
 
     // Top
+    hasTopChildren() {
+        let children = false;
+        let key = this.getParentKey();
+        for (let group of this.getTopArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getTopChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.getParentKey();
+        for (let group of this.getTopArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
     getFirstTopChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x * 3),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
+        let offset = this.getFirstLeftChildOffset();
+        if (this.hasLeftChildren()) {
+            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+        }
         return offset;
     }
 
     getTopChildOffset() {
-        alert('Get Top Child function "getTopEdgeChildOffset()" has not been implemented.')
-        return;
+        alert('Get Top Child function "getTopEdgeChildOffset()" has not been implemented.');
     }
 
     // Container
+    hasContainerChildren() {
+        let children = false;
+        let key = this.getParentKey();
+        for (let group of this.getContainerArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getContainerChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.getParentKey();
+        for (let group of this.getContainerArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
     getFirstContainerChildOffset() {
         let offset = this.getFirstTopChildOffset();
-        offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
+        if (this.hasTopChildren()) {
+            let dimensions = this.getTopChildrenMaxDimensions();
+            offset.dy += Math.round(dimensions.height + positional_adjustments.spacing.y);
+        }
         return offset;
     }
 
     getContainerChildOffset() {
-        alert('Get Container Child function "getContainerChildOffset()" has not been implemented.')
-        return;
+        alert('Get Container Child function "getContainerChildOffset()" has not been implemented.');
     }
 
     // Bottom
+    hasBottomChildren() {
+        let children = false;
+        let key = this.getParentKey();
+        for (let group of this.getBottomArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getBottomChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.getParentKey();
+        for (let group of this.getBottomArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
     getFirstBottomChildOffset() {
-        let offset = this.getFirstContainerChildOffset();
-        offset.dy += Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y);
+        let offset = this.getFirstTopChildOffset();
+        if (this.hasTopChildren()) {
+            let dimensions = this.getTopChildrenMaxDimensions();
+            offset.dy += Math.round(dimensions.height + positional_adjustments.spacing.y * 4);
+        }
+        if (this.hasContainerChildren()) {
+            let dimensions = this.getContainerChildrenMaxDimensions();
+            offset.dy += Math.round(dimensions.height + positional_adjustments.spacing.y);
+        }
         return offset;
     }
 
     getBottomChildOffset() {
-        alert('Get Bottom Child function "getBottomEdgeChildOffset()" has not been implemented.')
-        return;
+        alert('Get Bottom Child function "getBottomEdgeChildOffset()" has not been implemented.');
     }
 
     // Bottom Edge
+    hasBottomEdgeChildren() {
+        let children = false;
+        let key = this.getParentKey();
+        for (let group of this.getBottomEdgeArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getBottomEdgeChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.getParentKey();
+        for (let group of this.getBottomEdgeArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
     getFirstBottomEdgeChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
@@ -226,40 +395,64 @@ class OkitArtifact {
     }
 
     getBottomEdgeChildOffset() {
-        alert('Get Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.')
-        return;
+        alert('Get Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.');
     }
 
     // Left Edge
     getLeftEdgeChildOffset() {
-        alert('Get Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.')
-        return;
+        alert('Get Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.');
     }
 
     // Left
+    hasLeftChildren() {
+        let children = false;
+        let key = this.getParentKey();
+        for (let group of this.getLeftArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getLeftChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.getParentKey();
+        for (let group of this.getLeftArtifacts()) {
+            for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
     getFirstLeftChildOffset() {
         let offset = {
-            dx: Math.round(positional_adjustments.spacing.x * 3),
-            dy: Math.round(positional_adjustments.padding.y * 2)
+            dx: Math.round(positional_adjustments.spacing.x * 4),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
         };
         return offset;
     }
 
     getLeftChildOffset() {
-        alert('Get Left Child function "getLeftEdgeChildOffset()" has not been implemented.')
-        return;
+        alert('Get Left Child function "getLeftEdgeChildOffset()" has not been implemented.');
     }
 
     // Right
     getRightChildOffset() {
-        alert('Get Right Child function "getRightEdgeChildOffset()" has not been implemented.')
-        return;
+        alert('Get Right Child function "getRightEdgeChildOffset()" has not been implemented.');
     }
 
     // Right Edge
     getRightEdgeChildOffset() {
-        alert('Get Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.')
-        return;
+        alert('Get Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.');
     }
 
 
@@ -320,16 +513,14 @@ class OkitContainerArtifact extends OkitArtifact {
         super(okitjson);
     }
 
-    artifactToElement(name) {
-        return name.toLowerCase().split(' ').join('_') + 's';
-    }
-
     getDimensions(id_key='') {
         console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = {width: 0, height: 0};
         let offset = {dx: 0, dy: 0};
         // Process Top Edge Artifacts
         offset = this.getFirstTopEdgeChildOffset();
+        let top_edge_dimensions = this.getTopEdgeChildrenMaxDimensions();
+        /*
         let top_edge_dimensions = {width: offset.dx, height: offset.dy};
         for (let group of this.getTopEdgeArtifacts()) {
             console.info('Processing Top Edge Artifacts ' + group + ' - ' + this.artifactToElement(group));
@@ -340,10 +531,13 @@ class OkitContainerArtifact extends OkitArtifact {
                 }
             }
         }
+        */
         dimensions.width  = Math.max(dimensions.width, top_edge_dimensions.width);
         dimensions.height = Math.max(dimensions.height, top_edge_dimensions.height);
         // Process Bottom Edge Artifacts
         offset = this.getFirstBottomEdgeChildOffset();
+        let bottom_edge_dimensions = this.getBottomEdgeChildrenMaxDimensions();
+        /*
         let bottom_edge_dimensions = {width: offset.dx, height: offset.dy};
         for (let group of this.getBottomEdgeArtifacts()) {
             for (let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
@@ -353,10 +547,13 @@ class OkitContainerArtifact extends OkitArtifact {
                 }
             }
         }
+        */
         dimensions.width  = Math.max(dimensions.width, bottom_edge_dimensions.width);
         dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
         // Process Top Artifacts
         offset = this.getFirstTopChildOffset();
+        let top_dimensions = this.getTopChildrenMaxDimensions();
+        /*
         let top_dimensions = {width: offset.dx, height: offset.dy};
         for (let group of this.getTopArtifacts()) {
             for (let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
@@ -367,10 +564,13 @@ class OkitContainerArtifact extends OkitArtifact {
                 }
             }
         }
+        */
         dimensions.width   = Math.max(dimensions.width, top_dimensions.width);
         dimensions.height += top_dimensions.height;
         // Process Container Artifacts
         offset = this.getFirstContainerChildOffset();
+        let container_dimensions = this.getContainerChildrenMaxDimensions();
+        /*
         let container_dimensions = {width: offset.dx, height: offset.dy};
         for (let group of this.getContainerArtifacts()) {
             for (let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
@@ -381,10 +581,13 @@ class OkitContainerArtifact extends OkitArtifact {
                 }
             }
         }
+        */
         dimensions.width   = Math.max(dimensions.width, container_dimensions.width);
         dimensions.height += container_dimensions.height;
         // Process Bottom Artifacts
         offset = this.getFirstBottomChildOffset();
+        let bottom_dimensions = this.getBottomChildrenMaxDimensions();
+        /*
         let bottom_dimensions = {width: offset.dx, height: offset.dy};
         for (let group of this.getBottomArtifacts()) {
             for (let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
@@ -395,18 +598,34 @@ class OkitContainerArtifact extends OkitArtifact {
                 }
             }
         }
-        dimensions.width   = Math.max(dimensions.width, top_dimensions.width);
-        dimensions.height += top_dimensions.height;
+        */
+        dimensions.width   = Math.max(dimensions.width, bottom_dimensions.width);
+        dimensions.height += bottom_dimensions.height;
         // Process Left Edge Artifacts
         // Process Right Edge Artifacts
         // Process Left Artifacts
+        let left_dimensions = this.getLeftChildrenMaxDimensions();
+        dimensions.width += left_dimensions.width;
+        dimensions.height = Math.max(dimensions.height, left_dimensions.height);
         // Process Right Artifacts
+        // Add Padding
+        let padding = this.getPadding();
+        dimensions.width += padding.dx * 2;
+        dimensions.height += padding.dy * 2;
         // Check size against minimum
         dimensions['width']  = Math.max(dimensions['width'],  this.getMinimumDimensions().width);
         dimensions['height'] = Math.max(dimensions['height'], this.getMinimumDimensions().height);
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
         console.groupEnd();
         return dimensions;
+    }
+
+    getPadding() {
+        let padding = {
+            dx: Math.round(positional_adjustments.spacing.x * 4),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return padding;
     }
 
 
@@ -431,7 +650,9 @@ class OkitContainerArtifact extends OkitArtifact {
         for (let child of this.getTopArtifacts()) {
             $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
                 function() {
-                    offset.dx += Math.round(icon_width + positional_adjustments.spacing.x);
+                    console.info('Width  : ' + $(this).attr('width'));
+                    console.info('Height : ' + $(this).attr('height'));
+                    offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
                 });
         }
         return offset;
@@ -458,7 +679,9 @@ class OkitContainerArtifact extends OkitArtifact {
         for (let child of this.getBottomArtifacts()) {
             $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
                 function() {
-                    offset.dx += Math.round(icon_width + positional_adjustments.spacing.x);
+                    console.info('Width  : ' + $(this).attr('width'));
+                    console.info('Height : ' + $(this).attr('height'));
+                    offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
                 });
         }
         return offset;
