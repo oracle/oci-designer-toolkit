@@ -183,7 +183,8 @@ function queryFastConnectAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['fast_connects'] = response_json;
+            //okitJson['fast_connects'] = response_json;
+            okitJson.load({fast_connects: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryFastConnectAjax : ' + response_json[i]['display_name']);

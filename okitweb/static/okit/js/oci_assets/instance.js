@@ -453,7 +453,8 @@ function queryInstanceAjax(compartment_id, subnet_id) {
         data: JSON.stringify(request_json),
         success: function (resp) {
             let response_json = JSON.parse(resp);
-            okitJson['instances'] = response_json;
+            //okitJson['instances'] = response_json;
+            okitJson.load({instances: response_json});
             let len = response_json.length;
             for (let i = 0; i < len; i++) {
                 console.info('queryInstanceAjax : ' + response_json[i]['display_name']);

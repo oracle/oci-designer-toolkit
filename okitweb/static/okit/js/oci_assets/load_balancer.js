@@ -302,7 +302,8 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
         data: JSON.stringify(request_json),
         success: function (resp) {
             let response_json = JSON.parse(resp);
-            okitJson['load_balancers'] = response_json;
+            //okitJson['load_balancers'] = response_json;
+            okitJson.load({load_balancers: response_json});
             let len = response_json.length;
             for (let i = 0; i < len; i++) {
                 console.info('queryLoadBalancerAjax : ' + response_json[i]['display_name']);

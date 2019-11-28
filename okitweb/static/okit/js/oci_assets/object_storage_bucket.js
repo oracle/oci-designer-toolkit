@@ -201,7 +201,8 @@ function queryObjectStorageBucketAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['object_storage_buckets'] = response_json;
+            //okitJson['object_storage_buckets'] = response_json;
+            okitJson.load({object_storage_buckets: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryObjectStorageBucketAjax : ' + response_json[i]['display_name']);

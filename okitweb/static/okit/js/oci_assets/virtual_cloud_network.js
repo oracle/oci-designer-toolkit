@@ -418,7 +418,8 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['virtual_cloud_networks'] = response_json;
+            //okitJson['virtual_cloud_networks'] = response_json;
+            okitJson.load({virtual_cloud_networks: response_json});
             let len =  response_json.length;
             if (len > 0) {
                 for (let i = 0; i < len; i++) {

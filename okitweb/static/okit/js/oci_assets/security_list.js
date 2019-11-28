@@ -362,7 +362,8 @@ function querySecurityListAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['security_lists'] = response_json;
+            //okitJson['security_lists'] = response_json;
+            okitJson.load({security_lists: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('querySecurityListAjax : ' + response_json[i]['display_name']);

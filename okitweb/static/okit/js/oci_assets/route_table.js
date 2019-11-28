@@ -320,7 +320,8 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['route_tables'] = response_json;
+            //okitJson['route_tables'] = response_json;
+            okitJson.load({route_tables: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryRouteTableAjax : ' + response_json[i]['display_name']);

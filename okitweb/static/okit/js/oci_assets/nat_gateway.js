@@ -192,7 +192,8 @@ function queryNATGatewayAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['nat_gateways'] = response_json;
+            //okitJson['nat_gateways'] = response_json;
+            okitJson.load({nat_gateways: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryNATGatewayAjax : ' + response_json[i]['display_name']);

@@ -212,7 +212,8 @@ function queryFileStorageSystemAjax(compartment_id, subnet_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['file_storage_systems'] = response_json;
+            //okitJson['file_storage_systems'] = response_json;
+            okitJson.load({file_storage_systems: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryFileStorageSystemAjax : ' + response_json[i]['display_name']);

@@ -188,7 +188,8 @@ function queryServiceGatewayAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['service_gateways'] = response_json;
+            //okitJson['service_gateways'] = response_json;
+            okitJson.load({service_gateways: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryServiceGatewayAjax : ' + response_json[i]['display_name']);

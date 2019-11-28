@@ -211,7 +211,8 @@ function queryBlockStorageVolumeAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['block_storage_volumes'] = response_json;
+            //okitJson['block_storage_volumes'] = response_json;
+            okitJson.load({block_storage_volumes: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
