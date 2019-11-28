@@ -632,6 +632,7 @@ class Instance extends OkitArtifact {
         // Draw Attachments
         this.drawAttachments();
         console.groupEnd();
+        return svg;
     }
 
     drawAttachments() {
@@ -648,7 +649,17 @@ class Instance extends OkitArtifact {
             let artifact_clone = new VirtualNetworkInterface(this.getOkitJson().getSubnet(subnet_id), this.getOkitJson(), this);
             artifact_clone['parent_id'] = this.id;
             console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + artifact_clone.display_name);
-            artifact_clone.draw();
+            let svg = artifact_clone.draw();
+            // Add Highlighting
+            let fill = d3.select('#' + artifact_clone.id).attr('fill');
+            svg.on("mouseover", function () {
+                d3.select('#' + artifact_clone.id).attr('fill', svg_highlight_colour);
+                d3.event.stopPropagation();
+            });
+            svg.on("mouseout", function () {
+                d3.select('#' + artifact_clone.id).attr('fill', fill);
+                d3.event.stopPropagation();
+            });
             /*
             for (let subnet of this.getOkitJson().subnets) {
                 if (subnet_id == subnet['id']) {
@@ -662,23 +673,6 @@ class Instance extends OkitArtifact {
             attachment_count += 1;
         }
         console.groupEnd();
-    }
-
-    drawAttachedBlockStorageVolume(artifact, bs_count) {
-        console.info('Drawing ' + instance_artifact + ' Block Storage Volume : ' + artifact.id);
-        let first_child = this.getParent().getChildOffset(artifact.getArtifactReference());
-        let dimensions = this.getDimensions();
-        let artifact_definition = newBlockStorageVolumeDefinition(artifact, bs_count);
-        artifact_definition['svg']['x'] = Math.round(first_child.dx + (positional_adjustments.padding.x * bs_count) + (positional_adjustments.spacing.x * bs_count));
-        artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
-
-        let svg = drawArtifact(artifact_definition);
-
-        // Add click event to display properties
-        svg.on("click", function () {
-            loadBlockStorageVolumeProperties(artifact['id']);
-            d3.event.stopPropagation();
-        });
     }
 
     drawAttachedSubnetVnic(artifact, bs_count) {
