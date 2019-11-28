@@ -9,10 +9,13 @@
         <div class="property-editor-title">
             <label>Dynamic Routing Gateway</label>
         </div>
-        <table id="internet_gateway" class="property-editor-table">
+        <table id="dynamic_routing_gateway" class="property-editor-table">
             <tr><th>Property</th><th>Value</th></tr>
             <tr><td>Virtual Cloud Network</td><td><label id="virtual_cloud_network" class="property-value"></label></td></tr>
             <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
+            <tr><td>Fast Connect</td><td><select multiple="multiple" id="fast_connect_ids" class="property-value"></select></td></tr>
+            <tr><td>IPSec Connection</td><td><select multiple="multiple" id="ipsec_connection_ids" class="property-value"></select></td></tr>
+            <tr><td>Remote Peering Connection</td><td><select multiple="multiple" id="remote_peering_connection_ids" class="property-value"></select></td></tr>
         </table>
     </div>
 </body>

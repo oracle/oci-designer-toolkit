@@ -3,14 +3,14 @@ console.info('Loaded Dynamic Routing Gateway Javascript');
 /*
 ** Set Valid drop Targets
  */
-asset_drop_targets[dynamic_routing_gateway_artifact] = [compartment_artifact];
+asset_drop_targets[dynamic_routing_gateway_artifact] = [virtual_cloud_network_artifact];
 asset_connect_targets[dynamic_routing_gateway_artifact] = [];
 asset_add_functions[dynamic_routing_gateway_artifact] = "addDynamicRoutingGateway";
 asset_delete_functions[dynamic_routing_gateway_artifact] = "deleteDynamicRoutingGateway";
 asset_clear_functions.push("clearDynamicRoutingGatewayVariables");
 
 const dynamic_routing_gateway_stroke_colour = "purple";
-const dynamic_routing_gateway_query_cb = "dynamic_routing-gateway-query-cb";
+const dynamic_routing_gateway_query_cb = "dynamic-routing-gateway-query-cb";
 let dynamic_routing_gateway_ids = [];
 
 /*
@@ -24,7 +24,7 @@ function clearDynamicRoutingGatewayVariables() {
 /*
 ** Add Asset to JSON Model
  */
-function addDynamicRoutingGateway(compartment_id) {
+function addDynamicRoutingGateway(vcn_id, compartment_id) {
     let id = 'okit-' + dynamic_routing_gateway_prefix + '-' + uuidv4();
     console.groupCollapsed('Adding Dynamic Routing Gateway : ' + id);
 
@@ -41,12 +41,17 @@ function addDynamicRoutingGateway(compartment_id) {
     // Increment Count
     let dynamic_routing_gateway_count = okitJson['dynamic_routing_gateways'].length + 1;
     let dynamic_routing_gateway = {};
+    dynamic_routing_gateway['vcn_id'] = vcn_id;
+    dynamic_routing_gateway['virtual_cloud_network'] = '';
     dynamic_routing_gateway['compartment_id'] = compartment_id;
     dynamic_routing_gateway['id'] = id;
     dynamic_routing_gateway['display_name'] = generateDefaultName(dynamic_routing_gateway_prefix, dynamic_routing_gateway_count);
+    dynamic_routing_gateway['fast_connect_ids'] = [];
+    dynamic_routing_gateway['ipsec_connection_ids'] = [];
+    dynamic_routing_gateway['remote_peering_connection_ids'] = [];
     okitJson['dynamic_routing_gateways'].push(dynamic_routing_gateway);
     okitIdsJsonObj[id] = dynamic_routing_gateway['display_name'];
-    //console.info(JSON.stringify(okitJson, null, 2));
+    console.info(JSON.stringify(okitJson, null, 2));
     //drawDynamicRoutingGatewaySVG(dynamic_routing_gateway);
     drawSVGforJson();
     loadDynamicRoutingGatewayProperties(id);
