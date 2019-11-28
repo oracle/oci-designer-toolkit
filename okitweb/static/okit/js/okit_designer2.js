@@ -110,17 +110,6 @@ function newDiagram() {
     console.groupEnd();
 }
 
-// TODO: Delete
-function newDiagramDeprecated() {
-    console.groupCollapsed('Creating New Diagram');
-    initialiseJson();
-    clearArtifactData();
-    newCanvas();
-    addCompartment();
-    //document.getElementById('file-add-menu-item').click();
-    console.groupEnd();
-}
-
 function clearTabs() {
     $('#canvas-wrapper').empty();
     d3.select('#canvas-wrapper').append('div')
@@ -295,6 +284,16 @@ function saveSvg(svgEl, name) {
 ** Query OCI Ajax Calls to allow async svg build
  */
 function showQueryResults() {
+    console.info('Generating Query Results');
+    okitJson = new OkitJson();
+    newCanvas();
+    setBusyIcon();
+    $('#query-progress').removeClass('hidden');
+    queryCompartmentAjax();
+}
+
+// TODO: Delete
+function showQueryResultsDeprecated() {
     console.info('Generating Query Results');
     clearArtifactData();
     initialiseJson();

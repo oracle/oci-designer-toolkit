@@ -284,9 +284,9 @@ function drawArtifact(definition) {
 function drawSVGforJson() {
     console.groupCollapsed('Drawing SVG Canvas');
     // Display Source Code
-    displayOkitJson();
+    // displayOkitJson();
     // Clear existing
-    clearDiagram();
+    // clearDiagram();
     // Draw SVG
     okitJson.draw();
     console.groupEnd();

@@ -485,6 +485,9 @@ class OkitContainerArtifact extends OkitArtifact {
 }
 
 class OkitJson {
+    /*
+    ** Create
+     */
     constructor(okit_json_string = '') {
         this.title = "OKIT OCI Visualiser Json";
         this.description = "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......";
@@ -510,6 +513,9 @@ class OkitJson {
         }
     }
 
+    /*
+    ** Load Simple Json Structure and build Object Based JSON
+     */
     load(okit_json) {
         console.groupCollapsed('Load OKT Json');
         // Compartments
@@ -633,6 +639,9 @@ class OkitJson {
         console.groupEnd();
     }
 
+    /*
+    ** Draw the JSON Data within this Object as SVG.
+     */
     draw() {
         console.groupCollapsed('Drawing SVG Canvas');
         // Initialise SVG Coordinates
