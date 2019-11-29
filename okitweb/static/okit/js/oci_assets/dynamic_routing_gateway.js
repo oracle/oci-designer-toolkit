@@ -156,6 +156,13 @@ function loadDynamicRoutingGatewayProperties(id) {
                 if (dynamic_routing_gateway['id'] == id) {
                     //console.info('Found DynamicRouting Gateway: ' + id);
                     dynamic_routing_gateway['virtual_cloud_network'] = okitIdsJsonObj[dynamic_routing_gateway['vcn_id']];
+                    // Build Fast Connect Select
+                    let fast_connect_select = $('#fast_connect_ids');
+                    if (okitJson.hasOwnProperty('fast_connects')) {
+                        for (let fast_connect of okitJson['fast_connects']) {
+                            fast_connect_select.append($('<option>').attr('value', fast_connect['id']).text(fast_connect['display_name']));
+                        }
+                    }
                     // Load Properties
                     loadProperties(dynamic_routing_gateway);
                     // Add Event Listeners
