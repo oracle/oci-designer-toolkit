@@ -1,5 +1,5 @@
 
-# ------ Create NAT Gateway
+# ------ Create DRG
 resource "oci_core_drg" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_ocid }}
@@ -13,6 +13,14 @@ resource "oci_core_drg" "{{ resource_name }}" {
 {% endif %}
 }
 
+
 locals {
     {{ resource_name }}_id = oci_core_drg.{{ resource_name }}.id
+}
+
+# ------ Create DRG Attachment
+resource "oci_core_drg_attachment" "{{ resource_name }}DRGAttachment" {
+    drg_id        = local.{{ resource_name }}_id
+    vcn_id        = {{ vcn_id }}
+    display_name  = {{ resource_name }}drgattm
 }
