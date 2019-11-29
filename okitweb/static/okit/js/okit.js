@@ -1098,6 +1098,19 @@ class OkitJson {
         return {};
     }
 
+    getVirtualCloudNetwork(id='') {
+        for (let artifact of this.virtual_cloud_networks) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
+    getVcn(id='') {
+        return this.getVirtualCloudNetwork(id);
+    }
+
     /*
     ** Delete Artifact Processing
      */
