@@ -388,7 +388,7 @@ class OkitArtifact {
 
     getFirstBottomEdgeChildOffset() {
         let offset = {
-            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dx: Math.round(positional_adjustments.spacing.x),
             dy: 0
         };
         return offset;

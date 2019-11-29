@@ -769,9 +769,7 @@ class Subnet extends OkitContainerArtifact {
         this.cidr_block = this.generateCIDR(this.vcn_id);
         this.dns_label = this.display_name.toLowerCase().slice(-5);
         this.prohibit_public_ip_on_vnic = false;
-        this.route_table = '';
         this.route_table_id = '';
-        this.security_lists = [];
         this.security_list_ids = [];
         // Update with any passed data
         for (let key in data) {
