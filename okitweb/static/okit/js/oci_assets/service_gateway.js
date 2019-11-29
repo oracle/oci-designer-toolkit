@@ -111,7 +111,7 @@ class ServiceGateway extends OkitArtifact {
 
     deleteChildren() {
         // Remove Service Gateway references
-        for (route_table of this.getOkitJson().route_tables) {
+        for (let route_table of this.getOkitJson().route_tables) {
             for (let i = 0; i < route_table.route_rules.length; i++) {
                 if (route_table.route_rules[i]['network_entity_id'] === this.id) {
                     route_table.route_rules.splice(i, 1);
@@ -189,44 +189,6 @@ class ServiceGateway extends OkitArtifact {
             addPropertiesEventListeners(me, []);
         });
     }
-
-
-    /*
-    ** Child Offset Functions
-     */
-    getFirstChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
-        return offset;
-    }
-
-    getContainerChildOffset() {
-        let offset = this.getFirstContainerChildOffset();
-        return offset;
-    }
-
-    getTopEdgeChildOffset() {
-        let offset = this.getFirstTopEdgeChildOffset();
-        return offset;
-    }
-
-    getBottomEdgeChildOffset() {}
-
-    getLeftEdgeChildOffset() {}
-
-    getRightEdgeChildOffset() {}
-
-    getTopChildOffset() {
-        let offset = this.getTopEdgeChildOffset();
-        return offset;
-    }
-    getBottomChildOffset() {}
-
-    getLeftChildOffset() {}
-
-    getRightChildOffset() {}
 
 
     /*

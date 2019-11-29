@@ -109,7 +109,7 @@ class RouteTable extends OkitArtifact {
 
     deleteChildren() {
         // Remove Subnet references
-        for (subnet of this.getOkitJson().subnets) {
+        for (let subnet of this.getOkitJson().subnets) {
             if (subnet.route_table_id === this.id) {
                 subnet.route_table_id = '';
             }
