@@ -515,6 +515,7 @@ class OkitContainerArtifact extends OkitArtifact {
 
     getDimensions(id_key='') {
         console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let padding = this.getPadding();
         let dimensions = {width: 0, height: 0};
         let offset = {dx: 0, dy: 0};
         // Process Top Edge Artifacts
@@ -532,7 +533,7 @@ class OkitContainerArtifact extends OkitArtifact {
             }
         }
         */
-        dimensions.width  = Math.max(dimensions.width, top_edge_dimensions.width);
+        dimensions.width  = Math.max(dimensions.width, top_edge_dimensions.width + offset.dx - padding.dx);
         dimensions.height = Math.max(dimensions.height, top_edge_dimensions.height);
         // Process Bottom Edge Artifacts
         offset = this.getFirstBottomEdgeChildOffset();
@@ -609,7 +610,6 @@ class OkitContainerArtifact extends OkitArtifact {
         dimensions.height = Math.max(dimensions.height, left_dimensions.height);
         // Process Right Artifacts
         // Add Padding
-        let padding = this.getPadding();
         dimensions.width += padding.dx * 2;
         dimensions.height += padding.dy * 2;
         // Check size against minimum

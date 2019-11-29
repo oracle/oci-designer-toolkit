@@ -169,44 +169,6 @@ class Compartment extends OkitContainerArtifact {
     getDimensions() {
         return super.getDimensions('compartment_id');
     }
-    // TODO: Delete
-    getDimensions1(id='') {
-        console.groupCollapsed('Getting Dimensions of ' + compartment_artifact + ' : ' + id);
-        const min_compartment_dimensions = this.getMinimumDimensions();
-        let dimensions = {width:container_artifact_x_padding * 2, height:container_artifact_y_padding * 2};
-        let max_sub_container_dimensions = {width:0, height: 0, count:0};
-        let max_virtual_cloud_network_dimensions = {width:0, height: 0, count:0};
-        // Virtual Cloud Networks
-        if (this.getOkitJson().hasOwnProperty('virtual_cloud_networks')) {
-            for (let virtual_cloud_network of this.getOkitJson().virtual_cloud_networks) {
-                if (virtual_cloud_network['compartment_id'] == id) {
-                    let virtual_cloud_network_dimensions = virtual_cloud_network.getDimensions();
-                    max_virtual_cloud_network_dimensions['width'] = Math.max(virtual_cloud_network_dimensions['width'], max_virtual_cloud_network_dimensions['width']);
-                    max_virtual_cloud_network_dimensions['height'] += virtual_cloud_network_dimensions['height'];
-                    max_virtual_cloud_network_dimensions['count'] += 1;
-                }
-            }
-        }
-        // Calculate Largest Width
-        // User 3 * positional_adjustments.spacing.y because positioning of vcn uses x-left of 2 * positional_adjustments.spacing.y and we want a space on the right.
-        dimensions['width'] = Math.max((max_virtual_cloud_network_dimensions['width'] + positional_adjustments.padding.x + (3 * positional_adjustments.spacing.x)),
-            max_sub_container_dimensions['width']);
-        // Calculate Height
-        dimensions['height'] += max_sub_container_dimensions['height'];
-        dimensions['height'] += max_sub_container_dimensions['count'] + positional_adjustments.spacing.y;
-        dimensions['height'] += max_virtual_cloud_network_dimensions['height'];
-        dimensions['height'] += max_virtual_cloud_network_dimensions['count'] + positional_adjustments.spacing.y;
-        // Check size against minimum
-        dimensions['width'] = Math.max(dimensions['width'], min_compartment_dimensions['width']);
-        dimensions['height'] = Math.max(dimensions['height'], min_compartment_dimensions['height']);
-
-        console.info('Sub Container Dimensions         : ' + JSON.stringify(max_sub_container_dimensions));
-        console.info('Virtual Cloud Network Dimensions : ' + JSON.stringify(max_virtual_cloud_network_dimensions));
-        console.info('Overall Dimensions               : ' + JSON.stringify(dimensions));
-
-        console.groupEnd();
-        return dimensions;
-    }
 
     getMinimumDimensions() {
         // Check if this is the top level container
