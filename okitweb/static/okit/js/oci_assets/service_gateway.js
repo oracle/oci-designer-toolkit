@@ -181,7 +181,7 @@ class ServiceGateway extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/template_artifact.html", function () {
+        $("#properties").load("propertysheets/service_gateway.html", function () {
             // Load Referenced Ids
             // Load Properties
             loadProperties(me);

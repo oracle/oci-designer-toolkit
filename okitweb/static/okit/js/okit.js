@@ -718,12 +718,15 @@ class OkitJson {
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
         this.dynamic_routing_gateways = [];
+        this.fast_connects = [];
         this.file_storage_systems = [];
         this.instances = [];
         this.internet_gateways = [];
         this.load_balancers = [];
+        this.local_peering_connections = [];
         this.nat_gateways = [];
         this.object_storage_buckets = [];
+        this.remote_peering_connections = [];
         this.route_tables = [];
         this.security_lists = [];
         this.service_gateways = [];
