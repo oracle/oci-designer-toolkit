@@ -36,7 +36,14 @@ function loadProperties(json_element) {
             $('#' + key).val(val);
         } else if ($('#' + key).is("label")) {
             console.info(key + ' is label.');
-            $('#' + key).html(val);
+            if (key.endsWith('_id')) {
+                // Get Artifact Associated With Id
+                let artifact_type = key.substr(0, (key.length - 3));
+                console.info('Label : Artifact Type ' + titleCase(artifact_type) + ' - ' + key);
+                $('#' + key).html(okitJson['get' + titleCase(artifact_type)](val).display_name);
+            } else {
+                $('#' + key).html(val);
+            }
         } else if ($('#' + key).is("textarea")) {
             console.info(key + ' is textarea.');
             $('#' + key).val(val);
