@@ -993,6 +993,20 @@ class OkitJson {
         return this['nat_gateways'][this['nat_gateways'].length - 1];
     }
 
+    // Service Gateway
+    newServiceGateway(data, parent=null) {
+        console.info('New Service Gateway');
+        this['service_gateways'].push(new ServiceGateway(data, this, parent));
+        return this['service_gateways'][this['service_gateways'].length - 1];
+    }
+
+    // Dynamic Routing Gateway
+    newDynamicRoutingGateway(data, parent=null) {
+        console.info('New Dynamic Routing Gateway');
+        this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
+        return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
+    }
+
     // Route Table
     newRouteTable(data, parent=null) {
         console.info('New Route Table');

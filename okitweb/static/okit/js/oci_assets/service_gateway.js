@@ -4,169 +4,9 @@ console.info('Loaded Service Gateway Javascript');
 ** Set Valid drop Targets
  */
 asset_drop_targets[service_gateway_artifact] = [virtual_cloud_network_artifact];
-asset_connect_targets[service_gateway_artifact] = [];
-asset_add_functions[service_gateway_artifact] = "addServiceGateway";
-asset_delete_functions[service_gateway_artifact] = "deleteServiceGateway";
-asset_clear_functions.push("clearServiceGatewayVariables");
 
 const service_gateway_stroke_colour = "purple";
 const service_gateway_query_cb = "service-gateway-query-cb";
-let service_gateway_ids = [];
-let service_gateway_count = 0;
-
-/*
-** Reset variables
- */
-
-function clearServiceGatewayVariables() {
-    service_gateway_ids = [];
-    service_gateway_count = 0;
-}
-
-/*
-** Add Asset to JSON Model
- */
-function addServiceGateway(vcn_id, compartment_id) {
-    let id = 'okit-' + service_gateway_prefix + '-' + uuidv4();
-    console.groupCollapsed('Adding ' + service_gateway_artifact + ' : ' + id);
-
-    // Add Virtual Cloud Network to JSON
-
-    if (!okitJson.hasOwnProperty('service_gateways')) {
-        okitJson['service_gateways'] = [];
-    }
-
-    // Add id & empty name to id JSON
-    okitIdsJsonObj[id] = '';
-    service_gateway_ids.push(id);
-
-    // Increment Count
-    service_gateway_count += 1;
-    let service_gateway = {};
-    service_gateway['vcn_id'] = vcn_id;
-    service_gateway['virtual_cloud_network'] = '';
-    service_gateway['compartment_id'] = compartment_id;
-    service_gateway['id'] = id;
-    service_gateway['display_name'] = generateDefaultName(service_gateway_prefix, service_gateway_count);
-    service_gateway['service_name'] = 'All Services';
-    okitJson['service_gateways'].push(service_gateway);
-    okitIdsJsonObj[id] = service_gateway['display_name'];
-    //console.info(JSON.stringify(okitJson, null, 2));
-    //drawServiceGatewaySVG(service_gateway);
-    drawSVGforJson();
-    loadServiceGatewayProperties(id);
-    console.groupEnd();
-}
-
-/*
-** Delete From JSON Model
- */
-
-function deleteServiceGateway(id) {
-    console.groupCollapsed('Delete ' + service_gateway_artifact + ' : ' + id);
-    // Remove SVG Element
-    d3.select("#" + id + "-svg").remove()
-    // Remove Data Entry
-    for (let i=0; i < okitJson['service_gateways'].length; i++) {
-        if (okitJson['service_gateways'][i]['id'] == id) {
-            okitJson['service_gateways'].splice(i, 1);
-        }
-    }
-    // Remove Subnet references
-    if ('route_tables' in okitJson) {
-        for (route_table of okitJson['route_tables']) {
-            for (let i = 0; i < route_table['route_rules'].length; i++) {
-                if (route_table['route_rules'][i]['network_entity_id'] == id) {
-                    route_table['route_rules'].splice(i, 1);
-                }
-            }
-        }
-    }
-    console.groupEnd();
-}
-
-/*
-** SVG Creation
- */
-function getServiceGatewayDimensions(id='') {
-    return {width:icon_width, height:icon_height};
-}
-
-function newServiceGatewayDefinition(artifact, position=0) {
-    let dimensions = getServiceGatewayDimensions();
-    let definition = newArtifactSVGDefinition(artifact, service_gateway_artifact);
-    let first_child = getVirtualCloudNetworkFirstChildGatewayOffset();
-    definition['svg']['x'] = Math.round(first_child.dx + (icon_width * position) + (positional_adjustments.spacing.x * position));
-    definition['svg']['y'] = first_child.dy;
-    definition['svg']['width'] = dimensions['width'];
-    definition['svg']['height'] = dimensions['height'];
-    definition['rect']['stroke']['colour'] = service_gateway_stroke_colour;
-    definition['rect']['stroke']['dash'] = 1;
-    return definition;
-}
-
-function drawServiceGatewaySVG(artifact) {
-    let parent_id = artifact['vcn_id'];
-    artifact['parent_id'] = parent_id;
-    let id = artifact['id'];
-    let compartment_id = artifact['compartment_id'];
-    console.groupCollapsed('Drawing ' + service_gateway_artifact + ' : ' + id + ' [' + parent_id + ']');
-
-    if (!virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        virtual_cloud_network_bui_sub_artifacts[parent_id] = {};
-    }
-
-    if (virtual_cloud_network_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        if (!virtual_cloud_network_bui_sub_artifacts[parent_id].hasOwnProperty('gateway_position')) {
-            virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'] = 0;
-        }
-        // Calculate Position
-        let position = virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'];
-        // Increment Icon Position
-        virtual_cloud_network_bui_sub_artifacts[parent_id]['gateway_position'] += 1;
-
-        let svg = drawArtifact(newServiceGatewayDefinition(artifact, position));
-
-        //loadServiceGatewayProperties(id);
-        // Add click event to display properties
-        // Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-        // Add dragevent versions
-        // Set common attributes on svg element and children
-        svg.on("click", function () {
-            loadServiceGatewayProperties(id);
-            d3.event.stopPropagation();
-        });
-        //    .on("contextmenu", handleContextMenu);
-    } else {
-        console.warn(parent_id + ' was not found in virtual cloud network sub artifacts : ' + JSON.stringify(virtual_cloud_network_bui_sub_artifacts));
-    }
-    console.groupEnd();
-}
-
-/*
-** Property Sheet Load function
- */
-function loadServiceGatewayProperties(id) {
-    $("#properties").load("propertysheets/service_gateway.html", function () {
-        if ('service_gateways' in okitJson) {
-            console.info('Loading Service Gateway: ' + id);
-            let json = okitJson['service_gateways'];
-            for (let i = 0; i < json.length; i++) {
-                let service_gateway = json[i];
-                //console.info(JSON.stringify(service_gateway, null, 2));
-                if (service_gateway['id'] == id) {
-                    //console.info('Found Service Gateway: ' + id);
-                    service_gateway['virtual_cloud_network'] = okitIdsJsonObj[service_gateway['vcn_id']];
-                    // Load Properties
-                    loadProperties(service_gateway);
-                    // Add Event Listeners
-                    addPropertiesEventListeners(service_gateway, []);
-                    break;
-                }
-            }
-        }
-    });
-}
 
 /*
 ** Query OCI
@@ -205,9 +45,200 @@ function queryServiceGatewayAjax(compartment_id, vcn_id) {
     });
 }
 
-$(document).ready(function() {
-    clearServiceGatewayVariables();
+/*
+** Define ServiceGateway Class
+ */
+class ServiceGateway extends OkitArtifact {
+    /*
+    ** Create
+     */
+    constructor (data={}, okitjson={}, parent=null) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + service_gateway_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(service_gateway_prefix, okitjson.service_gateways.length + 1);
+        this.compartment_id = data.compartment_id;
+        this.vcn_id = data.parent_id;
+        this.service_name = 'All Services';
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+        // Add Get Parent function
+        this.parent_id = this.vcn_id;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.virtual_cloud_networks) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function () {
+                        return parent
+                    };
+                    break;
+                }
+            }
+        }
+    }
 
+
+    /*
+    ** Clone Functionality
+     */
+    clone() {
+        return new ServiceGateway(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Get the Artifact name this Artifact will be know by.
+     */
+    getArtifactReference() {
+        return service_gateway_artifact;
+    }
+
+
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {
+        // Remove Service Gateway references
+        for (route_table of this.getOkitJson().route_tables) {
+            for (let i = 0; i < route_table.route_rules.length; i++) {
+                if (route_table.route_rules[i]['network_entity_id'] === this.id) {
+                    route_table.route_rules.splice(i, 1);
+                }
+            }
+        }
+    }
+
+
+    /*
+     ** SVG Processing
+     */
+    draw() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+    }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = service_gateway_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
+        console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
+        return definition;
+    }
+
+    // Return Artifact Dimensions
+    getDimensions() {
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let dimensions = this.getMinimumDimensions();
+        // Calculate Size based on Child Artifacts
+        // Check size against minimum
+        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
+        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: icon_width, height:icon_height};
+    }
+
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/template_artifact.html", function () {
+            // Load Referenced Ids
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, []);
+        });
+    }
+
+
+    /*
+    ** Child Offset Functions
+     */
+    getFirstChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
+    getContainerChildOffset() {
+        let offset = this.getFirstContainerChildOffset();
+        return offset;
+    }
+
+    getTopEdgeChildOffset() {
+        let offset = this.getFirstTopEdgeChildOffset();
+        return offset;
+    }
+
+    getBottomEdgeChildOffset() {}
+
+    getLeftEdgeChildOffset() {}
+
+    getRightEdgeChildOffset() {}
+
+    getTopChildOffset() {
+        let offset = this.getTopEdgeChildOffset();
+        return offset;
+    }
+    getBottomChildOffset() {}
+
+    getLeftChildOffset() {}
+
+    getRightChildOffset() {}
+
+
+    /*
+    ** Define Allowable SVG Drop Targets
+     */
+    getTargets() {
+        // Return list of Artifact names
+        return [];
+    }
+}
+
+$(document).ready(function() {
     // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
