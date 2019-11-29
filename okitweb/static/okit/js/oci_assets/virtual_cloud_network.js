@@ -134,13 +134,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     deleteChildren() {
         console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Subnets
-        /*
-        for (let child of this.getOkitJson().subnets) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-            }
-        }*/
         this.getOkitJson().subnets = this.getOkitJson().subnets.filter(function(child) {
             if (child.vcn_id === this.id) {
                 console.info('Deleting ' + child.display_name);
@@ -150,13 +143,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             return true;
         }, this);
         // Remove Route_tables
-        /*
-        for (let child of this.getOkitJson().route_tables) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-            }
-        }*/
         this.getOkitJson().route_tables = this.getOkitJson().route_tables.filter(function(child) {
             if (child.vcn_id === this.id) {
                 console.info('Deleting ' + child.display_name);
@@ -166,13 +152,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             return true;
         }, this);
         // Remove Security Lists
-        /*
-        for (let child of this.getOkitJson().security_lists) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-            }
-        }*/
         this.getOkitJson().security_lists = this.getOkitJson().security_lists.filter(function(child) {
             if (child.vcn_id === this.id) {
                 console.info('Deleting ' + child.display_name);
@@ -182,12 +161,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             return true;
         }, this);
         // Remove Internet Gateways
-        /*
-        for (let child of this.getOkitJson().internet_gateways) {
-            if (child.vcn_id === this.id) {
-                child.delete();
-            }
-        }*/
         this.getOkitJson().internet_gateways = this.getOkitJson().internet_gateways.filter(function(child) {
             if (child.vcn_id === this.id) {
                 console.info('Deleting ' + child.display_name);
@@ -197,12 +170,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             return true;
         }, this);
         // Remove NAT Gateways
-        /*
-        for (let child of this.getOkitJson().nat_gateways) {
-            if (child.vcn_id === this.id) {
-                child.delete();
-            }
-        }*/
         this.getOkitJson().nat_gateways = this.getOkitJson().nat_gateways.filter(function(child) {
             if (child.vcn_id === this.id) {
                 console.info('Deleting ' + child.display_name);
@@ -212,12 +179,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             return true;
         }, this);
         // Remove Service Gateways
-        /*
-        for (let child of this.getOkitJson().service_gateways) {
-            if (child.vcn_id === this.id) {
-                child.delete();
-            }
-        }*/
         this.getOkitJson().service_gateways = this.getOkitJson().service_gateways.filter(function(child) {
             if (child.vcn_id === this.id) {
                 console.info('Deleting ' + child.display_name);

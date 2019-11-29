@@ -122,12 +122,6 @@ class Subnet extends OkitContainerArtifact {
     deleteChildren() {
         console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Instances
-        /*
-        for (let child of this.getOkitJson().instances) {
-            if (child.subnet_id === this.id) {
-                child.delete();
-            }
-        }*/
         this.getOkitJson().instances = this.getOkitJson().instances.filter(function(child) {
             if (child.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);
@@ -137,12 +131,6 @@ class Subnet extends OkitContainerArtifact {
             return true;
         }, this);
         // Remove Load Balancers
-        /*
-        for (let child of this.getOkitJson().load_balancers) {
-            if (child.subnet_id === this.id) {
-                child.delete();
-            }
-        }*/
         this.getOkitJson().load_balancers = this.getOkitJson().load_balancers.filter(function(child) {
             if (child.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);
@@ -152,12 +140,6 @@ class Subnet extends OkitContainerArtifact {
             return true;
         }, this);
         // Remove File Storage Systems
-        /*
-        for (let child of this.getOkitJson().file_storage_systems) {
-            if (child.subnet_id === this.id) {
-                child.delete();
-            }
-        }*/
         this.getOkitJson().file_storage_systems = this.getOkitJson().file_storage_systems.filter(function(child) {
             if (child.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);

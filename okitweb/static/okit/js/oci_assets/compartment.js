@@ -104,36 +104,83 @@ class Compartment extends OkitContainerArtifact {
     }
 
     deleteChildren() {
+        console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Compartments
+        /*
         for (let child of this.getOkitJson().compartments) {
             if (child.compartment_id === this.id && child.id !== this.id) {
                 child.delete();
             }
-        }
+        }*/
+        this.getOkitJson().compartments = this.getOkitJson().compartments.filter(function(child) {
+            if (child.compartment_id === this.id && child.id !== this.id) {
+                console.info('Deleting ' + child.display_name);
+                child.delete();
+                return false; // So the filter removes the element
+            }
+            return true;
+        }, this);
         // Virtual Cloud Networks
+        /*
         for (let child of this.getOkitJson().virtual_cloud_networks) {
             if (child.compartment_id === this.id) {
                 child.delete();
             }
-        }
+        }*/
+        this.getOkitJson().virtual_cloud_networks = this.getOkitJson().virtual_cloud_networks.filter(function(child) {
+            if (child.compartment_id === this.id) {
+                console.info('Deleting ' + child.display_name);
+                child.delete();
+                return false; // So the filter removes the element
+            }
+            return true;
+        }, this);
         // Block Storage Volumes
+        /*
         for (let child of this.getOkitJson().block_storage_volumes) {
             if (child.compartment_id === this.id) {
                 child.delete();
             }
-        }
+        }*/
+        this.getOkitJson().block_storage_volumes = this.getOkitJson().block_storage_volumes.filter(function(child) {
+            if (child.compartment_id === this.id) {
+                console.info('Deleting ' + child.display_name);
+                child.delete();
+                return false; // So the filter removes the element
+            }
+            return true;
+        }, this);
         // Object Storage Buckets
+        /*
         for (let child of this.getOkitJson().object_storage_buckets) {
             if (child.compartment_id === this.id) {
                 child.delete();
             }
-        }
+        }*/
+        this.getOkitJson().object_storage_buckets = this.getOkitJson().object_storage_buckets.filter(function(child) {
+            if (child.compartment_id === this.id) {
+                console.info('Deleting ' + child.display_name);
+                child.delete();
+                return false; // So the filter removes the element
+            }
+            return true;
+        }, this);
         // Autonomous Databases
+        /*
         for (let child of this.getOkitJson().autonomous_databases) {
             if (child.compartment_id === this.id) {
                 child.delete();
             }
-        }
+        }*/
+        this.getOkitJson().autonomous_databases = this.getOkitJson().autonomous_databases.filter(function(child) {
+            if (child.compartment_id === this.id) {
+                console.info('Deleting ' + child.display_name);
+                child.delete();
+                return false; // So the filter removes the element
+            }
+            return true;
+        }, this);
+        console.groupEnd();
     }
 
 
