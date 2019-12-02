@@ -339,7 +339,7 @@ to the system.
         - **[Python Generator](#python-generator)**                   : [visualiser/generators/ociGenerator.py](visualiser/generators/ociGenerator.py)
 
 #### Naming Convention
-All files associated with an artifict will have file names based on the artifact. If we take the ***Block Storage Volume***
+All files associated with an artifact will have file names based on the artifact. If we take the ***Block Storage Volume***
 artifact as an example it can be seen, from above, that all files are named in the same fashion with the exception of the
 palette SVG file. 
 

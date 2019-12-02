@@ -7,10 +7,7 @@ console.info('Loaded Designer Javascript');
  * Define designer working variables
  */
 // OKIT Json
-//let okitJson = {"compartments": [{id: 'okit-comp-' + uuidv4(), name: 'Wizards'}]};
 let okitJson = new OkitJson();
-// Common okit id to name mapping
-let okitIdsJsonObj = {};
 // Query Request only set to a value when designer called from query
 let okitQueryRequestJson = null;
 
@@ -42,40 +39,6 @@ function readOkitSettings() {
 // Automation details
 let okitSettings = readOkitSettings();
 
-/*
- * Variable Initialisation
- */
-function initialiseJson() {
-    okitJson = {
-        title: "OKIT OCI Visualiser Json",
-        description: "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......",
-        compartments: [],
-        autonomous_databases: [],
-        block_storage_volumes: [],
-        dynamic_routing_gateways: [],
-        file_storage_systems: [],
-        instances: [],
-        internet_gateways: [],
-        load_balancers: [],
-        nat_gateways: [],
-        object_storage_buckets: [],
-        route_tables: [],
-        security_lists: [],
-        service_gateways: [],
-        subnets: [],
-        virtual_cloud_networks: []
-    }
-}
-
-function initialiseCanvasJson() {
-    let canvasJson = {
-        compartments: {},
-        subnets: {},
-        virtual_cloud_networks: {}
-    };
-
-    return canvasJson
-}
 
 /*
  * Define Common Functions
@@ -135,11 +98,6 @@ function clearArtifactData() {
     console.groupEnd();
 }
 
-function clearCoreData() {
-    initialiseJson();
-    okitIdsJsonObj = {};
-}
-
 /*
 ** Load file
  */
@@ -154,11 +112,7 @@ function getAsJson(readFile) {
 function loaded(evt) {
     // Obtain the read file data
     let fileString = evt.target.result;
-    //console.info('Loaded: ' + fileString);
-    okitJson = JSON.parse(fileString);
-    //if (!okitJson.hasOwnProperty('canvas')) {
-    //    okitJson['canvas'] = initialiseCanvasJson();
-    //}
+    okitJson = new OkitJson(fileString);
     displayOkitJson();
     drawSVGforJson();
 }
@@ -258,7 +212,6 @@ function handleExportToSVG(evt) {
     if (!okitJson.hasOwnProperty('open_compartment_index')) {
         okitJson['open_compartment_index'] = 0;
     }
-    // let okitcanvas = document.getElementById(okitJson.compartments[okitJson['open_compartment_index']]['id'] + '-canvas-svg');
     let okitcanvas = document.getElementById("canvas-svg");
     let name = okitJson.compartments[okitJson['open_compartment_index']]['name'];
     saveSvg(okitcanvas, name + '.svg');
@@ -286,17 +239,6 @@ function saveSvg(svgEl, name) {
 function showQueryResults() {
     console.info('Generating Query Results');
     okitJson = new OkitJson();
-    newCanvas();
-    setBusyIcon();
-    $('#query-progress').removeClass('hidden');
-    queryCompartmentAjax();
-}
-
-// TODO: Delete
-function showQueryResultsDeprecated() {
-    console.info('Generating Query Results');
-    clearArtifactData();
-    initialiseJson();
     newCanvas();
     setBusyIcon();
     $('#query-progress').removeClass('hidden');

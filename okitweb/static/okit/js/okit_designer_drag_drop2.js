@@ -3,8 +3,6 @@ console.info('Loaded Drag & Drop Javascript');
 /*
 ** Define Connector Drag & Drop functions point manipulation code.
  */
-//let okitcanvasSVGPoint = okitcanvas.createSVGPoint();
-//let okitcanvasScreenCTM = okitcanvas.getScreenCTM();
 let connectorStartElement = null;
 let connectorStartXLeft = 0;
 let connectorStartYTop = 0;

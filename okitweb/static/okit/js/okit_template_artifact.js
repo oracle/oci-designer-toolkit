@@ -1,4 +1,49 @@
-console.info('Loaded OkitTemplateArtifact Javascript');
+console.info('Loaded Okit Template Artifact Javascript');
+
+/*
+** Set Valid drop Targets
+ */
+asset_drop_targets[template_artifact_artifact] = [compartment_artifact];
+
+const template_artifact_stroke_colour = "#F80000";
+const template_artifact_query_cb = "block-storage-volume-query-cb";
+
+/*
+** Query OCI
+ */
+
+function queryOkitTemplateArtifactAjax(compartment_id) {
+    console.info('------------- queryOkitTemplateArtifactAjax --------------------');
+    let request_json = {};
+    request_json['compartment_id'] = compartment_id;
+    if ('template_artifact_filter' in okitQueryRequestJson) {
+        request_json['template_artifact_filter'] = okitQueryRequestJson['template_artifact_filter'];
+    }
+    $.ajax({
+        type: 'get',
+        url: 'oci/artifacts/OkitTemplateArtifact',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let response_json = JSON.parse(resp);
+            okitJson.load({template_artifacts: response_json});
+            let len =  response_json.length;
+            for(let i=0;i<len;i++ ){
+                console.info('queryOkitTemplateArtifactAjax : ' + response_json[i]['display_name']);
+            }
+            redrawSVGCanvas();
+            $('#' + template_artifact_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + template_artifact_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
+        }
+    });
+}
 
 /*
 ** Define Okit Template Artifact Class
@@ -134,44 +179,6 @@ class OkitTemplateArtifact extends OkitArtifact {
 
 
     /*
-    ** Child Offset Functions
-     */
-    getFirstChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
-        return offset;
-    }
-
-    getContainerChildOffset() {
-        let offset = this.getFirstContainerChildOffset();
-        return offset;
-    }
-
-    getTopEdgeChildOffset() {
-        let offset = this.getFirstTopEdgeChildOffset();
-        return offset;
-    }
-
-    getBottomEdgeChildOffset() {}
-
-    getLeftEdgeChildOffset() {}
-
-    getRightEdgeChildOffset() {}
-
-    getTopChildOffset() {
-        let offset = this.getTopEdgeChildOffset();
-        return offset;
-    }
-    getBottomChildOffset() {}
-
-    getLeftChildOffset() {}
-
-    getRightChildOffset() {}
-
-
-    /*
     ** Define Allowable SVG Drop Targets
      */
     getTargets() {
@@ -179,3 +186,26 @@ class OkitTemplateArtifact extends OkitArtifact {
         return [];
     }
 }
+
+$(document).ready(function() {
+    // Setup Search Checkbox
+    let body = d3.select('#query-progress-tbody');
+    let row = body.append('tr');
+    let cell = row.append('td');
+    cell.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', template_artifact_query_cb);
+    cell.append('label').text(template_artifact_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(template_artifact_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'template_artifact_name_filter')
+        .attr('name', 'template_artifact_name_filter');
+});
