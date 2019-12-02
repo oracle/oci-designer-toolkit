@@ -983,24 +983,45 @@ class OkitJson {
     ** New Artifact Processing
      */
 
+    // Autonomous Database
+    newAutonomousDatabase(data, parent=null) {
+        console.info('New Autonomous Database');
+        this.autonomous_databases.push(new AutonomousDatabase(data, this, parent));
+        return this.autonomous_databases[this.autonomous_databases.length - 1];
+    }
+
+    // Block Storage Volume
+    newBlockStorageVolume(data, parent=null) {
+        console.info('New Block Storage Volume');
+        this.block_storage_volumes.push(new BlockStorageVolume(data, this, parent));
+        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
+    }
+
     // Compartment
     newCompartment(data = {}, parent=null) {
         this['compartments'].push(new Compartment(data, this, parent));
         return this['compartments'][this['compartments'].length - 1];
     }
 
-    // Virtual Cloud Network
-    newVirtualCloudNetwork(data, parent=null) {
-        console.info('New Virtual Cloud Network');
-        this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this, parent));
-        return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
+    // Dynamic Routing Gateway
+    newDynamicRoutingGateway(data, parent=null) {
+        console.info('New Dynamic Routing Gateway');
+        this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
+        return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
     }
 
-    // Subnet
-    newSubnet(data, parent=null) {
-        console.info('New Subnet');
-        this['subnets'].push(new Subnet(data, this, parent));
-        return this['subnets'][this['subnets'].length - 1];
+    // File Storage System
+    newFileStorageSystem(data, parent=null) {
+        console.info('New File Storage System');
+        this.file_storage_systems.push(new FileStorageSystem(data, this, parent));
+        return this.file_storage_systems[this.file_storage_systems.length - 1];
+    }
+
+    // Instance
+    newInstance(data, parent=null) {
+        console.info('New Instance');
+        this.instances.push(new Instance(data, this, parent));
+        return this.instances[this.instances.length - 1];
     }
 
     // Internet Gateway
@@ -1010,6 +1031,13 @@ class OkitJson {
         return this['internet_gateways'][this['internet_gateways'].length - 1];
     }
 
+    // Load Balancer
+    newLoadBalancer(data, parent=null) {
+        console.info('New Load Balancer');
+        this.load_balancers.push(new LoadBalancer(data, this, parent));
+        return this.load_balancers[this.load_balancers.length - 1];
+    }
+
     // NAT Gateway
     newNATGateway(data, parent=null) {
         console.info('New NAT Gateway');
@@ -1017,18 +1045,11 @@ class OkitJson {
         return this['nat_gateways'][this['nat_gateways'].length - 1];
     }
 
-    // Service Gateway
-    newServiceGateway(data, parent=null) {
-        console.info('New Service Gateway');
-        this['service_gateways'].push(new ServiceGateway(data, this, parent));
-        return this['service_gateways'][this['service_gateways'].length - 1];
-    }
-
-    // Dynamic Routing Gateway
-    newDynamicRoutingGateway(data, parent=null) {
-        console.info('New Dynamic Routing Gateway');
-        this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
-        return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
+    // Object Storage Bucket
+    newObjectStorageBucket(data, parent=null) {
+        console.info('New Object Storage Bucket');
+        this.object_storage_buckets.push(new ObjectStorageBucket(data, this, parent));
+        return this.object_storage_buckets[this.object_storage_buckets.length - 1];
     }
 
     // Route Table
@@ -1045,46 +1066,25 @@ class OkitJson {
         return this.security_lists[this.security_lists.length - 1];
     }
 
-    // Instance
-    newInstance(data, parent=null) {
-        console.info('New Instance');
-        this.instances.push(new Instance(data, this, parent));
-        return this.instances[this.instances.length - 1];
+    // Service Gateway
+    newServiceGateway(data, parent=null) {
+        console.info('New Service Gateway');
+        this['service_gateways'].push(new ServiceGateway(data, this, parent));
+        return this['service_gateways'][this['service_gateways'].length - 1];
     }
 
-    // Load Balancer
-    newLoadBalancer(data, parent=null) {
-        console.info('New Load Balancer');
-        this.load_balancers.push(new LoadBalancer(data, this, parent));
-        return this.load_balancers[this.load_balancers.length - 1];
+    // Subnet
+    newSubnet(data, parent=null) {
+        console.info('New Subnet');
+        this['subnets'].push(new Subnet(data, this, parent));
+        return this['subnets'][this['subnets'].length - 1];
     }
 
-    // Block Storage Volume
-    newBlockStorageVolume(data, parent=null) {
-        console.info('New Block Storage Volume');
-        this.block_storage_volumes.push(new BlockStorageVolume(data, this, parent));
-        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
-    }
-
-    // Object Storage Bucket
-    newObjectStorageBucket(data, parent=null) {
-        console.info('New Object Storage Bucket');
-        this.object_storage_buckets.push(new ObjectStorageBucket(data, this, parent));
-        return this.object_storage_buckets[this.object_storage_buckets.length - 1];
-    }
-
-    // File Storage System
-    newFileStorageSystem(data, parent=null) {
-        console.info('New File Storage System');
-        this.file_storage_systems.push(new FileStorageSystem(data, this, parent));
-        return this.file_storage_systems[this.file_storage_systems.length - 1];
-    }
-
-    // Autonomous Database
-    newAutonomousDatabase(data, parent=null) {
-        console.info('New Autonomous Database');
-        this.autonomous_databases.push(new AutonomousDatabase(data, this, parent));
-        return this.autonomous_databases[this.autonomous_databases.length - 1];
+    // Virtual Cloud Network
+    newVirtualCloudNetwork(data, parent=null) {
+        console.info('New Virtual Cloud Network');
+        this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this, parent));
+        return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
     }
 
     // Fragment
@@ -1159,10 +1159,32 @@ class OkitJson {
     ** Delete Artifact Processing
      */
 
+    // Autonomous Database
+    deleteAutonomousDatabase(id) {
+        for (let i = 0; i < this.autonomous_databases.length; i++) {
+            if (this.autonomous_databases[i].id === id) {
+                this.autonomous_databases[i].delete();
+                this.autonomous_databases.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Block Storage Volume
+    deleteBlockStorageVolume(id) {
+        for (let i = 0; i < this.block_storage_volumes.length; i++) {
+            if (this.block_storage_volumes[i].id === id) {
+                this.block_storage_volumes[i].delete();
+                this.block_storage_volumes.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Compartment
     deleteCompartment(id) {
         for (let i = 0; i < this.compartments.length; i++) {
             if (this.compartments[i].id === id) {
-                // Remove Compartment
                 this.compartments[i].delete();
                 this.compartments.splice(i, 1);
                 break;
@@ -1170,10 +1192,141 @@ class OkitJson {
         }
     }
 
+    // Dynamic Routing Gateway
+    deleteDynamicRoutingGateway(id) {
+        for (let i = 0; i < this.dynamic_routing_gateways.length; i++) {
+            if (this.dynamic_routing_gateways[i].id === id) {
+                this.dynamic_routing_gateways[i].delete();
+                this.dynamic_routing_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    deleteFastConnect(id) {
+        for (let i = 0; i < this.fast_connects.length; i++) {
+            if (this.fast_connects[i].id === id) {
+                this.fast_connects[i].delete();
+                this.fast_connects.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // File Storage System
+    deleteFileStorageSystem(id) {
+        for (let i = 0; i < this.file_storage_systems.length; i++) {
+            if (this.file_storage_systems[i].id === id) {
+                this.file_storage_systems[i].delete();
+                this.file_storage_systems.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Instance
+    deleteInstance(id) {
+        for (let i = 0; i < this.instances.length; i++) {
+            if (this.instances[i].id === id) {
+                this.instances[i].delete();
+                this.instances.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Internet Gateway
+    deleteInternetGateway(id) {
+        for (let i = 0; i < this.internet_gateways.length; i++) {
+            if (this.internet_gateways[i].id === id) {
+                this.internet_gateways[i].delete();
+                this.internet_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Load Balancer
+    deleteLoadBalancer(id) {
+        for (let i = 0; i < this.load_balancers.length; i++) {
+            if (this.load_balancers[i].id === id) {
+                this.load_balancers[i].delete();
+                this.load_balancers.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // NAT Gateway
+    deleteNATGateway(id) {
+        for (let i = 0; i < this.nat_gateways.length; i++) {
+            if (this.nat_gateways[i].id === id) {
+                this.nat_gateways[i].delete();
+                this.nat_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Object Storage Bucket
+    deleteObjectStorageBucket(id) {
+        for (let i = 0; i < this.object_storage_buckets.length; i++) {
+            if (this.object_storage_buckets[i].id === id) {
+                this.object_storage_buckets[i].delete();
+                this.object_storage_buckets.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Route Table
+    deleteRouteTable(id) {
+        for (let i = 0; i < this.route_tables.length; i++) {
+            if (this.route_tables[i].id === id) {
+                this.route_tables[i].delete();
+                this.route_tables.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Security List
+    deleteSecurityList(id) {
+        for (let i = 0; i < this.security_lists.length; i++) {
+            if (this.security_lists[i].id === id) {
+                this.security_lists[i].delete();
+                this.security_lists.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Service Gateway
+    deleteServiceGateway(id) {
+        for (let i = 0; i < this.service_gateways.length; i++) {
+            if (this.service_gateways[i].id === id) {
+                this.service_gateways[i].delete();
+                this.service_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Subnet
+    deleteSubnet(id) {
+        for (let i = 0; i < this.subnets.length; i++) {
+            if (this.subnets[i].id === id) {
+                this.subnets[i].delete();
+                this.subnets.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Virtual Cloud Network
     deleteVirtualCloudNetwork(id) {
         for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
             if (this.virtual_cloud_networks[i].id === id) {
-                // Remove Virtual Cloud Network
                 this.virtual_cloud_networks[i].delete();
                 this.virtual_cloud_networks.splice(i, 1);
                 break;
