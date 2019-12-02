@@ -62,6 +62,10 @@ function getTimestamp() {
     return timestamp;
 }
 
+function titleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
 /*
 ** Query OCI
  */
@@ -118,6 +122,11 @@ function handleQueryOci(e) {
     });
     // Show Query Box
     $('#query-oci').removeClass('hidden');
+}
+
+function handleCancelQuery(e) {
+    // Hide Query Box
+    $('#query-oci').addClass('hidden');
 }
 
 /*

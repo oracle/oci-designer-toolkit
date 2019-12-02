@@ -50,7 +50,7 @@ function styleCanvas(canvas_svg) {
     canvas_svg.append('style')
         .attr("type", "text/css")
         .text(colours + ' text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
-        //.text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+    //.text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
 }
 
 function createSVGDefinitions(canvas_svg) {
@@ -66,14 +66,14 @@ function createSVGDefinitions(canvas_svg) {
     // Add Connector Markers
     // Pointer
     let marker = defs.append('marker')
-            .attr("id", "connector-end-triangle")
-            .attr("viewBox", "0 0 100 100")
-            .attr("refX", "1")
-            .attr("refY", "5")
-            .attr("markerUnits", "strokeWidth")
-            .attr("markerWidth", "35")
-            .attr("markerHeight", "35")
-            .attr("orient", "auto");
+        .attr("id", "connector-end-triangle")
+        .attr("viewBox", "0 0 100 100")
+        .attr("refX", "1")
+        .attr("refY", "5")
+        .attr("markerUnits", "strokeWidth")
+        .attr("markerWidth", "35")
+        .attr("markerHeight", "35")
+        .attr("orient", "auto");
     marker.append('path')
         .attr("d", "M 0 0 L 10 5 L 0 10 z")
         .attr("fill", "black");
@@ -273,157 +273,24 @@ function drawArtifact(definition) {
         .attr("data-parent-id",      parent_id)
         .attr("data-compartment-id", compartment_id)
         .selectAll("*")
-            .attr("data-type",           definition['data_type'])
-            .attr("data-okit-id",        id)
-            .attr("data-parent-id",      parent_id)
-            .attr("data-compartment-id", compartment_id);
+        .attr("data-type",           definition['data_type'])
+        .attr("data-okit-id",        id)
+        .attr("data-parent-id",      parent_id)
+        .attr("data-compartment-id", compartment_id);
 
     return svg;
 }
 
-function drawSVGforJson(artifact={}) {
+function drawSVGforJson() {
     console.groupCollapsed('Drawing SVG Canvas');
-    displayOkitJson();
+    // Display Source Code
+    // displayOkitJson();
     // Clear existing
-    clearDiagram();
-
-    // Draw Outer SVG
-    if (okitJson.hasOwnProperty('compartments')) {
-        compartment_ids = [];
-        for (let i = 0; i < okitJson['compartments'].length; i++) {
-            compartment_ids.push(okitJson['compartments'][i]['id']);
-            okitIdsJsonObj[okitJson['compartments'][i]['id']] = okitJson['compartments'][i]['name']
-            drawCompartmentSVG(okitJson['compartments'][i]);
-        }
-    }
-
-    // Draw Compartment Subcomponents
-    if (okitJson.hasOwnProperty('virtual_cloud_networks')) {
-        virtual_network_ids = [];
-        for (let i=0; i < okitJson['virtual_cloud_networks'].length; i++) {
-            virtual_network_ids.push(okitJson['virtual_cloud_networks'][i]['id']);
-            okitIdsJsonObj[okitJson['virtual_cloud_networks'][i]['id']] = okitJson['virtual_cloud_networks'][i]['display_name'];
-            drawVirtualCloudNetworkSVG(okitJson['virtual_cloud_networks'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('block_storage_volumes')) {
-        block_storage_volume_ids = [];
-        for (let i=0; i < okitJson['block_storage_volumes'].length; i++) {
-            block_storage_volume_ids.push(okitJson['block_storage_volumes'][i]['id']);
-            okitIdsJsonObj[okitJson['block_storage_volumes'][i]['id']] = okitJson['block_storage_volumes'][i]['display_name'];
-            drawBlockStorageVolumeSVG(okitJson['block_storage_volumes'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('object_storage_buckets')) {
-        object_storage_bucket_ids = [];
-        for (let i=0; i < okitJson['object_storage_buckets'].length; i++) {
-            object_storage_bucket_ids.push(okitJson['object_storage_buckets'][i]['id']);
-            okitIdsJsonObj[okitJson['object_storage_buckets'][i]['id']] = okitJson['object_storage_buckets'][i]['display_name'];
-            drawObjectStorageBucketSVG(okitJson['object_storage_buckets'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('autonomous_databases')) {
-        autonomous_database_ids = [];
-        for (let i=0; i < okitJson['autonomous_databases'].length; i++) {
-            autonomous_database_ids.push(okitJson['autonomous_databases'][i]['id']);
-            okitIdsJsonObj[okitJson['autonomous_databases'][i]['id']] = okitJson['autonomous_databases'][i]['display_name'];
-            drawAutonomousDatabaseSVG(okitJson['autonomous_databases'][i]);
-        }
-    }
-
-    // Draw Virtual Cloud Network Subcomponents
-    if (okitJson.hasOwnProperty('internet_gateways')) {
-        internet_gateway_ids = [];
-        for (let i=0; i < okitJson['internet_gateways'].length; i++) {
-            internet_gateway_ids.push(okitJson['internet_gateways'][i]['id']);
-            okitIdsJsonObj[okitJson['internet_gateways'][i]['id']] = okitJson['internet_gateways'][i]['display_name'];
-            drawInternetGatewaySVG(okitJson['internet_gateways'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('nat_gateways')) {
-        nat_gateway_ids = [];
-        for (let i=0; i < okitJson['nat_gateways'].length; i++) {
-            nat_gateway_ids.push(okitJson['nat_gateways'][i]['id']);
-            okitIdsJsonObj[okitJson['nat_gateways'][i]['id']] = okitJson['nat_gateways'][i]['display_name'];
-            drawNATGatewaySVG(okitJson['nat_gateways'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('service_gateways')) {
-        service_gateway_ids = [];
-        for (let i=0; i < okitJson['service_gateways'].length; i++) {
-            service_gateway_ids.push(okitJson['service_gateways'][i]['id']);
-            okitIdsJsonObj[okitJson['service_gateways'][i]['id']] = okitJson['service_gateways'][i]['display_name'];
-            drawServiceGatewaySVG(okitJson['service_gateways'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('dynamic_routing_gateways')) {
-        dynamic_routing_gateway_ids = [];
-        for (let i=0; i < okitJson['dynamic_routing_gateways'].length; i++) {
-            dynamic_routing_gateway_ids.push(okitJson['dynamic_routing_gateways'][i]['id']);
-            okitIdsJsonObj[okitJson['dynamic_routing_gateways'][i]['id']] = okitJson['dynamic_routing_gateways'][i]['display_name'];
-            drawDynamicRoutingGatewaySVG(okitJson['dynamic_routing_gateways'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('fast_connects')) {
-        fast_connect_ids = [];
-        for (let i=0; i < okitJson['fast_connects'].length; i++) {
-            fast_connect_ids.push(okitJson['fast_connects'][i]['id']);
-            okitIdsJsonObj[okitJson['fast_connects'][i]['id']] = okitJson['fast_connects'][i]['display_name'];
-            drawFastConnectSVG(okitJson['fast_connects'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('route_tables')) {
-        route_table_ids = [];
-        for (let i=0; i < okitJson['route_tables'].length; i++) {
-            route_table_ids.push(okitJson['route_tables'][i]['id']);
-            okitIdsJsonObj[okitJson['route_tables'][i]['id']] = okitJson['route_tables'][i]['display_name'];
-            drawRouteTableSVG(okitJson['route_tables'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('security_lists')) {
-        security_list_ids = [];
-        for (let i=0; i < okitJson['security_lists'].length; i++) {
-            security_list_ids.push(okitJson['security_lists'][i]['id']);
-            okitIdsJsonObj[okitJson['security_lists'][i]['id']] = okitJson['security_lists'][i]['display_name'];
-            drawSecurityListSVG(okitJson['security_lists'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('subnets')) {
-        subnet_ids = [];
-        for (let i=0; i < okitJson['subnets'].length; i++) {
-            subnet_ids.push(okitJson['subnets'][i]['id']);
-            okitIdsJsonObj[okitJson['subnets'][i]['id']] = okitJson['subnets'][i]['display_name'];
-            initialiseSubnetChildData(okitJson['subnets'][i]['id']);
-            drawSubnetSVG(okitJson['subnets'][i]);
-        }
-    }
-
-    // Draw Subnet Subcomponents
-    if (okitJson.hasOwnProperty('file_storage_systems')) {
-        file_storage_system_ids = [];
-        for (let i=0; i < okitJson['file_storage_systems'].length; i++) {
-            file_storage_system_ids.push(okitJson['file_storage_systems'][i]['id']);
-            okitIdsJsonObj[okitJson['file_storage_systems'][i]['id']] = okitJson['file_storage_systems'][i]['display_name'];
-            drawFileStorageSystemSVG(okitJson['file_storage_systems'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('instances')) {
-        instance_ids = [];
-        for (let i=0; i < okitJson['instances'].length; i++) {
-            instance_ids.push(okitJson['instances'][i]['id']);
-            okitIdsJsonObj[okitJson['instances'][i]['id']] = okitJson['instances'][i]['display_name'];
-            drawInstanceSVG(okitJson['instances'][i]);
-        }
-    }
-    if (okitJson.hasOwnProperty('load_balancers')) {
-        load_balancer_ids = [];
-        for (let i=0; i < okitJson['load_balancers'].length; i++) {
-            load_balancer_ids.push(okitJson['load_balancers'][i]['id']);
-            okitIdsJsonObj[okitJson['load_balancers'][i]['id']] = okitJson['load_balancers'][i]['display_name'];
-            drawLoadBalancerSVG(okitJson['load_balancers'][i]);
-        }
-    }
+    // clearDiagram();
+    // Draw SVG
+    okitJson.draw();
     console.groupEnd();
+
 }
 
 function generateArc(radius, clockwise, xmod, ymod) {
@@ -558,7 +425,7 @@ function newCanvas(parent_id="canvas-wrapper") {
     compartment_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc
     let canvas_svg = compartment_div.append("svg")
-    //.attr("class", "svg-canvas")
+        //.attr("class", "svg-canvas")
         .attr("id", 'canvas-svg')
         .attr("x", 0)
         .attr("y", 0)

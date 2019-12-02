@@ -66,6 +66,8 @@ class OCILoadBalancers(OCILoadBalancerConnection):
         # Build List of Loadbalancer Objects
         self.load_balancers_obj = []
         for load_balancer in self.load_balancers_json:
+            # If subnet_id is not part of the object assign the first entry in subnet_ids
+            load_balancer['subnet_id'] = load_balancer.get('subnet_id', load_balancer['subnet_ids'][0])
             self.load_balancers_obj.append(OCILoadBalancer(self.config, self.configfile, load_balancer))
 
         return self.load_balancers_json

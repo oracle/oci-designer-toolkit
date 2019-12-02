@@ -1,76 +1,79 @@
-console.info('Loaded NAT Gateway Javascript');
+console.info('Loaded Okit Template Artifact Javascript');
 
 /*
 ** Set Valid drop Targets
  */
-asset_drop_targets[nat_gateway_artifact] = [virtual_cloud_network_artifact];
+asset_drop_targets[template_artifact_artifact] = [compartment_artifact];
 
-const nat_gateway_stroke_colour = "purple";
-const nat_gateway_query_cb = "nat-gateway-query-cb";
+const template_artifact_stroke_colour = "#F80000";
+const template_artifact_query_cb = "block-storage-volume-query-cb";
 
 /*
 ** Query OCI
  */
 
-function queryNATGatewayAjax(compartment_id, vcn_id) {
-    console.info('------------- queryNATGatewayAjax --------------------');
+function queryOkitTemplateArtifactAjax(compartment_id) {
+    console.info('------------- queryOkitTemplateArtifactAjax --------------------');
     let request_json = {};
     request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
-    if ('nat_gateway_filter' in okitQueryRequestJson) {
-        request_json['nat_gateway_filter'] = okitQueryRequestJson['nat_gateway_filter'];
+    if ('template_artifact_filter' in okitQueryRequestJson) {
+        request_json['template_artifact_filter'] = okitQueryRequestJson['template_artifact_filter'];
     }
     $.ajax({
         type: 'get',
-        url: 'oci/artifacts/NATGateway',
+        url: 'oci/artifacts/OkitTemplateArtifact',
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['nat_gateways'] = response_json;
-            okitJson.load({nat_gateways: response_json});
+            okitJson.load({template_artifacts: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.info('queryNATGatewayAjax : ' + response_json[i]['display_name']);
+                console.info('queryOkitTemplateArtifactAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
-            $('#' + nat_gateway_query_cb).prop('checked', true);
+            $('#' + template_artifact_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
             console.info('Status : ' + status)
             console.info('Error : ' + error)
-            $('#' + nat_gateway_query_cb).prop('checked', true);
+            $('#' + template_artifact_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         }
     });
 }
 
 /*
-** Define NAT Gateway Class
+** Define Okit Template Artifact Class
  */
-class NATGateway extends OkitArtifact {
+class OkitTemplateArtifact extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         // Configure default values
-        this.id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(nat_gateway_prefix, okitjson.nat_gateways.length + 1);
+        this.id = 'okit-' + template_artifact_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(template_artifact_prefix, okitjson.template_artifacts.length + 1);
         this.compartment_id = '';
-        this.vcn_id = data.parent_id;
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.vcn_id;
-        for (let parent of okitjson.virtual_cloud_networks) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
+        this.parent_id = this.parent_type_id;
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            for (let parent of okitjson.parent_type_list) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function () {
+                        return parent
+                    };
+                    break;
+                }
             }
         }
     }
@@ -80,7 +83,7 @@ class NATGateway extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new NATGateway(this, this.getOkitJson());
+        return new OkitTemplateArtifact(this, this.getOkitJson());
     }
 
 
@@ -88,7 +91,7 @@ class NATGateway extends OkitArtifact {
     ** Get the Artifact name this Artifact will be know by.
      */
     getArtifactReference() {
-        return nat_gateway_artifact;
+        return template_artifact_artifact;
     }
 
 
@@ -104,16 +107,7 @@ class NATGateway extends OkitArtifact {
         console.groupEnd();
     }
 
-    deleteChildren() {
-        // Remove Internet Gateway references
-        for (let route_table of this.getOkitJson().route_tables) {
-            for (let i = 0; i < route_table.route_rules.length; i++) {
-                if (route_table.route_rules[i]['network_entity_id'] === this.id) {
-                    route_table.route_rules.splice(i, 1);
-                }
-            }
-        }
-    }
+    deleteChildren() {}
 
 
     /*
@@ -138,17 +132,13 @@ class NATGateway extends OkitArtifact {
     // Return Artifact Specific Definition.
     getSvgDefinition() {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let position = 1;
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let dimensions = this.getDimensions();
-        //let first_child = this.getParent().getTopEdgeChildOffset();
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = nat_gateway_stroke_colour;
-        definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();
         return definition;
@@ -178,7 +168,7 @@ class NATGateway extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/nat_gateway.html", function () {
+        $("#properties").load("propertysheets/template_artifact.html", function () {
             // Load Referenced Ids
             // Load Properties
             loadProperties(me);
@@ -193,7 +183,7 @@ class NATGateway extends OkitArtifact {
      */
     getTargets() {
         // Return list of Artifact names
-        return [virtual_cloud_gateway_artifact];
+        return [];
     }
 }
 
@@ -204,33 +194,18 @@ $(document).ready(function() {
     let cell = row.append('td');
     cell.append('input')
         .attr('type', 'checkbox')
-        .attr('id', nat_gateway_query_cb);
-    cell.append('label').text(nat_gateway_artifact);
+        .attr('id', template_artifact_query_cb);
+    cell.append('label').text(template_artifact_artifact);
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(nat_gateway_artifact);
+        .text(template_artifact_artifact);
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
         .attr('class', 'query-filter')
-        .attr('id', 'nat_gateway_name_filter')
-        .attr('name', 'nat_gateway_name_filter');
+        .attr('id', 'template_artifact_name_filter')
+        .attr('name', 'template_artifact_name_filter');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
