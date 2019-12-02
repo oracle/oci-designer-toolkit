@@ -39,8 +39,10 @@ function queryBlockStorageVolumeAjax(compartment_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + block_storage_volume_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

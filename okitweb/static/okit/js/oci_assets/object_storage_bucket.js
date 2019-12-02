@@ -39,8 +39,10 @@ function queryObjectStorageBucketAjax(compartment_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + object_storage_bucket_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

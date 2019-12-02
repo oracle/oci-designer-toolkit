@@ -39,8 +39,10 @@ function queryAutonomousDatabaseAjax(compartment_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + autonomous_database_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

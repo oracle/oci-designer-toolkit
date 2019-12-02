@@ -47,6 +47,8 @@ function querySubnetAjax(compartment_id, vcn_id) {
         error: function (xhr, status, error) {
             console.info('Status : ' + status)
             console.info('Error : ' + error)
+            $('#' + subnet_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

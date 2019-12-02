@@ -38,8 +38,10 @@ function queryDynamicRoutingGatewayAjax(compartment_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

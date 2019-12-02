@@ -39,8 +39,10 @@ function queryServiceGatewayAjax(compartment_id, vcn_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + service_gateway_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

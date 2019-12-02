@@ -43,6 +43,8 @@ function queryLoadBalancerAjax(compartment_id, subnet_id) {
         error: function (xhr, status, error) {
             console.info('Status : ' + status)
             console.info('Error : ' + error)
+            $('#' + load_balancer_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

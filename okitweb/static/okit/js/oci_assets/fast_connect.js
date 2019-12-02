@@ -194,8 +194,10 @@ function queryFastConnectAjax(compartment_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + fast_connect_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

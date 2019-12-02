@@ -39,8 +39,10 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + route_table_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

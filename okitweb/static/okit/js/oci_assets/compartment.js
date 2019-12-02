@@ -39,8 +39,10 @@ function queryCompartmentAjax() {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.error('Status : '+ status);
-            console.error('Error  : '+ error);
+            console.error('Status : ' + status);
+            console.error('Error  : ' + error);
+            $('#' + compartment_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }
@@ -51,6 +53,7 @@ function initiateCompartmentSubQueries(id='') {
     queryDynamicRoutingGatewayAjax(id);
     queryAutonomousDatabaseAjax(id);
     queryObjectStorageBucketAjax(id);
+    queryFastConnectAjax(id);
 }
 
 /*

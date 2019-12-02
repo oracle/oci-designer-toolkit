@@ -44,6 +44,8 @@ function queryInstanceAjax(compartment_id, subnet_id) {
         error: function (xhr, status, error) {
             console.info('Status : ' + status)
             console.info('Error : ' + error)
+            $('#' + instance_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }

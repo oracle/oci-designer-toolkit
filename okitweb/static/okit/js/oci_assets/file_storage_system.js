@@ -38,8 +38,10 @@ function queryFileStorageSystemAjax(compartment_id, subnet_id) {
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.warn('Status : '+ status)
-            console.warn('Error : '+ error)
+            console.warn('Status : ' + status)
+            console.warn('Error : ' + error)
+            $('#' + file_storage_system_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }
