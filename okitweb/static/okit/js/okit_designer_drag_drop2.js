@@ -41,8 +41,8 @@ function updateAssetTarget(title, source_type, source_id, target_id) {
 }
 
 function deleteAssetFromSVG(artifact, id) {
-    console.info('addAssetToDropTarget - Artifact       : ' + artifact);
-    console.info('addAssetToDropTarget - Id             : ' + id);
+    console.info('deleteAssetFromSVG - Artifact       : ' + artifact);
+    console.info('deleteAssetFromSVG - Id             : ' + id);
     let deleteFunction = 'delete' + artifact.split(' ').join('');
     console.info('Delete Function : ' + deleteFunction);
     //window[asset_delete_functions[artifact]](id);

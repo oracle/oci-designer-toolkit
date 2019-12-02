@@ -513,6 +513,9 @@ class OkitContainerArtifact extends OkitArtifact {
         super(okitjson);
     }
 
+    /*
+    ** SVG Functions
+     */
     getDimensions(id_key='') {
         console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let padding = this.getPadding();
@@ -628,6 +631,23 @@ class OkitContainerArtifact extends OkitArtifact {
         return padding;
     }
 
+
+    getChildTypes() {
+        let child_types = this.getContainerArtifacts().concat(
+            this.getLeftEdgeArtifacts(),   this.getLeftArtifacts(),
+            this.getRightEdgeArtifacts(),  this.getRightArtifacts(),
+            this.getTopEdgeArtifacts(),    this.getTopArtifacts(),
+            this.getBottomEdgeArtifacts(), this.getBottomArtifacts()
+            );
+        console.info('Child Types : ' + child_types);
+        return child_types;
+    }
+
+    getChildElements() {
+        let child_elements = [];
+        this.getChildTypes().forEach(element => child_elements.push(this.artifactToElement(element)));
+        return child_elements;
+    }
 
     /*
     ** Child Offset Functions
@@ -886,7 +906,8 @@ class OkitJson {
         // Clear existing
         clearDiagram();
 
-        console.log(JSON.stringify(this, null, 2));
+        //console.info(JSON.stringify(this, null, 2));
+        console.info(this);
 
         // Draw Compartments
         for (let compartment of this.compartments) {
@@ -1064,6 +1085,12 @@ class OkitJson {
         console.info('New Autonomous Database');
         this.autonomous_databases.push(new AutonomousDatabase(data, this, parent));
         return this.autonomous_databases[this.autonomous_databases.length - 1];
+    }
+
+    // Fragment
+    newFragment(data, parent=null) {
+        console.info('New Fragment');
+        return new Fragment(data, this, parent);
     }
 
     /*
