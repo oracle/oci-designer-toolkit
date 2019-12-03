@@ -58,6 +58,7 @@
     border-width: 1px;
     border-color: black;
     background-color: #f0f5f5;
+    overflow: scroll;
 }
 
 .palette-icon {
