@@ -25,6 +25,7 @@ class Fragment extends OkitArtifact {
         this.vcn_id = data.parent_id;
         this.title = data.title;
         this.fragment_url = '/static/okit/fragments/json/' + this.title.toLowerCase().split(' ').join('_') + '.json';
+        this.fragment_url = '/static/okit/templates/' + this.title.toLowerCase().split(' ').join('_') + '.json';
 
         // Get Parent Type
         this.parent_type = d3.select('#' + data.parent_id).attr('data-type');
