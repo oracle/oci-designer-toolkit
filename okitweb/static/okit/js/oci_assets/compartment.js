@@ -231,7 +231,11 @@ class Compartment extends OkitContainerArtifact {
     }
 
     getLeftArtifacts() {
-        return [block_storage_volume_artifact, autonomous_database_artifact, object_storage_bucket_artifact];
+        return [block_storage_volume_artifact];
+    }
+
+    getRightArtifacts() {
+        return [autonomous_database_artifact, object_storage_bucket_artifact];
     }
 
 
