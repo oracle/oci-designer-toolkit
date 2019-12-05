@@ -619,8 +619,6 @@ class OkitContainerArtifact extends OkitArtifact {
         for (let child of this.getTopArtifacts()) {
             $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
                 function() {
-                    console.info('Width  : ' + $(this).attr('width'));
-                    console.info('Height : ' + $(this).attr('height'));
                     offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
                 });
         }
@@ -634,8 +632,6 @@ class OkitContainerArtifact extends OkitArtifact {
             //count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
             $('#' + this.id + '-svg').children('svg[data-type="' + child + '"]').each(
                 function() {
-                    console.info('Width  : ' + $(this).attr('width'));
-                    console.info('Height : ' + $(this).attr('height'));
                     offset.dy += Math.round(Number($(this).attr('height')) + positional_adjustments.spacing.y);
                 });
         }
@@ -648,8 +644,6 @@ class OkitContainerArtifact extends OkitArtifact {
         for (let child of this.getBottomArtifacts()) {
             $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
                 function() {
-                    console.info('Width  : ' + $(this).attr('width'));
-                    console.info('Height : ' + $(this).attr('height'));
                     offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
                 });
         }
@@ -675,6 +669,12 @@ class OkitContainerArtifact extends OkitArtifact {
 
     getRightEdgeChildOffset() {
         let offset = this.getFirstRightEdgeChildOffset();
+        for (let child of this.getRightEdgeArtifacts()) {
+            $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
+                function() {
+                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
+                });
+        }
         return offset;
     }
 }
