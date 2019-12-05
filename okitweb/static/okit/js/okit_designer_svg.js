@@ -143,11 +143,11 @@ function drawArtifact(definition) {
     let rect_height    = definition['svg']['height'] + definition['rect']['height_adjust'];
     if (definition['icon']['y_translation'] < 0) {
         rect_y = Math.abs(definition['icon']['y_translation']);
-        rect_height -= rect_y;
+        rect_height -= rect_y * 2;
     }
     if (definition['icon']['x_translation'] < 0) {
         rect_x = Math.abs(definition['icon']['x_translation']);
-        rect_width -= rect_x;
+        rect_width -= rect_x * 2;
     }
     // Check for Artifact Display Name and if it does not exist set it to Artifact Name
     if (!definition['artifact'].hasOwnProperty('display_name')) {
@@ -221,7 +221,7 @@ function drawArtifact(definition) {
             .attr("class", "svg-text")
             .attr("id", id + '-label')
             .attr("x", rect_x)
-            .attr("y", definition['svg']['height'] - 10)
+            .attr("y", definition['svg']['height'] - Math.max(10, rect_y * 2))
             .attr("fill", definition['rect']['stroke']['colour'])
             .attr("vector-effects", "non-scaling-size")
             .text(definition['label']['text']);
@@ -237,8 +237,8 @@ function drawArtifact(definition) {
         let name = info_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-info')
-            .attr("x", rect_x)
-            .attr("y", definition['svg']['height'] - 10)
+            .attr("x", 0)
+            .attr("y", definition['svg']['height'] - Math.max(10, rect_y * 2))
             .attr("fill", definition['rect']['stroke']['colour'])
             .attr("vector-effects", "non-scaling-size")
             .text(definition['info']['text']);
@@ -367,7 +367,6 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
         //return polyline;
     }
     console.groupEnd();
-    return;
 }
 
 function coordString(coord) {

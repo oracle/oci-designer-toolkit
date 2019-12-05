@@ -160,8 +160,13 @@ class LoadBalancer extends OkitArtifact {
 
     drawConnectors() {
         console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let parent_svg = d3.select('#' + this.parent_id + "-svg");
-        let parent_rect = d3.select('#' + this.parent_id);
+        //let parent_svg = d3.select('#' + this.parent_id + "-svg");
+        //let parent_rect = d3.select('#' + this.parent_id);
+        // Get Grand Parent
+        let grandparent_id = d3.select('#' + this.parent_id).attr('data-parent-id');
+        // Define Connector Parent
+        let parent_svg = d3.select('#' + grandparent_id + "-svg");
+        let parent_rect = d3.select('#' + grandparent_id);
         // Only Draw if parent exists
         if (parent_svg.node()) {
             console.info('Parent SVG     : ' + parent_svg.attr('id'));
