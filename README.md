@@ -27,6 +27,7 @@ python modules are installed and in addition provide a simple flask server that 
 Therefore these installation instructions will describe the docker based implementation.
 
 ##### 1. Clone Repository
+To clone the OraHub Repository you will need to be on the Corporate Network.
 ```bash
 anhopki-mac:tmp anhopki$ git clone git@orahub.oraclecorp.com:andrew.hopkinson/okit.oci.web.designer.git
 
@@ -65,6 +66,7 @@ total 56
 8 -rwxr-xr-x   1 anhopki  staff   654B 15 Aug 10:08 start-gunicorn.sh
 ```
 ##### 3. Execute Build Script
+For this to work correctly you will need to be **off** the Corporate Network.
 ```bash
 anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
@@ -331,7 +333,8 @@ to the system.
         - **[Ansible Jinja2 Template](#ansible-jinja2-template)**     : [visualiser/templates/ansible/*block_storage_volume*.jinja2](visualiser/templates/ansible/block_storage_volume.jinja2)
 - Updated Files
     - Frontend
-        - **[Designer Javascript](#designer-javascript)**             : [okitweb/static/okit/js/okit_designer.js](okitweb/static/okit/js/okit_designer.js)
+        - **[OKIT Class](#okit-class)**                               : [okitweb/static/okit/js/okit.js](okitweb/static/okit/js/okit.js)
+        - **[Artifact Constants](#artifact-constants)**               : [okitweb/static/okit/js/oci_assets/artifact_constants.js](okitweb/static/okit/js/oci_assets/artifact_constants.js)
         - **[Flask Web Designer Python](#flask-web-designer-python)** : [okitweb/okitWebDesigner.py](okitweb/okitWebDesigner.py)
     - Backend
         - **[Connection Facade](#connection-facade)**                 : [visualiser/facades/ociConnection.py](visualiser/facades/ociConnection.py)
@@ -339,12 +342,12 @@ to the system.
         - **[Python Generator](#python-generator)**                   : [visualiser/generators/ociGenerator.py](visualiser/generators/ociGenerator.py)
 
 #### Naming Convention
-All files associated with an artifict will have file names based on the artifact. If we take the ***Block Storage Volume***
+All files associated with an artifact will have file names based on the artifact. If we take the ***Block Storage Volume***
 artifact as an example it can be seen, from above, that all files are named in the same fashion with the exception of the
 palette SVG file. 
 
 All files must be named as per artifact name with the spaces replaced by underscores and converted to lowercase. The exception 
-to this is the palette SVG where title case should be used rether than lower case. The reason for this is that the palette
+to this is the palette SVG where title case should be used instead of lower case. The reason for this is that the palette
 file name will be manipulated (removing the underscore) and used to dynamically reference all Javascript function names.  
 
 #### Palette SVG
@@ -372,12 +375,21 @@ the icon. Hence the Block Storage Volume would look like the following
 </svg>
 ```
 
-Although the svg will display in the palete image without the "g" it will cause the designer to fail later if it is missing.
+Although the svg will display in the palette image without the "g" it will cause the designer to fail later if it is missing.
 
 #### Artifact Javascript
 The artifact javascript file is the key files for the BUI specifying all core code for the creation, drawing and querying 
 of the artifact. Each file has a standard set of variable definitions and function definitions which again are based on 
-the name of the artifact as follows.
+the name of the artifact as follows. To add an artifact to the OKIT BUI you should copy the okit_template_artifact.js to 
+the "oci_assets" subdirectory and name it appropriately (In out example that would be block_storage_volume.js).
+
+Once the file has been copied to the oci_assets directory then is can be opened and the following global Find/Replace modification applied:
+
+1. 'Okit Template Artifact' replaced by 'Artifact Name' - in our example this would be 'Block Storage Volume'.
+2. 'OkitTemplateArtifact' replaced by 'ArtifactName' - in our example this would be 'BlockStorageVolume'.
+3. 'template_artifact' replaced by 'artifact_name' - in our example this would be 'block_storage_volume'.
+4. 'parent_type_id' replaced by the id field associated with the parent container - in our example this would be 'compartment_id'.
+5. 'parent_type_list' replace by the okitJson list element corresponding to the parent - in our example this would be 'compartments'.
 
 ##### Standard Definitions
 ```javascript
@@ -387,213 +399,15 @@ console.log('Loaded Block Storage Javascript');
 ** Set Valid drop Targets
  */
 asset_drop_targets[block_storage_volume_artifact] = [compartment_artifact];
-asset_connect_targets[block_storage_volume_artifact] = [instance_artifact];
-asset_add_functions[block_storage_volume_artifact] = "addBlockStorageVolume";
-asset_delete_functions[block_storage_volume_artifact] = "deleteBlockStorageVolume";
-asset_clear_functions.push("clearBlockStorageVolumeVariables");
 
 const block_storage_volume_stroke_colour = "#F80000";
 const block_storage_volume_query_cb = "block-storage-volume-query-cb";
-let block_storage_volume_ids = [];
-let block_storage_volume_count = 0;
 ```
-Within this section we will define the target artifact where the new can be dropped, connected to and functions defining how the 
-artifact can be added, deleted and updated. For example the **Block Storage Volume** can be dropped on the *Compartment*
-and connected to an *Instance*. 
+Within this section we will define the target artifact where the new artifact can be dropped. For example the **Block Storage Volume** can be dropped on the *Compartment*. 
 
-***Note***: The block_storage_volume_artifact, compartment_artifact and instance_artifact constants are defined in the Designer Javascript.  
+***Note***: The block_storage_volume_artifact and compartment_artifact are defined in the Designer Javascript.  
 
 Additionally we define the stroke colour for the bounding rectangle used to display the artifact.
-
-##### Clear Function
-```javascript
-/*
-** Reset variables
- */
-
-function clearBlockStorageVolumeVariables() {
-    block_storage_volume_ids = [];
-    block_storage_volume_count = 0;
-}
-```
-Simple function to reset artifact specific variables.
-
-##### Add Function
-```javascript
-/*
-** Add Asset to JSON Model
- */
-function addBlockStorageVolume(parent_id, compartment_id) {
-    let id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
-    console.groupCollapsed('Adding ' + block_storage_volume_artifact + ' : ' + id);
-
-    // Add Virtual Cloud Network to JSON
-
-    if (!okitJson.hasOwnProperty('block_storage_volumes')) {
-        okitJson['block_storage_volumes'] = [];
-    }
-
-    // Add id & empty name to id JSON
-    okitIdsJsonObj[id] = '';
-    block_storage_volume_ids.push(id);
-
-    // Increment Count
-    block_storage_volume_count += 1;
-    let block_storage_volume = {};
-    block_storage_volume['compartment_id'] = parent_id;
-    block_storage_volume['availability_domain'] = '1';
-    block_storage_volume['id'] = id;
-    block_storage_volume['display_name'] = generateDefaultName(block_storage_volume_prefix, block_storage_volume_count);
-    block_storage_volume['size_in_gbs'] = 1024;
-    block_storage_volume['backup_policy'] = 'bronze';
-    okitJson['block_storage_volumes'].push(block_storage_volume);
-    okitIdsJsonObj[id] = block_storage_volume['display_name'];
-    //console.info(JSON.stringify(okitJson, null, 2));
-    //drawBlockStorageVolumeSVG(block_storage_volume);
-    drawSVGforJson();
-    loadBlockStorageVolumeProperties(id);
-    console.groupEnd();
-}
-```
-This function is used to add a new json element to the OKIT json structure. The elements within this json will match those 
-that are returned from querying OCI. All artifacts will be contained within a top level list with a name that matches that
-of the artifact (e.g. block_storage_volumes). Once that new json element has been added it will be drawn on the SVG canvas.
-
-##### Delete Function
-```javascript
-/*
-** Delete From JSON Model
- */
-
-function deleteBlockStorageVolume(id) {
-    console.log('Delete ' + block_storage_volume_artifact + ' : ' + id);
-    // Remove SVG Element
-    d3.select("#" + id + "-svg").remove()
-    // Remove Data Entry
-    for (let i=0; i < okitJson['block_storage_volumes'].length; i++) {
-        if (okitJson['block_storage_volumes'][i]['id'] == id) {
-            okitJson['block_storage_volumes'].splice(i, 1);
-        }
-    }
-    // Remove Instance references
-    if ('instances' in okitJson) {
-        for (let instance of okitJson['instances']) {
-            for (let i=0; i < instance['block_storage_volume_ids'].length; i++) {
-                if (instance['block_storage_volume_ids'][i] == id) {
-                    instance['block_storage_volume_ids'].splice(i, 1);
-                }
-            }
-        }
-    }
-}
-```
-Function used to remove artifact and delete any references within linked artifacts.
-
-##### Artifact Dimensions Function
-```javascript
-function getBlockStorageVolumeDimensions(id='') {
-    return {width:icon_width, height:icon_height};
-}
-```
-
-The function is used to calculate the dimensions of the artifact and will be called by container function to determine 
-how much space to reserve for drawing this artifact. If you are building a container artifact (e.g. subnet) then this
-function will call the dimensions function for all contained artifacts to calculate it's dimensions.
-
-##### Draw SVG
-```javascript
-/*
-** SVG Creation
- */
-function drawBlockStorageVolumeSVG(artifact) {
-    let parent_id = artifact['parent_id'];
-    let id = artifact['id'];
-    let compartment_id = artifact['compartment_id'];
-    console.groupCollapsed('Drawing ' + block_storage_volume_artifact + ' : ' + id);
-    // Check if this Block Storage Volume has been attached to an Instance and if so do not draw because it will be done
-    // as part of the instance
-    if (okitJson.hasOwnProperty('instances')) {
-        for (let instance of okitJson['instances']) {
-            if (instance.hasOwnProperty('block_storage_volume_ids')) {
-                if (instance['block_storage_volume_ids'].includes(artifact['id'])) {
-                    console.info(artifact['display_name'] + ' attached to instance '+ instance['display_name']);
-                    console.groupEnd();
-                    return;
-                }
-            }
-        }
-    }
-    if (!artifact.hasOwnProperty('parent_id')) {
-        artifact['parent_id'] = artifact['compartment_id'];
-    }
-
-    if (!compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        compartment_bui_sub_artifacts[parent_id] = {};
-    }
-
-    if (compartment_bui_sub_artifacts.hasOwnProperty(parent_id)) {
-        if (!compartment_bui_sub_artifacts[parent_id].hasOwnProperty('block_storage_position')) {
-            compartment_bui_sub_artifacts[parent_id]['block_storage_position'] = 0;
-        }
-        // Calculate Position
-        let position = compartment_bui_sub_artifacts[parent_id]['block_storage_position'];
-        // Increment Icon Position
-        compartment_bui_sub_artifacts[parent_id]['block_storage_position'] += 1;
-
-        let svg = drawArtifact(newBlockStorageVolumeDefinition(artifact, position));
-
-        let rect = d3.select('#' + id);
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        /*
-         Add click event to display properties
-         Add Drag Event to allow connector (Currently done a mouse events because SVG does not have drag version)
-         Add dragevent versions
-         Set common attributes on svg element and children
-         */
-        svg.on("click", function () {
-            loadBlockStorageVolumeProperties(id);
-            d3.event.stopPropagation();
-        });
-    } else {
-        console.warn(parent_id + ' was not found in compartment sub artifacts : ' + JSON.stringify(compartment_bui_sub_artifacts));
-    }
-    console.groupEnd();
-}
-``` 
-Draws the artifact on the SVG canvas as parted of the dropped component. All artifacts are contained within there own svg
-element because we can then drop, where appropriate, other arifacts on them and they become self contained. Once draw we
-will add a click event to display the properties associated with this artifact. If the artifact can be connected to another
-then we will also add the standard drag & drop handlers (Mouse Handlers are added as well because SVG does not support
-standard HTML drag & drop events).
-
-##### Load Property Sheet
-```javascript
-/*
-** Property Sheet Load function
- */
-function loadBlockStorageVolumeProperties(id) {
-    $("#properties").load("propertysheets/block_storage_volume.html", function () {
-        if ('block_storage_volumes' in okitJson) {
-            console.info('Loading ' + block_storage_volume_artifact + ' : ' + id);
-            let json = okitJson['block_storage_volumes'];
-            for (let i = 0; i < json.length; i++) {
-                let block_storage_volume = json[i];
-                if (block_storage_volume['id'] == id) {
-                    block_storage_volume['virtual_cloud_network'] = okitIdsJsonObj[block_storage_volume['vcn_id']];
-                    // Load Properties
-                    loadProperties(block_storage_volume);
-                    // Add Event Listeners
-                    addPropertiesEventListeners(block_storage_volume, []);
-                    break;
-                }
-            }
-        }
-    });
-}
-```
-When the user clicks on the drawn SVG artifact this load function will be called. It will load the artifact specific 
-properties sheet into the "properties" pane and then load each of the form fields with the data from the appropriate 
-json element.
 
 ##### Query OCI
 ```javascript
@@ -636,11 +450,166 @@ function queryBlockStorageVolumeAjax(compartment_id) {
 Uses Ajax to call the flask url to initiate an asynchronous query of OCI to retrieve all artifacts and then redraw the 
 svg canvas. On completion it will set the query progress for this artifact as complete.
 
-##### Read Function
+##### Class Definition
+Each artifact is described by a JavaScript class inherrited from the **OkitArtifact** Class and has a number of standard 
+methods associated with the class. for the majority of these you will not need to modify the code because the underlying
+super class will do all the work. If you are creating a new container then you will need to modify the class definition 
+to inherit from **OkitContainerArtifact** class.
+
+The following will list the methods that need modification.
+
+###### Constructor
+```javascript
+    /*
+    ** Create
+     */
+    constructor (data={}, okitjson={}, parent=null) {
+        super(okitjson);
+        // Configure default values
+        this.id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
+        this.display_name = generateDefaultName(block_storage_volume_prefix, okitjson.block_storage_volumes.length + 1);
+        this.compartment_id = data.parent_id;
+        this.availability_domain = '1';
+        this.size_in_gbs = 1024;
+        this.backup_policy = 'bronze';
+        // Update with any passed data
+        for (let key in data) {
+            this[key] = data[key];
+        }
+        // Add Get Parent function
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+            this.parent_id = parent.id;
+        } else {
+            this.parent_id = this.compartment_id;
+            for (let parent of okitjson.compartments) {
+                if (parent.id === this.parent_id) {
+                    this.getParent = function () {
+                        return parent
+                    };
+                    break;
+                }
+            }
+        }
+    }
+```
+This function is used to create a new json element to the OKIT json structure. The elements within this json will match those 
+that are returned from querying OCI. All artifacts will be contained within a top level list with a name that matches that
+of the artifact (e.g. block_storage_volumes). Once that new json element has been added it will be drawn on the SVG canvas.
+
+###### Delete Children
+```javascript
+    /*
+    ** Delete Processing
+     */
+    delete() {
+        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
+        // Delete Child Artifacts
+        this.deleteChildren();
+        // Remove SVG Element
+        d3.select("#" + this.id + "-svg").remove()
+        console.groupEnd();
+    }
+
+    deleteChildren() {
+        // Remove Instance references
+        for (let instance of this.getOkitJson().instances) {
+            for (let i=0; i < instance.block_storage_volume_ids.length; i++) {
+                if (instance.block_storage_volume_ids[i] === this.id) {
+                    instance.block_storage_volume_ids.splice(i, 1);
+                }
+            }
+        }
+    }
+```
+Although the main **delete** method will not need modifying the **deleteChildren** will need modification to remove any 
+references within linked artifacts or actual children in the case of a container.
+
+###### Artifact Dimensions
+```javascript
+    // Return Artifact Dimensions
+    getDimensions() {
+        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let dimensions = this.getMinimumDimensions();
+        // Calculate Size based on Child Artifacts
+        // Check size against minimum
+        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
+        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    getMinimumDimensions() {
+        return {width: load_balancer_width, height:load_balancer_height};
+    }
+```
+
+The function is used to calculate the dimensions of the artifact and will be called by container function to determine 
+how much space to reserve for drawing this artifact. If you are building a container artifact (e.g. subnet) then this
+function will call the dimensions function for all contained artifacts to calculate it's dimensions.
+
+###### Draw
+```javascript
+    draw() {
+        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        if (this.isAttached()) {
+            console.groupEnd();
+            return;
+        }
+        let svg = drawArtifact(this.getSvgDefinition());
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+        return svg;
+    }
+``` 
+Draws the artifact on the SVG canvas as parted of the dropped component. All artifacts are contained within there own svg
+element because we can then drop, where appropriate, other artifacts on them and they become self contained. Once draw we
+will add a click event to display the properties associated with this artifact. In the majority of cases this method will
+not need modification.
+
+If the artifact can be connected to another then we will also add the standard drag & drop handlers (Mouse Handlers are 
+added as well because SVG does not support standard HTML drag & drop events). (See Load Balancer).
+
+###### Load Property Sheet
+```javascript
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        let okitJson = this.getOkitJson();
+        let me = this;
+        $("#properties").load("propertysheets/load_balancer.html", function () {
+            // Load Referenced Ids
+            let instances_select = $('#instance_ids');
+            for (let instance of okitJson.instances) {
+                instances_select.append($('<option>').attr('value', instance.id).text(instance.display_name));
+            }
+            // Load Properties
+            loadProperties(me);
+            // Add Event Listeners
+            addPropertiesEventListeners(me, []);
+        });
+    }
+```
+When the user clicks on the drawn SVG artifact this load function will be called. It will load the artifact specific 
+properties sheet into the "properties" pane and then load each of the form fields with the data from the appropriate 
+json element. This method will only need modification if the properties sheet needs to select references of other artifacts. 
+For an example of this see the Subnet class which will load Route Table and security list information.
+
+##### Ready Function
 ```javascript
 $(document).ready(function() {
-    clearBlockStorageVolumeVariables();
-
+    // Setup Search Checkbox
     let body = d3.select('#query-progress-tbody');
     let row = body.append('tr');
     let cell = row.append('td');
@@ -648,9 +617,21 @@ $(document).ready(function() {
         .attr('type', 'checkbox')
         .attr('id', block_storage_volume_query_cb);
     cell.append('label').text(block_storage_volume_artifact);
+
+    // Setup Query Display Form
+    body = d3.select('#query-oci-tbody');
+    row = body.append('tr');
+    cell = row.append('td')
+        .text(block_storage_volume_artifact);
+    cell = row.append('td');
+    let input = cell.append('input')
+        .attr('type', 'text')
+        .attr('class', 'query-filter')
+        .attr('id', 'block_storage_volume_name_filter')
+        .attr('name', 'block_storage_volume_name_filter');
 });
 ```
-Clear the artifact variables and add the query checkbox to the query progress table.
+Add the query checkbox to the query progress table.
 
 #### Properties HTML
 The properties html is a simple piece of html that displays the properties associated with the artifact and as a minimum
@@ -876,7 +857,47 @@ this can be found in the various, existing, ansible templates.
       register: {{ resource_name }}BackupPolicy
 
 ``` 
-#### Designer Javascript
+#### OKIT Class
+The **OkitJson** Class definition with the **okit.js** file will need to be modified to include 3 Methods associated with
+the Creation, Getting and Deleting of the new Artifact. The correct locations with the file can be identified from the
+comments and the methods are defined in alphabetical order. The Following methods will be created.
+##### newArtifact
+This method will be dynamically called when artifact is dropped on it's target.
+```javascript
+    // Block Storage Volume
+    newBlockStorageVolume(data, parent=null) {
+        console.info('New Block Storage Volume');
+        this.block_storage_volumes.push(new BlockStorageVolume(data, this, parent));
+        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
+    }
+```
+##### getArtifact
+Used to retrieve the information about a specific artifact. May be called from other artifact.
+```javascript
+    getBlockStorageVolume(id='') {
+        for (let artifact of this.block_storage_volumes) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+```
+##### deleteArtifact
+This method will be dynamically called when the "delete" is selected from the canvas.
+```javascript
+    // Block Storage Volume
+    deleteBlockStorageVolume(id) {
+        for (let i = 0; i < this.block_storage_volumes.length; i++) {
+            if (this.block_storage_volumes[i].id === id) {
+                this.block_storage_volumes[i].delete();
+                this.block_storage_volumes.splice(i, 1);
+                break;
+            }
+        }
+    }
+```
+#### Artifacts Constants
 To allow access to artifact standard names a number of constants need to be added to the okit_designer.js that specify the
 artifact name and prefix.
 
@@ -998,21 +1019,21 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 ## 3rd Party Libraries
 ### Javascript
 
-| Library    | License    | Home Page                                               |
-| ---------- | ---------- | ------------------------------------------------------- |
-| jQuery     | MIT        | 
-| d3         | BSD        |
+| Library    | Version | License   | Sub Type   | Home Page                                               |
+| ---------- | ------- | --------- | ---------- | ------------------------------------------------------- |
+| jQuery     | 3.4.1   | MIT       | Expat      | [JQuery License](https://jquery.org/license/)           |
+| d3         | 5.14.2  | BSD       | 3-Clause   | [d3](https://d3js.org/)                                 |
 
 ### Python
 
-| Library    | License    | Home Page                                               |
-| ---------- | ---------- | ------------------------------------------------------- |
-| flask      | BSD        | [PyPi Flask](https://pypi.org/project/Flask/)           |
-| gunicorn   | MIT        | [PyPi gunicorn](https://pypi.org/project/gunicorn/)     |
-| jinja2     | BSD        | [PyPi Jinja2](https://pypi.org/project/Jinja2/)         |
-| pyyaml     | MIT        | [PyPi PyYAML](https://pypi.org/project/simplejson/)     |
-| simplejson | MIT        | [PyPi simplejson](https://pypi.org/project/simplejson/) |
-| werkzeug   | BSD        | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)     |
+| Library    | Version | License   | Sub Type   | Home Page                                               |
+| ---------- | ------- | --------- | ---------- | ------------------------------------------------------- |
+| flask      | 1.1.1   | BSD       | 3-Clause   | [PyPi Flask](https://pypi.org/project/Flask/)           |
+| gunicorn   | 20.0.4  | MIT       |            | [PyPi gunicorn](https://pypi.org/project/gunicorn/)     |
+| jinja2     | 2.10.3  | BSD       | 3-Clause   | [PyPi Jinja2](https://pypi.org/project/Jinja2/)         |
+| pyyaml     | 5.2     | MIT       |            | [PyPi PyYAML](https://pypi.org/project/PyYAML/)         |
+| simplejson | 3.17.0  | MIT / AFL |            | [PyPi simplejson](https://pypi.org/project/simplejson/) |
+| werkzeug   | 0.16.0  | BSD       | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)     |
 
 ## Contributing
 

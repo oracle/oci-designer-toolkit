@@ -3,8 +3,6 @@ console.info('Loaded Drag & Drop Javascript');
 /*
 ** Define Connector Drag & Drop functions point manipulation code.
  */
-//let okitcanvasSVGPoint = okitcanvas.createSVGPoint();
-//let okitcanvasScreenCTM = okitcanvas.getScreenCTM();
 let connectorStartElement = null;
 let connectorStartXLeft = 0;
 let connectorStartYTop = 0;
@@ -27,7 +25,12 @@ function addAssetToDropTarget(artifact, title, target_id, compartment_id) {
     console.info('addAssetToDropTarget - Target Id      : ' + target_id);
     console.info('addAssetToDropTarget - Compartment Id : ' + compartment_id);
     console.info('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
-    window[asset_add_functions[artifact]](target_id, compartment_id, title);
+    let newFunction = 'new' + artifact.split(' ').join('');
+    console.info('New Function : ' + newFunction);
+    //window[asset_add_functions[artifact]](target_id, compartment_id, title);
+    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: title});
+    console.info(JSON.stringify(result, null, 2));
+    okitJson.draw();
 }
 
 function updateAssetTarget(title, source_type, source_id, target_id) {
@@ -36,7 +39,12 @@ function updateAssetTarget(title, source_type, source_id, target_id) {
 }
 
 function deleteAssetFromSVG(artifact, id) {
-    window[asset_delete_functions[artifact]](id);
+    console.info('deleteAssetFromSVG - Artifact       : ' + artifact);
+    console.info('deleteAssetFromSVG - Id             : ' + id);
+    let deleteFunction = 'delete' + artifact.split(' ').join('');
+    console.info('Delete Function : ' + deleteFunction);
+    //window[asset_delete_functions[artifact]](id);
+    okitJson[deleteFunction](id);
     // Hide Context Menu
     $("#context-menu").addClass("hidden");
     // Redraw
