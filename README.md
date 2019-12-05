@@ -27,6 +27,7 @@ python modules are installed and in addition provide a simple flask server that 
 Therefore these installation instructions will describe the docker based implementation.
 
 ##### 1. Clone Repository
+To clone the OraHub Repository you will need to be on the Corporate Network.
 ```bash
 anhopki-mac:tmp anhopki$ git clone git@orahub.oraclecorp.com:andrew.hopkinson/okit.oci.web.designer.git
 
@@ -65,6 +66,7 @@ total 56
 8 -rwxr-xr-x   1 anhopki  staff   654B 15 Aug 10:08 start-gunicorn.sh
 ```
 ##### 3. Execute Build Script
+For this to work correctly you will need to be **off** the Corporate Network.
 ```bash
 anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```

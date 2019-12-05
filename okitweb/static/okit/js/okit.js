@@ -890,21 +890,19 @@ class OkitJson {
      */
     draw() {
         console.groupCollapsed('Drawing SVG Canvas');
-        // Initialise SVG Coordinates
-        /*
-        for (let key in this) {
-            console.info('Processing ' + key);
-            if (Array.isArray(this[key])) {
-                for (let element of this[key]) {
-                    element.svg = new OkitSvg();
-                }
-            }
-        }
-        */
         // Display Json
         displayOkitJson();
         // Clear existing
-        clearDiagram();
+        //clearCanvas();
+        // New canvas
+        let width = 0;
+        let height = 0;
+        for (let compartment of this.compartments) {
+            let dimensions = compartment.getDimensions();
+            width = Math.max(width, dimensions.width);
+            height = Math.max(height, dimensions.height);
+        }
+        newCanvas('canvas-wrapper', width, height);
 
         //console.info(JSON.stringify(this, null, 2));
         console.info(this);
@@ -976,6 +974,21 @@ class OkitJson {
             load_balancer.draw();
         }
 
+        // Resize Main Canvas if required
+        let canvas_svg = d3.select("#canvas-svg");
+        console.info('Canvas Width   : ' + canvas_svg.attr('width'));
+        console.info('Canvas Height  : ' + canvas_svg.attr('height'));
+        console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
+        $("#canvas-svg").children("svg [data-type='" + compartment_artifact + "']").each(function () {
+            console.info('Width   : ' + this.getAttribute('width'));
+            console.info('Height  : ' + this.getAttribute('height'));
+            console.info('viewBox : ' + this.getAttribute('viewBox'));
+            canvas_svg.attr('width', Math.max(Number(canvas_svg.attr('width')), Number(this.getAttribute('width'))));
+            canvas_svg.attr('height', Math.max(Number(canvas_svg.attr('height')), Number(this.getAttribute('height'))));
+        });
+        console.info('Canvas Width   : ' + canvas_svg.attr('width'));
+        console.info('Canvas Height  : ' + canvas_svg.attr('height'));
+        console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
         console.groupEnd();
     }
 
