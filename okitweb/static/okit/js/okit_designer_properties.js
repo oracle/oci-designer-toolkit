@@ -67,8 +67,9 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                 if (this.type === 'text') {
                     json_element[this.id] = this.value;
                     // If this is the name field copy to the Ids Map
-                    if (this.id === 'display_name') {
-                        okitIdsJsonObj[json_element['id']] = this.value;
+                    if (this.id === 'display_name' || this.id === 'name') {
+                        json_element['display_name'] = this.value;
+                        json_element['name'] = this.value;
                         d3.select('#' + json_element['id'] + '-title')
                             .text(this.value);
                         let text = d3.select('#' + json_element['id'] + '-display-name');
@@ -77,7 +78,6 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                         }
                     } else if (this.id === 'name') {
                         // Compartment Processing
-                        okitIdsJsonObj[json_element['id']] = this.value;
                         d3.select('#' + json_element['id'] + '-title')
                             .text(this.value);
                         let text = d3.select('#' + json_element['id'] + '-tab');

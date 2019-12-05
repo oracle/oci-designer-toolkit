@@ -273,11 +273,6 @@ function drawArtifact(definition) {
 
 function drawSVGforJson() {
     console.groupCollapsed('Drawing SVG Canvas');
-    // Display Source Code
-    // displayOkitJson();
-    // Clear existing
-    // clearDiagram();
-    // Draw SVG
     okitJson.draw();
     console.groupEnd();
 
@@ -396,11 +391,14 @@ function addGrid(canvas_svg) {
         .attr("fill", "url(#grid)");
 }
 
-function newCanvas(parent_id="canvas-wrapper") {
+const default_canvas_width = Math.round($(window).width() / 10) * 10;
+const default_canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
+
+function newCanvas(parent_id="canvas-wrapper", width=default_canvas_width, height=default_canvas_height) {
     console.groupCollapsed('New Canvas');
     let compartment_div = d3.select('#' + parent_id);
-    let canvas_width = Math.round($(window).width() / 10) * 10;
-    let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
+    //let canvas_width = Math.round($(window).width() / 10) * 10;
+    //let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
     let parent_width = $('#' + parent_id).width();
     let parent_height = $('#' + parent_id).height();
     console.info('JQuery Width  : ' + $('#' + parent_id).width());
@@ -409,8 +407,8 @@ function newCanvas(parent_id="canvas-wrapper") {
     console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
     console.info('Window Width  : ' + $(window).width());
     console.info('Window Height : ' + $(window).height());
-    console.info('Canvas Width  : ' + canvas_width);
-    console.info('Canvas Height : ' + canvas_height);
+    console.info('Canvas Width  : ' + width);
+    console.info('Canvas Height : ' + height);
     // Empty existing Canvas
     compartment_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc
@@ -419,9 +417,9 @@ function newCanvas(parent_id="canvas-wrapper") {
         .attr("id", 'canvas-svg')
         .attr("x", 0)
         .attr("y", 0)
-        .attr("width", canvas_width)
-        .attr("height", canvas_height)
-        .attr("viewBox", "0 0 " + canvas_width + " " + canvas_height)
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", "0 0 " + width + " " + height)
         //.attr("viewBox", "0 0 " + parent_width + " " + parent_height)
         .attr("preserveAspectRatio", "xMinYMin meet");
 

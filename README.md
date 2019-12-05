@@ -27,6 +27,7 @@ python modules are installed and in addition provide a simple flask server that 
 Therefore these installation instructions will describe the docker based implementation.
 
 ##### 1. Clone Repository
+To clone the OraHub Repository you will need to be on the Corporate Network.
 ```bash
 anhopki-mac:tmp anhopki$ git clone git@orahub.oraclecorp.com:andrew.hopkinson/okit.oci.web.designer.git
 
@@ -65,6 +66,7 @@ total 56
 8 -rwxr-xr-x   1 anhopki  staff   654B 15 Aug 10:08 start-gunicorn.sh
 ```
 ##### 3. Execute Build Script
+For this to work correctly you will need to be **off** the Corporate Network.
 ```bash
 anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
@@ -1017,21 +1019,21 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 ## 3rd Party Libraries
 ### Javascript
 
-| Library    | License    | Home Page                                               |
-| ---------- | ---------- | ------------------------------------------------------- |
-| jQuery     | MIT        | 
-| d3         | BSD        |
+| Library    | Version | License   | Sub Type   | Home Page                                               |
+| ---------- | ------- | --------- | ---------- | ------------------------------------------------------- |
+| jQuery     | 3.4.1   | MIT       | Expat      | [JQuery License](https://jquery.org/license/)           |
+| d3         | 5.14.2  | BSD       | 3-Clause   | [d3](https://d3js.org/)                                 |
 
 ### Python
 
-| Library    | License    | Home Page                                               |
-| ---------- | ---------- | ------------------------------------------------------- |
-| flask      | BSD        | [PyPi Flask](https://pypi.org/project/Flask/)           |
-| gunicorn   | MIT        | [PyPi gunicorn](https://pypi.org/project/gunicorn/)     |
-| jinja2     | BSD        | [PyPi Jinja2](https://pypi.org/project/Jinja2/)         |
-| pyyaml     | MIT        | [PyPi PyYAML](https://pypi.org/project/simplejson/)     |
-| simplejson | MIT        | [PyPi simplejson](https://pypi.org/project/simplejson/) |
-| werkzeug   | BSD        | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)     |
+| Library    | Version | License   | Sub Type   | Home Page                                               |
+| ---------- | ------- | --------- | ---------- | ------------------------------------------------------- |
+| flask      | 1.1.1   | BSD       | 3-Clause   | [PyPi Flask](https://pypi.org/project/Flask/)           |
+| gunicorn   | 20.0.4  | MIT       |            | [PyPi gunicorn](https://pypi.org/project/gunicorn/)     |
+| jinja2     | 2.10.3  | BSD       | 3-Clause   | [PyPi Jinja2](https://pypi.org/project/Jinja2/)         |
+| pyyaml     | 5.2     | MIT       |            | [PyPi PyYAML](https://pypi.org/project/PyYAML/)         |
+| simplejson | 3.17.0  | MIT / AFL |            | [PyPi simplejson](https://pypi.org/project/simplejson/) |
+| werkzeug   | 0.16.0  | BSD       | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)     |
 
 ## Contributing
 

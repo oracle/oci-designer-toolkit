@@ -60,11 +60,6 @@ function generateConnectorId(sourceid, destinationid) {
 ** New File functionality
  */
 
-function handleNew(evt) {
-    // newDiagram();
-    window.location = 'designer';
-}
-
 function newDiagram() {
     console.groupCollapsed('Creating New Diagram');
     okitJson = new OkitJson();
@@ -78,24 +73,6 @@ function clearTabs() {
     d3.select('#canvas-wrapper').append('div')
         .attr("id", "compartment-tabs")
         .attr("class", "tab");
-}
-
-function clearDiagram() {
-    console.groupCollapsed('Clearing Diagram');
-    // Clear Artifact
-    clearArtifactData();
-    // Clear Canvas
-    clearCanvas();
-    console.groupEnd();
-}
-
-function clearArtifactData() {
-    console.groupCollapsed('Clearing Artifact Data');
-    for (let clear_function of asset_clear_functions) {
-        console.info('Calling ' + clear_function);
-        window[clear_function]();
-    }
-    console.groupEnd();
 }
 
 /*
