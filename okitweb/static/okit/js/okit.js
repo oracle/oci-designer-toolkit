@@ -1044,6 +1044,13 @@ class OkitJson {
     // Dynamic Routing Gateway
     newDynamicRoutingGateway(data, parent=null) {
         console.info('New Dynamic Routing Gateway');
+        for (let gateway of this.dynamic_routing_gateways) {
+            if (gateway.vcn_id === data.parent_id) {
+                // We are only allowed a single Dynamic Routing Gateway peer VCN
+                alert('The maximum limit of 1 for Dynamic Routing Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                return {error: 'Service Gateway Already Exists.'};
+            }
+        }
         this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
         return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
     }
@@ -1065,6 +1072,13 @@ class OkitJson {
     // Internet Gateway
     newInternetGateway(data, parent=null) {
         console.info('New Internet Gateway');
+        for (let gateway of this.internet_gateways) {
+            if (gateway.vcn_id === data.parent_id) {
+                // We are only allowed a single Internet Gateway peer VCN
+                alert('The maximum limit of 1 for Internet Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                return {error: 'Service Gateway Already Exists.'};
+            }
+        }
         this['internet_gateways'].push(new InternetGateway(data, this, parent));
         return this['internet_gateways'][this['internet_gateways'].length - 1];
     }
@@ -1079,6 +1093,13 @@ class OkitJson {
     // NAT Gateway
     newNATGateway(data, parent=null) {
         console.info('New NAT Gateway');
+        for (let gateway of this.nat_gateways) {
+            if (gateway.vcn_id === data.parent_id) {
+                // We are only allowed a single NAT Gateway peer VCN
+                alert('The maximum limit of 1 for NAT Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                return {error: 'Service Gateway Already Exists.'};
+            }
+        }
         this['nat_gateways'].push(new NATGateway(data, this, parent));
         return this['nat_gateways'][this['nat_gateways'].length - 1];
     }
@@ -1107,6 +1128,13 @@ class OkitJson {
     // Service Gateway
     newServiceGateway(data, parent=null) {
         console.info('New Service Gateway');
+        for (let gateway of this.service_gateways) {
+            if (gateway.vcn_id === data.parent_id) {
+                // We are only allowed a single Service Gateway peer VCN
+                alert('The maximum limit of 1 for Service Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                return {error: 'Service Gateway Already Exists.'};
+            }
+        }
         this['service_gateways'].push(new ServiceGateway(data, this, parent));
         return this['service_gateways'][this['service_gateways'].length - 1];
     }
@@ -1135,6 +1163,7 @@ class OkitJson {
     ** Get Artifact Processing
      */
 
+    // Block Storage Volume
     getBlockStorageVolume(id='') {
         for (let artifact of this.block_storage_volumes) {
             if (artifact.id === id) {
@@ -1144,6 +1173,17 @@ class OkitJson {
         return {};
     }
 
+    // Compartment
+    getCompartment(id='') {
+        for (let artifact of this.compartments) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
+    // Instance
     getInstance(id='') {
         for (let artifact of this.instances) {
             if (artifact.id === id) {

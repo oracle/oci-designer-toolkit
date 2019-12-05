@@ -19,16 +19,21 @@ let asset_delete_functions = {};
 let asset_query_functions = {};
 let asset_clear_functions = [];
 
-function addAssetToDropTarget(artifact, title, target_id, compartment_id) {
+function addAssetToDropTarget(artifact, title, target_id, compartment_id, target_type) {
     console.info('addAssetToDropTarget - Artifact       : ' + artifact);
     console.info('addAssetToDropTarget - Title          : ' + title);
     console.info('addAssetToDropTarget - Target Id      : ' + target_id);
+    console.info('addAssetToDropTarget - Target Type    : ' + target_type);
     console.info('addAssetToDropTarget - Compartment Id : ' + compartment_id);
     console.info('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
     let newFunction = 'new' + artifact.split(' ').join('');
+    let getFunction = 'get' + target_type.split(' ').join('');
     console.info('New Function : ' + newFunction);
+    console.info('Get Function : ' + getFunction);
     //window[asset_add_functions[artifact]](target_id, compartment_id, title);
-    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: title});
+    let parentArtifact = okitJson[getFunction](target_id);
+    console.info('Parent : ' + JSON.stringify(parentArtifact));
+    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: title}, parentArtifact);
     console.info(JSON.stringify(result, null, 2));
     okitJson.draw();
 }
@@ -149,12 +154,12 @@ function handleDrop(e) {
 
     //this.innerHTML = e.dataTransfer.getData('text/html');
     let data = JSON.parse(e.dataTransfer.getData('text/plain'));
-    let type = e.target.getAttribute('data-type');
+    let target_type = e.target.getAttribute('data-type');
     let compartment_id = e.target.getAttribute('data-compartment-id');
     let target_id = e.target.id;
     //target_id = e.target.getAttribute('data-okit-id');
     // Call Add Function
-    addAssetToDropTarget(data.artifact, data.title, target_id, compartment_id)
+    addAssetToDropTarget(data.artifact, data.title, target_id, compartment_id, target_type);
 
     this.classList.remove('over');  // this / e.target is previous target element.
     console.groupEnd();
