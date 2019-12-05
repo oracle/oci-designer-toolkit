@@ -367,7 +367,6 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
         //return polyline;
     }
     console.groupEnd();
-    return;
 }
 
 function coordString(coord) {
