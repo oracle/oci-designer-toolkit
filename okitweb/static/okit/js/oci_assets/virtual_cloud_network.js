@@ -328,7 +328,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {
-        return [internet_gateway_artifact, nat_gateway_artifact, service_gateway_artifact, dynamic_routing_gateway_artifact];
+        return [internet_gateway_artifact, nat_gateway_artifact, dynamic_routing_gateway_artifact];
     }
 
     getTopArtifacts() {
@@ -337,6 +337,10 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
 
     getContainerArtifacts() {
         return [subnet_artifact];
+    }
+
+    getRightEdgeArtifacts() {
+        return[service_gateway_artifact]
     }
 
 

@@ -451,6 +451,14 @@ class OkitArtifact {
     }
 
     // Right Edge
+    getFirstRightEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(this.getDimensions().width - icon_width),
+            dy: Math.round(positional_adjustments.padding.x)
+        };
+        return offset;
+    }
+
     getRightEdgeChildOffset() {
         alert('Get Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.');
     }
@@ -724,7 +732,10 @@ class OkitContainerArtifact extends OkitArtifact {
 
     getRightChildOffset() {}
 
-    getRightEdgeChildOffset() {}
+    getRightEdgeChildOffset() {
+        let offset = this.getFirstRightEdgeChildOffset();
+        return offset;
+    }
 }
 
 class OkitJson {
