@@ -63,7 +63,7 @@ class OCIFastConnects(OCIVirtualNetworkConnection):
         return self.fast_connects_json
 
 
-class OCIDynamicRoutingGateway(object):
+class OCIFastConnect(object):
     def __init__(self, config=None, configfile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
