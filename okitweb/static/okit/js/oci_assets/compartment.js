@@ -235,7 +235,7 @@ class Compartment extends OkitContainerArtifact {
     }
 
     getRightArtifacts() {
-        return [autonomous_database_artifact, object_storage_bucket_artifact];
+        return [autonomous_database_artifact, object_storage_bucket_artifact, fast_connect_artifact];
     }
 
 
