@@ -1,5 +1,14 @@
 console.info('Loaded OKIT Javascript');
 /*
+** Add Clone to JSON package
+ */
+if (typeof JSON.clone !== "function") {
+    JSON.clone = function(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    };
+}
+
+/*
 ** Define OKIT Artifact Classes
  */
 class OkitSvg {

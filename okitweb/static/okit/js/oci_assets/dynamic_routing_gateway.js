@@ -14,7 +14,7 @@ const dynamic_routing_gateway_query_cb = "dynamic-routing-gateway-query-cb";
 
 function queryDynamicRoutingGatewayAjax(compartment_id) {
     console.info('------------- queryDynamicRoutingGatewayAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     if ('dynamic_routing_gateway_filter' in okitQueryRequestJson) {
         request_json['dynamic_routing_gateway_filter'] = okitQueryRequestJson['dynamic_routing_gateway_filter'];

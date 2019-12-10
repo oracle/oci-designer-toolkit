@@ -17,7 +17,7 @@ const min_instance_height = Math.round(icon_height * 5 / 2);
 
 function queryInstanceAjax(compartment_id, subnet_id) {
     console.info('------------- queryInstanceAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     request_json['subnet_id'] = subnet_id;
     if ('instance_filter' in okitQueryRequestJson) {

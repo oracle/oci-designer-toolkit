@@ -14,7 +14,7 @@ const service_gateway_query_cb = "service-gateway-query-cb";
 
 function queryServiceGatewayAjax(compartment_id, vcn_id) {
     console.info('------------- queryServiceGatewayAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('service_gateway_filter' in okitQueryRequestJson) {

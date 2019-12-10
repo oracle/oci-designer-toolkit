@@ -23,7 +23,6 @@ function queryCompartmentAjax() {
         data: JSON.stringify(okitQueryRequestJson),
         success: function(resp) {
             let response_json = [JSON.parse(resp)];
-            //okitJson['compartments'] = response_json;
             okitJson.load({compartments: response_json});
             let len =  response_json.length;
             if (len > 0) {

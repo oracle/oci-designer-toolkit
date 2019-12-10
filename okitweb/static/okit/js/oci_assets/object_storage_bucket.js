@@ -14,7 +14,7 @@ const object_storage_bucket_query_cb = "object-storage-bucket-query-cb";
 
 function queryObjectStorageBucketAjax(compartment_id) {
     console.info('------------- queryObjectStorageBucketAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     if ('object_storage_bucket_filter' in okitQueryRequestJson) {
         request_json['object_storage_bucket_filter'] = okitQueryRequestJson['object_storage_bucket_filter'];

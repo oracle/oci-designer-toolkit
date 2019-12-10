@@ -14,7 +14,7 @@ const internet_gateway_query_cb = "internet-gateway-query-cb";
 
 function queryInternetGatewayAjax(compartment_id, vcn_id) {
     console.info('------------- queryInternetGatewayAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('internet_gateway_filter' in okitQueryRequestJson) {

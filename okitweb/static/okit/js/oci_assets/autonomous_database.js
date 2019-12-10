@@ -14,7 +14,7 @@ const autonomous_database_query_cb = "autonomous-database-query-cb";
 
 function queryAutonomousDatabaseAjax(compartment_id) {
     console.info('------------- queryAutonomousDatabaseAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     if ('autonomous_database_filter' in okitQueryRequestJson) {
         request_json['autonomous_database_filter'] = okitQueryRequestJson['autonomous_database_filter'];
