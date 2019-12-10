@@ -762,6 +762,7 @@ class OkitJson {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
+        this.containers = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
         this.file_storage_systems = [];
@@ -989,6 +990,10 @@ class OkitJson {
         // File Storage System
         for (let file_storage_system of this.file_storage_systems) {
             file_storage_system.draw();
+        }
+        // Containers
+        for (let container of this.containers) {
+            container.draw();
         }
         // Instances
         for (let instance of this.instances) {
