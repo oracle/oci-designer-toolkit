@@ -14,7 +14,7 @@ const fast_connect_query_cb = "fast-connect-query-cb";
 
 function queryFastConnectAjax(compartment_id) {
     console.info('------------- queryFastConnectAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     if ('fast_connect_filter' in okitQueryRequestJson) {
         request_json['fast_connect_filter'] = okitQueryRequestJson['fast_connect_filter'];
