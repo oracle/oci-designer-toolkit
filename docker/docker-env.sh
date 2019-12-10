@@ -38,12 +38,14 @@ export VOLUMES="\
        -v ${ROOT_DIR}/output/terraform:/okit/terraform:Z \
        -v ${ROOT_DIR}/output/ansible:/okit/ansible:Z \
        -v ${ROOT_DIR}/output/python:/okit/python:Z \
+       -v ${ROOT_DIR}/output/log:/okit/log:Z \
        -v ${ROOT_DIR}/okitweb:/okit/okitweb:Z \
        -v ${ROOT_DIR}/visualiser:/okit/visualiser:Z \
        -v ${ROOT_DIR}/converter:/okit/converter:Z
 "
 
 export ENVIRONMENT="\
+       -e OCI_LOGFILE=/okit/log/okit.log \
        -e no_proxy=* \
        -e http_proxy="${http_proxy}" \
        -e https_proxy="${https_proxy}" \
