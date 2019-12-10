@@ -97,6 +97,8 @@ function handleQueryOci(e) {
 
     // Hide Menu
     hideNavMenu();
+    // Set Query Config Profile
+    $('#config_profile').val(okitSettings.profile);
     // Get Compartments
     $.ajax({
         type: 'get',

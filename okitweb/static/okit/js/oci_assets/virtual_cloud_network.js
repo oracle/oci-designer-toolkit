@@ -15,7 +15,7 @@ const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 
 function queryVirtualCloudNetworkAjax(compartment_id) {
     console.info('------------- queryVirtualCloudNetworkAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
         request_json['virtual_cloud_network_filter'] = okitQueryRequestJson['virtual_cloud_network_filter'];

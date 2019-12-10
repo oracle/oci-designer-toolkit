@@ -14,7 +14,7 @@ const nat_gateway_query_cb = "nat-gateway-query-cb";
 
 function queryNATGatewayAjax(compartment_id, vcn_id) {
     console.info('------------- queryNATGatewayAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('nat_gateway_filter' in okitQueryRequestJson) {

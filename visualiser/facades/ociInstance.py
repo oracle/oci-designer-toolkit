@@ -73,7 +73,7 @@ class OCIInstances(OCIComputeConnection):
         self.compartment_id = compartment_id
         self.instances_json = []
         self.instances_obj = []
-        super(OCIInstances, self).__init__(config=config, configfile=configfile)
+        super(OCIInstances, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -97,10 +97,10 @@ class OCIInstances(OCIComputeConnection):
         logger.debug(str(self.instances_json))
 
         # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
-        volume_attachments = OCIVolumeAttachments(config=self.config, configfile=self.configfile, compartment_id=compartment_id).list()
+        volume_attachments = OCIVolumeAttachments(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).list()
 
         # Get VNic Attachments as a single call and loop through them to see if they are associated with the instance.
-        vnic_attachments = OCIVnicAttachments(config=self.config, configfile=self.configfile, compartment_id=compartment_id).list()
+        vnic_attachments = OCIVnicAttachments(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).list()
 
         for instance in self.instances_json:
             # Add Attached Block Storage Volumes
