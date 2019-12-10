@@ -224,6 +224,7 @@ The hamburger menu in the top left will display a slide out menu with all availa
 - <img src="documentation/images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
 - <img src="documentation/images/Object_Storage_Bucket.png?raw=true" width="30" height="30"/> Object Storage Bucket
 - <img src="documentation/images/Autonomous_Database.png?raw=true" width="30" height="30"/>   Autonomous Database
+- <img src="okitweb/static/okit/palette/storage/File_Storage_System.svg?sanitize=true" width="30" height="30"/>   File Storage System
 
 ##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
