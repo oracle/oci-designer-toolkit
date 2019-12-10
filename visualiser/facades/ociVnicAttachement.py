@@ -27,13 +27,13 @@ logger = getLogger()
 
 
 class OCIVnicAttachments(OCIComputeConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None, vnic_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, instance_id=None, vnic_id=None):
         self.compartment_id = compartment_id
         self.instance_id = instance_id
         self.vnic_id = vnic_id
         self.vnic_attachments_json = []
         self.vnic_attachments_obj = []
-        super(OCIVnicAttachments, self).__init__(config=config, configfile=configfile)
+        super(OCIVnicAttachments, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, instance_id=None, vnic_id=None, filter=None):
         if compartment_id is None:
@@ -56,14 +56,15 @@ class OCIVnicAttachments(OCIComputeConnection):
         # Build List of Subnet Objects
         self.vnic_attachments_obj = []
         for vnic_attachment in self.vnic_attachments_json:
-            self.vnic_attachments_obj.append(OCIVnicAttachment(self.config, self.configfile, vnic_attachment))
+            self.vnic_attachments_obj.append(OCIVnicAttachment(self.config, self.configfile, self.profile, vnic_attachment))
 
         return self.vnic_attachments_json
 
 
 class OCIVnicAttachment(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

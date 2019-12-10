@@ -27,12 +27,12 @@ logger = getLogger()
 
 
 class OCILoadBalancerHosts(OCILoadBalancerConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, lb_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, lb_id=None):
         self.compartment_id = compartment_id
         self.lb_id = lb_id
         self.lb_hosts_json = []
         self.lb_hosts_obj = []
-        super(OCILoadBalancerHosts, self).__init__(config=config, configfile=configfile)
+        super(OCILoadBalancerHosts, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -50,14 +50,15 @@ class OCILoadBalancerHosts(OCILoadBalancerConnection):
         # Build List of LoadBalancer Host Objects
         self.lb_hosts_obj = []
         for lb_host in self.lb_hosts_json:
-            self.lb_hosts_obj.append(OCILoadBalancerHost(self.config, self.configfile, lb_host))
+            self.lb_hosts_obj.append(OCILoadBalancerHost(self.config, self.configfile, self.profile, lb_host))
 
         return self.lb_hosts_json
 
 
 class OCILoadBalancerHost(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

@@ -27,13 +27,13 @@ logger = getLogger()
 
 
 class OCIPrivateIps(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, subnet_id=None, vnic_id=None, ip_address=None):
+    def __init__(self, config=None, configfile=None, profile=None, subnet_id=None, vnic_id=None, ip_address=None):
         self.subnet_id = subnet_id
         self.vnic_id = vnic_id
         self.ip_address = ip_address
         self.private_ips_json = []
         self.private_ips_obj = []
-        super(OCIPrivateIps, self).__init__(config=config, configfile=configfile)
+        super(OCIPrivateIps, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, subnet_id=None, vnic_id=None, ip_address=None, filter=None):
         if subnet_id is None:
@@ -56,14 +56,15 @@ class OCIPrivateIps(OCIVirtualNetworkConnection):
         # Build List of Subnet Objects
         self.private_ips_obj = []
         for private_ip in self.private_ips_json:
-            self.private_ips_obj.append(OCIPrivateIp(self.config, self.configfile, private_ip))
+            self.private_ips_obj.append(OCIPrivateIp(self.config, self.configfile, self.profile, private_ip))
 
         return self.private_ips_json
 
 
 class OCIPrivateIp(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

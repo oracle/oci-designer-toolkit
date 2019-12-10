@@ -70,11 +70,11 @@ class Compartment extends OkitContainerArtifact {
         this.id = 'okit-' + compartment_prefix + '-' + uuidv4();
         this.compartment_id = this.id;
         this.name = generateDefaultName(compartment_prefix, okitjson.compartments.length + 1);
-        this.display_name = this.name;
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
         }
+        this.display_name = this.name;
     }
 
 

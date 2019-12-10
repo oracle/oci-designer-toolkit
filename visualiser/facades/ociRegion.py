@@ -27,13 +27,13 @@ logger = getLogger()
 
 
 class OCIRegions(OCIIdentityConnection):
-    def __init__(self, config=None, configfile=None):
+    def __init__(self, config=None, configfile=None, profile=None):
         self.regions_obj = []
         self.regions_json = []
         self.names = {}
         self.parents = {}
         self.canonicalnames = []
-        super(OCIRegions, self).__init__(config=config, configfile=configfile)
+        super(OCIRegions, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def get(self, region_id):
         region = self.client.get_region(region_id=region_id).data
@@ -59,13 +59,14 @@ class OCIRegions(OCIIdentityConnection):
         self.regions_obj = []
         for region in self.regions_json:
             region['display_name'] = self.getCanonicalName(region['id'])
-            self.regions_obj.append(OCIRegion(self.config, self.configfile, region))
+            self.regions_obj.append(OCIRegion(self.config, self.configfile, self.profile, region))
         return self.regions_json
 
 
 class OCIRegion(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

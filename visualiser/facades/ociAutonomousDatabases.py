@@ -27,11 +27,11 @@ logger = getLogger()
 
 
 class OCIAutonomousDatabases(OCIAutonomousDatabaseConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.autonomous_databases_json = []
         self.autonomous_databases_obj = []
-        super(OCIAutonomousDatabases, self).__init__(config=config, configfile=configfile)
+        super(OCIAutonomousDatabases, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -58,8 +58,9 @@ class OCIAutonomousDatabases(OCIAutonomousDatabaseConnection):
 
 
 class OCIAutonomousDatabase(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

@@ -27,11 +27,11 @@ logger = getLogger()
 
 
 class OCIDynamicRoutingGateways(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.dynamic_routing_gateways_json = []
         self.dynamic_routing_gateways_obj = []
-        super(OCIDynamicRoutingGateways, self).__init__(config=config, configfile=configfile)
+        super(OCIDynamicRoutingGateways, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -57,13 +57,14 @@ class OCIDynamicRoutingGateways(OCIVirtualNetworkConnection):
         # Build List of DynamicRoutingGateway Objects
         self.dynamic_routing_gateways_obj = []
         for dynamic_routing_gateway in self.dynamic_routing_gateways_json:
-            self.dynamic_routing_gateways_obj.append(OCIDynamicRoutingGateway(self.config, self.configfile, dynamic_routing_gateway))
+            self.dynamic_routing_gateways_obj.append(OCIDynamicRoutingGateway(self.config, self.configfile, self.profile, dynamic_routing_gateway))
         return self.dynamic_routing_gateways_json
 
 
 class OCIDynamicRoutingGateway(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

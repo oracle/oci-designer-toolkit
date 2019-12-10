@@ -27,12 +27,12 @@ logger = getLogger()
 
 
 class OCIRouteTables(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, vcn_id=None):
         self.compartment_id = compartment_id
         self.vcn_id = vcn_id
         self.route_tables_json = []
         self.route_tables_obj = []
-        super(OCIRouteTables, self).__init__(config=config, configfile=configfile)
+        super(OCIRouteTables, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -51,7 +51,7 @@ class OCIRouteTables(OCIVirtualNetworkConnection):
             # Build List of RouteTable Objects
             self.route_tables_obj = []
             for route_table in self.route_tables_json:
-                self.route_tables_obj.append(OCIRouteTable(self.config, self.configfile, route_table))
+                self.route_tables_obj.append(OCIRouteTable(self.config, self.configfile, self.profile, route_table))
         else:
             logger.warn('Virtual Cloud Network Id has not been specified.')
 
@@ -59,8 +59,9 @@ class OCIRouteTables(OCIVirtualNetworkConnection):
 
 
 class OCIRouteTable(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

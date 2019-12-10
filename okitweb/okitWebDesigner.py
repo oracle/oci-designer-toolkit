@@ -14,49 +14,42 @@ __module__ = "okitWebDesigner"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import oci
-import json
 import os
 import shutil
 import tempfile
 import time
 import urllib
-
 from flask import Blueprint
-from flask import redirect
 from flask import render_template
 from flask import request
-from flask import send_file
 from flask import send_from_directory
-from flask import session
-from flask import url_for
 
+import json
 from common.ociCommon import logJson
-from common.ociCommon import standardiseIds
 from common.ociCommon import readJsonFile
+from common.ociCommon import standardiseIds
+from common.ociLogging import getLogger
 from common.ociQuery import executeQuery
-from generators.ociTerraformGenerator import OCITerraformGenerator
-from generators.ociTerraform11Generator import OCITerraform11Generator
-from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
-from generators.ociAnsibleGenerator import OCIAnsibleGenerator
+from facades.ociAutonomousDatabases import OCIAutonomousDatabases
+from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
-from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from facades.ociFileStorageSystems import OCIFileStorageSystems
+from facades.ociInstance import OCIInstances
 from facades.ociInternetGateway import OCIInternetGateways
+from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociNATGateway import OCINATGateways
-from facades.ociServiceGateway import OCIServiceGateways
+from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
+from facades.ociResourceManager import OCIResourceManagers
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
+from facades.ociServiceGateway import OCIServiceGateways
 from facades.ociSubnet import OCISubnets
-from facades.ociLoadBalancer import OCILoadBalancers
-from facades.ociInstance import OCIInstances
-from facades.ociInstance import OCIInstanceVnics
-from facades.ociResourceManager import OCIResourceManagers
-from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
-from facades.ociAutonomousDatabases import OCIAutonomousDatabases
-from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
-from facades.ociFileStorageSystems import OCIFileStorageSystems
-
-from common.ociLogging import getLogger
+from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from generators.ociAnsibleGenerator import OCIAnsibleGenerator
+from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
+from generators.ociTerraform11Generator import OCITerraform11Generator
+from generators.ociTerraformGenerator import OCITerraformGenerator
 
 # Configure logging
 logger = getLogger()
@@ -191,7 +184,11 @@ def generate(language):
 
 @bp.route('/oci/compartment', methods=(['GET']))
 def ociCompartment():
-    ociCompartments = OCICompartments()
+    query_string = request.query_string
+    parsed_query_string = urllib.parse.unquote(query_string.decode())
+    query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+    logJson(query_json)
+    ociCompartments = OCICompartments(profile=query_json.get('config_profile', 'DEFAULT'))
     compartments = ociCompartments.listTenancy()
     compartments = [{'display_name': c['display_name'], 'id': c['id']} for c in compartments]
     compartments.sort(key=lambda x: x['display_name'])

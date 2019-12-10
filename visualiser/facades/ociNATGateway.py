@@ -27,12 +27,12 @@ logger = getLogger()
 
 
 class OCINATGateways(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, vcn_id=None):
         self.compartment_id = compartment_id
         self.vcn_id = vcn_id
         self.nat_gateways_json = []
         self.nat_gateways_obj = []
-        super(OCINATGateways, self).__init__(config=config, configfile=configfile)
+        super(OCINATGateways, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -61,7 +61,7 @@ class OCINATGateways(OCIVirtualNetworkConnection):
             # Build List of NAT Gateway Objects
             self.nat_gateways_obj = []
             for nat_gateway in self.nat_gateways_json:
-                self.nat_gateways_obj.append(OCINATGateway(self.config, self.configfile, nat_gateway))
+                self.nat_gateways_obj.append(OCINATGateway(self.config, self.configfile, self.profile, nat_gateway))
         else:
             logger.warn('Virtual Cloud Network Id has not been specified.')
 
@@ -69,8 +69,9 @@ class OCINATGateways(OCIVirtualNetworkConnection):
 
 
 class OCINATGateway(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

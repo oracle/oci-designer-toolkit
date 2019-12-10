@@ -18,22 +18,21 @@ __module__ = "ociFastConnect"
 
 
 import oci
-import re
 import sys
 
-from facades.ociConnection import OCIVirtualNetworkConnection
 from common.ociLogging import getLogger
+from facades.ociConnection import OCIVirtualNetworkConnection
 
 # Configure logging
 logger = getLogger()
 
 
 class OCIFastConnects(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, **kwargs):
         self.compartment_id = compartment_id
         self.fast_connects_json = []
         self.fast_connects_obj = []
-        super(OCIFastConnects, self).__init__(config=config, configfile=configfile)
+        super(OCIFastConnects, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -59,14 +58,15 @@ class OCIFastConnects(OCIVirtualNetworkConnection):
         # Build List of FastConnect Objects
         self.fast_connects_obj = []
         for fast_connect in self.fast_connects_json:
-            self.fast_connects_obj.append(OCIFastConnect(self.config, self.configfile, fast_connect))
+            self.fast_connects_obj.append(OCIFastConnect(self.config, self.configfile, self.profile, fast_connect))
         return self.fast_connects_json
 
 
-class OCIDynamicRoutingGateway(object):
+class OCIFastConnect(object):
     def __init__(self, config=None, configfile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 
 
