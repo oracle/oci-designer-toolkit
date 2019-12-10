@@ -40,6 +40,7 @@ from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from facades.ociCompartment import OCICompartments
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
+from facades.ociFastConnect import OCIFastConnects
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociNATGateway import OCINATGateways
