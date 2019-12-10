@@ -63,7 +63,7 @@ class OCIFastConnects(OCIVirtualNetworkConnection):
 
 
 class OCIFastConnect(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
         self.profile = profile

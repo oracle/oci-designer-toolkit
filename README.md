@@ -14,9 +14,10 @@ can quickly be turned into code and ultimately built in the OCI environment.
     2. [Prerequisites](#prerequisites)
     3. [Web Interface](#web-interface)
     4. [Command Line](#command-line)
-3. [Development](#development)
-4. [Contributing](#contributing)
-5. [Examples](#examples)
+3. [Tutorial](#tutorial)
+4. [Development](#development)
+5. [Contributing](#contributing)
+6. [Examples](#examples)
 
 ## Installation
 Although OKIT can simply be downloaded and the command line executed it is recommended that it be executed within a
@@ -27,7 +28,7 @@ python modules are installed and in addition provide a simple flask server that 
 Therefore these installation instructions will describe the docker based implementation.
 
 ##### 1. Clone Repository
-To clone the OraHub Repository you will need to be on the Corporate Network.
+***Note***: To clone the OraHub Repository you will need to be on the Corporate Network.
 ```bash
 anhopki-mac:tmp anhopki$ git clone git@orahub.oraclecorp.com:andrew.hopkinson/okit.oci.web.designer.git
 
@@ -66,7 +67,7 @@ total 56
 8 -rwxr-xr-x   1 anhopki  staff   654B 15 Aug 10:08 start-gunicorn.sh
 ```
 ##### 3. Execute Build Script
-For this to work correctly you will need to be **off** the Corporate Network.
+***Note***: For this to work correctly you will need to be **off** the Corporate Network.
 ```bash
 anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
@@ -305,6 +306,12 @@ cd test/unit.test
 python3 ./generateTFfromOCI.py -d . -c Stefan
 ```
 
+## Tutorial
+The following short tutorial will take you through a worked example for creating a simple 2 Instance load balanced nginx
+implementation. The results of the worked example can be seen in the template (Simple Load Balancer).
+
+**WIP**
+
 ## Development
 All currently active / planned development is documented / being tracked in the internal Jira ticket 
 [OKIT OCI Capture / DevOps / Visualisation Tool](http://ateam-engage.us.oracle.com/jira/browse/INT-2168). 
@@ -416,8 +423,8 @@ Additionally we define the stroke colour for the bounding rectangle used to disp
  */
 
 function queryBlockStorageVolumeAjax(compartment_id) {
-    console.log('------------- queryBlockStorageVolumeAjax --------------------');
-    let request_json = {};
+    console.info('------------- queryBlockStorageVolumeAjax --------------------');
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     if ('block_storage_volume_filter' in okitQueryRequestJson) {
         request_json['block_storage_volume_filter'] = okitQueryRequestJson['block_storage_volume_filter'];
@@ -431,18 +438,21 @@ function queryBlockStorageVolumeAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson['block_storage_volumes'] = response_json;
+            //okitJson['block_storage_volumes'] = response_json;
+            okitJson.load({block_storage_volumes: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
-                console.log('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
+                console.info('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
             }
             redrawSVGCanvas();
-            $('#block-storage-volume-query-cb').prop('checked', true);
+            $('#' + block_storage_volume_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
         error: function(xhr, status, error) {
-            console.log('Status : '+ status)
-            console.log('Error : '+ error)
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            $('#' + block_storage_volume_query_cb).prop('checked', true);
+            hideQueryProgressIfComplete();
         }
     });
 }
