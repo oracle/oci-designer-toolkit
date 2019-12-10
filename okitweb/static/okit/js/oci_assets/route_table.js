@@ -14,7 +14,7 @@ const route_table_query_cb = "route-table-query-cb";
 
 function queryRouteTableAjax(compartment_id, vcn_id) {
     console.info('------------- queryRouteTableAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('route_table_filter' in okitQueryRequestJson) {

@@ -27,12 +27,12 @@ logger = getLogger()
 
 
 class OCIInternetGateways(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, vcn_id=None):
         self.compartment_id = compartment_id
         self.vcn_id = vcn_id
         self.internet_gateways_json = []
         self.internet_gateways_obj = []
-        super(OCIInternetGateways, self).__init__(config=config, configfile=configfile)
+        super(OCIInternetGateways, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -59,7 +59,7 @@ class OCIInternetGateways(OCIVirtualNetworkConnection):
             # Build List of InternetGateway Objects
             self.internet_gateways_obj = []
             for internet_gateway in self.internet_gateways_json:
-                self.internet_gateways_obj.append(OCIInternetGateway(self.config, self.configfile, internet_gateway))
+                self.internet_gateways_obj.append(OCIInternetGateway(self.config, self.configfile, self.profile, internet_gateway))
         else:
             logger.warn('Virtual Cloud Network Id has not been specified.')
 
@@ -67,8 +67,9 @@ class OCIInternetGateways(OCIVirtualNetworkConnection):
 
 
 class OCIInternetGateway(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

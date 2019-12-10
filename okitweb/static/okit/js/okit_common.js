@@ -97,12 +97,15 @@ function handleQueryOci(e) {
 
     // Hide Menu
     hideNavMenu();
+    // Set Query Config Profile
+    $('#config_profile').val(okitSettings.profile);
     // Get Compartments
     $.ajax({
         type: 'get',
         url: 'oci/compartment',
         dataType: 'text',
         contentType: 'application/json',
+        data: JSON.stringify({config_profile: okitSettings.profile}),
         success: function(resp) {
             console.info('Response : ' + resp);
             let jsonBody = JSON.parse(resp)

@@ -23,7 +23,6 @@ function queryCompartmentAjax() {
         data: JSON.stringify(okitQueryRequestJson),
         success: function(resp) {
             let response_json = [JSON.parse(resp)];
-            //okitJson['compartments'] = response_json;
             okitJson.load({compartments: response_json});
             let len =  response_json.length;
             if (len > 0) {
@@ -70,11 +69,11 @@ class Compartment extends OkitContainerArtifact {
         this.id = 'okit-' + compartment_prefix + '-' + uuidv4();
         this.compartment_id = this.id;
         this.name = generateDefaultName(compartment_prefix, okitjson.compartments.length + 1);
-        this.display_name = this.name;
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
         }
+        this.display_name = this.name;
     }
 
 

@@ -14,7 +14,7 @@ const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 
 function queryBlockStorageVolumeAjax(compartment_id) {
     console.info('------------- queryBlockStorageVolumeAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     if ('block_storage_volume_filter' in okitQueryRequestJson) {
         request_json['block_storage_volume_filter'] = okitQueryRequestJson['block_storage_volume_filter'];

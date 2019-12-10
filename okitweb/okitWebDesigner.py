@@ -14,50 +14,43 @@ __module__ = "okitWebDesigner"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import oci
-import json
 import os
 import shutil
 import tempfile
 import time
 import urllib
-
 from flask import Blueprint
-from flask import redirect
 from flask import render_template
 from flask import request
-from flask import send_file
 from flask import send_from_directory
-from flask import session
-from flask import url_for
 
+import json
 from common.ociCommon import logJson
-from common.ociCommon import standardiseIds
 from common.ociCommon import readJsonFile
+from common.ociCommon import standardiseIds
+from common.ociLogging import getLogger
 from common.ociQuery import executeQuery
-from generators.ociTerraformGenerator import OCITerraformGenerator
-from generators.ociTerraform11Generator import OCITerraform11Generator
-from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
-from generators.ociAnsibleGenerator import OCIAnsibleGenerator
+from facades.ociAutonomousDatabases import OCIAutonomousDatabases
+from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociFastConnect import OCIFastConnects
-from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from facades.ociFileStorageSystems import OCIFileStorageSystems
+from facades.ociInstance import OCIInstances
 from facades.ociInternetGateway import OCIInternetGateways
+from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociNATGateway import OCINATGateways
-from facades.ociServiceGateway import OCIServiceGateways
+from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
+from facades.ociResourceManager import OCIResourceManagers
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
+from facades.ociServiceGateway import OCIServiceGateways
 from facades.ociSubnet import OCISubnets
-from facades.ociLoadBalancer import OCILoadBalancers
-from facades.ociInstance import OCIInstances
-from facades.ociInstance import OCIInstanceVnics
-from facades.ociResourceManager import OCIResourceManagers
-from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
-from facades.ociAutonomousDatabases import OCIAutonomousDatabases
-from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
-from facades.ociFileStorageSystems import OCIFileStorageSystems
-
-from common.ociLogging import getLogger
+from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
+from generators.ociAnsibleGenerator import OCIAnsibleGenerator
+from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
+from generators.ociTerraform11Generator import OCITerraform11Generator
+from generators.ociTerraformGenerator import OCITerraformGenerator
 
 # Configure logging
 logger = getLogger()
@@ -192,7 +185,13 @@ def generate(language):
 
 @bp.route('/oci/compartment', methods=(['GET']))
 def ociCompartment():
-    ociCompartments = OCICompartments()
+    query_string = request.query_string
+    parsed_query_string = urllib.parse.unquote(query_string.decode())
+    query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+    logJson(query_json)
+    config_profile = query_json.get('config_profile', 'DEFAULT')
+    logger.info('Using Profile : {0!s:s}'.format(config_profile))
+    ociCompartments = OCICompartments(profile=config_profile)
     compartments = ociCompartments.listTenancy()
     compartments = [{'display_name': c['display_name'], 'id': c['id']} for c in compartments]
     compartments.sort(key=lambda x: x['display_name'])
@@ -223,31 +222,33 @@ def ociArtifacts(artifact):
     query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
     logJson(query_json)
     logger.info(json.dumps(query_json, sort_keys=True, indent=2, separators=(',', ': ')))
+    config_profile = query_json.get('config_profile', 'DEFAULT')
+    logger.info('Using Profile : {0!s:s}'.format(config_profile))
     response_json = {}
     if artifact == 'Compartment':
         logger.info('---- Processing Compartments')
-        oci_compartments = OCICompartments()
+        oci_compartments = OCICompartments(profile=config_profile)
         #response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
         response_json = oci_compartments.get(compartment_id=query_json['compartment_id'])
     elif artifact == 'VirtualCloudNetwork':
         logger.info('---- Processing Virtual Cloud Networks')
-        oci_virtual_cloud_networks = OCIVirtualCloudNetworks(compartment_id=query_json['compartment_id'])
+        oci_virtual_cloud_networks = OCIVirtualCloudNetworks(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
     elif artifact == 'InternetGateway':
         logger.info('---- Processing Internet Gateways')
-        oci_internet_gateways = OCIInternetGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        oci_internet_gateways = OCIInternetGateways(profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
     elif artifact == 'NATGateway':
         logger.info('---- Processing NAT Gateways')
-        oci_nat_gateways = OCINATGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        oci_nat_gateways = OCINATGateways(profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
     elif artifact == 'ServiceGateway':
         logger.info('---- Processing Service Gateways')
-        oci_service_gateways = OCIServiceGateways(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        oci_service_gateways = OCIServiceGateways(profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_service_gateways.list(filter=query_json.get('service_gateway_filter', None))
     elif artifact == 'DynamicRoutingGateway':
         logger.info('---- Processing Dynamic Routing Gateways')
-        oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(compartment_id=query_json['compartment_id'])
+        oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_dynamic_routing_gateways.list(filter=query_json.get('dynamic_routing_gateway_filter', None))
     elif artifact == 'FastConnect':
         logger.info('---- Processing FastConnects')
@@ -255,40 +256,40 @@ def ociArtifacts(artifact):
         response_json = oci_fast_connects.list(filter=query_json.get('fast_connect_filter', None))
     elif artifact == 'RouteTable':
         logger.info('---- Processing Route Tables')
-        oci_route_tables = OCIRouteTables(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        oci_route_tables = OCIRouteTables(profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_route_tables.list(filter=query_json.get('route_table_filter', None))
     elif artifact == 'SecurityList':
         logger.info('---- Processing Security Lists')
-        oci_security_lists = OCISecurityLists(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        oci_security_lists = OCISecurityLists(profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_security_lists.list(filter=query_json.get('security_list_filter', None))
     elif artifact == 'Subnet':
         logger.info('---- Processing Subnets')
-        oci_subnets = OCISubnets(compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        oci_subnets = OCISubnets(profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_subnets.list(filter=query_json.get('subnet_filter', None))
     elif artifact == 'Instance':
         logger.info('---- Processing Instances')
-        oci_instances = OCIInstances(compartment_id=query_json['compartment_id'])
+        oci_instances = OCIInstances(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
     elif artifact == 'LoadBalancer':
         logger.info('---- Processing Load Balancers')
-        oci_load_balancers = OCILoadBalancers(compartment_id=query_json['compartment_id'])
+        oci_load_balancers = OCILoadBalancers(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
         response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
     elif artifact == 'BlockStorageVolume':
         logger.info('---- Processing Block Storage Volumes')
-        oci_block_storage_volumes = OCIBlockStorageVolumes(compartment_id=query_json['compartment_id'])
+        oci_block_storage_volumes = OCIBlockStorageVolumes(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
     elif artifact == 'AutonomousDatabase':
         logger.info('---- Processing Autonomous Databases')
-        oci_autonomous_databases = OCIAutonomousDatabases(compartment_id=query_json['compartment_id'])
+        oci_autonomous_databases = OCIAutonomousDatabases(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
     elif artifact == 'ObjectStorageBucket':
         logger.info('---- Processing Object Storage Buckets')
-        oci_object_storage_buckets = OCIObjectStorageBuckets(compartment_id=query_json['compartment_id'])
+        oci_object_storage_buckets = OCIObjectStorageBuckets(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
     elif artifact == 'FileStorageSystem':
         logger.info('---- Processing File Storage Systems')
-        oci_file_storage_systems = OCIFileStorageSystems(compartment_id=query_json['compartment_id'])
+        oci_file_storage_systems = OCIFileStorageSystems(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_file_storage_systems.list(filter=query_json.get('file_storage_system_filter', None))
     else:
         return '404'

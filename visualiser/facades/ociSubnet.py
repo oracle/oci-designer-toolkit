@@ -27,12 +27,12 @@ logger = getLogger()
 
 
 class OCISubnets(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, vcn_id=None):
         self.compartment_id = compartment_id
         self.vcn_id = vcn_id
         self.subnets_json = []
         self.subnets_obj = []
-        super(OCISubnets, self).__init__(config=config, configfile=configfile)
+        super(OCISubnets, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -51,7 +51,7 @@ class OCISubnets(OCIVirtualNetworkConnection):
             # Build List of Subnet Objects
             self.subnets_obj = []
             for subnet in self.subnets_json:
-                self.subnets_obj.append(OCISubnet(self.config, self.configfile, subnet))
+                self.subnets_obj.append(OCISubnet(self.config, self.configfile, self.profile, subnet))
         else:
             logger.warn('Virtual Cloud Network Id has not been specified.')
 
@@ -59,8 +59,9 @@ class OCISubnets(OCIVirtualNetworkConnection):
 
 
 class OCISubnet(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

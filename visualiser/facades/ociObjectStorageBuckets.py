@@ -28,11 +28,11 @@ logger = getLogger()
 
 
 class OCIObjectStorageBuckets(OCIObjectStorageBucketConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.object_storage_buckets_json = []
         self.object_storage_buckets_obj = []
-        super(OCIObjectStorageBuckets, self).__init__(config=config, configfile=configfile)
+        super(OCIObjectStorageBuckets, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -70,8 +70,9 @@ class OCIObjectStorageBuckets(OCIObjectStorageBucketConnection):
 
 
 class OCIObjectStorageBucket(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

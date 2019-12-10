@@ -27,12 +27,12 @@ logger = getLogger()
 
 
 class OCISecurityLists(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, vcn_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, vcn_id=None):
         self.compartment_id = compartment_id
         self.vcn_id = vcn_id
         self.security_lists_json = []
         self.security_lists_obj = []
-        super(OCISecurityLists, self).__init__(config=config, configfile=configfile)
+        super(OCISecurityLists, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -51,7 +51,7 @@ class OCISecurityLists(OCIVirtualNetworkConnection):
             # Build List of SecurityList Objects
             self.security_lists_obj = []
             for security_list in self.security_lists_json:
-                self.security_lists_obj.append(OCISecurityList(self.config, self.configfile, security_list))
+                self.security_lists_obj.append(OCISecurityList(self.config, self.configfile, self.profile, security_list))
         else:
             logger.warn('Virtual Cloud Network Id has not been specified.')
 
@@ -59,8 +59,9 @@ class OCISecurityLists(OCIVirtualNetworkConnection):
 
 
 class OCISecurityList(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

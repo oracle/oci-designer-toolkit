@@ -16,7 +16,7 @@ const load_balancer_height = Math.round(icon_height * 3 / 2);
 
 function queryLoadBalancerAjax(compartment_id, subnet_id) {
     console.info('------------- queryLoadBalancerAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     request_json['subnet_id'] = subnet_id;
     if ('load_balancer_filter' in okitQueryRequestJson) {

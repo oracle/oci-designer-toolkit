@@ -27,11 +27,11 @@ logger = getLogger()
 
 
 class OCIBlockStorageVolumes(OCIBlockStorageVolumeConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.block_storage_volumes_json = []
         self.block_storage_volumes_obj = []
-        super(OCIBlockStorageVolumes, self).__init__(config=config, configfile=configfile)
+        super(OCIBlockStorageVolumes, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -58,8 +58,9 @@ class OCIBlockStorageVolumes(OCIBlockStorageVolumeConnection):
 
 
 class OCIBlockStorageVolume(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

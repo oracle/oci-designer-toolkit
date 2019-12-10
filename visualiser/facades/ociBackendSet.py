@@ -27,12 +27,12 @@ logger = getLogger()
 
 
 class OCIBackendSets(OCILoadBalancerConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, lb_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, lb_id=None):
         self.compartment_id = compartment_id
         self.lb_id = lb_id
         self.backendsets_json = []
         self.backendsets_obj = []
-        super(OCIBackendSets, self).__init__(config=config, configfile=configfile)
+        super(OCIBackendSets, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -50,14 +50,15 @@ class OCIBackendSets(OCILoadBalancerConnection):
         # Build List of Backendset Objects
         self.backendsets_obj = []
         for backendset in self.backendsets_json:
-            self.backendsets_obj.append(OCIBackendSet(self.config, self.configfile, backendset))
+            self.backendsets_obj.append(OCIBackendSet(self.config, self.configfile, self.profile, backendset))
 
         return self.backendsets_json
 
 
 class OCIBackendSet(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

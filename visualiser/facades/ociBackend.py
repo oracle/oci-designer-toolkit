@@ -27,12 +27,12 @@ logger = getLogger()
 
 
 class OCIBackends(OCILoadBalancerConnection):
-    def __init__(self, config=None, configfile=None, load_balancer_id=None, backend_set_name=None):
+    def __init__(self, config=None, configfile=None, profile=None, load_balancer_id=None, backend_set_name=None):
         self.load_balancer_id = load_balancer_id
         self.backend_set_name = backend_set_name
         self.backends_json = []
         self.backends_obj = []
-        super(OCIBackends, self).__init__(config=config, configfile=configfile)
+        super(OCIBackends, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, load_balancer_id=None, filter=None):
         if load_balancer_id is None:
@@ -50,14 +50,15 @@ class OCIBackends(OCILoadBalancerConnection):
         # Build List of Backend Objects
         self.backends_obj = []
         for backend in self.backends_json:
-            self.backends_obj.append(OCIBackend(self.config, self.configfile, backend))
+            self.backends_obj.append(OCIBackend(self.config, self.configfile, self.profile, backend))
 
         return self.backends_json
 
 
 class OCIBackend(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

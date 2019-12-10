@@ -13,7 +13,7 @@ const file_storage_system_query_cb = "file-storage-system-query-cb";
 
 function queryFileStorageSystemAjax(compartment_id, subnet_id) {
     console.info('------------- queryFileStorageSystemAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     request_json['subnet_id'] = subnet_id;
     if ('file_storage_system_filter' in okitQueryRequestJson) {

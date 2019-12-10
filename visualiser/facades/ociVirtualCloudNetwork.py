@@ -31,11 +31,11 @@ logger = getLogger()
 
 
 class OCIVirtualCloudNetworks(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.virtual_cloud_networks_json = []
         self.virtual_cloud_networks_obj = []
-        super(OCIVirtualCloudNetworks, self).__init__(config=config, configfile=configfile)
+        super(OCIVirtualCloudNetworks, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -53,32 +53,33 @@ class OCIVirtualCloudNetworks(OCIVirtualNetworkConnection):
         # Build List of Subnet Objects
         self.virtual_cloud_networks_obj = []
         for virtual_cloud_network in self.virtual_cloud_networks_json:
-            self.virtual_cloud_networks_obj.append(OCIVirtualCloudNetwork(self.config, self.configfile, virtual_cloud_network))
+            self.virtual_cloud_networks_obj.append(OCIVirtualCloudNetwork(self.config, self.configfile, self.profile, virtual_cloud_network))
 
         return self.virtual_cloud_networks_json
 
 
 class OCIVirtualCloudNetwork(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 
     def getInternetGatewayClients(self):
-        return OCIInternetGateways(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCIInternetGateways(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def getServiceGatewayClients(self):
-        return OCIServiceGateways(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCIServiceGateways(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def OCIDynamicRoutingGateways(self):
-        return OCIDynamicRoutingGateways(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCIDynamicRoutingGateways(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def getRouteTableClients(self):
-        return OCIRouteTables(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCIRouteTables(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def getSecurityListClients(self):
-        return OCISecurityLists(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCISecurityLists(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def getSubnetClients(self):
-        return OCISubnets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCISubnets(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 

@@ -14,7 +14,7 @@ const security_list_query_cb = "security-list-query-cb";
 
 function querySecurityListAjax(compartment_id, vcn_id) {
     console.info('------------- querySecurityListAjax --------------------');
-    let request_json = {};
+    let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
     request_json['vcn_id'] = vcn_id;
     if ('security_list_filter' in okitQueryRequestJson) {
