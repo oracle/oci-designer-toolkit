@@ -29,11 +29,11 @@ logger = getLogger()
 
 
 class OCIResourceManagers(OCIResourceManagerConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.resource_managers_json = []
         self.resource_managers_obj = []
-        super(OCIResourceManagers, self).__init__(config=config, configfile=configfile)
+        super(OCIResourceManagers, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -52,7 +52,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         # Build List of ResourceManager Objects
         self.resource_managers_obj = []
         for resource_manager in self.resource_managers_json:
-            self.resource_managers_obj.append(OCIResourceManager(self.config, self.configfile, resource_manager))
+            self.resource_managers_obj.append(OCIResourceManager(self.config, self.configfile, self.profile, resource_manager))
         return self.resource_managers_json
 
     def createStack(self, stack):
@@ -75,12 +75,12 @@ class OCIResourceManagers(OCIResourceManagerConnection):
 
 
 class OCIResourceManager(OCIResourceManagerConnection):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
         self.data = data
         logger.info(str(data))
-        super(OCIResourceManager, self).__init__(config=config, configfile=configfile)
+        super(OCIResourceManager, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def listJobs(self):
         jobs = oci.pagination.list_call_get_all_results(self.client.list_jobs, stack_id=self.data['id']).data

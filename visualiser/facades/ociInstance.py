@@ -28,12 +28,12 @@ from facades.ociVolumeAttachment import OCIVolumeAttachments
 logger = getLogger()
 
 class OCIInstanceVnics(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, instance_id=None):
         self.compartment_id = compartment_id
         self.instance_id = instance_id
         self.vnics_json = []
         self.vnics_obj = []
-        super(OCIInstanceVnics, self).__init__(config=config, configfile=configfile)
+        super(OCIInstanceVnics, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, instance_id=None):
         computeclient=OCIComputeConnection()
@@ -58,18 +58,18 @@ class OCIInstanceVnics(OCIVirtualNetworkConnection):
         logger.debug(str(self.vnics_json))
 
         for vnic in self.vnics_json:
-            self.vnics_obj.append(OCIInstanceVnic(self.config, self.configfile, vnic))
+            self.vnics_obj.append(OCIInstanceVnic(self.config, self.configfile, self.profile, vnic))
 
         return self.vnics_json
 
 class OCIInstanceVnic(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
         self.data = data
 
 class OCIInstances(OCIComputeConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, **kwargs):
         self.compartment_id = compartment_id
         self.instances_json = []
         self.instances_obj = []
@@ -110,22 +110,23 @@ class OCIInstances(OCIComputeConnection):
             # Add first vnic as the default subnet
             instance['subnet_id'] = instance['vnics'][0]['subnet_id'] if len(instance['vnics']) > 0 else ''
             # Build object list
-            self.instances_obj.append(OCIInstance(self.config, self.configfile, instance))
+            self.instances_obj.append(OCIInstance(self.config, self.configfile, self.profile, instance))
 
         return self.instances_json
 
 class OCIInstance(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 
     def getInstanceVnicClients(self):
-        return OCIInstanceVnics(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCIInstanceVnics(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def getVolumeAttachments(self):
-        return OCIVolumeAttachments(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCIVolumeAttachments(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def getVnicAttachments(self):
-        return OCIVnicAttachments(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCIVnicAttachments(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 

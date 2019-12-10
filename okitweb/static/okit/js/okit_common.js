@@ -103,6 +103,7 @@ function handleQueryOci(e) {
         url: 'oci/compartment',
         dataType: 'text',
         contentType: 'application/json',
+        data: JSON.stringify({config_profile: okitSettings.profile}),
         success: function(resp) {
             console.info('Response : ' + resp);
             let jsonBody = JSON.parse(resp)

@@ -27,11 +27,11 @@ logger = getLogger()
 
 
 class OCIAvailabilityDomains(OCIIdentityConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.availability_domains_json = []
         self.availability_domains_obj = []
-        super(OCIAvailabilityDomains, self).__init__(config=config, configfile=configfile)
+        super(OCIAvailabilityDomains, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -55,8 +55,9 @@ class OCIAvailabilityDomains(OCIIdentityConnection):
 
 
 class OCIAvailabilityDomain(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 

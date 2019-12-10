@@ -87,9 +87,13 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                     }
                 } else if (this.type === 'checkbox') {
                     json_element[this.id] = $(this).is(':checked');
-                    saveOkitSettings();
                 } else {
                     console.info('Unknown input type ' + $(this).attr('type'));
+                }
+            });
+            inputfield.on('blur', function() {
+                if (settings) {
+                    saveOkitSettings();
                 }
                 drawSVGforJson();
             });
@@ -106,6 +110,11 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                     console.log(' Calling ' + f);
                     f(json_element);
                 }
+            });
+            inputfield.on('blur', function() {
+                if (settings) {
+                    saveOkitSettings();
+                }
                 drawSVGforJson();
             });
         }
@@ -118,6 +127,11 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                 console.info(this.id + ' Changed !!!!!!');
                 json_element[this.id] = this.value.replace('\n', '\\n');
                 json_element[this.id] = this.value;
+            });
+            inputfield.on('blur', function() {
+                if (settings) {
+                    saveOkitSettings();
+                }
                 drawSVGforJson();
             });
         }

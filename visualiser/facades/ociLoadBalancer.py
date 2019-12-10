@@ -32,11 +32,11 @@ logger = getLogger()
 
 
 class OCILoadBalancers(OCILoadBalancerConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.load_balancers_json = []
         self.load_balancers_obj = []
-        super(OCILoadBalancers, self).__init__(config=config, configfile=configfile)
+        super(OCILoadBalancers, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
@@ -68,23 +68,24 @@ class OCILoadBalancers(OCILoadBalancerConnection):
         for load_balancer in self.load_balancers_json:
             # If subnet_id is not part of the object assign the first entry in subnet_ids
             load_balancer['subnet_id'] = load_balancer.get('subnet_id', load_balancer['subnet_ids'][0])
-            self.load_balancers_obj.append(OCILoadBalancer(self.config, self.configfile, load_balancer))
+            self.load_balancers_obj.append(OCILoadBalancer(self.config, self.configfile, self.profile, load_balancer))
 
         return self.load_balancers_json
 
 
 class OCILoadBalancer(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 
     def getLBHostClients(self):
-        return OCILoadBalancerHosts(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCILoadBalancerHosts(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def getBackendSetClients(self):
-        return OCIBackendSets(self.config, self.configfile, self.data['compartment_id'], self.data['id'])
+        return OCIBackendSets(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
     def getBackendClients(self, backend_set_name=None):
-        return OCIBackends(self.config, self.configfile, self.data['id'], backend_set_name)
+        return OCIBackends(self.config, self.configfile, self.profile, self.data['id'], backend_set_name)
 

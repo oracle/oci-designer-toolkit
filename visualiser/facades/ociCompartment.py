@@ -31,13 +31,13 @@ logger = getLogger()
 
 
 class OCICompartments(OCIIdentityConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None):
         self.compartments_obj = []
         self.compartments_json = []
         self.names = {}
         self.parents = {}
         self.canonicalnames = []
-        super(OCICompartments, self).__init__(config=config, configfile=configfile)
+        super(OCICompartments, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def get(self, compartment_id):      
         compartment = self.client.get_compartment(compartment_id=compartment_id).data
@@ -77,7 +77,7 @@ class OCICompartments(OCIIdentityConnection):
         self.compartments_obj = []
         for compartment in self.compartments_json:
             compartment['display_name'] = self.getCanonicalName(compartment['id'])
-            self.compartments_obj.append(OCICompartment(self.config, self.configfile, compartment))
+            self.compartments_obj.append(OCICompartment(self.config, self.configfile, self.profile, compartment))
         return self.compartments_json
 
     def listTenancy(self, filter={}):
@@ -97,9 +97,10 @@ class OCICompartments(OCIIdentityConnection):
 
 
 class OCICompartment(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
+    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 
     def getVirtualCloudNetworkClients(self):

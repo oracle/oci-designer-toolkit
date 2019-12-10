@@ -27,13 +27,13 @@ logger = getLogger()
 
 
 class OCIVolumeAttachments(OCIComputeConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, instance_id=None, volume_id=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, instance_id=None, volume_id=None):
         self.compartment_id = compartment_id
         self.instance_id = instance_id
         self.volume_id = volume_id
         self.volume_attachments_json = []
         self.volume_attachments_obj = []
-        super(OCIVolumeAttachments, self).__init__(config=config, configfile=configfile)
+        super(OCIVolumeAttachments, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, instance_id=None, volume_id=None, filter=None):
         if compartment_id is None:
@@ -56,14 +56,15 @@ class OCIVolumeAttachments(OCIComputeConnection):
         # Build List of Subnet Objects
         self.volume_attachments_obj = []
         for volume_attachment in self.volume_attachments_json:
-            self.volume_attachments_obj.append(OCIVolumeAttachment(self.config, self.configfile, volume_attachment))
+            self.volume_attachments_obj.append(OCIVolumeAttachment(self.config, self.configfile, self.profile, volume_attachment))
 
         return self.volume_attachments_json
 
 
 class OCIVolumeAttachment(object):
-    def __init__(self, config=None, configfile=None, data=None):
+    def __init__(self, config=None, configfile=None, profile=None, data=None):
         self.config = config
         self.configfile = configfile
+        self.profile = profile
         self.data = data
 
