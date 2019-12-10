@@ -188,7 +188,7 @@ class DynamicRoutingGateway extends OkitArtifact {
             // Load Referenced Ids
             let fast_connect_select = $('#fast_connect_ids');
             for (let fast_connect of okitJson.fast_connects) {
-                if (me.vcn_id == fast_connect.vcn_id) {
+                if (me.compartment_id === fast_connect.compartment_id) {
                     fast_connect_select.append($('<option>').attr('value', fast_connect.id).text(fast_connect.display_name));
                 }
             }

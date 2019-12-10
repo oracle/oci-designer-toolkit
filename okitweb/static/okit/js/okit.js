@@ -982,6 +982,10 @@ class OkitJson {
         for (let dynamic_routing_gateway of this.dynamic_routing_gateways) {
             dynamic_routing_gateway.draw();
         }
+        // FastConnects
+        for (let fast_connect of this.fast_connects) {
+            fast_connect.draw();
+        }
         // Route Tables
         for (let route_table of this.route_tables) {
             route_table.draw();
@@ -1067,6 +1071,13 @@ class OkitJson {
         }
         this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
         return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
+    }
+
+    // FastConnect
+    newFastConnect(data, parent=null) {
+        console.info('New FastConnect');
+        this['fast_connects'].push(new FastConnect(data, this, parent));
+        return this['fast_connects'][this['fast_connects'].length - 1];
     }
 
     // File Storage System
