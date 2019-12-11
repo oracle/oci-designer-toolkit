@@ -233,26 +233,28 @@ The hamburger menu in the top left will display a slide out menu with all availa
 
 ##### Palette
 - Compute
-    - <img src="documentation/images/Instance.png?raw=true" width="30" height="30"/>              Instance
-    - <img src="documentation/images/Load_Balancer.png?raw=true" width="30" height="30"/>         Load Balancer
+    - <img src="documentation/images/Instance.png?raw=true" width="30" height="30"/>      Instance
+    - <img src="documentation/images/Load_Balancer.png?raw=true" width="30" height="30"/> Load Balancer
 - Containers
+    - <img src="documentation/images/Compartment.png?raw=true" width="30" height="30"/> Compartment
+    - <img src="documentation/images/Container.png?raw=true" width="30" height="30"/>   Container (OKE)
 - Database
-    - <img src="documentation/images/Autonomous_Database.png?raw=true" width="30" height="30"/>   Autonomous Database
+    - <img src="documentation/images/Autonomous_Database.png?raw=true" width="30" height="30"/> Autonomous Database
 - Gateways
-    - <img src="./okitweb/static/okit/palette/gateways/Dynamic_Routing_Gateway.svg?sanitize=true" width="30" height="30"/>   Dynamic Routing Gateway
-    - <img src="documentation/images/Internet_Gateway.png?raw=true" width="30" height="30"/>      Internet Gateway
-    - <img src="./okitweb/static/okit/palette/gateways/NAT_Gateway.svg?sanitize=true" width="30" height="30"/>   NAT Gateway
+    - <img src="documentation/images/Dynamic_Routing_Gateway.png?raw=true" width="30" height="30"/> Dynamic Routing Gateway
+    - <img src="documentation/images/Internet_Gateway.png?raw=true" width="30" height="30"/>        Internet Gateway
+    - <img src="documentation/images/NAT_Gateway.png?raw=true" width="30" height="30"/>             NAT Gateway
+    - <img src="documentation/images/Service_Gateway.png?raw=true" width="30" height="30"/>         Service Gateway
 - Networking
+    - <img src="documentation/images/Fast_Connect.png?raw=true" width="30" height="30"/>          Fast Connect
     - <img src="documentation/images/Route_Table.png?raw=true" width="30" height="30"/>           Route Table
     - <img src="documentation/images/Security_List.png?raw=true" width="30" height="30"/>         Security List
     - <img src="documentation/images/Subnet.png?raw=true" width="30" height="30"/>                Subnet
     - <img src="documentation/images/Virtual_Cloud_Network.png?raw=true" width="30" height="30"/> Virtual Cloud Network
 - Storage
     - <img src="documentation/images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
-    - <img src="./okitweb/static/okit/palette/storage/File_Storage_System.svg?sanitize=true" width="30" height="30"/>   File Storage System
+    - <img src="documentation/images/File_Storage_System.png?raw=true" width="30" height="30"/>   File Storage System
     - <img src="documentation/images/Object_Storage_Bucket.png?raw=true" width="30" height="30"/> Object Storage Bucket
-
-    - ![File Storage System](./okitweb/static/okit/palette/storage/File_Storage_System.svg?sanitize=true) <!-- .element  width="30px" height="30px" -->
 
 ##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
@@ -348,7 +350,88 @@ python3 ./generateTFfromOCI.py -d . -c Stefan
 The following short tutorial will take you through a worked example for creating a simple 2 Instance load balanced nginx
 implementation. The results of the worked example can be seen in the template (Simple Load Balancer).
 
-**WIP**
+### Step 1 : Open OKIT Designer
+![Example Step 1](documentation/images/Example01.png)
+### Step 2 : Add Virtual Cloud Network
+![Example Step 2](documentation/images/Example02.png)
+### Step 3 : Add Internet Gateway
+![Example Step 3](documentation/images/Example03.png)
+### Step 4 : Select Route Table
+![Example Step 4](documentation/images/Example04.png)
+![Example Step 5](documentation/images/Example05.png)
+### Step 5 : Add Subnet
+![Example Step 6](documentation/images/Example06.png)
+### Step 6 : Connect Subnet to Route Table & Security List
+![Example Step 7](documentation/images/Example07.png)
+### Step 7 : Add Instances
+![Example Step 8](documentation/images/Example08.png)
+### Step 8 : Add load Balancer
+![Example Step 9](documentation/images/Example09.png)
+### Step 9 : Connect Load Balancer to Instances
+![Example Step 10](documentation/images/Example10.png)
+![Example Step 11](documentation/images/Example11.png)
+### Step 10 : Update Instance Properties
+![Example Step 12](documentation/images/Example12.png)
+
+```yaml
+#cloud-config
+packages:
+  - nginx
+  - oci-utils
+  - python36
+  - python-oci-cli
+
+write_files:
+  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)
+  - path: /etc/.bashrc
+    append: true
+    content: |
+      alias lh='ls -lash'
+      alias lt='ls -last'
+      alias env='/usr/bin/env | sort'
+      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'
+  # Create nginx index.html
+  - path: /usr/share/nginx/html/index1.html
+    permissions: '0644'
+    content: |
+      <html>
+      <head>
+      <title>OCI Loadbalancer backend {hostname}</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta http-equiv="refresh" content="10" />
+      <style>
+      body {
+      background-image: url("bg.jpg");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      }
+      h1 {
+      text-align: center;
+      width: 100%;
+      }
+      </style>
+      </head>
+      <body>
+      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>
+      </body>
+      </html>
+
+runcmd:
+  # Enable nginx
+  - sudo systemctl enable nginx.service
+  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html
+  - sudo sed -i "s/{hostname}/$(hostname)/g" /usr/share/nginx/html/index.html
+  - sudo systemctl start nginx.service
+  # Set Firewall Rules
+  - sudo firewall-offline-cmd  --add-port=80/tcp
+  - sudo systemctl restart firewalld
+  # Add additional environment information because append does not appear to work in write_file
+  - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
+
+final_message: "**** The system is finally up, after $UPTIME seconds ****"
+```
+
 ### Terraform Generation & Execution
 For a given diagram you are able to select the menu option Generate->Terraform and this will generate a oci_terraform.zip 
 that can be saved and extracted to produce 3 files that can be used by terraform. If we assume that the export have been
