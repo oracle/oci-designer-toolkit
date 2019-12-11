@@ -391,7 +391,7 @@ properties will appear in the properties Panel. Click the Green ***"+"*** button
 Within the new Rule we will specify the Destination (CIDR Block) and the appropriate Gateway (Network Entity).
 ![Example Step 5](documentation/images/Example05.png)
 ### Step 5 : Add Subnet
-We will now add a Subnet to our diagram by selecting the Subnet Icon <img src="documentation/images/Subnet.png?raw=true" width="30" height="30"/>
+We will now add a Subnet to our diagram by selecting the Subnet Icon <img src="documentation/images/Subnet.png?raw=true" width="20" height="20"/>
 from the Palette and dragging it over the Virtual Cloud Network. Dropping this will create place a Subnet on our Virtual Cloude Network
 with a CIDR based on its parent (10.0.0.0/24) Additional Subnet will increment the 3rd Octet. 
 ![Example Step 6](documentation/images/Example06.png)
