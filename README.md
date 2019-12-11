@@ -14,10 +14,19 @@ can quickly be turned into code and ultimately built in the OCI environment.
     2. [Prerequisites](#prerequisites)
     3. [Web Interface](#web-interface)
     4. [Command Line](#command-line)
-3. [Tutorial](#tutorial)
-4. [Development](#development)
-5. [Contributing](#contributing)
-6. [Examples](#examples)
+3. [Examples](#examples)
+4. [Contributing](#contributing)
+5. [Development](#development)
+6. [3rd Party Libraries](#3rd-party-libraries)
+
+
+
+
+
+
+
+
+
 
 ## Installation
 Although OKIT can simply be downloaded and the command line executed it is recommended that it be executed within a
@@ -71,6 +80,15 @@ total 56
 ```bash
 anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
+
+
+
+
+
+
+
+
+
 
 ## Usage
 ### Supported Browsers
@@ -214,17 +232,27 @@ Instances fronted by a Load Balancer can be seen below.
 The hamburger menu in the top left will display a slide out menu with all available actions (described below).
 
 ##### Palette
-- <img src="documentation/images/Virtual_Cloud_Network.png?raw=true" width="30" height="30"/> Virtual Cloud Network
-- <img src="documentation/images/Internet_Gateway.png?raw=true" width="30" height="30"/>      Internet Gateway
-- <img src="documentation/images/Route_Table.png?raw=true" width="30" height="30"/>           Route Table
-- <img src="documentation/images/Security_List.png?raw=true" width="30" height="30"/>         Security List
-- <img src="documentation/images/Subnet.png?raw=true" width="30" height="30"/>                Subnet
-- <img src="documentation/images/Instance.png?raw=true" width="30" height="30"/>              Instance
-- <img src="documentation/images/Load_Balancer.png?raw=true" width="30" height="30"/>         Load Balancer
-- <img src="documentation/images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
-- <img src="documentation/images/Object_Storage_Bucket.png?raw=true" width="30" height="30"/> Object Storage Bucket
-- <img src="documentation/images/Autonomous_Database.png?raw=true" width="30" height="30"/>   Autonomous Database
-- <img src="https://orahub.oraclecorp.com/andrew.hopkinson/okit.oci.web.designer/blob/master/okitweb/static/okit/palette/storage/File_Storage_System.svg?sanitize=true" width="30" height="30"/>   File Storage System
+- Compute
+    - <img src="documentation/images/Instance.png?raw=true" width="30" height="30"/>              Instance
+    - <img src="documentation/images/Load_Balancer.png?raw=true" width="30" height="30"/>         Load Balancer
+- Containers
+- Database
+    - <img src="documentation/images/Autonomous_Database.png?raw=true" width="30" height="30"/>   Autonomous Database
+- Gateways
+    - <img src="./okitweb/static/okit/palette/gateways/Dynamic_Routing_Gateway.svg?sanitize=true" width="30" height="30"/>   Dynamic Routing Gateway
+    - <img src="documentation/images/Internet_Gateway.png?raw=true" width="30" height="30"/>      Internet Gateway
+    - <img src="./okitweb/static/okit/palette/gateways/NAT_Gateway.svg?sanitize=true" width="30" height="30"/>   NAT Gateway
+- Networking
+    - <img src="documentation/images/Route_Table.png?raw=true" width="30" height="30"/>           Route Table
+    - <img src="documentation/images/Security_List.png?raw=true" width="30" height="30"/>         Security List
+    - <img src="documentation/images/Subnet.png?raw=true" width="30" height="30"/>                Subnet
+    - <img src="documentation/images/Virtual_Cloud_Network.png?raw=true" width="30" height="30"/> Virtual Cloud Network
+- Storage
+    - <img src="documentation/images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
+    - <img src="./okitweb/static/okit/palette/storage/File_Storage_System.svg?sanitize=true" width="30" height="30"/>   File Storage System
+    - <img src="documentation/images/Object_Storage_Bucket.png?raw=true" width="30" height="30"/> Object Storage Bucket
+
+    - ![File Storage System](./okitweb/static/okit/palette/storage/File_Storage_System.svg?sanitize=true) <!-- .element  width="30px" height="30px" -->
 
 ##### Menu 
 ![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
@@ -234,15 +262,15 @@ The hamburger menu in the top left will display a slide out menu with all availa
     - Load
     - Save
     - Redraw
-- Export
-    - SVG
-    - Resource Manager
-    - Orca
+- Templates
 - Query
     - OCI
 - Generate
     - Terraform
     - Ansible
+- Export
+    - SVG
+    - Resource Manager
 
 ###### Canvas/New
 Creates a new clear canvas.
@@ -252,13 +280,8 @@ Allows the user to select a previously saved or command line generated json file
 Saves the current diagram as a json representation.
 ###### Canvas/Redraw
 Redraws the existing canvas this will have the effect of grouping similar assets.
-###### Export/SVG
-Will export the current diagram as an SVG object that can be distributed.
-###### Export/Resource Manager
-Will generate Terraform code and export the resulting zip file into the OCI Resource Manager. Once uploaded it will initiate
-a plan job.
-###### Export/Orca
-***(WIP)*** Convert the OKIT JSON format to Orca input format.
+###### Templates
+This is a dynamic menu that represents the available templates that can be loaded as a starting point for system development.
 ##### Query/OCI
 Opens Query pages and populates the Compartment list. Once the user has chosen the compartment and added a virtual cloud network 
 filter submitting will query OCI and draw the returning assets on the new designer canvas.
@@ -266,6 +289,11 @@ filter submitting will query OCI and draw the returning assets on the new design
 Generate a set of Terraform that can be used to build the designed OCI infrastructure currently loaded and return as a zip file.
 ##### Generate/Ansible
 Generate a set of Ansible that can be used to build the designed OCI infrastructure currently loaded  and return as a zip file.
+###### Export/SVG
+Will export the current diagram as an SVG object that can be distributed.
+###### Export/Resource Manager
+Will generate Terraform code and export the resulting zip file into the OCI Resource Manager. Once uploaded it will initiate
+a plan job.
 
 ### Command Line
 To use the Command Line you will first need to start the docker container using the following script:
@@ -307,11 +335,101 @@ cd test/unit.test
 python3 ./generateTFfromOCI.py -d . -c Stefan
 ```
 
-## Tutorial
+
+
+
+
+
+
+
+
+
+## Examples
 The following short tutorial will take you through a worked example for creating a simple 2 Instance load balanced nginx
 implementation. The results of the worked example can be seen in the template (Simple Load Balancer).
 
 **WIP**
+### Terraform Generation & Execution
+For a given diagram you are able to select the menu option Generate->Terraform and this will generate a oci_terraform.zip 
+that can be saved and extracted to produce 3 files that can be used by terraform. If we assume that the export have been
+generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
+
+#### Unzip Generated File
+```bash
+[root@start-flask terraform]# lh
+total 20K
+   0 drwxr-xr-x 4 root root  128 Oct 31 16:20 .
+4.0K drwxr-xr-x 1 root root 4.0K Oct 28 18:00 ..
+8.0K -rw-r--r-- 1 root root 6.1K Oct 31 16:20 .DS_Store
+8.0K -rw-r--r-- 1 root root 5.4K Oct 31 16:20 okit-terraform.zip
+[root@start-flask terraform]#
+[root@start-flask terraform]# unzip okit-terraform.zip -d okit-terraform
+Archive:  okit-terraform.zip
+  inflating: okit-terraform/variables.tf
+  inflating: okit-terraform/main.tf
+  inflating: okit-terraform/terraform.tfvars
+```
+
+#### Plan Terraform Build
+```bash
+[root@start-flask terraform]# cd okit-terraform
+[root@start-flask okit-terraform]# terraform init
+
+..........
+
+[root@start-flask okit-terraform]# terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan
+Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+..........
+```
+
+#### Apply Terraform Plan
+```bash
+[root@start-flask okit-terraform]#
+[root@start-flask okit-terraform]# terraform apply da.plan
+oci_core_vcn.Okit-Vcn001: Creating...
+oci_core_volume.Okit-Bsv001: Creating...
+..........
+```
+
+### Ansible Generation & Execution
+For a given diagram you are able to select the menu option Generate->Ansible and this will generate a oci_ansible.zip 
+that can be saved and extracted to produce 2 files that can be used by ansible. If we assume that the export have been
+generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
+
+#### Unzip Generated File
+```bash
+[root@start-flask ansible]# unzip okit-ansible.zip -d okit-ansible
+Archive:  okit-ansible.zip
+```
+
+#### Run Playbook
+```bash
+ansible-playbook main.yml --extra-vars "@/okit/config/connection.yml" 
+```
+
+
+
+
+
+
+
+
+
+
+## Contributing
+
+Bug reports, enhancement request and pull requests are welcome on the OraHub at [okit.oci.web.designer/issues](https://orahub.oraclecorp.com/andrew.hopkinson/okit.oci.web.designer/issues)
+
+
+
+
+
+
+
+
+
 
 ## Development
 All currently active / planned development is documented / being tracked in the internal Jira ticket 
@@ -1027,6 +1145,16 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 
         return
 ```
+
+
+
+
+
+
+
+
+
+
 ## 3rd Party Libraries
 ### Javascript
 
@@ -1046,70 +1174,12 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 | simplejson | 3.17.0  | MIT / AFL |            | [PyPi simplejson](https://pypi.org/project/simplejson/) |
 | werkzeug   | 0.16.0  | BSD       | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)     |
 
-## Contributing
 
-Bug reports, enhancement request and pull requests are welcome on the OraHub at [okit.oci.web.designer/issues](https://orahub.oraclecorp.com/cloud-tools-ateam/okit.oci.web.designer/issues)
 
-## Examples
-### Terraform Generation & Execution
-For a given diagram you are able to select the menu option Generate->Terraform and this will generate a oci_terraform.zip 
-that can be saved and extracted to produce 3 files that can be used by terraform. If we assume that the export have been
-generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
 
-#### Unzip Generated File
-```bash
-[root@start-flask terraform]# lh
-total 20K
-   0 drwxr-xr-x 4 root root  128 Oct 31 16:20 .
-4.0K drwxr-xr-x 1 root root 4.0K Oct 28 18:00 ..
-8.0K -rw-r--r-- 1 root root 6.1K Oct 31 16:20 .DS_Store
-8.0K -rw-r--r-- 1 root root 5.4K Oct 31 16:20 okit-terraform.zip
-[root@start-flask terraform]#
-[root@start-flask terraform]# unzip okit-terraform.zip -d okit-terraform
-Archive:  okit-terraform.zip
-  inflating: okit-terraform/variables.tf
-  inflating: okit-terraform/main.tf
-  inflating: okit-terraform/terraform.tfvars
-```
 
-#### Plan Terraform Build
-```bash
-[root@start-flask terraform]# cd okit-terraform
-[root@start-flask okit-terraform]# terraform init
 
-..........
 
-[root@start-flask okit-terraform]# terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan
-Refreshing Terraform state in-memory prior to plan...
-The refreshed state will be used to calculate this plan, but will not be
-persisted to local or remote state storage.
-..........
-```
 
-#### Apply Terraform Plan
-```bash
-[root@start-flask okit-terraform]#
-[root@start-flask okit-terraform]# terraform apply da.plan
-oci_core_vcn.Okit-Vcn001: Creating...
-oci_core_volume.Okit-Bsv001: Creating...
-..........
-```
 
-### Ansible Generation & Execution
-For a given diagram you are able to select the menu option Generate->Ansible and this will generate a oci_ansible.zip 
-that can be saved and extracted to produce 2 files that can be used by ansible. If we assume that the export have been
-generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
-
-#### Unzip Generated File
-```bash
-[root@start-flask ansible]# unzip okit-ansible.zip -d okit-ansible
-Archive:  okit-ansible.zip
-```
-
-#### Run Playbook
-```bash
-ansible-playbook main.yml --extra-vars "@/okit/config/connection.yml" 
-```
-
-## Cleanup
 
