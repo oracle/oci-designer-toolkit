@@ -350,29 +350,82 @@ python3 ./generateTFfromOCI.py -d . -c Stefan
 The following short tutorial will take you through a worked example for creating a simple 2 Instance load balanced nginx
 implementation. The results of the worked example can be seen in the template (Simple Load Balancer).
 
+This worked example will take you step-by-step through the process of building a visual representation of our application 
+and then ultimately generate Ansible 7 Terraform scripts that can be executed to build the solution. The Designer BUI is 
+built using simple HTML / JavaScript and provides an intuative Drag & Drop interface for placing artifacts on the canvas.
+Appropriate drop locations for an Artifact will be indicated by the addition of a green ***"+"*** over the Drag Icon.
+
 ### Step 1 : Open OKIT Designer
+The first step to building a diagram is be to open the designer page. If you have the docker container running (executed {Project Root}/docker/start-nginx.sh)
+this will be located at [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer) and will bring up a new
+empty diagram that contains only a top level Compartment. It can be seen that the Designer is split into 3 main panels.
+- Left (Palette): Contains all Drag Artifacts that can be used within the Designer. In addition this panel contains a fragments section which contain pre built common solution fragments, e.g. Bastion Host.
+- Centre (Canvas): Area on which the diagram will be built / displayed.
+- Right (Properties): Dynamically updated / changed panel that will show the editable properties associated with the selected Artifact.
+
+The Compartment name can be edited by simply clicking on it and modifying the name in the displayed properties. Although 
+we can change the name it is for display purposes only because this Compartment will not be created just it's contents.
 ![Example Step 1](documentation/images/Example01.png)
 ### Step 2 : Add Virtual Cloud Network
+The first this we will need for our Load Balancer example is to create a Virtual Cloud Network and this can be achieved 
+by dragging the Virtual Cloud Network Icon <img src="documentation/images/Virtual_Cloud_Network.png?raw=true" width="20" height="20"/> 
+from the palette onto the compartment. Doing this will create a Simple Virtual Cloud Network and populate it with a default
+Route Table and Security List. Again if the names do not match you requirements select the Artifact and edit in the properties panel.
+Looking at the Properties you will notice that a number of default values have been assigned including the CIDR which will
+be 10.0.0.0/16, If a second Virtual Cloud Network is added its CIDR will be 10.1.0.0/16 thus keeping them unique.
+
+These can be removed by Right-Clicking on them and selecting Delete but we will not do this because they are appropriate
+in this example. The generation of these is optional and configured in the settings window (see radio buttons at top of properties panel).
 ![Example Step 2](documentation/images/Example02.png)
 ### Step 3 : Add Internet Gateway
+To allow access to our system we will need an Internet Gateway added to the Virtual Cloud Network. We will do this in the 
+same way we did for the Virtual Cloud Network but selecting the Internet Gateway Icon <img src="documentation/images/Internet_Gateway.png?raw=true" width="20" height="20"/>
+from the palette and dragging it over the Virtual Cloud Network. You should note whilst doing this how the drag Icon changes
+to indicate allowable drop targets.
 ![Example Step 3](documentation/images/Example03.png)
 ### Step 4 : Select Route Table
+The auto generated Route Table will need to be modified to add a Route Rule to direct traffic to the Internet Gateway. Select
+the Route Table <img src="documentation/images/Route_Table.png?raw=true" width="20" height="20"/> on the Canvas and its
+properties will appear in the properties Panel. Click the Green ***"+"*** button on the rules table and a new Rule will be created.
 ![Example Step 4](documentation/images/Example04.png)
+Within the new Rule we will specify the Destination (CIDR Block) and the appropriate Gateway (Network Entity).
 ![Example Step 5](documentation/images/Example05.png)
 ### Step 5 : Add Subnet
+We will now add a Subnet to our diagram by selecting the Subnet Icon <img src="documentation/images/Subnet.png?raw=true" width="30" height="30"/>
+from the Palette and dragging it over the Virtual Cloud Network. Dropping this will create place a Subnet on our Virtual Cloude Network
+with a CIDR based on its parent (10.0.0.0/24) Additional Subnet will increment the 3rd Octet. 
 ![Example Step 6](documentation/images/Example06.png)
 ### Step 6 : Connect Subnet to Route Table & Security List
+To allow Artifacts within the network to access / be accessed by the internet we will need to provide it with a Route Table 
+and Security List. We can achieve this by selecting the Subnet and editing the properties to select the existing Route Table abd Security List.
+Once this has been done you will notice that the Route Table Icon <img src="documentation/images/Route_Table.png?raw=true" width="20" height="20"/>
+and Security List Icon <img src="documentation/images/Security_List.png?raw=true" width="20" height="20"/> have moved to the 
+top edge of the Subnet to indicate that the Subnet has assigned Route Table and Security. Additional Subnet can also select the same 
+Route Table and Security List.
 ![Example Step 7](documentation/images/Example07.png)
 ### Step 7 : Add Instances
+We will now create 2 Instances within the Subnet by dragging the Instance Icon <img src="documentation/images/Instance.png?raw=true" width="20" height="20"/>
+from the Palette and dropping it on the Subnet. You will notice that the second Instance will have the designation "002" 
+rather than "001".
 ![Example Step 8](documentation/images/Example08.png)
 ### Step 8 : Add load Balancer
+Next well will create a Load Balancer by dragging the Load Balancer Icon <img src="documentation/images/Load_Balancer.png?raw=true" width="20" height="20"/>
+from the Palette onto the Subnet. You will notice that Instances move and this is because the Visualiser controls placement 
+and will dynamically move / resize components to best display the system.
 ![Example Step 9](documentation/images/Example09.png)
 ### Step 9 : Connect Load Balancer to Instances
+Now we will need to connect the Load Balancer to the 2 backend Instance and we will do this by selecting the Load Balancer 
+and in the displayed Properties panel selecting the 2 Instances displayed in the "Backend Instance" Select box. On doing this
+you note that Load Balancer and the Instances become connected in the diagram.
 ![Example Step 10](documentation/images/Example10.png)
 ![Example Step 11](documentation/images/Example11.png)
 ### Step 10 : Update Instance Properties
+Our final step will be to update each of the instances to provide an Authorised Key for the instance and a Cloud Init YAML
+to install and configure nginx. We will do this by selecting each Instance individually and editing the properties and using 
+the [Cloud Init YANL](#cloud-init-yaml) below. Once this has been done our diagram is now complete and can be saved using the 
+"Save" option below the "Hamburger" menu. 
 ![Example Step 12](documentation/images/Example12.png)
-
+#### Cloud Init YAML
 ```yaml
 #cloud-config
 packages:
@@ -433,7 +486,7 @@ final_message: "**** The system is finally up, after $UPTIME seconds ****"
 ```
 
 ### Terraform Generation & Execution
-For a given diagram you are able to select the menu option Generate->Terraform and this will generate a oci_terraform.zip 
+For the diagram you are able to select the menu option Generate->Terraform and this will generate a oci_terraform.zip 
 that can be saved and extracted to produce 3 files that can be used by terraform. If we assume that the export have been
 generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
 
@@ -477,7 +530,7 @@ oci_core_volume.Okit-Bsv001: Creating...
 ```
 
 ### Ansible Generation & Execution
-For a given diagram you are able to select the menu option Generate->Ansible and this will generate a oci_ansible.zip 
+For the diagram you are able to select the menu option Generate->Ansible and this will generate a oci_ansible.zip 
 that can be saved and extracted to produce 2 files that can be used by ansible. If we assume that the export have been
 generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
 
