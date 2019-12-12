@@ -778,10 +778,10 @@ class OkitJson {
         this.instances = [];
         this.internet_gateways = [];
         this.load_balancers = [];
-        this.local_peering_connections = [];
+        this.local_peering_gateways = [];
         this.nat_gateways = [];
         this.object_storage_buckets = [];
-        this.remote_peering_connections = [];
+        this.remote_peering_gateways = [];
         this.route_tables = [];
         this.security_lists = [];
         this.service_gateways = [];
@@ -986,6 +986,10 @@ class OkitJson {
         for (let dynamic_routing_gateway of this.dynamic_routing_gateways) {
             dynamic_routing_gateway.draw();
         }
+        // Local Peering Gateways
+        for (let local_peering_gateway of this.local_peering_gateways) {
+            local_peering_gateway.draw();
+        }
         // Route Tables
         for (let route_table of this.route_tables) {
             route_table.draw();
@@ -1113,6 +1117,13 @@ class OkitJson {
         console.info('New Load Balancer');
         this.load_balancers.push(new LoadBalancer(data, this, parent));
         return this.load_balancers[this.load_balancers.length - 1];
+    }
+
+    // Local Peering Gateway
+    newLocalPeeringGateway(data, parent=null) {
+        console.info('New Local Peering Gateway');
+        this['local_peering_gateways'].push(new LocalPeeringGateway(data, this, parent));
+        return this['local_peering_gateways'][this['local_peering_gateways'].length - 1];
     }
 
     // NAT Gateway
@@ -1355,6 +1366,17 @@ class OkitJson {
             if (this.load_balancers[i].id === id) {
                 this.load_balancers[i].delete();
                 this.load_balancers.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Local Peering Gateway
+    deleteLocalPeeringGateway(id) {
+        for (let i = 0; i < this.local_peering_gateways.length; i++) {
+            if (this.local_peering_gateways[i].id === id) {
+                this.local_peering_gateways[i].delete();
+                this.local_peering_gateways.splice(i, 1);
                 break;
             }
         }

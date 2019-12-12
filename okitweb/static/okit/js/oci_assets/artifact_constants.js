@@ -20,6 +20,9 @@ const service_gateway_prefix = 'sg';
 // Dynamic Routing Gateway
 const dynamic_routing_gateway_artifact = 'Dynamic Routing Gateway';
 const dynamic_routing_gateway_prefix = 'dg';
+// Local Peering Gateway
+const local_peering_gateway_artifact = 'Local Peering Gateway';
+const local_peering_gateway_prefix = 'lpg';
 // Fast Connect
 const fast_connect_artifact = 'Fast Connect';
 const fast_connect_prefix = 'fc';

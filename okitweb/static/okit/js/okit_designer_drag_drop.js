@@ -28,11 +28,11 @@ function addAssetToDropTarget(artifact, title, target_id, compartment_id, target
     console.info('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
     let newFunction = 'new' + artifact.split(' ').join('');
     let getFunction = 'get' + target_type.split(' ').join('');
-    console.info('New Function : ' + newFunction);
-    console.info('Get Function : ' + getFunction);
+    console.info('addAssetToDropTarget - New Function   : ' + newFunction);
+    console.info('addAssetToDropTarget - Get Function   : ' + getFunction);
     //window[asset_add_functions[artifact]](target_id, compartment_id, title);
     let parentArtifact = okitJson[getFunction](target_id);
-    console.info('Parent : ' + JSON.stringify(parentArtifact));
+    console.info('addAssetToDropTarget - Parent         : ' + JSON.stringify(parentArtifact));
     let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: title}, parentArtifact);
     console.info(JSON.stringify(result, null, 2));
     okitJson.draw();

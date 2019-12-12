@@ -250,13 +250,13 @@ class Subnet extends OkitContainerArtifact {
             // Load Referenced Ids
             let route_table_select = $('#route_table_id');
             for (let route_table of okitJson.route_tables) {
-                if (me.vcn_id == route_table.vcn_id) {
+                if (me.vcn_id === route_table.vcn_id) {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
                 }
             }
             let security_lists_select = $('#security_list_ids');
             for (let security_list of okitJson.security_lists) {
-                if (me.vcn_id == security_list.vcn_id) {
+                if (me.vcn_id === security_list.vcn_id) {
                     security_lists_select.append($('<option>').attr('value', security_list.id).text(security_list.display_name));
                 }
             }
