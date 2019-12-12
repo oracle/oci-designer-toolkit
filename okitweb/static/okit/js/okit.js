@@ -830,12 +830,19 @@ class OkitJson {
             }
         }
         // Virtual Cloud Networks
+        // Turn Off Default Security List / Route Table Processing
+        let okitSettingsClone = JSON.clone(okitSettings);
+        okitSettings.is_default_route_table   = false;
+        okitSettings.is_default_security_list = false;
         if (okit_json.hasOwnProperty('virtual_cloud_networks')) {
             for (let artifact of okit_json['virtual_cloud_networks']) {
                 let obj = this.newVirtualCloudNetwork(artifact);
                 console.info(obj);
             }
         }
+        // Reset
+        okitSettings.is_default_route_table   = okitSettingsClone.is_default_route_table;
+        okitSettings.is_default_security_list = okitSettingsClone.is_default_security_list;
         // Web Application Firewall
         if (okit_json.hasOwnProperty('web_application_firewalls')) {
             for (let artifact of okit_json['web_application_firewalls']) {
