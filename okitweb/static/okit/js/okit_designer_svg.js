@@ -283,7 +283,7 @@ function generateArc(radius, clockwise, xmod, ymod) {
     return arc;
 }
 
-function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
+function drawConnectorOrig(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}, horizontal=false) {
     console.groupCollapsed('Generating Connector');
     console.info('Start Coordinates : ' + JSON.stringify(start));
     console.info('End Coordinates   : ' + JSON.stringify(end));
@@ -293,6 +293,143 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
         let dx = end['x'] - start['x'];
         let arc1 = '';
         let arc2 = '';
+        if (horizontal) {
+            dy = end['y'] - start['y'];
+            dx = Math.round((end['x'] - start['x']) / 2);
+        }
+        console.info('dx                : ' + dx);
+        console.info('dy                : ' + dy);
+        if (dy > 0 && dx > 0) {
+            // First turn down and right with counter clockwise arc
+            arc1 = 'a5,5 0 0 0 5,5';
+            arc1 = generateArc(radius, 0, '', '');
+            // Second turn right and down with clockwise arc
+            arc2 = 'a5,5 0 0 1 5,5';
+            arc2 = generateArc(radius, 1, '', '');
+            if (horizontal) {
+                // Reduce dx by radius
+                dx += radius;
+                // Reduce dy by 2 * radius
+                dy += radius * 2;
+            } else {
+                // Reduce dy by radius
+                dy -= radius;
+                // Reduce dx by 2 * radius
+                dx -= radius * 2;
+            }
+        } else if (dy > 0 && dx < 0) {
+            // First turn down and left with counter clockwise arc
+            arc1 = 'a5,5 0 0 1 -5,5';
+            arc1 = generateArc(radius, 1, '-', '');
+            // Second turn left and down with clockwise arc
+            arc2 = 'a5,5 0 0 0 -5,5';
+            arc2 = generateArc(radius, 0, '-', '');
+            if (horizontal) {
+                // Reduce dx by radius
+                dx += radius;
+                // Increase dy by 2 * radius
+                dy -= radius * 2;
+            } else {
+                // Reduce dy by radius
+                dy -= radius;
+                // Increase dx by 2 * radius
+                dx += radius * 2;
+            }
+        } else if (dy < 0 && dx < 0) {
+            // First turn up and left with counter clockwise arc
+            arc1 = 'a5,5 0 0 1 -5,-5';
+            arc1 = generateArc(radius, 1, '-', '-');
+            // Second turn left and up with clockwise arc
+            arc2 = 'a5,5 0 0 0 -5,-5';
+            arc2 = generateArc(radius, 0, '-', '-');
+            if (horizontal) {
+                // Reduce dx by radius
+                dx -= radius;
+                // Reduce dy by 2 * radius
+                dy += radius * 2;
+            } else {
+                // Reduce dy by radius
+                dy += radius;
+                // Reduce dx by 2 * radius
+                dx -= radius * 2;
+            }
+        } else if (dy < 0 && dx > 0) {
+            // First turn up and right with counter clockwise arc
+            arc1 = 'a5,5 0 0 0 5,-5';
+            arc1 = generateArc(radius, 0, '', '-');
+            // Second turn right and up with clockwise arc
+            arc2 = 'a5,5 0 0 1 5,-5';
+            arc2 = generateArc(radius, 1, '', '-');
+            if (horizontal) {
+                // Reduce dx by radius
+                dx -= radius;
+                // Increase dy by 2 * radius
+                dy += radius * 2;
+            } else {
+                // Reduce dy by radius
+                dy += radius;
+                // Increase dx by 2 * radius
+                dx -= radius * 2;
+            }
+        }
+        let points = "m" + coordString(start) + " v" + dy + " " + arc1 + " h" + dx + " " + arc2 + " v" + dy;
+        if (horizontal) {
+            points = "m" + coordString(start) + " h" + dx + " " + arc1 + " " + " v" + dy + arc2 + " h" + dx;
+        }
+        let path = parent_svg.append('path')
+            .attr("id", id)
+            .attr("d", points)
+            //.attr("d", "M100,100 h50 a5,5 0 0 0 5,5 v50 a5,5 0 0 1 -5,5 h-50 a5,5 0 0 1 -5,-5 v-50 a5,5 0 0 1 5,-5 z")
+            .attr("stroke-width", "2")
+            .attr("stroke", connector_colour)
+            .attr("fill", "none")
+            .attr("marker-start", "url(#connector-end-circle)")
+            .attr("marker-end", "url(#connector-end-circle)");
+        //return path;
+    } else {
+        // Calculate Polyline points
+        let ydiff = end['y'] - start['y'];
+        let ymid = Math.round(start['y'] + ydiff / 2);
+        let mid1 = {x: start['x'], y: ymid};
+        let mid2 = {x: end['x'], y: ymid};
+        let points = coordString(start) + " " + coordString(mid1) + " " + coordString(mid2) + " " + coordString(end);
+        let polyline = parent_svg.append('polyline')
+            .attr("id", id)
+            .attr("points", points)
+            .attr("stroke-width", "2")
+            .attr("stroke", connector_colour)
+            .attr("fill", "none")
+            .attr("marker-start", "url(#connector-end-circle)")
+            .attr("marker-end", "url(#connector-end-circle)");
+        //return polyline;
+    }
+    console.groupEnd();
+}
+
+function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}, horizontal=false) {
+    console.groupCollapsed('Generating Connector');
+    console.info('Start Coordinates : ' + JSON.stringify(start));
+    console.info('End Coordinates   : ' + JSON.stringify(end));
+    if (horizontal) {
+        drawHorizontalConnector(parent_svg, id, start, end);
+    } else {
+        drawVerticalConnector(parent_svg, id, start, end);
+    }
+    console.groupEnd();
+}
+
+function drawVerticalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0},) {
+    console.groupCollapsed('Generating Vertical Connector');
+    console.info('Start Coordinates : ' + JSON.stringify(start));
+    console.info('End Coordinates   : ' + JSON.stringify(end));
+    if (path_connector) {
+        let radius = corner_radius;
+        let dy = Math.round((end['y'] - start['y']) / 2);
+        let dx = end['x'] - start['x'];
+        let arc1 = '';
+        let arc2 = '';
+        console.info('dx                : ' + dx);
+        console.info('dy                : ' + dy);
         if (dy > 0 && dx > 0) {
             // First turn down and right with counter clockwise arc
             arc1 = 'a5,5 0 0 0 5,5';
@@ -322,7 +459,7 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
             // Second turn left and up with clockwise arc
             arc2 = 'a5,5 0 0 0 -5,-5';
             arc2 = generateArc(radius, 0, '-', '-');
-            // Reduce dy by radius
+            // Increase dy by radius
             dy += radius;
             // Reduce dx by 2 * radius
             dx -= radius * 2;
@@ -339,6 +476,94 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
             dx -= radius * 2;
         }
         let points = "m" + coordString(start) + " v" + dy + " " + arc1 + " h" + dx + " " + arc2 + " v" + dy;
+        let path = parent_svg.append('path')
+            .attr("id", id)
+            .attr("d", points)
+            //.attr("d", "M100,100 h50 a5,5 0 0 0 5,5 v50 a5,5 0 0 1 -5,5 h-50 a5,5 0 0 1 -5,-5 v-50 a5,5 0 0 1 5,-5 z")
+            .attr("stroke-width", "2")
+            .attr("stroke", connector_colour)
+            .attr("fill", "none")
+            .attr("marker-start", "url(#connector-end-circle)")
+            .attr("marker-end", "url(#connector-end-circle)");
+        //return path;
+    } else {
+        // Calculate Polyline points
+        let ydiff = end['y'] - start['y'];
+        let ymid = Math.round(start['y'] + ydiff / 2);
+        let mid1 = {x: start['x'], y: ymid};
+        let mid2 = {x: end['x'], y: ymid};
+        let points = coordString(start) + " " + coordString(mid1) + " " + coordString(mid2) + " " + coordString(end);
+        let polyline = parent_svg.append('polyline')
+            .attr("id", id)
+            .attr("points", points)
+            .attr("stroke-width", "2")
+            .attr("stroke", connector_colour)
+            .attr("fill", "none")
+            .attr("marker-start", "url(#connector-end-circle)")
+            .attr("marker-end", "url(#connector-end-circle)");
+        //return polyline;
+    }
+    console.groupEnd();
+}
+
+function drawHorizontalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
+    console.groupCollapsed('Generating Horizontal Connector');
+    console.info('Start Coordinates : ' + JSON.stringify(start));
+    console.info('End Coordinates   : ' + JSON.stringify(end));
+    if (path_connector) {
+        let radius = corner_radius;
+        let dy = end['y'] - start['y'];
+        let dx = Math.round((end['x'] - start['x']) / 2);
+        let arc1 = '';
+        let arc2 = '';
+        console.info('dx                : ' + dx);
+        console.info('dy                : ' + dy);
+        if (dy > 0 && dx > 0) {
+            // First turn right and down with clockwise arc
+            arc1 = 'a5,5 0 0 1 5,5';
+            arc1 = generateArc(radius, 1, '', '');
+            // Second turn down and right with counter clockwise arc
+            arc2 = 'a5,5 0 0 0 5,5';
+            arc2 = generateArc(radius, 0, '', '');
+            // Reduce dx by radius
+            dx -= radius;
+            // Reduce dy by 2 * radius
+            dy -= radius * 2;
+        } else if (dy > 0 && dx < 0) {
+            // First turn down and left with counter clockwise arc
+            arc1 = 'a5,5 0 0 1 -5,5';
+            arc1 = generateArc(radius, 1, '-', '');
+            // Second turn left and down with clockwise arc
+            arc2 = 'a5,5 0 0 0 -5,5';
+            arc2 = generateArc(radius, 0, '-', '');
+            // Increase dx by radius
+            dx += radius;
+            // Reduce dy by 2 * radius
+            dy -= radius * 2;
+        } else if (dy < 0 && dx < 0) {
+            // First turn up and left with counter clockwise arc
+            arc1 = 'a5,5 0 0 1 -5,-5';
+            arc1 = generateArc(radius, 1, '-', '-');
+            // Second turn left and up with clockwise arc
+            arc2 = 'a5,5 0 0 0 -5,-5';
+            arc2 = generateArc(radius, 0, '-', '-');
+            // Reduce dx by radius
+            dx -= radius;
+            // Increase dy by 2 * radius
+            dy += radius * 2;
+        } else if (dy < 0 && dx > 0) {
+            // First turn up and right with counter clockwise arc
+            arc1 = 'a5,5 0 0 0 5,-5';
+            arc1 = generateArc(radius, 0, '', '-');
+            // Second turn right and up with clockwise arc
+            arc2 = 'a5,5 0 0 1 5,-5';
+            arc2 = generateArc(radius, 1, '', '-');
+            // Reduce dx by radius
+            dx -= radius;
+            // Increase dy by 2 * radius
+            dy += radius * 2;
+        }
+        let points = "m" + coordString(start) + " h" + dx + " " + arc1 + " " + " v" + dy + arc2 + " h" + dx;
         let path = parent_svg.append('path')
             .attr("id", id)
             .attr("d", points)
