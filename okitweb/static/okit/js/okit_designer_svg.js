@@ -331,22 +331,22 @@ function drawVerticalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0},
             dx += radius * 2;
         } else if (dy < 0 && dx < 0) {
             // First turn up and left with counter clockwise arc
-            arc1 = 'a5,5 0 0 1 -5,-5';
-            arc1 = generateArc(radius, 1, '-', '-');
+            arc2 = 'a5,5 0 0 1 -5,-5';
+            arc2 = generateArc(radius, 1, '-', '-');
             // Second turn left and up with clockwise arc
-            arc2 = 'a5,5 0 0 0 -5,-5';
-            arc2 = generateArc(radius, 0, '-', '-');
+            arc1 = 'a5,5 0 0 0 -5,-5';
+            arc1 = generateArc(radius, 0, '-', '-');
             // Increase dy by radius
             dy += radius;
             // Reduce dx by 2 * radius
             dx -= radius * 2;
         } else if (dy < 0 && dx > 0) {
             // First turn up and right with counter clockwise arc
-            arc1 = 'a5,5 0 0 0 5,-5';
-            arc1 = generateArc(radius, 0, '', '-');
+            arc2 = 'a5,5 0 0 0 5,-5';
+            arc2 = generateArc(radius, 0, '', '-');
             // Second turn right and up with clockwise arc
-            arc2 = 'a5,5 0 0 1 5,-5';
-            arc2 = generateArc(radius, 1, '', '-');
+            arc1 = 'a5,5 0 0 1 5,-5';
+            arc1 = generateArc(radius, 1, '', '-');
             // Reduce dy by radius
             dy += radius;
             // Increase dx by 2 * radius

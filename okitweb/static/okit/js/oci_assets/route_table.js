@@ -295,8 +295,14 @@ class RouteTable extends OkitArtifact {
                 console.info('Changed network_entity_id ' + this.selectedIndex);
                 displayOkitJson();
             });
+        let gateways = [];
+        if (this.getParent().getArtifactReference() === virtual_cloud_network_artifact) {
+            gateways = this.getParent().getGateways();
+        } else {
+            // Must be a child of the Virtual Cloud Network
+            gateways = this.getParent().getParent().getGateways();
+        }
         // Add Internet gateways
-        let gateways = this.getParent().getGateways();
         for (let gateway of gateways) {
             let opt = network_entity_id_select.append('option')
                 .attr("value", gateway.id)
