@@ -127,6 +127,7 @@ class OkitTemplateArtifact extends OkitArtifact {
             d3.event.stopPropagation();
         });
         console.groupEnd();
+        return svg;
     }
 
     // Return Artifact Specific Definition.

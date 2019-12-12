@@ -964,6 +964,10 @@ class OkitJson {
         for (let autonomous_database of this.autonomous_databases) {
             autonomous_database.draw();
         }
+        // FastConnects
+        for (let fast_connect of this.fast_connects) {
+            fast_connect.draw();
+        }
 
         // Draw Virtual Cloud Network Sub Components
         // Internet Gateways
@@ -981,10 +985,6 @@ class OkitJson {
         // Dynamic Routing Gateways
         for (let dynamic_routing_gateway of this.dynamic_routing_gateways) {
             dynamic_routing_gateway.draw();
-        }
-        // FastConnects
-        for (let fast_connect of this.fast_connects) {
-            fast_connect.draw();
         }
         // Route Tables
         for (let route_table of this.route_tables) {

@@ -140,6 +140,71 @@ class DynamicRoutingGateway extends OkitArtifact {
             me.loadProperties();
             d3.event.stopPropagation();
         });
+        // Get Inner Rect to attach Connectors
+        let rect = svg.select("rect[id='" + this.id + "']");
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add Connector Data
+        svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true);
+        // Draw Connectors
+        this.drawConnectors();
+        console.groupEnd();
+        return svg;
+    }
+
+    drawConnectors() {
+        console.groupCollapsed('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        //let parent_svg = d3.select('#' + this.parent_id + "-svg");
+        //let parent_rect = d3.select('#' + this.parent_id);
+        // Get Grand Parent
+        let grandparent_id = d3.select('#' + this.parent_id).attr('data-parent-id');
+        // Define Connector Parent
+        let parent_svg = d3.select('#' + grandparent_id + "-svg");
+        let parent_rect = d3.select('#' + grandparent_id);
+        // Only Draw if parent exists
+        if (parent_svg.node()) {
+            console.info('Parent SVG     : ' + parent_svg.attr('id'));
+            // Define SVG position manipulation variables
+            let svgPoint = parent_svg.node().createSVGPoint();
+            let screenCTM = parent_rect.node().getScreenCTM();
+            svgPoint.x = d3.select('#' + this.id).attr('data-connector-start-x');
+            svgPoint.y = d3.select('#' + this.id).attr('data-connector-start-y');
+            let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+            console.info('Start svgPoint.x : ' + svgPoint.x);
+            console.info('Start svgPoint.y : ' + svgPoint.y);
+            console.info('Start matrixTransform.x : ' + connector_start.x);
+            console.info('Start matrixTransform.y : ' + connector_start.y);
+
+            let connector_end = null;
+
+            if (this.fast_connect_ids.length > 0) {
+                for (let i = 0; i < this.fast_connect_ids.length; i++) {
+                    let fast_connect_svg = d3.select('#' + this.fast_connect_ids[i]);
+                    if (fast_connect_svg.node()) {
+                        svgPoint.x = fast_connect_svg.attr('data-connector-start-x');
+                        svgPoint.y = fast_connect_svg.attr('data-connector-start-y');
+                        connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                        console.info('End svgPoint.x   : ' + svgPoint.x);
+                        console.info('End svgPoint.y   : ' + svgPoint.y);
+                        console.info('End matrixTransform.x : ' + connector_end.x);
+                        console.info('End matrixTransform.y : ' + connector_end.y);
+                        let polyline = drawConnector(parent_svg, generateConnectorId(this.fast_connect_ids[i], this.id),
+                            {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y}, true);
+                    }
+                }
+            }
+        }
         console.groupEnd();
     }
 

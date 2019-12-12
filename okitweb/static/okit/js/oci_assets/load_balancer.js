@@ -156,10 +156,11 @@ class LoadBalancer extends OkitArtifact {
         // Draw Connectors
         this.drawConnectors();
         console.groupEnd();
+        return svg;
     }
 
     drawConnectors() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.groupCollapsed('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         //let parent_svg = d3.select('#' + this.parent_id + "-svg");
         //let parent_rect = d3.select('#' + this.parent_id);
         // Get Grand Parent

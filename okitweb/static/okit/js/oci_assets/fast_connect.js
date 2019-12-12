@@ -126,7 +126,26 @@ class FastConnect extends OkitArtifact {
             me.loadProperties();
             d3.event.stopPropagation();
         });
+        // Get Inner Rect to attach Connectors
+        let rect = svg.select("rect[id='" + this.id + "']");
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add Connector Data
+        svg.attr("data-compartment-id", this.compartment_id)
+            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
+            .attr("data-connector-start-x", boundingClientRect.x)
+            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
+            .attr("data-connector-end-x", boundingClientRect.x)
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
+            .attr("data-connector-start-x", boundingClientRect.x)
+            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
+            .attr("data-connector-end-x", boundingClientRect.x)
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true);
         console.groupEnd();
+        return svg;
     }
 
     // Return Artifact Specific Definition.
@@ -139,6 +158,8 @@ class FastConnect extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = fast_connect_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();
         return definition;
