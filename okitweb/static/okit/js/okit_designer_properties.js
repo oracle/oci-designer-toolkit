@@ -110,12 +110,12 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                     console.log(' Calling ' + f);
                     f(json_element);
                 }
+                drawSVGforJson();
             });
             inputfield.on('blur', function() {
                 if (settings) {
                     saveOkitSettings();
                 }
-                drawSVGforJson();
             });
         }
     );

@@ -69,6 +69,8 @@ function handleGenerateTerraform11(e) {
 }
 
 function handleExportToResourceManager(e) {
+    let request_json = JSON.clone(okitJson);
+    request_json.config_profile = okitSettings.profile;
     hideNavMenu();
     setBusyIcon();
     $.ajax({
@@ -76,7 +78,7 @@ function handleExportToResourceManager(e) {
         url: 'export/resourcemanager',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(okitJson),
+        data: JSON.stringify(request_json),
         success: function(resp) {
             console.info('Response : ' + resp);
             unsetBusyIcon();

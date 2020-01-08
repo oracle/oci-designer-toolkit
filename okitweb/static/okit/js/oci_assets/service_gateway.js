@@ -62,6 +62,8 @@ class ServiceGateway extends OkitArtifact {
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;
         this.service_name = 'All Services';
+        this.autonomous_database_ids = [];
+        this.object_storage_bucket_ids = [];
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
@@ -139,6 +141,88 @@ class ServiceGateway extends OkitArtifact {
             me.loadProperties();
             d3.event.stopPropagation();
         });
+        // Get Inner Rect to attach Connectors
+        let rect = svg.select("rect[id='" + this.id + "']");
+        let boundingClientRect = rect.node().getBoundingClientRect();
+        // Add Connector Data
+        svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true)
+            .selectAll("*")
+            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
+            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
+            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
+            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
+            .attr("data-connector-id", this.id)
+            .attr("dragable", true);
+        // Draw Connectors
+        this.drawConnectors();
+        console.groupEnd();
+        return svg;
+    }
+
+    drawConnectors() {
+        console.groupCollapsed('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        //let parent_svg = d3.select('#' + this.parent_id + "-svg");
+        //let parent_rect = d3.select('#' + this.parent_id);
+        // Get Grand Parent
+        let grandparent_id = d3.select('#' + this.parent_id).attr('data-parent-id');
+        // Define Connector Parent
+        let parent_svg = d3.select('#' + grandparent_id + "-svg");
+        let parent_rect = d3.select('#' + grandparent_id);
+        // Only Draw if parent exists
+        if (parent_svg.node()) {
+            console.info('Parent SVG     : ' + parent_svg.attr('id'));
+            // Define SVG position manipulation variables
+            let svgPoint = parent_svg.node().createSVGPoint();
+            let screenCTM = parent_rect.node().getScreenCTM();
+            svgPoint.x = d3.select('#' + this.id).attr('data-connector-start-x');
+            svgPoint.y = d3.select('#' + this.id).attr('data-connector-start-y');
+            let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
+            console.info('Start svgPoint.x : ' + svgPoint.x);
+            console.info('Start svgPoint.y : ' + svgPoint.y);
+            console.info('Start matrixTransform.x : ' + connector_start.x);
+            console.info('Start matrixTransform.y : ' + connector_start.y);
+
+            let connector_end = null;
+
+            if (this.autonomous_database_ids.length > 0) {
+                for (let i = 0; i < this.autonomous_database_ids.length; i++) {
+                    let autonomous_database_svg = d3.select('#' + this.autonomous_database_ids[i]);
+                    if (autonomous_database_svg.node()) {
+                        svgPoint.x = autonomous_database_svg.attr('data-connector-start-x');
+                        svgPoint.y = autonomous_database_svg.attr('data-connector-start-y');
+                        connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                        console.info('End svgPoint.x   : ' + svgPoint.x);
+                        console.info('End svgPoint.y   : ' + svgPoint.y);
+                        console.info('End matrixTransform.x : ' + connector_end.x);
+                        console.info('End matrixTransform.y : ' + connector_end.y);
+                        let polyline = drawConnector(parent_svg, generateConnectorId(this.autonomous_database_ids[i], this.id),
+                            {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y}, true);
+                    }
+                }
+            }
+
+            if (this.object_storage_bucket_ids.length > 0) {
+                for (let i = 0; i < this.object_storage_bucket_ids.length; i++) {
+                    let object_storage_bucket_svg = d3.select('#' + this.object_storage_bucket_ids[i]);
+                    if (object_storage_bucket_svg.node()) {
+                        svgPoint.x = object_storage_bucket_svg.attr('data-connector-start-x');
+                        svgPoint.y = object_storage_bucket_svg.attr('data-connector-start-y');
+                        connector_end = svgPoint.matrixTransform(screenCTM.inverse());
+                        console.info('End svgPoint.x   : ' + svgPoint.x);
+                        console.info('End svgPoint.y   : ' + svgPoint.y);
+                        console.info('End matrixTransform.x : ' + connector_end.x);
+                        console.info('End matrixTransform.y : ' + connector_end.y);
+                        let polyline = drawConnector(parent_svg, generateConnectorId(this.object_storage_bucket_ids[i], this.id),
+                            {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y}, true);
+                    }
+                }
+            }
+        }
         console.groupEnd();
     }
 
@@ -185,6 +269,18 @@ class ServiceGateway extends OkitArtifact {
         let me = this;
         $("#properties").load("propertysheets/service_gateway.html", function () {
             // Load Referenced Ids
+            let autonomous_database_select = $('#autonomous_database_ids');
+            for (let autonomous_database of okitJson.autonomous_databases) {
+                if (me.compartment_id === autonomous_database.compartment_id) {
+                    autonomous_database_select.append($('<option>').attr('value', autonomous_database.id).text(autonomous_database.display_name));
+                }
+            }
+            let object_storage_bucket_select = $('#object_storage_bucket_ids');
+            for (let object_storage_bucket of okitJson.object_storage_buckets) {
+                if (me.compartment_id === object_storage_bucket.compartment_id) {
+                    object_storage_bucket_select.append($('<option>').attr('value', object_storage_bucket.id).text(object_storage_bucket.display_name));
+                }
+            }
             // Load Properties
             loadProperties(me);
             // Add Event Listeners

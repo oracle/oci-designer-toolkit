@@ -58,6 +58,7 @@ function initiateVirtualCloudNetworkSubQueries(compartment_id, id='') {
     queryInternetGatewayAjax(compartment_id, id);
     queryNATGatewayAjax(compartment_id, id);
     queryServiceGatewayAjax(compartment_id, id);
+    queryLocalPeeringGatewayAjax(compartment_id, id);
     queryRouteTableAjax(compartment_id, id);
     querySecurityListAjax(compartment_id, id);
     querySubnetAjax(compartment_id, id);
@@ -191,6 +192,15 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         }, this);
         // Dynamic Routing Gateways
         this.getOkitJson().dynamic_routing_gateways = this.getOkitJson().dynamic_routing_gateways.filter(function(child) {
+            if (child.vcn_id === this.id) {
+                console.info('Deleting ' + child.display_name);
+                child.delete();
+                return false; // So the filter removes the element
+            }
+            return true;
+        }, this);
+        // Local Peering Gateways
+        this.getOkitJson().local_peering_gateways = this.getOkitJson().local_peering_gateways.filter(function(child) {
             if (child.vcn_id === this.id) {
                 console.info('Deleting ' + child.display_name);
                 child.delete();
@@ -340,7 +350,11 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     }
 
     getRightEdgeArtifacts() {
-        return[service_gateway_artifact, dynamic_routing_gateway_artifact]
+        return[service_gateway_artifact, dynamic_routing_gateway_artifact, local_peering_gateway_artifact]
+    }
+
+    getBottomEdgeArtifacts() {
+        return [];
     }
 
 

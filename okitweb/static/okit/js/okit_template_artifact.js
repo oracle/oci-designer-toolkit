@@ -127,6 +127,7 @@ class OkitTemplateArtifact extends OkitArtifact {
             d3.event.stopPropagation();
         });
         console.groupEnd();
+        return svg;
     }
 
     // Return Artifact Specific Definition.
@@ -139,6 +140,8 @@ class OkitTemplateArtifact extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = template_artifact_stroke_colour;
+        definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();
         return definition;

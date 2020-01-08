@@ -70,7 +70,6 @@ RUN yum update -y ; \
         jinja2 \
         oci \
         pyyaml \
-        simplejson \
         werkzeug \
 # Install oci ansible module
  && cd /tmp ; \
