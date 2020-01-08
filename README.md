@@ -37,7 +37,7 @@ python modules are installed and in addition provide a simple flask server that 
 Therefore these installation instructions will describe the docker based implementation.
 
 ##### 1. Clone Repository
-***Note***: To clone the OraHub Repository you will need to be on the Corporate Network.
+**Note**: To clone the OraHub Repository you will need to be on the Corporate Network.
 ```bash
 anhopki-mac:tmp anhopki$ git clone git@orahub.oraclecorp.com:andrew.hopkinson/okit.oci.web.designer.git
 
@@ -76,7 +76,7 @@ total 56
 8 -rwxr-xr-x   1 anhopki  staff   654B 15 Aug 10:08 start-gunicorn.sh
 ```
 ##### 3. Execute Build Script
-***Note***: For this to work correctly you will need to be **off** the Corporate Network.
+**Note**: For this to work correctly you will need to be **off** the Corporate Network.
 ```bash
 anhopki-mac:docker anhopki$ ./build-docker-image.sh
 ```
@@ -311,11 +311,11 @@ Alternatively if you are running the Webb Application you can connect to the exi
 
 The command line interface consists of a number of python programs as follows:
 #### Capture
-***(WIP)*** The capture python will connect to the specified OCI instance (defaults to config in users home directory) and 
+**(WIP)** The capture python will connect to the specified OCI instance (defaults to config in users home directory) and 
 queries OCI based on the specified filters. The resulting data is then written to the specified OKIT json file (okit.json)
 and can be subsequently imported into the web based interface or used to generate the DevOps files (see [Generate](#generate)).
 #### Validate
-***(WIP)*** The validate python will read the specified OKIT json file (okit.json) and check if the references are consistent.
+**(WIP)** The validate python will read the specified OKIT json file (okit.json) and check if the references are consistent.
 #### Generate
 The generate python process takes a specified OKIT json file (okit.json) and converts it to a number terraform or ansible 
 files that can then be used with the appropriate DevOps tooling to build the artifacts defined within the json file.
@@ -667,7 +667,7 @@ const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 ```
 Within this section we will define the target artifact where the new artifact can be dropped. For example the **Block Storage Volume** can be dropped on the *Compartment*. 
 
-***Note***: The block_storage_volume_artifact and compartment_artifact are defined in the Designer Javascript.  
+**Note**: The block_storage_volume_artifact and compartment_artifact are defined in the Designer Javascript.  
 
 Additionally we define the stroke colour for the bounding rectangle used to display the artifact.
 

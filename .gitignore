@@ -29,3 +29,5 @@ output
 
 .scannerworks
 sonar-project.properties
+
+.vagrant
