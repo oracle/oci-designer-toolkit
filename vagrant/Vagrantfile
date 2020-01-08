@@ -1,0 +1,57 @@
+VAGRANTFILE_API_VERSION = "2"
+
+# define guest OS hostname
+NAME = "okit"
+
+unless Vagrant.has_plugin?("vagrant-reload")
+  puts 'Installing vagrant-reload Plugin...'
+  system('vagrant plugin install vagrant-reload')
+end
+unless Vagrant.has_plugin?("vagrant-vbguest")
+  puts 'Installing vagrant-vbguest Plugin...'
+  system('vagrant plugin install vagrant-vbguest')
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ol7-latest"
+  config.vm.box_url = "https://yum.oracle.com/boxes/oraclelinux/latest/ol7-latest.box"
+  config.vm.define NAME
+  # This will expose the OKIT repo folder inside the VM under ~/okit-repo
+  config.vm.synced_folder "../", "/home/vagrant/okit-repo"
+
+  # set cpu, memory size and vm name
+  config.vm.provider "virtualbox" do |v|
+    v.cpus = 1
+    v.memory = 512
+    v.name = NAME
+    # This is the name of the VM in Virtualbox Manager
+    v.customize ["modifyvm", :id, "--name", "OKIT-Vagrant"]
+    # Seems to reduce CPU spikes on macOS. Might be CPU dependant
+    v.customize ["modifyvm", :id, "--nestedpaging", "off"]  
+    # Setting the correct and supported graphics controller
+    v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"] 
+  end
+
+  config.vm.provision :reload
+
+  # Oracle port forwarding
+  # nginx
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  # GUnicorn, needed?
+  #config.vm.network "forwarded_port", guest: 5000, host: 5000
+  # Netdata, optional install
+  #config.vm.network "forwarded_port", guest: 19999, host: 19999
+
+  # Run external install script as root
+  config.vm.provision "shell", inline: "echo 'Running run-as-root.sh!'"
+  config.vm.provision "shell", path: "run-as-root.sh", privileged: true
+  config.vm.provision "shell", inline: "echo 'Finished run-as-root.sh!'"
+  config.vm.provision :reload
+
+  # Run external install script as vagrant
+  config.vm.provision "shell", inline: "echo 'Running run-as-vagrant.sh!'"
+  config.vm.provision "shell", path: "run-as-vagrant.sh", privileged: false
+  config.vm.provision "shell", inline: "echo 'Finished run-as-vagrant.sh!'"
+  config.vm.provision :reload
+
+end
