@@ -1307,7 +1307,6 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 | gunicorn   | 20.0.4  | MIT       |            | [PyPi gunicorn](https://pypi.org/project/gunicorn/)     |
 | jinja2     | 2.10.3  | BSD       | 3-Clause   | [PyPi Jinja2](https://pypi.org/project/Jinja2/)         |
 | pyyaml     | 5.2     | MIT       |            | [PyPi PyYAML](https://pypi.org/project/PyYAML/)         |
-| simplejson | 3.17.0  | MIT / AFL |            | [PyPi simplejson](https://pypi.org/project/simplejson/) |
 | werkzeug   | 0.16.0  | BSD       | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)     |
 
 

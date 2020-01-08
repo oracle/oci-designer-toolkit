@@ -4,7 +4,7 @@
   "compartments": [
     {
       "id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "name": "okit-comp001",
+      "name": "okit",
       "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
       "parent_id": "canvas",
       "display_name": "okit-comp001"

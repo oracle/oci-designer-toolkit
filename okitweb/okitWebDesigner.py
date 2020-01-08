@@ -302,6 +302,8 @@ def ociArtifacts(artifact):
 def export(destination):
     logger.debug('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
+    config_profile = request.json.get('config_profile', 'DEFAULT')
+    logger.info('Using Profile : {0!s:s}'.format(config_profile))
     if request.method == 'POST':
         try:
             destination_dir = tempfile.mkdtemp();
@@ -314,7 +316,7 @@ def export(destination):
                 export_compartment_index = request.json.get('open_compartment_index', 0)
                 export_compartment_name = request.json['compartments'][export_compartment_index]['name']
                 logger.info("Compartment Name {0!s:s}".format(export_compartment_name))
-                oci_compartments = OCICompartments()
+                oci_compartments = OCICompartments(profile=config_profile)
                 compartments = oci_compartments.listTenancy(filter={'name': export_compartment_name})
                 logger.debug("Compartments {0!s:s}".format(compartments))
                 # If we find a compartment
@@ -332,7 +334,7 @@ def export(destination):
                     stack['compartment_id'] = compartments[0]['id']
                     stack['zipfile'] = zipname
                     stack['variables'] = generator.getVariables()
-                    resource_manager = OCIResourceManagers(compartment_id=compartments[0]['id'])
+                    resource_manager = OCIResourceManagers(profile=config_profile, compartment_id=compartments[0]['id'])
                     stack_json = resource_manager.createStack(stack)
                     resource_manager.createJob(stack_json)
                     return_code = 200

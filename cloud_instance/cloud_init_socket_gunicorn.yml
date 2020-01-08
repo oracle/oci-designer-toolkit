@@ -165,7 +165,7 @@ runcmd:
   - sudo systemctl start nginx.service
   # Enable GUnicorn
   - sudo pip3 install configparser flask flask-cors flask_restful gunicorn ipaddress ipcalc jinja2 oci pexpect pyyaml
-  - sudo pip3 install requests simplejson six svglib svg.path wtforms xlrd
+  - sudo pip3 install requests six svglib svg.path wtforms xlrd
   - sudo systemctl enable gunicorn.service
   - sudo systemctl enable gunicorn.socket
   - sudo systemctl start gunicorn.socket
