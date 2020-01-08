@@ -54,5 +54,5 @@ echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connecti
 echo "alias wtd='terraform destroy -var-file=/okit/config/wizards.tfvars -auto-approve' " >> /home/vagrant/.bash_profile
 echo "alias wtp='terraform plan -var-file=/okit/config/wizards.tfvars -out=da.plan' "        >> /home/vagrant/.bash_profile
 
-export OCI_CONFIG_DIR=/home/vagrant/okit-repo/vagrant
+export OCI_CONFIG_DIR=/home/vagrant/
 echo "export OCI_CONFIG_DIR=/vagrant/" >> /home/vagrant/okit-repo/vagrant/.bash_profile
