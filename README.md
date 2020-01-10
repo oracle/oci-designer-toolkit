@@ -98,8 +98,9 @@ At present not all browsers are fully supported the following is a list of suppo
    - Brave
    - Chromium Based Browsers
    - Firefox 
-- Unsupported
+- Partially Supported
    - Safari
+- Unsupported
    - IE
 ### Currently Implemented Artifacts
 In the present release the following OCI artifacts have been implemented. The information captured in the properties may 
