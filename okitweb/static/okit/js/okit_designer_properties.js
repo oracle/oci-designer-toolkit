@@ -73,7 +73,7 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                         d3.select('#' + json_element['id'] + '-title')
                             .text(this.value);
                         let text = d3.select('#' + json_element['id'] + '-display-name');
-                        if (text && text !== null) {
+                        if (text && text != null) {
                             text.text(this.value);
                         }
                     } else if (this.id === 'name') {
@@ -81,7 +81,7 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                         d3.select('#' + json_element['id'] + '-title')
                             .text(this.value);
                         let text = d3.select('#' + json_element['id'] + '-tab');
-                        if (text && text !== null) {
+                        if (text && text != null) {
                             text.text(this.value);
                         }
                     }

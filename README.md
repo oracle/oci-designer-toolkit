@@ -98,8 +98,9 @@ At present not all browsers are fully supported the following is a list of suppo
    - Brave
    - Chromium Based Browsers
    - Firefox 
-- Unsupported
+- Partially Supported
    - Safari
+- Unsupported
    - IE
 ### Currently Implemented Artifacts
 In the present release the following OCI artifacts have been implemented. The information captured in the properties may 
@@ -1301,13 +1302,15 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 
 ### Python
 
-| Library    | Version | License   | Sub Type   | Home Page                                               |
-| ---------- | ------- | --------- | ---------- | ------------------------------------------------------- |
-| flask      | 1.1.1   | BSD       | 3-Clause   | [PyPi Flask](https://pypi.org/project/Flask/)           |
-| gunicorn   | 20.0.4  | MIT       |            | [PyPi gunicorn](https://pypi.org/project/gunicorn/)     |
-| jinja2     | 2.10.3  | BSD       | 3-Clause   | [PyPi Jinja2](https://pypi.org/project/Jinja2/)         |
-| pyyaml     | 5.2     | MIT       |            | [PyPi PyYAML](https://pypi.org/project/PyYAML/)         |
-| werkzeug   | 0.16.0  | BSD       | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)     |
+| Library      | Version | License   | Sub Type   | Home Page                                                       |
+| ------------ | ------- | --------- | ---------- | --------------------------------------------------------------- |
+| flask        | 1.1.1   | BSD       | 3-Clause   | [PyPi Flask](https://pypi.org/project/Flask/)                   |
+| gunicorn     | 20.0.4  | MIT       |            | [PyPi gunicorn](https://pypi.org/project/gunicorn/)             |
+| itsdangerous | 0.16.0  | BSD       | 3-Clause   | [PyPi ItsDangerous](https://pypi.org/project/itsdangerous/)     |
+| jinja2       | 2.10.3  | BSD       | 3-Clause   | [PyPi Jinja2](https://pypi.org/project/Jinja2/)                 |
+| markupsafe   | 1.1.1   | BSD       | 3-Clause   | [PyPi markupSafe](https://pypi.org/project/MarkupSafe/)         |
+| pyyaml       | 5.3     | MIT       |            | [PyPi PyYAML](https://pypi.org/project/PyYAML/)                 |
+| werkzeug     | 0.16.0  | BSD       | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)             |
 
 
 

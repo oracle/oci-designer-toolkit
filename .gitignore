@@ -27,7 +27,8 @@ converter/dest
 
 output
 
-.scannerworks
-sonar-project.properties
+.scannerwork
+#/.scannerwork/
+#sonar-project.properties
 
 .vagrant

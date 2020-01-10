@@ -67,7 +67,9 @@ RUN yum update -y ; \
         #ansible \
         flask \
         gunicorn \
+        itsdangerous \
         jinja2 \
+        markupsafe \
         oci \
         pyyaml \
         werkzeug \
