@@ -5,7 +5,7 @@
         <li>
             <div>
                 <span class="header-item">
-                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Canvas Menu">
                     <span>Canvas</span>
                 </span>
             </div>
@@ -18,7 +18,7 @@
         <li>
             <div>
                 <span class="header-item">
-                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Template Menu">
                     <span>Templates</span>
                 </span>
             </div>
@@ -30,7 +30,7 @@
         <li>
             <div>
                 <span class="header-item">
-                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Query Menu">
                     <span>Query</span>
                 </span>
             </div>
@@ -40,7 +40,7 @@
         <li>
             <div>
                 <span class="header-item">
-                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Generate Menu">
                     <span>Generate</span>
                 </span>
             </div>
@@ -51,7 +51,7 @@
         <li>
             <div>
                 <span class="header-item">
-                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}">
+                    <img id="header-item-icon" src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Export Menu">
                     <span>Export</span>
                 </span>
             </div>
@@ -125,7 +125,7 @@
                         </div>
                         <div class="palette-icon-group-icons">
                             {% for palette_icon in palette_icon_group['icons'] %}
-                                <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true">
+                                <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true" alt="{{ palette_icon['title'] }}">
                             {% endfor %}
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                     </div>
                     <div class="palette-icon-group-icons">
                         {% for fragment_icon in fragment_icons %}
-                            <img class="fragment-icon" src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}" title="{{ fragment_icon['title'] }}" draggable="true">
+                            <img class="fragment-icon" src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}" title="{{ fragment_icon['title'] }}" draggable="true" alt="{{ fragment_icon['title'] }}">
                         {% endfor %}
                     </div>
                 </div>

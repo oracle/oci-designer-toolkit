@@ -264,9 +264,9 @@ function loadSettings() {
 }
 
 
-const ro = new ResizeObserver(entries => {
-    redrawSVGCanvas();
-});
+//const ro = new ResizeObserver(entries => {
+//    redrawSVGCanvas();
+//});
 
 let dragging_palette_drag_bar = false;
 let dragging_properties_drag_bar = false;
@@ -389,7 +389,7 @@ $(document).ready(function(){
     $("#settings").slideToggle();
 
     // Only observe the canvas
-    ro.observe(document.querySelector('#canvas-wrapper'));
+    //ro.observe(document.querySelector('#canvas-wrapper'));
 
     // Add Drag Bar Functionality
     $('#properties-dragbar').mousedown(function(e) {
@@ -462,9 +462,11 @@ $(document).ready(function(){
             $(document).unbind('mousemove');
             dragging_palette_drag_bar = false;
             dragging_properties_drag_bar = false;
+            redrawSVGCanvas();
             console.groupEnd();
         }
     });
+    redrawSVGCanvas();
 
 });
 
