@@ -18,7 +18,7 @@ A Vagrantfile that installs and configures an Oracle Linux 7 Vagrant VM for runn
     - README.md
 
 3. Navigate to the vagrant folder and run `vagrant up; vagrant ssh`
-This step takes about 30 minutes on my mac, a little longer the first time as the Vbox image is downloaded from github. 
+This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
     - NOTE! There seems to be an issue using the terminal in MobaXterm. The regular Windows cmd shell works.
     
 4. After the Vagrant VM is built the vagrant users home folder should have folders from the cloned okit.oci.web.designer repository exposed in the Vagrant vm in the vagrant users home directory (/okitweb, /visualiser & /output). The OKIT app should also be running. To access the app the ports have been forwarded to the host and you should be able to access OKIT on http://localhost:8080/okit/designer from the host.

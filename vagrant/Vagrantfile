@@ -28,9 +28,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # This is the name of the VM in Virtualbox Manager
     v.customize ["modifyvm", :id, "--name", "OKIT-Vagrant"]
     # Seems to reduce CPU spikes on macOS. Might be CPU dependant
-    v.customize ["modifyvm", :id, "--nestedpaging", "off"]  
+    v.customize ["modifyvm", :id, "--nestedpaging", "on"]
     # Setting the correct and supported graphics controller
-    v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"] 
+    v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+    # Disable Audio to prevent CPU spikes
+    v.customize ["modifyvm", :id, "--audio", "none"]
   end
 
   config.vm.provision :reload
