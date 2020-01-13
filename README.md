@@ -1297,7 +1297,7 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 | Library    | Version | License   | Sub Type   | Home Page                                               |
 | ---------- | ------- | --------- | ---------- | ------------------------------------------------------- |
 | jQuery     | 3.4.1   | MIT       | Expat      | [JQuery License](https://jquery.org/license/)           |
-| d3         | 5.14.2  | BSD       | 3-Clause   | [d3](https://d3js.org/)                                 |
+| d3         | 5.15    | BSD       | 3-Clause   | [d3](https://d3js.org/)                                 |
 
 ### Python
 
