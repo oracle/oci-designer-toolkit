@@ -87,9 +87,19 @@ ul {
 }
 
 .nav-menu-button {
+    float: left;
     margin-left: 16px;
     padding-left: 8px;
     padding-right: 8px;
+    max-width: 40px;
+}
+
+.oci-link {
+    float: right;
+    margin-right: 16px;
+    padding-right: 8px;
+    padding-left: 8px;
+    padding-top: 8px;
     max-width: 40px;
 }
 
