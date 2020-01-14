@@ -82,9 +82,16 @@
     border-bottom: solid black 1px;
 }
 
+.palette-icon-group-header img {
+    max-height: 20px;
+    max-width: 20px;
+    padding-right: 5px;
+}
+
 .palette-icon-group-header label {
     font-family: Helvetica, Arial, sans-serif;
     font-size: smaller;
+    color: white;
 }
 
 .palette-icon-group-icons {
@@ -102,8 +109,10 @@
 .designer-left-column {
     padding-left: 5px;
     border-right: 1px solid black;
-    background-color: #f0f5f5;
-    width: 100px;
+    /*background-color: #f0f5f5;*/
+    background-color: #1d2733;
+    color: white;
+    width: 140px;
     min-width: 100px;
 }
 
@@ -116,7 +125,9 @@
 .designer-right-column {
     padding-left: 1px;
     border-left: 2px solid black;
-    background-color: #f0f5f5;
+    /*background-color: #f0f5f5;*/
+    background-color: #1d2733;
+    color: white;
     width: 300px;
     min-width: 300px;
     display: flex;
@@ -280,7 +291,8 @@
 }
 
 .property-editor-title {
-    color: #3d5c5c;
+    /*color: #3d5c5c;*/
+    color: white;
     font-weight: bold;
     font-family: "Times New Roman", Arial, sans-serif;
     min-height: 20px;
@@ -314,6 +326,7 @@
 .property-editor-table td {
     border: 1px solid #ddd;
     padding: 2px;
+    color: black;
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 14px;
 }
