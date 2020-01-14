@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>OKIT OCI Web Designer</title>
     <!--script src="https://d3js.org/d3.v5.min.js"></script-->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/d3-5.15.0.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_common.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_base.js') }}"></script>
@@ -19,6 +19,9 @@
             <div id="console-nav-container" class="console-nav-container">
                 <div class="nav-menu-button">
                     <img id="nav-menu-button" class="nav-menu-button-icon" src="{{ url_for('static', filename='svg/hamburger.svg') }}" alt="Navigation Menu">
+                </div>
+                <div class="oci-link">
+                    <a href="https://console.us-phoenix-1.oraclecloud.com" target="_blank"><img id="cloud-icon" src="{{ url_for('static', filename='svg/cloud.svg') }}" title="OCI Console" alt="OCI Console"></a>
                 </div>
                 <div id="console-nav-menu-container" class="nav-menu-container">
                     <div id="console-nav-menu-panel" class="nav-menu-panel">

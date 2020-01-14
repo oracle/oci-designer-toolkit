@@ -221,7 +221,7 @@ function drawArtifact(definition) {
             .attr("class", "svg-text")
             .attr("id", id + '-label')
             .attr("x", rect_x)
-            .attr("y", definition['svg']['height'] - Math.max(10, rect_y * 2))
+            .attr("y", definition['svg']['height'] - Math.max(10, (rect_y * 2) - 10))
             .attr("fill", definition['rect']['stroke']['colour'])
             .attr("vector-effects", "non-scaling-size")
             .text(definition['label']['text']);
@@ -238,7 +238,7 @@ function drawArtifact(definition) {
             .attr("class", "svg-text")
             .attr("id", id + '-info')
             .attr("x", 0)
-            .attr("y", definition['svg']['height'] - Math.max(10, rect_y * 2))
+            .attr("y", definition['svg']['height'] - Math.max(10, (rect_y * 2) - 10))
             .attr("fill", definition['rect']['stroke']['colour'])
             .attr("vector-effects", "non-scaling-size")
             .text(definition['info']['text']);

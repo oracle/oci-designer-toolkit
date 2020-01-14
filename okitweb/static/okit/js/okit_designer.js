@@ -332,7 +332,7 @@ $(document).ready(function(){
     //document.getElementById('Example-tab-button').addEventListener('click', function() { openCompartment('Example'); }, false);
 
     // Set Redraw when window resized
-    //window.addEventListener("resize", handleResize, false);
+    window.addEventListener("resize", handleResize, false);
 
     /*
     ** Set Empty Properties Sheet

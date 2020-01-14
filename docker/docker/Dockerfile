@@ -50,7 +50,9 @@ RUN yum update -y ; \
         tar \
         terraform \
         tree \
+        unzip \
         wget \
+        zip \
  && yum repolist all \
  && yum clean all \
 # Install pip
