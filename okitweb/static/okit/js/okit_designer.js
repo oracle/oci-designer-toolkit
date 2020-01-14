@@ -260,7 +260,13 @@ function loadSettings() {
         console.info('Loading Settings');
         loadProperties(okitSettings);
         addPropertiesEventListeners(okitSettings, [], true);
+        $('#is_always_free').attr('checked', okitSettings.is_always_free);
     });
+}
+
+function handleFooterIsAlwaysFreeClick(cb) {
+    okitSettings.is_always_free = $(cb).is(':checked');
+    saveOkitSettings();
 }
 
 

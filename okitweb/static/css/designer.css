@@ -80,6 +80,8 @@
     min-width: 100%;
     display: block;
     border-bottom: solid black 1px;
+    border-bottom-color: white;
+    padding-bottom: 5px;
 }
 
 .palette-icon-group-header img {
@@ -478,5 +480,16 @@
     overflow: scroll;
 }
 
+
+/* Footer */
+.footer-settings {
+    float: right;
+    max-width: 20em;
+    padding-right: 10px;
+}
+
+.footer-settings label {
+    font-size: smaller;
+}
 
 
