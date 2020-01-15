@@ -31,6 +31,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--nestedpaging", "on"]
     # Setting the correct and supported graphics controller
     v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+    # Setting the correct minimum video memory
+    v.customize ["modifyvm", :id, "--vram", "16"] 
     # Disable Audio to prevent CPU spikes
     v.customize ["modifyvm", :id, "--audio", "none"]
   end
