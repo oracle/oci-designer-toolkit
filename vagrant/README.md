@@ -16,7 +16,7 @@ A Vagrantfile that installs and configures an Oracle Linux 7 Vagrant VM for runn
     - run-as-root.sh
     - run-as-vagrant.sh
     - README.md
-    .oci (the whole folder)
+    - The .oci folder
 
 3.  Open the .oci/config file and edit the path to the key file to look like: "key_file=/vagrant/.oci/oci_api_key.pem"
 
