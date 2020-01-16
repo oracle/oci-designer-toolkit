@@ -95,7 +95,6 @@ mkdir -p /workspace
 mkdir -p /okit/{ansible,config,converter,terraform,visualiser,okitweb,workspace,python,unittests,preview};
 mkdir -p /home/vagrant/okit
 chown -R vagrant:vagrant /home/vagrant/okit
-#chmod 777 /home/vagrant/okit
 
 # Change Default nginx Config (Socket)
 cat > /etc/nginx/nginx.conf <<EOF 
