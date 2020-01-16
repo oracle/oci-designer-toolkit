@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # set cpu, memory size and vm name
   config.vm.provider "virtualbox" do |v|
     v.cpus = 1
-    v.memory = 512
+    v.memory = 384
     v.name = NAME
     # This is the name of the VM in Virtualbox Manager
     v.customize ["modifyvm", :id, "--name", "OKIT-Vagrant"]
