@@ -20,5 +20,8 @@ echo "export PATH=/usr/local/bin:/opt/python/bin:${PATH}"           >> /home/vag
 # Define Aliases
 echo '' >> /home/vagrant/.bash_profile
 
-export OCI_CONFIG_DIR=/home/vagrant/
-echo "export OCI_CONFIG_DIR=/vagrant/" >> /home/vagrant/.bash_profile
+# Create a link to the .oci folder in the Vagrantfile folder on the host
+ln -s /vagrant/.oci .oci
+
+export OCI_CONFIG_DIR=~/.oci
+echo "export OCI_CONFIG_DIR=~/.oci" >> /home/vagrant/.bash_profile
