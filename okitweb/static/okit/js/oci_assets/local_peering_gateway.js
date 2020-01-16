@@ -5,7 +5,6 @@ console.info('Loaded Local Peering Gateway Javascript');
  */
 asset_drop_targets[local_peering_gateway_artifact] = [virtual_cloud_network_artifact];
 
-const local_peering_gateway_stroke_colour = "#F80000";
 const local_peering_gateway_query_cb = "local-peering-gateway-query-cb";
 
 /*
@@ -160,7 +159,7 @@ class LocalPeeringGateway extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = local_peering_gateway_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

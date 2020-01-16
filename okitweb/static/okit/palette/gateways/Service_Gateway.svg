@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 288 288">
-	<style type="text/css">.svg-red{fill:#F80000;}</style>
+<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 288 288">
+	<style type="text/css">.icon-colour-01{fill:#F80000;}</style>
 	<g transform="translate(-140, -140) scale(2, 2)">
-		<path class="svg-red" d="M144.0,91.3 c-29.8,0.0,-53.9,24.1,-53.9,53.9 c0.0,29.8,24.1,53.9,53.9,53.9 s53.9,-24.1,53.9,-53.9 C197.9,115.2,173.8,91.3,144.0,91.3 z M104.1,148.0 v-6.0 h13.9 v-8.4 l19.3,11.2 L118.0,156.0 v-8.0 H104.1 z M144.1,184.4 l-11.2,-19.5 h8.1 v-40.4 h-8.1 l11.2,-19.5 l11.2,19.5 h-8.4 V165.0 h8.4 L144.1,184.4 z M171.0,148.0 v8.0 l-19.1,-11.2 l19.1,-11.2 v8.4 h14.0 v6.0 H171.0 z"/>
+		<path class="icon-colour-01" d="M144.0,91.3 c-29.8,0.0,-53.9,24.1,-53.9,53.9 c0.0,29.8,24.1,53.9,53.9,53.9 s53.9,-24.1,53.9,-53.9 C197.9,115.2,173.8,91.3,144.0,91.3 z M104.1,148.0 v-6.0 h13.9 v-8.4 l19.3,11.2 L118.0,156.0 v-8.0 H104.1 z M144.1,184.4 l-11.2,-19.5 h8.1 v-40.4 h-8.1 l11.2,-19.5 l11.2,19.5 h-8.4 V165.0 h8.4 L144.1,184.4 z M171.0,148.0 v8.0 l-19.1,-11.2 l19.1,-11.2 v8.4 h14.0 v6.0 H171.0 z"/>
 	</g>
 </svg>

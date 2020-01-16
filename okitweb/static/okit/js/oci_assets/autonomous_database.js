@@ -5,7 +5,6 @@ console.info('Loaded Autonomous Database Javascript');
  */
 asset_drop_targets[autonomous_database_artifact] = [compartment_artifact];
 
-const autonomous_database_stroke_colour = "#F80000";
 const autonomous_database_query_cb = "autonomous-database-query-cb";
 
 /*
@@ -180,7 +179,7 @@ class AutonomousDatabase extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = autonomous_database_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

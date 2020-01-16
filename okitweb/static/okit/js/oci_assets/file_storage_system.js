@@ -5,7 +5,6 @@ console.info('Loaded File Storage System Javascript');
  */
 asset_drop_targets[file_storage_system_artifact] = [subnet_artifact];
 
-const file_storage_system_stroke_colour = "#F80000";
 const file_storage_system_query_cb = "file-storage-system-query-cb";
 /*
 ** Query OCI
@@ -146,7 +145,7 @@ class FileStorageSystem extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = file_storage_system_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

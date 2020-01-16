@@ -5,7 +5,6 @@ console.info('Loaded Dynamic Routing Gateway Javascript');
  */
 asset_drop_targets[dynamic_routing_gateway_artifact] = [virtual_cloud_network_artifact];
 
-const dynamic_routing_gateway_stroke_colour = "purple";
 const dynamic_routing_gateway_query_cb = "dynamic-routing-gateway-query-cb";
 
 /*
@@ -218,7 +217,7 @@ class DynamicRoutingGateway extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = dynamic_routing_gateway_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();
