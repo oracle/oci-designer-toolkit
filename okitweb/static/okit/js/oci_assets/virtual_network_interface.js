@@ -3,7 +3,6 @@ console.info('Loaded Virtual Network Interface Javascript');
 /*
 ** Set Artifact Constants
  */
-const virtual_network_interface_stroke_colour = stroke_colours.svg_red;
 
 /*
 ** Define Virtual Network Interface Class
@@ -107,7 +106,7 @@ class VirtualNetworkInterface extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = virtual_network_interface_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

@@ -5,7 +5,6 @@ console.info('Loaded NAT Gateway Javascript');
  */
 asset_drop_targets[nat_gateway_artifact] = [virtual_cloud_network_artifact];
 
-const nat_gateway_stroke_colour = "#F80000";
 const nat_gateway_query_cb = "nat-gateway-query-cb";
 
 /*
@@ -147,7 +146,7 @@ class NATGateway extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = nat_gateway_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

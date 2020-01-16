@@ -5,7 +5,6 @@ console.info('Loaded Route Table Javascript');
  */
 asset_drop_targets[route_table_artifact] = [virtual_cloud_network_artifact];
 
-const route_table_stroke_colour = "#F80000";
 const route_table_query_cb = "route-table-query-cb";
 
 /*
@@ -152,7 +151,7 @@ class RouteTable extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = route_table_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

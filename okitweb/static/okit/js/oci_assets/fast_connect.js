@@ -5,7 +5,6 @@ console.info('Loaded FastConnect Javascript');
  */
 asset_drop_targets[fast_connect_artifact] = [compartment_artifact];
 
-const fast_connect_stroke_colour = "purple";
 const fast_connect_query_cb = "fast-connect-query-cb";
 
 /*
@@ -158,7 +157,7 @@ class FastConnect extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = fast_connect_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.purple;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

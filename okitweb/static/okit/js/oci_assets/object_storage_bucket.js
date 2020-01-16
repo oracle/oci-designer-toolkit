@@ -5,7 +5,6 @@ console.info('Loaded Object Storage Bucket Javascript');
  */
 asset_drop_targets[object_storage_bucket_artifact] = [compartment_artifact];
 
-const object_storage_bucket_stroke_colour = "#F80000";
 const object_storage_bucket_query_cb = "object-storage-bucket-query-cb";
 
 /*
@@ -172,7 +171,7 @@ class ObjectStorageBucket extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = object_storage_bucket_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

@@ -5,7 +5,6 @@ console.info('Loaded Load Balancer Javascript');
  */
 asset_drop_targets[load_balancer_artifact] = [subnet_artifact];
 
-const load_balancer_stroke_colour = "#F80000";
 const load_balancer_query_cb = "load-balancer-query-cb";
 const load_balancer_width = Math.round(icon_width * 6);
 const load_balancer_height = Math.round(icon_height * 3 / 2);
@@ -214,7 +213,7 @@ class LoadBalancer extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = load_balancer_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         definition['name']['show'] = true;
         console.info(JSON.stringify(definition, null, 2));

@@ -6,7 +6,6 @@ console.info('Loaded Compartment Javascript');
 asset_drop_targets[compartment_artifact] = [];
 asset_connect_targets[compartment_artifact] = [];
 
-const compartment_stroke_colour = "#F80000";
 const compartment_query_cb = "compartment-query-cb";
 
 /*
@@ -176,7 +175,7 @@ class Compartment extends OkitContainerArtifact {
         let definition = this.newSVGDefinition(this, compartment_artifact);
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = compartment_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 5;
         definition['icon']['x_translation'] = icon_translate_x_start;
         definition['icon']['y_translation'] = icon_translate_y_start;
