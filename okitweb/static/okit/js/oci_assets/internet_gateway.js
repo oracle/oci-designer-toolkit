@@ -5,7 +5,6 @@ console.info('Loaded Internet Gateway Javascript');
  */
 asset_drop_targets[internet_gateway_artifact] = [virtual_cloud_network_artifact];
 
-const internet_gateway_stroke_colour = "purple";
 const internet_gateway_query_cb = "internet-gateway-query-cb";
 
 /*
@@ -147,7 +146,7 @@ class InternetGateway extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = internet_gateway_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.purple;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();

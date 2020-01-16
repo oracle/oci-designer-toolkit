@@ -6,7 +6,6 @@ console.info('Loaded Virtual Cloud Network Javascript');
 asset_drop_targets[virtual_cloud_network_artifact] = [compartment_artifact];
 asset_connect_targets[virtual_cloud_network_artifact] = [];
 
-const virtual_cloud_network_stroke_colour = "#400080";
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 
 /*
@@ -238,7 +237,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         definition['svg']['y'] = parent_first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = virtual_cloud_network_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.purple;
         definition['rect']['stroke']['dash'] = 5;
         definition['icon']['x_translation'] = icon_translate_x_start;
         definition['icon']['y_translation'] = icon_translate_y_start;

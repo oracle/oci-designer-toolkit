@@ -6,7 +6,6 @@ console.info('Loaded Instance Javascript');
 asset_drop_targets[instance_artifact] = [subnet_artifact];
 asset_connect_targets[instance_artifact] = [load_balancer_artifact];
 
-const instance_stroke_colour = "#6699cc";
 const instance_query_cb = "instance-query-cb";
 const min_instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
 const min_instance_height = Math.round(icon_height * 5 / 2);
@@ -262,7 +261,7 @@ class Instance extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = instance_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.blue;
         definition['rect']['stroke']['dash'] = 1;
         definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
         definition['name']['show'] = true;

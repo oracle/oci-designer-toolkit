@@ -6,7 +6,6 @@ console.info('Loaded Subnet Javascript');
 asset_drop_targets[subnet_artifact] = [virtual_cloud_network_artifact];
 asset_connect_targets[subnet_artifact] = [];
 
-const subnet_stroke_colour = "#ff6600";
 const subnet_query_cb = "subnet-query-cb";
 
 /*
@@ -213,7 +212,7 @@ class Subnet extends OkitContainerArtifact {
         definition['svg']['y'] = parent_first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = subnet_stroke_colour;
+        definition['rect']['stroke']['colour'] = stroke_colours.orange;
         definition['rect']['stroke']['dash'] = 5;
         definition['icon']['x_translation'] = icon_translate_x_start;
         definition['icon']['y_translation'] = icon_translate_y_start;

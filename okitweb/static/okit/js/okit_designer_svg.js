@@ -20,11 +20,14 @@ const path_connector = true;
 const small_grid_size = 8;
 const grid_size = small_grid_size * 10;
 const stroke_colours = {
-    svg_red: "#F80000",
-    svg_gray: "#939699",
-    svg_blue: "#0066cc",
-    svg_orange: "#ff6600",
-    svg_purple: "#400080"
+    red: "#F80000",
+    bark: "#312D2A",
+    gray: "#939699",
+    blue: "#0066cc",
+    orange: "#ff6600",
+    purple: "#400080",
+    icon_colour_01: "#312D2A",
+    icon_colour_02: "#939699",
 };
 const svg_highlight_colour = "#00cc00";
 
@@ -35,7 +38,8 @@ const svg_highlight_colour = "#00cc00";
 function styleCanvas(canvas_svg) {
     let colours = '';
     for (let key in stroke_colours) {
-        colours += '.' + key.replace('_', '-') + '{fill:' + stroke_colours[key] + ';} ';
+        //colours += '.' + key.replace('_', '-') + '{fill:' + stroke_colours[key] + ';} ';
+        colours += '.' + key.replace(new RegExp('_', 'g'), '-') + '{fill:' + stroke_colours[key] + ';} ';
     }
     canvas_svg.append('style')
         .attr("type", "text/css")
