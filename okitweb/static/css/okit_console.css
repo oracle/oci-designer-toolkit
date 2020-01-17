@@ -259,6 +259,7 @@ ul.nav-list li a:hover {background-color: #F80000;border-left-width: 5px; border
  */
 
 .console-footer-content {
+    display: block;
     background: #1d2733;
 }
 

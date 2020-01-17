@@ -147,6 +147,9 @@ class OCIGenerator(object):
         # -- Subnet
         for subnet in self.visualiser_json.get('subnets', []):
             self.renderSubnet(subnet)
+        # -- Local Peering Gateways
+        for local_peering_gateway in self.visualiser_json.get('local_peering_gateways', []):
+            self.renderLocalPeeringGateway(local_peering_gateway)
 
         # - Subnet Sub components
         # -- File Storage System
@@ -537,6 +540,31 @@ class OCIGenerator(object):
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("subnet.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderLocalPeeringGateway(self, local_peering_gateway):
+        # Read Data
+        standardisedName = self.standardiseResourceName(local_peering_gateway['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = local_peering_gateway['display_name']
+        # Process Local Peering Gateway Data
+        logger.info('Processing Local Peering Gateway Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = local_peering_gateway["display_name"]
+        # ---- Route Table
+        self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['route_table_id']]))
+        # ---- Remote Peering gateway
+        self.jinja2_variables["peer_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['peer_id']]))
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("local_peering_gateway.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

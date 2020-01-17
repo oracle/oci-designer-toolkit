@@ -60,6 +60,7 @@ class LocalPeeringGateway extends OkitArtifact {
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         this.route_table_id = '';
+        this.peer_id = '';
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
@@ -128,6 +129,22 @@ class LocalPeeringGateway extends OkitArtifact {
             me.loadProperties();
             d3.event.stopPropagation();
         });
+        // Add Highlighting
+        let fill = d3.select('#' + this.id).attr('fill');
+        svg.on("mouseover", function () {
+            if (me.peer_id !== '') {
+                d3.selectAll('#' + me.peer_id).attr('fill', svg_highlight_colour);
+                d3.select('#' + me.id).attr('fill', svg_highlight_colour);
+            }
+            d3.event.stopPropagation();
+        });
+        svg.on("mouseout", function () {
+            if (me.peer_id !== '') {
+                d3.selectAll('#' + me.peer_id).attr('fill', fill);
+                d3.select('#' + me.id).attr('fill', fill);
+            }
+            d3.event.stopPropagation();
+        });
         console.groupEnd();
         return svg;
     }
@@ -179,6 +196,13 @@ class LocalPeeringGateway extends OkitArtifact {
             for (let route_table of okitJson.route_tables) {
                 if (me.vcn_id === route_table.vcn_id) {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
+                }
+            }
+            // Load Local Peering Gateways from other VCNs
+            let remote_peering_gateway_select = $('#peer_id');
+            for (let local_peering_gateway of okitJson.local_peering_gateways) {
+                if (me.vcn_id !== local_peering_gateway.vcn_id) {
+                    remote_peering_gateway_select.append($('<option>').attr('value', local_peering_gateway.id).text(local_peering_gateway.display_name));
                 }
             }
             // Load Properties
