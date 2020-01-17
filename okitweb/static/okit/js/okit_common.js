@@ -98,6 +98,11 @@ function handleQueryOci(e) {
     // Hide Menu
     hideNavMenu();
     // Set Query Config Profile
+    console.info('Profile : ' + okitSettings.profile);
+    if (!okitSettings.profile) {
+        okitSettings.profile = 'DEFAULT';
+    }
+    console.info('Profile : ' + okitSettings.profile);
     $('#config_profile').val(okitSettings.profile);
     // Get Compartments
     $.ajax({

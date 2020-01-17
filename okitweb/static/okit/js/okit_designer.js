@@ -26,7 +26,9 @@ function readOkitSettings() {
         let settings = {
             is_default_security_list: true,
             is_default_route_table: true,
-            is_timestamp_files: false
+            is_timestamp_files: false,
+            profile: 'DEFAULT',
+            is_always_free: false,
         };
         cookie_value = JSON.stringify(settings);
         saveOkitSettings(cookie_value);
