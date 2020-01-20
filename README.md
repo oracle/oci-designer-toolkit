@@ -6,6 +6,9 @@ through simple command line or web based interface, and then convert them to sta
 The web based drawing toll can also be used to generate simple architectural representations of customer systems that 
 can quickly be turned into code and ultimately built in the OCI environment.
 
+## Slack: #oci-okit-dev
+
+
 ## Table of Contents
 
 1. [Installation](#installation)

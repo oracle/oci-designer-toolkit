@@ -492,4 +492,16 @@
     font-size: smaller;
 }
 
+.footer-properties-source-toggle {
+    float: right;
+    padding-right: 10px;
+}
+
+.footer-properties-source-toggle label {
+    font-family: Helvetica,  Arial, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+
 

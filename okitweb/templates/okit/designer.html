@@ -148,11 +148,11 @@
             <div id="properties-dragbar" class="vertical-left-drag-bar"></div>
             <div id="asset-properties" class="designer-right-column properties-wrapper">
                 <div id="properties-and-source" class="properties-source-wrapper flex-column">
-                    <div id="properties-toggle" class="properties-source-toggle">
+                    <!--div id="properties-toggle" class="properties-source-toggle">
                         <label><input type="radio" name="source-properties" value="source">Source</label>
                         <label><input type="radio" name="source-properties" value="properties" checked="checked">Properties</label>
                         <label><input type="radio" name="source-properties" value="settings">Settings</label>
-                    </div>
+                    </div-->
                     <div id="sheets" class="sheets-column">
                         <div id="properties" class="property-sheet"></div>
                         <div id="json-display" class="source-code hidden">
@@ -203,7 +203,12 @@
 {% endblock %}
 
 {% block footerblock %}
-    <div class="footer-settings"><label><input type="checkbox" id="is_always_free" name="is_always_free" value="false" onclick="handleFooterIsAlwaysFreeClick(this)">Always Free</label></div>
+    <!--div class="footer-settings"><label><input type="checkbox" id="is_always_free" name="is_always_free" value="false" onclick="handleFooterIsAlwaysFreeClick(this)">Always Free</label></div-->
+    <div id="properties-toggle" class="footer-properties-source-toggle">
+        <label><input type="radio" name="source-properties" value="source">Source</label>
+        <label><input type="radio" name="source-properties" value="properties" checked="checked">Properties</label>
+        <label><input type="radio" name="source-properties" value="settings">Settings</label>
+    </div>
 {% endblock %}
 
 {% block footerscripts %}
