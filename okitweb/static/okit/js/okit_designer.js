@@ -236,7 +236,8 @@ function hideQueryProgressIfComplete() {
     console.info('>>>>>>> Unhecked Count : ' + cnt);
     if (cnt == 0) {
         unsetBusyIcon();
-        $('#query-progress').toggleClass('hidden');
+        //$('#query-progress').toggleClass('hidden');
+        $('#query-progress').addClass('hidden');
     }
 }
 

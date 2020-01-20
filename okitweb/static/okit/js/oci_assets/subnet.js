@@ -53,7 +53,7 @@ function querySubnetAjax(compartment_id, vcn_id) {
 }
 
 function initiateSubnetSubQueries(compartment_id, id='') {
-    queryInstanceAjax(compartment_id, id);
+    //queryInstanceAjax(compartment_id, id);
     queryLoadBalancerAjax(compartment_id, id);
     queryFileStorageSystemAjax(compartment_id, id);
 }

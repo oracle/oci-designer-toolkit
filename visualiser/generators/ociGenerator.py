@@ -562,7 +562,10 @@ class OCIGenerator(object):
         # ---- Route Table
         self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['route_table_id']]))
         # ---- Remote Peering gateway
-        self.jinja2_variables["peer_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['peer_id']]))
+        if len(local_peering_gateway['peer_id']) > 0:
+            self.jinja2_variables["peer_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['peer_id']]))
+        else:
+            self.jinja2_variables.pop("peer_id", None)
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("local_peering_gateway.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))

@@ -67,14 +67,14 @@ RUN yum update -y ; \
  && cd /tmp ; \
     pip3 install \
         #ansible \
-        flask \
-        gunicorn \
-        itsdangerous \
-        jinja2 \
-        markupsafe \
-        oci \
-        pyyaml \
-        werkzeug \
+        flask==1.1.1 \
+        gunicorn==20.0.4 \
+        itsdangerous==1.1.0 \
+        jinja2==2.10.3 \
+        markupsafe==1.1.1 \
+        oci==2.8.0 \
+        pyyaml==5.2 \
+        werkzeug==0.16.0 \
 # Install oci ansible module
  && cd /tmp ; \
     git clone https://github.com/oracle/oci-ansible-modules.git ; \
@@ -98,8 +98,10 @@ RUN yum update -y ; \
     echo "alias ti='terraform init' "                                                              >> /etc/bashrc ; \
     echo "alias tg='terraform get --update' "                                                      >> /etc/bashrc ; \
     echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connection.yml\" ' "   >> /etc/bashrc ; \
-    echo "alias wtd='terraform destroy -var-file=/okit/config/wizards.tfvars -auto-approve' "    >> /etc/bashrc ; \
-    echo "alias wtp='terraform plan -var-file=/okit/config/wizards.tfvars -out=da.plan' "        >> /etc/bashrc ; \
+    echo "alias wtd='terraform destroy -var-file=/okit/config/wizards.tfvars -auto-approve' "      >> /etc/bashrc ; \
+    echo "alias wtp='terraform plan -var-file=/okit/config/wizards.tfvars -out=da.plan' "          >> /etc/bashrc ; \
+    echo "alias otunzip='unzip -o okit-terraform.zip -d okit-terraform' "                          >> /etc/bashrc ; \
+    echo "alias oaunzip='unzip -o okit-ansible.zip -d okit-ansible' "                              >> /etc/bashrc ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \

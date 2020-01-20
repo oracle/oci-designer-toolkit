@@ -39,6 +39,7 @@ from facades.ociFileStorageSystems import OCIFileStorageSystems
 from facades.ociInstance import OCIInstances
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociLoadBalancer import OCILoadBalancers
+from facades.ociLocalPeeringGateway import OCILocalPeeringGateways
 from facades.ociNATGateway import OCINATGateways
 from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
 from facades.ociResourceManager import OCIResourceManagers
@@ -266,6 +267,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Subnets')
         oci_subnets = OCISubnets(profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_subnets.list(filter=query_json.get('subnet_filter', None))
+    elif artifact == 'LocalPeeringGateway':
+        logger.info('---- Processing LocalPeeringGateways')
+        oci_local_peering_gateways = OCILocalPeeringGateways(profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_local_peering_gateways.list(filter=query_json.get('local_peering_gateway_filter', None))
     elif artifact == 'Instance':
         logger.info('---- Processing Instances')
         oci_instances = OCIInstances(profile=config_profile, compartment_id=query_json['compartment_id'])
@@ -292,6 +297,7 @@ def ociArtifacts(artifact):
         oci_file_storage_systems = OCIFileStorageSystems(profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_file_storage_systems.list(filter=query_json.get('file_storage_system_filter', None))
     else:
+        logger.warn('---- Unknown Artifact : {0:s}'.format(str(artifact)))
         return '404'
 
     logger.debug(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))

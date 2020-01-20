@@ -52,6 +52,7 @@ function initiateCompartmentSubQueries(id='') {
     queryAutonomousDatabaseAjax(id);
     queryObjectStorageBucketAjax(id);
     queryFastConnectAjax(id);
+    queryInstanceAjax(id);
 }
 
 /*
