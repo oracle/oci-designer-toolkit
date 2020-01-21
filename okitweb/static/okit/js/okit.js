@@ -105,7 +105,7 @@ class OkitArtifact {
         return;
     }
 
-    // Return Artifact Dimentions
+    // Return Artifact Dimensions
     getDimensions() {
         alert('Get Dimension function "getDimensions()" has not been implemented.')
         return;
