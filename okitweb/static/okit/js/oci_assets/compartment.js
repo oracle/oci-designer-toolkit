@@ -64,6 +64,7 @@ class Compartment extends OkitContainerArtifact {
      */
     constructor (data={}, okitjson={}) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.parent_id = 'canvas';
         this.id = 'okit-' + compartment_prefix + '-' + uuidv4();

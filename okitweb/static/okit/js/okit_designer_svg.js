@@ -135,12 +135,14 @@ function newArtifactSVGDefinition(artifact, data_type) {
 function drawArtifact(definition) {
     let id             = definition['artifact']['id'];
     let parent_id      = definition['artifact']['parent_id'];
+    let parent_svg_id  = parent_id + "-svg";
     let compartment_id = definition['artifact']['compartment_id'];
     let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
     console.info('Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'])
     console.info('Id             : ' + id )
     console.info('Parent Id      : ' + parent_id)
-    console.info('Compartment Id : ' + compartment_id)
+    console.info('Parent SVG Id  : ' + parent_svg_id);
+    console.info('Compartment Id : ' + compartment_id);
     let rect_x         = definition['rect']['x'];
     let rect_y         = definition['rect']['y'];
     let rect_width     = definition['svg']['width']  + definition['rect']['width_adjust'];
@@ -158,7 +160,7 @@ function drawArtifact(definition) {
         definition['artifact']['display_name'] = definition['artifact']['name'];
     }
     // Get Parent SVG
-    let parent_svg = d3.select('#' + parent_id + "-svg");
+    let parent_svg = d3.select('#' + parent_svg_id);
     // Wrapper SVG Element to define ViewBox etc
     let svg = parent_svg.append("svg")
         .attr("id", id + '-svg')

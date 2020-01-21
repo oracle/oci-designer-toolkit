@@ -55,6 +55,7 @@ class RouteTable extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + route_table_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(route_table_prefix, okitjson.route_tables.length + 1);

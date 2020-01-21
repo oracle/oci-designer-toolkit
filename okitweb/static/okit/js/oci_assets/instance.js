@@ -58,6 +58,7 @@ class Instance extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + instance_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(instance_prefix, okitjson.instances.length + 1);

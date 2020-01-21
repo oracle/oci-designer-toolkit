@@ -57,6 +57,7 @@ class LoadBalancer extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(load_balancer_prefix, okitjson.load_balancers.length + 1);
