@@ -53,6 +53,7 @@ class FastConnect extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + fast_connect_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(fast_connect_prefix, okitjson.fast_connects.length + 1);

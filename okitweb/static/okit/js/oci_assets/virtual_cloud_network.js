@@ -72,6 +72,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
      */
     constructor (data={}, okitjson={}) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(virtual_cloud_network_prefix, okitjson.virtual_cloud_networks.length + 1);

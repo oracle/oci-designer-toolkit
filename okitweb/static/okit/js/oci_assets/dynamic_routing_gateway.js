@@ -54,6 +54,7 @@ class DynamicRoutingGateway extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + dynamic_routing_gateway_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(dynamic_routing_gateway_prefix, okitjson.dynamic_routing_gateways.length + 1);

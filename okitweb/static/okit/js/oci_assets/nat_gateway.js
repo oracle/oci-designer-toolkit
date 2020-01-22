@@ -55,6 +55,7 @@ class NATGateway extends OkitArtifact {
      */
     constructor (data={}, okitjson={}) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(nat_gateway_prefix, okitjson.nat_gateways.length + 1);

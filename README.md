@@ -6,6 +6,9 @@ through simple command line or web based interface, and then convert them to sta
 The web based drawing toll can also be used to generate simple architectural representations of customer systems that 
 can quickly be turned into code and ultimately built in the OCI environment.
 
+## Slack: #oci-okit-dev
+
+
 ## Table of Contents
 
 1. [Installation](#installation)
@@ -1302,15 +1305,16 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 
 ### Python
 
-| Library      | Version | License   | Sub Type   | Home Page                                                       |
-| ------------ | ------- | --------- | ---------- | --------------------------------------------------------------- |
-| flask        | 1.1.1   | BSD       | 3-Clause   | [PyPi Flask](https://pypi.org/project/Flask/)                   |
-| gunicorn     | 20.0.4  | MIT       |            | [PyPi gunicorn](https://pypi.org/project/gunicorn/)             |
-| itsdangerous | 0.16.0  | BSD       | 3-Clause   | [PyPi ItsDangerous](https://pypi.org/project/itsdangerous/)     |
-| jinja2       | 2.10.3  | BSD       | 3-Clause   | [PyPi Jinja2](https://pypi.org/project/Jinja2/)                 |
-| markupsafe   | 1.1.1   | BSD       | 3-Clause   | [PyPi markupSafe](https://pypi.org/project/MarkupSafe/)         |
-| pyyaml       | 5.3     | MIT       |            | [PyPi PyYAML](https://pypi.org/project/PyYAML/)                 |
-| werkzeug     | 0.16.0  | BSD       | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)             |
+| Library      | Version | License      | Sub Type   | Home Page                                                       |
+| ------------ | ------- | ------------ | ---------- | --------------------------------------------------------------- |
+| flask        | 1.1.1   | BSD          | 3-Clause   | [PyPi Flask](https://pypi.org/project/Flask/)                   |
+| gunicorn     | 20.0.4  | MIT          |            | [PyPi gunicorn](https://pypi.org/project/gunicorn/)             |
+| itsdangerous | 1.1.0   | BSD          | 3-Clause   | [PyPi ItsDangerous](https://pypi.org/project/itsdangerous/)     |
+| jinja2       | 2.10.3  | BSD          | 3-Clause   | [PyPi Jinja2](https://pypi.org/project/Jinja2/)                 |
+| markupsafe   | 1.1.1   | BSD          | 3-Clause   | [PyPi markupSafe](https://pypi.org/project/MarkupSafe/)         |
+| oci          | 2.10.0  | UPL / Apache | OSI        | [PyPi PyYAML](https://pypi.org/project/oci/)                 |
+| pyyaml       | 5.3     | MIT          |            | [PyPi PyYAML](https://pypi.org/project/PyYAML/)                 |
+| werkzeug     | 0.16.0  | BSD          | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)             |
 
 
 

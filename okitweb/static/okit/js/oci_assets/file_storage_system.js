@@ -54,6 +54,7 @@ class FileStorageSystem extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + file_storage_system_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(file_storage_system_prefix, okitjson.file_storage_systems.length + 1);

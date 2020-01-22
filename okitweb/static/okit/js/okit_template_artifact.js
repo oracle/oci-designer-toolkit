@@ -54,6 +54,7 @@ class OkitTemplateArtifact extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + template_artifact_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(template_artifact_prefix, okitjson.template_artifacts.length + 1);
@@ -63,7 +64,6 @@ class OkitTemplateArtifact extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.parent_type_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {

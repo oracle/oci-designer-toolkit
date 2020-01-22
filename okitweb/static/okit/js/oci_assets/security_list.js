@@ -55,6 +55,7 @@ class SecurityList extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + security_list_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(security_list_prefix, okitjson.security_lists.length + 1);

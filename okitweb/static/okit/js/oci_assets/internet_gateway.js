@@ -55,6 +55,7 @@ class InternetGateway extends OkitArtifact {
      */
     constructor (data={}, okitjson={}) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(internet_gateway_prefix, okitjson.internet_gateways.length + 1);

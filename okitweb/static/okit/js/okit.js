@@ -96,6 +96,7 @@ class OkitArtifact {
             d3.event.stopPropagation();
         });
         console.groupEnd();
+        return svg;
     }
 
     // Return Artifact Specific Definition.
@@ -104,7 +105,7 @@ class OkitArtifact {
         return;
     }
 
-    // Return Artifact Dimentions
+    // Return Artifact Dimensions
     getDimensions() {
         alert('Get Dimension function "getDimensions()" has not been implemented.')
         return;
@@ -891,6 +892,13 @@ class OkitJson {
         if (okit_json.hasOwnProperty('service_gateways')) {
             for (let artifact of okit_json['service_gateways']) {
                 let obj = this.newServiceGateway(artifact);
+                console.info(obj);
+            }
+        }
+        // Local Peering Gateways
+        if (okit_json.hasOwnProperty('local_peering_gateways')) {
+            for (let artifact of okit_json['local_peering_gateways']) {
+                let obj = this.newLocalPeeringGateway(artifact);
                 console.info(obj);
             }
         }

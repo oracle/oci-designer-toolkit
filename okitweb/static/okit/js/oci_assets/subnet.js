@@ -53,7 +53,7 @@ function querySubnetAjax(compartment_id, vcn_id) {
 }
 
 function initiateSubnetSubQueries(compartment_id, id='') {
-    queryInstanceAjax(compartment_id, id);
+    //queryInstanceAjax(compartment_id, id);
     queryLoadBalancerAjax(compartment_id, id);
     queryFileStorageSystemAjax(compartment_id, id);
 }
@@ -67,6 +67,7 @@ class Subnet extends OkitContainerArtifact {
      */
     constructor (data={}, okitjson={}) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + subnet_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(subnet_prefix, okitjson.subnets.length + 1);

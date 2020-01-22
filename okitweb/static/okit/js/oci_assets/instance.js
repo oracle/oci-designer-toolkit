@@ -14,7 +14,7 @@ const min_instance_height = Math.round(icon_height * 5 / 2);
 ** Query OCI
  */
 
-function queryInstanceAjax(compartment_id, subnet_id) {
+function queryInstanceAjax(compartment_id, subnet_id='') {
     console.info('------------- queryInstanceAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -58,6 +58,7 @@ class Instance extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + instance_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(instance_prefix, okitjson.instances.length + 1);

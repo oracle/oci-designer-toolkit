@@ -55,6 +55,7 @@ class AutonomousDatabase extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + autonomous_database_prefix + '-' + uuidv4();
         this.display_name = generateDefaultName(autonomous_database_prefix, okitjson.autonomous_databases.length + 1);
@@ -71,7 +72,7 @@ class AutonomousDatabase extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.compartment_id;
+        //this.parent_id = this.compartment_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
@@ -136,17 +137,18 @@ class AutonomousDatabase extends OkitArtifact {
             console.groupEnd();
             return;
         }
-        let svg = drawArtifact(this.getSvgDefinition());
+        let svg = super.draw();
+        //let svg = drawArtifact(this.getSvgDefinition());
         /*
         ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
         ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
         ** Artifact.
          */
-        let me = this;
-        svg.on("click", function() {
-            me.loadProperties();
-            d3.event.stopPropagation();
-        });
+        //let me = this;
+        //svg.on("click", function() {
+        //    me.loadProperties();
+        //    d3.event.stopPropagation();
+        //});
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + this.id + "']");
         let boundingClientRect = rect.node().getBoundingClientRect();
