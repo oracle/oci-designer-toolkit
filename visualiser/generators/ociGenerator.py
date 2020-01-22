@@ -148,7 +148,12 @@ class OCIGenerator(object):
         for subnet in self.visualiser_json.get('subnets', []):
             self.renderSubnet(subnet)
         # -- Local Peering Gateways
+        paired_gateways = []
         for local_peering_gateway in self.visualiser_json.get('local_peering_gateways', []):
+            if local_peering_gateway['id'] in paired_gateways:
+                local_peering_gateway['peer_id'] = ''
+            else:
+                paired_gateways.append(local_peering_gateway['peer_id'])
             self.renderLocalPeeringGateway(local_peering_gateway)
 
         # - Subnet Sub components

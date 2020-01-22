@@ -61,7 +61,6 @@ function initiateVirtualCloudNetworkSubQueries(compartment_id, id='') {
     queryRouteTableAjax(compartment_id, id);
     querySecurityListAjax(compartment_id, id);
     querySubnetAjax(compartment_id, id);
-    queryLocalPeeringGatewayAjax(compartment_id, id);
 }
 
 /*
