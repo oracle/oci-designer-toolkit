@@ -213,7 +213,7 @@ class LocalPeeringGateway extends OkitArtifact {
             // Load Properties
             loadProperties(me);
             // Add Event Listeners
-            addPropertiesEventListeners(me, []);
+            addPropertiesEventListeners(me, [setPeeredGatewayPeerId]);
         });
     }
 
@@ -224,6 +224,12 @@ class LocalPeeringGateway extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+}
+
+function setPeeredGatewayPeerId(input_id, artifact) {
+    if (input_id === 'peer_id' && artifact.peer_id) {
+        okitJson.getLocalPeeringGateway(artifact.peer_id).peer_id = artifact.id;
     }
 }
 
