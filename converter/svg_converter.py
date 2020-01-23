@@ -1,29 +1,23 @@
 #!/usr/bin/python
-# Copyright (c) 2013, 2014-2019 Oracle and/or its affiliates. All rights reserved.
 
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
 
 """Provide Module Description
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__copyright__ = "Copyright (c) 2013, 2014-2019  Oracle and/or its affiliates. All rights reserved."
-__ekitversion__ = "@VERSION@"
-__ekitrelease__ = "@RELEASE@"
 __version__ = "1.0.0.0"
-__date__ = "@BUILDDATE@"
-__status__ = "@RELEASE@"
 __module__ = "svg_converter"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-from contextlib import closing
 import getopt
 import os
 import re
 import sys
-
-import xml.etree.ElementTree as ET
+from contextlib import closing
 from xml.dom import minidom
 
 from common.ociLogging import getLogger

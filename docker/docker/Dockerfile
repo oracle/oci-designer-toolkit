@@ -1,3 +1,7 @@
+
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
+
 ARG os_version=latest
 ARG os=oraclelinux
 FROM ${os}:${os_version}
