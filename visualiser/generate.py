@@ -1,38 +1,27 @@
 #!/usr/bin/python
-# Copyright (c) 2013, 2014-2017 Oracle and/or its affiliates. All rights reserved.
 
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
 
 """Provide Module Description
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__copyright__ = "Copyright (c) 2013, 2014-2019  Oracle and/or its affiliates. All rights reserved."
 __version__ = "1.0.0.0"
-__date__ = "@BUILDDATE@"
-__status__ = "@RELEASE@"
 __module__ = "generate.py"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
 import getopt
-import jinja2
-import json
-import locale
-import logging
-import operator
 import os
-import requests
 import sys
 
+from common.ociCommon import readJsonFile
+from common.ociLogging import getLogger
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
 from generators.ociPythonGenerator import OCIPythonGenerator
 from generators.ociTerraformGenerator import OCITerraformGenerator
-from common.ociCommon import readJsonFile
-from common.ociCommon import readYamlFile
-from common.ociCommon import writeTerraformFile
-from common.ociLogging import getLogger
 
 # Configure logging
 logger = getLogger()

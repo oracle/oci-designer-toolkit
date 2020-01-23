@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
+
 #
 # This file is called from the Vagrantfile and completes the install of the Vagrant instance
 # Some edits needed to make it work in your env.
@@ -20,5 +24,8 @@ echo "export PATH=/usr/local/bin:/opt/python/bin:${PATH}"           >> /home/vag
 # Define Aliases
 echo '' >> /home/vagrant/.bash_profile
 
-export OCI_CONFIG_DIR=/home/vagrant/
-echo "export OCI_CONFIG_DIR=/vagrant/" >> /home/vagrant/.bash_profile
+# Create a link to the .oci folder in the Vagrantfile folder on the host
+ln -s /vagrant/.oci .oci
+
+export OCI_CONFIG_DIR=~/.oci
+echo "export OCI_CONFIG_DIR=~/.oci" >> /home/vagrant/.bash_profile

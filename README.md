@@ -1,10 +1,17 @@
 # OCI Kinetic Infrastructure Toolkit
 
-OCI Kinetic Infrastructure Toolkit (OKIT) is a a series of tools that allow the user to Query, Capture, Visualise and
-Generate DevOps tooling scripts. Using the toolkit the DevOps user will be able to capture existing OCI environments,
-through simple command line or web based interface, and then convert them to standard DevOps languages (see below). 
-The web based drawing toll can also be used to generate simple architectural representations of customer systems that 
-can quickly be turned into code and ultimately built in the OCI environment.
+OCI Kinetic Infrastructure Toolkit (OKIT) provides a number of tools that will allow full project integration from 
+Architects to Development and on to Operations.
+
+The Web based interface will allow architects and designers to build a visual representation of the required infrastructure
+with the customer and then export it as svg for inclusion in customer documentation. In addition they have the ability to 
+quickly generate DevOp scripts (terraform / ansible) that can be used to rapidly proto-type the environment they are building.
+Once built diagrams can be saved to a transportable json format that can subsequently be loaded or passed through the 
+terraform/ansible generation tool.
+
+Using the toolkit the Operations user will be able to capture existing OCI environments, through simple command line or the 
+web interface, to provide a portable generic, json, file that can be used to visualise existing systems or generate terraform/ansible. 
+
 
 ## Slack: #oci-okit-dev
 
@@ -1312,7 +1319,7 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 | itsdangerous | 1.1.0   | BSD          | 3-Clause   | [PyPi ItsDangerous](https://pypi.org/project/itsdangerous/)     |
 | jinja2       | 2.10.3  | BSD          | 3-Clause   | [PyPi Jinja2](https://pypi.org/project/Jinja2/)                 |
 | markupsafe   | 1.1.1   | BSD          | 3-Clause   | [PyPi markupSafe](https://pypi.org/project/MarkupSafe/)         |
-| oci          | 2.10.0  | UPL / Apache | OSI        | [PyPi PyYAML](https://pypi.org/project/oci/)                 |
+| oci          | 2.8.0   | UPL / Apache | OSI        | [PyPi PyYAML](https://pypi.org/project/oci/)                 |
 | pyyaml       | 5.3     | MIT          |            | [PyPi PyYAML](https://pypi.org/project/PyYAML/)                 |
 | werkzeug     | 0.16.0  | BSD          | 3-Clause   | [PyPi Werkzeug](https://pypi.org/project/Werkzeug/)             |
 

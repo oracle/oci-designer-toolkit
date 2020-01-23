@@ -1,3 +1,7 @@
+
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
+
 VAGRANTFILE_API_VERSION = "2"
 
 # define guest OS hostname
@@ -23,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # set cpu, memory size and vm name
   config.vm.provider "virtualbox" do |v|
     v.cpus = 1
-    v.memory = 512
+    v.memory = 384
     v.name = NAME
     # This is the name of the VM in Virtualbox Manager
     v.customize ["modifyvm", :id, "--name", "OKIT-Vagrant"]

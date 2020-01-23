@@ -1,36 +1,27 @@
 #!/usr/bin/python
-# Copyright (c) 2013, 2014-2019 Oracle and/or its affiliates. All rights reserved.
 
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
 
 """Provide Module Description
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__copyright__ = "Copyright (c) 2013, 2014-2019  Oracle and/or its affiliates. All rights reserved."
 __version__ = "1.0.0.0"
-__date__ = "@BUILDDATE@"
-__status__ = "@RELEASE@"
 __module__ = "xmlparser.py"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import datetime
 import getopt
-import json
-import locale
-import logging
-import operator
 import os
-import requests
 import sys
 
-from parsers.ociDrawioXMLParser import OCIDrawIoXMLParser
-from common.ociValidation import validateVisualiserJson
-from common.ociExceptions import ValidationException
-from common.ociCommon import writeJsonFile
 from common.ociCommon import logJson
+from common.ociCommon import writeJsonFile
 from common.ociLogging import getLogger
+from common.ociValidation import validateVisualiserJson
+from parsers.ociDrawioXMLParser import OCIDrawIoXMLParser
 
 # Configure logging
 logger = getLogger()
