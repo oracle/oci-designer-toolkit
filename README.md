@@ -3,7 +3,7 @@
 OCI Kinetic Infrastructure Toolkit (OKIT) provides a number of tools that will allow full project integration from 
 Architects to Development and on to Operations.
 
-The Web baseed interface will allow architects and designers to build a visual representation of the required infrastructure
+The Web based interface will allow architects and designers to build a visual representation of the required infrastructure
 with the customer and then export it as svg for inclusion in customer documentation. In addition they have the ability to 
 quickly generate DevOp scripts (terraform / ansible) that can be used to rapidly proto-type the environment they are building.
 Once built diagrams can be saved to a transportable json format that can subsequently be loaded or passed through the 
