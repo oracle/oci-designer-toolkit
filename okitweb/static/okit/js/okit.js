@@ -1248,6 +1248,15 @@ class OkitJson {
         return {};
     }
 
+    getLocalPeeringGateway(id='') {
+        for (let artifact of this.local_peering_gateways) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
     getRouteTable(id='') {
         for (let artifact of this.route_tables) {
             if (artifact.id === id) {

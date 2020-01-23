@@ -41,21 +41,26 @@ class OCILocalPeeringGateways(OCIVirtualNetworkConnection):
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'AVAILABLE'
 
-        local_peering_gateways = oci.pagination.list_call_get_all_results(self.client.list_local_peering_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
+        self.local_peering_gateways_json = []
+        try:
+            local_peering_gateways = oci.pagination.list_call_get_all_results(self.client.list_local_peering_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data
 
-        # Convert to Json object
-        local_peering_gateways_json = self.toJson(local_peering_gateways)
-        logger.debug(str(local_peering_gateways_json))
+            # Convert to Json object
+            local_peering_gateways_json = self.toJson(local_peering_gateways)
+            logger.debug(str(local_peering_gateways_json))
 
-        # Filter results
-        self.local_peering_gateways_json = self.filterJsonObjectList(local_peering_gateways_json, filter)
-        logger.debug(str(self.local_peering_gateways_json))
+            # Filter results
+            self.local_peering_gateways_json = self.filterJsonObjectList(local_peering_gateways_json, filter)
+            logger.debug(str(self.local_peering_gateways_json))
 
-        # Build List of LocalPeeringGateway Objects
-        self.local_peering_gateways_obj = []
-        for local_peering_gateway in self.local_peering_gateways_json:
-            self.local_peering_gateways_obj.append(OCILocalPeeringGateway(self.config, self.configfile, self.profile, local_peering_gateway))
-        return self.local_peering_gateways_json
+            # Build List of LocalPeeringGateway Objects
+            self.local_peering_gateways_obj = []
+            for local_peering_gateway in self.local_peering_gateways_json:
+                self.local_peering_gateways_obj.append(OCILocalPeeringGateway(self.config, self.configfile, self.profile, local_peering_gateway))
+        except oci.exceptions.ServiceError as e:
+            logger.error(e)
+        finally:
+            return self.local_peering_gateways_json
 
 
 class OCILocalPeeringGateway(object):

@@ -111,8 +111,8 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                 json_element[this.id] = $(this).val();
                 // Redraw Connectors
                 for (let f of callbacks) {
-                    console.log(' Calling ' + f);
-                    f(json_element);
+                    //console.log(' Calling ' + f);
+                    f(this.id, json_element);
                 }
                 drawSVGforJson();
             });
