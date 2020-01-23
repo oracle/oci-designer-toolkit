@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
+
 export ROOT_DIR=$(cd $(dirname $0)/..; pwd)
 export DOCKERIMAGE="$(echo ${ROOT_DIR/${HOME}\//} | awk '{print tolower($0)}')"
 export VERSION="1.0.0"

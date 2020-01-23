@@ -7,7 +7,7 @@ venv/
 *.pyc
 __pycache__/
 
-instance
+okitweb/instance
 
 .pytest_cache/
 .coverage

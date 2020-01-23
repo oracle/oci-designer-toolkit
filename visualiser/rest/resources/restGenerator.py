@@ -1,16 +1,17 @@
-import copy
+
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
+
 import os
 import shutil
 import tempfile
 import traceback
-
 from flask import request, send_from_directory
 from flask_restful import Resource
 
-from . import logger
-
-from generators.ociTerraformGenerator import OCITerraformGenerator
 from generators.ociAnsibleGenerator import OCIAnsibleGenerator
+from generators.ociTerraformGenerator import OCITerraformGenerator
+from . import logger
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
 template_root = '/oci/visualiser/templates'

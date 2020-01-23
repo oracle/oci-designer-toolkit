@@ -1,22 +1,19 @@
-# Copyright (c) 2013, 2014-2019 Oracle and/or its affiliates. All rights reserved.
 
+# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
+# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
 
 """Provide Module Description
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__copyright__ = "Copyright (c) 2013, 2014-2019  Oracle and/or its affiliates. All rights reserved."
 __version__ = "1.0.0.0"
-__date__ = "@BUILDDATE@"
-__status__ = "@RELEASE@"
 __module__ = "__init__"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import os
 
 from flask import Flask
-from flask import render_template
 from flask import send_from_directory
 
 def create_app(test_config=None):
