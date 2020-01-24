@@ -199,15 +199,15 @@ class Instance extends OkitArtifact {
             console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + artifact_clone.display_name);
             let svg = artifact_clone.draw();
             // Add Highlighting
-            let fill = d3.select('#' + artifact_clone.id).attr('fill');
+            let fill = d3.select(d3Id(artifact_clone.id)).attr('fill');
             svg.on("mouseover", function () {
-                d3.selectAll('#' + artifact_clone.id).attr('fill', svg_highlight_colour);
-                d3.select('#' + subnet_id).attr('fill', svg_highlight_colour);
+                d3.selectAll(d3Id(artifact_clone.id)).attr('fill', svg_highlight_colour);
+                d3.select(d3Id(subnet_id)).attr('fill', svg_highlight_colour);
                 d3.event.stopPropagation();
             });
             svg.on("mouseout", function () {
-                d3.selectAll('#' + artifact_clone.id).attr('fill', fill);
-                d3.select('#' + subnet_id).attr('fill', fill);
+                d3.selectAll(d3Id(artifact_clone.id)).attr('fill', fill);
+                d3.select(d3Id(subnet_id)).attr('fill', fill);
                 d3.event.stopPropagation();
             });
             /*
@@ -245,13 +245,13 @@ class Instance extends OkitArtifact {
             loadSubnetProperties(id);
             d3.event.stopPropagation();
         });
-        let fill = d3.select('#' + id).attr('fill');
+        let fill = d3.select(d3Id(id)).attr('fill');
         svg.on("mouseover", function () {
-            d3.select('#' + id).attr('fill', svg_highlight_colour);
+            d3.select(d3Id(id)).attr('fill', svg_highlight_colour);
             d3.event.stopPropagation();
         });
         svg.on("mouseout", function () {
-            d3.select('#' + id).attr('fill', fill);
+            d3.select(d3Id(id)).attr('fill', fill);
             d3.event.stopPropagation();
         });
     }

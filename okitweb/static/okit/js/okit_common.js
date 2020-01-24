@@ -4,12 +4,12 @@
 */
 console.info('Loaded OKIT Common Javascript');
 
-function jqid(id) {
-    return "#" + safeId();
+function jqId(id) {
+    return '#' + safeId(id);
 }
 
-function d3id(id) {
-    return "#" + safeId();
+function d3Id(id) {
+    return '#' + safeId(id);
 }
 
 function safeId(id) {
