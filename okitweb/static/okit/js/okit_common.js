@@ -13,8 +13,8 @@ function d3Id(id) {
 }
 
 function safeId(id) {
-    //return id.replace( /(:|\.|\[|\]|,|=|@)/g, "\\$1" );
-    return id;
+    return id.replace( /(:|\.|\[|\]|,|=|@)/g, "\\$1" );
+    //return id;
 }
 
 function uuidv4() {

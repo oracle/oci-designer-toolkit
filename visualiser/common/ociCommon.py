@@ -161,8 +161,10 @@ def writePythonFile(python_file, contents):
         f.write('{0:s}\n'.format(contents))
     return
 
-
 def standardiseIds(json_data={}, from_char='.', to_char='-'):
+    return json_data
+
+def standardiseIds1(json_data={}, from_char='.', to_char='-'):
     if isinstance(json_data, dict):
         for key, val in json_data.items():
             logger.debug('{0!s:s} : {1!s:s}'.format(key, val))
