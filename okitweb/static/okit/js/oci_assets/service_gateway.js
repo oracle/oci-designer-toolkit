@@ -146,7 +146,7 @@ class ServiceGateway extends OkitArtifact {
             d3.event.stopPropagation();
         });
         // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + this.id + "']");
+        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
         let boundingClientRect = rect.node().getBoundingClientRect();
         // Add Connector Data
         svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
@@ -170,21 +170,21 @@ class ServiceGateway extends OkitArtifact {
 
     drawConnectors() {
         console.groupCollapsed('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        //let parent_svg = d3.select('#' + this.parent_id + "-svg");
-        //let parent_rect = d3.select('#' + this.parent_id);
+        //let parent_svg = d3.select(d3Id(this.parent_id + "-svg"));
+        //let parent_rect = d3.select(d3Id(this.parent_id));
         // Get Grand Parent
-        let grandparent_id = d3.select('#' + this.parent_id).attr('data-parent-id');
+        let grandparent_id = d3.select(d3Id(this.parent_id)).attr('data-parent-id');
         // Define Connector Parent
-        let parent_svg = d3.select('#' + grandparent_id + "-svg");
-        let parent_rect = d3.select('#' + grandparent_id);
+        let parent_svg = d3.select(d3Id(grandparent_id + "-svg"));
+        let parent_rect = d3.select(d3Id(grandparent_id));
         // Only Draw if parent exists
         if (parent_svg.node()) {
             console.info('Parent SVG     : ' + parent_svg.attr('id'));
             // Define SVG position manipulation variables
             let svgPoint = parent_svg.node().createSVGPoint();
             let screenCTM = parent_rect.node().getScreenCTM();
-            svgPoint.x = d3.select('#' + this.id).attr('data-connector-start-x');
-            svgPoint.y = d3.select('#' + this.id).attr('data-connector-start-y');
+            svgPoint.x = d3.select(d3Id(this.id)).attr('data-connector-start-x');
+            svgPoint.y = d3.select(d3Id(this.id)).attr('data-connector-start-y');
             let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
             console.info('Start svgPoint.x : ' + svgPoint.x);
             console.info('Start svgPoint.y : ' + svgPoint.y);
@@ -195,7 +195,7 @@ class ServiceGateway extends OkitArtifact {
 
             if (this.autonomous_database_ids.length > 0) {
                 for (let i = 0; i < this.autonomous_database_ids.length; i++) {
-                    let autonomous_database_svg = d3.select('#' + this.autonomous_database_ids[i]);
+                    let autonomous_database_svg = d3.select(d3Id(this.autonomous_database_ids[i]));
                     if (autonomous_database_svg.node()) {
                         svgPoint.x = autonomous_database_svg.attr('data-connector-start-x');
                         svgPoint.y = autonomous_database_svg.attr('data-connector-start-y');
@@ -212,7 +212,7 @@ class ServiceGateway extends OkitArtifact {
 
             if (this.object_storage_bucket_ids.length > 0) {
                 for (let i = 0; i < this.object_storage_bucket_ids.length; i++) {
-                    let object_storage_bucket_svg = d3.select('#' + this.object_storage_bucket_ids[i]);
+                    let object_storage_bucket_svg = d3.select(d3Id(this.object_storage_bucket_ids[i]));
                     if (object_storage_bucket_svg.node()) {
                         svgPoint.x = object_storage_bucket_svg.attr('data-connector-start-x');
                         svgPoint.y = object_storage_bucket_svg.attr('data-connector-start-y');

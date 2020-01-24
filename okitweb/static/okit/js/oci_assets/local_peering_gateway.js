@@ -135,18 +135,18 @@ class LocalPeeringGateway extends OkitArtifact {
             d3.event.stopPropagation();
         });
         // Add Highlighting
-        let fill = d3.select('#' + this.id).attr('fill');
+        let fill = d3.select(d3Id(this.id)).attr('fill');
         svg.on("mouseover", function () {
             if (me.peer_id !== '') {
-                d3.selectAll('#' + me.peer_id).attr('fill', svg_highlight_colour);
-                d3.select('#' + me.id).attr('fill', svg_highlight_colour);
+                d3.selectAll(d3Id(me.peer_id)).attr('fill', svg_highlight_colour);
+                d3.select(d3Id(me.id)).attr('fill', svg_highlight_colour);
             }
             d3.event.stopPropagation();
         });
         svg.on("mouseout", function () {
             if (me.peer_id !== '') {
-                d3.selectAll('#' + me.peer_id).attr('fill', fill);
-                d3.select('#' + me.id).attr('fill', fill);
+                d3.selectAll(d3Id(me.peer_id)).attr('fill', fill);
+                d3.select(d3Id(me.id)).attr('fill', fill);
             }
             d3.event.stopPropagation();
         });

@@ -164,7 +164,7 @@ function drawArtifact(definition) {
         definition['artifact']['display_name'] = definition['artifact']['name'];
     }
     // Get Parent SVG
-    let parent_svg = d3.select('#' + parent_svg_id);
+    let parent_svg = d3.select(d3Id(parent_svg_id));
     // Wrapper SVG Element to define ViewBox etc
     let svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
@@ -507,18 +507,18 @@ const default_canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
 
 function newCanvas(parent_id="canvas-wrapper", width=default_canvas_width, height=default_canvas_height) {
     console.groupCollapsed('New Canvas');
-    let compartment_div = d3.select('#' + parent_id);
+    let compartment_div = d3.select(d3Id(parent_id));
     //let canvas_width = Math.round($(window).width() / 10) * 10;
     //let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
-    let parent_width  = $('#' + parent_id).width();
-    let parent_height = $('#' + parent_id).height();
+    let parent_width  = $(jqId(parent_id)).width();
+    let parent_height = $(jqId(parent_id)).height();
     width  = Math.round(Math.max(width, parent_width));
     height = Math.round(Math.max(height, parent_height));
     // Round up to next grid size to display full grid.
     width  += (grid_size - (width % grid_size) + 1);
     height += (grid_size - (height % grid_size) + 1);
-    console.info('JQuery Width  : ' + $('#' + parent_id).width());
-    console.info('JQuery Height : ' + $('#' + parent_id).height());
+    console.info('JQuery Width  : ' + $(jqId(parent_id)).width());
+    console.info('JQuery Height : ' + $(jqId(parent_id)).height());
     console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
     console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
     console.info('Window Width  : ' + $(window).width());
