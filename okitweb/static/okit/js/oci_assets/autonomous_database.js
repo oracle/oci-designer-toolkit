@@ -154,7 +154,7 @@ class AutonomousDatabase extends OkitArtifact {
         //    d3.event.stopPropagation();
         //});
         // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + this.id + "']");
+        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
         let boundingClientRect = rect.node().getBoundingClientRect();
         // Add Connector Data
         svg.attr("data-compartment-id", this.compartment_id)

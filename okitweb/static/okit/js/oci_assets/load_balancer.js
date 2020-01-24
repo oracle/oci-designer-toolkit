@@ -141,7 +141,7 @@ class LoadBalancer extends OkitArtifact {
         });
         // Get Inner Rect to attach Connectors
         //let rect = d3.select(d3Id(this.id));
-        let rect = svg.select("rect[id='" + this.id + "']");
+        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
         let boundingClientRect = rect.node().getBoundingClientRect();
         // Add Connector Data
         svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height)
