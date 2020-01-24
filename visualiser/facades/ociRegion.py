@@ -15,6 +15,7 @@ __module__ = "ociRegion"
 
 import oci
 
+from common.ociCommon import logJson
 from common.ociLogging import getLogger
 from facades.ociConnection import OCIIdentityConnection
 
@@ -26,8 +27,6 @@ class OCIRegions(OCIIdentityConnection):
     def __init__(self, config=None, configfile=None, profile=None):
         self.regions_obj = []
         self.regions_json = []
-        self.names = {}
-        self.parents = {}
         self.canonicalnames = []
         super(OCIRegions, self).__init__(config=config, configfile=configfile, profile=profile)
 
@@ -46,15 +45,13 @@ class OCIRegions(OCIIdentityConnection):
         # Filter results
         self.regions_json = self.filterJsonObjectList(regions_json, filter)
         logger.debug(str(self.regions_json))
+        logJson(self.regions_json)
 
-        # Generate Name / Id mappings
-        for region in self.regions_json:
-            self.names[region['key']] = region['name']
-            self.parents[region['id']] = region['region_id']
         # Build List of Region Objects that have methods for getting VCN / Security Lists / Route Tables etc
         self.regions_obj = []
         for region in self.regions_json:
-            region['display_name'] = self.getCanonicalName(region['id'])
+            region['display_name'] = region['name'].split('-')[1].capitalize()
+            region['id'] = region['name']
             self.regions_obj.append(OCIRegion(self.config, self.configfile, self.profile, region))
         return self.regions_json
 

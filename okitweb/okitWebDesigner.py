@@ -40,6 +40,7 @@ from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociLocalPeeringGateway import OCILocalPeeringGateways
 from facades.ociNATGateway import OCINATGateways
 from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
+from facades.ociRegion import OCIRegions
 from facades.ociResourceManager import OCIResourceManagers
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
@@ -197,6 +198,19 @@ def ociCompartment():
     #logger.info("Compartments: {0!s:s}".format(compartments))
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
 
+
+@bp.route('/oci/region', methods=(['GET']))
+def ociRegion():
+    query_string = request.query_string
+    parsed_query_string = urllib.parse.unquote(query_string.decode())
+    query_json = json.loads(parsed_query_string)
+    logJson(query_json)
+    config_profile = query_json.get('config_profile', 'DEFAULT')
+    logger.info('Using Profile : {0!s:s}'.format(config_profile))
+    oci_regions = OCIRegions(profile=config_profile)
+    regions = oci_regions.list()
+    #logger.info(">>>>>>>>> Regions: {0!s:s}".format(regions))
+    return json.dumps(regions, sort_keys=False, indent=2, separators=(',', ': '))
 
 @bp.route('/oci/query/<string:cloud>', methods=(['GET', 'POST']))
 def ociQuery(cloud):

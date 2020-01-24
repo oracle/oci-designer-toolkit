@@ -145,6 +145,30 @@ function handleQueryOci(e) {
             console.info('Error : '+ error)
         }
     });
+    // Get Regions
+    $.ajax({
+        type: 'get',
+        url: 'oci/region',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify({config_profile: okitSettings.profile}),
+        success: function(resp) {
+            console.info('Response : ' + resp);
+            let jsonBody = JSON.parse(resp)
+            $('#query-region-id').empty();
+            let region_select = d3.select('#query-region-id');
+            for(let region of jsonBody ){
+                console.info(region['display_name']);
+                region_select.append('option')
+                    .attr('value', region['name'])
+                    .text(region['display_name']);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+        }
+    });
     // Show Query Box
     $('#query-oci').removeClass('hidden');
 }

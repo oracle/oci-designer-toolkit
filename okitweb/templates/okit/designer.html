@@ -184,15 +184,20 @@
     </div>
     <div id="query-oci" class="hidden query-oci">
         <form id="query-oci-form" action="{{ url_for('okit.designer') }}" method="post" onsubmit="setBusyIcon();">
+            <input hidden="hidden" type="text" id="config_profile" name="config_profile" class="property-value" readonly="readonly" value="DEFAULT">
             <table id="query-oci-table">
                 <thead>
                     <tr><th colspan="2">Query Filters</th></tr>
-                    <tr><td>Config Profile</td><td><input type="text" id="config_profile" name="config_profile" class="property-value" readonly="readonly" value="DEFAULT"></td></tr>
+                    <!--tr><td>Config Profile</td><td><input type="text" id="config_profile" name="config_profile" class="property-value" readonly="readonly" value="DEFAULT"></td></tr-->
                     <tr><td>Compartment</td><td>
                         <select id="query-compartment-id" name="compartment_id" form="query-oci-form">
                             {% for compartment in compartments %}
                                 <option value="{{ compartment['id'] }}">{{ compartment['display_name'] }}</option>
                             {%  endfor %}
+                        </select>
+                    </td></tr>
+                    <tr><td>Region(s)</td><td>
+                        <select multiple id="query-region-id" name="region_id" form="query-oci-form" class="query-filter">
                         </select>
                     </td></tr>
                 </thead>
