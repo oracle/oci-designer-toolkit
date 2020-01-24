@@ -35,7 +35,8 @@ class OCICompartments(OCIIdentityConnection):
         self.canonicalnames = []
         super(OCICompartments, self).__init__(config=config, configfile=configfile, profile=profile)
 
-    def get(self, compartment_id):      
+    def get(self, compartment_id):
+        logger.info('Getting Compartment {0!s:s}'.format(compartment_id))
         compartment = self.client.get_compartment(compartment_id=compartment_id).data
         self.compartments_json = [self.toJson(compartment)]
         self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
