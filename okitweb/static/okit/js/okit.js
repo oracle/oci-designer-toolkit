@@ -684,7 +684,7 @@ class OkitContainerArtifact extends OkitArtifact {
         // Count how many top edge children and adjust.
         let count = 0;
         for (let child of this.getTopEdgeArtifacts()) {
-            count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
+            count += $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").length;
         }
         console.info('Top Edge Count : ' + count);
         // Increment x position based on count
@@ -695,7 +695,7 @@ class OkitContainerArtifact extends OkitArtifact {
     getTopChildOffset() {
         let offset = this.getFirstTopChildOffset();
         for (let child of this.getTopArtifacts()) {
-            $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
                 function() {
                     offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
                 });
@@ -707,8 +707,8 @@ class OkitContainerArtifact extends OkitArtifact {
         let offset = this.getFirstContainerChildOffset();
         // Count how many top edge children and adjust.
         for (let child of this.getContainerArtifacts()) {
-            //count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
-            $('#' + this.id + '-svg').children('svg[data-type="' + child + '"]').each(
+            //count += $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").length;
+            $(jqId(this.id + '-svg')).children('svg[data-type="' + child + '"]').each(
                 function() {
                     offset.dy += Math.round(Number($(this).attr('height')) + positional_adjustments.spacing.y);
                 });
@@ -720,7 +720,7 @@ class OkitContainerArtifact extends OkitArtifact {
     getBottomChildOffset() {
         let offset = this.getFirstBottomChildOffset();
         for (let child of this.getBottomArtifacts()) {
-            $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
                 function() {
                     offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
                 });
@@ -735,7 +735,7 @@ class OkitContainerArtifact extends OkitArtifact {
     getLeftChildOffset() {
         let offset = this.getFirstLeftChildOffset();
         for (let child of this.getLeftArtifacts()) {
-            $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
                 function() {
                     offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
                 });
@@ -746,7 +746,7 @@ class OkitContainerArtifact extends OkitArtifact {
     getRightChildOffset() {
         let offset = this.getFirstRightChildOffset();
         for (let child of this.getRightArtifacts()) {
-            $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
                 function() {
                     offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
                 });
@@ -757,7 +757,7 @@ class OkitContainerArtifact extends OkitArtifact {
     getRightEdgeChildOffset() {
         let offset = this.getFirstRightEdgeChildOffset();
         for (let child of this.getRightEdgeArtifacts()) {
-            $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").each(
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
                 function() {
                     offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
                 });

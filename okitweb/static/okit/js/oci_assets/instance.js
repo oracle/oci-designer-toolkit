@@ -349,7 +349,7 @@ class Instance extends OkitArtifact {
         // Count how many top edge children and adjust.
         let count = 0;
         for (let child of this.getBottomEdgeArtifacts()) {
-            count += $('#' + this.id + '-svg').children("svg[data-type='" + child + "']").length;
+            count += $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").length;
         }
         console.info('Bottom Edge Count : ' + count);
         let dimensions = this.getDimensions();

@@ -250,8 +250,8 @@ function openCompartment(compartment_id) {
     $('.tabcontent').hide();
     $('.tablinks').removeClass('active');
     // Add to selected
-    $('#' + compartment_id + '-tab-button').addClass('active');
-    $('#' + compartment_id + '-tab-content').show();
+    $(jqId(compartment_id + '-tab-button')).addClass('active');
+    $(jqId(compartment_id + '-tab-content')).show();
     // Set Open Compartment Index
     for (let i=0; i < okitJson['compartments'].length; i++) {
         if (okitJson['compartments'][i]['id'] == compartment_id) {

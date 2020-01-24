@@ -29,28 +29,28 @@ function loadProperties(json_element) {
     console.groupCollapsed('Loading Properties');
     $.each(json_element, function(key, val) {
         //console.info('Key : ' + key + ' = ' + val);
-        if ($('#' + key).is("input:text")) {
+        if ($(jqId(key)).is("input:text")) {
             console.info(key + ' is input:text.');
-            $('#' + key).val(val);
-        } else if ($('#' + key).is("input:checkbox")) {
+            $(jqId(key)).val(val);
+        } else if ($(jqId(key)).is("input:checkbox")) {
             console.info(key + ' is input:checkbox.');
-            $('#' + key).attr('checked', val);
-        } else if ($('#' + key).is("select")) {
+            $(jqId(key)).attr('checked', val);
+        } else if ($(jqId(key)).is("select")) {
             console.info(key + ' is select with value ' + val);
-            $('#' + key).val(val);
-        } else if ($('#' + key).is("label")) {
+            $(jqId(key)).val(val);
+        } else if ($(jqId(key)).is("label")) {
             console.info(key + ' is label.');
             if (key.endsWith('_id')) {
                 // Get Artifact Associated With Id
                 let artifact_type = key.substr(0, (key.length - 3));
                 console.info('Label : Artifact Type ' + titleCase(artifact_type) + ' - ' + key);
-                $('#' + key).html(okitJson['get' + titleCase(artifact_type)](val).display_name);
+                $(jqId(key)).html(okitJson['get' + titleCase(artifact_type)](val).display_name);
             } else {
-                $('#' + key).html(val);
+                $(jqId(key)).html(val);
             }
-        } else if ($('#' + key).is("textarea")) {
+        } else if ($(jqId(key)).is("textarea")) {
             console.info(key + ' is textarea.');
-            $('#' + key).val(val);
+            $(jqId(key)).val(val);
         } else {
             console.warn(key + ' type unknown')
         }
