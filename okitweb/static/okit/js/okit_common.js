@@ -4,10 +4,17 @@
 */
 console.info('Loaded OKIT Common Javascript');
 
-function jqid( id ) {
+function jqid(id) {
+    return "#" + safeId();
+}
 
-    return "#" + id.replace( /(:|\.|\[|\]|,|=|@)/g, "\\$1" );
+function d3id(id) {
+    return "#" + safeId();
+}
 
+function safeId(id) {
+    //return id.replace( /(:|\.|\[|\]|,|=|@)/g, "\\$1" );
+    return id;
 }
 
 function uuidv4() {
