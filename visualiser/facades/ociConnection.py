@@ -32,6 +32,15 @@ class OCIConnection(object):
         self.profile = profile
         if self.profile is None or len(self.profile.strip()) == 0:
             self.profile = 'DEFAULT'
+        # Read Config
+        if self.config is None:
+            self.config = {}
+        logger.debug('>>>>>>>>> Config : {0!s:s}'.format(self.config))
+        if self.configfile is None:
+            self.config.update(oci.config.from_file(profile_name=self.profile))
+        else:
+            self.config.update(oci.config.from_file(file_location=self.configfile, profile_name=self.profile))
+        logger.debug('>>>>>>>>> Config : {0!s:s}'.format(self.config))
         self.connect()
 
     def toJson(self, data):
@@ -56,10 +65,13 @@ class OCIIdentityConnection(OCIConnection):
 
     def connect(self):
         if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
+            self.config = {}
+        logger.debug('>>>>>>>>> Config : {0!s:s}'.format(self.config))
+        if self.configfile is None:
+            self.config.update(oci.config.from_file(profile_name=self.profile))
+        else:
+            self.config.update(oci.config.from_file(file_location=self.configfile, profile_name=self.profile))
+        logger.debug('>>>>>>>>> Config : {0!s:s}'.format(self.config))
         self.client = oci.identity.IdentityClient(self.config)
         self.compartment_ocid = self.config["tenancy"]
         return
