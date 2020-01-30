@@ -15,7 +15,7 @@ const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 ** Query OCI
  */
 
-function queryBlockStorageVolumeAjax(compartment_id) {
+function queryBlockStorageVolumeAjax1(compartment_id) {
     console.info('------------- queryBlockStorageVolumeAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -31,13 +31,13 @@ function queryBlockStorageVolumeAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['block_storage_volumes'] = response_json;
-            okitJson.load({block_storage_volumes: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({block_storage_volumes: response_json});
+            //okitJson.load({block_storage_volumes: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + block_storage_volume_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -223,6 +223,39 @@ class BlockStorageVolume extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [compartment_artifact];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Block Storage Volume Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/BlockStorageVolume',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({block_storage_volumes: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('Block Storage Volume Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + block_storage_volume_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + block_storage_volume_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 }
 

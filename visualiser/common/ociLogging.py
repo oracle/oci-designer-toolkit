@@ -46,6 +46,8 @@ def getDebugLogFilename():
 
 def getFileFormat():
     defaultformat = '[UTC] %(asctime)-15s [%(process)s] (%(module)s-%(funcName)s-%(lineno)d) %(levelname)s: %(message)s'
+    defaultformat = '%(asctime)-15s [%(process)5s] %(levelname)6s : %(module)s.%(funcName)s[%(lineno)04d] : %(message)s'
+    defaultformat = '%(asctime)-15s [%(process)5s] %(levelname)6s : %(module)15s[%(lineno)04d] : %(message)s'
     return os.getenv('OCI_LOG_FORMAT', defaultformat)
 
 

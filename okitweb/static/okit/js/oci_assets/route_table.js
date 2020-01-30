@@ -15,7 +15,7 @@ const route_table_query_cb = "route-table-query-cb";
 ** Query OCI
  */
 
-function queryRouteTableAjax(compartment_id, vcn_id) {
+function queryRouteTableAjax1(compartment_id, vcn_id) {
     console.info('------------- queryRouteTableAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -31,13 +31,13 @@ function queryRouteTableAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['route_tables'] = response_json;
-            okitJson.load({route_tables: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({route_tables: response_json});
+            //okitJson.load({route_tables: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryRouteTableAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + route_table_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -326,6 +326,40 @@ class RouteTable extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Route Table Query --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/RouteTable',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({route_tables: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('Route Table Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + route_table_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + route_table_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 }
 

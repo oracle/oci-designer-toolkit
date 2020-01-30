@@ -18,7 +18,7 @@ const min_instance_height = Math.round(icon_height * 5 / 2);
 ** Query OCI
  */
 
-function queryInstanceAjax(compartment_id, subnet_id='') {
+function queryInstanceAjax1(compartment_id, subnet_id='') {
     console.info('------------- queryInstanceAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -34,13 +34,13 @@ function queryInstanceAjax(compartment_id, subnet_id='') {
         data: JSON.stringify(request_json),
         success: function (resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['instances'] = response_json;
-            okitJson.load({instances: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({instances: response_json});
+            //okitJson.load({instances: response_json});
             let len = response_json.length;
             for (let i = 0; i < len; i++) {
                 console.info('queryInstanceAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + instance_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -365,6 +365,40 @@ class Instance extends OkitArtifact {
      */
     getBottomEdgeArtifacts() {
         return [block_storage_volume_artifact, virtual_network_interface_artifact];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Instance Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        console.info('------------- Subnet      : ' + request.subnet_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/Instance',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function (resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({instances: response_json});
+                let len = response_json.length;
+                for (let i = 0; i < len; i++) {
+                    console.info('Instance Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + instance_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function (xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + instance_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 }
 

@@ -12,6 +12,10 @@ console.info('Loaded Designer Javascript');
  */
 // OKIT Json
 let okitJson = new OkitJson();
+let regionOkitJson = {};
+// Canvas
+let activeCanvas = null;
+let activeRegion = null;
 // Query Request only set to a value when designer called from query
 let okitQueryRequestJson = null;
 
@@ -44,7 +48,7 @@ function readOkitSettings() {
 
 // Automation details
 let okitSettings = readOkitSettings();
-
+let ociRegions = [];
 
 /*
  * Define Common Functions
@@ -55,6 +59,7 @@ function generateDefaultName(prefix, count) {
 
 function displayOkitJson() {
     $('#okitjson').html(JSON.stringify(okitJson, null, 2));
+    $('#okitjson').html(JSON.stringify(regionOkitJson, null, 2));
     //console.info(JSON.stringify(okitJson, null, 2));
 }
 
@@ -72,13 +77,6 @@ function newDiagram() {
     newCanvas();
     okitJson.newCompartment();
     console.groupEnd();
-}
-
-function clearTabs() {
-    $('#canvas-wrapper').empty();
-    d3.select('#canvas-wrapper').append('div')
-        .attr("id", "compartment-tabs")
-        .attr("class", "tab");
 }
 
 /*
@@ -152,9 +150,13 @@ function handleResize(evt) {
     return false;
 }
 
-function redrawSVGCanvas() {
+function redrawSVGCanvas(region='') {
+    console.info('>>>>>>>>> Redrawing Canvas (Region : ' + region +')');
+    console.info('>>>>>>>>> Active Region            : ' + activeRegion);
     hideNavMenu();
-    drawSVGforJson();
+    if (region === '' || region === activeRegion) {
+        drawSVGforJson();
+    }
 }
 
 /*
@@ -174,16 +176,7 @@ function saveJson(text, filename){
     let a = document.createElement('a');
     a.setAttribute('href', 'data:text/plain;charset=utf-u,'+encodeURIComponent(text));
     a.setAttribute('download', filename);
-    a.click()
-}
-
-/*
-** Add Compartment file
- */
-
-function handleAdd(evt) {
-    hideNavMenu();
-    addCompartment();
+    a.click();
 }
 
 /*
@@ -217,15 +210,211 @@ function saveSvg(svgEl, name) {
 }
 
 /*
+** Query OCI
+ */
+
+function handleQueryAjax(e) {
+    $.ajax({
+        type: 'get',
+        url: 'oci/compartment',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(okitJson),
+        success: function(resp) {
+            console.info('Response : ' + resp);
+            let jsonBody = JSON.parse(resp)
+            let len =  jsonBody.length;
+            for(let i=0;i<len;i++ ){
+                console.info(jsonBody[i]['display_name']);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+        }
+    });
+}
+
+function handleQueryOci(e) {
+    //window.location = 'oci/query/oci';
+
+    // Hide Menu
+    hideNavMenu();
+    // Set Query Config Profile
+    console.info('Profile : ' + okitSettings.profile);
+    if (!okitSettings.profile) {
+        okitSettings.profile = 'DEFAULT';
+    }
+    console.info('Profile : ' + okitSettings.profile);
+    okitSettings.home_region_key = '';
+    okitSettings.home_region = '';
+    ociRegions = [];
+    $('#config_profile').val(okitSettings.profile);
+    // Get Compartments
+    $.ajax({
+        type: 'get',
+        url: 'oci/compartment',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify({config_profile: okitSettings.profile}),
+        success: function(resp) {
+            console.info('Response : ' + resp);
+            let jsonBody = JSON.parse(resp)
+            $('#query-compartment-id').empty();
+            let compartment_select = d3.select('#query-compartment-id');
+            for(let compartment of jsonBody ){
+                console.info(compartment['display_name']);
+                compartment_select.append('option')
+                    .attr('value', compartment['id'])
+                    .text(compartment['display_name']);
+                if (okitSettings.home_region_key === '') {
+                    okitSettings.home_region_key = compartment.home_region_key;
+                }
+            }
+            selectQueryHomeRegion();
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+        }
+    });
+    // Get Regions
+    $.ajax({
+        type: 'get',
+        url: 'oci/region',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify({config_profile: okitSettings.profile}),
+        success: function(resp) {
+            console.info('Response : ' + resp);
+            let jsonBody = JSON.parse(resp)
+            $('#query-region-id').empty();
+            let region_select = d3.select('#query-region-id');
+            ociRegions = jsonBody;
+            for(let region of jsonBody ){
+                console.info(region['display_name']);
+                region_select.append('option')
+                    .attr('value', region['name'])
+                    .text(region['display_name']);
+            }
+            selectQueryHomeRegion();
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+        }
+    });
+    // Show Query Box
+    $('#query-oci').removeClass('hidden');
+}
+
+function selectQueryHomeRegion() {
+    if (okitSettings.home_region_key !== '') {
+        for (let region of ociRegions) {
+            if (okitSettings.home_region_key === region.key) {
+                $(jqId('query-region-id')).val(region.name);
+                break;
+            }
+        }
+    }
+}
+
+function handleCancelQuery(e) {
+    // Hide Query Box
+    $('#query-oci').addClass('hidden');
+}
+
+/*
 ** Query OCI Ajax Calls to allow async svg build
  */
 function showQueryResults() {
-    console.info('Generating Query Results');
-    okitJson = new OkitJson();
+    console.group('Generating Query Results');
+    //newCanvasWrapper();
+    //let tab_bar = addRegionTabBar();
+    clearRegionTabBar();
+    showRegionTabBar();
+    okitJson = new OkitJson('', 'canvas-div');
     newCanvas();
-    setBusyIcon();
-    $('#query-progress').removeClass('hidden');
-    queryCompartmentAjax();
+    console.info('Regions Ids : ' + okitQueryRequestJson.regions);
+    regionOkitJson = {};
+    if (okitQueryRequestJson.regions.length > 0) {
+        for (let region of okitQueryRequestJson.regions) {
+            console.info('Processing Multiple Selected Region : ' + region);
+            okitQueryRequestJson.region = region;
+            addRegionTab(region);
+            //addRegionTabContent(region);
+            //okitJson = new OkitJson('', regionTabContentName(region));
+            //regionOkitJson[region] = okitJson;
+            regionOkitJson[region] = new OkitJson();
+            setBusyIcon();
+            $('#query-progress').removeClass('hidden');
+            //queryCompartmentAjax(region);
+            let request = JSON.clone(okitQueryRequestJson);
+            request.region = region;
+            Compartment.query(request, region);
+        }
+        $(jqId(regionTabName(okitQueryRequestJson.regions[0]))).trigger("click");
+    } else if (okitQueryRequestJson.regions.length === 1) {
+        let region = okitQueryRequestJson.regions[0];
+        console.info('Processing Single Selected Region : ' + region);
+        okitQueryRequestJson.region = region;
+    } else {
+        console.info('Region Not Selected Using Config Region.');
+    }
+    //setBusyIcon();
+    //$('#query-progress').removeClass('hidden');
+    //queryCompartmentAjax();
+    console.groupEnd();
+}
+
+function addRegionTabBar() {
+    return d3.select('#canvas-wrapper').append('div')
+        .attr("id", "region-tab-bar")
+        .attr("class", "tab-bar");
+}
+
+function clearRegionTabBar() {
+    $('#region-tab-bar').empty();
+}
+
+function showRegionTabBar() {
+    $('#region-tab-bar').removeClass('hidden');
+}
+
+function hideRegionTabBar() {
+    $('#region-tab-bar').addClass('hidden');
+}
+
+function addRegionTab(region) {
+    return d3.select(d3Id('region-tab-bar')).append('button')
+        .attr("id", regionTabName(region))
+        .attr("data-region-id", region)
+        .on("click", function() {
+            console.info('Clicked Tab ' + region);
+            activeRegion = region;
+            $('#region-tab-bar button').removeClass("active");
+            $(jqId(regionTabName(region))).addClass("active");
+            //$('#canvas-wrapper .tab-content').addClass("hidden");
+            //$(jqId(regionTabContentName(region))).removeClass("hidden");
+            okitJson = regionOkitJson[region];
+            redrawSVGCanvas(region);
+        })
+        //.attr("class", "active")
+        .text(region);
+}
+
+function addRegionTabContent(region='unknown') {
+    return d3.select('#canvas-wrapper').append('div')
+        .attr("id", regionTabContentName(region))
+        .attr("class", "tab-content hidden");
+}
+
+function regionTabName(region) {
+    return region + '-tab';
+}
+
+function regionTabContentName(region) {
+    return region + '-tab-content';
 }
 
 function showQueryProgress() {
@@ -237,7 +426,7 @@ function showQueryProgress() {
 
 function hideQueryProgressIfComplete() {
     let cnt = $('#query-progress input:checkbox:not(:checked)').length
-    console.info('>>>>>>> Unhecked Count : ' + cnt);
+    console.info('>>>>>>> Unchecked Count : ' + cnt);
     if (cnt == 0) {
         unsetBusyIcon();
         //$('#query-progress').toggleClass('hidden');
@@ -361,7 +550,10 @@ $(document).ready(function(){
 
     //let compartment_id = addCompartment();
 
-    if (okitQueryRequestJson == null) {
+    // Hide Region Tab Bar
+    hideRegionTabBar();
+
+    if (okitQueryRequestJson === null) {
         console.info('<<<<<<<<<<<<< New Canvas >>>>>>>>>>>>>');
         newDiagram();
     } else {

@@ -50,10 +50,11 @@ class OCIRegions(OCIIdentityConnection):
         # Build List of Region Objects that have methods for getting VCN / Security Lists / Route Tables etc
         self.regions_obj = []
         for region in self.regions_json:
-            region['display_name'] = region['name'].split('-')[1].capitalize()
+            name_parts = region['name'].split('-')
+            region['display_name'] = '{0!s:s} {1!s:s}'.format(name_parts[0].upper(), name_parts[1].capitalize())
             region['id'] = region['name']
             self.regions_obj.append(OCIRegion(self.config, self.configfile, self.profile, region))
-        return self.regions_json
+        return sorted(self.regions_json, key=lambda k: k['display_name'], reverse=True)
 
 
 class OCIRegion(object):

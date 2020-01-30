@@ -15,7 +15,7 @@ const service_gateway_query_cb = "service-gateway-query-cb";
 ** Query OCI
  */
 
-function queryServiceGatewayAjax(compartment_id, vcn_id) {
+function queryServiceGatewayAjax1(compartment_id, vcn_id) {
     console.info('------------- queryServiceGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -31,13 +31,13 @@ function queryServiceGatewayAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['service_gateways'] = response_json;
-            okitJson.load({service_gateways: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({service_gateways: response_json});
+            //okitJson.load({service_gateways: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryServiceGatewayAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + service_gateway_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -299,6 +299,40 @@ class ServiceGateway extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Service Gateway Query --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/ServiceGateway',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({service_gateways: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('Service Gateway Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + service_gateway_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + service_gateway_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 }
 

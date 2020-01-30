@@ -15,7 +15,7 @@ const security_list_query_cb = "security-list-query-cb";
 ** Query OCI
  */
 
-function querySecurityListAjax(compartment_id, vcn_id) {
+function querySecurityListAjax1(compartment_id, vcn_id) {
     console.info('------------- querySecurityListAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -31,13 +31,13 @@ function querySecurityListAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['security_lists'] = response_json;
-            okitJson.load({security_lists: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({security_lists: response_json});
+            //okitJson.load({security_lists: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('querySecurityListAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + security_list_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -387,6 +387,40 @@ class SecurityList extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Security List Query --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/SecurityList',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({security_lists: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('Security List Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + security_list_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + security_list_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 
 

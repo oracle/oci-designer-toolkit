@@ -32,15 +32,18 @@ class OCIConnection(object):
         self.profile = profile
         if self.profile is None or len(self.profile.strip()) == 0:
             self.profile = 'DEFAULT'
+        logger.debug('>>>>>>>>>>>>>>>> Config         : {0!s:s}'.format(self.config))
+        logger.debug('>>>>>>>>>>>>>>>> Config File    : {0!s:s}'.format(self.configfile))
+        logger.debug('>>>>>>>>>>>>>>>> Profile        : {0!s:s}'.format(self.profile))
         # Read Config
-        if self.config is None:
-            self.config = {}
-        logger.debug('>>>>>>>>> Config : {0!s:s}'.format(self.config))
         if self.configfile is None:
-            self.config.update(oci.config.from_file(profile_name=self.profile))
+            self.config = oci.config.from_file(profile_name=self.profile)
         else:
-            self.config.update(oci.config.from_file(file_location=self.configfile, profile_name=self.profile))
-        logger.debug('>>>>>>>>> Config : {0!s:s}'.format(self.config))
+            self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
+        logger.debug('>>>>>>>>>>>>>>>> Profile Config : {0!s:s}'.format(self.config))
+        if config is not None:
+            self.config.update(config)
+        logger.debug('>>>>>>>>>>>>>>>> Merged Config  : {0!s:s}'.format(self.config))
         self.connect()
 
     def toJson(self, data):
@@ -64,14 +67,6 @@ class OCIIdentityConnection(OCIConnection):
         super(OCIIdentityConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            self.config = {}
-        logger.debug('>>>>>>>>> Config : {0!s:s}'.format(self.config))
-        if self.configfile is None:
-            self.config.update(oci.config.from_file(profile_name=self.profile))
-        else:
-            self.config.update(oci.config.from_file(file_location=self.configfile, profile_name=self.profile))
-        logger.debug('>>>>>>>>> Config : {0!s:s}'.format(self.config))
         self.client = oci.identity.IdentityClient(self.config)
         self.compartment_ocid = self.config["tenancy"]
         return
@@ -82,11 +77,6 @@ class OCIVirtualNetworkConnection(OCIConnection):
         super(OCIVirtualNetworkConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
         self.client = oci.core.VirtualNetworkClient(self.config)
         return
 
@@ -96,11 +86,6 @@ class OCILoadBalancerConnection(OCIConnection):
         super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
         self.client = oci.load_balancer.LoadBalancerClient(self.config)
         return
 
@@ -110,11 +95,6 @@ class OCIComputeConnection(OCIConnection):
         super(OCIComputeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
         self.client = oci.core.ComputeClient(self.config)
         return
 
@@ -124,11 +104,6 @@ class OCIResourceManagerConnection(OCIConnection):
         super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
         self.client = oci.resource_manager.ResourceManagerClient(self.config)
         return
 
@@ -138,11 +113,6 @@ class OCIBlockStorageVolumeConnection(OCIConnection):
         super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
         self.client = oci.core.BlockstorageClient(self.config)
         return
 
@@ -152,11 +122,6 @@ class OCIAutonomousDatabaseConnection(OCIConnection):
         super(OCIAutonomousDatabaseConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
         self.client = oci.database.DatabaseClient(self.config)
         return
 
@@ -166,11 +131,6 @@ class OCIObjectStorageBucketConnection(OCIConnection):
         super(OCIObjectStorageBucketConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
         self.client = oci.object_storage.ObjectStorageClient(self.config)
         return
 
@@ -180,10 +140,5 @@ class OCIFileStorageSystemConnection(OCIConnection):
         super(OCIFileStorageSystemConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        if self.config is None:
-            if self.configfile is None:
-                self.config = oci.config.from_file(profile_name=self.profile)
-            else:
-                self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
         self.client = oci.file_storage.FileStorageClient(self.config)
         return
