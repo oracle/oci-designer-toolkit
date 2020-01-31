@@ -14,7 +14,7 @@ const service_gateway_query_cb = "service-gateway-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryServiceGatewayAjax1(compartment_id, vcn_id) {
     console.info('------------- queryServiceGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

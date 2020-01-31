@@ -15,7 +15,7 @@ const compartment_query_cb = "compartment-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryCompartmentAjax1() {
     console.info('------------- queryCompartmentAjax --------------------');
     $.ajax({
@@ -50,7 +50,7 @@ function queryCompartmentAjax1() {
         }
     });
 }
-
+// TODO: Delete
 function initiateCompartmentSubQueries(id='') {
     queryVirtualCloudNetworkAjax(id);
     queryBlockStorageVolumeAjax(id);

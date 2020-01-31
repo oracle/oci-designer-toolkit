@@ -15,7 +15,7 @@ const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryVirtualCloudNetworkAjax1(compartment_id) {
     console.info('------------- queryVirtualCloudNetworkAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
@@ -56,7 +56,7 @@ function queryVirtualCloudNetworkAjax1(compartment_id) {
         }
     });
 }
-
+// TODO: Delete
 function initiateVirtualCloudNetworkSubQueries(compartment_id, id='') {
     queryInternetGatewayAjax(compartment_id, id);
     queryNATGatewayAjax(compartment_id, id);

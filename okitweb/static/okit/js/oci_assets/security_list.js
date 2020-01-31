@@ -14,7 +14,7 @@ const security_list_query_cb = "security-list-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function querySecurityListAjax1(compartment_id, vcn_id) {
     console.info('------------- querySecurityListAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

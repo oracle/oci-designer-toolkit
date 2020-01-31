@@ -14,7 +14,7 @@ const internet_gateway_query_cb = "internet-gateway-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryInternetGatewayAjax1(compartment_id, vcn_id) {
     console.info('------------- queryInternetGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

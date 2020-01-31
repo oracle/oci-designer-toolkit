@@ -14,7 +14,7 @@ const nat_gateway_query_cb = "nat-gateway-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryNATGatewayAjax1(compartment_id, vcn_id) {
     console.info('------------- queryNATGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

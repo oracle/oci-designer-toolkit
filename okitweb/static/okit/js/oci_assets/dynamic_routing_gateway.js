@@ -14,7 +14,7 @@ const dynamic_routing_gateway_query_cb = "dynamic-routing-gateway-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryDynamicRoutingGatewayAjax1(compartment_id) {
     console.info('------------- queryDynamicRoutingGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

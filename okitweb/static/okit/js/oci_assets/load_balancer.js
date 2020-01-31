@@ -16,7 +16,7 @@ const load_balancer_height = Math.round(icon_height * 3 / 2);
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryLoadBalancerAjax1(compartment_id, subnet_id) {
     console.info('------------- queryLoadBalancerAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

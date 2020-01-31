@@ -17,7 +17,7 @@ const min_instance_height = Math.round(icon_height * 5 / 2);
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryInstanceAjax1(compartment_id, subnet_id='') {
     console.info('------------- queryInstanceAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

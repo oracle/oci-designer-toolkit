@@ -14,7 +14,7 @@ const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryBlockStorageVolumeAjax1(compartment_id) {
     console.info('------------- queryBlockStorageVolumeAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

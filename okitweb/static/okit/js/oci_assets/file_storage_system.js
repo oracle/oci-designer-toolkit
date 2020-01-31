@@ -13,7 +13,7 @@ const file_storage_system_query_cb = "file-storage-system-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryFileStorageSystemAjax1(compartment_id, subnet_id) {
     console.info('------------- queryFileStorageSystemAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

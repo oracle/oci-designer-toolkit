@@ -14,7 +14,7 @@ const autonomous_database_query_cb = "autonomous-database-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryAutonomousDatabaseAjax1(compartment_id) {
     console.info('------------- queryAutonomousDatabaseAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

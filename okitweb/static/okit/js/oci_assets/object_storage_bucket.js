@@ -14,7 +14,7 @@ const object_storage_bucket_query_cb = "object-storage-bucket-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryObjectStorageBucketAjax1(compartment_id) {
     console.info('------------- queryObjectStorageBucketAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

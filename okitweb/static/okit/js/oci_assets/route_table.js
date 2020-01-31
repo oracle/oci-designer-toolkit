@@ -14,7 +14,7 @@ const route_table_query_cb = "route-table-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryRouteTableAjax1(compartment_id, vcn_id) {
     console.info('------------- queryRouteTableAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

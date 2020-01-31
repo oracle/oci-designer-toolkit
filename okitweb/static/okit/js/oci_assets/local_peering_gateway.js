@@ -14,7 +14,7 @@ const local_peering_gateway_query_cb = "local-peering-gateway-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryLocalPeeringGatewayAjax1(compartment_id, vcn_id) {
     console.info('------------- queryLocalPeeringGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

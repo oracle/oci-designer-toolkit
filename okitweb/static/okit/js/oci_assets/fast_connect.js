@@ -14,7 +14,7 @@ const fast_connect_query_cb = "fast-connect-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function queryFastConnectAjax1(compartment_id) {
     console.info('------------- queryFastConnectAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);

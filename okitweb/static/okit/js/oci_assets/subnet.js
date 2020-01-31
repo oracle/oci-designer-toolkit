@@ -15,7 +15,7 @@ const subnet_query_cb = "subnet-query-cb";
 /*
 ** Query OCI
  */
-
+// TODO: Delete
 function querySubnetAjax1(compartment_id, vcn_id) {
     console.info('------------- querySubnetAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
@@ -55,7 +55,7 @@ function querySubnetAjax1(compartment_id, vcn_id) {
         }
     });
 }
-
+// TODO: Delete
 function initiateSubnetSubQueries(compartment_id, id='') {
     //queryInstanceAjax(compartment_id, id);
     queryLoadBalancerAjax(compartment_id, id);
