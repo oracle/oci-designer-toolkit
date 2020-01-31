@@ -78,6 +78,7 @@ class FileStorageSystem extends OkitArtifact {
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
+            /*
             for (let parent of okitjson.subnets) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {
@@ -85,6 +86,15 @@ class FileStorageSystem extends OkitArtifact {
                     };
                     break;
                 }
+            }
+            */
+            this.getParent = function() {
+                for (let parent of okitjson.subnets) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
+                }
+                return null;
             }
         }
     }

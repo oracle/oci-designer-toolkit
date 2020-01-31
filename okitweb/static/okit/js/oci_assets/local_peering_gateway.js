@@ -76,6 +76,7 @@ class LocalPeeringGateway extends OkitArtifact {
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
+            /*
             for (let parent of okitjson.virtual_cloud_networks) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {
@@ -83,6 +84,15 @@ class LocalPeeringGateway extends OkitArtifact {
                     };
                     break;
                 }
+            }
+            */
+            this.getParent = function() {
+                for (let parent of okitjson.virtual_cloud_networks) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
+                }
+                return null;
             }
         }
     }

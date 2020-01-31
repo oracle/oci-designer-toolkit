@@ -77,6 +77,7 @@ class BlockStorageVolume extends OkitArtifact {
             this.parent_id = parent.id;
         } else {
             this.parent_id = this.compartment_id;
+            /*
             for (let parent of okitjson.compartments) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {
@@ -84,6 +85,15 @@ class BlockStorageVolume extends OkitArtifact {
                     };
                     break;
                 }
+            }
+             */
+            this.getParent = function() {
+                for (let parent of okitjson.compartments) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
+                }
+                return null;
             }
         }
     }

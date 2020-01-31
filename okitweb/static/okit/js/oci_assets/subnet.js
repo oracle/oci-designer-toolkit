@@ -88,11 +88,21 @@ class Subnet extends OkitContainerArtifact {
         }
         // Add Get Parent function
         this.parent_id = this.vcn_id;
+        /*
         for (let parent of okitjson.virtual_cloud_networks) {
             if (parent.id === this.parent_id) {
                 this.getParent = function() {return parent};
                 break;
             }
+        }
+        */
+        this.getParent = function() {
+            for (let parent of okitjson.virtual_cloud_networks) {
+                if (parent.id === this.parent_id) {
+                    return parent
+                }
+            }
+            return null;
         }
     }
 

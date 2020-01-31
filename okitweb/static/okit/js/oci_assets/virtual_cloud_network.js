@@ -90,11 +90,21 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         }
         // Add Get Parent function
         this.parent_id = this.compartment_id;
+        /*
         for (let parent of okitjson.compartments) {
             if (parent.id === this.parent_id) {
                 this.getParent = function() {return parent};
                 break;
             }
+        }
+        */
+        this.getParent = function() {
+            for (let parent of okitjson.compartments) {
+                if (parent.id === this.parent_id) {
+                    return parent
+                }
+            }
+            return null;
         }
         console.groupCollapsed('Check if default Security List & Route Table Should be created.');
         if (okitSettings.is_default_route_table) {
