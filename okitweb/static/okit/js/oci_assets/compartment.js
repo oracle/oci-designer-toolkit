@@ -15,8 +15,8 @@ const compartment_query_cb = "compartment-query-cb";
 /*
 ** Query OCI
  */
-
-function queryCompartmentAjax() {
+// TODO: Delete
+function queryCompartmentAjax1() {
     console.info('------------- queryCompartmentAjax --------------------');
     $.ajax({
         type: 'get',
@@ -26,7 +26,9 @@ function queryCompartmentAjax() {
         data: JSON.stringify(okitQueryRequestJson),
         success: function(resp) {
             let response_json = [JSON.parse(resp)];
-            okitJson.load({compartments: response_json});
+            //let region = okitQueryRequestJson.region;
+            regionOkitJson[okitQueryRequestJson.region].load({compartments: response_json});
+            //okitJson.load({compartments: response_json});
             let len =  response_json.length;
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
@@ -36,7 +38,7 @@ function queryCompartmentAjax() {
             } else {
                 initiateCompartmentSubQueries(null);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + compartment_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -48,7 +50,7 @@ function queryCompartmentAjax() {
         }
     });
 }
-
+// TODO: Delete
 function initiateCompartmentSubQueries(id='') {
     queryVirtualCloudNetworkAjax(id);
     queryBlockStorageVolumeAjax(id);
@@ -197,7 +199,7 @@ class Compartment extends OkitContainerArtifact {
     getMinimumDimensions() {
         // Check if this is the top level container
         if (this.id === this.compartment_id) {
-            return {width: $('#canvas-wrapper').width(), height: $('#canvas-wrapper').height()};
+            return {width: $('#canvas-div').width(), height: $('#canvas-div').height()};
         } else {
             return {width: container_artifact_x_padding * 2, height: container_artifact_y_padding * 2};
         }
@@ -212,7 +214,7 @@ class Compartment extends OkitContainerArtifact {
         let me = this;
         $("#properties").load("propertysheets/compartment.html", function () {
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });
@@ -249,6 +251,56 @@ class Compartment extends OkitContainerArtifact {
     // return the name of the element used by the child to reference this artifact
     getParentKey() {
         return 'compartment_id';
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Compartment Query --------------------');
+        let me = this;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/Compartment',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = [JSON.parse(resp)];
+                regionOkitJson[region].load({compartments: response_json});
+                let len =  response_json.length;
+                if (len > 0) {
+                    for (let i = 0; i < len; i++) {
+                        console.info('Compartment Query : ' + response_json[i]['name']);
+                        me.querySubComponents(request, region, response_json[i]['id']);
+                    }
+                } else {
+                    me.querySubComponents(request, region, null);
+                }
+                redrawSVGCanvas(region);
+                $('#' + compartment_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.error('Status : ' + status);
+                console.error('Error  : ' + error);
+                $('#' + compartment_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
+    }
+
+    static querySubComponents(request = {}, region='', id='') {
+        let sub_query_request = JSON.clone(request);
+        sub_query_request.compartment_id = id;
+        VirtualCloudNetwork.query(sub_query_request, region);
+        BlockStorageVolume.query(sub_query_request, region);
+        DynamicRoutingGateway.query(sub_query_request, region);
+        AutonomousDatabase.query(sub_query_request, region);
+        ObjectStorageBucket.query(sub_query_request, region);
+        FastConnect.query(sub_query_request, region);
+        Instance.query(sub_query_request, region);
     }
 }
 

@@ -770,7 +770,7 @@ class OkitJson {
     /*
     ** Create
      */
-    constructor(okit_json_string = '') {
+    constructor(okit_json_string = '', parent_id = 'canvas-div') {
         this.title = "OKIT OCI Visualiser Json";
         this.description = "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......";
         this.compartments = [];
@@ -793,6 +793,7 @@ class OkitJson {
         this.subnets = [];
         this.virtual_cloud_networks = [];
         this.web_application_firewalls = [];
+        this.parent_id = parent_id;
 
         if (okit_json_string !== undefined && okit_json_string.length > 0) {
             this.load(JSON.parse(okit_json_string));
@@ -956,7 +957,7 @@ class OkitJson {
             width = Math.max(width, dimensions.width);
             height = Math.max(height, dimensions.height);
         }
-        newCanvas('canvas-wrapper', width, height);
+        newCanvas(this.parent_id, width, height);
 
         //console.info(JSON.stringify(this, null, 2));
         console.info(this);

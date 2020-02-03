@@ -25,7 +25,7 @@ function handlePropertiesMouseUp(e) {
     }
 }
 
-function loadProperties(json_element) {
+function loadPropertiesSheet(json_element) {
     console.groupCollapsed('Loading Properties');
     $.each(json_element, function(key, val) {
         //console.info('Key : ' + key + ' = ' + val);
@@ -68,25 +68,24 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
         function(index) {
             let inputfield = $(this);
             inputfield.on('input', function () {
+                console.warn('>>>>>>>> Change Event for ' + this.id + ' [' + this.type + '] ' + this.value + '(' + json_element.id + ')');
+                console.warn(json_element);
                 if (this.type === 'text') {
                     json_element[this.id] = this.value;
                     // If this is the name field copy to the Ids Map
                     if (this.id === 'display_name' || this.id === 'name') {
-                        json_element['display_name'] = this.value;
-                        json_element['name'] = this.value;
-                        d3.select(d3Id(json_element['id'] + '-title'))
-                            .text(this.value);
-                        let text = d3.select(d3Id(json_element['id'] + '-display-name'));
-                        if (text && text != null) {
-                            text.text(this.value);
+                        //json_element['display_name'] = this.value;
+                        //json_element['name'] = this.value;
+                        if (this.id === 'display_name') {
+                            json_element['name'] = json_element['display_name'];
+                        } else if (this.id === 'name') {
+                            json_element['display_name'] = json_element['name'];
                         }
-                    } else if (this.id === 'name') {
-                        // Compartment Processing
                         d3.select(d3Id(json_element['id'] + '-title'))
-                            .text(this.value);
-                        let text = d3.select(d3Id(json_element['id'] + '-tab'));
-                        if (text && text != null) {
-                            text.text(this.value);
+                            .text(json_element['display_name']);
+                        let display_name = d3.select(d3Id(json_element['id'] + '-display-name'));
+                        if (display_name && display_name != null) {
+                            display_name.text(json_element['display_name']);
                         }
                     }
                 } else if (this.type === 'checkbox') {
@@ -94,6 +93,7 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                 } else {
                     console.info('Unknown input type ' + $(this).attr('type'));
                 }
+                console.warn(json_element);
             });
             inputfield.on('blur', function() {
                 if (settings) {

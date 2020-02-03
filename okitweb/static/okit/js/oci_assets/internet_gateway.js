@@ -14,8 +14,8 @@ const internet_gateway_query_cb = "internet-gateway-query-cb";
 /*
 ** Query OCI
  */
-
-function queryInternetGatewayAjax(compartment_id, vcn_id) {
+// TODO: Delete
+function queryInternetGatewayAjax1(compartment_id, vcn_id) {
     console.info('------------- queryInternetGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -31,13 +31,13 @@ function queryInternetGatewayAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['internet_gateways'] = response_json;
-            okitJson.load({internet_gateways: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({internet_gateways: response_json});
+            //okitJson.load({internet_gateways: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + internet_gateway_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -71,11 +71,21 @@ class InternetGateway extends OkitArtifact {
         }
         // Add Get Parent function
         this.parent_id = this.vcn_id;
+        /*
         for (let parent of okitjson.virtual_cloud_networks) {
             if (parent.id === this.parent_id) {
                 this.getParent = function() {return parent};
                 break;
             }
+        }
+        */
+        this.getParent = function() {
+            for (let parent of okitjson.virtual_cloud_networks) {
+                if (parent.id === this.parent_id) {
+                    return parent
+                }
+            }
+            return null;
         }
     }
 
@@ -185,7 +195,7 @@ class InternetGateway extends OkitArtifact {
         $("#properties").load("propertysheets/internet_gateway.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });
@@ -198,6 +208,40 @@ class InternetGateway extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [virtual_cloud_gateway_artifact];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Internet Gateway Query --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/InternetGateway',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({internet_gateways: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('Internet Gateway Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + internet_gateway_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + internet_gateway_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 }
 

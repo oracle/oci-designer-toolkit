@@ -15,8 +15,8 @@ const subnet_query_cb = "subnet-query-cb";
 /*
 ** Query OCI
  */
-
-function querySubnetAjax(compartment_id, vcn_id) {
+// TODO: Delete
+function querySubnetAjax1(compartment_id, vcn_id) {
     console.info('------------- querySubnetAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -32,8 +32,8 @@ function querySubnetAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function (resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['subnets'] = response_json;
-            okitJson.load({subnets: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({subnets: response_json});
+            //okitJson.load({subnets: response_json});
             let len = response_json.length;
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
@@ -43,7 +43,7 @@ function querySubnetAjax(compartment_id, vcn_id) {
             } else {
                 initiateSubnetSubQueries(compartment_id, null);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + subnet_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -55,7 +55,7 @@ function querySubnetAjax(compartment_id, vcn_id) {
         }
     });
 }
-
+// TODO: Delete
 function initiateSubnetSubQueries(compartment_id, id='') {
     //queryInstanceAjax(compartment_id, id);
     queryLoadBalancerAjax(compartment_id, id);
@@ -88,11 +88,21 @@ class Subnet extends OkitContainerArtifact {
         }
         // Add Get Parent function
         this.parent_id = this.vcn_id;
+        /*
         for (let parent of okitjson.virtual_cloud_networks) {
             if (parent.id === this.parent_id) {
                 this.getParent = function() {return parent};
                 break;
             }
+        }
+        */
+        this.getParent = function() {
+            for (let parent of okitjson.virtual_cloud_networks) {
+                if (parent.id === this.parent_id) {
+                    return parent
+                }
+            }
+            return null;
         }
     }
 
@@ -265,7 +275,7 @@ class Subnet extends OkitContainerArtifact {
                 }
             }
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });
@@ -322,6 +332,53 @@ class Subnet extends OkitContainerArtifact {
     // return the name of the element used by the child to reference this artifact
     getParentKey() {
         return 'subnet_id';
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Subnet Query --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        let me = this;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/Subnet',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function (resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({subnets: response_json});
+                let len = response_json.length;
+                if (len > 0) {
+                    for (let i = 0; i < len; i++) {
+                        console.info('Subnet Query : ' + response_json[i]['display_name']);
+                        me.querySubComponents(request, region, response_json[i]['id']);
+                    }
+                } else {
+                    me.querySubComponents(request, region, null);
+                }
+                redrawSVGCanvas(region);
+                $('#' + subnet_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function (xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + subnet_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
+    }
+
+    static querySubComponents(request = {}, region='', id='') {
+        let sub_query_request = JSON.clone(request);
+        sub_query_request.subnet_id = id;
+        LoadBalancer.query(sub_query_request, region);
+        FileStorageSystem.query(sub_query_request, region);
     }
 }
 

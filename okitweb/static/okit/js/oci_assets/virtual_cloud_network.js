@@ -15,8 +15,8 @@ const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 /*
 ** Query OCI
  */
-
-function queryVirtualCloudNetworkAjax(compartment_id) {
+// TODO: Delete
+function queryVirtualCloudNetworkAjax1(compartment_id) {
     console.info('------------- queryVirtualCloudNetworkAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -32,8 +32,8 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['virtual_cloud_networks'] = response_json;
-            okitJson.load({virtual_cloud_networks: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({virtual_cloud_networks: response_json});
+            //okitJson.load({virtual_cloud_networks: response_json});
             let len =  response_json.length;
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
@@ -44,7 +44,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
                 // Do this to clear check boxes
                 initiateVirtualCloudNetworkSubQueries(compartment_id, null);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + virtual_cloud_network_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -56,7 +56,7 @@ function queryVirtualCloudNetworkAjax(compartment_id) {
         }
     });
 }
-
+// TODO: Delete
 function initiateVirtualCloudNetworkSubQueries(compartment_id, id='') {
     queryInternetGatewayAjax(compartment_id, id);
     queryNATGatewayAjax(compartment_id, id);
@@ -90,11 +90,21 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         }
         // Add Get Parent function
         this.parent_id = this.compartment_id;
+        /*
         for (let parent of okitjson.compartments) {
             if (parent.id === this.parent_id) {
                 this.getParent = function() {return parent};
                 break;
             }
+        }
+        */
+        this.getParent = function() {
+            for (let parent of okitjson.compartments) {
+                if (parent.id === this.parent_id) {
+                    return parent
+                }
+            }
+            return null;
         }
         console.groupCollapsed('Check if default Security List & Route Table Should be created.');
         if (okitSettings.is_default_route_table) {
@@ -272,7 +282,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         let me = this;
         $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });
@@ -368,6 +378,58 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     // return the name of the element used by the child to reference this artifact
     getParentKey() {
         return 'vcn_id';
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Virtual Cloud Network Query --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        let me = this;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/VirtualCloudNetwork',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({virtual_cloud_networks: response_json});
+                let len =  response_json.length;
+                if (len > 0) {
+                    for (let i = 0; i < len; i++) {
+                        console.info('Virtual Cloud Network Query : ' + response_json[i]['display_name']);
+                        me.querySubComponents(request, region, response_json[i]['id']);
+                    }
+                } else {
+                    // Do this to clear check boxes
+                    me.querySubComponents(request, region, null);
+                }
+                redrawSVGCanvas(region);
+                $('#' + virtual_cloud_network_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error  : ' + error)
+                $('#' + virtual_cloud_network_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
+    }
+
+    static querySubComponents(request = {}, region='', id='') {
+        let sub_query_request = JSON.clone(request);
+        sub_query_request.vcn_id = id;
+        InternetGateway.query(sub_query_request, region);
+        NATGateway.query(sub_query_request, region);
+        ServiceGateway.query(sub_query_request, region);
+        LocalPeeringGateway.query(sub_query_request, region);
+        RouteTable.query(sub_query_request, region);
+        SecurityList.query(sub_query_request, region);
+        Subnet.query(sub_query_request, region);
     }
 }
 
