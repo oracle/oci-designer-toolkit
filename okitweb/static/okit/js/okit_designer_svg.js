@@ -32,6 +32,7 @@ const stroke_colours = {
     purple: "#400080",
     icon_colour_01: "#F80000",
     icon_colour_02: "#939699",
+    icon_colour_03: "#ff6600",
 };
 const svg_highlight_colour = "#00cc00";
 
