@@ -98,6 +98,8 @@ function loaded(evt) {
     // Clear Existing Region
     regionOkitJson = {};
     okitJson = null
+    hideRegionTabBar();
+    clearRegionTabBar();
     // Obtain the read file data
     let fileString = evt.target.result;
     let fileJson = JSON.parse(fileString);
@@ -106,7 +108,6 @@ function loaded(evt) {
         okitJson = new OkitJson(fileString);
     } else {
         console.info('>> Multi Region File.')
-        clearRegionTabBar();
         showRegionTabBar();
         for (let region in fileJson) {
             console.info('>>>> Add Tab For ' + region);
