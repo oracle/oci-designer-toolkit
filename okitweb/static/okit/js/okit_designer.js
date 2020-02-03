@@ -58,7 +58,8 @@ function generateDefaultName(prefix, count) {
 }
 
 function displayOkitJson() {
-    if (regionOkitJson.length > 0) {
+    console.info('>>> Region Count ' + Object.keys(regionOkitJson).length);
+    if (Object.keys(regionOkitJson).length > 0) {
         $('#okitjson').html(JSON.stringify(regionOkitJson, null, 2));
     } else {
         $('#okitjson').html(JSON.stringify(okitJson, null, 2));
@@ -94,9 +95,29 @@ function getAsJson(readFile) {
 }
 
 function loaded(evt) {
+    // Clear Existing Region
+    regionOkitJson = {};
+    okitJson = null
     // Obtain the read file data
     let fileString = evt.target.result;
-    okitJson = new OkitJson(fileString);
+    let fileJson = JSON.parse(fileString);
+    if (fileJson.hasOwnProperty('compartments')) {
+        console.info('>> Single Region File')
+        okitJson = new OkitJson(fileString);
+    } else {
+        console.info('>> Multi Region File.')
+        clearRegionTabBar();
+        showRegionTabBar();
+        for (let region in fileJson) {
+            console.info('>>>> Add Tab For ' + region);
+            addRegionTab(region);
+            regionOkitJson[region] = new OkitJson(JSON.stringify(fileJson[region]));
+            if (okitJson === null) {
+                okitJson = regionOkitJson[region];
+                $(jqId(regionTabName(region))).trigger("click");
+            }
+        }
+    }
     displayOkitJson();
     drawSVGforJson();
 }
@@ -172,7 +193,13 @@ function handleSave(evt) {
     if (okitSettings.is_timestamp_files) {
         filename = 'okit-' + getTimestamp() + '.json'
     }
-    saveJson(JSON.stringify(okitJson, null, 2), filename);
+    if (Object.keys(regionOkitJson).length > 0) {
+        console.info('>> Saving Multi Region File');
+        saveJson(JSON.stringify(regionOkitJson, null, 2), filename);
+    } else {
+        console.info('>> Saving Single Region File');
+        saveJson(JSON.stringify(okitJson, null, 2), filename);
+    }
 }
 
 function saveJson(text, filename){
