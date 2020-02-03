@@ -239,7 +239,7 @@ class AutonomousDatabase extends OkitArtifact {
         $("#properties").load("propertysheets/autonomous_database.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

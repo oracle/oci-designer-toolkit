@@ -267,7 +267,7 @@ class LoadBalancer extends OkitArtifact {
                 instances_select.append($('<option>').attr('value', instance.id).text(instance.display_name));
             }
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

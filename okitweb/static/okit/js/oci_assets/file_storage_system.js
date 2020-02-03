@@ -194,7 +194,7 @@ class FileStorageSystem extends OkitArtifact {
         $("#properties").load("propertysheets/file_storage_system.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

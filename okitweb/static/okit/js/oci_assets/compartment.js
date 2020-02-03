@@ -214,7 +214,7 @@ class Compartment extends OkitContainerArtifact {
         let me = this;
         $("#properties").load("propertysheets/compartment.html", function () {
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

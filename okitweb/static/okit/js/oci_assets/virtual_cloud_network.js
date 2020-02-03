@@ -282,7 +282,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         let me = this;
         $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

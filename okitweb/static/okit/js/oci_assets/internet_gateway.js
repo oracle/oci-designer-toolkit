@@ -195,7 +195,7 @@ class InternetGateway extends OkitArtifact {
         $("#properties").load("propertysheets/internet_gateway.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

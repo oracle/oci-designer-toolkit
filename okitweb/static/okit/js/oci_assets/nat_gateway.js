@@ -195,7 +195,7 @@ class NATGateway extends OkitArtifact {
         $("#properties").load("propertysheets/nat_gateway.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

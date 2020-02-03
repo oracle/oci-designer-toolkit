@@ -58,8 +58,11 @@ function generateDefaultName(prefix, count) {
 }
 
 function displayOkitJson() {
-    $('#okitjson').html(JSON.stringify(okitJson, null, 2));
-    $('#okitjson').html(JSON.stringify(regionOkitJson, null, 2));
+    if (regionOkitJson.length > 0) {
+        $('#okitjson').html(JSON.stringify(regionOkitJson, null, 2));
+    } else {
+        $('#okitjson').html(JSON.stringify(okitJson, null, 2));
+    }
     //console.info(JSON.stringify(okitJson, null, 2));
 }
 
@@ -454,7 +457,7 @@ function openCompartment(compartment_id) {
 function loadSettings() {
     $("#settings").load("propertysheets/settings.html", function() {
         console.info('Loading Settings');
-        loadProperties(okitSettings);
+        loadPropertiesSheet(okitSettings);
         addPropertiesEventListeners(okitSettings, [], true);
         $('#is_always_free').attr('checked', okitSettings.is_always_free);
     });
@@ -487,7 +490,7 @@ $(document).ready(function(){
         palatteicon.addEventListener('dragstart', handleDragStart, false);
     });
     /*
-    ** Drag start for all pallet fragmentd
+    ** Drag start for all pallet fragments
      */
     let fragmenticons = document.querySelectorAll('#icon-palette .fragment-icon');
     [].forEach.call(fragmenticons, function (fragmenticon) {

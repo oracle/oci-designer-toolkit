@@ -220,7 +220,7 @@ class BlockStorageVolume extends OkitArtifact {
         $("#properties").load("propertysheets/block_storage_volume.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

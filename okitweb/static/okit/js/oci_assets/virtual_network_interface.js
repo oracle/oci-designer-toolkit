@@ -145,7 +145,7 @@ class VirtualNetworkInterface extends OkitArtifact {
         $("#properties").load("propertysheets/template_artifact.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });

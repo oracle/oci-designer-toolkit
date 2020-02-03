@@ -222,7 +222,7 @@ class LocalPeeringGateway extends OkitArtifact {
                 }
             }
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, [setPeeredGatewayPeerId]);
         });
