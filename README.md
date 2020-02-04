@@ -25,7 +25,7 @@ web interface, to provide a portable generic, json, file that can be used to vis
     3. [Web Interface](#web-interface)
     4. [Command Line](#command-line)
 3. [Examples](#examples)
-4. [Contributing](#contributing)
+4. [Issues](#issues)
 5. [Development](#development)
 6. [3rd Party Libraries](#3rd-party-libraries)
 
@@ -169,7 +169,7 @@ be achieved by running either of the following scripts, that can be found in the
 ```bash
 your-mac:docker youruser$ ./start-flask.sh
 
-DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+DOCKERIMAGE = development/okit.oci.web.designer
 /okit
 HOSTNAME=start-flask
 TERM=xterm
@@ -205,7 +205,7 @@ _=/usr/bin/env
 ```bash
 your-mac:docker youruser$ ./start-gunicorn.sh
 
-DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+DOCKERIMAGE = development/okit.oci.web.designer
 /okit/okitweb
 HOSTNAME=start-gunicorn
 TERM=xterm
@@ -327,7 +327,7 @@ a plan job.
 To use the Command Line you will first need to start the docker container using the following script:
 ```bash
 your-mac:docker youruser$ ./start-bash-shell.sh
-DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+DOCKERIMAGE = development/okit.oci.web.designer
 [root@start-bash-shell workspace]#
 ```
 Alternatively if you are running the Webb Application you can connect to the existing docker contain using either:
@@ -580,10 +580,9 @@ ansible-playbook main.yml --extra-vars "@/okit/config/connection.yml"
 
 
 
-## Contributing
-
-Bug reports, enhancement request and pull requests are welcome on the OraHub at [okit.oci.web.designer/issues](https://orahub.oraclecorp.com/andrew.hopkinson/okit.oci.web.designer/issues)
-
+## Issues
+Any issues found with the tool should be raised on the repositories issues page. Please check that this has not previously
+been reported. 
 
 
 
@@ -594,11 +593,6 @@ Bug reports, enhancement request and pull requests are welcome on the OraHub at 
 
 
 ## Development
-All currently active / planned development is documented / being tracked in the internal Jira ticket 
-[OKIT OCI Capture / DevOps / Visualisation Tool](http://ateam-engage.us.oracle.com/jira/browse/INT-2168). 
-Before starting any new development work the Jira should be checked to see if anyone else is working on the same area. 
-If this is new development then a new sub task should be created to document the artifact being added.
-
 The following worked example will take you through the required steps to add a new artifact to OKIT. This will be based 
 on adding Block Storage Volumes to OKIT. Adding an artifact to OKIT will require a number files to be created and a few 
 modified the following steps will document the procedure specifying where the files will need to be created and the names 
