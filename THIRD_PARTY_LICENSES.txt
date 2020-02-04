@@ -1,18 +1,16 @@
-# Third Party Licenses
-
-
+------------------------------------------------------------------------------------------------------------------------
 
 
 ## MIT Expat
 
-### jQuery (https://github.com/jquery/jquery/blob/master/LICENSE.txt)
+### jQuery 3.4.1 (https://github.com/jquery/jquery/blob/master/LICENSE.txt)
 Copyright JS Foundation and other contributors, https://js.foundation/
 
-### gunicorn (https://github.com/benoitc/gunicorn/blob/master/LICENSE)
+### gunicorn 20.0.4 (https://github.com/benoitc/gunicorn/blob/master/LICENSE)
 2009-2018 (c) Benoît Chesneau <benoitc@e-engura.org>
 2009-2015 (c) Paul J. Davis <paul.joseph.davis@gmail.com>
 
-### pyyaml (https://github.com/yaml/pyyaml/blob/master/LICENSE)
+### pyyaml 5.3 (https://github.com/yaml/pyyaml/blob/master/LICENSE)
 Copyright (c) 2017-2019 Ingy döt Net
 Copyright (c) 2006-2016 Kirill Simonov
 
@@ -41,7 +39,7 @@ SOFTWARE.
 
 ## BSD 3-Clause
 
-### d3 (https://github.com/d3/d3/blob/master/LICENSE)
+### d3 5.15.0 (https://github.com/d3/d3/blob/master/LICENSE)
 Copyright 2010-2017 Mike Bostock
 
 ### License Text
@@ -78,19 +76,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## BSD
 
-### Flask (https://palletsprojects.com/license/)
+### Flask 1.1.1 (https://palletsprojects.com/license/)
 Copyright (c) 2015 by Armin Ronacher and contributors.
 
-### jinja2 (https://palletsprojects.com/license/)
+### jinja2 2.10.3 (https://palletsprojects.com/license/)
 Copyright (c) 2015 by Armin Ronacher and contributors.
 
-### werkzeug (https://palletsprojects.com/license/)
+### werkzeug 0.16.0 (https://palletsprojects.com/license/)
 Copyright (c) 2015 by Armin Ronacher and contributors.
 
-### itsdangerous (https://palletsprojects.com/license/)
+### itsdangerous 1.1.0 (https://palletsprojects.com/license/)
 Copyright (c) 2015 by Armin Ronacher and contributors.
 
-### markupsafe (https://palletsprojects.com/license/)
+### markupsafe 1.1.1 (https://palletsprojects.com/license/)
 Copyright (c) 2015 by Armin Ronacher and contributors.
 
 ### License Text
@@ -125,7 +123,7 @@ SOFTWARE AND DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## UPL / Apache
 
-### oci (https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/license.html)
+### oci 2.6.0 (https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/license.html)
 Copyright (c) 2016, 2017, Oracle and/or its affiliates.  All rights reserved.
 
 ### License Text
