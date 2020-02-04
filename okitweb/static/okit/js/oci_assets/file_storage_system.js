@@ -13,8 +13,8 @@ const file_storage_system_query_cb = "file-storage-system-query-cb";
 /*
 ** Query OCI
  */
-
-function queryFileStorageSystemAjax(compartment_id, subnet_id) {
+// TODO: Delete
+function queryFileStorageSystemAjax1(compartment_id, subnet_id) {
     console.info('------------- queryFileStorageSystemAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -30,13 +30,13 @@ function queryFileStorageSystemAjax(compartment_id, subnet_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['file_storage_systems'] = response_json;
-            okitJson.load({file_storage_systems: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({file_storage_systems: response_json});
+            //okitJson.load({file_storage_systems: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryFileStorageSystemAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + file_storage_system_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -78,6 +78,7 @@ class FileStorageSystem extends OkitArtifact {
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
+            /*
             for (let parent of okitjson.subnets) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {
@@ -85,6 +86,15 @@ class FileStorageSystem extends OkitArtifact {
                     };
                     break;
                 }
+            }
+            */
+            this.getParent = function() {
+                for (let parent of okitjson.subnets) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
+                }
+                return null;
             }
         }
     }
@@ -184,7 +194,7 @@ class FileStorageSystem extends OkitArtifact {
         $("#properties").load("propertysheets/file_storage_system.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });
@@ -235,6 +245,40 @@ class FileStorageSystem extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [subnet_artifact];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- queryFileStorageSystemAjax --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        console.info('------------- Subnet      : ' + request.subnet_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/FileStorageSystem',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({file_storage_systems: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('queryFileStorageSystemAjax : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + file_storage_system_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : ' + status)
+                console.warn('Error : ' + error)
+                $('#' + file_storage_system_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 }
 

@@ -14,8 +14,8 @@ const autonomous_database_query_cb = "autonomous-database-query-cb";
 /*
 ** Query OCI
  */
-
-function queryAutonomousDatabaseAjax(compartment_id) {
+// TODO: Delete
+function queryAutonomousDatabaseAjax1(compartment_id) {
     console.info('------------- queryAutonomousDatabaseAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -31,13 +31,13 @@ function queryAutonomousDatabaseAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['autonomous_databases'] = response_json;
-            okitJson.load({autonomous_databases: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({autonomous_databases: response_json});
+            //okitJson.load({autonomous_databases: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryAutonomousDatabaseAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + autonomous_database_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -80,6 +80,7 @@ class AutonomousDatabase extends OkitArtifact {
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
+            /*
             for (let parent of okitjson.compartments) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {
@@ -87,6 +88,15 @@ class AutonomousDatabase extends OkitArtifact {
                     };
                     break;
                 }
+            }
+            */
+            this.getParent = function() {
+                for (let parent of okitjson.compartments) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
+                }
+                return null;
             }
         }
     }
@@ -154,7 +164,7 @@ class AutonomousDatabase extends OkitArtifact {
         //    d3.event.stopPropagation();
         //});
         // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + this.id + "']");
+        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
         let boundingClientRect = rect.node().getBoundingClientRect();
         // Add Connector Data
         svg.attr("data-compartment-id", this.compartment_id)
@@ -229,7 +239,7 @@ class AutonomousDatabase extends OkitArtifact {
         $("#properties").load("propertysheets/autonomous_database.html", function () {
             // Load Referenced Ids
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });
@@ -242,6 +252,39 @@ class AutonomousDatabase extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [compartment_artifact];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Autonomous Database Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/AutonomousDatabase',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({autonomous_databases: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('Autonomous Database Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + autonomous_database_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + autonomous_database_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 }
 

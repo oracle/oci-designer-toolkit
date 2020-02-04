@@ -13,43 +13,6 @@ const template_artifact_stroke_colour = "#F80000";
 const template_artifact_query_cb = "template-artifact-query-cb";
 
 /*
-** Query OCI
- */
-
-function queryOkitTemplateArtifactAjax(compartment_id) {
-    console.info('------------- queryOkitTemplateArtifactAjax --------------------');
-    let request_json = {};
-    request_json['compartment_id'] = compartment_id;
-    if ('template_artifact_filter' in okitQueryRequestJson) {
-        request_json['template_artifact_filter'] = okitQueryRequestJson['template_artifact_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/OkitTemplateArtifact',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            okitJson.load({template_artifacts: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryOkitTemplateArtifactAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas();
-            $('#' + template_artifact_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + template_artifact_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Okit Template Artifact Class
  */
 class OkitTemplateArtifact extends OkitArtifact {
@@ -71,13 +34,13 @@ class OkitTemplateArtifact extends OkitArtifact {
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            for (let parent of okitjson.parent_type_list) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {
-                        return parent
-                    };
-                    break;
+            this.getParent = function() {
+                for (let parent of okitjson.parent_type_list) {
+                    if (parent.id === this.parent_id) {
+                         return parent
+                    }
                 }
+                return null;
             }
         }
     }
@@ -191,6 +154,50 @@ class OkitTemplateArtifact extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- OkitTemplateArtifact --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        let me = this;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/OkitTemplateArtifact',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request_json),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({template_artifacts: response_json});
+                let len =  response_json.length;
+                if (len > 0) {
+                    for(let i=0;i<len;i++ ){
+                        console.info('OkitTemplateArtifact : ' + response_json[i]['display_name']);
+                        me.querySubComponents(request, region, response_json[i]['id']);
+                    }
+                } else {
+                    // Do this to clear check boxes
+                    me.querySubComponents(request, region, null);
+                }
+                redrawSVGCanvas(region);
+                $('#' + template_artifact_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + template_artifact_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
+    }
+
+    static querySubComponents(request = {}, region='', id='') {
+
     }
 }
 

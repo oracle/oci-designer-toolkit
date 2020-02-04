@@ -14,8 +14,8 @@ const local_peering_gateway_query_cb = "local-peering-gateway-query-cb";
 /*
 ** Query OCI
  */
-
-function queryLocalPeeringGatewayAjax(compartment_id, vcn_id) {
+// TODO: Delete
+function queryLocalPeeringGatewayAjax1(compartment_id, vcn_id) {
     console.info('------------- queryLocalPeeringGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -31,12 +31,13 @@ function queryLocalPeeringGatewayAjax(compartment_id, vcn_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            okitJson.load({local_peering_gateways: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({local_peering_gateways: response_json});
+            //okitJson.load({local_peering_gateways: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryLocalPeeringGatewayAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + local_peering_gateway_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -75,6 +76,7 @@ class LocalPeeringGateway extends OkitArtifact {
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
+            /*
             for (let parent of okitjson.virtual_cloud_networks) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {
@@ -82,6 +84,15 @@ class LocalPeeringGateway extends OkitArtifact {
                     };
                     break;
                 }
+            }
+            */
+            this.getParent = function() {
+                for (let parent of okitjson.virtual_cloud_networks) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
+                }
+                return null;
             }
         }
     }
@@ -135,18 +146,18 @@ class LocalPeeringGateway extends OkitArtifact {
             d3.event.stopPropagation();
         });
         // Add Highlighting
-        let fill = d3.select('#' + this.id).attr('fill');
+        let fill = d3.select(d3Id(this.id)).attr('fill');
         svg.on("mouseover", function () {
             if (me.peer_id !== '') {
-                d3.selectAll('#' + me.peer_id).attr('fill', svg_highlight_colour);
-                d3.select('#' + me.id).attr('fill', svg_highlight_colour);
+                d3.selectAll(d3Id(me.peer_id)).attr('fill', svg_highlight_colour);
+                d3.select(d3Id(me.id)).attr('fill', svg_highlight_colour);
             }
             d3.event.stopPropagation();
         });
         svg.on("mouseout", function () {
             if (me.peer_id !== '') {
-                d3.selectAll('#' + me.peer_id).attr('fill', fill);
-                d3.select('#' + me.id).attr('fill', fill);
+                d3.selectAll(d3Id(me.peer_id)).attr('fill', fill);
+                d3.select(d3Id(me.id)).attr('fill', fill);
             }
             d3.event.stopPropagation();
         });
@@ -211,9 +222,9 @@ class LocalPeeringGateway extends OkitArtifact {
                 }
             }
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
-            addPropertiesEventListeners(me, []);
+            addPropertiesEventListeners(me, [setPeeredGatewayPeerId]);
         });
     }
 
@@ -224,6 +235,46 @@ class LocalPeeringGateway extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Local Peering Gateway Query --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/LocalPeeringGateway',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({local_peering_gateways: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('Local Peering Gateway Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + local_peering_gateway_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + local_peering_gateway_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
+    }
+}
+
+function setPeeredGatewayPeerId(input_id, artifact) {
+    if (input_id === 'peer_id' && artifact.peer_id) {
+        okitJson.getLocalPeeringGateway(artifact.peer_id).peer_id = artifact.id;
     }
 }
 

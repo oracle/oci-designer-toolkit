@@ -76,7 +76,7 @@ RUN yum update -y ; \
         itsdangerous==1.1.0 \
         jinja2==2.10.3 \
         markupsafe==1.1.1 \
-        oci==2.8.0 \
+        oci==2.6.0 \
         pyyaml==5.2 \
         werkzeug==0.16.0 \
 # Install oci ansible module

@@ -14,8 +14,8 @@ const dynamic_routing_gateway_query_cb = "dynamic-routing-gateway-query-cb";
 /*
 ** Query OCI
  */
-
-function queryDynamicRoutingGatewayAjax(compartment_id) {
+// TODO: Delete
+function queryDynamicRoutingGatewayAjax1(compartment_id) {
     console.info('------------- queryDynamicRoutingGatewayAjax --------------------');
     let request_json = JSON.clone(okitQueryRequestJson);
     request_json['compartment_id'] = compartment_id;
@@ -30,13 +30,13 @@ function queryDynamicRoutingGatewayAjax(compartment_id) {
         data: JSON.stringify(request_json),
         success: function(resp) {
             let response_json = JSON.parse(resp);
-            //okitJson['dynamic_routing_gateways'] = response_json;
-            okitJson.load({dynamic_routing_gateways: response_json});
+            regionOkitJson[okitQueryRequestJson.region].load({dynamic_routing_gateways: response_json});
+            //okitJson.load({dynamic_routing_gateways: response_json});
             let len =  response_json.length;
             for(let i=0;i<len;i++ ){
                 console.info('queryDynamicRoutingGatewayAjax : ' + response_json[i]['display_name']);
             }
-            redrawSVGCanvas();
+            redrawSVGCanvas(okitQueryRequestJson.region);
             $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
             hideQueryProgressIfComplete();
         },
@@ -76,6 +76,7 @@ class DynamicRoutingGateway extends OkitArtifact {
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
+            /*
             for (let parent of okitjson.virtual_cloud_networks) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {
@@ -83,6 +84,15 @@ class DynamicRoutingGateway extends OkitArtifact {
                     };
                     break;
                 }
+            }
+            */
+            this.getParent = function() {
+                for (let parent of okitjson.virtual_cloud_networks) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
+                }
+                return null;
             }
         }
     }
@@ -145,7 +155,7 @@ class DynamicRoutingGateway extends OkitArtifact {
             d3.event.stopPropagation();
         });
         // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + this.id + "']");
+        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
         let boundingClientRect = rect.node().getBoundingClientRect();
         // Add Connector Data
         svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
@@ -169,21 +179,21 @@ class DynamicRoutingGateway extends OkitArtifact {
 
     drawConnectors() {
         console.groupCollapsed('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        //let parent_svg = d3.select('#' + this.parent_id + "-svg");
-        //let parent_rect = d3.select('#' + this.parent_id);
+        //let parent_svg = d3.select(d3Id(this.parent_id + "-svg"));
+        //let parent_rect = d3.select(d3Id(this.parent_id));
         // Get Grand Parent
-        let grandparent_id = d3.select('#' + this.parent_id).attr('data-parent-id');
+        let grandparent_id = d3.select(d3Id(this.parent_id)).attr('data-parent-id');
         // Define Connector Parent
-        let parent_svg = d3.select('#' + grandparent_id + "-svg");
-        let parent_rect = d3.select('#' + grandparent_id);
+        let parent_svg = d3.select(d3Id(grandparent_id + "-svg"));
+        let parent_rect = d3.select(d3Id(grandparent_id));
         // Only Draw if parent exists
         if (parent_svg.node()) {
             console.info('Parent SVG     : ' + parent_svg.attr('id'));
             // Define SVG position manipulation variables
             let svgPoint = parent_svg.node().createSVGPoint();
             let screenCTM = parent_rect.node().getScreenCTM();
-            svgPoint.x = d3.select('#' + this.id).attr('data-connector-start-x');
-            svgPoint.y = d3.select('#' + this.id).attr('data-connector-start-y');
+            svgPoint.x = d3.select(d3Id(this.id)).attr('data-connector-start-x');
+            svgPoint.y = d3.select(d3Id(this.id)).attr('data-connector-start-y');
             let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
             console.info('Start svgPoint.x : ' + svgPoint.x);
             console.info('Start svgPoint.y : ' + svgPoint.y);
@@ -194,7 +204,7 @@ class DynamicRoutingGateway extends OkitArtifact {
 
             if (this.fast_connect_ids.length > 0) {
                 for (let i = 0; i < this.fast_connect_ids.length; i++) {
-                    let fast_connect_svg = d3.select('#' + this.fast_connect_ids[i]);
+                    let fast_connect_svg = d3.select(d3Id(this.fast_connect_ids[i]));
                     if (fast_connect_svg.node()) {
                         svgPoint.x = fast_connect_svg.attr('data-connector-start-x');
                         svgPoint.y = fast_connect_svg.attr('data-connector-start-y');
@@ -262,7 +272,7 @@ class DynamicRoutingGateway extends OkitArtifact {
                 }
             }
             // Load Properties
-            loadProperties(me);
+            loadPropertiesSheet(me);
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
         });
@@ -275,6 +285,39 @@ class DynamicRoutingGateway extends OkitArtifact {
     getTargets() {
         // Return list of Artifact names
         return [];
+    }
+
+    /*
+    ** Static Query Functionality
+     */
+
+    static query(request = {}, region='') {
+        console.info('------------- Dynamic Routing Gateway Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/DynamicRoutingGateway',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({dynamic_routing_gateways: response_json});
+                let len =  response_json.length;
+                for(let i=0;i<len;i++ ){
+                    console.info('Dynamic Routing Gateway Query : ' + response_json[i]['display_name']);
+                }
+                redrawSVGCanvas(region);
+                $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
     }
 }
 

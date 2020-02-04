@@ -209,10 +209,10 @@ function handleConnectorDragStart() {
         if (asset_connect_targets.hasOwnProperty(source_type) && asset_connect_targets[source_type].length > 0) {
             // Set Start Element to know we are dragging
             connectorStartElement = this;
-            let parentid = d3.select(this).attr('data-parent-id');
-            let parent_svg = document.getElementById(parentid + "-svg");
+            let parent_id = d3.select(this).attr('data-parent-id');
+            let parent_svg = document.getElementById(parent_id + "-svg");
 
-            console.info('Connector Drag Start Parent Id : ' + parentid);
+            console.info('Connector Drag Start Parent Id : ' + parent_id);
             console.info('Connector Drag Start Id : ' + d3.select(this).attr('id'));
             console.info('Connector Drag Start data-connector-start-y : ' + d3.select(this).attr('data-connector-start-y'));
             console.info('Connector Drag Start data-connector-start-x : ' + d3.select(this).attr('data-connector-start-x'));
@@ -229,7 +229,7 @@ function handleConnectorDragStart() {
             connectorStartYTop = svgrelative.y;
 
             // Start Drawing line
-            svg = d3.select('#' + parentid + "-svg");
+            svg = d3.select(d3Id(parent_id + "-svg"));
             svg.append('line')
                 .attr("id", "Connector")
                 .attr("x1", connectorStartXLeft)

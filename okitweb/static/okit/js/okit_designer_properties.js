@@ -25,32 +25,32 @@ function handlePropertiesMouseUp(e) {
     }
 }
 
-function loadProperties(json_element) {
+function loadPropertiesSheet(json_element) {
     console.groupCollapsed('Loading Properties');
     $.each(json_element, function(key, val) {
         //console.info('Key : ' + key + ' = ' + val);
-        if ($('#' + key).is("input:text")) {
+        if ($(jqId(key)).is("input:text")) {
             console.info(key + ' is input:text.');
-            $('#' + key).val(val);
-        } else if ($('#' + key).is("input:checkbox")) {
+            $(jqId(key)).val(val);
+        } else if ($(jqId(key)).is("input:checkbox")) {
             console.info(key + ' is input:checkbox.');
-            $('#' + key).attr('checked', val);
-        } else if ($('#' + key).is("select")) {
+            $(jqId(key)).attr('checked', val);
+        } else if ($(jqId(key)).is("select")) {
             console.info(key + ' is select with value ' + val);
-            $('#' + key).val(val);
-        } else if ($('#' + key).is("label")) {
+            $(jqId(key)).val(val);
+        } else if ($(jqId(key)).is("label")) {
             console.info(key + ' is label.');
             if (key.endsWith('_id')) {
                 // Get Artifact Associated With Id
                 let artifact_type = key.substr(0, (key.length - 3));
                 console.info('Label : Artifact Type ' + titleCase(artifact_type) + ' - ' + key);
-                $('#' + key).html(okitJson['get' + titleCase(artifact_type)](val).display_name);
+                $(jqId(key)).html(okitJson['get' + titleCase(artifact_type)](val).display_name);
             } else {
-                $('#' + key).html(val);
+                $(jqId(key)).html(val);
             }
-        } else if ($('#' + key).is("textarea")) {
+        } else if ($(jqId(key)).is("textarea")) {
             console.info(key + ' is textarea.');
-            $('#' + key).val(val);
+            $(jqId(key)).val(val);
         } else {
             console.warn(key + ' type unknown')
         }
@@ -68,25 +68,24 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
         function(index) {
             let inputfield = $(this);
             inputfield.on('input', function () {
+                console.warn('>>>>>>>> Change Event for ' + this.id + ' [' + this.type + '] ' + this.value + '(' + json_element.id + ')');
+                console.warn(json_element);
                 if (this.type === 'text') {
                     json_element[this.id] = this.value;
                     // If this is the name field copy to the Ids Map
                     if (this.id === 'display_name' || this.id === 'name') {
-                        json_element['display_name'] = this.value;
-                        json_element['name'] = this.value;
-                        d3.select('#' + json_element['id'] + '-title')
-                            .text(this.value);
-                        let text = d3.select('#' + json_element['id'] + '-display-name');
-                        if (text && text != null) {
-                            text.text(this.value);
+                        //json_element['display_name'] = this.value;
+                        //json_element['name'] = this.value;
+                        if (this.id === 'display_name') {
+                            json_element['name'] = json_element['display_name'];
+                        } else if (this.id === 'name') {
+                            json_element['display_name'] = json_element['name'];
                         }
-                    } else if (this.id === 'name') {
-                        // Compartment Processing
-                        d3.select('#' + json_element['id'] + '-title')
-                            .text(this.value);
-                        let text = d3.select('#' + json_element['id'] + '-tab');
-                        if (text && text != null) {
-                            text.text(this.value);
+                        d3.select(d3Id(json_element['id'] + '-title'))
+                            .text(json_element['display_name']);
+                        let display_name = d3.select(d3Id(json_element['id'] + '-display-name'));
+                        if (display_name && display_name != null) {
+                            display_name.text(json_element['display_name']);
                         }
                     }
                 } else if (this.type === 'checkbox') {
@@ -94,6 +93,7 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                 } else {
                     console.info('Unknown input type ' + $(this).attr('type'));
                 }
+                console.warn(json_element);
             });
             inputfield.on('blur', function() {
                 if (settings) {
@@ -111,8 +111,8 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                 json_element[this.id] = $(this).val();
                 // Redraw Connectors
                 for (let f of callbacks) {
-                    console.log(' Calling ' + f);
-                    f(json_element);
+                    //console.log(' Calling ' + f);
+                    f(this.id, json_element);
                 }
                 drawSVGforJson();
             });

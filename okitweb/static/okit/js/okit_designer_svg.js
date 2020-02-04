@@ -32,6 +32,7 @@ const stroke_colours = {
     purple: "#400080",
     icon_colour_01: "#F80000",
     icon_colour_02: "#939699",
+    icon_colour_03: "#ff6600",
 };
 const svg_highlight_colour = "#00cc00";
 
@@ -164,7 +165,7 @@ function drawArtifact(definition) {
         definition['artifact']['display_name'] = definition['artifact']['name'];
     }
     // Get Parent SVG
-    let parent_svg = d3.select('#' + parent_svg_id);
+    let parent_svg = d3.select(d3Id(parent_svg_id));
     // Wrapper SVG Element to define ViewBox etc
     let svg = parent_svg.append("svg")
         .attr("id", id + '-svg')
@@ -283,6 +284,7 @@ function drawArtifact(definition) {
 
 function drawSVGforJson() {
     console.groupCollapsed('Drawing SVG Canvas');
+    console.info(okitJson);
     okitJson.draw();
     console.groupEnd();
 
@@ -505,20 +507,49 @@ function addGrid(canvas_svg) {
 const default_canvas_width = Math.round($(window).width() / 10) * 10;
 const default_canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
 
-function newCanvas(parent_id="canvas-wrapper", width=default_canvas_width, height=default_canvas_height) {
-    console.groupCollapsed('New Canvas');
-    let compartment_div = d3.select('#' + parent_id);
+function newCanvasWrapper(width=default_canvas_width, height=default_canvas_height) {
+    console.groupCollapsed('New Canvas Wrapper');
+    let parent_id = 'canvas-wrapper';
+    let canvas_wrapper_div = d3.select(d3Id(parent_id));
     //let canvas_width = Math.round($(window).width() / 10) * 10;
     //let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
-    let parent_width  = $('#' + parent_id).width();
-    let parent_height = $('#' + parent_id).height();
+    let parent_width  = $(jqId(parent_id)).width();
+    let parent_height = $(jqId(parent_id)).height();
+    // Empty existing Canvas
+    canvas_wrapper_div.selectAll('*').remove();
     width  = Math.round(Math.max(width, parent_width));
     height = Math.round(Math.max(height, parent_height));
     // Round up to next grid size to display full grid.
     width  += (grid_size - (width % grid_size) + 1);
     height += (grid_size - (height % grid_size) + 1);
-    console.info('JQuery Width  : ' + $('#' + parent_id).width());
-    console.info('JQuery Height : ' + $('#' + parent_id).height());
+    console.info('JQuery Width  : ' + $(jqId(parent_id)).width());
+    console.info('JQuery Height : ' + $(jqId(parent_id)).height());
+    console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
+    console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
+    console.info('Window Width  : ' + $(window).width());
+    console.info('Window Height : ' + $(window).height());
+    console.info('Canvas Width  : ' + width);
+    console.info('Canvas Height : ' + height);
+    console.groupEnd();
+
+    return canvas_wrapper_div;
+}
+
+
+function newCanvas(parent_id="canvas-div", width=default_canvas_width, height=default_canvas_height) {
+    console.groupCollapsed('New Canvas');
+    let canvas_div = d3.select(d3Id(parent_id));
+    //let canvas_width = Math.round($(window).width() / 10) * 10;
+    //let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
+    let parent_width  = $(jqId(parent_id)).width();
+    let parent_height = $(jqId(parent_id)).height();
+    width  = Math.round(Math.max(width, parent_width));
+    height = Math.round(Math.max(height, parent_height));
+    // Round up to next grid size to display full grid.
+    width  += (grid_size - (width % grid_size) + 1);
+    height += (grid_size - (height % grid_size) + 1);
+    console.info('JQuery Width  : ' + $(jqId(parent_id)).width());
+    console.info('JQuery Height : ' + $(jqId(parent_id)).height());
     console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
     console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
     console.info('Window Width  : ' + $(window).width());
@@ -526,9 +557,9 @@ function newCanvas(parent_id="canvas-wrapper", width=default_canvas_width, heigh
     console.info('Canvas Width  : ' + width);
     console.info('Canvas Height : ' + height);
     // Empty existing Canvas
-    compartment_div.selectAll('*').remove();
+    canvas_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc
-    let canvas_svg = compartment_div.append("svg")
+    let canvas_svg = canvas_div.append("svg")
         //.attr("class", "svg-canvas")
         .attr("id", 'canvas-svg')
         .attr("x", 0)
