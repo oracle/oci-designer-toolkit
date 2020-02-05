@@ -157,8 +157,19 @@ class OkitTemplateArtifact extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'ota';
+    }
+
+    static getArtifactReference() {
+        return 'OkitTemplateArtifact';
+    }
+
+    static getDropTargets() {
+        return [Parent.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- OkitTemplateArtifact --------------------');

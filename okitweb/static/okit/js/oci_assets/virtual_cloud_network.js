@@ -321,8 +321,19 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'vcn';
+    }
+
+    static getArtifactReference() {
+        return 'Virtual Cloud Network';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Virtual Cloud Network Query --------------------');

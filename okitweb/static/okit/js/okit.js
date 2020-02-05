@@ -37,7 +37,7 @@ class OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        alert('Clone function "clone()" has not been implemented.')
+        alert('Clone function "clone()" has not been implemented.');
         return;
     }
 
@@ -46,7 +46,7 @@ class OkitArtifact {
     ** Get the Artifact name this Artifact will be know by.
      */
     getArtifactReference() {
-        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.')
+        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
         return;
     }
 
@@ -105,13 +105,13 @@ class OkitArtifact {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.')
+        alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.');
         return;
     }
 
     // Return Artifact Dimensions
     getDimensions() {
-        alert('Get Dimension function "getDimensions()" has not been implemented.')
+        alert('Get Dimension function "getDimensions()" has not been implemented.');
         return;
     }
 
@@ -582,6 +582,29 @@ class OkitArtifact {
         // Return list of Artifact names
         return [];
     }
+
+
+    /*
+    ** Static Functionality
+     */
+    static getNamePrefix() {
+        return 'okit-';
+    }
+
+    static getArtifactReference() {
+        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
+        return;
+    }
+
+    static getDropTargets() {
+        console.warn('Get Drop Tagets not implements');
+        return [];
+    }
+
+    static query(request={}, region='') {
+        console.error('Query not implemented');
+    }
+
 }
 
 class OkitContainerArtifact extends OkitArtifact {

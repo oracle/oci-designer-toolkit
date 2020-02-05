@@ -186,8 +186,19 @@ class BlockStorageVolume extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'bsv';
+    }
+
+    static getArtifactReference() {
+        return 'Block Storage Volume';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Block Storage Volume Query --------------------');

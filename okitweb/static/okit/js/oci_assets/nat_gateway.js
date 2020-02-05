@@ -167,8 +167,19 @@ class NATGateway extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'ng';
+    }
+
+    static getArtifactReference() {
+        return 'NAT Gateway';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- NAT Gateway Query --------------------');

@@ -174,8 +174,19 @@ class FastConnect extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'fc';
+    }
+
+    static getArtifactReference() {
+        return 'Fast Connect';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Fast Connect Query --------------------');

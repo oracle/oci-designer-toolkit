@@ -205,8 +205,19 @@ class AutonomousDatabase extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'ad';
+    }
+
+    static getArtifactReference() {
+        return 'Autonomous Database';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Autonomous Database Query --------------------');

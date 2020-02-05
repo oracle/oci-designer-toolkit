@@ -167,8 +167,19 @@ class InternetGateway extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'ig';
+    }
+
+    static getArtifactReference() {
+        return 'Internet Gateway';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Internet Gateway Query --------------------');

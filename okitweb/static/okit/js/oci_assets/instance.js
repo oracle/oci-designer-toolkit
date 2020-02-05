@@ -328,8 +328,19 @@ class Instance extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'in';
+    }
+
+    static getArtifactReference() {
+        return 'Instance';
+    }
+
+    static getDropTargets() {
+        return [Subnet.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Instance Query --------------------');

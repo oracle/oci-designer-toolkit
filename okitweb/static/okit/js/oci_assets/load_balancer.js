@@ -235,8 +235,19 @@ class LoadBalancer extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'lb';
+    }
+
+    static getArtifactReference() {
+        return 'Load Balancer';
+    }
+
+    static getDropTargets() {
+        return [Subnet.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Load Balancer Query --------------------');

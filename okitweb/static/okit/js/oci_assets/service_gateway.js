@@ -262,8 +262,19 @@ class ServiceGateway extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'sg';
+    }
+
+    static getArtifactReference() {
+        return 'Service Gateway';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Service Gateway Query --------------------');

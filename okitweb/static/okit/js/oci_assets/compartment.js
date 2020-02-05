@@ -218,8 +218,19 @@ class Compartment extends OkitContainerArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'comp';
+    }
+
+    static getArtifactReference() {
+        return 'Compartment';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Compartment Query --------------------');

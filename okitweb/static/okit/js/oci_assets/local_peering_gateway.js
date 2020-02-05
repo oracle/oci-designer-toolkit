@@ -188,8 +188,19 @@ class LocalPeeringGateway extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'lpg';
+    }
+
+    static getArtifactReference() {
+        return 'Local Peering Gateway';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Local Peering Gateway Query --------------------');

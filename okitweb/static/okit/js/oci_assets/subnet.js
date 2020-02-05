@@ -280,8 +280,19 @@ class Subnet extends OkitContainerArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'sn';
+    }
+
+    static getArtifactReference() {
+        return 'Subnet';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Subnet Query --------------------');

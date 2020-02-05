@@ -291,8 +291,19 @@ class RouteTable extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'rt';
+    }
+
+    static getArtifactReference() {
+        return 'Route Table';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Route Table Query --------------------');

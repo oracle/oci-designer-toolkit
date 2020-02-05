@@ -224,8 +224,19 @@ class ObjectStorageBucket extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'osb';
+    }
+
+    static getArtifactReference() {
+        return 'Object Storage Bucket';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Object Storage Bucket Query --------------------');

@@ -199,8 +199,19 @@ class FileStorageSystem extends OkitArtifact {
     }
 
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getNamePrefix() {
+        return super.getNamePrefix() + 'fss';
+    }
+
+    static getArtifactReference() {
+        return 'File Storage System';
+    }
+
+    static getDropTargets() {
+        return [Subnet.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- queryFileStorageSystemAjax --------------------');
