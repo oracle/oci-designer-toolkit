@@ -368,6 +368,9 @@ function showQueryResults() {
     newCanvas();
     console.info('Regions Ids : ' + okitQueryRequestJson.regions);
     regionOkitJson = {};
+    if (okitQueryRequestJson.regions.length === 1) {
+        $('#query-progress').removeClass('hidden');
+    }
     if (okitQueryRequestJson.regions.length > 0) {
         for (let region of okitQueryRequestJson.regions) {
             console.info('Processing Multiple Selected Region : ' + region);
@@ -378,7 +381,7 @@ function showQueryResults() {
             //regionOkitJson[region] = okitJson;
             regionOkitJson[region] = new OkitJson();
             setBusyIcon();
-            $('#query-progress').removeClass('hidden');
+            //$('#query-progress').removeClass('hidden');
             //queryCompartmentAjax(region);
             let request = JSON.clone(okitQueryRequestJson);
             request.region = region;
