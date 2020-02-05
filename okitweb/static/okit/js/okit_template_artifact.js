@@ -24,7 +24,8 @@ class OkitTemplateArtifact extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + template_artifact_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(template_artifact_prefix, okitjson.template_artifacts.length + 1);
+        //this.display_name = generateDefaultName(template_artifact_prefix, okitjson.template_artifacts.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.template_artifacts.length + 1);
         this.compartment_id = '';
         // Update with any passed data
         for (let key in data) {
@@ -156,13 +157,13 @@ class OkitTemplateArtifact extends OkitArtifact {
         return [];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'ota';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'OkitTemplateArtifact';
     }
