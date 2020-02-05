@@ -1,6 +1,7 @@
 ---
 # file: variables.yml
-# copyright: Copyright (c) 2013, 2014-2017  Oracle and/or its affiliates. All rights reserved.
+# Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 tenancy_ocid: "{{ tenancy_ocid }}"
 user_ocid: "{{ user_ocid }}"
 fingerprint: "{{ fingerprint }}"

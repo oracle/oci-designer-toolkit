@@ -25,7 +25,7 @@ web interface, to provide a portable generic, json, file that can be used to vis
     3. [Web Interface](#web-interface)
     4. [Command Line](#command-line)
 3. [Examples](#examples)
-4. [Contributing](#contributing)
+4. [Issues](#issues)
 5. [Development](#development)
 6. [3rd Party Libraries](#3rd-party-libraries)
 
@@ -44,52 +44,67 @@ docker container that can be built using the Dockerfile within this repository. 
 python modules are installed and in addition provide a simple flask server that will present the web based application on
 [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer).
 
-Therefore these installation instructions will describe the docker based implementation.
+### Docker (Recommended)
+These installation instructions will describe the docker based implementation.
 
-##### 1. Clone Repository
-**Note**: To clone the OraHub Repository you will need to be on the Corporate Network.
+#### Clone Repository
 ```bash
-anhopki-mac:tmp anhopki$ git clone git@orahub.oraclecorp.com:andrew.hopkinson/okit.oci.web.designer.git
-
-Cloning into 'okit.oci.web.designer'...
-===============================================================================
-            Oracle USA Inc. - Unauthorized Access Strictly Prohibited
--------------------------------------------------------------------------------
-   WARNING: This is a restricted access server. If you do not have explicit
-            permission to access this server, please disconnect immediately.
-            Unauthorized access to this system is considered gross misconduct
-            and may result in disciplinary action, including revocation of
-            access privileges, immediate termination of employment.
-===============================================================================
-remote: Enumerating objects: 448, done.
-remote: Counting objects: 100% (448/448), done.
-remote: Compressing objects: 100% (208/208), done.
-remote: Total 1455 (delta 287), reused 376 (delta 229)00 KiB/s
-Receiving objects: 100% (1455/1455), 604.46 KiB | 798.00 KiB/s, done.
-Resolving deltas: 100% (859/859), done.
+your-mac:tmp youruser$ git clone <Git Repo URL>
 ```
-##### 2. Change Directory into docker directory
+#### Change Directory into docker directory
 ```bash
-anhopki-mac:tmp anhopki$ cd okit.oci.web.designer/docker/
-anhopki-mac:docker anhopki$ lh
+your-mac:tmp youruser$ cd okit.oci.web.designer/docker/
+your-mac:docker youruser$ lh
 
 total 56
-0 drwxr-xr-x  10 anhopki  staff   320B 15 Aug 10:08 .
-0 drwxr-xr-x   9 anhopki  staff   288B 15 Aug 10:08 ..
-8 -rwxr-xr-x   1 anhopki  staff   932B 15 Aug 10:08 build-docker-image.sh
-8 -rwxr-xr-x   1 anhopki  staff   238B 15 Aug 10:08 connect-flask-bash-shell.sh
-8 -rwxr-xr-x   1 anhopki  staff   241B 15 Aug 10:08 connect-gunicorn-bash-shell.sh
-0 drwxr-xr-x   3 anhopki  staff    96B 15 Aug 10:08 docker
-8 -rwxr-xr-x   1 anhopki  staff   1.6K 15 Aug 10:08 docker-env.sh
-8 -rwxr-xr-x   1 anhopki  staff   512B 15 Aug 10:08 start-bash-shell.sh
-8 -rwxr-xr-x   1 anhopki  staff   621B 15 Aug 10:08 start-flask.sh
-8 -rwxr-xr-x   1 anhopki  staff   654B 15 Aug 10:08 start-gunicorn.sh
+0 drwxr-xr-x  10 youruser  staff   320B 15 Aug 10:08 .
+0 drwxr-xr-x   9 youruser  staff   288B 15 Aug 10:08 ..
+8 -rwxr-xr-x   1 youruser  staff   932B 15 Aug 10:08 build-docker-image.sh
+8 -rwxr-xr-x   1 youruser  staff   238B 15 Aug 10:08 connect-flask-bash-shell.sh
+8 -rwxr-xr-x   1 youruser  staff   241B 15 Aug 10:08 connect-gunicorn-bash-shell.sh
+0 drwxr-xr-x   3 youruser  staff    96B 15 Aug 10:08 docker
+8 -rwxr-xr-x   1 youruser  staff   1.6K 15 Aug 10:08 docker-env.sh
+8 -rwxr-xr-x   1 youruser  staff   512B 15 Aug 10:08 start-bash-shell.sh
+8 -rwxr-xr-x   1 youruser  staff   621B 15 Aug 10:08 start-flask.sh
+8 -rwxr-xr-x   1 youruser  staff   654B 15 Aug 10:08 start-gunicorn.sh
 ```
-##### 3. Execute Build Script
-**Note**: For this to work correctly you will need to be **off** the Corporate Network.
+#### Execute Build Script
 ```bash
-anhopki-mac:docker anhopki$ ./build-docker-image.sh
+your-mac:docker youruser$ ./build-docker-image.sh
 ```
+
+### Vagrant
+
+#### Prerequisites
+
+1. Install [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+2. Install [Vagrant](https://vagrantup.com/)
+3. If you have VirtualBox 6.1 installed you need to apply a small fix to get Vagrant to work, https://blogs.oracle.com/scoter/getting-vagrant-226-working-with-virtualbox-61-ga
+
+#### Clone Repository
+```bash
+your-mac:tmp youruser$ git clone <Git Repo URL>
+```
+#### Copy the .oci folder 
+From your home directory to the okit.oci.web.designer/vagrant folder. 
+
+The vagrant should now have these folders & files: 
+- Vagrantfile
+- run-as-root.sh
+- run-as-vagrant.sh
+- README.md
+- The .oci folder
+#### Execute Build Script
+```bash
+your-mac:docker youruser$ vagrant up; vagrant ssh
+```
+NOTE: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
+is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
+    
+After the Vagrant VM is built the vagrant users home folder should have folders from the cloned okit.oci.web.designer 
+repository exposed in the Vagrant vm in the vagrant users home directory (/okitweb, /visualiser & /output). The OKIT app 
+should also be running. To access the app the ports have been forwarded to the host and you should be able to access 
+OKIT on http://localhost:8080/okit/designer from the host.
 
 
 
@@ -152,9 +167,9 @@ To use the Web Application you will first need to start the docker container and
 be achieved by running either of the following scripts, that can be found in the docker sub-directory.
 
 ```bash
-anhopki-mac:docker anhopki$ ./start-flask.sh
+your-mac:docker youruser$ ./start-flask.sh
 
-DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+DOCKERIMAGE = development/okit.oci.web.designer
 /okit
 HOSTNAME=start-flask
 TERM=xterm
@@ -188,9 +203,9 @@ _=/usr/bin/env
 ```
 
 ```bash
-anhopki-mac:docker anhopki$ ./start-gunicorn.sh
+your-mac:docker youruser$ ./start-gunicorn.sh
 
-DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+DOCKERIMAGE = development/okit.oci.web.designer
 /okit/okitweb
 HOSTNAME=start-gunicorn
 TERM=xterm
@@ -311,8 +326,8 @@ a plan job.
 ### Command Line
 To use the Command Line you will first need to start the docker container using the following script:
 ```bash
-anhopki-mac:docker anhopki$ ./start-bash-shell.sh
-DOCKERIMAGE = development/orahub/andrew.hopkinson/okit.oci.web.designer
+your-mac:docker youruser$ ./start-bash-shell.sh
+DOCKERIMAGE = development/okit.oci.web.designer
 [root@start-bash-shell workspace]#
 ```
 Alternatively if you are running the Webb Application you can connect to the existing docker contain using either:
@@ -565,10 +580,9 @@ ansible-playbook main.yml --extra-vars "@/okit/config/connection.yml"
 
 
 
-## Contributing
-
-Bug reports, enhancement request and pull requests are welcome on the OraHub at [okit.oci.web.designer/issues](https://orahub.oraclecorp.com/andrew.hopkinson/okit.oci.web.designer/issues)
-
+## Issues
+Any issues found with the tool should be raised on the repositories issues page. Please check that this has not previously
+been reported. 
 
 
 
@@ -579,11 +593,6 @@ Bug reports, enhancement request and pull requests are welcome on the OraHub at 
 
 
 ## Development
-All currently active / planned development is documented / being tracked in the internal Jira ticket 
-[OKIT OCI Capture / DevOps / Visualisation Tool](http://ateam-engage.us.oracle.com/jira/browse/INT-2168). 
-Before starting any new development work the Jira should be checked to see if anyone else is working on the same area. 
-If this is new development then a new sub task should be created to document the artifact being added.
-
 The following worked example will take you through the required steps to add a new artifact to OKIT. This will be based 
 on adding Block Storage Volumes to OKIT. Adding an artifact to OKIT will require a number files to be created and a few 
 modified the following steps will document the procedure specifying where the files will need to be created and the names 

@@ -1,7 +1,7 @@
 #!flask/bin/python
 
-# Copyright (c) 2019  Oracle and/or its affiliates. All rights reserved.
-# The Universal Permissive License (UPL), Version 1.0 [https://oss.oracle.com/licenses/upl/]
+# Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 from flask import Flask
 from flask_cors import CORS
