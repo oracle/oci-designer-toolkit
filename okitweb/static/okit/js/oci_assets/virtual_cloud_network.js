@@ -19,7 +19,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
@@ -34,22 +34,17 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.compartment_id;
-        /*
-        for (let parent of okitjson.compartments) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
-            }
-        }
-        */
-        this.getParent = function() {
-            for (let parent of okitjson.compartments) {
-                if (parent.id === this.parent_id) {
-                    return parent
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            this.getParent = function () {
+                for (let parent of okitjson.compartments) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
                 }
+                return null;
             }
-            return null;
         }
         console.groupCollapsed('Check if default Security List & Route Table Should be created.');
         if (okitSettings.is_default_route_table) {

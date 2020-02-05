@@ -817,6 +817,7 @@ class OkitJson {
         // Autonomous Databases
         if (okit_json.hasOwnProperty('autonomous_databases')) {
             for (let artifact of okit_json['autonomous_databases']) {
+                artifact.parent_id = artifact.compartment_id;
                 let obj = this.newAutonomousDatabase(artifact);
                 console.info(obj);
             }
@@ -824,6 +825,7 @@ class OkitJson {
         // Block Storage Volumes
         if (okit_json.hasOwnProperty('block_storage_volumes')) {
             for (let artifact of okit_json['block_storage_volumes']) {
+                artifact.parent_id = artifact.compartment_id;
                 let obj = this.newBlockStorageVolume(artifact);
                 console.info(obj);
             }
@@ -831,6 +833,7 @@ class OkitJson {
         // Object Storage Buckets
         if (okit_json.hasOwnProperty('object_storage_buckets')) {
             for (let artifact of okit_json['object_storage_buckets']) {
+                artifact.parent_id = artifact.compartment_id;
                 let obj = this.newObjectStorageBucket(artifact);
                 console.info(obj);
             }
@@ -852,6 +855,7 @@ class OkitJson {
         // Web Application Firewall
         if (okit_json.hasOwnProperty('web_application_firewalls')) {
             for (let artifact of okit_json['web_application_firewalls']) {
+                artifact.parent_id = artifact.compartment_id;
                 let obj = this.newWebApplicationFirewall(artifact);
                 console.info(obj);
             }
@@ -861,6 +865,7 @@ class OkitJson {
         // Dynamic Routing Gateways
         if (okit_json.hasOwnProperty('dynamic_routing_gateways')) {
             for (let artifact of okit_json['dynamic_routing_gateways']) {
+                artifact.parent_id = artifact.vcn_id;
                 let obj = this.newDynamicRoutingGateway(artifact);
                 console.info(obj);
             }
@@ -868,6 +873,7 @@ class OkitJson {
         // Internet Gateways
         if (okit_json.hasOwnProperty('internet_gateways')) {
             for (let artifact of okit_json['internet_gateways']) {
+                artifact.parent_id = artifact.vcn_id;
                 let obj = this.newInternetGateway(artifact);
                 console.info(obj);
             }
@@ -875,6 +881,7 @@ class OkitJson {
         // NAT Gateway
         if (okit_json.hasOwnProperty('nat_gateways')) {
             for (let artifact of okit_json['nat_gateways']) {
+                artifact.parent_id = artifact.vcn_id;
                 let obj = this.newNATGateway(artifact);
                 console.info(obj);
             }
@@ -882,6 +889,7 @@ class OkitJson {
         // Route Tables
         if (okit_json.hasOwnProperty('route_tables')) {
             for (let artifact of okit_json['route_tables']) {
+                artifact.parent_id = artifact.vcn_id;
                 let obj = this.newRouteTable(artifact);
                 console.info(obj);
             }
@@ -889,6 +897,7 @@ class OkitJson {
         // Security Lists
         if (okit_json.hasOwnProperty('security_lists')) {
             for (let artifact of okit_json['security_lists']) {
+                artifact.parent_id = artifact.vcn_id;
                 let obj = this.newSecurityList(artifact);
                 console.info(obj);
             }
@@ -896,6 +905,7 @@ class OkitJson {
         // Service Gateways
         if (okit_json.hasOwnProperty('service_gateways')) {
             for (let artifact of okit_json['service_gateways']) {
+                artifact.parent_id = artifact.vcn_id;
                 let obj = this.newServiceGateway(artifact);
                 console.info(obj);
             }
@@ -903,6 +913,7 @@ class OkitJson {
         // Local Peering Gateways
         if (okit_json.hasOwnProperty('local_peering_gateways')) {
             for (let artifact of okit_json['local_peering_gateways']) {
+                artifact.parent_id = artifact.vcn_id;
                 let obj = this.newLocalPeeringGateway(artifact);
                 console.info(obj);
             }
@@ -910,6 +921,7 @@ class OkitJson {
         // Subnets
         if (okit_json.hasOwnProperty('subnets')) {
             for (let artifact of okit_json['subnets']) {
+                artifact.parent_id = artifact.vcn_id;
                 let obj = this.newSubnet(artifact);
                 console.info(obj);
             }
@@ -919,6 +931,7 @@ class OkitJson {
         // File Storage Systems
         if (okit_json.hasOwnProperty('file_storage_systems')) {
             for (let artifact of okit_json['file_storage_systems']) {
+                artifact.parent_id = artifact.subnet_id;
                 let obj = this.newFileStorageSystem(artifact);
                 console.info(obj);
             }
@@ -926,6 +939,7 @@ class OkitJson {
         // Instances
         if (okit_json.hasOwnProperty('instances')) {
             for (let artifact of okit_json['instances']) {
+                artifact.parent_id = artifact.subnet_id;
                 let obj = this.newInstance(artifact);
                 console.info(obj);
             }
@@ -933,6 +947,7 @@ class OkitJson {
         // Load Balancers
         if (okit_json.hasOwnProperty('load_balancers')) {
             for (let artifact of okit_json['load_balancers']) {
+                artifact.parent_id = artifact.subnet_id;
                 let obj = this.newLoadBalancer(artifact);
                 console.info(obj);
             }

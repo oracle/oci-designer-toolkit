@@ -19,7 +19,7 @@ class Compartment extends OkitContainerArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
@@ -32,6 +32,19 @@ class Compartment extends OkitContainerArtifact {
             this[key] = data[key];
         }
         this.display_name = this.name;
+        // Add Get Parent function
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            this.getParent = function() {
+                for (let parent of okitjson.compartments) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
+                }
+                return null;
+            }
+        }
     }
 
 

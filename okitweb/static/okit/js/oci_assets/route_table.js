@@ -32,18 +32,9 @@ class RouteTable extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.vcn_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            /*
-            for (let parent of okitjson.virtual_cloud_networks) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function() {return parent};
-                    break;
-                }
-            }
-            */
             this.getParent = function() {
                 for (let parent of okitjson.virtual_cloud_networks) {
                     if (parent.id === this.parent_id) {

@@ -18,7 +18,7 @@ class NATGateway extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
@@ -31,22 +31,17 @@ class NATGateway extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.vcn_id;
-        /*
-        for (let parent of okitjson.virtual_cloud_networks) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
-            }
-        }
-        */
-        this.getParent = function() {
-            for (let parent of okitjson.virtual_cloud_networks) {
-                if (parent.id === this.parent_id) {
-                    return parent
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            this.getParent = function () {
+                for (let parent of okitjson.virtual_cloud_networks) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
                 }
+                return null;
             }
-            return null;
         }
     }
 

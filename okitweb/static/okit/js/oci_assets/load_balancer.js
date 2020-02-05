@@ -39,18 +39,9 @@ class LoadBalancer extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.subnet_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            /*
-            for (let parent of okitjson.subnets) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {return parent};
-                    break;
-                }
-            }
-            */
             this.getParent = function() {
                 for (let parent of okitjson.subnets) {
                     if (parent.id === this.parent_id) {

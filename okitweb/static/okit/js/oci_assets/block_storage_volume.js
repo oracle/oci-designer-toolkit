@@ -37,17 +37,6 @@ class BlockStorageVolume extends OkitArtifact {
             this.getParent = function() {return parent};
             this.parent_id = parent.id;
         } else {
-            this.parent_id = this.compartment_id;
-            /*
-            for (let parent of okitjson.compartments) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {
-                        return parent
-                    };
-                    break;
-                }
-            }
-             */
             this.getParent = function() {
                 for (let parent of okitjson.compartments) {
                     if (parent.id === this.parent_id) {

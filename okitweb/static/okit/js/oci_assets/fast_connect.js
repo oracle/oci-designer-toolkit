@@ -30,20 +30,9 @@ class FastConnect extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.compartment_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            /*
-            for (let parent of okitjson.compartments) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {
-                        return parent
-                    };
-                    break;
-                }
-            }
-            */
             this.getParent = function() {
                 for (let parent of okitjson.compartments) {
                     if (parent.id === this.parent_id) {
