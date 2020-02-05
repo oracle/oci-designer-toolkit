@@ -13,55 +13,6 @@ asset_connect_targets[compartment_artifact] = [];
 const compartment_query_cb = "compartment-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryCompartmentAjax1() {
-    console.info('------------- queryCompartmentAjax --------------------');
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/Compartment',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(okitQueryRequestJson),
-        success: function(resp) {
-            let response_json = [JSON.parse(resp)];
-            //let region = okitQueryRequestJson.region;
-            regionOkitJson[okitQueryRequestJson.region].load({compartments: response_json});
-            //okitJson.load({compartments: response_json});
-            let len =  response_json.length;
-            if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                    console.info('queryCompartmentAjax : ' + response_json[i]['name']);
-                    initiateCompartmentSubQueries(response_json[i]['id']);
-                }
-            } else {
-                initiateCompartmentSubQueries(null);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + compartment_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.error('Status : ' + status);
-            console.error('Error  : ' + error);
-            $('#' + compartment_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-// TODO: Delete
-function initiateCompartmentSubQueries(id='') {
-    queryVirtualCloudNetworkAjax(id);
-    queryBlockStorageVolumeAjax(id);
-    queryDynamicRoutingGatewayAjax(id);
-    queryAutonomousDatabaseAjax(id);
-    queryObjectStorageBucketAjax(id);
-    queryFastConnectAjax(id);
-    queryInstanceAjax(id);
-}
-
-/*
 ** Define Compartment Artifact Class
  */
 class Compartment extends OkitContainerArtifact {

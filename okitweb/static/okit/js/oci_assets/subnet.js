@@ -13,56 +13,6 @@ asset_connect_targets[subnet_artifact] = [];
 const subnet_query_cb = "subnet-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function querySubnetAjax1(compartment_id, vcn_id) {
-    console.info('------------- querySubnetAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
-    if ('subnet_filter' in okitQueryRequestJson) {
-        request_json['subnet_filter'] = okitQueryRequestJson['subnet_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/Subnet',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function (resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({subnets: response_json});
-            //okitJson.load({subnets: response_json});
-            let len = response_json.length;
-            if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                    console.info('querySubnetAjax : ' + response_json[i]['display_name']);
-                    initiateSubnetSubQueries(compartment_id, response_json[i]['id']);
-                }
-            } else {
-                initiateSubnetSubQueries(compartment_id, null);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + subnet_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function (xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + subnet_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-// TODO: Delete
-function initiateSubnetSubQueries(compartment_id, id='') {
-    //queryInstanceAjax(compartment_id, id);
-    queryLoadBalancerAjax(compartment_id, id);
-    queryFileStorageSystemAjax(compartment_id, id);
-}
-
-/*
 ** Define Subnet Artifact Class
  */
 class Subnet extends OkitContainerArtifact {

@@ -12,45 +12,6 @@ asset_drop_targets[object_storage_bucket_artifact] = [compartment_artifact];
 const object_storage_bucket_query_cb = "object-storage-bucket-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryObjectStorageBucketAjax1(compartment_id) {
-    console.info('------------- queryObjectStorageBucketAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    if ('object_storage_bucket_filter' in okitQueryRequestJson) {
-        request_json['object_storage_bucket_filter'] = okitQueryRequestJson['object_storage_bucket_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/ObjectStorageBucket',
-        dataType: 'text',
-        contentType: 'application/json',
-        //data: JSON.stringify(okitQueryRequestJson),
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({object_storage_buckets: response_json});
-            //okitJson.load({object_storage_buckets: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryObjectStorageBucketAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + object_storage_bucket_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + object_storage_bucket_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Object Storage Bucket Class
  */
 class ObjectStorageBucket extends OkitArtifact {

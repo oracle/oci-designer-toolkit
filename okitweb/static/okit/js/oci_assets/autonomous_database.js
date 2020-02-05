@@ -12,45 +12,6 @@ asset_drop_targets[autonomous_database_artifact] = [compartment_artifact];
 const autonomous_database_query_cb = "autonomous-database-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryAutonomousDatabaseAjax1(compartment_id) {
-    console.info('------------- queryAutonomousDatabaseAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    if ('autonomous_database_filter' in okitQueryRequestJson) {
-        request_json['autonomous_database_filter'] = okitQueryRequestJson['autonomous_database_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/AutonomousDatabase',
-        dataType: 'text',
-        contentType: 'application/json',
-        //data: JSON.stringify(okitQueryRequestJson),
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({autonomous_databases: response_json});
-            //okitJson.load({autonomous_databases: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryAutonomousDatabaseAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + autonomous_database_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + autonomous_database_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Autonomous Database Class
  */
 class AutonomousDatabase extends OkitArtifact {

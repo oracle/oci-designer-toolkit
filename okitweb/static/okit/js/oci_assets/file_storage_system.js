@@ -10,44 +10,6 @@ console.info('Loaded File Storage System Javascript');
 asset_drop_targets[file_storage_system_artifact] = [subnet_artifact];
 
 const file_storage_system_query_cb = "file-storage-system-query-cb";
-/*
-** Query OCI
- */
-// TODO: Delete
-function queryFileStorageSystemAjax1(compartment_id, subnet_id) {
-    console.info('------------- queryFileStorageSystemAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['subnet_id'] = subnet_id;
-    if ('file_storage_system_filter' in okitQueryRequestJson) {
-        request_json['file_storage_system_filter'] = okitQueryRequestJson['file_storage_system_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/FileStorageSystem',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({file_storage_systems: response_json});
-            //okitJson.load({file_storage_systems: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryFileStorageSystemAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + file_storage_system_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.warn('Status : ' + status)
-            console.warn('Error : ' + error)
-            $('#' + file_storage_system_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
 
 /*
 ** Define File Storage System Class

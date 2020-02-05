@@ -12,45 +12,6 @@ asset_drop_targets[block_storage_volume_artifact] = [compartment_artifact];
 const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryBlockStorageVolumeAjax1(compartment_id) {
-    console.info('------------- queryBlockStorageVolumeAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    if ('block_storage_volume_filter' in okitQueryRequestJson) {
-        request_json['block_storage_volume_filter'] = okitQueryRequestJson['block_storage_volume_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/BlockStorageVolume',
-        dataType: 'text',
-        contentType: 'application/json',
-        //data: JSON.stringify(okitQueryRequestJson),
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({block_storage_volumes: response_json});
-            //okitJson.load({block_storage_volumes: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + block_storage_volume_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + block_storage_volume_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Block Storage Volume Class
  */
 class BlockStorageVolume extends OkitArtifact {

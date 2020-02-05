@@ -12,45 +12,6 @@ asset_drop_targets[local_peering_gateway_artifact] = [virtual_cloud_network_arti
 const local_peering_gateway_query_cb = "local-peering-gateway-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryLocalPeeringGatewayAjax1(compartment_id, vcn_id) {
-    console.info('------------- queryLocalPeeringGatewayAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
-    if ('local_peering_gateway_filter' in okitQueryRequestJson) {
-        request_json['local_peering_gateway_filter'] = okitQueryRequestJson['local_peering_gateway_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/LocalPeeringGateway',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({local_peering_gateways: response_json});
-            //okitJson.load({local_peering_gateways: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryLocalPeeringGatewayAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + local_peering_gateway_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + local_peering_gateway_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Local Peering Gateway Class
  */
 class LocalPeeringGateway extends OkitArtifact {

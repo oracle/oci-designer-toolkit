@@ -15,45 +15,6 @@ const min_instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
 const min_instance_height = Math.round(icon_height * 5 / 2);
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryInstanceAjax1(compartment_id, subnet_id='') {
-    console.info('------------- queryInstanceAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['subnet_id'] = subnet_id;
-    if ('instance_filter' in okitQueryRequestJson) {
-        request_json['instance_filter'] = okitQueryRequestJson['instance_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/Instance',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function (resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({instances: response_json});
-            //okitJson.load({instances: response_json});
-            let len = response_json.length;
-            for (let i = 0; i < len; i++) {
-                console.info('queryInstanceAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + instance_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function (xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + instance_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Instance Class
  */
 class Instance extends OkitArtifact {
