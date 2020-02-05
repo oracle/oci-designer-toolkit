@@ -12,44 +12,6 @@ asset_drop_targets[dynamic_routing_gateway_artifact] = [virtual_cloud_network_ar
 const dynamic_routing_gateway_query_cb = "dynamic-routing-gateway-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryDynamicRoutingGatewayAjax1(compartment_id) {
-    console.info('------------- queryDynamicRoutingGatewayAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    if ('dynamic_routing_gateway_filter' in okitQueryRequestJson) {
-        request_json['dynamic_routing_gateway_filter'] = okitQueryRequestJson['dynamic_routing_gateway_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/DynamicRoutingGateway',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({dynamic_routing_gateways: response_json});
-            //okitJson.load({dynamic_routing_gateways: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryDynamicRoutingGatewayAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Dynamic Routing Gateway Class
  */
 class DynamicRoutingGateway extends OkitArtifact {
@@ -61,7 +23,8 @@ class DynamicRoutingGateway extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + dynamic_routing_gateway_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(dynamic_routing_gateway_prefix, okitjson.dynamic_routing_gateways.length + 1);
+        //this.display_name = generateDefaultName(dynamic_routing_gateway_prefix, okitjson.dynamic_routing_gateways.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.dynamic_routing_gateways.length + 1);
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;
         this.fast_connect_ids = [];
@@ -72,20 +35,9 @@ class DynamicRoutingGateway extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.vcn_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            /*
-            for (let parent of okitjson.virtual_cloud_networks) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {
-                        return parent
-                    };
-                    break;
-                }
-            }
-            */
             this.getParent = function() {
                 for (let parent of okitjson.virtual_cloud_networks) {
                     if (parent.id === this.parent_id) {
@@ -287,9 +239,20 @@ class DynamicRoutingGateway extends OkitArtifact {
         return [];
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'drg';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'Dynamic Routing Gateway';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Dynamic Routing Gateway Query --------------------');

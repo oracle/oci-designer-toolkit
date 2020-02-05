@@ -13,73 +13,19 @@ asset_connect_targets[virtual_cloud_network_artifact] = [];
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryVirtualCloudNetworkAjax1(compartment_id) {
-    console.info('------------- queryVirtualCloudNetworkAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    if ('virtual_cloud_network_filter' in okitQueryRequestJson) {
-        request_json['virtual_cloud_network_filter'] = okitQueryRequestJson['virtual_cloud_network_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/VirtualCloudNetwork',
-        dataType: 'text',
-        contentType: 'application/json',
-        //data: JSON.stringify(okitQueryRequestJson),
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({virtual_cloud_networks: response_json});
-            //okitJson.load({virtual_cloud_networks: response_json});
-            let len =  response_json.length;
-            if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                    console.info('queryVirtualCloudNetworkAjax : ' + response_json[i]['display_name']);
-                    initiateVirtualCloudNetworkSubQueries(compartment_id, response_json[i]['id']);
-                }
-            } else {
-                // Do this to clear check boxes
-                initiateVirtualCloudNetworkSubQueries(compartment_id, null);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + virtual_cloud_network_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error  : ' + error)
-            $('#' + virtual_cloud_network_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-// TODO: Delete
-function initiateVirtualCloudNetworkSubQueries(compartment_id, id='') {
-    queryInternetGatewayAjax(compartment_id, id);
-    queryNATGatewayAjax(compartment_id, id);
-    queryServiceGatewayAjax(compartment_id, id);
-    queryLocalPeeringGatewayAjax(compartment_id, id);
-    queryRouteTableAjax(compartment_id, id);
-    querySecurityListAjax(compartment_id, id);
-    querySubnetAjax(compartment_id, id);
-}
-
-/*
 ** Define Virtual Cloud Network Artifact Class
  */
 class VirtualCloudNetwork extends OkitContainerArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(virtual_cloud_network_prefix, okitjson.virtual_cloud_networks.length + 1);
+        //this.display_name = generateDefaultName(virtual_cloud_network_prefix, okitjson.virtual_cloud_networks.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.virtual_cloud_networks.length + 1);
         this.compartment_id = data.parent_id;
         // Generate Cidr
         this.cidr_block = '10.' + okitjson.virtual_cloud_networks.length + '.0.0/16';
@@ -89,22 +35,17 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.compartment_id;
-        /*
-        for (let parent of okitjson.compartments) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
-            }
-        }
-        */
-        this.getParent = function() {
-            for (let parent of okitjson.compartments) {
-                if (parent.id === this.parent_id) {
-                    return parent
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            this.getParent = function () {
+                for (let parent of okitjson.compartments) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
                 }
+                return null;
             }
-            return null;
         }
         console.groupCollapsed('Check if default Security List & Route Table Should be created.');
         if (okitSettings.is_default_route_table) {
@@ -380,9 +321,20 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         return 'vcn_id';
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'vcn';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'Virtual Cloud Network';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Virtual Cloud Network Query --------------------');

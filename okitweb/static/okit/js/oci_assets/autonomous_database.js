@@ -12,45 +12,6 @@ asset_drop_targets[autonomous_database_artifact] = [compartment_artifact];
 const autonomous_database_query_cb = "autonomous-database-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryAutonomousDatabaseAjax1(compartment_id) {
-    console.info('------------- queryAutonomousDatabaseAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    if ('autonomous_database_filter' in okitQueryRequestJson) {
-        request_json['autonomous_database_filter'] = okitQueryRequestJson['autonomous_database_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/AutonomousDatabase',
-        dataType: 'text',
-        contentType: 'application/json',
-        //data: JSON.stringify(okitQueryRequestJson),
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({autonomous_databases: response_json});
-            //okitJson.load({autonomous_databases: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryAutonomousDatabaseAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + autonomous_database_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + autonomous_database_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Autonomous Database Class
  */
 class AutonomousDatabase extends OkitArtifact {
@@ -62,7 +23,8 @@ class AutonomousDatabase extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + autonomous_database_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(autonomous_database_prefix, okitjson.autonomous_databases.length + 1);
+        //this.display_name = generateDefaultName(autonomous_database_prefix, okitjson.autonomous_databases.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.autonomous_databases.length + 1);
         this.compartment_id = data.parent_id;
         this.db_name = this.display_name.replace('-', '');
         this.admin_password = generatePassword();
@@ -76,20 +38,9 @@ class AutonomousDatabase extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        //this.parent_id = this.compartment_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            /*
-            for (let parent of okitjson.compartments) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {
-                        return parent
-                    };
-                    break;
-                }
-            }
-            */
             this.getParent = function() {
                 for (let parent of okitjson.compartments) {
                     if (parent.id === this.parent_id) {
@@ -254,9 +205,20 @@ class AutonomousDatabase extends OkitArtifact {
         return [compartment_artifact];
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'ad';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'Autonomous Database';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Autonomous Database Query --------------------');

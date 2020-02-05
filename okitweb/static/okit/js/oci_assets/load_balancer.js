@@ -14,45 +14,6 @@ const load_balancer_width = Math.round(icon_width * 6);
 const load_balancer_height = Math.round(icon_height * 3 / 2);
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryLoadBalancerAjax1(compartment_id, subnet_id) {
-    console.info('------------- queryLoadBalancerAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['subnet_id'] = subnet_id;
-    if ('load_balancer_filter' in okitQueryRequestJson) {
-        request_json['load_balancer_filter'] = okitQueryRequestJson['load_balancer_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/LoadBalancer',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function (resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({load_balancers: response_json});
-            //okitJson.load({load_balancers: response_json});
-            let len = response_json.length;
-            for (let i = 0; i < len; i++) {
-                console.info('queryLoadBalancerAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + load_balancer_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function (xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + load_balancer_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Load Balancer Class
  */
 class LoadBalancer extends OkitArtifact {
@@ -64,7 +25,8 @@ class LoadBalancer extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(load_balancer_prefix, okitjson.load_balancers.length + 1);
+        //this.display_name = generateDefaultName(load_balancer_prefix, okitjson.load_balancers.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.load_balancers.length + 1);
         this.compartment_id = '';
         this.subnet_id = data.parent_id;
         this.subnet_ids = [data.parent_id];
@@ -78,18 +40,9 @@ class LoadBalancer extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.subnet_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            /*
-            for (let parent of okitjson.subnets) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {return parent};
-                    break;
-                }
-            }
-            */
             this.getParent = function() {
                 for (let parent of okitjson.subnets) {
                     if (parent.id === this.parent_id) {
@@ -282,9 +235,20 @@ class LoadBalancer extends OkitArtifact {
         return [];
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'lb';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'Load Balancer';
+    }
+
+    static getDropTargets() {
+        return [Subnet.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Load Balancer Query --------------------');

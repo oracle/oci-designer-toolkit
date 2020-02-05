@@ -752,7 +752,7 @@ The following will list the methods that need modification.
         super(okitjson);
         // Configure default values
         this.id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(block_storage_volume_prefix, okitjson.block_storage_volumes.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
         this.compartment_id = data.parent_id;
         this.availability_domain = '1';
         this.size_in_gbs = 1024;

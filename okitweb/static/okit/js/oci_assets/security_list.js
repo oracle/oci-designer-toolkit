@@ -12,45 +12,6 @@ asset_drop_targets[security_list_artifact] = [virtual_cloud_network_artifact];
 const security_list_query_cb = "security-list-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function querySecurityListAjax1(compartment_id, vcn_id) {
-    console.info('------------- querySecurityListAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
-    if ('security_list_filter' in okitQueryRequestJson) {
-        request_json['security_list_filter'] = okitQueryRequestJson['security_list_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/SecurityList',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({security_lists: response_json});
-            //okitJson.load({security_lists: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('querySecurityListAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + security_list_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + security_list_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Security List Class
  */
 class SecurityList extends OkitArtifact {
@@ -62,7 +23,8 @@ class SecurityList extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + security_list_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(security_list_prefix, okitjson.security_lists.length + 1);
+        //this.display_name = generateDefaultName(security_list_prefix, okitjson.security_lists.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.security_lists.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         this.egress_security_rules = [];
@@ -72,18 +34,9 @@ class SecurityList extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.vcn_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            /*
-            for (let parent of okitjson.virtual_cloud_networks) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function() {return parent};
-                    break;
-                }
-            }
-            */
             this.getParent = function() {
                 for (let parent of okitjson.virtual_cloud_networks) {
                     if (parent.id === this.parent_id) {
@@ -399,9 +352,20 @@ class SecurityList extends OkitArtifact {
         return [];
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'sl';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'Security List';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Security List Query --------------------');

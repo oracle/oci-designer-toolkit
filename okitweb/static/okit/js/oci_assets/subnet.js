@@ -13,68 +13,19 @@ asset_connect_targets[subnet_artifact] = [];
 const subnet_query_cb = "subnet-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function querySubnetAjax1(compartment_id, vcn_id) {
-    console.info('------------- querySubnetAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
-    if ('subnet_filter' in okitQueryRequestJson) {
-        request_json['subnet_filter'] = okitQueryRequestJson['subnet_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/Subnet',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function (resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({subnets: response_json});
-            //okitJson.load({subnets: response_json});
-            let len = response_json.length;
-            if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                    console.info('querySubnetAjax : ' + response_json[i]['display_name']);
-                    initiateSubnetSubQueries(compartment_id, response_json[i]['id']);
-                }
-            } else {
-                initiateSubnetSubQueries(compartment_id, null);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + subnet_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function (xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + subnet_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-// TODO: Delete
-function initiateSubnetSubQueries(compartment_id, id='') {
-    //queryInstanceAjax(compartment_id, id);
-    queryLoadBalancerAjax(compartment_id, id);
-    queryFileStorageSystemAjax(compartment_id, id);
-}
-
-/*
 ** Define Subnet Artifact Class
  */
 class Subnet extends OkitContainerArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + subnet_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(subnet_prefix, okitjson.subnets.length + 1);
+        //this.display_name = generateDefaultName(subnet_prefix, okitjson.subnets.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.subnets.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         this.cidr_block = this.generateCIDR(this.vcn_id);
@@ -87,22 +38,17 @@ class Subnet extends OkitContainerArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.vcn_id;
-        /*
-        for (let parent of okitjson.virtual_cloud_networks) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
-            }
-        }
-        */
-        this.getParent = function() {
-            for (let parent of okitjson.virtual_cloud_networks) {
-                if (parent.id === this.parent_id) {
-                    return parent
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            this.getParent = function () {
+                for (let parent of okitjson.virtual_cloud_networks) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
                 }
+                return null;
             }
-            return null;
         }
     }
 
@@ -334,9 +280,20 @@ class Subnet extends OkitContainerArtifact {
         return 'subnet_id';
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'sn';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'Subnet';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Subnet Query --------------------');

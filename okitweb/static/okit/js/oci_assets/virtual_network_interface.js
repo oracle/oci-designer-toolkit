@@ -20,7 +20,8 @@ class VirtualNetworkInterface extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + virtual_network_interface_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(virtual_network_interface_prefix, okitjson.subnets.length + 1);
+        //this.display_name = generateDefaultName(virtual_network_interface_prefix, okitjson.subnets.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.subnets.length + 1);
         this.compartment_id = '';
         this.instance_id = data.parent_id;
         this.vcn_id = data.parent_id;
@@ -197,5 +198,23 @@ class VirtualNetworkInterface extends OkitArtifact {
         // Return list of Artifact names
         return [];
     }
+
+    getNamePrefix() {
+        return super.getNamePrefix() + 'vnic';
+    }
+
+    /*
+    ** Static Functionality
+     */
+    static getArtifactReference() {
+        return 'Virtual Network Interface';
+    }
+
+    static getDropTargets() {
+        return [];
+    }
+
+    static query(request = {}, region='') {}
+
 }
 

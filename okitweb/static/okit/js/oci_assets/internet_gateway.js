@@ -12,57 +12,19 @@ asset_drop_targets[internet_gateway_artifact] = [virtual_cloud_network_artifact]
 const internet_gateway_query_cb = "internet-gateway-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryInternetGatewayAjax1(compartment_id, vcn_id) {
-    console.info('------------- queryInternetGatewayAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
-    if ('internet_gateway_filter' in okitQueryRequestJson) {
-        request_json['internet_gateway_filter'] = okitQueryRequestJson['internet_gateway_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/InternetGateway',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({internet_gateways: response_json});
-            //okitJson.load({internet_gateways: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryInternetGatewayAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + internet_gateway_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + internet_gateway_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define Internet Gateway Artifact Class
  */
 class InternetGateway extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(internet_gateway_prefix, okitjson.internet_gateways.length + 1);
+        //this.display_name = generateDefaultName(internet_gateway_prefix, okitjson.internet_gateways.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.internet_gateways.length + 1);
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;
         // Update with any passed data
@@ -70,22 +32,17 @@ class InternetGateway extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.vcn_id;
-        /*
-        for (let parent of okitjson.virtual_cloud_networks) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
-            }
-        }
-        */
-        this.getParent = function() {
-            for (let parent of okitjson.virtual_cloud_networks) {
-                if (parent.id === this.parent_id) {
-                    return parent
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            this.getParent = function () {
+                for (let parent of okitjson.virtual_cloud_networks) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
                 }
+                return null;
             }
-            return null;
         }
     }
 
@@ -210,9 +167,20 @@ class InternetGateway extends OkitArtifact {
         return [virtual_cloud_gateway_artifact];
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'ig';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'Internet Gateway';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Internet Gateway Query --------------------');

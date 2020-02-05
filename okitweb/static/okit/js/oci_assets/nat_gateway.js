@@ -12,57 +12,19 @@ asset_drop_targets[nat_gateway_artifact] = [virtual_cloud_network_artifact];
 const nat_gateway_query_cb = "nat-gateway-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryNATGatewayAjax1(compartment_id, vcn_id) {
-    console.info('------------- queryNATGatewayAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    request_json['vcn_id'] = vcn_id;
-    if ('nat_gateway_filter' in okitQueryRequestJson) {
-        request_json['nat_gateway_filter'] = okitQueryRequestJson['nat_gateway_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/NATGateway',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({nat_gateways: response_json});
-            //okitJson.load({nat_gateways: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryNATGatewayAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + nat_gateway_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + nat_gateway_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define NAT Gateway Class
  */
 class NATGateway extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}) {
+    constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(nat_gateway_prefix, okitjson.nat_gateways.length + 1);
+        //this.display_name = generateDefaultName(nat_gateway_prefix, okitjson.nat_gateways.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.nat_gateways.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         // Update with any passed data
@@ -70,22 +32,17 @@ class NATGateway extends OkitArtifact {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.vcn_id;
-        /*
-        for (let parent of okitjson.virtual_cloud_networks) {
-            if (parent.id === this.parent_id) {
-                this.getParent = function() {return parent};
-                break;
-            }
-        }
-        */
-        this.getParent = function() {
-            for (let parent of okitjson.virtual_cloud_networks) {
-                if (parent.id === this.parent_id) {
-                    return parent
+        if (parent !== null) {
+            this.getParent = function() {return parent};
+        } else {
+            this.getParent = function () {
+                for (let parent of okitjson.virtual_cloud_networks) {
+                    if (parent.id === this.parent_id) {
+                        return parent
+                    }
                 }
+                return null;
             }
-            return null;
         }
     }
 
@@ -210,9 +167,20 @@ class NATGateway extends OkitArtifact {
         return [virtual_cloud_gateway_artifact];
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'ng';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'NAT Gateway';
+    }
+
+    static getDropTargets() {
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- NAT Gateway Query --------------------');

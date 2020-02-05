@@ -12,44 +12,6 @@ asset_drop_targets[fast_connect_artifact] = [compartment_artifact];
 const fast_connect_query_cb = "fast-connect-query-cb";
 
 /*
-** Query OCI
- */
-// TODO: Delete
-function queryFastConnectAjax1(compartment_id) {
-    console.info('------------- queryFastConnectAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    if ('fast_connect_filter' in okitQueryRequestJson) {
-        request_json['fast_connect_filter'] = okitQueryRequestJson['fast_connect_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/FastConnect',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            regionOkitJson[okitQueryRequestJson.region].load({fast_connects: response_json});
-            //okitJson.load({fast_connects: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryFastConectAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas(okitQueryRequestJson.region);
-            $('#' + fast_connect_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + fast_connect_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-
-/*
 ** Define FastConnect Class
  */
 class FastConnect extends OkitArtifact {
@@ -61,27 +23,17 @@ class FastConnect extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + fast_connect_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(fast_connect_prefix, okitjson.fast_connects.length + 1);
+        //this.display_name = generateDefaultName(fast_connect_prefix, okitjson.fast_connects.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.fast_connects.length + 1);
         this.compartment_id = data.parent_id;
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
         }
         // Add Get Parent function
-        this.parent_id = this.compartment_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            /*
-            for (let parent of okitjson.compartments) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {
-                        return parent
-                    };
-                    break;
-                }
-            }
-            */
             this.getParent = function() {
                 for (let parent of okitjson.compartments) {
                     if (parent.id === this.parent_id) {
@@ -222,9 +174,20 @@ class FastConnect extends OkitArtifact {
         return [];
     }
 
+    getNamePrefix() {
+        return super.getNamePrefix() + 'fc';
+    }
+
     /*
-    ** Static Query Functionality
+    ** Static Functionality
      */
+    static getArtifactReference() {
+        return 'Fast Connect';
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
     static query(request = {}, region='') {
         console.info('------------- Fast Connect Query --------------------');
