@@ -23,7 +23,8 @@ class InternetGateway extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(internet_gateway_prefix, okitjson.internet_gateways.length + 1);
+        //this.display_name = generateDefaultName(internet_gateway_prefix, okitjson.internet_gateways.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.internet_gateways.length + 1);
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;
         // Update with any passed data
@@ -166,13 +167,13 @@ class InternetGateway extends OkitArtifact {
         return [virtual_cloud_gateway_artifact];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'ig';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Internet Gateway';
     }

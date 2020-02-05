@@ -23,7 +23,8 @@ class SecurityList extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + security_list_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(security_list_prefix, okitjson.security_lists.length + 1);
+        //this.display_name = generateDefaultName(security_list_prefix, okitjson.security_lists.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.security_lists.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         this.egress_security_rules = [];
@@ -351,13 +352,13 @@ class SecurityList extends OkitArtifact {
         return [];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'sl';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Security List';
     }

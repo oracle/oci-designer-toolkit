@@ -585,12 +585,21 @@ class OkitArtifact {
 
 
     /*
-    ** Static Functionality
+    ** Default name generation
      */
-    static getNamePrefix() {
+    generateDefaultName(count = 0) {
+        return this.getNamePrefix() + ('000' + count).slice(-3);
+    }
+
+
+    getNamePrefix() {
         return 'okit-';
     }
 
+
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
         return;

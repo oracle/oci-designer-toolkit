@@ -25,7 +25,8 @@ class LoadBalancer extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(load_balancer_prefix, okitjson.load_balancers.length + 1);
+        //this.display_name = generateDefaultName(load_balancer_prefix, okitjson.load_balancers.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.load_balancers.length + 1);
         this.compartment_id = '';
         this.subnet_id = data.parent_id;
         this.subnet_ids = [data.parent_id];
@@ -234,13 +235,13 @@ class LoadBalancer extends OkitArtifact {
         return [];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'lb';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Load Balancer';
     }

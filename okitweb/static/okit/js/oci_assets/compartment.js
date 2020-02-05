@@ -26,7 +26,8 @@ class Compartment extends OkitContainerArtifact {
         this.parent_id = 'canvas';
         this.id = 'okit-' + compartment_prefix + '-' + uuidv4();
         this.compartment_id = this.id;
-        this.name = generateDefaultName(compartment_prefix, okitjson.compartments.length + 1);
+        //this.name = generateDefaultName(compartment_prefix, okitjson.compartments.length + 1);
+        this.name = this.generateDefaultName(okitjson.compartments.length + 1);
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
@@ -217,13 +218,14 @@ class Compartment extends OkitContainerArtifact {
         return 'compartment_id';
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+
+    getNamePrefix() {
         return super.getNamePrefix() + 'comp';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Compartment';
     }

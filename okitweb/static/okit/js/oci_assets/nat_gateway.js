@@ -23,7 +23,8 @@ class NATGateway extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + nat_gateway_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(nat_gateway_prefix, okitjson.nat_gateways.length + 1);
+        //this.display_name = generateDefaultName(nat_gateway_prefix, okitjson.nat_gateways.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.nat_gateways.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         // Update with any passed data
@@ -166,13 +167,13 @@ class NATGateway extends OkitArtifact {
         return [virtual_cloud_gateway_artifact];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'ng';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'NAT Gateway';
     }

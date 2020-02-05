@@ -26,7 +26,8 @@ class Instance extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + instance_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(instance_prefix, okitjson.instances.length + 1);
+        //this.display_name = generateDefaultName(instance_prefix, okitjson.instances.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
         this.compartment_id = '';
         this.subnet_id = data.parent_id;
         this.availability_domain = '1';
@@ -327,13 +328,13 @@ class Instance extends OkitArtifact {
         return [block_storage_volume_artifact, virtual_network_interface_artifact];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'in';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Instance';
     }

@@ -23,7 +23,8 @@ class FileStorageSystem extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + file_storage_system_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(file_storage_system_prefix, okitjson.file_storage_systems.length + 1);
+        //this.display_name = generateDefaultName(file_storage_system_prefix, okitjson.file_storage_systems.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.file_storage_systems.length + 1);
         this.compartment_id = '';
         this.subnet_id = data.parent_id;
         this.availability_domain = '1';
@@ -198,13 +199,13 @@ class FileStorageSystem extends OkitArtifact {
         return [subnet_artifact];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'fss';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'File Storage System';
     }

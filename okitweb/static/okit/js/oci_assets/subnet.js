@@ -24,7 +24,8 @@ class Subnet extends OkitContainerArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + subnet_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(subnet_prefix, okitjson.subnets.length + 1);
+        //this.display_name = generateDefaultName(subnet_prefix, okitjson.subnets.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.subnets.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         this.cidr_block = this.generateCIDR(this.vcn_id);
@@ -279,13 +280,13 @@ class Subnet extends OkitContainerArtifact {
         return 'subnet_id';
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'sn';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Subnet';
     }

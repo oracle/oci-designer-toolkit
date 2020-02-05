@@ -23,7 +23,8 @@ class BlockStorageVolume extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(block_storage_volume_prefix, okitjson.block_storage_volumes.length + 1);
+        //this.display_name = generateDefaultName(block_storage_volume_prefix, okitjson.block_storage_volumes.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
         this.compartment_id = data.parent_id;
         this.availability_domain = '1';
         this.size_in_gbs = 1024;
@@ -185,13 +186,13 @@ class BlockStorageVolume extends OkitArtifact {
         return [compartment_artifact];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'bsv';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Block Storage Volume';
     }

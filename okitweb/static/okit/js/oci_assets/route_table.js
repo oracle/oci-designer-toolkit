@@ -23,7 +23,8 @@ class RouteTable extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + route_table_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(route_table_prefix, okitjson.route_tables.length + 1);
+        //this.display_name = generateDefaultName(route_table_prefix, okitjson.route_tables.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.route_tables.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         this.route_rules = [];
@@ -290,13 +291,13 @@ class RouteTable extends OkitArtifact {
         return [];
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'rt';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Route Table';
     }

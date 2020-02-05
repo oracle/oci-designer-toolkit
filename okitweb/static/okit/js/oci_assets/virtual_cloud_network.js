@@ -24,7 +24,8 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
-        this.display_name = generateDefaultName(virtual_cloud_network_prefix, okitjson.virtual_cloud_networks.length + 1);
+        //this.display_name = generateDefaultName(virtual_cloud_network_prefix, okitjson.virtual_cloud_networks.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.virtual_cloud_networks.length + 1);
         this.compartment_id = data.parent_id;
         // Generate Cidr
         this.cidr_block = '10.' + okitjson.virtual_cloud_networks.length + '.0.0/16';
@@ -320,13 +321,13 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         return 'vcn_id';
     }
 
-    /*
-    ** Static Functionality
-     */
-    static getNamePrefix() {
+    getNamePrefix() {
         return super.getNamePrefix() + 'vcn';
     }
 
+    /*
+    ** Static Functionality
+     */
     static getArtifactReference() {
         return 'Virtual Cloud Network';
     }
