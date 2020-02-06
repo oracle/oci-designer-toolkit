@@ -431,6 +431,10 @@ class OCIGenerator(object):
             variableName = '{0:s}_egress_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
             self.run_variables[variableName] = egress_rule["destination_type"]
             jinja2_egress_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            # ------ Description
+            variableName = '{0:s}_egress_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = egress_rule["description"]
+            jinja2_egress_rule["description"] = self.formatJinja2Variable(variableName)
             # Add to Egress Rules used for Jinja template
             jinja2_egress_rules.append(jinja2_egress_rule)
             # Increment rule number
@@ -450,7 +454,11 @@ class OCIGenerator(object):
             variableName = '{0:s}_ingress_rule_{1:02d}_source'.format(standardisedName, rule_number)
             self.run_variables[variableName] = ingress_rule["source"]
             jinja2_ingress_rule["source"] = self.formatJinja2Variable(variableName)
-            # Add to Egress Rules used for Jinja template
+            # ------ Description
+            variableName = '{0:s}_ingress_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = ingress_rule["description"]
+            jinja2_ingress_rule["description"] = self.formatJinja2Variable(variableName)
+            # Add to Ingress Rules used for Jinja template
             jinja2_ingress_rules.append(jinja2_ingress_rule)
             # Increment rule number
             rule_number += 1
@@ -494,6 +502,10 @@ class OCIGenerator(object):
             variableName = '{0:s}_route_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
             self.run_variables[variableName] = route_rule["destination_type"]
             jinja2_route_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            # ------ Description
+            variableName = '{0:s}_route_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = route_rule["description"]
+            jinja2_route_rule["description"] = self.formatJinja2Variable(variableName)
             # Add to Egress Rules used for Jinja template
             jinja2_route_rules.append(jinja2_route_rule)
             # Increment rule number

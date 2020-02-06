@@ -11,6 +11,7 @@
             - destination: "{{ rule.destination }}"
               destination_type: "{{ rule.destination_type }}"
               network_entity_id: "{{ rule.network_entity_id }}"
+              description: "{{ rule.description }}"
 {% endfor %}
         # Optional
         display_name: "{{ display_name }}"

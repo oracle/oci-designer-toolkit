@@ -18,16 +18,62 @@ web interface, to provide a portable generic, json, file that can be used to vis
 
 ## Table of Contents
 
-1. [Installation](#installation)
-2. [Usage](#usage)
+1. [Artifact Support Matrix](#artifact-support-matrix)
+2. [Installation](#installation)
+3. [Usage](#usage)
     1. [Currently Implemented Artifacts](#currently-implemented-artifacts)
     2. [Prerequisites](#prerequisites)
     3. [Web Interface](#web-interface)
     4. [Command Line](#command-line)
-3. [Examples](#examples)
-4. [Issues](#issues)
-5. [Development](#development)
-6. [3rd Party Libraries](#3rd-party-libraries)
+4. [Examples](#examples)
+5. [Issues](#issues)
+6. [Development](#development)
+7. [3rd Party Libraries](#3rd-party-libraries)
+8. [Artifact Support Matrix Gap Analysis](#artifact-support-matrix-gap-analysis)
+
+
+
+
+
+
+
+
+
+
+## Artifact Support Matrix
+All Released Arifacts support the **Required** parameters allowing there creation through Terraform / Ansible and query 
+using the oci python API.
+ 
+Where functionality is missing it will be associated with **Optional** parameters.
+
+The table below lists a summary of the current support status whilst the details can be found at the end of the document.
+
+| Artifact                | Support | Version | Gaps |
+| ----------------------- | ------- | ------- | ---- |
+| **Containers**
+| Compartment             | Partial | 0.1.0   | [2](#compartment)
+| **Network**
+| Route Table             | Partial | 0.1.0   | [3](#route-table)
+| Security List           | Partial | 0.1.0   | [5](#security-list)
+| Subnet                  | Partial | 0.1.0   | [4](#subnet)
+| Virtual Cloud Network   | Partial | 0.1.0   | [3](#virtual-cloud-network)
+| **Gateways**
+| Dynamic Routing Gateway | Partial | 0.1.0   | [2](#dynamic-routing-gateway)
+| Internet Gateway        | Partial | 0.1.0   | [3](#internet-gateway)
+| Local Peering Gateway   | Partial | 0.1.0   | [2](#local-peering-gateway)
+| NAT Gateway             | Partial | 0.1.0   | [3](#nat-gateway)
+| Service Gateway         | Partial | 0.1.0   | [3](#service-gateway)
+| **Storage**
+| Block Storage Volume    | Partial | 0.1.0   | [5](#block-storage-volume)
+| File Storage System     | Partial | 0.1.0   | [7](#file-storage-system)
+| Object Storage Bucket   | Partial | 0.1.0   | [5](#object-storage-bucket)
+| **Database**
+| Autonomous Database     | Partial | 0.1.0   | [4](#autonomous-database)
+| **Compute**
+| Instance                | Partial | 0.1.0   | [7](#instance)
+| Load Balancer           | Partial | 0.1.0   | [4](#load-balancer)
+
+
 
 
 
@@ -1341,3 +1387,98 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 
 
 
+
+## Artifact Support Matrix Gap Analysis
+
+#### Containers
+##### Compartment
+- Freeform Tags
+- Defined Tags
+
+#### Network
+##### Route Table
+- Freeform Tags
+- Defined Tags
+- Destination Type of CIDR_BLOCK is the only supported option.
+##### Security List
+- Freeform Tags
+- Defined Tags
+- TCP Options - Current just uses default
+- UDP Options - Current just uses default
+- ICMP Options - Current just uses default
+##### Subnet
+- Freeform Tags
+- Defined Tags
+- ipV6 Functionality but this is currently only available for Government domains.
+- Availability Domain we assume that we always use the recommended Regional Subnets.
+##### Virtual Cloud Network
+- Freeform Tags
+- Defined Tags
+- ipV6 Functionality but this is currently only available for Government domains.
+
+#### Gateways
+##### Dynamic Routing Gateway
+- Freeform Tags
+- Defined Tags
+##### Fast Connect
+- Freeform Tags
+- Defined Tags
+##### Internet Gateway
+- Freeform Tags
+- Defined Tags
+- Enabled / Disabled Flag we assume that the Internet Gateway will be enabled.
+##### Local Peering Gateway
+- Freeform Tags
+- Defined Tags
+##### NAT Gateway
+- Freeform Tags
+- Defined Tags
+- Block Traffic use the default.
+##### Service Gateway
+- Freeform Tags
+- Defined Tags
+- Route Table Selection
+
+#### Storage
+##### Block Storage Volume
+- Freeform Tags
+- Defined Tags
+- Key Management / Encryption
+- VPUs
+- Source Information for creation from backup.
+##### File Storage System
+- Freeform Tags
+- Defined Tags
+- Key Management / Encryption
+- Min / Max Size
+- Anonymous GID/UID
+- Identity Squash
+- Privileged Source Port
+##### Object Storage Bucket
+- Freeform Tags
+- Defined Tags
+- Key Management / Encryption
+- Metadata
+- Events
+
+#### Database
+##### Autonomous Database
+- Freeform Tags
+- Defined Tags
+- Cloning (Includes all cloning functionality / Referencing)
+- BYOL
+
+#### Compute
+##### Instance
+- Freeform Tags
+- Defined Tags
+- Agent Config
+- Fault Domain (Unable To specify)
+- Existing Boot Volume can not be specified.
+- Launch Options
+- PV Encryption
+##### Load Balancer
+- Freeform Tags
+- Defined Tags
+- Network Security Group
+- IPv6 (Only Government)

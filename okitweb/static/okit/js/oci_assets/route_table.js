@@ -182,7 +182,7 @@ class RouteTable extends OkitArtifact {
     handleAddRouteRule(evt) {
         //route_table = evt.target.route_table;
         console.info('Adding route rule to : ' + evt.target.route_table);
-        let new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity_id: ""}
+        let new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity_id: "", description: ""}
         evt.target.route_table.route_rules.push(new_rule);
         evt.target.route_table.addRouteRuleHtml(new_rule);
         displayOkitJson();
@@ -279,6 +279,22 @@ class RouteTable extends OkitArtifact {
             route_rule.network_entity_id = gateways[0].id;
         }
         network_entity_id_select.property('value', route_rule.network_entity_id);
+        // Description
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td')
+            .text("Description");
+        rule_cell = rule_row.append('td');
+        rule_cell.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value")
+            .attr("id", "description")
+            .attr("name", "description")
+            .attr("value", route_rule['description'])
+            .on("change", function() {
+                route_rule['description'] = this.value;
+                console.info('Changed description: ' + this.value);
+                displayOkitJson();
+            });
     }
 
 
