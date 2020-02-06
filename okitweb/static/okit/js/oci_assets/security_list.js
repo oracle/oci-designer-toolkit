@@ -190,7 +190,7 @@ class SecurityList extends OkitArtifact {
 
     handleAddEgressRule(evt) {
         console.info('Adding Egress rule');
-        let new_rule = { "protocol": "all", "is_stateless": false}
+        let new_rule = { "protocol": "all", "is_stateless": false, description: ""}
         new_rule["destination_type"] = "CIDR_BLOCK";
         new_rule["destination"] = "0.0.0.0/0";
         evt.target.security_list.egress_security_rules.push(new_rule)
@@ -200,7 +200,7 @@ class SecurityList extends OkitArtifact {
 
     handleAddIngressRule(evt) {
         console.info('Adding Ingress rule');
-        let new_rule = { "protocol": "all", "is_stateless": false}
+        let new_rule = { "protocol": "all", "is_stateless": false, description: ""}
         new_rule["source_type"] = "CIDR_BLOCK";
         new_rule["source"] = "0.0.0.0/0";
         evt.target.security_list.ingress_security_rules.push(new_rule)
@@ -341,6 +341,22 @@ class SecurityList extends OkitArtifact {
         if (access_rule['protocol'] == '') {
             access_rule['protocol'] = protocol_select.node().options[protocol_select.node().selectedIndex].value;
         }
+        // Description
+        rule_row = rule_table.append('tr');
+        rule_cell = rule_row.append('td')
+            .text("Description");
+        rule_cell = rule_row.append('td');
+        rule_cell.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value")
+            .attr("id", "description")
+            .attr("name", "description")
+            .attr("value", access_rule['description'])
+            .on("change", function() {
+                access_rule['description'] = this.value;
+                console.info('Changed description: ' + this.value);
+                displayOkitJson();
+            });
     }
 
 
@@ -412,7 +428,8 @@ class SecurityList extends OkitArtifact {
                 "is_stateless": false,
                 "protocol": "all",
                 "tcp_options": null,
-                "udp_options": null
+                "udp_options": null,
+                "description": ""
             }
         );
         // Ingress Rules
@@ -430,7 +447,8 @@ class SecurityList extends OkitArtifact {
                     },
                     "source_port_range": null
                 },
-                "udp_options": null
+                "udp_options": null,
+                "description": ""
             }
         );
         this.ingress_security_rules.push(
@@ -444,7 +462,8 @@ class SecurityList extends OkitArtifact {
                 "source": "0.0.0.0/0",
                 "source_type": "CIDR_BLOCK",
                 "tcp_options": null,
-                "udp_options": null
+                "udp_options": null,
+                "description": ""
             }
         );
         this.ingress_security_rules.push(
@@ -458,7 +477,8 @@ class SecurityList extends OkitArtifact {
                 "source": vcn_cidr_block,
                 "source_type": "CIDR_BLOCK",
                 "tcp_options": null,
-                "udp_options": null
+                "udp_options": null,
+                "description": ""
             }
         );
     }
