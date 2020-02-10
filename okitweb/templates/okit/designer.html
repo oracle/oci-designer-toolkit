@@ -17,6 +17,7 @@
         <li><a id="file-new-menu-item" class="parent-item" href="{{ url_for('okit.designer') }}">New</a></li>
         <li><a id="file-load-menu-item" class="parent-item" href="#">Load</a></li>
         <li><a id="file-save-menu-item" class="parent-item" href="#">Save</a></li>
+        <li><a id="file-save-as-menu-item" class="parent-item" href="#">Save As Template</a></li>
         <li><a id="file-redraw-menu-item" class="parent-item" href="#">Redraw</a></li>
         <!--li><a id="file-add-menu-item" class="parent-item" href="#">Add Compartment</a></li-->
         <li>
@@ -27,9 +28,22 @@
                 </span>
             </div>
         </li>
-        {% for okit_template in okit_templates %}
-            <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="#"
-                   onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+        {% for template_group in okit_templates_groups %}
+            {% if template_group['name'] == '.' %}
+                {% for okit_template in template_group['templates'] %}
+                    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="#"
+                           onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+                {% endfor %}
+            {% elif template_group['templates']|length > 0 %}
+                <li id="{{ template_group['name'] }}" class="sub-header-item dropdown">{{ template_group['name'] }}
+                    <ul class="dropdown-content">
+                    {% for okit_template in template_group['templates'] %}
+                        <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="#"
+                               onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
         {% endfor %}
         <li>
             <div>
@@ -123,16 +137,14 @@
                 {% endfor %}
                 {% for palette_icon_group in palette_icon_groups %}
                     {% if palette_icon_group['name'] != 'Hidden' %}
-                    <div id="{{ palette_icon_group['name'] }}" class="palette-icon-group">
-                        <div class="palette-icon-group-header">
-                            <img id="palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label>
-                        </div>
-                        <div class="palette-icon-group-icons">
-                            {% for palette_icon in palette_icon_group['icons'] %}
-                                <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true" alt="{{ palette_icon['title'] }}">
-                            {% endfor %}
-                        </div>
-                    </div>
+                        <details  id="{{ palette_icon_group['name'] }}" class="palette-icon-group" open>
+                            <summary class="palette-icon-group-header"><img id="palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label></summary>
+                            <div class="palette-icon-group-icons">
+                                {% for palette_icon in palette_icon_group['icons'] %}
+                                    <img class="palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true" alt="{{ palette_icon['title'] }}">
+                                {% endfor %}
+                            </div>
+                        </details>
                     {% endif %}
                 {% endfor %}
                 <div id="fragments" class="palette-icon-group">
@@ -163,6 +175,10 @@
                         <div id="properties" class="property-sheet"></div>
                         <div id="json-display" class="source-code hidden">
                             <pre id="okitjson" readonly="readonly"></pre>
+                            <!--details>
+                                <summary>Regional</summary>
+                                <pre id="regionjson" readonly="readonly"></pre>
+                            </details-->
                         </div>
                         <div id="settings" class="setting-sheet hidden"></div>
                     </div>
@@ -174,7 +190,7 @@
         </div>
     </div>
     <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
-    <div id="query-progress" class="hidden query-progress">
+    <div id="query-progress" class="hidden popup-box">
         <table>
             <thead>
                 <tr><th>Searching.....</th></tr>
@@ -184,7 +200,7 @@
             </tbody>
         </table>
     </div>
-    <div id="query-oci" class="hidden query-oci">
+    <div id="query-oci" class="hidden popup-box">
         <form id="query-oci-form" action="{{ url_for('okit.designer') }}" method="post" onsubmit="setBusyIcon();">
             <input hidden="hidden" type="text" id="config_profile" name="config_profile" class="property-value" readonly="readonly" value="DEFAULT">
             <table id="query-oci-table">
@@ -207,6 +223,24 @@
                 </tbody>
                 <tfoot>
                     <tr><td><input type = "submit" value = "Submit" /></td><td><input type="button" value="Cancel" onclick="handleCancelQuery()"/></td></tr>
+                </tfoot>
+            </table>
+        </form>
+    </div>
+    <div id="save-as-template" class="hidden popup-box">
+        <form id="save-as-template-form">
+            <table id="save-as-template-table" class="property-editor-table">
+                <thead>
+                    <tr><th colspan="2">Save As Template</th></tr>
+                </thead>
+                <tbody id="save-as-template-tbody">
+                    <tr><td>Title</td><td><input type="text" id="template_title" name="template_title" class="property-value"></td></tr>
+                    <tr><td>Description</td><td><input type="text" id="template_description" name="template_description" class="property-value"></td></tr>
+                    <tr><td>Type</td><td><input type="text" id="template_type" name="template_type" class="property-value"></td></tr>
+                    <!--tr><td>Type</td><td><select id="template_type" class="property-value"></select></td></tr-->
+                </tbody>
+                <tfoot>
+                    <tr><td><input type="button" value = "Save" onclick="handleSaveAsTemplate()"/></td><td><input type="button" value="Cancel" onclick="handleCancelSaveAs()"/></td></tr>
                 </tfoot>
             </table>
         </form>

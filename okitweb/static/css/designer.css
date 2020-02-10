@@ -196,6 +196,17 @@
 
 .context-menu li{ list-style: none; }
 
+.popup-box {
+    z-index:1000;
+    position: absolute;
+    left: 30%;
+    top: 20%;
+    border: black 1px dashed;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(224, 235, 235, 0.7);
+}
+
 .query-progress {
     z-index:1000;
     position: absolute;
@@ -222,6 +233,18 @@
     width: 100%;
     margin-right: 2em;
 }
+
+.save-as-template {
+    z-index:1000;
+    position: absolute;
+    left: 30%;
+    top: 20%;
+    border: black 1px dashed;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(224, 235, 235, 0.9);
+}
+
 
 /* Asset Properties */
 

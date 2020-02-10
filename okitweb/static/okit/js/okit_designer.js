@@ -211,6 +211,57 @@ function saveJson(text, filename){
 }
 
 /*
+** Save As Template
+ */
+function handleSaveAs(evt) {
+    // Hide Menu
+    hideNavMenu();
+    // Hide Popups
+    hidePopups();
+    $(jqId('save-as-template')).removeClass('hidden');
+}
+
+function handleSaveAsTemplate(e) {
+    hideNavMenu();
+    okitJson.title = $(jqId('template_title')).val();
+    okitJson.description = $(jqId('template_description')).val();
+    okitJson.template_type = $(jqId('template_type')).val();
+    $.ajax({
+        type: 'post',
+        url: 'saveas/template',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(okitJson),
+        success: function(resp) {
+            console.info('Response : ' + resp);
+            // Hide Popups
+            hidePopups();
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+            // Hide Popups
+            hidePopups();
+        }
+    });
+}
+
+
+function handleCancelSaveAs(e) {
+    // Hide Query Box
+    $(jqId('save-as-template')).addClass('hidden');
+}
+
+
+/*
+** Popups
+ */
+
+function hidePopups() {
+    $('.popup-box').addClass('hidden');
+}
+
+/*
 ** Export SVG
  */
 
@@ -271,6 +322,8 @@ function handleQueryOci(e) {
 
     // Hide Menu
     hideNavMenu();
+    // Hide Popups
+    hidePopups();
     // Set Query Config Profile
     console.info('Profile : ' + okitSettings.profile);
     if (!okitSettings.profile) {
@@ -543,6 +596,8 @@ $(document).ready(function(){
 
     document.getElementById('file-save-menu-item').addEventListener('click', handleSave, false);
 
+    document.getElementById('file-save-as-menu-item').addEventListener('click', handleSaveAs, false);
+
     // Canvas Menu
     //document.getElementById('file-add-menu-item').addEventListener('click', handleAdd, false);
 
@@ -569,6 +624,14 @@ $(document).ready(function(){
 
     // Set Redraw when window resized
     window.addEventListener("resize", handleResize, false);
+
+    // Set Template Types
+    /*
+    let template_types_select = $('#template_type');
+    template_types_select.append($('<option>').attr('value', 'network').text('Network'));
+    template_types_select.append($('<option>').attr('value', 'compute').text('Compute'));
+    template_types_select.append($('<option>').attr('value', 'database').text('Database'));
+     */
 
     /*
     ** Set Empty Properties Sheet

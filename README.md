@@ -1,4 +1,4 @@
-# OCI Kinetic Infrastructure Toolkit
+# OCI Kinetic Infrastructure Toolkit [0.1.0](#version-0.1.0)
 
 OCI Kinetic Infrastructure Toolkit (OKIT) provides a number of tools that will allow full project integration from 
 Architects to Development and on to Operations.
@@ -30,6 +30,7 @@ web interface, to provide a portable generic, json, file that can be used to vis
 6. [Development](#development)
 7. [3rd Party Libraries](#3rd-party-libraries)
 8. [Artifact Support Matrix Gap Analysis](#artifact-support-matrix-gap-analysis)
+9. [Release Notes](#release-notes)
 
 
 
@@ -1482,3 +1483,51 @@ Storage Volume must exist before an Instance can use it hence it occurs before t
 - Defined Tags
 - Network Security Group
 - IPv6 (Only Government)
+
+
+
+
+
+
+
+
+
+
+
+## Release Notes
+
+### Version 0.1.1 
+**Release Date**: TBD
+#### Features
+1. Save Ass Template
+#### Bug Fixes
+
+### Version 0.1.0
+**Release Date**: 6th February 2020
+
+Initial internal release providing a number of basic functionality with required properties. This release allows for the 
+drawing of infrastructure, generation of Ansible & Terraform for the implemented artifacts and the querying of multiple
+regions to generate diagrams representing implemented infrastructure.
+#### Features
+1. Infrastructure Creation Web Interface
+    1. Compartment
+    2. Virtual Cloud Networks
+    3. Subnets
+    4. Instances
+    5. Load Balancers
+    6. Internet Gateways
+    7. NAT Gateways
+    8. Local Peering Gateways
+    9. Block Storage
+    10. Object Storage
+    11. File Storage
+    12. Autonomous Database
+    13. Service Gateway
+2. Ansible Script Generation
+3. Terraform Script Generation
+4. Export to Resource Manager
+5. Multi Regional Query of implemented Artifacts
+6. File (Diagram) Management
+    1. New
+    2. Save
+    3. Load

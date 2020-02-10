@@ -51,6 +51,32 @@ ul {
     padding-inline-start: 40px;
 }
 
+details summary::-webkit-details-marker {
+    display:none;
+}
+/*
+details > summary {
+    list-style: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+*/
+
+details summary:after {
+    border-radius: 5px;
+    content: "+";
+    color: #fff;
+    float: right;
+    margin: 2px;
+    padding: 0;
+    text-align: center;
+    width: 10px;
+}
+details[open] summary:after {
+    content: "-";
+}
+
 /*
 ** OCI Console Classes
  */
@@ -204,6 +230,23 @@ ul {
     cursor: none;
 }
 
+.sub-header-item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    font: normal 14px/20px Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #aeaeae;
+    text-decoration: none;
+    outline: 0;
+    user-select: none;
+    padding: 12.5px 30px;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    align-items: center;
+}
+
 .header-item img {
     display: block;
     height: 18px;
@@ -248,9 +291,36 @@ ul.nav-list li .header-item {
     align-items: center;
 }
 
+ul.nav-list li a:hover {background-color: #242526;border-left-width: 5px !important; border-left-color: lime; cursor: context-menu;}
 ul.nav-list1 li a:hover {background-color: #242526;border-left-width: 5px; border-left-color: #b4ec51; cursor: pointer;}
 ul.nav-list2 li a:hover {background-color: #1d2733;border-left-width: 5px; border-left-color: lime; cursor: context-menu;}
-ul.nav-list li a:hover {background-color: #F80000;border-left-width: 5px; border-left-color: lime; cursor: context-menu;}
+ul.nav-list3 li a:hover {background-color: #F80000;border-left-width: 5px; border-left-color: lime; cursor: context-menu;}
+
+.dropdown {
+}
+
+.dropdown-content {
+    display: none;
+    text-decoration: none;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-content1 a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
 
 /*
 ** Body
