@@ -129,13 +129,16 @@ def designer():
     for key in sorted(template_dirs.keys()):
         template_group = {'name': str(key).replace('_', ' ').title(), 'templates': []}
         for template_file in sorted(template_dirs[key]):
-            okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
-            filename = os.path.join(bp.static_folder, 'templates', key, template_file)
-            template_json = readJsonFile(filename)
-            logger.debug('Template Json : {0!s:s}'.format(template_json))
-            okit_template['title'] = template_json['title']
-            okit_template['description'] = template_json.get('description', template_json['title'])
-            template_group['templates'].append(okit_template)
+            try:
+                okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
+                filename = os.path.join(bp.static_folder, 'templates', key, template_file)
+                template_json = readJsonFile(filename)
+                logger.debug('Template Json : {0!s:s}'.format(template_json))
+                okit_template['title'] = template_json['title']
+                okit_template['description'] = template_json.get('description', template_json['title'])
+                template_group['templates'].append(okit_template)
+            except Exception as e:
+                logger.debug(e)
         template_groups.append(template_group)
     logger.debug('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
