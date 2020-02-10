@@ -26,6 +26,7 @@ import json
 from common.ociCommon import logJson
 from common.ociCommon import readJsonFile
 from common.ociCommon import standardiseIds
+from common.ociCommon import writeJsonFile
 from common.ociLogging import getLogger
 from common.ociQuery import executeQuery
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
@@ -85,7 +86,7 @@ def designer():
         logger.debug('filenames : {0!s:s}'.format(filenames))
         if os.path.basename(dirpath) != 'palette':
             svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
-            svg_icon_groups[os.path.basename(dirpath)] = filenames;
+            svg_icon_groups[os.path.basename(dirpath)] = filenames
         else:
             svg_files.extend(filenames)
     logger.debug('Files Walk : {0!s:s}'.format(svg_files))
@@ -108,19 +109,36 @@ def designer():
     logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
     logJson(palette_icon_groups)
 
-    # Read Template Files
-    template_files = os.listdir(os.path.join(bp.static_folder, 'templates'))
-    okit_templates = []
-    for template_file in sorted(template_files):
-        logger.debug('Template : {0!s:s}'.format(template_file))
-        logger.debug('Template full : {0!s:s}'.format(os.path.join(bp.static_folder, 'templates', template_file)))
-        okit_template = {'json': template_file, 'id': template_file.replace('.', '_')}
-        template_json = readJsonFile(os.path.join(bp.static_folder, 'templates', template_file))
-        logger.debug('Template Json : {0!s:s}'.format(template_json))
-        okit_template['title'] = template_json['title']
-        okit_template['description'] = template_json.get('description', template_json['title'])
-        okit_templates.append(okit_template)
-    logger.debug('Templates : {0!s:s}'.format(okit_templates))
+    template_files = []
+    template_dirs = {}
+    # Walk Template directory Structure
+    logger.debug('Walking the template directories')
+    rootdir = os.path.join(bp.static_folder, 'templates')
+    for (dirpath, dirnames, filenames) in os.walk(rootdir):
+        logger.debug('dirpath : {0!s:s}'.format(dirpath))
+        logger.debug('dirnames : {0!s:s}'.format(dirnames))
+        logger.debug('filenames : {0!s:s}'.format(filenames))
+        relpath = os.path.relpath(dirpath, rootdir)
+        logger.debug('Relative Path : {0!s:s}'.format(relpath))
+        template_files.extend([os.path.join(relpath, f) for f in filenames])
+        template_dirs[relpath] = filenames
+    logger.debug('Files Walk : {0!s:s}'.format(template_files))
+    logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
+
+    template_groups = []
+    for key in sorted(template_dirs.keys()):
+        template_group = {'name': str(key).replace('_', ' ').title(), 'templates': []}
+        for template_file in sorted(template_dirs[key]):
+            okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
+            filename = os.path.join(bp.static_folder, 'templates', key, template_file)
+            template_json = readJsonFile(filename)
+            logger.debug('Template Json : {0!s:s}'.format(template_json))
+            okit_template['title'] = template_json['title']
+            okit_template['description'] = template_json.get('description', template_json['title'])
+            template_group['templates'].append(okit_template)
+        template_groups.append(template_group)
+    logger.debug('Template Groups {0!s:s}'.format(template_groups))
+    logJson(template_groups)
 
     # Read Fragment Files
     fragment_files = os.listdir(os.path.join(bp.static_folder, 'fragments', 'svg'))
@@ -152,10 +170,10 @@ def designer():
         logger.info('Response Json {0!s:s}'.format(response_json))
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates=okit_templates, fragment_icons=fragment_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates_groups=template_groups, fragment_icons=fragment_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
         logger.info('>>>>>>>>> oci version {0!s:s}'.format(oci.__version__))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates=okit_templates, fragment_icons=fragment_icons)
+        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates_groups=template_groups, fragment_icons=fragment_icons)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
@@ -191,6 +209,32 @@ def generate(language):
             return str(e), 500
     else:
         return send_from_directory('/tmp', "okit-{0:s}.zip".format(str(language)), mimetype='application/zip', as_attachment=True)
+
+
+@bp.route('/saveas/<string:savetype>', methods=(['GET', 'POST']))
+def saveas(savetype):
+    logger.info('Save Type : {0:s} - {1:s}'.format(str(savetype), str(request.method)))
+    logger.debug('JSON     : {0:s}'.format(str(request.json)))
+    if request.method == 'POST':
+        try:
+            if savetype == 'template':
+                filename = '{0!s:s}.json'.format(request.json['title'].replace(' ', '_').lower())
+                template_type = request.json['template_type']
+                if len(template_type.strip()) == 0:
+                    fullpath = os.path.abspath(os.path.join(bp.static_folder, 'templates', filename))
+                else:
+                    typedir = os.path.abspath(os.path.join(bp.static_folder, 'templates', template_type.strip().replace(' ', '_').lower()))
+                    if not os.path.exists(typedir):
+                        os.makedirs(typedir)
+                    fullpath = os.path.abspath(os.path.join(typedir, filename))
+                logger.info('Template File Name : {0!s:s}'.format(filename))
+                logger.info('>>>>>> Path to file {0!s:s}'.format(fullpath))
+                writeJsonFile(request.json, fullpath)
+                return filename
+        except Exception as e:
+            logger.exception(e)
+            return str(e), 500
+
 
 
 @bp.route('/oci/compartment', methods=(['GET']))
