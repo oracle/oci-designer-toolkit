@@ -22,15 +22,19 @@ then
     exit 1
 fi
 
+if [ -z ${OKIT_OUTPUT_DIR} ]
+then
+  export OKIT_OUTPUT_DIR=${ROOT_DIR}/output
+fi
+
 #       -v ${OCI_WORKSPACE}:/okit/workspace:Z \
 export VOLUMES="\
        -v ${OCI_CONFIG_DIR}:/okit/config:Z \
        -v ${OCI_CONFIG_DIR}:/root/.oci:Z \
-       -v ${ROOT_DIR}/unittests:/okit/unittests:Z \
-       -v ${ROOT_DIR}/output/terraform:/okit/terraform:Z \
-       -v ${ROOT_DIR}/output/ansible:/okit/ansible:Z \
-       -v ${ROOT_DIR}/output/python:/okit/python:Z \
-       -v ${ROOT_DIR}/output/log:/okit/log:Z \
+       -v ${OKIT_OUTPUT_DIR}/terraform:/okit/terraform:Z \
+       -v ${OKIT_OUTPUT_DIR}/ansible:/okit/ansible:Z \
+       -v ${OKIT_OUTPUT_DIR}/python:/okit/python:Z \
+       -v ${OKIT_OUTPUT_DIR}/log:/okit/log:Z \
        -v ${ROOT_DIR}/okitweb:/okit/okitweb:Z \
        -v ${ROOT_DIR}/visualiser:/okit/visualiser:Z \
        -v ${ROOT_DIR}/converter:/okit/converter:Z
