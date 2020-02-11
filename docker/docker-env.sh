@@ -18,13 +18,14 @@ export PROJECTROOT=${ROOT_DIR}
 
 if [ -z ${OCI_CONFIG_DIR} ]
 then
-    echo "OCI_CONFIG_DIR has not been set exiting."
-    exit 1
+  echo "OCI_CONFIG_DIR has not been set exiting."
+  exit 1
 fi
 
 if [ -z ${OKIT_OUTPUT_DIR} ]
 then
   export OKIT_OUTPUT_DIR=${ROOT_DIR}/output
+  echo "OKIT_OUTPUT_DIR has not been set using ${OKIT_OUTPUT_DIR}"
 fi
 
 #       -v ${OCI_WORKSPACE}:/okit/workspace:Z \
