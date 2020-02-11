@@ -987,7 +987,12 @@ class OkitJson {
         // Load Balancers
         if (okit_json.hasOwnProperty('load_balancers')) {
             for (let artifact of okit_json['load_balancers']) {
-                artifact.parent_id = artifact.subnet_id;
+                if (artifact.hasOwnProperty('subnet_id')) {
+                    artifact.parent_id = artifact.subnet_id;
+                } else {
+                    artifact.parent_id = artifact.subnet_ids[0];
+                    artifact.subnet_id = artifact.subnet_ids[0];
+                }
                 let obj = this.newLoadBalancer(artifact);
                 console.info(obj);
             }
