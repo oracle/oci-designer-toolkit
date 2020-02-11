@@ -31,15 +31,19 @@ class Fragment extends OkitArtifact {
         this.fragment_url = '/static/okit/fragments/json/' + this.title.toLowerCase().split(' ').join('_') + '.json';
         this.fragment_url = '/static/okit/templates/' + this.title.toLowerCase().split(' ').join('_') + '.json';
 
-        // Get Parent Type
-        this.parent_type = d3.select(d3Id(data.parent_id)).attr('data-type');
-        console.log('Fragment Parent Type : ' + this.parent_type);
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];
         }
+        // Get Parent Type
+        this.parent_type = d3.select(d3Id(data.parent_id)).attr('data-type');
+        console.log('Fragment Parent Type : ' + this.parent_type);
+        if (this.parent_type === Compartment.getArtifactReference()) {
+            this.compartment_id = data.parent_id;
+        } else if (this.parent_type === VirtualCloudNetwork.getArtifactReference()) {
+            this.vcn_id = data.parent_id;
+        }
         // Add Get Parent function
-        this.parent_id = this.parent_id;
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
@@ -57,10 +61,16 @@ class Fragment extends OkitArtifact {
 
 
     /*
+    ** Get Container Child Artifacts
+     */
+
+
+    /*
     ** Add functionality
      */
-    addToCompartment(fragment_json={}) {
-        // We always need to process containers firt so the sequence is :
+    addToCompartment(fragment_json={}, compartment_id=null) {
+        console.info('Adding Fragment to Compartment ' + compartment_id);
+        // We always need to process containers first so the sequence is :
         //  1. Compartments
         //  2. Virtual Cloud Networks
         //  3. Subnets
@@ -68,7 +78,8 @@ class Fragment extends OkitArtifact {
         // Process Add Sub Compartments
         // process Add Virtual Cloud Networks
         fragment_json.virtual_cloud_networks.forEach(function (artifact) {
-            artifact.compartment_id = this.compartment_id;
+            artifact.compartment_id = compartment_id;
+            artifact.parent_id = compartment_id;
             this.getOkitJson().newVirtualCloudNetwork(artifact);
         }, this);
         // Remaining Artifacts
@@ -76,6 +87,7 @@ class Fragment extends OkitArtifact {
     }
 
     addToVirtualCloudNetwork(fragment_json={}, vcn_id=null) {
+        console.info('Adding Fragment to Virtual Cloud Network ' + vcn_id);
         let ignore_elements = [this.artifactToElement(compartment_artifact), this.artifactToElement(virtual_cloud_network_artifact), this.artifactToElement(subnet_artifact)];
         // Process Subnets (Container)
         fragment_json.subnets.forEach(function (artifact) {
@@ -83,6 +95,7 @@ class Fragment extends OkitArtifact {
             if (vcn_id !== null) {
                 artifact.vcn_id = vcn_id;
             }
+            artifact.parent_id = artifact.vcn_id;
             this.getOkitJson().newSubnet(artifact);
         }, this);
         // Process Remaining
@@ -100,28 +113,29 @@ class Fragment extends OkitArtifact {
     }
 
     addCommon(fragment_json, key, vcn_id=null) {
-        if (key === this.artifactToElement(autonomous_database_artifact)) {
+        if (key === this.artifactToElement(AutonomousDatabase.getArtifactReference())) {
             // Process Autonomous Databases
             fragment_json.autonomous_databases.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 this.getOkitJson().newAutonomousDatabase(artifact);
             }, this);
-        } else if (key === this.artifactToElement(block_storage_volume_artifact)) {
+        } else if (key === this.artifactToElement(BlockStorageVolume.getArtifactReference())) {
             // Process Block Storage Volumes
             fragment_json.block_storage_volumes.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 this.getOkitJson().newBlockStorageVolume(artifact);
             }, this);
-        } else if (key === this.artifactToElement(dynamic_routing_gateway_artifact)) {
+        } else if (key === this.artifactToElement(DynamicRoutingGateway.getArtifactReference())) {
             // Process Dynamic Routing Gateways
             fragment_json.dynamic_routing_gateways.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
                     artifact.vcn_id = vcn_id;
                 }
+                artifact.parent_id = artifact.vcn_id;
                 this.getOkitJson().newDynamicRoutingGateway(artifact);
             }, this);
-        } else if (key === this.artifactToElement(fast_connect_artifact)) {
+        } else if (key === this.artifactToElement(FastConnect.getArtifactReference())) {
             // Process Fast Connects
             fragment_json.fast_connects.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
@@ -130,67 +144,78 @@ class Fragment extends OkitArtifact {
                 }
                 this.getOkitJson().newFastConnect(artifact);
             }, this);
-        } else if (key === this.artifactToElement(instance_artifact)) {
+        } else if (key === this.artifactToElement(FileStorageSystem.getArtifactReference())) {
+            // Process File Storage System
+            fragment_json.file_storage_systems.forEach(function (artifact) {
+                artifact.compartment_id = this.compartment_id;
+                this.getOkitJson().newFileStorageSystem(artifact);
+            }, this);
+        } else if (key === this.artifactToElement(Instance.getArtifactReference())) {
             // Process Instances
             fragment_json.instances.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 this.getOkitJson().newInstance(artifact);
             }, this);
-        } else if (key === this.artifactToElement(internet_gateway_artifact)) {
+        } else if (key === this.artifactToElement(InternetGateway.getArtifactReference())) {
             // Process Internet Gateways
             fragment_json.internet_gateways.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
                     artifact.vcn_id = vcn_id;
                 }
+                artifact.parent_id = artifact.vcn_id;
                 this.getOkitJson().newInternetGateway(artifact);
             }, this);
-        } else if (key === this.artifactToElement(load_balancer_artifact)) {
+        } else if (key === this.artifactToElement(LoadBalancer.getArtifactReference())) {
             // Process Load Balancers
             fragment_json.load_balancers.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 this.getOkitJson().newLoadBalancer(artifact);
             }, this);
-        } else if (key === this.artifactToElement(nat_gateway_artifact)) {
+        } else if (key === this.artifactToElement(NATGateway.getArtifactReference())) {
             // Process NAT Gateways
             fragment_json.nat_gateways.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
                     artifact.vcn_id = vcn_id;
                 }
+                artifact.parent_id = artifact.vcn_id;
                 this.getOkitJson().newNATGateway(artifact);
             }, this);
-        } else if (key === this.artifactToElement(object_storage_bucket_artifact)) {
+        } else if (key === this.artifactToElement(ObjectStorageBucket.getArtifactReference())) {
             // Process Object Storage Buckets
             fragment_json.object_storage_buckets.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 this.getOkitJson().newObjectStorageBucket(artifact);
             }, this);
-        } else if (key === this.artifactToElement(route_table_artifact)) {
+        } else if (key === this.artifactToElement(RouteTable.getArtifactReference())) {
             // Process Route Tables
             fragment_json.route_tables.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
                     artifact.vcn_id = vcn_id;
                 }
+                artifact.parent_id = artifact.vcn_id;
                 this.getOkitJson().newRouteTable(artifact);
             }, this);
-        } else if (key === this.artifactToElement(security_list_artifact)) {
+        } else if (key === this.artifactToElement(SecurityList.getArtifactReference())) {
             // Process Security Lists
             fragment_json.security_lists.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
                     artifact.vcn_id = vcn_id;
                 }
+                artifact.parent_id = artifact.vcn_id;
                 this.getOkitJson().newSecurityList(artifact);
             }, this);
-        } else if (key === this.artifactToElement(service_gateway_artifact)) {
+        } else if (key === this.artifactToElement(ServiceGateway.getArtifactReference())) {
             // Process Service Gateways
             fragment_json.service_gateways.forEach(function (artifact) {
                 artifact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
                     artifact.vcn_id = vcn_id;
                 }
+                artifact.parent_id = artifact.vcn_id;
                 this.getOkitJson().newServiceGateway(artifact);
             }, this);
         } else {
@@ -203,8 +228,8 @@ class Fragment extends OkitArtifact {
      */
     load() {
         console.info('Loading ' + this.fragment_url);
+        console.info(this);
         // Need local variables for ajax success to access
-        let vcn_id = this.parent_id;
         let me = this;
         $.ajax({
             type: 'get',
@@ -214,10 +239,10 @@ class Fragment extends OkitArtifact {
             success: function(resp) {
                 let fragment_json = JSON.parse(resp);
                 // Add Fragment to Json
-                if (me.parent_type === compartment_artifact) {
-                    me.addToCompartment(fragment_json);
-                } else if (me.parent_type === virtual_cloud_network_artifact) {
-                    me.addToVirtualCloudNetwork(fragment_json, vcn_id);
+                if (me.parent_type === Compartment.getArtifactReference()) {
+                    me.addToCompartment(fragment_json, me.compartment_id);
+                } else if (me.parent_type === VirtualCloudNetwork.getArtifactReference()) {
+                    me.addToVirtualCloudNetwork(fragment_json, me.vcn_id);
                 } else {
                     console.warn('Invalid Drop Parent ' + me.parent_type);
                 }
