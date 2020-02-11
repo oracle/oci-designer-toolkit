@@ -271,7 +271,7 @@ class Compartment extends OkitContainerArtifact {
                 let response_json = JSON.parse(resp);
                 response_json.parent_id = ROOT_CANVAS_ID;
                 regionOkitJson[region].load({compartments: [response_json]});
-                console.info('Compartment Query : ' + response_json.name);
+                console.info(me.getArtifactReference() + ' Query : ' + response_json.name);
                 me.querySubComponents(request, region, response_json.id);
                 redrawSVGCanvas(region);
                 $('#' + compartment_query_cb).prop('checked', true);
@@ -287,7 +287,7 @@ class Compartment extends OkitContainerArtifact {
     }
 
     static query(request = {}, region='') {
-        console.info('------------- Compartment Query --------------------');
+        console.info('------------- Compartments Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         let me = this;
         $.ajax({
@@ -299,10 +299,9 @@ class Compartment extends OkitContainerArtifact {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({compartments: response_json});
-                for (let compartment of response_json) {
-                    console.info('Compartment Query : ' + compartment.name);
-                    console.info('Compartment Query : ' + compartment.id);
-                    me.querySubComponents(request, region, compartment.id);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + 's Query : ' + artifact.display_name);
+                    me.querySubComponents(request, region, artifact.id);
                 }
                 redrawSVGCanvas(region);
                 $('#' + compartment_query_cb).prop('checked', true);

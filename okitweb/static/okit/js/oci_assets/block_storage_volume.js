@@ -204,6 +204,7 @@ class BlockStorageVolume extends OkitArtifact {
     static query(request = {}, region='') {
         console.info('------------- Block Storage Volume Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/BlockStorageVolume',
@@ -213,9 +214,8 @@ class BlockStorageVolume extends OkitArtifact {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({block_storage_volumes: response_json});
-                let len =  response_json.length;
-                for(let i=0;i<len;i++ ){
-                    console.info('Block Storage Volume Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + block_storage_volume_query_cb).prop('checked', true);

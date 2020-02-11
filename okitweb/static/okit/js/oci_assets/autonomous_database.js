@@ -223,6 +223,7 @@ class AutonomousDatabase extends OkitArtifact {
     static query(request = {}, region='') {
         console.info('------------- Autonomous Database Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/AutonomousDatabase',
@@ -232,9 +233,8 @@ class AutonomousDatabase extends OkitArtifact {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({autonomous_databases: response_json});
-                let len =  response_json.length;
-                for(let i=0;i<len;i++ ){
-                    console.info('Autonomous Database Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + autonomous_database_query_cb).prop('checked', true);

@@ -281,6 +281,7 @@ class ServiceGateway extends OkitArtifact {
         console.info('------------- Service Gateway Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/ServiceGateway',
@@ -290,9 +291,8 @@ class ServiceGateway extends OkitArtifact {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({service_gateways: response_json});
-                let len =  response_json.length;
-                for(let i=0;i<len;i++ ){
-                    console.info('Service Gateway Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + service_gateway_query_cb).prop('checked', true);

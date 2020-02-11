@@ -347,6 +347,7 @@ class Instance extends OkitArtifact {
         console.info('------------- Instance Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         console.info('------------- Subnet      : ' + request.subnet_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/Instance',
@@ -356,9 +357,8 @@ class Instance extends OkitArtifact {
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({instances: response_json});
-                let len = response_json.length;
-                for (let i = 0; i < len; i++) {
-                    console.info('Instance Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + instance_query_cb).prop('checked', true);
