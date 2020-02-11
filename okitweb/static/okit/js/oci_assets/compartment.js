@@ -7,7 +7,8 @@ console.info('Loaded Compartment Javascript');
 /*
 ** Set Valid drop Targets
  */
-asset_drop_targets[compartment_artifact] = [];
+//asset_drop_targets[Compartment.getArtifactReference()] = Compartment.getDropTargets();
+asset_drop_targets[compartment_artifact] = [compartment_artifact];
 asset_connect_targets[compartment_artifact] = [];
 
 const compartment_query_cb = "compartment-query-cb";
@@ -26,6 +27,7 @@ class Compartment extends OkitContainerArtifact {
         this.parent_id = 'canvas';
         this.id = 'okit-' + compartment_prefix + '-' + uuidv4();
         this.compartment_id = this.id;
+        this.compartment_id = null;
         //this.name = generateDefaultName(compartment_prefix, okitjson.compartments.length + 1);
         this.name = this.generateDefaultName(okitjson.compartments.length + 1);
         // Update with any passed data
@@ -46,6 +48,18 @@ class Compartment extends OkitContainerArtifact {
                 return null;
             }
         }
+    }
+
+    /*
+    ** Test If Top Level compartment
+     */
+
+    isTopLevel() {
+        //if (this.compartment_id) {
+        if (this.getParent()) {
+                return false;
+        }
+        return true;
     }
 
 
@@ -146,6 +160,13 @@ class Compartment extends OkitContainerArtifact {
     getSvgDefinition() {
         let dimensions = this.getDimensions(this.id);
         let definition = this.newSVGDefinition(this, compartment_artifact);
+        console.info('>>>>>>>> Parent');
+        console.info(this.getParent());
+        if (this.getParent()) {
+            let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
+            definition['svg']['x'] = parent_first_child.dx;
+            definition['svg']['y'] = parent_first_child.dy;
+        }
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
@@ -163,7 +184,8 @@ class Compartment extends OkitContainerArtifact {
 
     getMinimumDimensions() {
         // Check if this is the top level container
-        if (this.id === this.compartment_id) {
+        //if (this.id === this.compartment_id) {
+        if (this.isTopLevel()) {
             return {width: $('#canvas-div').width(), height: $('#canvas-div').height()};
         } else {
             return {width: container_artifact_x_padding * 2, height: container_artifact_y_padding * 2};
@@ -198,7 +220,9 @@ class Compartment extends OkitContainerArtifact {
     ** Child Type Functions
      */
     getContainerArtifacts() {
-        return [virtual_cloud_network_artifact];
+        //return [VirtualCloudNetwork.getArtifactReference(), Compartment.getArtifactReference()];
+        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
+        //return [VirtualCloudNetwork.getArtifactReference()];
     }
 
     getLeftArtifacts() {
