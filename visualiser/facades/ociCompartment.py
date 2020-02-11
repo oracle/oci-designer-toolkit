@@ -27,7 +27,8 @@ logger = getLogger()
 
 
 class OCICompartments(OCIIdentityConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
+        self.compartment_id = compartment_id
         self.compartments_obj = []
         self.compartments_json = []
         self.names = {}
@@ -41,11 +42,11 @@ class OCICompartments(OCIIdentityConnection):
         self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
         return self.compartments_json[0]
 
-    def list(self, id=None, filter={}, recursive=False):
-        if id is None:
-            id = self.compartment_ocid
+    def list(self, compartment_id=None, filter={}, recursive=False):
+        if compartment_id is None:
+            compartment_id = self.compartment_id
         # Recursive only valid if we are querying the root / tenancy
-        recursive = (recursive and (id == self.config['tenancy']))
+        recursive = (recursive and (compartment_id == self.config['tenancy']))
 
         # Add filter to only return ACTIVE Compartments
         if filter is None:
@@ -54,7 +55,7 @@ class OCICompartments(OCIIdentityConnection):
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'ACTIVE'
 
-        compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=id, compartment_id_in_subtree=recursive).data
+        compartments = oci.pagination.list_call_get_all_results(self.client.list_compartments, compartment_id=compartment_id, compartment_id_in_subtree=recursive).data
 
         # Convert to Json object
         compartments_json = self.toJson(compartments)
@@ -77,7 +78,7 @@ class OCICompartments(OCIIdentityConnection):
         return self.compartments_json
 
     def listTenancy(self, filter={}):
-        return self.list(id=self.config['tenancy'], filter=filter, recursive=True)
+        return self.list(compartment_id=self.config['tenancy'], filter=filter, recursive=True)
 
     def listHierarchicalNames(self, filter={}):
         compartments = self.listTenancy(filter=filter)

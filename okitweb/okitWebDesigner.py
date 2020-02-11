@@ -291,16 +291,18 @@ def ociArtifacts(artifact):
     parsed_query_string = urllib.parse.unquote(query_string.decode())
     query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
     logJson(query_json)
-    logger.info(json.dumps(query_json, sort_keys=True, indent=2, separators=(',', ': ')))
     config_profile = query_json.get('config_profile', 'DEFAULT')
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     response_json = {}
     config = {'region': query_json['region']}
     if artifact == 'Compartment':
-        logger.info('---- Processing Compartments')
+        logger.info('---- Processing Compartment')
         oci_compartments = OCICompartments(config=config, profile=config_profile)
-        #response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
         response_json = oci_compartments.get(compartment_id=query_json['compartment_id'])
+    elif artifact == 'Compartments':
+        logger.info('---- Processing Compartments')
+        oci_compartments = OCICompartments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
     elif artifact == 'VirtualCloudNetwork':
         logger.info('---- Processing Virtual Cloud Networks')
         oci_virtual_cloud_networks = OCIVirtualCloudNetworks(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])

@@ -841,7 +841,12 @@ class OkitJson {
         // Compartments
         if (okit_json.hasOwnProperty('compartments')) {
             for (let artifact of okit_json['compartments']) {
-                artifact.parent_id = artifact.compartment_id;
+                if (artifact.parent_id && artifact.parent_id === ROOT_CANVAS_ID) {
+                    artifact.parent_id = ROOT_CANVAS_ID;
+                    console.info('Adding Root Compartment ' + artifact.name);
+                } else {
+                    artifact.parent_id = artifact.compartment_id;
+                }
                 let obj = this.newCompartment(artifact);
                 console.info(obj);
             }

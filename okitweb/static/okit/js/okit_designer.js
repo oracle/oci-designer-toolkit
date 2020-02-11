@@ -10,6 +10,7 @@ console.info('Loaded Designer Javascript');
 /*
  * Define designer working variables
  */
+const ROOT_CANVAS_ID='canvas';
 // OKIT Json
 let okitJson = new OkitJson();
 let regionOkitJson = {};
@@ -421,9 +422,9 @@ function showQueryResults() {
     newCanvas();
     console.info('Regions Ids : ' + okitQueryRequestJson.regions);
     regionOkitJson = {};
-    if (okitQueryRequestJson.regions.length === 1) {
-        $('#query-progress').removeClass('hidden');
-    }
+    //if (okitQueryRequestJson.regions.length === 1) {
+    //    $('#query-progress').removeClass('hidden');
+    //}
     if (okitQueryRequestJson.regions.length > 0) {
         for (let region of okitQueryRequestJson.regions) {
             console.info('Processing Multiple Selected Region : ' + region);
@@ -438,7 +439,7 @@ function showQueryResults() {
             //queryCompartmentAjax(region);
             let request = JSON.clone(okitQueryRequestJson);
             request.region = region;
-            Compartment.query(request, region);
+            Compartment.queryRoot(request, region);
         }
         $(jqId(regionTabName(okitQueryRequestJson.regions[0]))).trigger("click");
     } else if (okitQueryRequestJson.regions.length === 1) {

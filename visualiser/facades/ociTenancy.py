@@ -39,7 +39,7 @@ class OCITenancies(OCICompartments):
 
     def listCompartments(self, filter={}):
         tenancy_json = self.get(self.config['tenancy'])
-        tenancy_json['compartments'] = super(OCITenancies, self).list(id=self.config['tenancy'], filter=filter, recursive=True)
+        tenancy_json['compartments'] = super(OCITenancies, self).list(compartment_id=self.config['tenancy'], filter=filter, recursive=True)
         return tenancy_json
 
 
