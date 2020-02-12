@@ -10,7 +10,7 @@ data "oci_core_images" "{{ resource_name }}Images" {
 # ------ Create Instance
 resource "oci_core_instance" "{{ resource_name }}" {
     # Required
-    compartment_id      = {{ compartment_ocid }}
+    compartment_id      = {{ compartment_id }}
     shape               = {{ shape }}
     # Optional
     display_name        = {{ display_name }}

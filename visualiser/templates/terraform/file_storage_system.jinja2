@@ -2,7 +2,7 @@
 # ------ Create File Storage System
 resource "oci_file_storage_file_system" "{{ resource_name }}" {
     # Required
-    compartment_id      = {{ compartment_ocid }}
+    compartment_id      = {{ compartment_id }}
     availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(1) }} - 1]["name"]
 
     # Optional

@@ -111,6 +111,14 @@ class OCIGenerator(object):
 
         # Process keys within the input json file
         # - Compartment Sub Components
+        # -- Compartments
+        # --- Get List of Compartment Ids
+        compartment_ids = [compartment['id'] for compartment in self.visualiser_json.get('compartments', [])]
+        logger.info('Compartment Ids {0!s:s}'.format(compartment_ids))
+        for compartment in self.visualiser_json.get('compartments', []):
+            compartment['root_compartment'] = (compartment.get('compartment_id', 'ROOT') not in compartment_ids)
+            logger.info('Compartment {0!s:s}'.format(compartment))
+            self.renderCompartment(compartment)
         # -- Virtual Cloud Networks
         for virtual_cloud_network in self.visualiser_json.get('virtual_cloud_networks', []):
             self.renderVirtualCloudNetwork(virtual_cloud_network)
@@ -168,6 +176,35 @@ class OCIGenerator(object):
 
         return
 
+    def renderCompartment(self, compartment):
+        # Read Data
+        standardisedName = self.standardiseResourceName(compartment['name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = compartment['name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Compartment Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Root Compartment
+        self.jinja2_variables["root_compartment"] = compartment["root_compartment"]
+        # ---- Parent Compartment Id
+        if not compartment["root_compartment"]:
+            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = compartment["name"]
+        # ---- Description
+        variableName = '{0:s}_description'.format(standardisedName)
+        self.jinja2_variables["description"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = compartment.get("description", compartment["name"])
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("compartment.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.info(self.create_sequence[-1])
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderVirtualCloudNetwork(self, virtual_cloud_network):
         # Read Data
         standardisedName = self.standardiseResourceName(virtual_cloud_network['display_name'])
@@ -177,6 +214,8 @@ class OCIGenerator(object):
         # Process Virtual Cloud Networks Data
         logger.info('Processing Virtual Cloud Network Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[virtual_cloud_network['compartment_id']]))
         # ---- CIDR Block
         variableName = '{0:s}_cidr_block'.format(standardisedName)
         self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
@@ -201,9 +240,11 @@ class OCIGenerator(object):
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = block_storage_volume['display_name']
-        # Process Virtual Cloud Networks Data
+        # Process Block Storage Volume Data
         logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume['compartment_id']]))
         # ---- Availability Domain
         variableName = '{0:s}_availability_domain'.format(standardisedName)
         self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
@@ -232,9 +273,11 @@ class OCIGenerator(object):
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = object_storage_bucket['display_name']
-        # Process Virtual Cloud Networks Data
+        # Process Object Storage Bucket Data
         logger.info('Processing Object Storage Bucket Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[object_storage_bucket['compartment_id']]))
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
@@ -270,6 +313,8 @@ class OCIGenerator(object):
         # Process Autonomous Databases Data
         logger.info('Processing Autonomous Database Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[autonomous_database['compartment_id']]))
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
@@ -317,6 +362,8 @@ class OCIGenerator(object):
         # Process Internet Gateway Data
         logger.info('Processing Internet Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[internet_gateway['compartment_id']]))
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[internet_gateway['vcn_id']]))
         # ---- Display Name
@@ -338,6 +385,8 @@ class OCIGenerator(object):
         # Process NAT Gateway Data
         logger.info('Processing NAT Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[nat_gateway['compartment_id']]))
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[nat_gateway['vcn_id']]))
         # ---- Display Name
@@ -359,6 +408,8 @@ class OCIGenerator(object):
         # Process Service Gateway Data
         logger.info('Processing Service Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['compartment_id']]))
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['vcn_id']]))
         # ---- Display Name
@@ -386,6 +437,8 @@ class OCIGenerator(object):
         # Process NAT Gateway Data
         logger.info('Processing NAT Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['compartment_id']]))
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
         # ---- Display Name
@@ -407,6 +460,8 @@ class OCIGenerator(object):
         # Process Security List Data
         logger.info('Processing Security List Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['compartment_id']]))
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['vcn_id']]))
         # ---- Display Name
@@ -433,7 +488,7 @@ class OCIGenerator(object):
             jinja2_egress_rule["destination_type"] = self.formatJinja2Variable(variableName)
             # ------ Description
             variableName = '{0:s}_egress_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = egress_rule["description"]
+            self.run_variables[variableName] = egress_rule.get("description", "Egress Rule {0:02d}".format(rule_number))
             jinja2_egress_rule["description"] = self.formatJinja2Variable(variableName)
             # Add to Egress Rules used for Jinja template
             jinja2_egress_rules.append(jinja2_egress_rule)
@@ -456,7 +511,7 @@ class OCIGenerator(object):
             jinja2_ingress_rule["source"] = self.formatJinja2Variable(variableName)
             # ------ Description
             variableName = '{0:s}_ingress_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = ingress_rule["description"]
+            self.run_variables[variableName] = ingress_rule.get("description", "Ingress Rule {0:02d}".format(rule_number))
             jinja2_ingress_rule["description"] = self.formatJinja2Variable(variableName)
             # Add to Ingress Rules used for Jinja template
             jinja2_ingress_rules.append(jinja2_ingress_rule)
@@ -478,6 +533,8 @@ class OCIGenerator(object):
         # Process Route Table Data
         logger.info('Processing Route Table Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['compartment_id']]))
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['vcn_id']]))
         # ---- Display Name
@@ -504,7 +561,7 @@ class OCIGenerator(object):
             jinja2_route_rule["destination_type"] = self.formatJinja2Variable(variableName)
             # ------ Description
             variableName = '{0:s}_route_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule["description"]
+            self.run_variables[variableName] = route_rule.get("description", "Rule {0:02d}".format(rule_number))
             jinja2_route_rule["description"] = self.formatJinja2Variable(variableName)
             # Add to Egress Rules used for Jinja template
             jinja2_route_rules.append(jinja2_route_rule)
@@ -526,6 +583,8 @@ class OCIGenerator(object):
         # Process Subnet Data
         logger.info('Processing Subnet Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['compartment_id']]))
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # ---- Display Name
@@ -569,6 +628,8 @@ class OCIGenerator(object):
         # Process Local Peering Gateway Data
         logger.info('Processing Local Peering Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['compartment_id']]))
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['vcn_id']]))
         # ---- Display Name
@@ -597,6 +658,8 @@ class OCIGenerator(object):
         # Process Virtual Cloud Networks Data
         logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['compartment_id']]))
         # ---- Availability Domain
         variableName = '{0:s}_availability_domain'.format(standardisedName)
         self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
@@ -638,6 +701,8 @@ class OCIGenerator(object):
         # Process Subnet Data
         logger.info('Processing Instance Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance['compartment_id']]))
         # ---- Availability Domain
         variableName = '{0:s}_availability_domain'.format(standardisedName)
         self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
@@ -734,6 +799,8 @@ class OCIGenerator(object):
         logger.info('Processing Loadbalancer Information {0!s:s}'.format(standardisedName))
         #logger.info('Loadbalancer Information {0!s:s}'.format(loadbalancer))
         # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[loadbalancer['compartment_id']]))
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
