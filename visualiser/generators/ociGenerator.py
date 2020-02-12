@@ -176,134 +176,6 @@ class OCIGenerator(object):
 
         return
 
-    def renderCompartment(self, compartment):
-        # Read Data
-        standardisedName = self.standardiseResourceName(compartment['name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = compartment['name']
-        # Process Virtual Cloud Networks Data
-        logger.info('Processing Compartment Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Root Compartment
-        self.jinja2_variables["root_compartment"] = compartment["root_compartment"]
-        # ---- Parent Compartment Id
-        if not compartment["root_compartment"]:
-            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = compartment["name"]
-        # ---- Description
-        variableName = '{0:s}_description'.format(standardisedName)
-        self.jinja2_variables["description"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = compartment.get("description", compartment["name"])
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("compartment.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.info(self.create_sequence[-1])
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderVirtualCloudNetwork(self, virtual_cloud_network):
-        # Read Data
-        standardisedName = self.standardiseResourceName(virtual_cloud_network['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = virtual_cloud_network['display_name']
-        # Process Virtual Cloud Networks Data
-        logger.info('Processing Virtual Cloud Network Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[virtual_cloud_network['compartment_id']]))
-        # ---- CIDR Block
-        variableName = '{0:s}_cidr_block'.format(standardisedName)
-        self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["cidr_block"]
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["display_name"]
-        # ---- DNS Label
-        variableName = '{0:s}_dns_label'.format(standardisedName)
-        self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["dns_label"]
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("virtual_cloud_network.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderBlockStorageVolume(self, block_storage_volume):
-        # Read Data
-        standardisedName = self.standardiseResourceName(block_storage_volume['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = block_storage_volume['display_name']
-        # Process Block Storage Volume Data
-        logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume['compartment_id']]))
-        # ---- Availability Domain
-        variableName = '{0:s}_availability_domain'.format(standardisedName)
-        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = block_storage_volume["availability_domain"]
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = block_storage_volume["display_name"]
-        # ---- Backup Policy
-        variableName = '{0:s}_backup_policy'.format(standardisedName)
-        self.jinja2_variables["backup_policy"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = block_storage_volume["backup_policy"]
-        # ---- Size In GBs
-        variableName = '{0:s}_size_in_gbs'.format(standardisedName)
-        self.jinja2_variables["size_in_gbs"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = int(block_storage_volume["size_in_gbs"])
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("block_storage_volume.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderObjectStorageBucket(self, object_storage_bucket):
-        # Read Data
-        standardisedName = self.standardiseResourceName(object_storage_bucket['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = object_storage_bucket['display_name']
-        # Process Object Storage Bucket Data
-        logger.info('Processing Object Storage Bucket Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[object_storage_bucket['compartment_id']]))
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["display_name"]
-        # ---- Namespace
-        variableName = '{0:s}_namespace'.format(standardisedName)
-        self.jinja2_variables["namespace"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["namespace"]
-        # ---- Name
-        variableName = '{0:s}_name'.format(standardisedName)
-        self.jinja2_variables["name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["name"]
-        # ---- Storage Tier
-        variableName = '{0:s}_storage_tier'.format(standardisedName)
-        self.jinja2_variables["storage_tier"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["storage_tier"]
-        # ---- Public Access Type
-        variableName = '{0:s}_public_access_type'.format(standardisedName)
-        self.jinja2_variables["public_access_type"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["public_access_type"]
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("object_storage_bucket.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
     def renderAutonomousDatabase(self, autonomous_database):
         # Read Data
         standardisedName = self.standardiseResourceName(autonomous_database['display_name'])
@@ -353,78 +225,65 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderInternetGateway(self, internet_gateway):
+    def renderBlockStorageVolume(self, block_storage_volume):
         # Read Data
-        standardisedName = self.standardiseResourceName(internet_gateway['display_name'])
+        standardisedName = self.standardiseResourceName(block_storage_volume['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = internet_gateway['display_name']
-        # Process Internet Gateway Data
-        logger.info('Processing Internet Gateway Information {0!s:s}'.format(standardisedName))
+        self.jinja2_variables['output_name'] = block_storage_volume['display_name']
+        # Process Block Storage Volume Data
+        logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[internet_gateway['compartment_id']]))
-        # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[internet_gateway['vcn_id']]))
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume['compartment_id']]))
+        # ---- Availability Domain
+        variableName = '{0:s}_availability_domain'.format(standardisedName)
+        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = block_storage_volume["availability_domain"]
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = internet_gateway["display_name"]
+        self.run_variables[variableName] = block_storage_volume["display_name"]
+        # ---- Backup Policy
+        variableName = '{0:s}_backup_policy'.format(standardisedName)
+        self.jinja2_variables["backup_policy"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = block_storage_volume["backup_policy"]
+        # ---- Size In GBs
+        variableName = '{0:s}_size_in_gbs'.format(standardisedName)
+        self.jinja2_variables["size_in_gbs"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = int(block_storage_volume["size_in_gbs"])
         # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("internet_gateway.jinja2")
+        jinja2_template = self.jinja2_environment.get_template("block_storage_volume.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderNATGateway(self, nat_gateway):
+    def renderCompartment(self, compartment):
         # Read Data
-        standardisedName = self.standardiseResourceName(nat_gateway['display_name'])
+        standardisedName = self.standardiseResourceName(compartment['name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = nat_gateway['display_name']
-        # Process NAT Gateway Data
-        logger.info('Processing NAT Gateway Information {0!s:s}'.format(standardisedName))
+        self.jinja2_variables['output_name'] = compartment['name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Compartment Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[nat_gateway['compartment_id']]))
-        # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[nat_gateway['vcn_id']]))
+        # ---- Root Compartment
+        self.jinja2_variables["root_compartment"] = compartment["root_compartment"]
+        # ---- Parent Compartment Id
+        if not compartment["root_compartment"]:
+            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
         # ---- Display Name
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = nat_gateway["display_name"]
+        self.run_variables[variableName] = compartment["name"]
+        # ---- Description
+        variableName = '{0:s}_description'.format(standardisedName)
+        self.jinja2_variables["description"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = compartment.get("description", compartment["name"])
         # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("nat_gateway.jinja2")
+        jinja2_template = self.jinja2_environment.get_template("compartment.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderServiceGateway(self, service_gateway):
-        # Read Data
-        standardisedName = self.standardiseResourceName(service_gateway['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = service_gateway['display_name']
-        # Process Service Gateway Data
-        logger.info('Processing Service Gateway Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['compartment_id']]))
-        # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['vcn_id']]))
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = service_gateway["display_name"]
-
-        # ---- Service Name
-        variableName = '{0:s}_service_name'.format(standardisedName)
-        self.jinja2_variables["service_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = service_gateway["service_name"]
-
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("service_gateway.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.info(self.create_sequence[-1])
         logger.debug(self.create_sequence[-1])
         return
 
@@ -447,204 +306,6 @@ class OCIGenerator(object):
         self.run_variables[variableName] = dynamic_routing_gateway["display_name"]
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("dynamic_routing_gateway.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderSecurityList(self, security_list):
-        # Read Data
-        standardisedName = self.standardiseResourceName(security_list['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = security_list['display_name']
-        # Process Security List Data
-        logger.info('Processing Security List Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['compartment_id']]))
-        # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['vcn_id']]))
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = security_list["display_name"]
-        # ---- Egress Rules
-        rule_number = 1
-        jinja2_egress_rules = []
-        for egress_rule in security_list.get('egress_security_rules', []):
-            # ------ Protocol
-            variableName = '{0:s}_egress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = egress_rule["protocol"]
-            jinja2_egress_rule = {
-                "protocol": self.formatJinja2Variable(variableName)
-            }
-            # ------ Destination
-            variableName = '{0:s}_egress_rule_{1:02d}_destination'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = egress_rule["destination"]
-            jinja2_egress_rule["destination"] = self.formatJinja2Variable(variableName)
-            # ------ Destination Type
-            variableName = '{0:s}_egress_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = egress_rule["destination_type"]
-            jinja2_egress_rule["destination_type"] = self.formatJinja2Variable(variableName)
-            # ------ Description
-            variableName = '{0:s}_egress_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = egress_rule.get("description", "Egress Rule {0:02d}".format(rule_number))
-            jinja2_egress_rule["description"] = self.formatJinja2Variable(variableName)
-            # Add to Egress Rules used for Jinja template
-            jinja2_egress_rules.append(jinja2_egress_rule)
-            # Increment rule number
-            rule_number += 1
-        self.jinja2_variables["egress_rules"] = jinja2_egress_rules
-        # ---- Ingress Rules
-        rule_number = 1
-        jinja2_ingress_rules = []
-        for ingress_rule in security_list.get('ingress_security_rules', []):
-            # ------ Protocol
-            variableName = '{0:s}_ingress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = ingress_rule["protocol"]
-            jinja2_ingress_rule = {
-                "protocol": self.formatJinja2Variable(variableName)
-            }
-            # ------ Source
-            variableName = '{0:s}_ingress_rule_{1:02d}_source'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = ingress_rule["source"]
-            jinja2_ingress_rule["source"] = self.formatJinja2Variable(variableName)
-            # ------ Description
-            variableName = '{0:s}_ingress_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = ingress_rule.get("description", "Ingress Rule {0:02d}".format(rule_number))
-            jinja2_ingress_rule["description"] = self.formatJinja2Variable(variableName)
-            # Add to Ingress Rules used for Jinja template
-            jinja2_ingress_rules.append(jinja2_ingress_rule)
-            # Increment rule number
-            rule_number += 1
-        self.jinja2_variables["ingress_rules"] = jinja2_ingress_rules
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("security_list.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderRouteTable(self, route_table):
-        # Read Data
-        standardisedName = self.standardiseResourceName(route_table['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = route_table['display_name']
-        # Process Route Table Data
-        logger.info('Processing Route Table Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['compartment_id']]))
-        # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['vcn_id']]))
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = route_table["display_name"]
-        # ---- Route Rules
-        rule_number = 1
-        jinja2_route_rules = []
-        for route_rule in route_table.get('route_rules', []):
-            # ------ Network End Point
-            variableName = '{0:s}_route_rule_{1:02d}_network_entity_id'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule["network_entity_id"]
-            jinja2_route_rule = {
-                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
-            }
-            # ------ Destination
-            variableName = '{0:s}_route_rule_{1:02d}_destination'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule["destination"]
-            jinja2_route_rule["destination"] = self.formatJinja2Variable(variableName)
-            # ------ Destination Type
-            variableName = '{0:s}_route_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule["destination_type"]
-            jinja2_route_rule["destination_type"] = self.formatJinja2Variable(variableName)
-            # ------ Description
-            variableName = '{0:s}_route_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule.get("description", "Rule {0:02d}".format(rule_number))
-            jinja2_route_rule["description"] = self.formatJinja2Variable(variableName)
-            # Add to Egress Rules used for Jinja template
-            jinja2_route_rules.append(jinja2_route_rule)
-            # Increment rule number
-            rule_number += 1
-        self.jinja2_variables["route_rules"] = jinja2_route_rules
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("route_table.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderSubnet(self, subnet):
-        # Read Data
-        standardisedName = self.standardiseResourceName(subnet['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = subnet['display_name']
-        # Process Subnet Data
-        logger.info('Processing Subnet Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['compartment_id']]))
-        # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["display_name"]
-        # ---- CIDR Block
-        variableName = '{0:s}_cidr_block'.format(standardisedName)
-        self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["cidr_block"]
-        # ---- DNS Label
-        variableName = '{0:s}_dns_label'.format(standardisedName)
-        self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["dns_label"]
-        # ---- Route Table
-        self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['route_table_id']]))
-        # ---- Security Lists
-        jinja2_security_list_ids = []
-        for security_list_id in subnet.get('security_list_ids', []):
-            security_list = self.id_name_map[security_list_id]
-            jinja2_security_list_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(security_list)))
-        self.jinja2_variables["security_list_ids"] = ','.join(jinja2_security_list_ids)
-        self.jinja2_variables["security_list_ids"] = jinja2_security_list_ids
-        # ---- DHCP Options
-        if 'dhcp_options' in subnet:
-            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['dhcp_options']))
-        else:
-            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("subnet.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderLocalPeeringGateway(self, local_peering_gateway):
-        # Read Data
-        standardisedName = self.standardiseResourceName(local_peering_gateway['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = local_peering_gateway['display_name']
-        # Process Local Peering Gateway Data
-        logger.info('Processing Local Peering Gateway Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['compartment_id']]))
-        # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['vcn_id']]))
-        # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = local_peering_gateway["display_name"]
-        # ---- Route Table
-        self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['route_table_id']]))
-        # ---- Remote Peering gateway
-        if len(local_peering_gateway['peer_id']) > 0:
-            self.jinja2_variables["peer_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['peer_id']]))
-        else:
-            self.jinja2_variables.pop("peer_id", None)
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("local_peering_gateway.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
@@ -789,6 +450,29 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderInternetGateway(self, internet_gateway):
+        # Read Data
+        standardisedName = self.standardiseResourceName(internet_gateway['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = internet_gateway['display_name']
+        # Process Internet Gateway Data
+        logger.info('Processing Internet Gateway Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[internet_gateway['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[internet_gateway['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = internet_gateway["display_name"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("internet_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderLoadbalancer(self, loadbalancer):
         # Read Data
         standardisedName = self.standardiseResourceName(loadbalancer['display_name'])
@@ -821,6 +505,322 @@ class OCIGenerator(object):
         self.jinja2_variables["backend_instances"] = jinja2_backend_instances_resource_names
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("loadbalancer.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderLocalPeeringGateway(self, local_peering_gateway):
+        # Read Data
+        standardisedName = self.standardiseResourceName(local_peering_gateway['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = local_peering_gateway['display_name']
+        # Process Local Peering Gateway Data
+        logger.info('Processing Local Peering Gateway Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = local_peering_gateway["display_name"]
+        # ---- Route Table
+        self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['route_table_id']]))
+        # ---- Remote Peering gateway
+        if len(local_peering_gateway['peer_id']) > 0:
+            self.jinja2_variables["peer_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['peer_id']]))
+        else:
+            self.jinja2_variables.pop("peer_id", None)
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("local_peering_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderNATGateway(self, nat_gateway):
+        # Read Data
+        standardisedName = self.standardiseResourceName(nat_gateway['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = nat_gateway['display_name']
+        # Process NAT Gateway Data
+        logger.info('Processing NAT Gateway Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[nat_gateway['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[nat_gateway['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = nat_gateway["display_name"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("nat_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderObjectStorageBucket(self, object_storage_bucket):
+        # Read Data
+        standardisedName = self.standardiseResourceName(object_storage_bucket['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = object_storage_bucket['display_name']
+        # Process Object Storage Bucket Data
+        logger.info('Processing Object Storage Bucket Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[object_storage_bucket['compartment_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["display_name"]
+        # ---- Namespace
+        variableName = '{0:s}_namespace'.format(standardisedName)
+        self.jinja2_variables["namespace"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["namespace"]
+        # ---- Name
+        variableName = '{0:s}_name'.format(standardisedName)
+        self.jinja2_variables["name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["name"]
+        # ---- Storage Tier
+        variableName = '{0:s}_storage_tier'.format(standardisedName)
+        self.jinja2_variables["storage_tier"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["storage_tier"]
+        # ---- Public Access Type
+        variableName = '{0:s}_public_access_type'.format(standardisedName)
+        self.jinja2_variables["public_access_type"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = object_storage_bucket["public_access_type"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("object_storage_bucket.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderRouteTable(self, route_table):
+        # Read Data
+        standardisedName = self.standardiseResourceName(route_table['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = route_table['display_name']
+        # Process Route Table Data
+        logger.info('Processing Route Table Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = route_table["display_name"]
+        # ---- Route Rules
+        rule_number = 1
+        jinja2_route_rules = []
+        for route_rule in route_table.get('route_rules', []):
+            # ------ Network End Point
+            variableName = '{0:s}_route_rule_{1:02d}_network_entity_id'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = route_rule["network_entity_id"]
+            jinja2_route_rule = {
+                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
+            }
+            # ------ Destination
+            variableName = '{0:s}_route_rule_{1:02d}_destination'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = route_rule["destination"]
+            jinja2_route_rule["destination"] = self.formatJinja2Variable(variableName)
+            # ------ Destination Type
+            variableName = '{0:s}_route_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = route_rule["destination_type"]
+            jinja2_route_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            # ------ Description
+            variableName = '{0:s}_route_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = route_rule.get("description", "Rule {0:02d}".format(rule_number))
+            jinja2_route_rule["description"] = self.formatJinja2Variable(variableName)
+            # Add to Egress Rules used for Jinja template
+            jinja2_route_rules.append(jinja2_route_rule)
+            # Increment rule number
+            rule_number += 1
+        self.jinja2_variables["route_rules"] = jinja2_route_rules
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("route_table.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderSecurityList(self, security_list):
+        # Read Data
+        standardisedName = self.standardiseResourceName(security_list['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = security_list['display_name']
+        # Process Security List Data
+        logger.info('Processing Security List Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = security_list["display_name"]
+        # ---- Egress Rules
+        rule_number = 1
+        jinja2_egress_rules = []
+        for egress_rule in security_list.get('egress_security_rules', []):
+            # ------ Protocol
+            variableName = '{0:s}_egress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = egress_rule["protocol"]
+            jinja2_egress_rule = {
+                "protocol": self.formatJinja2Variable(variableName)
+            }
+            # ------ Destination
+            variableName = '{0:s}_egress_rule_{1:02d}_destination'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = egress_rule["destination"]
+            jinja2_egress_rule["destination"] = self.formatJinja2Variable(variableName)
+            # ------ Destination Type
+            variableName = '{0:s}_egress_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = egress_rule["destination_type"]
+            jinja2_egress_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            # ------ Description
+            variableName = '{0:s}_egress_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = egress_rule.get("description", "Egress Rule {0:02d}".format(rule_number))
+            jinja2_egress_rule["description"] = self.formatJinja2Variable(variableName)
+            # Add to Egress Rules used for Jinja template
+            jinja2_egress_rules.append(jinja2_egress_rule)
+            # Increment rule number
+            rule_number += 1
+        self.jinja2_variables["egress_rules"] = jinja2_egress_rules
+        # ---- Ingress Rules
+        rule_number = 1
+        jinja2_ingress_rules = []
+        for ingress_rule in security_list.get('ingress_security_rules', []):
+            # ------ Protocol
+            variableName = '{0:s}_ingress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = ingress_rule["protocol"]
+            jinja2_ingress_rule = {
+                "protocol": self.formatJinja2Variable(variableName)
+            }
+            # ------ Source
+            variableName = '{0:s}_ingress_rule_{1:02d}_source'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = ingress_rule["source"]
+            jinja2_ingress_rule["source"] = self.formatJinja2Variable(variableName)
+            # ------ Description
+            variableName = '{0:s}_ingress_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = ingress_rule.get("description", "Ingress Rule {0:02d}".format(rule_number))
+            jinja2_ingress_rule["description"] = self.formatJinja2Variable(variableName)
+            # Add to Ingress Rules used for Jinja template
+            jinja2_ingress_rules.append(jinja2_ingress_rule)
+            # Increment rule number
+            rule_number += 1
+        self.jinja2_variables["ingress_rules"] = jinja2_ingress_rules
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("security_list.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderServiceGateway(self, service_gateway):
+        # Read Data
+        standardisedName = self.standardiseResourceName(service_gateway['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = service_gateway['display_name']
+        # Process Service Gateway Data
+        logger.info('Processing Service Gateway Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = service_gateway["display_name"]
+
+        # ---- Service Name
+        variableName = '{0:s}_service_name'.format(standardisedName)
+        self.jinja2_variables["service_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = service_gateway["service_name"]
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("service_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderSubnet(self, subnet):
+        # Read Data
+        standardisedName = self.standardiseResourceName(subnet['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = subnet['display_name']
+        # Process Subnet Data
+        logger.info('Processing Subnet Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = subnet["display_name"]
+        # ---- CIDR Block
+        variableName = '{0:s}_cidr_block'.format(standardisedName)
+        self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = subnet["cidr_block"]
+        # ---- DNS Label
+        variableName = '{0:s}_dns_label'.format(standardisedName)
+        self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = subnet["dns_label"]
+        # ---- Route Table
+        self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['route_table_id']]))
+        # ---- Security Lists
+        jinja2_security_list_ids = []
+        for security_list_id in subnet.get('security_list_ids', []):
+            security_list = self.id_name_map[security_list_id]
+            jinja2_security_list_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(security_list)))
+        self.jinja2_variables["security_list_ids"] = ','.join(jinja2_security_list_ids)
+        self.jinja2_variables["security_list_ids"] = jinja2_security_list_ids
+        # ---- DHCP Options
+        if 'dhcp_options' in subnet:
+            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['dhcp_options']))
+        else:
+            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("subnet.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderVirtualCloudNetwork(self, virtual_cloud_network):
+        # Read Data
+        standardisedName = self.standardiseResourceName(virtual_cloud_network['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = virtual_cloud_network['display_name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Virtual Cloud Network Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[virtual_cloud_network['compartment_id']]))
+        # ---- CIDR Block
+        variableName = '{0:s}_cidr_block'.format(standardisedName)
+        self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = virtual_cloud_network["cidr_block"]
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = virtual_cloud_network["display_name"]
+        # ---- DNS Label
+        variableName = '{0:s}_dns_label'.format(standardisedName)
+        self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = virtual_cloud_network["dns_label"]
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("virtual_cloud_network.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
