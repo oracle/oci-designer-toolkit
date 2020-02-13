@@ -434,7 +434,7 @@ function showQueryResults() {
             //okitJson = new OkitJson('', regionTabContentName(region));
             //regionOkitJson[region] = okitJson;
             regionOkitJson[region] = new OkitJson();
-            setBusyIcon();
+            //setBusyIcon();
             //$('#query-progress').removeClass('hidden');
             //queryCompartmentAjax(region);
             let request = JSON.clone(okitQueryRequestJson);
