@@ -124,7 +124,7 @@ SOFTWARE AND DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## UPL / Apache
 
-### oci 2.6.0 (https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/license.html)
+### OCI Python SDK 2.6.0 (https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/license.html)
 Copyright (c) 2016, 2017, Oracle and/or its affiliates.  All rights reserved.
 
 ### License Text
