@@ -120,24 +120,26 @@ class Instance extends OkitArtifact {
         });
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        // Add Connector Data
-        svg.attr("data-compartment-id", this.compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true);
-        // Draw Attachments
-        this.drawAttachments();
+        if (rect && rect.node()) {
+            let boundingClientRect = rect.node().getBoundingClientRect();
+            // Add Connector Data
+            svg.attr("data-compartment-id", this.compartment_id)
+                .attr("data-connector-start-y", boundingClientRect.y)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", this.id)
+                .attr("dragable", true)
+                .selectAll("*")
+                .attr("data-connector-start-y", boundingClientRect.y)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", this.id)
+                .attr("dragable", true);
+            // Draw Attachments
+            this.drawAttachments();
+        }
         console.groupEnd();
         return svg;
     }
@@ -222,9 +224,12 @@ class Instance extends OkitArtifact {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let dimensions = this.getDimensions();
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
+        let parent = this.getParent();
+        if (parent) {
+            let first_child = parent.getChildOffset(this.getArtifactReference());
+            definition['svg']['x'] = first_child.dx;
+            definition['svg']['y'] = first_child.dy;
+        }
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.blue;
