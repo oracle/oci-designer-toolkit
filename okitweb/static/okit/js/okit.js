@@ -736,11 +736,12 @@ class OkitContainerArtifact extends OkitArtifact {
     }
 
     getContainerChildOffset() {
+        console.info('Get Container Child Offset');
         let offset = this.getFirstContainerChildOffset();
         // Count how many top edge children and adjust.
         for (let child of this.getContainerArtifacts()) {
-            //count += $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").length;
-            $(jqId(this.id + '-svg')).children('svg[data-type="' + child + '"]').each(
+            //console.info('Container Child Count : ' + $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "'][data-parent-id='" + this.id + "']").length);
+            $(jqId(this.id + '-svg')).children('svg[data-type="' + child + '"][data-parent-id="' + this.id + '"]').each(
                 function() {
                     offset.dy += Math.round(Number($(this).attr('height')) + positional_adjustments.spacing.y);
                 });
@@ -836,10 +837,16 @@ class OkitJson {
     ** Load Simple Json Structure and build Object Based JSON
      */
     load(okit_json) {
-        console.groupCollapsed('Load OKT Json');
+        console.groupCollapsed('Load OKIT Json');
         // Compartments
         if (okit_json.hasOwnProperty('compartments')) {
             for (let artifact of okit_json['compartments']) {
+                if (artifact.parent_id && artifact.parent_id === ROOT_CANVAS_ID) {
+                    artifact.parent_id = ROOT_CANVAS_ID;
+                    console.info('Adding Root Compartment ' + artifact.name);
+                } else {
+                    artifact.parent_id = artifact.compartment_id;
+                }
                 let obj = this.newCompartment(artifact);
                 console.info(obj);
             }
@@ -877,6 +884,7 @@ class OkitJson {
         okitSettings.is_default_security_list = false;
         if (okit_json.hasOwnProperty('virtual_cloud_networks')) {
             for (let artifact of okit_json['virtual_cloud_networks']) {
+                artifact.parent_id = artifact.compartment_id;
                 let obj = this.newVirtualCloudNetwork(artifact);
                 console.info(obj);
             }
@@ -979,7 +987,12 @@ class OkitJson {
         // Load Balancers
         if (okit_json.hasOwnProperty('load_balancers')) {
             for (let artifact of okit_json['load_balancers']) {
-                artifact.parent_id = artifact.subnet_id;
+                if (artifact.hasOwnProperty('subnet_id')) {
+                    artifact.parent_id = artifact.subnet_id;
+                } else {
+                    artifact.parent_id = artifact.subnet_ids[0];
+                    artifact.subnet_id = artifact.subnet_ids[0];
+                }
                 let obj = this.newLoadBalancer(artifact);
                 console.info(obj);
             }
@@ -1113,6 +1126,8 @@ class OkitJson {
     // Autonomous Database
     newAutonomousDatabase(data, parent=null) {
         console.info('New Autonomous Database');
+        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
+        data.compartment_id = data.parent_id;
         this.autonomous_databases.push(new AutonomousDatabase(data, this, parent));
         return this.autonomous_databases[this.autonomous_databases.length - 1];
     }
@@ -1120,12 +1135,17 @@ class OkitJson {
     // Block Storage Volume
     newBlockStorageVolume(data, parent=null) {
         console.info('New Block Storage Volume');
+        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
+        data.compartment_id = data.parent_id;
         this.block_storage_volumes.push(new BlockStorageVolume(data, this, parent));
         return this.block_storage_volumes[this.block_storage_volumes.length - 1];
     }
 
     // Compartment
     newCompartment(data = {}, parent=null) {
+        console.info('New Compartment');
+        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
+        data.compartment_id = data.parent_id;
         this['compartments'].push(new Compartment(data, this, parent));
         return this['compartments'][this['compartments'].length - 1];
     }
@@ -1210,6 +1230,8 @@ class OkitJson {
     // Object Storage Bucket
     newObjectStorageBucket(data, parent=null) {
         console.info('New Object Storage Bucket');
+        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
+        data.compartment_id = data.parent_id;
         this.object_storage_buckets.push(new ObjectStorageBucket(data, this, parent));
         return this.object_storage_buckets[this.object_storage_buckets.length - 1];
     }
@@ -1252,6 +1274,8 @@ class OkitJson {
     // Virtual Cloud Network
     newVirtualCloudNetwork(data, parent=null) {
         console.info('New Virtual Cloud Network');
+        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
+        data.compartment_id = data.parent_id;
         this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this, parent));
         return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
     }

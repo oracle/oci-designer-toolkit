@@ -120,24 +120,26 @@ class Instance extends OkitArtifact {
         });
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        // Add Connector Data
-        svg.attr("data-compartment-id", this.compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-end-y", boundingClientRect.y)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true);
-        // Draw Attachments
-        this.drawAttachments();
+        if (rect && rect.node()) {
+            let boundingClientRect = rect.node().getBoundingClientRect();
+            // Add Connector Data
+            svg.attr("data-compartment-id", this.compartment_id)
+                .attr("data-connector-start-y", boundingClientRect.y)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", this.id)
+                .attr("dragable", true)
+                .selectAll("*")
+                .attr("data-connector-start-y", boundingClientRect.y)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-end-y", boundingClientRect.y)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
+                .attr("data-connector-id", this.id)
+                .attr("dragable", true);
+            // Draw Attachments
+            this.drawAttachments();
+        }
         console.groupEnd();
         return svg;
     }
@@ -222,9 +224,12 @@ class Instance extends OkitArtifact {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let dimensions = this.getDimensions();
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
+        let parent = this.getParent();
+        if (parent) {
+            let first_child = parent.getChildOffset(this.getArtifactReference());
+            definition['svg']['x'] = first_child.dx;
+            definition['svg']['y'] = first_child.dy;
+        }
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.blue;
@@ -347,6 +352,7 @@ class Instance extends OkitArtifact {
         console.info('------------- Instance Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         console.info('------------- Subnet      : ' + request.subnet_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/Instance',
@@ -356,9 +362,8 @@ class Instance extends OkitArtifact {
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({instances: response_json});
-                let len = response_json.length;
-                for (let i = 0; i < len; i++) {
-                    console.info('Instance Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + instance_query_cb).prop('checked', true);

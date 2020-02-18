@@ -309,14 +309,9 @@ class Subnet extends OkitContainerArtifact {
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({subnets: response_json});
-                let len = response_json.length;
-                if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                        console.info('Subnet Query : ' + response_json[i]['display_name']);
-                        me.querySubComponents(request, region, response_json[i]['id']);
-                    }
-                } else {
-                    me.querySubComponents(request, region, null);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                    me.querySubComponents(request, region, artifact.id);
                 }
                 redrawSVGCanvas(region);
                 $('#' + subnet_query_cb).prop('checked', true);

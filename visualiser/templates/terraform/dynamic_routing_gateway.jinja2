@@ -2,7 +2,7 @@
 # ------ Create DRG
 resource "oci_core_drg" "{{ resource_name }}" {
     # Required
-    compartment_id = {{ compartment_ocid }}
+    compartment_id = {{ compartment_id }}
     # Optional
     display_name   = {{ display_name }}
 {% if defined_tags is defined %}

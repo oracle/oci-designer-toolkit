@@ -2,13 +2,13 @@
 # ------ Get Namespace for Compartment
 data "oci_objectstorage_namespace" "{{ resource_name }}Namespace" {
     #Optional
-    compartment_id = {{ compartment_ocid }}
+    compartment_id = {{ compartment_id }}
 }
 
 # ------ Create Object Storage Bucket
 resource "oci_objectstorage_bucket" "{{ resource_name }}" {
     #Required
-    compartment_id = {{ compartment_ocid }}
+    compartment_id = {{ compartment_id }}
     name           = {{ name }}
     namespace      = data.oci_objectstorage_namespace.{{ resource_name }}Namespace.namespace
 
