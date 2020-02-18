@@ -14,7 +14,7 @@ ENV https_proxy ${https_proxy}
 ENV PYTHONIOENCODING=utf8
 ENV PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit"
 # Specify Ansible Config variables
-ENV ANSIBLE_CONFIG_DIR=/okit/ansible/config
+ENV ANSIBLE_CONFIG_DIR=/okit/config/ansible
 ENV ANSIBLE_INVENTORY=${ANSIBLE_CONFIG_DIR}/ansible_hosts
 ENV ANSIBLE_CONFIG=${ANSIBLE_CONFIG_DIR}/ansible.cfg
 ENV ANSIBLE_LIBRARY=${SRC}:${ANSIBLE_LIBRARY}
