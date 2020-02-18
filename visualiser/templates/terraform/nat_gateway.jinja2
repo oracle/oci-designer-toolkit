@@ -2,7 +2,7 @@
 # ------ Create NAT Gateway
 resource "oci_core_nat_gateway" "{{ resource_name }}" {
     # Required
-    compartment_id = {{ compartment_ocid }}
+    compartment_id = {{ compartment_id }}
     vcn_id         = {{ vcn_id }}
     # Optional
     display_name   = {{ display_name }}

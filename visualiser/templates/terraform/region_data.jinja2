@@ -8,3 +8,15 @@ data "template_file" "AvailabilityDomainNames" {
     count    = length(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains)
     template = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[count.index]["name"]
 }
+# -------- Get Home Region Name
+data "oci_identity_region_subscriptions" "RegionSubscriptions" {
+    tenancy_id = {{ tenancy_ocid }}
+}
+locals {
+    HomeRegion = [for x in data.oci_identity_region_subscriptions.RegionSubscriptions.region_subscriptions: x if x.is_home_region][0]
+}
+
+#output "HomeRegion" {
+#    value = local.HomeRegion
+#}
+

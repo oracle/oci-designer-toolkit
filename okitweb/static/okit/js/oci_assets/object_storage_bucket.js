@@ -242,6 +242,7 @@ class ObjectStorageBucket extends OkitArtifact {
     static query(request = {}, region='') {
         console.info('------------- Object Storage Bucket Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/ObjectStorageBucket',
@@ -251,9 +252,8 @@ class ObjectStorageBucket extends OkitArtifact {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({object_storage_buckets: response_json});
-                let len =  response_json.length;
-                for(let i=0;i<len;i++ ){
-                    console.info('Object Storage Bucket Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + object_storage_bucket_query_cb).prop('checked', true);

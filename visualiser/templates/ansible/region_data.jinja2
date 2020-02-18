@@ -6,3 +6,12 @@
         compartment_id: "{{ compartment_ocid }}"
         region: "{{ region }}"
       register: AvailabilityDomains
+
+# -------- Get Home Region Name
+    - name: Get Region Subscription
+      oci_region_subscription_facts:
+        id: "{{ tenancy_ocid }}"
+      register: RegionSubscriptions
+
+    - set_fact:
+        HomeRegion: RegionSubscriptions.region_subscriptions | selectattr("is_home_region", "equalto", "true")

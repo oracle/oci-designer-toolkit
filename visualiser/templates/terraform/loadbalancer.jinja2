@@ -2,7 +2,7 @@
 # ------ Create Loadbalancer
 resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
     # Required
-    compartment_id = {{ compartment_ocid }}
+    compartment_id = {{ compartment_id }}
     shape          = {{ shape | default('"100Mbps"') }}
     display_name   = {{ display_name }}
     subnet_ids     = [

@@ -2,7 +2,7 @@
 # ------ Create Internet Gateway
 resource "oci_core_internet_gateway" "{{ resource_name }}" {
     # Required
-    compartment_id = {{ compartment_ocid }}
+    compartment_id = {{ compartment_id }}
     vcn_id         = {{ vcn_id }}
     # Optional
     enabled        = true

@@ -25,7 +25,6 @@ class LoadBalancer extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(load_balancer_prefix, okitjson.load_balancers.length + 1);
         this.display_name = this.generateDefaultName(okitjson.load_balancers.length + 1);
         this.compartment_id = '';
         this.subnet_id = data.parent_id;
@@ -254,6 +253,7 @@ class LoadBalancer extends OkitArtifact {
         console.info('------------- Load Balancer Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         console.info('------------- Subnet      : ' + request.subnet_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/LoadBalancer',
@@ -263,9 +263,8 @@ class LoadBalancer extends OkitArtifact {
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({load_balancers: response_json});
-                let len = response_json.length;
-                for (let i = 0; i < len; i++) {
-                    console.info('Load Balancer Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + load_balancer_query_cb).prop('checked', true);

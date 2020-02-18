@@ -387,6 +387,7 @@ class SecurityList extends OkitArtifact {
         console.info('------------- Security List Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/SecurityList',
@@ -396,9 +397,8 @@ class SecurityList extends OkitArtifact {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({security_lists: response_json});
-                let len =  response_json.length;
-                for(let i=0;i<len;i++ ){
-                    console.info('Security List Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + security_list_query_cb).prop('checked', true);

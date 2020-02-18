@@ -349,15 +349,9 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({virtual_cloud_networks: response_json});
-                let len =  response_json.length;
-                if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                        console.info('Virtual Cloud Network Query : ' + response_json[i]['display_name']);
-                        me.querySubComponents(request, region, response_json[i]['id']);
-                    }
-                } else {
-                    // Do this to clear check boxes
-                    me.querySubComponents(request, region, null);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                    me.querySubComponents(request, region, artifact.id);
                 }
                 redrawSVGCanvas(region);
                 $('#' + virtual_cloud_network_query_cb).prop('checked', true);

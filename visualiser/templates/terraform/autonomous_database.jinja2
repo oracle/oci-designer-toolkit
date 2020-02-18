@@ -3,7 +3,7 @@
 resource "oci_database_autonomous_database" "{{ resource_name }}" {
     #Required
     admin_password           = {{ admin_password }}
-    compartment_id           = {{ compartment_ocid }}
+    compartment_id           = {{ compartment_id }}
     cpu_core_count           = {{ cpu_core_count }}
     data_storage_size_in_tbs = {{ data_storage_size_in_tbs }}
     db_name                  = {{ db_name }}

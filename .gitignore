@@ -32,3 +32,5 @@ output
 #sonar-project.properties
 
 .vagrant
+
+config

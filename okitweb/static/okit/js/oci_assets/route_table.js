@@ -326,6 +326,7 @@ class RouteTable extends OkitArtifact {
         console.info('------------- Route Table Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
+        let me = this;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/RouteTable',
@@ -335,9 +336,8 @@ class RouteTable extends OkitArtifact {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({route_tables: response_json});
-                let len =  response_json.length;
-                for(let i=0;i<len;i++ ){
-                    console.info('Route Table Query : ' + response_json[i]['display_name']);
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + route_table_query_cb).prop('checked', true);

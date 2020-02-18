@@ -129,13 +129,16 @@ def designer():
     for key in sorted(template_dirs.keys()):
         template_group = {'name': str(key).replace('_', ' ').title(), 'templates': []}
         for template_file in sorted(template_dirs[key]):
-            okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
-            filename = os.path.join(bp.static_folder, 'templates', key, template_file)
-            template_json = readJsonFile(filename)
-            logger.debug('Template Json : {0!s:s}'.format(template_json))
-            okit_template['title'] = template_json['title']
-            okit_template['description'] = template_json.get('description', template_json['title'])
-            template_group['templates'].append(okit_template)
+            try:
+                okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
+                filename = os.path.join(bp.static_folder, 'templates', key, template_file)
+                template_json = readJsonFile(filename)
+                logger.debug('Template Json : {0!s:s}'.format(template_json))
+                okit_template['title'] = template_json['title']
+                okit_template['description'] = template_json.get('description', template_json['title'])
+                template_group['templates'].append(okit_template)
+            except Exception as e:
+                logger.debug(e)
         template_groups.append(template_group)
     logger.debug('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
@@ -288,16 +291,18 @@ def ociArtifacts(artifact):
     parsed_query_string = urllib.parse.unquote(query_string.decode())
     query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
     logJson(query_json)
-    logger.info(json.dumps(query_json, sort_keys=True, indent=2, separators=(',', ': ')))
     config_profile = query_json.get('config_profile', 'DEFAULT')
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     response_json = {}
     config = {'region': query_json['region']}
     if artifact == 'Compartment':
-        logger.info('---- Processing Compartments')
+        logger.info('---- Processing Compartment')
         oci_compartments = OCICompartments(config=config, profile=config_profile)
-        #response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
         response_json = oci_compartments.get(compartment_id=query_json['compartment_id'])
+    elif artifact == 'Compartments':
+        logger.info('---- Processing Compartments')
+        oci_compartments = OCICompartments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
     elif artifact == 'VirtualCloudNetwork':
         logger.info('---- Processing Virtual Cloud Networks')
         oci_virtual_cloud_networks = OCIVirtualCloudNetworks(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])

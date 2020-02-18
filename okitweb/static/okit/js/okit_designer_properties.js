@@ -68,8 +68,8 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
         function(index) {
             let inputfield = $(this);
             inputfield.on('input', function () {
-                console.warn('>>>>>>>> Change Event for ' + this.id + ' [' + this.type + '] ' + this.value + '(' + json_element.id + ')');
-                console.warn(json_element);
+                //console.warn('>>>>>>>> Change Event for ' + this.id + ' [' + this.type + '] ' + this.value + '(' + json_element.id + ')');
+                //console.warn(json_element);
                 if (this.type === 'text') {
                     json_element[this.id] = this.value;
                     // If this is the name field copy to the Ids Map
@@ -93,7 +93,7 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
                 } else {
                     console.info('Unknown input type ' + $(this).attr('type'));
                 }
-                console.warn(json_element);
+                //console.warn(json_element);
             });
             inputfield.on('blur', function() {
                 if (settings) {
