@@ -96,16 +96,20 @@ RUN yum update -y ; \
     echo "alias scpopc='scp -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
     echo ''                                                                          >> /etc/bashrc ; \
     echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
+    echo ''                                                                          >> /etc/bashrc ; \
+    echo '# Terraform Quick Aliases'                                                               >> /etc/bashrc ; \
     echo "alias ta='terraform apply da.plan' "                                                     >> /etc/bashrc ; \
     echo "alias td='terraform destroy -var-file=/okit/config/connection.tfvars -auto-approve' "    >> /etc/bashrc ; \
     echo "alias tp='terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan' "        >> /etc/bashrc ; \
     echo "alias ti='terraform init' "                                                              >> /etc/bashrc ; \
     echo "alias tg='terraform get --update' "                                                      >> /etc/bashrc ; \
-    echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connection.yml\" ' "   >> /etc/bashrc ; \
-    echo "alias wtd='terraform destroy -var-file=/okit/config/wizards.tfvars -auto-approve' "      >> /etc/bashrc ; \
-    echo "alias wtp='terraform plan -var-file=/okit/config/wizards.tfvars -out=da.plan' "          >> /etc/bashrc ; \
     echo "alias otunzip='unzip -o okit-terraform.zip -d okit-terraform' "                          >> /etc/bashrc ; \
+    echo "alias otupdate='cd ..;otunzip;cd okit-terraform"                                         >> /etc/bashrc ; \
+    echo ''                                                                                        >> /etc/bashrc ; \
+    echo '# Ansible Quick Aliases'                                                                 >> /etc/bashrc ; \
+    echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connection.yml\" ' "   >> /etc/bashrc ; \
     echo "alias oaunzip='unzip -o okit-ansible.zip -d okit-ansible' "                              >> /etc/bashrc ; \
+    echo "alias oaupdate='cd ..;oaunzip;cd okit-terraform"                                         >> /etc/bashrc ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
