@@ -2,9 +2,10 @@
 # ------ Create Route Table
     - name: Create Route Table {{ output_name }}
       oci_route_table:
-        # Required
+        region: "{{ region }}"
         state: "present"
-        compartment_id: "{{ compartment_ocid }}"
+        # Required
+        compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
         route_rules:
 {% for rule in route_rules %}

@@ -2,9 +2,10 @@
 # ------ Create Security List
     - name: Create Security List {{ output_name }}
       oci_security_list:
+        region: "{{ region }}"
         state: "present"
         # Required
-        compartment_id: "{{ compartment_ocid }}"
+        compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
         egress_security_rules:
 {% for rule in egress_rules %}
