@@ -2,6 +2,7 @@
 # ------ Get List OL7 Images
     - name: List images
       oci_image_facts:
+        region: "{{ region }}"
         compartment_id: "{{ compartment_ocid }}"
         operating_system: "{{ os }}"
         operating_system_version: "{{ os_version }}"
@@ -11,10 +12,11 @@
 # ------ Create Instance {{ output_name }}
     - name: Create Instance {{ output_name }}
       oci_instance:
+        region: "{{ region }}"
         state: "present"
         # Required
         availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
-        compartment_id: "{{ compartment_ocid }}"
+        compartment_id: "{{ compartment_id }}"
         shape: "{{ shape }}"
         # Optional
         display_name: "{{ display_name }}"
@@ -59,6 +61,7 @@
 # ------ Get Vnic Attachments for Instance {{ output_name }}
     - name: Get VNIC Attachments for {{ output_name }}
       oci_vnic_attachment_facts:
+        region: "{{ region }}"
         compartment_id: "{{ compartment_ocid }}"
         instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
       register: {{ resource_name }}VnicAttachments
@@ -66,6 +69,7 @@
 # ------ Get Primary Vnic for Instance {{ output_name }}
     - name: Get Primary VNIC for {{ output_name }}
       oci_vnic_facts:
+        region: "{{ region }}"
         id: "{{ '{{' }} ({{ resource_name }}VnicAttachments.vnic_attachments | map(attribute='vnic_id') | list)[0] {{ '}}' }}"
       register: {{ resource_name }}PrimaryVnic
 
@@ -77,6 +81,7 @@
 {% for volume in volume_attachments %}
     - name: Attach volume {{ loop.index }} to {{ output_name }} instance
       oci_volume_attachment:
+        region: "{{ region }}"
         instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
         type: "{{ volume.attachment_type | default('iscsi') }}"
         volume_id: "{{ volume.block_storage_volume_id }}"
@@ -87,6 +92,7 @@
 {% for vnic in vnic_attachments %}
     - name: Attach vnic {{ loop.index }} to {{ output_name }} instance
       oci_vnic_attachment:
+        region: "{{ region }}"
         instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
         display_name: "{{ vnic.display_name }}"
         #nicindex: 0

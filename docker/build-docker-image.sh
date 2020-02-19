@@ -9,6 +9,8 @@ docker images
 
 docker rmi ${DOCKERIMAGE}
 
+docker images
+
 echo "*******************************************************************"
 echo "**                                                               **"
 echo "**  Building OL7 Image                                           **"
@@ -30,3 +32,11 @@ do
 done
 
 docker images
+
+
+echo "*******************************************************************"
+echo "**                                                               **"
+echo "**  Image Build Complete                                         **"
+echo "**  ${DOCKERIMAGE}                                               "
+echo "**                                                               **"
+echo "*******************************************************************"

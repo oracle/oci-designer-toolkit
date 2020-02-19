@@ -14,4 +14,9 @@
       register: RegionSubscriptions
 
     - set_fact:
-        HomeRegion: RegionSubscriptions.region_subscriptions | selectattr("is_home_region", "equalto", "true")
+        HomeRegion: "{{ '{{' }} (RegionSubscriptions.region_subscriptions | selectattr('is_home_region') | list)[0] {{ '}}' }}"
+        HomeRegionName: "{{ '{{' }} (RegionSubscriptions.region_subscriptions | selectattr('is_home_region') | map(attribute='region_name') | list)[0] {{ '}}' }}"
+
+#    - debug: msg="{{ '{{' }} HomeRegion {{ '}}' }}"
+    - debug: msg="Home Region {{ '{{' }} HomeRegionName {{ '}}' }}"
+    - debug: msg="Working Region {{ region }}"

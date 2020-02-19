@@ -3,9 +3,10 @@
 # -------- If Workload OLTP
     - name: Create Autonomous OLTP Database
       oci_autonomous_database:
-        state:  "{{ '{{' }} state | default('present') {{ '}}' }}"
+        region: "{{ region }}"
+        state:  "present"
         # Required
-        compartment_id: "{{ compartment_ocid }}"
+        compartment_id: "{{ compartment_id }}"
         admin_password: "{{ admin_password }}"
         data_storage_size_in_tbs: "{{ data_storage_size_in_tbs }}"
         cpu_core_count: "{{ cpu_core_count }}"
