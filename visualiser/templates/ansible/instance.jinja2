@@ -34,7 +34,7 @@
         source_details:
             # Required
             source_type: "{{ source_type | default('image') }}"
-            image_id: "{{ '{{' }} ({{ resource_name }}Images.images | map(attribute='id') | list)[0] {{ '}}' }}"
+            image_id: "{{ '{{' }} ({{ resource_name }}Images.images | map(attribute='id') | first) {{ '}}' }}"
             # Optional
 {% if boot_volume_size_in_gbs is defined %}
             boot_volume_size_in_gbs: "{{ boot_volume_size_in_gbs }}"
@@ -62,7 +62,7 @@
     - name: Get VNIC Attachments for {{ output_name }}
       oci_vnic_attachment_facts:
         region: "{{ region }}"
-        compartment_id: "{{ compartment_ocid }}"
+        compartment_id: "{{ compartment_id }}"
         instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
       register: {{ resource_name }}VnicAttachments
 
@@ -70,7 +70,7 @@
     - name: Get Primary VNIC for {{ output_name }}
       oci_vnic_facts:
         region: "{{ region }}"
-        id: "{{ '{{' }} ({{ resource_name }}VnicAttachments.vnic_attachments | map(attribute='vnic_id') | list)[0] {{ '}}' }}"
+        id: "{{ '{{' }} ({{ resource_name }}VnicAttachments.vnic_attachments | map(attribute='vnic_id') | first) {{ '}}' }}"
       register: {{ resource_name }}PrimaryVnic
 
     - set_fact:
