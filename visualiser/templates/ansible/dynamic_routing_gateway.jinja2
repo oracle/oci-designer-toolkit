@@ -2,9 +2,10 @@
 # ------ Create Dynamic Routing Gateway
     - name: Create Dynamic Routing Gateway {{ output_name }}
       oci_drg:
+        region: "{{ region }}"
         state: "present"
         # Required
-        compartment_id: "{{ compartment_ocid }}"
+        compartment_id: "{{ compartment_id }}"
         # Optional
         display_name: "{{ display_name }}"
 {% if defined_tags is defined %}

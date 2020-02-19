@@ -14,10 +14,10 @@ ENV https_proxy ${https_proxy}
 ENV PYTHONIOENCODING=utf8
 ENV PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit"
 # Specify Ansible Config variables
-ENV ANSIBLE_CONFIG_DIR=/okit/config/ansible
-ENV ANSIBLE_INVENTORY=${ANSIBLE_CONFIG_DIR}/ansible_hosts
-ENV ANSIBLE_CONFIG=${ANSIBLE_CONFIG_DIR}/ansible.cfg
-ENV ANSIBLE_LIBRARY=${SRC}:${ANSIBLE_LIBRARY}
+#ENV ANSIBLE_CONFIG_DIR=/okit/config/ansible
+#ENV ANSIBLE_CONFIG=${ANSIBLE_CONFIG_DIR}/ansible.cfg
+#ENV ANSIBLE_INVENTORY=${ANSIBLE_CONFIG_DIR}/ansible_hosts
+#ENV ANSIBLE_LIBRARY=${SRC}:${ANSIBLE_LIBRARY}
 # Flask
 ENV FLASK_APP=okitweb
 ENV FLASK_DEBUG=development
@@ -42,7 +42,7 @@ RUN yum update -y ; \
  && yum repolist all \
 # Install additional packages
  && yum update -y && yum install -y \
-        ansible \
+        #ansible \
         curl \
         git \
         make \
@@ -70,7 +70,7 @@ RUN yum update -y ; \
 # Install required python modules
  && cd /tmp ; \
     pip3 install \
-        #ansible \
+        ansible \
         flask==1.1.1 \
         gunicorn==20.0.4 \
         itsdangerous==1.1.0 \
@@ -96,16 +96,20 @@ RUN yum update -y ; \
     echo "alias scpopc='scp -i /okit/config/ssh/id_rsa_oci_test' "                   >> /etc/bashrc ; \
     echo ''                                                                          >> /etc/bashrc ; \
     echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
+    echo ''                                                                          >> /etc/bashrc ; \
+    echo '# Terraform Quick Aliases'                                                               >> /etc/bashrc ; \
     echo "alias ta='terraform apply da.plan' "                                                     >> /etc/bashrc ; \
     echo "alias td='terraform destroy -var-file=/okit/config/connection.tfvars -auto-approve' "    >> /etc/bashrc ; \
     echo "alias tp='terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan' "        >> /etc/bashrc ; \
     echo "alias ti='terraform init' "                                                              >> /etc/bashrc ; \
     echo "alias tg='terraform get --update' "                                                      >> /etc/bashrc ; \
-    echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connection.yml\" ' "   >> /etc/bashrc ; \
-    echo "alias wtd='terraform destroy -var-file=/okit/config/wizards.tfvars -auto-approve' "      >> /etc/bashrc ; \
-    echo "alias wtp='terraform plan -var-file=/okit/config/wizards.tfvars -out=da.plan' "          >> /etc/bashrc ; \
     echo "alias otunzip='unzip -o okit-terraform.zip -d okit-terraform' "                          >> /etc/bashrc ; \
+    echo "alias otupdate='cd ..;otunzip;cd okit-terraform'"                                        >> /etc/bashrc ; \
+    echo ''                                                                                        >> /etc/bashrc ; \
+    echo '# Ansible Quick Aliases'                                                                 >> /etc/bashrc ; \
+    echo "alias apa='ansible-playbook main.yml --extra-vars \"@/okit/config/connection.yml\" ' "   >> /etc/bashrc ; \
     echo "alias oaunzip='unzip -o okit-ansible.zip -d okit-ansible' "                              >> /etc/bashrc ; \
+    echo "alias oaupdate='cd ..;oaunzip;cd okit-ansible'"                                          >> /etc/bashrc ; \
     cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \

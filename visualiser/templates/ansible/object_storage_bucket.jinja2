@@ -2,15 +2,17 @@
 # ------ Get Namespace for Compartment
     - name: Get the object storage namespace using the optional compartment id parameter
       oci_namespace_facts:
-        compartment_id: "{{ compartment_ocid }}"
+        region: "{{ region }}"
+        compartment_id: "{{ compartment_id }}"
       register: {{ resource_name }}Namespace
 
 # ------ Create Object Storage Bucket {{ output_name }}
     - name: Create Object Storage Bucket {{ output_name }}
       oci_bucket:
-        state: 'present'
+        region: "{{ region }}"
+        state: "present"
         # Required
-        compartment_id: "{{ compartment_ocid }}"
+        compartment_id: "{{ compartment_id }}"
         name: "{{ name }}"
         namespace_name: "{{ '{{' }} {{ resource_name }}Namespace.namespaces[0] {{ '}}' }}"
         # Optional

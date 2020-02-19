@@ -2,9 +2,10 @@
 # ------ Create Loadbalancer
     - name: Create Load Balancer
       oci_load_balancer:
+        region: "{{ region }}"
         state: 'present'
         # Required
-        compartment_id: "{{ compartment_ocid }}"
+        compartment_id: "{{ compartment_id }}"
         shape_name: "{{ shape | default('100Mbps') }}"
         subnet_ids:
 {% for subnet_id in loadbalancer_subnet_ids %}
