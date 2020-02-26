@@ -13,9 +13,6 @@ Using the toolkit the Operations user will be able to capture existing OCI envir
 web interface, to provide a portable generic, json, file that can be used to visualise existing systems or generate terraform/ansible. 
 
 
-## Slack: #oci-okit-dev
-
-
 ## Table of Contents
 
 1. [Artifact Support Matrix](#artifact-support-matrix)
