@@ -10,7 +10,7 @@ export GUNICORN_SERVER='pwd;env;gunicorn --bind=0.0.0.0:8080 --workers=2 --limit
 export NGINX_SERVER='pwd;env;nginx;gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app'
 
 RUN_COMMAND=${NGINX_SERVER}
-RUNTIME='nginx'
+RUNTIME='nginx   '
 
 while getopts bfgn option
 do
@@ -18,12 +18,12 @@ do
   in
     b)
       RUN_COMMAND=${BASH_SHELL}
-      RUNTIME='bash'
+      RUNTIME='bash    '
       break
       ;;
     f)
       RUN_COMMAND=${FLASK_SERVER}
-      RUNTIME='flask'
+      RUNTIME='flask   '
       break
       ;;
     g)
@@ -33,7 +33,7 @@ do
       ;;
     n)
       RUN_COMMAND=${NGINX_SERVER}
-      RUNTIME='nginx'
+      RUNTIME='nginx   '
       break
       ;;
     *)
@@ -42,7 +42,17 @@ do
   esac
 done
 
-echo "Running : ${RUNTIME}"
+#echo "Runtime     : ${RUNTIME}"
+#echo "Run Command : ${RUN_COMMAND}"
+echo ""
+echo ""
+echo ""
+echo "=========================================================================="
+echo "=====                              ${RUNTIME}                          ====="
+echo "=========================================================================="
+echo ""
+echo ""
+echo ""
 
 export BASENAME=$(basename $0)
 export DIRNAME=$(dirname $0)

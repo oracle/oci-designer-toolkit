@@ -53,17 +53,12 @@ your-mac:docker youruser$ ./start-okit-server.sh
 
 1. Install [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 2. Install [Vagrant](https://vagrantup.com/)
-3. If you have VirtualBox 6.1 installed you need to apply a small fix to get Vagrant to work, 
-[Vagrant 2.2.6 on VirtualBox 6.1](https://blogs.oracle.com/scoter/getting-vagrant-226-working-with-virtualbox-61-ga)
 
 ### Copy the .oci folder 
 From your home directory to the okit.oci.web.designer/vagrant folder. 
 
 The vagrant should now have these folders & files: 
 - Vagrantfile
-- run-as-root.sh
-- run-as-vagrant.sh
-- README.md
 - The .oci folder
 
 ### Build Vagrant Image
