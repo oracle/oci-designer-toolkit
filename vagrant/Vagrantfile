@@ -16,6 +16,254 @@ unless Vagrant.has_plugin?("vagrant-vbguest")
   system('vagrant plugin install vagrant-vbguest')
 end
 
+$yum_update = <<-'SCRIPT'
+export PATH=/usr/local/bin:/usr/bin:${PATH}
+
+# Install software as root
+yum update -y
+if [ -f /usr/bin/ol_yum_configure.sh ];
+then
+    /usr/bin/ol_yum_configure.sh
+    yum update -y
+fi
+
+yum install -y \
+  oracle-softwarecollection-release-el7 \
+  oraclelinux-developer-release-el7 \
+  oracle-epel-release-el7
+yum repolist all
+yum update -y
+yum install -y \
+  curl \
+  nginx \
+  python36 \
+yum repolist all
+yum clean all
+SCRIPT
+
+$config_env = <<-'SCRIPT'
+# Add Environment
+echo 'export PYTHONIOENCODING="utf8"'                                            >> /etc/bashrc
+echo 'export PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit"'                 >> /etc/bashrc
+echo 'export FLASK_APP=okitweb'                                                  >> /etc/bashrc
+echo 'export FLASK_DEBUG=development'                                            >> /etc/bashrc
+echo ''                                                                          >> /etc/bashrc
+echo "alias lh='ls -lash' "                                                      >> /etc/bashrc
+echo "alias lt='ls -last' "                                                      >> /etc/bashrc
+echo "alias env='/usr/bin/env | sort' "                                          >> /etc/bashrc
+echo "alias ips='ip -f inet address' "                                           >> /etc/bashrc
+echo ''                                                                          >> /etc/bashrc
+echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc
+echo ''                                                                          >> /etc/bashrc
+echo "alias startflask='python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger'" >> /etc/bashrc
+echo "alias startgunicorn='gunicorn --bind=0.0.0.0:8080 --workers=2 --limit-request-line 0 '\''okitweb:create_app()'\'''" >> /etc/bashrc
+echo "alias startnginx='nginx;gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app'" >> /etc/bashrc
+echo ''                                                                          >> /etc/bashrc
+source /etc/bashrc
+
+# Create Directories
+mkdir -p /workspace
+mkdir -p /okit/{config,visualiser,okitweb,workspace,preview};
+mkdir -p /home/vagrant/okit
+chown -R vagrant:vagrant /home/vagrant/okit
+SCRIPT
+
+$python_install = <<-'SCRIPT'
+export PATH=/usr/local/bin:/usr/bin:${PATH}
+
+# Install pip
+rm -fv /usr/bin/python3
+ln -sv /usr/bin/python3.6 /usr/bin/python3
+cd /tmp
+curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+python3 /tmp/get-pip.py
+pip3 install --upgrade pip
+
+# Install required python modules
+cd /tmp
+pip3 install \
+    click==7.0 \
+    flask==1.1.1 \
+    gunicorn==20.0.4 \
+    itsdangerous==1.1.0 \
+    jinja2==2.10.3 \
+    markupsafe==1.1.1 \
+    oci==2.6.0 \
+    pyyaml==5.2 \
+    werkzeug==0.16.0
+SCRIPT
+
+$nginx_service = <<-'SCRIPT'
+# Change Default nginx Config (Socket)
+cat > /etc/nginx/nginx.conf <<EOF 
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+    }
+
+      http {
+          log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                            '\$status \$body_bytes_sent "\$http_referer" '
+                            '"\$http_user_agent" "\$http_x_forwarded_for"';
+
+          access_log  /var/log/nginx/access.log  main;
+
+          sendfile            on;
+          tcp_nopush          on;
+          tcp_nodelay         on;
+          keepalive_timeout   65;
+          types_hash_max_size 2048;
+
+          include             /etc/nginx/mime.types;
+          default_type        application/octet-stream;
+
+          # Load modular configuration files from the /etc/nginx/conf.d directory.
+          # See http://nginx.org/en/docs/ngx_core_module.html#include
+          # for more information.
+          include /etc/nginx/conf.d/*.conf;
+
+          server {
+              listen       80 default_server;
+              server_name  _;
+              root         /usr/share/nginx/html;
+
+              # Load configuration files for the default server block.
+              include /etc/nginx/default.d/*.conf;
+
+              location / {
+                  #proxy_pass http://127.0.0.1:5000/;
+                  proxy_pass http://unix:/var/run/gunicorn.sock;
+                  proxy_redirect   off;
+                  proxy_set_header Host \$http_host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+              }
+
+              error_page 404 /404.html;
+                  location = /40x.html {
+              }
+
+              error_page 500 502 503 504 /50x.html;
+                  location = /50x.html {
+              }
+          }
+      }
+EOF
+
+# enable and start nginx
+#systemctl enable nginx
+#systemctl start nginx
+SCRIPT
+
+$gunicorn_service = <<-'SCRIPT'
+# Write GUnicorn Service
+cat > /etc/systemd/system/gunicorn.service <<EOF 
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+Type=notify
+# the specific user that our service will run as
+User=vagrant
+Group=vagrant
+Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+Environment="PYTHONPATH=${PYTHONPATH}"
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/vagrant/okit
+ExecStart=/usr/local/bin/gunicorn okitweb.wsgi:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Write GUnicorn Socket
+cat > /etc/systemd/system/gunicorn.socket <<EOF 
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/var/run/gunicorn.sock
+# Our service won't need permissions for the socket, since it
+# inherits the file descriptor by socket activation
+# only the nginx daemon will need access to the socket
+User=nginx
+# Optionally restrict the socket permissions even more.
+# Mode=600
+
+[Install]
+WantedBy=sockets.target
+EOF
+
+# Enable Gunicorn
+#systemctl enable gunicorn.service
+#systemctl enable gunicorn.socket
+#systemctl start gunicorn.socket
+#systemctl restart gunicorn.service
+SCRIPT
+
+$flask_service = <<-'SCRIPT'
+# Write Flask Service
+cat > /etc/systemd/system/flask.service <<EOF
+[Unit]
+Description=Flask daemon
+After=network.target
+
+[Service]
+Type=notify
+# the specific user that our service will run as
+User=vagrant
+Group=vagrant
+Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+Environment="PYTHONPATH=${PYTHONPATH}"
+Environment="FLASK_APP=okitweb"
+Environment="FLASK_DEBUG=development"
+RuntimeDirectory=flask
+WorkingDirectory=/home/vagrant/okit
+ExecStart=/usr/bin/python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# enable and start Flask
+systemctl enable flask.service
+#systemctl start flask.service
+SCRIPT
+
+$firewall = <<-'SCRIPT'
+# Config SELinux
+setsebool -P httpd_can_network_connect 1
+# Reload
+systemctl daemon-reload
+
+# Set Firewall Rules
+firewall-offline-cmd  --add-port=80/tcp
+firewall-offline-cmd  --add-port=8080/tcp
+firewall-offline-cmd  --add-port=8888/tcp
+firewall-offline-cmd  --add-port=5000/tcp
+systemctl restart firewalld
+
+SCRIPT
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ol7-latest"
   config.vm.box_url = "https://yum.oracle.com/boxes/oraclelinux/latest/ol7-latest.box"
@@ -51,19 +299,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "forwarded_port", guest: 8080, host: 8080
   # GUnicorn, needed?
   #config.vm.network "forwarded_port", guest: 5000, host: 5000
-  # Netdata, optional install
-  #config.vm.network "forwarded_port", guest: 19999, host: 19999
 
   # Run external install script as root
-  config.vm.provision "shell", inline: "echo 'Running run-as-root.sh!'"
-  config.vm.provision "shell", path: "run-as-root.sh", privileged: true
-  config.vm.provision "shell", inline: "echo 'Finished run-as-root.sh!'"
+  config.vm.provision "shell", inline: "echo '============== Running privileged commands ============== '"
+  config.vm.provision "shell", inline: $yum_update, privileged: true
+  config.vm.provision "shell", inline: $python_install, privileged: true
+  config.vm.provision "shell", inline: $config_env, privileged: true
+  config.vm.provision "shell", inline: $nginx_service, privileged: true
+  config.vm.provision "shell", inline: $gunicorn_service, privileged: true
+  config.vm.provision "shell", inline: $flask_service, privileged: true
+  config.vm.provision "shell", inline: $firewall, privileged: true
+  config.vm.provision "shell", inline: "echo '============== Finished privileged commands ============== '"
   config.vm.provision :reload
 
   # Run external install script as vagrant
-  config.vm.provision "shell", inline: "echo 'Running run-as-vagrant.sh!'"
-  config.vm.provision "shell", path: "run-as-vagrant.sh", privileged: false
-  config.vm.provision "shell", inline: "echo 'Finished run-as-vagrant.sh!'"
+  config.vm.provision "shell", inline: "echo '************** Running vagrant user commands ************** '"
+  config.vm.provision "shell", inline: "echo 'export PATH=/usr/local/bin:/opt/python/bin:${PATH}' >> /home/vagrant/.bash_profile", privileged: false
+  config.vm.provision "shell", inline: "echo 'export OCI_CONFIG_DIR=~/.oci' >> /home/vagrant/.bash_profile", privileged: false
+  config.vm.provision "shell", inline: "ln -s /vagrant/.oci .oci", privileged: false
+  config.vm.provision "shell", inline: "echo '************** Finished vagrant user commands ************** '"
   config.vm.provision :reload
 
 end
