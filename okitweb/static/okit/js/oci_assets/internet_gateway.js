@@ -22,11 +22,12 @@ class InternetGateway extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + internet_gateway_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(internet_gateway_prefix, okitjson.internet_gateways.length + 1);
         this.display_name = this.generateDefaultName(okitjson.internet_gateways.length + 1);
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;
+        this.enabled = true;
+        this.freeform_tags = {};
+        this.defined_tags = {};
         // Update with any passed data
         for (let key in data) {
             this[key] = data[key];

@@ -22,8 +22,6 @@ class SecurityList extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + security_list_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(security_list_prefix, okitjson.security_lists.length + 1);
         this.display_name = this.generateDefaultName(okitjson.security_lists.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
@@ -173,100 +171,109 @@ class SecurityList extends OkitArtifact {
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
             // Egress Rules
-            for (let security_rule of me.egress_security_rules) {
-                me.addAccessRuleHtml(security_rule, 'egress');
-            }
+            me.loadEgressRules();
             // Ingress Rules
-            for (let security_rule of me.ingress_security_rules) {
-                me.addAccessRuleHtml(security_rule, 'ingress');
-            }
+            me.loadIngressRules();
             // Add Handler to Add Button
-            document.getElementById('egress_add_button').addEventListener('click', me.handleAddEgressRule, false);
-            document.getElementById('egress_add_button').security_list = me;
-            document.getElementById('ingress_add_button').addEventListener('click', me.handleAddIngressRule, false);
-            document.getElementById('ingress_add_button').security_list = me;
+            $(jqId('add_egress_rule')).click(function () {
+                me.addEgressRule();
+            });
+            $(jqId('add_ingress_rule')).click(function () {
+                me.addIngressRule();
+            });
         });
     }
 
-    handleAddEgressRule(evt) {
-        console.info('Adding Egress rule');
-        let new_rule = { "protocol": "all", "is_stateless": false, description: ""}
-        new_rule["destination_type"] = "CIDR_BLOCK";
-        new_rule["destination"] = "0.0.0.0/0";
-        evt.target.security_list.egress_security_rules.push(new_rule)
-        evt.target.security_list.addAccessRuleHtml(new_rule, 'egress');
+    loadEgressRules() {
+        // Empty Existing Rules
+        $(jqId('egress_rules_table_body')).empty();
+        // Egress Rules
+        let rule_num = 1;
+        for (let security_rule of this.egress_security_rules) {
+            this.addSecurityRuleHtml(security_rule, rule_num, 'egress');
+            rule_num += 1;
+        }
+    }
+
+    loadIngressRules() {
+        // Empty Existing Rules
+        $(jqId('ingress_rules_table_body')).empty();
+        // Ingress Rules
+        let rule_num = 1;
+        for (let security_rule of this.ingress_security_rules) {
+            this.addSecurityRuleHtml(security_rule, rule_num, 'ingress');
+            rule_num += 1;
+        }
+    }
+
+    addEgressRule() {
+        let new_rule = { "protocol": "all", "is_stateless": false, description: "", destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0"};
+        this.egress_security_rules.push(new_rule);
+        this.loadEgressRules();
         displayOkitJson();
     }
 
-    handleAddIngressRule(evt) {
-        console.info('Adding Ingress rule');
-        let new_rule = { "protocol": "all", "is_stateless": false, description: ""}
-        new_rule["source_type"] = "CIDR_BLOCK";
-        new_rule["source"] = "0.0.0.0/0";
-        evt.target.security_list.ingress_security_rules.push(new_rule)
-        evt.target.security_list.addAccessRuleHtml(new_rule, 'ingress');
+    addIngressRule() {
+        let new_rule = { "protocol": "all", "is_stateless": false, description: "", source_type: "CIDR_BLOCK", source: "0.0.0.0/0"};
+        this.ingress_security_rules.push(new_rule);
+        this.loadIngressRules();
         displayOkitJson();
     }
 
-    handleDeleteEgressRulesRow(evt) {
-        let row = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
-        row.parentNode.removeChild(row);
-        evt.target.security_list.egress_security_rules.splice(evt.target.security_list.rule_num, 1);
+    deleteEgressRule(rule_num) {
+        this.egress_security_rules.splice(rule_num, 1);
+        this.loadEgressRules();
         displayOkitJson();
     }
 
-    handleDeleteIngressRulesRow(evt) {
-        let row = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
-        row.parentNode.removeChild(row);
-        evt.target.security_list.ingress_security_rules.splice(evt.target.security_list.rule_num, 1);
+    deleteIngressRule(rule_num) {
+        this.ingress_security_rules.splice(rule_num, 1);
+        this.loadIngressRules();
         displayOkitJson();
     }
 
-    addAccessRuleHtml(access_rule, access_type) {
+    addSecurityRuleHtml(access_rule, rule_num, access_type) {
+        let me = this;
         // default to ingress rules
         let rules_table_body = d3.select('#ingress_rules_table_body');
-        let rules_count = $('#ingress_rules_table_body > tr').length;
         let source_dest = 'source';
         let source_dest_title = 'Source';
         if (access_type === 'egress') {
             rules_table_body = d3.select('#egress_rules_table_body');
-            rules_count = $('#egress_rules_table_body > tr').length;
             source_dest = 'destination';
             source_dest_title = 'Destination';
         }
-        let rule_num = rules_count + 1;
-        let row = rules_table_body.append('tr');
-        let cell = row.append('td')
-            .attr("id", "rule_" + rule_num)
-            .attr("colspan", "2");
-        let rule_table = cell.append('table')
-            .attr("id", "rule_table_" + rule_num)
-            .attr("class", "property-editor-table");
+        let row = rules_table_body.append('div').attr('class', 'tr');
+        let cell = row.append('div').attr('class', 'td')
+            .attr("id", "rule_" + rule_num);
+        let rule_table = cell.append('div').attr('class', 'table okit-table okit-properties-table')
+            .attr("id", access_type + "_rule_table_" + rule_num);
         // First Row with Delete Button
-        let rule_row = rule_table.append('tr');
-        let rule_cell = rule_row.append('td')
-            .attr("colspan", "2");
-        let delete_btn = rule_cell.append('input')
+        let rule_cell = row.append('div').attr('class', 'td');
+        rule_cell.append('button')
             .attr("type", "button")
-            .attr("class", "delete-button")
-            .attr("value", "-");
-        if (access_type === 'egress') {
-            delete_btn.node().addEventListener("click", this.handleDeleteEgressRulesRow, false);
-        } else {
-            delete_btn.node().addEventListener("click", this.handleDeleteIngressRulesRow, false);
-        }
-        delete_btn.node().security_list = this;
-        delete_btn.node().rule_num = rule_num;
+            .attr("class", "okit-delete-button")
+            .text("X")
+            .on('click', function() {
+                if (access_type === 'egress') {
+                    me.deleteEgressRule(rule_num - 1);
+                    me.loadEgressRules();
+                } else {
+                    me.deleteIngressRule(rule_num - 1);
+                    me.loadIngressRules();
+                }
+                displayOkitJson();
+            });
         // Destination / Source Type
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td')
+        let rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
             .text(source_dest_title + " Type");
-        rule_cell = rule_row.append('td');
+        rule_cell = rule_row.append('div').attr('class', 'td');
         rule_cell.append('input')
             .attr("type", "text")
             .attr("class", "property-value")
             .attr("readonly", "readonly")
-            .attr("id", source_dest + "_type")
+            .attr("id", source_dest + "_type" + rule_num + access_type)
             .attr("name", source_dest + "_type")
             .attr("value", access_rule[source_dest + '_type'])
             .on("change", function() {
@@ -274,12 +281,12 @@ class SecurityList extends OkitArtifact {
                 displayOkitJson();
             });
         // Stateful
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td');
-        rule_cell = rule_row.append('td');
+        rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td');
+        rule_cell = rule_row.append('div').attr('class', 'td');
         rule_cell.append('input')
             .attr("type", "checkbox")
-            .attr("id", "is_stateless")
+            .attr("id", "is_stateless" + rule_num + access_type)
             .attr("name", "is_stateless")
             .on("change", function() {
                 access_rule['is_stateless'] = this.checked;
@@ -293,14 +300,14 @@ class SecurityList extends OkitArtifact {
             .attr("class", "property-value")
             .text('Stateless');
         // Destination / Source
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td')
+        rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
             .text(source_dest_title);
-        rule_cell = rule_row.append('td');
+        rule_cell = rule_row.append('div').attr('class', 'td');
         rule_cell.append('input')
             .attr("type", "text")
             .attr("class", "property-value")
-            .attr("id", source_dest)
+            .attr("id", source_dest + rule_num + access_type)
             .attr("name", source_dest)
             .attr("value", access_rule[source_dest])
             .on("change", function() {
@@ -309,13 +316,13 @@ class SecurityList extends OkitArtifact {
                 displayOkitJson();
             });
         // Add Protocol
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td')
+        rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
             .text("Protocol");
-        rule_cell = rule_row.append('td');
+        rule_cell = rule_row.append('div').attr('class', 'td');
         let protocol_select = rule_cell.append('select')
             .attr("class", "property-value")
-            .attr("id", "protocol")
+            .attr("id", "protocol" + rule_num + access_type)
             .on("change", function() {
                 access_rule['protocol'] = this.options[this.selectedIndex].value;
                 console.info('Changed network_entity_id ' + this.selectedIndex);
@@ -342,14 +349,14 @@ class SecurityList extends OkitArtifact {
             access_rule['protocol'] = protocol_select.node().options[protocol_select.node().selectedIndex].value;
         }
         // Description
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td')
+        rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
             .text("Description");
-        rule_cell = rule_row.append('td');
+        rule_cell = rule_row.append('div').attr('class', 'td');
         rule_cell.append('input')
             .attr("type", "text")
             .attr("class", "property-value")
-            .attr("id", "description")
+            .attr("id", "description" + rule_num + access_type)
             .attr("name", "description")
             .attr("value", access_rule['description'])
             .on("change", function() {

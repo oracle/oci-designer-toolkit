@@ -22,8 +22,6 @@ class ServiceGateway extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + service_gateway_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(service_gateway_prefix, okitjson.service_gateways.length + 1);
         this.display_name = this.generateDefaultName(okitjson.service_gateways.length + 1);
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;

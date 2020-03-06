@@ -2,29 +2,22 @@
 ** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Route Table</title>
-</head>
-<body>
-    <div id="property-editor" class="property-editor">
-        <div class="property-editor-title">
-            <label>Route Table</label>
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Route Table{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="virtual_cloud_network" class="property-value"></label></div></div>
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="property-value"></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}{% endblock %}
+
+{% block optional_properties_block %}
+    <div id="route_rules_table" class="table okit-table okit-properties-table okit-dynamic-table">
+        <div class="thead">
+            <div class="tr"><div class="th">Route Rules</div><div class="th"><button type="button" id="add_route_rule" class="okit-add-button">+</button></div></div>
         </div>
-        <table id="route_table" class="property-editor-table">
-            <tr><th>Property</th><th>Value</th></tr>
-            <tr><td>Virtual Cloud Network</td><td><label id="virtual_cloud_network" class="property-value"></label></td></tr>
-            <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
-        </table>
-        <table id="route_rules_table" class="property-editor-table">
-            <thead>
-                <tr><th>Rules</th><th width="20px"><input type="button" id="add_button" class="add-button" value="+"/></th></tr>
-            </thead>
-            <tbody id="route_rules_table_body">
-            </tbody>
-        </table>
+        <div class="tbody" id="route_rules_table_body"></div>
     </div>
-</body>
-</html>
+{% endblock %}

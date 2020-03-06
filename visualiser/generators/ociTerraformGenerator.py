@@ -13,6 +13,7 @@ __module__ = "ociTerraformGenerator"
 
 
 import os
+import json
 
 from common.ociCommon import writeTerraformFile
 from common.ociLogging import getLogger
@@ -42,7 +43,12 @@ class OCITerraformGenerator(OCIGenerator):
         variable_definitions = []
         variable_values = []
         for key, value in self.getVariables().items():
-            variable_values.append('{0!s:s} = "{1}"'.format(key, value))
+            if type(value) is dict:
+                variable_values.append('{0!s:s} = {1!s:s}'.format(key, json.dumps(value)))
+            elif type(value) is bool:
+                variable_values.append('{0!s:s} = "{1}"'.format(key, str(value).lower()))
+            else:
+                variable_values.append('{0!s:s} = "{1}"'.format(key, value))
             variable_definitions.append('variable "{0:s}" {{}}'.format(key))
             #variable_definitions.append('variable "{0:s}" {{\ndefault = "{1}"\n}}'.format(key, value))
         writeTerraformFile(os.path.join(self.output_dir, self.VARIABLES_FILE_NAME), variable_definitions)
@@ -58,5 +64,17 @@ class OCITerraformGenerator(OCIGenerator):
 
     def formatJinja2DhcpReference(self, resource_name):
         return 'local.{0:s}_dhcp_options_id'.format(resource_name)
+
+    def renderDefinedTags(self, artifact):
+        standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+        # -- Defined Tags
+        variableName = '{0:s}_defined_tags'.format(standardisedName)
+        self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
+        definedtags = {}
+        for namespace, tags in artifact.get("defined_tags", {}).items():
+            for key, value in tags.items():
+                definedtags["{0!s:s}.{1!s:s}".format(namespace, key)] = str(value)
+        self.run_variables[variableName] = definedtags
+        return
 
 

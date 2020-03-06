@@ -5,7 +5,7 @@ resource "oci_core_internet_gateway" "{{ resource_name }}" {
     compartment_id = {{ compartment_id }}
     vcn_id         = {{ vcn_id }}
     # Optional
-    enabled        = true
+    enabled        = {{ enabled }}
     display_name   = {{ display_name }}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags }}

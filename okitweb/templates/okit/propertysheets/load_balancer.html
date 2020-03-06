@@ -2,29 +2,23 @@
 ** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Load Balancer</title>
-</head>
-<body>
-    <div id="property-editor" class="property-editor">
-        <div class="property-editor-title">
-            <label>Load Balancer</label>
-        </div>
-        <table id="load_balancer" class="property-editor-table">
-            <tr><th>Property</th><th>Value</th></tr>
-            <tr><td>Subnet</td><td><label id="subnet" class="property-value"></label></td></tr>
-            <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
-            <tr><td></td><td><input type="checkbox" id="is_private" name="is_private" value="false">Private</td></tr>
-            <tr><td>Bandwidth</td><td><select id="shape_name" class="property-value">
-                <option value="100Mbps" selected="selected">Small 100Mbps</option>
-                <option value="400Mbps">Medium 400Mbps</option>
-                <option value="8000Mbps">Large 8000Mbps</option>
-            </select></td></tr>
-            <tr><td>Backend Instances</td><td><select multiple="multiple" id="instance_ids" class="property-value"></select></td></tr>
-        </table>
-    </div>
-</body>
-</html>
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Load Balancer{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Subnet</div><div class='td'><label id="subnet" class="property-value"></label></div></div>
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="property-value"></div></div>
+    <div class='tr'><div class='td'>Bandwidth</div><div class='td'><select id="shape_name" class="property-value">
+        <option value="100Mbps" selected="selected">Small 100Mbps</option>
+        <option value="400Mbps">Medium 400Mbps</option>
+        <option value="8000Mbps">Large 8000Mbps</option>
+    </select></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Backend Instances</div><div class='td'><select multiple="multiple" id="instance_ids" class="property-value"></select></div></div>
+    <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_private" name="is_private" value="false">Private</div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}

@@ -22,8 +22,6 @@ class ObjectStorageBucket extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + object_storage_bucket_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(object_storage_bucket_prefix, okitjson.object_storage_buckets.length + 1);
         this.display_name = this.generateDefaultName(okitjson.object_storage_buckets.length + 1);
         this.compartment_id = data.parent_id;
         this.name = this.display_name;

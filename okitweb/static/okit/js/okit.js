@@ -30,6 +30,11 @@ class OkitArtifact {
      */
     constructor (okitjson) {
         this.getOkitJson = function() {return okitjson};
+        // Add Id
+        this.id = 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();
+        // Add default for common Tag variables
+        this.freeform_tags = {};
+        this.defined_tags = {};
     }
 
 
@@ -900,16 +905,16 @@ class OkitJson {
                 console.info(obj);
             }
         }
-
-        // Virtual Cloud Network Sub Components
         // Dynamic Routing Gateways
         if (okit_json.hasOwnProperty('dynamic_routing_gateways')) {
             for (let artifact of okit_json['dynamic_routing_gateways']) {
-                artifact.parent_id = artifact.vcn_id;
+                artifact.parent_id = artifact.compartment_id;
                 let obj = this.newDynamicRoutingGateway(artifact);
                 console.info(obj);
             }
         }
+
+        // Virtual Cloud Network Sub Components
         // Internet Gateways
         if (okit_json.hasOwnProperty('internet_gateways')) {
             for (let artifact of okit_json['internet_gateways']) {
@@ -1153,13 +1158,8 @@ class OkitJson {
     // Dynamic Routing Gateway
     newDynamicRoutingGateway(data, parent=null) {
         console.info('New Dynamic Routing Gateway');
-        for (let gateway of this.dynamic_routing_gateways) {
-            if (gateway.vcn_id === data.parent_id) {
-                // We are only allowed a single Dynamic Routing Gateway peer VCN
-                alert('The maximum limit of 1 for Dynamic Routing Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                return {error: 'Service Gateway Already Exists.'};
-            }
-        }
+        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
+        data.compartment_id = data.parent_id;
         this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
         return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
     }

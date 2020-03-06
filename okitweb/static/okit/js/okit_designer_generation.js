@@ -8,9 +8,11 @@ console.info('Loaded Generation Javascript');
 ** Generate Button handlers
  */
 
-function openInNewTab(url) {
-    let win = window.open(url, '_blank');
-    win.focus();
+function saveZip(url, filename="") {
+    let a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', filename);
+    a.click();
 }
 
 function handleGenerateTerraform(e) {
@@ -23,8 +25,8 @@ function handleGenerateTerraform(e) {
         data: JSON.stringify(okitJson),
         success: function(resp) {
             console.info('Response : ' + resp);
-            window.location = 'generate/terraform';
-            //openInNewTab('generate/terraform');
+            //window.location = 'generate/terraform';
+            saveZip('generate/terraform');
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
@@ -43,8 +45,8 @@ function handleGenerateAnsible(e) {
         data: JSON.stringify(okitJson),
         success: function(resp) {
             console.info('REST Response : ' + resp);
-            window.location = 'generate/ansible';
-            //openInNewTab('generate/ansible');
+            //window.location = 'generate/ansible';
+            saveZip('generate/ansible');
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)

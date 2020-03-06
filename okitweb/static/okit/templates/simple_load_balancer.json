@@ -158,29 +158,5 @@
       "dns_label": "vcn001",
       "parent_id": "okit-comp-300c6c8c-df80-478a-8fbf-cf85ad578ae5"
     }
-  ],
-  "canvas": {
-    "compartments": {},
-    "subnets": {
-      "okit-sn-e723cc24-b902-474d-a2ba-26593ecb9e7c": {
-        "svg": {
-          "x": 55,
-          "y": 110,
-          "width": 480,
-          "height": 336
-        }
-      }
-    },
-    "virtual_cloud_networks": {
-      "okit-vcn-68071510-f99d-4268-9c38-c34a86c91ff7": {
-        "svg": {
-          "x": 55,
-          "y": 55,
-          "width": 580,
-          "height": 501
-        }
-      }
-    }
-  },
-  "open_compartment_index": 0
+  ]
 }

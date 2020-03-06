@@ -25,10 +25,8 @@ class Compartment extends OkitContainerArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.parent_id = 'canvas';
-        this.id = 'okit-' + compartment_prefix + '-' + uuidv4();
         this.compartment_id = this.id;
         this.compartment_id = null;
-        //this.name = generateDefaultName(compartment_prefix, okitjson.compartments.length + 1);
         this.name = this.generateDefaultName(okitjson.compartments.length + 1);
         // Update with any passed data
         for (let key in data) {
@@ -139,6 +137,15 @@ class Compartment extends OkitContainerArtifact {
             return true;
         }, this);
         console.groupEnd();
+        // Dynamic Routing Gateways
+        this.getOkitJson().dynamic_routing_gateways = this.getOkitJson().dynamic_routing_gateways.filter(function(child) {
+            if (child.compartment_id === this.id) {
+                console.info('Deleting ' + child.display_name);
+                child.delete();
+                return false; // So the filter removes the element
+            }
+            return true;
+        }, this);
     }
 
 
@@ -230,7 +237,7 @@ class Compartment extends OkitContainerArtifact {
     }
 
     getRightArtifacts() {
-        return [autonomous_database_artifact, object_storage_bucket_artifact, fast_connect_artifact];
+        return [dynamic_routing_gateway_artifact, autonomous_database_artifact, object_storage_bucket_artifact, fast_connect_artifact];
     }
 
 

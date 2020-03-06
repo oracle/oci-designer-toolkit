@@ -41,7 +41,7 @@ The table below lists a summary of the current support status whilst the details
 | Artifact                | Support | Version | Gaps |
 | ----------------------- | ------- | ------- | ---- |
 | **Containers**
-| Compartment             | Partial | 0.1.0   | [2](#compartment)
+| Compartment             | Full    | 0.2.0   | [2](#compartment)
 | **Network**
 | Route Table             | Partial | 0.1.0   | [3](#route-table)
 | Security List           | Partial | 0.1.0   | [5](#security-list)
@@ -49,8 +49,8 @@ The table below lists a summary of the current support status whilst the details
 | Virtual Cloud Network   | Partial | 0.1.0   | [3](#virtual-cloud-network)
 | **Gateways**
 | Dynamic Routing Gateway | Partial | 0.1.0   | [2](#dynamic-routing-gateway)
-| Internet Gateway        | Partial | 0.1.0   | [3](#internet-gateway)
-| Local Peering Gateway   | Partial | 0.1.0   | [2](#local-peering-gateway)
+| Internet Gateway        | Full    | 0.2.0   | [3](#internet-gateway)
+| Local Peering Gateway   | Full    | 0.1.0   | [2](#local-peering-gateway)
 | NAT Gateway             | Partial | 0.1.0   | [3](#nat-gateway)
 | Service Gateway         | Partial | 0.1.0   | [3](#service-gateway)
 | **Storage**
@@ -106,107 +106,79 @@ If you would like to extend OKIT the development process is documented in [OCI K
 ## Artifact Support Matrix Gap Analysis
 
 #### Containers
-##### Compartment
-- Freeform Tags
-- Defined Tags
 
 #### Network
 ##### Route Table
-- Freeform Tags
-- Defined Tags
 - Destination Type of CIDR_BLOCK is the only supported option.
 ##### Security List
-- Freeform Tags
-- Defined Tags
 - TCP Options - Current just uses default
 - UDP Options - Current just uses default
 - ICMP Options - Current just uses default
 ##### Subnet
-- Freeform Tags
-- Defined Tags
 - ipV6 Functionality but this is currently only available for Government domains.
 - Availability Domain we assume that we always use the recommended Regional Subnets.
 ##### Virtual Cloud Network
-- Freeform Tags
-- Defined Tags
 - ipV6 Functionality but this is currently only available for Government domains.
 
 #### Gateways
-##### Dynamic Routing Gateway
-- Freeform Tags
-- Defined Tags
-##### Fast Connect
-- Freeform Tags
-- Defined Tags
-##### Internet Gateway
-- Freeform Tags
-- Defined Tags
-- Enabled / Disabled Flag we assume that the Internet Gateway will be enabled.
-##### Local Peering Gateway
-- Freeform Tags
-- Defined Tags
 ##### NAT Gateway
 - Freeform Tags
 - Defined Tags
 - Block Traffic use the default.
 ##### Service Gateway
-- Freeform Tags
-- Defined Tags
 - Route Table Selection
 
 #### Storage
 ##### Block Storage Volume
-- Freeform Tags
-- Defined Tags
 - Key Management / Encryption
 - VPUs
 - Source Information for creation from backup.
 ##### File Storage System
-- Freeform Tags
-- Defined Tags
 - Key Management / Encryption
 - Min / Max Size
 - Anonymous GID/UID
 - Identity Squash
 - Privileged Source Port
 ##### Object Storage Bucket
-- Freeform Tags
-- Defined Tags
 - Key Management / Encryption
 - Metadata
 - Events
 
 #### Database
 ##### Autonomous Database
-- Freeform Tags
-- Defined Tags
 - Cloning (Includes all cloning functionality / Referencing)
 - BYOL
 
 #### Compute
 ##### Instance
-- Freeform Tags
-- Defined Tags
 - Agent Config
 - Fault Domain (Unable To specify)
 - Existing Boot Volume can not be specified.
 - Launch Options
 - PV Encryption
 ##### Load Balancer
-- Freeform Tags
-- Defined Tags
 - Network Security Group
 - IPv6 (Only Government)
 
 
 ## Release Notes
 
-### Version 0.1.1 
-**Release Date**: TBD
+### Version 0.2.0 
+**Release Date**: 6th March 2020
 #### Features
 1. Save As Template
 2. Sub Compartments
+3. Freeform Tags
+4. Defined Tags - Assumes the user types the names correctly.
+5. Fully Supported Artifacts
+    1. Compartments
+    2. Route Table
+    3. Internet Gateways
+    4. NAT Gateways
+    5. Local Peering Gateways
 #### Bug Fixes
+1. Terraform creation failed when the subnet was not attached to a Route Table.
+2. Unattached DRGs caused the display of the JSON to fail.
 
 ### Version 0.1.0
 **Release Date**: 6th February 2020

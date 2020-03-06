@@ -24,7 +24,6 @@ class LoadBalancer extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + load_balancer_prefix + '-' + uuidv4();
         this.display_name = this.generateDefaultName(okitjson.load_balancers.length + 1);
         this.compartment_id = '';
         this.subnet_id = data.parent_id;

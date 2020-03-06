@@ -23,8 +23,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + virtual_cloud_network_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(virtual_cloud_network_prefix, okitjson.virtual_cloud_networks.length + 1);
         this.display_name = this.generateDefaultName(okitjson.virtual_cloud_networks.length + 1);
         this.compartment_id = data.parent_id;
         // Generate Cidr
@@ -145,15 +143,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
             }
             return true;
         }, this);
-        // Dynamic Routing Gateways
-        this.getOkitJson().dynamic_routing_gateways = this.getOkitJson().dynamic_routing_gateways.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
         // Local Peering Gateways
         this.getOkitJson().local_peering_gateways = this.getOkitJson().local_peering_gateways.filter(function(child) {
             if (child.vcn_id === this.id) {
@@ -262,23 +251,64 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     getGateways() {
         let gateways = [];
         // Internet Gateways
+        gateways.push(...this.getInternetGateways());
+        // NAT Gateways
+        gateways.push(...this.getNATGateways());
+        // Local Peering Gateways
+        gateways.push(...this.getLocalPeeringGateways());
+        // Service Gateways
+        gateways.push(...this.getServiceGateways());
+        // Dynamic Routing Gateways
+        gateways.push(...this.getDynamicRoutingGateways());
+        return gateways;
+    }
+
+    getInternetGateways() {
+        let gateways = [];
+        // Internet Gateways
         for (let gateway of this.getOkitJson().internet_gateways) {
             if (gateway.vcn_id === this.id) {
                 gateways.push(gateway);
             }
         }
+        return gateways;
+    }
+
+    getNATGateways() {
+        let gateways = [];
         // NAT Gateways
         for (let gateway of this.getOkitJson().nat_gateways) {
             if (gateway.vcn_id === this.id) {
                 gateways.push(gateway);
             }
         }
+        return gateways;
+    }
+
+    getLocalPeeringGateways() {
+        let gateways = [];
+        // NAT Gateways
+        for (let gateway of this.getOkitJson().local_peering_gateways) {
+            if (gateway.vcn_id === this.id) {
+                gateways.push(gateway);
+            }
+        }
+        return gateways;
+    }
+
+    getServiceGateways() {
+        let gateways = [];
         // Service Gateways
         for (let gateway of this.getOkitJson().service_gateways) {
             if (gateway.vcn_id === this.id) {
                 gateways.push(gateway);
             }
         }
+        return gateways;
+    }
+
+    getDynamicRoutingGateways() {
+        let gateways = [];
         // Dynamic Routing Gateways
         for (let gateway of this.getOkitJson().dynamic_routing_gateways) {
             if (gateway.vcn_id === this.id) {

@@ -22,8 +22,6 @@ class AutonomousDatabase extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + autonomous_database_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(autonomous_database_prefix, okitjson.autonomous_databases.length + 1);
         this.display_name = this.generateDefaultName(okitjson.autonomous_databases.length + 1);
         this.compartment_id = data.parent_id;
         this.db_name = this.display_name.replace('-', '');
