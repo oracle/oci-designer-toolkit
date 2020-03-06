@@ -55,6 +55,53 @@ function loadPropertiesSheet(json_element) {
             console.warn(key + ' type unknown')
         }
     });
+    console.info('Loading Freeform Tags');
+    if (json_element.hasOwnProperty('freeform_tags')) {
+        $(jqId('freeform_tags')).empty();
+        let tbody = d3.select(d3Id('freeform_tags'));
+        for (const [key, value] of Object.entries(json_element.freeform_tags)) {
+            console.info('Key: ' + key + ' Value: ' + value);
+            let tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').append('label').text(key);
+            tr.append('div').attr('class', 'td').append('label').text(value);
+            let button = tr.append('div').attr('class', 'td').append('button')
+                .attr('class', 'delete-row-button')
+                .attr('type', 'button')
+                .text('X');
+            button.on('click', function() {
+                delete json_element.freeform_tags[key];
+                loadPropertiesSheet(json_element);
+                d3.event.stopPropagation();
+            });
+        }
+    }
+    console.info('Loading Defined Tags');
+    if (json_element.hasOwnProperty('defined_tags')) {
+        $(jqId('defined_tags')).empty();
+        let tbody = d3.select(d3Id('defined_tags'));
+        for (const [namespace, tags] of Object.entries(json_element.defined_tags)) {
+            for (const [key, value] of Object.entries(tags)) {
+                console.info('Namespace: ' + namespace + ' Key: ' + key + ' Value: ' + value);
+                let tr = tbody.append('div').attr('class', 'tr');
+                tr.append('div').attr('class', 'td').append('label').text(namespace);
+                tr.append('div').attr('class', 'td').append('label').text(key);
+                tr.append('div').attr('class', 'td').append('label').text(value);
+                let button = tr.append('div').attr('class', 'td').append('button')
+                    .attr('class', 'delete-row-button')
+                    .attr('type', 'button')
+                    .text('X');
+                button.on('click', function () {
+                    delete json_element.defined_tags[key];
+                    loadPropertiesSheet(json_element);
+                    d3.event.stopPropagation();
+                });
+            }
+        }
+    }
+    console.info('Checking if Optional Should be open ' + okitSettings.is_optional_expanded);
+    if (okitSettings.is_optional_expanded) {
+        d3.select(d3Id("optional_properties")).attr("open", "open");
+    }
     console.groupEnd();
 }
 
@@ -64,7 +111,7 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
     callbacks = (typeof callbacks !== 'undefined') ? callbacks : [];
     // Add Event Listeners
     // Input Fields
-    $('.property-editor-table input').each(
+    $('.okit-properties-table input').each(
         function(index) {
             let inputfield = $(this);
             inputfield.on('input', function () {
@@ -104,7 +151,7 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
         }
     );
     // Select Boxes
-    $('.property-editor-table select').each(
+    $('.okit-properties-table select').each(
         function(index) {
             let inputfield = $(this);
             inputfield.on('change', function () {
@@ -124,7 +171,7 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
         }
     );
     // Text Areas
-    $('.property-editor-table textarea').each(
+    $('.okit-properties-table textarea').each(
         function(index) {
             let inputfield = $(this);
             inputfield.on('change', function() {
@@ -140,5 +187,116 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
             });
         }
     );
+    // Add Freeform Tag "Add Row" Handler
+    $(jqId('add-freeform-tag')).click(function () {
+        addFreeformTag(json_element);
+    });
+    // Add Defined Tag "Add Row" Handler
+    $(jqId('add-defined-tag')).click(function () {
+        addDefinedTag(json_element);
+    });
     console.groupEnd();
+}
+
+function addFreeformTag(json_element) {
+    $(jqId('modal_dialog_title')).text('Add Tag');
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    let tagtable = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    let thead = tagtable.append('div').attr('class', 'thead');
+    let tr = thead.append('div').attr('class', 'tr');
+    tr.append('div').attr('class', 'th').text('Tag Key');
+    tr.append('div').attr('class', 'th').text('Tag Value');
+    let tbody = tagtable.append('div').attr('class', 'tbody');
+    tr = tbody.append('div').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('id', 'tag_key')
+        .attr('type', 'text');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('id', 'tag_value')
+        .attr('type', 'text');
+    let addbutton = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'add_tag_btn')
+        .attr('type', 'button')
+        .text('Add Tag');
+    addbutton.on("click", function() {
+        let key = $(jqId('tag_key')).val().trim();
+        let value = $(jqId('tag_value')).val().trim();
+        if (/\s/.test(key)) {
+            // It has any kind of whitespace
+            alert('Whitespace not allowed in key replacing with "_".');
+            key = key.replace(/\s+/g, '_');
+        }
+        if (key.length > 0 && value.length > 0) {
+            json_element.freeform_tags[key] = value;
+        }
+        $(jqId('modal_dialog_wrapper')).addClass('hidden');
+        loadPropertiesSheet(json_element);
+        displayOkitJson();
+        d3.event.stopPropagation();
+    });
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+
+function deleteFreeformTag() {
+
+}
+
+function addDefinedTag(json_element) {
+    $(jqId('modal_dialog_title')).text('Add Tag');
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    let tagtable = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    let thead = tagtable.append('div').attr('class', 'thead');
+    let tr = thead.append('div').attr('class', 'tr');
+    tr.append('div').attr('class', 'th').text('Namespace');
+    tr.append('div').attr('class', 'th').text('Tag Key');
+    tr.append('div').attr('class', 'th').text('Tag Value');
+    let tbody = tagtable.append('div').attr('class', 'tbody');
+    tr = tbody.append('div').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('id', 'tag_namespace')
+        .attr('type', 'text');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('id', 'tag_key')
+        .attr('type', 'text');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('id', 'tag_value')
+        .attr('type', 'text');
+    let addbutton = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'add_tag_btn')
+        .attr('type', 'button')
+        .text('Add Tag');
+    addbutton.on("click", function() {
+        let namespace = $(jqId('tag_namespace')).val().trim();
+        let key = $(jqId('tag_key')).val().trim();
+        let value = $(jqId('tag_value')).val().trim();
+        if (/\s/.test(namespace)) {
+            // It has any kind of whitespace
+            alert('Whitespace not allowed in namespace replacing with "_".');
+            namespace = namespace.replace(/\s+/g, '_');
+        }
+        if (/\s/.test(key)) {
+            // It has any kind of whitespace
+            alert('Whitespace not allowed in key replacing with "_".');
+            key = key.replace(/\s+/g, '_');
+        }
+        if (namespace.length > 0 && key.length > 0 && value.length > 0) {
+            if (!json_element.defined_tags.hasOwnProperty(namespace)) {
+                json_element.defined_tags[namespace] = {};
+            }
+            json_element.defined_tags[namespace][key] = value;
+        }
+        $(jqId('modal_dialog_wrapper')).addClass('hidden');
+        loadPropertiesSheet(json_element);
+        displayOkitJson();
+        d3.event.stopPropagation();
+    });
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+
+function deleteDefinedTag() {
+
 }

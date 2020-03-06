@@ -6,17 +6,19 @@ resource "oci_core_subnet" "{{ resource_name }}" {
     compartment_id             = {{ compartment_id }}
     vcn_id                     = {{ vcn_id }}
     cidr_block                 = {{ cidr_block }}
-    security_list_ids          = [
-{% for security_list_id in security_list_ids %}
-                                   {{ security_list_id }}{% if not loop.last %},{% endif %}
-{% endfor %}
-                                 ]
     # Optional
 {% if display_name is defined %}
     display_name               = {{ display_name }}
 {% endif %}
 {% if dns_label is defined %}
     dns_label                  = {{ dns_label }}
+{% endif %}
+{% if security_list_ids is defined %}
+    security_list_ids          = [
+    {% for security_list_id in security_list_ids %}
+                            {{ security_list_id }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+                            ]
 {% endif %}
 {% if route_table_id is defined %}
     route_table_id             = {{ route_table_id }}
@@ -27,8 +29,8 @@ resource "oci_core_subnet" "{{ resource_name }}" {
 {% if dhcp_options_id is defined %}
     dhcp_options_id            = {{ dhcp_options_id }}
 {% endif %}
-{% if prohibit_public_ip is defined %}
-    prohibit_public_ip_on_vnic = {{ prohibit_public_ip }}
+{% if prohibit_public_ip_on_vnic is defined %}
+    prohibit_public_ip_on_vnic = {{ prohibit_public_ip_on_vnic }}
 {% endif %}
 {% if defined_tags is defined %}
     defined_tags               = {{ defined_tags }}

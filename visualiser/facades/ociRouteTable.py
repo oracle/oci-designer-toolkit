@@ -23,6 +23,13 @@ logger = getLogger()
 
 
 class OCIRouteTables(OCIVirtualNetworkConnection):
+    rule_type_map = {'internetgateway': 'internet_gateways',
+                     'natgateway':'nat_gateways',
+                     'localpeeringgateway': 'local_peering_gateways',
+                     'dynamicroutinggateway': 'dynamic_routing_gateways',
+                     'privateip':'private_ips',
+                     'servicegateway': 'service_gateways'}
+
     def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, vcn_id=None):
         self.compartment_id = compartment_id
         self.vcn_id = vcn_id
@@ -43,6 +50,14 @@ class OCIRouteTables(OCIVirtualNetworkConnection):
             # Filter results
             self.route_tables_json = self.filterJsonObjectList(route_tables_json, filter)
             logger.debug(str(self.route_tables_json))
+
+            # Add Route Rule Target Type
+            for route_table in self.route_tables_json:
+                for rule in route_table.get('route_rules', []):
+                    if len(rule['network_entity_id']) > 0:
+                        rule['target_type'] = self.rule_type_map[rule['network_entity_id'].split('.')[1]]
+                    else:
+                        rule['target_type'] = ''
 
             # Build List of RouteTable Objects
             self.route_tables_obj = []

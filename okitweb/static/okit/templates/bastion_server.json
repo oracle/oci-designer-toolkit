@@ -156,6 +156,5 @@
       "dns_label": "bastionvcn",
       "parent_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9"
     }
-  ],
-  "open_compartment_index": 0
+  ]
 }

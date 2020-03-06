@@ -7,7 +7,7 @@ console.info('Loaded Dynamic Routing Gateway Javascript');
 /*
 ** Set Valid drop Targets
  */
-asset_drop_targets[dynamic_routing_gateway_artifact] = [virtual_cloud_network_artifact];
+asset_drop_targets[dynamic_routing_gateway_artifact] = [compartment_artifact];
 
 const dynamic_routing_gateway_query_cb = "dynamic-routing-gateway-query-cb";
 
@@ -22,11 +22,8 @@ class DynamicRoutingGateway extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + dynamic_routing_gateway_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(dynamic_routing_gateway_prefix, okitjson.dynamic_routing_gateways.length + 1);
         this.display_name = this.generateDefaultName(okitjson.dynamic_routing_gateways.length + 1);
         this.compartment_id = data.compartment_id;
-        this.vcn_id = data.parent_id;
         this.fast_connect_ids = [];
         this.ipsec_connection_ids = [];
         this.remote_peering_connection_ids = [];
@@ -39,7 +36,7 @@ class DynamicRoutingGateway extends OkitArtifact {
             this.getParent = function() {return parent};
         } else {
             this.getParent = function() {
-                for (let parent of okitjson.virtual_cloud_networks) {
+                for (let parent of okitjson.compartments) {
                     if (parent.id === this.parent_id) {
                         return parent
                     }
@@ -124,7 +121,7 @@ class DynamicRoutingGateway extends OkitArtifact {
             .attr("data-connector-id", this.id)
             .attr("dragable", true);
         // Draw Connectors
-        this.drawConnectors();
+        // this.drawConnectors();
         console.groupEnd();
         return svg;
     }
@@ -251,7 +248,7 @@ class DynamicRoutingGateway extends OkitArtifact {
     }
 
     static getDropTargets() {
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Compartment.getArtifactReference()];
     }
 
     static query(request = {}, region='') {

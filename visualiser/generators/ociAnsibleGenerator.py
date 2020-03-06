@@ -38,10 +38,9 @@ class OCIAnsibleGenerator(OCIGenerator):
         # Write Main tf processing file
         writeAnsibleFile(os.path.join(self.output_dir, self.MAIN_FILE_NAME), main_rendered)
         # Write Variable files
-        variable_definitions = []
         variable_values = []
         for key, value in self.getVariables().items():
-            if isinstance(value, (int, float, bool)):
+            if isinstance(value, (int, float, bool, dict)):
                 variable_values.append('{0!s:s}: {1}'.format(key, value))
             else:
                 variable_values.append('{0!s:s}: "{1}"'.format(key, value))

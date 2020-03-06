@@ -2,49 +2,43 @@
 ** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Instance</title>
-</head>
-<body>
-    <div id="property-editor" class="property-editor">
-        <div class="property-editor-title">
-            <label>Instance</label>
-        </div>
-        <table id="instance" class="property-editor-table">
-            <tr><th>Property</th><th>Value</th></tr>
-            <tr><td>Subnet</td><td><label id="subnet_id" class="property-value property-label"></label></td></tr>
-            <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
-            <tr><td>Availability Domain</td><td><select id="availability_domain" class="property-value">
-                <option value="1" selected="selected">AD 1</option>
-                <option value="2">AD 2</option>
-                <option value="3">AD 3</option>
-            </select></td></tr>
-            <tr><td>Hostname</td><td><input type="text" id="hostname_label" name="hostname_label" class="property-value"></td></tr>
-            <tr><td>OS</td><td><select id="os" class="property-value">
-                <option value="Oracle Linux" selected="selected">Oracle Linux</option>
-            </select></td></tr>
-            <tr><td>Version</td><td><select id="version" class="property-value">
-                <option value="7.7" selected="selected">7.7</option>
-            </select></td></tr>
-            <tr><td>Shape</td><td><select id="shape" class="property-value">
-                <option value="VM.Standard2.1" selected="selected">VM.Standard2.1 (1 Core OCPU, 15 GB Memory)</option>
-                <option value="VM.Standard2.2" selected="selected">VM.Standard2.2 (1 Core OCPU, 30 GB Memory)</option>
-                <option value="VM.Standard2.4" selected="selected">VM.Standard2.4 (1 Core OCPU, 60 GB Memory)</option>
-                <option value="VM.Standard2.8" selected="selected">VM.Standard2.8 (1 Core OCPU, 120 GB Memory)</option>
-                <option value="VM.Standard.E2.1" selected="selected">VM.Standard.E2.1 (1 Core OCPU, 15 GB Memory)</option>
-                <option value="VM.Standard.E2.2" selected="selected">VM.Standard.E2.2 (1 Core OCPU, 30 GB Memory)</option>
-                <option value="VM.Standard.E2.4" selected="selected">VM.Standard.E2.4 (1 Core OCPU, 60 GB Memory)</option>
-                <option value="VM.Standard.E2.8" selected="selected">VM.Standard.E2.8 (1 Core OCPU, 120 GB Memory)</option>
-            </select></td></tr>
-            <tr><td>Boot Volume Size (in GB)</td><td><input type="text" id="boot_volume_size_in_gbs" name="boot_volume_size_in_gbs" class="property-value"></td></tr>
-            <tr><td>Authorised Keys</td><td><input type="text" id="authorized_keys" name="authorized_keys" class="property-value"></td></tr>
-            <tr><td>Block Storage Volumes</td><td><select multiple="multiple" id="block_storage_volume_ids" class="property-value"></select></td></tr>
-            <tr><td>Cloud Init YAML</td><td><textarea id="cloud_init_yaml" name="cloud_init_yaml" class="property-value" rows="10"></textarea></td></tr>
-            <tr><td>Vnics</td><td><select multiple="multiple" id="subnet_ids" class="property-value"></select></td></tr>
-        </table>
-    </div>
-</body>
-</html>
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Instance{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Subnet</div><div class='td'><label id="subnet_id" class="property-value property-label"></label></div></div>
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="property-value"></div></div>
+    <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="property-value">
+        <option value="1" selected="selected">AD 1</option>
+        <option value="2">AD 2</option>
+        <option value="3">AD 3</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Shape</div><div class='td'><select id="shape" class="property-value">
+        <option value="VM.Standard2.1" selected="selected">VM.Standard2.1 (1 Core OCPU, 15 GB Memory)</option>
+        <option value="VM.Standard2.2" selected="selected">VM.Standard2.2 (1 Core OCPU, 30 GB Memory)</option>
+        <option value="VM.Standard2.4" selected="selected">VM.Standard2.4 (1 Core OCPU, 60 GB Memory)</option>
+        <option value="VM.Standard2.8" selected="selected">VM.Standard2.8 (1 Core OCPU, 120 GB Memory)</option>
+        <option value="VM.Standard.E2.1" selected="selected">VM.Standard.E2.1 (1 Core OCPU, 15 GB Memory)</option>
+        <option value="VM.Standard.E2.2" selected="selected">VM.Standard.E2.2 (1 Core OCPU, 30 GB Memory)</option>
+        <option value="VM.Standard.E2.4" selected="selected">VM.Standard.E2.4 (1 Core OCPU, 60 GB Memory)</option>
+        <option value="VM.Standard.E2.8" selected="selected">VM.Standard.E2.8 (1 Core OCPU, 120 GB Memory)</option>
+    </select></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Hostname</div><div class='td'><input type="text" id="hostname_label" name="hostname_label" class="property-value"></div></div>
+    <div class='tr'><div class='td'>OS</div><div class='td'><select id="os" class="property-value">
+        <option value="Oracle Linux" selected="selected">Oracle Linux</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Version</div><div class='td'><select id="version" class="property-value">
+        <option value="7.7" selected="selected">7.7</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Boot Volume Size (in GB)</div><div class='td'><input type="text" id="boot_volume_size_in_gbs" name="boot_volume_size_in_gbs" class="property-value"></div></div>
+    <div class='tr'><div class='td'>Authorised Keys</div><div class='td'><input type="text" id="authorized_keys" name="authorized_keys" class="property-value"></div></div>
+    <div class='tr'><div class='td'>Block Storage Volumes</div><div class='td'><select multiple="multiple" id="block_storage_volume_ids" class="property-value"></select></div></div>
+    <div class='tr'><div class='td'>Cloud Init YAML</div><div class='td'><textarea id="cloud_init_yaml" name="cloud_init_yaml" class="property-value" rows="10"></textarea></div></div>
+    <div class='tr'><div class='td'>Vnics</div><div class='td'><select multiple="multiple" id="subnet_ids" class="property-value"></select></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}

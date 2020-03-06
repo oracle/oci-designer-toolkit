@@ -21,6 +21,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import request
 from flask import send_from_directory
+from flask import jsonify
 
 import json
 from common.ociCommon import logJson
@@ -69,6 +70,29 @@ def standardiseJson(json_data={}, **kwargs):
     logJson(json_data)
     return json_data
 
+#
+# Define Error Handlers
+#
+
+@bp.errorhandler(Exception)
+def handle_exception(error):
+    message = [str(x) for x in error.args]
+    status_code = 500
+    success = False
+    response = {
+        'success': success,
+        'error': {
+            'type': error.__class__.__name__,
+            'message': message
+        }
+    }
+    logger.exception(error)
+    logJson(response)
+    return jsonify(response), status_code
+
+#
+# Define Endpoints
+#
 
 @bp.route('/designer', methods=(['GET', 'POST']))
 def designer():

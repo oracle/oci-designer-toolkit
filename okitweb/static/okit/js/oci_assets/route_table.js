@@ -20,10 +20,9 @@ class RouteTable extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        console.warn('ProtoType Name of Route Table : ' + this.constructor.name);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + route_table_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(route_table_prefix, okitjson.route_tables.length + 1);
         this.display_name = this.generateDefaultName(okitjson.route_tables.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
@@ -170,78 +169,160 @@ class RouteTable extends OkitArtifact {
             // Add Event Listeners
             addPropertiesEventListeners(me, []);
             // Route Rules
-            for (let route_rule of me.route_rules) {
-                me.addRouteRuleHtml(route_rule);
-            }
+            me.loadRouteRules();
             // Add Handler to Add Button
-            document.getElementById('add_button').addEventListener('click', me.handleAddRouteRule, false);
-            document.getElementById('add_button').route_table = me;
+            $(jqId('add_route_rule')).click(function () {
+                me.addRouteRule();
+            });
         });
     }
 
-    handleAddRouteRule(evt) {
-        //route_table = evt.target.route_table;
-        console.info('Adding route rule to : ' + evt.target.route_table);
-        let new_rule = {destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0", network_entity_id: "", description: ""}
-        evt.target.route_table.route_rules.push(new_rule);
-        evt.target.route_table.addRouteRuleHtml(new_rule);
+    loadRouteRules() {
+        // Empty Existing Rules
+        $(jqId('route_rules_table_body')).empty();
+        // Route Rules
+        let rule_num = 1;
+        for (let route_rule of this.route_rules) {
+            this.addRouteRuleHtml(route_rule, rule_num);
+            rule_num += 1;
+        }
+    }
+
+    addRouteRule() {
+        let new_rule = {
+            target_type: "internet_gateways",
+            destination_type: "CIDR_BLOCK",
+            destination: "0.0.0.0/0",
+            network_entity_id: "",
+            description: ""
+        };
+        this.route_rules.push(new_rule);
+        this.loadRouteRules();
         displayOkitJson();
     }
 
-    handleDeleteRouteRulesRow(evt) {
-        let row = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode;
-        row.parentNode.removeChild(row);
-        evt.target.route_table.route_rules.splice(evt.target.route_table.rule_num, 1);
+    deleteRouteRule(rule_num) {
+        this.route_rules.splice(rule_num, 1);
+        this.loadRouteRules();
         displayOkitJson();
     }
 
-    addRouteRuleHtml(route_rule) {
+    addRouteRuleHtml(route_rule, rule_num=1) {
+        let me = this;
+        let vcn_id = '';
+        if (this.getParent().getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
+            vcn_id = this.getParent().id;
+        } else {
+            // Must be a child of the Virtual Cloud Network
+            vcn_id = this.getParent().getParent().id;
+        }
+
         let rules_table_body = d3.select('#route_rules_table_body');
-        let rules_count = $('#route_rules_table_body > tr').length;
-        let rule_num = rules_count + 1;
-        let row = rules_table_body.append('tr');
-        let cell = row.append('td')
-            .attr("id", "rule_" + rule_num)
-            .attr("colspan", "2");
-        let rule_table = cell.append('table')
-            .attr("id", "rule_table_" + rule_num)
-            .attr("class", "property-editor-table");
+        let row = rules_table_body.append('div').attr('class', 'tr');
+        let cell = row.append('div').attr('class', 'td')
+            .attr("id", "rule_" + rule_num);
+        let rule_table = cell.append('div').attr('class', 'table okit-table okit-properties-table')
+            .attr("id", "rule_table_" + rule_num);
         // First Row with Delete Button
-        let rule_row = rule_table.append('tr');
-        let rule_cell = rule_row.append('td')
-            .attr("colspan", "2");
-        let delete_btn = rule_cell.append('input')
+        let rule_cell = row.append('div').attr('class', 'td');
+        rule_cell.append('button')
             .attr("type", "button")
-            .attr("class", "delete-button")
-            .attr("value", "-");
-        delete_btn.node().addEventListener("click", this.handleDeleteRouteRulesRow, false);
-        delete_btn.node().route_table = this;
-        delete_btn.node().rule_num = rule_num;
-        // Destination Type
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td')
-            .text("Destination Type");
-        rule_cell = rule_row.append('td');
-        rule_cell.append('input')
-            .attr("type", "text")
-            .attr("class", "property-value")
-            .attr("readonly", "readonly")
-            .attr("id", "destination_type")
-            .attr("name", "destination_type")
-            .attr("value", route_rule['destination_type'])
-            .on("change", function() {
-                route_rule['destination_type'] = this.value;
+            .attr("class", "okit-delete-button")
+            .text("X")
+            .on('click', function() {
+                me.deleteRouteRule(rule_num - 1);
+                me.loadRouteRules();
                 displayOkitJson();
             });
+
+        // Target Type
+        const target_types_map = new Map([
+            ['Internet Gateway', 'internet_gateways'],
+            ['NAT Gateway', 'nat_gateways'],
+            ['Local Peering Gateway', 'local_peering_gateways'],
+            ['Dynamic Routing Gateway', 'dynamic_routing_gateways'],
+            ['Private IP', 'private_ips'],
+            ['Service Gateway', 'service_gateways'],
+        ]);
+        let rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
+            .text("Target Type");
+        let target_type_select = rule_row.append('div').attr('class', 'td').append('select')
+            .attr("class", "property-value")
+            .attr("id", "target_type" + rule_num)
+            .on("change", function() {
+                let target_type = this.options[this.selectedIndex].value;
+                console.info('Selected ' + target_type);
+                route_rule['target_type'] = target_type;
+                if (target_type !== 'private_ips') {
+                    $(jqId("destination_type_row" + rule_num)).addClass('collapsed');
+                    if (target_type !== 'service_gateways') {
+                        $(jqId("destination_type" + rule_num)).val('CIDR_BLOCK');
+                        route_rule['destination_type'] = 'CIDR_BLOCK';
+                    } else {
+                        $(jqId("destination_type" + rule_num)).val('SERVICE_CIDR_BLOCK');
+                        route_rule['destination_type'] = 'SERVICE_CIDR_BLOCK';
+                    }
+                    console.info('Processing list ' + JSON.stringify(me.getOkitJson()[target_type]));
+                    let network_entity = '';
+                    route_rule.network_entity_id = '';
+                    for (let gateway of me.getOkitJson()[target_type]) {
+                        if (gateway.vcn_id == vcn_id) {
+                            route_rule.network_entity_id = gateway.id;
+                            network_entity = gateway.display_name;
+                            break;
+                        }
+                    }
+                    $(jqId("network_entity" + rule_num)).text(network_entity);
+                } else {
+                    $(jqId("destination_type_row" + rule_num)).removeClass('collapsed');
+                }
+                displayOkitJson();
+            });
+        target_types_map.forEach((value, key) => {
+            target_type_select.append('option')
+                .attr('value', value)
+                .text(key);
+        });
+        target_type_select.property('value', route_rule.target_type);
+        if (!route_rule.target_type || route_rule.target_type === '') {
+            route_rule.target_type = 'internet_gateways';
+        }
+        $(jqId("target_type" + rule_num)).val(route_rule.target_type);
+
+        // Destination Type
+        const destination_types_map = new Map([
+            ['CIDR Block', 'CIDR_BLOCK'],
+            ['Service', 'SERVICE_CIDR_BLOCK'],
+        ]);
+        rule_row = rule_table.append('div').attr('class', 'tr collapsed')
+            .attr('id', "destination_type_row" + rule_num);
+        rule_row.append('div').attr('class', 'td')
+            .text("Destination Type");
+        let destination_type = rule_row.append('div').attr('class', 'td').append('select')
+            .attr("class", "property-value")
+            .attr("id", "destination_type" + rule_num)
+            .on("change", function() {
+                let destination_type = this.options[this.selectedIndex].value;
+                console.info('Selected ' + destination_type);
+                route_rule['destination_type'] = destination_type;
+                displayOkitJson();
+            });
+        destination_types_map.forEach((value, key) => {
+            destination_type.append('option')
+                .attr('value', value)
+                .text(key);
+        });
+        $(jqId("destination_type" + rule_num)).val(route_rule.destination_type);
         // Destination
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td')
+        rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
             .text("Destination");
-        rule_cell = rule_row.append('td');
+        rule_cell = rule_row.append('div').attr('class', 'td');
         rule_cell.append('input')
             .attr("type", "text")
             .attr("class", "property-value")
-            .attr("id", "destination")
+            .attr("id", "destination" + rule_num)
             .attr("name", "destination")
             .attr("value", route_rule['destination'])
             .on("change", function() {
@@ -249,45 +330,42 @@ class RouteTable extends OkitArtifact {
                 console.info('Changed destination: ' + this.value);
                 displayOkitJson();
             });
+
         // Network Entity
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td')
+        let target_type = $(jqId("target_type" + rule_num)).val();
+        let network_entity = '';
+        for (let gateway of me.getOkitJson()[target_type]) {
+            if (gateway.vcn_id == vcn_id) {
+                if (route_rule.network_entity_id === '') {
+                    // No Network Entity Specified will assume the first of "Target Type"
+                    network_entity = gateway.display_name;
+                    break;
+                }
+                else if (gateway.id === route_rule.network_entity_id) {
+                    network_entity = gateway.display_name;
+                    break;
+                }
+            }
+        }
+        rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
             .text("Network Entity");
-        rule_cell = rule_row.append('td');
-        let network_entity_id_select = rule_cell.append('select')
+        rule_cell = rule_row.append('div').attr('class', 'td');
+        rule_cell.append('label')
+            //.attr("type", "text")
             .attr("class", "property-value")
-            .attr("id", "network_entity_id")
-            .on("change", function() {
-                route_rule['network_entity_id'] = this.options[this.selectedIndex].value;
-                console.info('Changed network_entity_id ' + this.selectedIndex);
-                displayOkitJson();
-            });
-        let gateways = [];
-        if (this.getParent().getArtifactReference() === virtual_cloud_network_artifact) {
-            gateways = this.getParent().getGateways();
-        } else {
-            // Must be a child of the Virtual Cloud Network
-            gateways = this.getParent().getParent().getGateways();
-        }
-        // Add Internet gateways
-        for (let gateway of gateways) {
-            let opt = network_entity_id_select.append('option')
-                .attr("value", gateway.id)
-                .text(gateway.display_name);
-        }
-        if (route_rule.network_entity_id === '' && gateways.length > 0) {
-            route_rule.network_entity_id = gateways[0].id;
-        }
-        network_entity_id_select.property('value', route_rule.network_entity_id);
+            .attr("id", "network_entity" + rule_num)
+            .attr("name", "network_entity")
+            .text(network_entity);
         // Description
-        rule_row = rule_table.append('tr');
-        rule_cell = rule_row.append('td')
+        rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
             .text("Description");
-        rule_cell = rule_row.append('td');
+        rule_cell = rule_row.append('div').attr('class', 'td');
         rule_cell.append('input')
             .attr("type", "text")
             .attr("class", "property-value")
-            .attr("id", "description")
+            .attr("id", "description" + rule_num)
             .attr("name", "description")
             .attr("value", route_rule['description'])
             .on("change", function() {

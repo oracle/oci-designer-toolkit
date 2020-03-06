@@ -38,6 +38,7 @@ function readOkitSettings() {
             is_timestamp_files: false,
             profile: 'DEFAULT',
             is_always_free: false,
+            is_optional_expanded: true,
         };
         cookie_value = JSON.stringify(settings);
         saveOkitSettings(cookie_value);

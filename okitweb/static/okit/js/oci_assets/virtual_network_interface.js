@@ -19,8 +19,6 @@ class VirtualNetworkInterface extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + virtual_network_interface_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(virtual_network_interface_prefix, okitjson.subnets.length + 1);
         this.display_name = this.generateDefaultName(okitjson.subnets.length + 1);
         this.compartment_id = '';
         this.instance_id = data.parent_id;

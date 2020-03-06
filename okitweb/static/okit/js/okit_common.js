@@ -50,7 +50,6 @@ function generatePassword(length=30, lowercase=1, uppercase=1, numeric=1, specia
     let count_array = [lowercase, uppercase, numeric, special, any];
     // Generate
     let generatedPassword = shuffle(count_array.map(function(len, i) { return Array(len).fill(chars_array[i]).map(function(x) { return x[Math.floor(Math.random() * x.length)] }).join('') }).concat().join('').split('')).join('');
-
     return generatedPassword;
 }
 

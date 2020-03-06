@@ -8,7 +8,7 @@
         compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
         # Optional
-        is_enabled: "yes"
+        is_enabled: "{{ enabled }}"
         display_name: "{{ display_name }}"
 {% if defined_tags is defined %}
         defined_tags: "{{ defined_tags }}"

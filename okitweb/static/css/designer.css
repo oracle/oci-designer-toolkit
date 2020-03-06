@@ -39,6 +39,22 @@
     text-transform: capitalize;
 }
 
+details {
+    display: block;
+    margin-top: 2em;
+}
+
+summary {
+    color: white;
+    font-weight: bold;
+    font-family: "Times New Roman", Arial, sans-serif;
+    min-height: 20px;
+    display: block;
+    vertical-align: middle;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
 /*
 ** Main Panel (Main Block) CSS
  */
@@ -164,7 +180,6 @@
     padding: 5px;
     max-height: 100%;
     display: block;
-    /*overflow: scroll;*/
 }
 
 .svg-canvas {
@@ -201,10 +216,52 @@
     position: absolute;
     left: 30%;
     top: 20%;
-    border: black 1px dashed;
-    border-radius: 5px;
-    padding: 5px;
+    border-radius: 2px;
+    padding: 10px;
     background-color: rgba(224, 235, 235, 0.7);
+    box-shadow: 0px 0px 5px black;
+}
+
+.popup-box div {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+    display: block;
+}
+
+
+.okit-button {
+}
+
+.okit-button-link {
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    font: inherit;
+    text-transform: none;
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: middle;
+    font-size: 14px;
+    text-align: center;
+
+    padding: 0;
+    line-height: 20px;
+    background: none;
+    color: #0572ce;
+    text-decoration: underline;
+}
+
+.okit-button-link:hover,
+.okit-button-link:active {
+    color: #73a5e0;
+    text-decoration: underline;
+}
+
+.okit-button-link:disabled {
+    color: #aeaeae;
+    text-decoration: none;
 }
 
 .query-progress {
@@ -356,6 +413,18 @@
     font-size: 14px;
 }
 
+.property-editor-table th:first-child {
+    max-width: 12em;
+}
+
+.property-editor-dynamic-table {
+    table-layout: fixed;
+}
+
+.property-editor-dynamic-table th:last-child {
+    width: 2em;
+}
+
 .property-editor-table td {
     border: 1px solid #ddd;
     padding: 2px;
@@ -474,7 +543,7 @@
 /* Style the tab */
 .tab-bar {
     min-width: 100%;
-    overflow: hidden;
+    overflow: scroll;
     border-bottom: 2px solid #312D2A;
     background-color: #f1f1f1;
     margin-bottom: 2px;
@@ -545,3 +614,167 @@
 }
 
 
+/*
+** Style Tables
+ */
+
+/* Classes for formatting divs as tables */
+.table {display: table; margin: 0 auto;}
+.thead {display: table-header-group;}
+.tbody {display: table-row-group;}
+.tr {display: table-row;}
+.table .thead .tr {background-color: #669999}
+.table .tbody .tr:nth-child(even) {background-color: white;}
+.table .tbody .tr:nth-child(odd) {background-color: ghostwhite;}
+.table .tbody .tr:hover {background-color: #ddd;}
+.th {display: table-cell; color: black; overflow: hidden;}
+.td {display: table-cell; color: black; overflow: hidden;}
+
+.okit-table {
+    border-collapse: collapse;
+    width: 100%;
+    color: #1e2834;
+}
+
+.okit-table .th {
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.okit-table .td {
+    border: 1px solid #ddd;
+    padding: 2px;
+    text-align: left;
+    vertical-align: middle;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.okit-table tr:nth-child(even) {background-color: white;}
+
+.okit-table tr:nth-child(odd) {background-color: ghostwhite;}
+
+.okit-table tr:hover {background-color: #ddd;}
+
+.okit-table th {
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.okit-table td {
+    border: 1px solid #ddd;
+    padding: 2px;
+    text-align: left;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.okit-dynamic-table {
+    table-layout: fixed;
+}
+
+.okit-dynamic-table .th:last-child {
+    width: 2em;
+}
+
+.okit-properties-table {
+    margin-top: 10px;
+}
+
+.okit-properties-table th:first-child {
+    max-width: 12em;
+}
+
+.okit-properties-table td:first-child {
+    max-width: 12em;
+    font-weight: bold;
+}
+
+
+.collapsed {
+    visibility: collapse;
+}
+
+/*
+** Style Modal Dialog
+ */
+
+
+.okit-modal-wrapper {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1010;
+    padding: 15px 15px;
+    background: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+}
+
+.okit-modal-dialog {
+    z-index:1000;
+    position: absolute;
+    left: 30%;
+    top: 20%;
+    border-radius: 2px;
+    background-color: rgba(224, 235, 235, 0.7);
+    box-shadow: 0px 0px 5px black;
+    min-width: 100px;
+    min-height: 100px;
+    overflow: hidden;
+}
+
+.okit-modal-dialog-header {
+    display: block;
+    padding-top: 0.5em;
+    width: 100%;
+    height: 1.5em;
+}
+
+.okit-modal-dialog-body {
+    width: 100%;
+    padding: 5px;
+    border-top: #555555 1px solid;
+    border-bottom: #555555 1px solid;
+    flex-grow: 1;
+    display: flex;
+}
+
+.okit-modal-dialog-footer {
+    display: block;
+    width: 100%;
+    height: 2em;
+}
+
+.okit-modal-dialog-heading {
+    float: left;
+    margin-left: 5px;
+    height: 100%;
+    vertical-align: center;
+}
+
+.okit-modal-dialog-close-link {
+    float: right;
+    margin-right: 5px;
+    height: 100%;
+    vertical-align: center;
+}
+
+.okit-modal-dialog-table {
+    width: 100%;
+}
