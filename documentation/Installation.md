@@ -22,10 +22,10 @@ python modules are installed and in addition provide a simple flask server that 
 Before the building either the Docker or Vagrant Images the project will nee to be cloned from the Git Repository (or downloaded)
 and it is recommended that the latest Stable Release be cloned. The latest stable version number if shown in the README
 and the associated Release tag is in the format Release-<Version> hence for the version 0.1.0 the Reease tag will be 
-**Release-0.1.0**. The command shows how this can be cloned to the local machine.
+**Release-0.2.0**. The command shows how this can be cloned to the local machine.
 
 ```bash
-your-mac:tmp git clone -b Release-0.1.0 --depth 1 git@<Git Repo URL>:<Repository>/okit.oci.web.designer.git
+your-mac:tmp git clone -b Release-0.2.0 --depth 1 git@<Git Repo URL>:<Repository>/okit.oci.web.designer.git
 ```
 
 

@@ -41,27 +41,27 @@ The table below lists a summary of the current support status whilst the details
 | Artifact                | Support | Version | Gaps |
 | ----------------------- | ------- | ------- | ---- |
 | **Containers**
-| Compartment             | Full    | 0.2.0   | [2](#compartment)
+| Compartment             | Full    | 0.2.0   | 
 | **Network**
-| Route Table             | Partial | 0.1.0   | [3](#route-table)
-| Security List           | Partial | 0.1.0   | [5](#security-list)
-| Subnet                  | Partial | 0.1.0   | [4](#subnet)
-| Virtual Cloud Network   | Partial | 0.1.0   | [3](#virtual-cloud-network)
+| Route Table             | Partial | 0.1.0   | [1](#route-table)
+| Security List           | Partial | 0.1.0   | [3](#security-list)
+| Subnet                  | Partial | 0.1.0   | [2](#subnet)
+| Virtual Cloud Network   | Partial | 0.1.0   | [1](#virtual-cloud-network)
 | **Gateways**
 | Dynamic Routing Gateway | Partial | 0.1.0   | [2](#dynamic-routing-gateway)
-| Internet Gateway        | Full    | 0.2.0   | [3](#internet-gateway)
-| Local Peering Gateway   | Full    | 0.1.0   | [2](#local-peering-gateway)
-| NAT Gateway             | Partial | 0.1.0   | [3](#nat-gateway)
-| Service Gateway         | Partial | 0.1.0   | [3](#service-gateway)
+| Internet Gateway        | Full    | 0.2.0   | 
+| Local Peering Gateway   | Full    | 0.2.0   | 
+| NAT Gateway             | Full    | 0.2.0   | 
+| Service Gateway         | Partial | 0.1.0   | [1](#service-gateway)
 | **Storage**
-| Block Storage Volume    | Partial | 0.1.0   | [5](#block-storage-volume)
-| File Storage System     | Partial | 0.1.0   | [7](#file-storage-system)
-| Object Storage Bucket   | Partial | 0.1.0   | [5](#object-storage-bucket)
+| Block Storage Volume    | Partial | 0.1.0   | [3](#block-storage-volume)
+| File Storage System     | Partial | 0.1.0   | [5](#file-storage-system)
+| Object Storage Bucket   | Partial | 0.1.0   | [3](#object-storage-bucket)
 | **Database**
-| Autonomous Database     | Partial | 0.1.0   | [4](#autonomous-database)
+| Autonomous Database     | Partial | 0.1.0   | [2](#autonomous-database)
 | **Compute**
-| Instance                | Partial | 0.1.0   | [7](#instance)
-| Load Balancer           | Partial | 0.1.0   | [4](#load-balancer)
+| Instance                | Partial | 0.1.0   | [5](#instance)
+| Load Balancer           | Partial | 0.1.0   | [2](#load-balancer)
 
 
 ## Installation
@@ -121,10 +121,6 @@ If you would like to extend OKIT the development process is documented in [OCI K
 - ipV6 Functionality but this is currently only available for Government domains.
 
 #### Gateways
-##### NAT Gateway
-- Freeform Tags
-- Defined Tags
-- Block Traffic use the default.
 ##### Service Gateway
 - Route Table Selection
 
