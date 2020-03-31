@@ -157,7 +157,7 @@ If you would like to extend OKIT the development process is documented in [OCI K
 6. Improved Support for
     1. Instance
     2. Load Balancer
-7. Cleaner L&F
+7. Cleaner Look and Feel
     1. Change colors to more closely match OCI Console
     2. Palette, Properties and JSON View panels now slide of the screen to give more visual real estate.
     3. Setting panel replaced by Preferences Dialog accessible from menu.
@@ -167,12 +167,12 @@ If you would like to extend OKIT the development process is documented in [OCI K
         4. Timestamp Filenames (Adds timestamp to save files)
         5. Auto Expand "Advanced Properties" indicates that the advanced properties will be displayed by default in properties panel.
         6. Profile to be used within the oci config when accessing OCI
-8. Change Json Structure to more closely represent that returned by querying OCI.
+8. Change JSON Structure to more closely represent that returned by querying OCI.
 9. Reference Architecture Templates
     1. CockroachDB Cluster
 #### Bug Fixes
 1. Canvas Scrollbar becomes hidden when the region tabs are displayed
-2. Canvas draw fails when json contains unattached DRG
+2. Canvas draw fails when JSON contains unattached DRG
 3. Public IP Assigned to Instance in private Subnet
 
 ### Version 0.2.0 
