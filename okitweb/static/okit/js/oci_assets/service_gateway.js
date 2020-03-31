@@ -28,10 +28,10 @@ class ServiceGateway extends OkitArtifact {
         this.service_name = 'All Services';
         this.autonomous_database_ids = [];
         this.object_storage_bucket_ids = [];
+        this.route_table_id = '';
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -67,15 +67,6 @@ class ServiceGateway extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Service Gateway references
         for (let route_table of this.getOkitJson().route_tables) {
@@ -230,15 +221,22 @@ class ServiceGateway extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/service_gateway.html", function () {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/service_gateway.html", () => {
             // Load Referenced Ids
-            let autonomous_database_select = $('#autonomous_database_ids');
+            let route_table_select = $(jqId('route_table_id'));
+            route_table_select.append($('<option>').attr('value', '').text(''));
+            for (let route_table of okitJson.route_tables) {
+                if (me.vcn_id === route_table.vcn_id) {
+                    route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
+                }
+            }
+            let autonomous_database_select = $(jqId('autonomous_database_ids'));
             for (let autonomous_database of okitJson.autonomous_databases) {
                 if (me.compartment_id === autonomous_database.compartment_id) {
                     autonomous_database_select.append($('<option>').attr('value', autonomous_database.id).text(autonomous_database.display_name));
                 }
             }
-            let object_storage_bucket_select = $('#object_storage_bucket_ids');
+            let object_storage_bucket_select = $(jqId('object_storage_bucket_ids'));
             for (let object_storage_bucket of okitJson.object_storage_buckets) {
                 if (me.compartment_id === object_storage_bucket.compartment_id) {
                     object_storage_bucket_select.append($('<option>').attr('value', object_storage_bucket.id).text(object_storage_bucket.display_name));
@@ -246,8 +244,6 @@ class ServiceGateway extends OkitArtifact {
             }
             // Load Properties
             loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
         });
     }
 

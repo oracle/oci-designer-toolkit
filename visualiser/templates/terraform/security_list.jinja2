@@ -10,6 +10,42 @@ resource "oci_core_security_list" "{{ resource_name }}" {
         protocol    = {{ rule.protocol }}
         destination = {{ rule.destination }}
         # Optional
+    {% if rule.tcp_options is defined %}
+        tcp_options {
+        {% if rule.tcp_options.destination_port_range is defined %}
+            min = {{ rule.tcp_options.destination_port_range.min }}
+            max = {{ rule.tcp_options.destination_port_range.max }}
+        {% endif %}
+        {% if rule.tcp_options.source_port_range is defined %}
+            source_port_range {
+                min = {{ rule.tcp_options.source_port_range.min }}
+                max = {{ rule.tcp_options.source_port_range.max }}
+            }
+        {% endif %}
+        }
+    {% endif %}
+    {% if rule.udp_options is defined %}
+        udp_options {
+        {% if rule.udp_options.destination_port_range is defined %}
+            min = {{ rule.udp_options.destination_port_range.min }}
+            max = {{ rule.udp_options.destination_port_range.max }}
+        {% endif %}
+        {% if rule.udp_options.source_port_range is defined %}
+            source_port_range {
+                min = {{ rule.udp_options.source_port_range.min }}
+                max = {{ rule.udp_options.source_port_range.max }}
+            }
+        {% endif %}
+        }
+    {% endif %}
+    {% if rule.icmp_options is defined %}
+        icmp_options {
+            type = {{ rule.icmp_options.type }}
+        {% if rule.icmp_options.code is defined %}
+            code = {{ rule.icmp_options.code }}
+        {% endif %}
+        }
+    {% endif %}
     {% if rule.destination_type is defined %}
         destination_type  = {{ rule.destination_type }}
     {% endif %}
@@ -21,12 +57,42 @@ resource "oci_core_security_list" "{{ resource_name }}" {
         protocol    = {{ rule.protocol }}
         source      = {{ rule.source }}
         # Optional
-{% if rule.tcp_options is defined %}
+    {% if rule.tcp_options is defined %}
         tcp_options {
-            min = {{ rule.tcp_options.min }}
-            max = {{ rule.tcp_options.max }}
+        {% if rule.tcp_options.destination_port_range is defined %}
+            min = {{ rule.tcp_options.destination_port_range.min }}
+            max = {{ rule.tcp_options.destination_port_range.max }}
+        {% endif %}
+        {% if rule.tcp_options.source_port_range is defined %}
+            source_port_range {
+                min = {{ rule.tcp_options.source_port_range.min }}
+                max = {{ rule.tcp_options.source_port_range.max }}
+            }
+        {% endif %}
         }
-{% endif %}
+    {% endif %}
+    {% if rule.udp_options is defined %}
+        udp_options {
+        {% if rule.udp_options.destination_port_range is defined %}
+            min = {{ rule.udp_options.destination_port_range.min }}
+            max = {{ rule.udp_options.destination_port_range.max }}
+        {% endif %}
+        {% if rule.udp_options.source_port_range is defined %}
+            source_port_range {
+                min = {{ rule.udp_options.source_port_range.min }}
+                max = {{ rule.udp_options.source_port_range.max }}
+            }
+        {% endif %}
+        }
+    {% endif %}
+    {% if rule.icmp_options is defined %}
+        icmp_options {
+            type = {{ rule.icmp_options.type }}
+        {% if rule.icmp_options.code is defined %}
+            code = {{ rule.icmp_options.code }}
+        {% endif %}
+        }
+    {% endif %}
     }
 {% endfor %}
     # Optional

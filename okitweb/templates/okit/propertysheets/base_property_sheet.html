@@ -7,10 +7,10 @@
 <body>
 <div id="property-editor" class="property-editor">
     <div class="property-editor-title">
-        <label>{% block title_block %}{% endblock %}</label>
+        <h3>{% block title_block %}{% endblock %}</h3>
     </div>
-    <details class="required-properties" open="open">
-        <summary>Required Properties</summary>
+    <!--details class="required-properties" open="open">
+        <summary>Required Properties</summary-->
         <div id="required_properties" class="table okit-table okit-properties-table">
             <div class="thead">
                 <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
@@ -19,10 +19,11 @@
                {% block required_properties_table_rows_block %}{% endblock %}
             </div>
         </div>
-    </details>
-    <details id="optional_properties" class="optional-properties">
-        <summary>Optional Properties</summary>
-        <div id="required_properties" class="table okit-table okit-properties-table">
+    <!--/details-->
+    <details id="optional_properties" class="optional-properties" ontoggle="{$('#optional_properties_summary').text(this.open ? 'Hide Advanced Options' : 'Show Advanced Options');}">
+        <summary id="optional_properties_summary">Show Advanced Options</summary>
+        {% block optional_properties_table_block %}
+        <div id="optional_properties_div" class="table okit-table okit-properties-table">
             <div class="thead">
                 <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
             </div>
@@ -30,12 +31,13 @@
                 {% block optional_properties_table_rows_block %}{% endblock %}
             </div>
         </div>
+        {% endblock optional_properties_table_block %}
         {% block optional_properties_block %}{% endblock %}
         <details open="open">
             <summary>Freeform Tags</summary>
             <div id="fftags" class="table okit-table okit-properties-table okit-dynamic-table">
                 <div class="thead">
-                    <div class="tr"><div class="th">Key</div><div class="th">Value</div><div class="th"><button id="add-freeform-tag" type="button">+</button></div></div>
+                    <div class="tr"><div class="th">Key</div><div class="th">Value</div><div class="th"><button id="add_freeform_tag" class="okit-add-button" type="button">+</button></div></div>
                 </div>
                 <div class="tbody" id="freeform_tags"></div>
             </div>
@@ -44,7 +46,7 @@
             <summary>Defined Tags</summary>
             <div id="dftags" class="table okit-table okit-properties-table okit-dynamic-table">
                 <div class="thead">
-                    <div class="tr"><div class="th">Namespace</div><div class="th">Key</div><div class="th">Value</div><div class="th"><button id="add-defined-tag" type="button">+</button></div></div>
+                    <div class="tr"><div class="th">Namespace</div><div class="th">Key</div><div class="th">Value</div><div class="th"><button id="add_defined_tag" class="okit-add-button" type="button">+</button></div></div>
                 </div>
                 <div class="tbody" id="defined_tags"></div>
             </div>

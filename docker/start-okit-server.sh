@@ -75,6 +75,7 @@ docker run \
        -w /okit \
        -p 8080:8080 \
        -p 80:80 \
+       -p 443:443 \
        --rm \
        -it \
        ${DOCKERIMAGE} \

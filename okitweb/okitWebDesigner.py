@@ -94,8 +94,91 @@ def handle_exception(error):
 # Define Endpoints
 #
 
-@bp.route('/designer', methods=(['GET', 'POST']))
+@bp.route('/designer', methods=(['GET']))
 def designer():
+    # Read Artifact Specific JavaScript Files
+    oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets')))
+
+    # Get Palette Icon Groups / Icons
+    svg_files = []
+    svg_icon_groups = {}
+    # Read Files
+    for (dirpath, dirnames, filenames) in os.walk(os.path.join(bp.static_folder, 'palette')):
+        logger.debug('dirpath : {0!s:s}'.format(dirpath))
+        logger.debug('dirnames : {0!s:s}'.format(dirnames))
+        logger.debug('filenames : {0!s:s}'.format(filenames))
+        if os.path.basename(dirpath) != 'palette':
+            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
+            svg_icon_groups[os.path.basename(dirpath)] = filenames
+        else:
+            svg_files.extend(filenames)
+    logger.debug('Files Walk : {0!s:s}'.format(svg_files))
+    logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
+
+    palette_icon_groups = []
+    for key in sorted(svg_icon_groups.keys()):
+        palette_icon_group = {'name': str(key).title(), 'icons': []}
+        for palette_svg in sorted(svg_icon_groups[key]):
+            palette_icon = {'svg': os.path.join(key, palette_svg), 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
+            palette_icon_group['icons'].append(palette_icon)
+        palette_icon_groups.append(palette_icon_group)
+    logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
+    logJson(palette_icon_groups)
+
+    # Read Fragment Files
+    fragment_files = os.listdir(os.path.join(bp.static_folder, 'fragments', 'svg'))
+    fragment_icons = []
+    for fragment_svg in sorted(fragment_files):
+        logger.info('Fragment : {0!s:s}'.format(fragment_svg))
+        logger.info('Fragment full : {0!s:s}'.format(os.path.join(bp.static_folder, 'fragments', 'svg', fragment_svg)))
+        fragment_icon = {'svg': fragment_svg, 'title': os.path.basename(fragment_svg).split('.')[0].replace('_', ' ').title()}
+        logger.info('Icon : {0!s:s}'.format(fragment_icon))
+        fragment_icons.append(fragment_icon)
+
+    # Walk Template directory Structure
+    template_files = []
+    template_dirs = {}
+    logger.debug('Walking the template directories')
+    rootdir = os.path.join(bp.static_folder, 'templates')
+    for (dirpath, dirnames, filenames) in os.walk(rootdir):
+        logger.debug('dirpath : {0!s:s}'.format(dirpath))
+        logger.debug('dirnames : {0!s:s}'.format(dirnames))
+        logger.debug('filenames : {0!s:s}'.format(filenames))
+        relpath = os.path.relpath(dirpath, rootdir)
+        logger.debug('Relative Path : {0!s:s}'.format(relpath))
+        template_files.extend([os.path.join(relpath, f) for f in filenames])
+        template_dirs[relpath] = filenames
+    logger.debug('Files Walk : {0!s:s}'.format(template_files))
+    logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
+
+    template_groups = []
+    for key in sorted(template_dirs.keys()):
+        template_group = {'name': str(key).replace('_', ' ').title(), 'templates': []}
+        for template_file in sorted(template_dirs[key]):
+            try:
+                okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
+                filename = os.path.join(bp.static_folder, 'templates', key, template_file)
+                template_json = readJsonFile(filename)
+                logger.debug('Template Json : {0!s:s}'.format(template_json))
+                okit_template['title'] = template_json['title']
+                okit_template['description'] = template_json.get('description', template_json['title'])
+                template_group['templates'].append(okit_template)
+            except Exception as e:
+                logger.debug(e)
+        template_groups.append(template_group)
+    logger.debug('Template Groups {0!s:s}'.format(template_groups))
+    logJson(template_groups)
+
+    #Render The Template
+    return render_template('okit/okit_designer.html',
+                           oci_assets_js=oci_assets_js,
+                           palette_icon_groups=palette_icon_groups,
+                           fragment_icons=fragment_icons,
+                           okit_templates_groups=template_groups)
+
+# TODO: Delete
+@bp.route('/designerv1', methods=(['GET', 'POST']))
+def designerv1():
     oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets')))
     #palette_icons_svg = os.listdir(os.path.join(bp.static_folder, 'palette'))
     #logger.info('Basic List Dir : {0!s:s}'.format(palette_icons_svg))
@@ -133,9 +216,9 @@ def designer():
     logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
     logJson(palette_icon_groups)
 
+    # Walk Template directory Structure
     template_files = []
     template_dirs = {}
-    # Walk Template directory Structure
     logger.debug('Walking the template directories')
     rootdir = os.path.join(bp.static_folder, 'templates')
     for (dirpath, dirnames, filenames) in os.walk(rootdir):
@@ -197,10 +280,10 @@ def designer():
         logger.info('Response Json {0!s:s}'.format(response_json))
         logJson(response_json)
         response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates_groups=template_groups, fragment_icons=fragment_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
+        return render_template('okit/deprecated/templates/okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates_groups=template_groups, fragment_icons=fragment_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
     elif request.method == 'GET':
         logger.info('>>>>>>>>> oci version {0!s:s}'.format(oci.__version__))
-        return render_template('okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates_groups=template_groups, fragment_icons=fragment_icons)
+        return render_template('okit/deprecated/templates/okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates_groups=template_groups, fragment_icons=fragment_icons)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
@@ -314,7 +397,9 @@ def ociArtifacts(artifact):
     query_string = request.query_string
     parsed_query_string = urllib.parse.unquote(query_string.decode())
     query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+    logger.debug('===================================== Query Json =====================================')
     logJson(query_json)
+    logger.debug('======================================================================================')
     config_profile = query_json.get('config_profile', 'DEFAULT')
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     response_json = {}

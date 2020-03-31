@@ -7,15 +7,17 @@
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-__author__ = ["Stefan Hinker (Oracle Cloud Solutions A-Team)"]
+__author__ = ["Stefan Hinker (Oracle Cloud Solutions A-Team)", "Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
 __version__ = "1.0.0.0"
-__module__ = "ociNetwork"
+__module__ = "ociInstance"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
+import base64
 import oci
 
 from common.ociLogging import getLogger
+from facades.ociBootVolumeAttachment import OCIBootVolumeAttachments
 from facades.ociConnection import OCIComputeConnection, OCIVirtualNetworkConnection
 from facades.ociVnicAttachement import OCIVnicAttachments
 from facades.ociVolumeAttachment import OCIVolumeAttachments
@@ -92,6 +94,7 @@ class OCIInstances(OCIComputeConnection):
         self.instances_json = self.filterJsonObjectList(instances_json, filter)
         logger.debug(str(self.instances_json))
 
+
         # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
         volume_attachments = OCIVolumeAttachments(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).list()
 
@@ -99,12 +102,21 @@ class OCIInstances(OCIComputeConnection):
         vnic_attachments = OCIVnicAttachments(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).list()
 
         for instance in self.instances_json:
+            # Decode Cloud Init Yaml
+            #instance['cloud_init_yaml'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
+            instance['metadata']['user_data'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
             # Add Attached Block Storage Volumes
             instance['block_storage_volume_ids'] = [va['volume_id'] for va in volume_attachments if va['instance_id'] == instance['id']]
             # Add Vnic Attachments
             instance['vnics'] = [va for va in vnic_attachments if va['instance_id'] == instance['id']]
+            if len(instance['vnics']) > 0:
+                instance['primary_vnic'] = instance['vnics']
             # Add first vnic as the default subnet
             instance['subnet_id'] = instance['vnics'][0]['subnet_id'] if len(instance['vnics']) > 0 else ''
+            # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
+            boot_volume_attachments = OCIBootVolumeAttachments(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id, availability_domain=instance['availability_domain'], instance_id=instance['id']).list()
+            instance['boot_volume_size_in_gbs'] = boot_volume_attachments[0]['boot_volume']['size_in_gbs']
+            instance['is_pv_encryption_in_transit_enabled'] = boot_volume_attachments[0]['is_pv_encryption_in_transit_enabled']
             # Build object list
             self.instances_obj.append(OCIInstance(self.config, self.configfile, self.profile, instance))
 

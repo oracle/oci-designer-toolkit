@@ -28,8 +28,12 @@ class BlockStorageVolume extends OkitArtifact {
         this.size_in_gbs = 1024;
         this.backup_policy = 'bronze';
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
+        this.merge(data);
+        this.convert();
+        // Check if built from a query
+        if (this.availability_domain.length > 1) {
+            this.region_availability_domain = this.availability_domain;
+            this.availability_domain = this.region_availability_domain.slice(-1);
         }
         // Add Get Parent function
         if (parent !== null) {
@@ -67,15 +71,6 @@ class BlockStorageVolume extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Instance references
         for (let instance of this.getOkitJson().instances) {
@@ -166,13 +161,7 @@ class BlockStorageVolume extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/block_storage_volume.html", function () {
-            // Load Referenced Ids
-            // Load Properties
-            loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(me);});
     }
 
 

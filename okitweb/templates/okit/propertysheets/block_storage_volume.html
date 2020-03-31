@@ -7,8 +7,8 @@
 {% block title_block %}Block Storage Volume{% endblock %}
 
 {% block required_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="property-value"></div></div>
-    <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="property-value">
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="okit-property-value">
         <option value="1" selected="selected">AD 1</option>
         <option value="2">AD 2</option>
         <option value="3">AD 3</option>
@@ -16,8 +16,8 @@
 {% endblock %}
 
 {% block optional_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Size (in GB)</div><div class='td'><input type="text" id="size_in_gbs" name="size_in_gbs" class="property-value"></div></div>
-    <div class='tr'><div class='td'>Backup Policy</div><div class='td'><select id="backup_policy" class="property-value">
+    <div class='tr'><div class='td'>Size (in GB)</div><div class='td'><input type="text" id="size_in_gbs" name="size_in_gbs" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Backup Policy</div><div class='td'><select id="backup_policy" class="okit-property-value">
         <option value="bronze" selected="selected">Bronze</option>
         <option value="silver">Silver</option>
         <option value="gold">Gold</option>

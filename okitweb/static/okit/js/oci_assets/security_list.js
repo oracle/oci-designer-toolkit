@@ -28,9 +28,8 @@ class SecurityList extends OkitArtifact {
         this.egress_security_rules = [];
         this.ingress_security_rules = [];
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -66,15 +65,6 @@ class SecurityList extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Subnet references
         for (let subnet of this.getOkitJson().subnets) {
@@ -164,23 +154,17 @@ class SecurityList extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/security_list.html", function () {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/security_list.html", () => {
             // Load Referenced Ids
             // Load Properties
             loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
             // Egress Rules
             me.loadEgressRules();
             // Ingress Rules
             me.loadIngressRules();
             // Add Handler to Add Button
-            $(jqId('add_egress_rule')).click(function () {
-                me.addEgressRule();
-            });
-            $(jqId('add_ingress_rule')).click(function () {
-                me.addIngressRule();
-            });
+            $(jqId('add_egress_rule')).on('click', () => {me.addEgressRule();});
+            $(jqId('add_ingress_rule')).on('click', () => {me.addIngressRule();});
         });
     }
 
@@ -234,7 +218,7 @@ class SecurityList extends OkitArtifact {
 
     addSecurityRuleHtml(access_rule, rule_num, access_type) {
         let me = this;
-        // default to ingress rules
+        // Default to ingress rules
         let rules_table_body = d3.select('#ingress_rules_table_body');
         let source_dest = 'source';
         let source_dest_title = 'Source';
@@ -269,17 +253,20 @@ class SecurityList extends OkitArtifact {
         rule_row.append('div').attr('class', 'td')
             .text(source_dest_title + " Type");
         rule_cell = rule_row.append('div').attr('class', 'td');
-        rule_cell.append('input')
-            .attr("type", "text")
+        let type_select = rule_cell.append('select')
             .attr("class", "property-value")
-            .attr("readonly", "readonly")
             .attr("id", source_dest + "_type" + rule_num + access_type)
-            .attr("name", source_dest + "_type")
-            .attr("value", access_rule[source_dest + '_type'])
             .on("change", function() {
-                access_rule[source_dest + '_type'] = this.value;
+                access_rule[source_dest + '_type'] = this.options[this.selectedIndex].value;
                 displayOkitJson();
             });
+        type_select.append('option')
+            .attr("value", 'CIDR_BLOCK')
+            .text('CIDR');
+        type_select.append('option')
+            .attr("value", 'SERVICE_CIDR_BLOCK')
+            .text('Service');
+        type_select.node().value = access_rule[source_dest + '_type'];
         // Stateful
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td');
@@ -326,6 +313,30 @@ class SecurityList extends OkitArtifact {
             .on("change", function() {
                 access_rule['protocol'] = this.options[this.selectedIndex].value;
                 console.info('Changed network_entity_id ' + this.selectedIndex);
+                // Hide
+                // IMCP
+                $(jqId('imcp_code_' + rule_num + access_type)).addClass('collapsed');
+                $(jqId('imcp_type_' + rule_num + access_type)).addClass('collapsed');
+                // TCP
+                $(jqId('tcp_source_port_' + rule_num + access_type)).addClass('collapsed');
+                $(jqId('tcp_destination_port_' + rule_num + access_type)).addClass('collapsed');
+                // UDP
+                $(jqId('udp_source_port_' + rule_num + access_type)).addClass('collapsed');
+                $(jqId('udp_destination_port_' + rule_num + access_type)).addClass('collapsed');
+                // Show
+                if (access_rule.protocol == '1') {
+                    // IMCP
+                    $(jqId('imcp_code_' + rule_num + access_type)).removeClass('collapsed');
+                    $(jqId('imcp_type_' + rule_num + access_type)).removeClass('collapsed');
+                } else if (access_rule.protocol == '6') {
+                    // TCP
+                    $(jqId('tcp_source_port_' + rule_num + access_type)).removeClass('collapsed');
+                    $(jqId('tcp_destination_port_' + rule_num + access_type)).removeClass('collapsed');
+                } else if (access_rule.protocol == '17') {
+                    // UDP
+                    $(jqId('udp_source_port_' + rule_num + access_type)).removeClass('collapsed');
+                    $(jqId('udp_destination_port_' + rule_num + access_type)).removeClass('collapsed');
+                }
                 displayOkitJson();
             });
         // Add Protocol Options
@@ -348,6 +359,12 @@ class SecurityList extends OkitArtifact {
         if (access_rule['protocol'] == '') {
             access_rule['protocol'] = protocol_select.node().options[protocol_select.node().selectedIndex].value;
         }
+        // TCP Options
+        this.addPortRangeHtml('tcp', access_rule, rule_num, access_type, rule_table);
+        // UDP Options
+        this.addPortRangeHtml('udp', access_rule, rule_num, access_type, rule_table);
+        // IMCP Options
+        this.addImcpHtml(access_rule, rule_num, access_type, rule_table);
         // Description
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td')
@@ -364,8 +381,157 @@ class SecurityList extends OkitArtifact {
                 console.info('Changed description: ' + this.value);
                 displayOkitJson();
             });
+        // Show Appropriate Protocol rows
+        if (access_rule.protocol == '1') {
+            // IMCP
+            $(jqId('imcp_code_' + rule_num + access_type)).removeClass('collapsed');
+            $(jqId('imcp_type_' + rule_num + access_type)).removeClass('collapsed');
+        } else if (access_rule.protocol == '6') {
+            // TCP
+            $(jqId('tcp_source_port_' + rule_num + access_type)).removeClass('collapsed');
+            $(jqId('tcp_destination_port_' + rule_num + access_type)).removeClass('collapsed');
+        } else if (access_rule.protocol == '17') {
+            // UDP
+            $(jqId('udp_source_port_' + rule_num + access_type)).removeClass('collapsed');
+            $(jqId('udp_destination_port_' + rule_num + access_type)).removeClass('collapsed');
+        }
     }
 
+    addPortRangeHtml(type, access_rule, rule_num, access_type, rule_table) {
+        let options = type + '_options';
+        // Check if values are null and if so define empty
+        if (access_rule[options] == null) {
+            access_rule[options] = {source_port_range: {min: '', max: ''}, destination_port_range: {min: '', max: ''}};
+        } else {
+            if (access_rule[options].source_port_range == null) {
+                access_rule[options].source_port_range = {min: '', max: ''};
+            }
+            if (access_rule[options].destination_port_range == null) {
+                access_rule[options].destination_port_range = {min: '', max: ''};
+            }
+        }
+        // Source Port
+        let rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr('id', type + '_source_port_' + rule_num + access_type);
+        rule_row.append('div').attr('class', 'td')
+            .text("Source Port Range");
+        let rule_cell = rule_row.append('div').attr('class', 'td property-min-max-range');
+        let cell_div = rule_cell.append('div');
+        cell_div.append('label').text('Min:');
+        cell_div.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value property-min-max")
+            .attr("id", type + '_source_port_min_' + rule_num + access_type)
+            .attr("name", "source_port_min")
+            .attr("value", access_rule[options].source_port_range.min)
+            .on("change", function() {
+                access_rule[options].source_port_range.min = this.value;
+                console.info('Changed min source port: ' + this.value);
+                displayOkitJson();
+            });
+        cell_div = rule_cell.append('div');
+        cell_div.append('label').text('Max:');
+        cell_div.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value property-min-max")
+            .attr("id", type + '_source_port_max_' + rule_num + access_type)
+            .attr("name", "source_port_max")
+            .attr("value", access_rule[options].source_port_range.max)
+            .on("change", function() {
+                access_rule[options].source_port_range.max = this.value;
+                console.info('Changed max source port: ' + this.value);
+                displayOkitJson();
+            });
+        // Destination Port
+        rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr('id', type + '_destination_port_' + rule_num + access_type);
+        rule_row.append('div').attr('class', 'td')
+            .text("Destination Port Range");
+        rule_cell = rule_row.append('div').attr('class', 'td property-min-max-range');
+        cell_div = rule_cell.append('div');
+        cell_div.append('label').text('Min:');
+        cell_div.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value property-min-max")
+            .attr("id", type + '_destination_port_min_' + rule_num + access_type)
+            .attr("name", "destination_port_min")
+            .attr("value", access_rule[options].destination_port_range.min)
+            .on("change", function() {
+                access_rule[options].destination_port_range.min = this.value;
+                console.info('Changed min destination port: ' + this.value);
+                displayOkitJson();
+            });
+        cell_div = rule_cell.append('div');
+        cell_div.append('label').text('Max:');
+        cell_div.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value property-min-max")
+            .attr("id", type + '_destination_port_max_' + rule_num + access_type)
+            .attr("name", "destination_port_max")
+            .attr("value", access_rule[options].destination_port_range.max)
+            .on("change", function() {
+                access_rule[options].destination_port_range.max = this.value;
+                console.info('Changed max destination port: ' + this.value);
+                displayOkitJson();
+            });
+    }
+
+    addImcpHtml(access_rule, rule_num, access_type, rule_table) {
+        // Check if values are null and if so define empty
+        if (access_rule.icmp_options == null) {
+            access_rule.icmp_options = {code: '', type: ''};
+        }
+        // Code
+        let rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr('id', 'imcp_code_' + rule_num + access_type);
+        rule_row.append('div').attr('class', 'td')
+            .text('Code');
+        let rule_cell = rule_row.append('div').attr('class', 'td');
+        let code_select = rule_cell.append('select')
+            .attr("class", "property-value")
+            .attr("id", "code" + rule_num + access_type)
+            .on("change", function() {
+                access_rule.icmp_options.code = this.options[this.selectedIndex].value;
+                console.info('Changed IMCP Code ' + this.selectedIndex);
+                displayOkitJson();
+            });
+        code_select.append('option')
+            .attr("value", '')
+            .text('');
+        for (let i=0; i<255; i++) {
+            code_select.append('option')
+                .attr("value", i)
+                .text(i);
+        }
+        code_select.node().value = access_rule.icmp_options.code;
+        // Type
+        rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr('id', 'imcp_type_' + rule_num + access_type);
+        rule_row.append('div').attr('class', 'td')
+            .text('Type');
+        rule_cell = rule_row.append('div').attr('class', 'td');
+        let type_select = rule_cell.append('select')
+            .attr("class", "property-value")
+            .attr("id", "type" + rule_num + access_type)
+            .on("change", function() {
+                access_rule.icmp_options.type = this.options[this.selectedIndex].value;
+                console.info('Changed IMCP Type ' + this.selectedIndex);
+                displayOkitJson();
+            });
+        type_select.append('option')
+            .attr("value", '')
+            .text('');
+        for (let i=0; i<17; i++) {
+            type_select.append('option')
+                .attr("value", i)
+                .text(i);
+        }
+        type_select.node().value = access_rule.icmp_options.type;
+    }
 
     /*
     ** Define Allowable SVG Drop Targets

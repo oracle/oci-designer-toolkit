@@ -32,9 +32,8 @@ class AutonomousDatabase extends OkitArtifact {
         this.is_auto_scaling_enabled = true;
         this.is_free_tier = false;
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -70,15 +69,6 @@ class AutonomousDatabase extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Instance references
         for (let instance of this.getOkitJson().instances) {
@@ -185,13 +175,7 @@ class AutonomousDatabase extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/autonomous_database.html", function () {
-            // Load Referenced Ids
-            // Load Properties
-            loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/autonomous_database.html", () => {loadPropertiesSheet(me);});
     }
 
 

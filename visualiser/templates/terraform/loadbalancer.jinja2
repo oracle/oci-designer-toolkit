@@ -12,6 +12,12 @@ resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
                     ]
     # Optional
     is_private     = {{ private | default('false') }}
+{% if ip_mode is defined %}
+    ip_mode   = {{ ip_mode }}
+{% endif %}
+{% if network_security_group_ids is defined %}
+    network_security_group_ids   = {{ network_security_group_ids }}
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags }}
 {% endif %}

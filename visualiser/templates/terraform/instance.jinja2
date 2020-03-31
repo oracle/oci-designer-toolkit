@@ -15,19 +15,28 @@ resource "oci_core_instance" "{{ resource_name }}" {
     # Optional
     display_name        = {{ display_name }}
     availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(1) }} - 1]["name"]
-#    agent_config {
-#        # Optional
-#        is_monitoring_disabled = var.instance_agent_config_is_monitoring_disabled}
-#    }
+    agent_config {
+        # Optional
+{% if is_management_disabled is defined %}
+        is_management_disabled = {{ is_management_disabled }}
+{% endif %}
+{% if is_monitoring_disabled is defined %}
+        is_monitoring_disabled = {{ is_monitoring_disabled }}
+{% endif %}
+    }
     create_vnic_details {
         # Required
         subnet_id                  = {{ subnet_id }}
         # Optional
-        assign_public_ip           = {{ assign_public_ip | default('true') }}
+        assign_public_ip           = {{ assign_public_ip }}
         display_name               = {{ display_name_vnic }}
         hostname_label             = {{ hostname }}
-#        private_ip                = {{ private_ip }}
-        skip_source_dest_check     = {{ skip_source_dest_check | default('false') }}
+{% if private_ip is defined %}
+        private_ip                 = {{ private_ip }}
+{% endif %}
+{% if skip_source_dest_check is defined %}
+        skip_source_dest_check     = {{ skip_source_dest_check }}
+{% endif %}
 {% if defined_tags is defined %}
         defined_tags               = {{ defined_tags }}
 {% endif %}
@@ -39,12 +48,13 @@ resource "oci_core_instance" "{{ resource_name }}" {
 #        some_string = "stringA"
 #        nested_object = "{\"some_string\": \"stringB\", \"object\": {\"some_string\": \"stringC\"}}"
 #    }
-    fault_domain = "{{ fault_domain }}"
+{% if fault_domain is defined %}
+    fault_domain = {{ fault_domain }}
+{% endif %}
     metadata = {
         ssh_authorized_keys = {{ authorized_keys }}
-#        user_data           = base64encode(file("path.module/cloud_init.yml"))
-{% if cloud_init_yaml is defined %}
-        user_data           = base64encode({{ cloud_init_yaml }})
+{% if user_data is defined %}
+        user_data           = base64encode({{ user_data }})
 {% endif %}
     }
     source_details {
@@ -55,7 +65,9 @@ resource "oci_core_instance" "{{ resource_name }}" {
         boot_volume_size_in_gbs = {{ boot_volume_size_in_gbs | default(50) }}
 #        kms_key_id              = {{ kms_key_id }}
     }
-    preserve_boot_volume = false
+{% if preserve_boot_volume is defined %}
+    preserve_boot_volume = {{ preserve_boot_volume }}
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags               = {{ defined_tags }}
 {% endif %}

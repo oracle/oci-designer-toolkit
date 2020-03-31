@@ -9,6 +9,9 @@
         vcn_id: "{{ vcn_id }}"
         cidr_block: "{{ cidr_block }}"
         # Optional
+{% if availability_domain is defined %}
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+{% endif %}
 {% if display_name is defined %}
         display_name: "{{ display_name }}"
 {% endif %}
@@ -33,6 +36,9 @@
 {% endif %}
 {% if prohibit_public_ip_on_vnic is defined %}
         prohibit_public_ip_on_vnic: "{{ prohibit_public_ip_on_vnic }}"
+{% endif %}
+{% if ipv6cidr_block is defined %}
+        ipv6cidr_block: "{{ ipv6cidr_block }}"
 {% endif %}
       register: {{ resource_name }}
 

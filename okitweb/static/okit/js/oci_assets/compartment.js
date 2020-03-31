@@ -29,9 +29,8 @@ class Compartment extends OkitContainerArtifact {
         this.compartment_id = null;
         this.name = this.generateDefaultName(okitjson.compartments.length + 1);
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         this.display_name = this.name;
         // Add Get Parent function
         if (parent !== null) {
@@ -80,15 +79,6 @@ class Compartment extends OkitContainerArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Compartments
@@ -206,12 +196,7 @@ class Compartment extends OkitContainerArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/compartment.html", function () {
-            // Load Properties
-            loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/compartment.html", () => {loadPropertiesSheet(me);});
     }
 
 
@@ -219,17 +204,17 @@ class Compartment extends OkitContainerArtifact {
     ** Define Allowable SVG Drop Targets
      */
     getTargets() {
-        return [compartment_artifact];
+        return [Compartment.getArtifactReference()];
     }
 
 
     /*
     ** Child Type Functions
      */
+    //getTopArtifacts() {return [Instance.getArtifactReference()];}
+
     getContainerArtifacts() {
-        //return [VirtualCloudNetwork.getArtifactReference(), Compartment.getArtifactReference()];
         return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
-        //return [VirtualCloudNetwork.getArtifactReference()];
     }
 
     getLeftArtifacts() {

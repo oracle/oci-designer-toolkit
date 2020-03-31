@@ -48,7 +48,9 @@
 {% endif %}
             name: "{{ display_name_vnic }}"
             hostname_label: "{{ hostname }}"
-            #private_ip: "{{ private_ip }}"
+{% if private_ip is defined %}
+            private_ip: "{{ private_ip }}"
+{% endif %}
 {% if skip_source_dest_check is defined %}
             skip_source_dest_check: "{{ skip_source_dest_check }}"
 {% endif %}

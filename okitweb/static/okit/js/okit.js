@@ -24,6 +24,170 @@ class OkitSvg {
     }
 }
 
+class OkitSettings {
+    constructor() {
+        this.is_default_security_list = true;
+        this.is_default_route_table = true;
+        this.is_timestamp_files = false;
+        this.profile = 'DEFAULT';
+        this.is_always_free = false;
+        this.is_optional_expanded = true;
+        this.is_display_grid = true;
+        this.load();
+    }
+
+    load() {
+        let cookie_string = readCookie('okit-settings');
+        if (cookie_string && cookie_string != '') {
+            let cookie_json = JSON.parse(cookie_string);
+            $.extend(this, cookie_json);
+        } else {
+            this.save();
+        }
+    }
+
+    save() {
+        createCookie('okit-settings', JSON.stringify(this));
+        redrawSVGCanvas();
+    }
+
+    erase() {
+        eraseCookie('okit-settings');
+    }
+
+    edit() {
+        let me = this;
+        console.info('Settings:');
+        console.info(this);
+        // Display Save As Dialog
+        $(jqId('modal_dialog_title')).text('Preferences');
+        $(jqId('modal_dialog_body')).empty();
+        $(jqId('modal_dialog_footer')).empty();
+        let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+            .attr('id', 'preferences_table')
+            .attr('class', 'table okit-table okit-modal-dialog-table');
+        let tbody = table.append('div').attr('class', 'tbody');
+        let tr = tbody.append('div').attr('class', 'tr');
+        // Display Grid
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_display_grid')
+            .attr('name', 'is_display_grid')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_display_grid)
+            .on('change', function () {
+                //me.is_display_grid = $(this).is(':checked');
+            });
+        td.append('label')
+            .attr('for', 'is_display_grid')
+            .text('Display Grid');
+        // Default route Table
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_default_route_table')
+            .attr('name', 'is_default_route_table')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_default_route_table)
+            .on('change', function () {
+                //me.is_default_route_table = $(this).is(':checked');
+            });
+        td.append('label')
+            .attr('for', 'is_default_route_table')
+            .text('Default Route Table');
+        // Default Security List
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_default_security_list')
+            .attr('name', 'is_default_security_list')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_default_security_list)
+            .on('change', function () {
+                //me.is_default_security_list = $(this).is(':checked');
+            });
+        td.append('label')
+            .attr('for', 'is_default_security_list')
+            .text('Default Security List');
+        // Always Free
+        /*
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_always_free')
+            .attr('name', 'is_always_free')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_always_free)
+            .on('change', function () {
+                //me.is_always_free = $(this).is(':checked');
+            });
+        td.append('label')
+            .attr('for', 'is_always_free')
+            .text('Is Always Free Only');
+        */
+        // Timestamp File
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_timestamp_files')
+            .attr('name', 'is_timestamp_files')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_timestamp_files)
+            .on('change', function () {
+                //me.is_timestamp_files = $(this).is(':checked');
+            });
+        td.append('label')
+            .attr('for', 'is_timestamp_files')
+            .text('Timestamp File Names');
+        // Auto Expand Optional
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_optional_expanded')
+            .attr('name', 'is_optional_expanded')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_optional_expanded)
+            .on('change', function () {
+                //me.is_optional_expanded = $(this).is(':checked');
+            });
+        td.append('label')
+            .attr('for', 'is_optional_expanded')
+            .text('Auto Expanded Advanced');
+        // Config Profile
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('Profile');
+        tr.append('div').attr('class', 'td').append('input')
+            .attr('class', 'okit-input')
+            .attr('id', 'profile')
+            .attr('name', 'profile')
+            .attr('type', 'text')
+            .attr('value', this.profile);
+        d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+            .attr('id', 'save_as_button')
+            .attr('type', 'button')
+            .text('Save')
+            .on('click', function () {
+                me.is_display_grid = $(jqId('is_display_grid')).is(':checked');
+                me.is_default_route_table = $(jqId('is_default_route_table')).is(':checked');
+                me.is_default_security_list = $(jqId('is_default_security_list')).is(':checked');
+                me.is_always_free = $(jqId('is_always_free')).is(':checked');
+                me.is_timestamp_files = $(jqId('is_timestamp_files')).is(':checked');
+                me.is_optional_expanded = $(jqId('is_optional_expanded')).is(':checked');
+                me.profile = $(jqId('profile')).val();
+                me.save();
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            });
+        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+    }
+
+}
+
 class OkitArtifact {
     /*
     ** Create
@@ -46,6 +210,17 @@ class OkitArtifact {
         return;
     }
 
+    /*
+    ** Merge Functionality
+     */
+    merge(update) {
+        $.extend(true, this, update);
+    }
+
+    /*
+    ** Convert Functionality will be overridden to allow backwards compatibility
+     */
+    convert() {}
 
     /*
     ** Get the Artifact name this Artifact will be know by.
@@ -64,11 +239,12 @@ class OkitArtifact {
     ** Delete Processing
      */
     delete() {
-        console.groupCollapsed('Delete (Default) ' + this.getArtifactReference() + ' : ' + id);
+        console.groupCollapsed('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
         // Delete Child Artifacts
         this.deleteChildren();
         // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
+        if ($(jqId(this.id + "-svg")).length) {$(jqId(this.id + "-svg")).remove()}
+        //d3.select("#" + this.id + "-svg").remove()
         console.groupEnd();
     }
 
@@ -602,6 +778,11 @@ class OkitArtifact {
     }
 
 
+    generateConnectorId(sourceid, destinationid) {
+        return sourceid + '-' + destinationid;
+    }
+
+
     /*
     ** Static Functionality
      */
@@ -823,6 +1004,7 @@ class OkitJson {
         this.load_balancers = [];
         this.local_peering_gateways = [];
         this.nat_gateways = [];
+        this.network_security_groups = [];
         this.object_storage_buckets = [];
         this.remote_peering_gateways = [];
         this.route_tables = [];

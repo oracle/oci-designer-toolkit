@@ -28,24 +28,24 @@ RUN yum update -y ; \
 # Install new yum repos
 # Configure new OL package list
  && yum install -y \
-    oracle-softwarecollection-release-el7 \
-    oraclelinux-developer-release-el7 \
+#    oracle-softwarecollection-release-el7 \
+#    oraclelinux-developer-release-el7 \
     oracle-epel-release-el7 \
  && yum repolist all \
 # Install additional packages
- && yum update -y && yum install -y \
-        curl \
-        nginx \
+ && yum update -y \
+ && yum install -y \
+        nginx-1.12.2-2.el7 \
         python36 \
+        python3-pip \
  && yum repolist all \
  && yum clean all \
 # Install pip
  && rm -fv /usr/bin/python3 ; \
     ln -sv /usr/bin/python3.6 /usr/bin/python3 ; \
     cd /tmp ; \
-    curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py ; \
-    python3 /tmp/get-pip.py ; \
-    pip3 install --upgrade pip ; \
+#    pip3 install --upgrade pip ; \
+    python3 -m pip install --upgrade pip==20.0.2 ; \
     cd ~ \
 # Install required python modules
  && cd /tmp ; \

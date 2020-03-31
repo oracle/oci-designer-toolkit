@@ -25,28 +25,42 @@ class Instance extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
+        // # Required
         this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
-        this.compartment_id = '';
-        this.subnet_id = data.parent_id;
         this.availability_domain = '1';
-        this.hostname_label = this.display_name.toLowerCase();
-        this.os = 'Oracle Linux';
-        this.version = '7.7';
+        this.compartment_id = '';
         this.shape = 'VM.Standard2.1';
-        this.boot_volume_size_in_gbs = '50';
-        this.authorized_keys = '';
-        this.cloud_init_yaml = '';
+        // # Optional
+        this.fault_domain = '';
+        this.hostname_label = this.display_name.toLowerCase();
+        this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
+        this.primary_vnic = {subnet_id: data.parent_id};
+        this.vnics = [];
+        this.source_details = {os: 'Oracle Linux', version: '7.7', boot_volume_size_in_gbs: '50'};
+        this.metadata = {authorized_keys: '', user_data: ''};
+        this.subnet_id = data.parent_id;
+        //this.os = 'Oracle Linux';
+        //this.version = '7.7';
+        //this.boot_volume_size_in_gbs = '50';
+        //this.authorized_keys = '';
+        //this.cloud_init_yaml = '';
         this.block_storage_volume_ids = [];
         this.object_storage_bucket_ids = [];
         this.autonomous_database_ids = [];
         this.subnet_ids = [];
+        this.preserve_boot_volume = false;
+        this.is_pv_encryption_in_transit_enabled = false;
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
+        this.merge(data);
+        this.convert();
+        // Check if built from a query
+        if (this.availability_domain.length > 1) {
+            this.region_availability_domain = this.availability_domain;
+            this.availability_domain = this.region_availability_domain.slice(-1);
         }
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
+            this.getParent = () => {return parent};
         } else {
             this.getParent = function() {
                 for (let parent of okitjson.subnets) {
@@ -57,6 +71,21 @@ class Instance extends OkitArtifact {
                 return null;
             }
         }
+    }
+
+    /*
+    ** Conversion Routine allowing loading of old json
+     */
+    convert() {
+        // Move Metadata elements
+        if (this.metadata === undefined) {this.metadata = {};}
+        if (this.cloud_init_yaml !== undefined) {this.metadata.user_data = String(this.cloud_init_yaml); delete this.cloud_init_yaml;}
+        if (this.authorized_keys !== undefined) {this.metadata.authorized_keys = this.authorized_keys; delete this.authorized_keys;}
+        // Move Source Details elements
+        if (this.source_details === undefined) {this.source_details = {};}
+        if (this.os !== undefined) {this.source_details.os = this.os; delete this.os;}
+        if (this.version !== undefined) {this.source_details.version = this.version; delete this.version;}
+        if (this.boot_volume_size_in_gbs !== undefined) {this.source_details.boot_volume_size_in_gbs = this.boot_volume_size_in_gbs; delete this.boot_volume_size_in_gbs;}
     }
 
 
@@ -79,15 +108,6 @@ class Instance extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Load Balancer references
         for (let load_balancer of this.getOkitJson().load_balancers) {
@@ -274,15 +294,15 @@ class Instance extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/instance.html", function () {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance.html", () => {
             // Load Referenced Ids
             // Build Block Storage Select
-            let block_storage_volume_select = $('#block_storage_volume_ids');
+            let block_storage_volume_select = $(jqId('block_storage_volume_ids'));
             for (let block_storage_volume of me.getOkitJson().block_storage_volumes) {
                 block_storage_volume_select.append($('<option>').attr('value', block_storage_volume.id).text(block_storage_volume.display_name));
             }
             // Build Vnic / Subnet List
-            let subnet_select = $('#subnet_ids');
+            let subnet_select = $(jqId('subnet_ids'));
             for (let subnet of me.getOkitJson().subnets) {
                 if (subnet.id !== me.subnet_id) {
                     subnet_select.append($('<option>').attr('value', subnet.id).text(subnet.display_name));
@@ -290,8 +310,6 @@ class Instance extends OkitArtifact {
             }
             // Load Properties
             loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
         });
     }
 
@@ -301,7 +319,7 @@ class Instance extends OkitArtifact {
      */
     getTargets() {
         // Return list of Artifact names
-        return [];
+        return [Compartment.getArtifactReference(), Subnet.getArtifactReference()];
     }
 
 
