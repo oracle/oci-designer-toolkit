@@ -13,6 +13,9 @@ resource "oci_core_service_gateway" "{{ resource_name }}" {
     }
     # Optional
     display_name   = {{ display_name }}
+{% if route_table_id is defined %}
+    route_table_id = {{ route_table_id }}
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags }}
 {% endif %}

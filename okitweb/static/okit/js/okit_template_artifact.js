@@ -28,9 +28,8 @@ class OkitTemplateArtifact extends OkitArtifact {
         this.display_name = this.generateDefaultName(okitjson.template_artifacts.length + 1);
         this.compartment_id = '';
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -139,13 +138,7 @@ class OkitTemplateArtifact extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/template_artifact.html", function () {
-            // Load Referenced Ids
-            // Load Properties
-            loadProperties(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artifact.html", () => {loadPropertiesSheet(me);});
     }
 
 

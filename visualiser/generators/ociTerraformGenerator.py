@@ -66,15 +66,17 @@ class OCITerraformGenerator(OCIGenerator):
         return 'local.{0:s}_dhcp_options_id'.format(resource_name)
 
     def renderDefinedTags(self, artifact):
-        standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
-        # -- Defined Tags
-        variableName = '{0:s}_defined_tags'.format(standardisedName)
-        self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
-        definedtags = {}
-        for namespace, tags in artifact.get("defined_tags", {}).items():
-            for key, value in tags.items():
-                definedtags["{0!s:s}.{1!s:s}".format(namespace, key)] = str(value)
-        self.run_variables[variableName] = definedtags
+        defined_tags = artifact.get("defined_tags", {})
+        if len(defined_tags.keys()) > 0:
+            standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+            # -- Defined Tags
+            variableName = '{0:s}_defined_tags'.format(standardisedName)
+            self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
+            definedtags = {}
+            for namespace, tags in defined_tags.items():
+                for key, value in tags.items():
+                    definedtags["{0!s:s}.{1!s:s}".format(namespace, key)] = str(value)
+            self.run_variables[variableName] = definedtags
         return
 
 

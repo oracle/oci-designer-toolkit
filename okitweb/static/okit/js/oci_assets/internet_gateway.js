@@ -29,9 +29,8 @@ class InternetGateway extends OkitArtifact {
         this.freeform_tags = {};
         this.defined_tags = {};
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -67,15 +66,6 @@ class InternetGateway extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Internet Gateway references
         for (let route_table of this.getOkitJson().route_tables) {
@@ -150,13 +140,7 @@ class InternetGateway extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/internet_gateway.html", function () {
-            // Load Referenced Ids
-            // Load Properties
-            loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/internet_gateway.html", () => {loadPropertiesSheet(me);});
     }
 
 

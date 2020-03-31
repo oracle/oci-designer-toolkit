@@ -7,17 +7,17 @@
 {% block title_block %}Object Storage Bucket{% endblock %}
 
 {% block required_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="name" name="name" class="property-value"></div></div>
-    <!--tr><div class='td'>Namespace</div><div class='td'><input type="text" id="namespace" name="namespace" class="property-value"></div></tr-->
-    <div class='tr'><div class='td'>Namespace</div><div class='td'><label id="namespace" class="property-value property-label"></label></div></div>
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="name" name="name" class="okit-property-value"></div></div>
+    <!--tr><div class='td'>Namespace</div><div class='td'><input type="text" id="namespace" name="namespace" class="okit-property-value"></div></tr-->
+    <div class='tr'><div class='td'>Namespace</div><div class='td'><label id="namespace" class="okit-property-value okit-property-label"></label></div></div>
 {% endblock %}
 
 {% block optional_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Storage Tier</div><div class='td'><select id="storage_tier" class="property-value">
+    <div class='tr'><div class='td'>Storage Tier</div><div class='td'><select id="storage_tier" class="okit-property-value">
         <option value="Standard" selected="selected">Standard</option>
         <option value="Archive">Archive</option>
     </select></div></div>
-    <div class='tr'><div class='td'>Public Access</div><div class='td'><select id="public_access_type" class="property-value">
+    <div class='tr'><div class='td'>Public Access</div><div class='td'><select id="public_access_type" class="okit-property-value">
         <option value="NoPublicAccess" selected="selected">No Public Access</option>
         <option value="ObjectRead">Read & List</option>
         <option value="ObjectReadWithoutList">Read Only</option>

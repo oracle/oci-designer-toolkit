@@ -25,20 +25,58 @@ function handlePropertiesMouseUp(e) {
     }
 }
 
+function getDescendantProp(obj, desc) {
+    let arr = desc.split('.');
+    while (arr.length) {
+        obj = obj[arr.shift()];
+    }
+    return obj;
+}
+
+function setDescendantProp(obj, desc, value) {
+    let arr = desc.split('.');
+    while (arr.length > 1) {
+        obj = obj[arr.shift()];
+    }
+    return obj[arr[0]] = value;
+}
+
 function loadPropertiesSheet(json_element) {
     console.groupCollapsed('Loading Properties');
     $.each(json_element, function(key, val) {
-        //console.info('Key : ' + key + ' = ' + val);
-        if ($(jqId(key)).is("input:text")) {
+        console.info('Key : ' + key + ' = ' + val);
+        if (val == null) {
+            console.info('Ignoring NULL Property ' + key);
+            return true;
+        } else if (Array.isArray(val) && val.some((e) => {return (typeof e === 'object')})) {
+            console.info('Ignoring Object Array Property ' + key);
+        } else if (typeof val === 'object' && !Array.isArray(val)) {
+            console.info('Processing Object Property ' + key);
+            loadPropertiesSheet(val);
+        } else if (typeof val === 'function') {
+            console.info('Ignoring Function Property ' + key);
+            return true;
+        } else if ($(jqId(key)).is("input:text")) {                     // Text
             console.info(key + ' is input:text.');
             $(jqId(key)).val(val);
-        } else if ($(jqId(key)).is("input:checkbox")) {
+            $(jqId(key)).on('input', () => {
+                json_element[key] = $(jqId(key)).val();
+                if (key === 'display_name' || key === 'name') {
+                    json_element['display_name'] = json_element[key];
+                    json_element['name'] = json_element[key];
+                    $(jqId(json_element['id'] + '-title')).text(json_element[key]);
+                    $(jqId(json_element['id'] + '-display-name')).text(json_element[key]);
+                }
+            });
+        } else if ($(jqId(key)).is("input:checkbox")) {                // CheckBox
             console.info(key + ' is input:checkbox.');
+            $(jqId(key)).on('input', () => {json_element[key] = $(jqId(key)).is(':checked');});
             $(jqId(key)).attr('checked', val);
-        } else if ($(jqId(key)).is("select")) {
+        } else if ($(jqId(key)).is("select")) {                        // Select
             console.info(key + ' is select with value ' + val);
             $(jqId(key)).val(val);
-        } else if ($(jqId(key)).is("label")) {
+            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val();});
+        } else if ($(jqId(key)).is("label")) {                         // Label
             console.info(key + ' is label.');
             if (key.endsWith('_id')) {
                 // Get Artifact Associated With Id
@@ -48,12 +86,19 @@ function loadPropertiesSheet(json_element) {
             } else {
                 $(jqId(key)).html(val);
             }
-        } else if ($(jqId(key)).is("textarea")) {
+        } else if ($(jqId(key)).is("textarea")) {                     // Text Area
             console.info(key + ' is textarea.');
             $(jqId(key)).val(val);
+            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val();});
+        } else if ($(jqId(key)).is("div")) {
+            console.info(key + ' is div.');
+            loadPropertiesSheet(val);
         } else {
-            console.warn(key + ' type unknown')
+            console.info(`Ignoring Property ${key} No Corresponding HTML Element Found.`);
+            return true;
         }
+        console.info('>>> Adding Blur Event on ' + key);
+        $(jqId(key)).on('blur', () => {redrawSVGCanvas();});
     });
     console.info('Loading Freeform Tags');
     if (json_element.hasOwnProperty('freeform_tags')) {
@@ -65,7 +110,7 @@ function loadPropertiesSheet(json_element) {
             tr.append('div').attr('class', 'td').append('label').text(key);
             tr.append('div').attr('class', 'td').append('label').text(value);
             let button = tr.append('div').attr('class', 'td').append('button')
-                .attr('class', 'delete-row-button')
+                .attr('class', 'okit-delete-button')
                 .attr('type', 'button')
                 .text('X');
             button.on('click', function() {
@@ -75,6 +120,9 @@ function loadPropertiesSheet(json_element) {
             });
         }
     }
+    // Add Freeform Tag "Add Row" Handler
+    $(jqId('add_freeform_tag')).off('click'); // Remove Any Existing Events
+    $(jqId('add_freeform_tag')).on('click',() => {addFreeformTag(json_element);});
     console.info('Loading Defined Tags');
     if (json_element.hasOwnProperty('defined_tags')) {
         $(jqId('defined_tags')).empty();
@@ -87,7 +135,7 @@ function loadPropertiesSheet(json_element) {
                 tr.append('div').attr('class', 'td').append('label').text(key);
                 tr.append('div').attr('class', 'td').append('label').text(value);
                 let button = tr.append('div').attr('class', 'td').append('button')
-                    .attr('class', 'delete-row-button')
+                    .attr('class', 'okit-delete-button')
                     .attr('type', 'button')
                     .text('X');
                 button.on('click', function () {
@@ -98,6 +146,10 @@ function loadPropertiesSheet(json_element) {
             }
         }
     }
+    // Add Defined Tag "Add Row" Handler
+    $(jqId('add_defined_tag')).off('click'); // Remove Any Existing Events
+    $(jqId('add_defined_tag')).on('click',() => {addDefinedTag(json_element);});
+    // Check status of advanced options
     console.info('Checking if Optional Should be open ' + okitSettings.is_optional_expanded);
     if (okitSettings.is_optional_expanded) {
         d3.select(d3Id("optional_properties")).attr("open", "open");
@@ -105,7 +157,8 @@ function loadPropertiesSheet(json_element) {
     console.groupEnd();
 }
 
-function addPropertiesEventListeners(json_element, callbacks=[], settings=false) {
+// TODO: Deprecated Delete
+function addPropertiesEventListeners1(json_element, callbacks=[], settings=false) {
     console.groupCollapsed('Adding Property Listeners for ' + json_element.display_name);
     // Default callbacks if not passed
     callbacks = (typeof callbacks !== 'undefined') ? callbacks : [];
@@ -144,7 +197,8 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
             });
             inputfield.on('blur', function() {
                 if (settings) {
-                    saveOkitSettings();
+                    //saveOkitSettings();
+                    json_element.save();
                 }
                 drawSVGforJson();
             });
@@ -165,7 +219,8 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
             });
             inputfield.on('blur', function() {
                 if (settings) {
-                    saveOkitSettings();
+                    //saveOkitSettings();
+                    json_element.save();
                 }
             });
         }
@@ -181,7 +236,8 @@ function addPropertiesEventListeners(json_element, callbacks=[], settings=false)
             });
             inputfield.on('blur', function() {
                 if (settings) {
-                    saveOkitSettings();
+                    //saveOkitSettings();
+                    json_element.save();
                 }
                 drawSVGforJson();
             });
@@ -211,9 +267,11 @@ function addFreeformTag(json_element) {
     let tbody = tagtable.append('div').attr('class', 'tbody');
     tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
         .attr('id', 'tag_key')
         .attr('type', 'text');
     tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
         .attr('id', 'tag_value')
         .attr('type', 'text');
     let addbutton = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
@@ -257,12 +315,15 @@ function addDefinedTag(json_element) {
     let tbody = tagtable.append('div').attr('class', 'tbody');
     tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
         .attr('id', 'tag_namespace')
         .attr('type', 'text');
     tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
         .attr('id', 'tag_key')
         .attr('type', 'text');
     tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
         .attr('id', 'tag_value')
         .attr('type', 'text');
     let addbutton = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')

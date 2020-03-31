@@ -31,10 +31,12 @@ class Subnet extends OkitContainerArtifact {
         this.prohibit_public_ip_on_vnic = false;
         this.route_table_id = '';
         this.security_list_ids = [];
+        this.availability_domain = '0';
+        this.is_ipv6enabled = false;
+        this.ipv6cidr_block = '';
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -70,15 +72,6 @@ class Subnet extends OkitContainerArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Instances
@@ -204,15 +197,16 @@ class Subnet extends OkitContainerArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/subnet.html", function () {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/subnet.html", () => {
             // Load Referenced Ids
-            let route_table_select = $('#route_table_id');
+            let route_table_select = $(jqId('route_table_id'));
+            route_table_select.append($('<option>').attr('value', '').text(''));
             for (let route_table of okitJson.route_tables) {
                 if (me.vcn_id === route_table.vcn_id) {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
                 }
             }
-            let security_lists_select = $('#security_list_ids');
+            let security_lists_select = $(jqId('security_list_ids'));
             for (let security_list of okitJson.security_lists) {
                 if (me.vcn_id === security_list.vcn_id) {
                     security_lists_select.append($('<option>').attr('value', security_list.id).text(security_list.display_name));
@@ -220,8 +214,6 @@ class Subnet extends OkitContainerArtifact {
             }
             // Load Properties
             loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
         });
     }
 

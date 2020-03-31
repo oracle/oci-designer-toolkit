@@ -29,7 +29,7 @@ class Fragment extends OkitArtifact {
         this.vcn_id = data.parent_id;
         this.title = data.title;
         this.fragment_url = '/static/okit/fragments/json/' + this.title.toLowerCase().split(' ').join('_') + '.json';
-        this.fragment_url = '/static/okit/templates/' + this.title.toLowerCase().split(' ').join('_') + '.json';
+        //this.fragment_url = '/static/okit/templates/' + this.title.toLowerCase().split(' ').join('_') + '.json';
 
         // Update with any passed data
         for (let key in data) {

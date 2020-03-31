@@ -29,9 +29,8 @@ class VirtualNetworkInterface extends OkitArtifact {
         this.route_table_id = '';
         this.security_list_ids = [];
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         this.parent_id = this.instance_id;
         if (parent !== null) {
@@ -68,15 +67,6 @@ class VirtualNetworkInterface extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {}
 
 
@@ -141,13 +131,7 @@ class VirtualNetworkInterface extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/template_artifact.html", function () {
-            // Load Referenced Ids
-            // Load Properties
-            loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artifact.html", () => {loadPropertiesSheet(me);});
     }
 
 

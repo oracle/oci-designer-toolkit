@@ -28,9 +28,8 @@ class LocalPeeringGateway extends OkitArtifact {
         this.route_table_id = '';
         this.peer_id = '';
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -66,15 +65,6 @@ class LocalPeeringGateway extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {}
 
 
@@ -155,16 +145,16 @@ class LocalPeeringGateway extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/local_peering_gateway.html", function () {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/local_peering_gateway.html", () => {
             // Load Referenced Ids
-            let route_table_select = $('#route_table_id');
+            let route_table_select = $(jqId('route_table_id'));
             for (let route_table of okitJson.route_tables) {
                 if (me.vcn_id === route_table.vcn_id) {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
                 }
             }
             // Load Local Peering Gateways from other VCNs
-            let remote_peering_gateway_select = $('#peer_id');
+            let remote_peering_gateway_select = $(jqId('peer_id'));
             for (let local_peering_gateway of okitJson.local_peering_gateways) {
                 if (me.vcn_id !== local_peering_gateway.vcn_id) {
                     remote_peering_gateway_select.append($('<option>').attr('value', local_peering_gateway.id).text(local_peering_gateway.display_name));
@@ -172,8 +162,7 @@ class LocalPeeringGateway extends OkitArtifact {
             }
             // Load Properties
             loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, [setPeeredGatewayPeerId]);
+            $(jqId('peer_id')).on('blur', () => {okitJson.getLocalPeeringGateway(me.peer_id).peer_id = me.id;});
         });
     }
 

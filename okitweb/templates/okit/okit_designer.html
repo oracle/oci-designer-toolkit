@@ -1,0 +1,203 @@
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/okit_console.html" %}
+
+{% block headscripts %}
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
+    <script type="text/javascript">
+        let palette_svg = {}
+        let xmlSerialiser = new XMLSerializer();
+        {% for palette_icon_group in palette_icon_groups %}
+            {% for palette_icon in palette_icon_group['icons'] %}
+                palette_svg["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
+                $.ajax({
+                    type: 'get',
+                    url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
+                    dataType: 'xml',
+                    success: function(xml) {
+                        console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
+                        let g = $(xml).find("g");
+                        g[0].removeAttribute('transform');
+                        palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
+                    },
+                    error: function(xhr, status, error) {
+                        console.groupCollapsed("{{ 'Error Loading ' + palette_icon['svg'] }}");
+                        console.error('Error  : ' + error);
+                        console.error('Status : ' + status);
+                        console.groupEnd();
+                    }
+                });
+            {% endfor %}
+            {% endfor %}
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
+    {% for oci_asset_js in oci_assets_js %}
+        <script type="text/javascript" src="{{ url_for('static', filename='okit/js/oci_assets/' + oci_asset_js) }}"></script>
+    {% endfor %}
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_fragments.js') }}"></script>
+{% endblock %}
+
+{% block headcss %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_designer.css') }}">
+{% endblock %}
+
+{% block navmenublock %}
+    <ul id="navigation_menu_list" class="okit-navigation-list">
+        <ul class="okit-navigation-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Canvas Menu"></div>
+                        <span>OKIT</span>
+                    </span>
+                </div>
+            </li>
+            <li><a id="okit_preferences" class="parent-item" href="javascript:void(0)" onclick="handlePreferences()">Preferences</a></li>
+        </ul>
+        <ul class="okit-navigation-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Canvas Menu"></div>
+                        <span>Canvas</span>
+                    </span>
+                </div>
+            </li>
+            <li><a id="file-new-menu-item"     class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
+            <li><a id="file-load-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Load</a></li>
+            <li><a id="file-save-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
+            <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAs()">Save As Template</a></li>
+            <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li>
+        </ul>
+        <ul class="okit-navigation-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Template Menu"></div>
+                        <span>Templates</span>
+                    </span>
+                </div>
+            </li>
+            {% for template_group in okit_templates_groups %}
+                {% if template_group['name'] == '.' %}
+                    {% for okit_template in template_group['templates'] %}
+                        <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
+                               onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+                    {% endfor %}
+                {% elif template_group['templates']|length > 0 %}
+                    <li id="{{ template_group['name'] }}" class="sub-header-item dropdown">{{ template_group['name'] }}
+                        <ul class="dropdown-content">
+                            {% for okit_template in template_group['templates'] %}
+                                <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
+                                       onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <!--ul class="okit-navigation-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="View Menu"></div>
+                        <span>View</span>
+                    </span>
+                </div>
+            </li>
+            <li><a id="view-designer-menu-item" class="parent-item" href="javascript:void(0)">Designer</a></li>
+            <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)">Network</a></li>
+            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li>
+        </ul-->
+        <ul class="okit-navigation-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Query Menu"></div>
+                        <span>Query</span>
+                    </span>
+                </div>
+            </li>
+            <li><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOci()">OCI</a></li>
+        </ul>
+        <ul class="okit-navigation-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Generate Menu"></div>
+                        <span>Generate</span>
+                    </span>
+                </div>
+            </li>
+            <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleGenerateTerraform()">Terraform</a></li>
+            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleGenerateAnsible()">Ansible</a></li>
+        </ul>
+        <ul class="okit-navigation-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Export Menu"></div>
+                        <span>Export</span>
+                    </span>
+                </div>
+            </li>
+            <li><a id="file-export-svg-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToSVG()">SVG</a></li>
+            <li><a id="file_export_png_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToPNG()">PNG</a></li>
+            <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">JPEG</a></li>
+            <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
+        </ul>
+    </ul>
+{% endblock %}
+
+
+{% block mainblock %}
+    <div id="designer_left_column" class="okit-designer-left-column">
+        <div id="icons_palette" class="okit-icons-palette">
+            {% for palette_icon_group in palette_icon_groups %}
+                {% if palette_icon_group['name'] != 'Hidden' %}
+                    <details  id="{{ palette_icon_group['name'] }}" class="okit-palette-icon-group" open>
+                        <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label></summary>
+                        <div class="okit-palette-icon-group-icons">
+                            {% for palette_icon in palette_icon_group['icons'] %}
+                                <img class="okit-palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true" alt="{{ palette_icon['title'] }}">
+                            {% endfor %}
+                        </div>
+                    </details>
+                {% endif %}
+            {% endfor %}
+            <details  id="fragments" class="okit-palette-icon-group" open>
+                <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
+                <div class="okit-palette-icon-group-icons">
+                    {% for fragment_icon in fragment_icons %}
+                        <img class="okit-fragment-icon" src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}" title="{{ fragment_icon['title'] }}" draggable="true" alt="{{ fragment_icon['title'] }}">
+                    {% endfor %}
+                </div>
+            </details>
+        </div>
+    </div>
+    <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
+    <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
+        <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
+        <div id="canvas-div" class="okit-svg-canvas"></div>
+    </div>
+    <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
+        <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>
+        <div id="properties_panel" class="okit-property-sheet hidden"></div>
+        <div id="json_panel" class="okit-source-code hidden"></div>
+        <!--div id="settings_panel" class="okit-settings-sheet hidden"></div-->
+    </div>
+    <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]"></div>
+    <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
+{% endblock %}
+
+{% block footerblock %}
+{% endblock %}
+
+{% block footerscripts %}
+{% endblock %}

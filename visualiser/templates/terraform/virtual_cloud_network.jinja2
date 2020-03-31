@@ -13,6 +13,12 @@ resource "oci_core_vcn" "{{ resource_name }}" {
 {% if freeform_tags is defined %}
     freeform_tags  = {{ freeform_tags }}
 {% endif %}
+{% if is_ipv6enabled is defined %}
+    is_ipv6enabled  = {{ is_ipv6enabled }}
+{% endif %}
+{% if ipv6cidr_block is defined %}
+    ipv6cidr_block  = {{ ipv6cidr_block }}
+{% endif %}
 }
 
 locals {

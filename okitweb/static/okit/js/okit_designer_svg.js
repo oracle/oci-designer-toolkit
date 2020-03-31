@@ -494,7 +494,13 @@ function clearCanvas() {
     canvas_svg.selectAll('*').remove();
     styleCanvas(canvas_svg);
     createSVGDefinitions(canvas_svg);
-    addGrid(canvas_svg);
+    canvas_svg.append('rect')
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("fill", "white");
+    if (okitSettings.is_display_grid) {
+        addGrid(canvas_svg);
+    }
 }
 
 function addGrid(canvas_svg) {

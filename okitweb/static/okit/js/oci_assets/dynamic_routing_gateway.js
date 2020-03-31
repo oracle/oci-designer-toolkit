@@ -28,9 +28,8 @@ class DynamicRoutingGateway extends OkitArtifact {
         this.ipsec_connection_ids = [];
         this.remote_peering_connection_ids = [];
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -66,15 +65,6 @@ class DynamicRoutingGateway extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Dynamic Routing Gateway references
         for (let route_table of this.getOkitJson().route_tables) {
@@ -212,9 +202,9 @@ class DynamicRoutingGateway extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/dynamic_routing_gateway.html", function () {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/dynamic_routing_gateway.html", () => {
             // Load Referenced Ids
-            let fast_connect_select = $('#fast_connect_ids');
+            let fast_connect_select = $(jqId('fast_connect_ids'));
             for (let fast_connect of okitJson.fast_connects) {
                 if (me.compartment_id === fast_connect.compartment_id) {
                     fast_connect_select.append($('<option>').attr('value', fast_connect.id).text(fast_connect.display_name));
@@ -222,9 +212,7 @@ class DynamicRoutingGateway extends OkitArtifact {
             }
             // Load Properties
             loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+         });
     }
 
 

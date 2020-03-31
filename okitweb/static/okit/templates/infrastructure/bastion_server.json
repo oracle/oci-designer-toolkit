@@ -1,10 +1,10 @@
 {
-  "title": "OKT Bastion Server Fragment",
-  "description": "OKIT Bastion Server Fragment that can be dragged onto an existing canvas.",
+  "title": "Bastion Server",
+  "description": "Bastion Server Fragment.",
   "compartments": [
     {
       "id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "name": "okit-comp001",
+      "name": "okit",
       "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
       "parent_id": "canvas",
       "display_name": "okit-comp001"
@@ -25,7 +25,7 @@
       "hostname_label": "okit-in001",
       "os": "Oracle Linux",
       "version": "7.7",
-      "shape": "VM.Standard2.1",
+      "shape": "VM.Standard.E2.1",
       "boot_volume_size_in_gbs": "50",
       "authorized_keys": "",
       "cloud_init_yaml": "#cloud-config\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias ssh='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10 -i /etc/ssh/ssh_host_rsa_key '\n\nssh_keys:\n  rsa_private: |\n    -----BEGIN OPENSSH PRIVATE KEY-----\n    Add Private Key\n    -----END OPENSSH PRIVATE KEY-----\n  rsa_public: ssh-rsa Add Public Key\n\nruncmd:\n  # Set Private Key to read everyone\n  - sudo chmod a+r /etc/ssh/ssh_host_rsa_key*\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The Bastion Instance is finally up, after $UPTIME seconds ****\"\n",
@@ -156,6 +156,5 @@
       "dns_label": "bastionvcn",
       "parent_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9"
     }
-  ],
-  "open_compartment_index": 0
+  ]
 }

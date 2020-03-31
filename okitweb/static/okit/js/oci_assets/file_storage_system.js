@@ -31,9 +31,8 @@ class FileStorageSystem extends OkitArtifact {
         this.path = '/mnt';
         this.access = 'READ_ONLY';
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -69,15 +68,6 @@ class FileStorageSystem extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {}
 
 
@@ -141,13 +131,7 @@ class FileStorageSystem extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/file_storage_system.html", function () {
-            // Load Referenced Ids
-            // Load Properties
-            loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_storage_system.html", () => {loadPropertiesSheet(me);});
     }
 
 
@@ -234,8 +218,8 @@ class FileStorageSystem extends OkitArtifact {
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
-                console.warn('Status : ' + status)
-                console.warn('Error : ' + error)
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
                 $('#' + file_storage_system_query_cb).prop('checked', true);
                 hideQueryProgressIfComplete();
             }

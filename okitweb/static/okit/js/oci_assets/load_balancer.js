@@ -33,10 +33,11 @@ class LoadBalancer extends OkitArtifact {
         this.protocol = 'HTTP';
         this.port = '80';
         this.instance_ids = [];
+        this.ip_mode = '';
+        this.network_security_group_ids = [];
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -72,15 +73,6 @@ class LoadBalancer extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {}
 
 
@@ -160,7 +152,7 @@ class LoadBalancer extends OkitArtifact {
                         console.info('End svgPoint.y   : ' + svgPoint.y);
                         console.info('End matrixTransform.x : ' + connector_end.x);
                         console.info('End matrixTransform.y : ' + connector_end.y);
-                        let polyline = drawConnector(parent_svg, generateConnectorId(this.instance_ids[i], this.id),
+                        let polyline = drawConnector(parent_svg, this.generateConnectorId(this.instance_ids[i], this.id),
                             {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y});
                     }
                 }
@@ -211,16 +203,18 @@ class LoadBalancer extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/load_balancer.html", function () {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/load_balancer.html", () => {
             // Load Referenced Ids
-            let instances_select = $('#instance_ids');
+            let instances_select = $(jqId('instance_ids'));
             for (let instance of okitJson.instances) {
                 instances_select.append($('<option>').attr('value', instance.id).text(instance.display_name));
             }
+            let network_security_groups_select = $(jqId('network_security_group_ids'));
+            for (let network_security_group of okitJson.network_security_groups) {
+                network_security_groups_select.append($('<option>').attr('value', network_security_group.id).text(network_security_group.display_name));
+            }
             // Load Properties
             loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
         });
     }
 

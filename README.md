@@ -1,4 +1,4 @@
-# OCI Kinetic Infrastructure Toolkit [0.2.0](#version-0.2.0)
+# OCI Kinetic Infrastructure Toolkit [0.3.0](#version-0.3.0)
 
 OCI Kinetic Infrastructure Toolkit (OKIT) provides a number of tools that will allow full project integration from 
 Architects to Development and on to Operations.
@@ -43,16 +43,16 @@ The table below lists a summary of the current support status whilst the details
 | **Containers**
 | Compartment             | Full    | 0.2.0   | 
 | **Network**
-| Route Table             | Partial | 0.1.0   | [1](#route-table)
-| Security List           | Partial | 0.1.0   | [3](#security-list)
-| Subnet                  | Partial | 0.1.0   | [2](#subnet)
-| Virtual Cloud Network   | Partial | 0.1.0   | [1](#virtual-cloud-network)
+| Route Table             | Full    | 0.3.0   | 
+| Security List           | Full    | 0.3.0   |
+| Subnet                  | Full    | 0.3.0   | 
+| Virtual Cloud Network   | Full    | 0.3.0   | 
 | **Gateways**
 | Dynamic Routing Gateway | Partial | 0.1.0   | [2](#dynamic-routing-gateway)
 | Internet Gateway        | Full    | 0.2.0   | 
 | Local Peering Gateway   | Full    | 0.2.0   | 
 | NAT Gateway             | Full    | 0.2.0   | 
-| Service Gateway         | Partial | 0.1.0   | [1](#service-gateway)
+| Service Gateway         | Full    | 0.3.0   |
 | **Storage**
 | Block Storage Volume    | Partial | 0.1.0   | [3](#block-storage-volume)
 | File Storage System     | Partial | 0.1.0   | [5](#file-storage-system)
@@ -60,8 +60,8 @@ The table below lists a summary of the current support status whilst the details
 | **Database**
 | Autonomous Database     | Partial | 0.1.0   | [2](#autonomous-database)
 | **Compute**
-| Instance                | Partial | 0.1.0   | [5](#instance)
-| Load Balancer           | Partial | 0.1.0   | [2](#load-balancer)
+| Instance                | Partial | 0.3.0   | [3](#instance)
+| Load Balancer           | Partial | 0.3.0   | [2](#loadbalancer)
 
 
 ## Installation
@@ -108,21 +108,8 @@ If you would like to extend OKIT the development process is documented in [OCI K
 #### Containers
 
 #### Network
-##### Route Table
-- Destination Type of CIDR_BLOCK is the only supported option.
-##### Security List
-- TCP Options - Current just uses default
-- UDP Options - Current just uses default
-- ICMP Options - Current just uses default
-##### Subnet
-- ipV6 Functionality but this is currently only available for Government domains.
-- Availability Domain we assume that we always use the recommended Regional Subnets.
-##### Virtual Cloud Network
-- ipV6 Functionality but this is currently only available for Government domains.
 
 #### Gateways
-##### Service Gateway
-- Route Table Selection
 
 #### Storage
 ##### Block Storage Volume
@@ -147,17 +134,46 @@ If you would like to extend OKIT the development process is documented in [OCI K
 
 #### Compute
 ##### Instance
-- Agent Config
-- Fault Domain (Unable To specify)
 - Existing Boot Volume can not be specified.
 - Launch Options
 - PV Encryption
-##### Load Balancer
-- Network Security Group
-- IPv6 (Only Government)
-
+##### Loadbalancer
+- Health Checker Configuration
+- Backend Host Configuration
 
 ## Release Notes
+
+### Version 0.3.0 
+**Release Date**: 1st April 2020
+#### Features
+1. Canvas Grid is now optional.
+2. Default expand Optional Parameters
+3. Export to image (jpeg & png)
+4. Display OKIT Version in footer
+5. Fully Supported Artifacts
+    1. Virtual Cloud Networks
+    2. Subnets
+    3. Security Lists
+6. Improved Support for
+    1. Instance
+    2. Load Balancer
+7. Cleaner L&F
+    1. Change colors to more closely match OCI Console
+    2. Palette, Properties and JSON View panels now slide of the screen to give more visual real estate.
+    3. Setting panel replaced by Preferences Dialog accessible from menu.
+        1. Canvas Grid On/Off
+        2. Default Route Table for VCN
+        3. Default Security List for VCN
+        4. Timestamp Filenames (Adds timestamp to save files)
+        5. Auto Expand "Advanced Properties" indicates that the advanced properties will be displayed by default in properties panel.
+        6. Profile to be used within the oci config when accessing OCI
+8. Change Json Structure to more closely represent that returned by querying OCI.
+9. Reference Architecture Templates
+    1. CockroachDB Cluster
+#### Bug Fixes
+1. Canvas Scrollbar becomes hidden when the region tabs are displayed
+2. Canvas draw fails when json contains unattached DRG
+3. Public IP Assigned to Instance in private Subnet
 
 ### Version 0.2.0 
 **Release Date**: 6th March 2020

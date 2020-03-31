@@ -34,9 +34,9 @@ yum install -y \
 yum repolist all
 yum update -y
 yum install -y \
-  curl \
-  nginx \
-  python36 \
+    nginx-1.12.2-2.el7 \
+    python36 \
+    python3-pip \
 yum repolist all
 yum clean all
 SCRIPT
@@ -75,9 +75,8 @@ export PATH=/usr/local/bin:/usr/bin:${PATH}
 rm -fv /usr/bin/python3
 ln -sv /usr/bin/python3.6 /usr/bin/python3
 cd /tmp
-curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
-python3 /tmp/get-pip.py
-pip3 install --upgrade pip
+#pip3 install --upgrade pip
+python3 -m pip install --upgrade pip==20.0.2
 
 # Install required python modules
 cd /tmp

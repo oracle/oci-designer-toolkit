@@ -28,10 +28,11 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         // Generate Cidr
         this.cidr_block = '10.' + okitjson.virtual_cloud_networks.length + '.0.0/16';
         this.dns_label = this.display_name.toLowerCase().slice(-6);
+        this.is_ipv6enabled = false;
+        this.ipv6cidr_block = '';
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -78,15 +79,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Subnets
@@ -210,12 +202,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/virtual_cloud_network.html", function () {
-            // Load Properties
-            loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {loadPropertiesSheet(me);});
     }
 
 

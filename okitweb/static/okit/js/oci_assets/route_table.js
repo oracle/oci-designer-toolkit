@@ -20,7 +20,6 @@ class RouteTable extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
-        console.warn('ProtoType Name of Route Table : ' + this.constructor.name);
         this.parent_id = data.parent_id;
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.route_tables.length + 1);
@@ -28,9 +27,8 @@ class RouteTable extends OkitArtifact {
         this.vcn_id = data.parent_id;
         this.route_rules = [];
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
-        }
+        this.merge(data);
+        this.convert();
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -66,15 +64,6 @@ class RouteTable extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Subnet references
         for (let subnet of this.getOkitJson().subnets) {
@@ -162,18 +151,14 @@ class RouteTable extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/route_table.html", function () {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/route_table.html", () => {
             // Load Referenced Ids
             // Load Properties
             loadPropertiesSheet(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
             // Route Rules
             me.loadRouteRules();
             // Add Handler to Add Button
-            $(jqId('add_route_rule')).click(function () {
-                me.addRouteRule();
-            });
+            $(jqId('add_route_rule')).on('click', () => {me.addRouteRule();});
         });
     }
 
@@ -253,6 +238,10 @@ class RouteTable extends OkitArtifact {
             .on("change", function() {
                 let target_type = this.options[this.selectedIndex].value;
                 console.info('Selected ' + target_type);
+                // Reset Network Entity
+                route_rule.network_entity_id = '';
+                $(jqId("network_entity" + rule_num)).val('');
+                // Get Type
                 route_rule['target_type'] = target_type;
                 if (target_type !== 'private_ips') {
                     $(jqId("destination_type_row" + rule_num)).addClass('collapsed');
@@ -273,7 +262,7 @@ class RouteTable extends OkitArtifact {
                             break;
                         }
                     }
-                    $(jqId("network_entity" + rule_num)).text(network_entity);
+                    $(jqId("network_entity" + rule_num)).val(network_entity);
                 } else {
                     $(jqId("destination_type_row" + rule_num)).removeClass('collapsed');
                 }
@@ -338,6 +327,7 @@ class RouteTable extends OkitArtifact {
             if (gateway.vcn_id == vcn_id) {
                 if (route_rule.network_entity_id === '') {
                     // No Network Entity Specified will assume the first of "Target Type"
+                    route_rule.network_entity_id = gateway.id;
                     network_entity = gateway.display_name;
                     break;
                 }
@@ -351,12 +341,18 @@ class RouteTable extends OkitArtifact {
         rule_row.append('div').attr('class', 'td')
             .text("Network Entity");
         rule_cell = rule_row.append('div').attr('class', 'td');
-        rule_cell.append('label')
-            //.attr("type", "text")
+        rule_cell.append('input')
+            .attr("type", "text")
             .attr("class", "property-value")
             .attr("id", "network_entity" + rule_num)
             .attr("name", "network_entity")
-            .text(network_entity);
+            .attr('readonly', 'readonly')
+            .attr("value", network_entity)
+            .on("change", function() {
+                route_rule['network_entity'] = this.value;
+                console.info('Changed Network Entity: ' + this.value);
+                displayOkitJson();
+            });
         // Description
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td')

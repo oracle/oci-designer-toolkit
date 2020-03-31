@@ -89,8 +89,6 @@ function handleExportToResourceManager(e) {
             console.info('Response : ' + resp);
             unsetBusyIcon();
             alert('Created Stack ' + resp);
-            //window.location = 'generate/terraform';
-            //openInNewTab('generate/terraform');
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)

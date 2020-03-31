@@ -49,7 +49,7 @@ class OCIVolumeAttachments(OCIComputeConnection):
         logger.debug('--------------------- Volumes ----------------------')
         logger.debug(str(self.volume_attachments_json))
 
-        # Build List of Subnet Objects
+        # Build List of Volume Attachment Objects
         self.volume_attachments_obj = []
         for volume_attachment in self.volume_attachments_json:
             self.volume_attachments_obj.append(OCIVolumeAttachment(self.config, self.configfile, self.profile, volume_attachment))
