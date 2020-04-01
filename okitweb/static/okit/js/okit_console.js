@@ -42,5 +42,14 @@ $(document).ready(function() {
 
     $(jqId('okit_version')).text('Version: ' + okitVersion);
 
+    $('li.dropdown').on('mouseover', function() {
+        console.info(`>>>>>>> Over ${this.id}`);
+        let menu_pos = $(this).position();
+        console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left}`);
+        let $slideout = $('> .dropdown-content', $(this));
+        //$slideout.css('position', 'fixed');
+        //$slideout.css('top', menu_pos.top);
+        //$slideout.css('left', menu_pos.left + $(this).outerWidth() * 0.75);
+    });
 
 });
