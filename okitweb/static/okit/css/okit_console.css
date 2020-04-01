@@ -119,7 +119,6 @@ summary:focus {
 .main {
     margin: 0;
     padding: 0;
-    position: relative;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
