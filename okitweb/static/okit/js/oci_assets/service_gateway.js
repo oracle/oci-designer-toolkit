@@ -57,14 +57,6 @@ class ServiceGateway extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return service_gateway_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -247,14 +239,6 @@ class ServiceGateway extends OkitArtifact {
         });
     }
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'sg';

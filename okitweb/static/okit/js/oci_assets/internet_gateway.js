@@ -56,14 +56,6 @@ class InternetGateway extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return internet_gateway_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -143,14 +135,6 @@ class InternetGateway extends OkitArtifact {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/internet_gateway.html", () => {loadPropertiesSheet(me);});
     }
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [virtual_cloud_gateway_artifact];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'ig';

@@ -102,6 +102,19 @@ function handleDragStart(e) {
     console.info('Data Type   : ' + this.title);
 }
 
+function dragStart(event, me, artifact) {
+    console.groupCollapsed('***** Drag Start - ' + me.title);
+    console.info(event);
+    console.info(artifact);
+    console.info(artifact.getDropTargets());
+    console.info(artifact.getArtifactReference());
+    let inst = new artifact({}, okitJson);
+    console.info(inst);
+    console.info(inst.getArtifactReference());
+    console.groupEnd();
+    return true;
+}
+
 function handleFragmentDragStart(e) {
     if (typeof e == 'undefined') {
         e = d3.event;

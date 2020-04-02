@@ -226,8 +226,8 @@ class OkitArtifact {
     ** Get the Artifact name this Artifact will be know by.
      */
     getArtifactReference() {
-        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
-        return;
+        //alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
+        return this.constructor.getArtifactReference();
     }
 
     artifactToElement(name) {
@@ -759,9 +759,9 @@ class OkitArtifact {
     /*
     ** Define Allowable SVG Drop Targets
      */
-    getTargets() {
+    getDropTargets() {
         // Return list of Artifact names
-        return [];
+        return this.constructor.getDropTargets();
     }
 
 
@@ -792,7 +792,7 @@ class OkitArtifact {
     }
 
     static getDropTargets() {
-        console.warn('Get Drop Tagets not implements');
+        console.warn('Get Drop Targets not implements');
         return [];
     }
 

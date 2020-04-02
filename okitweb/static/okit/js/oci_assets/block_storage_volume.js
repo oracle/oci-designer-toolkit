@@ -61,14 +61,6 @@ class BlockStorageVolume extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return block_storage_volume_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -164,14 +156,6 @@ class BlockStorageVolume extends OkitArtifact {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(me);});
     }
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [compartment_artifact];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'bsv';

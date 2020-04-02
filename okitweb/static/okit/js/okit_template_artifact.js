@@ -55,14 +55,6 @@ class OkitTemplateArtifact extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return template_artifact_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     delete() {
@@ -141,14 +133,6 @@ class OkitTemplateArtifact extends OkitArtifact {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artifact.html", () => {loadPropertiesSheet(me);});
     }
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'ota';

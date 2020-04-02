@@ -54,14 +54,6 @@ class RouteTable extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return route_table_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -372,14 +364,6 @@ class RouteTable extends OkitArtifact {
     }
 
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'rt';

@@ -59,14 +59,6 @@ class AutonomousDatabase extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return autonomous_database_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -178,14 +170,6 @@ class AutonomousDatabase extends OkitArtifact {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/autonomous_database.html", () => {loadPropertiesSheet(me);});
     }
 
-
-    /*
-   ** Define Allowable SVG Drop Targets
-    */
-    getTargets() {
-        // Return list of Artifact names
-        return [compartment_artifact];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'ad';

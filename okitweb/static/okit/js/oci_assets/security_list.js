@@ -55,14 +55,6 @@ class SecurityList extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return security_list_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -531,14 +523,6 @@ class SecurityList extends OkitArtifact {
                 .text(i);
         }
         type_select.node().value = access_rule.icmp_options.type;
-    }
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
     }
 
     getNamePrefix() {

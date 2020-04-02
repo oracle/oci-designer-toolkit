@@ -56,14 +56,6 @@ class ObjectStorageBucket extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return object_storage_bucket_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -191,20 +183,13 @@ class ObjectStorageBucket extends OkitArtifact {
         let offset = this.getTopEdgeChildOffset();
         return offset;
     }
+
     getBottomChildOffset() {}
 
     getLeftChildOffset() {}
 
     getRightChildOffset() {}
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [compartment_artifact];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'osb';

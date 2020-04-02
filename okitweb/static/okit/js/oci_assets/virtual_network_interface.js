@@ -57,14 +57,6 @@ class VirtualNetworkInterface extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return virtual_network_interface_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {}
@@ -172,14 +164,6 @@ class VirtualNetworkInterface extends OkitArtifact {
 
     getRightChildOffset() {}
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'vnic';

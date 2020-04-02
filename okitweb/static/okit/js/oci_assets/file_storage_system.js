@@ -58,14 +58,6 @@ class FileStorageSystem extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return file_storage_system_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {}
@@ -166,20 +158,13 @@ class FileStorageSystem extends OkitArtifact {
         let offset = this.getTopEdgeChildOffset();
         return offset;
     }
+
     getBottomChildOffset() {}
 
     getLeftChildOffset() {}
 
     getRightChildOffset() {}
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [subnet_artifact];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'fss';

@@ -165,7 +165,13 @@
                         <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label></summary>
                         <div class="okit-palette-icon-group-icons">
                             {% for palette_icon in palette_icon_group['icons'] %}
-                                <img class="okit-palette-icon" src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}" title="{{ palette_icon['title'] }}" draggable="true" alt="{{ palette_icon['title'] }}">
+                                <img class="okit-palette-icon"
+                                     src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}"
+                                     title="{{ palette_icon['title'] }}"
+                                     draggable="true"
+                                     alt="{{ palette_icon['title'] }}"
+                                     ondragstart="dragStart(event, this, {{ palette_icon['title'] | replace(' ', '') }})"
+                                     >
                             {% endfor %}
                         </div>
                     </details>

@@ -52,14 +52,6 @@ class FastConnect extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return fast_connect_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {}
@@ -147,14 +139,6 @@ class FastConnect extends OkitArtifact {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/fast_connect.html", () => {loadPropertiesSheet(me);});
     }
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'fc';

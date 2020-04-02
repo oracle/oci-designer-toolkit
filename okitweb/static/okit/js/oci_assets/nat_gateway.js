@@ -54,14 +54,6 @@ class NATGateway extends OkitArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return nat_gateway_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -141,14 +133,6 @@ class NATGateway extends OkitArtifact {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/nat_gateway.html", () => {loadPropertiesSheet(me);});
     }
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [virtual_cloud_gateway_artifact];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'ng';

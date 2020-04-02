@@ -69,14 +69,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return virtual_cloud_network_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -203,14 +195,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {loadPropertiesSheet(me);});
-    }
-
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        return [compartment_artifact];
     }
 
 

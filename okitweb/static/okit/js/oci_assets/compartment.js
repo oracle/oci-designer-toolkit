@@ -69,14 +69,6 @@ class Compartment extends OkitContainerArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return compartment_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -197,14 +189,6 @@ class Compartment extends OkitContainerArtifact {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/compartment.html", () => {loadPropertiesSheet(me);});
-    }
-
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        return [Compartment.getArtifactReference()];
     }
 
 

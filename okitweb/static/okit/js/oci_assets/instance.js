@@ -39,11 +39,6 @@ class Instance extends OkitArtifact {
         this.source_details = {os: 'Oracle Linux', version: '7.7', boot_volume_size_in_gbs: '50'};
         this.metadata = {authorized_keys: '', user_data: ''};
         this.subnet_id = data.parent_id;
-        //this.os = 'Oracle Linux';
-        //this.version = '7.7';
-        //this.boot_volume_size_in_gbs = '50';
-        //this.authorized_keys = '';
-        //this.cloud_init_yaml = '';
         this.block_storage_volume_ids = [];
         this.object_storage_bucket_ids = [];
         this.autonomous_database_ids = [];
@@ -94,14 +89,6 @@ class Instance extends OkitArtifact {
      */
     clone() {
         return new Instance(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return instance_artifact;
     }
 
 
@@ -311,15 +298,6 @@ class Instance extends OkitArtifact {
             // Load Properties
             loadPropertiesSheet(me);
         });
-    }
-
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [Compartment.getArtifactReference(), Subnet.getArtifactReference()];
     }
 
 

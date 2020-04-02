@@ -62,14 +62,6 @@ class Subnet extends OkitContainerArtifact {
 
 
     /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return subnet_artifact;
-    }
-
-
-    /*
     ** Delete Processing
      */
     deleteChildren() {
@@ -231,14 +223,6 @@ class Subnet extends OkitContainerArtifact {
         }
         let vcn_octets = vcn_cidr.split('/')[0].split('.');
         return vcn_octets[0] + '.' + vcn_octets[1] + '.' + this.getOkitJson().subnets.length + '.' + vcn_octets[3] + '/24';
-    }
-
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        return [compartment_artifact];
     }
 
 
