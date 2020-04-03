@@ -34,6 +34,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         this.merge(data);
         this.convert();
         // Add Get Parent function
+        /*
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
@@ -46,6 +47,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
                 return null;
             }
         }
+         */
         console.groupCollapsed('Check if default Security List & Route Table Should be created.');
         if (okitSettings.is_default_route_table) {
             console.info('Creating Default Route Table');

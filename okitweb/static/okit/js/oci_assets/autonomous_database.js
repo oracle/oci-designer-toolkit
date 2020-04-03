@@ -34,6 +34,7 @@ class AutonomousDatabase extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
+        /*
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = function() {return parent};
@@ -47,6 +48,7 @@ class AutonomousDatabase extends OkitArtifact {
                 return null;
             }
         }
+        */
     }
 
 

@@ -28,6 +28,7 @@ class FastConnect extends OkitArtifact {
         this.merge(data);
         this.convert();
         // Add Get Parent function
+        /*
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
@@ -40,6 +41,7 @@ class FastConnect extends OkitArtifact {
                 return null;
             }
         }
+        */
     }
 
 

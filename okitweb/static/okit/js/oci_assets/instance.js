@@ -54,6 +54,7 @@ class Instance extends OkitArtifact {
             this.availability_domain = this.region_availability_domain.slice(-1);
         }
         // Add Get Parent function
+        /*
         if (parent !== null) {
             this.getParent = () => {return parent};
         } else {
@@ -66,6 +67,7 @@ class Instance extends OkitArtifact {
                 return null;
             }
         }
+        */
     }
 
     /*

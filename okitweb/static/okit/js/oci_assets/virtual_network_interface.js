@@ -33,6 +33,7 @@ class VirtualNetworkInterface extends OkitArtifact {
         this.convert();
         // Add Get Parent function
         this.parent_id = this.instance_id;
+        /*
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
@@ -45,6 +46,7 @@ class VirtualNetworkInterface extends OkitArtifact {
                 }
             }
         }
+        */
     }
 
 

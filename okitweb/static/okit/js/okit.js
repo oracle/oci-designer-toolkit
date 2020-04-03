@@ -196,6 +196,7 @@ class OkitArtifact {
         this.getOkitJson = function() {return okitjson};
         // Add Id
         this.id = 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();
+        this.parent_id = null;
         // Add default for common Tag variables
         this.freeform_tags = {};
         this.defined_tags = {};
@@ -221,6 +222,18 @@ class OkitArtifact {
     ** Convert Functionality will be overridden to allow backwards compatibility
      */
     convert() {}
+
+    /*
+    ** Get this Artifacts Parent Object
+     */
+    getParent() {
+        if (this.parent_id && $(jqId(this.parent_id)).data('type')) {
+            console.info('Parent Id : ' + this.parent_id);
+            const getFunction = 'get' + $(jqId(this.parent_id)).data('type').split(' ').join('');
+            return this.getOkitJson()[getFunction](this.parent_id);
+        }
+        return null;
+    }
 
     /*
     ** Get the Artifact name this Artifact will be know by.
