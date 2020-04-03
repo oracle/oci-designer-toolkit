@@ -125,12 +125,15 @@ function dragDrop(evt) {
     let compartment_id = evt.target.getAttribute('data-compartment-id');
     let target_id = evt.target.id;
     // Add the Artifact to the OKIT Json / Canvas
-    let newFunction = 'new' + artifact.getArtifactReference().split(' ').join('');
+    //let newFunction = 'new' + artifact.getArtifactReference().split(' ').join('');
+    let newFunction = 'new' + artifact.name;
     let getFunction = 'get' + target_type.split(' ').join('');
-    console.info('dragDrop Create - New Function   : ' + newFunction);
-    console.info('dragDrop Parent - Get Function   : ' + getFunction);
+    console.info('New Function : ' + newFunction);
+    console.info('Get Function : ' + getFunction);
     let parentArtifact = okitJson[getFunction](target_id);
     let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: artifact.getArtifactReference()}, parentArtifact);
+    console.debug(JSON.stringify(result, null, 2));
+    okitJson.draw();
     // Clear Drag class
     this.classList.remove('over');  // this / e.target is previous target element.
     return false;

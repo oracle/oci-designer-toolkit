@@ -274,7 +274,7 @@ class Fragment extends OkitArtifact {
     }
 
     static getDropTargets() {
-        return [Subnet.getArtifactReference()];
+        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
     }
 
 
