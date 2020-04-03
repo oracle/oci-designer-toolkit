@@ -679,21 +679,6 @@ $(document).ready(function() {
     console.info('Added Designer Handlers');
 
     /*
-    ** Drag start for all pallet icons
-     */
-    let palatteicons = document.querySelectorAll('#icons_palette .okit-palette-icon');
-    [].forEach.call(palatteicons, function (palatteicon) {
-        //palatteicon.addEventListener('dragstart', handleDragStart, false);
-    });
-    /*
-    ** Drag start for all pallet fragments
-     */
-    let fragmenticons = document.querySelectorAll('#icons_palette .okit-fragment-icon');
-    [].forEach.call(fragmenticons, function (fragmenticon) {
-        //fragmenticon.addEventListener('dragstart', handleFragmentDragStart, false);
-    });
-
-    /*
     ** Add Load File Handling
      */
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
