@@ -683,7 +683,7 @@ $(document).ready(function() {
      */
     let palatteicons = document.querySelectorAll('#icons_palette .okit-palette-icon');
     [].forEach.call(palatteicons, function (palatteicon) {
-        palatteicon.addEventListener('dragstart', handleDragStart, false);
+        //palatteicon.addEventListener('dragstart', handleDragStart, false);
     });
     /*
     ** Drag start for all pallet fragments

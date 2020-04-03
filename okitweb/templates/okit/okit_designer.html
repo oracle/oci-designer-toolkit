@@ -170,7 +170,7 @@
                                      title="{{ palette_icon['title'] }}"
                                      draggable="true"
                                      alt="{{ palette_icon['title'] }}"
-                                     ondragstart="dragStart(event, this, {{ palette_icon['title'] | replace(' ', '') }})"
+                                     ondragstart="dragStart(event, {{ palette_icon['title'] | replace(' ', '') }})"
                                      >
                             {% endfor %}
                         </div>

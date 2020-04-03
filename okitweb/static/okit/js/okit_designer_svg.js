@@ -264,11 +264,11 @@ function drawArtifact(definition) {
 
     // Set common attributes on svg element and children
     svg.on("contextmenu", handleContextMenu)
-        .on("dragenter",  handleDragEnter)
-        .on("dragover",   handleDragOver)
-        .on("dragleave",  handleDragLeave)
-        .on("drop",       handleDrop)
-        .on("dragend",    handleDragEnd)
+        .on("dragenter",  dragEnter)
+        .on("dragover",   dragOver)
+        .on("dragleave",  dragLeave)
+        .on("drop",       dragDrop)
+        .on("dragend",    dragEnd)
         .attr("data-type",           definition['data_type'])
         .attr("data-okit-id",        id)
         .attr("data-parent-id",      parent_id)

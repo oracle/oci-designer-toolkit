@@ -71,6 +71,73 @@ function deleteAssetFromSVG(artifact, id) {
 let asset_drop_targets = {};
 let asset_connect_targets = {};
 let palette_artifact_data = {artifact: ''};
+let palette_drag_artifact = null;
+
+function dragStart(evt, artifact) {
+    //console.groupCollapsed('***** Drag Start - ' + artifact.getArtifactReference());
+    evt.dataTransfer.effectAllowed = 'copy';
+    let palette_artifact_data = {artifact: artifact.getArtifactReference(), title: artifact.getArtifactReference()};
+    let data_string = JSON.stringify(palette_artifact_data);
+    evt.dataTransfer.setData('text/plain', data_string);
+    evt.dataTransfer.setData('any', artifact);
+    palette_drag_artifact = artifact;
+}
+
+function dragEnter(evt) {
+    evt = evt || d3.event;
+    dragEnterOverLeave(evt);
+}
+
+function dragOver(evt) {
+    evt = evt || d3.event;
+    if (evt.preventDefault) {
+        evt.preventDefault(); // Necessary. Allows us to drop.
+    }
+    dragEnterOverLeave(evt);
+}
+
+function dragLeave(evt) {
+    evt = evt || d3.event;
+    //dragEnterOverLeave(evt);
+}
+
+function dragEnterOverLeave(evt) {
+    evt = evt || d3.event;
+    let type = evt.target.getAttribute('data-type');
+    if (palette_drag_artifact !== undefined && palette_drag_artifact.getDropTargets().indexOf(type) >= 0) {
+        evt.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
+    } else {
+        evt.dataTransfer.effectAllowed = "none";
+        evt.dataTransfer.dropEffect = "none";
+    }
+}
+
+function dragDrop(evt) {
+    evt = evt || d3.event;
+    if (evt.stopPropagation) {
+        evt.stopPropagation(); // Stops some browsers from redirecting.
+    }
+    if (evt.preventDefault) {
+        evt.preventDefault(); // Necessary. Allows us to drop.
+    }
+    let artifact = palette_drag_artifact;
+    let target_type = evt.target.getAttribute('data-type');
+    let compartment_id = evt.target.getAttribute('data-compartment-id');
+    let target_id = evt.target.id;
+    // Add the Artifact to the OKIT Json / Canvas
+    let newFunction = 'new' + artifact.getArtifactReference().split(' ').join('');
+    let getFunction = 'get' + target_type.split(' ').join('');
+    let parentArtifact = okitJson[getFunction](target_id);
+    let result = okitJson[newFunction]();
+    // Clear Drag class
+    this.classList.remove('over');  // this / e.target is previous target element.
+    return false;
+}
+
+function dragEnd(evt) {
+    evt = evt || d3.event;
+    console.info('>>>>>>> Drag End ' + evt);
+}
 
 function setDragDropIcon(e) {
     if (typeof e == 'undefined') {
@@ -78,9 +145,9 @@ function setDragDropIcon(e) {
     }
     let type = e.target.getAttribute('data-type');
     let data_string = e.dataTransfer.getData('text/plain');
-    //console.info('Data String : ' + data_string);
-    //let data = JSON.parse(data_string);
-    //console.info('Set Drop Target Icon for ' + palette_artifact_data.artifact + ' over ' + type);
+    console.info('Data String : ' + data_string);
+    let data = JSON.parse(data_string);
+    console.info('Set Drop Target Icon for ' + palette_artifact_data.artifact + ' over ' + type);
     if (palette_artifact_data.artifact !== undefined && asset_drop_targets[palette_artifact_data.artifact].indexOf(type) >= 0) {
         e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
@@ -102,19 +169,6 @@ function handleDragStart(e) {
     console.info('Data Type   : ' + this.title);
 }
 
-function dragStart(event, me, artifact) {
-    console.groupCollapsed('***** Drag Start - ' + me.title);
-    console.info(event);
-    console.info(artifact);
-    console.info(artifact.getDropTargets());
-    console.info(artifact.getArtifactReference());
-    let inst = new artifact({}, okitJson);
-    console.info(inst);
-    console.info(inst.getArtifactReference());
-    console.groupEnd();
-    return true;
-}
-
 function handleFragmentDragStart(e) {
     if (typeof e == 'undefined') {
         e = d3.event;
@@ -129,9 +183,11 @@ function handleFragmentDragStart(e) {
 }
 
 function handleDragOver(e) {
+    console.info('Drag Over ' + e);
     if (typeof e === 'undefined') {
         e = d3.event;
     }
+    console.info('Drag Over 2 ' + e);
     if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
     }
@@ -171,6 +227,8 @@ function handleDrop(e) {
 
     //this.innerHTML = e.dataTransfer.getData('text/html');
     let data = JSON.parse(e.dataTransfer.getData('text/plain'));
+    //let artifact = e.dataTransfer.getData('any') || palette_drag_artifact;
+    //console.info('>>>>> Artifact ' + artifact.getArtifactReference());
     let target_type = e.target.getAttribute('data-type');
     let compartment_id = e.target.getAttribute('data-compartment-id');
     let target_id = e.target.id;
