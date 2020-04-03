@@ -19,6 +19,7 @@ function addFragment(parent_id, compartment_id, fragment_title) {
 }
 
 class Fragment extends OkitArtifact {
+    static fragment_json = '';
     /*
     ** Create
      */
@@ -264,5 +265,18 @@ class Fragment extends OkitArtifact {
     draw() {
 
     }
+
+    /*
+    ** Static Functionality
+     */
+    static getArtifactReference() {
+        return this.fragment_json;
+    }
+
+    static getDropTargets() {
+        return [Subnet.getArtifactReference()];
+    }
+
+
 }
 

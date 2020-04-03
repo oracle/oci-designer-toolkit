@@ -181,7 +181,13 @@
                 <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
                 <div class="okit-palette-icon-group-icons">
                     {% for fragment_icon in fragment_icons %}
-                        <img class="okit-fragment-icon" src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}" title="{{ fragment_icon['title'] }}" draggable="true" alt="{{ fragment_icon['title'] }}">
+                        <img class="okit-fragment-icon"
+                             src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}"
+                             title="{{ fragment_icon['title'] }}"
+                             draggable="true"
+                             alt="{{ fragment_icon['title'] }}"
+                             ondragstart="dragStart(event, Fragment); Fragment.fragment_json={{ fragment_icon['title'] }})"
+                        >
                     {% endfor %}
                 </div>
             </details>

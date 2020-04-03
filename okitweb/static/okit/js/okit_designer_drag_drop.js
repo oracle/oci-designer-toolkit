@@ -127,8 +127,10 @@ function dragDrop(evt) {
     // Add the Artifact to the OKIT Json / Canvas
     let newFunction = 'new' + artifact.getArtifactReference().split(' ').join('');
     let getFunction = 'get' + target_type.split(' ').join('');
+    console.info('dragDrop Create - New Function   : ' + newFunction);
+    console.info('dragDrop Parent - Get Function   : ' + getFunction);
     let parentArtifact = okitJson[getFunction](target_id);
-    let result = okitJson[newFunction]();
+    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: artifact.getArtifactReference()}, parentArtifact);
     // Clear Drag class
     this.classList.remove('over');  // this / e.target is previous target element.
     return false;
@@ -138,6 +140,7 @@ function dragEnd(evt) {
     evt = evt || d3.event;
     console.info('>>>>>>> Drag End ' + evt);
 }
+
 
 function setDragDropIcon(e) {
     if (typeof e == 'undefined') {

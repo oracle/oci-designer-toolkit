@@ -690,7 +690,7 @@ $(document).ready(function() {
      */
     let fragmenticons = document.querySelectorAll('#icons_palette .okit-fragment-icon');
     [].forEach.call(fragmenticons, function (fragmenticon) {
-        fragmenticon.addEventListener('dragstart', handleFragmentDragStart, false);
+        //fragmenticon.addEventListener('dragstart', handleFragmentDragStart, false);
     });
 
     /*
