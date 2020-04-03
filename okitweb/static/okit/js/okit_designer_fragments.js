@@ -18,8 +18,12 @@ function addFragment(parent_id, compartment_id, fragment_title) {
     console.groupEnd();
 }
 
+// Use global because the static class field fails in FireFox
+let fragmentType = null;
+
 class Fragment extends OkitArtifact {
-    static fragment_json = '';
+    //static _fragmentType = ''
+
     /*
     ** Create
      */
@@ -269,8 +273,12 @@ class Fragment extends OkitArtifact {
     /*
     ** Static Functionality
      */
+    static setFragmentType(type) {
+        fragmentType = type;
+    }
     static getArtifactReference() {
-        return this.fragment_json;
+        //return this._fragmentType;
+        return fragmentType;
     }
 
     static getDropTargets() {

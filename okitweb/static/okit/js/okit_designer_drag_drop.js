@@ -136,6 +136,7 @@ function dragDrop(evt) {
     okitJson.draw();
     // Clear Drag class
     this.classList.remove('over');  // this / e.target is previous target element.
+    palette_drag_artifact = null;
     return false;
 }
 

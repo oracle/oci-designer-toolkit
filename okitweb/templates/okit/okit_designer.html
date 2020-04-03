@@ -186,7 +186,7 @@
                              title="{{ fragment_icon['title'] }}"
                              draggable="true"
                              alt="{{ fragment_icon['title'] }}"
-                             ondragstart="dragStart(event, Fragment); Fragment.fragment_json='{{ fragment_icon['title'] }}'"
+                             ondragstart="dragStart(event, Fragment); Fragment.setFragmentType('{{ fragment_icon['title'] }}')"
                         >
                     {% endfor %}
                 </div>
