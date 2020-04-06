@@ -230,8 +230,10 @@ class OkitArtifact {
         if (this.parent_id && $(jqId(this.parent_id)).data('type')) {
             console.info('Parent Id : ' + this.parent_id);
             const getFunction = 'get' + $(jqId(this.parent_id)).data('type').split(' ').join('');
+            console.info('>>>>>>>>> Parent ' + this.getOkitJson()[getFunction](this.parent_id).display_name);
             return this.getOkitJson()[getFunction](this.parent_id);
         }
+        console.info('>>>>>>>>> Parent NULL');
         return null;
     }
 

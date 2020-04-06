@@ -236,15 +236,15 @@ class Subnet extends OkitContainerArtifact {
     }
 
     getTopArtifacts() {
-        return [load_balancer_artifact];
+        return [LoadBalancer.getArtifactReference()];
     }
 
     getBottomArtifacts() {
-        return [instance_artifact];
+        return [Instance.getArtifactReference()];
     }
 
     getLeftArtifacts() {
-        return [file_storage_system_artifact];
+        return [FileStorageSystem.getArtifactReference()];
     }
 
 
