@@ -5,7 +5,7 @@
 ARG os_version=latest
 ARG os=oraclelinux
 FROM ${os}:${os_version}
-LABEL version="1.0"
+LABEL version="0.4.0"
 LABEL description="OKIT Web Server."
 SHELL ["/bin/bash", "-c"]
 ENV http_proxy ${http_proxy}
