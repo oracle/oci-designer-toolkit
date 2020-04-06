@@ -176,6 +176,7 @@ function drawArtifact(definition) {
         .attr("height",    definition['svg']['height'])
         .attr("viewBox", "0 0 " + definition['svg']['width'] + " " + definition['svg']['height'])
         .attr("preserveAspectRatio", "xMinYMax meet");
+
     let rect = svg.append("rect")
         .attr("id", id)
         .attr("x",      rect_x)
@@ -189,9 +190,9 @@ function drawArtifact(definition) {
         .attr("stroke", definition['rect']['stroke']['colour'])
         .attr("stroke-dasharray",
             definition['rect']['stroke']['dash'] + ", " + definition['rect']['stroke']['dash']);
-    let title = rect.append("title")
-        .attr("id", id + '-title')
-        .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
+    //let title = rect.append("title")
+    //    .attr("id", id + '-title')
+    //    .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
     /*
     for (let key of definition['title_keys']) {
         title.append("tspan")
@@ -260,6 +261,9 @@ function drawArtifact(definition) {
         //.attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
         .append("use")
         .attr("xlink:href","#" + def_id);
+    svg.append("title")
+        .attr("id", id + '-title')
+        .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
 
 
     // Set common attributes on svg element and children
