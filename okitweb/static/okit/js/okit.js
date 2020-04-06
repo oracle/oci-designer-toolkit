@@ -1179,7 +1179,12 @@ class OkitJson {
         // Instances
         if (okit_json.hasOwnProperty('instances')) {
             for (let artifact of okit_json['instances']) {
-                artifact.parent_id = artifact.subnet_id;
+                let subnet = this.getSubnet(artifact.subnet_id)
+                if (subnet && subnet.compartment_id === artifact.compartment_id) {
+                    artifact.parent_id = artifact.subnet_id;
+                } else {
+                    artifact.parent_id = artifact.compartment_id;
+                }
                 let obj = this.newInstance(artifact);
                 console.info(obj);
             }

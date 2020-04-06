@@ -204,11 +204,12 @@ class Compartment extends OkitContainerArtifact {
     }
 
     getLeftArtifacts() {
-        return [block_storage_volume_artifact];
+        return [BlockStorageVolume.getArtifactReference(), Instance.getArtifactReference()];
     }
 
     getRightArtifacts() {
-        return [dynamic_routing_gateway_artifact, autonomous_database_artifact, object_storage_bucket_artifact, fast_connect_artifact];
+        return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
+            ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference()];
     }
 
 

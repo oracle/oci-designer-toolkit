@@ -4,7 +4,7 @@
 */
 console.info('Loaded Console Javascript');
 
-const okitVersion = '0.3.0';
+const okitVersion = '0.4.0';
 
 function hideNavMenu() {
     $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
