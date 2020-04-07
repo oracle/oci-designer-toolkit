@@ -19,7 +19,7 @@ const display_name_prefix = 'okit-';
 // Dynamic Routing Gateway
 //const DynamicRoutingGateway.getArtifactReference() = 'Dynamic Routing Gateway';
 // Local Peering Gateway
-const local_peering_gateway_artifact = 'Local Peering Gateway';
+//const LocalPeeringGateway.getArtifactReference() = 'Local Peering Gateway';
 // Fast Connect
 const fast_connect_artifact = 'Fast Connect';
 // Route Table

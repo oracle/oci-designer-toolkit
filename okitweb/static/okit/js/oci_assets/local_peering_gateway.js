@@ -205,13 +205,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', local_peering_gateway_query_cb);
-    cell.append('label').text(local_peering_gateway_artifact);
+    cell.append('label').text(LocalPeeringGateway.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(local_peering_gateway_artifact);
+        .text(LocalPeeringGateway.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
