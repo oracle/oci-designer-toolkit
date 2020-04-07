@@ -5,7 +5,6 @@
 console.info('Loaded Fragments Javascript');
 
 const fragment_artifact = 'Fragment';
-asset_drop_targets[fragment_artifact] = [compartment_artifact, virtual_cloud_network_artifact];
 asset_add_functions[fragment_artifact] = "addFragment";
 
 /*
@@ -93,7 +92,7 @@ class Fragment extends OkitArtifact {
 
     addToVirtualCloudNetwork(fragment_json={}, vcn_id=null) {
         console.info('Adding Fragment to Virtual Cloud Network ' + vcn_id);
-        let ignore_elements = [this.artifactToElement(compartment_artifact), this.artifactToElement(virtual_cloud_network_artifact), this.artifactToElement(subnet_artifact)];
+        let ignore_elements = [this.artifactToElement(Compartment.getArtifactReference()), this.artifactToElement(virtual_cloud_network_artifact), this.artifactToElement(subnet_artifact)];
         // Process Subnets (Container)
         fragment_json.subnets.forEach(function (artifact) {
             artifact.compartment_id = this.compartment_id;

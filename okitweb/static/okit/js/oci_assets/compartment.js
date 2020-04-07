@@ -4,13 +4,6 @@
 */
 console.info('Loaded Compartment Javascript');
 
-/*
-** Set Valid drop Targets
- */
-//asset_drop_targets[Compartment.getArtifactReference()] = Compartment.getDropTargets();
-asset_drop_targets[compartment_artifact] = [compartment_artifact];
-asset_connect_targets[compartment_artifact] = [];
-
 const compartment_query_cb = "compartment-query-cb";
 
 /*
@@ -126,7 +119,7 @@ class Compartment extends OkitContainerArtifact {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing ' + compartment_artifact + ' : ' + this.id);
+        console.groupCollapsed('Drawing ' + Compartment.getArtifactReference() + ' : ' + this.id);
         let svg = drawArtifact(this.getSvgDefinition());
         // Add Properties Load Event to created svg
         let me = this;
@@ -139,7 +132,7 @@ class Compartment extends OkitContainerArtifact {
 
     getSvgDefinition() {
         let dimensions = this.getDimensions(this.id);
-        let definition = this.newSVGDefinition(this, compartment_artifact);
+        let definition = this.newSVGDefinition(this, Compartment.getArtifactReference());
         console.info('>>>>>>>> Parent');
         console.info(this.getParent());
         if (this.getParent()) {
@@ -305,5 +298,5 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', compartment_query_cb);
-    cell.append('label').text(compartment_artifact);
+    cell.append('label').text(Compartment.getArtifactReference());
 });

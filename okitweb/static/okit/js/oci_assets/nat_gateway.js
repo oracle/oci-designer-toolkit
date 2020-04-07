@@ -4,11 +4,6 @@
 */
 console.info('Loaded NAT Gateway Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[nat_gateway_artifact] = [virtual_cloud_network_artifact];
-
 const nat_gateway_query_cb = "nat-gateway-query-cb";
 
 /*

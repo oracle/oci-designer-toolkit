@@ -1346,7 +1346,7 @@ class OkitJson {
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));
         console.info('Canvas Height  : ' + canvas_svg.attr('height'));
         console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
-        $("#canvas-svg").children("svg [data-type='" + compartment_artifact + "']").each(function () {
+        $("#canvas-svg").children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
             console.info('Width   : ' + this.getAttribute('width'));
             console.info('Height  : ' + this.getAttribute('height'));
             console.info('viewBox : ' + this.getAttribute('viewBox'));

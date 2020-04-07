@@ -4,11 +4,6 @@
 */
 console.info('Loaded Local Peering Gateway Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[local_peering_gateway_artifact] = [virtual_cloud_network_artifact];
-
 const local_peering_gateway_query_cb = "local-peering-gateway-query-cb";
 
 /*

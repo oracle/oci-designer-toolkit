@@ -4,12 +4,6 @@
 */
 console.info('Loaded Virtual Cloud Network Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[virtual_cloud_network_artifact] = [compartment_artifact];
-asset_connect_targets[virtual_cloud_network_artifact] = [];
-
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 
 /*

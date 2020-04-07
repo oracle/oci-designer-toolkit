@@ -4,11 +4,6 @@
 */
 console.info('Loaded Internet Gateway Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[internet_gateway_artifact] = [virtual_cloud_network_artifact];
-
 const internet_gateway_query_cb = "internet-gateway-query-cb";
 
 /*

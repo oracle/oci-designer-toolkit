@@ -4,11 +4,6 @@
 */
 console.info('Loaded File Storage System Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[file_storage_system_artifact] = [subnet_artifact];
-
 const file_storage_system_query_cb = "file-storage-system-query-cb";
 
 /*

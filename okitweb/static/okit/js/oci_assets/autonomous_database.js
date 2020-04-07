@@ -4,11 +4,6 @@
 */
 console.info('Loaded Autonomous Database Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[autonomous_database_artifact] = [compartment_artifact];
-
 const autonomous_database_query_cb = "autonomous-database-query-cb";
 
 /*

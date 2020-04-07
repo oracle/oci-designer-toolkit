@@ -4,11 +4,6 @@
 */
 console.info('Loaded Security List Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[security_list_artifact] = [virtual_cloud_network_artifact];
-
 const security_list_query_cb = "security-list-query-cb";
 
 /*

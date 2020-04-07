@@ -4,11 +4,6 @@
 */
 console.info('Loaded Load Balancer Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[load_balancer_artifact] = [subnet_artifact];
-
 const load_balancer_query_cb = "load-balancer-query-cb";
 const load_balancer_width = Math.round(icon_width * 6);
 const load_balancer_height = Math.round(icon_height * 3 / 2);

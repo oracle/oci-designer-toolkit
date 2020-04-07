@@ -4,11 +4,6 @@
 */
 console.info('Loaded Route Table Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[route_table_artifact] = [virtual_cloud_network_artifact];
-
 const route_table_query_cb = "route-table-query-cb";
 
 /*

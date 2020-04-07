@@ -4,11 +4,6 @@
 */
 console.info('Loaded Service Gateway Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[service_gateway_artifact] = [virtual_cloud_network_artifact];
-
 const service_gateway_query_cb = "service-gateway-query-cb";
 
 /*

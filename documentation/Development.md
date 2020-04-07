@@ -106,11 +106,6 @@ Once the file has been copied to the oci_assets directory then is can be opened 
 ```javascript
 console.log('Loaded Block Storage Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[block_storage_volume_artifact] = [compartment_artifact];
-
 const block_storage_volume_stroke_colour = "#F80000";
 const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 ```

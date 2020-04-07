@@ -4,11 +4,6 @@
 */
 console.info('Loaded Dynamic Routing Gateway Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[dynamic_routing_gateway_artifact] = [compartment_artifact];
-
 const dynamic_routing_gateway_query_cb = "dynamic-routing-gateway-query-cb";
 
 /*

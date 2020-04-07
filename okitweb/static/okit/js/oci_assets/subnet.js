@@ -4,11 +4,6 @@
 */
 console.info('Loaded Subnet Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[subnet_artifact] = [virtual_cloud_network_artifact];
-asset_connect_targets[subnet_artifact] = [];
 
 const subnet_query_cb = "subnet-query-cb";
 

@@ -4,11 +4,6 @@
 */
 console.info('Loaded Okit Template Artifact Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[template_artifact_artifact] = [compartment_artifact];
-
 const template_artifact_stroke_colour = "#F80000";
 const template_artifact_query_cb = "template-artifact-query-cb";
 

@@ -7,7 +7,7 @@ console.info('Loaded Artifact Constants Javascript');
 // Artifact name prefix
 const display_name_prefix = 'okit-';
 // Compartment
-const compartment_artifact = 'Compartment';
+//const Compartment.getArtifactReference() = 'Compartment';
 // Virtual Cloud Network
 const virtual_cloud_network_artifact = 'Virtual Cloud Network';
 // Internet Gateway

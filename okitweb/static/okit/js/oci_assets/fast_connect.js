@@ -4,11 +4,6 @@
 */
 console.info('Loaded FastConnect Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[fast_connect_artifact] = [compartment_artifact];
-
 const fast_connect_query_cb = "fast-connect-query-cb";
 
 /*

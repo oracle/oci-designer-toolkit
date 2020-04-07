@@ -4,11 +4,6 @@
 */
 console.info('Loaded Object Storage Bucket Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[object_storage_bucket_artifact] = [compartment_artifact];
-
 const object_storage_bucket_query_cb = "object-storage-bucket-query-cb";
 
 /*

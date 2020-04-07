@@ -4,10 +4,6 @@
 */
 console.info('Loaded Instance Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[instance_artifact] = [subnet_artifact];
 asset_connect_targets[instance_artifact] = [load_balancer_artifact];
 
 const instance_query_cb = "instance-query-cb";
