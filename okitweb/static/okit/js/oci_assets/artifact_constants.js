@@ -25,7 +25,7 @@ const display_name_prefix = 'okit-';
 // Route Table
 //const RouteTable.getArtifactReference() = 'Route Table';
 // Security List
-const security_list_artifact = 'Security List';
+//const SecurityList.getArtifactReference() = 'Security List';
 // Subnet
 const subnet_artifact = 'Subnet';
 // Virtual Network Interface

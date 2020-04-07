@@ -216,7 +216,7 @@ class Subnet extends OkitContainerArtifact {
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {
-        return [RouteTable.getArtifactReference(), security_list_artifact];
+        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference()];
     }
 
     getTopArtifacts() {

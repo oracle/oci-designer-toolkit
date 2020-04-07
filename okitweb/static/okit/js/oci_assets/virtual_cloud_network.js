@@ -283,7 +283,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     }
 
     getTopArtifacts() {
-        return [RouteTable.getArtifactReference(), security_list_artifact];
+        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference()];
     }
 
     getContainerArtifacts() {
