@@ -7,6 +7,7 @@ ARG os=oraclelinux
 FROM ${os}:${os_version}
 LABEL version="0.4.0"
 LABEL description="OKIT Web Server."
+LABEL copyright="Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved."
 SHELL ["/bin/bash", "-c"]
 ENV http_proxy ${http_proxy}
 ENV https_proxy ${https_proxy}
