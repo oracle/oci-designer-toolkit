@@ -44,7 +44,6 @@ RUN yum update -y ; \
  && rm -fv /usr/bin/python3 ; \
     ln -sv /usr/bin/python3.6 /usr/bin/python3 ; \
     cd /tmp ; \
-#    pip3 install --upgrade pip ; \
     python3 -m pip install --upgrade pip==20.0.2 ; \
     cd ~ \
 # Install required python modules
