@@ -4,8 +4,6 @@
 */
 console.info('Loaded Instance Javascript');
 
-asset_connect_targets[instance_artifact] = [load_balancer_artifact];
-
 const instance_query_cb = "instance-query-cb";
 const min_instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
 const min_instance_height = Math.round(icon_height * 5 / 2);
@@ -337,6 +335,10 @@ class Instance extends OkitArtifact {
 
     static getDropTargets() {
         return [Subnet.getArtifactReference(), Compartment.getArtifactReference()];
+    }
+
+    static getConnectTargets() {
+        return [LoadBalancer.getArtifactReference()];
     }
 
     static query(request = {}, region='') {

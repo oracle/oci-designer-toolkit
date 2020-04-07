@@ -23,6 +23,7 @@ let asset_delete_functions = {};
 let asset_query_functions = {};
 let asset_clear_functions = [];
 
+// TODO: Delete
 function addAssetToDropTarget(artifact, title, target_id, compartment_id, target_type) {
     console.info('addAssetToDropTarget - Artifact       : ' + artifact);
     console.info('addAssetToDropTarget - Title          : ' + title);
@@ -68,9 +69,6 @@ function deleteAssetFromSVG(artifact, id) {
 ** Define palette Drag & Drop functions
  */
 
-let asset_drop_targets = {};
-let asset_connect_targets = {};
-let palette_artifact_data = {artifact: ''};
 let palette_drag_artifact = null;
 
 function dragStart(evt, artifact) {

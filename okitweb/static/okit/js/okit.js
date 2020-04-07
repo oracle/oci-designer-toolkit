@@ -844,6 +844,11 @@ class OkitArtifact {
         return [];
     }
 
+    static getConnectTargets() {
+        console.warn('Get Connect Targets not implements');
+        return [];
+    }
+
     static query(request={}, region='') {
         console.error('Query not implemented');
     }
