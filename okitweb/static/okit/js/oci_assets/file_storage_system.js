@@ -206,13 +206,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', file_storage_system_query_cb);
-    cell.append('label').text(file_storage_system_artifact);
+    cell.append('label').text(FileStorageSystem.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(file_storage_system_artifact);
+        .text(FileStorageSystem.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
