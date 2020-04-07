@@ -23,7 +23,7 @@ const display_name_prefix = 'okit-';
 // Fast Connect
 //const FastConnect.getArtifactReference() = 'Fast Connect';
 // Route Table
-const route_table_artifact = 'Route Table';
+//const RouteTable.getArtifactReference() = 'Route Table';
 // Security List
 const security_list_artifact = 'Security List';
 // Subnet
