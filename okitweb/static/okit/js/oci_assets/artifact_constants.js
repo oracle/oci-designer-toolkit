@@ -11,7 +11,7 @@ const display_name_prefix = 'okit-';
 // Virtual Cloud Network
 //const VirtualCloudNetwork.getArtifactReference() = 'Virtual Cloud Network';
 // Internet Gateway
-const internet_gateway_artifact = 'Internet Gateway';
+//const InternetGateway.getArtifactReference() = 'Internet Gateway';
 // NAT Gateway
 const nat_gateway_artifact = 'NAT Gateway';
 // Service Gateway

@@ -176,13 +176,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', internet_gateway_query_cb);
-    cell.append('label').text(internet_gateway_artifact);
+    cell.append('label').text(InternetGateway.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(internet_gateway_artifact);
+        .text(InternetGateway.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

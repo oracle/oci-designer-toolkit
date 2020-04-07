@@ -279,7 +279,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {
-        return [internet_gateway_artifact, nat_gateway_artifact];
+        return [InternetGateway.getArtifactReference(), nat_gateway_artifact];
     }
 
     getTopArtifacts() {
