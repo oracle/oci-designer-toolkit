@@ -35,7 +35,7 @@ const display_name_prefix = 'okit-';
 // Load Balancer
 //const LoadBalancer.getArtifactReference() = 'Load Balancer';
 // Block Storage Volume
-const block_storage_volume_artifact = 'Block Storage Volume';
+//const BlockStorageVolume.getArtifactReference() = 'Block Storage Volume';
 // Object Storage Bucket
 const object_storage_bucket_artifact = 'Object Storage Bucket';
 // File Storage
