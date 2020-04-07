@@ -130,7 +130,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
      */
     draw() {
         this.parent_id = this.compartment_id;
-        console.groupCollapsed('Drawing ' + virtual_cloud_network_artifact + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.groupCollapsed('Drawing ' + VirtualCloudNetwork.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let svg = drawArtifact(this.getSvgDefinition());
         // Add Properties Load Event to created svg
         let me = this;
@@ -144,7 +144,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     getSvgDefinition() {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getDimensions(this.id);
-        let definition = this.newSVGDefinition(this, virtual_cloud_network_artifact);
+        let definition = this.newSVGDefinition(this, VirtualCloudNetwork.getArtifactReference());
         //let parent_first_child = getCompartmentFirstChildContainerOffset(this.compartment_id);
         let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = parent_first_child.dx;
@@ -373,13 +373,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', virtual_cloud_network_query_cb);
-    cell.append('label').text(virtual_cloud_network_artifact);
+    cell.append('label').text(VirtualCloudNetwork.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(virtual_cloud_network_artifact);
+        .text(VirtualCloudNetwork.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

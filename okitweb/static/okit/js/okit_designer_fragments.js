@@ -92,7 +92,7 @@ class Fragment extends OkitArtifact {
 
     addToVirtualCloudNetwork(fragment_json={}, vcn_id=null) {
         console.info('Adding Fragment to Virtual Cloud Network ' + vcn_id);
-        let ignore_elements = [this.artifactToElement(Compartment.getArtifactReference()), this.artifactToElement(virtual_cloud_network_artifact), this.artifactToElement(subnet_artifact)];
+        let ignore_elements = [this.artifactToElement(Compartment.getArtifactReference()), this.artifactToElement(VirtualCloudNetwork.getArtifactReference()), this.artifactToElement(subnet_artifact)];
         // Process Subnets (Container)
         fragment_json.subnets.forEach(function (artifact) {
             artifact.compartment_id = this.compartment_id;
