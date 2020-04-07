@@ -17,7 +17,7 @@ const display_name_prefix = 'okit-';
 // Service Gateway
 //const ServiceGateway.getArtifactReference() = 'Service Gateway';
 // Dynamic Routing Gateway
-const dynamic_routing_gateway_artifact = 'Dynamic Routing Gateway';
+//const DynamicRoutingGateway.getArtifactReference() = 'Dynamic Routing Gateway';
 // Local Peering Gateway
 const local_peering_gateway_artifact = 'Local Peering Gateway';
 // Fast Connect
