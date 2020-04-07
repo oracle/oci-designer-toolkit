@@ -15,7 +15,7 @@ const display_name_prefix = 'okit-';
 // NAT Gateway
 //const NATGateway.getArtifactReference() = 'NAT Gateway';
 // Service Gateway
-const service_gateway_artifact = 'Service Gateway';
+//const ServiceGateway.getArtifactReference() = 'Service Gateway';
 // Dynamic Routing Gateway
 const dynamic_routing_gateway_artifact = 'Dynamic Routing Gateway';
 // Local Peering Gateway

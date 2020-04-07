@@ -291,7 +291,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     }
 
     getRightEdgeArtifacts() {
-        return[service_gateway_artifact, dynamic_routing_gateway_artifact, local_peering_gateway_artifact]
+        return[ServiceGateway.getArtifactReference(), dynamic_routing_gateway_artifact, local_peering_gateway_artifact]
     }
 
     getBottomEdgeArtifacts() {
