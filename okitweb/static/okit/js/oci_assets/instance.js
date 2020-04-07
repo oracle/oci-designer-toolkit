@@ -37,11 +37,9 @@ class Instance extends OkitArtifact {
         this.vnics = [];
         this.source_details = {os: 'Oracle Linux', version: '7.7', boot_volume_size_in_gbs: '50'};
         this.metadata = {authorized_keys: '', user_data: ''};
-        this.subnet_id = data.parent_id;
         this.block_storage_volume_ids = [];
         this.object_storage_bucket_ids = [];
         this.autonomous_database_ids = [];
-        //this.subnet_ids = [];
         this.preserve_boot_volume = false;
         this.is_pv_encryption_in_transit_enabled = false;
         // Update with any passed data
@@ -58,7 +56,6 @@ class Instance extends OkitArtifact {
             this.primary_vnic = {subnet_id: ''};
             this.vnics[0] = this.primary_vnic;
         }
-        //this.subnet_id = this.primary_vnic.subnet_id;
         // Add Get Parent function
         /*
         if (parent !== null) {

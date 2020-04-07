@@ -46,8 +46,8 @@ export ENVIRONMENT="\
 "
 
 export HOSTINFO="\
-       --name ${FILENAME} \
-       --hostname ${FILENAME}
+       --name ${FILENAME}-${VERSION} \
+       --hostname ${FILENAME}-${VERSION}
 "
 
 export HOSTS=""

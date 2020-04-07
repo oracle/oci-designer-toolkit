@@ -11,6 +11,11 @@ export NGINX_SERVER='pwd;env;nginx;gunicorn --workers=2 --limit-request-line 0 -
 
 RUN_COMMAND=${NGINX_SERVER}
 RUNTIME='nginx   '
+export EXPOSE_PORTS="\
+       -p 80:80 \
+       -p 443:443 \
+"
+
 
 while getopts bfgn option
 do
@@ -24,6 +29,7 @@ do
     f)
       RUN_COMMAND=${FLASK_SERVER}
       RUNTIME='flask   '
+      export EXPOSE_PORTS="-p 8080:8080 "
       break
       ;;
     g)
@@ -69,13 +75,12 @@ fi
 
 # Run command
 docker run \
-       ${HOSTINFO} \
+       --name ${FILENAME}-${VERSION} \
+       --hostname ${FILENAME}-${VERSION} \
        ${VOLUMES} \
        ${ENVIRONMENT} \
        -w /okit \
-       -p 8080:8080 \
-       -p 80:80 \
-       -p 443:443 \
+       ${EXPOSE_PORTS} \
        --rm \
        -it \
        ${DOCKERIMAGE} \

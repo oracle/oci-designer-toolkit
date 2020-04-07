@@ -24,6 +24,39 @@ class OkitSvg {
     }
 }
 
+class OkitOCIData {
+    constructor() {
+        this.load();
+    }
+
+    load() {
+        let me = this;
+        $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); console.info(me)});
+    }
+
+    save() {
+        $.ajax({
+            type: 'post',
+            url: 'dropdown/data',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(this),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : '+ status)
+                console.warn('Error : '+ error)
+            }
+        });
+    }
+
+    query() {
+        let me = this;
+        $.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp), me.save(); console.info(me)});
+    }
+}
+
 class OkitSettings {
     constructor() {
         this.is_default_security_list = true;
@@ -348,7 +381,7 @@ class OkitArtifact {
     ** Child Offset Functions
      */
     getParentKey() {
-        alert('Function "getParentKey()" has not been implemented for ' + this.getArtifactReference() + '.');
+        return 'parent_id';
     }
 
     getChildOffset(child_type) {

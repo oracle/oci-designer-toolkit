@@ -13,7 +13,7 @@ source $(dirname $0)/docker-env.sh
 # Exec command
 docker exec \
        -it \
-       start-okit-server \
+       start-okit-server-${VERSION} \
        /bin/bash
 
 docker ps -l

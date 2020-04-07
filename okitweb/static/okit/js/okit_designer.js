@@ -24,52 +24,11 @@ let okitQueryRequestJson = null;
 let dragging_right_drag_bar = false;
 let right_drag_bar_start_x = 0;
 
-/*
-** Setting Cookie Functions
- */
-// TODO: Delete
-/*
-function saveOkitSettings(settings) {
-    console.info('Saving OKIT Settings To Cookie.');
-    if (settings === undefined) {
-        settings = JSON.stringify(okitSettings);
-    }
-    setCookie('okit-settings', settings);
-}
-function readOkitSettings() {
-    let cookie_value = getCookie('okit-settings');
-    if (cookie_value == '') {
-        console.info('OKIT Settings Cookie Was Not Found.');
-        let settings = {
-            is_default_security_list: true,
-            is_default_route_table: true,
-            is_timestamp_files: false,
-            profile: 'DEFAULT',
-            is_always_free: false,
-            is_optional_expanded: true,
-            is_display_grid: true,
-        };
-        cookie_value = JSON.stringify(settings);
-        saveOkitSettings(cookie_value);
-    } else {
-        console.info('OKIT Settings Cookie Found.');
-    }
-    return JSON.parse(cookie_value);
-}
-function loadSettings() {
-    $(jqId(SETTINGS_PANEL)).load("propertysheets/settings.html", function() {
-        console.info('Loading Settings');
-        loadPropertiesSheet(okitSettings);
-        addPropertiesEventListeners(okitSettings, [], true);
-    });
-}
-*/
-
-
 // Automation details
 //let okitSettings = readOkitSettings();
 let okitSettings = new OkitSettings();
 let ociRegions = [];
+let okitOciData = new OkitOCIData();
 
 function resetDesigner() {
     clearRegionTabBar();

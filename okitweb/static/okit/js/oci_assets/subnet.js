@@ -251,10 +251,6 @@ class Subnet extends OkitContainerArtifact {
     /*
     ** Container Specific Overrides
      */
-    // return the name of the element used by the child to reference this artifact
-    getParentKey() {
-        return 'subnet_id';
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'sn';
