@@ -319,7 +319,7 @@ class Instance extends OkitArtifact {
     ** Child Artifact Functions
      */
     getBottomEdgeArtifacts() {
-        return [block_storage_volume_artifact, virtual_network_interface_artifact];
+        return [block_storage_volume_artifact, VirtualCloudNetwork.getArtifactReference()];
     }
 
     getNamePrefix() {

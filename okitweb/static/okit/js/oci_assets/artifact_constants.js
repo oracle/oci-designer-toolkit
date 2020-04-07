@@ -29,7 +29,7 @@ const display_name_prefix = 'okit-';
 // Subnet
 //const Subnet.getArtifactReference() = 'Subnet';
 // Virtual Network Interface
-const virtual_network_interface_artifact = 'Virtual Network Interface';
+//const VirtualCloudNetwork.getArtifactReference() = 'Virtual Network Interface';
 // Instance
 const instance_artifact = 'Instance';
 // Load Balancer
