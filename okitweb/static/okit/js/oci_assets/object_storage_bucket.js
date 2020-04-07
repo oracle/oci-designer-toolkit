@@ -230,13 +230,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', object_storage_bucket_query_cb);
-    cell.append('label').text(object_storage_bucket_artifact);
+    cell.append('label').text(ObjectStorageBucket.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(object_storage_bucket_artifact);
+        .text(ObjectStorageBucket.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

@@ -37,7 +37,7 @@ const display_name_prefix = 'okit-';
 // Block Storage Volume
 //const BlockStorageVolume.getArtifactReference() = 'Block Storage Volume';
 // Object Storage Bucket
-const object_storage_bucket_artifact = 'Object Storage Bucket';
+//const ObjectStorageBucket.getArtifactReference() = 'Object Storage Bucket';
 // File Storage
 const file_storage_system_artifact = 'File Storage System';
 // Autonomous Database
