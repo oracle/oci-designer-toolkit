@@ -251,13 +251,13 @@ $(document).ready(function () {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', load_balancer_query_cb);
-    cell.append('label').text(load_balancer_artifact);
+    cell.append('label').text(LoadBalancer.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(load_balancer_artifact);
+        .text(LoadBalancer.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
