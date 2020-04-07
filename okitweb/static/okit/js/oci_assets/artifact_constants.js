@@ -27,7 +27,7 @@ const display_name_prefix = 'okit-';
 // Security List
 //const SecurityList.getArtifactReference() = 'Security List';
 // Subnet
-const subnet_artifact = 'Subnet';
+//const Subnet.getArtifactReference() = 'Subnet';
 // Virtual Network Interface
 const virtual_network_interface_artifact = 'Virtual Network Interface';
 // Instance

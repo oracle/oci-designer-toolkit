@@ -89,7 +89,7 @@ class Subnet extends OkitContainerArtifact {
     draw() {
         this.parent_id = this.vcn_id;
         let id = this.id;
-        console.groupCollapsed('Drawing ' + subnet_artifact + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.groupCollapsed('Drawing ' + Subnet.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let svg = drawArtifact(this.getSvgDefinition());
 
         // Add Properties Load Event to created svg
@@ -112,7 +112,7 @@ class Subnet extends OkitContainerArtifact {
     }
 
     drawAttachments() {
-        console.info('Drawing ' + subnet_artifact + ' : ' + this.id + ' Attachments');
+        console.info('Drawing ' + Subnet.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         // Draw Route Table
         if (this.route_table_id !== '') {
@@ -135,7 +135,7 @@ class Subnet extends OkitContainerArtifact {
     getSvgDefinition() {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getDimensions(this.id);
-        let definition = this.newSVGDefinition(this, subnet_artifact);
+        let definition = this.newSVGDefinition(this, Subnet.getArtifactReference());
         // Get Parents First Child Container Offset
         let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = parent_first_child.dx;
@@ -149,9 +149,9 @@ class Subnet extends OkitContainerArtifact {
         definition['name']['show'] = true;
         definition['label']['show'] = true;
         if (this.prohibit_public_ip_on_vnic) {
-            definition['label']['text'] = 'Private ' + subnet_artifact;
+            definition['label']['text'] = 'Private ' + Subnet.getArtifactReference();
         } else  {
-            definition['label']['text'] = 'Public ' + subnet_artifact;
+            definition['label']['text'] = 'Public ' + Subnet.getArtifactReference();
         }
         definition['info']['show'] = true;
         definition['info']['text'] = this.cidr_block;
@@ -298,13 +298,13 @@ $(document).ready(function () {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', subnet_query_cb);
-    cell.append('label').text(subnet_artifact);
+    cell.append('label').text(Subnet.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(subnet_artifact);
+        .text(Subnet.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

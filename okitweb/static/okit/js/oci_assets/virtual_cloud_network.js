@@ -287,7 +287,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     }
 
     getContainerArtifacts() {
-        return [subnet_artifact];
+        return [Subnet.getArtifactReference()];
     }
 
     getRightEdgeArtifacts() {

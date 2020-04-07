@@ -114,7 +114,7 @@ class SecurityList extends OkitArtifact {
 
     isAttached() {
         // Check if this is attached but exclude when parent is the attachment type.
-        if (this.getParent().getArtifactReference() !== subnet_artifact) {
+        if (this.getParent().getArtifactReference() !== Subnet.getArtifactReference()) {
             for (let subnet of this.getOkitJson().subnets) {
                 if (subnet.security_list_ids.includes(this.id)) {
                     console.info(this.display_name + ' attached to subnet '+ subnet.display_name);
