@@ -24,27 +24,15 @@ class OkitTemplateArtifact extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + template_artifact_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(template_artifact_prefix, okitjson.template_artifacts.length + 1);
         this.display_name = this.generateDefaultName(okitjson.template_artifacts.length + 1);
         this.compartment_id = '';
         // Update with any passed data
         this.merge(data);
         this.convert();
         // Add Get Parent function
-        /*
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function() {
-                for (let parent of okitjson.parent_type_list) {
-                    if (parent.id === this.parent_id) {
-                         return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
-        */
     }
 
 

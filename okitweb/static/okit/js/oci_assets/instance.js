@@ -57,20 +57,9 @@ class Instance extends OkitArtifact {
             this.vnics[0] = this.primary_vnic;
         }
         // Add Get Parent function
-        /*
         if (parent !== null) {
             this.getParent = () => {return parent};
-        } else {
-            this.getParent = function() {
-                for (let parent of okitjson.subnets) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
         }
-        */
     }
 
     /*

@@ -33,20 +33,9 @@ class Compartment extends OkitContainerArtifact {
         this.convert();
         this.display_name = this.name;
         // Add Get Parent function
-        /*
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function() {
-                for (let parent of okitjson.compartments) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
-        */
     }
 
     /*

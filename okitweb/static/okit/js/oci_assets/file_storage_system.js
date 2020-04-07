@@ -34,20 +34,9 @@ class FileStorageSystem extends OkitArtifact {
         this.merge(data);
         this.convert();
         // Add Get Parent function
-        /*
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function() {
-                for (let parent of okitjson.subnets) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
-        */
     }
 
 
