@@ -142,7 +142,7 @@ class Instance extends OkitArtifact {
     }
 
     drawAttachments() {
-        console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + this.id + ' Attachments');
+        console.groupCollapsed('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
             let artifact_clone = new BlockStorageVolume(this.getOkitJson().getBlockStorageVolume(block_storage_id), this.getOkitJson(), this);
@@ -189,7 +189,7 @@ class Instance extends OkitArtifact {
     }
 
     drawAttachedSubnetVnic(artifact, bs_count) {
-        console.info('Drawing ' + instance_artifact + ' Subnet Vnic : ' + artifact.id);
+        console.info('Drawing ' + Instance.getArtifactReference() + ' Subnet Vnic : ' + artifact.id);
         let first_child = this.getParent().getChildOffset(artifact.getArtifactReference());
         let dimensions = this.getDimensions();
         let artifact_definition = newVirtualNetworkInterfaceDefinition(artifact, bs_count);
@@ -380,13 +380,13 @@ $(document).ready(function () {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', instance_query_cb);
-    cell.append('label').text(instance_artifact);
+    cell.append('label').text(Instance.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(instance_artifact);
+        .text(Instance.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

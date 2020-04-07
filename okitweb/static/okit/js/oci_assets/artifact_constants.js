@@ -31,7 +31,7 @@ const display_name_prefix = 'okit-';
 // Virtual Network Interface
 //const VirtualCloudNetwork.getArtifactReference() = 'Virtual Network Interface';
 // Instance
-const instance_artifact = 'Instance';
+//const Instance.getArtifactReference() = 'Instance';
 // Load Balancer
 const load_balancer_artifact = 'Load Balancer';
 // Block Storage Volume

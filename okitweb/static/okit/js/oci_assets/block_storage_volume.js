@@ -120,7 +120,7 @@ class BlockStorageVolume extends OkitArtifact {
 
     isAttached() {
         // Check if this is attached but exclude when parent is the attachment type.
-        if (this.getParent().getArtifactReference() !== instance_artifact) {
+        if (this.getParent().getArtifactReference() !== Instance.getArtifactReference()) {
             for (let instance of this.getOkitJson().instances) {
                 if (instance.block_storage_volume_ids.includes(this.id)) {
                     console.info(this.display_name + ' attached to instance ' + instance.display_name);
