@@ -21,7 +21,7 @@ const display_name_prefix = 'okit-';
 // Local Peering Gateway
 //const LocalPeeringGateway.getArtifactReference() = 'Local Peering Gateway';
 // Fast Connect
-const fast_connect_artifact = 'Fast Connect';
+//const FastConnect.getArtifactReference() = 'Fast Connect';
 // Route Table
 const route_table_artifact = 'Route Table';
 // Security List
