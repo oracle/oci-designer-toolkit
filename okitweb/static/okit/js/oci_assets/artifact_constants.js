@@ -13,7 +13,7 @@ const display_name_prefix = 'okit-';
 // Internet Gateway
 //const InternetGateway.getArtifactReference() = 'Internet Gateway';
 // NAT Gateway
-const nat_gateway_artifact = 'NAT Gateway';
+//const NATGateway.getArtifactReference() = 'NAT Gateway';
 // Service Gateway
 const service_gateway_artifact = 'Service Gateway';
 // Dynamic Routing Gateway
