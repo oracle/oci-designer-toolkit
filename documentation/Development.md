@@ -45,7 +45,6 @@ to the system.
 - Updated Files
     - Frontend
         - **[OKIT Class](#okit-class)**                               : [okitweb/static/okit/js/okit.js](okitweb/static/okit/js/okit.js)
-        - **[Artifact Constants](#artifact-constants)**               : [okitweb/static/okit/js/oci_assets/artifact_constants.js](okitweb/static/okit/js/oci_assets/artifact_constants.js)
         - **[Flask Web Designer Python](#flask-web-designer-python)** : [okitweb/okitWebDesigner.py](okitweb/okitWebDesigner.py)
     - Backend
         - **[Connection Facade](#connection-facade)**                 : [visualiser/facades/ociConnection.py](visualiser/facades/ociConnection.py)
