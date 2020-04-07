@@ -5,7 +5,7 @@
 console.info('Loaded Artifact Constants Javascript');
 
 // Artifact name prefix
-const display_name_prefix = 'okit-';
+//const display_name_prefix = 'okit-';
 // Compartment
 //const Compartment.getArtifactReference() = 'Compartment';
 // Virtual Cloud Network
@@ -41,4 +41,4 @@ const display_name_prefix = 'okit-';
 // File Storage
 //const FileStorageSystem.getArtifactReference() = 'File Storage System';
 // Autonomous Database
-const autonomous_database_artifact = 'Autonomous Database';
+//const AutonomousDatabase.getArtifactReference() = 'Autonomous Database';

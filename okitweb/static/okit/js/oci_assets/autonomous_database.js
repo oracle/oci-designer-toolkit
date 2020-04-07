@@ -210,13 +210,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', autonomous_database_query_cb);
-    cell.append('label').text(autonomous_database_artifact);
+    cell.append('label').text(AutonomousDatabase.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(autonomous_database_artifact);
+        .text(AutonomousDatabase.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
