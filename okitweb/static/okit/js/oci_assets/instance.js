@@ -26,7 +26,6 @@ class Instance extends OkitArtifact {
         this.shape = 'VM.Standard2.1';
         // # Optional
         this.fault_domain = '';
-        this.hostname_label = this.display_name.toLowerCase();
         this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
         this.vnics = [];
         this.source_details = {os: 'Oracle Linux', version: '7.7', boot_volume_size_in_gbs: '50'};
@@ -47,12 +46,22 @@ class Instance extends OkitArtifact {
         if (this.vnics.length > 0) {
             this.primary_vnic = this.vnics[0];
         } else {
-            this.primary_vnic = {subnet_id: ''};
+            this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
             this.vnics[0] = this.primary_vnic;
         }
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = () => {return parent};
+        } else {
+            this.getParent = () => {
+                let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
+                if (primary_subnet.compartment_id === this.compartment_id) {
+                    this.parent_id = this.primary_vnic.subnet_id;
+                } else {
+                    this.parent_id = this.compartment_id;
+                }
+                return super.getParent();
+            };
         }
     }
 
@@ -73,6 +82,7 @@ class Instance extends OkitArtifact {
         if (this.vnics === undefined) {this.vnics = [];}
         if (this.subnet_ids !== undefined) {if (this.subnet_ids.length > 0) {for (let subnet_id of this.subnet_ids) {this.vnics.push({subnet_id: subnet_id})}} delete this.subnet_ids;}
         if (this.subnet_id !== undefined) {if (this.vnics.length === 0) {this.vnics.push({subnet_id: ''})} this.vnics[0].subnet_id = this.subnet_id; delete this.subnet_id;}
+        if (this.hostname_label !== undefined) {this.vnics[0].hostname_label = this.hostname_label; delete this.hostname_label;}
     }
 
 
@@ -172,51 +182,10 @@ class Instance extends OkitArtifact {
                     d3.select(d3Id(subnet_id)).attr('fill', fill);
                     d3.event.stopPropagation();
                 });
-                /*
-                for (let subnet of this.getOkitJson().subnets) {
-                    if (subnet_id == subnet['id']) {
-                        let artifact_clone = new VirtualNetworkInterface(subnet, this.getOkitJson(), this);
-                        artifact_clone['parent_id'] = this.id;
-                        artifact_clone.draw();
-                        //this.drawAttachedSubnetVnic(artifact_clone, attachment_count);
-                    }
-                }
-                */
                 attachment_count += 1;
             }
         }
         console.groupEnd();
-    }
-
-    drawAttachedSubnetVnic(artifact, bs_count) {
-        console.info('Drawing ' + Instance.getArtifactReference() + ' Subnet Vnic : ' + artifact.id);
-        let first_child = this.getParent().getChildOffset(artifact.getArtifactReference());
-        let dimensions = this.getDimensions();
-        let artifact_definition = newVirtualNetworkInterfaceDefinition(artifact, bs_count);
-        artifact_definition['svg']['x'] = Math.round(first_child.dx + (positional_adjustments.padding.x * bs_count) + (positional_adjustments.spacing.x * bs_count));
-        artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
-        artifact_definition['rect']['stroke']['colour'] = stroke_colours.svg_orange;
-
-        let id = artifact['id'];
-        // Update id so it does not conflict with actual subnet
-        artifact['id'] += '-vnic';
-
-        let svg = drawArtifact(artifact_definition);
-
-        // Add click event to display properties
-        svg.on("click", function () {
-            loadSubnetProperties(id);
-            d3.event.stopPropagation();
-        });
-        let fill = d3.select(d3Id(id)).attr('fill');
-        svg.on("mouseover", function () {
-            d3.select(d3Id(id)).attr('fill', svg_highlight_colour);
-            d3.event.stopPropagation();
-        });
-        svg.on("mouseout", function () {
-            d3.select(d3Id(id)).attr('fill', fill);
-            d3.event.stopPropagation();
-        });
     }
 
     // Return Artifact Specific Definition.

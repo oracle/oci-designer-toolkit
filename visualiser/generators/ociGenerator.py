@@ -412,7 +412,7 @@ class OCIGenerator(object):
         # ---- Hostname
         variableName = '{0:s}_hostname'.format(standardisedName)
         self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["hostname_label"]
+        self.run_variables[variableName] = instance["vnics"][0]["hostname_label"]
         # ---- Shape
         variableName = '{0:s}_shape'.format(standardisedName)
         self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
@@ -433,7 +433,7 @@ class OCIGenerator(object):
         # --- Optional
         # ---- Primary VNIC
         # ----- Subnet OCID
-        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance["subnet_id"]]))
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance["vnics"][0]["subnet_id"]]))
         # ----- Display Name (Vnic)
         variableName = '{0:s}_display_name_vnic'.format(standardisedName)
         self.jinja2_variables["display_name_vnic"] = self.formatJinja2Variable(variableName)
@@ -475,6 +475,7 @@ class OCIGenerator(object):
         # ---- Vnic Attachements
         attachment_number = 1
         jinja2_vnic_attachments = []
+        # TODO: Change to vnics list
         for subnet_id in instance.get('subnet_ids', []):
             # ------ Subnet Vnic
             variableName = '{0:s}_vnic_attachment_{1:02d}_subnet_id'.format(standardisedName, attachment_number)

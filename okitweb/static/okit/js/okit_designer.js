@@ -31,6 +31,8 @@ let ociRegions = [];
 let okitOciData = new OkitOCIData();
 
 function resetDesigner() {
+    okitJson = new OkitJson();
+    regionOkitJson = {};
     clearRegionTabBar();
     hideRegionTabBar();
     $(jqId(PROPERTIES_PANEL)).load('propertysheets/empty.html');

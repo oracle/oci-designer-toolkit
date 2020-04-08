@@ -267,17 +267,19 @@ def ociRegion():
     #logger.info(">>>>>>>>> Regions: {0!s:s}".format(regions))
     return json.dumps(regions, sort_keys=False, indent=2, separators=(',', ': '))
 
-@bp.route('/oci/query/<string:cloud>', methods=(['GET', 'POST']))
-def ociQuery(cloud):
-    if cloud == 'oci':
-        if request.method == 'POST':
-            response_json = {}
-            logger.info('Post JSON : {0:s}'.format(str(request.json)))
-            return executeQuery(request.json)
-        else:
-            ociCompartments = OCICompartments()
-            compartments = ociCompartments.listTenancy()
-            return render_template('okit/oci_query.html', compartments=compartments)
+@bp.route('/oci/query/', methods=(['GET']))
+def ociQuery():
+    if request.method == 'GET':
+        query_string = request.query_string
+        parsed_query_string = urllib.parse.unquote(query_string.decode())
+        query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+        logger.debug('===================================== Query Json =====================================')
+        logJson(query_json)
+        logger.debug('======================================================================================')
+        config_profile = query_json.get('config_profile', 'DEFAULT')
+        logger.info('Using Profile : {0!s:s}'.format(config_profile))
+        response_json = {}
+        config = {'region': query_json['region']}
     else:
         return '404'
 
