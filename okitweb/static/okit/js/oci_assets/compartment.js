@@ -15,10 +15,8 @@ class Compartment extends OkitContainerArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
-        this.parent_id = data.parent_id;
         // Configure default values
         this.parent_id = 'canvas';
-        this.compartment_id = this.id;
         this.compartment_id = null;
         this.name = this.generateDefaultName(okitjson.compartments.length + 1);
         // Update with any passed data
@@ -186,7 +184,7 @@ class Compartment extends OkitContainerArtifact {
     }
 
     getLeftArtifacts() {
-        return [BlockStorageVolume.getArtifactReference(), Instance.getArtifactReference()];
+        return [BlockStorageVolume.getArtifactReference()];
     }
 
     getRightArtifacts() {

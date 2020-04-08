@@ -1045,6 +1045,7 @@ class OkitJson {
     constructor(okit_json_string = '', parent_id = 'canvas-div') {
         this.title = "OKIT OCI Visualiser Json";
         this.description = "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......";
+        this.okit_version = okitVersion;
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
@@ -1347,16 +1348,18 @@ class OkitJson {
         }
 
         // Resize Main Canvas if required
-        let canvas_svg = d3.select("#canvas-svg");
+        let canvas_svg = d3.select(d3Id("canvas-svg"));
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));
         console.info('Canvas Height  : ' + canvas_svg.attr('height'));
         console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
-        $("#canvas-svg").children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
+        $(jqId("canvas-svg")).children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
+            console.info('Id      : ' + this.getAttribute('id'));
             console.info('Width   : ' + this.getAttribute('width'));
             console.info('Height  : ' + this.getAttribute('height'));
             console.info('viewBox : ' + this.getAttribute('viewBox'));
             canvas_svg.attr('width', Math.max(Number(canvas_svg.attr('width')), Number(this.getAttribute('width'))));
             canvas_svg.attr('height', Math.max(Number(canvas_svg.attr('height')), Number(this.getAttribute('height'))));
+            canvas_svg.attr('viewBox', '0 0 ' + canvas_svg.attr('width') + ' ' + canvas_svg.attr('height'));
         });
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));
         console.info('Canvas Height  : ' + canvas_svg.attr('height'));
