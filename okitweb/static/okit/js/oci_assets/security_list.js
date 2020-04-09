@@ -258,10 +258,9 @@ class SecurityList extends OkitArtifact {
                 console.info('Changed is_stateless: ' + this.checked);
                 displayOkitJson();
             });
-        if (access_rule['is_stateless']) {
-            rule_cell.attr("checked", access_rule['is_stateless']);
-        }
+        $(jqId("is_stateless" + rule_num + access_type)).prop('checked', access_rule.is_stateless);
         rule_cell.append('label')
+            .attr('for', "is_stateless" + rule_num + access_type)
             .attr("class", "property-value")
             .text('Stateless');
         // Destination / Source

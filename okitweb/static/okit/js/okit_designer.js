@@ -691,8 +691,12 @@ $(document).ready(function() {
             dragging_right_drag_bar = false;
             // Set Width
             $(jqId('designer_right_column')).width(new_width);
-            $(jqId('designer_right_column')).css('min-width', new_width);
-            redrawSVGCanvas();
+            if (new_width > 250) {
+                $(jqId('designer_right_column')).css('min-width', new_width);
+            } else {
+                $(jqId('designer_right_column')).css('min-width', 250);
+            }
+            setTimeout(redrawSVGCanvas, 260);
         }
     });
     /**/

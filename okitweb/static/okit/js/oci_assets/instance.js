@@ -51,6 +51,9 @@ class Instance extends OkitArtifact {
         }
         // Add Get Parent function
         if (parent !== null) {
+            if (parent.getArtifactReference() === Subnet.getArtifactReference()) {
+                this.primary_vnic.subnet_id = parent.id;
+            }
             this.getParent = () => {return parent};
         } else {
             this.getParent = () => {
@@ -252,16 +255,148 @@ class Instance extends OkitArtifact {
             for (let block_storage_volume of me.getOkitJson().block_storage_volumes) {
                 block_storage_volume_select.append($('<option>').attr('value', block_storage_volume.id).text(block_storage_volume.display_name));
             }
-            // Build Vnic / Subnet List
-            let subnet_select = $(jqId('subnet_ids'));
-            for (let subnet of me.getOkitJson().subnets) {
-                if (subnet.id !== me.subnet_id) {
-                    subnet_select.append($('<option>').attr('value', subnet.id).text(subnet.display_name));
-                }
+            // Build Primary Vnic / Subnet List
+            let subnet_select = $(jqId('subnet_id'));
+            for (let subnet of this.getOkitJson().subnets) {
+                let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
+                let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
+                let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+                subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
             }
+            // Secondary Vnics
+            this.loadSecondaryVnics();
+            $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(this);
         });
+    }
+
+    loadSecondaryVnics() {
+        // Empty Existing VNICs
+        $(jqId('vnics_table_body')).empty();
+        // VNICs
+        for (let vnic_idx = 1; vnic_idx < this.vnics.length; vnic_idx++) {
+            this.addVnicHtml(this.vnics[vnic_idx], vnic_idx);
+        }
+    }
+
+    addSecondaryVnic() {
+        let vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + this.vnics.length};
+        this.vnics.push(vnic);
+        this.loadSecondaryVnics();
+        displayOkitJson();
+    }
+
+    deleteSecondayVnic(vnic_idx) {
+        this.vnics.splice(vnic_idx, 1);
+        this.loadSecondaryVnics();
+        displayOkitJson();
+    }
+
+    addVnicHtml(vnic, idx) {
+        let me = this;
+        let tbody = d3.select(d3Id('vnics_table_body'));
+        let row = tbody.append('div').attr('class', 'tr');
+        let cell = row.append('div').attr('class', 'td')
+            .attr("id", "rule_" + idx);
+        let table = cell.append('div').attr('class', 'table okit-table okit-properties-table')
+            .attr("id", "vnic_table_" + idx);
+        // First Row with Delete Button
+        let rule_cell = row.append('div').attr('class', 'td');
+        rule_cell.append('button')
+            .attr("type", "button")
+            .attr("class", "okit-delete-button")
+            .text("X")
+            .on('click', function() {
+                me.deleteSecondayVnic(idx);
+            });
+        // Subnet Id
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td')
+            .text("Subnet");
+        cell = row.append('div').attr('class', 'td');
+        let select = cell.append('select')
+            .attr("class", "okit-property-value")
+            .attr("id", "subnet_id" + idx)
+            .on("change", function() {
+                vnic.subnet_id = this.options[this.selectedIndex].value;
+                displayOkitJson();
+            });
+        for (let subnet of this.getOkitJson().subnets) {
+            let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
+            let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
+            let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+            select.append('option').attr('value', subnet.id).text(display_name);
+        }
+        $(jqId("subnet_id" + idx)).val(vnic.subnet_id);
+        // Assign Public IP
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td');
+        cell = row.append('div').attr('class', 'td');
+        cell.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', 'assign_public_ip' + idx)
+            .attr('name', 'assign_public_ip' + idx)
+            .attr('checked', vnic.assign_public_ip)
+            .on('change', function() {
+                vnic.assign_public_ip = this.checked;
+                displayOkitJson();
+            });
+        cell.append('label')
+            .attr('for', 'assign_public_ip' + idx)
+            .attr("class", "okit-property-value")
+            .text('Assign Public IP');
+        $(jqId('assign_public_ip' + idx)).prop('checked', vnic.assign_public_ip);
+        // Hostname
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td')
+            .text('Hostname');
+        cell = row.append('div').attr('class', 'td');
+        cell.append('input')
+            .attr("type", "text")
+            .attr("class", "okit-property-value")
+            .attr("id", 'hostname_label' + idx)
+            .attr("name", 'hostname_label' + idx)
+            .attr("value", vnic.hostname_label)
+            .on("change", function() {
+                vnic.hostname_label = this.value;
+                displayOkitJson();
+            });
+        // Skip Source / Destination Check
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td');
+        cell = row.append('div').attr('class', 'td');
+        cell.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', 'skip_source_dest_check' + idx)
+            .attr('name', 'skip_source_dest_check' + idx)
+            .attr('checked', vnic.skip_source_dest_check)
+            .on('change', function() {
+                vnic.skip_source_dest_check = this.checked;
+                displayOkitJson();
+            });
+        cell.append('label')
+            .attr('for', 'skip_source_dest_check' + idx)
+            .attr("class", "okit-property-value")
+            .text('Skip Source / Destination Check');
+        $(jqId('skip_source_dest_check' + idx)).prop('checked', vnic.skip_source_dest_check);
+        // Network Security Groups
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td')
+            .text("Network Security Groups");
+        cell = row.append('div').attr('class', 'td');
+        select = cell.append('select')
+            .attr("class", "okit-property-value")
+            .attr("id", "nsg_ids" + idx)
+            .attr("multiple", "multiple")
+            .on("change", function() {
+                vnic.nsg_ids = $(jqId("nsg_ids" + idx)).val();
+                displayOkitJson();
+            });
+        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+            select.append('option').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name);
+        }
+        $(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
     }
 
 
