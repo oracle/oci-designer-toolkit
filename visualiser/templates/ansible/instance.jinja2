@@ -47,12 +47,15 @@
             assign_public_ip: "{{ assign_public_ip }}"
 {% endif %}
             name: "{{ display_name_vnic }}"
-            hostname_label: "{{ hostname }}"
+            hostname_label: "{{ hostname_label }}"
 {% if private_ip is defined %}
             private_ip: "{{ private_ip }}"
 {% endif %}
 {% if skip_source_dest_check is defined %}
             skip_source_dest_check: "{{ skip_source_dest_check }}"
+{% endif %}
+{% if nsg_ids is defined %}
+            nsg_ids: "{{ nsg_ids }}"
 {% endif %}
       register: {{ resource_name }}
 
@@ -97,10 +100,20 @@
         region: "{{ region }}"
         instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
         display_name: "{{ vnic.display_name }}"
-        #nicindex: 0
         vnic:
             subnet_id: "{{ vnic.subnet_id }}"
-            #hostname_label: "{{ hostname }}{{ loop.index }}"
-            #private_ip: "10.0.0.6"
+            hostname_label: "{{ vnic.hostname_label }}"
+    {% if vnic.assign_public_ip is defined %}
+            assign_public_ip: "{{ vnic.assign_public_ip }}"
+    {% endif %}
+    {% if vnic.private_ip is defined %}
+            private_ip: "{{ vnic.private_ip }}"
+    {% endif %}
+    {% if vnic.skip_source_dest_check is defined %}
+            skip_source_dest_check: "{{ vnic.skip_source_dest_check }}"
+    {% endif %}
+    {% if vnic.nsg_ids is defined %}
+            nsg_ids: "{{ vnic.nsg_ids }}"
+    {% endif %}
 
 {% endfor %}

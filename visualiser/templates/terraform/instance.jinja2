@@ -30,7 +30,10 @@ resource "oci_core_instance" "{{ resource_name }}" {
         # Optional
         assign_public_ip           = {{ assign_public_ip }}
         display_name               = {{ display_name_vnic }}
-        hostname_label             = {{ hostname }}
+        hostname_label             = {{ hostname_label }}
+{% if nsg_ids is defined %}
+        nsg_ids                    = {{ nsg_ids }}
+{% endif %}
 {% if private_ip is defined %}
         private_ip                 = {{ private_ip }}
 {% endif %}
@@ -106,27 +109,31 @@ resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.in
     #Required
     create_vnic_details {
         #Required
-        subnet_id = {{ vnic.subnet_id }}
-
+        subnet_id              = {{ vnic.subnet_id }}
         #Optional
-        display_name = {{ vnic.display_name }}
-        #assign_public_ip = "${var.vnic_attachment_create_vnic_details_assign_public_ip}"
+        display_name           = {{ vnic.display_name }}
+        assign_public_ip       = {{ vnic.assign_public_ip }}
     {% if defined_tags is defined %}
-        defined_tags               = {{ defined_tags }}
+        defined_tags           = {{ defined_tags }}
     {% endif %}
     {% if freeform_tags is defined %}
-        freeform_tags              = {{ freeform_tags }}
+        freeform_tags          = {{ freeform_tags }}
     {% endif %}
-        #hostname_label = "${format("%s{{ loop.index }}", {{ hostname }})}"
-        #nsg_ids = "${var.vnic_attachment_create_vnic_details_nsg_ids}"
-        #private_ip = "${var.vnic_attachment_create_vnic_details_private_ip}"
-        #skip_source_dest_check = "${var.vnic_attachment_create_vnic_details_skip_source_dest_check}"
+        hostname_label         = {{ vnic.hostname_label }}
+    {% if vnic.nsg_ids is defined %}
+        nsg_ids                = {{ vnic.nsg_ids }}
+    {% endif %}
+    {% if vnic.private_ip is defined %}
+        private_ip             = {{ vnic.private_ip }}
+    {% endif %}
+    {% if vnic.skip_source_dest_check is defined %}
+        skip_source_dest_check = {{ vnic.skip_source_dest_check }}
+    {% endif %}
     }
     instance_id = local.{{ resource_name }}_id
 
     #Optional
     display_name = {{ vnic.display_name }}
-    #nic_index = "0"
 }
 {% endfor %}
 

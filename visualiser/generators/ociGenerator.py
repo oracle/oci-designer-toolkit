@@ -405,14 +405,6 @@ class OCIGenerator(object):
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["display_name"]
-        # ---- Display Name (Vnic)
-        variableName = '{0:s}_display_name_vnic'.format(standardisedName)
-        self.jinja2_variables["display_name_vnic"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = '{0!s:s} vnic'.format(instance["display_name"])
-        # ---- Hostname
-        variableName = '{0:s}_hostname'.format(standardisedName)
-        self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["vnics"][0]["hostname_label"]
         # ---- Shape
         variableName = '{0:s}_shape'.format(standardisedName)
         self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
@@ -437,23 +429,30 @@ class OCIGenerator(object):
         # ----- Display Name (Vnic)
         variableName = '{0:s}_display_name_vnic'.format(standardisedName)
         self.jinja2_variables["display_name_vnic"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = '{0!s:s} vnic'.format(instance["display_name"])
+        self.run_variables[variableName] = '{0!s:s} vnic 00'.format(instance["display_name"])
+        # ---- Hostname
+        variableName = '{0:s}_hostname_label'.format(standardisedName)
+        self.jinja2_variables["hostname_label"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["vnics"][0]["hostname_label"]
         # ----- Assign Public IP
         variableName = '{0:s}_primary_vnic_assign_public'.format(standardisedName)
         self.jinja2_variables["assign_public_ip"] = self.formatJinja2Variable(variableName)
-        subnet = self.get("subnets", instance["primary_vnic"]["subnet_id"])
-        self.run_variables[variableName] = (not subnet["prohibit_public_ip_on_vnic"])
-        # ---- Authorised Public SSH Keys
+        subnet = self.get("subnets", instance["vnics"][0]["subnet_id"])
+        self.run_variables[variableName] = (instance["vnics"][0]["assign_public_ip"] and (not subnet["prohibit_public_ip_on_vnic"]))
+        # ----- Skip Source/destination Check
+        variableName = '{0:s}_primary_vnic_skip_src_dst_check'.format(standardisedName)
+        self.jinja2_variables["skip_source_dest_check"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["vnics"][0]["skip_source_dest_check"]
+        # ---- Metadata
+        # ----- Authorised Public SSH Keys
         variableName = '{0:s}_authorized_keys'.format(standardisedName)
         self.jinja2_variables["authorized_keys"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["metadata"]["authorized_keys"]
-        #self.run_variables[variableName] = instance["authorized_keys"]
-        # ---- Cloud Init YAML
+        # ----- Cloud Init YAML
         variableName = '{0:s}user_data'.format(standardisedName)
         self.jinja2_variables["user_data"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["metadata"]["user_data"].replace('\n', '\\n').replace('"', '\\"')
-        #self.run_variables[variableName] = instance["cloud_init_yaml"].replace('\n', '\\n').replace('"', '\\"')
-        # ---- Volume Attachements
+        # ---- Volume Attachments
         attachment_number = 1
         jinja2_volume_attachments = []
         for block_storage_volume_id in instance.get('block_storage_volume_ids', []):
@@ -472,21 +471,34 @@ class OCIGenerator(object):
             # Increment attachment number
             attachment_number += 1
         self.jinja2_variables["volume_attachments"] = jinja2_volume_attachments
-        # ---- Vnic Attachements
+        # ---- Vnic Attachments
         attachment_number = 1
         jinja2_vnic_attachments = []
-        # TODO: Change to vnics list
-        for subnet_id in instance.get('subnet_ids', []):
+        for vnic in instance.get('vnics', [{}])[1:]:
             # ------ Subnet Vnic
             variableName = '{0:s}_vnic_attachment_{1:02d}_subnet_id'.format(standardisedName, attachment_number)
-            self.run_variables[variableName] = subnet_id
             jinja2_vnic_attachment = {
-                "subnet_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet_id]))
+                "subnet_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[vnic["subnet_id"]]))
             }
+            self.run_variables[variableName] = vnic["subnet_id"]
             # ---- Display Name
             variableName = '{0:s}_vnic_attachment_{1:02d}_display_name'.format(standardisedName, attachment_number)
-            self.run_variables[variableName] = '{0!s:s} Vnic Attachment {1:02d}'.format(instance["display_name"], attachment_number)
             jinja2_vnic_attachment["display_name"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = '{0!s:s} vnic {1:02d}'.format(instance["display_name"], attachment_number)
+            # ---- Hostname
+            variableName = '{0:s}_vnic_attachment_{1:02d}_hostname_label'.format(standardisedName, attachment_number)
+            jinja2_vnic_attachment["hostname_label"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = vnic["hostname_label"]
+            # ----- Assign Public IP
+            variableName = '{0!s:s}_vnic_attachment_{1:02d}_assign_public'.format(standardisedName, attachment_number)
+            jinja2_vnic_attachment["assign_public_ip"] = self.formatJinja2Variable(variableName)
+            subnet = self.get("subnets", vnic["subnet_id"])
+            self.run_variables[variableName] = (vnic["assign_public_ip"] and (not subnet["prohibit_public_ip_on_vnic"]))
+            # ----- Skip Source/destination Check
+            variableName = '{0:s}_vnic_attachment_{1:02d}_skip_src_dst_check'.format(standardisedName, attachment_number)
+            jinja2_vnic_attachment["skip_source_dest_check"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = vnic["skip_source_dest_check"]
+
             # Add to Vnic Attachments used for Jinja template
             jinja2_vnic_attachments.append(jinja2_vnic_attachment)
             # Increment attachment number
