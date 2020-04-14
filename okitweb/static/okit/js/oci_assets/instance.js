@@ -167,29 +167,27 @@ class Instance extends OkitArtifact {
             artifact_clone.draw();
             attachment_count += 1;
         }
-        for (let vnic of this.vnics) {
-            let subnet_id = vnic.subnet_id;
-            if (subnet_id !== '' && subnet_id != this.parent_id) {
-                let artifact_clone = new VirtualNetworkInterface(this.getOkitJson().getSubnet(subnet_id), this.getOkitJson(), this);
-                // Add the -vnic suffix
-                artifact_clone.id += '-vnic';
-                artifact_clone['parent_id'] = this.id;
-                console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + artifact_clone.display_name);
-                let svg = artifact_clone.draw();
-                // Add Highlighting
-                let fill = d3.select(d3Id(artifact_clone.id)).attr('fill');
-                svg.on("mouseover", function () {
-                    d3.selectAll(d3Id(artifact_clone.id)).attr('fill', svg_highlight_colour);
-                    d3.select(d3Id(subnet_id)).attr('fill', svg_highlight_colour);
-                    d3.event.stopPropagation();
-                });
-                svg.on("mouseout", function () {
-                    d3.selectAll(d3Id(artifact_clone.id)).attr('fill', fill);
-                    d3.select(d3Id(subnet_id)).attr('fill', fill);
-                    d3.event.stopPropagation();
-                });
-                attachment_count += 1;
-            }
+        for (let idx = 1;  idx < this.vnics.length; idx++) {
+            let vnic = this.vnics[idx];
+            let artifact_clone = new VirtualNetworkInterface(this.getOkitJson().getSubnet(vnic.subnet_id), this.getOkitJson(), this);
+            // Add the -vnic suffix
+            artifact_clone.id += '-vnic';
+            artifact_clone['parent_id'] = this.id;
+            console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + artifact_clone.display_name);
+            let svg = artifact_clone.draw();
+            // Add Highlighting
+            let fill = d3.select(d3Id(artifact_clone.id)).attr('fill');
+            svg.on("mouseover", function () {
+                d3.selectAll(d3Id(artifact_clone.id)).attr('fill', svg_highlight_colour);
+                d3.select(d3Id(vnic.subnet_id)).attr('fill', svg_highlight_colour);
+                d3.event.stopPropagation();
+            });
+            svg.on("mouseout", function () {
+                d3.selectAll(d3Id(artifact_clone.id)).attr('fill', fill);
+                d3.select(d3Id(vnic.subnet_id)).attr('fill', fill);
+                d3.event.stopPropagation();
+            });
+            attachment_count += 1;
         }
         console.groupEnd();
     }
@@ -426,7 +424,7 @@ class Instance extends OkitArtifact {
     ** Child Artifact Functions
      */
     getBottomEdgeArtifacts() {
-        return [BlockStorageVolume.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
+        return [BlockStorageVolume.getArtifactReference(), VirtualNetworkInterface.getArtifactReference()];
     }
 
     getNamePrefix() {
