@@ -58,7 +58,7 @@ class Instance extends OkitArtifact {
                 this.primary_vnic.subnet_id = parent.id;
             }
             this.getParent = () => {return parent};
-        } else {
+        /*} else {
             this.getParent = () => {
                 let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
                 if (primary_subnet.compartment_id === this.compartment_id) {
@@ -67,8 +67,16 @@ class Instance extends OkitArtifact {
                     this.parent_id = this.compartment_id;
                 }
                 return super.getParent();
-            };
+            };*/
         }
+        this.parent_id = (() => {
+            let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
+            if (primary_subnet.compartment_id === this.compartment_id) {
+                return this.primary_vnic.subnet_id;
+            } else {
+                return this.compartment_id;
+            }
+        })();
     }
 
     /*
