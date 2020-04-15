@@ -175,7 +175,9 @@ class Instance extends OkitArtifact {
             artifact_clone.draw();
             attachment_count += 1;
         }
-        for (let idx = 1;  idx < this.vnics.length; idx++) {
+        let start_idx = 1;
+        if (this.getParent().getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') {start_idx = 0;}
+        for (let idx = start_idx;  idx < this.vnics.length; idx++) {
             let vnic = this.vnics[idx];
             let artifact_clone = new VirtualNetworkInterface(this.getOkitJson().getSubnet(vnic.subnet_id), this.getOkitJson(), this);
             // Add the -vnic suffix
@@ -330,6 +332,7 @@ class Instance extends OkitArtifact {
             .on("change", function() {
                 vnic.subnet_id = this.options[this.selectedIndex].value;
                 displayOkitJson();
+                redrawSVGCanvas();
             });
         for (let subnet of this.getOkitJson().subnets) {
             let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
