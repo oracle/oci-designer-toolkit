@@ -9,7 +9,7 @@ MIT
 3rd Party
 =========
 
-Name: jQuery 3.4.1 (https://github.com/jquery/jquery/blob/master/LICENSE.txt)
+Name: jQuery 3.4.1
 Copyright: JS Foundation and other contributors, https://js.foundation/
 
 Name: gunicorn
@@ -18,8 +18,7 @@ Summary: WSGI HTTP Server for UNIX
 Home-page: http://gunicorn.org
 Author: Benoit Chesneau
 Author-email: benoitc@e-engura.com
-License: MIT (https://github.com/benoitc/gunicorn/blob/master/LICENSE)
-Location: /usr/local/lib/python3.6/site-packages
+License: MIT
 Requires: setuptools
 Required-by:
 Copyright 2009-2018 (c) Benoît Chesneau <benoitc@e-engura.org>
@@ -31,8 +30,7 @@ Summary: The PyPA recommended tool for installing Python packages.
 Home-page: https://pip.pypa.io/
 Author: The pip developers
 Author-email: pypa-dev@groups.google.com
-License: MIT (https://github.com/pypa/pip/blob/master/LICENSE.txt)
-Location: /usr/local/lib/python3.6/site-packages
+License: MIT
 Requires:
 Required-by:
 
@@ -42,8 +40,7 @@ Summary: YAML parser and emitter for Python
 Home-page: https://github.com/yaml/pyyaml
 Author: Kirill Simonov
 Author-email: xi@resolvent.net
-License: MIT (https://github.com/yaml/pyyaml/blob/master/LICENSE)
-Location: /usr/local/lib64/python3.6/site-packages
+License: MIT
 Requires:
 Required-by:
 Copyright (c) 2017-2019 Ingy döt Net
@@ -59,7 +56,6 @@ Home-page: http://cffi.readthedocs.org
 Author: Armin Rigo, Maciej Fijalkowski
 Author-email: python-cffi@googlegroups.com
 License: MIT
-Location: /usr/local/lib64/python3.6/site-packages
 Requires: pycparser
 Required-by: cryptography
 Copyright (C) 2005-2007, James Bielman  <jamesjb@jamesjb.com>
@@ -70,8 +66,7 @@ Summary: Updated configparser from Python 3.7 for Python 2.6+.
 Home-page: https://github.com/jaraco/configparser/
 Author: Łukasz Langa
 Author-email: lukasz@langa.pl
-License: MIT (https://github.com/jaraco/configparser/blob/master/LICENSE)
-Location: /usr/local/lib/python3.6/site-packages
+License: MIT
 Requires:
 Required-by: oci
 Copyright Jason R. Coombs
@@ -82,8 +77,7 @@ Summary: World timezone definitions, modern and historical
 Home-page: http://pythonhosted.org/pytz
 Author: Stuart Bishop
 Author-email: stuart@stuartbishop.net
-License: MIT (https://pythonhosted.org/pytz/#license)
-Location: /usr/local/lib/python3.6/site-packages
+License: MIT
 Requires:
 Required-by: oci
 Copyright (c) 2003-2017 Stuart Bishop <stuart@stuartbishop.net>
@@ -94,8 +88,7 @@ Summary: Easily download, build, install, upgrade, and uninstall Python packages
 Home-page: https://github.com/pypa/setuptools
 Author: Python Packaging Authority
 Author-email: distutils-sig@python.org
-License: MIT (https://github.com/pypa/setuptools/blob/master/LICENSE)
-Location: /usr/lib/python3.6/site-packages
+License: MIT
 Requires:
 Required-by: gunicorn
 Copyright (C) 2016 Jason R Coombs <jaraco@jaraco.com>
@@ -107,8 +100,7 @@ Summary: Python 2 and 3 compatibility utilities
 Home-page: https://github.com/benjaminp/six
 Author: Benjamin Peterson
 Author-email: benjamin@python.org
-License: MIT (https://github.com/benjaminp/six/blob/master/LICENSE)
-Location: /usr/local/lib/python3.6/site-packages
+License: MIT
 Requires:
 Required-by: cryptography, python-dateutil, pyOpenSSL
 Copyright (c) 2010-2018 Benjamin Peterson
@@ -119,8 +111,7 @@ Summary: A built-package format for Python
 Home-page: https://github.com/pypa/wheel
 Author: Daniel Holth
 Author-email: dholth@fastmail.fm
-License: MIT (https://github.com/pypa/wheel/blob/master/LICENSE.txt)
-Location: /usr/local/lib/python3.6/site-packages
+License: MIT
 Requires:
 Required-by:
 Copyright (c) 2012-2014 Daniel Holth <dholth@fastmail.fm> and contributors.
@@ -156,11 +147,11 @@ BSD 3-Clause
 3rd Party
 =========
 
-Name: nginx 1.12.2 (https://nginx.org/LICENSE)
+Name: nginx 1.12.2
 Copyright (C) 2002-2020 Igor Sysoev All rights reserved.
 Copyright (C) 2011-2020 Nginx, Inc. All rights reserved.
 
-Name: d3 5.15.0 (https://github.com/d3/d3/blob/master/LICENSE)
+Name: d3 5.15.0
 Copyright 2010-2017 Mike Bostock, All rights reserved.
 
 Name: Flask
@@ -169,8 +160,7 @@ Summary: A simple framework for building complex web applications.
 Home-page: https://palletsprojects.com/p/flask/
 Author: Armin Ronacher
 Author-email: armin.ronacher@active-4.com
-License: BSD-3-Clause (https://palletsprojects.com/license/)
-Location: /usr/local/lib/python3.6/site-packages
+License: BSD-3-Clause
 Requires: click, Jinja2, itsdangerous, Werkzeug
 Required-by:
 Copyright (c) 2015 by Armin Ronacher and contributors.
@@ -181,8 +171,7 @@ Summary: A very fast and expressive template engine.
 Home-page: https://palletsprojects.com/p/jinja/
 Author: Armin Ronacher
 Author-email: armin.ronacher@active-4.com
-License: BSD-3-Clause (https://palletsprojects.com/license/)
-Location: /usr/local/lib/python3.6/site-packages
+License: BSD-3-Clause
 Requires: MarkupSafe
 Required-by: Flask
 Copyright (c) 2015 by Armin Ronacher and contributors.
@@ -197,7 +186,6 @@ Home-page: https://palletsprojects.com/p/click/
 Author: Armin Ronacher
 Author-email: armin.ronacher@active-4.com
 License: BSD (Copyright (c) 2014 by Armin Ronacher.)
-Location: /usr/local/lib/python3.6/site-packages
 Requires:
 Required-by: Flask
 Copyright (c) 2014 by Armin Ronacher and contributors.
@@ -208,8 +196,7 @@ Summary: cryptography is a package which provides cryptographic recipes and prim
 Home-page: https://github.com/pyca/cryptography
 Author: The cryptography developers
 Author-email: cryptography-dev@python.org
-License: BSD or Apache License, Version 2.0 (https://github.com/pyca/cryptography/blob/master/LICENSE.BSD)
-Location: /usr/local/lib64/python3.6/site-packages
+License: BSD or Apache License, Version 2.0
 Requires: cffi, six
 Required-by: pyOpenSSL, oci
 Copyright (c) Individual contributors.
@@ -220,8 +207,7 @@ Summary: Various helpers to pass data to untrusted environments and back.
 Home-page: https://palletsprojects.com/p/itsdangerous/
 Author: Armin Ronacher
 Author-email: armin.ronacher@active-4.com
-License: BSD (https://palletsprojects.com/license/)
-Location: /usr/local/lib/python3.6/site-packages
+License: BSD
 Requires:
 Required-by: Flask
 Copyright (c) 2015 by Armin Ronacher and contributors.
@@ -233,7 +219,6 @@ Home-page: https://palletsprojects.com/p/markupsafe/
 Author: Armin Ronacher
 Author-email: armin.ronacher@active-4.com
 License: BSD-3-Clause
-Location: /usr/local/lib64/python3.6/site-packages
 Requires:
 Required-by: Jinja2
 
@@ -243,8 +228,7 @@ Summary: C parser in Python
 Home-page: https://github.com/eliben/pycparser
 Author: Eli Bendersky
 Author-email: eliben@gmail.com
-License: BSD (https://github.com/eliben/pycparser/blob/master/LICENSE)
-Location: /usr/local/lib/python3.6/site-packages
+License: BSD
 Requires:
 Required-by: cffi
 Copyright (c) 2008-2017, Eli Bendersky, All rights reserved.
@@ -255,8 +239,7 @@ Summary: Extensions to the standard Python datetime module
 Home-page: https://dateutil.readthedocs.io
 Author: Gustavo Niemeyer
 Author-email: gustavo@niemeyer.net
-License: Apache Software License, BSD License (Dual License) (https://github.com/dateutil/dateutil/blob/master/LICENSE)
-Location: /usr/local/lib/python3.6/site-packages
+License: Apache Software License, BSD License (Dual License)
 Requires: six
 Required-by: oci
 Copyright 2017- Paul Ganssle <paul@ganssle.io>
@@ -268,8 +251,7 @@ Summary: The comprehensive WSGI web application library.
 Home-page: https://palletsprojects.com/p/werkzeug/
 Author: Armin Ronacher
 Author-email: armin.ronacher@active-4.com
-License: BSD-3-Clause (https://palletsprojects.com/license/)
-Location: /usr/local/lib/python3.6/site-packages
+License: BSD-3-Clause
 Requires:
 Required-by: Flask
 Copyright (c) 2015 by Armin Ronacher and contributors.
@@ -317,10 +299,9 @@ Version: 2.6.0
 Summary: Oracle Cloud Infrastructure Python SDK
 Home-page: https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/index.html
 Author: Oracle
-Author-email: joe.levy@oracle.com
-License: Universal Permissive License 1.0 or Apache License 2.0  (https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/license.html)
+Author-email:
+License: Universal Permissive License 1.0 or Apache License 2.0
 License: This software is dual-licensed to you under the Universal Permissive License (UPL) and Apache License 2.0. See below for license terms.  You may choose either license, or both.
-Location: /usr/local/lib/python3.6/site-packages
 Requires: pyOpenSSL, configparser, python-dateutil, cryptography, pytz, certifi
 Required-by:
 Copyright (c) 2016, 2017, Oracle and/or its affiliates.  All rights reserved.
@@ -370,10 +351,9 @@ Version: 2.6.0
 Summary: Oracle Cloud Infrastructure Python SDK
 Home-page: https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/index.html
 Author: Oracle
-Author-email: joe.levy@oracle.com
-License: Universal Permissive License 1.0 or Apache License 2.0  (https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/license.html)
+Author-email:
+License: Universal Permissive License 1.0 or Apache License 2.0
 License: This software is dual-licensed to you under the Universal Permissive License (UPL) and Apache License 2.0. See below for license terms.  You may choose either license, or both.
-Location: /usr/local/lib/python3.6/site-packages
 Requires: pyOpenSSL, configparser, python-dateutil, cryptography, pytz, certifi
 Required-by:
 Copyright (c) 2016, 2017, Oracle and/or its affiliates.  All rights reserved.
@@ -387,8 +367,7 @@ Summary: cryptography is a package which provides cryptographic recipes and prim
 Home-page: https://github.com/pyca/cryptography
 Author: The cryptography developers
 Author-email: cryptography-dev@python.org
-License: BSD or Apache License, Version 2.0 (https://github.com/pyca/cryptography/blob/master/LICENSE.APACHE)
-Location: /usr/local/lib64/python3.6/site-packages
+License: BSD or Apache License, Version 2.0
 Requires: cffi, six
 Required-by: pyOpenSSL, oci
 Copyright (c) Individual contributors.
@@ -400,7 +379,6 @@ Home-page: https://pyopenssl.org/
 Author: The pyOpenSSL developers
 Author-email: cryptography-dev@python.org
 License: Apache License, Version 2.0
-Location: /usr/local/lib/python3.6/site-packages
 Requires: six, cryptography
 Required-by: oci
 Copyright (C) AB Strakt
@@ -412,8 +390,7 @@ Summary: Extensions to the standard Python datetime module
 Home-page: https://dateutil.readthedocs.io
 Author: Gustavo Niemeyer
 Author-email: gustavo@niemeyer.net
-License: Apache Software License, BSD License (Dual License) (https://github.com/dateutil/dateutil/blob/master/LICENSE)
-Location: /usr/local/lib/python3.6/site-packages
+License: Apache Software License, BSD License (Dual License)
 Requires: six
 Required-by: oci
 Copyright 2017- Paul Ganssle <paul@ganssle.io>
@@ -591,7 +568,6 @@ Home-page: https://certifi.io/
 Author: Kenneth Reitz
 Author-email: me@kennethreitz.com
 License: MPL-2.0
-Location: /usr/local/lib/python3.6/site-packages
 Requires:
 Required-by: oci
 
@@ -695,33 +671,6 @@ If it is not possible or desirable to put the notice in a particular file, then 
 You may add additional accurate notices of copyright ownership.
 Exhibit B - "Incompatible With Secondary Licenses" Notice
 This Source Code Form is "Incompatible With Secondary Licenses", as defined by the Mozilla Public License, v. 2.0.
-
-
-------------------------------------------------------------------------------------------------------------------------
-
-
-Modified MIT
-============
-
-3rd Party
-=========
-
-Name: curl 7.29.0
-
-License Text
-============
-
-COPYRIGHT AND PERMISSION NOTICE
-
-Copyright (c) 1996 - 2020, Daniel Stenberg, daniel@haxx.se, and many contributors, see the THANKS file.
-
-All rights reserved.
-
-Permission to use, copy, modify, and distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Except as contained in this notice, the name of a copyright holder shall not be used in advertising or otherwise to promote the sale, use or other dealings in this Software without prior written authorization of the copyright holder.
 
 
 ------------------------------------------------------------------------------------------------------------------------
