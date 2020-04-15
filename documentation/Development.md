@@ -384,20 +384,16 @@ basic processing and provide the key "list" method to retrieve the artifacts dur
 
 ```python
 #!/usr/bin/python
-# Copyright (c) 2013, 2014-2019 Oracle and/or its affiliates. All rights reserved.
 
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__copyright__ = "Copyright (c) 2013, 2014-2019  Oracle and/or its affiliates. All rights reserved."
-__ekitversion__ = "@VERSION@"
-__ekitrelease__ = "@RELEASE@"
 __version__ = "1.0.0.0"
-__date__ = "@BUILDDATE@"
-__status__ = "@RELEASE@"
 __module__ = "ociBlockStorageVolumes"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 

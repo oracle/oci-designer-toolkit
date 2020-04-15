@@ -1,5 +1,5 @@
 
-# Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright © 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 ARG os_version=latest
@@ -7,7 +7,7 @@ ARG os=oraclelinux
 FROM ${os}:${os_version}
 LABEL version="0.4.0"
 LABEL description="OKIT Web Server."
-LABEL copyright="Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved."
+LABEL copyright="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
 ENV http_proxy ${http_proxy}
 ENV https_proxy ${https_proxy}
