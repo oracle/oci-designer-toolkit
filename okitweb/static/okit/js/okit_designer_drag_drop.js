@@ -122,6 +122,7 @@ function dragDrop(evt) {
     let target_type = evt.target.getAttribute('data-type');
     let compartment_id = evt.target.getAttribute('data-compartment-id');
     let target_id = evt.target.id;
+    if (target_type === Compartment.getArtifactReference()) {compartment_id = target_id;}
     // Add the Artifact to the OKIT Json / Canvas
     //let newFunction = 'new' + artifact.getArtifactReference().split(' ').join('');
     let newFunction = 'new' + artifact.name;

@@ -177,7 +177,9 @@ class Compartment extends OkitContainerArtifact {
     /*
     ** Child Type Functions
      */
-    //getTopArtifacts() {return [Instance.getArtifactReference()];}
+    getTopArtifacts() {
+        return [Instance.getArtifactReference()];
+    }
 
     getContainerArtifacts() {
         return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
