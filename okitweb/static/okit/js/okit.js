@@ -1183,6 +1183,14 @@ class OkitJson {
                 console.info(obj);
             }
         }
+        // Network Security Groups
+        if (okit_json.hasOwnProperty('network_security_groups')) {
+            for (let artifact of okit_json['network_security_groups']) {
+                artifact.parent_id = artifact.vcn_id;
+                let obj = this.newNetworkSecurityGroup(artifact);
+                console.info(obj);
+            }
+        }
         // Service Gateways
         if (okit_json.hasOwnProperty('service_gateways')) {
             for (let artifact of okit_json['service_gateways']) {
@@ -1323,6 +1331,10 @@ class OkitJson {
         // Security Lists
         for (let security_list of this.security_lists) {
             security_list.draw();
+        }
+        // Network Security Groups
+        for (let network_security_group of this.network_security_groups) {
+            network_security_group.draw();
         }
         // Subnets
         for (let subnet of this.subnets) {
@@ -1468,6 +1480,13 @@ class OkitJson {
         }
         this['nat_gateways'].push(new NATGateway(data, this, parent));
         return this['nat_gateways'][this['nat_gateways'].length - 1];
+    }
+
+    // Network Security Group
+    newNetworkSecurityGroup(data, parent=null) {
+        console.info('New Network Security Group');
+        this.network_security_groups.push(new NetworkSecurityGroup(data, this, parent));
+        return this.network_security_groups[this.network_security_groups.length - 1];
     }
 
     // Object Storage Bucket
