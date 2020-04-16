@@ -149,7 +149,7 @@ class ServiceGateway extends OkitArtifact {
                         console.info('End svgPoint.y   : ' + svgPoint.y);
                         console.info('End matrixTransform.x : ' + connector_end.x);
                         console.info('End matrixTransform.y : ' + connector_end.y);
-                        let polyline = drawConnector(parent_svg, generateConnectorId(this.object_storage_bucket_ids[i], this.id),
+                        let polyline = drawConnector(parent_svg, this.generateConnectorId(this.object_storage_bucket_ids[i], this.id),
                             {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y}, true);
                     }
                 }

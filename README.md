@@ -1,4 +1,4 @@
-# OCI Kinetic Infrastructure Toolkit [0.3.0](#version-0.3.0)
+# OCI Kinetic Infrastructure Toolkit [0.4.0](#version-0.4.0)
 
 OCI Kinetic Infrastructure Toolkit (OKIT) provides a number of tools that will allow full project integration from 
 Architects to Development and on to Operations.
@@ -142,6 +142,14 @@ If you would like to extend OKIT the development process is documented in [OCI K
 - Backend Host Configuration
 
 ## Release Notes
+
+### Version 0.4.0 
+**Release Date**: 22nd April 2020
+#### Features
+1. Extended Instance VNIC Support allowing full specification of vnics / secondary vnics with the exception of private IP.
+#### Bug Fixes
+1. Discovery conflict between compartment and subnet attachment. Instance not in the same compartment as there primary vnic were drawn in the compartment of their primary vnic not the correct one.
+2. JSON: network_entity_id value is empty in route_tables.route_rules
 
 ### Version 0.3.0 
 **Release Date**: 1st April 2020
