@@ -41,6 +41,7 @@ from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociLocalPeeringGateway import OCILocalPeeringGateways
 from facades.ociNATGateway import OCINATGateways
+from facades.ociNetworkSecurityGroup import OCINetworkSecurityGroups
 from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
 from facades.ociRegion import OCIRegions
 from facades.ociResourceManager import OCIResourceManagers
@@ -301,26 +302,18 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Compartment')
         oci_compartments = OCICompartments(config=config, profile=config_profile)
         response_json = oci_compartments.get(compartment_id=query_json['compartment_id'])
+    elif artifact == 'AutonomousDatabase':
+        logger.info('---- Processing Autonomous Databases')
+        oci_autonomous_databases = OCIAutonomousDatabases(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
+    elif artifact == 'BlockStorageVolume':
+        logger.info('---- Processing Block Storage Volumes')
+        oci_block_storage_volumes = OCIBlockStorageVolumes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
     elif artifact == 'Compartments':
         logger.info('---- Processing Compartments')
         oci_compartments = OCICompartments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
-    elif artifact == 'VirtualCloudNetwork':
-        logger.info('---- Processing Virtual Cloud Networks')
-        oci_virtual_cloud_networks = OCIVirtualCloudNetworks(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
-    elif artifact == 'InternetGateway':
-        logger.info('---- Processing Internet Gateways')
-        oci_internet_gateways = OCIInternetGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
-    elif artifact == 'NATGateway':
-        logger.info('---- Processing NAT Gateways')
-        oci_nat_gateways = OCINATGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
-    elif artifact == 'ServiceGateway':
-        logger.info('---- Processing Service Gateways')
-        oci_service_gateways = OCIServiceGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json = oci_service_gateways.list(filter=query_json.get('service_gateway_filter', None))
     elif artifact == 'DynamicRoutingGateway':
         logger.info('---- Processing Dynamic Routing Gateways')
         oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
@@ -329,6 +322,35 @@ def ociArtifacts(artifact):
         logger.info('---- Processing FastConnects')
         oci_fast_connects = OCIFastConnects(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_fast_connects.list(filter=query_json.get('fast_connect_filter', None))
+    elif artifact == 'FileStorageSystem':
+        logger.info('---- Processing File Storage Systems')
+        oci_file_storage_systems = OCIFileStorageSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_file_storage_systems.list(filter=query_json.get('file_storage_system_filter', None))
+    elif artifact == 'Instance':
+        logger.info('---- Processing Instances')
+        oci_instances = OCIInstances(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
+    elif artifact == 'InternetGateway':
+        logger.info('---- Processing Internet Gateways')
+        oci_internet_gateways = OCIInternetGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
+    elif artifact == 'LoadBalancer':
+        logger.info('---- Processing Load Balancers')
+        oci_load_balancers = OCILoadBalancers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
+        response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
+    elif artifact == 'LocalPeeringGateway':
+        logger.info('---- Processing LocalPeeringGateways')
+        oci_local_peering_gateways = OCILocalPeeringGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_local_peering_gateways.list(filter=query_json.get('local_peering_gateway_filter', None))
+    elif artifact == 'NATGateway':
+        logger.info('---- Processing NAT Gateways')
+        oci_nat_gateways = OCINATGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
+    elif artifact == 'ObjectStorageBucket':
+        logger.info('---- Processing Object Storage Buckets')
+        oci_object_storage_buckets = OCIObjectStorageBuckets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
     elif artifact == 'RouteTable':
         logger.info('---- Processing Route Tables')
         oci_route_tables = OCIRouteTables(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
@@ -337,39 +359,18 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Security Lists')
         oci_security_lists = OCISecurityLists(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_security_lists.list(filter=query_json.get('security_list_filter', None))
+    elif artifact == 'ServiceGateway':
+        logger.info('---- Processing Service Gateways')
+        oci_service_gateways = OCIServiceGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_service_gateways.list(filter=query_json.get('service_gateway_filter', None))
     elif artifact == 'Subnet':
         logger.info('---- Processing Subnets')
         oci_subnets = OCISubnets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_subnets.list(filter=query_json.get('subnet_filter', None))
-    elif artifact == 'LocalPeeringGateway':
-        logger.info('---- Processing LocalPeeringGateways')
-        oci_local_peering_gateways = OCILocalPeeringGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json = oci_local_peering_gateways.list(filter=query_json.get('local_peering_gateway_filter', None))
-    elif artifact == 'Instance':
-        logger.info('---- Processing Instances')
-        oci_instances = OCIInstances(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
-    elif artifact == 'LoadBalancer':
-        logger.info('---- Processing Load Balancers')
-        oci_load_balancers = OCILoadBalancers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
-        response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
-    elif artifact == 'BlockStorageVolume':
-        logger.info('---- Processing Block Storage Volumes')
-        oci_block_storage_volumes = OCIBlockStorageVolumes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
-    elif artifact == 'AutonomousDatabase':
-        logger.info('---- Processing Autonomous Databases')
-        oci_autonomous_databases = OCIAutonomousDatabases(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
-    elif artifact == 'ObjectStorageBucket':
-        logger.info('---- Processing Object Storage Buckets')
-        oci_object_storage_buckets = OCIObjectStorageBuckets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
-    elif artifact == 'FileStorageSystem':
-        logger.info('---- Processing File Storage Systems')
-        oci_file_storage_systems = OCIFileStorageSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_file_storage_systems.list(filter=query_json.get('file_storage_system_filter', None))
+    elif artifact == 'VirtualCloudNetwork':
+        logger.info('---- Processing Virtual Cloud Networks')
+        oci_virtual_cloud_networks = OCIVirtualCloudNetworks(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
     else:
         logger.warn('---- Unknown Artifact : {0:s}'.format(str(artifact)))
         return '404'
