@@ -499,6 +499,7 @@ function clearCanvas() {
     styleCanvas(canvas_svg);
     createSVGDefinitions(canvas_svg);
     canvas_svg.append('rect')
+        .attr("id", "canvas-rect")
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("fill", "white");

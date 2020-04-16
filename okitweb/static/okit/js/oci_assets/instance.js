@@ -58,7 +58,7 @@ class Instance extends OkitArtifact {
                 this.primary_vnic.subnet_id = parent.id;
             }
             this.getParent = () => {return parent};
-        /*} else {
+        } else {
             this.getParent = () => {
                 let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
                 if (primary_subnet.compartment_id === this.compartment_id) {
@@ -67,10 +67,11 @@ class Instance extends OkitArtifact {
                     this.parent_id = this.compartment_id;
                 }
                 return super.getParent();
-            };*/
+            };
         }
         this.parent_id = (() => {
             let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
+            console.info(`Primary Subnet ${JSON.stringify(primary_subnet)}`);
             if (primary_subnet.compartment_id === this.compartment_id) {
                 return this.primary_vnic.subnet_id;
             } else {
@@ -97,6 +98,11 @@ class Instance extends OkitArtifact {
         if (this.subnet_ids !== undefined) {if (this.subnet_ids.length > 0) {for (let subnet_id of this.subnet_ids) {this.vnics.push({subnet_id: subnet_id})}} delete this.subnet_ids;}
         if (this.subnet_id !== undefined) {if (this.vnics.length === 0) {this.vnics.push({subnet_id: ''})} this.vnics[0].subnet_id = this.subnet_id; delete this.subnet_id;}
         if (this.hostname_label !== undefined) {this.vnics[0].hostname_label = this.hostname_label; delete this.hostname_label;}
+        for (let vnic of this.vnics) {
+            if (!vnic.hasOwnProperty('assign_public_ip')) {vnic.assign_public_ip = true;}
+            if (!vnic.hasOwnProperty('skip_source_dest_check')) {vnic.skip_source_dest_check = false;}
+            if (!vnic.hasOwnProperty('nsg_ids')) {vnic.nsg_ids = [];}
+        }
     }
 
 
