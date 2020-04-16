@@ -367,6 +367,11 @@ class OkitArtifact {
         return definition
     }
 
+    isAttached() {return false;}
+
+    isParentOf(artifact) {
+        return (artifact && artifact.getParent() && artifact.getParent().id === this.id);
+    }
 
     /*
     ** Property Sheet Load function
@@ -928,7 +933,6 @@ class OkitContainerArtifact extends OkitArtifact {
         };
         return padding;
     }
-
 
     getChildTypes() {
         let child_types = this.getContainerArtifacts().concat(
