@@ -44,6 +44,7 @@ The table below lists a summary of the current support status whilst the details
 | Compartment             | Full    | 0.2.0   | 
 | **Network**
 | Route Table             | Full    | 0.3.0   | 
+| Network Security Groups | Full    | 0.4.0   |
 | Security List           | Full    | 0.3.0   |
 | Subnet                  | Full    | 0.3.0   | 
 | Virtual Cloud Network   | Full    | 0.3.0   | 
@@ -147,6 +148,7 @@ If you would like to extend OKIT the development process is documented in [OCI K
 **Release Date**: 22nd April 2020
 #### Features
 1. Extended Instance VNIC Support allowing full specification of vnics / secondary vnics with the exception of private IP.
+2. Network Security Groups
 #### Bug Fixes
 1. Discovery conflict between compartment and subnet attachment. Instance not in the same compartment as there primary vnic were drawn in the compartment of their primary vnic not the correct one.
 2. JSON: network_entity_id value is empty in route_tables.route_rules

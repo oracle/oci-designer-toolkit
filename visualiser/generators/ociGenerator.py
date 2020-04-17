@@ -939,6 +939,10 @@ class OCIGenerator(object):
             if rule["protocol"] == '1' and 'icmp_options' in rule and rule['icmp_options'] is not None:
                 icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'ingress')
                 jinja2_ingress_rule["icmp_options"] = icmp_options
+            # ------ Source Type
+            variableName = '{0:s}_ingress_rule_{1:02d}_source_type'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = rule["source_type"]
+            jinja2_ingress_rule["source_type"] = self.formatJinja2Variable(variableName)
             # ------ Source
             variableName = '{0:s}_ingress_rule_{1:02d}_source'.format(standardisedName, rule_number)
             self.run_variables[variableName] = rule["source"]
