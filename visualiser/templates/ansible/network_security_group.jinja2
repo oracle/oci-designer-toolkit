@@ -1,95 +1,12 @@
 
-# ------ Create Security List
-    - name: Create Security List {{ output_name }}
-      oci_security_list:
+# ------ Create Network Security Group
+    - name: Create Network Security Group {{ output_name }}
+      oci_network_security_group:
         region: "{{ region }}"
         state: "present"
         # Required
         compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
-        egress_security_rules:
-{% for rule in egress_rules %}
-              # Required
-            - protocol: "{{ rule.protocol }}"
-              destination: "{{ rule.destination }}"
-              # Optional
-    {% if rule.destination_type is defined %}
-              destination_type: "{{ rule.destination_type }}"
-    {% endif %}
-    {% if rule.tcp_options is defined %}
-              tcp_options:
-        {% if rule.tcp_options.destination_port_range is defined %}
-                destination_port_range:
-                    min: {{ rule.tcp_options.destination_port_range.min }}
-                    max: {{ rule.tcp_options.destination_port_range.max }}
-        {% endif %}
-        {% if rule.tcp_options.source_port_range is defined %}
-                source_port_range:
-                    min: {{ rule.tcp_options.source_port_range.min }}
-                    max: {{ rule.tcp_options.source_port_range.max }}
-        {% endif %}
-    {% endif %}
-    {% if rule.udp_options is defined %}
-              udp_options:
-        {% if rule.udp_options.destination_port_range is defined %}
-                destination_port_range:
-                    min: {{ rule.udp_options.destination_port_range.min }}
-                    max: {{ rule.udp_options.destination_port_range.max }}
-        {% endif %}
-        {% if rule.udp_options.source_port_range is defined %}
-                source_port_range:
-                    min: {{ rule.udp_options.source_port_range.min }}
-                    max: {{ rule.udp_options.source_port_range.max }}
-        {% endif %}
-    {% endif %}
-    {% if rule.icmp_options is defined %}
-              icmp_options:
-                type: {{ rule.icmp_options.type }}
-        {% if rule.icmp_options.code is defined %}
-                code: {{ rule.icmp_options.code }}
-        {% endif %}
-    {% endif %}
-{% endfor %}
-        ingress_security_rules:
-{% for rule in ingress_rules %}
-              # Required
-            - protocol: "{{ rule.protocol }}"
-              source: "{{ rule.source }}"
-              # Optional
-    {% if rule.tcp_options is defined %}
-              tcp_options:
-        {% if rule.tcp_options.destination_port_range is defined %}
-                destination_port_range:
-                    min: {{ rule.tcp_options.destination_port_range.min }}
-                    max: {{ rule.tcp_options.destination_port_range.max }}
-        {% endif %}
-        {% if rule.tcp_options.source_port_range is defined %}
-                source_port_range:
-                    min: {{ rule.tcp_options.source_port_range.min }}
-                    max: {{ rule.tcp_options.source_port_range.max }}
-        {% endif %}
-    {% endif %}
-    {% if rule.udp_options is defined %}
-              udp_options:
-        {% if rule.udp_options.destination_port_range is defined %}
-                destination_port_range:
-                    min: {{ rule.udp_options.destination_port_range.min }}
-                    max: {{ rule.udp_options.destination_port_range.max }}
-        {% endif %}
-        {% if rule.udp_options.source_port_range is defined %}
-                source_port_range:
-                    min: {{ rule.udp_options.source_port_range.min }}
-                    max: {{ rule.udp_options.source_port_range.max }}
-        {% endif %}
-    {% endif %}
-    {% if rule.icmp_options is defined %}
-              icmp_options:
-                type: {{ rule.icmp_options.type }}
-        {% if rule.icmp_options.code is defined %}
-                code: {{ rule.icmp_options.code }}
-        {% endif %}
-    {% endif %}
-{% endfor %}
         # Optional
         display_name: "{{ display_name }}"
 {% if defined_tags is defined %}
@@ -101,5 +18,69 @@
       register: {{ resource_name }}
 
     - set_fact:
-        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.security_list.id {{ '}}' }}"
-        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.security_list.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.network_security_group.id {{ '}}' }}"
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.network_security_group.id {{ '}}' }}"
+
+
+
+# ------ Create Network Security Group
+    - name: Create Network Security Group Rule {{ output_name }}Rules
+      oci_security_rule_actions:
+        region: "{{ region }}"
+        state: "present"
+        action: add_network_security_group_security_rules
+        # Required
+        network_security_group_id: "{{ resource_name }}_id"
+        security_rules:
+{% for rule in security_rules %}
+        - description: "{{ rule.description }}"
+          direction: "{{ rule.direction }}"
+    {% if rule.destination is defined %}
+          destination: "{{ rule.destination }}"
+    {% endif %}
+    {% if rule.destination_type is defined %}
+          destination_type: "{{ rule.destination_type }}"
+    {% endif %}
+    {% if rule.source is defined %}
+          source: "{{ rule.source }}"
+    {% endif %}
+    {% if rule.source_type is defined %}
+          source_type: "{{ rule.source_type }}"
+    {% endif %}
+          protocol: "{{ rule.protocol }}"
+    {% if rule.tcp_options is defined %}
+          tcp_options:
+        {% if rule.tcp_options.destination_port_range is defined %}
+            destination_port_range:
+                min: {{ rule.tcp_options.destination_port_range.min }}
+                max: {{ rule.tcp_options.destination_port_range.max }}
+        {% endif %}
+        {% if rule.tcp_options.source_port_range is defined %}
+            source_port_range:
+                min: {{ rule.tcp_options.source_port_range.min }}
+                max: {{ rule.tcp_options.source_port_range.max }}
+        {% endif %}
+    {% endif %}
+    {% if rule.udp_options is defined %}
+          udp_options:
+        {% if rule.udp_options.destination_port_range is defined %}
+            destination_port_range:
+                min: {{ rule.udp_options.destination_port_range.min }}
+                max: {{ rule.udp_options.destination_port_range.max }}
+        {% endif %}
+        {% if rule.udp_options.source_port_range is defined %}
+            source_port_range:
+                min: {{ rule.udp_options.source_port_range.min }}
+                max: {{ rule.udp_options.source_port_range.max }}
+        {% endif %}
+    {% endif %}
+    {% if rule.icmp_options is defined %}
+          icmp_options:
+            type: {{ rule.icmp_options.type }}
+        {% if rule.icmp_options.code is defined %}
+            code: {{ rule.icmp_options.code }}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+      register: {{ resource_name }}Rules
+

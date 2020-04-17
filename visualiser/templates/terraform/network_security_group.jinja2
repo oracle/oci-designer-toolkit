@@ -58,8 +58,10 @@ resource "oci_core_network_security_group_security_rule" "{{ resource_name }}_Ru
     {% if rule.udp_options is defined %}
         udp_options {
         {% if rule.udp_options.destination_port_range is defined %}
+            destination_port_range {
             min = {{ rule.udp_options.destination_port_range.min }}
             max = {{ rule.udp_options.destination_port_range.max }}
+            }
         {% endif %}
         {% if rule.udp_options.source_port_range is defined %}
             source_port_range {
