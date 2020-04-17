@@ -4,32 +4,22 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 
-{% block title_block %}Security List{% endblock %}
+{% block title_block %}Network Security Group{% endblock %}
 
 {% block required_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="virtual_cloud_network" class="okit-property-value"></label></div></div>
     <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
 {% endblock %}
 
 {% block optional_properties_table_block %}{% endblock %}
 
 {% block optional_properties_block %}
-    <details class="security-rules ingress-rules" open="open">
-        <summary>Ingress Rules</summary>
-        <div id="ingress_rules_table" class="table okit-table okit-properties-table okit-dynamic-table">
+    <details class="security-rules security-rules" open="open">
+        <summary>Security Rules</summary>
+        <div id="security_rules_table" class="table okit-table okit-properties-table okit-dynamic-table">
             <div class="thead">
-                <div class="tr"><div class="th"></div><div class="th"><button type="button" id="add_ingress_rule" class="okit-add-button">+</button></div></div>
+                <div class="tr"><div class="th"></div><div class="th"><button type="button" id="add_security_rule" class="okit-add-button">+</button></div></div>
             </div>
-            <div class="tbody" id="ingress_rules_table_body"></div>
-        </div>
-    </details>
-    <details class="security-rules egress-rules" open="open">
-        <summary>Egress Rules</summary>
-        <div id="egress_rules_table" class="table okit-table okit-properties-table okit-dynamic-table">
-            <div class="thead">
-                <div class="tr"><div class="th"></div><div class="th"><button type="button" id="add_egress_rule" class="okit-add-button">+</button></div></div>
-            </div>
-            <div class="tbody" id="egress_rules_table_body"></div>
+            <div class="tbody" id="security_rules_table_body"></div>
         </div>
     </details>
 {% endblock %}

@@ -357,6 +357,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         sub_query_request.vcn_id = id;
         InternetGateway.query(sub_query_request, region);
         NATGateway.query(sub_query_request, region);
+        NetworkSecurityGroup.query(sub_query_request, region);
         ServiceGateway.query(sub_query_request, region);
         LocalPeeringGateway.query(sub_query_request, region);
         RouteTable.query(sub_query_request, region);

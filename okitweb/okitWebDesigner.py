@@ -347,6 +347,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing NAT Gateways')
         oci_nat_gateways = OCINATGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
+    elif artifact == 'NetworkSecurityGroup':
+        logger.info('---- Processing Network Security Groups')
+        oci_network_security_groups = OCINetworkSecurityGroups(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_network_security_groups.list(filter=query_json.get('network_security_group_filter', None))
     elif artifact == 'ObjectStorageBucket':
         logger.info('---- Processing Object Storage Buckets')
         oci_object_storage_buckets = OCIObjectStorageBuckets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])

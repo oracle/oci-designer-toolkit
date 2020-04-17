@@ -47,6 +47,7 @@ class OCINetworkSecurityGroups(OCIVirtualNetworkConnection):
             # Build List of NetworkSecurityGroup Objects
             self.network_security_groups_obj = []
             for network_security_group in self.network_security_groups_json:
+                network_security_group['security_rules'] = self.toJson(oci.pagination.list_call_get_all_results(self.client.list_network_security_group_security_rules, network_security_group_id=network_security_group['id']).data)
                 self.network_security_groups_obj.append(OCINetworkSecurityGroup(self.config, self.configfile, self.profile, network_security_group))
         else:
             logger.warn('Virtual Cloud Network Id has not been specified.')

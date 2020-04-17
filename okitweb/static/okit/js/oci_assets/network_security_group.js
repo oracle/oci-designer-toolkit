@@ -20,8 +20,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         this.display_name = this.generateDefaultName(okitjson.network_security_groups.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
-        this.egress_security_rules = [];
-        this.ingress_security_rules = [];
+        this.security_rules = [];
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -112,19 +111,6 @@ class NetworkSecurityGroup extends OkitArtifact {
         return {width: icon_width, height:icon_height};
     }
 
-    isAttached() {
-        // Check if this is attached but exclude when parent is the attachment type.
-        if (this.getParent().getArtifactReference() !== Subnet.getArtifactReference()) {
-            for (let subnet of this.getOkitJson().subnets) {
-                if (subnet.network_security_group_ids.includes(this.id)) {
-                    console.info(this.display_name + ' attached to subnet '+ subnet.display_name);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 
     /*
     ** Property Sheet Load function
@@ -137,79 +123,47 @@ class NetworkSecurityGroup extends OkitArtifact {
             // Load Properties
             loadPropertiesSheet(me);
             // Egress Rules
-            me.loadEgressRules();
-            // Ingress Rules
-            me.loadIngressRules();
+            me.loadSecurityRules();
             // Add Handler to Add Button
-            $(jqId('add_egress_rule')).on('click', () => {me.addEgressRule();});
-            $(jqId('add_ingress_rule')).on('click', () => {me.addIngressRule();});
+            $(jqId('add_security_rule')).on('click', () => {me.addSecurityRule();});
         });
     }
 
-    loadEgressRules() {
+    loadSecurityRules() {
         // Empty Existing Rules
-        $(jqId('egress_rules_table_body')).empty();
+        $(jqId('security_rules_table_body')).empty();
         // Egress Rules
         let rule_num = 1;
-        for (let security_rule of this.egress_security_rules) {
-            this.addSecurityRuleHtml(security_rule, rule_num, 'egress');
+        for (let security_rule of this.security_rules) {
+            this.addSecurityRuleHtml(security_rule, rule_num);
             rule_num += 1;
         }
     }
 
-    loadIngressRules() {
-        // Empty Existing Rules
-        $(jqId('ingress_rules_table_body')).empty();
-        // Ingress Rules
-        let rule_num = 1;
-        for (let security_rule of this.ingress_security_rules) {
-            this.addSecurityRuleHtml(security_rule, rule_num, 'ingress');
-            rule_num += 1;
-        }
-    }
-
-    addEgressRule() {
-        let new_rule = { "protocol": "all", "is_stateless": false, description: "", destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0"};
-        this.egress_security_rules.push(new_rule);
-        this.loadEgressRules();
+    addSecurityRule() {
+        let new_rule = {direction: "INGRESS", protocol: "all", is_stateless: false, description: "",
+            source_type: "CIDR_BLOCK", source: "0.0.0.0/0",
+            destination_type: "CIDR_BLOCK", destination: "0.0.0.0/0"};
+        this.security_rules.push(new_rule);
+        this.loadSecurityRules();
         displayOkitJson();
     }
 
-    addIngressRule() {
-        let new_rule = { "protocol": "all", "is_stateless": false, description: "", source_type: "CIDR_BLOCK", source: "0.0.0.0/0"};
-        this.ingress_security_rules.push(new_rule);
-        this.loadIngressRules();
+    deleteSecurityRule(rule_num) {
+        this.security_rules.splice(rule_num, 1);
+        this.loadSecurityRules();
         displayOkitJson();
     }
 
-    deleteEgressRule(rule_num) {
-        this.egress_security_rules.splice(rule_num, 1);
-        this.loadEgressRules();
-        displayOkitJson();
-    }
-
-    deleteIngressRule(rule_num) {
-        this.ingress_security_rules.splice(rule_num, 1);
-        this.loadIngressRules();
-        displayOkitJson();
-    }
-
-    addSecurityRuleHtml(access_rule, rule_num, access_type) {
+    addSecurityRuleHtml(access_rule, rule_num) {
         let me = this;
         // Default to ingress rules
-        let rules_table_body = d3.select('#ingress_rules_table_body');
-        let source_dest = 'source';
-        let source_dest_title = 'Source';
-        if (access_type === 'egress') {
-            rules_table_body = d3.select('#egress_rules_table_body');
-            source_dest = 'destination';
-            source_dest_title = 'Destination';
-        }
+        let rules_table_body = d3.select('#security_rules_table_body');
         let row = rules_table_body.append('div').attr('class', 'tr');
         let cell = row.append('div').attr('class', 'td')
             .attr("id", "rule_" + rule_num);
         let rule_table = cell.append('div').attr('class', 'table okit-table okit-properties-table')
-            .attr("id", access_type + "_rule_table_" + rule_num);
+            .attr("id", "rule_table_" + rule_num);
         // First Row with Delete Button
         let rule_cell = row.append('div').attr('class', 'td');
         rule_cell.append('button')
@@ -217,68 +171,139 @@ class NetworkSecurityGroup extends OkitArtifact {
             .attr("class", "okit-delete-button")
             .text("X")
             .on('click', function() {
-                if (access_type === 'egress') {
-                    me.deleteEgressRule(rule_num - 1);
-                    me.loadEgressRules();
+                me.deleteSecurityRule(rule_num - 1);
+                me.loadSecurityRules();
+                displayOkitJson();
+            });
+        // Direction
+        let rule_row = rule_table.append('div').attr('class', 'tr');
+        rule_row.append('div').attr('class', 'td')
+            .text("Direction");
+        rule_cell = rule_row.append('div').attr('class', 'td');
+        let select = rule_cell.append('select')
+            .attr("class", "property-value")
+            .attr("id", "direction" + rule_num)
+            .on("change", function() {
+                access_rule.direction = this.options[this.selectedIndex].value;
+                $(jqId('source_type_tr' + rule_num)).addClass('collapsed');
+                $(jqId('source_tr' + rule_num)).addClass('collapsed');
+                $(jqId('destination_type_tr' + rule_num)).addClass('collapsed');
+                $(jqId('destination_tr' + rule_num)).addClass('collapsed');
+                if (access_rule.direction === 'INGRESS') {
+                    $(jqId('source_type_tr' + rule_num)).removeClass('collapsed');
+                    $(jqId('source_tr' + rule_num)).removeClass('collapsed');
                 } else {
-                    me.deleteIngressRule(rule_num - 1);
-                    me.loadIngressRules();
+                    $(jqId('destination_type_tr' + rule_num)).removeClass('collapsed');
+                    $(jqId('destination_tr' + rule_num)).removeClass('collapsed');
                 }
                 displayOkitJson();
             });
-        // Destination / Source Type
-        let rule_row = rule_table.append('div').attr('class', 'tr');
-        rule_row.append('div').attr('class', 'td')
-            .text(source_dest_title + " Type");
-        rule_cell = rule_row.append('div').attr('class', 'td');
-        let type_select = rule_cell.append('select')
-            .attr("class", "property-value")
-            .attr("id", source_dest + "_type" + rule_num + access_type)
-            .on("change", function() {
-                access_rule[source_dest + '_type'] = this.options[this.selectedIndex].value;
-                displayOkitJson();
-            });
-        type_select.append('option')
-            .attr("value", 'CIDR_BLOCK')
-            .text('CIDR');
-        type_select.append('option')
-            .attr("value", 'SERVICE_CIDR_BLOCK')
-            .text('Service');
-        type_select.node().value = access_rule[source_dest + '_type'];
+        select.append('option')
+            .attr("value", 'INGRESS')
+            .text('Ingress');
+        select.append('option')
+            .attr("value", 'EGRESS')
+            .text('Egress');
+        select.node().value = access_rule.direction;
         // Stateful
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td');
         rule_cell = rule_row.append('div').attr('class', 'td');
         rule_cell.append('input')
             .attr("type", "checkbox")
-            .attr("id", "is_stateless" + rule_num + access_type)
+            .attr("id", "is_stateless" + rule_num)
             .attr("name", "is_stateless")
             .on("change", function() {
-                access_rule['is_stateless'] = this.checked;
+                access_rule.is_stateless = this.checked;
                 console.info('Changed is_stateless: ' + this.checked);
                 displayOkitJson();
             });
-        $(jqId("is_stateless" + rule_num + access_type)).prop('checked', access_rule.is_stateless);
+        $(jqId("is_stateless" + rule_num)).prop('checked', access_rule.is_stateless);
         rule_cell.append('label')
-            .attr('for', "is_stateless" + rule_num + access_type)
+            .attr('for', "is_stateless" + rule_num)
             .attr("class", "property-value")
             .text('Stateless');
-        // Destination / Source
-        rule_row = rule_table.append('div').attr('class', 'tr');
+
+        // Source Type
+        rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr("id", 'source_type_tr' + rule_num);
         rule_row.append('div').attr('class', 'td')
-            .text(source_dest_title);
+            .text("Source Type");
+        rule_cell = rule_row.append('div').attr('class', 'td');
+        select = rule_cell.append('select')
+            .attr("class", "property-value")
+            .attr("id", "source_type" + rule_num)
+            .on("change", function() {
+                access_rule.source_type = this.options[this.selectedIndex].value;
+                displayOkitJson();
+            });
+        select.append('option')
+            .attr("value", 'CIDR_BLOCK')
+            .text('CIDR');
+        select.append('option')
+            .attr("value", 'SERVICE_CIDR_BLOCK')
+            .text('Service');
+        select.node().value = access_rule.source_type;
+        // Source
+        rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr("id", 'source_tr' + rule_num);
+        rule_row.append('div').attr('class', 'td')
+            .text('Source');
         rule_cell = rule_row.append('div').attr('class', 'td');
         rule_cell.append('input')
             .attr("type", "text")
             .attr("class", "property-value")
-            .attr("id", source_dest + rule_num + access_type)
-            .attr("name", source_dest)
-            .attr("value", access_rule[source_dest])
+            .attr("id", 'source' + rule_num)
+            .attr("name", 'source' + rule_num)
+            .attr("value", access_rule.source)
             .on("change", function() {
-                access_rule[source_dest] = this.value;
+                access_rule.source = this.value;
                 console.info('Changed destination: ' + this.value);
                 displayOkitJson();
             });
+
+        // Destination Type
+        rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr("id", 'destination_type_tr' + rule_num);
+        rule_row.append('div').attr('class', 'td')
+            .text("Destination Type");
+        rule_cell = rule_row.append('div').attr('class', 'td');
+        select = rule_cell.append('select')
+            .attr("class", "property-value")
+            .attr("id", "destination_type" + rule_num)
+            .on("change", function() {
+                access_rule.destination_type = this.options[this.selectedIndex].value;
+                displayOkitJson();
+            });
+        select.append('option')
+            .attr("value", 'CIDR_BLOCK')
+            .text('CIDR');
+        select.append('option')
+            .attr("value", 'SERVICE_CIDR_BLOCK')
+            .text('Service');
+        select.node().value = access_rule.destination_type;
+        // Destination
+        rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr("id", 'destination_tr' + rule_num);
+        rule_row.append('div').attr('class', 'td')
+            .text('Destination');
+        rule_cell = rule_row.append('div').attr('class', 'td');
+        rule_cell.append('input')
+            .attr("type", "text")
+            .attr("class", "property-value")
+            .attr("id", 'destination' + rule_num)
+            .attr("name", 'destination' + rule_num)
+            .attr("value", access_rule.destination)
+            .on("change", function() {
+                access_rule.destination = this.value;
+                console.info('Changed destination: ' + this.value);
+                displayOkitJson();
+            });
+
         // Add Protocol
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td')
@@ -286,33 +311,33 @@ class NetworkSecurityGroup extends OkitArtifact {
         rule_cell = rule_row.append('div').attr('class', 'td');
         let protocol_select = rule_cell.append('select')
             .attr("class", "property-value")
-            .attr("id", "protocol" + rule_num + access_type)
+            .attr("id", "protocol" + rule_num)
             .on("change", function() {
                 access_rule['protocol'] = this.options[this.selectedIndex].value;
                 console.info('Changed network_entity_id ' + this.selectedIndex);
                 // Hide
                 // IMCP
-                $(jqId('imcp_code_' + rule_num + access_type)).addClass('collapsed');
-                $(jqId('imcp_type_' + rule_num + access_type)).addClass('collapsed');
+                $(jqId('imcp_code_' + rule_num)).addClass('collapsed');
+                $(jqId('imcp_type_' + rule_num)).addClass('collapsed');
                 // TCP
-                $(jqId('tcp_source_port_' + rule_num + access_type)).addClass('collapsed');
-                $(jqId('tcp_destination_port_' + rule_num + access_type)).addClass('collapsed');
+                $(jqId('tcp_source_port_' + rule_num)).addClass('collapsed');
+                $(jqId('tcp_destination_port_' + rule_num)).addClass('collapsed');
                 // UDP
-                $(jqId('udp_source_port_' + rule_num + access_type)).addClass('collapsed');
-                $(jqId('udp_destination_port_' + rule_num + access_type)).addClass('collapsed');
+                $(jqId('udp_source_port_' + rule_num)).addClass('collapsed');
+                $(jqId('udp_destination_port_' + rule_num)).addClass('collapsed');
                 // Show
                 if (access_rule.protocol == '1') {
                     // IMCP
-                    $(jqId('imcp_code_' + rule_num + access_type)).removeClass('collapsed');
-                    $(jqId('imcp_type_' + rule_num + access_type)).removeClass('collapsed');
+                    $(jqId('imcp_code_' + rule_num)).removeClass('collapsed');
+                    $(jqId('imcp_type_' + rule_num)).removeClass('collapsed');
                 } else if (access_rule.protocol == '6') {
                     // TCP
-                    $(jqId('tcp_source_port_' + rule_num + access_type)).removeClass('collapsed');
-                    $(jqId('tcp_destination_port_' + rule_num + access_type)).removeClass('collapsed');
+                    $(jqId('tcp_source_port_' + rule_num)).removeClass('collapsed');
+                    $(jqId('tcp_destination_port_' + rule_num)).removeClass('collapsed');
                 } else if (access_rule.protocol == '17') {
                     // UDP
-                    $(jqId('udp_source_port_' + rule_num + access_type)).removeClass('collapsed');
-                    $(jqId('udp_destination_port_' + rule_num + access_type)).removeClass('collapsed');
+                    $(jqId('udp_source_port_' + rule_num)).removeClass('collapsed');
+                    $(jqId('udp_destination_port_' + rule_num)).removeClass('collapsed');
                 }
                 displayOkitJson();
             });
@@ -337,11 +362,11 @@ class NetworkSecurityGroup extends OkitArtifact {
             access_rule['protocol'] = protocol_select.node().options[protocol_select.node().selectedIndex].value;
         }
         // TCP Options
-        this.addPortRangeHtml('tcp', access_rule, rule_num, access_type, rule_table);
+        this.addPortRangeHtml('tcp', access_rule, rule_num, rule_table);
         // UDP Options
-        this.addPortRangeHtml('udp', access_rule, rule_num, access_type, rule_table);
+        this.addPortRangeHtml('udp', access_rule, rule_num, rule_table);
         // IMCP Options
-        this.addImcpHtml(access_rule, rule_num, access_type, rule_table);
+        this.addImcpHtml(access_rule, rule_num, rule_table);
         // Description
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td')
@@ -350,7 +375,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         rule_cell.append('input')
             .attr("type", "text")
             .attr("class", "property-value")
-            .attr("id", "description" + rule_num + access_type)
+            .attr("id", "description" + rule_num)
             .attr("name", "description")
             .attr("value", access_rule['description'])
             .on("change", function() {
@@ -358,23 +383,31 @@ class NetworkSecurityGroup extends OkitArtifact {
                 console.info('Changed description: ' + this.value);
                 displayOkitJson();
             });
+        // Show Appropriate Source/Destination Rows
+        if (access_rule.direction === 'INGRESS') {
+            $(jqId('source_type_tr' + rule_num)).removeClass('collapsed');
+            $(jqId('source_tr' + rule_num)).removeClass('collapsed');
+        } else {
+            $(jqId('destination_type_tr' + rule_num)).removeClass('collapsed');
+            $(jqId('destination_tr' + rule_num)).removeClass('collapsed');
+        }
         // Show Appropriate Protocol rows
         if (access_rule.protocol == '1') {
             // IMCP
-            $(jqId('imcp_code_' + rule_num + access_type)).removeClass('collapsed');
-            $(jqId('imcp_type_' + rule_num + access_type)).removeClass('collapsed');
+            $(jqId('imcp_code_' + rule_num)).removeClass('collapsed');
+            $(jqId('imcp_type_' + rule_num)).removeClass('collapsed');
         } else if (access_rule.protocol == '6') {
             // TCP
-            $(jqId('tcp_source_port_' + rule_num + access_type)).removeClass('collapsed');
-            $(jqId('tcp_destination_port_' + rule_num + access_type)).removeClass('collapsed');
+            $(jqId('tcp_source_port_' + rule_num)).removeClass('collapsed');
+            $(jqId('tcp_destination_port_' + rule_num)).removeClass('collapsed');
         } else if (access_rule.protocol == '17') {
             // UDP
-            $(jqId('udp_source_port_' + rule_num + access_type)).removeClass('collapsed');
-            $(jqId('udp_destination_port_' + rule_num + access_type)).removeClass('collapsed');
+            $(jqId('udp_source_port_' + rule_num)).removeClass('collapsed');
+            $(jqId('udp_destination_port_' + rule_num)).removeClass('collapsed');
         }
     }
 
-    addPortRangeHtml(type, access_rule, rule_num, access_type, rule_table) {
+    addPortRangeHtml(type, access_rule, rule_num, rule_table) {
         let options = type + '_options';
         // Check if values are null and if so define empty
         if (access_rule[options] == null) {
@@ -390,7 +423,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         // Source Port
         let rule_row = rule_table.append('div')
             .attr('class', 'tr collapsed')
-            .attr('id', type + '_source_port_' + rule_num + access_type);
+            .attr('id', type + '_source_port_' + rule_num);
         rule_row.append('div').attr('class', 'td')
             .text("Source Port Range");
         let rule_cell = rule_row.append('div').attr('class', 'td property-min-max-range');
@@ -399,7 +432,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         cell_div.append('input')
             .attr("type", "text")
             .attr("class", "property-value property-min-max")
-            .attr("id", type + '_source_port_min_' + rule_num + access_type)
+            .attr("id", type + '_source_port_min_' + rule_num)
             .attr("name", "source_port_min")
             .attr("value", access_rule[options].source_port_range.min)
             .on("change", function() {
@@ -412,7 +445,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         cell_div.append('input')
             .attr("type", "text")
             .attr("class", "property-value property-min-max")
-            .attr("id", type + '_source_port_max_' + rule_num + access_type)
+            .attr("id", type + '_source_port_max_' + rule_num)
             .attr("name", "source_port_max")
             .attr("value", access_rule[options].source_port_range.max)
             .on("change", function() {
@@ -423,7 +456,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         // Destination Port
         rule_row = rule_table.append('div')
             .attr('class', 'tr collapsed')
-            .attr('id', type + '_destination_port_' + rule_num + access_type);
+            .attr('id', type + '_destination_port_' + rule_num);
         rule_row.append('div').attr('class', 'td')
             .text("Destination Port Range");
         rule_cell = rule_row.append('div').attr('class', 'td property-min-max-range');
@@ -432,7 +465,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         cell_div.append('input')
             .attr("type", "text")
             .attr("class", "property-value property-min-max")
-            .attr("id", type + '_destination_port_min_' + rule_num + access_type)
+            .attr("id", type + '_destination_port_min_' + rule_num)
             .attr("name", "destination_port_min")
             .attr("value", access_rule[options].destination_port_range.min)
             .on("change", function() {
@@ -445,7 +478,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         cell_div.append('input')
             .attr("type", "text")
             .attr("class", "property-value property-min-max")
-            .attr("id", type + '_destination_port_max_' + rule_num + access_type)
+            .attr("id", type + '_destination_port_max_' + rule_num)
             .attr("name", "destination_port_max")
             .attr("value", access_rule[options].destination_port_range.max)
             .on("change", function() {
@@ -455,7 +488,7 @@ class NetworkSecurityGroup extends OkitArtifact {
             });
     }
 
-    addImcpHtml(access_rule, rule_num, access_type, rule_table) {
+    addImcpHtml(access_rule, rule_num, rule_table) {
         // Check if values are null and if so define empty
         if (access_rule.icmp_options == null) {
             access_rule.icmp_options = {code: '', type: ''};
@@ -463,13 +496,13 @@ class NetworkSecurityGroup extends OkitArtifact {
         // Code
         let rule_row = rule_table.append('div')
             .attr('class', 'tr collapsed')
-            .attr('id', 'imcp_code_' + rule_num + access_type);
+            .attr('id', 'imcp_code_' + rule_num);
         rule_row.append('div').attr('class', 'td')
             .text('Code');
         let rule_cell = rule_row.append('div').attr('class', 'td');
         let code_select = rule_cell.append('select')
             .attr("class", "property-value")
-            .attr("id", "code" + rule_num + access_type)
+            .attr("id", "code" + rule_num)
             .on("change", function() {
                 access_rule.icmp_options.code = this.options[this.selectedIndex].value;
                 console.info('Changed IMCP Code ' + this.selectedIndex);
@@ -487,13 +520,13 @@ class NetworkSecurityGroup extends OkitArtifact {
         // Type
         rule_row = rule_table.append('div')
             .attr('class', 'tr collapsed')
-            .attr('id', 'imcp_type_' + rule_num + access_type);
+            .attr('id', 'imcp_type_' + rule_num);
         rule_row.append('div').attr('class', 'td')
             .text('Type');
         rule_cell = rule_row.append('div').attr('class', 'td');
         let type_select = rule_cell.append('select')
             .attr("class", "property-value")
-            .attr("id", "type" + rule_num + access_type)
+            .attr("id", "type" + rule_num)
             .on("change", function() {
                 access_rule.icmp_options.type = this.options[this.selectedIndex].value;
                 console.info('Changed IMCP Type ' + this.selectedIndex);
@@ -511,7 +544,7 @@ class NetworkSecurityGroup extends OkitArtifact {
     }
 
     getNamePrefix() {
-        return super.getNamePrefix() + 'sl';
+        return super.getNamePrefix() + 'nsg';
     }
 
     /*
@@ -559,71 +592,6 @@ class NetworkSecurityGroup extends OkitArtifact {
     /*
     ** Artifact Specific Functions
      */
-    addDefaultNetworkSecurityGroupRules(vcn_cidr_block='10.0.0.0/16') {
-        console.info('Adding Default Network Security Group Rules for ' + this.id);
-        // Add Egress Rule
-        this.egress_security_rules.push(
-            {
-                "destination": "0.0.0.0/0",
-                "destination_type": "CIDR_BLOCK",
-                "icmp_options": null,
-                "is_stateless": false,
-                "protocol": "all",
-                "tcp_options": null,
-                "udp_options": null,
-                "description": ""
-            }
-        );
-        // Ingress Rules
-        this.ingress_security_rules.push(
-            {
-                "icmp_options": null,
-                "is_stateless": false,
-                "protocol": "6",
-                "source": "0.0.0.0/0",
-                "source_type": "CIDR_BLOCK",
-                "tcp_options": {
-                    "destination_port_range": {
-                        "max": 22,
-                        "min": 22
-                    },
-                    "source_port_range": null
-                },
-                "udp_options": null,
-                "description": ""
-            }
-        );
-        this.ingress_security_rules.push(
-            {
-                "icmp_options": {
-                    "code": 4,
-                    "type": 3
-                },
-                "is_stateless": false,
-                "protocol": "1",
-                "source": "0.0.0.0/0",
-                "source_type": "CIDR_BLOCK",
-                "tcp_options": null,
-                "udp_options": null,
-                "description": ""
-            }
-        );
-        this.ingress_security_rules.push(
-            {
-                "icmp_options": {
-                    "code": null,
-                    "type": 3
-                },
-                "is_stateless": false,
-                "protocol": "1",
-                "source": vcn_cidr_block,
-                "source_type": "CIDR_BLOCK",
-                "tcp_options": null,
-                "udp_options": null,
-                "description": ""
-            }
-        );
-    }
 }
 
 $(document).ready(function() {

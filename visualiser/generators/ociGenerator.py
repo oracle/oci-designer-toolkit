@@ -149,6 +149,9 @@ class OCIGenerator(object):
         # -- Dynamic Routing Gateways
         for dynamic_routing_gateway in self.visualiser_json.get('dynamic_routing_gateways', []):
             self.renderDynamicRoutingGateway(dynamic_routing_gateway)
+        # -- Network Security Group
+        for network_security_group in self.visualiser_json.get('network_security_groups', []):
+            self.renderNetworkSecurityGroup(network_security_group)
         # -- Security Lists
         for security_list in self.visualiser_json.get('security_lists', []):
             self.renderSecurityList(security_list)
@@ -674,6 +677,87 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("nat_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderNetworkSecurityGroup(self, network_security_group):
+        # Read Data
+        standardisedName = self.standardiseResourceName(network_security_group['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = network_security_group['display_name']
+        # Process Security List Data
+        logger.info('Processing Network Security Group Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[network_security_group['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[network_security_group['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = network_security_group["display_name"]
+        # --- Optional
+        # ---- Security Rules
+        rule_number = 1
+        jinja2_security_rules = []
+        for rule in network_security_group.get('security_rules', []):
+            # ------ Protocol
+            variableName = '{0:s}_security_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = rule["protocol"]
+            jinja2_security_rule = {
+                "protocol": self.formatJinja2Variable(variableName)
+            }
+            # ------ TCP Options (Protocol 6)
+            if rule["protocol"] == '6' and 'tcp_options' in rule and rule["tcp_options"] is not None:
+                tcp_options = self.renderSecurityListRuleOptions(rule, 'tcp_options', standardisedName, rule_number, 'security')
+                jinja2_security_rule["tcp_options"] = tcp_options
+            # ------ UDP Options (Protocol 17)
+            if rule["protocol"] == '17' and 'udp_options' in rule and rule["udp_options"] is not None:
+                udp_options = self.renderSecurityListRuleOptions(rule, 'udp_options', standardisedName, rule_number, 'security')
+                jinja2_security_rule["udp_options"] = udp_options
+            # ------ ICMP Options (Protocol 1)
+            if rule["protocol"] == '1' and 'icmp_options' in rule and rule["icmp_options"] is not None:
+                icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'security')
+                jinja2_security_rule["icmp_options"] = icmp_options
+            # ------ Direction
+            variableName = '{0:s}_security_rule_{1:02d}_direction'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = rule["direction"]
+            jinja2_security_rule["direction"] = self.formatJinja2Variable(variableName)
+            if rule["direction"] == 'INGRESS':
+                # ------ Source
+                variableName = '{0:s}_security_rule_{1:02d}_source'.format(standardisedName, rule_number)
+                self.run_variables[variableName] = rule["source"]
+                jinja2_security_rule["source"] = self.formatJinja2Variable(variableName)
+                # ------ Source Type
+                variableName = '{0:s}_security_rule_{1:02d}_source_type'.format(standardisedName, rule_number)
+                self.run_variables[variableName] = rule["source_type"]
+                jinja2_security_rule["source_type"] = self.formatJinja2Variable(variableName)
+            else:
+                # ------ Destination
+                variableName = '{0:s}_security_rule_{1:02d}_destination'.format(standardisedName, rule_number)
+                self.run_variables[variableName] = rule["destination"]
+                jinja2_security_rule["destination"] = self.formatJinja2Variable(variableName)
+                # ------ Destination Type
+                variableName = '{0:s}_security_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
+                self.run_variables[variableName] = rule["destination_type"]
+                jinja2_security_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            # ------ Description
+            variableName = '{0:s}_security_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = rule.get("description", "Egress Rule {0:02d}".format(rule_number))
+            jinja2_security_rule["description"] = self.formatJinja2Variable(variableName)
+            # Add to Egress Rules used for Jinja template
+            jinja2_security_rules.append(jinja2_security_rule)
+            # Increment rule number
+            rule_number += 1
+        self.jinja2_variables["security_rules"] = jinja2_security_rules
+        # ---- Tags
+        self.renderTags(network_security_group)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("network_security_group.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
