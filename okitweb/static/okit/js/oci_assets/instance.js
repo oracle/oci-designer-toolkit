@@ -274,18 +274,32 @@ class Instance extends OkitArtifact {
             }
             // Build Primary Vnic / Subnet List
             let subnet_select = $(jqId('subnet_id'));
+            subnet_select.append($('<option>').attr('value', '').text(''));
             for (let subnet of this.getOkitJson().subnets) {
                 let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
                 let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
                 let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
                 subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
             }
+            // Build Network Security Groups
+            let nsg_select = $(jqId('nsg_ids'));
+            this.loadNetworkSecurityGroups(nsg_select, this.primary_vnic.subnet_id);
             // Secondary Vnics
             this.loadSecondaryVnics();
             $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
             // Load Properties
             loadPropertiesSheet(this);
         });
+    }
+
+    loadNetworkSecurityGroups(select, subnet_id) {
+        $(select).empty();
+        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
+        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+            if (networkSecurityGroup.vcn_id === vcn.id) {
+                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+            }
+        }
     }
 
     loadSecondaryVnics() {
@@ -339,6 +353,7 @@ class Instance extends OkitArtifact {
                 vnic.subnet_id = this.options[this.selectedIndex].value;
                 displayOkitJson();
                 redrawSVGCanvas();
+                me.loadNetworkSecurityGroups($(jqId("nsg_ids" + idx)), vnic.subnet_id);
             });
         for (let subnet of this.getOkitJson().subnets) {
             let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
@@ -411,9 +426,7 @@ class Instance extends OkitArtifact {
                 vnic.nsg_ids = $(jqId("nsg_ids" + idx)).val();
                 displayOkitJson();
             });
-        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-            select.append('option').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name);
-        }
+        this.loadNetworkSecurityGroups(select, vnic.subnet_id);
         $(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
     }
 
