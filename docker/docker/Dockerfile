@@ -49,7 +49,7 @@ RUN yum update -y ; \
     cd ~ \
 # Install required python modules
  && cd /tmp ; \
-    pip3 install \
+    pip3 install --no-cache-dir \
         click==7.0 \
         flask==1.1.1 \
         gunicorn==20.0.4 \
@@ -59,6 +59,7 @@ RUN yum update -y ; \
         oci==2.6.0 \
         pyyaml==5.2 \
         werkzeug==0.16.0 \
+        cryptography==2.8 \
 # Set-up env
  && echo ''                                                                          >> /etc/bashrc ; \
     echo "alias lh='ls -lash' "                                                      >> /etc/bashrc ; \
