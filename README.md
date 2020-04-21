@@ -56,7 +56,7 @@ The table below lists a summary of the current support status whilst the details
 | Service Gateway         | Full    | 0.3.0   |
 | **Storage**
 | Block Storage Volume    | Partial | 0.1.0   | [3](#block-storage-volume)
-| File Storage System     | Partial | 0.1.0   | [5](#file-storage-system)
+| File Storage System     | Partial | 0.4.0   | [2](#file-storage-system)
 | Object Storage Bucket   | Partial | 0.1.0   | [3](#object-storage-bucket)
 | **Database**
 | Autonomous Database     | Partial | 0.1.0   | [2](#autonomous-database)
@@ -119,10 +119,7 @@ If you would like to extend OKIT the development process is documented in [OCI K
 - Source Information for creation from backup.
 ##### File Storage System
 - Key Management / Encryption
-- Min / Max Size
-- Anonymous GID/UID
-- Identity Squash
-- Privileged Source Port
+- Multiple Export / Mount Points
 ##### Object Storage Bucket
 - Key Management / Encryption
 - Metadata
@@ -147,8 +144,18 @@ If you would like to extend OKIT the development process is documented in [OCI K
 ### Version 0.4.0 
 **Release Date**: 22nd April 2020
 #### Features
-1. Extended Instance VNIC Support allowing full specification of vnics / secondary vnics with the exception of private IP.
+1. Extended Instance 
+    1. VNIC Support allowing full specification of vnics / secondary vnics with the exception of private IP.
+    2. Network Security Groups
 2. Network Security Groups
+3. Extend File Storage System
+    1. Min / Max Size
+    2. Anonymous GID/UID
+    3. Identity Squash
+    4. Privileged Source Port
+    5. Network Security Groups
+
+
 #### Bug Fixes
 1. Discovery conflict between compartment and subnet attachment. Instance not in the same compartment as there primary vnic were drawn in the compartment of their primary vnic not the correct one.
 2. JSON: network_entity_id value is empty in route_tables.route_rules
