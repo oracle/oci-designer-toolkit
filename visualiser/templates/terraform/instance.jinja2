@@ -26,25 +26,25 @@ resource "oci_core_instance" "{{ resource_name }}" {
     }
     create_vnic_details {
         # Required
-        subnet_id                  = {{ subnet_id }}
+        subnet_id        = {{ subnet_id }}
         # Optional
-        assign_public_ip           = {{ assign_public_ip }}
-        display_name               = {{ display_name_vnic }}
-        hostname_label             = {{ hostname_label }}
+        assign_public_ip = {{ assign_public_ip }}
+        display_name     = {{ display_name_vnic }}
+        hostname_label   = {{ hostname_label }}
 {% if nsg_ids is defined %}
-        nsg_ids                    = {{ nsg_ids }}
+        nsg_ids          = [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 {% if private_ip is defined %}
-        private_ip                 = {{ private_ip }}
+        private_ip       = {{ private_ip }}
 {% endif %}
 {% if skip_source_dest_check is defined %}
-        skip_source_dest_check     = {{ skip_source_dest_check }}
+        skip_source_dest_check = {{ skip_source_dest_check }}
 {% endif %}
 {% if defined_tags is defined %}
-        defined_tags               = {{ defined_tags }}
+        defined_tags     = {{ defined_tags }}
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags              = {{ freeform_tags }}
+        freeform_tags    = {{ freeform_tags }}
 {% endif %}
     }
 #    extended_metadata {
@@ -109,22 +109,22 @@ resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.in
     #Required
     create_vnic_details {
         #Required
-        subnet_id              = {{ vnic.subnet_id }}
+        subnet_id        = {{ vnic.subnet_id }}
         #Optional
-        display_name           = {{ vnic.display_name }}
-        assign_public_ip       = {{ vnic.assign_public_ip }}
+        display_name     = {{ vnic.display_name }}
+        assign_public_ip = {{ vnic.assign_public_ip }}
     {% if defined_tags is defined %}
-        defined_tags           = {{ defined_tags }}
+        defined_tags     = {{ defined_tags }}
     {% endif %}
     {% if freeform_tags is defined %}
-        freeform_tags          = {{ freeform_tags }}
+        freeform_tags    = {{ freeform_tags }}
     {% endif %}
-        hostname_label         = {{ vnic.hostname_label }}
+        hostname_label   = {{ vnic.hostname_label }}
     {% if vnic.nsg_ids is defined %}
-        nsg_ids                = {{ vnic.nsg_ids }}
+        nsg_ids          = [{% for nsg_id in vnic.nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
     {% endif %}
     {% if vnic.private_ip is defined %}
-        private_ip             = {{ vnic.private_ip }}
+        private_ip       = {{ vnic.private_ip }}
     {% endif %}
     {% if vnic.skip_source_dest_check is defined %}
         skip_source_dest_check = {{ vnic.skip_source_dest_check }}

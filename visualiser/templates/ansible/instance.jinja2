@@ -55,7 +55,7 @@
             skip_source_dest_check: "{{ skip_source_dest_check }}"
 {% endif %}
 {% if nsg_ids is defined %}
-            nsg_ids: "{{ nsg_ids }}"
+            nsg_ids: [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
       register: {{ resource_name }}
 
@@ -113,7 +113,7 @@
             skip_source_dest_check: "{{ vnic.skip_source_dest_check }}"
     {% endif %}
     {% if vnic.nsg_ids is defined %}
-            nsg_ids: "{{ vnic.nsg_ids }}"
+            nsg_ids: [{% for nsg_id in vnic.nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
     {% endif %}
 
 {% endfor %}

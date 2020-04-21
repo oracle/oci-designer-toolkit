@@ -385,10 +385,7 @@ class OCIGenerator(object):
         # --- Optional
         # ----- Network Security Groups
         if len(file_storage_system['primary_mount_target']["nsg_ids"]):
-            #variableName = '{0:s}_nsg_ids'.format(standardisedName)
             self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in file_storage_system['primary_mount_target']["nsg_ids"]]
-            #self.jinja2_variables["nsg_ids"] = self.formatJinja2Variable(variableName)
-            #self.run_variables[variableName] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in file_storage_system['primary_mount_target']["nsg_ids"]]
         # ----- Max FS Stat Bytes
         if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_bytes"].strip() != '':
             variableName = '{0:s}_max_fs_stat_bytes'.format(standardisedName)
@@ -480,6 +477,9 @@ class OCIGenerator(object):
         variableName = '{0:s}_primary_vnic_skip_src_dst_check'.format(standardisedName)
         self.jinja2_variables["skip_source_dest_check"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["vnics"][0]["skip_source_dest_check"]
+        # ----- Network Security Groups
+        if len(instance["vnics"][0]["nsg_ids"]):
+            self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in instance["vnics"][0]["nsg_ids"]]
         # ---- Metadata
         # ----- Authorised Public SSH Keys
         variableName = '{0:s}_authorized_keys'.format(standardisedName)
@@ -535,7 +535,9 @@ class OCIGenerator(object):
             variableName = '{0:s}_vnic_attachment_{1:02d}_skip_src_dst_check'.format(standardisedName, attachment_number)
             jinja2_vnic_attachment["skip_source_dest_check"] = self.formatJinja2Variable(variableName)
             self.run_variables[variableName] = vnic["skip_source_dest_check"]
-
+            # ----- Network Security Groups
+            if len(vnic["nsg_ids"]):
+                jinja2_vnic_attachment["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in vnic["nsg_ids"]]
             # Add to Vnic Attachments used for Jinja template
             jinja2_vnic_attachments.append(jinja2_vnic_attachment)
             # Increment attachment number
