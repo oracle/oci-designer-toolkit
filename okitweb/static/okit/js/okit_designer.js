@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Designer Javascript');
@@ -24,54 +24,15 @@ let okitQueryRequestJson = null;
 let dragging_right_drag_bar = false;
 let right_drag_bar_start_x = 0;
 
-/*
-** Setting Cookie Functions
- */
-// TODO: Delete
-/*
-function saveOkitSettings(settings) {
-    console.info('Saving OKIT Settings To Cookie.');
-    if (settings === undefined) {
-        settings = JSON.stringify(okitSettings);
-    }
-    setCookie('okit-settings', settings);
-}
-function readOkitSettings() {
-    let cookie_value = getCookie('okit-settings');
-    if (cookie_value == '') {
-        console.info('OKIT Settings Cookie Was Not Found.');
-        let settings = {
-            is_default_security_list: true,
-            is_default_route_table: true,
-            is_timestamp_files: false,
-            profile: 'DEFAULT',
-            is_always_free: false,
-            is_optional_expanded: true,
-            is_display_grid: true,
-        };
-        cookie_value = JSON.stringify(settings);
-        saveOkitSettings(cookie_value);
-    } else {
-        console.info('OKIT Settings Cookie Found.');
-    }
-    return JSON.parse(cookie_value);
-}
-function loadSettings() {
-    $(jqId(SETTINGS_PANEL)).load("propertysheets/settings.html", function() {
-        console.info('Loading Settings');
-        loadPropertiesSheet(okitSettings);
-        addPropertiesEventListeners(okitSettings, [], true);
-    });
-}
-*/
-
-
 // Automation details
 //let okitSettings = readOkitSettings();
 let okitSettings = new OkitSettings();
 let ociRegions = [];
+let okitOciData = new OkitOCIData();
 
 function resetDesigner() {
+    okitJson = new OkitJson();
+    regionOkitJson = {};
     clearRegionTabBar();
     hideRegionTabBar();
     $(jqId(PROPERTIES_PANEL)).load('propertysheets/empty.html');
@@ -679,21 +640,6 @@ $(document).ready(function() {
     console.info('Added Designer Handlers');
 
     /*
-    ** Drag start for all pallet icons
-     */
-    let palatteicons = document.querySelectorAll('#icons_palette .okit-palette-icon');
-    [].forEach.call(palatteicons, function (palatteicon) {
-        palatteicon.addEventListener('dragstart', handleDragStart, false);
-    });
-    /*
-    ** Drag start for all pallet fragments
-     */
-    let fragmenticons = document.querySelectorAll('#icons_palette .okit-fragment-icon');
-    [].forEach.call(fragmenticons, function (fragmenticon) {
-        fragmenticon.addEventListener('dragstart', handleFragmentDragStart, false);
-    });
-
-    /*
     ** Add Load File Handling
      */
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
@@ -745,8 +691,12 @@ $(document).ready(function() {
             dragging_right_drag_bar = false;
             // Set Width
             $(jqId('designer_right_column')).width(new_width);
-            $(jqId('designer_right_column')).css('min-width', new_width);
-            redrawSVGCanvas();
+            if (new_width > 250) {
+                $(jqId('designer_right_column')).css('min-width', new_width);
+            } else {
+                $(jqId('designer_right_column')).css('min-width', 250);
+            }
+            setTimeout(redrawSVGCanvas, 260);
         }
     });
     /**/

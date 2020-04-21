@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Drag & Drop Javascript');
@@ -23,6 +23,7 @@ let asset_delete_functions = {};
 let asset_query_functions = {};
 let asset_clear_functions = [];
 
+// TODO: Delete
 function addAssetToDropTarget(artifact, title, target_id, compartment_id, target_type) {
     console.info('addAssetToDropTarget - Artifact       : ' + artifact);
     console.info('addAssetToDropTarget - Title          : ' + title);
@@ -68,119 +69,81 @@ function deleteAssetFromSVG(artifact, id) {
 ** Define palette Drag & Drop functions
  */
 
-let asset_drop_targets = {};
-let asset_connect_targets = {};
-let palette_artifact_data = {artifact: ''};
+let palette_drag_artifact = null;
 
-function setDragDropIcon(e) {
-    if (typeof e == 'undefined') {
-        e = d3.event;
+function dragStart(evt, artifact) {
+    //console.groupCollapsed('***** Drag Start - ' + artifact.getArtifactReference());
+    evt.dataTransfer.effectAllowed = 'copy';
+    let palette_artifact_data = {artifact: artifact.getArtifactReference(), title: artifact.getArtifactReference()};
+    let data_string = JSON.stringify(palette_artifact_data);
+    evt.dataTransfer.setData('text/plain', data_string);
+    evt.dataTransfer.setData('any', artifact);
+    palette_drag_artifact = artifact;
+}
+
+function dragEnter(evt) {
+    evt = evt || d3.event;
+    dragEnterOverLeave(evt);
+}
+
+function dragOver(evt) {
+    evt = evt || d3.event;
+    if (evt.preventDefault) {
+        evt.preventDefault(); // Necessary. Allows us to drop.
     }
-    let type = e.target.getAttribute('data-type');
-    let data_string = e.dataTransfer.getData('text/plain');
-    //console.info('Data String : ' + data_string);
-    //let data = JSON.parse(data_string);
-    //console.info('Set Drop Target Icon for ' + palette_artifact_data.artifact + ' over ' + type);
-    if (palette_artifact_data.artifact !== undefined && asset_drop_targets[palette_artifact_data.artifact].indexOf(type) >= 0) {
-        e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
+    dragEnterOverLeave(evt);
+}
+
+function dragLeave(evt) {
+    evt = evt || d3.event;
+    //dragEnterOverLeave(evt);
+}
+
+function dragEnterOverLeave(evt) {
+    evt = evt || d3.event;
+    let type = evt.target.getAttribute('data-type');
+    if (palette_drag_artifact !== undefined && palette_drag_artifact.getDropTargets().indexOf(type) >= 0) {
+        evt.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
-        e.dataTransfer.effectAllowed = "none";
-        e.dataTransfer.dropEffect = "none";
+        evt.dataTransfer.effectAllowed = "none";
+        evt.dataTransfer.dropEffect = "none";
     }
 }
 
-function handleDragStart(e) {
-    if (typeof e == 'undefined') {
-        e = d3.event;
+function dragDrop(evt) {
+    evt = evt || d3.event;
+    if (evt.stopPropagation) {
+        evt.stopPropagation(); // Stops some browsers from redirecting.
     }
-    console.groupCollapsed('Drag Start - ' + this.title);
-    palette_artifact_data = {artifact: this.title, title: this.title};
-    let data_string = JSON.stringify(palette_artifact_data);
-    console.info('Tranfer Data : ' + data_string);
-    e.dataTransfer.effectAllowed = 'copy';
-    e.dataTransfer.setData('text/plain', data_string);
-    console.info('Data Type   : ' + this.title);
-}
-
-function handleFragmentDragStart(e) {
-    if (typeof e == 'undefined') {
-        e = d3.event;
+    if (evt.preventDefault) {
+        evt.preventDefault(); // Necessary. Allows us to drop.
     }
-    console.groupCollapsed('Drag Start - ' + this.title);
-    palette_artifact_data = {artifact: fragment_artifact, title: this.title};
-    let data_string = JSON.stringify(palette_artifact_data);
-    console.info('Tranfer Data : ' + data_string);
-    e.dataTransfer.effectAllowed = 'copy';
-    e.dataTransfer.setData('text/plain', data_string);
-    console.info('Data Type    : ' + this.title);
-}
-
-function handleDragOver(e) {
-    if (typeof e === 'undefined') {
-        e = d3.event;
-    }
-    if (e.preventDefault) {
-        e.preventDefault(); // Necessary. Allows us to drop.
-    }
-    setDragDropIcon(e);
-    return false;
-}
-
-function handleDragEnter(e) {
-    if (typeof e == 'undefined') {
-        e = d3.event;
-    }
-    // this / e.target is the current hover target.
-    //this.classList.add('over');
-    setDragDropIcon(e);
-}
-
-function handleDragLeave(e) {
-    if (typeof e == 'undefined') {
-        e = d3.event;
-    }
-    //this.classList.remove('over');  // this / e.target is previous target element.
-}
-
-function handleDrop(e) {
-    if (typeof e == 'undefined') {
-        e = d3.event;
-    }
-    console.info('Drag Drop (Dynamic)');
-    // this/e.target is current target element.
-
-    if (e.stopPropagation) {
-        e.stopPropagation(); // Stops some browsers from redirecting.
-    }
-    if (e.preventDefault) {
-        e.preventDefault(); // Necessary. Allows us to drop.
-    }
-
-    //this.innerHTML = e.dataTransfer.getData('text/html');
-    let data = JSON.parse(e.dataTransfer.getData('text/plain'));
-    let target_type = e.target.getAttribute('data-type');
-    let compartment_id = e.target.getAttribute('data-compartment-id');
-    let target_id = e.target.id;
-    //target_id = e.target.getAttribute('data-okit-id');
-    // Call Add Function
-    addAssetToDropTarget(data.artifact, data.title, target_id, compartment_id, target_type);
-
+    let artifact = palette_drag_artifact;
+    let target_type = evt.target.getAttribute('data-type');
+    let compartment_id = evt.target.getAttribute('data-compartment-id');
+    let target_id = evt.target.id;
+    if (target_type === Compartment.getArtifactReference()) {compartment_id = target_id;}
+    // Add the Artifact to the OKIT Json / Canvas
+    //let newFunction = 'new' + artifact.getArtifactReference().split(' ').join('');
+    let newFunction = 'new' + artifact.name;
+    let getFunction = 'get' + target_type.split(' ').join('');
+    console.info('New Function : ' + newFunction);
+    console.info('Get Function : ' + getFunction);
+    let parentArtifact = okitJson[getFunction](target_id);
+    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: artifact.getArtifactReference()}, parentArtifact);
+    console.debug(JSON.stringify(result, null, 2));
+    okitJson.draw();
+    // Clear Drag class
     this.classList.remove('over');  // this / e.target is previous target element.
-    console.groupEnd();
+    palette_drag_artifact = null;
     return false;
 }
 
-function handleDragEnd(e) {
-    if (typeof e == 'undefined') {
-        e = d3.event;
-    }
-    // this/e.target is the source node.
-    console.info('Drag End');
-
-    [].forEach.call(cols, function (col) {
-        col.classList.remove('over');
-    });
+function dragEnd(evt) {
+    evt = evt || d3.event;
+    console.info('>>>>>>> Drag End ' + evt);
 }
+
 
 /*
 ** SVG Psudo Drag & Drop

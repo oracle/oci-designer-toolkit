@@ -1,13 +1,8 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Okit Template Artifact Javascript');
-
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[template_artifact_artifact] = [compartment_artifact];
 
 const template_artifact_stroke_colour = "#F80000";
 const template_artifact_query_cb = "template-artifact-query-cb";
@@ -24,7 +19,6 @@ class OkitTemplateArtifact extends OkitArtifact {
         this.parent_id = data.parent_id;
         // Configure default values
         this.id = 'okit-' + template_artifact_prefix + '-' + uuidv4();
-        //this.display_name = generateDefaultName(template_artifact_prefix, okitjson.template_artifacts.length + 1);
         this.display_name = this.generateDefaultName(okitjson.template_artifacts.length + 1);
         this.compartment_id = '';
         // Update with any passed data
@@ -32,16 +26,7 @@ class OkitTemplateArtifact extends OkitArtifact {
         this.convert();
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function() {
-                for (let parent of okitjson.parent_type_list) {
-                    if (parent.id === this.parent_id) {
-                         return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
     }
 
@@ -51,14 +36,6 @@ class OkitTemplateArtifact extends OkitArtifact {
      */
     clone() {
         return new OkitTemplateArtifact(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return template_artifact_artifact;
     }
 
 
@@ -141,14 +118,6 @@ class OkitTemplateArtifact extends OkitArtifact {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artifact.html", () => {loadPropertiesSheet(me);});
     }
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'ota';

@@ -1,14 +1,8 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Instance Javascript');
-
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[instance_artifact] = [subnet_artifact];
-asset_connect_targets[instance_artifact] = [load_balancer_artifact];
 
 const instance_query_cb = "instance-query-cb";
 const min_instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
@@ -32,22 +26,16 @@ class Instance extends OkitArtifact {
         this.shape = 'VM.Standard2.1';
         // # Optional
         this.fault_domain = '';
-        this.hostname_label = this.display_name.toLowerCase();
         this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
-        this.primary_vnic = {subnet_id: data.parent_id};
         this.vnics = [];
         this.source_details = {os: 'Oracle Linux', version: '7.7', boot_volume_size_in_gbs: '50'};
         this.metadata = {authorized_keys: '', user_data: ''};
-        this.subnet_id = data.parent_id;
-        //this.os = 'Oracle Linux';
-        //this.version = '7.7';
-        //this.boot_volume_size_in_gbs = '50';
-        //this.authorized_keys = '';
-        //this.cloud_init_yaml = '';
+        // TODO: Future
+        //this.launch_options_specified = false;
+        //this.launch_options = {boot_volume_type: '', firmware: '', is_consistent_volume_naming_enabled: false, is_pv_encryption_in_transit_enabled: false, network_type: '', remote_data_volume_type: ''};
         this.block_storage_volume_ids = [];
         this.object_storage_bucket_ids = [];
         this.autonomous_database_ids = [];
-        this.subnet_ids = [];
         this.preserve_boot_volume = false;
         this.is_pv_encryption_in_transit_enabled = false;
         // Update with any passed data
@@ -58,19 +46,38 @@ class Instance extends OkitArtifact {
             this.region_availability_domain = this.availability_domain;
             this.availability_domain = this.region_availability_domain.slice(-1);
         }
+        if (this.vnics.length > 0) {
+            this.primary_vnic = this.vnics[0];
+        } else {
+            this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
+            this.vnics[0] = this.primary_vnic;
+        }
         // Add Get Parent function
         if (parent !== null) {
+            if (parent.getArtifactReference() === Subnet.getArtifactReference()) {
+                this.primary_vnic.subnet_id = parent.id;
+            }
             this.getParent = () => {return parent};
         } else {
-            this.getParent = function() {
-                for (let parent of okitjson.subnets) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
+            this.getParent = () => {
+                let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
+                if (primary_subnet.compartment_id === this.compartment_id) {
+                    this.parent_id = this.primary_vnic.subnet_id;
+                } else {
+                    this.parent_id = this.compartment_id;
                 }
-                return null;
-            }
+                return super.getParent();
+            };
         }
+        this.parent_id = (() => {
+            let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
+            console.info(`Primary Subnet ${JSON.stringify(primary_subnet)}`);
+            if (primary_subnet.compartment_id === this.compartment_id) {
+                return this.primary_vnic.subnet_id;
+            } else {
+                return this.compartment_id;
+            }
+        })();
     }
 
     /*
@@ -86,6 +93,16 @@ class Instance extends OkitArtifact {
         if (this.os !== undefined) {this.source_details.os = this.os; delete this.os;}
         if (this.version !== undefined) {this.source_details.version = this.version; delete this.version;}
         if (this.boot_volume_size_in_gbs !== undefined) {this.source_details.boot_volume_size_in_gbs = this.boot_volume_size_in_gbs; delete this.boot_volume_size_in_gbs;}
+        // Move Subnet_ids
+        if (this.vnics === undefined) {this.vnics = [];}
+        if (this.subnet_ids !== undefined) {if (this.subnet_ids.length > 0) {for (let subnet_id of this.subnet_ids) {this.vnics.push({subnet_id: subnet_id})}} delete this.subnet_ids;}
+        if (this.subnet_id !== undefined) {if (this.vnics.length === 0) {this.vnics.push({subnet_id: ''})} this.vnics[0].subnet_id = this.subnet_id; delete this.subnet_id;}
+        if (this.hostname_label !== undefined) {this.vnics[0].hostname_label = this.hostname_label; delete this.hostname_label;}
+        for (let vnic of this.vnics) {
+            if (!vnic.hasOwnProperty('assign_public_ip')) {vnic.assign_public_ip = true;}
+            if (!vnic.hasOwnProperty('skip_source_dest_check')) {vnic.skip_source_dest_check = false;}
+            if (!vnic.hasOwnProperty('nsg_ids')) {vnic.nsg_ids = [];}
+        }
     }
 
 
@@ -94,14 +111,6 @@ class Instance extends OkitArtifact {
      */
     clone() {
         return new Instance(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return instance_artifact;
     }
 
 
@@ -163,7 +172,7 @@ class Instance extends OkitArtifact {
     }
 
     drawAttachments() {
-        console.groupCollapsed('Drawing ' + instance_artifact + ' : ' + this.id + ' Attachments');
+        console.groupCollapsed('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
             let artifact_clone = new BlockStorageVolume(this.getOkitJson().getBlockStorageVolume(block_storage_id), this.getOkitJson(), this);
@@ -172,8 +181,11 @@ class Instance extends OkitArtifact {
             artifact_clone.draw();
             attachment_count += 1;
         }
-        for (let subnet_id of this.subnet_ids) {
-            let artifact_clone = new VirtualNetworkInterface(this.getOkitJson().getSubnet(subnet_id), this.getOkitJson(), this);
+        let start_idx = 1;
+        if (this.getParent().getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') {start_idx = 0;}
+        for (let idx = start_idx;  idx < this.vnics.length; idx++) {
+            let vnic = this.vnics[idx];
+            let artifact_clone = new VirtualNetworkInterface(this.getOkitJson().getSubnet(vnic.subnet_id), this.getOkitJson(), this);
             // Add the -vnic suffix
             artifact_clone.id += '-vnic';
             artifact_clone['parent_id'] = this.id;
@@ -183,58 +195,17 @@ class Instance extends OkitArtifact {
             let fill = d3.select(d3Id(artifact_clone.id)).attr('fill');
             svg.on("mouseover", function () {
                 d3.selectAll(d3Id(artifact_clone.id)).attr('fill', svg_highlight_colour);
-                d3.select(d3Id(subnet_id)).attr('fill', svg_highlight_colour);
+                d3.select(d3Id(vnic.subnet_id)).attr('fill', svg_highlight_colour);
                 d3.event.stopPropagation();
             });
             svg.on("mouseout", function () {
                 d3.selectAll(d3Id(artifact_clone.id)).attr('fill', fill);
-                d3.select(d3Id(subnet_id)).attr('fill', fill);
+                d3.select(d3Id(vnic.subnet_id)).attr('fill', fill);
                 d3.event.stopPropagation();
             });
-            /*
-            for (let subnet of this.getOkitJson().subnets) {
-                if (subnet_id == subnet['id']) {
-                    let artifact_clone = new VirtualNetworkInterface(subnet, this.getOkitJson(), this);
-                    artifact_clone['parent_id'] = this.id;
-                    artifact_clone.draw();
-                    //this.drawAttachedSubnetVnic(artifact_clone, attachment_count);
-                }
-            }
-            */
             attachment_count += 1;
         }
         console.groupEnd();
-    }
-
-    drawAttachedSubnetVnic(artifact, bs_count) {
-        console.info('Drawing ' + instance_artifact + ' Subnet Vnic : ' + artifact.id);
-        let first_child = this.getParent().getChildOffset(artifact.getArtifactReference());
-        let dimensions = this.getDimensions();
-        let artifact_definition = newVirtualNetworkInterfaceDefinition(artifact, bs_count);
-        artifact_definition['svg']['x'] = Math.round(first_child.dx + (positional_adjustments.padding.x * bs_count) + (positional_adjustments.spacing.x * bs_count));
-        artifact_definition['svg']['y'] = Math.round(dimensions.height - positional_adjustments.padding.y);
-        artifact_definition['rect']['stroke']['colour'] = stroke_colours.svg_orange;
-
-        let id = artifact['id'];
-        // Update id so it does not conflict with actual subnet
-        artifact['id'] += '-vnic';
-
-        let svg = drawArtifact(artifact_definition);
-
-        // Add click event to display properties
-        svg.on("click", function () {
-            loadSubnetProperties(id);
-            d3.event.stopPropagation();
-        });
-        let fill = d3.select(d3Id(id)).attr('fill');
-        svg.on("mouseover", function () {
-            d3.select(d3Id(id)).attr('fill', svg_highlight_colour);
-            d3.event.stopPropagation();
-        });
-        svg.on("mouseout", function () {
-            d3.select(d3Id(id)).attr('fill', fill);
-            d3.event.stopPropagation();
-        });
     }
 
     // Return Artifact Specific Definition.
@@ -271,8 +242,8 @@ class Instance extends OkitArtifact {
         bottom_edge_dimensions.width += Math.round(this.block_storage_volume_ids.length * positional_adjustments.padding.x);
         bottom_edge_dimensions.width += Math.round(this.block_storage_volume_ids.length * positional_adjustments.spacing.x);
         // Virtual Network Interface Cards
-        bottom_edge_dimensions.width += Math.round(this.subnet_ids.length * positional_adjustments.padding.x);
-        bottom_edge_dimensions.width += Math.round(this.subnet_ids.length * positional_adjustments.spacing.x);
+        bottom_edge_dimensions.width += Math.round(this.vnics.length * positional_adjustments.padding.x);
+        bottom_edge_dimensions.width += Math.round(this.vnics.length * positional_adjustments.spacing.x);
         dimensions.width  = Math.max(dimensions.width, bottom_edge_dimensions.width);
         dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
         // Check size against minimum
@@ -301,25 +272,162 @@ class Instance extends OkitArtifact {
             for (let block_storage_volume of me.getOkitJson().block_storage_volumes) {
                 block_storage_volume_select.append($('<option>').attr('value', block_storage_volume.id).text(block_storage_volume.display_name));
             }
-            // Build Vnic / Subnet List
-            let subnet_select = $(jqId('subnet_ids'));
-            for (let subnet of me.getOkitJson().subnets) {
-                if (subnet.id !== me.subnet_id) {
-                    subnet_select.append($('<option>').attr('value', subnet.id).text(subnet.display_name));
-                }
+            // Build Primary Vnic / Subnet List
+            let subnet_select = $(jqId('subnet_id'));
+            subnet_select.append($('<option>').attr('value', '').text(''));
+            for (let subnet of this.getOkitJson().subnets) {
+                let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
+                let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
+                let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+                subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
             }
+            // Build Network Security Groups
+            let nsg_select = $(jqId('nsg_ids'));
+            this.loadNetworkSecurityGroups(nsg_select, this.primary_vnic.subnet_id);
+            // Secondary Vnics
+            this.loadSecondaryVnics();
+            $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(this);
         });
     }
 
+    loadNetworkSecurityGroups(select, subnet_id) {
+        $(select).empty();
+        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
+        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+            if (networkSecurityGroup.vcn_id === vcn.id) {
+                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+            }
+        }
+    }
 
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [Compartment.getArtifactReference(), Subnet.getArtifactReference()];
+    loadSecondaryVnics() {
+        // Empty Existing VNICs
+        $(jqId('vnics_table_body')).empty();
+        // VNICs
+        for (let vnic_idx = 1; vnic_idx < this.vnics.length; vnic_idx++) {
+            this.addVnicHtml(this.vnics[vnic_idx], vnic_idx);
+        }
+    }
+
+    addSecondaryVnic() {
+        let vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + this.vnics.length};
+        this.vnics.push(vnic);
+        this.loadSecondaryVnics();
+        displayOkitJson();
+    }
+
+    deleteSecondayVnic(vnic_idx) {
+        this.vnics.splice(vnic_idx, 1);
+        this.loadSecondaryVnics();
+        displayOkitJson();
+    }
+
+    addVnicHtml(vnic, idx) {
+        let me = this;
+        let tbody = d3.select(d3Id('vnics_table_body'));
+        let row = tbody.append('div').attr('class', 'tr');
+        let cell = row.append('div').attr('class', 'td')
+            .attr("id", "rule_" + idx);
+        let table = cell.append('div').attr('class', 'table okit-table okit-properties-table')
+            .attr("id", "vnic_table_" + idx);
+        // First Row with Delete Button
+        let rule_cell = row.append('div').attr('class', 'td');
+        rule_cell.append('button')
+            .attr("type", "button")
+            .attr("class", "okit-delete-button")
+            .text("X")
+            .on('click', function() {
+                me.deleteSecondayVnic(idx);
+            });
+        // Subnet Id
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td')
+            .text("Subnet");
+        cell = row.append('div').attr('class', 'td');
+        let select = cell.append('select')
+            .attr("class", "okit-property-value")
+            .attr("id", "subnet_id" + idx)
+            .on("change", function() {
+                vnic.subnet_id = this.options[this.selectedIndex].value;
+                displayOkitJson();
+                redrawSVGCanvas();
+                me.loadNetworkSecurityGroups($(jqId("nsg_ids" + idx)), vnic.subnet_id);
+            });
+        for (let subnet of this.getOkitJson().subnets) {
+            let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
+            let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
+            let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+            select.append('option').attr('value', subnet.id).text(display_name);
+        }
+        $(jqId("subnet_id" + idx)).val(vnic.subnet_id);
+        // Assign Public IP
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td');
+        cell = row.append('div').attr('class', 'td');
+        cell.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', 'assign_public_ip' + idx)
+            .attr('name', 'assign_public_ip' + idx)
+            .attr('checked', vnic.assign_public_ip)
+            .on('change', function() {
+                vnic.assign_public_ip = this.checked;
+                displayOkitJson();
+            });
+        cell.append('label')
+            .attr('for', 'assign_public_ip' + idx)
+            .attr("class", "okit-property-value")
+            .text('Assign Public IP');
+        $(jqId('assign_public_ip' + idx)).prop('checked', vnic.assign_public_ip);
+        // Hostname
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td')
+            .text('Hostname');
+        cell = row.append('div').attr('class', 'td');
+        cell.append('input')
+            .attr("type", "text")
+            .attr("class", "okit-property-value")
+            .attr("id", 'hostname_label' + idx)
+            .attr("name", 'hostname_label' + idx)
+            .attr("value", vnic.hostname_label)
+            .on("change", function() {
+                vnic.hostname_label = this.value;
+                displayOkitJson();
+            });
+        // Skip Source / Destination Check
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td');
+        cell = row.append('div').attr('class', 'td');
+        cell.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', 'skip_source_dest_check' + idx)
+            .attr('name', 'skip_source_dest_check' + idx)
+            .attr('checked', vnic.skip_source_dest_check)
+            .on('change', function() {
+                vnic.skip_source_dest_check = this.checked;
+                displayOkitJson();
+            });
+        cell.append('label')
+            .attr('for', 'skip_source_dest_check' + idx)
+            .attr("class", "okit-property-value")
+            .text('Skip Source / Destination Check');
+        $(jqId('skip_source_dest_check' + idx)).prop('checked', vnic.skip_source_dest_check);
+        // Network Security Groups
+        row = table.append('div').attr('class', 'tr');
+        row.append('div').attr('class', 'td')
+            .text("Network Security Groups");
+        cell = row.append('div').attr('class', 'td');
+        select = cell.append('select')
+            .attr("class", "okit-property-value")
+            .attr("id", "nsg_ids" + idx)
+            .attr("multiple", "multiple")
+            .on("change", function() {
+                vnic.nsg_ids = $(jqId("nsg_ids" + idx)).val();
+                displayOkitJson();
+            });
+        this.loadNetworkSecurityGroups(select, vnic.subnet_id);
+        $(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
     }
 
 
@@ -346,7 +454,7 @@ class Instance extends OkitArtifact {
     ** Child Artifact Functions
      */
     getBottomEdgeArtifacts() {
-        return [block_storage_volume_artifact, virtual_network_interface_artifact];
+        return [BlockStorageVolume.getArtifactReference(), VirtualNetworkInterface.getArtifactReference()];
     }
 
     getNamePrefix() {
@@ -361,7 +469,11 @@ class Instance extends OkitArtifact {
     }
 
     static getDropTargets() {
-        return [Subnet.getArtifactReference()];
+        return [Subnet.getArtifactReference(), Compartment.getArtifactReference()];
+    }
+
+    static getConnectTargets() {
+        return [LoadBalancer.getArtifactReference()];
     }
 
     static query(request = {}, region='') {
@@ -403,13 +515,13 @@ $(document).ready(function () {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', instance_query_cb);
-    cell.append('label').text(instance_artifact);
+    cell.append('label').text(Instance.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(instance_artifact);
+        .text(Instance.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

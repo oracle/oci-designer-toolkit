@@ -1,11 +1,10 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Fragments Javascript');
 
 const fragment_artifact = 'Fragment';
-asset_drop_targets[fragment_artifact] = [compartment_artifact, virtual_cloud_network_artifact];
 asset_add_functions[fragment_artifact] = "addFragment";
 
 /*
@@ -18,7 +17,12 @@ function addFragment(parent_id, compartment_id, fragment_title) {
     console.groupEnd();
 }
 
+// Use global because the static class field fails in FireFox
+let fragmentType = null;
+
 class Fragment extends OkitArtifact {
+    //static _fragmentType = ''
+
     /*
     ** Create
      */
@@ -88,7 +92,7 @@ class Fragment extends OkitArtifact {
 
     addToVirtualCloudNetwork(fragment_json={}, vcn_id=null) {
         console.info('Adding Fragment to Virtual Cloud Network ' + vcn_id);
-        let ignore_elements = [this.artifactToElement(compartment_artifact), this.artifactToElement(virtual_cloud_network_artifact), this.artifactToElement(subnet_artifact)];
+        let ignore_elements = [this.artifactToElement(Compartment.getArtifactReference()), this.artifactToElement(VirtualCloudNetwork.getArtifactReference()), this.artifactToElement(Subnet.getArtifactReference())];
         // Process Subnets (Container)
         fragment_json.subnets.forEach(function (artifact) {
             artifact.compartment_id = this.compartment_id;
@@ -264,5 +268,22 @@ class Fragment extends OkitArtifact {
     draw() {
 
     }
+
+    /*
+    ** Static Functionality
+     */
+    static setFragmentType(type) {
+        fragmentType = type;
+    }
+    static getArtifactReference() {
+        //return this._fragmentType;
+        return fragmentType;
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
+    }
+
+
 }
 

@@ -1,5 +1,5 @@
 /*
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  */
 
@@ -144,7 +144,7 @@
     margin: 0;
     padding: 5px;
     display: flex;
-    width: 250px;
+    width: 500px;
     min-width: 250px;
     border-left: #aeaeae 1px solid;
     transition: all 0.25s;

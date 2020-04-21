@@ -1,12 +1,13 @@
 
-# Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright © 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 ARG os_version=latest
 ARG os=oraclelinux
 FROM ${os}:${os_version}
-LABEL version="1.0"
+LABEL version="0.4.0"
 LABEL description="OKIT Web Server."
+LABEL copyright="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
 ENV http_proxy ${http_proxy}
 ENV https_proxy ${https_proxy}
@@ -44,7 +45,6 @@ RUN yum update -y ; \
  && rm -fv /usr/bin/python3 ; \
     ln -sv /usr/bin/python3.6 /usr/bin/python3 ; \
     cd /tmp ; \
-#    pip3 install --upgrade pip ; \
     python3 -m pip install --upgrade pip==20.0.2 ; \
     cd ~ \
 # Install required python modules

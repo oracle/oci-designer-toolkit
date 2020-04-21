@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Properties Javascript');
@@ -70,12 +70,12 @@ function loadPropertiesSheet(json_element) {
             });
         } else if ($(jqId(key)).is("input:checkbox")) {                // CheckBox
             console.info(key + ' is input:checkbox.');
-            $(jqId(key)).on('input', () => {json_element[key] = $(jqId(key)).is(':checked');});
+            $(jqId(key)).on('input', () => {json_element[key] = $(jqId(key)).is(':checked'); redrawSVGCanvas();});
             $(jqId(key)).attr('checked', val);
         } else if ($(jqId(key)).is("select")) {                        // Select
             console.info(key + ' is select with value ' + val);
             $(jqId(key)).val(val);
-            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val();});
+            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val(); redrawSVGCanvas();});
         } else if ($(jqId(key)).is("label")) {                         // Label
             console.info(key + ' is label.');
             if (key.endsWith('_id')) {
@@ -97,8 +97,8 @@ function loadPropertiesSheet(json_element) {
             console.info(`Ignoring Property ${key} No Corresponding HTML Element Found.`);
             return true;
         }
-        console.info('>>> Adding Blur Event on ' + key);
-        $(jqId(key)).on('blur', () => {redrawSVGCanvas();});
+        //console.info('>>> Adding Blur Event on ' + key);
+        //$(jqId(key)).on('blur', () => {redrawSVGCanvas();});
     });
     console.info('Loading Freeform Tags');
     if (json_element.hasOwnProperty('freeform_tags')) {

@@ -10,6 +10,9 @@ resource "oci_core_security_list" "{{ resource_name }}" {
         protocol    = {{ rule.protocol }}
         destination = {{ rule.destination }}
         # Optional
+    {% if rule.destination_type is defined %}
+        destination_type  = {{ rule.destination_type }}
+    {% endif %}
     {% if rule.tcp_options is defined %}
         tcp_options {
         {% if rule.tcp_options.destination_port_range is defined %}
@@ -46,9 +49,6 @@ resource "oci_core_security_list" "{{ resource_name }}" {
         {% endif %}
         }
     {% endif %}
-    {% if rule.destination_type is defined %}
-        destination_type  = {{ rule.destination_type }}
-    {% endif %}
     }
 {% endfor %}
 {% for rule in ingress_rules %}
@@ -57,6 +57,9 @@ resource "oci_core_security_list" "{{ resource_name }}" {
         protocol    = {{ rule.protocol }}
         source      = {{ rule.source }}
         # Optional
+    {% if rule.source_type is defined %}
+        source_type  = {{ rule.source_type }}
+    {% endif %}
     {% if rule.tcp_options is defined %}
         tcp_options {
         {% if rule.tcp_options.destination_port_range is defined %}

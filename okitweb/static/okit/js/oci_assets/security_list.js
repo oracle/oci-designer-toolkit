@@ -1,13 +1,8 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Security List Javascript');
-
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[security_list_artifact] = [virtual_cloud_network_artifact];
 
 const security_list_query_cb = "security-list-query-cb";
 
@@ -32,16 +27,7 @@ class SecurityList extends OkitArtifact {
         this.convert();
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function() {
-                for (let parent of okitjson.virtual_cloud_networks) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
     }
 
@@ -51,14 +37,6 @@ class SecurityList extends OkitArtifact {
      */
     clone() {
         return new SecurityList(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return security_list_artifact;
     }
 
 
@@ -136,7 +114,7 @@ class SecurityList extends OkitArtifact {
 
     isAttached() {
         // Check if this is attached but exclude when parent is the attachment type.
-        if (this.getParent().getArtifactReference() !== subnet_artifact) {
+        if (this.getParent().getArtifactReference() !== Subnet.getArtifactReference()) {
             for (let subnet of this.getOkitJson().subnets) {
                 if (subnet.security_list_ids.includes(this.id)) {
                     console.info(this.display_name + ' attached to subnet '+ subnet.display_name);
@@ -280,10 +258,9 @@ class SecurityList extends OkitArtifact {
                 console.info('Changed is_stateless: ' + this.checked);
                 displayOkitJson();
             });
-        if (access_rule['is_stateless']) {
-            rule_cell.attr("checked", access_rule['is_stateless']);
-        }
+        $(jqId("is_stateless" + rule_num + access_type)).prop('checked', access_rule.is_stateless);
         rule_cell.append('label')
+            .attr('for', "is_stateless" + rule_num + access_type)
             .attr("class", "property-value")
             .text('Stateless');
         // Destination / Source
@@ -533,14 +510,6 @@ class SecurityList extends OkitArtifact {
         type_select.node().value = access_rule.icmp_options.type;
     }
 
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
-    }
-
     getNamePrefix() {
         return super.getNamePrefix() + 'sl';
     }
@@ -665,13 +634,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', security_list_query_cb);
-    cell.append('label').text(security_list_artifact);
+    cell.append('label').text(SecurityList.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(security_list_artifact);
+        .text(SecurityList.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

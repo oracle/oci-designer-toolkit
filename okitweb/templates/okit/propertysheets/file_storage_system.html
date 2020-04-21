@@ -1,5 +1,5 @@
 <!--
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
@@ -9,19 +9,68 @@
 {% block required_properties_table_rows_block %}
     <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
     <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="okit-property-value">
-        <option value="1" selected="selected">AD 1</option>
-        <option value="2">AD 2</option>
-        <option value="3">AD 3</option>
-    </select></div></div>
-    <div class='tr'><div class='td'>Mount Path</div><div class='td'><input type="text" id="path" name="path" class="okit-property-value"></div></div>
-{% endblock %}
-
-{% block optional_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Source Cidr</div><div class='td'><input type="text" id="source" name="source" class="okit-property-value"></div></div>
-    <div class='tr'><div class='td'>Access</div><div class='td'><select id="access" class="okit-property-value">
-        <option value="READ_ONLY" selected="selected">Read Only</option>
-        <option value="READ_WRITE">Read/Write</option>
+        <option value="1" selected="selected">Availability Domain 1</option>
+        <option value="2">Availability Domain 2</option>
+        <option value="3">Availability Domain 3</option>
     </select></div></div>
 {% endblock %}
 
-{% block optional_properties_block %}{% endblock %}
+{% block optional_properties_block %}
+    <details open="open">
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span>Mount Target Configuration</span></a>
+        </summary>
+        <div id="export_properties_div" class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
+            </div>
+            <div class="tbody">
+                <div class='tr'><div class='td'>Hostname</div><div class='td'><input type="text" id="hostname_label" name="hostname_label" class="okit-property-value"></div></div>
+                <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><select multiple="multiple" id="nsg_ids" class="okit-property-value"></select></div></div>
+                <div class='tr'><div class='td'>Max FS Stat Bytes</div><div class='td'><input type="text" id="max_fs_stat_bytes" name="max_fs_stat_bytes" class="okit-property-value"></div></div>
+                <div class='tr'><div class='td'>Max FS Stat Files</div><div class='td'><input type="text" id="max_fs_stat_files" name="max_fs_stat_files" class="okit-property-value"></div></div>
+            </div>
+        </div>
+    </details>
+    <details open="open">
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span>Export Configuration</span></a>
+        </summary>
+        <div id="export_properties_div" class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
+            </div>
+            <div class="tbody">
+                <div class='tr'><div class='td'>Mount Path</div><div class='td'><input type="text" id="path" name="path" class="okit-property-value"></div></div>
+                <div class='tr'><div class='td'>Source Cidr</div><div class='td'><input type="text" id="source" name="source" class="okit-property-value"></div></div>
+                <div class='tr'>
+                    <div class='td'>Access</div>
+                    <div class='td'>
+                        <select id="access" class="okit-property-value">
+                            <option value="READ_ONLY" selected="selected">Read Only</option>
+                            <option value="READ_WRITE">Read/Write</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='tr'>
+                    <div class='td'>Identity Squash</div>
+                    <div class='td'>
+                        <select id="identity_squash" class="okit-property-value">
+                            <option value="NONE" selected="selected">None</option>
+                            <option value="ALL">All</option>
+                            <option value="ROOT">Root</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='tr' id="squash_gid"><div class='td'>Squash GID</div><div class='td'><input type="text" id="anonymous_gid" name="anonymous_gid" class="okit-property-value"></div></div>
+                <div class='tr' id="squash_uid"><div class='td'>Squash UID</div><div class='td'><input type="text" id="anonymous_uid" name="anonymous_uid" class="okit-property-value"></div></div>
+                <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="require_privileged_source_port" name="require_privileged_source_port" value="true">Require Privileged Source Port</label></div></div>
+            </div>
+        </div>
+    </details>
+{% endblock %}
+
+{% block optional_properties_table_block %}{% endblock %}
+

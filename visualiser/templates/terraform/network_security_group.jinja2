@@ -1,0 +1,93 @@
+
+# ------ Create Network Security Group
+resource "oci_core_network_security_group" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    vcn_id         = {{ vcn_id }}
+    # Optional
+    display_name   = {{ display_name }}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id = oci_core_network_security_group.{{ resource_name }}.id
+}
+
+# ------ Create Network Security Group Rules
+{% for rule in security_rules %}
+resource "oci_core_network_security_group_security_rule" "{{ resource_name }}_Rule{{ loop.index }}" {
+    # Required
+    network_security_group_id = local.{{ resource_name }}_id
+    direction    = {{ rule.direction }}
+    protocol    = {{ rule.protocol }}
+    # Optional
+    description   = {{ description }}
+    {% if rule.destination is defined %}
+        destination = {{ rule.destination }}
+    {% endif %}
+    {% if rule.destination_type is defined %}
+        destination_type  = {{ rule.destination_type }}
+    {% endif %}
+    {% if rule.source is defined %}
+        source = {{ rule.source }}
+    {% endif %}
+    {% if rule.source_type is defined %}
+        source_type  = {{ rule.source_type }}
+    {% endif %}
+    {% if rule.tcp_options is defined %}
+        tcp_options {
+        {% if rule.tcp_options.destination_port_range is defined %}
+            destination_port_range {
+            min = {{ rule.tcp_options.destination_port_range.min }}
+            max = {{ rule.tcp_options.destination_port_range.max }}
+            }
+        {% endif %}
+        {% if rule.tcp_options.source_port_range is defined %}
+            source_port_range {
+            min = {{ rule.tcp_options.source_port_range.min }}
+            max = {{ rule.tcp_options.source_port_range.max }}
+            }
+        {% endif %}
+        }
+    {% endif %}
+    {% if rule.udp_options is defined %}
+        udp_options {
+        {% if rule.udp_options.destination_port_range is defined %}
+            destination_port_range {
+            min = {{ rule.udp_options.destination_port_range.min }}
+            max = {{ rule.udp_options.destination_port_range.max }}
+            }
+        {% endif %}
+        {% if rule.udp_options.source_port_range is defined %}
+            source_port_range {
+            min = {{ rule.udp_options.source_port_range.min }}
+            max = {{ rule.udp_options.source_port_range.max }}
+            }
+        {% endif %}
+        }
+    {% endif %}
+    {% if rule.icmp_options is defined %}
+        icmp_options {
+        type = {{ rule.icmp_options.type }}
+        {% if rule.icmp_options.code is defined %}
+            code = {{ rule.icmp_options.code }}
+        {% endif %}
+        }
+    {% endif %}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_Rule{{ loop.index }}_id = oci_core_network_security_group_security_rule.{{ resource_name }}_Rule{{ loop.index }}.id
+}
+{% endfor %}

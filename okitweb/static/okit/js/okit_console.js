@@ -1,10 +1,10 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Console Javascript');
 
-const okitVersion = '0.3.0';
+const okitVersion = '0.4.0';
 
 function hideNavMenu() {
     $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
@@ -42,5 +42,14 @@ $(document).ready(function() {
 
     $(jqId('okit_version')).text('Version: ' + okitVersion);
 
+    $('li.dropdown').on('mouseover', function() {
+        console.info(`>>>>>>> Over ${this.id}`);
+        let menu_pos = $(this).position();
+        console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left}`);
+        let $slideout = $('> .dropdown-content', $(this));
+        //$slideout.css('position', 'fixed');
+        //$slideout.css('top', menu_pos.top);
+        //$slideout.css('left', menu_pos.left + $(this).outerWidth() * 0.75);
+    });
 
 });

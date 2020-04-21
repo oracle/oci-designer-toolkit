@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -7,7 +7,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__copyright__ = "Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved."
+__copyright__ = "Copyright (c) 2020, Oracle and/or its affiliates."
 __version__ = "1.0.0.0"
 __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -149,6 +149,9 @@ class OCIGenerator(object):
         # -- Dynamic Routing Gateways
         for dynamic_routing_gateway in self.visualiser_json.get('dynamic_routing_gateways', []):
             self.renderDynamicRoutingGateway(dynamic_routing_gateway)
+        # -- Network Security Group
+        for network_security_group in self.visualiser_json.get('network_security_groups', []):
+            self.renderNetworkSecurityGroup(network_security_group)
         # -- Security Lists
         for security_list in self.visualiser_json.get('security_lists', []):
             self.renderSecurityList(security_list)
@@ -358,24 +361,55 @@ class OCIGenerator(object):
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = file_storage_system["display_name"]
         # ---- Network OCID
-        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['subnet_id']]))
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['primary_mount_target']['subnet_id']]))
         # ---- Source (CIDR)
         variableName = '{0:s}_source'.format(standardisedName)
         self.jinja2_variables["source"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["source"]
+        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["source"]
         # ---- Hostname
         variableName = '{0:s}_hostname'.format(standardisedName)
-        self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["hostname_label"]
+        self.jinja2_variables["hostname_label"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system['primary_mount_target']["hostname_label"]
         # ---- (Mount) Path
         variableName = '{0:s}_path'.format(standardisedName)
         self.jinja2_variables["path"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["path"]
+        self.run_variables[variableName] = file_storage_system["primary_export"]["path"]
+        # ---- Require Privileged Source Port
+        variableName = '{0:s}_require_privileged_source_port'.format(standardisedName)
+        self.jinja2_variables["require_privileged_source_port"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["require_privileged_source_port"]
         # ---- Access
         variableName = '{0:s}_access'.format(standardisedName)
         self.jinja2_variables["access"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["access"]
+        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["access"]
         # --- Optional
+        # ----- Network Security Groups
+        if len(file_storage_system['primary_mount_target']["nsg_ids"]):
+            self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in file_storage_system['primary_mount_target']["nsg_ids"]]
+        # ----- Max FS Stat Bytes
+        if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_bytes"].strip() != '':
+            variableName = '{0:s}_max_fs_stat_bytes'.format(standardisedName)
+            self.jinja2_variables["max_fs_stat_bytes"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system['primary_mount_target']['export_set']["max_fs_stat_bytes"]
+        # ----- Max FS Stat Files
+        if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_files"].strip() != '':
+            variableName = '{0:s}_max_fs_stat_files'.format(standardisedName)
+            self.jinja2_variables["max_fs_stat_files"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system['primary_mount_target']['export_set']["max_fs_stat_files"]
+        # ----- Identity Squash
+        if file_storage_system["primary_export"]["export_options"]["identity_squash"] != 'NONE':
+            # ----- Identity Squash
+            variableName = '{0:s}_identity_squash'.format(standardisedName)
+            self.jinja2_variables["identity_squash"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["identity_squash"]
+            # ----- Identity Squash GID
+            variableName = '{0:s}_anonymous_gid'.format(standardisedName)
+            self.jinja2_variables["anonymous_gid"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["anonymous_gid"]
+            # ----- Identity Squash UID
+            variableName = '{0:s}_anonymous_uid'.format(standardisedName)
+            self.jinja2_variables["anonymous_uid"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["anonymous_uid"]
         # ---- Tags
         self.renderTags(file_storage_system)
 
@@ -405,14 +439,6 @@ class OCIGenerator(object):
         variableName = '{0:s}_display_name'.format(standardisedName)
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["display_name"]
-        # ---- Display Name (Vnic)
-        variableName = '{0:s}_display_name_vnic'.format(standardisedName)
-        self.jinja2_variables["display_name_vnic"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = '{0!s:s} vnic'.format(instance["display_name"])
-        # ---- Hostname
-        variableName = '{0:s}_hostname'.format(standardisedName)
-        self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["hostname_label"]
         # ---- Shape
         variableName = '{0:s}_shape'.format(standardisedName)
         self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
@@ -433,27 +459,37 @@ class OCIGenerator(object):
         # --- Optional
         # ---- Primary VNIC
         # ----- Subnet OCID
-        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance["subnet_id"]]))
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance["vnics"][0]["subnet_id"]]))
         # ----- Display Name (Vnic)
         variableName = '{0:s}_display_name_vnic'.format(standardisedName)
         self.jinja2_variables["display_name_vnic"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = '{0!s:s} vnic'.format(instance["display_name"])
+        self.run_variables[variableName] = '{0!s:s} vnic 00'.format(instance["display_name"])
+        # ---- Hostname
+        variableName = '{0:s}_hostname_label'.format(standardisedName)
+        self.jinja2_variables["hostname_label"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["vnics"][0]["hostname_label"]
         # ----- Assign Public IP
         variableName = '{0:s}_primary_vnic_assign_public'.format(standardisedName)
         self.jinja2_variables["assign_public_ip"] = self.formatJinja2Variable(variableName)
-        subnet = self.get("subnets", instance["primary_vnic"]["subnet_id"])
-        self.run_variables[variableName] = (not subnet["prohibit_public_ip_on_vnic"])
-        # ---- Authorised Public SSH Keys
+        subnet = self.get("subnets", instance["vnics"][0]["subnet_id"])
+        self.run_variables[variableName] = (instance["vnics"][0]["assign_public_ip"] and (not subnet["prohibit_public_ip_on_vnic"]))
+        # ----- Skip Source/destination Check
+        variableName = '{0:s}_primary_vnic_skip_src_dst_check'.format(standardisedName)
+        self.jinja2_variables["skip_source_dest_check"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["vnics"][0]["skip_source_dest_check"]
+        # ----- Network Security Groups
+        if len(instance["vnics"][0]["nsg_ids"]):
+            self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in instance["vnics"][0]["nsg_ids"]]
+        # ---- Metadata
+        # ----- Authorised Public SSH Keys
         variableName = '{0:s}_authorized_keys'.format(standardisedName)
         self.jinja2_variables["authorized_keys"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["metadata"]["authorized_keys"]
-        #self.run_variables[variableName] = instance["authorized_keys"]
-        # ---- Cloud Init YAML
+        # ----- Cloud Init YAML
         variableName = '{0:s}user_data'.format(standardisedName)
         self.jinja2_variables["user_data"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["metadata"]["user_data"].replace('\n', '\\n').replace('"', '\\"')
-        #self.run_variables[variableName] = instance["cloud_init_yaml"].replace('\n', '\\n').replace('"', '\\"')
-        # ---- Volume Attachements
+        # ---- Volume Attachments
         attachment_number = 1
         jinja2_volume_attachments = []
         for block_storage_volume_id in instance.get('block_storage_volume_ids', []):
@@ -472,20 +508,36 @@ class OCIGenerator(object):
             # Increment attachment number
             attachment_number += 1
         self.jinja2_variables["volume_attachments"] = jinja2_volume_attachments
-        # ---- Vnic Attachements
+        # ---- Vnic Attachments
         attachment_number = 1
         jinja2_vnic_attachments = []
-        for subnet_id in instance.get('subnet_ids', []):
+        for vnic in instance.get('vnics', [{}])[1:]:
             # ------ Subnet Vnic
             variableName = '{0:s}_vnic_attachment_{1:02d}_subnet_id'.format(standardisedName, attachment_number)
-            self.run_variables[variableName] = subnet_id
             jinja2_vnic_attachment = {
-                "subnet_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet_id]))
+                "subnet_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[vnic["subnet_id"]]))
             }
+            self.run_variables[variableName] = vnic["subnet_id"]
             # ---- Display Name
             variableName = '{0:s}_vnic_attachment_{1:02d}_display_name'.format(standardisedName, attachment_number)
-            self.run_variables[variableName] = '{0!s:s} Vnic Attachment {1:02d}'.format(instance["display_name"], attachment_number)
             jinja2_vnic_attachment["display_name"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = '{0!s:s} vnic {1:02d}'.format(instance["display_name"], attachment_number)
+            # ---- Hostname
+            variableName = '{0:s}_vnic_attachment_{1:02d}_hostname_label'.format(standardisedName, attachment_number)
+            jinja2_vnic_attachment["hostname_label"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = vnic["hostname_label"]
+            # ----- Assign Public IP
+            variableName = '{0!s:s}_vnic_attachment_{1:02d}_assign_public'.format(standardisedName, attachment_number)
+            jinja2_vnic_attachment["assign_public_ip"] = self.formatJinja2Variable(variableName)
+            subnet = self.get("subnets", vnic["subnet_id"])
+            self.run_variables[variableName] = (vnic["assign_public_ip"] and (not subnet["prohibit_public_ip_on_vnic"]))
+            # ----- Skip Source/destination Check
+            variableName = '{0:s}_vnic_attachment_{1:02d}_skip_src_dst_check'.format(standardisedName, attachment_number)
+            jinja2_vnic_attachment["skip_source_dest_check"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = vnic["skip_source_dest_check"]
+            # ----- Network Security Groups
+            if len(vnic["nsg_ids"]):
+                jinja2_vnic_attachment["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in vnic["nsg_ids"]]
             # Add to Vnic Attachments used for Jinja template
             jinja2_vnic_attachments.append(jinja2_vnic_attachment)
             # Increment attachment number
@@ -661,6 +713,87 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("nat_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderNetworkSecurityGroup(self, network_security_group):
+        # Read Data
+        standardisedName = self.standardiseResourceName(network_security_group['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = network_security_group['display_name']
+        # Process Security List Data
+        logger.info('Processing Network Security Group Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[network_security_group['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[network_security_group['vcn_id']]))
+        # ---- Display Name
+        variableName = '{0:s}_display_name'.format(standardisedName)
+        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = network_security_group["display_name"]
+        # --- Optional
+        # ---- Security Rules
+        rule_number = 1
+        jinja2_security_rules = []
+        for rule in network_security_group.get('security_rules', []):
+            # ------ Protocol
+            variableName = '{0:s}_security_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = rule["protocol"]
+            jinja2_security_rule = {
+                "protocol": self.formatJinja2Variable(variableName)
+            }
+            # ------ TCP Options (Protocol 6)
+            if rule["protocol"] == '6' and 'tcp_options' in rule and rule["tcp_options"] is not None:
+                tcp_options = self.renderSecurityListRuleOptions(rule, 'tcp_options', standardisedName, rule_number, 'security')
+                jinja2_security_rule["tcp_options"] = tcp_options
+            # ------ UDP Options (Protocol 17)
+            if rule["protocol"] == '17' and 'udp_options' in rule and rule["udp_options"] is not None:
+                udp_options = self.renderSecurityListRuleOptions(rule, 'udp_options', standardisedName, rule_number, 'security')
+                jinja2_security_rule["udp_options"] = udp_options
+            # ------ ICMP Options (Protocol 1)
+            if rule["protocol"] == '1' and 'icmp_options' in rule and rule["icmp_options"] is not None:
+                icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'security')
+                jinja2_security_rule["icmp_options"] = icmp_options
+            # ------ Direction
+            variableName = '{0:s}_security_rule_{1:02d}_direction'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = rule["direction"]
+            jinja2_security_rule["direction"] = self.formatJinja2Variable(variableName)
+            if rule["direction"] == 'INGRESS':
+                # ------ Source
+                variableName = '{0:s}_security_rule_{1:02d}_source'.format(standardisedName, rule_number)
+                self.run_variables[variableName] = rule["source"]
+                jinja2_security_rule["source"] = self.formatJinja2Variable(variableName)
+                # ------ Source Type
+                variableName = '{0:s}_security_rule_{1:02d}_source_type'.format(standardisedName, rule_number)
+                self.run_variables[variableName] = rule["source_type"]
+                jinja2_security_rule["source_type"] = self.formatJinja2Variable(variableName)
+            else:
+                # ------ Destination
+                variableName = '{0:s}_security_rule_{1:02d}_destination'.format(standardisedName, rule_number)
+                self.run_variables[variableName] = rule["destination"]
+                jinja2_security_rule["destination"] = self.formatJinja2Variable(variableName)
+                # ------ Destination Type
+                variableName = '{0:s}_security_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
+                self.run_variables[variableName] = rule["destination_type"]
+                jinja2_security_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            # ------ Description
+            variableName = '{0:s}_security_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = rule.get("description", "Egress Rule {0:02d}".format(rule_number))
+            jinja2_security_rule["description"] = self.formatJinja2Variable(variableName)
+            # Add to Egress Rules used for Jinja template
+            jinja2_security_rules.append(jinja2_security_rule)
+            # Increment rule number
+            rule_number += 1
+        self.jinja2_variables["security_rules"] = jinja2_security_rules
+        # ---- Tags
+        self.renderTags(network_security_group)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("network_security_group.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
@@ -842,6 +975,10 @@ class OCIGenerator(object):
             if rule["protocol"] == '1' and 'icmp_options' in rule and rule['icmp_options'] is not None:
                 icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'ingress')
                 jinja2_ingress_rule["icmp_options"] = icmp_options
+            # ------ Source Type
+            variableName = '{0:s}_ingress_rule_{1:02d}_source_type'.format(standardisedName, rule_number)
+            self.run_variables[variableName] = rule["source_type"]
+            jinja2_ingress_rule["source_type"] = self.formatJinja2Variable(variableName)
             # ------ Source
             variableName = '{0:s}_ingress_rule_{1:02d}_source'.format(standardisedName, rule_number)
             self.run_variables[variableName] = rule["source"]

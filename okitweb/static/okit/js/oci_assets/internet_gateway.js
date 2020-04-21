@@ -1,13 +1,8 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Internet Gateway Javascript');
-
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[internet_gateway_artifact] = [virtual_cloud_network_artifact];
 
 const internet_gateway_query_cb = "internet-gateway-query-cb";
 
@@ -33,16 +28,7 @@ class InternetGateway extends OkitArtifact {
         this.convert();
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function () {
-                for (let parent of okitjson.virtual_cloud_networks) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
     }
 
@@ -52,14 +38,6 @@ class InternetGateway extends OkitArtifact {
      */
     clone() {
         return new InternetGateway(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return internet_gateway_artifact;
     }
 
 
@@ -144,14 +122,6 @@ class InternetGateway extends OkitArtifact {
     }
 
 
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [virtual_cloud_gateway_artifact];
-    }
-
     getNamePrefix() {
         return super.getNamePrefix() + 'ig';
     }
@@ -206,13 +176,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', internet_gateway_query_cb);
-    cell.append('label').text(internet_gateway_artifact);
+    cell.append('label').text(InternetGateway.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(internet_gateway_artifact);
+        .text(InternetGateway.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

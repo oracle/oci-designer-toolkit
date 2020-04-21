@@ -1,13 +1,8 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Object Storage Bucket Javascript');
-
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[object_storage_bucket_artifact] = [compartment_artifact];
 
 const object_storage_bucket_query_cb = "object-storage-bucket-query-cb";
 
@@ -33,16 +28,7 @@ class ObjectStorageBucket extends OkitArtifact {
         this.convert();
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function() {
-                for (let parent of okitjson.compartments) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
     }
 
@@ -52,14 +38,6 @@ class ObjectStorageBucket extends OkitArtifact {
      */
     clone() {
         return new ObjectStorageBucket(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return object_storage_bucket_artifact;
     }
 
 
@@ -191,20 +169,13 @@ class ObjectStorageBucket extends OkitArtifact {
         let offset = this.getTopEdgeChildOffset();
         return offset;
     }
+
     getBottomChildOffset() {}
 
     getLeftChildOffset() {}
 
     getRightChildOffset() {}
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [compartment_artifact];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'osb';
@@ -259,13 +230,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', object_storage_bucket_query_cb);
-    cell.append('label').text(object_storage_bucket_artifact);
+    cell.append('label').text(ObjectStorageBucket.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(object_storage_bucket_artifact);
+        .text(ObjectStorageBucket.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
