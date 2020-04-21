@@ -142,6 +142,7 @@ class Compartment extends OkitContainerArtifact {
         definition['svg']['height'] = dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 5;
+        definition['rect']['stroke']['width'] = 2;
         definition['icon']['x_translation'] = icon_translate_x_start;
         definition['icon']['y_translation'] = icon_translate_y_start;
         definition['name']['show'] = true;

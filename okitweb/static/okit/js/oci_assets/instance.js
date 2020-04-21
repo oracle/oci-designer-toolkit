@@ -221,10 +221,12 @@ class Instance extends OkitArtifact {
         }
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
+        definition['svg']['align'] = "center";
         definition['rect']['stroke']['colour'] = stroke_colours.blue;
         definition['rect']['stroke']['dash'] = 1;
         definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
         definition['name']['show'] = true;
+        definition['name']['align'] = "center";
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();
         return definition;
