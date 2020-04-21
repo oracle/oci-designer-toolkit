@@ -155,6 +155,10 @@ If you would like to extend OKIT the development process is documented in [OCI K
     3. Identity Squash
     4. Privileged Source Port
     5. Network Security Groups
+4. Modified Look
+    1. Tweaked Colours
+    2. Remove Curved Corners on Artifacts
+    3. Centralise Load Balancer & Instance Icons
 
 #### Bug Fixes
 1. Discovery conflict between compartment and subnet attachment. Instance not in the same compartment as there primary vnic were drawn in the compartment of their primary vnic not the correct one.
