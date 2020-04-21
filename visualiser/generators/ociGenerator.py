@@ -361,24 +361,58 @@ class OCIGenerator(object):
         self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = file_storage_system["display_name"]
         # ---- Network OCID
-        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['subnet_id']]))
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['primary_mount_target']['subnet_id']]))
         # ---- Source (CIDR)
         variableName = '{0:s}_source'.format(standardisedName)
         self.jinja2_variables["source"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["source"]
+        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["source"]
         # ---- Hostname
         variableName = '{0:s}_hostname'.format(standardisedName)
-        self.jinja2_variables["hostname"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["hostname_label"]
+        self.jinja2_variables["hostname_label"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system['primary_mount_target']["hostname_label"]
         # ---- (Mount) Path
         variableName = '{0:s}_path'.format(standardisedName)
         self.jinja2_variables["path"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["path"]
+        self.run_variables[variableName] = file_storage_system["primary_export"]["path"]
+        # ---- Require Privileged Source Port
+        variableName = '{0:s}_require_privileged_source_port'.format(standardisedName)
+        self.jinja2_variables["require_privileged_source_port"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["require_privileged_source_port"]
         # ---- Access
         variableName = '{0:s}_access'.format(standardisedName)
         self.jinja2_variables["access"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["access"]
+        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["access"]
         # --- Optional
+        # ----- Network Security Groups
+        if len(file_storage_system['primary_mount_target']["nsg_ids"]):
+            #variableName = '{0:s}_nsg_ids'.format(standardisedName)
+            self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in file_storage_system['primary_mount_target']["nsg_ids"]]
+            #self.jinja2_variables["nsg_ids"] = self.formatJinja2Variable(variableName)
+            #self.run_variables[variableName] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in file_storage_system['primary_mount_target']["nsg_ids"]]
+        # ----- Max FS Stat Bytes
+        if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_bytes"].strip() != '':
+            variableName = '{0:s}_max_fs_stat_bytes'.format(standardisedName)
+            self.jinja2_variables["max_fs_stat_bytes"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system['primary_mount_target']['export_set']["max_fs_stat_bytes"]
+        # ----- Max FS Stat Files
+        if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_files"].strip() != '':
+            variableName = '{0:s}_max_fs_stat_files'.format(standardisedName)
+            self.jinja2_variables["max_fs_stat_files"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system['primary_mount_target']['export_set']["max_fs_stat_files"]
+        # ----- Identity Squash
+        if file_storage_system["primary_export"]["export_options"]["identity_squash"] != 'NONE':
+            # ----- Identity Squash
+            variableName = '{0:s}_identity_squash'.format(standardisedName)
+            self.jinja2_variables["identity_squash"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["identity_squash"]
+            # ----- Identity Squash GID
+            variableName = '{0:s}_anonymous_gid'.format(standardisedName)
+            self.jinja2_variables["anonymous_gid"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["anonymous_gid"]
+            # ----- Identity Squash UID
+            variableName = '{0:s}_anonymous_uid'.format(standardisedName)
+            self.jinja2_variables["anonymous_uid"] = self.formatJinja2Variable(variableName)
+            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["anonymous_uid"]
         # ---- Tags
         self.renderTags(file_storage_system)
 

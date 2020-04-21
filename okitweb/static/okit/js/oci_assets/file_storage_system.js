@@ -15,25 +15,63 @@ class FileStorageSystem extends OkitArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
-        this.parent_id = data.parent_id;
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.file_storage_systems.length + 1);
         this.compartment_id = '';
-        this.subnet_id = data.parent_id;
+        //this.subnet_id = data.parent_id;
         this.availability_domain = '1';
-        this.source = this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'];
-        this.hostname_label = this.display_name.toLowerCase();
-        this.path = '/mnt';
-        this.access = 'READ_ONLY';
+        //this.source = this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'];
+        //this.hostname_label = this.display_name.toLowerCase();
+        //this.path = '/mnt';
+        //this.access = 'READ_ONLY';
+        //this.export = {path: '/mnt', export_options: {source: this.getOkitJson().getSubnet(data.parent_id)['cidr_block'], access: 'READ_ONLY', anonymous_gid: '', anonymous_uid: '', identity_squash: 'NONE', require_privileged_source_port: true}};
+        //this.export_set = {max_fs_stat_bytes: '', max_fs_stat_files: ''};
+        //this.mount_target = {subnet_id: data.parent_id, hostname_label: this.display_name.toLowerCase(), nsg_ids: []};
+        this.exports = [];
+        this.mount_targets = [];
         // Update with any passed data
         this.merge(data);
-        this.convert();
+        // Check if built from a query
+        if (this.availability_domain.length > 1) {
+            this.region_availability_domain = this.availability_domain;
+            this.availability_domain = this.region_availability_domain.slice(-1);
+        }
+        if (this.exports.length > 0) {
+            this.primary_export = this.exports[0];
+        } else {
+            this.primary_export = {path: '/mnt', export_options: {source: this.getOkitJson().getSubnet(data.parent_id)['cidr_block'], access: 'READ_ONLY', anonymous_gid: '', anonymous_uid: '', identity_squash: 'NONE', require_privileged_source_port: true}};
+            this.exports[0] = this.primary_export;
+        }
+        if (this.mount_targets.length > 0) {
+            this.primary_mount_target = this.mount_targets[0];
+        } else {
+            this.primary_mount_target = {subnet_id: data.parent_id, hostname_label: this.display_name.toLowerCase(), nsg_ids: [], export_set: {max_fs_stat_bytes: '', max_fs_stat_files: ''}};
+            this.mount_targets[0] = this.primary_mount_target;
+        }
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = () => {return parent};
         }
+        this.convert();
+        this.parent_id = this.primary_mount_target.subnet_id;
     }
 
+
+    /*
+    ** Conversion Routine allowing loading of old json
+     */
+    convert() {
+        // Export Element
+        if (this.exports === undefined) {this.export = [];}
+        if (this.exports[0].export_options === undefined) {this.exports[0].export_options = {};}
+        if (this.path !== undefined) {this.exports[0].path = this.path; delete this.path;}
+        if (this.source !== undefined) {this.exports[0].export_options.source = this.source; delete this.source;}
+        if (this.access !== undefined) {this.exports[0].export_options.access = this.access; delete this.access;}
+        // Mount Target
+        if (this.mount_targets === undefined) {this.mount_target = [{}];}
+        if (this.subnet_id !== undefined) {this.mount_targets[0].subnet_id = this.subnet_id; delete this.subnet_id;}
+        if (this.hostname_label !== undefined) {this.mount_target[0].hostname_label = this.hostname_label; delete this.hostname_label;}
+    }
 
     /*
     ** Clone Functionality
@@ -109,7 +147,23 @@ class FileStorageSystem extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_storage_system.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_storage_system.html", () => {
+            // Build Network Security Groups
+            let nsg_select = $(jqId('nsg_ids'));
+            this.loadNetworkSecurityGroups(nsg_select, this.primary_mount_target.subnet_id);
+            // Load Properties
+            loadPropertiesSheet(me);
+        });
+    }
+
+    loadNetworkSecurityGroups(select, subnet_id) {
+        $(select).empty();
+        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
+        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+            if (networkSecurityGroup.vcn_id === vcn.id) {
+                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+            }
+        }
     }
 
 
