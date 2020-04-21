@@ -1,14 +1,9 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Subnet Javascript');
 
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[subnet_artifact] = [virtual_cloud_network_artifact];
-asset_connect_targets[subnet_artifact] = [];
 
 const subnet_query_cb = "subnet-query-cb";
 
@@ -39,16 +34,7 @@ class Subnet extends OkitContainerArtifact {
         this.convert();
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function () {
-                for (let parent of okitjson.virtual_cloud_networks) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
     }
 
@@ -58,14 +44,6 @@ class Subnet extends OkitContainerArtifact {
      */
     clone() {
         return new Subnet(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return subnet_artifact;
     }
 
 
@@ -111,7 +89,7 @@ class Subnet extends OkitContainerArtifact {
     draw() {
         this.parent_id = this.vcn_id;
         let id = this.id;
-        console.groupCollapsed('Drawing ' + subnet_artifact + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.groupCollapsed('Drawing ' + Subnet.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let svg = drawArtifact(this.getSvgDefinition());
 
         // Add Properties Load Event to created svg
@@ -134,7 +112,7 @@ class Subnet extends OkitContainerArtifact {
     }
 
     drawAttachments() {
-        console.info('Drawing ' + subnet_artifact + ' : ' + this.id + ' Attachments');
+        console.info('Drawing ' + Subnet.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         // Draw Route Table
         if (this.route_table_id !== '') {
@@ -157,7 +135,7 @@ class Subnet extends OkitContainerArtifact {
     getSvgDefinition() {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getDimensions(this.id);
-        let definition = this.newSVGDefinition(this, subnet_artifact);
+        let definition = this.newSVGDefinition(this, Subnet.getArtifactReference());
         // Get Parents First Child Container Offset
         let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = parent_first_child.dx;
@@ -171,9 +149,9 @@ class Subnet extends OkitContainerArtifact {
         definition['name']['show'] = true;
         definition['label']['show'] = true;
         if (this.prohibit_public_ip_on_vnic) {
-            definition['label']['text'] = 'Private ' + subnet_artifact;
+            definition['label']['text'] = 'Private ' + Subnet.getArtifactReference();
         } else  {
-            definition['label']['text'] = 'Public ' + subnet_artifact;
+            definition['label']['text'] = 'Public ' + Subnet.getArtifactReference();
         }
         definition['info']['show'] = true;
         definition['info']['text'] = this.cidr_block;
@@ -235,40 +213,28 @@ class Subnet extends OkitContainerArtifact {
 
 
     /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        return [compartment_artifact];
-    }
-
-
-    /*
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {
-        return [route_table_artifact, security_list_artifact];
+        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference()];
     }
 
     getTopArtifacts() {
-        return [load_balancer_artifact];
+        return [LoadBalancer.getArtifactReference()];
     }
 
     getBottomArtifacts() {
-        return [instance_artifact];
+        return [Instance.getArtifactReference()];
     }
 
     getLeftArtifacts() {
-        return [file_storage_system_artifact];
+        return [FileStorageSystem.getArtifactReference()];
     }
 
 
     /*
     ** Container Specific Overrides
      */
-    // return the name of the element used by the child to reference this artifact
-    getParentKey() {
-        return 'subnet_id';
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'sn';
@@ -321,6 +287,7 @@ class Subnet extends OkitContainerArtifact {
         sub_query_request.subnet_id = id;
         LoadBalancer.query(sub_query_request, region);
         FileStorageSystem.query(sub_query_request, region);
+        Instance.query(sub_query_request, region);
     }
 }
 
@@ -332,13 +299,13 @@ $(document).ready(function () {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', subnet_query_cb);
-    cell.append('label').text(subnet_artifact);
+    cell.append('label').text(Subnet.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(subnet_artifact);
+        .text(Subnet.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -41,6 +41,7 @@ from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociLocalPeeringGateway import OCILocalPeeringGateways
 from facades.ociNATGateway import OCINATGateways
+from facades.ociNetworkSecurityGroup import OCINetworkSecurityGroups
 from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
 from facades.ociRegion import OCIRegions
 from facades.ociResourceManager import OCIResourceManagers
@@ -176,115 +177,6 @@ def designer():
                            fragment_icons=fragment_icons,
                            okit_templates_groups=template_groups)
 
-# TODO: Delete
-@bp.route('/designerv1', methods=(['GET', 'POST']))
-def designerv1():
-    oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets')))
-    #palette_icons_svg = os.listdir(os.path.join(bp.static_folder, 'palette'))
-    #logger.info('Basic List Dir : {0!s:s}'.format(palette_icons_svg))
-    #palette_icons_svg = [f for f in os.listdir(os.path.join(bp.static_folder, 'palette')) if os.path.isfile(os.path.join(bp.static_folder, 'palette', f))]
-    #logger.info('Files List Dir : {0!s:s}'.format(palette_icons_svg))
-    svg_files = []
-    svg_icon_groups = {}
-    # Get Palette Icon Groups / Icons
-    for (dirpath, dirnames, filenames) in os.walk(os.path.join(bp.static_folder, 'palette')):
-        logger.debug('dirpath : {0!s:s}'.format(dirpath))
-        logger.debug('dirnames : {0!s:s}'.format(dirnames))
-        logger.debug('filenames : {0!s:s}'.format(filenames))
-        if os.path.basename(dirpath) != 'palette':
-            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
-            svg_icon_groups[os.path.basename(dirpath)] = filenames
-        else:
-            svg_files.extend(filenames)
-    logger.debug('Files Walk : {0!s:s}'.format(svg_files))
-    logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
-    palette_icons_svg = svg_files
-
-    palette_icons = []
-    for palette_svg in sorted(palette_icons_svg):
-        palette_icon = {'svg': palette_svg, 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
-        palette_icons.append(palette_icon)
-    logger.debug('Palette Icons : {0!s:s}'.format(palette_icons))
-
-    palette_icon_groups = []
-    for key in sorted(svg_icon_groups.keys()):
-        palette_icon_group = {'name': str(key).title(), 'icons': []}
-        for palette_svg in sorted(svg_icon_groups[key]):
-            palette_icon = {'svg': os.path.join(key, palette_svg), 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
-            palette_icon_group['icons'].append(palette_icon)
-        palette_icon_groups.append(palette_icon_group)
-    logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
-    logJson(palette_icon_groups)
-
-    # Walk Template directory Structure
-    template_files = []
-    template_dirs = {}
-    logger.debug('Walking the template directories')
-    rootdir = os.path.join(bp.static_folder, 'templates')
-    for (dirpath, dirnames, filenames) in os.walk(rootdir):
-        logger.debug('dirpath : {0!s:s}'.format(dirpath))
-        logger.debug('dirnames : {0!s:s}'.format(dirnames))
-        logger.debug('filenames : {0!s:s}'.format(filenames))
-        relpath = os.path.relpath(dirpath, rootdir)
-        logger.debug('Relative Path : {0!s:s}'.format(relpath))
-        template_files.extend([os.path.join(relpath, f) for f in filenames])
-        template_dirs[relpath] = filenames
-    logger.debug('Files Walk : {0!s:s}'.format(template_files))
-    logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
-
-    template_groups = []
-    for key in sorted(template_dirs.keys()):
-        template_group = {'name': str(key).replace('_', ' ').title(), 'templates': []}
-        for template_file in sorted(template_dirs[key]):
-            try:
-                okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
-                filename = os.path.join(bp.static_folder, 'templates', key, template_file)
-                template_json = readJsonFile(filename)
-                logger.debug('Template Json : {0!s:s}'.format(template_json))
-                okit_template['title'] = template_json['title']
-                okit_template['description'] = template_json.get('description', template_json['title'])
-                template_group['templates'].append(okit_template)
-            except Exception as e:
-                logger.debug(e)
-        template_groups.append(template_group)
-    logger.debug('Template Groups {0!s:s}'.format(template_groups))
-    logJson(template_groups)
-
-    # Read Fragment Files
-    fragment_files = os.listdir(os.path.join(bp.static_folder, 'fragments', 'svg'))
-    fragment_icons = []
-    for fragment_svg in sorted(fragment_files):
-        logger.info('Fragment : {0!s:s}'.format(fragment_svg))
-        logger.info('Fragment full : {0!s:s}'.format(os.path.join(bp.static_folder, 'fragments', 'svg', fragment_svg)))
-        fragment_icon = {'svg': fragment_svg, 'title': os.path.basename(fragment_svg).split('.')[0].replace('_', ' ').title()}
-        logger.info('Icon : {0!s:s}'.format(fragment_icon))
-        fragment_icons.append(fragment_icon)
-
-    if request.method == 'POST':
-        request_json = {}
-        response_json = {}
-        logger.debug('>>>>>>>>> Compartments {0!s:s}'.format(request.form.getlist('compartment_id')))
-        logger.debug('>>>>>>>>> Regions {0!s:s}'.format(request.form.getlist('region')))
-        for key, value in request.form.items():
-            logger.debug('>>>>>>>>>>>>>>>>> {0!s:s} : {1!s:s}'.format(key, request.form.get(key)))
-            logger.debug('>>>>>>>>>>>>>>>>> {0!s:s} : {1!s:s}'.format(key, request.form.getlist(key)))
-            request_json[key] = value
-            if key.endswith('name_filter'):
-                request_json[key.replace('_name', '')] = {'display_name': request_json[key]}
-        request_json['regions'] = request.form.getlist('regions')
-        #request_json['virtual_cloud_network_filter'] = {'display_name': request_json.get('virtual_cloud_network_name_filter', '')}
-        #request_json['block_storage_volume_filter'] = {'display_name': request_json.get('block_storage_volume_name_filter', '')}
-        logger.info('Request Json {0!s:s}'.format(request_json))
-        logJson(request_json)
-        #response_json = executeQuery(request_json)
-        logger.info('Response Json {0!s:s}'.format(response_json))
-        logJson(response_json)
-        response_string = json.dumps(response_json, separators=(',', ': '))
-        return render_template('okit/deprecated/templates/okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates_groups=template_groups, fragment_icons=fragment_icons, okit_query_request_json=request_json, okit_query_response_json=response_string)
-    elif request.method == 'GET':
-        logger.info('>>>>>>>>> oci version {0!s:s}'.format(oci.__version__))
-        return render_template('okit/deprecated/templates/okit/designer.html', oci_assets_js=oci_assets_js, palette_icons=palette_icons, palette_icon_groups=palette_icon_groups, okit_templates_groups=template_groups, fragment_icons=fragment_icons)
-
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
 def propertysheets(sheet):
@@ -376,17 +268,19 @@ def ociRegion():
     #logger.info(">>>>>>>>> Regions: {0!s:s}".format(regions))
     return json.dumps(regions, sort_keys=False, indent=2, separators=(',', ': '))
 
-@bp.route('/oci/query/<string:cloud>', methods=(['GET', 'POST']))
-def ociQuery(cloud):
-    if cloud == 'oci':
-        if request.method == 'POST':
-            response_json = {}
-            logger.info('Post JSON : {0:s}'.format(str(request.json)))
-            return executeQuery(request.json)
-        else:
-            ociCompartments = OCICompartments()
-            compartments = ociCompartments.listTenancy()
-            return render_template('okit/oci_query.html', compartments=compartments)
+@bp.route('/oci/query/', methods=(['GET']))
+def ociQuery():
+    if request.method == 'GET':
+        query_string = request.query_string
+        parsed_query_string = urllib.parse.unquote(query_string.decode())
+        query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+        logger.debug('===================================== Query Json =====================================')
+        logJson(query_json)
+        logger.debug('======================================================================================')
+        config_profile = query_json.get('config_profile', 'DEFAULT')
+        logger.info('Using Profile : {0!s:s}'.format(config_profile))
+        response_json = {}
+        config = {'region': query_json['region']}
     else:
         return '404'
 
@@ -408,26 +302,18 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Compartment')
         oci_compartments = OCICompartments(config=config, profile=config_profile)
         response_json = oci_compartments.get(compartment_id=query_json['compartment_id'])
+    elif artifact == 'AutonomousDatabase':
+        logger.info('---- Processing Autonomous Databases')
+        oci_autonomous_databases = OCIAutonomousDatabases(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
+    elif artifact == 'BlockStorageVolume':
+        logger.info('---- Processing Block Storage Volumes')
+        oci_block_storage_volumes = OCIBlockStorageVolumes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
     elif artifact == 'Compartments':
         logger.info('---- Processing Compartments')
         oci_compartments = OCICompartments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
-    elif artifact == 'VirtualCloudNetwork':
-        logger.info('---- Processing Virtual Cloud Networks')
-        oci_virtual_cloud_networks = OCIVirtualCloudNetworks(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
-    elif artifact == 'InternetGateway':
-        logger.info('---- Processing Internet Gateways')
-        oci_internet_gateways = OCIInternetGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
-    elif artifact == 'NATGateway':
-        logger.info('---- Processing NAT Gateways')
-        oci_nat_gateways = OCINATGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
-    elif artifact == 'ServiceGateway':
-        logger.info('---- Processing Service Gateways')
-        oci_service_gateways = OCIServiceGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json = oci_service_gateways.list(filter=query_json.get('service_gateway_filter', None))
     elif artifact == 'DynamicRoutingGateway':
         logger.info('---- Processing Dynamic Routing Gateways')
         oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
@@ -436,6 +322,39 @@ def ociArtifacts(artifact):
         logger.info('---- Processing FastConnects')
         oci_fast_connects = OCIFastConnects(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_fast_connects.list(filter=query_json.get('fast_connect_filter', None))
+    elif artifact == 'FileStorageSystem':
+        logger.info('---- Processing File Storage Systems')
+        oci_file_storage_systems = OCIFileStorageSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_file_storage_systems.list(filter=query_json.get('file_storage_system_filter', None))
+    elif artifact == 'Instance':
+        logger.info('---- Processing Instances')
+        oci_instances = OCIInstances(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
+    elif artifact == 'InternetGateway':
+        logger.info('---- Processing Internet Gateways')
+        oci_internet_gateways = OCIInternetGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
+    elif artifact == 'LoadBalancer':
+        logger.info('---- Processing Load Balancers')
+        oci_load_balancers = OCILoadBalancers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
+        response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
+    elif artifact == 'LocalPeeringGateway':
+        logger.info('---- Processing LocalPeeringGateways')
+        oci_local_peering_gateways = OCILocalPeeringGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_local_peering_gateways.list(filter=query_json.get('local_peering_gateway_filter', None))
+    elif artifact == 'NATGateway':
+        logger.info('---- Processing NAT Gateways')
+        oci_nat_gateways = OCINATGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_nat_gateways.list(filter=query_json.get('nat_gateway_filter', None))
+    elif artifact == 'NetworkSecurityGroup':
+        logger.info('---- Processing Network Security Groups')
+        oci_network_security_groups = OCINetworkSecurityGroups(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_network_security_groups.list(filter=query_json.get('network_security_group_filter', None))
+    elif artifact == 'ObjectStorageBucket':
+        logger.info('---- Processing Object Storage Buckets')
+        oci_object_storage_buckets = OCIObjectStorageBuckets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
     elif artifact == 'RouteTable':
         logger.info('---- Processing Route Tables')
         oci_route_tables = OCIRouteTables(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
@@ -444,39 +363,18 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Security Lists')
         oci_security_lists = OCISecurityLists(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_security_lists.list(filter=query_json.get('security_list_filter', None))
+    elif artifact == 'ServiceGateway':
+        logger.info('---- Processing Service Gateways')
+        oci_service_gateways = OCIServiceGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
+        response_json = oci_service_gateways.list(filter=query_json.get('service_gateway_filter', None))
     elif artifact == 'Subnet':
         logger.info('---- Processing Subnets')
         oci_subnets = OCISubnets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_subnets.list(filter=query_json.get('subnet_filter', None))
-    elif artifact == 'LocalPeeringGateway':
-        logger.info('---- Processing LocalPeeringGateways')
-        oci_local_peering_gateways = OCILocalPeeringGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
-        response_json = oci_local_peering_gateways.list(filter=query_json.get('local_peering_gateway_filter', None))
-    elif artifact == 'Instance':
-        logger.info('---- Processing Instances')
-        oci_instances = OCIInstances(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
-    elif artifact == 'LoadBalancer':
-        logger.info('---- Processing Load Balancers')
-        oci_load_balancers = OCILoadBalancers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_load_balancers.list(filter=query_json.get('load_balancer_filter', None))
-        response_json = [lb for lb in response_json if query_json['subnet_id'] in lb['subnet_ids']]
-    elif artifact == 'BlockStorageVolume':
-        logger.info('---- Processing Block Storage Volumes')
-        oci_block_storage_volumes = OCIBlockStorageVolumes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
-    elif artifact == 'AutonomousDatabase':
-        logger.info('---- Processing Autonomous Databases')
-        oci_autonomous_databases = OCIAutonomousDatabases(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_autonomous_databases.list(filter=query_json.get('autonomous_database_filter', None))
-    elif artifact == 'ObjectStorageBucket':
-        logger.info('---- Processing Object Storage Buckets')
-        oci_object_storage_buckets = OCIObjectStorageBuckets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
-    elif artifact == 'FileStorageSystem':
-        logger.info('---- Processing File Storage Systems')
-        oci_file_storage_systems = OCIFileStorageSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_file_storage_systems.list(filter=query_json.get('file_storage_system_filter', None))
+    elif artifact == 'VirtualCloudNetwork':
+        logger.info('---- Processing Virtual Cloud Networks')
+        oci_virtual_cloud_networks = OCIVirtualCloudNetworks(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
     else:
         logger.warn('---- Unknown Artifact : {0:s}'.format(str(artifact)))
         return '404'
@@ -535,3 +433,21 @@ def export(destination):
             logger.exception(e)
             return str(e), 500
     return
+
+@bp.route('/dropdown/data', methods=(['GET', 'POST']))
+def dropdownData():
+    if request.method == 'GET':
+        return {"instance": {"shapes": []}}
+    elif request.method == 'POST':
+        return request.json
+    else:
+        return 'Unknown Method', 500
+
+@bp.route('/dropdown/query', methods=(['GET']))
+def dropdownQuery():
+    if request.method == 'GET':
+        return {"instance": {"shapes": []}}
+    else:
+        return 'Unknown Method', 500
+
+

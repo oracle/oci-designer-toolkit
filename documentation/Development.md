@@ -45,7 +45,6 @@ to the system.
 - Updated Files
     - Frontend
         - **[OKIT Class](#okit-class)**                               : [okitweb/static/okit/js/okit.js](okitweb/static/okit/js/okit.js)
-        - **[Artifact Constants](#artifact-constants)**               : [okitweb/static/okit/js/oci_assets/artifact_constants.js](okitweb/static/okit/js/oci_assets/artifact_constants.js)
         - **[Flask Web Designer Python](#flask-web-designer-python)** : [okitweb/okitWebDesigner.py](okitweb/okitWebDesigner.py)
     - Backend
         - **[Connection Facade](#connection-facade)**                 : [visualiser/facades/ociConnection.py](visualiser/facades/ociConnection.py)
@@ -105,11 +104,6 @@ Once the file has been copied to the oci_assets directory then is can be opened 
 ### Standard Definitions
 ```javascript
 console.log('Loaded Block Storage Javascript');
-
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[block_storage_volume_artifact] = [compartment_artifact];
 
 const block_storage_volume_stroke_colour = "#F80000";
 const block_storage_volume_query_cb = "block-storage-volume-query-cb";
@@ -390,20 +384,16 @@ basic processing and provide the key "list" method to retrieve the artifacts dur
 
 ```python
 #!/usr/bin/python
-# Copyright (c) 2013, 2014-2019 Oracle and/or its affiliates. All rights reserved.
 
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__copyright__ = "Copyright (c) 2013, 2014-2019  Oracle and/or its affiliates. All rights reserved."
-__ekitversion__ = "@VERSION@"
-__ekitrelease__ = "@RELEASE@"
 __version__ = "1.0.0.0"
-__date__ = "@BUILDDATE@"
-__status__ = "@RELEASE@"
 __module__ = "ociBlockStorageVolumes"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 

@@ -17,11 +17,7 @@ resource "oci_core_subnet" "{{ resource_name }}" {
     dns_label                  = {{ dns_label }}
 {% endif %}
 {% if security_list_ids is defined %}
-    security_list_ids          = [
-    {% for security_list_id in security_list_ids %}
-                            {{ security_list_id }}{% if not loop.last %},{% endif %}
-    {% endfor %}
-                            ]
+    security_list_ids          = [{% for security_list_id in security_list_ids %}{{ security_list_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 {% if route_table_id is defined %}
     route_table_id             = {{ route_table_id }}

@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT Javascript');
@@ -21,6 +21,39 @@ class OkitSvg {
         this.y = y;
         this.height = height;
         this.width = width;
+    }
+}
+
+class OkitOCIData {
+    constructor() {
+        this.load();
+    }
+
+    load() {
+        let me = this;
+        $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); console.info(me)});
+    }
+
+    save() {
+        $.ajax({
+            type: 'post',
+            url: 'dropdown/data',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(this),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : '+ status)
+                console.warn('Error : '+ error)
+            }
+        });
+    }
+
+    query() {
+        let me = this;
+        $.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp), me.save(); console.info(me)});
     }
 }
 
@@ -196,6 +229,7 @@ class OkitArtifact {
         this.getOkitJson = function() {return okitjson};
         // Add Id
         this.id = 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();
+        this.parent_id = null;
         // Add default for common Tag variables
         this.freeform_tags = {};
         this.defined_tags = {};
@@ -223,11 +257,25 @@ class OkitArtifact {
     convert() {}
 
     /*
+    ** Get this Artifacts Parent Object
+     */
+    getParent() {
+        if (this.parent_id && $(jqId(this.parent_id)).data('type')) {
+            console.info('Parent Id : ' + this.parent_id);
+            const getFunction = 'get' + $(jqId(this.parent_id)).data('type').split(' ').join('');
+            console.info('>>>>>>>>> Parent ' + this.getOkitJson()[getFunction](this.parent_id).display_name);
+            return this.getOkitJson()[getFunction](this.parent_id);
+        }
+        console.info('>>>>>>>>> Parent NULL');
+        return null;
+    }
+
+    /*
     ** Get the Artifact name this Artifact will be know by.
      */
     getArtifactReference() {
-        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
-        return;
+        //alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
+        return this.constructor.getArtifactReference();
     }
 
     artifactToElement(name) {
@@ -319,6 +367,11 @@ class OkitArtifact {
         return definition
     }
 
+    isAttached() {return false;}
+
+    isParentOf(artifact) {
+        return (artifact && artifact.getParent() && artifact.getParent().id === this.id);
+    }
 
     /*
     ** Property Sheet Load function
@@ -333,7 +386,7 @@ class OkitArtifact {
     ** Child Offset Functions
      */
     getParentKey() {
-        alert('Function "getParentKey()" has not been implemented for ' + this.getArtifactReference() + '.');
+        return 'parent_id';
     }
 
     getChildOffset(child_type) {
@@ -759,9 +812,9 @@ class OkitArtifact {
     /*
     ** Define Allowable SVG Drop Targets
      */
-    getTargets() {
+    getDropTargets() {
         // Return list of Artifact names
-        return [];
+        return this.constructor.getDropTargets();
     }
 
 
@@ -792,7 +845,12 @@ class OkitArtifact {
     }
 
     static getDropTargets() {
-        console.warn('Get Drop Tagets not implements');
+        console.warn('Get Drop Targets not implements');
+        return [];
+    }
+
+    static getConnectTargets() {
+        console.warn('Get Connect Targets not implements');
         return [];
     }
 
@@ -875,7 +933,6 @@ class OkitContainerArtifact extends OkitArtifact {
         };
         return padding;
     }
-
 
     getChildTypes() {
         let child_types = this.getContainerArtifacts().concat(
@@ -992,6 +1049,7 @@ class OkitJson {
     constructor(okit_json_string = '', parent_id = 'canvas-div') {
         this.title = "OKIT OCI Visualiser Json";
         this.description = "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......";
+        this.okit_version = okitVersion;
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
@@ -1129,6 +1187,14 @@ class OkitJson {
                 console.info(obj);
             }
         }
+        // Network Security Groups
+        if (okit_json.hasOwnProperty('network_security_groups')) {
+            for (let artifact of okit_json['network_security_groups']) {
+                artifact.parent_id = artifact.vcn_id;
+                let obj = this.newNetworkSecurityGroup(artifact);
+                console.info(obj);
+            }
+        }
         // Service Gateways
         if (okit_json.hasOwnProperty('service_gateways')) {
             for (let artifact of okit_json['service_gateways']) {
@@ -1166,7 +1232,12 @@ class OkitJson {
         // Instances
         if (okit_json.hasOwnProperty('instances')) {
             for (let artifact of okit_json['instances']) {
-                artifact.parent_id = artifact.subnet_id;
+                let subnet = this.getSubnet(artifact.subnet_id)
+                if (subnet && subnet.compartment_id === artifact.compartment_id) {
+                    artifact.parent_id = artifact.subnet_id;
+                } else {
+                    artifact.parent_id = artifact.compartment_id;
+                }
                 let obj = this.newInstance(artifact);
                 console.info(obj);
             }
@@ -1265,6 +1336,10 @@ class OkitJson {
         for (let security_list of this.security_lists) {
             security_list.draw();
         }
+        // Network Security Groups
+        for (let network_security_group of this.network_security_groups) {
+            network_security_group.draw();
+        }
         // Subnets
         for (let subnet of this.subnets) {
             subnet.draw();
@@ -1289,16 +1364,18 @@ class OkitJson {
         }
 
         // Resize Main Canvas if required
-        let canvas_svg = d3.select("#canvas-svg");
+        let canvas_svg = d3.select(d3Id("canvas-svg"));
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));
         console.info('Canvas Height  : ' + canvas_svg.attr('height'));
         console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
-        $("#canvas-svg").children("svg [data-type='" + compartment_artifact + "']").each(function () {
+        $(jqId("canvas-svg")).children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
+            console.info('Id      : ' + this.getAttribute('id'));
             console.info('Width   : ' + this.getAttribute('width'));
             console.info('Height  : ' + this.getAttribute('height'));
             console.info('viewBox : ' + this.getAttribute('viewBox'));
             canvas_svg.attr('width', Math.max(Number(canvas_svg.attr('width')), Number(this.getAttribute('width'))));
             canvas_svg.attr('height', Math.max(Number(canvas_svg.attr('height')), Number(this.getAttribute('height'))));
+            canvas_svg.attr('viewBox', '0 0 ' + canvas_svg.attr('width') + ' ' + canvas_svg.attr('height'));
         });
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));
         console.info('Canvas Height  : ' + canvas_svg.attr('height'));
@@ -1407,6 +1484,13 @@ class OkitJson {
         }
         this['nat_gateways'].push(new NATGateway(data, this, parent));
         return this['nat_gateways'][this['nat_gateways'].length - 1];
+    }
+
+    // Network Security Group
+    newNetworkSecurityGroup(data, parent=null) {
+        console.info('New Network Security Group');
+        this.network_security_groups.push(new NetworkSecurityGroup(data, this, parent));
+        return this.network_security_groups[this.network_security_groups.length - 1];
     }
 
     // Object Storage Bucket

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -41,10 +41,10 @@ class OCIInstanceVnics(OCIVirtualNetworkConnection):
             instance_id = self.instance_id
 
         vnic_attachments = oci.pagination.list_call_get_all_results(computeclient.client.list_vnic_attachments, compartment_id=compartment_id, instance_id=instance_id).data        
-        vnics=[]
+        vnics = []
         for attachment in vnic_attachments:
             try:
-                vnic=self.client.get_vnic(attachment.vnic_id).data
+                vnic = self.client.get_vnic(attachment.vnic_id).data
                 vnics.append(vnic)
             except Exception as e:
                 logger.exception('Failed to get Vnic Attachment')

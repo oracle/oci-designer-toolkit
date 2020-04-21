@@ -56,6 +56,9 @@
             - protocol: "{{ rule.protocol }}"
               source: "{{ rule.source }}"
               # Optional
+    {% if rule.source_type is defined %}
+              source_type: "{{ rule.source_type }}"
+    {% endif %}
     {% if rule.tcp_options is defined %}
               tcp_options:
         {% if rule.tcp_options.destination_port_range is defined %}

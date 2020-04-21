@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -52,13 +52,16 @@ class OCIFileStorageSystems(OCIFileStorageSystemConnection):
             for file_storage_system in ad_file_storage_system_json:
                 file_storage_system['availability_domain'] = list(oci_availability_domain['name'])[-1];
                 exports = self.listExports(compartment_id, file_storage_system['id'])
-                if len(exports) > 0:
-                    file_storage_system['path'] = exports[0]['path']
-                    file_storage_system['access'] = exports[0]['access']
-                    file_storage_system['source'] = exports[0]['source']
-                    mount_points = self.listMountTargets(compartment_id, oci_availability_domain['name'], exports[0]['export_set_id'])
-                    if len(mount_points) > 0:
-                        file_storage_system['subnet_id'] = mount_points[0]['subnet_id']
+                file_storage_system['exports'] = exports
+                mount_targets = self.listMountTargets(compartment_id, oci_availability_domain['name'], None)
+                file_storage_system['mount_targets'] = mount_targets
+                #if len(exports) > 0:
+                #    file_storage_system['path'] = exports[0]['path']
+                #    file_storage_system['access'] = exports[0]['access']
+                #    file_storage_system['source'] = exports[0]['source']
+                #    mount_points = self.listMountTargets(compartment_id, oci_availability_domain['name'], exports[0]['export_set_id'])
+                #    if len(mount_points) > 0:
+                #        file_storage_system['subnet_id'] = mount_points[0]['subnet_id']
             # Convert to Json object
             file_storage_systems_json.extend(ad_file_storage_system_json)
 
@@ -77,10 +80,12 @@ class OCIFileStorageSystems(OCIFileStorageSystemConnection):
         exports_json = self.toJson(exports)
         for export in exports_json:
             export_details = self.getExport(export['id'])
+            #export.update(export_details)
             logger.debug('Export Details {0!s:s}'.format(export_details))
-            export['export_options'] = export_details['export_options']
-            export['access'] = export_details['export_options'][0]['access']
-            export['source'] = export_details['export_options'][0]['source']
+            # This release we only deal with a single export option
+            export['export_options'] = export_details['export_options'][0]
+            #export['access'] = export_details['export_options'][0]['access']
+            #export['source'] = export_details['export_options'][0]['source']
         return exports_json
 
     def getExport(self, export_id):
@@ -92,7 +97,16 @@ class OCIFileStorageSystems(OCIFileStorageSystemConnection):
                                                                  compartment_id=compartment_id,
                                                                  availability_domain=availability_domain,
                                                                  export_set_id=export_set_id).data
-        return self.toJson(mount_targets)
+        mount_targets_json = self.toJson(mount_targets)
+        for mount_target in mount_targets_json:
+            mount_target.pop('availability_domain', None)
+            export_set = self.getExportSet(mount_target['export_set_id'])
+            mount_target['export_set'] = {'id': export_set['id'], 'max_fs_stat_bytes': export_set['max_fs_stat_bytes'], 'max_fs_stat_files': export_set['max_fs_stat_files']}
+        return mount_targets_json
+
+    def getExportSet(self, export_set_id):
+        export_set = self.client.get_export_set(export_set_id=export_set_id).data
+        return self.toJson(export_set)
 
 class OCIFileStorageSystem(object):
     def __init__(self, config=None, configfile=None, profile=None, data=None):

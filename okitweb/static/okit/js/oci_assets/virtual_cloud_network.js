@@ -1,14 +1,8 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Virtual Cloud Network Javascript');
-
-/*
-** Set Valid drop Targets
- */
-asset_drop_targets[virtual_cloud_network_artifact] = [compartment_artifact];
-asset_connect_targets[virtual_cloud_network_artifact] = [];
 
 const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 
@@ -35,16 +29,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         this.convert();
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function () {
-                for (let parent of okitjson.compartments) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
         console.groupCollapsed('Check if default Security List & Route Table Should be created.');
         if (okitSettings.is_default_route_table) {
@@ -65,14 +50,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
      */
     clone() {
         return new VirtualCloudNetwork(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return virtual_cloud_network_artifact;
     }
 
 
@@ -153,7 +130,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
      */
     draw() {
         this.parent_id = this.compartment_id;
-        console.groupCollapsed('Drawing ' + virtual_cloud_network_artifact + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.groupCollapsed('Drawing ' + VirtualCloudNetwork.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let svg = drawArtifact(this.getSvgDefinition());
         // Add Properties Load Event to created svg
         let me = this;
@@ -167,7 +144,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     getSvgDefinition() {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getDimensions(this.id);
-        let definition = this.newSVGDefinition(this, virtual_cloud_network_artifact);
+        let definition = this.newSVGDefinition(this, VirtualCloudNetwork.getArtifactReference());
         //let parent_first_child = getCompartmentFirstChildContainerOffset(this.compartment_id);
         let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = parent_first_child.dx;
@@ -203,14 +180,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {loadPropertiesSheet(me);});
-    }
-
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        return [compartment_artifact];
     }
 
 
@@ -310,19 +279,19 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {
-        return [internet_gateway_artifact, nat_gateway_artifact];
+        return [InternetGateway.getArtifactReference(), NATGateway.getArtifactReference()];
     }
 
     getTopArtifacts() {
-        return [route_table_artifact, security_list_artifact];
+        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference(), NetworkSecurityGroup.getArtifactReference()];
     }
 
     getContainerArtifacts() {
-        return [subnet_artifact];
+        return [Subnet.getArtifactReference()];
     }
 
     getRightEdgeArtifacts() {
-        return[service_gateway_artifact, dynamic_routing_gateway_artifact, local_peering_gateway_artifact]
+        return[ServiceGateway.getArtifactReference(), DynamicRoutingGateway.getArtifactReference(), LocalPeeringGateway.getArtifactReference()]
     }
 
     getBottomEdgeArtifacts() {
@@ -388,6 +357,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         sub_query_request.vcn_id = id;
         InternetGateway.query(sub_query_request, region);
         NATGateway.query(sub_query_request, region);
+        NetworkSecurityGroup.query(sub_query_request, region);
         ServiceGateway.query(sub_query_request, region);
         LocalPeeringGateway.query(sub_query_request, region);
         RouteTable.query(sub_query_request, region);
@@ -404,13 +374,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', virtual_cloud_network_query_cb);
-    cell.append('label').text(virtual_cloud_network_artifact);
+    cell.append('label').text(VirtualCloudNetwork.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(virtual_cloud_network_artifact);
+        .text(VirtualCloudNetwork.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')

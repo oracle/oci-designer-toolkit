@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 export ROOT_DIR=$(cd $(dirname $0)/..; pwd)
-export DOCKERIMAGE="okit/webserver"
-export VERSION="1.0.0"
+export VERSION="0.4.0"
+export DOCKERIMAGE="okit/${VERSION}/webserver"
 export BUILDSCRIPT="build-docker-image.sh"
 
 echo "DOCKERIMAGE = ${DOCKERIMAGE}"
@@ -46,8 +46,8 @@ export ENVIRONMENT="\
 "
 
 export HOSTINFO="\
-       --name ${FILENAME} \
-       --hostname ${FILENAME}
+       --name ${FILENAME}-${VERSION} \
+       --hostname ${FILENAME}-${VERSION}
 "
 
 export HOSTS=""

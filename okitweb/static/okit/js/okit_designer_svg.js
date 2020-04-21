@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded SVG Javascript');
@@ -176,6 +176,7 @@ function drawArtifact(definition) {
         .attr("height",    definition['svg']['height'])
         .attr("viewBox", "0 0 " + definition['svg']['width'] + " " + definition['svg']['height'])
         .attr("preserveAspectRatio", "xMinYMax meet");
+
     let rect = svg.append("rect")
         .attr("id", id)
         .attr("x",      rect_x)
@@ -189,9 +190,9 @@ function drawArtifact(definition) {
         .attr("stroke", definition['rect']['stroke']['colour'])
         .attr("stroke-dasharray",
             definition['rect']['stroke']['dash'] + ", " + definition['rect']['stroke']['dash']);
-    let title = rect.append("title")
-        .attr("id", id + '-title')
-        .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
+    //let title = rect.append("title")
+    //    .attr("id", id + '-title')
+    //    .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
     /*
     for (let key of definition['title_keys']) {
         title.append("tspan")
@@ -260,15 +261,18 @@ function drawArtifact(definition) {
         //.attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
         .append("use")
         .attr("xlink:href","#" + def_id);
+    svg.append("title")
+        .attr("id", id + '-title')
+        .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
 
 
     // Set common attributes on svg element and children
     svg.on("contextmenu", handleContextMenu)
-        .on("dragenter",  handleDragEnter)
-        .on("dragover",   handleDragOver)
-        .on("dragleave",  handleDragLeave)
-        .on("drop",       handleDrop)
-        .on("dragend",    handleDragEnd)
+        .on("dragenter",  dragEnter)
+        .on("dragover",   dragOver)
+        .on("dragleave",  dragLeave)
+        .on("drop",       dragDrop)
+        .on("dragend",    dragEnd)
         .attr("data-type",           definition['data_type'])
         .attr("data-okit-id",        id)
         .attr("data-parent-id",      parent_id)
@@ -490,11 +494,12 @@ function coordString(coord) {
 }
 
 function clearCanvas() {
-    let canvas_svg = d3.select('#canvas-svg');
+    let canvas_svg = d3.select(d3Id('canvas-svg'));
     canvas_svg.selectAll('*').remove();
     styleCanvas(canvas_svg);
     createSVGDefinitions(canvas_svg);
     canvas_svg.append('rect')
+        .attr("id", "canvas-rect")
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("fill", "white");
@@ -542,8 +547,11 @@ function newCanvasWrapper(width=default_canvas_width, height=default_canvas_heig
 }
 
 
-function newCanvas(parent_id="canvas-div", width=default_canvas_width, height=default_canvas_height) {
+function newCanvas(parent_id="canvas-div", width=400, height=300) {
     console.groupCollapsed('New Canvas');
+    console.info('Parent                : ' + parent_id);
+    console.info('Width                 : ' + width);
+    console.info('Height                : ' + height);
     let canvas_div = d3.select(d3Id(parent_id));
     //let canvas_width = Math.round($(window).width() / 10) * 10;
     //let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
@@ -551,17 +559,23 @@ function newCanvas(parent_id="canvas-div", width=default_canvas_width, height=de
     let parent_height = $(jqId(parent_id)).height();
     width  = Math.round(Math.max(width, parent_width));
     height = Math.round(Math.max(height, parent_height));
+    console.info('Width                 : ' + width);
+    console.info('Height                : ' + height);
     // Round up to next grid size to display full grid.
-    width  += (grid_size - (width % grid_size) + 1);
-    height += (grid_size - (height % grid_size) + 1);
-    console.info('JQuery Width  : ' + $(jqId(parent_id)).width());
-    console.info('JQuery Height : ' + $(jqId(parent_id)).height());
-    console.info('Client Width  : ' + document.getElementById(parent_id).clientWidth);
-    console.info('Client Height : ' + document.getElementById(parent_id).clientHeight);
-    console.info('Window Width  : ' + $(window).width());
-    console.info('Window Height : ' + $(window).height());
-    console.info('Canvas Width  : ' + width);
-    console.info('Canvas Height : ' + height);
+    if (okitSettings.is_display_grid) {
+        width += (grid_size - (width % grid_size) + 1);
+        height += (grid_size - (height % grid_size) + 1);
+    }
+    console.info('Default Canvas Width  : ' + default_canvas_width);
+    console.info('Default Canvas Height : ' + default_canvas_height);
+    console.info('JQuery Parent Width   : ' + $(jqId(parent_id)).width());
+    console.info('JQuery Parent Height  : ' + $(jqId(parent_id)).height());
+    console.info('Client Parent Width   : ' + document.getElementById(parent_id).clientWidth);
+    console.info('Client Parent Height  : ' + document.getElementById(parent_id).clientHeight);
+    console.info('Window Width          : ' + $(window).width());
+    console.info('Window Height         : ' + $(window).height());
+    console.info('Canvas Width          : ' + width);
+    console.info('Canvas Height         : ' + height);
     // Empty existing Canvas
     canvas_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc

@@ -1,15 +1,8 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Compartment Javascript');
-
-/*
-** Set Valid drop Targets
- */
-//asset_drop_targets[Compartment.getArtifactReference()] = Compartment.getDropTargets();
-asset_drop_targets[compartment_artifact] = [compartment_artifact];
-asset_connect_targets[compartment_artifact] = [];
 
 const compartment_query_cb = "compartment-query-cb";
 
@@ -22,10 +15,8 @@ class Compartment extends OkitContainerArtifact {
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
-        this.parent_id = data.parent_id;
         // Configure default values
         this.parent_id = 'canvas';
-        this.compartment_id = this.id;
         this.compartment_id = null;
         this.name = this.generateDefaultName(okitjson.compartments.length + 1);
         // Update with any passed data
@@ -34,16 +25,7 @@ class Compartment extends OkitContainerArtifact {
         this.display_name = this.name;
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            this.getParent = function() {
-                for (let parent of okitjson.compartments) {
-                    if (parent.id === this.parent_id) {
-                        return parent
-                    }
-                }
-                return null;
-            }
+            this.getParent = () => {return parent};
         }
     }
 
@@ -65,14 +47,6 @@ class Compartment extends OkitContainerArtifact {
      */
     clone() {
         return new Compartment(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return compartment_artifact;
     }
 
 
@@ -143,7 +117,7 @@ class Compartment extends OkitContainerArtifact {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing ' + compartment_artifact + ' : ' + this.id);
+        console.groupCollapsed('Drawing ' + Compartment.getArtifactReference() + ' : ' + this.id);
         let svg = drawArtifact(this.getSvgDefinition());
         // Add Properties Load Event to created svg
         let me = this;
@@ -156,7 +130,7 @@ class Compartment extends OkitContainerArtifact {
 
     getSvgDefinition() {
         let dimensions = this.getDimensions(this.id);
-        let definition = this.newSVGDefinition(this, compartment_artifact);
+        let definition = this.newSVGDefinition(this, Compartment.getArtifactReference());
         console.info('>>>>>>>> Parent');
         console.info(this.getParent());
         if (this.getParent()) {
@@ -201,28 +175,23 @@ class Compartment extends OkitContainerArtifact {
 
 
     /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        return [Compartment.getArtifactReference()];
-    }
-
-
-    /*
     ** Child Type Functions
      */
-    //getTopArtifacts() {return [Instance.getArtifactReference()];}
+    getTopArtifacts() {
+        return [Instance.getArtifactReference()];
+    }
 
     getContainerArtifacts() {
         return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
     }
 
     getLeftArtifacts() {
-        return [block_storage_volume_artifact];
+        return [BlockStorageVolume.getArtifactReference()];
     }
 
     getRightArtifacts() {
-        return [dynamic_routing_gateway_artifact, autonomous_database_artifact, object_storage_bucket_artifact, fast_connect_artifact];
+        return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
+            ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference()];
     }
 
 
@@ -318,7 +287,6 @@ class Compartment extends OkitContainerArtifact {
         AutonomousDatabase.query(sub_query_request, region);
         ObjectStorageBucket.query(sub_query_request, region);
         FastConnect.query(sub_query_request, region);
-        Instance.query(sub_query_request, region);
     }
 }
 
@@ -329,5 +297,5 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', compartment_query_cb);
-    cell.append('label').text(compartment_artifact);
+    cell.append('label').text(Compartment.getArtifactReference());
 });

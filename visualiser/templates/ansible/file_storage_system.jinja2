@@ -32,8 +32,11 @@
         subnet_id: "{{ subnet_id }}"
         # Optional
         display_name: "{{ display_name }}"
-        hostname_label: "{{ hostname }}"
+        hostname_label: "{{ hostname_label }}"
         #ip_address: "{{ ip_address }}"
+{% if nsg_ids is defined %}
+        nsg_ids: [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
 {% if defined_tags is defined %}
         defined_tags: "{{ defined_tags }}"
 {% endif %}

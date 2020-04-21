@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Virtual Network Interface Javascript');
@@ -34,16 +34,7 @@ class VirtualNetworkInterface extends OkitArtifact {
         // Add Get Parent function
         this.parent_id = this.instance_id;
         if (parent !== null) {
-            this.getParent = function() {return parent};
-        } else {
-            for (let parent of okitjson.instances) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {
-                        return parent
-                    };
-                    break;
-                }
-            }
+            this.getParent = () => {return parent};
         }
     }
 
@@ -53,14 +44,6 @@ class VirtualNetworkInterface extends OkitArtifact {
      */
     clone() {
         return new VirtualNetworkInterface(this, this.getOkitJson());
-    }
-
-
-    /*
-    ** Get the Artifact name this Artifact will be know by.
-     */
-    getArtifactReference() {
-        return virtual_network_interface_artifact;
     }
 
 
@@ -172,14 +155,6 @@ class VirtualNetworkInterface extends OkitArtifact {
 
     getRightChildOffset() {}
 
-
-    /*
-    ** Define Allowable SVG Drop Targets
-     */
-    getTargets() {
-        // Return list of Artifact names
-        return [];
-    }
 
     getNamePrefix() {
         return super.getNamePrefix() + 'vnic';

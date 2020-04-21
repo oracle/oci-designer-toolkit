@@ -1,0 +1,25 @@
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Network Security Group{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+{% endblock %}
+
+{% block optional_properties_table_block %}{% endblock %}
+
+{% block optional_properties_block %}
+    <details class="security-rules security-rules" open="open">
+        <summary>Security Rules</summary>
+        <div id="security_rules_table" class="table okit-table okit-properties-table okit-dynamic-table">
+            <div class="thead">
+                <div class="tr"><div class="th"></div><div class="th"><button type="button" id="add_security_rule" class="okit-add-button">+</button></div></div>
+            </div>
+            <div class="tbody" id="security_rules_table_body"></div>
+        </div>
+    </details>
+{% endblock %}
