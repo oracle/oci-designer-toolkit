@@ -34,3 +34,5 @@ output
 .vagrant
 
 config
+
+docker/.oci
