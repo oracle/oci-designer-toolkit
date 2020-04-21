@@ -41,11 +41,7 @@ resource "oci_file_storage_mount_target" "{{ resource_name }}MountTarget" {
     ip_address     = {{ ip_address }}
 {%  endif %}
 {% if nsg_ids is defined %}
-    nsg_ids        = [
-    {% for nsg_id in nsg_ids %}
-        {{ nsg_id }}{% if not loop.last %},{% endif %}
-    {% endfor %}
-    ]
+    nsg_ids        = [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 }
 
