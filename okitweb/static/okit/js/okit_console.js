@@ -37,7 +37,7 @@ $(document).ready(function() {
         $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
     });
 
-    $(jqId('okit_version')).text('Version: ' + okitVersion);
+    $(jqId('okit_version')).text('Version: ' + okitVersion + '  (' + okitReleaseDate + ')');
 
     $('li.dropdown').on('mouseover', function() {
         console.info(`>>>>>>> Over ${this.id}`);
