@@ -151,8 +151,9 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         definition['svg']['y'] = parent_first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.purple;
+        definition['rect']['stroke']['colour'] = stroke_colours.orange;
         definition['rect']['stroke']['dash'] = 5;
+        definition['rect']['stroke']['width'] = 2;
         definition['icon']['x_translation'] = icon_translate_x_start;
         definition['icon']['y_translation'] = icon_translate_y_start;
         definition['name']['show'] = true;

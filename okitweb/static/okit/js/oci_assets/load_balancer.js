@@ -149,9 +149,11 @@ class LoadBalancer extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
+        definition['svg']['align'] = "center";
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         definition['name']['show'] = true;
+        definition['name']['align'] = "center";
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();
         return definition;
