@@ -1,4 +1,4 @@
-# OCI Kinetic Infrastructure Toolkit [0.4.0](#version-0.4.0)
+# OCI Kinetic Infrastructure Toolkit [0.5.0](#version-0.5.0)
 
 OCI Kinetic Infrastructure Toolkit (OKIT) provides a number of tools that will allow full project integration from 
 Architects to Development and on to Operations.
@@ -140,6 +140,12 @@ If you would like to extend OKIT the development process is documented in [OCI K
 - Backend Host Configuration
 
 ## Release Notes
+
+### Version 0.5.0 
+**Release Date**: 13th May 2020
+#### Features
+
+#### Bug Fixes
 
 ### Version 0.4.0 
 **Release Date**: 22nd April 2020
