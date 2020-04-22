@@ -55,13 +55,6 @@ class OCIFileStorageSystems(OCIFileStorageSystemConnection):
                 file_storage_system['exports'] = exports
                 mount_targets = self.listMountTargets(compartment_id, oci_availability_domain['name'], None)
                 file_storage_system['mount_targets'] = mount_targets
-                #if len(exports) > 0:
-                #    file_storage_system['path'] = exports[0]['path']
-                #    file_storage_system['access'] = exports[0]['access']
-                #    file_storage_system['source'] = exports[0]['source']
-                #    mount_points = self.listMountTargets(compartment_id, oci_availability_domain['name'], exports[0]['export_set_id'])
-                #    if len(mount_points) > 0:
-                #        file_storage_system['subnet_id'] = mount_points[0]['subnet_id']
             # Convert to Json object
             file_storage_systems_json.extend(ad_file_storage_system_json)
 
@@ -80,12 +73,9 @@ class OCIFileStorageSystems(OCIFileStorageSystemConnection):
         exports_json = self.toJson(exports)
         for export in exports_json:
             export_details = self.getExport(export['id'])
-            #export.update(export_details)
             logger.debug('Export Details {0!s:s}'.format(export_details))
             # This release we only deal with a single export option
             export['export_options'] = export_details['export_options'][0]
-            #export['access'] = export_details['export_options'][0]['access']
-            #export['source'] = export_details['export_options'][0]['source']
         return exports_json
 
     def getExport(self, export_id):

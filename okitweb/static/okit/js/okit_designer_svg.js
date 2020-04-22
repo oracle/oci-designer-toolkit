@@ -43,13 +43,11 @@ const svg_highlight_colour = "#00cc00";
 function styleCanvas(canvas_svg) {
     let colours = '';
     for (let key in stroke_colours) {
-        //colours += '.' + key.replace('_', '-') + '{fill:' + stroke_colours[key] + ';} ';
         colours += '.' + key.replace(new RegExp('_', 'g'), '-') + '{fill:' + stroke_colours[key] + ';} ';
     }
     canvas_svg.append('style')
         .attr("type", "text/css")
         .text(colours + ' text{font-weight: normal; font-size: 10pt}');
-    //.text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt}');
 }
 
 function createSVGDefinitions(canvas_svg) {
@@ -191,21 +189,7 @@ function drawArtifact(definition) {
         .attr("stroke-width", definition['rect']['stroke']['width'])
         .attr("stroke-dasharray",
             definition['rect']['stroke']['dash'] + ", " + definition['rect']['stroke']['dash']);
-    //let title = rect.append("title")
-    //    .attr("id", id + '-title')
-    //    .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
-    /*
-    for (let key of definition['title_keys']) {
-        title.append("tspan")
-            .attr("class", 'key')
-            .attr("dy", 25)
-            .text("\n" + key.replace('_', ' ') + " : ");
-        title.append("tspan")
-            .attr("class", 'text')
-            .attr("dy", 25)
-            .text(definition['artifact'][key]);
-    }
-    */
+
     let text_align_x = rect_x;
     let text_anchor = "start"
     if (definition['name']['align']) {
@@ -488,7 +472,6 @@ function drawHorizontalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0
             .attr("fill", "none")
             .attr("marker-start", "url(#connector-end-circle)")
             .attr("marker-end", "url(#connector-end-circle)");
-        //return path;
     } else {
         // Calculate Polyline points
         let ydiff = end['y'] - start['y'];
@@ -504,14 +487,12 @@ function drawHorizontalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0
             .attr("fill", "none")
             .attr("marker-start", "url(#connector-end-circle)")
             .attr("marker-end", "url(#connector-end-circle)");
-        //return polyline;
     }
     console.groupEnd();
 }
 
 function coordString(coord) {
     let coord_str = coord['x'] + ',' + coord['y'];
-    //console.info('Coord String : ' + coord_str);
     return coord_str;
 }
 
@@ -544,8 +525,6 @@ function newCanvasWrapper(width=default_canvas_width, height=default_canvas_heig
     console.groupCollapsed('New Canvas Wrapper');
     let parent_id = 'canvas-wrapper';
     let canvas_wrapper_div = d3.select(d3Id(parent_id));
-    //let canvas_width = Math.round($(window).width() / 10) * 10;
-    //let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
     let parent_width  = $(jqId(parent_id)).width();
     let parent_height = $(jqId(parent_id)).height();
     // Empty existing Canvas
@@ -575,8 +554,6 @@ function newCanvas(parent_id="canvas-div", width=400, height=300) {
     console.info('Width                 : ' + width);
     console.info('Height                : ' + height);
     let canvas_div = d3.select(d3Id(parent_id));
-    //let canvas_width = Math.round($(window).width() / 10) * 10;
-    //let canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
     let parent_width  = $(jqId(parent_id)).width();
     let parent_height = $(jqId(parent_id)).height();
     width  = Math.round(Math.max(width, parent_width));
@@ -602,14 +579,12 @@ function newCanvas(parent_id="canvas-div", width=400, height=300) {
     canvas_div.selectAll('*').remove();
     // Wrapper SVG Element to define ViewBox etc
     let canvas_svg = canvas_div.append("svg")
-        //.attr("class", "svg-canvas")
         .attr("id", 'canvas-svg')
         .attr("x", 0)
         .attr("y", 0)
         .attr("width", width)
         .attr("height", height)
         .attr("viewBox", "0 0 " + width + " " + height)
-        //.attr("viewBox", "0 0 " + parent_width + " " + parent_height)
         .attr("preserveAspectRatio", "xMinYMin meet");
 
     clearCanvas();

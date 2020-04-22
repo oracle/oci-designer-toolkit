@@ -85,6 +85,10 @@ summary:focus {
     outline: none;
 }
 
+textarea {
+    overflow: auto;
+}
+
 /*
 ** OKIT Common
  */

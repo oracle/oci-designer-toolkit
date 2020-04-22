@@ -46,7 +46,6 @@ class OCITerraform11Generator(OCIGenerator):
         for key, value in self.getVariables().items():
             variable_values.append('{0!s:s} = "{1}"'.format(key, value))
             variable_definitions.append('variable "{0:s}" {{}}'.format(key))
-            #variable_definitions.append('variable "{0:s}" {{\ndefault = "{1}"\n}}'.format(key, value))
         writeTerraformFile(os.path.join(self.output_dir, self.VARIABLES_FILE_NAME), variable_definitions)
         writeTerraformFile(os.path.join(self.output_dir, self.TERRAFORM_FILE_NAME), variable_values)
 

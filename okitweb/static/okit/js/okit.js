@@ -145,23 +145,6 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'is_default_security_list')
             .text('Default Security List');
-        // Always Free
-        /*
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_always_free')
-            .attr('name', 'is_always_free')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_always_free)
-            .on('change', function () {
-                //me.is_always_free = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_always_free')
-            .text('Is Always Free Only');
-        */
         // Timestamp File
         tr = tbody.append('div').attr('class', 'tr');
         tr.append('div').attr('class', 'td').text('');
@@ -1265,8 +1248,6 @@ class OkitJson {
         console.groupCollapsed('Drawing SVG Canvas');
         // Display Json
         displayOkitJson();
-        // Clear existing
-        //clearCanvas();
         // New canvas
         let width = 0;
         let height = 0;
@@ -1277,7 +1258,6 @@ class OkitJson {
         }
         newCanvas(this.parent_id, width, height);
 
-        //console.info(JSON.stringify(this, null, 2));
         console.info(this);
 
         // Draw Compartments

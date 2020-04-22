@@ -97,8 +97,6 @@ function loadPropertiesSheet(json_element) {
             console.info(`Ignoring Property ${key} No Corresponding HTML Element Found.`);
             return true;
         }
-        //console.info('>>> Adding Blur Event on ' + key);
-        //$(jqId(key)).on('blur', () => {redrawSVGCanvas();});
     });
     console.info('Loading Freeform Tags');
     if (json_element.hasOwnProperty('freeform_tags')) {
@@ -168,14 +166,10 @@ function addPropertiesEventListeners1(json_element, callbacks=[], settings=false
         function(index) {
             let inputfield = $(this);
             inputfield.on('input', function () {
-                //console.warn('>>>>>>>> Change Event for ' + this.id + ' [' + this.type + '] ' + this.value + '(' + json_element.id + ')');
-                //console.warn(json_element);
                 if (this.type === 'text') {
                     json_element[this.id] = this.value;
                     // If this is the name field copy to the Ids Map
                     if (this.id === 'display_name' || this.id === 'name') {
-                        //json_element['display_name'] = this.value;
-                        //json_element['name'] = this.value;
                         if (this.id === 'display_name') {
                             json_element['name'] = json_element['display_name'];
                         } else if (this.id === 'name') {
@@ -197,7 +191,6 @@ function addPropertiesEventListeners1(json_element, callbacks=[], settings=false
             });
             inputfield.on('blur', function() {
                 if (settings) {
-                    //saveOkitSettings();
                     json_element.save();
                 }
                 drawSVGforJson();
@@ -212,14 +205,12 @@ function addPropertiesEventListeners1(json_element, callbacks=[], settings=false
                 json_element[this.id] = $(this).val();
                 // Redraw Connectors
                 for (let f of callbacks) {
-                    //console.log(' Calling ' + f);
                     f(this.id, json_element);
                 }
                 drawSVGforJson();
             });
             inputfield.on('blur', function() {
                 if (settings) {
-                    //saveOkitSettings();
                     json_element.save();
                 }
             });
@@ -236,7 +227,6 @@ function addPropertiesEventListeners1(json_element, callbacks=[], settings=false
             });
             inputfield.on('blur', function() {
                 if (settings) {
-                    //saveOkitSettings();
                     json_element.save();
                 }
                 drawSVGforJson();

@@ -18,15 +18,7 @@ class FileStorageSystem extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.file_storage_systems.length + 1);
         this.compartment_id = '';
-        //this.subnet_id = data.parent_id;
         this.availability_domain = '1';
-        //this.source = this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'];
-        //this.hostname_label = this.display_name.toLowerCase();
-        //this.path = '/mnt';
-        //this.access = 'READ_ONLY';
-        //this.export = {path: '/mnt', export_options: {source: this.getOkitJson().getSubnet(data.parent_id)['cidr_block'], access: 'READ_ONLY', anonymous_gid: '', anonymous_uid: '', identity_squash: 'NONE', require_privileged_source_port: true}};
-        //this.export_set = {max_fs_stat_bytes: '', max_fs_stat_files: ''};
-        //this.mount_target = {subnet_id: data.parent_id, hostname_label: this.display_name.toLowerCase(), nsg_ids: []};
         this.exports = [];
         this.mount_targets = [];
         // Update with any passed data
