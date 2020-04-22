@@ -204,8 +204,6 @@ def generate(language):
             filename = os.path.split(zipname)
             logger.info('Split Zipfile : {0:s}'.format(str(filename)))
             return zipname
-            #return send_file(zipname, mimetype='application/zip', as_attachment=True)
-            #return send_from_directory(filename[0], filename[-1], mimetype='application/zip', as_attachment=True)
         except Exception as e:
             logger.exception(e)
             return str(e), 500
@@ -251,7 +249,7 @@ def ociCompartment():
     tenancy = oci_tenancies.listCompartments()
     compartments = [{'display_name': c['display_name'], 'id': c['id'], 'home_region_key': tenancy['home_region_key']} for c in tenancy['compartments']]
     compartments.sort(key=lambda x: x['display_name'])
-    #logger.info("Compartments: {0!s:s}".format(compartments))
+    logger.debug("Compartments: {0!s:s}".format(compartments))
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
 
 
@@ -265,7 +263,7 @@ def ociRegion():
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     oci_regions = OCIRegions(profile=config_profile)
     regions = oci_regions.list()
-    #logger.info(">>>>>>>>> Regions: {0!s:s}".format(regions))
+    logger.debug(">>>>>>>>> Regions: {0!s:s}".format(regions))
     return json.dumps(regions, sort_keys=False, indent=2, separators=(',', ': '))
 
 @bp.route('/oci/query/', methods=(['GET']))
