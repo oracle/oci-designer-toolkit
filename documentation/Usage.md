@@ -67,23 +67,30 @@ export OCI_CONFIG_DIR=~/.oci/oci.config
 ```
 
 ### Web Interface
-To use the Web Application you will first need to start the docker container and run either flask or gunicorn which can 
-be achieved by running either of the following scripts, that can be found in the docker sub-directory.
+To use the Web Application you will first need to start the docker container and run the web server; which can 
+be achieved by running the following script in the docker sub-directory.
 
 ```bash
-./start-flask.sh
+./start-okit-server.sh
 
-DOCKERIMAGE = development/okit.oci.web.designer
+
+
+==========================================================================
+=====                              nginx                             =====
+==========================================================================
+
+
+
+DOCKERIMAGE = okit/0.4.0/webserver
 /okit
-HOSTNAME=start-flask
+HOSTNAME=start-okit-server-0.4.0
 TERM=xterm
-ANSIBLE_INVENTORY=/okit/ansible/config/ansible_hosts
+OCI_LOGFILE=/okit/log/okit.log
 LC_ALL=en_GB.UTF-8
 FLASK_APP=okitweb
 PYTHONIOENCODING=utf8
 http_proxy=
 ftp_proxy=
-ANSIBLE_LIBRARY=:
 PATH=/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 PWD=/okit
 LANG=en_GB.UTF-8
@@ -93,54 +100,16 @@ SHLVL=1
 HOME=/root
 LANGUAGE=en_GB:en
 no_proxy=*
-ANSIBLE_CONFIG_DIR=/okit/ansible/config
 PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
-ANSIBLE_CONFIG=/okit/ansible/config/ansible.cfg
 _=/usr/bin/env
- * Serving Flask app "okitweb" (lazy loading)
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: on
- * Running on http://0.0.0.0:8080/ (Press CTRL+C to quit)
- * Restarting with stat
-```
-
-```bash
-./start-gunicorn.sh
-
-DOCKERIMAGE = development/okit.oci.web.designer
-/okit/okitweb
-HOSTNAME=start-gunicorn
-TERM=xterm
-ANSIBLE_INVENTORY=/okit/ansible/config/ansible_hosts
-LC_ALL=en_GB.UTF-8
-FLASK_APP=okitweb
-PYTHONIOENCODING=utf8
-http_proxy=
-ftp_proxy=
-ANSIBLE_LIBRARY=:
-PATH=/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-PWD=/okit/okitweb
-LANG=en_GB.UTF-8
-FLASK_DEBUG=development
-https_proxy=
-SHLVL=1
-HOME=/root
-LANGUAGE=en_GB:en
-no_proxy=*
-ANSIBLE_CONFIG_DIR=/okit/ansible/config
-PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
-ANSIBLE_CONFIG=/okit/ansible/config/ansible.cfg
-_=/usr/bin/env
-[2019-08-15 14:32:05 +0000] [7] [INFO] Starting gunicorn 19.9.0
-[2019-08-15 14:32:05 +0000] [7] [INFO] Listening at: http://0.0.0.0:8080 (7)
-[2019-08-15 14:32:05 +0000] [7] [INFO] Using worker: sync
-[2019-08-15 14:32:05 +0000] [10] [INFO] Booting worker with pid: 10
-[2019-08-15 14:32:05 +0000] [11] [INFO] Booting worker with pid: 11
+[2020-04-22 09:05:16 +0000] [11] [INFO] Starting gunicorn 20.0.4
+[2020-04-22 09:05:16 +0000] [11] [INFO] Listening at: http://0.0.0.0:5000 (11)
+[2020-04-22 09:05:16 +0000] [11] [INFO] Using worker: sync
+[2020-04-22 09:05:16 +0000] [14] [INFO] Booting worker with pid: 14
+[2020-04-22 09:05:16 +0000] [15] [INFO] Booting worker with pid: 15
 ```
 #### Designer BUI
-The Designer BUI can be accessed on [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer) and consists of 3 main areas.
+The Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer) and consists of 3 main areas.
 1. Palette
 2. Canvas
 3. Properties Sheet
