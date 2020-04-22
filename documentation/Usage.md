@@ -67,80 +67,28 @@ export OCI_CONFIG_DIR=~/.oci/oci.config
 ```
 
 ### Web Interface
-To use the Web Application you will first need to start the docker container and run either flask or gunicorn which can 
-be achieved by running either of the following scripts, that can be found in the docker sub-directory.
+To use the Web Application you will first need to start the docker container and run the web server; which can 
+be achieved by running the following script in the docker sub-directory.
 
 ```bash
-your-mac:docker youruser$ ./start-flask.sh
+./start-okit-server.sh
 
-DOCKERIMAGE = development/okit.oci.web.designer
-/okit
-HOSTNAME=start-flask
-TERM=xterm
-ANSIBLE_INVENTORY=/okit/ansible/config/ansible_hosts
-LC_ALL=en_GB.UTF-8
-FLASK_APP=okitweb
-PYTHONIOENCODING=utf8
-http_proxy=
-ftp_proxy=
-ANSIBLE_LIBRARY=:
-PATH=/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-PWD=/okit
-LANG=en_GB.UTF-8
-FLASK_DEBUG=development
-https_proxy=
-SHLVL=1
-HOME=/root
-LANGUAGE=en_GB:en
-no_proxy=*
-ANSIBLE_CONFIG_DIR=/okit/ansible/config
-PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
-ANSIBLE_CONFIG=/okit/ansible/config/ansible.cfg
-_=/usr/bin/env
- * Serving Flask app "okitweb" (lazy loading)
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: on
- * Running on http://0.0.0.0:8080/ (Press CTRL+C to quit)
- * Restarting with stat
-```
 
-```bash
-your-mac:docker youruser$ ./start-gunicorn.sh
+==========================================================================
+=====                              nginx                             =====
+==========================================================================
 
-DOCKERIMAGE = development/okit.oci.web.designer
-/okit/okitweb
-HOSTNAME=start-gunicorn
-TERM=xterm
-ANSIBLE_INVENTORY=/okit/ansible/config/ansible_hosts
-LC_ALL=en_GB.UTF-8
-FLASK_APP=okitweb
-PYTHONIOENCODING=utf8
-http_proxy=
-ftp_proxy=
-ANSIBLE_LIBRARY=:
-PATH=/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-PWD=/okit/okitweb
-LANG=en_GB.UTF-8
-FLASK_DEBUG=development
-https_proxy=
-SHLVL=1
-HOME=/root
-LANGUAGE=en_GB:en
-no_proxy=*
-ANSIBLE_CONFIG_DIR=/okit/ansible/config
-PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
-ANSIBLE_CONFIG=/okit/ansible/config/ansible.cfg
-_=/usr/bin/env
-[2019-08-15 14:32:05 +0000] [7] [INFO] Starting gunicorn 19.9.0
-[2019-08-15 14:32:05 +0000] [7] [INFO] Listening at: http://0.0.0.0:8080 (7)
-[2019-08-15 14:32:05 +0000] [7] [INFO] Using worker: sync
-[2019-08-15 14:32:05 +0000] [10] [INFO] Booting worker with pid: 10
-[2019-08-15 14:32:05 +0000] [11] [INFO] Booting worker with pid: 11
+
+
+DOCKERIMAGE = okit/0.4.0/webserver
+[2020-04-22 11:07:49 +0000] [11] [INFO] Starting gunicorn 20.0.4
+[2020-04-22 11:07:49 +0000] [11] [INFO] Listening at: http://0.0.0.0:5000 (11)
+[2020-04-22 11:07:49 +0000] [11] [INFO] Using worker: sync
+[2020-04-22 11:07:49 +0000] [14] [INFO] Booting worker with pid: 14
+[2020-04-22 11:07:49 +0000] [15] [INFO] Booting worker with pid: 15
 ```
 #### Designer BUI
-The Designer BUI can be accessed on [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer) and consists of 3 main areas.
+The Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer) and consists of 3 main areas.
 1. Palette
 2. Canvas
 3. Properties Sheet
@@ -230,9 +178,8 @@ a plan job.
 ### Command Line
 To use the Command Line you will first need to start the docker container using the following script:
 ```bash
-your-mac:docker youruser$ ./start-bash-shell.sh
+./start-bash-shell.sh
 DOCKERIMAGE = development/okit.oci.web.designer
-[root@start-bash-shell workspace]#
 ```
 Alternatively if you are running the Webb Application you can connect to the existing docker contain using either:
 
@@ -422,14 +369,14 @@ generated from the 'Load Balanced Nginx Instances' Template then the infrastruct
 
 #### Unzip Generated File
 ```bash
-[root@start-flask terraform]# lh
+lh
 total 20K
    0 drwxr-xr-x 4 root root  128 Oct 31 16:20 .
 4.0K drwxr-xr-x 1 root root 4.0K Oct 28 18:00 ..
 8.0K -rw-r--r-- 1 root root 6.1K Oct 31 16:20 .DS_Store
 8.0K -rw-r--r-- 1 root root 5.4K Oct 31 16:20 okit-terraform.zip
 [root@start-flask terraform]#
-[root@start-flask terraform]# unzip okit-terraform.zip -d okit-terraform
+unzip okit-terraform.zip -d okit-terraform
 Archive:  okit-terraform.zip
   inflating: okit-terraform/variables.tf
   inflating: okit-terraform/main.tf
@@ -438,12 +385,12 @@ Archive:  okit-terraform.zip
 
 #### Plan Terraform Build
 ```bash
-[root@start-flask terraform]# cd okit-terraform
-[root@start-flask okit-terraform]# terraform init
+cd okit-terraform
+terraform init
 
 ..........
 
-[root@start-flask okit-terraform]# terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan
+terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan
 Refreshing Terraform state in-memory prior to plan...
 The refreshed state will be used to calculate this plan, but will not be
 persisted to local or remote state storage.
@@ -452,8 +399,7 @@ persisted to local or remote state storage.
 
 #### Apply Terraform Plan
 ```bash
-[root@start-flask okit-terraform]#
-[root@start-flask okit-terraform]# terraform apply da.plan
+terraform apply da.plan
 oci_core_vcn.Okit-Vcn001: Creating...
 oci_core_volume.Okit-Bsv001: Creating...
 ..........
@@ -466,7 +412,7 @@ generated from the 'Load Balanced Nginx Instances' Template then the infrastruct
 
 #### Unzip Generated File
 ```bash
-[root@start-flask ansible]# unzip okit-ansible.zip -d okit-ansible
+unzip okit-ansible.zip -d okit-ansible
 Archive:  okit-ansible.zip
 ```
 

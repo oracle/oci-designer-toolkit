@@ -45,7 +45,6 @@ function handleGenerateAnsible(e) {
         data: JSON.stringify(okitJson),
         success: function(resp) {
             console.info('REST Response : ' + resp);
-            //window.location = 'generate/ansible';
             saveZip('generate/ansible');
         },
         error: function(xhr, status, error) {

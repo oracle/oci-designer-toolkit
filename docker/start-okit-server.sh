@@ -7,7 +7,7 @@
 export BASH_SHELL='/bin/bash'
 export FLASK_SERVER='pwd;env;python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger'
 export GUNICORN_SERVER='pwd;env;gunicorn --bind=0.0.0.0:8080 --workers=2 --limit-request-line 0 '\''okitweb:create_app()'\'''
-export NGINX_SERVER='pwd;env;nginx;gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app'
+export NGINX_SERVER='nginx;gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app'
 
 RUN_COMMAND=${NGINX_SERVER}
 RUNTIME='nginx   '

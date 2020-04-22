@@ -44,7 +44,7 @@ class OCIPythonGenerator(OCIGenerator):
         variable_values = []
         for key, value in self.getVariables().items():
             variable_values.append('{0!s:s} = "{1}"'.format(key, value))
-        #writePythonFile(os.path.join(self.output_dir, self.VARIABLES_FILE_NAME), variable_values)
+        writePythonFile(os.path.join(self.output_dir, self.VARIABLES_FILE_NAME), variable_values)
 
         return
 
