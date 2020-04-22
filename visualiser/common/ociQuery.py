@@ -40,9 +40,6 @@ def executeQuery(request_json={}, ** kwargs):
     compartment_json = oci_compartments.get(compartment_id=compartment_id)
     oci_compartment = oci_compartments.compartments_obj[0]
     # Build OKIT Response json add compartment information
-    #compartment = {}
-    #compartment['id'] = compartment_json['id']
-    #compartment['name'] = compartment_json['name']
     response_json['compartments'] = [compartment_json]
     logger.info('Compartment: {0!s:s}'.format(oci_compartment.data['name']))
     # Query all Virtual Cloud Networks
