@@ -71,7 +71,7 @@ To use the Web Application you will first need to start the docker container and
 be achieved by running either of the following scripts, that can be found in the docker sub-directory.
 
 ```bash
-your-mac:docker youruser$ ./start-flask.sh
+./start-flask.sh
 
 DOCKERIMAGE = development/okit.oci.web.designer
 /okit
@@ -107,7 +107,7 @@ _=/usr/bin/env
 ```
 
 ```bash
-your-mac:docker youruser$ ./start-gunicorn.sh
+./start-gunicorn.sh
 
 DOCKERIMAGE = development/okit.oci.web.designer
 /okit/okitweb
@@ -230,9 +230,8 @@ a plan job.
 ### Command Line
 To use the Command Line you will first need to start the docker container using the following script:
 ```bash
-your-mac:docker youruser$ ./start-bash-shell.sh
+./start-bash-shell.sh
 DOCKERIMAGE = development/okit.oci.web.designer
-[root@start-bash-shell workspace]#
 ```
 Alternatively if you are running the Webb Application you can connect to the existing docker contain using either:
 
@@ -422,14 +421,14 @@ generated from the 'Load Balanced Nginx Instances' Template then the infrastruct
 
 #### Unzip Generated File
 ```bash
-[root@start-flask terraform]# lh
+lh
 total 20K
    0 drwxr-xr-x 4 root root  128 Oct 31 16:20 .
 4.0K drwxr-xr-x 1 root root 4.0K Oct 28 18:00 ..
 8.0K -rw-r--r-- 1 root root 6.1K Oct 31 16:20 .DS_Store
 8.0K -rw-r--r-- 1 root root 5.4K Oct 31 16:20 okit-terraform.zip
 [root@start-flask terraform]#
-[root@start-flask terraform]# unzip okit-terraform.zip -d okit-terraform
+unzip okit-terraform.zip -d okit-terraform
 Archive:  okit-terraform.zip
   inflating: okit-terraform/variables.tf
   inflating: okit-terraform/main.tf
@@ -438,12 +437,12 @@ Archive:  okit-terraform.zip
 
 #### Plan Terraform Build
 ```bash
-[root@start-flask terraform]# cd okit-terraform
-[root@start-flask okit-terraform]# terraform init
+cd okit-terraform
+terraform init
 
 ..........
 
-[root@start-flask okit-terraform]# terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan
+terraform plan -var-file=/okit/config/connection.tfvars -out=da.plan
 Refreshing Terraform state in-memory prior to plan...
 The refreshed state will be used to calculate this plan, but will not be
 persisted to local or remote state storage.
@@ -452,8 +451,7 @@ persisted to local or remote state storage.
 
 #### Apply Terraform Plan
 ```bash
-[root@start-flask okit-terraform]#
-[root@start-flask okit-terraform]# terraform apply da.plan
+terraform apply da.plan
 oci_core_vcn.Okit-Vcn001: Creating...
 oci_core_volume.Okit-Bsv001: Creating...
 ..........
@@ -466,7 +464,7 @@ generated from the 'Load Balanced Nginx Instances' Template then the infrastruct
 
 #### Unzip Generated File
 ```bash
-[root@start-flask ansible]# unzip okit-ansible.zip -d okit-ansible
+unzip okit-ansible.zip -d okit-ansible
 Archive:  okit-ansible.zip
 ```
 
