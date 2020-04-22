@@ -25,7 +25,6 @@ let dragging_right_drag_bar = false;
 let right_drag_bar_start_x = 0;
 
 // Automation details
-//let okitSettings = readOkitSettings();
 let okitSettings = new OkitSettings();
 let ociRegions = [];
 let okitOciData = new OkitOCIData();
@@ -473,7 +472,6 @@ function saveAsImage(type='jpeg') {
         image.src = img.src;
     }
 
-    //console.info(svgStr);
     img.src = 'data:image/svg+xml;base64,' + window.btoa(svgStr);
     console.groupEnd();
 }
@@ -562,7 +560,6 @@ function setCenterColumnWidth() {
     console.info('Left Adjustment : ' + leftAdjust);
     console.info('Right Adjustment : ' + rightAdjust);
     console.info('Center Width : ' + centerWidth);
-    //$(jqId('designer_center_column')).width(centerWidth + 'px');
     $(jqId('designer_center_column')).css('min-width', 'calc(100% - ' + (leftAdjust + rightAdjust) + 'px)');
 }
 
@@ -601,24 +598,6 @@ $(document).ready(function() {
         })
         .text('Properties');
 
-    /*
-    d3.select(d3Id('console_right_bar')).append('label')
-        .attr('id', 'toggle_settings_button')
-        .on('click', function () {
-            let open = $(this).hasClass('okit-bar-panel-displayed');
-            slideRightPanelsOffScreen();
-            if (!open) {
-                console.info("Opening Panel");
-                $(jqId(SETTINGS_PANEL)).removeClass('hidden');
-                $(this).addClass('okit-bar-panel-displayed');
-                $(jqId('right_column_dragbar')).removeClass('hidden');
-            }
-            // Check to see if Right Column needs to be hidden
-            checkRightColumn();
-        })
-        .text('Settings');
-    */
-
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_source_button')
         .on('click', function () {
@@ -648,11 +627,6 @@ $(document).ready(function() {
     ** Load Empty Properties Sheet
      */
     $(jqId(PROPERTIES_PANEL)).load('propertysheets/empty.html');
-
-    /*
-    ** Load Setting Information
-     */
-    //loadSettings();
 
     /*
     ** Add Drag Bar Functionality

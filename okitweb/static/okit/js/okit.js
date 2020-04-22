@@ -1248,8 +1248,6 @@ class OkitJson {
         console.groupCollapsed('Drawing SVG Canvas');
         // Display Json
         displayOkitJson();
-        // Clear existing
-        //clearCanvas();
         // New canvas
         let width = 0;
         let height = 0;
@@ -1260,7 +1258,6 @@ class OkitJson {
         }
         newCanvas(this.parent_id, width, height);
 
-        //console.info(JSON.stringify(this, null, 2));
         console.info(this);
 
         // Draw Compartments

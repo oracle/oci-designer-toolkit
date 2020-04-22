@@ -72,7 +72,6 @@ function deleteAssetFromSVG(artifact, id) {
 let palette_drag_artifact = null;
 
 function dragStart(evt, artifact) {
-    //console.groupCollapsed('***** Drag Start - ' + artifact.getArtifactReference());
     evt.dataTransfer.effectAllowed = 'copy';
     let palette_artifact_data = {artifact: artifact.getArtifactReference(), title: artifact.getArtifactReference()};
     let data_string = JSON.stringify(palette_artifact_data);
@@ -96,7 +95,6 @@ function dragOver(evt) {
 
 function dragLeave(evt) {
     evt = evt || d3.event;
-    //dragEnterOverLeave(evt);
 }
 
 function dragEnterOverLeave(evt) {
@@ -124,7 +122,6 @@ function dragDrop(evt) {
     let target_id = evt.target.id;
     if (target_type === Compartment.getArtifactReference()) {compartment_id = target_id;}
     // Add the Artifact to the OKIT Json / Canvas
-    //let newFunction = 'new' + artifact.getArtifactReference().split(' ').join('');
     let newFunction = 'new' + artifact.name;
     let getFunction = 'get' + target_type.split(' ').join('');
     console.info('New Function : ' + newFunction);
@@ -151,7 +148,6 @@ function dragEnd(evt) {
 
 function handleConnectorDrag(e) {
     if (connectorStartElement) {
-        //console.info('Connector Drag : ' + getMousePosition(e).x + ' - ' + getMousePosition(e).y);
         let mousePos = getMousePosition(d3.event);
         d3.select("#Connector")
             .attr("x2", mousePos.x)
@@ -214,19 +210,21 @@ function handleConnectorDragStart() {
     }
 }
 
-
+// TODO: Delete
 function handleConnectorDragEnter(e) {
     if (connectorStartElement) {
         //console.info('Connector Drag Enter : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
     }
 }
 
+// TODO: Delete
 function handleConnectorDragLeave(e) {
     if (connectorStartElement) {
         //console.info('Connector Drag Leave : ' + e.target.id + ' - ' + e.target.getAttribute('data-type'));
     }
 }
 
+// TODO: Delete
 function handleConnectorDrop(e) {
     console.info('Connector Drop');
     let thisid = d3.select(this).attr('id');
@@ -257,23 +255,6 @@ function handleConnectorDrop(e) {
         // Check is Connection of
         if (asset_connect_targets[sourceType].indexOf(destinationType) >= 0) {
             updateAssetTarget(destinationType, sourceType, sourceid, id);
-            /*
-            console.info('Creating Connector Line (' + sourceType + ') - (' + destinationType + ')');
-            console.info('Creating Connector Line (' + sourceid + ') - (' + id + ')');
-            connectorContainerSVGPoint.x = d3.select(this).attr('data-connector-end-x');
-            connectorContainerSVGPoint.y = d3.select(this).attr('data-connector-end-y');
-            let svgrelative = connectorContainerSVGPoint.matrixTransform(connectorContainerScreenCTM.inverse());
-            //let svg = d3.select("#" + parentid + '-svg');
-            let svg = d3.select("#" + source_parent_id + '-svg');
-            svg.append('line')
-                .attr("id", generateConnectorId(sourceid, id))
-                .attr("x1", connectorStartXLeft)
-                .attr("y1", connectorStartYTop)
-                .attr("x2", svgrelative.x)
-                .attr("y2", svgrelative.y)
-                .attr("stroke-width", "2")
-                .attr("stroke", "black");
-            */
         }
     }
 
@@ -298,7 +279,6 @@ function handleContextMenu() {
     console.info('Right Click on ' + thisid);
     d3.event.preventDefault();
     d3.event.stopPropagation();
-    //alert('Right Click');
     let element = document.getElementById("context-menu");
     element.classList.toggle("hidden");
     element.style.top =  d3.event.clientY + 'px';
