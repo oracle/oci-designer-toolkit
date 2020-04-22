@@ -103,8 +103,8 @@ class OCIInstances(OCIComputeConnection):
 
         for instance in self.instances_json:
             # Decode Cloud Init Yaml
-            #instance['cloud_init_yaml'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
-            instance['metadata']['user_data'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
+            if 'metadata' in instance and 'user_data' in instance['metadata']:
+                instance['metadata']['user_data'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
             # Add Attached Block Storage Volumes
             instance['block_storage_volume_ids'] = [va['volume_id'] for va in volume_attachments if va['instance_id'] == instance['id']]
             # Add Vnic Attachments
