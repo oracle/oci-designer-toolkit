@@ -74,7 +74,6 @@ be achieved by running the following script in the docker sub-directory.
 ./start-okit-server.sh
 
 
-
 ==========================================================================
 =====                              nginx                             =====
 ==========================================================================
@@ -82,31 +81,11 @@ be achieved by running the following script in the docker sub-directory.
 
 
 DOCKERIMAGE = okit/0.4.0/webserver
-/okit
-HOSTNAME=start-okit-server-0.4.0
-TERM=xterm
-OCI_LOGFILE=/okit/log/okit.log
-LC_ALL=en_GB.UTF-8
-FLASK_APP=okitweb
-PYTHONIOENCODING=utf8
-http_proxy=
-ftp_proxy=
-PATH=/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-PWD=/okit
-LANG=en_GB.UTF-8
-FLASK_DEBUG=development
-https_proxy=
-SHLVL=1
-HOME=/root
-LANGUAGE=en_GB:en
-no_proxy=*
-PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit
-_=/usr/bin/env
-[2020-04-22 09:05:16 +0000] [11] [INFO] Starting gunicorn 20.0.4
-[2020-04-22 09:05:16 +0000] [11] [INFO] Listening at: http://0.0.0.0:5000 (11)
-[2020-04-22 09:05:16 +0000] [11] [INFO] Using worker: sync
-[2020-04-22 09:05:16 +0000] [14] [INFO] Booting worker with pid: 14
-[2020-04-22 09:05:16 +0000] [15] [INFO] Booting worker with pid: 15
+[2020-04-22 11:07:49 +0000] [11] [INFO] Starting gunicorn 20.0.4
+[2020-04-22 11:07:49 +0000] [11] [INFO] Listening at: http://0.0.0.0:5000 (11)
+[2020-04-22 11:07:49 +0000] [11] [INFO] Using worker: sync
+[2020-04-22 11:07:49 +0000] [14] [INFO] Booting worker with pid: 14
+[2020-04-22 11:07:49 +0000] [15] [INFO] Booting worker with pid: 15
 ```
 #### Designer BUI
 The Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer) and consists of 3 main areas.
