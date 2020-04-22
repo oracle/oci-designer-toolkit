@@ -172,7 +172,7 @@ function drawArtifact(definition) {
         .attr("y",         definition['svg']['y'])
         .attr("width",     definition['svg']['width'])
         .attr("height",    definition['svg']['height'])
-        .attr("viewBox", "0 0 " + definition['svg']['width'] + " " + definition['svg']['height'])
+        .attr("viewBox", (0 - definition['rect']['stroke']['width'] / 2) + " " + (0 - definition['rect']['stroke']['width'] / 2) + " " + (definition['svg']['width'] + definition['rect']['stroke']['width']) + " " + (definition['svg']['height'] + definition['rect']['stroke']['width'] / 2))
         .attr("preserveAspectRatio", "xMinYMax meet");
 
     let rect = svg.append("rect")
