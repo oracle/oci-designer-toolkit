@@ -10,8 +10,8 @@ const icon_height = 45;
 const icon_translate_x_start = -20;
 const icon_translate_y_start = -20;
 const icon_spacing = 10;
-const connector_colour = "#336699";
-const corner_radius = 10;
+const connector_colour = "#5f5f5f";
+const corner_radius = 0;
 const container_artifact_x_padding = Math.round(icon_width  * 3 / 2);
 const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
 const container_artifact_label_width = 300;
@@ -26,12 +26,12 @@ const grid_size = small_grid_size * 10;
 const stroke_colours = {
     red: "#F80000",
     bark: "#312D2A",
-    gray: "#939699",
+    gray: "#5f5f5f",
     blue: "#0066cc",
     orange: "#ff6600",
     purple: "#400080",
     icon_colour_01: "#F80000",
-    icon_colour_02: "#939699",
+    icon_colour_02: "#5f5f5f",
     icon_colour_03: "#ff6600",
 };
 const svg_highlight_colour = "#00cc00";
@@ -48,8 +48,8 @@ function styleCanvas(canvas_svg) {
     }
     canvas_svg.append('style')
         .attr("type", "text/css")
-        .text(colours + ' text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
-    //.text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt; font-family: Ariel}');
+        .text(colours + ' text{font-weight: normal; font-size: 10pt}');
+    //.text('.svg-red{fill:#F80000;} .svg-gray{fill:#939699;} .svg-blue{fill:#0066cc} .svg-orange{fill:#ff6600} .svg-purple{fill:#400080} text{font-weight: bold; font-size: 11pt}');
 }
 
 function createSVGDefinitions(canvas_svg) {
@@ -174,20 +174,21 @@ function drawArtifact(definition) {
         .attr("y",         definition['svg']['y'])
         .attr("width",     definition['svg']['width'])
         .attr("height",    definition['svg']['height'])
-        .attr("viewBox", "0 0 " + definition['svg']['width'] + " " + definition['svg']['height'])
+        .attr("viewBox", (0 - definition['rect']['stroke']['width'] / 2) + " " + (0 - definition['rect']['stroke']['width'] / 2) + " " + (definition['svg']['width'] + definition['rect']['stroke']['width']) + " " + (definition['svg']['height'] + definition['rect']['stroke']['width'] / 2))
         .attr("preserveAspectRatio", "xMinYMax meet");
 
     let rect = svg.append("rect")
         .attr("id", id)
-        .attr("x",      rect_x)
-        .attr("y",      rect_y)
-        .attr("rx",     corner_radius)
-        .attr("ry",     corner_radius)
-        .attr("width",  rect_width)
-        .attr("height", rect_height)
-        .attr("fill",   definition['rect']['fill'])
-        .attr("style",  definition['rect']['style'])
-        .attr("stroke", definition['rect']['stroke']['colour'])
+        .attr("x",            rect_x)
+        .attr("y",            rect_y)
+        .attr("rx",           corner_radius)
+        .attr("ry",           corner_radius)
+        .attr("width",        rect_width)
+        .attr("height",       rect_height)
+        .attr("fill",         definition['rect']['fill'])
+        .attr("style",        definition['rect']['style'])
+        .attr("stroke",       definition['rect']['stroke']['colour'])
+        .attr("stroke-width", definition['rect']['stroke']['width'])
         .attr("stroke-dasharray",
             definition['rect']['stroke']['dash'] + ", " + definition['rect']['stroke']['dash']);
     //let title = rect.append("title")
@@ -205,19 +206,32 @@ function drawArtifact(definition) {
             .text(definition['artifact'][key]);
     }
     */
+    let text_align_x = rect_x;
+    let text_anchor = "start"
+    if (definition['name']['align']) {
+        if (definition['name']['align'] === 'center') {
+            text_align_x = (Math.round(definition['svg']['width']-20) / 2)
+            text_anchor = "middle"
+        }
+        else if (definition['name']['align'] === 'right') {
+            text_align_x = definition['svg']['width']-20
+            text_anchor = "end"
+        }
+    }
     if (definition['name']['show']) {
         let name_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
-            .attr("width", container_artifact_label_width)
+            .attr("width", container_artifact_label_width) 
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
         let name = name_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-display-name')
-            .attr("x", rect_x)
+            .attr("x", text_align_x)
             .attr("y", "55")
+            .attr("text-anchor", text_anchor)
             .attr("vector-effects", "non-scaling-size")
             .text(definition['name']['text']);
     }
@@ -256,15 +270,23 @@ function drawArtifact(definition) {
             .text(definition['info']['text']);
     }
 
+    let svg_transform = ""
+    if (definition['svg']['align']) {
+        if (definition['svg']['align'] === 'center') {
+            svg_transform = "translate(" + (definition['svg']['width']/2 - icon_width/2) + " , 0)"
+        } else if (definition['svg']['align'] === 'right') {
+            svg_transform = "translate(" + (definition['svg']['width'] - icon_width - icon_spacing) + " , 0)"
+        }
+    }
+
     svg.append('g')
-        //.attr("transform", "translate("  + [icon_translate_x, icon_translate_y] + ")")
-        //.attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
         .append("use")
-        .attr("xlink:href","#" + def_id);
+        .attr("xlink:href","#" + def_id)
+        .attr("transform", svg_transform);
+
     svg.append("title")
         .attr("id", id + '-title')
         .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
-
 
     // Set common attributes on svg element and children
     svg.on("contextmenu", handleContextMenu)
