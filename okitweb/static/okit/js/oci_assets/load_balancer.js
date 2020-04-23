@@ -5,7 +5,7 @@
 console.info('Loaded Load Balancer Javascript');
 
 const load_balancer_query_cb = "load-balancer-query-cb";
-const load_balancer_width = Math.round(icon_width * 6);
+const load_balancer_width = Math.round(icon_width * 3);
 const load_balancer_height = Math.round(icon_height * 3 / 2);
 
 /*
@@ -172,7 +172,7 @@ class LoadBalancer extends OkitArtifact {
     }
 
     getMinimumDimensions() {
-        return {width: load_balancer_width, height:load_balancer_height};
+        return {width: load_balancer_width, height: load_balancer_height};
     }
 
 
