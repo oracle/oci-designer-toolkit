@@ -224,14 +224,11 @@ textarea {
 
 .okit-navigation-menu {
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: visible;
     position: absolute;
-    /*left: 0;
-    top: 54px;*/
     z-index: 100;
     width: 300px;
     height: 100%;
-    /*height: calc(100% - (4px + 50px + 30px));*/
     background-color: #253141;
     direction: rtl;
     transition: all 0.25s;
@@ -284,12 +281,10 @@ ul.okit-navigation-list li.sub-header-item {
     overflow-wrap: break-word;
     display: block;
     font: normal 12px Helvetica Neue,Helvetica,Arial,sans-serif;
-    /*font: normal 14px/20px Helvetica Neue,Helvetica,Arial,sans-serif;*/
     color: #aeaeae;
     text-decoration: none;
     outline: 0;
     user-select: none;
-    /*padding: 12.5px 30px;*/
     /*padding: t r b l*/
     padding: 12px 10px 12px 45px;
     flex-direction: row;
@@ -303,11 +298,10 @@ ul.okit-navigation-list .dropdown {}
 
 ul.okit-navigation-list .dropdown-content {
     display: none;
-    /*border: 1px solid #aeaeae;*/
     text-decoration: none;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1000;
+    z-index: 1001;
     list-style-type: none;
     margin: 0;
     padding: 0;

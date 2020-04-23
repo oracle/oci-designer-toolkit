@@ -42,12 +42,15 @@ $(document).ready(function() {
     $('li.dropdown').on('mouseover', function() {
         console.info(`>>>>>>> Over ${this.id}`);
         let menu_pos = $(this).position();
-        console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left}`);
+        let width = $(this).outerWidth();
+        console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left} w: ${width}`);
         let $slideout = $('> .dropdown-content', $(this));
         // TODO: Implement as part of Slide Out Menu fix
-        //$slideout.css('position', 'fixed');
+        //$slideout.css('position', 'sticky');
         //$slideout.css('top', menu_pos.top);
-        //$slideout.css('left', menu_pos.left + $(this).outerWidth() * 0.75);
+        //$slideout.css('left', menu_pos.left + width * 0.75);
+        //$slideout.css('transformY', `translate(${menu_pos.top})`);
+        //$slideout.css('transformX', `translate(${menu_pos.left + width})`);
     });
 
 });
