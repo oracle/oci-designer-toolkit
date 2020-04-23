@@ -27,12 +27,12 @@ $(document).ready(function() {
         $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
     });
 
-    $(jqId('navigation_menu')).mouseover(function(e) {
+    $(jqId('navigation_menu_list')).mouseover(function(e) {
         e.preventDefault();
         $(jqId('navigation_menu')).addClass('okit-navigation-menu-show');
     });
 
-    $(jqId('navigation_menu')).mouseleave(function(e) {
+    $(jqId('navigation_menu_list')).mouseleave(function(e) {
         e.preventDefault();
         $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
     });
@@ -46,9 +46,9 @@ $(document).ready(function() {
         console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left} w: ${width}`);
         let $slideout = $('> .dropdown-content', $(this));
         // TODO: Implement as part of Slide Out Menu fix
-        //$slideout.css('position', 'fixed');
-        //$slideout.css('top', menu_pos.top);
-        //$slideout.css('left', menu_pos.left + width * 0.75);
+        $slideout.css('position', 'absolute');
+        $slideout.css('top', menu_pos.top);
+        $slideout.css('left', menu_pos.left + width);
     });
 
 });
