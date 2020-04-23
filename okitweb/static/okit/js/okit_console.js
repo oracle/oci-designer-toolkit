@@ -46,11 +46,9 @@ $(document).ready(function() {
         console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left} w: ${width}`);
         let $slideout = $('> .dropdown-content', $(this));
         // TODO: Implement as part of Slide Out Menu fix
-        //$slideout.css('position', 'sticky');
+        //$slideout.css('position', 'fixed');
         //$slideout.css('top', menu_pos.top);
         //$slideout.css('left', menu_pos.left + width * 0.75);
-        //$slideout.css('transformY', `translate(${menu_pos.top})`);
-        //$slideout.css('transformX', `translate(${menu_pos.left + width})`);
     });
 
 });
