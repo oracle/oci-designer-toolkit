@@ -47,7 +47,7 @@ class OCIGenerator(object):
         self.jinja2_variables["copyright"] = __copyright__
         # Initialise Jinja2
         self.template_loader = jinja2.FileSystemLoader(searchpath=template_dir)
-        self.jinja2_environment = jinja2.Environment(loader=self.template_loader, trim_blocks=True, lstrip_blocks=True)
+        self.jinja2_environment = jinja2.Environment(loader=self.template_loader, trim_blocks=True, lstrip_blocks=True, autoescape=True)
         # Initialise working variables
         self.id_name_map = {}
 
