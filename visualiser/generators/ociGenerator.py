@@ -1125,7 +1125,6 @@ class OCIGenerator(object):
             for security_list_id in subnet.get('security_list_ids', []):
                 security_list = self.id_name_map[security_list_id]
                 jinja2_security_list_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(security_list)))
-            self.jinja2_variables["security_list_ids"] = ','.join(jinja2_security_list_ids)
             self.jinja2_variables["security_list_ids"] = jinja2_security_list_ids
         else:
             self.jinja2_variables.pop("security_list_ids", None)
