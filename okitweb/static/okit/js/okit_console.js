@@ -4,8 +4,8 @@
 */
 console.info('Loaded Console Javascript');
 
-const okitVersion = '0.5.0';
-const okitReleaseDate = '13th May 2020';
+const okitVersion = '0.4.1';
+const okitReleaseDate = '24th April 2020';
 
 function hideNavMenu() {
     $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');

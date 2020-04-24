@@ -500,8 +500,8 @@ class Instance extends OkitArtifact {
                 hideQueryProgressIfComplete();
             },
             error: function (xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error : ' + error);
                 $('#' + instance_query_cb).prop('checked', true);
                 hideQueryProgressIfComplete();
             }

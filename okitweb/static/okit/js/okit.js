@@ -73,7 +73,7 @@ class OkitSettings {
         this.profile = 'DEFAULT';
         this.is_always_free = false;
         this.is_optional_expanded = true;
-        this.is_display_grid = true;
+        this.is_display_grid = false;
         this.load();
     }
 

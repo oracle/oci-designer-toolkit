@@ -5,6 +5,9 @@
       "shape": "BM.Standard2.52"
     },
     {
+      "shape": "BM.Standard.E3.128"
+    },
+    {
       "shape": "BM.Standard.E2.64"
     },
     {
@@ -20,73 +23,7 @@
       "shape": "BM.Standard.B1.44"
     },
     {
-      "shape": "VM.Standard2.1"
-    },
-    {
-      "shape": "VM.Standard2.2"
-    },
-    {
-      "shape": "VM.Standard2.4"
-    },
-    {
-      "shape": "VM.Standard2.8"
-    },
-    {
-      "shape": "VM.Standard2.16"
-    },
-    {
-      "shape": "VM.Standard2.24"
-    },
-    {
-      "shape": "VM.Standard.E2.1"
-    },
-    {
-      "shape": "VM.Standard.E2.2"
-    },
-    {
-      "shape": "VM.Standard.E2.4"
-    },
-    {
-      "shape": "VM.Standard.E2.8"
-    },
-    {
-      "shape": "VM.DenseIO2.8"
-    },
-    {
-      "shape": "VM.DenseIO2.16"
-    },
-    {
-      "shape": "VM.DenseIO2.24"
-    },
-    {
-      "shape": "VM.Standard1.1"
-    },
-    {
-      "shape": "VM.Standard1.2"
-    },
-    {
-      "shape": "VM.Standard1.4"
-    },
-    {
-      "shape": "VM.Standard1.8"
-    },
-    {
-      "shape": "VM.Standard1.16"
-    },
-    {
-      "shape": "BM.Standard2.52"
-    },
-    {
-      "shape": "BM.Standard.E2.64"
-    },
-    {
-      "shape": "BM.DenseIO2.52"
-    },
-    {
-      "shape": "BM.Standard1.36"
-    },
-    {
-      "shape": "BM.Standard.B1.44"
+      "shape": "VM.Standard.E3.Flex"
     },
     {
       "shape": "VM.Standard2.1"
@@ -146,6 +83,9 @@
       "shape": "BM.Standard2.52"
     },
     {
+      "shape": "BM.Standard.E3.128"
+    },
+    {
       "shape": "BM.Standard.E2.64"
     },
     {
@@ -156,6 +96,84 @@
     },
     {
       "shape": "BM.Standard.B1.44"
+    },
+    {
+      "shape": "VM.Standard.E3.Flex"
+    },
+    {
+      "shape": "VM.Standard2.1"
+    },
+    {
+      "shape": "VM.Standard2.2"
+    },
+    {
+      "shape": "VM.Standard2.4"
+    },
+    {
+      "shape": "VM.Standard2.8"
+    },
+    {
+      "shape": "VM.Standard2.16"
+    },
+    {
+      "shape": "VM.Standard2.24"
+    },
+    {
+      "shape": "VM.Standard.E2.1"
+    },
+    {
+      "shape": "VM.Standard.E2.2"
+    },
+    {
+      "shape": "VM.Standard.E2.4"
+    },
+    {
+      "shape": "VM.Standard.E2.8"
+    },
+    {
+      "shape": "VM.DenseIO2.8"
+    },
+    {
+      "shape": "VM.DenseIO2.16"
+    },
+    {
+      "shape": "VM.DenseIO2.24"
+    },
+    {
+      "shape": "VM.Standard1.1"
+    },
+    {
+      "shape": "VM.Standard1.2"
+    },
+    {
+      "shape": "VM.Standard1.4"
+    },
+    {
+      "shape": "VM.Standard1.8"
+    },
+    {
+      "shape": "VM.Standard1.16"
+    },
+    {
+      "shape": "BM.Standard2.52"
+    },
+    {
+      "shape": "BM.Standard.E3.128"
+    },
+    {
+      "shape": "BM.Standard.E2.64"
+    },
+    {
+      "shape": "BM.DenseIO2.52"
+    },
+    {
+      "shape": "BM.Standard1.36"
+    },
+    {
+      "shape": "BM.Standard.B1.44"
+    },
+    {
+      "shape": "VM.Standard.E3.Flex"
     },
     {
       "shape": "VM.Standard2.1"
