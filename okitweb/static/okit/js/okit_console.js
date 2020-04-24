@@ -4,8 +4,8 @@
 */
 console.info('Loaded Console Javascript');
 
-const okitVersion = '0.4.0';
-const okitReleaseDate = '22nd April 2020';
+const okitVersion = '0.4.1';
+const okitReleaseDate = '24th April 2020';
 
 function hideNavMenu() {
     $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
@@ -27,12 +27,12 @@ $(document).ready(function() {
         $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
     });
 
-    $(jqId('navigation_menu')).mouseover(function(e) {
+    $(jqId('navigation_menu_list')).mouseover(function(e) {
         e.preventDefault();
         $(jqId('navigation_menu')).addClass('okit-navigation-menu-show');
     });
 
-    $(jqId('navigation_menu')).mouseleave(function(e) {
+    $(jqId('navigation_menu_list')).mouseleave(function(e) {
         e.preventDefault();
         $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
     });
@@ -42,12 +42,13 @@ $(document).ready(function() {
     $('li.dropdown').on('mouseover', function() {
         console.info(`>>>>>>> Over ${this.id}`);
         let menu_pos = $(this).position();
-        console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left}`);
+        let width = $(this).outerWidth();
+        console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left} w: ${width}`);
         let $slideout = $('> .dropdown-content', $(this));
         // TODO: Implement as part of Slide Out Menu fix
-        //$slideout.css('position', 'fixed');
-        //$slideout.css('top', menu_pos.top);
-        //$slideout.css('left', menu_pos.left + $(this).outerWidth() * 0.75);
+        $slideout.css('position', 'absolute');
+        $slideout.css('top', menu_pos.top);
+        $slideout.css('left', menu_pos.left + width);
     });
 
 });

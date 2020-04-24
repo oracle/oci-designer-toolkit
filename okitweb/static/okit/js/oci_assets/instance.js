@@ -5,7 +5,7 @@
 console.info('Loaded Instance Javascript');
 
 const instance_query_cb = "instance-query-cb";
-const min_instance_width = Math.round((icon_width * 3) + (icon_spacing * 4));
+const min_instance_width = Math.round(icon_width * 5 / 2);
 const min_instance_height = Math.round(icon_height * 5 / 2);
 
 /*
@@ -257,7 +257,7 @@ class Instance extends OkitArtifact {
     }
 
     getMinimumDimensions() {
-        return {width: min_instance_width, height:min_instance_height};
+        return {width: min_instance_width, height: min_instance_height};
     }
 
 
@@ -500,8 +500,8 @@ class Instance extends OkitArtifact {
                 hideQueryProgressIfComplete();
             },
             error: function (xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error : ' + error);
                 $('#' + instance_query_cb).prop('checked', true);
                 hideQueryProgressIfComplete();
             }

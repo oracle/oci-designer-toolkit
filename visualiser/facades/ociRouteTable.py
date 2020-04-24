@@ -27,6 +27,7 @@ class OCIRouteTables(OCIVirtualNetworkConnection):
                      'natgateway':'nat_gateways',
                      'localpeeringgateway': 'local_peering_gateways',
                      'dynamicroutinggateway': 'dynamic_routing_gateways',
+                     'drg': 'dynamic_routing_gateways',
                      'privateip':'private_ips',
                      'servicegateway': 'service_gateways'}
 
