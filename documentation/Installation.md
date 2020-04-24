@@ -3,7 +3,7 @@
 Although OKIT can simply be downloaded and the command line executed it is recommended that it be executed within a
 docker container that can be built using the Dockerfile within this repository. This will guarantee that all the required 
 python modules are installed and in addition provide a simple flask server that will present the web based application on
-[http://localhost:8080/okit/designer](http://localhost:8080/okit/designer).
+[http://localhost/okit/designer](http://localhost/okit/designer).
 
 
 ## Table of Contents
@@ -21,11 +21,11 @@ python modules are installed and in addition provide a simple flask server that 
 ## Clone Repository
 Before the building either the Docker or Vagrant Images the project will nee to be cloned from the Git Repository (or downloaded)
 and it is recommended that the latest Stable Release be cloned. The latest stable version number if shown in the README
-and the associated Release tag is in the format Release-<Version> hence for the version 0.1.0 the Reease tag will be 
+and the associated Release tag is in the format Release-<Version> hence for the version 0.2.0 the Release tag will be 
 **Release-0.2.0**. The command shows how this can be cloned to the local machine.
 
 ```bash
-your-mac:tmp git clone -b Release-0.2.0 --depth 1 git@<Git Repo URL>:<Repository>/okit.oci.web.designer.git
+git clone -b Release-0.2.0 --depth 1 git@<Git Repo URL>:<Repository>/okit.oci.web.designer.git
 ```
 
 
@@ -34,16 +34,14 @@ The docker image is the recommended runtime server and can be built and started 
 
 ### Build Docker Image
 ```bash
-your-mac:tmp youruser$ cd okit.oci.web.designer/docker/
-your-mac:docker
-your-mac:docker youruser$ ./build-docker-image.sh
+cd okit.oci.web.designer/docker/
+./build-docker-image.sh
 ```
 
 ### Start Docker Image
 ```bash
-your-mac:tmp youruser$ cd okit.oci.web.designer/docker/
-your-mac:docker
-your-mac:docker youruser$ ./start-okit-server.sh
+cd okit.oci.web.designer/docker/
+./start-okit-server.sh
 ```
 
 
@@ -63,8 +61,8 @@ The vagrant should now have these folders & files:
 
 ### Build Vagrant Image
 ```bash
-your-mac:tmp youruser$ cd okit.oci.web.designer/vagrant/
-your-mac:vagrant youruser$ vagrant up; vagrant ssh
+cd okit.oci.web.designer/vagrant/
+vagrant up; vagrant ssh
 ```
 **NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
 is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.

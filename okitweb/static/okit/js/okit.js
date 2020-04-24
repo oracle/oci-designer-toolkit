@@ -15,15 +15,6 @@ if (typeof JSON.clone !== "function") {
 /*
 ** Define OKIT Artifact Classes
  */
-class OkitSvg {
-    constructor(x=0, y=0, height=0, width=0) {
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        this.width = width;
-    }
-}
-
 class OkitOCIData {
     constructor() {
         this.load();
@@ -31,7 +22,7 @@ class OkitOCIData {
 
     load() {
         let me = this;
-        $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); console.info(me)});
+        $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); console.info(me); me.query();});
     }
 
     save() {
@@ -53,7 +44,24 @@ class OkitOCIData {
 
     query() {
         let me = this;
-        $.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp), me.save(); console.info(me)});
+        //$.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
+        $.ajax({
+            type: 'get',
+            url: 'dropdown/query',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(this),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                $.extend(true, me, resp);
+                me.save();
+                console.info(me);
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : '+ status)
+                console.warn('Error : '+ error)
+            }
+        });
     }
 }
 
@@ -65,7 +73,7 @@ class OkitSettings {
         this.profile = 'DEFAULT';
         this.is_always_free = false;
         this.is_optional_expanded = true;
-        this.is_display_grid = true;
+        this.is_display_grid = false;
         this.load();
     }
 

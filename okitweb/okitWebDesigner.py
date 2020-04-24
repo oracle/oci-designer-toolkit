@@ -48,6 +48,7 @@ from facades.ociResourceManager import OCIResourceManagers
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
 from facades.ociServiceGateway import OCIServiceGateways
+from facades.ociShape import OCIShapes
 from facades.ociSubnet import OCISubnets
 from facades.ociTenancy import OCITenancies
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
@@ -211,7 +212,7 @@ def generate(language):
         return send_from_directory('/tmp', "okit-{0:s}.zip".format(str(language)), mimetype='application/zip', as_attachment=True)
 
 
-@bp.route('/saveas/<string:savetype>', methods=(['GET', 'POST']))
+@bp.route('/saveas/<string:savetype>', methods=(['POST']))
 def saveas(savetype):
     logger.info('Save Type : {0:s} - {1:s}'.format(str(savetype), str(request.method)))
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
@@ -434,9 +435,13 @@ def export(destination):
 
 @bp.route('/dropdown/data', methods=(['GET', 'POST']))
 def dropdownData():
+    dropdown_file = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown.json'))
     if request.method == 'GET':
-        return {"instance": {"shapes": []}}
+        dropdown_json = readJsonFile(dropdown_file)
+        logger.info('>> Drop Down Json {0!s:s}'.format(str(dropdown_json)))
+        return dropdown_json
     elif request.method == 'POST':
+        writeJsonFile(request.json, dropdown_file)
         return request.json
     else:
         return 'Unknown Method', 500
@@ -444,7 +449,11 @@ def dropdownData():
 @bp.route('/dropdown/query', methods=(['GET']))
 def dropdownQuery():
     if request.method == 'GET':
-        return {"instance": {"shapes": []}}
+        dropdown_json = {}
+        oci_shapes = OCIShapes()
+        dropdown_json["shapes"] = oci_shapes.list()
+        #return {"instance": {"shapes": []}}
+        return dropdown_json
     else:
         return 'Unknown Method', 500
 
