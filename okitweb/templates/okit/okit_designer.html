@@ -53,7 +53,7 @@
             <li>
                 <div>
                     <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Canvas Menu"></div>
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="OKIT Menu"></div>
                         <span>OKIT</span>
                     </span>
                 </div>
@@ -70,9 +70,15 @@
                 </div>
             </li>
             <li><a id="file-new-menu-item"     class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
-            <li><a id="file-load-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Load</a></li>
-            <li><a id="file-save-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
-            <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAs()">Save As Template</a></li>
+            <li><a id="file-load-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
+            <li id="save_file" class="sub-header-item dropdown">
+                <span>Save</span>
+                <ul class="dropdown-content">
+                    <li><a id="file-save-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
+                    <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAs()">Save As Template</a></li>
+                </ul>
+            </li>
+            <li><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOci()">Query</a></li>
             <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li>
         </ul>
         <ul class="okit-navigation-sub-list">
@@ -91,7 +97,7 @@
                                onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
                     {% endfor %}
                 {% elif template_group['templates']|length > 0 %}
-                    <li id="{{ template_group['name'] }}" class="sub-header-item dropdown">{{ template_group['name'] }}
+                    <li id="{{ template_group['name'] }}" class="sub-header-item dropdown"><span>{{ template_group['name'] }}</span>
                         <ul class="dropdown-content">
                             {% for okit_template in template_group['templates'] %}
                                 <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
@@ -115,7 +121,7 @@
             <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)">Network</a></li>
             <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li>
         </ul-->
-        <ul class="okit-navigation-sub-list">
+        <!--ul class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -124,9 +130,8 @@
                     </span>
                 </div>
             </li>
-            <li><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOci()">OCI</a></li>
-        </ul>
-        <ul class="okit-navigation-sub-list">
+        </ul-->
+        <!--ul class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -135,9 +140,7 @@
                     </span>
                 </div>
             </li>
-            <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleGenerateTerraform()">Terraform</a></li>
-            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleGenerateAnsible()">Ansible</a></li>
-        </ul>
+        </ul-->
         <ul class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -147,9 +150,16 @@
                     </span>
                 </div>
             </li>
-            <li><a id="file-export-svg-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToSVG()">SVG</a></li>
-            <li><a id="file_export_png_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToPNG()">PNG</a></li>
-            <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">JPEG</a></li>
+            <li id="image_export" class="sub-header-item dropdown">
+                <span>Image</span>
+                <ul class="dropdown-content">
+                    <li><a id="file-export-svg-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToSVG()">svg</a></li>
+                    <li><a id="file_export_png_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToPNG()">png</a></li>
+                    <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">jpeg</a></li>
+                </ul>
+            </li>
+            <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleGenerateTerraform()">Terraform</a></li>
+            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleGenerateAnsible()">Ansible</a></li>
             <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
         </ul>
     </ul>
