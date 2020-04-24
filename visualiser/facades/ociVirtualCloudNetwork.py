@@ -17,9 +17,11 @@ import oci
 
 from common.ociLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
+from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
+from facades.ociServiceGateway import OCIServiceGateways
 from facades.ociSubnet import OCISubnets
 
 # Configure logging
