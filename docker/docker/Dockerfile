@@ -5,7 +5,7 @@
 ARG os_version=latest
 ARG os=oraclelinux
 FROM ${os}:${os_version}
-LABEL version="0.5.0"
+LABEL version="0.4.1"
 LABEL description="OKIT Web Server."
 LABEL copyright="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
