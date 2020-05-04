@@ -16,10 +16,9 @@ to be fixed. Please include:
 Pull requests can be made under
 [The Oracle Contributor Agreement](https://www.oracle.com/technetwork/community/oca-486395.html) (OCA).
 
-We have a list of great things we want to implement.  If you have
-ideas, get in touch directly or via the Oracle Technology Network
-OKIT discussion forum
-so we don't duplicate efforts.
+This repo is in early and active development. While we welcome contributions from the community, we may defer merging 
+new functionality until the codebase stabilises. We have a list of great things we want to implement.  If you have
+ideas get in touch directly or via the Oracle Technology Network OKIT discussion forum, so we don't duplicate efforts.
 
 For pull requests to be accepted, the bottom of your commit message must have 
 the following line using your name and e-mail address as it appears in the
