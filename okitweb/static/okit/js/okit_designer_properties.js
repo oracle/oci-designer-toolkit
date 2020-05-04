@@ -193,7 +193,7 @@ function addPropertiesEventListeners1(json_element, callbacks=[], settings=false
                 if (settings) {
                     json_element.save();
                 }
-                drawSVGforJson();
+                okitJson.draw();
             });
         }
     );
@@ -207,7 +207,7 @@ function addPropertiesEventListeners1(json_element, callbacks=[], settings=false
                 for (let f of callbacks) {
                     f(this.id, json_element);
                 }
-                drawSVGforJson();
+                okitJson.draw();
             });
             inputfield.on('blur', function() {
                 if (settings) {
@@ -229,7 +229,7 @@ function addPropertiesEventListeners1(json_element, callbacks=[], settings=false
                 if (settings) {
                     json_element.save();
                 }
-                drawSVGforJson();
+                okitJson.draw();
             });
         }
     );

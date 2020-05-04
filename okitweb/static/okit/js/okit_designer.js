@@ -105,7 +105,7 @@ function loaded(evt) {
         }
     }
     displayOkitJson();
-    drawSVGforJson();
+    okitJson.draw();
 }
 function errorHandler(evt) {
     console.info('Error: ' + evt.target.error.name);
@@ -206,7 +206,7 @@ function redrawSVGCanvas(region='') {
     console.info('>>>>>>>>> Redrawing Canvas (Region : ' + region +')');
     console.info('>>>>>>>>> Active Region            : ' + activeRegion);
     if (region === '' || region === activeRegion) {
-        drawSVGforJson();
+        okitJson.draw();
     }
 }
 /*
@@ -223,7 +223,7 @@ function loadTemplate(template_url) {
         success: function(resp) {
             okitJson = new OkitJson(resp);
             displayOkitJson();
-            drawSVGforJson();
+            okitJson.draw();
         },
         error: function(xhr, status, error) {
             console.error('Status : '+ status);

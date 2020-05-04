@@ -45,7 +45,7 @@ function addAssetToDropTarget(artifact, title, target_id, compartment_id, target
 
 function updateAssetTarget(title, source_type, source_id, target_id) {
     window[asset_update_functions[title]](source_type, source_id, target_id);
-    drawSVGforJson();
+    okitJson.draw();
 }
 
 function deleteAssetFromSVG(artifact, id) {
