@@ -70,5 +70,5 @@ is downloaded from github. Once the VM is built the vagrant up should just take 
 After the Vagrant VM is built the vagrant users home folder should have folders from the cloned okit.oci.web.designer 
 repository exposed in the Vagrant vm in the vagrant users home directory (/okitweb, /visualiser & /output). The OKIT app 
 should also be running. To access the app the ports have been forwarded to the host and you should be able to access 
-OKIT on http://localhost:8080/okit/designer from the host.
+OKIT on http://localhost/okit/designer from the host.
 

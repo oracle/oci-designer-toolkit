@@ -4,12 +4,9 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 export ROOT_DIR=$(cd $(dirname $0)/..; pwd)
-export VERSION="0.4.1"
+export VERSION="0.5.0"
 export DOCKERIMAGE="okit/${VERSION}/webserver"
 export BUILDSCRIPT="build-docker-image.sh"
-
-echo "DOCKERIMAGE = ${DOCKERIMAGE}"
-
 export DOCKERDIR=$(cd $(dirname $0); pwd)
 
 # Script information

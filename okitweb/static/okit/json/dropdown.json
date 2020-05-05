@@ -1,233 +1,487 @@
 {
-  "os": {},
   "shapes": [
     {
-      "shape": "BM.Standard2.52"
-    },
-    {
-      "shape": "BM.Standard.E3.128"
-    },
-    {
-      "shape": "BM.Standard.E2.64"
-    },
-    {
-      "shape": "BM.DenseIO2.52"
-    },
-    {
-      "shape": "BM.HPC2.36"
-    },
-    {
-      "shape": "BM.Standard1.36"
-    },
-    {
-      "shape": "BM.Standard.B1.44"
-    },
-    {
-      "shape": "VM.Standard.E3.Flex"
-    },
-    {
-      "shape": "VM.Standard2.1"
-    },
-    {
-      "shape": "VM.Standard2.2"
-    },
-    {
-      "shape": "VM.Standard2.4"
-    },
-    {
-      "shape": "VM.Standard2.8"
-    },
-    {
-      "shape": "VM.Standard2.16"
-    },
-    {
-      "shape": "VM.Standard2.24"
-    },
-    {
-      "shape": "VM.Standard.E2.1"
-    },
-    {
-      "shape": "VM.Standard.E2.2"
-    },
-    {
-      "shape": "VM.Standard.E2.4"
-    },
-    {
-      "shape": "VM.Standard.E2.8"
-    },
-    {
-      "shape": "VM.DenseIO2.8"
-    },
-    {
-      "shape": "VM.DenseIO2.16"
-    },
-    {
-      "shape": "VM.DenseIO2.24"
-    },
-    {
-      "shape": "VM.Standard1.1"
-    },
-    {
-      "shape": "VM.Standard1.2"
-    },
-    {
-      "shape": "VM.Standard1.4"
-    },
-    {
-      "shape": "VM.Standard1.8"
-    },
-    {
-      "shape": "VM.Standard1.16"
-    },
-    {
-      "shape": "BM.Standard2.52"
-    },
-    {
-      "shape": "BM.Standard.E3.128"
-    },
-    {
-      "shape": "BM.Standard.E2.64"
-    },
-    {
-      "shape": "BM.DenseIO2.52"
-    },
-    {
-      "shape": "BM.Standard1.36"
-    },
-    {
-      "shape": "BM.Standard.B1.44"
-    },
-    {
-      "shape": "VM.Standard.E3.Flex"
-    },
-    {
-      "shape": "VM.Standard2.1"
-    },
-    {
-      "shape": "VM.Standard2.2"
-    },
-    {
-      "shape": "VM.Standard2.4"
-    },
-    {
-      "shape": "VM.Standard2.8"
-    },
-    {
-      "shape": "VM.Standard2.16"
-    },
-    {
-      "shape": "VM.Standard2.24"
-    },
-    {
-      "shape": "VM.Standard.E2.1"
-    },
-    {
-      "shape": "VM.Standard.E2.2"
-    },
-    {
-      "shape": "VM.Standard.E2.4"
-    },
-    {
-      "shape": "VM.Standard.E2.8"
-    },
-    {
-      "shape": "VM.DenseIO2.8"
-    },
-    {
-      "shape": "VM.DenseIO2.16"
-    },
-    {
-      "shape": "VM.DenseIO2.24"
-    },
-    {
-      "shape": "VM.Standard1.1"
-    },
-    {
-      "shape": "VM.Standard1.2"
-    },
-    {
-      "shape": "VM.Standard1.4"
-    },
-    {
-      "shape": "VM.Standard1.8"
-    },
-    {
-      "shape": "VM.Standard1.16"
-    },
-    {
-      "shape": "BM.Standard2.52"
-    },
-    {
-      "shape": "BM.Standard.E3.128"
-    },
-    {
-      "shape": "BM.Standard.E2.64"
-    },
-    {
-      "shape": "BM.DenseIO2.52"
-    },
-    {
-      "shape": "BM.Standard1.36"
-    },
-    {
-      "shape": "BM.Standard.B1.44"
-    },
-    {
-      "shape": "VM.Standard.E3.Flex"
-    },
-    {
-      "shape": "VM.Standard2.1"
-    },
-    {
-      "shape": "VM.Standard2.2"
-    },
-    {
-      "shape": "VM.Standard2.4"
-    },
-    {
-      "shape": "VM.Standard2.8"
-    },
-    {
-      "shape": "VM.Standard2.16"
-    },
-    {
-      "shape": "VM.Standard2.24"
-    },
-    {
-      "shape": "VM.Standard.E2.1"
-    },
-    {
-      "shape": "VM.Standard.E2.2"
-    },
-    {
-      "shape": "VM.Standard.E2.4"
-    },
-    {
-      "shape": "VM.Standard.E2.8"
-    },
-    {
-      "shape": "VM.DenseIO2.8"
-    },
-    {
-      "shape": "VM.DenseIO2.16"
-    },
-    {
-      "shape": "VM.DenseIO2.24"
-    },
-    {
-      "shape": "VM.Standard1.1"
-    },
-    {
-      "shape": "VM.Standard1.2"
-    },
-    {
-      "shape": "VM.Standard1.4"
-    },
-    {
-      "shape": "VM.Standard1.8"
-    },
-    {
-      "shape": "VM.Standard1.16"
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": "NVMe SSD Storage",
+      "local_disks": 8,
+      "local_disks_total_size_in_gbs": 52428.8,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 52,
+      "memory_in_gbs": 768,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 50,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 52,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "BM.DenseIO2.52",
+      "sort_key": "BM-DenseIO2-052-768"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": "NVMe SSD Storage",
+      "local_disks": 8,
+      "local_disks_total_size_in_gbs": 6860.8,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 50,
+      "memory_in_gbs": 384,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 25,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 36,
+      "processor_description": "3.0 GHz Intel\u00ae Xeon\u00ae Gold 6154 (Skylake)",
+      "shape": "BM.HPC2.36",
+      "sort_key": "BM-HPC2-036-384"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 44,
+      "memory_in_gbs": 512,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 25,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 44,
+      "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
+      "shape": "BM.Standard.B1.44",
+      "sort_key": "BM-Standard-044-512"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 150,
+      "memory_in_gbs": 512,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 50,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 64,
+      "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+      "shape": "BM.Standard.E2.64",
+      "sort_key": "BM-Standard-064-512"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 256,
+      "memory_in_gbs": 2048,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 100,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 128,
+      "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
+      "shape": "BM.Standard.E3.128",
+      "sort_key": "BM-Standard-128-2048"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 100,
+      "memory_in_gbs": 256,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 10,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 36,
+      "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
+      "shape": "BM.Standard1.36",
+      "sort_key": "BM-Standard1-036-256"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 200,
+      "memory_in_gbs": 768,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 50,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 52,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "BM.Standard2.52",
+      "sort_key": "BM-Standard2-052-768"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": "NVMe SSD Storage",
+      "local_disks": 1,
+      "local_disks_total_size_in_gbs": 6553.6,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 8,
+      "memory_in_gbs": 120,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 8.2,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 8,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.DenseIO2.8",
+      "sort_key": "VM-DenseIO2-008-120"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": "NVMe SSD Storage",
+      "local_disks": 2,
+      "local_disks_total_size_in_gbs": 13107.2,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 16,
+      "memory_in_gbs": 240,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 16.4,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 16,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.DenseIO2.16",
+      "sort_key": "VM-DenseIO2-016-240"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": "NVMe SSD Storage",
+      "local_disks": 4,
+      "local_disks_total_size_in_gbs": 26214.4,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 24,
+      "memory_in_gbs": 320,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 24.6,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 24,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.DenseIO2.24",
+      "sort_key": "VM-DenseIO2-024-320"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 2,
+      "memory_in_gbs": 8,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 0.7,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 1,
+      "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+      "shape": "VM.Standard.E2.1",
+      "sort_key": "VM-Standard-001-008"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": {
+        "default_per_ocpu": 2,
+        "max": 64,
+        "min": 2
+      },
+      "max_vnic_attachments": 2,
+      "memory_in_gbs": 16,
+      "memory_options": {
+        "default_per_ocpu_in_g_bs": 16,
+        "max_in_g_bs": 1024,
+        "min_in_g_bs": 16
+      },
+      "networking_bandwidth_in_gbps": 1,
+      "networking_bandwidth_options": {
+        "default_per_ocpu_in_gbps": 1,
+        "max_in_gbps": 40,
+        "min_in_gbps": 1
+      },
+      "ocpu_options": {
+        "max": 64,
+        "min": 1
+      },
+      "ocpus": 1,
+      "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
+      "shape": "VM.Standard.E3.Flex",
+      "sort_key": "VM-Standard-001-016"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 2,
+      "memory_in_gbs": 16,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 1.4,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 2,
+      "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+      "shape": "VM.Standard.E2.2",
+      "sort_key": "VM-Standard-002-016"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 4,
+      "memory_in_gbs": 32,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 2.8,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 4,
+      "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+      "shape": "VM.Standard.E2.4",
+      "sort_key": "VM-Standard-004-032"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 8,
+      "memory_in_gbs": 64,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 5.6,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 8,
+      "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+      "shape": "VM.Standard.E2.8",
+      "sort_key": "VM-Standard-008-064"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 2,
+      "memory_in_gbs": 7,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 0.6,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 1,
+      "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
+      "shape": "VM.Standard1.1",
+      "sort_key": "VM-Standard1-001-007"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 2,
+      "memory_in_gbs": 14,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 1.2,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 2,
+      "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
+      "shape": "VM.Standard1.2",
+      "sort_key": "VM-Standard1-002-014"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 4,
+      "memory_in_gbs": 28,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 1.2,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 4,
+      "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
+      "shape": "VM.Standard1.4",
+      "sort_key": "VM-Standard1-004-028"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 8,
+      "memory_in_gbs": 56,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 2.4,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 8,
+      "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
+      "shape": "VM.Standard1.8",
+      "sort_key": "VM-Standard1-008-056"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 16,
+      "memory_in_gbs": 112,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 4.8,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 16,
+      "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
+      "shape": "VM.Standard1.16",
+      "sort_key": "VM-Standard1-016-112"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 2,
+      "memory_in_gbs": 15,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 1,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 1,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.Standard2.1",
+      "sort_key": "VM-Standard2-001-015"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 2,
+      "memory_in_gbs": 30,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 2,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 2,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.Standard2.2",
+      "sort_key": "VM-Standard2-002-030"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 4,
+      "memory_in_gbs": 60,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 4.1,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 4,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.Standard2.4",
+      "sort_key": "VM-Standard2-004-060"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 8,
+      "memory_in_gbs": 120,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 8.2,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 8,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.Standard2.8",
+      "sort_key": "VM-Standard2-008-120"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 16,
+      "memory_in_gbs": 240,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 16.4,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 16,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.Standard2.16",
+      "sort_key": "VM-Standard2-016-240"
+    },
+    {
+      "gpu_description": null,
+      "gpus": 0,
+      "local_disk_description": null,
+      "local_disks": 0,
+      "local_disks_total_size_in_gbs": null,
+      "max_vnic_attachment_options": null,
+      "max_vnic_attachments": 24,
+      "memory_in_gbs": 320,
+      "memory_options": null,
+      "networking_bandwidth_in_gbps": 24.6,
+      "networking_bandwidth_options": null,
+      "ocpu_options": null,
+      "ocpus": 24,
+      "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.Standard2.24",
+      "sort_key": "VM-Standard2-024-320"
     }
   ]
 }

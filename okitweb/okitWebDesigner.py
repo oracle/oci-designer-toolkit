@@ -394,8 +394,7 @@ def export(destination):
             destination_dir = tempfile.mkdtemp();
             logger.debug(">>>>>>>>>>>>> {0!s:s}".format(destination_dir))
             stack = {}
-            stack['display_name'] = 'okit-stack-export-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
-            stack['display_name'] = 'nightmare-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
+            stack['display_name'] = 'okit-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
             if destination == 'resourcemanager':
                 # Get Compartment Information
                 export_compartment_index = request.json.get('open_compartment_index', 0)
@@ -451,7 +450,7 @@ def dropdownQuery():
     if request.method == 'GET':
         dropdown_json = {}
         oci_shapes = OCIShapes()
-        dropdown_json["shapes"] = oci_shapes.list()
+        dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
         #return {"instance": {"shapes": []}}
         return dropdown_json
     else:

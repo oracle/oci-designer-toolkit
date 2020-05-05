@@ -33,7 +33,7 @@
 {% endif %}
         source_details:
             # Required
-            source_type: "{{ source_type | default('image') }}"
+            source_type: "{{ source_type }}"
             image_id: "{{ '{{' }} ({{ resource_name }}Images.images | map(attribute='id') | first) {{ '}}' }}"
             # Optional
 {% if boot_volume_size_in_gbs is defined %}

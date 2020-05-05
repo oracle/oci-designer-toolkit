@@ -33,7 +33,7 @@ class OkitOCIData {
             contentType: 'application/json',
             data: JSON.stringify(this),
             success: function(resp) {
-                console.info('Response : ' + resp);
+                console.info('OKIT Dropdown Data Saved');
             },
             error: function(xhr, status, error) {
                 console.warn('Status : '+ status)
@@ -251,16 +251,19 @@ class OkitArtifact {
     ** Get this Artifacts Parent Object
      */
     getParent() {
-        if (this.parent_id && $(jqId(this.parent_id)).data('type')) {
-            console.info('Parent Id : ' + this.parent_id);
-            const getFunction = 'get' + $(jqId(this.parent_id)).data('type').split(' ').join('');
-            console.info('>>>>>>>>> Parent ' + this.getOkitJson()[getFunction](this.parent_id).display_name);
-            return this.getOkitJson()[getFunction](this.parent_id);
+        if (this.getParentId() && $(jqId(this.getParentId())).data('type')) {
+            console.info('Parent Id : ' + this.getParentId());
+            const getFunction = 'get' + $(jqId(this.getParentId())).data('type').split(' ').join('');
+            console.info('>>>>>>>>> Parent ' + this.getOkitJson()[getFunction](this.getParentId()).display_name);
+            return this.getOkitJson()[getFunction](this.getParentId());
         }
         console.info('>>>>>>>>> Parent NULL');
         return null;
     }
 
+    getParentId() {
+        return this.parent_id;
+    }
     /*
     ** Get the Artifact name this Artifact will be know by.
      */
@@ -307,7 +310,7 @@ class OkitArtifact {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing (Default) ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.groupCollapsed('Drawing (Default) ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.getParentId() + ']');
         let svg = drawArtifact(this.getSvgDefinition());
         /*
         ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can

@@ -48,23 +48,23 @@ do
   esac
 done
 
-#echo "Runtime     : ${RUNTIME}"
-#echo "Run Command : ${RUN_COMMAND}"
-echo ""
-echo ""
-echo ""
-echo "=========================================================================="
-echo "=====                              ${RUNTIME}                          ====="
-echo "=========================================================================="
-echo ""
-echo ""
-echo ""
-
 export BASENAME=$(basename $0)
 export DIRNAME=$(dirname $0)
 export FILENAME="${BASENAME%.*}"
 
 source $(dirname $0)/docker-env.sh
+
+echo ""
+echo ""
+echo ""
+echo "=========================================================================="
+echo "=====  Runtime : ${RUNTIME}                                            ====="
+echo "=====  Version : ${VERSION}                                               ====="
+echo "=====  Image   : ${DOCKERIMAGE}                                ====="
+echo "=========================================================================="
+echo ""
+echo ""
+echo ""
 
 # Test Docker Image exists
 PCMAIMAGE=$(docker images | grep ${DOCKERIMAGE})

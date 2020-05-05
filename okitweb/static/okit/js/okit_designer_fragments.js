@@ -250,7 +250,7 @@ class Fragment extends OkitArtifact {
                     console.warn('Invalid Drop Parent ' + me.parent_type);
                 }
                 displayOkitJson();
-                drawSVGforJson();
+                okitJson.draw();
             },
             error: function(xhr, status, error) {
                 console.error('Status : ' + status);

@@ -1,5 +1,13 @@
 # Release Notes
 
+## Version 0.5.0 
+**Release Date**: 13th May 2020
+### Features
+
+### Bug Fixes
+
+
+
 ## Version 0.4.1 
 **Release Date**: 24th April 2020
 ### Features
@@ -8,6 +16,8 @@
 ### Bug Fixes
 1. When querying Instances missing user_data would cause an exception to be thrown.
 2. Route Table Route Rule endpoint map did not include 'drg' which caused and exception to be raised when querying.
+
+
 
 ## Version 0.4.0 
 **Release Date**: 22nd April 2020
@@ -31,6 +41,8 @@
 ### Bug Fixes
 1. Discovery conflict between compartment and subnet attachment. Instance not in the same compartment as there primary vnic were drawn in the compartment of their primary vnic not the correct one.
 2. JSON: network_entity_id value is empty in route_tables.route_rules
+
+
 
 ## Version 0.3.0 
 **Release Date**: 1st April 2020
@@ -64,6 +76,8 @@
 2. Canvas draw fails when JSON contains unattached DRG
 3. Public IP Assigned to Instance in private Subnet
 
+
+
 ## Version 0.2.0 
 **Release Date**: 6th March 2020
 ### Features
@@ -80,6 +94,8 @@
 ### Bug Fixes
 1. Terraform creation failed when the subnet was not attached to a Route Table.
 2. Unattached DRGs caused the display of the JSON to fail.
+
+
 
 ## Version 0.1.0
 **Release Date**: 6th February 2020

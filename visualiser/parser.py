@@ -54,6 +54,11 @@ def processWorkflow(args):
     return
 
 
+def usage():
+    logger.info('Usage Not defined')
+    return
+
+
 # Set default values for Args
 def defaultArgs():
     args = {}

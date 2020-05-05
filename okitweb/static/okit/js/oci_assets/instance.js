@@ -23,12 +23,12 @@ class Instance extends OkitArtifact {
         this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
         this.availability_domain = '1';
         this.compartment_id = '';
-        this.shape = 'VM.Standard2.1';
+        this.shape = 'VM.Standard.E2.1';
         // # Optional
         this.fault_domain = '';
         this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
         this.vnics = [];
-        this.source_details = {os: 'Oracle Linux', version: '7.7', boot_volume_size_in_gbs: '50'};
+        this.source_details = {os: 'Oracle Linux', version: '7.7', boot_volume_size_in_gbs: '50', source_type: 'image'};
         this.metadata = {authorized_keys: '', user_data: ''};
         // TODO: Future
         //this.launch_options_specified = false;
@@ -282,6 +282,15 @@ class Instance extends OkitArtifact {
                 let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
                 let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
                 subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
+            }
+            // Build Instance Shape Select
+            let shape_select = $(jqId('shape'));
+            $(shape_select).empty();
+            for (let shape of okitOciData.shapes) {
+                if (!shape.shape.startsWith('BM.')) {
+                    let shape_text = `${shape.shape} (${shape.ocpus} OCPU ${shape.memory_in_gbs} GB Memory)`;
+                    shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
+                }
             }
             // Build Network Security Groups
             let nsg_select = $(jqId('nsg_ids'));

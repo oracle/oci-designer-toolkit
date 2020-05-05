@@ -234,7 +234,7 @@ Appropriate drop locations for an Artifact will be indicated by the addition of 
 
 ### Step 1 : Open OKIT Designer
 The first step to building a diagram is be to open the designer page. If you have the docker container running (executed {Project Root}/docker/start-nginx.sh)
-this will be located at [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer) and will bring up a new
+this will be located at [http://localhost/okit/designer](http://localhost/okit/designer) and will bring up a new
 empty diagram that contains only a top level Compartment. It can be seen that the Designer is split into 3 main panels.
 - Left (Palette): Contains all Drag Artifacts that can be used within the Designer. In addition this panel contains a fragments section which contain pre built common solution fragments, e.g. Bastion Host.
 - Centre (Canvas): Area on which the diagram will be built / displayed.
