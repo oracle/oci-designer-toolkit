@@ -443,19 +443,23 @@ class OCIGenerator(object):
         variableName = '{0:s}_shape'.format(standardisedName)
         self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["shape"]
-        # ---- Operating System
+        # ---- Source Details
+        # ----- Source Type
+        variableName = '{0:s}_source_type'.format(standardisedName)
+        self.jinja2_variables["source_type"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = instance["source_details"]["source_type"]
+        # ----- Operating System
         variableName = '{0:s}_os'.format(standardisedName)
         self.jinja2_variables["os"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["source_details"]["os"]
-        # ---- Operating System Version
+        # ----- Operating System Version
         variableName = '{0:s}_os_version'.format(standardisedName)
         self.jinja2_variables["os_version"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["source_details"]["version"]
-        # ---- Boot Volume Size
+        # ----- Boot Volume Size
         variableName = '{0:s}_boot_volume_size_in_gbs'.format(standardisedName)
         self.jinja2_variables["boot_volume_size_in_gbs"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = int(instance["source_details"]["boot_volume_size_in_gbs"])
-        #self.run_variables[variableName] = int(instance["boot_volume_size_in_gbs"])
         # --- Optional
         # ---- Primary VNIC
         # ----- Subnet OCID
@@ -486,7 +490,7 @@ class OCIGenerator(object):
         self.jinja2_variables["authorized_keys"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["metadata"]["authorized_keys"]
         # ----- Cloud Init YAML
-        variableName = '{0:s}user_data'.format(standardisedName)
+        variableName = '{0:s}_user_data'.format(standardisedName)
         self.jinja2_variables["user_data"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = instance["metadata"]["user_data"].replace('\n', '\\n').replace('"', '\\"')
         # ---- Volume Attachments

@@ -63,7 +63,7 @@ resource "oci_core_instance" "{{ resource_name }}" {
     source_details {
         # Required
         source_id               = data.oci_core_images.{{ resource_name }}Images.images[0]["id"]
-        source_type             = {{ source_type | default('"image"') }}
+        source_type             = {{ source_type }}
         # Optional
         boot_volume_size_in_gbs = {{ boot_volume_size_in_gbs | default(50) }}
 #        kms_key_id              = {{ kms_key_id }}
