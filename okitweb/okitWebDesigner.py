@@ -450,7 +450,7 @@ def dropdownQuery():
     if request.method == 'GET':
         dropdown_json = {}
         oci_shapes = OCIShapes()
-        dropdown_json["shapes"] = oci_shapes.list()
+        dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
         #return {"instance": {"shapes": []}}
         return dropdown_json
     else:

@@ -33,7 +33,7 @@ class OkitOCIData {
             contentType: 'application/json',
             data: JSON.stringify(this),
             success: function(resp) {
-                console.info('Response : ' + resp);
+                console.info('OKIT Dropdown Data Saved');
             },
             error: function(xhr, status, error) {
                 console.warn('Status : '+ status)

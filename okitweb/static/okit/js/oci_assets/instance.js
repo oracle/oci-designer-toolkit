@@ -283,6 +283,15 @@ class Instance extends OkitArtifact {
                 let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
                 subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
             }
+            // Build Instance Shape Select
+            let shape_select = $(jqId('shape'));
+            $(shape_select).empty();
+            for (let shape of okitOciData.shapes) {
+                if (!shape.shape.startsWith('BM.')) {
+                    let shape_text = `${shape.shape} (${shape.ocpus} OCPU ${shape.memory_in_gbs} GB Memory)`;
+                    shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
+                }
+            }
             // Build Network Security Groups
             let nsg_select = $(jqId('nsg_ids'));
             this.loadNetworkSecurityGroups(nsg_select, this.primary_vnic.subnet_id);
