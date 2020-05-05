@@ -23,7 +23,7 @@ class Instance extends OkitArtifact {
         this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
         this.availability_domain = '1';
         this.compartment_id = '';
-        this.shape = 'VM.Standard2.1';
+        this.shape = 'VM.Standard.E2.1';
         // # Optional
         this.fault_domain = '';
         this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
