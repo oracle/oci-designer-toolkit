@@ -17,6 +17,7 @@ __module__ = "ociShape"
 import oci
 
 from common.ociLogging import getLogger
+from common.ociCommon import logJson
 from facades.ociConnection import OCIComputeConnection
 
 # Configure logging
@@ -42,10 +43,22 @@ class OCIShapes(OCIComputeConnection):
         shapes = oci.pagination.list_call_get_all_results(self.client.list_shapes, compartment_id=compartment_id).data
         logger.debug('============================== Shapes Raw ==============================')
         logger.debug(str(shapes))
-
         # Convert to Json object
         shapes_json = self.toJson(shapes)
-        logger.debug(str(shapes_json))
+        logJson(shapes_json)
+        # De-Duplicate
+        seen = []
+        deduplicated = []
+        for shape in shapes_json:
+            if shape['shape'] not in seen:
+                split_shape = shape['shape'].split('.')
+                logger.info('>>>>>>> {0!s:s}'.format(split_shape))
+                shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])
+                deduplicated.append(shape)
+                seen.append(shape['shape'])
+        logger.debug('============================== Shapes De-Duplicate ==============================')
+        logJson(deduplicated)
+        shapes_json = deduplicated
 
         # Filter results
         self.shapes_json = self.filterJsonObjectList(shapes_json, filter)

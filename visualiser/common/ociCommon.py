@@ -56,7 +56,7 @@ def readJsonFile(filename, varsyaml=None, templates='/pcma/templates'):
         if varsyaml is not None:
             varsyaml = expandNestedVars(varsyaml)
             loader = jinja2.FileSystemLoader(searchpath=templates)
-            env = jinja2.Environment(loader=loader)
+            env = jinja2.Environment(loader=loader, autoescape=True)
             jsontemplate = env.get_template(filename)
             rendered = jsontemplate.render(varsyaml)
             logger.debug("Rendered File ===>")

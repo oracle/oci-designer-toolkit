@@ -292,14 +292,6 @@ function drawArtifact(definition) {
     return svg;
 }
 
-function drawSVGforJson() {
-    console.groupCollapsed('Drawing SVG Canvas');
-    console.info(okitJson);
-    okitJson.draw();
-    console.groupEnd();
-
-}
-
 function generateArc(radius, clockwise, xmod, ymod) {
     let arc = 'a' + radius + ',' + radius + ' 0 0 ' + clockwise + ' ' + xmod + radius + ',' + ymod + radius;
     return arc;
