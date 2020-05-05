@@ -72,14 +72,14 @@ the icon. Hence the Block Storage Volume would look like the following
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" x="0px"
      y="0px"
      viewBox="0 0 288 288" style="enable-background:new 0 0 288 288;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#F80000;}
+	.icon-colour-01{fill:#F80000;}
 </style>
-    <g>
-		<path class="st0"
+    <g transform="translate(-140, -140) scale(2, 2)">
+		<path class="icon-colour-01"
 			  d="M172.6,88.4c-13.7-1.6-28-1.6-28.6-1.6c-0.6,0-14.8,0-28.6,1.6c-24,2.8-24.2,7.8-24.2,7.9v95.5c0,0,0.3,5,24.2,7.9c13.7,1.6,28,1.6,28.6,1.6c0.6,0,14.8,0,28.6-1.6c24-2.8,24.2-7.8,24.2-7.9V96.3C196.8,96.2,196.5,91.2,172.6,88.4z M137.2,180.7h-18.9v-18.9h18.9V180.7z M137.2,146.5h-18.9v-18.9h18.9V146.5z M168.1,180.7h-18.9v-18.9h18.9V180.7z M168.1,146.5h-18.9v-18.9h18.9V146.5z M192.8,104.1c-1.8,2.8-18.9,7.5-48.3,7.5c-29.4,0-46.5-4.7-48.3-7.5c0,0,0,0,0,0c1.7-2.8,18.8-7.6,48.3-7.6C174,96.5,191.1,101.2,192.8,104.1C192.8,104.1,192.8,104.1,192.8,104.1z"/>
 	</g>
 </svg>
@@ -105,61 +105,12 @@ Once the file has been copied to the oci_assets directory then is can be opened 
 ```javascript
 console.log('Loaded Block Storage Javascript');
 
-const block_storage_volume_stroke_colour = "#F80000";
 const block_storage_volume_query_cb = "block-storage-volume-query-cb";
 ```
 Within this section we will define the target artifact where the new artifact can be dropped. For example the **Block Storage Volume** can be dropped on the *Compartment*. 
 
-**Note**: The block_storage_volume_artifact and compartment_artifact are defined in the Designer Javascript.  
-
-Additionally we define the stroke colour for the bounding rectangle used to display the artifact.
-
-### Query OCI
-```javascript
-/*
-** Query OCI
- */
-
-function queryBlockStorageVolumeAjax(compartment_id) {
-    console.info('------------- queryBlockStorageVolumeAjax --------------------');
-    let request_json = JSON.clone(okitQueryRequestJson);
-    request_json['compartment_id'] = compartment_id;
-    if ('block_storage_volume_filter' in okitQueryRequestJson) {
-        request_json['block_storage_volume_filter'] = okitQueryRequestJson['block_storage_volume_filter'];
-    }
-    $.ajax({
-        type: 'get',
-        url: 'oci/artifacts/BlockStorageVolume',
-        dataType: 'text',
-        contentType: 'application/json',
-        //data: JSON.stringify(okitQueryRequestJson),
-        data: JSON.stringify(request_json),
-        success: function(resp) {
-            let response_json = JSON.parse(resp);
-            //okitJson['block_storage_volumes'] = response_json;
-            okitJson.load({block_storage_volumes: response_json});
-            let len =  response_json.length;
-            for(let i=0;i<len;i++ ){
-                console.info('queryBlockStorageVolumeAjax : ' + response_json[i]['display_name']);
-            }
-            redrawSVGCanvas();
-            $('#' + block_storage_volume_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
-            $('#' + block_storage_volume_query_cb).prop('checked', true);
-            hideQueryProgressIfComplete();
-        }
-    });
-}
-```
-Uses Ajax to call the flask url to initiate an asynchronous query of OCI to retrieve all artifacts and then redraw the 
-svg canvas. On completion it will set the query progress for this artifact as complete.
-
 ### Class Definition
-Each artifact is described by a JavaScript class inherrited from the **OkitArtifact** Class and has a number of standard 
+Each artifact is described by a JavaScript class inherited from the **OkitArtifact** Class and has a number of standard 
 methods associated with the class. for the majority of these you will not need to modify the code because the underlying
 super class will do all the work. If you are creating a new container then you will need to modify the class definition 
 to inherit from **OkitContainerArtifact** class.
@@ -173,31 +124,24 @@ The following will list the methods that need modification.
      */
     constructor (data={}, okitjson={}, parent=null) {
         super(okitjson);
+        this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + block_storage_volume_prefix + '-' + uuidv4();
         this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
         this.compartment_id = data.parent_id;
         this.availability_domain = '1';
         this.size_in_gbs = 1024;
         this.backup_policy = 'bronze';
         // Update with any passed data
-        for (let key in data) {
-            this[key] = data[key];
+        this.merge(data);
+        this.convert();
+        // Check if built from a query
+        if (this.availability_domain.length > 1) {
+            this.region_availability_domain = this.availability_domain;
+            this.availability_domain = this.region_availability_domain.slice(-1);
         }
         // Add Get Parent function
         if (parent !== null) {
-            this.getParent = function() {return parent};
-            this.parent_id = parent.id;
-        } else {
-            this.parent_id = this.compartment_id;
-            for (let parent of okitjson.compartments) {
-                if (parent.id === this.parent_id) {
-                    this.getParent = function () {
-                        return parent
-                    };
-                    break;
-                }
-            }
+            this.getParent = () => {return parent};
         }
     }
 ```
@@ -210,15 +154,6 @@ of the artifact (e.g. block_storage_volumes). Once that new json element has bee
     /*
     ** Delete Processing
      */
-    delete() {
-        console.groupCollapsed('Delete ' + this.getArtifactReference() + ' : ' + this.id);
-        // Delete Child Artifacts
-        this.deleteChildren();
-        // Remove SVG Element
-        d3.select("#" + this.id + "-svg").remove()
-        console.groupEnd();
-    }
-
     deleteChildren() {
         // Remove Instance references
         for (let instance of this.getOkitJson().instances) {
@@ -249,7 +184,7 @@ references within linked artifacts or actual children in the case of a container
     }
 
     getMinimumDimensions() {
-        return {width: load_balancer_width, height:load_balancer_height};
+        return {width: icon_width, height:icon_height};
     }
 ```
 
@@ -279,6 +214,23 @@ function will call the dimensions function for all contained artifacts to calcul
         console.groupEnd();
         return svg;
     }
+
+    // Return Artifact Specific Definition.
+    getSvgDefinition() {
+        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        let dimensions = this.getDimensions();
+        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+        definition['svg']['x'] = first_child.dx;
+        definition['svg']['y'] = first_child.dy;
+        definition['svg']['width'] = dimensions['width'];
+        definition['svg']['height'] = dimensions['height'];
+        definition['rect']['stroke']['colour'] = stroke_colours.bark;
+        definition['rect']['stroke']['dash'] = 1;
+        console.info(JSON.stringify(definition, null, 2));
+        console.groupEnd();
+        return definition;
+    }
 ``` 
 Draws the artifact on the SVG canvas as parted of the dropped component. All artifacts are contained within there own svg
 element because we can then drop, where appropriate, other artifacts on them and they become self contained. Once draw we
@@ -296,23 +248,47 @@ added as well because SVG does not support standard HTML drag & drop events). (S
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $("#properties").load("propertysheets/load_balancer.html", function () {
-            // Load Referenced Ids
-            let instances_select = $('#instance_ids');
-            for (let instance of okitJson.instances) {
-                instances_select.append($('<option>').attr('value', instance.id).text(instance.display_name));
-            }
-            // Load Properties
-            loadProperties(me);
-            // Add Event Listeners
-            addPropertiesEventListeners(me, []);
-        });
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(me);});
     }
 ```
 When the user clicks on the drawn SVG artifact this load function will be called. It will load the artifact specific 
 properties sheet into the "properties" pane and then load each of the form fields with the data from the appropriate 
 json element. This method will only need modification if the properties sheet needs to select references of other artifacts. 
 For an example of this see the Subnet class which will load Route Table and security list information.
+
+### Query OCI
+```javascript
+    static query(request = {}, region='') {
+        console.info('------------- Block Storage Volume Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artifacts/BlockStorageVolume',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[region].load({block_storage_volumes: response_json});
+                for (let artifact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                }
+                redrawSVGCanvas(region);
+                $('#' + block_storage_volume_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                $('#' + block_storage_volume_query_cb).prop('checked', true);
+                hideQueryProgressIfComplete();
+            }
+        });
+    }
+```
+Uses Ajax to call the flask url to initiate an asynchronous query of OCI to retrieve all artifacts and then redraw the 
+svg canvas. On completion it will set the query progress for this artifact as complete.
 
 ### Ready Function
 ```javascript
@@ -324,13 +300,13 @@ $(document).ready(function() {
     cell.append('input')
         .attr('type', 'checkbox')
         .attr('id', block_storage_volume_query_cb);
-    cell.append('label').text(block_storage_volume_artifact);
+    cell.append('label').text(BlockStorageVolume.getArtifactReference());
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(block_storage_volume_artifact);
+        .text(BlockStorageVolume.getArtifactReference());
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
@@ -347,35 +323,33 @@ all required properties must be displayed. The htmi 'id' and 'name' attributes o
 edit.
 
 ```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Block Storage</title>
-</head>
-<body>
-    <div id="property-editor" class="property-editor">
-        <div class="property-editor-title">
-            <label>Block Storage</label>
-        </div>
-        <table id="block_storage" class="property-editor-table">
-            <tr><th>Property</th><th>Value</th></tr>
-            <tr><td>Name</td><td><input type="text" id="display_name" name="display_name" class="property-value"></td></tr>
-            <tr><td>Availability Domain</td><td><select id="availability_domain" class="property-value">
-                <option value="1" selected="selected">AD 1</option>
-                <option value="2">AD 2</option>
-                <option value="3">AD 3</option>
-            </select></td></tr>
-            <tr><td>Size (in GB)</td><td><input type="text" id="size_in_gbs" name="size_in_gbs" class="property-value"></td></tr>
-            <tr><td>Backup Policy</td><td><select id="backup_policy" class="property-value">
-                <option value="bronze" selected="selected">Bronze</option>
-                <option value="silver">Silver</option>
-                <option value="gold">Gold</option>
-            </select></td></tr>
-        </table>
-    </div>
-</body>
-</html>
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Block Storage Volume{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="okit-property-value">
+        <option value="1" selected="selected">AD 1</option>
+        <option value="2">AD 2</option>
+        <option value="3">AD 3</option>
+    </select></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Size (in GB)</div><div class='td'><input type="text" id="size_in_gbs" name="size_in_gbs" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Backup Policy</div><div class='td'><select id="backup_policy" class="okit-property-value">
+        <option value="bronze" selected="selected">Bronze</option>
+        <option value="silver">Silver</option>
+        <option value="gold">Gold</option>
+    </select></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}
 ```
 
 ## Python OCI Facade
@@ -600,15 +574,6 @@ This method will be dynamically called when the "delete" is selected from the ca
             }
         }
     }
-```
-## Artifacts Constants
-To allow access to artifact standard names a number of constants need to be added to the okit_designer.js that specify the
-artifact name and prefix.
-
-```javascript
-// Block Storage
-const block_storage_volume_artifact = 'Block Storage Volume';
-const block_storage_volume_prefix = 'bsv';
 ```
 
 ## Flask Web Designer Python

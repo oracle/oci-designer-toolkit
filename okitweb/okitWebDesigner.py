@@ -437,7 +437,6 @@ def dropdownData():
     dropdown_file = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown.json'))
     if request.method == 'GET':
         dropdown_json = readJsonFile(dropdown_file)
-        logger.info('>> Drop Down Json {0!s:s}'.format(str(dropdown_json)))
         return dropdown_json
     elif request.method == 'POST':
         writeJsonFile(request.json, dropdown_file)
@@ -451,7 +450,6 @@ def dropdownQuery():
         dropdown_json = {}
         oci_shapes = OCIShapes()
         dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
-        #return {"instance": {"shapes": []}}
         return dropdown_json
     else:
         return 'Unknown Method', 500

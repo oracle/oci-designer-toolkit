@@ -62,22 +62,13 @@ class Instance extends OkitArtifact {
             this.getParent = () => {
                 let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
                 if (primary_subnet.compartment_id === this.compartment_id) {
-                    this.parent_id = this.primary_vnic.subnet_id;
+                    return this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
                 } else {
-                    this.parent_id = this.compartment_id;
+                    return this.getOkitJson().getCompartment(this.compartment_id);
                 }
-                return super.getParent();
             };
         }
-        this.parent_id = (() => {
-            let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
-            console.info(`Primary Subnet ${JSON.stringify(primary_subnet)}`);
-            if (primary_subnet.compartment_id === this.compartment_id) {
-                return this.primary_vnic.subnet_id;
-            } else {
-                return this.compartment_id;
-            }
-        })();
+        this.parent_id = this.getParentId();
     }
 
     /*
@@ -111,6 +102,22 @@ class Instance extends OkitArtifact {
      */
     clone() {
         return new Instance(this, this.getOkitJson());
+    }
+
+
+    /*
+    ** Parent Processing Override
+     */
+    getParentId() {
+        let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
+        console.info(`Primary Subnet ${JSON.stringify(primary_subnet)}`);
+        if (primary_subnet.compartment_id === this.compartment_id) {
+            this.parent_id = this.primary_vnic.subnet_id;
+            return this.primary_vnic.subnet_id;
+        } else {
+            this.parent_id = this.compartment_id;
+            return this.compartment_id;
+        }
     }
 
 

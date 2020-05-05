@@ -48,7 +48,9 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Object Storage Buckets
 
 ### Prerequisites
-Before executing any of the docker container scripts we OKIT requires that a OCI connection configuration file be created.
+Before executing any of the docker container scripts we OKIT requires that an OCI connection configuration file 
+(~/.oci/oci.config) be created.
+
 This file will contain the following:
 
 ```properties
@@ -375,7 +377,7 @@ total 20K
 4.0K drwxr-xr-x 1 root root 4.0K Oct 28 18:00 ..
 8.0K -rw-r--r-- 1 root root 6.1K Oct 31 16:20 .DS_Store
 8.0K -rw-r--r-- 1 root root 5.4K Oct 31 16:20 okit-terraform.zip
-[root@start-flask terraform]#
+
 unzip okit-terraform.zip -d okit-terraform
 Archive:  okit-terraform.zip
   inflating: okit-terraform/variables.tf

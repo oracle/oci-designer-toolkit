@@ -52,7 +52,6 @@ class OCIShapes(OCIComputeConnection):
         for shape in shapes_json:
             if shape['shape'] not in seen:
                 split_shape = shape['shape'].split('.')
-                logger.info('>>>>>>> {0!s:s}'.format(split_shape))
                 shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])
                 deduplicated.append(shape)
                 seen.append(shape['shape'])
