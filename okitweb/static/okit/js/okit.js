@@ -472,7 +472,7 @@ class OkitArtifact {
         let key = this.getParentKey();
         for (let group of this.getTopArtifacts()) {
             for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.getParentId() === this.id) {
                     children = true;
                     break;
                 }
@@ -486,7 +486,7 @@ class OkitArtifact {
         let key = this.getParentKey();
         for (let group of this.getTopArtifacts()) {
             for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.getParentId() === this.id) {
                     let dimension = artifact.getDimensions();
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -557,7 +557,7 @@ class OkitArtifact {
         let key = this.getParentKey();
         for (let group of this.getBottomArtifacts()) {
             for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.getParentId() === this.id) {
                     children = true;
                     break;
                 }
@@ -571,7 +571,7 @@ class OkitArtifact {
         let key = this.getParentKey();
         for (let group of this.getBottomArtifacts()) {
             for(let artifact of this.getOkitJson()[this.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.getParentId() === this.id) {
                     let dimension = artifact.getDimensions();
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
