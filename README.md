@@ -1,6 +1,6 @@
-# OCI Kinetic Infrastructure Toolkit [0.4.1](ReleaseNotes.md#version-0.4.1)
+# OCI Designer [0.4.1](ReleaseNotes.md#version-0.4.1)
 
-OCI Kinetic Infrastructure Toolkit (OKIT) is a set of tools for enabling design, deploy and visualise OCI environments 
+OCI designer toolKIT (OKIT) is a set of tools for enabling design, deploy and visualise OCI environments 
 through a graphical web based interface. 
 
 The Web based interface will allow architects and designers to build a visual representation of their infrastructure
