@@ -2,15 +2,16 @@
 # Copyright © 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
+# Vagrantfile API/syntax version.
 VAGRANTFILE_API_VERSION = "2"
 
-# define guest OS hostname
-NAME = "okit"
+# Box metadata location and box name
+BOX_URL = "https://oracle.github.io/vagrant-boxes/boxes"
+BOX_NAME = "oraclelinux/7"
 
-unless Vagrant.has_plugin?("vagrant-reload")
-  puts 'Installing vagrant-reload Plugin...'
-  system('vagrant plugin install vagrant-reload')
-end
+# define hostname
+NAME = "okit-vagrant"
+
 unless Vagrant.has_plugin?("vagrant-vbguest")
   puts 'Installing vagrant-vbguest Plugin...'
   system('vagrant plugin install vagrant-vbguest')
@@ -21,16 +22,8 @@ export PATH=/usr/local/bin:/usr/bin:${PATH}
 
 # Install software as root
 yum update -y
-if [ -f /usr/bin/ol_yum_configure.sh ];
-then
-    /usr/bin/ol_yum_configure.sh
-    yum update -y
-fi
-
 yum install -y \
-  oracle-softwarecollection-release-el7 \
-  oraclelinux-developer-release-el7 \
-  oracle-epel-release-el7
+  oracle-softwarecollection-release-el7 
 yum repolist all
 yum update -y
 yum install -y \
@@ -264,9 +257,10 @@ systemctl restart firewalld
 SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "ol7-latest"
-  config.vm.box_url = "https://yum.oracle.com/boxes/oraclelinux/latest/ol7-latest.box"
+  config.vm.box = BOX_NAME
+  config.vm.box_url = "#{BOX_URL}/#{BOX_NAME}.json"
   config.vm.define NAME
+
   # This will expose the OKIT repo folder inside the VM under ~/okit-repo
   config.vm.synced_folder "../okitweb", "/okit/okitweb"
   config.vm.synced_folder "../visualiser", "/okit/visualiser"
@@ -288,16 +282,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--audio", "none"]
   end
 
-  config.vm.provision :reload
+  # VM hostname
+  config.vm.hostname = NAME
 
   # Oracle port forwarding
   # nginx
-  config.vm.network "forwarded_port", guest: 80, host: 8888
-  #config.vm.network "forwarded_port", guest: 80, host: 8080
+  #config.vm.network "forwarded_port", guest: 80, host: 80
   # Flask
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
+  config.vm.network "forwarded_port", guest: 8080, host: 80
   # GUnicorn, needed?
-  #config.vm.network "forwarded_port", guest: 5000, host: 5000
+  #config.vm.network "forwarded_port", guest: 5000, host: 80
 
   # Run external install script as root
   config.vm.provision "shell", inline: "echo '============== Running privileged commands ============== '"
@@ -309,7 +303,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: $flask_service, privileged: true
   config.vm.provision "shell", inline: $firewall, privileged: true
   config.vm.provision "shell", inline: "echo '============== Finished privileged commands ============== '"
-  config.vm.provision :reload
 
   # Run external install script as vagrant
   config.vm.provision "shell", inline: "echo '************** Running vagrant user commands ************** '"
@@ -317,6 +310,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: "echo 'export OCI_CONFIG_DIR=~/.oci' >> /home/vagrant/.bash_profile", privileged: false
   config.vm.provision "shell", inline: "ln -s /vagrant/.oci .oci", privileged: false
   config.vm.provision "shell", inline: "echo '************** Finished vagrant user commands ************** '"
-  config.vm.provision :reload
 
 end
