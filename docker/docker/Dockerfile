@@ -29,6 +29,8 @@ RUN yum update -y \
 # Configure new OL package list
  && yum install -y \
     oracle-softwarecollection-release-el7 \
+#   oracle-epel-release-el7 required for nginx
+    oracle-epel-release-el7 \
  && yum repolist all \
 # Install additional packages
  && yum update -y \
