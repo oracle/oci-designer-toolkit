@@ -15,7 +15,7 @@
     {
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "display_name": "okit-vcn001",
+      "display_name": "nginx-vcn",
       "cidr_block": "10.0.0.0/16",
       "dns_label": "vcn001",
       "parent_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536"
@@ -24,10 +24,10 @@
   "subnets": [
     {
       "vcn_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "virtual_cloud_network": "okit-vcn001",
+      "virtual_cloud_network": "nginx-vcn",
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "display_name": "okit-sn001",
+      "display_name": "nginx-public-subnet",
       "cidr_block": "10.0.0.0/24",
       "dns_label": "sn001",
       "prohibit_public_ip_on_vnic": false,
@@ -43,7 +43,7 @@
   "route_tables": [
     {
       "vcn_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "virtual_cloud_network": "okit-vcn001",
+      "virtual_cloud_network": "nginx-vcn",
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "id": "okit-rt-9634a102-9de8-4d3a-8124-821f036e0ac0",
       "display_name": "okit-rt001",
@@ -60,7 +60,7 @@
   "security_lists": [
     {
       "vcn_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "virtual_cloud_network": "okit-vcn001",
+      "virtual_cloud_network": "nginx-vcn",
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "id": "okit-sl-912892db-b457-441e-b2c1-9ef9691154d2",
       "display_name": "okit-sl001",
@@ -86,12 +86,12 @@
   "instances": [
     {
       "subnet_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "subnet": "okit-sn001",
+      "subnet": "nginx-public-subnet",
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "availability_domain": "1",
       "id": "okit-in-ee74310b-457b-4b18-b566-ae7351a17d7a",
-      "display_name": "okit-in001",
-      "hostname_label": "okit-in001",
+      "display_name": "nginx-in001",
+      "hostname_label": "nginx-in001",
       "os": "Oracle Linux",
       "version": "7.7",
       "shape": "VM.Standard2.1",
@@ -101,17 +101,16 @@
       "block_storage_volume_ids": [],
       "block_storage_volumes": [],
       "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001",
       "subnet_ids": []
     },
     {
       "subnet_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "subnet": "okit-sn001",
+      "subnet": "nginx-public-subnet",
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "availability_domain": "1",
       "id": "okit-in-6ce3195d-7119-4666-8966-6555874819a8",
-      "display_name": "okit-in002",
-      "hostname_label": "okit-in002",
+      "display_name": "nginx-in002",
+      "hostname_label": "nginx-in002",
       "os": "Oracle Linux",
       "version": "7.7",
       "shape": "VM.Standard.E2.1",
@@ -121,17 +120,16 @@
       "block_storage_volume_ids": [],
       "block_storage_volumes": [],
       "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001",
       "subnet_ids": []
     },
     {
       "subnet_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "subnet": "okit-sn001",
+      "subnet": "nginx-public-subnet",
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "availability_domain": "1",
       "id": "okit-in-2195d4b3-07bc-4a57-a06b-627cf69b8c46",
-      "display_name": "okit-in003",
-      "hostname_label": "okit-in003",
+      "display_name": "nginx-in003",
+      "hostname_label": "nginx-in003",
       "os": "Oracle Linux",
       "version": "7.7",
       "shape": "VM.Standard.E2.1",
@@ -141,17 +139,16 @@
       "block_storage_volume_ids": [],
       "block_storage_volumes": [],
       "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001",
       "subnet_ids": []
     },
     {
       "subnet_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "subnet": "okit-sn001",
+      "subnet": "nginx-public-subnet",
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "availability_domain": "1",
       "id": "okit-in-f59e4c4c-012f-45de-a81a-8772131f1df1",
-      "display_name": "okit-in004",
-      "hostname_label": "okit-in004",
+      "display_name": "nginx-in004",
+      "hostname_label": "nginx-in004",
       "os": "Oracle Linux",
       "version": "7.7",
       "shape": "VM.Standard.E2.1",
@@ -161,7 +158,6 @@
       "block_storage_volume_ids": [],
       "block_storage_volumes": [],
       "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001",
       "subnet_ids": []
     }
   ],
@@ -170,12 +166,9 @@
       "subnet_ids": [
         "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb"
       ],
-      "subnets": [
-        ""
-      ],
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "id": "okit-lb-95c8b99f-3c7b-4e7a-94e8-a4622788f1fa",
-      "display_name": "okit-lb001",
+      "display_name": "nginx-lb001",
       "is_private": false,
       "shape_name": "100Mbps",
       "instances": [],
@@ -185,14 +178,13 @@
         "okit-in-2195d4b3-07bc-4a57-a06b-627cf69b8c46",
         "okit-in-f59e4c4c-012f-45de-a81a-8772131f1df1"
       ],
-      "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001"
+      "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb"
     }
   ],
   "internet_gateways": [
     {
       "vcn_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "virtual_cloud_network": "okit-vcn001",
+      "virtual_cloud_network": "nginx-vcn",
       "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
       "id": "okit-ig-9b4a5d64-9346-4c7f-a97a-a0c323500224",
       "display_name": "okit-ig001",

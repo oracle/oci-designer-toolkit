@@ -5,7 +5,7 @@
 console.info('Loaded Instance Javascript');
 
 const instance_query_cb = "instance-query-cb";
-const min_instance_width = Math.round(icon_width * 5 / 2);
+const min_instance_width = Math.round(icon_width * 3);
 const min_instance_height = Math.round(icon_height * 5 / 2);
 
 /*
