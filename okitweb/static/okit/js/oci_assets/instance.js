@@ -5,7 +5,7 @@
 console.info('Loaded Instance Javascript');
 
 const instance_query_cb = "instance-query-cb";
-const min_instance_width = Math.round(icon_width * 5 / 2);
+const min_instance_width = Math.round(icon_width * 3);
 const min_instance_height = Math.round(icon_height * 5 / 2);
 
 /*
@@ -52,21 +52,11 @@ class Instance extends OkitArtifact {
             this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
             this.vnics[0] = this.primary_vnic;
         }
-        // Add Get Parent function
+        // Add Parent Id to Primary VNIC if the parent is a subnet
         if (parent !== null) {
             if (parent.getArtifactReference() === Subnet.getArtifactReference()) {
                 this.primary_vnic.subnet_id = parent.id;
             }
-            this.getParent = () => {return parent};
-        } else {
-            this.getParent = () => {
-                let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
-                if (primary_subnet.compartment_id === this.compartment_id) {
-                    return this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
-                } else {
-                    return this.getOkitJson().getCompartment(this.compartment_id);
-                }
-            };
         }
         this.parent_id = this.getParentId();
     }
@@ -117,6 +107,15 @@ class Instance extends OkitArtifact {
         } else {
             this.parent_id = this.compartment_id;
             return this.compartment_id;
+        }
+    }
+
+    getParent() {
+        let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
+        if (primary_subnet.compartment_id === this.compartment_id) {
+            return this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
+        } else {
+            return this.getOkitJson().getCompartment(this.compartment_id);
         }
     }
 
