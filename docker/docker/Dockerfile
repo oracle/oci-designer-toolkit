@@ -2,7 +2,7 @@
 # Copyright © 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-ARG os_version=latest
+ARG os_version=7-slim
 ARG os=oraclelinux
 FROM ${os}:${os_version}
 LABEL version="0.5.0"
@@ -24,14 +24,11 @@ ENV LC_ALL en_GB.UTF-8
 ENV PATH=/root/bin:${PATH}
 
 # Update base image
-RUN yum update -y ; \
-    if [ ! -z /usr/bin/ol_yum_configure.sh ]; then /usr/bin/ol_yum_configure.sh;yum update -y; fi \
+RUN yum update -y \
 # Install new yum repos
 # Configure new OL package list
  && yum install -y \
-#    oracle-softwarecollection-release-el7 \
-#    oraclelinux-developer-release-el7 \
-    oracle-epel-release-el7 \
+    oracle-softwarecollection-release-el7 \
  && yum repolist all \
 # Install additional packages
  && yum update -y \
