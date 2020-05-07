@@ -5,45 +5,36 @@
 ARG os_version=7-slim
 ARG os=oraclelinux
 FROM ${os}:${os_version}
-LABEL version="0.5.0"
-LABEL description="OKIT Web Server."
-LABEL copyright="Copyright (c) 2020, Oracle and/or its affiliates."
+LABEL version="0.5.0" \
+      description="OKIT Web Server." \
+      copyright="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
-ENV http_proxy ${http_proxy}
-ENV https_proxy ${https_proxy}
-# Set Python Variables
-ENV PYTHONIOENCODING=utf8
-ENV PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit"
-# Flask
-ENV FLASK_APP=okitweb
-ENV FLASK_DEBUG=development
-# Define System
-ENV LANG en_GB.UTF-8
-ENV LANGUAGE en_GB:en
-ENV LC_ALL en_GB.UTF-8
-ENV PATH=/root/bin:${PATH}
+ENV http_proxy=${http_proxy} \
+    https_proxy=${https_proxy} \
+    PYTHONIOENCODING=utf8 \
+    PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit" \
+    FLASK_APP=okitweb \
+    FLASK_DEBUG=development \
+    LANG=en_GB.UTF-8 \
+    LANGUAGE=en_GB:en \
+    LC_ALL=en_GB.UTF-8 \
+    PATH=/root/bin:${PATH}
 
 # Update base image
-RUN yum update -y \
 # Install new yum repos
-# Configure new OL package list
- && yum install -y \
+RUN yum install -y \
     oracle-softwarecollection-release-el7 \
-#   oracle-epel-release-el7 required for nginx
+#   Required for nginx
     oracle-epel-release-el7 \
- && yum repolist all \
 # Install additional packages
  && yum update -y \
  && yum install -y \
         nginx-1.12.2-2.el7 \
         python36 \
         python3-pip \
- && yum repolist all \
  && yum clean all \
 # Install pip
- && rm -fv /usr/bin/python3 ; \
-    ln -sv /usr/bin/python3.6 /usr/bin/python3 ; \
-    cd /tmp ; \
+ && cd /tmp ; \
     python3 -m pip install --upgrade pip==20.0.2 ; \
     cd ~ \
 # Install required python modules
@@ -59,17 +50,6 @@ RUN yum update -y \
         pyyaml==5.2 \
         werkzeug==0.16.0 \
         cryptography==2.8 \
-# Set-up env
- && echo ''                                                                          >> /etc/bashrc ; \
-    echo "alias lh='ls -lash' "                                                      >> /etc/bashrc ; \
-    echo "alias lt='ls -last' "                                                      >> /etc/bashrc ; \
-    echo "alias env='/usr/bin/env | sort' "                                          >> /etc/bashrc ; \
-    echo "alias ips='ip -f inet address' "                                           >> /etc/bashrc ; \
-    echo "alias pymods='for m in \$(pip3 list | cut -d \" \" -f 1); do echo; pip3 show \${m} 2>/dev/null; done'" >> /etc/bashrc ; \
-    echo ''                                                                          >> /etc/bashrc ; \
-    echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc ; \
-    echo ''                                                                          >> /etc/bashrc ; \
-    cd ~  \
 # Create Workspace
  && mkdir -p /workspace; \
     mkdir -p /okit/{config,visualiser,okitweb,workspace}; \

@@ -15,8 +15,8 @@ export PROJECTROOT=${ROOT_DIR}
 
 if [ -z ${OCI_CONFIG_DIR} ]
 then
-  echo "OCI_CONFIG_DIR has not been set exiting."
-  exit 1
+  export OCI_CONFIG_DIR=${HOME}/.oci
+  echo "OCI_CONFIG_DIR has not been set using ${OCI_CONFIG_DIR}"
 fi
 
 if [ -z ${OKIT_OUTPUT_DIR} ]
