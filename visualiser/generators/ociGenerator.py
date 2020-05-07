@@ -630,6 +630,19 @@ class OCIGenerator(object):
         for backend_instance_id in loadbalancer.get('instance_ids', []):
             jinja2_backend_instances_resource_names.append(self.standardiseResourceName(self.id_name_map[backend_instance_id]))
         self.jinja2_variables["backend_instances"] = jinja2_backend_instances_resource_names
+        # ---- Protocol
+        variableName = '{0:s}_protocol'.format(standardisedName)
+        self.jinja2_variables["protocol"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = loadbalancer["protocol"]
+        # ---- Backend Policy
+        variableName = '{0:s}_backend_policy'.format(standardisedName)
+        self.jinja2_variables["backend_policy"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = loadbalancer["backend_policy"]
+        # ---- Health Checker
+        # ----- URL Path
+        variableName = '{0:s}_url_path'.format(standardisedName)
+        self.jinja2_variables["url_path"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = loadbalancer["health_checker"]["url_path"]
         # --- Optional
         # ---- IP Mode
         if loadbalancer.get('ip_mode', '') != '':

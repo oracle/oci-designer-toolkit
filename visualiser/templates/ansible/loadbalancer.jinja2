@@ -62,7 +62,7 @@
 {% endif %}
                     #timeout_in_millis: "{{ health_check_timeout | default(3000) }}"
                     #return_code: "{{ health_check_return_code | default(200) }}"
-                    url_path: "{{ health_check_url | default('/') }}"
+                    url_path: "{{ url_path | default('/') }}"
                 policy: "{{ backend_policy | default('ROUND_ROBIN') }}"
         listeners:
             {{ resource_name }}Listener:

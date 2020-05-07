@@ -30,6 +30,8 @@ class LoadBalancer extends OkitArtifact {
         this.instance_ids = [];
         this.ip_mode = '';
         this.network_security_group_ids = [];
+        this.backend_policy = 'ROUND_ROBIN';
+        this.health_checker = {url_path: '/'}
         // Update with any passed data
         this.merge(data);
         this.convert();

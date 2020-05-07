@@ -50,7 +50,7 @@ resource "oci_load_balancer_backend_set" "{{ resource_name }}BackendSet" {
     # Required
     health_checker {
         # Required
-        protocol            = {{ protocol | default('"HTTP"') }}
+        protocol            = {{ protocol }}
         # Optional
         interval_ms         = {{ health_check_interval | default(1000) }}
         port                = {{ port | default(80) }}
@@ -58,11 +58,11 @@ resource "oci_load_balancer_backend_set" "{{ resource_name }}BackendSet" {
 #        retries             = {{ health_check_retries | default(100) }}
 #        return_code         = {{ health_check_return_code | default(200) }}
 #        timeout_in_millis   = {{ health_check_timeout | default(3000) }}
-        url_path            = {{ health_check_url | default('"/"') }}
+        url_path            = {{ url_path | default('"/"') }}
     }
     load_balancer_id = local.{{ resource_name }}_id
     name             = substr(local.{{ resource_name }}_backend_set_name, 0, 32)
-    policy           = {{ backend_policy | default('"ROUND_ROBIN"') }}
+    policy           = {{ backend_policy }}
 {% if persistence_cookie_name is defined %}
     # Optional
     session_persistence_configuration {
@@ -111,7 +111,7 @@ resource "oci_load_balancer_listener" "{{ resource_name }}Listener" {
     load_balancer_id         = local.{{ resource_name }}_id
     name                     = substr(local.{{ resource_name }}_listener_name, 0, 32)
     port                     = {{ port | default(80) }}
-    protocol                 = {{ protocol | default('"HTTP"') }}
+    protocol                 = {{ protocol }}
     # Optional
     connection_configuration {
         # Required
