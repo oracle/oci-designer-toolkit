@@ -51,8 +51,10 @@ class OCIShapes(OCIComputeConnection):
         deduplicated = []
         for shape in shapes_json:
             if shape['shape'] not in seen:
-                split_shape = shape['shape'].split('.')
-                shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])
+                shape['sort_key'] = shape['shape']
+                if 'ocpus' in shape:
+                    split_shape = shape['shape'].split('.')
+                    shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])
                 deduplicated.append(shape)
                 seen.append(shape['shape'])
         logger.debug('============================== Shapes De-Duplicate ==============================')

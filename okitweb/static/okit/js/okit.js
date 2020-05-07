@@ -23,6 +23,26 @@ class OkitOCIData {
     load() {
         let me = this;
         $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); console.info(me); me.query();});
+        /*
+        $.ajax({
+            type: 'get',
+            url: 'dropdown/data',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(this),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                $.extend(true, me, resp);
+                console.info(me);
+                me.query();
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : '+ status)
+                console.warn('Error : '+ error)
+            }
+        });
+
+         */
     }
 
     save() {
@@ -44,7 +64,8 @@ class OkitOCIData {
 
     query() {
         let me = this;
-        //$.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
+        $.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
+        /*
         $.ajax({
             type: 'get',
             url: 'dropdown/query',
@@ -62,6 +83,8 @@ class OkitOCIData {
                 console.warn('Error : '+ error)
             }
         });
+
+         */
     }
 }
 
