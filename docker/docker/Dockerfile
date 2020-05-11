@@ -24,12 +24,9 @@ ENV http_proxy=${http_proxy} \
 # Install new yum repos
 RUN yum install -y \
     oracle-softwarecollection-release-el7 \
-#   Required for nginx
-    oracle-epel-release-el7 \
 # Install additional packages
  && yum update -y \
  && yum install -y \
-        nginx-1.12.2-2.el7 \
         python36 \
         python3-pip \
  && yum clean all \
