@@ -327,6 +327,7 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         console.info('------------- Virtual Cloud Network Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/VirtualCloudNetwork',
@@ -342,12 +343,14 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + virtual_cloud_network_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error  : ' + error)
                 $('#' + virtual_cloud_network_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

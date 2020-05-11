@@ -370,6 +370,7 @@ function selectQueryHomeRegion() {
         }
     }
 }
+let queryCount = 0;
 function showQueryResults() {
     console.group('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
@@ -390,6 +391,7 @@ function showQueryResults() {
             regionOkitJson[region] = new OkitJson();
             let request = JSON.clone(okitQueryRequestJson);
             request.region = region;
+            queryCount = 0;
             Compartment.queryRoot(request, region);
         }
         $(jqId(regionTabName(regions[0]))).trigger("click");
@@ -692,4 +694,6 @@ $(document).ready(function() {
 ** Deprecated
  */
 // TODO: Delete
-function hideQueryProgressIfComplete() {}
+function hideQueryProgressIfComplete() {
+    console.info(`>>>>>>>>>>>>> Query Count: ${queryCount}`);
+}
