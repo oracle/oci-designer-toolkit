@@ -27,7 +27,6 @@ yum install -y \
 yum repolist all
 yum update -y
 yum install -y \
-    nginx-1.12.2-2.el7 \
     python36 \
     python3-pip \
 yum repolist all
@@ -41,15 +40,10 @@ echo 'export PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit"'                
 echo 'export FLASK_APP=okitweb'                                                  >> /etc/bashrc
 echo 'export FLASK_DEBUG=development'                                            >> /etc/bashrc
 echo ''                                                                          >> /etc/bashrc
-echo "alias lh='ls -lash' "                                                      >> /etc/bashrc
-echo "alias lt='ls -last' "                                                      >> /etc/bashrc
-echo "alias env='/usr/bin/env | sort' "                                          >> /etc/bashrc
-echo "alias ips='ip -f inet address' "                                           >> /etc/bashrc
-echo ''                                                                          >> /etc/bashrc
 echo 'export PATH=/opt/python/bin:${PATH} '                                      >> /etc/bashrc
 echo ''                                                                          >> /etc/bashrc
-echo "alias startflask='python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger'" >> /etc/bashrc
-echo "alias startgunicorn='gunicorn --bind=0.0.0.0:8080 --workers=2 --limit-request-line 0 '\''okitweb:create_app()'\'''" >> /etc/bashrc
+echo "alias startflask='python3 -m flask run --host=0.0.0.0 --port=80 --no-debugger'" >> /etc/bashrc
+echo "alias startgunicorn='gunicorn --bind=0.0.0.0:80 --workers=2 --limit-request-line 0 '\''okitweb:create_app()'\'''" >> /etc/bashrc
 echo "alias startnginx='nginx;gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app'" >> /etc/bashrc
 echo ''                                                                          >> /etc/bashrc
 source /etc/bashrc
