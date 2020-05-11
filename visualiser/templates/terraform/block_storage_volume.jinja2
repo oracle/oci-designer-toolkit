@@ -23,6 +23,7 @@ resource "oci_core_volume" "{{ resource_name }}" {
     # Optional
     display_name   = {{ display_name }}
     size_in_gbs    = {{ size_in_gbs }}
+    vpus_per_gb    = {{ vpus_per_gb }}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags }}
 {% endif %}
