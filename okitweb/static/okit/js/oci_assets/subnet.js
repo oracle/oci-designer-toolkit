@@ -288,7 +288,6 @@ class Subnet extends OkitContainerArtifact {
         sub_query_request.subnet_id = id;
         LoadBalancer.query(sub_query_request, region);
         FileStorageSystem.query(sub_query_request, region);
-        Instance.query(sub_query_request, region);
     }
 }
 
