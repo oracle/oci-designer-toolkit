@@ -269,6 +269,10 @@ class OCIGenerator(object):
         self.jinja2_variables["size_in_gbs"] = self.formatJinja2Variable(variableName)
         self.run_variables[variableName] = int(block_storage_volume["size_in_gbs"])
         # --- Optional
+        # ---- VPU
+        variableName = '{0:s}_vpus_per_gb'.format(standardisedName)
+        self.jinja2_variables["vpus_per_gb"] = self.formatJinja2Variable(variableName)
+        self.run_variables[variableName] = int(block_storage_volume["vpus_per_gb"])
         # ---- Tags
         self.renderTags(block_storage_volume)
 
