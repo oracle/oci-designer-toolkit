@@ -145,6 +145,7 @@ class FastConnect extends OkitArtifact {
         console.info('------------- Fast Connect Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/FastConnect',
@@ -159,12 +160,14 @@ class FastConnect extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + fast_connect_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + fast_connect_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

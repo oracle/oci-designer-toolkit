@@ -196,6 +196,7 @@ class ObjectStorageBucket extends OkitArtifact {
         console.info('------------- Object Storage Bucket Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/ObjectStorageBucket',
@@ -210,12 +211,14 @@ class ObjectStorageBucket extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + object_storage_bucket_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + object_storage_bucket_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

@@ -138,6 +138,7 @@ class OkitTemplateArtifact extends OkitArtifact {
         console.info('------------- OkitTemplateArtifact --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/OkitTemplateArtifact',
@@ -159,12 +160,14 @@ class OkitTemplateArtifact extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + template_artifact_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + template_artifact_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

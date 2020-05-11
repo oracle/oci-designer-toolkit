@@ -139,6 +139,7 @@ class NATGateway extends OkitArtifact {
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/NATGateway',
@@ -153,12 +154,14 @@ class NATGateway extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + nat_gateway_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + nat_gateway_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

@@ -165,6 +165,7 @@ class LocalPeeringGateway extends OkitArtifact {
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/LocalPeeringGateway',
@@ -179,12 +180,14 @@ class LocalPeeringGateway extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + local_peering_gateway_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + local_peering_gateway_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

@@ -211,6 +211,7 @@ class DynamicRoutingGateway extends OkitArtifact {
         console.info('------------- Dynamic Routing Gateway Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/DynamicRoutingGateway',
@@ -225,12 +226,14 @@ class DynamicRoutingGateway extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + dynamic_routing_gateway_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });
