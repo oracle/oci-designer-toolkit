@@ -370,6 +370,7 @@ function selectQueryHomeRegion() {
         }
     }
 }
+let queryCount = 0;
 function showQueryResults() {
     console.group('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
@@ -383,6 +384,8 @@ function showQueryResults() {
     console.info('Regions Ids : ' + regions);
     regionOkitJson = {};
     if (regions.length > 0) {
+        queryCount = 0;
+        $(jqId('modal_loading_wrapper')).removeClass('hidden');
         for (let region of regions) {
             console.info('Processing Selected Region : ' + region);
             okitQueryRequestJson.region = region;
@@ -398,6 +401,12 @@ function showQueryResults() {
     }
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     console.groupEnd();
+}
+function hideQueryProgressIfComplete() {
+    console.info(`>>>>>>>>>>>>> Query Count: ${queryCount}`);
+    if (queryCount === 0) {
+        $(jqId('modal_loading_wrapper')).addClass('hidden');
+    }
 }
 /*
 ** Export the Model as various formats
@@ -688,8 +697,3 @@ $(document).ready(function() {
     window.addEventListener('resize', () => { redrawSVGCanvas() });
 });
 
-/*
-** Deprecated
- */
-// TODO: Delete
-function hideQueryProgressIfComplete() {}

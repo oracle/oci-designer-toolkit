@@ -141,6 +141,7 @@ class InternetGateway extends OkitArtifact {
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/InternetGateway',
@@ -155,12 +156,14 @@ class InternetGateway extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + internet_gateway_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + internet_gateway_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

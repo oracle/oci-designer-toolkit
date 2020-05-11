@@ -371,6 +371,7 @@ class RouteTable extends OkitArtifact {
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/RouteTable',
@@ -385,12 +386,14 @@ class RouteTable extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + route_table_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + route_table_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

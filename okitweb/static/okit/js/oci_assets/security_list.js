@@ -530,6 +530,7 @@ class SecurityList extends OkitArtifact {
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/SecurityList',
@@ -544,12 +545,14 @@ class SecurityList extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + security_list_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + security_list_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

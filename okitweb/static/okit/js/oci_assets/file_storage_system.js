@@ -218,6 +218,7 @@ class FileStorageSystem extends OkitArtifact {
         console.info('------------- Compartment : ' + request.compartment_id);
         console.info('------------- Subnet      : ' + request.subnet_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/FileStorageSystem',
@@ -232,12 +233,14 @@ class FileStorageSystem extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + file_storage_system_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + file_storage_system_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

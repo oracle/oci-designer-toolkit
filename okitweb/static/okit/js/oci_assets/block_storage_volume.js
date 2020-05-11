@@ -162,6 +162,7 @@ class BlockStorageVolume extends OkitArtifact {
         console.info('------------- Block Storage Volume Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/BlockStorageVolume',
@@ -176,12 +177,14 @@ class BlockStorageVolume extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + block_storage_volume_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + block_storage_volume_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

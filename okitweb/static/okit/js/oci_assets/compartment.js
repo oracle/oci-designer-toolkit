@@ -223,6 +223,7 @@ class Compartment extends OkitContainerArtifact {
     static queryRoot(request = {}, region='') {
         console.info('------------- Compartment Query --------------------');
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/Compartment',
@@ -237,12 +238,14 @@ class Compartment extends OkitContainerArtifact {
                 me.querySubComponents(request, region, response_json.id);
                 redrawSVGCanvas(region);
                 $('#' + compartment_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.error('Status : ' + status);
                 console.error('Error  : ' + error);
                 $('#' + compartment_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });
@@ -252,6 +255,7 @@ class Compartment extends OkitContainerArtifact {
         console.info('------------- Compartments Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/Compartments',
@@ -267,12 +271,14 @@ class Compartment extends OkitContainerArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + compartment_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.error('Status : ' + status);
                 console.error('Error  : ' + error);
                 $('#' + compartment_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });
@@ -288,6 +294,7 @@ class Compartment extends OkitContainerArtifact {
         AutonomousDatabase.query(sub_query_request, region);
         ObjectStorageBucket.query(sub_query_request, region);
         FastConnect.query(sub_query_request, region);
+        Instance.query(sub_query_request, region);
     }
 }
 

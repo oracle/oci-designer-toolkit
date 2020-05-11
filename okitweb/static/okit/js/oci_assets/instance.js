@@ -498,6 +498,7 @@ class Instance extends OkitArtifact {
         console.info('------------- Compartment : ' + request.compartment_id);
         console.info('------------- Subnet      : ' + request.subnet_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/Instance',
@@ -512,12 +513,14 @@ class Instance extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + instance_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function (xhr, status, error) {
                 console.warn('Status : ' + status);
                 console.warn('Error : ' + error);
                 $('#' + instance_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

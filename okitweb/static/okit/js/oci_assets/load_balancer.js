@@ -220,6 +220,7 @@ class LoadBalancer extends OkitArtifact {
         console.info('------------- Compartment : ' + request.compartment_id);
         console.info('------------- Subnet      : ' + request.subnet_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/LoadBalancer',
@@ -234,12 +235,14 @@ class LoadBalancer extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + load_balancer_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function (xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + load_balancer_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

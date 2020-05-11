@@ -257,6 +257,7 @@ class Subnet extends OkitContainerArtifact {
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/Subnet',
@@ -272,12 +273,14 @@ class Subnet extends OkitContainerArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + subnet_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function (xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + subnet_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });
@@ -288,7 +291,6 @@ class Subnet extends OkitContainerArtifact {
         sub_query_request.subnet_id = id;
         LoadBalancer.query(sub_query_request, region);
         FileStorageSystem.query(sub_query_request, region);
-        Instance.query(sub_query_request, region);
     }
 }
 

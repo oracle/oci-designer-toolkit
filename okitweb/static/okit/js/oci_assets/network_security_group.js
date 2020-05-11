@@ -563,6 +563,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/NetworkSecurityGroup',
@@ -577,12 +578,14 @@ class NetworkSecurityGroup extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + network_security_group_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + network_security_group_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });

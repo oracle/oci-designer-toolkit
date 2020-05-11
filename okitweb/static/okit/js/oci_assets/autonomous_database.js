@@ -170,6 +170,7 @@ class AutonomousDatabase extends OkitArtifact {
         console.info('------------- Autonomous Database Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
+        queryCount++;
         $.ajax({
             type: 'get',
             url: 'oci/artifacts/AutonomousDatabase',
@@ -184,12 +185,14 @@ class AutonomousDatabase extends OkitArtifact {
                 }
                 redrawSVGCanvas(region);
                 $('#' + autonomous_database_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
                 $('#' + autonomous_database_query_cb).prop('checked', true);
+                queryCount--;
                 hideQueryProgressIfComplete();
             }
         });
