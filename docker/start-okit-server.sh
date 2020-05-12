@@ -5,11 +5,11 @@
 
 # Run Command Options
 export BASH_SHELL='/bin/bash'
-export FLASK_SERVER='pwd;env;python3 -m flask run --host=0.0.0.0 --port=80 --no-debugger'
-export GUNICORN_SERVER='pwd;env;gunicorn --bind=0.0.0.0:80 --workers=2 --limit-request-line 0 '\''okitweb:create_app()'\'''
+export FLASK_SERVER='python3 -m flask run --host=0.0.0.0 --port=80 --no-debugger'
+export GUNICORN_SERVER='gunicorn --bind=0.0.0.0:80 --workers=2 --limit-request-line 0 '\''okitweb:create_app()'\'''
 export NGINX_SERVER='nginx;gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:5000 okitweb.wsgi:app'
 
-RUN_COMMAND=${NGINX_SERVER}
+RUN_COMMAND=${GUNICORN_SERVER}
 RUNTIME='gunicorn'
 export EXPOSE_PORTS="\
        -p 80:80 \

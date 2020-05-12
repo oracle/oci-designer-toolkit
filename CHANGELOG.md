@@ -3,8 +3,11 @@
 ## Version 0.5.0 
 **Release Date**: 13th May 2020
 ### Features
+1. Querying Overlay
+2. Extend Block Storage Properties
 
 ### Bug Fixes
+1. Update User Guide and make examples platform independent 
 
 
 
