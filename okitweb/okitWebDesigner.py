@@ -99,7 +99,7 @@ def handle_exception(error):
 @bp.route('/designer', methods=(['GET']))
 def designer():
     # Read Artifact Specific JavaScript Files
-    oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_assets')))
+    oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_artefacts')))
 
     # Get Palette Icon Groups / Icons
     svg_files = []
