@@ -36,7 +36,7 @@ to the system.
 - New Files
     - Frontend
         - **[Palette SVG](#palette-svg)**                             : [okitweb/static/okit/palette/*Block_Storage_Volume*.svg](okitweb/static/okit/palette/Block_Storage_Volume.svg)
-        - **[Artifact Javascript](#artifact-javascript)**             : [okitweb/static/okit/js/oci_assets/*block_storage_volume*.js](okitweb/static/okit/js/oci_assets/block_storage_volume.js)
+        - **[Artifact Javascript](#artifact-javascript)**             : [okitweb/static/okit/js/oci_artefacts/*block_storage_volume*.js](okitweb/static/okit/js/oci_artefacts/block_storage_volume.js)
         - **[Properties HTML](#properties-html)**                     : [okitweb/templates/okit/propertysheets/*block_storage_volume*.html](okitweb/templates/okit/propertysheets/block_storage_volume.html)
     - Backend
         - **[Python OCI Facade](#python-oci-facade)**                 : [visualiser/facades/oci*BlockStorageVolume*.py](visualiser/facades/ociBlockStorageVolume.py)
@@ -91,9 +91,9 @@ Although the svg will display in the palette image without the "g" it will cause
 The artifact javascript file is the key files for the BUI specifying all core code for the creation, drawing and querying 
 of the artifact. Each file has a standard set of variable definitions and function definitions which again are based on 
 the name of the artifact as follows. To add an artifact to the OKIT BUI you should copy the okit_template_artifact.js to 
-the "oci_assets" subdirectory and name it appropriately (In out example that would be block_storage_volume.js).
+the "oci_artefacts" subdirectory and name it appropriately (In out example that would be block_storage_volume.js).
 
-Once the file has been copied to the oci_assets directory then is can be opened and the following global Find/Replace modification applied:
+Once the file has been copied to the oci_artefacts directory then is can be opened and the following global Find/Replace modification applied:
 
 1. 'Okit Template Artifact' replaced by 'Artifact Name' - in our example this would be 'Block Storage Volume'.
 2. 'OkitTemplateArtifact' replaced by 'ArtifactName' - in our example this would be 'BlockStorageVolume'.
