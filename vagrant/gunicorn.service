@@ -1,0 +1,25 @@
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+Type=notify
+# the specific user that our service will run as
+User=vagrant
+Group=vagrant
+Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/vagrant/okit
+ExecStart=/usr/local/bin/gunicorn okitweb.wsgi:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

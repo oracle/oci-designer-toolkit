@@ -30,7 +30,9 @@ git clone -b Release-0.2.0 --depth 1 git@<Git Repo URL>:<Repository>/okit.oci.we
 
 
 ## Docker 
-The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory
+The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory.
+It should be noted that the current Docker script is designed for development purposes and and mounts the source directories
+at runtime. 
 
 ### Build Docker Image
 ```bash
@@ -70,5 +72,8 @@ is downloaded from github. Once the VM is built the vagrant up should just take 
 After the Vagrant VM is built the vagrant users home folder should have folders from the cloned okit.oci.web.designer 
 repository exposed in the Vagrant vm in the vagrant users home directory (/okitweb, /visualiser & /output). The OKIT app 
 should also be running. To access the app the ports have been forwarded to the host and you should be able to access 
-OKIT on http://localhost/okit/designer from the host.
+OKIT on [http://localhost/okit/designer](http://localhost/okit/designer) from the host.
+
+It should be noted that the current Vagrantfile script is designed for development purposes and and mounts the source directories
+at runtime.
 
