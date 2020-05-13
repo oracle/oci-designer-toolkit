@@ -107,37 +107,37 @@ the web front end will restrict this.
 A simple diagram representing a virtual Cloud Network with associated Internet Gateway, Route Table, Security List and 
 Instances fronted by a Load Balancer can be seen below.
 
-![OKIT Designer Canvas](documentation/images/okit_web_interface.png?raw=true "OKIT Designer Canvas")
+![OKIT Designer Canvas](images/okit_web_interface.png?raw=true "OKIT Designer Canvas")
 
 The hamburger menu in the top left will display a slide out menu with all available actions (described below).
 
 ##### Palette
 - Compute
-    - <img src="documentation/images/Instance.png?raw=true" width="30" height="30"/>      Instance
-    - <img src="documentation/images/Load_Balancer.png?raw=true" width="30" height="30"/> Load Balancer
+    - <img src="images/Instance.png?raw=true" width="30" height="30"/>      Instance
+    - <img src="images/Load_Balancer.png?raw=true" width="30" height="30"/> Load Balancer
 - Containers
-    - <img src="documentation/images/Compartment.png?raw=true" width="30" height="30"/> Compartment
-    - <img src="documentation/images/Container.png?raw=true" width="30" height="30"/>   Container (OKE)
+    - <img src="images/Compartment.png?raw=true" width="30" height="30"/> Compartment
+    - <img src="images/Container.png?raw=true" width="30" height="30"/>   Container (OKE)
 - Database
-    - <img src="documentation/images/Autonomous_Database.png?raw=true" width="30" height="30"/> Autonomous Database
+    - <img src="images/Autonomous_Database.png?raw=true" width="30" height="30"/> Autonomous Database
 - Gateways
-    - <img src="documentation/images/Dynamic_Routing_Gateway.png?raw=true" width="30" height="30"/> Dynamic Routing Gateway
-    - <img src="documentation/images/Internet_Gateway.png?raw=true" width="30" height="30"/>        Internet Gateway
-    - <img src="documentation/images/NAT_Gateway.png?raw=true" width="30" height="30"/>             NAT Gateway
-    - <img src="documentation/images/Service_Gateway.png?raw=true" width="30" height="30"/>         Service Gateway
+    - <img src="images/Dynamic_Routing_Gateway.png?raw=true" width="30" height="30"/> Dynamic Routing Gateway
+    - <img src="images/Internet_Gateway.png?raw=true" width="30" height="30"/>        Internet Gateway
+    - <img src="images/NAT_Gateway.png?raw=true" width="30" height="30"/>             NAT Gateway
+    - <img src="images/Service_Gateway.png?raw=true" width="30" height="30"/>         Service Gateway
 - Networking
-    - <img src="documentation/images/Fast_Connect.png?raw=true" width="30" height="30"/>          Fast Connect
-    - <img src="documentation/images/Route_Table.png?raw=true" width="30" height="30"/>           Route Table
-    - <img src="documentation/images/Security_List.png?raw=true" width="30" height="30"/>         Security List
-    - <img src="documentation/images/Subnet.png?raw=true" width="30" height="30"/>                Subnet
-    - <img src="documentation/images/Virtual_Cloud_Network.png?raw=true" width="30" height="30"/> Virtual Cloud Network
+    - <img src="images/Fast_Connect.png?raw=true" width="30" height="30"/>          Fast Connect
+    - <img src="images/Route_Table.png?raw=true" width="30" height="30"/>           Route Table
+    - <img src="images/Security_List.png?raw=true" width="30" height="30"/>         Security List
+    - <img src="images/Subnet.png?raw=true" width="30" height="30"/>                Subnet
+    - <img src="images/Virtual_Cloud_Network.png?raw=true" width="30" height="30"/> Virtual Cloud Network
 - Storage
-    - <img src="documentation/images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
-    - <img src="documentation/images/File_Storage_System.png?raw=true" width="30" height="30"/>   File Storage System
-    - <img src="documentation/images/Object_Storage_Bucket.png?raw=true" width="30" height="30"/> Object Storage Bucket
+    - <img src="images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
+    - <img src="images/File_Storage_System.png?raw=true" width="30" height="30"/>   File Storage System
+    - <img src="images/Object_Storage_Bucket.png?raw=true" width="30" height="30"/> Object Storage Bucket
 
 ##### Menu 
-![OKIT Web Interface Menu](documentation/images/okit_menu.png?raw=true "OKIT Web Interface Menu")
+![OKIT Web Interface Menu](images/okit_menu.png?raw=true "OKIT Web Interface Menu")
 
 - Canvas
     - New
@@ -244,10 +244,10 @@ empty diagram that contains only a top level Compartment. It can be seen that th
 
 The Compartment name can be edited by simply clicking on it and modifying the name in the displayed properties. Although 
 we can change the name it is for display purposes only because this Compartment will not be created just it's contents.
-![Example Step 1](documentation/images/Example01.png)
+![Example Step 1](images/Example01.png)
 ### Step 2 : Add Virtual Cloud Network
 The first this we will need for our Load Balancer example is to create a Virtual Cloud Network and this can be achieved 
-by dragging the Virtual Cloud Network Icon <img src="documentation/images/Virtual_Cloud_Network.png?raw=true" width="20" height="20"/> 
+by dragging the Virtual Cloud Network Icon <img src="images/Virtual_Cloud_Network.png?raw=true" width="20" height="20"/> 
 from the palette onto the compartment. Doing this will create a Simple Virtual Cloud Network and populate it with a default
 Route Table and Security List. Again if the names do not match you requirements select the Artifact and edit in the properties panel.
 Looking at the Properties you will notice that a number of default values have been assigned including the CIDR which will
@@ -255,55 +255,55 @@ be 10.0.0.0/16, If a second Virtual Cloud Network is added its CIDR will be 10.1
 
 These can be removed by Right-Clicking on them and selecting Delete but we will not do this because they are appropriate
 in this example. The generation of these is optional and configured in the settings window (see radio buttons at top of properties panel).
-![Example Step 2](documentation/images/Example02.png)
+![Example Step 2](images/Example02.png)
 ### Step 3 : Add Internet Gateway
 To allow access to our system we will need an Internet Gateway added to the Virtual Cloud Network. We will do this in the 
-same way we did for the Virtual Cloud Network but selecting the Internet Gateway Icon <img src="documentation/images/Internet_Gateway.png?raw=true" width="20" height="20"/>
+same way we did for the Virtual Cloud Network but selecting the Internet Gateway Icon <img src="images/Internet_Gateway.png?raw=true" width="20" height="20"/>
 from the palette and dragging it over the Virtual Cloud Network. You should note whilst doing this how the drag Icon changes
 to indicate allowable drop targets.
-![Example Step 3](documentation/images/Example03.png)
+![Example Step 3](images/Example03.png)
 ### Step 4 : Select Route Table
 The auto generated Route Table will need to be modified to add a Route Rule to direct traffic to the Internet Gateway. Select
-the Route Table <img src="documentation/images/Route_Table.png?raw=true" width="20" height="20"/> on the Canvas and its
+the Route Table <img src="images/Route_Table.png?raw=true" width="20" height="20"/> on the Canvas and its
 properties will appear in the properties Panel. Click the Green ***"+"*** button on the rules table and a new Rule will be created.
-![Example Step 4](documentation/images/Example04.png)
+![Example Step 4](images/Example04.png)
 Within the new Rule we will specify the Destination (CIDR Block) and the appropriate Gateway (Network Entity).
-![Example Step 5](documentation/images/Example05.png)
+![Example Step 5](images/Example05.png)
 ### Step 5 : Add Subnet
-We will now add a Subnet to our diagram by selecting the Subnet Icon <img src="documentation/images/Subnet.png?raw=true" width="20" height="20"/>
+We will now add a Subnet to our diagram by selecting the Subnet Icon <img src="images/Subnet.png?raw=true" width="20" height="20"/>
 from the Palette and dragging it over the Virtual Cloud Network. Dropping this will create place a Subnet on our Virtual Cloude Network
 with a CIDR based on its parent (10.0.0.0/24) Additional Subnet will increment the 3rd Octet. 
-![Example Step 6](documentation/images/Example06.png)
+![Example Step 6](images/Example06.png)
 ### Step 6 : Connect Subnet to Route Table & Security List
 To allow Artifacts within the network to access / be accessed by the internet we will need to provide it with a Route Table 
 and Security List. We can achieve this by selecting the Subnet and editing the properties to select the existing Route Table abd Security List.
-Once this has been done you will notice that the Route Table Icon <img src="documentation/images/Route_Table.png?raw=true" width="20" height="20"/>
-and Security List Icon <img src="documentation/images/Security_List.png?raw=true" width="20" height="20"/> have moved to the 
+Once this has been done you will notice that the Route Table Icon <img src="images/Route_Table.png?raw=true" width="20" height="20"/>
+and Security List Icon <img src="images/Security_List.png?raw=true" width="20" height="20"/> have moved to the 
 top edge of the Subnet to indicate that the Subnet has assigned Route Table and Security. Additional Subnet can also select the same 
 Route Table and Security List.
-![Example Step 7](documentation/images/Example07.png)
+![Example Step 7](images/Example07.png)
 ### Step 7 : Add Instances
-We will now create 2 Instances within the Subnet by dragging the Instance Icon <img src="documentation/images/Instance.png?raw=true" width="20" height="20"/>
+We will now create 2 Instances within the Subnet by dragging the Instance Icon <img src="images/Instance.png?raw=true" width="20" height="20"/>
 from the Palette and dropping it on the Subnet. You will notice that the second Instance will have the designation "002" 
 rather than "001".
-![Example Step 8](documentation/images/Example08.png)
+![Example Step 8](images/Example08.png)
 ### Step 8 : Add load Balancer
-Next well will create a Load Balancer by dragging the Load Balancer Icon <img src="documentation/images/Load_Balancer.png?raw=true" width="20" height="20"/>
+Next well will create a Load Balancer by dragging the Load Balancer Icon <img src="images/Load_Balancer.png?raw=true" width="20" height="20"/>
 from the Palette onto the Subnet. You will notice that Instances move and this is because the Visualiser controls placement 
 and will dynamically move / resize components to best display the system.
-![Example Step 9](documentation/images/Example09.png)
+![Example Step 9](images/Example09.png)
 ### Step 9 : Connect Load Balancer to Instances
 Now we will need to connect the Load Balancer to the 2 backend Instance and we will do this by selecting the Load Balancer 
 and in the displayed Properties panel selecting the 2 Instances displayed in the "Backend Instance" Select box. On doing this
 you note that Load Balancer and the Instances become connected in the diagram.
-![Example Step 10](documentation/images/Example10.png)
-![Example Step 11](documentation/images/Example11.png)
+![Example Step 10](images/Example10.png)
+![Example Step 11](images/Example11.png)
 ### Step 10 : Update Instance Properties
 Our final step will be to update each of the instances to provide an Authorised Key for the instance and a Cloud Init YAML
 to install and configure nginx. We will do this by selecting each Instance individually and editing the properties and using 
 the [Cloud Init YANL](#cloud-init-yaml) below. Once this has been done our diagram is now complete and can be saved using the 
 "Save" option below the "Hamburger" menu. 
-![Example Step 12](documentation/images/Example12.png)
+![Example Step 12](images/Example12.png)
 #### Cloud Init YAML
 ```yaml
 #cloud-config
