@@ -25,7 +25,7 @@ The table below lists a summary of the current support status whilst the details
 | NAT Gateway             | Full    | 0.2.0   | 
 | Service Gateway         | Full    | 0.3.0   |
 | **Storage**
-| Block Storage Volume    | Partial | 0.1.0   | [3](#block-storage-volume)
+| Block Storage Volume    | Partial | 0.5.0   | [2](#block-storage-volume)
 | File Storage System     | Partial | 0.4.0   | [2](#file-storage-system)
 | Object Storage Bucket   | Partial | 0.1.0   | [3](#object-storage-bucket)
 | **Database**
@@ -45,7 +45,6 @@ The table below lists a summary of the current support status whilst the details
 #### Storage
 ##### Block Storage Volume
 - Key Management / Encryption
-- VPUs
 - Source Information for creation from backup.
 ##### File Storage System
 - Key Management / Encryption
