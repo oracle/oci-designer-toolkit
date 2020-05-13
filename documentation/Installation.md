@@ -21,17 +21,17 @@ python modules are installed and in addition provide a simple flask server that 
 ## Clone Repository
 Before the building either the Docker or Vagrant Images the project will nee to be cloned from the Git Repository (or downloaded)
 and it is recommended that the latest Stable Release be cloned. The latest stable version number if shown in the README
-and the associated Release tag is in the format Release-<Version> hence for the version 0.2.0 the Release tag will be 
-**Release-0.2.0**. The command shows how this can be cloned to the local machine.
+and the associated Release tag is in the format v<Version> hence for the version 0.5.0 the Release tag will be 
+**v0.5.0**. The command shows how this can be cloned to the local machine.
 
 ```bash
-git clone -b Release-0.2.0 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
+git clone -b v0.5.0 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
 ```
 
 
 ## Docker 
 The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory.
-It should be noted that the current Docker script is designed for development purposes and and mounts the source directories
+It should be noted that the current Docker script is designed for development purposes and mounts the source directories
 at runtime. 
 
 ### Build Docker Image
