@@ -25,7 +25,7 @@ web interface, to provide a portable generic, json, file that can be used to vis
 
 
 ## Installation
-Detailed OKIT Installation steps can be found in the [OCI Kinetic Infrastructure Toolkit Installation Guide](documentation/Installation.md).
+Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
 
 ### Quick Start
 The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory
@@ -46,7 +46,7 @@ Once started the Designer BUI can be accessed on [http://localhost/okit/designer
 
 
 ## Usage / Examples
-The OKIT User / Usage Guide and worked examples can be found in the [OCI Kinetic Infrastructure Toolkit Usage Guide](documentation/Usage.md)
+The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](documentation/Usage.md)
 
 
 ## Changes
@@ -61,8 +61,8 @@ been reported.
 
 
 ## Contributing
-OCI Kinetic Infrastructure Toolkit is an open source project. See [CONTRIBUTING](CONTRIBUTING.md) for details.
+OCI Designer Toolkit is an open source project. See [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-If you would like to extend OKIT the development documentation can be found in [OCI Kinetic Infrastructure Toolkit Development Guide](documentation/Development.md)
+If you would like to extend OKIT the development documentation can be found in [OCI Designer Toolkit Development Guide](documentation/Development.md)
 
 

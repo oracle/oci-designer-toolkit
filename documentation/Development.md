@@ -1,4 +1,4 @@
-# OCI Kinetic Infrastructure Toolkit Development Guide
+# OCI Designer Toolkit Development Guide
 The following worked example will take you through the required steps to add a new artifact to OKIT. This will be based 
 on adding Block Storage Volumes to OKIT. Adding an artifact to OKIT will require a number files to be created and a few 
 modified the following steps will document the procedure specifying where the files will need to be created and the names 

@@ -1,4 +1,4 @@
-# OCI Kinetic Infrastructure Toolkit Usage Guide
+# OCI Designer Toolkit Usage Guide
 
 
 

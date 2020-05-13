@@ -1,4 +1,4 @@
-# OCI Kinetic Infrastructure Toolkit Installation Guide
+# OCI Designer Toolkit Installation Guide
 
 Although OKIT can simply be downloaded and the command line executed it is recommended that it be executed within a
 docker container that can be built using the Dockerfile within this repository. This will guarantee that all the required 
@@ -25,7 +25,7 @@ and the associated Release tag is in the format Release-<Version> hence for the 
 **Release-0.2.0**. The command shows how this can be cloned to the local machine.
 
 ```bash
-git clone -b Release-0.2.0 --depth 1 git@<Git Repo URL>:<Repository>/okit.oci.web.designer.git
+git clone -b Release-0.2.0 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
 ```
 
 
@@ -36,13 +36,13 @@ at runtime.
 
 ### Build Docker Image
 ```bash
-cd okit.oci.web.designer/docker/
+cd oci-designer-toolkit/docker/
 ./build-docker-image.sh
 ```
 
 ### Start Docker Image
 ```bash
-cd okit.oci.web.designer/docker/
+cd oci-designer-toolkit/docker/
 ./start-okit-server.sh
 ```
 
@@ -55,7 +55,7 @@ cd okit.oci.web.designer/docker/
 2. Install [Vagrant](https://vagrantup.com/)
 
 ### Copy the .oci folder 
-From your home directory to the okit.oci.web.designer/vagrant folder. 
+From your home directory to the oci-designer-toolkit/vagrant folder. 
 
 The vagrant should now have these folders & files: 
 - Vagrantfile
@@ -63,13 +63,13 @@ The vagrant should now have these folders & files:
 
 ### Build Vagrant Image
 ```bash
-cd okit.oci.web.designer/vagrant/
+cd oci-designer-toolkit/vagrant/
 vagrant up; vagrant ssh
 ```
 **NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
 is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
     
-After the Vagrant VM is built the vagrant users home folder should have folders from the cloned okit.oci.web.designer 
+After the Vagrant VM is built the vagrant users home folder should have folders from the cloned oci-designer-toolkit 
 repository exposed in the Vagrant vm in the vagrant users home directory (/okitweb, /visualiser & /output). The OKIT app 
 should also be running. To access the app the ports have been forwarded to the host and you should be able to access 
 OKIT on [http://localhost/okit/designer](http://localhost/okit/designer) from the host.
