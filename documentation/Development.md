@@ -35,7 +35,7 @@ to the system.
 
 - New Files
     - Frontend
-        - **[Palette SVG](#palette-svg)**                             : [../okitweb/static/okit/palette/*Block_Storage_Volume*.svg](../okitweb/static/okit/palette/Block_Storage_Volume.svg)
+        - **[Palette SVG](#palette-svg)**                             : [../okitweb/static/okit/palette/storage/*Block_Storage_Volume*.svg](../okitweb/static/okit/palette/storage/Block_Storage_Volume.svg)
         - **[Artifact Javascript](#artifact-javascript)**             : [../okitweb/static/okit/js/oci_artefacts/*block_storage_volume*.js](../okitweb/static/okit/js/oci_artefacts/block_storage_volume.js)
         - **[Properties HTML](#properties-html)**                     : [../okitweb/templates/okit/propertysheets/*block_storage_volume*.html](../okitweb/templates/okit/propertysheets/block_storage_volume.html)
     - Backend
