@@ -10,7 +10,6 @@
     1. [Currently Implemented Artifacts](#currently-implemented-artifacts)
     2. [Prerequisites](#prerequisites)
     3. [Web Interface](#web-interface)
-    4. [Command Line](#command-line)
 4. [Examples](#examples)
 5. [Issues](#issues)
 6. [Development](#development)
