@@ -177,45 +177,6 @@ Will export the current diagram as an SVG object that can be distributed.
 Will generate Terraform code and export the resulting zip file into the OCI Resource Manager. Once uploaded it will initiate
 a plan job.
 
-### Command Line
-To use the Command Line you will first need to start the docker container using the following script:
-```bash
-./start-bash-shell.sh
-DOCKERIMAGE = development/okit.oci.web.designer
-```
-Alternatively if you are running the Webb Application you can connect to the existing docker contain using either:
-
-- connect-flask-bash-shell.sh
-- connect-gunicorn-bash-shell.sh
-
-The command line interface consists of a number of python programs as follows:
-#### Capture
-**(WIP)** The capture python will connect to the specified OCI instance (defaults to config in users home directory) and 
-queries OCI based on the specified filters. The resulting data is then written to the specified OKIT json file (okit.json)
-and can be subsequently imported into the web based interface or used to generate the DevOps files (see [Generate](#generate)).
-#### Validate
-**(WIP)** The validate python will read the specified OKIT json file (okit.json) and check if the references are consistent.
-#### Generate
-The generate python process takes a specified OKIT json file (okit.json) and converts it to a number terraform or ansible 
-files that can then be used with the appropriate DevOps tooling to build the artifacts defined within the json file.
-```bash
-# Generate Terraform
-python3 generate.py -f okit.json -d destination_directory -t
-
-# Generate Ansible
-python3 generate.py -f okit.json -d destination_directory -a
-
-# Generate Terraform & Ansible
-python3 generate.py -f okit.json -d destination_directory -t -a
-```
-#### Generate TF from OCI
-This test program will connect to OCI with the default configuration and query based on the specified filter (-c) then generate
-appropriate yerraform files below the specified directory.
-```bash
-cd test/unit.test
-python3 ./generateTFfromOCI.py -d . -c Stefan
-```
-
 
 
 
