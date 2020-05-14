@@ -5,6 +5,7 @@
 ### Features
 1. Querying Overlay
 2. Extend Block Storage Properties
+3. Default OCI_CONFIG_DIR variable to ~/.oci
 
 ### Bug Fixes
 1. Update User Guide and make examples platform independent 
