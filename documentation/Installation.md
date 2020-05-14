@@ -28,6 +28,12 @@ and the associated Release tag is in the format vX.Y.Z hence for the version 0.5
 git clone -b v0.5.0 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
 ```
 
+or 
+
+```bash
+git clone -b v0.5.0 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
+```
+
 
 ## Docker 
 The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory.
