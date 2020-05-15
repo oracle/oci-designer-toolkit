@@ -64,7 +64,7 @@ region=us-phoenix-1
 You will then need to create the following environment variable that points to the directory containing the config file.
 
 ```bash
-export OCI_CONFIG_DIR=~/.oci/oci.config
+export OCI_CONFIG_DIR=~/.oci
 ```
 
 ### Web Interface
