@@ -35,17 +35,17 @@ to the system.
 
 - New Files
     - Frontend
-        - **[Palette SVG](#palette-svg)**                             : [okitweb/static/okit/palette/*Block_Storage_Volume*.svg](okitweb/static/okit/palette/Block_Storage_Volume.svg)
-        - **[Artifact Javascript](#artifact-javascript)**             : [okitweb/static/okit/js/oci_artefacts/*block_storage_volume*.js](okitweb/static/okit/js/oci_artefacts/block_storage_volume.js)
-        - **[Properties HTML](#properties-html)**                     : [okitweb/templates/okit/propertysheets/*block_storage_volume*.html](okitweb/templates/okit/propertysheets/block_storage_volume.html)
+        - **[Palette SVG](#palette-svg)**                             : [../okitweb/static/okit/palette/storage/*Block_Storage_Volume*.svg](../okitweb/static/okit/palette/storage/Block_Storage_Volume.svg)
+        - **[Artifact Javascript](#artifact-javascript)**             : [../okitweb/static/okit/js/oci_artefacts/*block_storage_volume*.js](../okitweb/static/okit/js/oci_artefacts/block_storage_volume.js)
+        - **[Properties HTML](#properties-html)**                     : [../okitweb/templates/okit/propertysheets/*block_storage_volume*.html](../okitweb/templates/okit/propertysheets/block_storage_volume.html)
     - Backend
         - **[Python OCI Facade](#python-oci-facade)**                 : [visualiser/facades/oci*BlockStorageVolume*.py](visualiser/facades/ociBlockStorageVolume.py)
         - **[Terraform Jinja2 Template](#terraform-jinja2-template)** : [visualiser/templates/terraform/*block_storage_volume*.jinja2](visualiser/templates/terraform/block_storage_volume.jinja2)
         - **[Ansible Jinja2 Template](#ansible-jinja2-template)**     : [visualiser/templates/ansible/*block_storage_volume*.jinja2](visualiser/templates/ansible/block_storage_volume.jinja2)
 - Updated Files
     - Frontend
-        - **[OKIT Class](#okit-class)**                               : [okitweb/static/okit/js/okit.js](okitweb/static/okit/js/okit.js)
-        - **[Flask Web Designer Python](#flask-web-designer-python)** : [okitweb/okitWebDesigner.py](okitweb/okitWebDesigner.py)
+        - **[OKIT Class](#okit-class)**                               : [../okitweb/static/okit/js/okit.js](../okitweb/static/okit/js/okit.js)
+        - **[Flask Web Designer Python](#flask-web-designer-python)** : [../okitweb/okitWebDesigner.py](../okitweb/okitWebDesigner.py)
     - Backend
         - **[Connection Facade](#connection-facade)**                 : [visualiser/facades/ociConnection.py](visualiser/facades/ociConnection.py)
         - **[Python OCI Query](#python-oci-query)**                   : [visualiser/common/ociQuery.py](visualiser/common/ociQuery.py)
