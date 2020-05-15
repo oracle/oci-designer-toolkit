@@ -6,7 +6,7 @@ Description=Flask daemon
 After=network.target
 
 [Service]
-Type=notify
+Type=simple
 # the specific user that our service will run as
 User=vagrant
 Group=vagrant
