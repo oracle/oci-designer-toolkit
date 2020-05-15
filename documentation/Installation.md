@@ -42,14 +42,21 @@ at runtime.
 
 ### Build Docker Image
 ```bash
-cd oci-designer-toolkit/docker/
-./build-docker-image.sh
+cd oci-designer-toolkit
+docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./containers/docker/
 ```
 
 ### Start Docker Image
 ```bash
-cd oci-designer-toolkit/docker/
-./start-okit-server.sh
+cd oci-designer-toolkit
+docker run -it --rm -p 80:80 \
+           --name okit \
+           --hostname okit \
+           -v ~/.oci:/root/.oci:Z \
+           -v `pwd`/okitweb:/okit/okitweb:Z \
+           -v `pwd`/visualiser:/okit/visualiser:Z \
+           -v `pwd`/log:/okit/log:Z \
+           okit
 ```
 
 
@@ -69,7 +76,7 @@ The vagrant should now have these folders & files:
 
 ### Build Vagrant Image
 ```bash
-cd oci-designer-toolkit/vagrant/
+cd oci-designer-toolkit/containers/vagrant/
 vagrant up; vagrant ssh
 ```
 **NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 

@@ -18,8 +18,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define NAME
 
   # This will expose the OKIT repo folder inside the VM under ~/okit-repo
-  config.vm.synced_folder "../okitweb", "/okit/okitweb"
-  config.vm.synced_folder "../visualiser", "/okit/visualiser"
+  config.vm.synced_folder "../../okitweb", "/okit/okitweb"
+  config.vm.synced_folder "../../visualiser", "/okit/visualiser"
 
   # set cpu, memory size and vm name
   config.vm.provider "virtualbox" do |v|
