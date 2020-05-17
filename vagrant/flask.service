@@ -6,7 +6,7 @@ Description=Flask daemon
 After=network.target
 
 [Service]
-Type=notify
+Type=simple
 # the specific user that our service will run as
 User=vagrant
 Group=vagrant
@@ -20,6 +20,7 @@ ExecStart=/usr/bin/python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed
 TimeoutStopSec=5
+TimeoutStartSec=240
 PrivateTmp=true
 Restart=always
 
