@@ -19,6 +19,7 @@ ExecStart=/usr/local/bin/gunicorn okitweb.wsgi:app
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed
 TimeoutStopSec=5
+TimeoutStartSec=300
 PrivateTmp=true
 
 [Install]
