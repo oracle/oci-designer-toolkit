@@ -35,4 +35,4 @@ output
 
 config
 
-docker/.oci
+containers/.oci

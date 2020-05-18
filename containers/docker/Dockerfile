@@ -2,28 +2,30 @@
 # Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-ARG os_version=7-slim
-ARG os=oraclelinux
-FROM ${os}:${os_version}
-LABEL version="0.5.0" \
-      description="OKIT Web Server." \
-      copyright="Copyright (c) 2020, Oracle and/or its affiliates."
+FROM oraclelinux:7-slim
+LABEL "provider"="Oracle" \
+      "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
+      "version"="0.5.0" \
+      "description"="OKIT Web Server Container." \
+      "copyright"="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
 ENV PYTHONIOENCODING=utf8 \
     PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit" \
     FLASK_APP=okitweb \
-    FLASK_DEBUG=development \
+    FLASK_DEBUG=1 \
     LANG=en_GB.UTF-8 \
     LANGUAGE=en_GB:en \
     LC_ALL=en_GB.UTF-8 \
     PATH=/root/bin:${PATH}
-
-# Update base image
+# Expose Ports
+EXPOSE 80
+EXPOSE 443
 # Install new yum repos
 RUN yum install -y \
     oracle-softwarecollection-release-el7 \
-# Install additional packages
+# Update base image
  && yum update -y \
+# Install additional packages
  && yum install -y \
         python36 \
         python3-pip \
@@ -44,6 +46,7 @@ RUN yum install -y \
         cryptography==2.8 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace}
-# Copy nginx conf information
-COPY okit_nginx.conf /etc/nginx/conf.d/okit.conf
-COPY nginx.conf /etc/nginx/nginx.conf
+# Add entrypoint to automatically start webserver
+#ENTRYPOINT gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:80 okitweb.wsgi:app
+ENTRYPOINT ["gunicorn"]
+CMD ["--workers=2", "--limit-request-line", "0", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]

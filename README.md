@@ -28,18 +28,25 @@ web interface, to provide a portable generic, json, file that can be used to vis
 Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
 
 ### Quick Start
-The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory
+The docker image is the recommended runtime server and can be built and started using the following simple docker commands.
 
 #### Build Docker Image
 ```bash
-cd docker/
-./build-docker-image.sh
+cd oci-designer-toolkit
+docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./containers/docker/
 ```
 
 #### Start Docker Image
 ```bash
-cd docker/
-./start-okit-server.sh
+cd oci-designer-toolkit
+docker run -d --rm -p 80:80 \
+           --name okit \
+           --hostname okit \
+           -v ~/.oci:/root/.oci:Z \
+           -v `pwd`/okitweb:/okit/okitweb:Z \
+           -v `pwd`/visualiser:/okit/visualiser:Z \
+           -v `pwd`/log:/okit/log:Z \
+           okit
 ```
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
