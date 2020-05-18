@@ -1128,17 +1128,26 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["display_name"]
+        if self.use_vars:
+            variableName = '{0:s}_display_name'.format(standardisedName)
+            self.run_variables[variableName] = subnet["display_name"]
+            self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        else:
+            self.jinja2_variables["display_name"] = self.formatJinja2Value(subnet["display_name"])
         # ---- CIDR Block
-        variableName = '{0:s}_cidr_block'.format(standardisedName)
-        self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["cidr_block"]
+        if self.use_vars:
+            variableName = '{0:s}_cidr_block'.format(standardisedName)
+            self.run_variables[variableName] = subnet["cidr_block"]
+            self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
+        else:
+            self.jinja2_variables["cidr_block"] = self.formatJinja2Value(subnet["cidr_block"])
         # ---- DNS Label
-        variableName = '{0:s}_dns_label'.format(standardisedName)
-        self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["dns_label"]
+        if self.use_vars:
+            variableName = '{0:s}_dns_label'.format(standardisedName)
+            self.run_variables[variableName] = subnet["dns_label"]
+            self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
+        else:
+            self.jinja2_variables["dns_label"] = self.formatJinja2Value(subnet["dns_label"])
         # ---- Route Table
         if len(subnet['route_table_id']):
             self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['route_table_id']]))
@@ -1161,23 +1170,35 @@ class OCIGenerator(object):
         # --- Optional
         # ---- Availability Domain
         if int(str(subnet.get("availability_domain", "0"))) > 0:
-            variableName = '{0:s}_availability_domain'.format(standardisedName)
-            self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = subnet["availability_domain"]
+            if self.use_vars:
+                variableName = '{0:s}_availability_domain'.format(standardisedName)
+                self.run_variables[variableName] = subnet["availability_domain"]
+                self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["availability_domain"] = self.formatJinja2Value(subnet["availability_domain"])
         else:
             self.jinja2_variables.pop("availability_domain", None)
         # ---- Prohibit Public IP
-        variableName = '{0:s}_prohibit_public_ip_on_vnic'.format(standardisedName)
-        self.jinja2_variables["prohibit_public_ip_on_vnic"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["prohibit_public_ip_on_vnic"]
+        if self.use_vars:
+            variableName = '{0:s}_prohibit_public_ip_on_vnic'.format(standardisedName)
+            self.run_variables[variableName] = subnet["prohibit_public_ip_on_vnic"]
+            self.jinja2_variables["prohibit_public_ip_on_vnic"] = self.formatJinja2Variable(variableName)
+        else:
+            self.jinja2_variables["prohibit_public_ip_on_vnic"] = self.formatJinja2Value(subnet["prohibit_public_ip_on_vnic"])
         # ---- IPv6
         if subnet['is_ipv6enabled']:
-            variableName = '{0:s}_is_ipv6enabled'.format(standardisedName)
-            self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = subnet['is_ipv6enabled']
-            variableName = '{0:s}_ipv6cidr_block'.format(standardisedName)
-            self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = subnet['ipv6cidr_block']
+            if self.use_vars:
+                variableName = '{0:s}_is_ipv6enabled'.format(standardisedName)
+                self.run_variables[variableName] = subnet['is_ipv6enabled']
+                self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Value(subnet['is_ipv6enabled'])
+            if self.use_vars:
+                variableName = '{0:s}_ipv6cidr_block'.format(standardisedName)
+                self.run_variables[variableName] = subnet['ipv6cidr_block']
+                self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Value(subnet['ipv6cidr_block'])
         else:
             self.jinja2_variables.pop("is_ipv6enabled", None)
             self.jinja2_variables.pop("ipv6cidr_block", None)

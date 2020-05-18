@@ -68,6 +68,8 @@ class OCITerraformGenerator(OCIGenerator):
     def formatJinja2Value(self, value):
         if isinstance(value, dict):
             return json.dumps(value)
+        elif isinstance(value, bool):
+            return str(value).lower()
         else:
             return '"{0!s:s}"'.format(value)
 
