@@ -50,7 +50,10 @@ only be the minimum to create the artifacts but will be extended in the future.
 Before executing any of the docker container scripts we OKIT requires that an OCI connection configuration file 
 (~/.oci/config) be created. Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
 
+
 This file will contain the following:
+
+__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine.
 
 ```properties
 [DEFAULT]
