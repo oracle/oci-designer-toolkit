@@ -25,13 +25,13 @@ and the associated Release tag is in the format vX.Y.Z hence for the version 0.5
 **v0.5.0**. The command shows how this can be cloned to the local machine.
 
 ```bash
-git clone -b v0.5.0 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
+git clone -b v0.5.1 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
 ```
 
 or 
 
 ```bash
-git clone -b v0.5.0 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
+git clone -b v0.5.1 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
 ```
 
 

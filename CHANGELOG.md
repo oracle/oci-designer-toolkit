@@ -1,5 +1,15 @@
 # Release Notes
 
+## Version 0.5.1 
+**Release Date**: 18th May 2020
+### Features
+1. Consolidate vangrant and docker files below container directory.
+2. Remove requirement to run bash scripts to build docker container
+3. Document pure docker commands.
+
+### Bug Fixes
+
+
 ## Version 0.5.0 
 **Release Date**: 13th May 2020
 ### Features
