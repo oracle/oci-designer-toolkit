@@ -47,4 +47,6 @@ RUN yum install -y \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace}
 # Add entrypoint to automatically start webserver
-ENTRYPOINT gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:80 okitweb.wsgi:app
+#ENTRYPOINT gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:80 okitweb.wsgi:app
+ENTRYPOINT ["gunicorn"]
+CMD ["--workers=2", "--limit-request-line", "0", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]

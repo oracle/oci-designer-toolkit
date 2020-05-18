@@ -49,7 +49,7 @@ docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./conta
 ### Start Docker Image
 ```bash
 cd oci-designer-toolkit
-docker run -it --rm -p 80:80 \
+docker run -d --rm -p 80:80 \
            --name okit \
            --hostname okit \
            -v ~/.oci:/root/.oci:Z \
@@ -58,6 +58,8 @@ docker run -it --rm -p 80:80 \
            -v `pwd`/log:/okit/log:Z \
            okit
 ```
+
+If you want to run the image in and interactive mode then replace to _-d_ in the above command with _-it_.
 
 
 ## Vagrant

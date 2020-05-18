@@ -48,7 +48,7 @@ only be the minimum to create the artifacts but will be extended in the future.
 
 ### Prerequisites
 Before executing any of the docker container scripts we OKIT requires that an OCI connection configuration file 
-(~/.oci/oci.config) be created.
+(~/.oci/config) be created. Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
 
 This file will contain the following:
 
@@ -64,7 +64,7 @@ region=us-phoenix-1
 You will then need to create the following environment variable that points to the directory containing the config file.
 
 ```bash
-export OCI_CONFIG_DIR=~/.oci/oci.config
+export OCI_CONFIG_DIR=~/.oci
 ```
 
 ### Web Interface
@@ -73,13 +73,13 @@ be achieved by running the docker container created during [installation](Instal
 
 ```bash
 cd oci-designer-toolkit
-docker run -it --rm -p 80:80 \
+docker run -d --rm -p 80:80 \
            --name okit \
            --hostname okit \
            -v ~/.oci:/root/.oci:Z \
-           -v ./okitweb:/okit/okitweb:Z \
-           -v ./visualiser:/okit/visualiser:Z \
-           -v ./log:/okit/log:Z \
+           -v `pwd`/okitweb:/okit/okitweb:Z \
+           -v `pwd`/visualiser:/okit/visualiser:Z \
+           -v `pwd`/log:/okit/log:Z \
            okit
 
 [2020-04-22 11:07:49 +0000] [11] [INFO] Starting gunicorn 20.0.4

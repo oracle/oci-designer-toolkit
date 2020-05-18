@@ -13,9 +13,9 @@ echo "*******************************************************************"
 
 docker build \
    --tag okit \
-   --file ./docker/Dockerfile \
+   --file ../docker/Dockerfile \
    --force-rm \
-   ./docker/
+   ../docker/
 
 for dangling in $(docker images -f "dangling=true" -q)
 do

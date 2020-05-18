@@ -3,9 +3,9 @@
 # Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-export ROOT_DIR=$(cd $(dirname $0)/..; pwd)
+export ROOT_DIR=$(cd $(dirname $0)/../..; pwd)
 
-docker run -it --rm -p 80:80 \
+docker run -d --rm -p 80:80 \
        --name okit \
        --hostname okit \
        -v ~/.oci:/root/.oci:Z \
