@@ -81,12 +81,6 @@ docker run -d --rm -p 80:80 \
            -v `pwd`/visualiser:/okit/visualiser:Z \
            -v `pwd`/log:/okit/log:Z \
            okit
-
-[2020-04-22 11:07:49 +0000] [11] [INFO] Starting gunicorn 20.0.4
-[2020-04-22 11:07:49 +0000] [11] [INFO] Listening at: http://0.0.0.0:80 (11)
-[2020-04-22 11:07:49 +0000] [11] [INFO] Using worker: sync
-[2020-04-22 11:07:49 +0000] [14] [INFO] Booting worker with pid: 14
-[2020-04-22 11:07:49 +0000] [15] [INFO] Booting worker with pid: 15
 ```
 
 Alternatively if you have chosen to use Vagrant the server can be started as follows:
