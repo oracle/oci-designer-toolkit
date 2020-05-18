@@ -65,6 +65,12 @@ class OCITerraformGenerator(OCIGenerator):
     def formatJinja2DhcpReference(self, resource_name):
         return 'local.{0:s}_dhcp_options_id'.format(resource_name)
 
+    def formatJinja2Value(self, value):
+        if isinstance(value, dict):
+            return json.dumps(value)
+        else:
+            return '"{0!s:s}"'.format(value)
+
     def renderDefinedTags(self, artifact):
         defined_tags = artifact.get("defined_tags", {})
         if len(defined_tags.keys()) > 0:

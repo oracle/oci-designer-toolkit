@@ -88,6 +88,9 @@ class OCIGenerator(object):
     def formatJinja2DhcpReference(self, resource_name):
         pass
 
+    def formatJinja2Value(self, value):
+        pass
+
     def buildIdNameMap(self):
         logger.info("Build Id/Name Map")
         self.id_name_map = {}
@@ -1205,21 +1208,21 @@ class OCIGenerator(object):
             self.run_variables[variableName] = virtual_cloud_network["cidr_block"]
             self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
         else:
-            self.jinja2_variables["cidr_block"] = '"{0!s:s}"'.format(virtual_cloud_network["cidr_block"])
+            self.jinja2_variables["cidr_block"] = self.formatJinja2Value(virtual_cloud_network["cidr_block"])
         # ---- Display Name
         if self.use_vars:
             variableName = '{0:s}_display_name'.format(standardisedName)
             self.run_variables[variableName] = virtual_cloud_network["display_name"]
             self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
         else:
-            self.jinja2_variables["display_name"] = '"{0!s:s}"'.format(virtual_cloud_network["display_name"])
+            self.jinja2_variables["display_name"] = self.formatJinja2Value(virtual_cloud_network["display_name"])
         # ---- DNS Label
         if self.use_vars:
             variableName = '{0:s}_dns_label'.format(standardisedName)
             self.run_variables[variableName] = virtual_cloud_network["dns_label"]
             self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
         else:
-            self.jinja2_variables["dns_label"] = '"{0!s:s}"'.format(virtual_cloud_network["dns_label"])
+            self.jinja2_variables["dns_label"] = self.formatJinja2Value(virtual_cloud_network["dns_label"])
         # --- Optional
         # ---- IPv6
         if virtual_cloud_network['is_ipv6enabled']:
@@ -1228,13 +1231,13 @@ class OCIGenerator(object):
                 self.run_variables[variableName] = virtual_cloud_network['is_ipv6enabled']
                 self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Variable(variableName)
             else:
-                self.jinja2_variables["is_ipv6enabled"] = '"{0!s:s}"'.format(virtual_cloud_network['is_ipv6enabled'])
+                self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Value(virtual_cloud_network['is_ipv6enabled'])
             if self.use_vars:
                 variableName = '{0:s}_ipv6cidr_block'.format(standardisedName)
                 self.run_variables[variableName] = virtual_cloud_network['ipv6cidr_block']
                 self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Variable(variableName)
             else:
-                self.jinja2_variables["ipv6cidr_block"] = '"{0!s:s}"'.format(virtual_cloud_network['ipv6cidr_block'])
+                self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Value(virtual_cloud_network['ipv6cidr_block'])
         else:
             self.jinja2_variables.pop("is_ipv6enabled", None)
             self.jinja2_variables.pop("ipv6cidr_block", None)
@@ -1281,7 +1284,7 @@ class OCIGenerator(object):
                 self.run_variables[variableName] = tags
                 self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
             else:
-                self.jinja2_variables["defined_tags"] = '"{0!s:s}"'.format(tags)
+                self.jinja2_variables["defined_tags"] = self.formatJinja2Value(tags)
         else:
             self.jinja2_variables.pop("defined_tags", None)
         return
@@ -1296,7 +1299,7 @@ class OCIGenerator(object):
                 self.run_variables[variableName] = tags
                 self.jinja2_variables["freeform_tags"] = self.formatJinja2Variable(variableName)
             else:
-                self.jinja2_variables["freeform_tags"] = '"{0!s:s}"'.format(tags)
+                self.jinja2_variables["freeform_tags"] = self.formatJinja2Value(tags)
         else:
             self.jinja2_variables.pop("freeform_tags", None)
         return

@@ -54,4 +54,7 @@ class OCIAnsibleGenerator(OCIGenerator):
     def formatJinja2Variable(self, variable_name):
         return '{{{{ {0:s} }}}}'.format(variable_name)
 
+    def formatJinja2Value(self, value):
+        return value
+
 
