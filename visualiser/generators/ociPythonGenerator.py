@@ -28,10 +28,10 @@ class OCIPythonGenerator(OCIGenerator):
     OUTPUTS_FILE_NAME = 'output.py'
     JINJA2_VARIABLE_FORMAT = '{{{{ {0:s} }}}}'
 
-    def __init__(self, template_root, output_root, visualiser_json):
+    def __init__(self, template_root, output_root, visualiser_json, use_vars=True):
         template_dir = os.path.join(template_root, self.DIRECTORY_SUFFIX)
         output_dir = os.path.join(output_root, self.DIRECTORY_SUFFIX)
-        super(OCIPythonGenerator, self).__init__(template_dir, output_dir, visualiser_json)
+        super(OCIPythonGenerator, self).__init__(template_dir, output_dir, visualiser_json, use_vars)
 
     def writeFiles(self):
         main_rendered = self.getRenderedMain()

@@ -16,7 +16,7 @@
       "ocpus": 52,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "BM.DenseIO2.52",
-      "sort_key": "BM-DenseIO2-052-768"
+      "sort_key": "BM.DenseIO2.52"
     },
     {
       "gpu_description": null,
@@ -34,7 +34,7 @@
       "ocpus": 36,
       "processor_description": "3.0 GHz Intel\u00ae Xeon\u00ae Gold 6154 (Skylake)",
       "shape": "BM.HPC2.36",
-      "sort_key": "BM-HPC2-036-384"
+      "sort_key": "BM.HPC2.36"
     },
     {
       "gpu_description": null,
@@ -52,7 +52,7 @@
       "ocpus": 44,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
       "shape": "BM.Standard.B1.44",
-      "sort_key": "BM-Standard-044-512"
+      "sort_key": "BM.Standard.B1.44"
     },
     {
       "gpu_description": null,
@@ -70,7 +70,7 @@
       "ocpus": 64,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
       "shape": "BM.Standard.E2.64",
-      "sort_key": "BM-Standard-064-512"
+      "sort_key": "BM.Standard.E2.64"
     },
     {
       "gpu_description": null,
@@ -88,7 +88,7 @@
       "ocpus": 128,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
       "shape": "BM.Standard.E3.128",
-      "sort_key": "BM-Standard-128-2048"
+      "sort_key": "BM.Standard.E3.128"
     },
     {
       "gpu_description": null,
@@ -106,7 +106,7 @@
       "ocpus": 36,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
       "shape": "BM.Standard1.36",
-      "sort_key": "BM-Standard1-036-256"
+      "sort_key": "BM.Standard1.36"
     },
     {
       "gpu_description": null,
@@ -124,7 +124,7 @@
       "ocpus": 52,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "BM.Standard2.52",
-      "sort_key": "BM-Standard2-052-768"
+      "sort_key": "BM.Standard2.52"
     },
     {
       "gpu_description": null,
@@ -141,8 +141,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.8",
-      "sort_key": "VM-DenseIO2-008-120"
+      "shape": "VM.DenseIO2.16",
+      "sort_key": "VM.DenseIO2.16"
     },
     {
       "gpu_description": null,
@@ -159,8 +159,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.16",
-      "sort_key": "VM-DenseIO2-016-240"
+      "shape": "VM.DenseIO2.24",
+      "sort_key": "VM.DenseIO2.24"
     },
     {
       "gpu_description": null,
@@ -177,8 +177,8 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.24",
-      "sort_key": "VM-DenseIO2-024-320"
+      "shape": "VM.DenseIO2.8",
+      "sort_key": "VM.DenseIO2.8"
     },
     {
       "gpu_description": null,
@@ -196,7 +196,7 @@
       "ocpus": 1,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
       "shape": "VM.Standard.E2.1",
-      "sort_key": "VM-Standard-001-008"
+      "sort_key": "VM.Standard.E2.1"
     },
     {
       "gpu_description": null,
@@ -228,8 +228,8 @@
       },
       "ocpus": 1,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
-      "shape": "VM.Standard.E3.Flex",
-      "sort_key": "VM-Standard-001-016"
+      "shape": "VM.Standard.E2.2",
+      "sort_key": "VM.Standard.E2.2"
     },
     {
       "gpu_description": null,
@@ -246,8 +246,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.2",
-      "sort_key": "VM-Standard-002-016"
+      "shape": "VM.Standard.E2.4",
+      "sort_key": "VM.Standard.E2.4"
     },
     {
       "gpu_description": null,
@@ -264,8 +264,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.4",
-      "sort_key": "VM-Standard-004-032"
+      "shape": "VM.Standard.E2.8",
+      "sort_key": "VM.Standard.E2.8"
     },
     {
       "gpu_description": null,
@@ -282,8 +282,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.8",
-      "sort_key": "VM-Standard-008-064"
+      "shape": "VM.Standard.E3.Flex",
+      "sort_key": "VM.Standard.E3.Flex"
     },
     {
       "gpu_description": null,
@@ -301,7 +301,7 @@
       "ocpus": 1,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
       "shape": "VM.Standard1.1",
-      "sort_key": "VM-Standard1-001-007"
+      "sort_key": "VM.Standard1.1"
     },
     {
       "gpu_description": null,
@@ -318,8 +318,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.2",
-      "sort_key": "VM-Standard1-002-014"
+      "shape": "VM.Standard1.16",
+      "sort_key": "VM.Standard1.16"
     },
     {
       "gpu_description": null,
@@ -336,8 +336,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.4",
-      "sort_key": "VM-Standard1-004-028"
+      "shape": "VM.Standard1.2",
+      "sort_key": "VM.Standard1.2"
     },
     {
       "gpu_description": null,
@@ -354,8 +354,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.8",
-      "sort_key": "VM-Standard1-008-056"
+      "shape": "VM.Standard1.4",
+      "sort_key": "VM.Standard1.4"
     },
     {
       "gpu_description": null,
@@ -372,8 +372,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.16",
-      "sort_key": "VM-Standard1-016-112"
+      "shape": "VM.Standard1.8",
+      "sort_key": "VM.Standard1.8"
     },
     {
       "gpu_description": null,
@@ -391,7 +391,7 @@
       "ocpus": 1,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "VM.Standard2.1",
-      "sort_key": "VM-Standard2-001-015"
+      "sort_key": "VM.Standard2.1"
     },
     {
       "gpu_description": null,
@@ -408,8 +408,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.2",
-      "sort_key": "VM-Standard2-002-030"
+      "shape": "VM.Standard2.16",
+      "sort_key": "VM.Standard2.16"
     },
     {
       "gpu_description": null,
@@ -426,8 +426,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.4",
-      "sort_key": "VM-Standard2-004-060"
+      "shape": "VM.Standard2.2",
+      "sort_key": "VM.Standard2.2"
     },
     {
       "gpu_description": null,
@@ -444,8 +444,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.8",
-      "sort_key": "VM-Standard2-008-120"
+      "shape": "VM.Standard2.24",
+      "sort_key": "VM.Standard2.24"
     },
     {
       "gpu_description": null,
@@ -462,8 +462,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.16",
-      "sort_key": "VM-Standard2-016-240"
+      "shape": "VM.Standard2.4",
+      "sort_key": "VM.Standard2.4"
     },
     {
       "gpu_description": null,
@@ -480,8 +480,8 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.24",
-      "sort_key": "VM-Standard2-024-320"
+      "shape": "VM.Standard2.8",
+      "sort_key": "VM.Standard2.8"
     }
   ]
 }

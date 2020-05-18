@@ -25,7 +25,7 @@ from common.ociValidation import validateVisualiserJson
 logger = getLogger()
 
 class OCIGenerator(object):
-    def __init__(self, template_dir, output_dir, visualiser_json):
+    def __init__(self, template_dir, output_dir, visualiser_json, use_vars=True):
         # Initialise generator output data variables
         self.create_sequence = []
         self.run_variables = {}
@@ -34,6 +34,7 @@ class OCIGenerator(object):
         self.template_dir = template_dir
         self.output_dir = output_dir
         self.visualiser_json = visualiser_json
+        self.use_vars = use_vars
         # Check output directory
         self.getCheckOutputDirectory()
         # Read common variables
@@ -1199,26 +1200,41 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[virtual_cloud_network['compartment_id']]))
         # ---- CIDR Block
-        variableName = '{0:s}_cidr_block'.format(standardisedName)
-        self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["cidr_block"]
+        if self.use_vars:
+            variableName = '{0:s}_cidr_block'.format(standardisedName)
+            self.run_variables[variableName] = virtual_cloud_network["cidr_block"]
+            self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
+        else:
+            self.jinja2_variables["cidr_block"] = '"{0!s:s}"'.format(virtual_cloud_network["cidr_block"])
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["display_name"]
+        if self.use_vars:
+            variableName = '{0:s}_display_name'.format(standardisedName)
+            self.run_variables[variableName] = virtual_cloud_network["display_name"]
+            self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
+        else:
+            self.jinja2_variables["display_name"] = '"{0!s:s}"'.format(virtual_cloud_network["display_name"])
         # ---- DNS Label
-        variableName = '{0:s}_dns_label'.format(standardisedName)
-        self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["dns_label"]
+        if self.use_vars:
+            variableName = '{0:s}_dns_label'.format(standardisedName)
+            self.run_variables[variableName] = virtual_cloud_network["dns_label"]
+            self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
+        else:
+            self.jinja2_variables["dns_label"] = '"{0!s:s}"'.format(virtual_cloud_network["dns_label"])
         # --- Optional
         # ---- IPv6
         if virtual_cloud_network['is_ipv6enabled']:
-            variableName = '{0:s}_is_ipv6enabled'.format(standardisedName)
-            self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = virtual_cloud_network['is_ipv6enabled']
-            variableName = '{0:s}_ipv6cidr_block'.format(standardisedName)
-            self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = virtual_cloud_network['ipv6cidr_block']
+            if self.use_vars:
+                variableName = '{0:s}_is_ipv6enabled'.format(standardisedName)
+                self.run_variables[variableName] = virtual_cloud_network['is_ipv6enabled']
+                self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["is_ipv6enabled"] = '"{0!s:s}"'.format(virtual_cloud_network['is_ipv6enabled'])
+            if self.use_vars:
+                variableName = '{0:s}_ipv6cidr_block'.format(standardisedName)
+                self.run_variables[variableName] = virtual_cloud_network['ipv6cidr_block']
+                self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["ipv6cidr_block"] = '"{0!s:s}"'.format(virtual_cloud_network['ipv6cidr_block'])
         else:
             self.jinja2_variables.pop("is_ipv6enabled", None)
             self.jinja2_variables.pop("ipv6cidr_block", None)
@@ -1258,21 +1274,31 @@ class OCIGenerator(object):
     def renderDefinedTags(self, artifact):
         tags = artifact.get("defined_tags", {})
         if len(tags.keys()) > 0:
-            standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
-            # -- Defined Tags
-            variableName = '{0:s}_defined_tags'.format(standardisedName)
-            self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = tags
+            if self.use_vars:
+                standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+                # -- Defined Tags
+                variableName = '{0:s}_defined_tags'.format(standardisedName)
+                self.run_variables[variableName] = tags
+                self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["defined_tags"] = '"{0!s:s}"'.format(tags)
+        else:
+            self.jinja2_variables.pop("defined_tags", None)
         return
 
     def renderFreeformTags(self, artifact):
         tags = artifact.get("freeform_tags", {})
         if len(tags.keys()) > 0:
-            standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
-            # -- Freeform Tags
-            variableName = '{0:s}_freeform_tags'.format(standardisedName)
-            self.jinja2_variables["freeform_tags"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = tags
+            if self.use_vars:
+                standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+                # -- Freeform Tags
+                variableName = '{0:s}_freeform_tags'.format(standardisedName)
+                self.run_variables[variableName] = tags
+                self.jinja2_variables["freeform_tags"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["freeform_tags"] = '"{0!s:s}"'.format(tags)
+        else:
+            self.jinja2_variables.pop("freeform_tags", None)
         return
 
     def standardiseResourceName(self, name):
