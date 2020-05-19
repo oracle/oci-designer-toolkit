@@ -30,7 +30,7 @@ class OCITerraformGenerator(OCIGenerator):
     OUTPUTS_FILE_NAME = 'output.tf'
     JINJA2_VARIABLE_FORMAT = 'var.{0:s}'
 
-    def __init__(self, template_root, output_root, visualiser_json, use_vars=False):
+    def __init__(self, template_root, output_root, visualiser_json, use_vars=True):
         template_dir = os.path.join(template_root, self.DIRECTORY_SUFFIX)
         output_dir = os.path.join(output_root, self.DIRECTORY_SUFFIX)
         super(OCITerraformGenerator, self).__init__(template_dir, output_dir, visualiser_json, use_vars)

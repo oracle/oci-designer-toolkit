@@ -816,12 +816,9 @@ class OCIGenerator(object):
         rule_number = 1
         jinja2_egress_rules = []
         for rule in security_list.get('egress_security_rules', []):
+            jinja2_egress_rule = {}
             # ------ Protocol
-            variableName = '{0:s}_egress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["protocol"]
-            jinja2_egress_rule = {
-                "protocol": self.formatJinja2Variable(variableName)
-            }
+            jinja2_egress_rule["protocol"] = self.generateJinja2Variable('egress_rule_{0:02d}_protocol'.format(rule_number), rule["protocol"], standardisedName)
             # ------ TCP Options (Protocol 6)
             if rule["protocol"] == '6' and 'tcp_options' in rule and rule["tcp_options"] is not None:
                 tcp_options = self.renderSecurityListRuleOptions(rule, 'tcp_options', standardisedName, rule_number, 'egress')
@@ -835,17 +832,11 @@ class OCIGenerator(object):
                 icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'egress')
                 jinja2_egress_rule["icmp_options"] = icmp_options
             # ------ Destination
-            variableName = '{0:s}_egress_rule_{1:02d}_destination'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["destination"]
-            jinja2_egress_rule["destination"] = self.formatJinja2Variable(variableName)
+            jinja2_egress_rule["destination"] = self.generateJinja2Variable('egress_rule_{0:02d}_destination'.format(rule_number), rule["destination"], standardisedName)
             # ------ Destination Type
-            variableName = '{0:s}_egress_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["destination_type"]
-            jinja2_egress_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            jinja2_egress_rule["destination_type"] = self.generateJinja2Variable('egress_rule_{0:02d}_destination_type'.format(rule_number), rule["destination_type"], standardisedName)
             # ------ Description
-            variableName = '{0:s}_egress_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule.get("description", "Egress Rule {0:02d}".format(rule_number))
-            jinja2_egress_rule["description"] = self.formatJinja2Variable(variableName)
+            jinja2_egress_rule["description"] = self.generateJinja2Variable('egress_rule_{0:02d}_description'.format(rule_number), rule.get("description", "Egress Rule {0:02d}".format(rule_number)), standardisedName)
             # Add to Egress Rules used for Jinja template
             jinja2_egress_rules.append(jinja2_egress_rule)
             # Increment rule number
@@ -855,12 +846,9 @@ class OCIGenerator(object):
         rule_number = 1
         jinja2_ingress_rules = []
         for rule in security_list.get('ingress_security_rules', []):
+            jinja2_ingress_rule = {}
             # ------ Protocol
-            variableName = '{0:s}_ingress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["protocol"]
-            jinja2_ingress_rule = {
-                "protocol": self.formatJinja2Variable(variableName)
-            }
+            jinja2_ingress_rule["protocol"] = self.generateJinja2Variable('ingress_rule_{0:02d}_protocol'.format(rule_number), rule["protocol"], standardisedName)
             # ------ TCP Options (Protocol 6)
             if rule["protocol"] == '6' and 'tcp_options' in rule and rule['tcp_options'] is not None:
                 tcp_options = self.renderSecurityListRuleOptions(rule, 'tcp_options', standardisedName, rule_number, 'ingress')
@@ -874,17 +862,11 @@ class OCIGenerator(object):
                 icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'ingress')
                 jinja2_ingress_rule["icmp_options"] = icmp_options
             # ------ Source Type
-            variableName = '{0:s}_ingress_rule_{1:02d}_source_type'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["source_type"]
-            jinja2_ingress_rule["source_type"] = self.formatJinja2Variable(variableName)
+            jinja2_ingress_rule["source_type"] = self.generateJinja2Variable('ingress_rule_{0:02d}_source_type'.format(rule_number), rule["source_type"], standardisedName)
             # ------ Source
-            variableName = '{0:s}_ingress_rule_{1:02d}_source'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["source"]
-            jinja2_ingress_rule["source"] = self.formatJinja2Variable(variableName)
+            jinja2_ingress_rule["source"] = self.generateJinja2Variable('ingress_rule_{0:02d}_source'.format(rule_number), rule["source"], standardisedName)
             # ------ Description
-            variableName = '{0:s}_ingress_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule.get("description", "Ingress Rule {0:02d}".format(rule_number))
-            jinja2_ingress_rule["description"] = self.formatJinja2Variable(variableName)
+            jinja2_ingress_rule["description"] = self.generateJinja2Variable('ingress_rule_{0:02d}_description'.format(rule_number), rule.get("description", "Ingress Rule {0:02d}".format(rule_number)), standardisedName)
             # Add to Ingress Rules used for Jinja template
             jinja2_ingress_rules.append(jinja2_ingress_rule)
             # Increment rule number
@@ -902,16 +884,12 @@ class OCIGenerator(object):
     def renderSecurityListRuleOptions(self, rule, element, standardisedName, rule_number, rule_type):
         options = {}
         if element == 'icmp_options':
-            if 'type' in rule["icmp_options"] and  rule["icmp_options"]["type"] != '' and rule["icmp_options"]["type"] is not None:
+            if 'type' in rule["icmp_options"] and rule["icmp_options"]["type"] != '' and rule["icmp_options"]["type"] is not None:
                 # Type
-                variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_icmp_type'.format(standardisedName, rule_type, rule_number)
-                self.run_variables[variableName] = rule["icmp_options"]["type"]
-                options['type'] = self.formatJinja2Variable(variableName)
+                options['type'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_icmp_type'.format(rule_type, rule_number), rule["icmp_options"]["type"], standardisedName)
                 # Code
                 if 'code' in rule["icmp_options"] and rule["icmp_options"]["code"] != '' and rule["icmp_options"]["code"] is not None:
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_icmp_code'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule["icmp_options"]["code"]
-                    options['code'] = self.formatJinja2Variable(variableName)
+                    options['code'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_icmp_code'.format(rule_type, rule_number), rule["icmp_options"]["code"], standardisedName)
         else:
             if 'destination_port_range' in rule[element] and rule[element]['destination_port_range'] is not None:
                 # If min or max is missing and if so set to the other
@@ -923,13 +901,9 @@ class OCIGenerator(object):
                     # We have a range
                     options['destination_port_range'] = {}
                     # Min
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_tcp_dst_min'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule[element]['destination_port_range']['min']
-                    options['destination_port_range']['min'] = self.formatJinja2Variable(variableName)
+                    options['destination_port_range']['min'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_tcp_dst_min'.format(rule_type, rule_number), rule[element]['destination_port_range']['min'], standardisedName)
                     # Max
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_tcp_dst_max'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule[element]['destination_port_range']['max']
-                    options['destination_port_range']['max'] = self.formatJinja2Variable(variableName)
+                    options['destination_port_range']['max'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_tcp_dst_max'.format(rule_type, rule_number), rule[element]['destination_port_range']['max'], standardisedName)
             if 'source_port_range' in rule[element] and rule[element]['source_port_range'] is not None:
                 # If min or max is missing and if so set to the other
                 if rule[element]['source_port_range']['max'] == '':
@@ -940,13 +914,9 @@ class OCIGenerator(object):
                     # We have a range
                     options['source_port_range'] = {}
                     # Min
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_tcp_src_min'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule[element]['source_port_range']['min']
-                    options['source_port_range']['min'] = self.formatJinja2Variable(variableName)
+                    options['source_port_range']['min'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_tcp_src_min'.format(rule_type, rule_number), rule[element]['source_port_range']['min'], standardisedName)
                     # Max
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_tcp_src_max'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule[element]['source_port_range']['max']
-                    options['source_port_range']['max'] = self.formatJinja2Variable(variableName)
+                    options['source_port_range']['max'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_tcp_src_max'.format(rule_type, rule_number), rule[element]['source_port_range']['max'], standardisedName)
         return options
 
     def renderServiceGateway(self, service_gateway):
