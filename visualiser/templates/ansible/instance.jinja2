@@ -4,9 +4,9 @@
       oci_image_facts:
         region: "{{ region }}"
         compartment_id: "{{ compartment_ocid }}"
-        operating_system: "{{ os }}"
-        operating_system_version: "{{ os_version }}"
-        shape: "{{ shape }}"
+        operating_system: "{{ os | safe }}"
+        operating_system_version: "{{ os_version | safe }}"
+        shape: "{{ shape | safe }}"
       register: {{ resource_name }}Images
 
 # ------ Create Instance {{ output_name }}
@@ -15,44 +15,44 @@
         region: "{{ region }}"
         state: "present"
         # Required
-        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
         compartment_id: "{{ compartment_id }}"
-        shape: "{{ shape }}"
+        shape: "{{ shape | safe }}"
         # Optional
-        display_name: "{{ display_name }}"
+        display_name: "{{ display_name | safe }}"
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
         metadata:
-            ssh_authorized_keys: "{{ authorized_keys }}"
+            ssh_authorized_keys: "{{ authorized_keys | safe }}"
 {% if cloud_init_yaml is defined %}
             user_data: "{{ cloud_init_yaml | replace(' }}', '') }} | b64encode {{ '}}' }}"
 {% endif %}
         source_details:
             # Required
-            source_type: "{{ source_type }}"
+            source_type: "{{ source_type | safe }}"
             image_id: "{{ '{{' }} ({{ resource_name }}Images.images | map(attribute='id') | first) {{ '}}' }}"
             # Optional
 {% if boot_volume_size_in_gbs is defined %}
-            boot_volume_size_in_gbs: "{{ boot_volume_size_in_gbs }}"
+            boot_volume_size_in_gbs: "{{ boot_volume_size_in_gbs | safe }}"
 {% endif %}
         create_vnic_details:
             # Required
             subnet_id: "{{ subnet_id }}"
             # Optional
 {% if assign_public_ip is defined %}
-            assign_public_ip: "{{ assign_public_ip }}"
+            assign_public_ip: "{{ assign_public_ip | safe }}"
 {% endif %}
             name: "{{ display_name_vnic }}"
-            hostname_label: "{{ hostname_label }}"
+            hostname_label: "{{ hostname_label | safe }}"
 {% if private_ip is defined %}
-            private_ip: "{{ private_ip }}"
+            private_ip: "{{ private_ip | safe }}"
 {% endif %}
 {% if skip_source_dest_check is defined %}
-            skip_source_dest_check: "{{ skip_source_dest_check }}"
+            skip_source_dest_check: "{{ skip_source_dest_check | safe }}"
 {% endif %}
 {% if nsg_ids is defined %}
             nsg_ids: [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
@@ -88,9 +88,9 @@
       oci_volume_attachment:
         region: "{{ region }}"
         instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
-        type: "{{ volume.attachment_type | default('iscsi') }}"
+        type: "{{ volume.attachment_type | safe }}"
         volume_id: "{{ volume.block_storage_volume_id }}"
-        display_name: "{{ volume.display_name }}"
+        display_name: "{{ volume.display_name | safe }}"
 {% endfor %}
 
 # ------ Create Vnic Attachments for Instance {{ output_name }}
@@ -99,18 +99,18 @@
       oci_vnic_attachment:
         region: "{{ region }}"
         instance_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
-        display_name: "{{ vnic.display_name }}"
+        display_name: "{{ vnic.display_name | safe }}"
         vnic:
             subnet_id: "{{ vnic.subnet_id }}"
-            hostname_label: "{{ vnic.hostname_label }}"
+            hostname_label: "{{ vnic.hostname_label | safe }}"
     {% if vnic.assign_public_ip is defined %}
-            assign_public_ip: "{{ vnic.assign_public_ip }}"
+            assign_public_ip: "{{ vnic.assign_public_ip | safe }}"
     {% endif %}
     {% if vnic.private_ip is defined %}
-            private_ip: "{{ vnic.private_ip }}"
+            private_ip: "{{ vnic.private_ip | safe }}"
     {% endif %}
     {% if vnic.skip_source_dest_check is defined %}
-            skip_source_dest_check: "{{ vnic.skip_source_dest_check }}"
+            skip_source_dest_check: "{{ vnic.skip_source_dest_check | safe }}"
     {% endif %}
     {% if vnic.nsg_ids is defined %}
             nsg_ids: [{% for nsg_id in vnic.nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]

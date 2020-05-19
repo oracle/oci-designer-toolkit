@@ -24,7 +24,7 @@ class LoadBalancer extends OkitArtifact {
         this.subnet_id = data.parent_id;
         this.subnet_ids = [data.parent_id];
         this.is_private = false;
-        this.shape_name = '100Mbps';
+        this.shape = '100Mbps';
         this.protocol = 'HTTP';
         this.port = '80';
         this.instance_ids = [];
@@ -41,10 +41,17 @@ class LoadBalancer extends OkitArtifact {
         }
     }
 
-
     /*
-    ** Clone Functionality
+    ** Conversion Routine allowing loading of old json
      */
+    convert() {
+        if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
+    }
+
+
+        /*
+        ** Clone Functionality
+         */
     clone() {
         return new LoadBalancer(this, this.getOkitJson());
     }

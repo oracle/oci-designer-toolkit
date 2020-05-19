@@ -2,28 +2,28 @@
 # ------ Create Autonomous Database
 resource "oci_database_autonomous_database" "{{ resource_name }}" {
     #Required
-    admin_password           = {{ admin_password }}
-    compartment_id           = {{ compartment_id }}
-    cpu_core_count           = {{ cpu_core_count }}
-    data_storage_size_in_tbs = {{ data_storage_size_in_tbs }}
-    db_name                  = {{ db_name }}
+    admin_password           = {{ admin_password | safe }}
+    compartment_id           = {{ compartment_id | safe }}
+    cpu_core_count           = {{ cpu_core_count | safe }}
+    data_storage_size_in_tbs = {{ data_storage_size_in_tbs | safe }}
+    db_name                  = {{ db_name | safe }}
 
     #Optional
-    display_name             = {{ display_name }}
+    display_name             = {{ display_name | safe }}
 #    autonomous_container_database_id = {{ autonomous_container_database_id }}
-#    clone_type               = {{ clone_type }}
-    db_workload              = {{ db_workload }}
-    is_auto_scaling_enabled  = tobool(lower({{ is_auto_scaling_enabled }}))
-#    is_dedicated             = tobool(lower({{ is_dedicated }}))
-    is_free_tier             = tobool(lower({{ is_free_tier }}))
-#    is_preview_version_with_service_terms_accepted = {{ is_preview_version_with_service_terms_accepted }}
-#    license_model = {{ license_model }}
-#    source = {{ database_source }}
+#    clone_type               = {{ clone_type | safe }}
+    db_workload              = {{ db_workload | safe }}
+    is_auto_scaling_enabled  = tobool(lower({{ is_auto_scaling_enabled | safe }}))
+#    is_dedicated             = tobool(lower({{ is_dedicated | safe }}))
+    is_free_tier             = tobool(lower({{ is_free_tier | safe }}))
+#    is_preview_version_with_service_terms_accepted = {{ is_preview_version_with_service_terms_accepted | safe }}
+#    license_model = {{ license_model | safe }}
+#    source = {{ database_source | safe }}
 #    source_id = {{ source_id }}
     {% if defined_tags is defined %}
-        defined_tags             = {{ defined_tags }}
+        defined_tags             = {{ defined_tags | safe }}
     {% endif %}
     {% if freeform_tags is defined %}
-        freeform_tags            = {{ freeform_tags }}
+        freeform_tags            = {{ freeform_tags | safe }}
     {% endif %}
 }

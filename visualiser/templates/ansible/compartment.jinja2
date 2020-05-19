@@ -11,7 +11,7 @@
       oci_compartment_facts:
         region: "{{ '{{' }} HomeRegion.region_name {{ '}}' }}"
         compartment_id: "{{ compartment_id }}"
-        name: "{{ display_name }}"
+        name: "{{ display_name | safe }}"
         fetch_subcompartments: True
       register: {{ resource_name }}List
 
@@ -21,14 +21,14 @@
         state: "present"
         # Required
         parent_compartment_id: "{{ compartment_id }}"
-        name: "{{ display_name }}"
-        description: "{{ description }}"
+        name: "{{ display_name | safe }}"
+        description: "{{ description | safe }}"
         # Optional
     {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
     {% endif %}
     {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
     {% endif %}
         wait_until: "ACTIVE"
       register: {{ resource_name }}
@@ -39,7 +39,7 @@
       oci_compartment_facts:
         region: "{{ '{{' }} HomeRegion.region_name {{ '}}' }}"
         compartment_id: "{{ compartment_id }}"
-        name: "{{ display_name }}"
+        name: "{{ display_name | safe }}"
         fetch_subcompartments: True
       register: {{ resource_name }}List
 
