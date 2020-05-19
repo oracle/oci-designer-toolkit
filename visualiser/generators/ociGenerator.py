@@ -534,6 +534,8 @@ class OCIGenerator(object):
         self.generateJinja2Variable("display_name", loadbalancer["display_name"], standardisedName)
         # ---- Shape
         self.generateJinja2Variable("shape", loadbalancer["shape"], standardisedName)
+        # ---- Private
+        self.generateJinja2Variable("is_private", loadbalancer["is_private"], standardisedName)
         # ---- Subnets
         jinja2_subnet_ids = []
         for subnet_id in loadbalancer.get('subnet_ids', []):
@@ -546,6 +548,8 @@ class OCIGenerator(object):
         self.jinja2_variables["backend_instances"] = jinja2_backend_instances_resource_names
         # ---- Protocol
         self.generateJinja2Variable("protocol", loadbalancer["protocol"], standardisedName)
+        # ---- Port
+        self.generateJinja2Variable("port", loadbalancer["port"], standardisedName)
         # ---- Backend Policy
         self.generateJinja2Variable("backend_policy", loadbalancer["backend_policy"], standardisedName)
         # ---- Health Checker

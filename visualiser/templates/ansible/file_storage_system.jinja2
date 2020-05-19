@@ -6,7 +6,7 @@
         state: "present"
         # Required
         compartment_id: "{{ compartment_id }}"
-        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
         # Optional
         display_name: "{{ display_name | safe }}"
 {% if defined_tags is defined %}
@@ -28,7 +28,7 @@
         state: "present"
         # Required
         compartment_id: "{{ compartment_ocid }}"
-        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
         subnet_id: "{{ subnet_id }}"
         # Optional
         display_name: "{{ display_name | safe }}"
@@ -55,7 +55,7 @@
       oci_export_set_facts:
         region: "{{ region }}"
 #        compartment_id: "{{ compartment_ocid }}"
-#        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+#        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
         export_set_id: "{{ '{{' }} {{ resource_name }}MountTarget_export_set_id {{ '}}' }}"
       register: {{ resource_name }}ExportSet
 
@@ -69,7 +69,7 @@
         state: 'present'
         file_system_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
         export_set_id: "{{ '{{' }} {{ resource_name }}MountTarget_export_set_id {{ '}}' }}"
-        path: "{{ path }}"
+        path: "{{ path | safe }}"
         export_options:
             - source: "{{ source | safe }}"
               access: "{{ access | safe }}"
