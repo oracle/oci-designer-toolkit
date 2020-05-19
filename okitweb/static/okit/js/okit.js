@@ -97,6 +97,7 @@ class OkitSettings {
         this.is_always_free = false;
         this.is_optional_expanded = true;
         this.is_display_grid = false;
+        this.is_variables = true;
         this.load();
     }
 
@@ -206,6 +207,21 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'is_optional_expanded')
             .text('Auto Expanded Advanced');
+        // Generate Variables File
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_variables')
+            .attr('name', 'is_variables')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_variables)
+            .on('change', function () {
+                //me.is_optional_expanded = $(this).is(':checked');
+            });
+        td.append('label')
+            .attr('for', 'is_variables')
+            .text('Use Variables in Generate');
         // Config Profile
         tr = tbody.append('div').attr('class', 'tr');
         tr.append('div').attr('class', 'td').text('Profile');
@@ -226,6 +242,7 @@ class OkitSettings {
                 me.is_always_free = $(jqId('is_always_free')).is(':checked');
                 me.is_timestamp_files = $(jqId('is_timestamp_files')).is(':checked');
                 me.is_optional_expanded = $(jqId('is_optional_expanded')).is(':checked');
+                me.is_variables = $(jqId('is_variables')).is(':checked');
                 me.profile = $(jqId('profile')).val();
                 me.save();
                 $(jqId('modal_dialog_wrapper')).addClass('hidden');
@@ -1396,6 +1413,11 @@ class OkitJson {
         console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
         console.groupEnd();
     }
+
+    /*
+    ** Calculate price
+     */
+    price(rate_card) {}
 
     /*
     ** New Artifact Processing

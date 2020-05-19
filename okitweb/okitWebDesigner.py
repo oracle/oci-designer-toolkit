@@ -189,12 +189,13 @@ def generate(language):
     logger.info('Language : {0:s} - {1:s}'.format(str(language), str(request.method)))
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
+        use_vars = request.json.get("use_variables", True)
         try:
             destination_dir = tempfile.mkdtemp();
             if language == 'terraform':
-                generator = OCITerraformGenerator(template_root, destination_dir, request.json)
+                generator = OCITerraformGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'ansible':
-                generator = OCIAnsibleGenerator(template_root, destination_dir, request.json)
+                generator = OCIAnsibleGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'terraform11':
                 generator = OCITerraform11Generator(template_root, destination_dir, request.json)
             generator.generate()

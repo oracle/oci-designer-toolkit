@@ -17,12 +17,14 @@ function saveZip(url, filename="") {
 
 function handleGenerateTerraform(e) {
     hideNavMenu();
+    let requestJson = JSON.parse(JSON.stringify(okitJson));
+    requestJson.use_variables = okitSettings.is_variables;
     $.ajax({
         type: 'post',
         url: 'generate/terraform',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(okitJson),
+        data: JSON.stringify(requestJson),
         success: function(resp) {
             console.info('Response : ' + resp);
             //window.location = 'generate/terraform';
@@ -37,12 +39,14 @@ function handleGenerateTerraform(e) {
 
 function handleGenerateAnsible(e) {
     hideNavMenu();
+    let requestJson = JSON.parse(JSON.stringify(okitJson));
+    requestJson.use_variables = okitSettings.is_variables;
     $.ajax({
         type: 'post',
         url: 'generate/ansible',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(okitJson),
+        data: JSON.stringify(requestJson),
         success: function(resp) {
             console.info('REST Response : ' + resp);
             saveZip('generate/ansible');
