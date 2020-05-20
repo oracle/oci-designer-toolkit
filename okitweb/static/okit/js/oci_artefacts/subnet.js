@@ -54,18 +54,27 @@ class Subnet extends OkitContainerArtifact {
         console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Instances
         this.getOkitJson().instances = this.getOkitJson().instances.filter(function(child) {
-            if (child.subnet_id === this.id) {
+            if (child.primary_vnic.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);
-                child.delete();
+                //child.delete();
                 return false; // So the filter removes the element
             }
             return true;
         }, this);
+        for (let instance of this.getOkitJson().instances) {
+            instance.vnics = instance.vnics.filter(function(child) {
+                if (child.subnet_id === this.id) {
+                    console.info('Deleting ' + child.hostname_label);
+                    return false; // So the filter removes the element
+                }
+                return true;
+            }, this);
+        }
         // Remove Load Balancers
         this.getOkitJson().load_balancers = this.getOkitJson().load_balancers.filter(function(child) {
             if (child.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);
-                child.delete();
+                //child.delete();
                 return false; // So the filter removes the element
             }
             return true;
@@ -74,7 +83,7 @@ class Subnet extends OkitContainerArtifact {
         this.getOkitJson().file_storage_systems = this.getOkitJson().file_storage_systems.filter(function(child) {
             if (child.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);
-                child.delete();
+                //child.delete();
                 return false; // So the filter removes the element
             }
             return true;
@@ -229,7 +238,7 @@ class Subnet extends OkitContainerArtifact {
     }
 
     getLeftArtifacts() {
-        return [FileStorageSystem.getArtifactReference()];
+        return [FileStorageSystem.getArtifactReference(), DatabaseSystem.getArtifactReference()];
     }
 
 
