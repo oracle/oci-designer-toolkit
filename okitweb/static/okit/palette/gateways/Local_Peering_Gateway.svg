@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 288 288">
-	<style type="text/css">
-		.icon-colour-02{fill:#5f5f5f;}
-	</style>
-	<g transform="translate(-140, -140) scale(2, 2)">
-		<path class="icon-colour-02" d="M144.0,91.3 c-29.8,0.0,-53.9,24.1,-53.9,53.9 c0.0,29.8,24.1,53.9,53.9,53.9 s53.9,-24.1,53.9,-53.9 C197.9,115.2,173.8,91.3,144.0,91.3 z M104.1,148.0 v-6.0 h13.9 v-8.4 l19.3,11.2 L118.0,156.0 v-8.0 H104.1 z M144.1,184.4 l-11.2,-19.5 h8.1 v-40.4 h-8.1 l11.2,-19.5 l11.2,19.5 h-8.4 V165.0 h8.4 L144.1,184.4 z M171.0,148.0 v8.0 l-19.1,-11.2 l19.1,-11.2 v8.4 h14.0 v6.0 H171.0 z"/>
-	</g>
+<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Local_Peering_Gateway" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 161.9 162" enable-background="new 0 0 161.9 162" xml:space="preserve">
+<g>
+	<path fill="#ff6600" d="M81,19.2c-34.1,0-61.8,27.7-61.8,61.8s27.7,61.8,61.8,61.8s61.8-27.7,61.8-61.8S115.1,19.2,81,19.2z
+		 M81,133.8c-27.7,0-50.5-21.5-52.6-48.7h23.9v8.6l21-11.6l-21-11.5v7.1h-24C30.1,50.1,53,28.2,81,28.2c28.1,0,51.1,22,52.7,49.7
+		h-23.8v-7.8l-21,11.6l21,11.5v-7.8h23.7C131.4,112.4,108.7,133.8,81,133.8z"/>
+	<polygon fill="#ff6600" points="84.2,60.7 92.1,60.7 80.5,39.8 69,60.7 76.8,60.7 76.8,102 68.9,102 80.5,122.9 92,102 84.2,102 	
+		"/>
+</g>
 </svg>

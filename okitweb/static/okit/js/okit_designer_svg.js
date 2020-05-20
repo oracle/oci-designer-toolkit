@@ -57,7 +57,8 @@ function createSVGDefinitions(canvas_svg) {
         let defid = key.replace(/ /g, '') + 'Svg';
         defs.append('g')
             .attr("id", defid)
-            .attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
+            //.attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
+            .attr("transform", "translate(-1, -1) scale(0.29, 0.29)")
             .html(palette_svg[key]);
     }
     // Add Connector Markers
