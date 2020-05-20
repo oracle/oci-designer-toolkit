@@ -1,4 +1,4 @@
-# OCI Designer Toolkit [0.5.0](CHANGELOG.md#version-0.5.0)
+# OCI Designer Toolkit [0.6.0](CHANGELOG.md#version-0.6.0)
 
 OCI designer toolKIT (OKIT) is a set of tools for enabling design, deploy and visualise OCI environments 
 through a graphical web based interface. 
@@ -42,10 +42,10 @@ cd oci-designer-toolkit
 docker run -d --rm -p 80:80 \
            --name okit \
            --hostname okit \
-           -v ~/.oci:/root/.oci:Z \
-           -v `pwd`/okitweb:/okit/okitweb:Z \
-           -v `pwd`/visualiser:/okit/visualiser:Z \
-           -v `pwd`/log:/okit/log:Z \
+           -v ~/.oci:/root/.oci \
+           -v `pwd`/okitweb:/okit/okitweb \
+           -v `pwd`/visualiser:/okit/visualiser \
+           -v `pwd`/log:/okit/log \
            okit
 ```
 

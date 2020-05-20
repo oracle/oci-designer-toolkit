@@ -1,5 +1,19 @@
 # Release Notes
 
+## Version 0.6.0 
+**Release Date**: 3rd June 2020
+### Features
+1. Optional generation of variable file for Ansible and Terraform, defaults:
+   1. Terraform : True
+   2. Ansible : True
+2. Resource Manager no longer uses variable file for anything other than connection information.
+3. Switch to new Oracle Icons as defined in https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm.
+
+### Bug Fixes
+1. Palette did not scroll 
+
+
+
 ## Version 0.5.0 
 **Release Date**: 13th May 2020
 ### Features

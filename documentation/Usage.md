@@ -79,10 +79,10 @@ cd oci-designer-toolkit
 docker run -d --rm -p 80:80 \
            --name okit \
            --hostname okit \
-           -v ~/.oci:/root/.oci:Z \
-           -v `pwd`/okitweb:/okit/okitweb:Z \
-           -v `pwd`/visualiser:/okit/visualiser:Z \
-           -v `pwd`/log:/okit/log:Z \
+           -v ~/.oci:/root/.oci \
+           -v `pwd`/okitweb:/okit/okitweb \
+           -v `pwd`/visualiser:/okit/visualiser \
+           -v `pwd`/log:/okit/log \
            okit
 ```
 
