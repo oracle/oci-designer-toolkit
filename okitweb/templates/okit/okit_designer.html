@@ -171,9 +171,9 @@
         <div id="icons_palette" class="okit-icons-palette">
             <div id="icon_text_toggle" class="okit-icons-toggle">
                 <label><input type="radio" name="icon_toggle" checked="checked"
-                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');">Icons</label>
-                <label><input type="radio" name="icon_toggle"
-                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');">Icons & Text</label>
+                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');okitSettings.icons_only=true;okitSettings.save();">Icons</label>
+                <label><input type="radio" id="icons_and_text" name="icon_toggle"
+                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();">Icons & Text</label>
             </div>
             {% for palette_icon_group in palette_icon_groups %}
                 {% if palette_icon_group['name'] != 'Hidden' %}
@@ -206,6 +206,7 @@
                              draggable="true"
                              alt="{{ fragment_icon['title'] }}"
                              ondragstart="dragStart(event, Fragment); Fragment.setFragmentType('{{ fragment_icon['title'] }}')">
+                            <label>{{ fragment_icon['title'] }}</label>
                         </div>
                     {% endfor %}
                 </div>

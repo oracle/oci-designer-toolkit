@@ -684,6 +684,15 @@ $(document).ready(function() {
     });
     /**/
 
+    /*
+    ** Check Palette layout
+     */
+
+    if (!okitSettings.icons_only) {
+        $(jqId("icons_and_text")).prop('checked', 'checked');
+        $(jqId("icons_and_text")).click();
+    }
+
 
     /*
     ** Display New Canvas

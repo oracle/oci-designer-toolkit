@@ -98,6 +98,7 @@ class OkitSettings {
         this.is_optional_expanded = true;
         this.is_display_grid = false;
         this.is_variables = true;
+        this.icons_only = true;
         this.load();
     }
 
