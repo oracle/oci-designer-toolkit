@@ -1089,6 +1089,7 @@ class OkitJson {
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
         this.containers = [];
+        this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
         this.file_storage_systems = [];
@@ -1378,6 +1379,10 @@ class OkitJson {
         }
 
         // Draw Subnet Sub Components
+        // Database System
+        for (let database_system of this.database_systems) {
+            database_system.draw();
+        }
         // File Storage System
         for (let file_storage_system of this.file_storage_systems) {
             file_storage_system.draw();
@@ -1449,6 +1454,13 @@ class OkitJson {
         data.compartment_id = data.parent_id;
         this['compartments'].push(new Compartment(data, this, parent));
         return this['compartments'][this['compartments'].length - 1];
+    }
+
+    // Database System
+    newDatabaseSystem(data, parent=null) {
+        console.info('New Database System');
+        this['database_systems'].push(new DatabaseSystem(data, this, parent));
+        return this['database_systems'][this['database_systems'].length - 1];
     }
 
     // Dynamic Routing Gateway
@@ -1613,6 +1625,16 @@ class OkitJson {
         return {};
     }
 
+    // Database System
+    getDatabaseSystem(id='') {
+        for (let artifact of this.database_systems) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return {};
+    }
+
     // Instance
     getInstance(id='') {
         for (let artifact of this.instances) {
@@ -1704,6 +1726,17 @@ class OkitJson {
             if (this.compartments[i].id === id) {
                 this.compartments[i].delete();
                 this.compartments.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Database Systems
+    deleteDatabaseSystem(id) {
+        for (let i = 0; i < this.database_systems.length; i++) {
+            if (this.database_systems[i].id === id) {
+                this.database_systems[i].delete();
+                this.database_systems.splice(i, 1);
                 break;
             }
         }
