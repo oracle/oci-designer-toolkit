@@ -30,7 +30,9 @@
     font-size: 8pt;
 }
 
-.okit-icons-palette {}
+.okit-icons-palette {
+    overflow-y: scroll;
+}
 
 .okit-icons-palette details {
     width: 180px;
