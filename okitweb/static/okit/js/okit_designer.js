@@ -38,6 +38,28 @@ function resetDesigner() {
     displayOkitJson();
 }
 /*
+** Set OCI Link
+ */
+function setOCILink() {
+    $.ajax({
+        type: 'get',
+        url: `config/region/${okitSettings.profile}`,
+        dataType: 'text',
+        contentType: 'application/json',
+        success: function(resp) {
+            //console.info('Response : ' + resp);
+            let jsonBody = JSON.parse(resp)
+            let oci_href = `https://console.${jsonBody.name}.oraclecloud.com`;
+            console.info('OCI Console url :' + oci_href);
+            $(jqId('oci_link')).attr('href', oci_href);
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+        }
+    });
+}
+/*
 ** Navigation Menu handlers
  */
 function displayPreferencesDialog() {}
@@ -683,6 +705,8 @@ $(document).ready(function() {
         }
     });
     /**/
+
+    setOCILink();
 
     /*
     ** Check Palette layout

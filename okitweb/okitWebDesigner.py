@@ -11,6 +11,7 @@ __version__ = "1.0.0.0"
 __module__ = "okitWebDesigner"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import configparser
 import oci
 import os
 import shutil
@@ -71,6 +72,27 @@ def standardiseJson(json_data={}, **kwargs):
     json_data = standardiseIds(json_data)
     logJson(json_data)
     return json_data
+
+def readConfigFileSections(config_file='~/.oci/config'):
+    logger.debug('Config File {0!s:s}'.format(config_file))
+    abs_config_file = os.path.expanduser(config_file)
+    logger.debug('Config File {0!s:s}'.format(abs_config_file))
+    config = configparser.ConfigParser()
+    config.read(abs_config_file)
+    config_sections = []
+    if 'DEFAULT' in config:
+        config_sections = ['DEFAULT']
+    config_sections.extend(config.sections())
+    logger.info('Config Sections {0!s:s}'.format(config_sections))
+    return config_sections
+
+def getConfigFileValue(section, key, config_file='~/.oci/config'):
+    logger.debug('Config File {0!s:s}'.format(config_file))
+    abs_config_file = os.path.expanduser(config_file)
+    logger.debug('Config File {0!s:s}'.format(abs_config_file))
+    config = configparser.ConfigParser()
+    config.read(abs_config_file)
+    return config[section][key]
 
 #
 # Define Error Handlers
@@ -170,6 +192,9 @@ def designer():
         template_groups.append(template_group)
     logger.debug('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
+
+    config_sections = {"sections": readConfigFileSections()}
+    logger.info('Config Sections {0!s:s}'.format(config_sections))
 
     #Render The Template
     return render_template('okit/okit_designer.html',
@@ -455,4 +480,20 @@ def dropdownQuery():
     else:
         return 'Unknown Method', 500
 
+@bp.route('config/sections', methods=(['GET']))
+def configSections():
+    if request.method == 'GET':
+        config_sections = {"sections": readConfigFileSections()}
+        logger.info('Config Sections {0!s:s}'.format(config_sections))
+        return config_sections
+    else:
+        return 'Unknown Method', 500
+
+@bp.route('config/region/<string:section>', methods=(['GET']))
+def configRegion(section):
+    if request.method == 'GET':
+        response = {"name": getConfigFileValue(section, 'region')}
+        return response
+    else:
+        return 'Unknown Method', 500
 
