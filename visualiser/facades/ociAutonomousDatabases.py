@@ -16,13 +16,13 @@ __module__ = "ociAutonomousDatabases"
 import oci
 
 from common.ociLogging import getLogger
-from facades.ociConnection import OCIAutonomousDatabaseConnection
+from facades.ociConnection import OCIDatabaseConnection
 
 # Configure logging
 logger = getLogger()
 
 
-class OCIAutonomousDatabases(OCIAutonomousDatabaseConnection):
+class OCIAutonomousDatabases(OCIDatabaseConnection):
     def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.autonomous_databases_json = []

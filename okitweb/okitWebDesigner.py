@@ -34,6 +34,8 @@ from common.ociQuery import executeQuery
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments
+from facades.ociDatabaseSystemShape import OCIDatabaseSystemShapes
+from facades.ociDatabaseVersion import OCIDatabaseVersions
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociFastConnect import OCIFastConnects
 from facades.ociFileStorageSystems import OCIFileStorageSystems
@@ -476,6 +478,10 @@ def dropdownQuery():
         dropdown_json = {}
         oci_shapes = OCIShapes()
         dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
+        db_system_shapes = OCIDatabaseSystemShapes()
+        dropdown_json["db_system_shapes"] = sorted(db_system_shapes.list(), key=lambda k: k['shape'])
+        db_versions = OCIDatabaseVersions()
+        dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
         return dropdown_json
     else:
         return 'Unknown Method', 500

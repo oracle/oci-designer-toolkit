@@ -10,7 +10,9 @@
 3. Switch to new Oracle Icons as defined in https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm.
 
 ### Bug Fixes
-1. Palette did not scroll 
+1. Palette did not scroll
+2. Link to OCI Console should be data driven #20 
+3. 100 variable limit with Resource Manager causes upload failure #9
 
 
 

@@ -33,6 +33,8 @@ class DatabaseSystem extends OkitArtifact {
         this.shape = 'VM.Standard.E2.1';
         this.ssh_public_keys = '';
         this.subnet_id = '';
+        this.backup_network_nsg_ids = [];
+        this.backup_subnet_id = '';
         this.cluster_name = '';
         this.cpu_core_count = 1;
         this.data_storage_percentage = 80;
@@ -40,7 +42,15 @@ class DatabaseSystem extends OkitArtifact {
         this.db_system_options = {
             storage_management: 'ASM'
         }
+        this.disk_redundancy = '';
+        this.domain = '';
+        this.fault_domains = [];
+        this.license_model = 'LICENSE_INCLUDED';
+        this.node_count = 1;
+        this.nsg_ids = [];
         this.source = 'NONE'
+        this.sparse_diskgroup = false;
+        this.time_zone = '+00:00';
         // Update with any passed data
         this.merge(data);
         this.convert();
