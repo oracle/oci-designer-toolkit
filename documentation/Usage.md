@@ -8,7 +8,7 @@
 2. [Installation](#installation)
 3. [Usage](#usage)
     1. [Currently Implemented Artifacts](#currently-implemented-artifacts)
-    2. [Prerequisites](#prerequisites)
+    2. [OCI Config File](#oci-config-file)
     3. [Web Interface](#web-interface)
 4. [Examples](#examples)
 5. [Issues](#issues)
@@ -46,7 +46,7 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Block Storage Volumes
 - Object Storage Buckets
 
-### Prerequisites
+### OCI Config File
 Before executing any of the docker container scripts OKIT requires an OCI connection configuration file (<OKIT_ROOT_DIR>/containers/oci). 
 This file contains the connection information used by OKIT when executing queries or exporting to Resource Manager and has 
 the following content:
