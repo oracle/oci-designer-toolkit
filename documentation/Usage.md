@@ -47,13 +47,12 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Object Storage Buckets
 
 ### Prerequisites
-Before executing any of the docker container scripts we OKIT requires that an OCI connection configuration file 
-(~/.oci/config) be created. Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
+Before executing any of the docker container scripts OKIT requires an OCI connection configuration file (<OKIT_ROOT_DIR>/containers/oci). 
+This file contains the connection information used by OKIT when executing queries or exporting to Resource Manager and has 
+the following content:
 
-
-This file will contain the following:
-
-__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine.
+__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine but represent a relative path as seen 
+by the linux root user.
 
 ```properties
 [DEFAULT]
@@ -62,27 +61,26 @@ fingerprint=3b:7e:37:ec:a0:86:1....
 key_file=~/.oci/oci_api_key.pem
 tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
 region=us-phoenix-1
-
 ```
-You will then need to create the following environment variable that points to the directory containing the config file.
 
-```bash
-export OCI_CONFIG_DIR=~/.oci
-```
+Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
 
 ### Web Interface
 To use the Web Application you will first need to start the docker container and run the web server; which can 
 be achieved by running the docker container created during [installation](Installation.md#build-docker-image).
+
+- OKIT_ROOT_DIR: Root Directory of the extracted / cloned OKIT repository
+- OCI_CONFIG_DIR: Directory containing the OCI config file (OKIT_ROOT_DIR/containers/oci)
 
 ```bash
 cd oci-designer-toolkit
 docker run -d --rm -p 80:80 \
            --name okit \
            --hostname okit \
-           -v ~/.oci:/root/.oci:Z \
-           -v `pwd`/okitweb:/okit/okitweb:Z \
-           -v `pwd`/visualiser:/okit/visualiser:Z \
-           -v `pwd`/log:/okit/log:Z \
+           -v <OCI_CONFIG_DIR>:/root/.oci \
+           -v <OKIT_ROOT_DIR>/okitweb:/okit/okitweb \
+           -v <OKIT_ROOT_DIR>/visualiser:/okit/visualiser \
+           -v <OKIT_ROOT_DIR>/log:/okit/log \
            okit
 ```
 

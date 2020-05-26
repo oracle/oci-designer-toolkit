@@ -36,3 +36,4 @@ output
 config
 
 containers/.oci
+containers/oci
