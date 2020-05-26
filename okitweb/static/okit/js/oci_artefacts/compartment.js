@@ -295,6 +295,7 @@ class Compartment extends OkitContainerArtifact {
         ObjectStorageBucket.query(sub_query_request, region);
         FastConnect.query(sub_query_request, region);
         Instance.query(sub_query_request, region);
+        DatabaseSystem.query(sub_query_request, region);
     }
 }
 

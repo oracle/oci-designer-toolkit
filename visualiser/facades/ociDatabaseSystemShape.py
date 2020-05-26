@@ -46,6 +46,17 @@ class OCIDatabaseSystemShapes(OCIDatabaseConnection):
         # Convert to Json object
         database_system_shapes_json = self.toJson(database_system_shapes)
         logJson(database_system_shapes_json)
+        # De-Duplicate
+        seen = []
+        deduplicated = []
+        for shape in database_system_shapes_json:
+            if shape['shape'] not in seen:
+                deduplicated.append(shape)
+                seen.append(shape['shape'])
+        logger.debug('============================== Shapes De-Duplicate ==============================')
+        logJson(deduplicated)
+        database_system_shapes_json = deduplicated
+
 
         # Filter results
         self.database_system_shapes_json = self.filterJsonObjectList(database_system_shapes_json, filter)

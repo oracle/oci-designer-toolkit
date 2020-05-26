@@ -11,46 +11,6 @@
       "shape_family": "SINGLENODE"
     },
     {
-      "available_core_count": 36,
-      "core_count_increment": 2,
-      "maximum_node_count": 1,
-      "minimum_core_count": 2,
-      "minimum_node_count": 1,
-      "name": "BM.DenseIO1.36",
-      "shape": "BM.DenseIO1.36",
-      "shape_family": "SINGLENODE"
-    },
-    {
-      "available_core_count": 36,
-      "core_count_increment": 2,
-      "maximum_node_count": 1,
-      "minimum_core_count": 2,
-      "minimum_node_count": 1,
-      "name": "BM.DenseIO1.36",
-      "shape": "BM.DenseIO1.36",
-      "shape_family": "SINGLENODE"
-    },
-    {
-      "available_core_count": 52,
-      "core_count_increment": 2,
-      "maximum_node_count": 1,
-      "minimum_core_count": 2,
-      "minimum_node_count": 1,
-      "name": "BM.DenseIO2.52",
-      "shape": "BM.DenseIO2.52",
-      "shape_family": "SINGLENODE"
-    },
-    {
-      "available_core_count": 52,
-      "core_count_increment": 2,
-      "maximum_node_count": 1,
-      "minimum_core_count": 2,
-      "minimum_node_count": 1,
-      "name": "BM.DenseIO2.52",
-      "shape": "BM.DenseIO2.52",
-      "shape_family": "SINGLENODE"
-    },
-    {
       "available_core_count": 52,
       "core_count_increment": 2,
       "maximum_node_count": 1,
@@ -68,46 +28,6 @@
       "minimum_node_count": 2,
       "name": "Exadata.Base.48",
       "shape": "Exadata.Base.48",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 48,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 0,
-      "minimum_node_count": 2,
-      "name": "Exadata.Base.48",
-      "shape": "Exadata.Base.48",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 48,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 0,
-      "minimum_node_count": 2,
-      "name": "Exadata.Base.48",
-      "shape": "Exadata.Base.48",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 336,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 88,
-      "minimum_node_count": 8,
-      "name": "Exadata.Full1.336",
-      "shape": "Exadata.Full1.336",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 336,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 88,
-      "minimum_node_count": 8,
-      "name": "Exadata.Full1.336",
-      "shape": "Exadata.Full1.336",
       "shape_family": "EXADATA"
     },
     {
@@ -131,26 +51,6 @@
       "shape_family": "EXADATA"
     },
     {
-      "available_core_count": 368,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 0,
-      "minimum_node_count": 8,
-      "name": "Exadata.Full2.368",
-      "shape": "Exadata.Full2.368",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 368,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 0,
-      "minimum_node_count": 8,
-      "name": "Exadata.Full2.368",
-      "shape": "Exadata.Full2.368",
-      "shape_family": "EXADATA"
-    },
-    {
       "available_core_count": 400,
       "core_count_increment": 8,
       "maximum_node_count": 8,
@@ -158,46 +58,6 @@
       "minimum_node_count": 8,
       "name": "Exadata.Full3.400",
       "shape": "Exadata.Full3.400",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 400,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 0,
-      "minimum_node_count": 8,
-      "name": "Exadata.Full3.400",
-      "shape": "Exadata.Full3.400",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 400,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 0,
-      "minimum_node_count": 8,
-      "name": "Exadata.Full3.400",
-      "shape": "Exadata.Full3.400",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 168,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 44,
-      "minimum_node_count": 4,
-      "name": "Exadata.Half1.168",
-      "shape": "Exadata.Half1.168",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 168,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 44,
-      "minimum_node_count": 4,
-      "name": "Exadata.Half1.168",
-      "shape": "Exadata.Half1.168",
       "shape_family": "EXADATA"
     },
     {
@@ -221,26 +81,6 @@
       "shape_family": "EXADATA"
     },
     {
-      "available_core_count": 184,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 0,
-      "minimum_node_count": 4,
-      "name": "Exadata.Half2.184",
-      "shape": "Exadata.Half2.184",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 184,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 0,
-      "minimum_node_count": 4,
-      "name": "Exadata.Half2.184",
-      "shape": "Exadata.Half2.184",
-      "shape_family": "EXADATA"
-    },
-    {
       "available_core_count": 200,
       "core_count_increment": 4,
       "maximum_node_count": 4,
@@ -248,46 +88,6 @@
       "minimum_node_count": 4,
       "name": "Exadata.Half3.200",
       "shape": "Exadata.Half3.200",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 200,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 0,
-      "minimum_node_count": 4,
-      "name": "Exadata.Half3.200",
-      "shape": "Exadata.Half3.200",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 200,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 0,
-      "minimum_node_count": 4,
-      "name": "Exadata.Half3.200",
-      "shape": "Exadata.Half3.200",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 84,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 22,
-      "minimum_node_count": 2,
-      "name": "Exadata.Quarter1.84",
-      "shape": "Exadata.Quarter1.84",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 84,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 22,
-      "minimum_node_count": 2,
-      "name": "Exadata.Quarter1.84",
-      "shape": "Exadata.Quarter1.84",
       "shape_family": "EXADATA"
     },
     {
@@ -311,46 +111,6 @@
       "shape_family": "EXADATA"
     },
     {
-      "available_core_count": 92,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 0,
-      "minimum_node_count": 2,
-      "name": "Exadata.Quarter2.92",
-      "shape": "Exadata.Quarter2.92",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 92,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 0,
-      "minimum_node_count": 2,
-      "name": "Exadata.Quarter2.92",
-      "shape": "Exadata.Quarter2.92",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 100,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 0,
-      "minimum_node_count": 2,
-      "name": "Exadata.Quarter3.100",
-      "shape": "Exadata.Quarter3.100",
-      "shape_family": "EXADATA"
-    },
-    {
-      "available_core_count": 100,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 0,
-      "minimum_node_count": 2,
-      "name": "Exadata.Quarter3.100",
-      "shape": "Exadata.Quarter3.100",
-      "shape_family": "EXADATA"
-    },
-    {
       "available_core_count": 100,
       "core_count_increment": 2,
       "maximum_node_count": 2,
@@ -368,46 +128,6 @@
       "minimum_node_count": 2,
       "name": "ExadataCC.Base2.44",
       "shape": "ExadataCC.Base2.44",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 44,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 2,
-      "name": "ExadataCC.Base2.44",
-      "shape": "ExadataCC.Base2.44",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 44,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 2,
-      "name": "ExadataCC.Base2.44",
-      "shape": "ExadataCC.Base2.44",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 48,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 2,
-      "name": "ExadataCC.Base3.48",
-      "shape": "ExadataCC.Base3.48",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 48,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 2,
-      "name": "ExadataCC.Base3.48",
-      "shape": "ExadataCC.Base3.48",
       "shape_family": "EXACC"
     },
     {
@@ -431,26 +151,6 @@
       "shape_family": "EXACC"
     },
     {
-      "available_core_count": 368,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 16,
-      "minimum_node_count": 8,
-      "name": "ExadataCC.Full2.368",
-      "shape": "ExadataCC.Full2.368",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 368,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 16,
-      "minimum_node_count": 8,
-      "name": "ExadataCC.Full2.368",
-      "shape": "ExadataCC.Full2.368",
-      "shape_family": "EXACC"
-    },
-    {
       "available_core_count": 400,
       "core_count_increment": 8,
       "maximum_node_count": 8,
@@ -458,46 +158,6 @@
       "minimum_node_count": 8,
       "name": "ExadataCC.Full3.400",
       "shape": "ExadataCC.Full3.400",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 400,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 16,
-      "minimum_node_count": 8,
-      "name": "ExadataCC.Full3.400",
-      "shape": "ExadataCC.Full3.400",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 400,
-      "core_count_increment": 8,
-      "maximum_node_count": 8,
-      "minimum_core_count": 16,
-      "minimum_node_count": 8,
-      "name": "ExadataCC.Full3.400",
-      "shape": "ExadataCC.Full3.400",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 184,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 8,
-      "minimum_node_count": 4,
-      "name": "ExadataCC.Half2.184",
-      "shape": "ExadataCC.Half2.184",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 184,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 8,
-      "minimum_node_count": 4,
-      "name": "ExadataCC.Half2.184",
-      "shape": "ExadataCC.Half2.184",
       "shape_family": "EXACC"
     },
     {
@@ -521,26 +181,6 @@
       "shape_family": "EXACC"
     },
     {
-      "available_core_count": 200,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 8,
-      "minimum_node_count": 4,
-      "name": "ExadataCC.Half3.200",
-      "shape": "ExadataCC.Half3.200",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 200,
-      "core_count_increment": 4,
-      "maximum_node_count": 4,
-      "minimum_core_count": 8,
-      "minimum_node_count": 4,
-      "name": "ExadataCC.Half3.200",
-      "shape": "ExadataCC.Half3.200",
-      "shape_family": "EXACC"
-    },
-    {
       "available_core_count": 92,
       "core_count_increment": 2,
       "maximum_node_count": 2,
@@ -548,46 +188,6 @@
       "minimum_node_count": 2,
       "name": "ExadataCC.Quarter2.92",
       "shape": "ExadataCC.Quarter2.92",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 92,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 2,
-      "name": "ExadataCC.Quarter2.92",
-      "shape": "ExadataCC.Quarter2.92",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 92,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 2,
-      "name": "ExadataCC.Quarter2.92",
-      "shape": "ExadataCC.Quarter2.92",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 100,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 2,
-      "name": "ExadataCC.Quarter3.100",
-      "shape": "ExadataCC.Quarter3.100",
-      "shape_family": "EXACC"
-    },
-    {
-      "available_core_count": 100,
-      "core_count_increment": 2,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 2,
-      "name": "ExadataCC.Quarter3.100",
-      "shape": "ExadataCC.Quarter3.100",
       "shape_family": "EXACC"
     },
     {
@@ -611,26 +211,6 @@
       "shape_family": "VIRTUALMACHINE"
     },
     {
-      "available_core_count": 1,
-      "core_count_increment": 0,
-      "maximum_node_count": 1,
-      "minimum_core_count": 1,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.1",
-      "shape": "VM.Standard1.1",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 1,
-      "core_count_increment": 0,
-      "maximum_node_count": 1,
-      "minimum_core_count": 1,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.1",
-      "shape": "VM.Standard1.1",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
       "available_core_count": 16,
       "core_count_increment": 0,
       "maximum_node_count": 2,
@@ -638,46 +218,6 @@
       "minimum_node_count": 1,
       "name": "VM.Standard1.16",
       "shape": "VM.Standard1.16",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 16,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 16,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.16",
-      "shape": "VM.Standard1.16",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 16,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 16,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.16",
-      "shape": "VM.Standard1.16",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 2,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 2,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.2",
-      "shape": "VM.Standard1.2",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 2,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 2,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.2",
-      "shape": "VM.Standard1.2",
       "shape_family": "VIRTUALMACHINE"
     },
     {
@@ -701,26 +241,6 @@
       "shape_family": "VIRTUALMACHINE"
     },
     {
-      "available_core_count": 4,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.4",
-      "shape": "VM.Standard1.4",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 4,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.4",
-      "shape": "VM.Standard1.4",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
       "available_core_count": 8,
       "core_count_increment": 0,
       "maximum_node_count": 2,
@@ -728,46 +248,6 @@
       "minimum_node_count": 1,
       "name": "VM.Standard1.8",
       "shape": "VM.Standard1.8",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 8,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 8,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.8",
-      "shape": "VM.Standard1.8",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 8,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 8,
-      "minimum_node_count": 1,
-      "name": "VM.Standard1.8",
-      "shape": "VM.Standard1.8",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 1,
-      "core_count_increment": 0,
-      "maximum_node_count": 1,
-      "minimum_core_count": 1,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.1",
-      "shape": "VM.Standard2.1",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 1,
-      "core_count_increment": 0,
-      "maximum_node_count": 1,
-      "minimum_core_count": 1,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.1",
-      "shape": "VM.Standard2.1",
       "shape_family": "VIRTUALMACHINE"
     },
     {
@@ -791,46 +271,6 @@
       "shape_family": "VIRTUALMACHINE"
     },
     {
-      "available_core_count": 16,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 16,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.16",
-      "shape": "VM.Standard2.16",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 16,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 16,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.16",
-      "shape": "VM.Standard2.16",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 2,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 2,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.2",
-      "shape": "VM.Standard2.2",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 2,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 2,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.2",
-      "shape": "VM.Standard2.2",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
       "available_core_count": 2,
       "core_count_increment": 0,
       "maximum_node_count": 2,
@@ -851,26 +291,6 @@
       "shape_family": "VIRTUALMACHINE"
     },
     {
-      "available_core_count": 24,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 24,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.24",
-      "shape": "VM.Standard2.24",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 24,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 24,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.24",
-      "shape": "VM.Standard2.24",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
       "available_core_count": 4,
       "core_count_increment": 0,
       "maximum_node_count": 2,
@@ -878,46 +298,6 @@
       "minimum_node_count": 1,
       "name": "VM.Standard2.4",
       "shape": "VM.Standard2.4",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 4,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.4",
-      "shape": "VM.Standard2.4",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 4,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 4,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.4",
-      "shape": "VM.Standard2.4",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 8,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 8,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.8",
-      "shape": "VM.Standard2.8",
-      "shape_family": "VIRTUALMACHINE"
-    },
-    {
-      "available_core_count": 8,
-      "core_count_increment": 0,
-      "maximum_node_count": 2,
-      "minimum_core_count": 8,
-      "minimum_node_count": 1,
-      "name": "VM.Standard2.8",
-      "shape": "VM.Standard2.8",
       "shape_family": "VIRTUALMACHINE"
     },
     {

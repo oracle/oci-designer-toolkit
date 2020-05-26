@@ -34,6 +34,7 @@ from common.ociQuery import executeQuery
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments
+from facades.ociDatabaseSystem import OCIDatabaseSystems
 from facades.ociDatabaseSystemShape import OCIDatabaseSystemShapes
 from facades.ociDatabaseVersion import OCIDatabaseVersions
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
@@ -341,6 +342,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Compartments')
         oci_compartments = OCICompartments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
+    elif artifact == 'DatabaseSystem':
+        logger.info('---- Processing Database Systems')
+        oci_database_systems = OCIDatabaseSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_database_systems.list(filter=query_json.get('database_system_filter', None))
     elif artifact == 'DynamicRoutingGateway':
         logger.info('---- Processing Dynamic Routing Gateways')
         oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])

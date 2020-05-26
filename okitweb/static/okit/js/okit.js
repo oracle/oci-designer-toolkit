@@ -86,6 +86,35 @@ class OkitOCIData {
 
          */
     }
+
+    /*
+    ** Get functions to retrieve drop-down data.
+     */
+
+    getDBSystemShapes(family='') {
+        if (family === '') {
+            return this.db_system_shapes;
+        } else {
+            return this.db_system_shapes.filter(function(dss) {return dss.shape_family === family;});
+        }
+    }
+
+    getDBSystemShape(shape) {
+        console.log('Get DB Shape ' + shape);
+        return this.db_system_shapes.filter(function(dss) {return dss.shape === shape;})[0];
+    }
+
+    getDBVersions() {
+        return this.db_versions;
+    }
+
+    getInstanceShapes(type='') {
+        if (type === '') {
+            return this.shapes;
+        } else {
+            return this.shapes.filter(function(s) {return s.shape.startsWith(type);});
+        }
+    }
 }
 
 class OkitSettings {
@@ -1262,6 +1291,14 @@ class OkitJson {
             for (let artifact of okit_json['file_storage_systems']) {
                 artifact.parent_id = artifact.subnet_id;
                 let obj = this.newFileStorageSystem(artifact);
+                console.info(obj);
+            }
+        }
+        // Database Systems
+        if (okit_json.hasOwnProperty('database_systems')) {
+            for (let artifact of okit_json['database_systems']) {
+                artifact.parent_id = artifact.subnet_id;
+                let obj = this.newDatabaseSystem(artifact);
                 console.info(obj);
             }
         }

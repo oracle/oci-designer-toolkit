@@ -19,26 +19,26 @@ class DatabaseSystem extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.database_systems.length + 1);
         this.compartment_id = data.parent_id;
-        this.availability_domain = 0;
-        this.database_edition = 'ENTERPRISE_EDITION_EXTREME_PERFORMANCE';
+        this.availability_domain = 1;
+        this.database_edition = 'STANDARD_EDITION';
         this.db_home = {
             database: {
                 admin_password: generatePassword(),
-                db_name: this.display_name.replace('-', ''),
+                db_name: this.display_name.replace('-', '').substr(4, 8),
                 db_workload: 'OLTP'
             },
-            db_version: '12.1.0.2'
+            db_version: ''
         };
         this.hostname = this.display_name.toLowerCase();
-        this.shape = 'VM.Standard.E2.1';
+        this.shape = 'VM.Standard2.1';
         this.ssh_public_keys = '';
-        this.subnet_id = '';
+        this.subnet_id = data.parent_id;
         this.backup_network_nsg_ids = [];
         this.backup_subnet_id = '';
         this.cluster_name = '';
-        this.cpu_core_count = 1;
+        this.cpu_core_count = 0;
         this.data_storage_percentage = 80;
-        this.data_storage_size_in_gb = 0;
+        this.data_storage_size_in_gb = 256;
         this.db_system_options = {
             storage_management: 'ASM'
         }
@@ -172,7 +172,39 @@ class DatabaseSystem extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/database_system.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/database_system.html", () => {
+            // Load DB System Shapes
+            let shape_select = $(jqId('shape'));
+            $(shape_select).empty();
+            for (let shape of okitOciData.getDBSystemShapes()) {
+                if (!shape.shape.startsWith('BM.')) {
+                    shape_select.append($('<option>').attr('value', shape.shape).text(shape.name));
+                }
+            }
+            $(shape_select).on('click', function() {
+                let shape = okitOciData.getDBSystemShape($(this).val());
+                console.info('Selected Shape ' + JSON.stringify(shape));
+                let cpu_count_select = $(jqId('cpu_core_count'));
+                $(cpu_count_select).empty();
+                cpu_count_select.append($('<option>').attr('value', 0).text('System Default'));
+                for (let i = shape.minimum_core_count; i < shape.available_core_count; i += shape.core_count_increment) {
+                    cpu_count_select.append($('<option>').attr('value', i).text(i));
+                }
+                $(cpu_count_select).val(0);
+                $(cpu_count_select).select();
+            });
+            // Load DB System Versions
+            let db_version_select = $(jqId('db_version'));
+            $(db_version_select).empty();
+            //db_version_select.append($('<option>').attr('value', '').text('System Default'));
+            for (let version of okitOciData.getDBVersions()) {
+                db_version_select.append($('<option>').attr('value', version.version).text(version.version));
+            }
+            // Load Properties
+            loadPropertiesSheet(me);
+            // Click Select Lists we have added dynamic on click to
+            $(shape_select).click();
+        });
     }
 
 

@@ -181,6 +181,9 @@ class OCIGenerator(object):
         # -- File Storage System
         for file_storage_system in self.visualiser_json.get('file_storage_systems', []):
             self.renderFileStorageSystem(file_storage_system)
+        # -- Database Systems
+        for database_system in self.visualiser_json.get('database_systems', []):
+            self.renderDatabaseSystem(database_system)
         # -- Instances
         for instance in self.visualiser_json.get('instances', []):
             self.renderInstance(instance)
@@ -290,14 +293,62 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderDatabaseSystem(self, database_system):
+        # Read Data
+        standardisedName = self.standardiseResourceName(database_system['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = database_system['display_name']
+        # Process Database System Data
+        logger.info('Processing Database System Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[database_system['compartment_id']]))
+        # ---- Availability Domain
+        self.addJinja2Variable("availability_domain", database_system["availability_domain"], standardisedName)
+        # ---- Display Name
+        self.addJinja2Variable("display_name", database_system["display_name"], standardisedName)
+        # ---- Subnet
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[database_system['subnet_id']]))
+        # ---- Database Edition
+        self.addJinja2Variable("database_edition", database_system["database_edition"], standardisedName)
+        # ---- Hostname
+        self.addJinja2Variable("hostname", database_system["hostname"], standardisedName)
+        # ---- Shape
+        self.addJinja2Variable("shape", database_system["shape"], standardisedName)
+        # ---- Public Keys
+        self.addJinja2Variable("ssh_public_keys", database_system["ssh_public_keys"], standardisedName)
+        # ---- Admin Password
+        self.addJinja2Variable("admin_password", database_system["db_home"]["database"]["admin_password"], standardisedName)
+        # --- Optional
+        # ---- Database Name
+        self.addJinja2Variable("db_name", database_system["db_home"]["database"]["db_name"], standardisedName)
+        # ---- Database Workload
+        self.addJinja2Variable("db_workload", database_system["db_home"]["database"]["db_workload"], standardisedName)
+        # ---- Database Version
+        self.addJinja2Variable("db_version", database_system["db_home"]["db_version"], standardisedName)
+        # ---- Data Storage Size
+        self.addJinja2Variable("data_storage_size_in_gb", database_system["data_storage_size_in_gb"], standardisedName)
+        # ---- Node Count
+        self.addJinja2Variable("node_count", database_system["node_count"], standardisedName)
+        # ---- Tags
+        self.renderTags(database_system)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("database_system.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderDynamicRoutingGateway(self, dynamic_routing_gateway):
         # Read Data
         standardisedName = self.standardiseResourceName(dynamic_routing_gateway['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = dynamic_routing_gateway['display_name']
-        # Process NAT Gateway Data
-        logger.info('Processing NAT Gateway Information {0!s:s}'.format(standardisedName))
+        # Process Dynamic Routing Gateway Data
+        logger.info('Processing Dynamic Routing Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
         # ---- Compartment Id

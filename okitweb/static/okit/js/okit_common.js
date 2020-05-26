@@ -35,7 +35,7 @@ function generatePassword(length=30, lowercase=1, uppercase=1, numeric=1, specia
     let lowercase_chars = 'abcdefghijklmnopqrstuvwxyz';
     let uppercase_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let numeric_chars = '0123456789';
-    let special_chars = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+    let special_chars = "#_-";
     let all_chars = lowercase_chars + uppercase_chars + numeric_chars + special_chars;
     let chars_array = [lowercase_chars, uppercase_chars, numeric_chars, special_chars, all_chars];
     // Force Positive Numbers
