@@ -52,7 +52,8 @@ have the sdk or cli installed then we will need to create a config as defined in
 
 ### Creating the Config File
 
-Create the directory __<OKIT_ROOT_DIR>/containers/oci__ and within it a file called __config__ with 
+Create the directory __<OKIT_ROOT_DIR>/containers/oci__ and within it a file called __config__ with contents similar to
+that below.
 
 ```properties
 [DEFAULT]
@@ -62,6 +63,8 @@ key_file=~/.oci/oci_api_key.pem
 tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
 region=us-phoenix-1
 ```
+
+Your pem key associated with your OCI Tenancy / Account should now be copied to the __<OKIT_ROOT_DIR>/containers/oci/oci_api_key.pem__.
 
 Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
 
