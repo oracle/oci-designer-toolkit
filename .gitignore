@@ -33,6 +33,6 @@ output
 
 .vagrant
 
-config
+config/
 
 containers/.oci

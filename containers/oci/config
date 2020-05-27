@@ -1,0 +1,6 @@
+[DEFAULT]
+user=<OCID For User>
+fingerprint=<Key File Fingerprint>
+key_file=~/.oci/<Key File>.pem
+tenancy=<OCID for Tenancy>
+region=<Preferred Region>
