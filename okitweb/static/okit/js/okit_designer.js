@@ -425,9 +425,9 @@ let queryCount = 0;
 function showQueryResults() {
     console.group('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
-    okitQueryRequestJson = {}
+    okitQueryRequestJson = {};
     okitQueryRequestJson.compartment_id = $(jqId('query_compartment_id')).val();
-    okitQueryRequestJson.config_profile = $(jqId('config_profile')).val()
+    okitQueryRequestJson.config_profile = $(jqId('config_profile')).val();
     okitQueryRequestJson.region = '';
     clearRegionTabBar();
     showRegionTabBar();

@@ -420,45 +420,36 @@ def ociArtifacts(artifact):
 def export(destination):
     logger.debug('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
-    config_profile = request.json.get('config_profile', 'DEFAULT')
+    config_profile = request.json.get('location', {}).get('config_profile', 'DEFAULT')
+    compartment_id = request.json.get('location', {}).get('compartment_id', None)
+    region = request.json.get('location', {}).get('region', None)
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     if request.method == 'POST':
         try:
-            config = {}
+            config = {'region': region}
             destination_dir = tempfile.mkdtemp();
             logger.debug(">>>>>>>>>>>>> {0!s:s}".format(destination_dir))
             stack = {}
             stack['display_name'] = 'okit-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
             if destination == 'resourcemanager':
-                # Get Compartment Information
-                export_compartment_index = request.json.get('open_compartment_index', 0)
-                export_compartment_name = request.json['compartments'][export_compartment_index]['name']
-                logger.info("Compartment Name {0!s:s}".format(export_compartment_name))
                 oci_compartments = OCICompartments(config=config, profile=config_profile)
-                compartments = oci_compartments.listTenancy(filter={'name': export_compartment_name})
-                logger.debug("Compartments {0!s:s}".format(compartments))
-                # If we find a compartment
-                if len(compartments) > 0:
-                    # Generate Resource Manager Terraform zip
-                    generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json,
-                                                            tenancy_ocid=oci_compartments.config['tenancy'],
-                                                            region=oci_compartments.config['region'],
-                                                            compartment_ocid=compartments[0]['id'])
-                    generator.generate()
-                    generator.writeFiles()
-                    zipname = generator.createZipArchive(os.path.join(destination_dir, 'resource-manager'), "/tmp/okit-resource-manager")
-                    logger.info('Zipfile : {0:s}'.format(str(zipname)))
-                    # Upload to Resource manager
-                    stack['compartment_id'] = compartments[0]['id']
-                    stack['zipfile'] = zipname
-                    stack['variables'] = generator.getVariables()
-                    resource_manager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartments[0]['id'])
-                    stack_json = resource_manager.createStack(stack)
-                    resource_manager.createJob(stack_json)
-                    return_code = 200
-                else:
-                    logger.warn('Unknown Compartment {0!s:s}'.format(export_compartment_name))
-                    return_code = 400
+                # Generate Resource Manager Terraform zip
+                generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json,
+                                                        tenancy_ocid=oci_compartments.config['tenancy'],
+                                                        region=region,
+                                                        compartment_ocid=compartment_id)
+                generator.generate()
+                generator.writeFiles()
+                zipname = generator.createZipArchive(os.path.join(destination_dir, 'resource-manager'), "/tmp/okit-resource-manager")
+                logger.info('Zipfile : {0:s}'.format(str(zipname)))
+                # Upload to Resource manager
+                stack['compartment_id'] = compartment_id
+                stack['zipfile'] = zipname
+                stack['variables'] = generator.getVariables()
+                resource_manager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
+                stack_json = resource_manager.createStack(stack)
+                resource_manager.createJob(stack_json)
+                return_code = 200
             shutil.rmtree(destination_dir)
             return stack['display_name'], return_code
         except Exception as e:
