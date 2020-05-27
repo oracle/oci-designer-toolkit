@@ -454,11 +454,9 @@ function showQueryResults() {
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     console.groupEnd();
 }
+// TODO: Delete
 function hideQueryProgressIfComplete() {
     console.info(`>>>>>>>>>>>>> Query Count: ${queryCount}`);
-    if (queryCount === 0) {
-        $(jqId('modal_loading_wrapper')).addClass('hidden');
-    }
 }
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
