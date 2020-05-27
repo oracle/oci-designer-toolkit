@@ -37,8 +37,8 @@ docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./conta
 ```
 
 #### Start Docker Image
-- OKIT_ROOT_DIR: Root Directory of the extracted / cloned OKIT repository.
-- OCI_CONFIG_DIR: Directory containing the OCI config file. Details can be found in [OCI Designer Toolkit Installation Guide](documentation/Installation.md#oci-config-file).
+- OKIT_ROOT_DIR  : Absolute directory name for the extracted / cloned OKIT repository
+- OCI_CONFIG_DIR : Directory containing the OCI config file. Details can be found in [OCI Designer Toolkit Installation Guide](documentation/Installation.md#oci-config-file).
 
 ```bash
 cd oci-designer-toolkit

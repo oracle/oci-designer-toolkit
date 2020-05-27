@@ -47,30 +47,15 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Object Storage Buckets
 
 ### OCI Config File
-Before executing any of the docker container scripts OKIT requires an OCI connection configuration file (<OKIT_ROOT_DIR>/containers/oci). 
-This file contains the connection information used by OKIT when executing queries or exporting to Resource Manager and has 
-the following content:
-
-__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine but represent a relative path as seen 
-by the linux root user.
-
-```properties
-[DEFAULT]
-user=ocid1.user.oc1..aaaaaaaak6z......
-fingerprint=3b:7e:37:ec:a0:86:1....
-key_file=~/.oci/oci_api_key.pem
-tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
-region=us-phoenix-1
-```
-
-Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
+Before executing any of the docker container scripts OKIT requires an OCI connection configuration file. The information 
+for creating this file can be found in the [Installation Guide](Installation.md#oci-config-file).
 
 ### Web Interface
 To use the Web Application you will first need to start the docker container and run the web server; which can 
 be achieved by running the docker container created during [installation](Installation.md#build-docker-image).
 
-- OKIT_ROOT_DIR: Root Directory of the extracted / cloned OKIT repository
-- OCI_CONFIG_DIR: Directory containing the OCI config file (OKIT_ROOT_DIR/containers/oci)
+- OKIT_ROOT_DIR  : Absolute directory name for the extracted / cloned OKIT repository.
+- OCI_CONFIG_DIR : Directory containing the OCI config file. Details can be found in [OCI Designer Toolkit Installation Guide](Installation.md#oci-config-file).
 
 ```bash
 cd oci-designer-toolkit

@@ -41,12 +41,18 @@ https://github.com/oracle/oci-designer-toolkit/archive/v0.5.1.zip
 
 
 ## OCI Config File
-Before executing any of the docker container scripts OKIT requires an OCI connection configuration file (<OKIT_ROOT_DIR>/containers/oci). 
-This file contains the connection information used by OKIT when executing queries or exporting to Resource Manager and has 
-the following content:
+Before executing any of the docker container scripts OKIT requires an OCI connection configuration file. This file 
+contains the connection information used by OKIT when executing queries or exporting to Resource Manager.
 
-__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine but represent a relative path as seen 
-by the linux root user.
+__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine. The config directory will be mounted
+to the docker, linux, root user ~/.oci directory.
+
+If you have already installed the OCI SDK/CLI on you machine then you will have already created this file. If you do not 
+have the sdk or cli installed then we will need to create a config as defined in the next section.
+
+### Creating the Config File
+
+Create the directory __<OKIT_ROOT_DIR>/containers/oci__ and within it a file called __config__ with 
 
 ```properties
 [DEFAULT]
@@ -73,8 +79,8 @@ docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./conta
 
 ### Start Docker Image
 
-- OKIT_ROOT_DIR: Root Directory of the extracted / cloned OKIT repository
-- OCI_CONFIG_DIR: Directory containing the OCI config file (OKIT_ROOT_DIR/containers/oci)
+- OKIT_ROOT_DIR  : Absolute Root Directory of the extracted / cloned OKIT repository
+- OCI_CONFIG_DIR : Directory containing the OCI config file (OKIT_ROOT_DIR/containers/oci)
 
 ```bash
 cd oci-designer-toolkit
