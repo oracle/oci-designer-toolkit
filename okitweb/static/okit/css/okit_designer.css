@@ -260,7 +260,7 @@
     opacity: 0.5;
     position: absolute;
     cursor: col-resize !important;
-    z-index: 999
+    z-index: 100
 }
 
 /*
@@ -268,7 +268,7 @@
  */
 
 .context-menu {
-    z-index:1000;
+    z-index:102;
     position: absolute;
 }
 

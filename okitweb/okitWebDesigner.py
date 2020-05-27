@@ -278,6 +278,7 @@ def ociCompartment():
     oci_tenancies = OCITenancies(profile=config_profile)
     tenancy = oci_tenancies.listCompartments()
     compartments = [{'display_name': c['display_name'], 'id': c['id'], 'home_region_key': tenancy['home_region_key']} for c in tenancy['compartments']]
+    compartments.append({'display_name': '/', 'id': tenancy['id'], 'home_region_key': tenancy['home_region_key']})
     compartments.sort(key=lambda x: x['display_name'])
     logger.debug("Compartments: {0!s:s}".format(compartments))
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))

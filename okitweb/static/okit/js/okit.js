@@ -15,6 +15,18 @@ if (typeof JSON.clone !== "function") {
 /*
 ** Define OKIT Artifact Classes
  */
+class OkitOCIConfig {
+    constructor() {
+        this.load();
+    }
+
+    load() {
+        let me = this;
+        $.getJSON('config/sections', function(resp) {$.extend(true, me, resp);console.info('Sections Response '+resp);});
+        console.info(this);
+    }
+}
+
 class OkitOCIData {
     constructor() {
         this.load();
@@ -254,13 +266,27 @@ class OkitSettings {
             .text('Use Variables in Generate');
         // Config Profile
         tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('Profile');
+        tr.append('div').attr('class', 'td').text('Default Profile');
+        /*
         tr.append('div').attr('class', 'td').append('input')
             .attr('class', 'okit-input')
             .attr('id', 'profile')
             .attr('name', 'profile')
             .attr('type', 'text')
             .attr('value', this.profile);
+
+         */
+        let profile_select = tr.append('div')
+            .attr('class', 'td')
+            .append('select')
+            .attr('id', 'profile');
+        for (let section of okitOciConfig.sections) {
+            profile_select.append('option')
+                .attr('value', section)
+                .text(section);
+        }
+        $(jqId('profile')).val(this.profile);
+        // Footer
         d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
             .attr('id', 'save_as_button')
             .attr('type', 'button')

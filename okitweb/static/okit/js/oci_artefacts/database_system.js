@@ -70,6 +70,19 @@ class DatabaseSystem extends OkitArtifact {
 
 
     /*
+    ** Parent Processing Override
+     */
+    getParentId() {
+        return this.compartment_id;
+    }
+
+    getParent() {
+        return this.getOkitJson().getSubnet(this.subnet_id);
+    }
+
+
+
+    /*
     ** Delete Processing
      */
     deleteChildren() {
