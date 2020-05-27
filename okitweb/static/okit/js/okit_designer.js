@@ -460,6 +460,10 @@ function hideQueryProgressIfComplete() {
         $(jqId('modal_loading_wrapper')).addClass('hidden');
     }
 }
+$(document).ajaxStop(function() {
+    console.info('All Ajax Functions Stopped');
+    $(jqId('modal_loading_wrapper')).addClass('hidden');
+});
 /*
 ** Export the Model as various formats
  */
@@ -623,6 +627,7 @@ function setCenterColumnWidth() {
     console.info('Center Width : ' + centerWidth);
     $(jqId('designer_center_column')).css('min-width', 'calc(100% - ' + (leftAdjust + rightAdjust) + 'px)');
 }
+
 
 /*
 ** Ready function initiated on page load.

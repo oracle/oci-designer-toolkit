@@ -1675,7 +1675,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     // Compartment
@@ -1685,7 +1685,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     // Database System
@@ -1695,7 +1695,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     // Instance
@@ -1705,7 +1705,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getLocalPeeringGateway(id='') {
@@ -1714,7 +1714,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getRouteTable(id='') {
@@ -1723,7 +1723,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getSecurityList(id='') {
@@ -1732,7 +1732,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getSubnet(id='') {
@@ -1741,7 +1741,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getVirtualCloudNetwork(id='') {
@@ -1750,7 +1750,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getVcn(id='') {
