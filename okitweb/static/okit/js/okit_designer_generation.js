@@ -155,6 +155,35 @@ function displayResourceManagerDialog() {
         .append('option')
         .attr('value', 'Retrieving')
         .text('Retrieving..........');
+    // Plan / Apply
+    tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div')
+        .attr('class', 'td')
+        .text('');
+    let td = tr.append('div')
+        .attr('class', 'td');
+    // Plan
+    let div = td.append('div')
+        .attr('class', 'okit-horizontal-radio');
+    div.append('input')
+        .attr('type','radio')
+        .attr('id', 'rm_plan')
+        .attr('name', 'plan_apply_toggle')
+        .attr('value', 'PLAN')
+        .attr('checked', 'checked');
+    div.append('label')
+        .attr('for', 'rm_plan')
+        .text('Plan');
+    // Apply
+    div.append('input')
+        .attr('type','radio')
+        .attr('id', 'rm_apply')
+        .attr('name', 'plan_apply_toggle')
+        .attr('value', 'APPLY');
+    div.append('label')
+        .attr('for', 'rm_apply')
+        .text('Apply');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
@@ -170,7 +199,8 @@ function exportToResourceManager() {
     request_json.location = {
         config_profile: $(jqId('config_profile')).val(),
         compartment_id: $(jqId('query_compartment_id')).val(),
-        region: $(jqId('query_region_id')).val()
+        region: $(jqId('query_region_id')).val(),
+        plan_or_apply: $('input[name=plan_apply_toggle]:checked').val()
     };
     hideNavMenu();
     setBusyIcon();

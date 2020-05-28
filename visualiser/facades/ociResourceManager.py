@@ -62,10 +62,16 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         logger.info('Create Stack Response : {0!s:s}'.format(str(response.data)))
         return self.toJson(response.data)
 
-    def createJob(self, stack):
-        job_details = oci.resource_manager.models.CreateJobDetails(stack_id=stack['id'],
-                                                                   display_name='plan-job-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S')),
-                                                                   operation='PLAN')
+    def createJob(self, stack, operation='PLAN'):
+        if operation == 'PLAN':
+            job_details = oci.resource_manager.models.CreateJobDetails(stack_id=stack['id'],
+                                                                       display_name='{0!s:s}-job-{1!s:s}'.format(operation.lower(), time.strftime('%Y%m%d%H%M%S')),
+                                                                       operation=operation)
+        else:
+            job_details = oci.resource_manager.models.CreateJobDetails(stack_id=stack['id'],
+                                                                       display_name='{0!s:s}-job-{1!s:s}'.format(operation.lower(), time.strftime('%Y%m%d%H%M%S')),
+                                                                       operation=operation,
+                                                                       apply_job_plan_resolution=oci.resource_manager.models.ApplyJobPlanResolution(is_auto_approved=True))
         self.client.create_job(job_details)
         return
 

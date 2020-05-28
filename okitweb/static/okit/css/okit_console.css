@@ -595,6 +595,18 @@ li a.parent-item:hover {
     padding: 5px;
 }
 
+.okit-horizontal-radio {
+    display: block;
+    margin: auto;
+    vertical-align: middle;
+}
+
+.okit-horizontal-radio > label {
+    margin-left: 5px;
+    margin-right: 10px;
+    height: 100%;
+}
+
 /*
 ** Style Vertical sidebar buttons
  */

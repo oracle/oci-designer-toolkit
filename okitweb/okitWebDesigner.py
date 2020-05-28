@@ -423,6 +423,7 @@ def export(destination):
     config_profile = request.json.get('location', {}).get('config_profile', 'DEFAULT')
     compartment_id = request.json.get('location', {}).get('compartment_id', None)
     region = request.json.get('location', {}).get('region', None)
+    plan_or_apply = request.json.get('location', {}).get('plan_or_apply', 'PLAN')
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     if request.method == 'POST':
         try:
@@ -448,7 +449,7 @@ def export(destination):
                 stack['variables'] = generator.getVariables()
                 resource_manager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
                 stack_json = resource_manager.createStack(stack)
-                resource_manager.createJob(stack_json)
+                resource_manager.createJob(stack_json, plan_or_apply)
                 return_code = 200
             shutil.rmtree(destination_dir)
             return stack['display_name'], return_code

@@ -10,6 +10,7 @@
 3. Switch to new Oracle Icons as defined in https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm.
 4. Add Config Profile selection to the Query Popup so we can specify alternative tenancy information.
 5. Add Profile / Region / Compartment selection to the Resource Manager export rather than using DEFAULT profile values.
+6. Add Plan / Apply toggle to Resource Manager export.
 
 ### Bug Fixes
 1. Palette did not scroll
