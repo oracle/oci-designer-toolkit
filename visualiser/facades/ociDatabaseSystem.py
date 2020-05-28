@@ -40,6 +40,9 @@ class OCIDatabaseSystems(OCIDatabaseConnection):
         if filter is None:
             filter = {}
 
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = ["PROVISIONING", "AVAILABLE", "UPDATING"]
+
         database_systems = oci.pagination.list_call_get_all_results(self.client.list_db_systems, compartment_id=compartment_id).data
         logger.debug('============================== DatabaseSystems Raw ==============================')
         logger.debug(str(database_systems))
@@ -48,7 +51,7 @@ class OCIDatabaseSystems(OCIDatabaseConnection):
         logJson(database_systems_json)
         # Retrieve Full data
         for db_system in database_systems_json:
-            self.get(db_system["id"])
+            db_system.update(self.get(db_system["id"]))
 
         # Filter results
         self.database_systems_json = self.filterJsonObjectList(database_systems_json, filter)
@@ -57,13 +60,14 @@ class OCIDatabaseSystems(OCIDatabaseConnection):
 
         return self.database_systems_json
 
-    def get(self, id=None, filter=None):
+    def get(self, id=None,):
         database_system = self.client.get_db_system(db_system_id=id).data
         logger.debug('============================== DatabaseSystems Raw ==============================')
         logger.debug(str(database_system))
         # Convert to Json object
         database_system_json = self.toJson(database_system)
         logJson(database_system_json)
+        return database_system_json
 
 
 

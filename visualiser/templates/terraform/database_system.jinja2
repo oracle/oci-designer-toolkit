@@ -152,7 +152,7 @@ resource "oci_database_db_system" "{{ resource_name }}" {
 
 locals {
     {{ resource_name }}_id              = oci_database_db_system.{{ resource_name }}.id
-    {{ resource_name }}_scan_ip_ips     = oci_database_db_system.{{ resource_name }}.scan_ip_ips
-    {{ resource_name }}_vip_ids         = oci_database_db_system.{{ resource_name }}.vip_ids
+#    {{ resource_name }}_scan_ip_ips     = oci_database_db_system.{{ resource_name }}.scan_ip_ips
+#    {{ resource_name }}_vip_ids         = oci_database_db_system.{{ resource_name }}.vip_ids
 }
 

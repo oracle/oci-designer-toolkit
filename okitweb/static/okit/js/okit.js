@@ -925,6 +925,14 @@ class OkitArtifact {
         return sourceid + '-' + destinationid;
     }
 
+    getAvailabilityDomainNumber(availability_domain) {
+        if (availability_domain) {
+            return availability_domain.slice(-1);
+        } else {
+            return availability_domain;
+        }
+    }
+
 
     /*
     ** Static Functionality
