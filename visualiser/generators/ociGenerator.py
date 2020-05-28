@@ -1044,7 +1044,7 @@ class OCIGenerator(object):
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # --- Optional
         # ---- Availability Domain
-        if int(str(subnet.get("availability_domain", "0"))) > 0:
+        if subnet.get("availability_domain", None) is not None and int(subnet["availability_domain"]) > 0:
             self.addJinja2Variable("availability_domain", subnet["availability_domain"], standardisedName)
         else:
             self.jinja2_variables.pop("availability_domain", None)

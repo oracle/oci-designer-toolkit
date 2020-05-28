@@ -101,7 +101,7 @@ class Instance extends OkitArtifact {
     getParentId() {
         let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
         console.info(`Primary Subnet ${JSON.stringify(primary_subnet)}`);
-        if (primary_subnet.compartment_id === this.compartment_id) {
+        if (primary_subnet && primary_subnet.compartment_id === this.compartment_id) {
             this.parent_id = this.primary_vnic.subnet_id;
             return this.primary_vnic.subnet_id;
         } else {
@@ -112,7 +112,7 @@ class Instance extends OkitArtifact {
 
     getParent() {
         let primary_subnet = this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
-        if (primary_subnet.compartment_id === this.compartment_id) {
+        if (primary_subnet && primary_subnet.compartment_id === this.compartment_id) {
             return this.getOkitJson().getSubnet(this.primary_vnic.subnet_id);
         } else {
             return this.getOkitJson().getCompartment(this.compartment_id);
