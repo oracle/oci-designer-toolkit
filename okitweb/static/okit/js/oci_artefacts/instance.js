@@ -44,10 +44,14 @@ class Instance extends OkitArtifact {
         // Check if built from a query
         if (this.availability_domain.length > 1) {
             this.region_availability_domain = this.availability_domain;
-            this.availability_domain = this.region_availability_domain.slice(-1);
+            this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
         }
         if (this.vnics.length > 0) {
             this.primary_vnic = this.vnics[0];
+            for (let vnic of this.vnics) {
+                vnic.region_availability_domain = vnic.availability_domain;
+                vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.region_availability_domain);
+            }
         } else {
             this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
             this.vnics[0] = this.primary_vnic;

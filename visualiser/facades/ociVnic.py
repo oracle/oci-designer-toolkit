@@ -31,11 +31,15 @@ class OCIVnics(OCIVirtualNetworkConnection):
         super(OCIVnics, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def get(self, vnic_id=None):
-        vnic = self.client.get_vnic(vnic_id=vnic_id).data
-        logger.debug(str(vnic))
-        # Convert to Json object
-        vnic_json = self.toJson(vnic)
-        logJson(vnic_json)
-        return vnic_json
+        try:
+            vnic = self.client.get_vnic(vnic_id=vnic_id).data
+            logger.debug(str(vnic))
+            # Convert to Json object
+            vnic_json = self.toJson(vnic)
+            logJson(vnic_json)
+            return vnic_json
+        except oci.exceptions.ServiceError as e:
+            logger.exception(e)
+            return {}
 
 

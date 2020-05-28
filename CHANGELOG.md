@@ -8,11 +8,17 @@
    2. Ansible : True
 2. Resource Manager no longer uses variable file for anything other than connection information.
 3. Switch to new Oracle Icons as defined in https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm.
+4. Add Config Profile selection to the Query Popup so we can specify alternative tenancy information.
+5. Add Profile / Region / Compartment selection to the Resource Manager export rather than using DEFAULT profile values.
 
 ### Bug Fixes
 1. Palette did not scroll
 2. Link to OCI Console should be data driven #20 
-3. 100 variable limit with Resource Manager causes upload failure #9
+3. 100 variable limit with Resource Manager causes upload failure (Issue #09)
+4. Add Tenancy root to selectable list of compartments (Issue: #21)
+5. Generation of terraform with regional subnet throws error for missing availability domain. (Issue: #22)
+6. Export to Resource Manager: Compartment Name is not checked for uniqueness (OKIT-5)
+7. Missing logs (default log location now /okit/log/okit.log in container).
 
 
 
