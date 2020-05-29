@@ -11,6 +11,7 @@
 4. Add Config Profile selection to the Query Popup so we can specify alternative tenancy information.
 5. Add Profile / Region / Compartment selection to the Resource Manager export rather than using DEFAULT profile values.
 6. Add Plan / Apply toggle to Resource Manager export.
+7. Move DRG to VCN Parent rather than Compartment
 
 ### Bug Fixes
 1. Palette did not scroll
