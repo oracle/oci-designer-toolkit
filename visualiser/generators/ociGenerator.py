@@ -348,6 +348,11 @@ class OCIGenerator(object):
             self.addJinja2Variable("fault_domains", fault_domains, standardisedName)
         else:
             self.removeJinja2Variable("fault_domains")
+        # ---- Cluster Name
+        if str(database_system["cluster_name"]).strip() != '':
+            self.addJinja2Variable("cluster_name", database_system["cluster_name"], standardisedName)
+        else:
+            self.removeJinja2Variable("cluster_name")
 
         # ---- Tags
         self.renderTags(database_system)

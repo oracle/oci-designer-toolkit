@@ -51,7 +51,7 @@ resource "oci_database_db_system" "{{ resource_name }}" {
 {% endif %}
 {% if pdb_name is defined %}
             pdb_name       = {{ pdb_name | safe }}
-{%  endif %}
+{% endif %}
 {% if defined_tags is defined %}
             defined_tags             = {{ defined_tags | safe }}
 {% endif %}
