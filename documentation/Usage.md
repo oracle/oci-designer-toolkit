@@ -117,29 +117,30 @@ The hamburger menu in the top left will display a slide out menu with all availa
 
 ##### Palette
 - Compute
-    - <img src="../okitweb/static/okit/palette/compute/Instance.svg?raw=true" width="30" height="30"/>      Instance
-    - <img src="images/Instance.png?raw=true" width="30" height="30"/>      Instance
-    - <img src="images/Load_Balancer.png?raw=true" width="30" height="30"/> Load Balancer
+    - <img src="../okitweb/static/okit/palette/compute/Instance.svg?raw=true" width="30" height="30"/>                  Instance
 - Containers
-    - <img src="images/Compartment.png?raw=true" width="30" height="30"/> Compartment
-    - <img src="images/Container.png?raw=true" width="30" height="30"/>   Container (OKE)
+    - <img src="../okitweb/static/okit/palette/containers/Compartment.svg?raw=true" width="30" height="30"/>            Compartment
 - Database
-    - <img src="images/Autonomous_Database.png?raw=true" width="30" height="30"/> Autonomous Database
+    - <img src="../okitweb/static/okit/palette/database/Autonomous_Database.svg?raw=true" width="30" height="30"/>      Autonomous Database
+    - <img src="../okitweb/static/okit/palette/database/Database_System.svg?raw=true" width="30" height="30"/>          Database System
 - Gateways
-    - <img src="images/Dynamic_Routing_Gateway.png?raw=true" width="30" height="30"/> Dynamic Routing Gateway
-    - <img src="images/Internet_Gateway.png?raw=true" width="30" height="30"/>        Internet Gateway
-    - <img src="images/NAT_Gateway.png?raw=true" width="30" height="30"/>             NAT Gateway
-    - <img src="images/Service_Gateway.png?raw=true" width="30" height="30"/>         Service Gateway
+    - <img src="../okitweb/static/okit/palette/gateways/Dynamic_Routing_Gateway.svg?raw=true" width="30" height="30"/>  Dynamic Routing Gateway
+    - <img src="../okitweb/static/okit/palette/gateways/Internet_Gateway.svg?raw=true" width="30" height="30"/>         Internet Gateway
+    - <img src="../okitweb/static/okit/palette/gateways/NAT_Gateway.svg?raw=true" width="30" height="30"/>              NAT Gateway
+    - <img src="../okitweb/static/okit/palette/gateways/Service_Gateway.svg?svg=true" width="30" height="30"/>          Service Gateway
+    - <img src="../okitweb/static/okit/palette/gateways/Local_Peering_Gateway.svg?svg=true" width="30" height="30"/>    Local Peering Gateway
 - Networking
-    - <img src="images/Fast_Connect.png?raw=true" width="30" height="30"/>          Fast Connect
-    - <img src="images/Route_Table.png?raw=true" width="30" height="30"/>           Route Table
-    - <img src="images/Security_List.png?raw=true" width="30" height="30"/>         Security List
-    - <img src="images/Subnet.png?raw=true" width="30" height="30"/>                Subnet
-    - <img src="images/Virtual_Cloud_Network.png?raw=true" width="30" height="30"/> Virtual Cloud Network
+    - <img src="../okitweb/static/okit/palette/networking/Fast_Connect.svg?raw=true" width="30" height="30"/>           Fast Connect
+    - <img src="../okitweb/static/okit/palette/networking/Load_Balancer.svg?raw=true" width="30" height="30"/>          Load Balancer
+    - <img src="../okitweb/static/okit/palette/networking/Network_Security_Group.svg?raw=true" width="30" height="30"/> Network Security Group
+    - <img src="../okitweb/static/okit/palette/networking/Route_Table.svg?raw=true" width="30" height="30"/>            Route Table
+    - <img src="../okitweb/static/okit/palette/networking/Security_List.svg?raw=true" width="30" height="30"/>          Security List
+    - <img src="../okitweb/static/okit/palette/networking/Subnet.svg?raw=true" width="30" height="30"/>                 Subnet
+    - <img src="../okitweb/static/okit/palette/networking/Virtual_Cloud_Network.svg?raw=true" width="30" height="30"/>  Virtual Cloud Network
 - Storage
-    - <img src="images/Block_Storage_Volume.png?raw=true" width="30" height="30"/>  Block Storage Volume
-    - <img src="images/File_Storage_System.png?raw=true" width="30" height="30"/>   File Storage System
-    - <img src="images/Object_Storage_Bucket.png?raw=true" width="30" height="30"/> Object Storage Bucket
+    - <img src="../okitweb/static/okit/palette/storage/Block_Storage_Volume.svg?raw=true" width="30" height="30"/>      Block Storage Volume
+    - <img src="../okitweb/static/okit/palette/storage/File_Storage_System.svg?raw=true" width="30" height="30"/>       File Storage System
+    - <img src="../okitweb/static/okit/palette/storage/Object_Storage_Bucket.svg?raw=true" width="30" height="30"/>     Object Storage Bucket
 
 ##### Menu 
 ![OKIT Web Interface Menu](images/okit_menu.png?raw=true "OKIT Web Interface Menu")
@@ -148,15 +149,22 @@ The hamburger menu in the top left will display a slide out menu with all availa
     - New
     - Load
     - Save
+        - Save
+        - Save As Template
+    - Query
     - Redraw
 - Templates
-- Query
-    - OCI
+    - Infrastructure
+    - Network
+    - Reference Architecture
 - Generate
+- Export
+    - Image
+        - png
+        - jpeg
+        - svg
     - Terraform
     - Ansible
-- Export
-    - SVG
     - Resource Manager
 
 ###### Canvas/New
@@ -165,22 +173,26 @@ Creates a new clear canvas.
 Allows the user to select a previously saved or command line generated json file.
 ###### Canvas/Save
 Saves the current diagram as a json representation.
+##### Canvas/Query
+Opens Query pages and populates the Compartment list. Once the user has chosen the compartment and regions.  
+Submitting will query OCI and draw the returning assets on the new designer canvas.
 ###### Canvas/Redraw
 Redraws the existing canvas this will have the effect of grouping similar assets.
 ###### Templates
 This is a dynamic menu that represents the available templates that can be loaded as a starting point for system development.
-##### Query/OCI
-Opens Query pages and populates the Compartment list. Once the user has chosen the compartment and added a virtual cloud network 
-filter submitting will query OCI and draw the returning assets on the new designer canvas.
-##### Generate/Terraform
+##### Export/Terraform
 Generate a set of Terraform that can be used to build the designed OCI infrastructure currently loaded and return as a zip file.
-##### Generate/Ansible
+##### Export/Ansible
 Generate a set of Ansible that can be used to build the designed OCI infrastructure currently loaded  and return as a zip file.
-###### Export/SVG
+###### Export/Image/png
+Will export the current diagram as a png image that can be distributed.
+###### Export/Image/jpeg
+Will export the current diagram as a jpeg image that can be distributed.
+###### Export/Image/svg
 Will export the current diagram as an SVG object that can be distributed.
 ###### Export/Resource Manager
 Will generate Terraform code and export the resulting zip file into the OCI Resource Manager. Once uploaded it will initiate
-a plan job.
+a plan or apply job.
 
 
 
