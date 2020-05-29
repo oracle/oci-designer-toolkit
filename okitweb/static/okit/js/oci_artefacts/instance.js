@@ -299,6 +299,8 @@ class Instance extends OkitArtifact {
             for (let shape of okitOciData.shapes) {
                 if (!shape.shape.startsWith('BM.')) {
                     let shape_text = `${shape.shape} (${shape.ocpus} OCPU ${shape.memory_in_gbs} GB Memory)`;
+                    // Simple Shape Text because we need to upgrade the oci module
+                    shape_text = `${shape.shape}`;
                     shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
                 }
             }
