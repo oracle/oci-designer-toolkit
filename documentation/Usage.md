@@ -225,7 +225,7 @@ we can change the name it is for display purposes only because this Compartment 
 ![Example Step 1](images/Example01.png)
 ### Step 2 : Add Virtual Cloud Network
 The first this we will need for our Load Balancer example is to create a Virtual Cloud Network and this can be achieved 
-by dragging the Virtual Cloud Network Icon <img src="images/Virtual_Cloud_Network.png?raw=true" width="20" height="20"/> 
+by dragging the Virtual Cloud Network Icon <img src="../okitweb/static/okit/palette/networking/Virtual_Cloud_Network.svg?raw=true" width="20" height="20"/> 
 from the palette onto the compartment. Doing this will create a Simple Virtual Cloud Network and populate it with a default
 Route Table and Security List. Again if the names do not match you requirements select the Artifact and edit in the properties panel.
 Looking at the Properties you will notice that a number of default values have been assigned including the CIDR which will
@@ -236,37 +236,37 @@ in this example. The generation of these is optional and configured in the setti
 ![Example Step 2](images/Example02.png)
 ### Step 3 : Add Internet Gateway
 To allow access to our system we will need an Internet Gateway added to the Virtual Cloud Network. We will do this in the 
-same way we did for the Virtual Cloud Network but selecting the Internet Gateway Icon <img src="images/Internet_Gateway.png?raw=true" width="20" height="20"/>
+same way we did for the Virtual Cloud Network but selecting the Internet Gateway Icon <img src="../okitweb/static/okit/palette/gateways/NAT_Gateway.svg?raw=true" width="20" height="20"/>
 from the palette and dragging it over the Virtual Cloud Network. You should note whilst doing this how the drag Icon changes
 to indicate allowable drop targets.
 ![Example Step 3](images/Example03.png)
 ### Step 4 : Select Route Table
 The auto generated Route Table will need to be modified to add a Route Rule to direct traffic to the Internet Gateway. Select
-the Route Table <img src="images/Route_Table.png?raw=true" width="20" height="20"/> on the Canvas and its
+the Route Table <img src="../okitweb/static/okit/palette/networking/Route_Table.svg?raw=true" width="20" height="20"/> on the Canvas and its
 properties will appear in the properties Panel. Click the Green ***"+"*** button on the rules table and a new Rule will be created.
 ![Example Step 4](images/Example04.png)
 Within the new Rule we will specify the Destination (CIDR Block) and the appropriate Gateway (Network Entity).
 ![Example Step 5](images/Example05.png)
 ### Step 5 : Add Subnet
-We will now add a Subnet to our diagram by selecting the Subnet Icon <img src="images/Subnet.png?raw=true" width="20" height="20"/>
-from the Palette and dragging it over the Virtual Cloud Network. Dropping this will create place a Subnet on our Virtual Cloude Network
+We will now add a Subnet to our diagram by selecting the Subnet Icon <img src="../okitweb/static/okit/palette/networking/Subnet.svg?raw=true" width="20" height="20"/>
+from the Palette and dragging it over the Virtual Cloud Network. Dropping this will create place a Subnet on our Virtual Cloud Network
 with a CIDR based on its parent (10.0.0.0/24) Additional Subnet will increment the 3rd Octet. 
 ![Example Step 6](images/Example06.png)
 ### Step 6 : Connect Subnet to Route Table & Security List
 To allow Artifacts within the network to access / be accessed by the internet we will need to provide it with a Route Table 
 and Security List. We can achieve this by selecting the Subnet and editing the properties to select the existing Route Table abd Security List.
 Once this has been done you will notice that the Route Table Icon <img src="images/Route_Table.png?raw=true" width="20" height="20"/>
-and Security List Icon <img src="images/Security_List.png?raw=true" width="20" height="20"/> have moved to the 
+and Security List Icon <img src="../okitweb/static/okit/palette/networking/Route_Table.svg?raw=true" width="20" height="20"/> have moved to the 
 top edge of the Subnet to indicate that the Subnet has assigned Route Table and Security. Additional Subnet can also select the same 
 Route Table and Security List.
 ![Example Step 7](images/Example07.png)
 ### Step 7 : Add Instances
-We will now create 2 Instances within the Subnet by dragging the Instance Icon <img src="images/Instance.png?raw=true" width="20" height="20"/>
+We will now create 2 Instances within the Subnet by dragging the Instance Icon <img src="../okitweb/static/okit/palette/compute/Instance.svg?raw=true" width="20" height="20"/>
 from the Palette and dropping it on the Subnet. You will notice that the second Instance will have the designation "002" 
 rather than "001".
 ![Example Step 8](images/Example08.png)
 ### Step 8 : Add load Balancer
-Next well will create a Load Balancer by dragging the Load Balancer Icon <img src="images/Load_Balancer.png?raw=true" width="20" height="20"/>
+Next well will create a Load Balancer by dragging the Load Balancer Icon <img src="../okitweb/static/okit/palette/networking/Load_Balancer.svg?raw=true" width="20" height="20"/>
 from the Palette onto the Subnet. You will notice that Instances move and this is because the Visualiser controls placement 
 and will dynamically move / resize components to best display the system.
 ![Example Step 9](images/Example09.png)
