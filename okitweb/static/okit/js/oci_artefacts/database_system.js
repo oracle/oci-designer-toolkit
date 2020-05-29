@@ -54,6 +54,11 @@ class DatabaseSystem extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
+        // Check if built from a query
+        if (this.availability_domain.length > 1) {
+            this.region_availability_domain = this.availability_domain;
+            this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
+        }
         // Add Get Parent function
         if (parent !== null) {
             this.getParent = () => {return parent};
@@ -194,11 +199,11 @@ class DatabaseSystem extends OkitArtifact {
             let shape_select = $(jqId('shape'));
             $(shape_select).empty();
             for (let shape of okitOciData.getDBSystemShapes()) {
-                if (!shape.shape.startsWith('BM.')) {
+                if (shape.shape.startsWith('VM.') || shape.shape.startsWith('BM.') || shape.shape.startsWith('Exadata.')) {
                     shape_select.append($('<option>').attr('value', shape.shape).text(shape.name));
                 }
             }
-            $(shape_select).on('click', function() {
+            $(shape_select).on('change', function() {
                 let shape = okitOciData.getDBSystemShape($(this).val());
                 console.info('Selected Shape ' + JSON.stringify(shape));
                 let cpu_count_select = $(jqId('cpu_core_count'));
@@ -209,6 +214,25 @@ class DatabaseSystem extends OkitArtifact {
                 }
                 $(cpu_count_select).val(0);
                 $(cpu_count_select).select();
+                if (shape.shape_family === 'VIRTUALMACHINE') {
+                    $(jqId('data_storage_percentage_tr')).addClass('collapsed');
+                    $(jqId('cpu_core_count_tr')).addClass('collapsed');
+                    if (shape.maximum_node_count > 1) {
+                        $(jqId('node_count_tr')).removeClass('collapsed');
+                    } else {
+                        $(jqId('node_count_tr')).addClass('collapsed');
+                        $(jqId('node_count_tr')).val(1);
+                        $(jqId('cluster_name_tr')).addClass('collapsed');
+                        $(jqId('cluster_name')).val('');
+                    }
+                } else {
+                    $(jqId('node_count_tr')).addClass('collapsed');
+                    $(jqId('data_storage_percentage_tr')).removeClass('collapsed');
+                    $(jqId('cpu_core_count_tr')).removeClass('collapsed');
+                    if (shape.shape_family === 'EXADATA') {
+                        $(jqId('cluster_name_tr')).removeClass('collapsed');
+                    }
+                }
             });
             // Load DB System Versions
             let db_version_select = $(jqId('db_version'));
@@ -217,12 +241,35 @@ class DatabaseSystem extends OkitArtifact {
             for (let version of okitOciData.getDBVersions()) {
                 db_version_select.append($('<option>').attr('value', version.version).text(version.version));
             }
+            // Build Network Security Groups
+            let nsg_select = $(jqId('nsg_ids'));
+            this.loadNetworkSecurityGroups(nsg_select, this.subnet_id);
+            // Add change event to node count to hide/display cluster name
+            $(jqId('node_count')).on('change', () => {
+                if ($(jqId('node_count')).val() > 1) {
+                    $(jqId('cluster_name_tr')).removeClass('collapsed');
+                } else {
+                    $(jqId('cluster_name_tr')).addClass('collapsed');
+                    $(jqId('cluster_name')).val('');
+                }
+            });
             // Load Properties
             loadPropertiesSheet(me);
             // Click Select Lists we have added dynamic on click to
-            $(shape_select).click();
+            $(shape_select).change();
         });
     }
+
+    loadNetworkSecurityGroups(select, subnet_id) {
+        $(select).empty();
+        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
+        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+            if (networkSecurityGroup.vcn_id === vcn.id) {
+                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+            }
+        }
+    }
+
 
 
     getNamePrefix() {

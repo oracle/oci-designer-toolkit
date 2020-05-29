@@ -4,7 +4,7 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 
-{% block title_block %}Autonomous Database{% endblock %}
+{% block title_block %}Database System{% endblock %}
 
 {% block required_properties_table_rows_block %}
     <div class='tr'><div class='td'>Subnet</div><div class='td'><label id="subnet_id" class="okit-property-value okit-property-label"></label></div></div>
@@ -33,14 +33,24 @@
         <option value="OLTP" selected="selected">Transaction Processing</option>
         <option value="DW">Data Warehouse</option>
     </select></div></div>
+    <div class='tr'><div class='td'>Storage Management</div><div class='td'><select id="storage_management" class="okit-property-value">
+        <option value="ASM" selected="selected">Automatic Storage Management</option>
+        <option value="LVM">Logical Volume Management</option>
+    </select></div></div>
+    <div class='tr' id="data_storage_percentage_tr"><div class='td'>Storage Percentage</div><div class='td'><input type="text" id="data_storage_percentage" name="data_storage_percentage" class="okit-property-value"></div></div>
     <div class='tr'><div class='td'>Size (in GB)</div><div class='td'><input type="text" id="data_storage_size_in_gb" name="data_storage_size_in_gb" class="okit-property-value"></div></div>
-    <div class='tr'><div class='td'>CPU Core Count</div><div class='td'><select id="cpu_core_count" class="okit-property-value"></select></div></div>
-    <div class='tr'><div class='td'>Fault Domain</div><div class='td'><select id="fault_domain" class="okit-property-value">
-        <option value="" selected="selected">System Selected</option>
+    <div class='tr' id="cpu_core_count_tr"><div class='td'>CPU Core Count</div><div class='td'><select id="cpu_core_count" class="okit-property-value"></select></div></div>
+    <div class='tr' id="node_count_tr"><div class='td'>Node Count</div><div class='td'><select id="node_count" class="okit-property-value">
+        <option value="1" selected="selected">1</option>
+        <option value="2">2</option>
+    </select></div></div>
+    <div class='tr' id="cluster_name_tr"><div class='td'>Cluster Name</div><div class='td'><input type="text" id="cluster_name" name="cluster_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Fault Domain</div><div class='td'><select id="fault_domains" multiple="multiple" class="okit-property-value">
         <option value="FAULT-DOMAIN-1">Fault Domain 1</option>
         <option value="FAULT-DOMAIN-2">Fault Domain 2</option>
         <option value="FAULT-DOMAIN-3">Fault Domain 3</option>
     </select></div></div>
+    <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><select multiple="multiple" id="nsg_ids" class="okit-property-value"></select></div></div>
 {% endblock %}
 
 {% block optional_properties_block %}{% endblock %}

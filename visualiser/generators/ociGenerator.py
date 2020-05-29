@@ -330,8 +330,25 @@ class OCIGenerator(object):
         self.addJinja2Variable("db_version", database_system["db_home"]["db_version"], standardisedName)
         # ---- Data Storage Size
         self.addJinja2Variable("data_storage_size_in_gb", database_system["data_storage_size_in_gb"], standardisedName)
+        # ---- Storage Management
+        self.addJinja2Variable("storage_management", database_system["db_system_options"]["storage_management"], standardisedName)
         # ---- Node Count
         self.addJinja2Variable("node_count", database_system["node_count"], standardisedName)
+        # ---- CPU Core Count
+        if database_system["cpu_core_count"] > 0:
+            self.addJinja2Variable("cpu_core_count", database_system["cpu_core_count"], standardisedName)
+        else:
+            self.removeJinja2Variable("cpu_core_count")
+        # ---- Fault Domains
+        if len(database_system["fault_domains"]) > 0:
+            if isinstance(database_system["fault_domains"], list):
+                fault_domains = database_system["fault_domains"]
+            else:
+                fault_domains = [database_system["fault_domains"]]
+            self.addJinja2Variable("fault_domains", fault_domains, standardisedName)
+        else:
+            self.removeJinja2Variable("fault_domains")
+
         # ---- Tags
         self.renderTags(database_system)
 
@@ -1106,8 +1123,12 @@ class OCIGenerator(object):
         return
 
     def addJinja2Variable(self, name, value, resource):
-        # We will assume that Variables are not being used
         self.jinja2_variables[name] = self.generateJinja2Variable(name, value, resource)
+        return
+
+    def removeJinja2Variable(self, name):
+        self.jinja2_variables.pop(name, None)
+        return
 
     def generateJinja2Variable(self, name, value, resource):
         # We will assume that Variables are not being used
