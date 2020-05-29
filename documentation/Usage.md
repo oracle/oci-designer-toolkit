@@ -255,8 +255,8 @@ with a CIDR based on its parent (10.0.0.0/24) Additional Subnet will increment t
 ### Step 6 : Connect Subnet to Route Table & Security List
 To allow Artifacts within the network to access / be accessed by the internet we will need to provide it with a Route Table 
 and Security List. We can achieve this by selecting the Subnet and editing the properties to select the existing Route Table abd Security List.
-Once this has been done you will notice that the Route Table Icon <img src="images/Route_Table.png?raw=true" width="20" height="20"/>
-and Security List Icon <img src="../okitweb/static/okit/palette/networking/Route_Table.svg?raw=true" width="20" height="20"/> have moved to the 
+Once this has been done you will notice that the Route Table Icon <img src="../okitweb/static/okit/palette/networking/Route_Table.svg?raw=true" width="20" height="20"/>
+and Security List Icon <img src="../okitweb/static/okit/palette/networking/Security_List.svg?raw=true" width="20" height="20"/> have moved to the 
 top edge of the Subnet to indicate that the Subnet has assigned Route Table and Security. Additional Subnet can also select the same 
 Route Table and Security List.
 ![Example Step 7](images/Example07.png)
@@ -279,7 +279,7 @@ you note that Load Balancer and the Instances become connected in the diagram.
 ### Step 10 : Update Instance Properties
 Our final step will be to update each of the instances to provide an Authorised Key for the instance and a Cloud Init YAML
 to install and configure nginx. We will do this by selecting each Instance individually and editing the properties and using 
-the [Cloud Init YANL](#cloud-init-yaml) below. Once this has been done our diagram is now complete and can be saved using the 
+the [Cloud Init YAML](#cloud-init-yaml) below. Once this has been done our diagram is now complete and can be saved using the 
 "Save" option below the "Hamburger" menu. 
 ![Example Step 12](images/Example12.png)
 #### Cloud Init YAML
