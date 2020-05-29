@@ -117,6 +117,7 @@ The hamburger menu in the top left will display a slide out menu with all availa
 
 ##### Palette
 - Compute
+    - <img src="../okitweb/static/okit/palette/compute/Instance.svg?raw=true" width="30" height="30"/>      Instance
     - <img src="images/Instance.png?raw=true" width="30" height="30"/>      Instance
     - <img src="images/Load_Balancer.png?raw=true" width="30" height="30"/> Load Balancer
 - Containers
