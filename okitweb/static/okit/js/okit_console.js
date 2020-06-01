@@ -11,6 +11,16 @@ function hideNavMenu() {
     $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
 }
 
+function checkForUpdate() {
+    $.getJSON('https://raw.githubusercontent.com/oracle/oci-designer-toolkit/master/okitweb/static/okit/json/release.json', function(resp) {
+        console.info(resp);
+        if (resp.release > okitVersion) {
+            console.info('OKIT Update Available');
+            $(jqId('okit_update')).text(`Update: OKIT ${resp.release} Available for Download`);
+        }
+    });
+}
+
 $(document).ready(function() {
     /*
     ** Add handler functionality
@@ -50,5 +60,7 @@ $(document).ready(function() {
         $slideout.css('top', menu_pos.top);
         $slideout.css('left', menu_pos.left + width);
     });
+
+    checkForUpdate();
 
 });
