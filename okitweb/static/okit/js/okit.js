@@ -266,7 +266,7 @@ class OkitSettings {
             .text('Use Variables in Generate');
         // Config Profile
         tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('Default Profile');
+        tr.append('div').attr('class', 'td').text('Default Connection Profile');
         /*
         tr.append('div').attr('class', 'td').append('input')
             .attr('class', 'okit-input')

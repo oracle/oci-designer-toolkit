@@ -274,7 +274,7 @@ function displayQueryDialog() {
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
-        .text('Profile');
+        .text('Connection Profile');
     let profile_select = tr.append('div')
         .attr('class', 'td')
         .append('select')
