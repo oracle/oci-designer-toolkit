@@ -219,7 +219,7 @@ function exportToResourceManager() {
             console.info('Status : '+ status)
             console.info('Error : '+ error)
             unsetBusyIcon();
-            alert('Compartment ' + okitJson.compartments[0].name + ' does not exist.');
+            alert(`Export to Resource Manager Failed (${error})`);
         }
     });
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
