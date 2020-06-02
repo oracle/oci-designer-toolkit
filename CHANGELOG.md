@@ -12,6 +12,7 @@
 5. Add Profile / Region / Compartment selection to the Resource Manager export rather than using DEFAULT profile values.
 6. Add Plan / Apply toggle to Resource Manager export.
 7. Move DRG to VCN Parent rather than Compartment
+8. Check for Update
 
 ### Bug Fixes
 1. Palette did not scroll
