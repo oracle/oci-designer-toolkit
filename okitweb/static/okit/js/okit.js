@@ -12,6 +12,8 @@ if (typeof JSON.clone !== "function") {
     };
 }
 
+let selectedArtefact = null;
+
 /*
 ** Define OKIT Artifact Classes
  */
@@ -376,9 +378,10 @@ class OkitArtifact {
         let me = this;
         svg.on("click", function() {
             console.info('******* Click');
+            me.loadProperties();
             $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
             $(jqId(me.id)).toggleClass('highlight');
-            me.loadProperties();
+            $(jqId(me.id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
             d3.event.stopPropagation();
         });
         console.groupEnd();
@@ -1451,6 +1454,9 @@ class OkitJson {
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));
         console.info('Canvas Height  : ' + canvas_svg.attr('height'));
         console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
+        if (selectedArtefact) {
+            $(jqId(selectedArtefact)).toggleClass('highlight');
+        }
         console.groupEnd();
     }
 

@@ -131,13 +131,8 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     draw() {
         this.parent_id = this.compartment_id;
         console.groupCollapsed('Drawing ' + VirtualCloudNetwork.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let svg = drawArtifact(this.getSvgDefinition());
-        // Add Properties Load Event to created svg
         let me = this;
-        svg.on("click", function() {
-            me.loadProperties();
-            d3.event.stopPropagation();
-        });
+        let svg = super.draw();
         console.groupEnd();
     }
 

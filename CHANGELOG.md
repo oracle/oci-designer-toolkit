@@ -13,6 +13,7 @@
 6. Add Plan / Apply toggle to Resource Manager export.
 7. Move DRG to VCN Parent rather than Compartment
 8. Check for Update
+9. Highlight selected artefact (Toggles on/off).
 
 ### Bug Fixes
 1. Palette did not scroll

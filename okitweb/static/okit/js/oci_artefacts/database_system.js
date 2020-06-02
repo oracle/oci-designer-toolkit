@@ -111,12 +111,8 @@ class DatabaseSystem extends OkitArtifact {
         //    console.groupEnd();
         //    return;
         //}
+        let me = this;
         let svg = super.draw();
-        /*
-        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
-        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
-        ** Artifact.
-         */
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + safeId(this.id) + "']");
         if (rect && rect.node()) {
