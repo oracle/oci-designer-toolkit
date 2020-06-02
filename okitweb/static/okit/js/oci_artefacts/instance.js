@@ -144,17 +144,8 @@ class Instance extends OkitArtifact {
      */
     draw() {
         console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let svg = drawArtifact(this.getSvgDefinition());
-        /*
-        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
-        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
-        ** Artifact.
-         */
         let me = this;
-        svg.on("click", function() {
-            me.loadProperties();
-            d3.event.stopPropagation();
-        });
+        let svg = super.draw();
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + safeId(this.id) + "']");
         if (rect && rect.node()) {
@@ -305,8 +296,7 @@ class Instance extends OkitArtifact {
                 }
             }
             // Build Network Security Groups
-            let nsg_select = $(jqId('nsg_ids'));
-            this.loadNetworkSecurityGroups(nsg_select, this.primary_vnic.subnet_id);
+            this.loadNetworkSecurityGroups('nsg_ids', this.primary_vnic.subnet_id);
             // Secondary Vnics
             this.loadSecondaryVnics();
             $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
@@ -315,12 +305,14 @@ class Instance extends OkitArtifact {
         });
     }
 
-    loadNetworkSecurityGroups(select, subnet_id) {
-        $(select).empty();
-        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-            if (networkSecurityGroup.vcn_id === vcn.id) {
-                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+    loadNetworkSecurityGroups(select_id, subnet_id) {
+        $(jqId(select_id)).empty();
+        if (subnet_id && subnet_id !== '') {
+            let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
+            for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+                if (networkSecurityGroup.vcn_id === vcn.id) {
+                    $(jqId(select_id)).append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+                }
             }
         }
     }
@@ -376,7 +368,7 @@ class Instance extends OkitArtifact {
                 vnic.subnet_id = this.options[this.selectedIndex].value;
                 displayOkitJson();
                 redrawSVGCanvas();
-                me.loadNetworkSecurityGroups($(jqId("nsg_ids" + idx)), vnic.subnet_id);
+                me.loadNetworkSecurityGroups("nsg_ids" + idx, vnic.subnet_id);
             });
         for (let subnet of this.getOkitJson().subnets) {
             let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
@@ -449,7 +441,7 @@ class Instance extends OkitArtifact {
                 vnic.nsg_ids = $(jqId("nsg_ids" + idx)).val();
                 displayOkitJson();
             });
-        this.loadNetworkSecurityGroups(select, vnic.subnet_id);
+        this.loadNetworkSecurityGroups("nsg_ids" + idx, vnic.subnet_id);
         $(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
     }
 

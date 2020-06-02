@@ -99,14 +99,8 @@ class Subnet extends OkitContainerArtifact {
         this.parent_id = this.vcn_id;
         let id = this.id;
         console.groupCollapsed('Drawing ' + Subnet.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let svg = drawArtifact(this.getSvgDefinition());
-
-        // Add Properties Load Event to created svg
         let me = this;
-        svg.on("click", function () {
-            me.loadProperties();
-            d3.event.stopPropagation();
-        });
+        let svg = super.draw();
         let fill = d3.select(d3Id(this.id)).attr('fill');
         svg.on("mouseover", function () {
             d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', svg_highlight_colour);
