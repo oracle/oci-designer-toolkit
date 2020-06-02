@@ -19,9 +19,12 @@
 2. Link to OCI Console should be data driven #20 
 3. 100 variable limit with Resource Manager causes upload failure (Issue #09)
 4. Add Tenancy root to selectable list of compartments (Issue: #21)
-5. Generation of terraform with regional subnet throws error for missing availability domain. (Issue: #22)
-6. Export to Resource Manager: Compartment Name is not checked for uniqueness (OKIT-5)
-7. Missing logs (default log location now /okit/log/okit.log in container).
+5. Generation of terraform with regional subnet throws error for missing availability domain. (Issue: #22).
+6. Missing logs (default log location now /okit/log/okit.log in container).
+7. Export to Resource Manager:
+    1. Error message modified so that it does not always say the compartment does not exist when failing (OKIT-67).
+    2. Compartment Name is not checked for uniqueness (OKIT-5).
+    3. Error planning job with no Tags (OKIT-45).
 
 
 
