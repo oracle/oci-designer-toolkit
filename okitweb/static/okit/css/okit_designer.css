@@ -285,3 +285,12 @@
 
 .context-menu li{ list-style: none; }
 
+
+/*
+** SVG Highlighting
+ */
+
+rect.highlight {
+    stroke-width: 3;
+    stroke-dasharray: none;
+}
