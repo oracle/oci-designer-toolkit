@@ -1,5 +1,6 @@
 # Release Notes
 
+
 ## Version 0.6.0 
 **Release Date**: 3rd June 2020
 ### Features
@@ -26,6 +27,16 @@
     1. Error message modified so that it does not always say the compartment does not exist when failing (OKIT-67).
     2. Compartment Name is not checked for uniqueness (OKIT-5).
     3. Error planning job with no Tags (OKIT-45).
+
+
+## Version 0.5.1 
+**Release Date**: 18th May 2020
+### Features
+1. Consolidate vangrant and docker files below container directory.
+2. Remove requirement to run bash scripts to build docker container
+3. Document pure docker commands.
+
+### Bug Fixes
 
 
 

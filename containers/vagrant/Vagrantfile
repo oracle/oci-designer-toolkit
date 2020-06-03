@@ -64,7 +64,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: "echo '************** Running vagrant user commands ************** '"
   config.vm.provision "shell", inline: "echo 'export PATH=/usr/local/bin:/opt/python/bin:${PATH}' >> /home/vagrant/.bash_profile", privileged: false
   config.vm.provision "shell", inline: "echo 'export OCI_CONFIG_DIR=~/.oci' >> /home/vagrant/.bash_profile", privileged: false
-  config.vm.provision "shell", inline: "ln -s /vagrant/.oci .oci", privileged: false
+  config.vm.provision "shell", inline: "ln -s /vagrant/oci ~/.oci", privileged: false
   config.vm.provision "shell", inline: "echo '************** Finished vagrant user commands ************** '"
 
 end

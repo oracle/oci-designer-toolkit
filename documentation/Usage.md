@@ -8,7 +8,7 @@
 2. [Installation](#installation)
 3. [Usage](#usage)
     1. [Currently Implemented Artifacts](#currently-implemented-artifacts)
-    2. [Prerequisites](#prerequisites)
+    2. [OCI Config File](#oci-config-file)
     3. [Web Interface](#web-interface)
 4. [Examples](#examples)
 5. [Issues](#issues)
@@ -46,43 +46,26 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Block Storage Volumes
 - Object Storage Buckets
 
-### Prerequisites
-Before executing any of the docker container scripts we OKIT requires that an OCI connection configuration file 
-(~/.oci/config) be created. Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
-
-
-This file will contain the following:
-
-__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine.
-
-```properties
-[DEFAULT]
-user=ocid1.user.oc1..aaaaaaaak6z......
-fingerprint=3b:7e:37:ec:a0:86:1....
-key_file=~/.oci/oci_api_key.pem
-tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
-region=us-phoenix-1
-
-```
-You will then need to create the following environment variable that points to the directory containing the config file.
-
-```bash
-export OCI_CONFIG_DIR=~/.oci
-```
+### OCI Config File
+Before executing any of the docker container scripts OKIT requires an OCI connection configuration file. The information 
+for creating this file can be found in the [Installation Guide](Installation.md#oci-config-file).
 
 ### Web Interface
 To use the Web Application you will first need to start the docker container and run the web server; which can 
 be achieved by running the docker container created during [installation](Installation.md#build-docker-image).
+
+- OKIT_ROOT_DIR  : Absolute directory name for the extracted / cloned OKIT repository.
+- OCI_CONFIG_DIR : Directory containing the OCI config file. Details can be found in [OCI Designer Toolkit Installation Guide](Installation.md#oci-config-file).
 
 ```bash
 cd oci-designer-toolkit
 docker run -d --rm -p 80:80 \
            --name okit \
            --hostname okit \
-           -v ~/.oci:/root/.oci \
-           -v `pwd`/okitweb:/okit/okitweb \
-           -v `pwd`/visualiser:/okit/visualiser \
-           -v `pwd`/log:/okit/log \
+           -v <OCI_CONFIG_DIR>:/root/.oci \
+           -v <OKIT_ROOT_DIR>/okitweb:/okit/okitweb \
+           -v <OKIT_ROOT_DIR>/visualiser:/okit/visualiser \
+           -v <OKIT_ROOT_DIR>/log:/okit/log \
            okit
 ```
 

@@ -34,6 +34,39 @@ or
 git clone -b v0.6.0 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
 ```
 
+### Download
+If you do not have git installed locally the current release of OKIT can be retrieved by downloading it as a zip file from
+https://github.com/oracle/oci-designer-toolkit/archive/v0.5.1.zip
+
+
+## OCI Config File
+Before executing any of the docker container scripts OKIT requires an OCI connection configuration file. This file 
+contains the connection information used by OKIT when executing queries or exporting to Resource Manager.
+
+__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine. The config directory will be mounted
+to the docker, linux, root user ~/.oci directory.
+
+If you have already installed the OCI SDK/CLI on you machine then you will have already created this file. If you do not 
+have the sdk or cli installed then we will need to create a config as defined in the next section.
+
+### Creating the Config File
+
+Create the directory __<OKIT_ROOT_DIR>/containers/oci__ and within it a file called __config__ with contents similar to
+that below.
+
+```properties
+[DEFAULT]
+user=ocid1.user.oc1..aaaaaaaak6z......
+fingerprint=3b:7e:37:ec:a0:86:1....
+key_file=~/.oci/oci_api_key.pem
+tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
+region=us-phoenix-1
+```
+
+Your pem key associated with your OCI Tenancy / Account should now be copied to the __<OKIT_ROOT_DIR>/containers/oci/oci_api_key.pem__.
+
+Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
+
 
 ## Docker 
 The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory.
@@ -47,15 +80,19 @@ docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./conta
 ```
 
 ### Start Docker Image
+
+- OKIT_ROOT_DIR  : Absolute Root Directory of the extracted / cloned OKIT repository
+- OCI_CONFIG_DIR : Directory containing the OCI config file (OKIT_ROOT_DIR/containers/oci)
+
 ```bash
 cd oci-designer-toolkit
 docker run -d --rm -p 80:80 \
            --name okit \
            --hostname okit \
-           -v ~/.oci:/root/.oci \
-           -v `pwd`/okitweb:/okit/okitweb \
-           -v `pwd`/visualiser:/okit/visualiser \
-           -v `pwd`/log:/okit/log \
+           -v <OCI_CONFIG_DIR>:/root/.oci \
+           -v <OKIT_ROOT_DIR>/okitweb:/okit/okitweb \
+           -v <OKIT_ROOT_DIR>/visualiser:/okit/visualiser \
+           -v <OKIT_ROOT_DIR>/log:/okit/log \
            okit
 ```
 
@@ -69,12 +106,12 @@ If you want to run the image in and interactive mode then replace to _-d_ in the
 1. Install [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 2. Install [Vagrant](https://vagrantup.com/)
 
-### Copy the .oci folder 
-From your home directory to the oci-designer-toolkit/vagrant folder. 
+### Copy the OCI_CONFIG_DIR folder 
+Copy the contents of the OCI_CONFIG_DIR directory to the oci-designer-toolkit/containers/vagrant/__oci__ folder. 
 
 The vagrant should now have these folders & files: 
 - Vagrantfile
-- The .oci folder
+- oci folder
 
 ### Build Vagrant Image
 ```bash
