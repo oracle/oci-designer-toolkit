@@ -30,6 +30,7 @@ The table below lists a summary of the current support status whilst the details
 | Object Storage Bucket   | Partial | 0.1.0   | [3](#object-storage-bucket)
 | **Database**
 | Autonomous Database     | Partial | 0.1.0   | [2](#autonomous-database)
+| Database Systems        | Partial | 0.6.0   | [2](#database-systems)
 | **Compute**
 | Instance                | Partial | 0.3.0   | [3](#instance)
 | Load Balancer           | Partial | 0.3.0   | [2](#loadbalancer)
@@ -58,6 +59,9 @@ The table below lists a summary of the current support status whilst the details
 ##### Autonomous Database
 - Cloning (Includes all cloning functionality / Referencing)
 - BYOL
+##### Database Systems
+- Backup Configuration
+- Maintenance Window
 
 #### Compute
 ##### Instance

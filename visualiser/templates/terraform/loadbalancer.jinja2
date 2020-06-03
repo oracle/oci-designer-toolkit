@@ -3,26 +3,26 @@
 resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_id }}
-    shape          = {{ shape | default('"100Mbps"') }}
-    display_name   = {{ display_name }}
+    shape          = {{ shape | safe }}
+    display_name   = {{ display_name | safe }}
     subnet_ids     = [
 {% for subnet_id in loadbalancer_subnet_ids %}
                     {{ subnet_id }}{% if not loop.last %},{% endif %}
 {% endfor %}
                     ]
     # Optional
-    is_private     = {{ private | default('false') }}
+    is_private     = {{ is_private | safe }}
 {% if ip_mode is defined %}
-    ip_mode   = {{ ip_mode }}
+    ip_mode   = {{ ip_mode | safe }}
 {% endif %}
 {% if network_security_group_ids is defined %}
     network_security_group_ids   = {{ network_security_group_ids }}
 {% endif %}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }
 
@@ -50,35 +50,35 @@ resource "oci_load_balancer_backend_set" "{{ resource_name }}BackendSet" {
     # Required
     health_checker {
         # Required
-        protocol            = {{ protocol }}
+        protocol            = {{ protocol | safe }}
         # Optional
         interval_ms         = {{ health_check_interval | default(1000) }}
-        port                = {{ port | default(80) }}
+        port                = {{ port | safe }}
 #        response_body_regex = {{ health_check_response_regex }}
 #        retries             = {{ health_check_retries | default(100) }}
 #        return_code         = {{ health_check_return_code | default(200) }}
 #        timeout_in_millis   = {{ health_check_timeout | default(3000) }}
-        url_path            = {{ url_path | default('"/"') }}
+        url_path            = {{ url_path | safe }}
     }
     load_balancer_id = local.{{ resource_name }}_id
     name             = substr(local.{{ resource_name }}_backend_set_name, 0, 32)
-    policy           = {{ backend_policy }}
+    policy           = {{ backend_policy | safe }}
 {% if persistence_cookie_name is defined %}
     # Optional
     session_persistence_configuration {
         #Required
-        cookie_name      = {{ persistence_cookie_name }}
+        cookie_name      = {{ persistence_cookie_name | safe }}
         # Optional
-        disable_fallback = {{ disable_fallback }}
+        disable_fallback = {{ disable_fallback | safe }}
     }
 {% endif %}
 {% if ssl_certificate_name is defined %}
     ssl_configuration {
         #Required
-        certificate_name        = {{ ssl_certificate_name }}
+        certificate_name        = {{ ssl_certificate_name | safe }}
         # Optional
-        verify_depth            = {{ ssl_verify_depth }}
-        verify_peer_certificate = {{ ssl_verify_peer_certificate }}
+        verify_depth            = {{ ssl_verify_depth | safe }}
+        verify_peer_certificate = {{ ssl_verify_peer_certificate | safe }}
     }
 {% endif %}
 }
@@ -95,7 +95,7 @@ resource "oci_load_balancer_backend" "{{ resource_name }}Backend{{ loop.index }}
     backendset_name  = local.{{ resource_name }}BackendSet_name
     ip_address       = local.{{ backend_instance }}_private_ip
     load_balancer_id = local.{{ resource_name }}_id
-    port             = {{ port | default(80) }}
+    port             = {{ port | safe }}
     # Optional
 #    backup           = {{ backup }}
 #    drain            = {{ drain }}
@@ -110,22 +110,22 @@ resource "oci_load_balancer_listener" "{{ resource_name }}Listener" {
     default_backend_set_name = local.{{ resource_name }}BackendSet_name
     load_balancer_id         = local.{{ resource_name }}_id
     name                     = substr(local.{{ resource_name }}_listener_name, 0, 32)
-    port                     = {{ port | default(80) }}
-    protocol                 = {{ protocol }}
+    port                     = {{ port | safe }}
+    protocol                 = {{ protocol | safe }}
     # Optional
     connection_configuration {
         # Required
         idle_timeout_in_seconds = {{ idle_timeout | default(1200) }}
     }
-#    hostname_names           = [{{ hostnames }}]
-#    path_route_set_name      = {{ path_route_set_name }}
-#    rule_set_names           = [{{ rule_set_names }}]
+#    hostname_names           = [{{ hostnames | safe }}]
+#    path_route_set_name      = {{ path_route_set_name | safe }}
+#    rule_set_names           = [{{ rule_set_names | safe }}]
 #    ssl_configuration {
 #        # Required
-#        certificate_name        = {{ ssl_certificate_name }}
+#        certificate_name        = {{ ssl_certificate_name | safe }}
 #        # Optional
-#        verify_depth            = {{ ssl_verify_depth }}
-#        verify_peer_certificate = {{ ssl_verify_peer_certificate }}
+#        verify_depth            = {{ ssl_verify_depth | safe }}
+#        verify_peer_certificate = {{ ssl_verify_peer_certificate | safe }}
 #    }
 }
 

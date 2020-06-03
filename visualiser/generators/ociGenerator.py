@@ -25,7 +25,7 @@ from common.ociValidation import validateVisualiserJson
 logger = getLogger()
 
 class OCIGenerator(object):
-    def __init__(self, template_dir, output_dir, visualiser_json):
+    def __init__(self, template_dir, output_dir, visualiser_json, use_vars=True):
         # Initialise generator output data variables
         self.create_sequence = []
         self.run_variables = {}
@@ -34,6 +34,7 @@ class OCIGenerator(object):
         self.template_dir = template_dir
         self.output_dir = output_dir
         self.visualiser_json = visualiser_json
+        self.use_vars = use_vars
         # Check output directory
         self.getCheckOutputDirectory()
         # Read common variables
@@ -85,6 +86,9 @@ class OCIGenerator(object):
         pass
 
     def formatJinja2DhcpReference(self, resource_name):
+        pass
+
+    def formatJinja2Value(self, value):
         pass
 
     def buildIdNameMap(self):
@@ -177,6 +181,9 @@ class OCIGenerator(object):
         # -- File Storage System
         for file_storage_system in self.visualiser_json.get('file_storage_systems', []):
             self.renderFileStorageSystem(file_storage_system)
+        # -- Database Systems
+        for database_system in self.visualiser_json.get('database_systems', []):
+            self.renderDatabaseSystem(database_system)
         # -- Instances
         for instance in self.visualiser_json.get('instances', []):
             self.renderInstance(instance)
@@ -199,37 +206,21 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[autonomous_database['compartment_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = autonomous_database["display_name"]
+        self.addJinja2Variable("display_name", autonomous_database["display_name"], standardisedName)
         # ---- DB Name
-        variableName = '{0:s}_db_name'.format(standardisedName)
-        self.jinja2_variables["db_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = autonomous_database["db_name"]
+        self.addJinja2Variable("db_name", autonomous_database["db_name"], standardisedName)
         # ---- Admin Password
-        variableName = '{0:s}_admin_password'.format(standardisedName)
-        self.jinja2_variables["admin_password"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = autonomous_database["admin_password"]
+        self.addJinja2Variable("admin_password", autonomous_database["admin_password"], standardisedName)
         # ---- Storage Size In TBs
-        variableName = '{0:s}_data_storage_size_in_tbs'.format(standardisedName)
-        self.jinja2_variables["data_storage_size_in_tbs"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = autonomous_database["data_storage_size_in_tbs"]
+        self.addJinja2Variable("data_storage_size_in_tbs", autonomous_database["data_storage_size_in_tbs"], standardisedName)
         # ---- Core Count
-        variableName = '{0:s}_cpu_core_count'.format(standardisedName)
-        self.jinja2_variables["cpu_core_count"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = autonomous_database["cpu_core_count"]
+        self.addJinja2Variable("cpu_core_count", autonomous_database["cpu_core_count"], standardisedName)
         # ---- Work Load
-        variableName = '{0:s}_db_workload'.format(standardisedName)
-        self.jinja2_variables["db_workload"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = autonomous_database["db_workload"]
+        self.addJinja2Variable("db_workload", autonomous_database["db_workload"], standardisedName)
         # ---- Auto Scaling
-        variableName = '{0:s}_is_auto_scaling_enabled'.format(standardisedName)
-        self.jinja2_variables["is_auto_scaling_enabled"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = autonomous_database["is_auto_scaling_enabled"]
+        self.addJinja2Variable("is_auto_scaling_enabled", autonomous_database["is_auto_scaling_enabled"], standardisedName)
         # ---- Free Tier
-        variableName = '{0:s}_is_free_tier'.format(standardisedName)
-        self.jinja2_variables["is_free_tier"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = autonomous_database["is_free_tier"]
+        self.addJinja2Variable("is_free_tier", autonomous_database["is_free_tier"], standardisedName)
         # --- Optional
         # ---- Tags
         self.renderTags(autonomous_database)
@@ -253,26 +244,16 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume['compartment_id']]))
         # ---- Availability Domain
-        variableName = '{0:s}_availability_domain'.format(standardisedName)
-        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = block_storage_volume["availability_domain"]
+        self.addJinja2Variable("availability_domain", block_storage_volume["availability_domain"], standardisedName)
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = block_storage_volume["display_name"]
+        self.addJinja2Variable("display_name", block_storage_volume["display_name"], standardisedName)
         # ---- Backup Policy
-        variableName = '{0:s}_backup_policy'.format(standardisedName)
-        self.jinja2_variables["backup_policy"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = block_storage_volume["backup_policy"]
+        self.addJinja2Variable("backup_policy", block_storage_volume["backup_policy"], standardisedName)
         # ---- Size In GBs
-        variableName = '{0:s}_size_in_gbs'.format(standardisedName)
-        self.jinja2_variables["size_in_gbs"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = int(block_storage_volume["size_in_gbs"])
+        self.addJinja2Variable("size_in_gbs", block_storage_volume["size_in_gbs"], standardisedName)
         # --- Optional
         # ---- VPU
-        variableName = '{0:s}_vpus_per_gb'.format(standardisedName)
-        self.jinja2_variables["vpus_per_gb"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = int(block_storage_volume["vpus_per_gb"])
+        self.addJinja2Variable("vpus_per_gb", block_storage_volume["vpus_per_gb"], standardisedName)
         # ---- Tags
         self.renderTags(block_storage_volume)
 
@@ -298,13 +279,9 @@ class OCIGenerator(object):
         if not compartment["root_compartment"]:
             self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = compartment["name"]
+        self.addJinja2Variable("display_name", compartment["name"], standardisedName)
         # ---- Description
-        variableName = '{0:s}_description'.format(standardisedName)
-        self.jinja2_variables["description"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = compartment.get("description", compartment["name"])
+        self.addJinja2Variable("description", compartment.get("description", compartment["name"]), standardisedName)
         # --- Optional
         # ---- Tags
         self.renderTags(compartment)
@@ -316,14 +293,84 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderDatabaseSystem(self, database_system):
+        # Read Data
+        standardisedName = self.standardiseResourceName(database_system['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = database_system['display_name']
+        # Process Database System Data
+        logger.info('Processing Database System Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[database_system['compartment_id']]))
+        # ---- Availability Domain
+        self.addJinja2Variable("availability_domain", database_system["availability_domain"], standardisedName)
+        # ---- Display Name
+        self.addJinja2Variable("display_name", database_system["display_name"], standardisedName)
+        # ---- Subnet
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[database_system['subnet_id']]))
+        # ---- Database Edition
+        self.addJinja2Variable("database_edition", database_system["database_edition"], standardisedName)
+        # ---- Hostname
+        self.addJinja2Variable("hostname", database_system["hostname"], standardisedName)
+        # ---- Shape
+        self.addJinja2Variable("shape", database_system["shape"], standardisedName)
+        # ---- Public Keys
+        self.addJinja2Variable("ssh_public_keys", database_system["ssh_public_keys"], standardisedName)
+        # ---- Admin Password
+        self.addJinja2Variable("admin_password", database_system["db_home"]["database"]["admin_password"], standardisedName)
+        # --- Optional
+        # ---- Database Name
+        self.addJinja2Variable("db_name", database_system["db_home"]["database"]["db_name"], standardisedName)
+        # ---- Database Workload
+        self.addJinja2Variable("db_workload", database_system["db_home"]["database"]["db_workload"], standardisedName)
+        # ---- Database Version
+        self.addJinja2Variable("db_version", database_system["db_home"]["db_version"], standardisedName)
+        # ---- Data Storage Size
+        self.addJinja2Variable("data_storage_size_in_gb", database_system["data_storage_size_in_gb"], standardisedName)
+        # ---- Storage Management
+        self.addJinja2Variable("storage_management", database_system["db_system_options"]["storage_management"], standardisedName)
+        # ---- Node Count
+        self.addJinja2Variable("node_count", database_system["node_count"], standardisedName)
+        # ---- CPU Core Count
+        if database_system["cpu_core_count"] > 0:
+            self.addJinja2Variable("cpu_core_count", database_system["cpu_core_count"], standardisedName)
+        else:
+            self.removeJinja2Variable("cpu_core_count")
+        # ---- Fault Domains
+        if len(database_system["fault_domains"]) > 0:
+            if isinstance(database_system["fault_domains"], list):
+                fault_domains = database_system["fault_domains"]
+            else:
+                fault_domains = [database_system["fault_domains"]]
+            self.addJinja2Variable("fault_domains", fault_domains, standardisedName)
+        else:
+            self.removeJinja2Variable("fault_domains")
+        # ---- Cluster Name
+        if str(database_system["cluster_name"]).strip() != '':
+            self.addJinja2Variable("cluster_name", database_system["cluster_name"], standardisedName)
+        else:
+            self.removeJinja2Variable("cluster_name")
+
+        # ---- Tags
+        self.renderTags(database_system)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("database_system.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderDynamicRoutingGateway(self, dynamic_routing_gateway):
         # Read Data
         standardisedName = self.standardiseResourceName(dynamic_routing_gateway['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = dynamic_routing_gateway['display_name']
-        # Process NAT Gateway Data
-        logger.info('Processing NAT Gateway Information {0!s:s}'.format(standardisedName))
+        # Process Dynamic Routing Gateway Data
+        logger.info('Processing Dynamic Routing Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
         # ---- Compartment Id
@@ -331,9 +378,7 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = dynamic_routing_gateway["display_name"]
+        self.addJinja2Variable("display_name", dynamic_routing_gateway["display_name"], standardisedName)
         # --- Optional
         # ---- Tags
         self.renderTags(dynamic_routing_gateway)
@@ -357,63 +402,39 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['compartment_id']]))
         # ---- Availability Domain
-        variableName = '{0:s}_availability_domain'.format(standardisedName)
-        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["availability_domain"]
+        self.addJinja2Variable("availability_domain", file_storage_system["availability_domain"], standardisedName)
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["display_name"]
+        self.addJinja2Variable("display_name", file_storage_system["display_name"], standardisedName)
         # ---- Network OCID
         self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['primary_mount_target']['subnet_id']]))
         # ---- Source (CIDR)
-        variableName = '{0:s}_source'.format(standardisedName)
-        self.jinja2_variables["source"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["source"]
+        self.addJinja2Variable("source", file_storage_system["primary_export"]["export_options"]["source"], standardisedName)
         # ---- Hostname
-        variableName = '{0:s}_hostname'.format(standardisedName)
-        self.jinja2_variables["hostname_label"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system['primary_mount_target']["hostname_label"]
+        self.addJinja2Variable("hostname_label", file_storage_system['primary_mount_target']["hostname_label"], standardisedName)
         # ---- (Mount) Path
-        variableName = '{0:s}_path'.format(standardisedName)
-        self.jinja2_variables["path"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["primary_export"]["path"]
+        self.addJinja2Variable("path", file_storage_system["primary_export"]["path"], standardisedName)
         # ---- Require Privileged Source Port
-        variableName = '{0:s}_require_privileged_source_port'.format(standardisedName)
-        self.jinja2_variables["require_privileged_source_port"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["require_privileged_source_port"]
+        self.addJinja2Variable("require_privileged_source_port", file_storage_system["primary_export"]["export_options"]["require_privileged_source_port"], standardisedName)
         # ---- Access
-        variableName = '{0:s}_access'.format(standardisedName)
-        self.jinja2_variables["access"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["access"]
+        self.addJinja2Variable("access", file_storage_system["primary_export"]["export_options"]["access"], standardisedName)
         # --- Optional
         # ----- Network Security Groups
         if len(file_storage_system['primary_mount_target']["nsg_ids"]):
             self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in file_storage_system['primary_mount_target']["nsg_ids"]]
         # ----- Max FS Stat Bytes
         if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_bytes"].strip() != '':
-            variableName = '{0:s}_max_fs_stat_bytes'.format(standardisedName)
-            self.jinja2_variables["max_fs_stat_bytes"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = file_storage_system['primary_mount_target']['export_set']["max_fs_stat_bytes"]
+            self.addJinja2Variable("max_fs_stat_bytes", file_storage_system["primary_export"]["export_set"]["max_fs_stat_bytes"], standardisedName)
         # ----- Max FS Stat Files
         if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_files"].strip() != '':
-            variableName = '{0:s}_max_fs_stat_files'.format(standardisedName)
-            self.jinja2_variables["max_fs_stat_files"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = file_storage_system['primary_mount_target']['export_set']["max_fs_stat_files"]
+            self.addJinja2Variable("max_fs_stat_files", file_storage_system["primary_export"]["export_set"]["max_fs_stat_files"], standardisedName)
         # ----- Identity Squash
         if file_storage_system["primary_export"]["export_options"]["identity_squash"] != 'NONE':
             # ----- Identity Squash
-            variableName = '{0:s}_identity_squash'.format(standardisedName)
-            self.jinja2_variables["identity_squash"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["identity_squash"]
+            self.addJinja2Variable("identity_squash", file_storage_system["primary_export"]["export_options"]["identity_squash"], standardisedName)
             # ----- Identity Squash GID
-            variableName = '{0:s}_anonymous_gid'.format(standardisedName)
-            self.jinja2_variables["anonymous_gid"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["anonymous_gid"]
+            self.addJinja2Variable("anonymous_gid", file_storage_system["primary_export"]["export_options"]["anonymous_gid"], standardisedName)
             # ----- Identity Squash UID
-            variableName = '{0:s}_anonymous_uid'.format(standardisedName)
-            self.jinja2_variables["anonymous_uid"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = file_storage_system["primary_export"]["export_options"]["anonymous_uid"]
+            self.addJinja2Variable("anonymous_uid", file_storage_system["primary_export"]["export_options"]["anonymous_uid"], standardisedName)
         # ---- Tags
         self.renderTags(file_storage_system)
 
@@ -436,67 +457,41 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance['compartment_id']]))
         # ---- Availability Domain
-        variableName = '{0:s}_availability_domain'.format(standardisedName)
-        self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["availability_domain"]
+        self.addJinja2Variable("availability_domain", instance["availability_domain"], standardisedName)
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["display_name"]
+        self.addJinja2Variable("display_name", instance["display_name"], standardisedName)
         # ---- Shape
-        variableName = '{0:s}_shape'.format(standardisedName)
-        self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["shape"]
+        self.addJinja2Variable("shape", instance["shape"], standardisedName)
         # ---- Source Details
         # ----- Source Type
-        variableName = '{0:s}_source_type'.format(standardisedName)
-        self.jinja2_variables["source_type"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["source_details"]["source_type"]
+        self.addJinja2Variable("source_type", instance["source_details"]["source_type"], standardisedName)
         # ----- Operating System
-        variableName = '{0:s}_os'.format(standardisedName)
-        self.jinja2_variables["os"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["source_details"]["os"]
+        self.addJinja2Variable("os", instance["source_details"]["os"], standardisedName)
         # ----- Operating System Version
-        variableName = '{0:s}_os_version'.format(standardisedName)
-        self.jinja2_variables["os_version"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["source_details"]["version"]
+        self.addJinja2Variable("os_version", instance["source_details"]["version"], standardisedName)
         # ----- Boot Volume Size
-        variableName = '{0:s}_boot_volume_size_in_gbs'.format(standardisedName)
-        self.jinja2_variables["boot_volume_size_in_gbs"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = int(instance["source_details"]["boot_volume_size_in_gbs"])
+        self.addJinja2Variable("boot_volume_size_in_gbs", instance["source_details"]["boot_volume_size_in_gbs"], standardisedName)
         # --- Optional
         # ---- Primary VNIC
         # ----- Subnet OCID
         self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[instance["vnics"][0]["subnet_id"]]))
         # ----- Display Name (Vnic)
-        variableName = '{0:s}_display_name_vnic'.format(standardisedName)
-        self.jinja2_variables["display_name_vnic"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = '{0!s:s} vnic 00'.format(instance["display_name"])
+        self.addJinja2Variable("display_name_vnic", '{0!s:s} vnic 00'.format(instance["display_name"]), standardisedName)
         # ---- Hostname
-        variableName = '{0:s}_hostname_label'.format(standardisedName)
-        self.jinja2_variables["hostname_label"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["vnics"][0]["hostname_label"]
+        self.addJinja2Variable("hostname_label", instance["vnics"][0]["hostname_label"], standardisedName)
         # ----- Assign Public IP
-        variableName = '{0:s}_primary_vnic_assign_public'.format(standardisedName)
-        self.jinja2_variables["assign_public_ip"] = self.formatJinja2Variable(variableName)
         subnet = self.get("subnets", instance["vnics"][0]["subnet_id"])
-        self.run_variables[variableName] = (instance["vnics"][0]["assign_public_ip"] and (not subnet["prohibit_public_ip_on_vnic"]))
+        self.addJinja2Variable("assign_public_ip", (instance["vnics"][0]["assign_public_ip"] and (not subnet["prohibit_public_ip_on_vnic"])), standardisedName)
         # ----- Skip Source/destination Check
-        variableName = '{0:s}_primary_vnic_skip_src_dst_check'.format(standardisedName)
-        self.jinja2_variables["skip_source_dest_check"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["vnics"][0]["skip_source_dest_check"]
+        self.addJinja2Variable("skip_source_dest_check", instance["vnics"][0]["skip_source_dest_check"], standardisedName)
         # ----- Network Security Groups
         if len(instance["vnics"][0]["nsg_ids"]):
             self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in instance["vnics"][0]["nsg_ids"]]
         # ---- Metadata
         # ----- Authorised Public SSH Keys
-        variableName = '{0:s}_authorized_keys'.format(standardisedName)
-        self.jinja2_variables["authorized_keys"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["metadata"]["authorized_keys"]
+        self.addJinja2Variable("authorized_keys", instance["metadata"]["authorized_keys"], standardisedName)
         # ----- Cloud Init YAML
-        variableName = '{0:s}_user_data'.format(standardisedName)
-        self.jinja2_variables["user_data"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["metadata"]["user_data"].replace('\n', '\\n').replace('"', '\\"')
+        self.addJinja2Variable("user_data", instance["metadata"]["user_data"].replace('\n', '\\n').replace('"', '\\"'), standardisedName)
         # ---- Volume Attachments
         attachment_number = 1
         jinja2_volume_attachments = []
@@ -553,15 +548,11 @@ class OCIGenerator(object):
         self.jinja2_variables["vnic_attachments"] = jinja2_vnic_attachments
         # ---- Fault Domain
         if instance.get('fault_domain', '') != '':
-            variableName = '{0:s}_fault_domain'.format(standardisedName)
-            self.jinja2_variables["fault_domain"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = instance["fault_domain"]
+            self.addJinja2Variable("fault_domain", instance["fault_domain"], standardisedName)
         else:
             self.jinja2_variables.pop("fault_domain", None)
         # ---- Preserve Boot Volume
-        variableName = '{0:s}_preserve_boot_volume'.format(standardisedName)
-        self.jinja2_variables["preserve_boot_volume"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = instance["preserve_boot_volume"]
+        self.addJinja2Variable("preserve_boot_volume", instance["preserve_boot_volume"], standardisedName)
         # ---- Tags
         self.renderTags(instance)
 
@@ -587,13 +578,9 @@ class OCIGenerator(object):
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[internet_gateway['vcn_id']]))
         # --- Optional
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = internet_gateway["display_name"]
+        self.addJinja2Variable("display_name", internet_gateway["display_name"], standardisedName)
         # ---- Enabled
-        variableName = '{0:s}_enabled'.format(standardisedName)
-        self.jinja2_variables["enabled"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = internet_gateway["enabled"]
+        self.addJinja2Variable("enabled", internet_gateway["enabled"], standardisedName)
         # ---- Tags
         self.renderTags(internet_gateway)
 
@@ -617,13 +604,11 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[loadbalancer['compartment_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = loadbalancer["display_name"]
+        self.addJinja2Variable("display_name", loadbalancer["display_name"], standardisedName)
         # ---- Shape
-        variableName = '{0:s}_shape'.format(standardisedName)
-        self.jinja2_variables["shape"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = loadbalancer["shape_name"]
+        self.addJinja2Variable("shape", loadbalancer["shape"], standardisedName)
+        # ---- Private
+        self.addJinja2Variable("is_private", loadbalancer["is_private"], standardisedName)
         # ---- Subnets
         jinja2_subnet_ids = []
         for subnet_id in loadbalancer.get('subnet_ids', []):
@@ -635,24 +620,18 @@ class OCIGenerator(object):
             jinja2_backend_instances_resource_names.append(self.standardiseResourceName(self.id_name_map[backend_instance_id]))
         self.jinja2_variables["backend_instances"] = jinja2_backend_instances_resource_names
         # ---- Protocol
-        variableName = '{0:s}_protocol'.format(standardisedName)
-        self.jinja2_variables["protocol"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = loadbalancer["protocol"]
+        self.addJinja2Variable("protocol", loadbalancer["protocol"], standardisedName)
+        # ---- Port
+        self.addJinja2Variable("port", loadbalancer["port"], standardisedName)
         # ---- Backend Policy
-        variableName = '{0:s}_backend_policy'.format(standardisedName)
-        self.jinja2_variables["backend_policy"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = loadbalancer["backend_policy"]
+        self.addJinja2Variable("backend_policy", loadbalancer["backend_policy"], standardisedName)
         # ---- Health Checker
         # ----- URL Path
-        variableName = '{0:s}_url_path'.format(standardisedName)
-        self.jinja2_variables["url_path"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = loadbalancer["health_checker"]["url_path"]
+        self.addJinja2Variable("url_path", loadbalancer["health_checker"]["url_path"], standardisedName)
         # --- Optional
         # ---- IP Mode
         if loadbalancer.get('ip_mode', '') != '':
-            variableName = '{0:s}_ip_mode'.format(standardisedName)
-            self.jinja2_variables["ip_mode"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = loadbalancer["ip_mode"]
+            self.addJinja2Variable("ip_mode", loadbalancer["ip_mode"], standardisedName)
         # ---- Network Security Groups
         if len(loadbalancer['network_security_group_ids']):
             jinja2_network_security_group_ids = []
@@ -686,9 +665,7 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = local_peering_gateway["display_name"]
+        self.addJinja2Variable("display_name", local_peering_gateway["display_name"], standardisedName)
         # ---- Route Table
         self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['route_table_id']]))
         # ---- Remote Peering gateway
@@ -721,14 +698,10 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[nat_gateway['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = nat_gateway["display_name"]
+        self.addJinja2Variable("display_name", nat_gateway["display_name"], standardisedName)
         # --- Optional
         # ---- Block Traffic
-        variableName = '{0:s}_block_traffic'.format(standardisedName)
-        self.jinja2_variables["block_traffic"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = nat_gateway["block_traffic"]
+        self.addJinja2Variable("block_traffic", nat_gateway["block_traffic"], standardisedName)
         # ---- Tags
         self.renderTags(nat_gateway)
 
@@ -753,9 +726,7 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[network_security_group['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = network_security_group["display_name"]
+        self.addJinja2Variable("display_name", network_security_group["display_name"], standardisedName)
         # --- Optional
         # ---- Security Rules
         rule_number = 1
@@ -832,25 +803,15 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[object_storage_bucket['compartment_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["display_name"]
+        self.addJinja2Variable("display_name", object_storage_bucket["display_name"], standardisedName)
         # ---- Namespace
-        variableName = '{0:s}_namespace'.format(standardisedName)
-        self.jinja2_variables["namespace"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["namespace"]
+        self.addJinja2Variable("namespace", object_storage_bucket["namespace"], standardisedName)
         # ---- Name
-        variableName = '{0:s}_name'.format(standardisedName)
-        self.jinja2_variables["name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["name"]
+        self.addJinja2Variable("name", object_storage_bucket["name"], standardisedName)
         # ---- Storage Tier
-        variableName = '{0:s}_storage_tier'.format(standardisedName)
-        self.jinja2_variables["storage_tier"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["storage_tier"]
+        self.addJinja2Variable("storage_tier", object_storage_bucket["storage_tier"], standardisedName)
         # ---- Public Access Type
-        variableName = '{0:s}_public_access_type'.format(standardisedName)
-        self.jinja2_variables["public_access_type"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = object_storage_bucket["public_access_type"]
+        self.addJinja2Variable("public_access_type", object_storage_bucket["public_access_type"], standardisedName)
         # --- Optional
         # ---- Tags
         self.renderTags(object_storage_bucket)
@@ -876,31 +837,22 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = route_table["display_name"]
+        self.addJinja2Variable("display_name", route_table["display_name"], standardisedName)
         # ---- Route Rules
         rule_number = 1
         jinja2_route_rules = []
         for route_rule in route_table.get('route_rules', []):
+            jinja2_route_rule = {}
             # ------ Network End Point
-            variableName = '{0:s}_route_rule_{1:02d}_network_entity_id'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule["network_entity_id"]
-            jinja2_route_rule = {
-                "network_entity_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
-            }
+            #variableName = '{0:s}_route_rule_{1:02d}_network_entity_id'.format(standardisedName, rule_number)
+            #self.run_variables[variableName] = route_rule["network_entity_id"]
+            jinja2_route_rule["network_entity_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             # ------ Destination
-            variableName = '{0:s}_route_rule_{1:02d}_destination'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule["destination"]
-            jinja2_route_rule["destination"] = self.formatJinja2Variable(variableName)
+            jinja2_route_rule["destination"] = self.generateJinja2Variable('route_rule_{0:02d}_destination'.format(rule_number), route_rule["destination"], standardisedName)
             # ------ Destination Type
-            variableName = '{0:s}_route_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule["destination_type"]
-            jinja2_route_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            jinja2_route_rule["destination_type"] = self.generateJinja2Variable('route_rule_{0:02d}_destination_type'.format(rule_number), route_rule["destination_type"], standardisedName)
             # ------ Description
-            variableName = '{0:s}_route_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = route_rule.get("description", "Rule {0:02d}".format(rule_number))
-            jinja2_route_rule["description"] = self.formatJinja2Variable(variableName)
+            jinja2_route_rule["description"] = self.generateJinja2Variable('route_rule_{0:02d}_description'.format(rule_number), route_rule.get("description", "Rule {0:02d}".format(rule_number)), standardisedName)
             # Add to Egress Rules used for Jinja template
             jinja2_route_rules.append(jinja2_route_rule)
             # Increment rule number
@@ -931,20 +883,15 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = security_list["display_name"]
+        self.addJinja2Variable("display_name", security_list["display_name"], standardisedName)
         # --- Optional
         # ---- Egress Rules
         rule_number = 1
         jinja2_egress_rules = []
         for rule in security_list.get('egress_security_rules', []):
+            jinja2_egress_rule = {}
             # ------ Protocol
-            variableName = '{0:s}_egress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["protocol"]
-            jinja2_egress_rule = {
-                "protocol": self.formatJinja2Variable(variableName)
-            }
+            jinja2_egress_rule["protocol"] = self.generateJinja2Variable('egress_rule_{0:02d}_protocol'.format(rule_number), rule["protocol"], standardisedName)
             # ------ TCP Options (Protocol 6)
             if rule["protocol"] == '6' and 'tcp_options' in rule and rule["tcp_options"] is not None:
                 tcp_options = self.renderSecurityListRuleOptions(rule, 'tcp_options', standardisedName, rule_number, 'egress')
@@ -958,17 +905,11 @@ class OCIGenerator(object):
                 icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'egress')
                 jinja2_egress_rule["icmp_options"] = icmp_options
             # ------ Destination
-            variableName = '{0:s}_egress_rule_{1:02d}_destination'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["destination"]
-            jinja2_egress_rule["destination"] = self.formatJinja2Variable(variableName)
+            jinja2_egress_rule["destination"] = self.generateJinja2Variable('egress_rule_{0:02d}_destination'.format(rule_number), rule["destination"], standardisedName)
             # ------ Destination Type
-            variableName = '{0:s}_egress_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["destination_type"]
-            jinja2_egress_rule["destination_type"] = self.formatJinja2Variable(variableName)
+            jinja2_egress_rule["destination_type"] = self.generateJinja2Variable('egress_rule_{0:02d}_destination_type'.format(rule_number), rule["destination_type"], standardisedName)
             # ------ Description
-            variableName = '{0:s}_egress_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule.get("description", "Egress Rule {0:02d}".format(rule_number))
-            jinja2_egress_rule["description"] = self.formatJinja2Variable(variableName)
+            jinja2_egress_rule["description"] = self.generateJinja2Variable('egress_rule_{0:02d}_description'.format(rule_number), rule.get("description", "Egress Rule {0:02d}".format(rule_number)), standardisedName)
             # Add to Egress Rules used for Jinja template
             jinja2_egress_rules.append(jinja2_egress_rule)
             # Increment rule number
@@ -978,12 +919,9 @@ class OCIGenerator(object):
         rule_number = 1
         jinja2_ingress_rules = []
         for rule in security_list.get('ingress_security_rules', []):
+            jinja2_ingress_rule = {}
             # ------ Protocol
-            variableName = '{0:s}_ingress_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["protocol"]
-            jinja2_ingress_rule = {
-                "protocol": self.formatJinja2Variable(variableName)
-            }
+            jinja2_ingress_rule["protocol"] = self.generateJinja2Variable('ingress_rule_{0:02d}_protocol'.format(rule_number), rule["protocol"], standardisedName)
             # ------ TCP Options (Protocol 6)
             if rule["protocol"] == '6' and 'tcp_options' in rule and rule['tcp_options'] is not None:
                 tcp_options = self.renderSecurityListRuleOptions(rule, 'tcp_options', standardisedName, rule_number, 'ingress')
@@ -997,17 +935,11 @@ class OCIGenerator(object):
                 icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'ingress')
                 jinja2_ingress_rule["icmp_options"] = icmp_options
             # ------ Source Type
-            variableName = '{0:s}_ingress_rule_{1:02d}_source_type'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["source_type"]
-            jinja2_ingress_rule["source_type"] = self.formatJinja2Variable(variableName)
+            jinja2_ingress_rule["source_type"] = self.generateJinja2Variable('ingress_rule_{0:02d}_source_type'.format(rule_number), rule["source_type"], standardisedName)
             # ------ Source
-            variableName = '{0:s}_ingress_rule_{1:02d}_source'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["source"]
-            jinja2_ingress_rule["source"] = self.formatJinja2Variable(variableName)
+            jinja2_ingress_rule["source"] = self.generateJinja2Variable('ingress_rule_{0:02d}_source'.format(rule_number), rule["source"], standardisedName)
             # ------ Description
-            variableName = '{0:s}_ingress_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule.get("description", "Ingress Rule {0:02d}".format(rule_number))
-            jinja2_ingress_rule["description"] = self.formatJinja2Variable(variableName)
+            jinja2_ingress_rule["description"] = self.generateJinja2Variable('ingress_rule_{0:02d}_description'.format(rule_number), rule.get("description", "Ingress Rule {0:02d}".format(rule_number)), standardisedName)
             # Add to Ingress Rules used for Jinja template
             jinja2_ingress_rules.append(jinja2_ingress_rule)
             # Increment rule number
@@ -1025,16 +957,12 @@ class OCIGenerator(object):
     def renderSecurityListRuleOptions(self, rule, element, standardisedName, rule_number, rule_type):
         options = {}
         if element == 'icmp_options':
-            if 'type' in rule["icmp_options"] and  rule["icmp_options"]["type"] != '' and rule["icmp_options"]["type"] is not None:
+            if 'type' in rule["icmp_options"] and rule["icmp_options"]["type"] != '' and rule["icmp_options"]["type"] is not None:
                 # Type
-                variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_icmp_type'.format(standardisedName, rule_type, rule_number)
-                self.run_variables[variableName] = rule["icmp_options"]["type"]
-                options['type'] = self.formatJinja2Variable(variableName)
+                options['type'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_icmp_type'.format(rule_type, rule_number), rule["icmp_options"]["type"], standardisedName)
                 # Code
                 if 'code' in rule["icmp_options"] and rule["icmp_options"]["code"] != '' and rule["icmp_options"]["code"] is not None:
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_icmp_code'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule["icmp_options"]["code"]
-                    options['code'] = self.formatJinja2Variable(variableName)
+                    options['code'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_icmp_code'.format(rule_type, rule_number), rule["icmp_options"]["code"], standardisedName)
         else:
             if 'destination_port_range' in rule[element] and rule[element]['destination_port_range'] is not None:
                 # If min or max is missing and if so set to the other
@@ -1046,13 +974,9 @@ class OCIGenerator(object):
                     # We have a range
                     options['destination_port_range'] = {}
                     # Min
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_tcp_dst_min'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule[element]['destination_port_range']['min']
-                    options['destination_port_range']['min'] = self.formatJinja2Variable(variableName)
+                    options['destination_port_range']['min'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_tcp_dst_min'.format(rule_type, rule_number), rule[element]['destination_port_range']['min'], standardisedName)
                     # Max
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_tcp_dst_max'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule[element]['destination_port_range']['max']
-                    options['destination_port_range']['max'] = self.formatJinja2Variable(variableName)
+                    options['destination_port_range']['max'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_tcp_dst_max'.format(rule_type, rule_number), rule[element]['destination_port_range']['max'], standardisedName)
             if 'source_port_range' in rule[element] and rule[element]['source_port_range'] is not None:
                 # If min or max is missing and if so set to the other
                 if rule[element]['source_port_range']['max'] == '':
@@ -1063,13 +987,9 @@ class OCIGenerator(object):
                     # We have a range
                     options['source_port_range'] = {}
                     # Min
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_tcp_src_min'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule[element]['source_port_range']['min']
-                    options['source_port_range']['min'] = self.formatJinja2Variable(variableName)
+                    options['source_port_range']['min'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_tcp_src_min'.format(rule_type, rule_number), rule[element]['source_port_range']['min'], standardisedName)
                     # Max
-                    variableName = '{0!s:s}_{1!s:s}_rule_{2:02d}_tcp_src_max'.format(standardisedName, rule_type, rule_number)
-                    self.run_variables[variableName] = rule[element]['source_port_range']['max']
-                    options['source_port_range']['max'] = self.formatJinja2Variable(variableName)
+                    options['source_port_range']['max'] = self.generateJinja2Variable('{0!s:s}_rule_{1:02d}_tcp_src_max'.format(rule_type, rule_number), rule[element]['source_port_range']['max'], standardisedName)
         return options
 
     def renderServiceGateway(self, service_gateway):
@@ -1087,13 +1007,9 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = service_gateway["display_name"]
+        self.addJinja2Variable("display_name", service_gateway["display_name"], standardisedName)
         # ---- Service Name
-        variableName = '{0:s}_service_name'.format(standardisedName)
-        self.jinja2_variables["service_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = service_gateway["service_name"]
+        self.addJinja2Variable("service_name", service_gateway["service_name"], standardisedName)
         # --- Optional
         # ---- Route Table
         if len(service_gateway['route_table_id']):
@@ -1124,17 +1040,11 @@ class OCIGenerator(object):
         # ---- Virtual Cloud Network OCID
         self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["display_name"]
+        self.addJinja2Variable("display_name", subnet["display_name"], standardisedName)
         # ---- CIDR Block
-        variableName = '{0:s}_cidr_block'.format(standardisedName)
-        self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["cidr_block"]
+        self.addJinja2Variable("cidr_block", subnet["cidr_block"], standardisedName)
         # ---- DNS Label
-        variableName = '{0:s}_dns_label'.format(standardisedName)
-        self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["dns_label"]
+        self.addJinja2Variable("dns_label", subnet["dns_label"], standardisedName)
         # ---- Route Table
         if len(subnet['route_table_id']):
             self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['route_table_id']]))
@@ -1156,24 +1066,18 @@ class OCIGenerator(object):
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # --- Optional
         # ---- Availability Domain
-        if int(str(subnet.get("availability_domain", "0"))) > 0:
-            variableName = '{0:s}_availability_domain'.format(standardisedName)
-            self.jinja2_variables["availability_domain"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = subnet["availability_domain"]
+        if subnet.get("availability_domain", None) is not None and int(subnet["availability_domain"]) > 0:
+            self.addJinja2Variable("availability_domain", subnet["availability_domain"], standardisedName)
         else:
             self.jinja2_variables.pop("availability_domain", None)
         # ---- Prohibit Public IP
-        variableName = '{0:s}_prohibit_public_ip_on_vnic'.format(standardisedName)
-        self.jinja2_variables["prohibit_public_ip_on_vnic"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = subnet["prohibit_public_ip_on_vnic"]
+        self.addJinja2Variable("prohibit_public_ip_on_vnic", subnet["prohibit_public_ip_on_vnic"], standardisedName)
         # ---- IPv6
         if subnet['is_ipv6enabled']:
-            variableName = '{0:s}_is_ipv6enabled'.format(standardisedName)
-            self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = subnet['is_ipv6enabled']
-            variableName = '{0:s}_ipv6cidr_block'.format(standardisedName)
-            self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = subnet['ipv6cidr_block']
+            # ----- Enabled
+            self.addJinja2Variable("is_ipv6enabled", subnet["is_ipv6enabled"], standardisedName)
+            # ----- Block
+            self.addJinja2Variable("ipv6cidr_block", subnet["ipv6cidr_block"], standardisedName)
         else:
             self.jinja2_variables.pop("is_ipv6enabled", None)
             self.jinja2_variables.pop("ipv6cidr_block", None)
@@ -1199,26 +1103,18 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[virtual_cloud_network['compartment_id']]))
         # ---- CIDR Block
-        variableName = '{0:s}_cidr_block'.format(standardisedName)
-        self.jinja2_variables["cidr_block"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["cidr_block"]
+        self.addJinja2Variable("cidr_block", virtual_cloud_network["cidr_block"], standardisedName)
         # ---- Display Name
-        variableName = '{0:s}_display_name'.format(standardisedName)
-        self.jinja2_variables["display_name"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["display_name"]
+        self.addJinja2Variable("display_name", virtual_cloud_network["display_name"], standardisedName)
         # ---- DNS Label
-        variableName = '{0:s}_dns_label'.format(standardisedName)
-        self.jinja2_variables["dns_label"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = virtual_cloud_network["dns_label"]
+        self.addJinja2Variable("dns_label", virtual_cloud_network["dns_label"], standardisedName)
         # --- Optional
         # ---- IPv6
         if virtual_cloud_network['is_ipv6enabled']:
-            variableName = '{0:s}_is_ipv6enabled'.format(standardisedName)
-            self.jinja2_variables["is_ipv6enabled"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = virtual_cloud_network['is_ipv6enabled']
-            variableName = '{0:s}_ipv6cidr_block'.format(standardisedName)
-            self.jinja2_variables["ipv6cidr_block"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = virtual_cloud_network['ipv6cidr_block']
+            # ----- Enabled
+            self.addJinja2Variable("is_ipv6enabled", virtual_cloud_network["is_ipv6enabled"], standardisedName)
+            # ----- Block
+            self.addJinja2Variable("ipv6cidr_block", virtual_cloud_network["ipv6cidr_block"], standardisedName)
         else:
             self.jinja2_variables.pop("is_ipv6enabled", None)
             self.jinja2_variables.pop("ipv6cidr_block", None)
@@ -1231,22 +1127,22 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    # TODO: Delete
-    def renderTags1(self, artifact):
-        standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
-        # -- Freeform Tags
-        variableName = '{0:s}_freeform_tags'.format(standardisedName)
-        self.jinja2_variables["freeform_tags"] = self.formatJinja2Variable(variableName)
-        self.run_variables[variableName] = artifact.get("freeform_tags", {})
-        # -- Defined Tags
-        variableName = '{0:s}_defined_tags'.format(standardisedName)
-        self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
-        definedtags = {}
-        for namespace, tags in artifact.get("defined_tags", {}).items():
-            for key, value in tags.items():
-                definedtags["{0!s:s}.{1!s:s}".format(namespace, key)] = str(value)
-        self.run_variables[variableName] = definedtags
+    def addJinja2Variable(self, name, value, resource):
+        self.jinja2_variables[name] = self.generateJinja2Variable(name, value, resource)
         return
+
+    def removeJinja2Variable(self, name):
+        self.jinja2_variables.pop(name, None)
+        return
+
+    def generateJinja2Variable(self, name, value, resource):
+        # We will assume that Variables are not being used
+        jinja2_var = self.formatJinja2Value(value)
+        if self.use_vars:
+            variableName = '{0!s:s}_{1!s:s}'.format(resource, name)
+            self.run_variables[variableName] = value
+            jinja2_var = self.formatJinja2Variable(variableName)
+        return jinja2_var
 
     def renderTags(self, artifact):
         # -- Defined Tags
@@ -1258,21 +1154,31 @@ class OCIGenerator(object):
     def renderDefinedTags(self, artifact):
         tags = artifact.get("defined_tags", {})
         if len(tags.keys()) > 0:
-            standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
-            # -- Defined Tags
-            variableName = '{0:s}_defined_tags'.format(standardisedName)
-            self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = tags
+            if self.use_vars:
+                standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+                # -- Defined Tags
+                variableName = '{0:s}_defined_tags'.format(standardisedName)
+                self.run_variables[variableName] = tags
+                self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["defined_tags"] = self.formatJinja2Value(tags)
+        else:
+            self.jinja2_variables.pop("defined_tags", None)
         return
 
     def renderFreeformTags(self, artifact):
         tags = artifact.get("freeform_tags", {})
         if len(tags.keys()) > 0:
-            standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
-            # -- Freeform Tags
-            variableName = '{0:s}_freeform_tags'.format(standardisedName)
-            self.jinja2_variables["freeform_tags"] = self.formatJinja2Variable(variableName)
-            self.run_variables[variableName] = tags
+            if self.use_vars:
+                standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+                # -- Freeform Tags
+                variableName = '{0:s}_freeform_tags'.format(standardisedName)
+                self.run_variables[variableName] = tags
+                self.jinja2_variables["freeform_tags"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["freeform_tags"] = self.formatJinja2Value(tags)
+        else:
+            self.jinja2_variables.pop("freeform_tags", None)
         return
 
     def standardiseResourceName(self, name):

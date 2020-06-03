@@ -8,21 +8,21 @@
         # Required
         compartment_id: "{{ compartment_id }}"
         admin_password: "{{ admin_password }}"
-        data_storage_size_in_tbs: "{{ data_storage_size_in_tbs }}"
-        cpu_core_count: "{{ cpu_core_count }}"
-        db_name: "{{ db_name }}"
+        data_storage_size_in_tbs: "{{ data_storage_size_in_tbs | safe }}"
+        cpu_core_count: "{{ cpu_core_count | safe }}"
+        db_name: "{{ db_name | safe }}"
         # Optional
-        display_name: "{{ display_name }}"
+        display_name: "{{ display_name | safe }}"
         #initial_data_storage_size_in_tbs: 2
-        #license_model: "{{ license_model }}"
+        #license_model: "{{ license_model | safe }}"
         #node_count: 1
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
-      when: {{ db_workload | replace('{{ ', '') | replace(' }}', '') }} == "OLTP"
+      when: {{ db_workload | safe | replace('{{ ', '') | replace(' }}', '') }} == "OLTP"
       register: {{ resource_name }}
 
     - set_fact:
@@ -36,22 +36,22 @@
         state:  "{{ '{{' }} state | default('present') {{ '}}' }}"
         # Required
         compartment_id: "{{ compartment_ocid }}"
-        admin_password: "{{ admin_password }}"
-        data_storage_size_in_tbs: "{{ data_storage_size_in_tbs }}"
-        cpu_core_count: "{{ cpu_core_count }}"
-        db_name: "{{ db_name }}"
+        admin_password: "{{ admin_password | safe }}"
+        data_storage_size_in_tbs: "{{ data_storage_size_in_tbs | safe }}"
+        cpu_core_count: "{{ cpu_core_count | safe }}"
+        db_name: "{{ db_name | safe }}"
         # Optional
-        display_name: "{{ display_name }}"
+        display_name: "{{ display_name | safe }}"
         #initial_data_storage_size_in_tbs: 2
-        #license_model: "{{ license_model }}"
+        #license_model: "{{ license_model | safe }}"
         #node_count: 1
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
-      when: {{ db_workload | replace('{{ ', '') | replace(' }}', '') }} != "OLTP"
+      when: {{ db_workload | safe | replace('{{ ', '') | replace(' }}', '') }} != "OLTP"
       register: {{ resource_name }}
 
     - set_fact:

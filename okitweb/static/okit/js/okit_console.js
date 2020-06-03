@@ -4,11 +4,22 @@
 */
 console.info('Loaded Console Javascript');
 
-const okitVersion = '0.5.1';
-const okitReleaseDate = '18th May 2020';
+const okitVersion = '0.6.0';
+const okitReleaseDate = '3rd June 2020';
 
 function hideNavMenu() {
     $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
+}
+
+function checkForUpdate() {
+    $.getJSON('https://raw.githubusercontent.com/oracle/oci-designer-toolkit/master/okitweb/static/okit/json/release.json', function(resp) {
+        console.info(resp);
+        if (resp.release > okitVersion) {
+            console.info('OKIT Update Available');
+            $(jqId('okit_update')).text(`Update: OKIT ${resp.release} Available for Download`);
+            $(jqId('okit_update')).attr(`href`, `https://github.com/oracle/oci-designer-toolkit/tree/${resp.tag}`);
+        }
+    });
 }
 
 $(document).ready(function() {
@@ -50,5 +61,7 @@ $(document).ready(function() {
         $slideout.css('top', menu_pos.top);
         $slideout.css('left', menu_pos.left + width);
     });
+
+    checkForUpdate();
 
 });

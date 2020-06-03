@@ -12,9 +12,23 @@ if (typeof JSON.clone !== "function") {
     };
 }
 
+let selectedArtefact = null;
+
 /*
 ** Define OKIT Artifact Classes
  */
+class OkitOCIConfig {
+    constructor() {
+        this.load();
+    }
+
+    load() {
+        let me = this;
+        $.getJSON('config/sections', function(resp) {$.extend(true, me, resp);console.info('Sections Response '+resp);});
+        console.info(this);
+    }
+}
+
 class OkitOCIData {
     constructor() {
         this.load();
@@ -23,26 +37,6 @@ class OkitOCIData {
     load() {
         let me = this;
         $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); console.info(me); me.query();});
-        /*
-        $.ajax({
-            type: 'get',
-            url: 'dropdown/data',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(this),
-            success: function(resp) {
-                console.info('Response : ' + resp);
-                $.extend(true, me, resp);
-                console.info(me);
-                me.query();
-            },
-            error: function(xhr, status, error) {
-                console.warn('Status : '+ status)
-                console.warn('Error : '+ error)
-            }
-        });
-
-         */
     }
 
     save() {
@@ -65,26 +59,35 @@ class OkitOCIData {
     query() {
         let me = this;
         $.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
-        /*
-        $.ajax({
-            type: 'get',
-            url: 'dropdown/query',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(this),
-            success: function(resp) {
-                console.info('Response : ' + resp);
-                $.extend(true, me, resp);
-                me.save();
-                console.info(me);
-            },
-            error: function(xhr, status, error) {
-                console.warn('Status : '+ status)
-                console.warn('Error : '+ error)
-            }
-        });
+    }
 
-         */
+    /*
+    ** Get functions to retrieve drop-down data.
+     */
+
+    getDBSystemShapes(family='') {
+        if (family === '') {
+            return this.db_system_shapes;
+        } else {
+            return this.db_system_shapes.filter(function(dss) {return dss.shape_family === family;});
+        }
+    }
+
+    getDBSystemShape(shape) {
+        console.log('Get DB Shape ' + shape);
+        return this.db_system_shapes.filter(function(dss) {return dss.shape === shape;})[0];
+    }
+
+    getDBVersions() {
+        return this.db_versions;
+    }
+
+    getInstanceShapes(type='') {
+        if (type === '') {
+            return this.shapes;
+        } else {
+            return this.shapes.filter(function(s) {return s.shape.startsWith(type);});
+        }
     }
 }
 
@@ -97,6 +100,8 @@ class OkitSettings {
         this.is_always_free = false;
         this.is_optional_expanded = true;
         this.is_display_grid = false;
+        this.is_variables = true;
+        this.icons_only = true;
         this.load();
     }
 
@@ -206,15 +211,44 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'is_optional_expanded')
             .text('Auto Expanded Advanced');
+        // Generate Variables File
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_variables')
+            .attr('name', 'is_variables')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_variables)
+            .on('change', function () {
+                //me.is_optional_expanded = $(this).is(':checked');
+            });
+        td.append('label')
+            .attr('for', 'is_variables')
+            .text('Use Variables in Generate');
         // Config Profile
         tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('Profile');
+        tr.append('div').attr('class', 'td').text('Default Connection Profile');
+        /*
         tr.append('div').attr('class', 'td').append('input')
             .attr('class', 'okit-input')
             .attr('id', 'profile')
             .attr('name', 'profile')
             .attr('type', 'text')
             .attr('value', this.profile);
+
+         */
+        let profile_select = tr.append('div')
+            .attr('class', 'td')
+            .append('select')
+            .attr('id', 'profile');
+        for (let section of okitOciConfig.sections) {
+            profile_select.append('option')
+                .attr('value', section)
+                .text(section);
+        }
+        $(jqId('profile')).val(this.profile);
+        // Footer
         d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
             .attr('id', 'save_as_button')
             .attr('type', 'button')
@@ -226,6 +260,7 @@ class OkitSettings {
                 me.is_always_free = $(jqId('is_always_free')).is(':checked');
                 me.is_timestamp_files = $(jqId('is_timestamp_files')).is(':checked');
                 me.is_optional_expanded = $(jqId('is_optional_expanded')).is(':checked');
+                me.is_variables = $(jqId('is_variables')).is(':checked');
                 me.profile = $(jqId('profile')).val();
                 me.save();
                 $(jqId('modal_dialog_wrapper')).addClass('hidden');
@@ -343,6 +378,9 @@ class OkitArtifact {
         let me = this;
         svg.on("click", function() {
             me.loadProperties();
+            $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
+            $(jqId(me.id)).toggleClass('highlight');
+            $(jqId(me.id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
             d3.event.stopPropagation();
         });
         console.groupEnd();
@@ -852,6 +890,14 @@ class OkitArtifact {
         return sourceid + '-' + destinationid;
     }
 
+    getAvailabilityDomainNumber(availability_domain) {
+        if (availability_domain) {
+            return availability_domain.slice(-1);
+        } else {
+            return availability_domain;
+        }
+    }
+
 
     /*
     ** Static Functionality
@@ -1071,6 +1117,7 @@ class OkitJson {
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
         this.containers = [];
+        this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
         this.file_storage_systems = [];
@@ -1246,6 +1293,14 @@ class OkitJson {
                 console.info(obj);
             }
         }
+        // Database Systems
+        if (okit_json.hasOwnProperty('database_systems')) {
+            for (let artifact of okit_json['database_systems']) {
+                artifact.parent_id = artifact.subnet_id;
+                let obj = this.newDatabaseSystem(artifact);
+                console.info(obj);
+            }
+        }
         // Instances
         if (okit_json.hasOwnProperty('instances')) {
             for (let artifact of okit_json['instances']) {
@@ -1360,6 +1415,10 @@ class OkitJson {
         }
 
         // Draw Subnet Sub Components
+        // Database System
+        for (let database_system of this.database_systems) {
+            database_system.draw();
+        }
         // File Storage System
         for (let file_storage_system of this.file_storage_systems) {
             file_storage_system.draw();
@@ -1394,8 +1453,16 @@ class OkitJson {
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));
         console.info('Canvas Height  : ' + canvas_svg.attr('height'));
         console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
+        if (selectedArtefact) {
+            $(jqId(selectedArtefact)).toggleClass('highlight');
+        }
         console.groupEnd();
     }
+
+    /*
+    ** Calculate price
+     */
+    price(rate_card) {}
 
     /*
     ** New Artifact Processing
@@ -1426,6 +1493,13 @@ class OkitJson {
         data.compartment_id = data.parent_id;
         this['compartments'].push(new Compartment(data, this, parent));
         return this['compartments'][this['compartments'].length - 1];
+    }
+
+    // Database System
+    newDatabaseSystem(data, parent=null) {
+        console.info('New Database System');
+        this['database_systems'].push(new DatabaseSystem(data, this, parent));
+        return this['database_systems'][this['database_systems'].length - 1];
     }
 
     // Dynamic Routing Gateway
@@ -1577,7 +1651,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     // Compartment
@@ -1587,7 +1661,17 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
+    }
+
+    // Database System
+    getDatabaseSystem(id='') {
+        for (let artifact of this.database_systems) {
+            if (artifact.id === id) {
+                return artifact;
+            }
+        }
+        return undefined;
     }
 
     // Instance
@@ -1597,7 +1681,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getLocalPeeringGateway(id='') {
@@ -1606,7 +1690,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getRouteTable(id='') {
@@ -1615,7 +1699,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getSecurityList(id='') {
@@ -1624,7 +1708,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getSubnet(id='') {
@@ -1633,7 +1717,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getVirtualCloudNetwork(id='') {
@@ -1642,7 +1726,7 @@ class OkitJson {
                 return artifact;
             }
         }
-        return {};
+        return undefined;
     }
 
     getVcn(id='') {
@@ -1681,6 +1765,17 @@ class OkitJson {
             if (this.compartments[i].id === id) {
                 this.compartments[i].delete();
                 this.compartments.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Database Systems
+    deleteDatabaseSystem(id) {
+        for (let i = 0; i < this.database_systems.length; i++) {
+            if (this.database_systems[i].id === id) {
+                this.database_systems[i].delete();
+                this.database_systems.splice(i, 1);
                 break;
             }
         }

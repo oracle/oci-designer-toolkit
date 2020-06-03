@@ -19,13 +19,8 @@ build/
 
 okit.wpr
 
-**/OCI_Icons_SVG.zip
-converter/source
-converter/OCI_Icons_SVG
-converter/dist
-converter/dest
-
-output
+output/
+log/
 
 .scannerwork
 #/.scannerwork/
@@ -33,7 +28,8 @@ output
 
 .vagrant
 
-config
+config/
 
 containers/.oci
-containers/oci
+**/*.pem
+

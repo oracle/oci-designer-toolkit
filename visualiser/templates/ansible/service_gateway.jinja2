@@ -16,15 +16,15 @@
         services:
             - service_id: "{{ '{{' }} ({{ resource_name }}Service.services | map(attribute='id') | list)[0] {{ '}}' }}"
         # Optional
-        display_name: "{{ display_name }}"
+        display_name: "{{ display_name | safe }}"
 {% if route_table_id is defined %}
         route_table_id: "{{ route_table_id }}"
 {% endif %}
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
       register: {{ resource_name }}
 

@@ -1,0 +1,87 @@
+
+# ------ Create Autonomous Database
+    - name: Database System
+      oci_db_system:
+        region: "{{ region }}"
+        state:  "present"
+        # Required
+        compartment_id: "{{ compartment_id }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        database_edition: "{{ database_edition | safe }}"
+        db_home:
+          #Required
+          database:
+            admin_password: "{{ admin_password | safe }}"
+            #Optional
+{% if character_set is defined %}
+            character_set: "{{ character_set | safe }}"
+{% endif %}
+{% if auto_backup_enabled is defined or auto_backup_window is defined or recovery_window_in_days is defined %}
+            db_backup_config:
+    {% if auto_backup_enabled is defined %}
+              auto_backup_enabled: {{ auto_backup_enabled | safe }}
+    {% endif %}
+{% endif %}
+{% if db_name is defined %}
+            db_name: "{{ db_name | safe }}"
+{%  endif %}
+{% if db_workload is defined %}
+            db_workload: "{{ db_workload | safe }}"
+{%  endif %}
+{% if ncharacter_set is defined %}
+            ncharacter_set: "{{ ncharacter_set | safe }}"
+{% endif %}
+{% if pdb_name is defined %}
+            pdb_name: "{{ pdb_name | safe }}"
+{% endif %}
+{% if defined_tags is defined %}
+            defined_tags: "{{ defined_tags | safe }}"
+{% endif %}
+{% if freeform_tags is defined %}
+            freeform_tags: "{{ freeform_tags | safe }}"
+{% endif %}
+          #Optional
+{% if db_version is defined %}
+          db_version: "{{ db_version | safe }}"
+{% endif %}
+{% if display_name is defined %}
+          display_name: "{{ display_name | safe }}"
+{% endif %}
+        hostname: "{{ hostname | safe }}"
+        shape: "{{ shape | safe }}"
+        ssh_public_keys: ["{{ ssh_public_keys | safe }}"]
+        subnet_id: "{{ subnet_id }}"
+        #Optional
+{% if disk_redundancy is defined %}
+        disk_redundancy: "{{ disk_redundancy | safe }}"
+{% endif %}
+        display_name: "{{ display_name | safe }}"
+{% if cluster_name is defined %}
+        cluster_name: "{{ cluster_name | safe }}"
+{%  endif %}
+{% if cpu_core_count is defined %}
+        cpu_core_count: {{ cpu_core_count | safe }}
+{% endif %}
+{% if data_storage_percentage is defined %}
+        data_storage_percentage: {{ data_storage_percentage | safe }}
+{% endif %}
+{% if data_storage_size_in_gb is defined %}
+        data_storage_size_in_gb: {{ data_storage_size_in_gb | safe }}
+{% endif %}
+{% if license_model is defined %}
+        license_model: "{{ license_model | safe }}"
+{% endif %}
+{% if node_count is defined %}
+        node_count: {{ node_count | safe }}
+{% endif %}
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags | safe }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags | safe }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+      {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.db_system.id {{ '}}' }}"
+      {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.db_system.id {{ '}}' }}"

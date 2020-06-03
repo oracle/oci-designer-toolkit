@@ -118,13 +118,7 @@ class Compartment extends OkitContainerArtifact {
      */
     draw() {
         console.groupCollapsed('Drawing ' + Compartment.getArtifactReference() + ' : ' + this.id);
-        let svg = drawArtifact(this.getSvgDefinition());
-        // Add Properties Load Event to created svg
-        let me = this;
-        svg.on("click", function() {
-            me.loadProperties();
-            d3.event.stopPropagation();
-        });
+        let svg = super.draw();
         console.groupEnd();
     }
 
@@ -295,6 +289,7 @@ class Compartment extends OkitContainerArtifact {
         ObjectStorageBucket.query(sub_query_request, region);
         FastConnect.query(sub_query_request, region);
         Instance.query(sub_query_request, region);
+        DatabaseSystem.query(sub_query_request, region);
     }
 }
 

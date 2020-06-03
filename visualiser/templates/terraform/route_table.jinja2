@@ -6,19 +6,19 @@ resource "oci_core_route_table" "{{ resource_name }}" {
     vcn_id         = {{ vcn_id }}
 {% for rule in route_rules %}
     route_rules    {
-        destination       = {{ rule.destination }}
-        destination_type  = {{ rule.destination_type }}
+        destination       = {{ rule.destination | safe }}
+        destination_type  = {{ rule.destination_type | safe }}
         network_entity_id = {{ rule.network_entity_id }}
-        description       = {{ rule.description }}
+        description       = {{ rule.description | safe }}
     }
 {% endfor %}
     # Optional
-    display_name   = {{ display_name }}
+    display_name   = {{ display_name | safe }}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }
 

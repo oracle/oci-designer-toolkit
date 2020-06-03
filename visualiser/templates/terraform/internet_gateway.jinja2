@@ -5,13 +5,13 @@ resource "oci_core_internet_gateway" "{{ resource_name }}" {
     compartment_id = {{ compartment_id }}
     vcn_id         = {{ vcn_id }}
     # Optional
-    enabled        = {{ enabled }}
-    display_name   = {{ display_name }}
+    enabled        = {{ enabled | safe }}
+    display_name   = {{ display_name | safe }}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }
 

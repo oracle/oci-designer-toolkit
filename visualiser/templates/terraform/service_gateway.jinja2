@@ -12,15 +12,15 @@ resource "oci_core_service_gateway" "{{ resource_name }}" {
         service_id = data.oci_core_services.{{ resource_name }}Services.services[0]["id"]
     }
     # Optional
-    display_name   = {{ display_name }}
+    display_name   = {{ display_name | safe }}
 {% if route_table_id is defined %}
     route_table_id = {{ route_table_id }}
 {% endif %}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }
 

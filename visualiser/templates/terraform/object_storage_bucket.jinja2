@@ -9,19 +9,19 @@ data "oci_objectstorage_namespace" "{{ resource_name }}Namespace" {
 resource "oci_objectstorage_bucket" "{{ resource_name }}" {
     #Required
     compartment_id = {{ compartment_id }}
-    name           = {{ name }}
+    name           = {{ name | safe }}
     namespace      = data.oci_objectstorage_namespace.{{ resource_name }}Namespace.namespace
 
     #Optional
-    storage_tier   = {{ storage_tier }}
-    access_type    = {{ public_access_type }}
+    storage_tier   = {{ storage_tier | safe }}
+    access_type    = {{ public_access_type | safe }}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
     #kms_key_id = {{ kms_key_id }}
-    #metadata = {{ metadata }}
-    #object_events_enabled = {{ object_events_enabled }}
+    #metadata = {{ metadata | safe }}
+    #object_events_enabled = {{ object_events_enabled | safe }}
 }

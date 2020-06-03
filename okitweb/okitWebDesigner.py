@@ -11,6 +11,7 @@ __version__ = "1.0.0.0"
 __module__ = "okitWebDesigner"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import configparser
 import oci
 import os
 import shutil
@@ -33,6 +34,9 @@ from common.ociQuery import executeQuery
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments
+from facades.ociDatabaseSystem import OCIDatabaseSystems
+from facades.ociDatabaseSystemShape import OCIDatabaseSystemShapes
+from facades.ociDatabaseVersion import OCIDatabaseVersions
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociFastConnect import OCIFastConnects
 from facades.ociFileStorageSystems import OCIFileStorageSystems
@@ -71,6 +75,27 @@ def standardiseJson(json_data={}, **kwargs):
     json_data = standardiseIds(json_data)
     logJson(json_data)
     return json_data
+
+def readConfigFileSections(config_file='~/.oci/config'):
+    logger.debug('Config File {0!s:s}'.format(config_file))
+    abs_config_file = os.path.expanduser(config_file)
+    logger.debug('Config File {0!s:s}'.format(abs_config_file))
+    config = configparser.ConfigParser()
+    config.read(abs_config_file)
+    config_sections = []
+    if 'DEFAULT' in config:
+        config_sections = ['DEFAULT']
+    config_sections.extend(config.sections())
+    logger.info('Config Sections {0!s:s}'.format(config_sections))
+    return config_sections
+
+def getConfigFileValue(section, key, config_file='~/.oci/config'):
+    logger.debug('Config File {0!s:s}'.format(config_file))
+    abs_config_file = os.path.expanduser(config_file)
+    logger.debug('Config File {0!s:s}'.format(abs_config_file))
+    config = configparser.ConfigParser()
+    config.read(abs_config_file)
+    return config[section][key]
 
 #
 # Define Error Handlers
@@ -171,6 +196,9 @@ def designer():
     logger.debug('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
 
+    config_sections = {"sections": readConfigFileSections()}
+    logger.info('Config Sections {0!s:s}'.format(config_sections))
+
     #Render The Template
     return render_template('okit/okit_designer.html',
                            oci_assets_js=oci_assets_js,
@@ -189,12 +217,13 @@ def generate(language):
     logger.info('Language : {0:s} - {1:s}'.format(str(language), str(request.method)))
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
+        use_vars = request.json.get("use_variables", True)
         try:
             destination_dir = tempfile.mkdtemp();
             if language == 'terraform':
-                generator = OCITerraformGenerator(template_root, destination_dir, request.json)
+                generator = OCITerraformGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'ansible':
-                generator = OCIAnsibleGenerator(template_root, destination_dir, request.json)
+                generator = OCIAnsibleGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'terraform11':
                 generator = OCITerraform11Generator(template_root, destination_dir, request.json)
             generator.generate()
@@ -249,6 +278,7 @@ def ociCompartment():
     oci_tenancies = OCITenancies(profile=config_profile)
     tenancy = oci_tenancies.listCompartments()
     compartments = [{'display_name': c['display_name'], 'id': c['id'], 'home_region_key': tenancy['home_region_key']} for c in tenancy['compartments']]
+    compartments.append({'display_name': '/', 'id': tenancy['id'], 'home_region_key': tenancy['home_region_key']})
     compartments.sort(key=lambda x: x['display_name'])
     logger.debug("Compartments: {0!s:s}".format(compartments))
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
@@ -313,6 +343,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Compartments')
         oci_compartments = OCICompartments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
+    elif artifact == 'DatabaseSystem':
+        logger.info('---- Processing Database Systems')
+        oci_database_systems = OCIDatabaseSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_database_systems.list(filter=query_json.get('database_system_filter', None))
     elif artifact == 'DynamicRoutingGateway':
         logger.info('---- Processing Dynamic Routing Gateways')
         oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
@@ -386,45 +420,37 @@ def ociArtifacts(artifact):
 def export(destination):
     logger.debug('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
-    config_profile = request.json.get('config_profile', 'DEFAULT')
+    config_profile = request.json.get('location', {}).get('config_profile', 'DEFAULT')
+    compartment_id = request.json.get('location', {}).get('compartment_id', None)
+    region = request.json.get('location', {}).get('region', None)
+    plan_or_apply = request.json.get('location', {}).get('plan_or_apply', 'PLAN')
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     if request.method == 'POST':
         try:
-            config = {}
+            config = {'region': region}
             destination_dir = tempfile.mkdtemp();
             logger.debug(">>>>>>>>>>>>> {0!s:s}".format(destination_dir))
             stack = {}
             stack['display_name'] = 'okit-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
             if destination == 'resourcemanager':
-                # Get Compartment Information
-                export_compartment_index = request.json.get('open_compartment_index', 0)
-                export_compartment_name = request.json['compartments'][export_compartment_index]['name']
-                logger.info("Compartment Name {0!s:s}".format(export_compartment_name))
                 oci_compartments = OCICompartments(config=config, profile=config_profile)
-                compartments = oci_compartments.listTenancy(filter={'name': export_compartment_name})
-                logger.debug("Compartments {0!s:s}".format(compartments))
-                # If we find a compartment
-                if len(compartments) > 0:
-                    # Generate Resource Manager Terraform zip
-                    generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json,
-                                                            tenancy_ocid=oci_compartments.config['tenancy'],
-                                                            region=oci_compartments.config['region'],
-                                                            compartment_ocid=compartments[0]['id'])
-                    generator.generate()
-                    generator.writeFiles()
-                    zipname = generator.createZipArchive(os.path.join(destination_dir, 'resource-manager'), "/tmp/okit-resource-manager")
-                    logger.info('Zipfile : {0:s}'.format(str(zipname)))
-                    # Upload to Resource manager
-                    stack['compartment_id'] = compartments[0]['id']
-                    stack['zipfile'] = zipname
-                    stack['variables'] = generator.getVariables()
-                    resource_manager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartments[0]['id'])
-                    stack_json = resource_manager.createStack(stack)
-                    resource_manager.createJob(stack_json)
-                    return_code = 200
-                else:
-                    logger.warn('Unknown Compartment {0!s:s}'.format(export_compartment_name))
-                    return_code = 400
+                # Generate Resource Manager Terraform zip
+                generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json,
+                                                        tenancy_ocid=oci_compartments.config['tenancy'],
+                                                        region=region,
+                                                        compartment_ocid=compartment_id)
+                generator.generate()
+                generator.writeFiles()
+                zipname = generator.createZipArchive(os.path.join(destination_dir, 'resource-manager'), "/tmp/okit-resource-manager")
+                logger.info('Zipfile : {0:s}'.format(str(zipname)))
+                # Upload to Resource manager
+                stack['compartment_id'] = compartment_id
+                stack['zipfile'] = zipname
+                stack['variables'] = generator.getVariables()
+                resource_manager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
+                stack_json = resource_manager.createStack(stack)
+                resource_manager.createJob(stack_json, plan_or_apply)
+                return_code = 200
             shutil.rmtree(destination_dir)
             return stack['display_name'], return_code
         except Exception as e:
@@ -450,8 +476,28 @@ def dropdownQuery():
         dropdown_json = {}
         oci_shapes = OCIShapes()
         dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
+        db_system_shapes = OCIDatabaseSystemShapes()
+        dropdown_json["db_system_shapes"] = sorted(db_system_shapes.list(), key=lambda k: k['shape'])
+        db_versions = OCIDatabaseVersions()
+        dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
         return dropdown_json
     else:
         return 'Unknown Method', 500
 
+@bp.route('config/sections', methods=(['GET']))
+def configSections():
+    if request.method == 'GET':
+        config_sections = {"sections": readConfigFileSections()}
+        logger.info('Config Sections {0!s:s}'.format(config_sections))
+        return config_sections
+    else:
+        return 'Unknown Method', 500
+
+@bp.route('config/region/<string:section>', methods=(['GET']))
+def configRegion(section):
+    if request.method == 'GET':
+        response = {"name": getConfigFileValue(section, 'region')}
+        return response
+    else:
+        return 'Unknown Method', 500
 

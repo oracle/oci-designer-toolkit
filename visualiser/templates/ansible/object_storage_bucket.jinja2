@@ -13,16 +13,16 @@
         state: "present"
         # Required
         compartment_id: "{{ compartment_id }}"
-        name: "{{ name }}"
+        name: "{{ name | safe }}"
         namespace_name: "{{ '{{' }} {{ resource_name }}Namespace.namespaces[0] {{ '}}' }}"
         # Optional
-        storage_tier: "{{ storage_tier }}"
-        public_access_type: "{{ public_access_type }}"
+        storage_tier: "{{ storage_tier | safe }}"
+        public_access_type: "{{ public_access_type | safe }}"
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
         #metadata:
       register: {{ resource_name }}

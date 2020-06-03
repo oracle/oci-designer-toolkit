@@ -10,8 +10,8 @@
 .okit-designer-left-column {
     position: relative;
     display: flex;
-    min-width: 150px;
-    width: 150px;
+    min-width: 180px;
+    width: 180px;
     border-right: #aeaeae 1px solid;
     transition: all 0.25s;
 }
@@ -21,12 +21,21 @@
     transform: translateX(-150px);
 }
 
-.okit-icons-palette {
+.okit-icons-toggle {
+    display: block;
+    margin: auto;
+}
 
+.okit-icons-toggle > label {
+    font-size: 8pt;
+}
+
+.okit-icons-palette {
+    overflow-y: scroll;
 }
 
 .okit-icons-palette details {
-    width: 150px;
+    width: 180px;
 }
 
 .okit-palette-icon-group {
@@ -37,10 +46,16 @@
 
 }
 
-.okit-palette-icon {
-    width: 40px;
-    height: 40px;
-    margin: 2px;
+.okit-palette-icon {}
+
+.okit-palette-icon:hover {
+    outline: 1px solid red;
+}
+
+.okit-fragment-icon {}
+
+.okit-fragment-icon:hover {
+    outline: 1px solid red;
 }
 
 .okit-palette-icon-group-header {
@@ -63,14 +78,46 @@
     vertical-align: text-top;
 }
 
-.okit-palette-icon-group-icons {
+.okit-palette-icon-group-icons {}
 
+.okit-icons-only > div {
+    display: initial;
 }
 
-.okit-fragment-icon {
+.okit-icons-only > div > img {
     width: 40px;
     height: 40px;
     margin: 2px;
+}
+
+.okit-icons-only > div > label {
+    visibility: hidden;
+    display: none;
+}
+
+.okit-icons-and-text > div {
+    display: block;
+    overflow: hidden;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.okit-icons-and-text1 > div:hover {
+    border: 1px solid red;
+}
+
+.okit-icons-and-text > div > img {
+    width: 25px;
+    height: 25px;
+    margin: 2px;
+}
+
+.okit-icons-and-text > div > label {
+    display: inline-block;
+    height: 25px;
+    max-height: 25px;
+    font-size: 8pt;
+    vertical-align: middle;
 }
 
 /*
@@ -213,7 +260,7 @@
     opacity: 0.5;
     position: absolute;
     cursor: col-resize !important;
-    z-index: 999
+    z-index: 100
 }
 
 /*
@@ -221,7 +268,7 @@
  */
 
 .context-menu {
-    z-index:1000;
+    z-index:102;
     position: absolute;
 }
 
@@ -238,3 +285,12 @@
 
 .context-menu li{ list-style: none; }
 
+
+/*
+** SVG Highlighting
+ */
+
+rect.highlight {
+    stroke-width: 3;
+    stroke-dasharray: none;
+}

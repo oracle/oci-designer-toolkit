@@ -3,15 +3,15 @@
 resource "oci_file_storage_file_system" "{{ resource_name }}" {
     # Required
     compartment_id      = {{ compartment_id }}
-    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(1) }} - 1]["name"]
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe | default(1) }} - 1]["name"]
 
     # Optional
-    display_name   = {{ display_name }}
+    display_name   = {{ display_name | safe }}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
     #kms_key_id = "${oci_kms_key.test_key.id}"
 }
@@ -25,18 +25,18 @@ locals {
 resource "oci_file_storage_mount_target" "{{ resource_name }}MountTarget" {
     # Required
     compartment_id      = {{ compartment_ocid }}
-    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(1) }} - 1]["name"]
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe | default(1) }} - 1]["name"]
     subnet_id           = {{ subnet_id }}
 
     # Optional
-    display_name   = {{ display_name }}
+    display_name   = {{ display_name | safe }}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
-    hostname_label = {{ hostname_label }}
+    hostname_label = {{ hostname_label | safe }}
 {% if ip_address is defined %}
     ip_address     = {{ ip_address }}
 {%  endif %}
@@ -56,12 +56,12 @@ resource "oci_file_storage_export_set" "{{ resource_name }}ExportSet" {
     mount_target_id = local.{{ resource_name }}MountTarget_id
 
     #Optional
-    display_name   = {{ display_name }}
+    display_name   = {{ display_name | safe }}
 {% if max_fs_stat_bytes is defined %}
-    max_fs_stat_bytes = {{ max_fs_stat_bytes }}
+    max_fs_stat_bytes = {{ max_fs_stat_bytes | safe }}
 {% endif %}
 {% if max_fs_stat_files is defined %}
-    max_fs_stat_files = {{ max_fs_stat_files }}
+    max_fs_stat_files = {{ max_fs_stat_files | safe }}
 {% endif %}
 }
 
@@ -75,19 +75,19 @@ resource "oci_file_storage_export" "{{ resource_name }}Export" {
     #Required
     export_set_id  = local.{{ resource_name }}ExportSet_id
     file_system_id = local.{{ resource_name }}_id
-    path = {{ path }}
+    path = {{ path | safe }}
 
     #Optional
     export_options {
         #Required
-        source = {{ source }}
+        source = {{ source | safe }}
 
         #Optional
-        access = {{ access }}
+        access = {{ access | safe }}
 {% if identity_squash is defined %}
-        identity_squash = {{ identity_squash }}
-        anonymous_gid = {{ anonymous_gid }}
-        anonymous_uid = {{ anonymous_uid }}
+        identity_squash = {{ identity_squash | safe }}
+        anonymous_gid = {{ anonymous_gid | safe }}
+        anonymous_uid = {{ anonymous_uid | safe }}
 {% endif %}
         require_privileged_source_port = {{ require_privileged_source_port }}
     }

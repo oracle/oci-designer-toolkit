@@ -1,0 +1,8 @@
+### Example OCI Connection Config File
+### All values must be changed to match you connection information.
+[DEFAULT]
+user=<OCID For User>
+fingerprint=<Key File Fingerprint>
+key_file=~/.oci/<Key File>.pem
+tenancy=<OCID for Tenancy>
+region=<Preferred Region>

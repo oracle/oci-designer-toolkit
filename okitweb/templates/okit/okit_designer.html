@@ -169,19 +169,27 @@
 {% block mainblock %}
     <div id="designer_left_column" class="okit-designer-left-column">
         <div id="icons_palette" class="okit-icons-palette">
+            <div id="icon_text_toggle" class="okit-icons-toggle">
+                <label><input type="radio" name="icon_toggle" checked="checked"
+                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');okitSettings.icons_only=true;okitSettings.save();">Icons</label>
+                <label><input type="radio" id="icons_and_text" name="icon_toggle"
+                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();">Icons & Text</label>
+            </div>
             {% for palette_icon_group in palette_icon_groups %}
                 {% if palette_icon_group['name'] != 'Hidden' %}
                     <details  id="{{ palette_icon_group['name'] }}" class="okit-palette-icon-group" open>
                         <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label></summary>
-                        <div class="okit-palette-icon-group-icons">
+                        <div class="okit-palette-icon-group-icons okit-icons-only">
                             {% for palette_icon in palette_icon_group['icons'] %}
-                                <img class="okit-palette-icon"
+                                <div>
+                                    <img class="okit-palette-icon"
                                      src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}"
                                      title="{{ palette_icon['title'] }}"
                                      draggable="true"
                                      alt="{{ palette_icon['title'] }}"
-                                     ondragstart="dragStart(event, {{ palette_icon['title'] | replace(' ', '') }})"
-                                     >
+                                     ondragstart="dragStart(event, {{ palette_icon['title'] | replace(' ', '') }})">
+                                    <label>{{ palette_icon['title'] }}</label>
+                                </div>
                             {% endfor %}
                         </div>
                     </details>
@@ -189,15 +197,17 @@
             {% endfor %}
             <details  id="fragments" class="okit-palette-icon-group" open>
                 <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
-                <div class="okit-palette-icon-group-icons">
+                <div class="okit-palette-icon-group-icons okit-icons-only">
                     {% for fragment_icon in fragment_icons %}
-                        <img class="okit-fragment-icon"
+                        <div>
+                            <img class="okit-fragment-icon"
                              src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}"
                              title="{{ fragment_icon['title'] }}"
                              draggable="true"
                              alt="{{ fragment_icon['title'] }}"
-                             ondragstart="dragStart(event, Fragment); Fragment.setFragmentType('{{ fragment_icon['title'] }}')"
-                        >
+                             ondragstart="dragStart(event, Fragment); Fragment.setFragmentType('{{ fragment_icon['title'] }}')">
+                            <label>{{ fragment_icon['title'] }}</label>
+                        </div>
                     {% endfor %}
                 </div>
             </details>
@@ -214,7 +224,7 @@
         <div id="json_panel" class="okit-source-code hidden"></div>
         <!--div id="settings_panel" class="okit-settings-sheet hidden"></div-->
     </div>
-    <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]"></div>
+    <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json"></div>
     <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
 {% endblock %}
 

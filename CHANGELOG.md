@@ -1,5 +1,34 @@
 # Release Notes
 
+
+## Version 0.6.0 
+**Release Date**: 3rd June 2020
+### Features
+1. Optional generation of variable file for Ansible and Terraform, defaults:
+   1. Terraform : True
+   2. Ansible : True
+2. Resource Manager no longer uses variable file for anything other than connection information.
+3. Switch to new Oracle Icons as defined in https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm.
+4. Add Config Profile selection to the Query Popup so we can specify alternative tenancy information.
+5. Add Profile / Region / Compartment selection to the Resource Manager export rather than using DEFAULT profile values.
+6. Add Plan / Apply toggle to Resource Manager export.
+7. Move DRG to VCN Parent rather than Compartment
+8. Check for Update
+9. Highlight selected artefact (Toggles on/off).
+
+### Bug Fixes
+1. Palette did not scroll
+2. Link to OCI Console should be data driven #20 
+3. 100 variable limit with Resource Manager causes upload failure (Issue #09)
+4. Add Tenancy root to selectable list of compartments (Issue: #21)
+5. Generation of terraform with regional subnet throws error for missing availability domain. (Issue: #22).
+6. Missing logs (default log location now /okit/log/okit.log in container).
+7. Export to Resource Manager:
+    1. Error message modified so that it does not always say the compartment does not exist when failing (OKIT-67).
+    2. Compartment Name is not checked for uniqueness (OKIT-5).
+    3. Error planning job with no Tags (OKIT-45).
+
+
 ## Version 0.5.1 
 **Release Date**: 18th May 2020
 ### Features
@@ -8,6 +37,7 @@
 3. Document pure docker commands.
 
 ### Bug Fixes
+
 
 
 ## Version 0.5.0 

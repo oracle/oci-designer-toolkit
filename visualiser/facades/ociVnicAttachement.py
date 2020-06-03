@@ -16,7 +16,9 @@ __module__ = "ociVnicAttachments"
 import oci
 
 from common.ociLogging import getLogger
+from common.ociCommon import logJson
 from facades.ociConnection import OCIComputeConnection
+from facades.ociVnic import OCIVnics
 
 # Configure logging
 logger = getLogger()
@@ -47,7 +49,12 @@ class OCIVnicAttachments(OCIComputeConnection):
         # Filter results
         self.vnic_attachments_json = self.filterJsonObjectList(vnic_attachments_json, filter)
         logger.debug('--------------------- Vnics ----------------------')
-        logger.debug(str(self.vnic_attachments_json))
+        logJson(self.vnic_attachments_json)
+
+        # Update VNic information
+        oci_vnics = OCIVnics(config=self.config, configfile=self.configfile, profile=self.profile)
+        for attachment in self.vnic_attachments_json:
+            attachment.update(oci_vnics.get(vnic_id=attachment['vnic_id']))
 
         # Build List of Subnet Objects
         self.vnic_attachments_obj = []

@@ -24,7 +24,7 @@ class LoadBalancer extends OkitArtifact {
         this.subnet_id = data.parent_id;
         this.subnet_ids = [data.parent_id];
         this.is_private = false;
-        this.shape_name = '100Mbps';
+        this.shape = '100Mbps';
         this.protocol = 'HTTP';
         this.port = '80';
         this.instance_ids = [];
@@ -41,10 +41,17 @@ class LoadBalancer extends OkitArtifact {
         }
     }
 
-
     /*
-    ** Clone Functionality
+    ** Conversion Routine allowing loading of old json
      */
+    convert() {
+        if (this.shape_name !== undefined) {this.shape = this.shape_name; delete this.shape_name;}
+    }
+
+
+        /*
+        ** Clone Functionality
+         */
     clone() {
         return new LoadBalancer(this, this.getOkitJson());
     }
@@ -61,17 +68,8 @@ class LoadBalancer extends OkitArtifact {
      */
     draw() {
         console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let svg = drawArtifact(this.getSvgDefinition());
-        /*
-        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
-        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
-        ** Artifact.
-         */
         let me = this;
-        svg.on("click", function() {
-            me.loadProperties();
-            d3.event.stopPropagation();
-        });
+        let svg = super.draw();
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + safeId(this.id) + "']");
         let boundingClientRect = rect.node().getBoundingClientRect();

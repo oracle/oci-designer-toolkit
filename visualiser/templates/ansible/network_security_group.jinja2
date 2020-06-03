@@ -8,12 +8,12 @@
         compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
         # Optional
-        display_name: "{{ display_name }}"
+        display_name: "{{ display_name | safe }}"
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
       register: {{ resource_name }}
 
@@ -33,52 +33,52 @@
         network_security_group_id: "{{ resource_name }}_id"
         security_rules:
 {% for rule in security_rules %}
-        - description: "{{ rule.description }}"
-          direction: "{{ rule.direction }}"
+        - description: "{{ rule.description | safe }}"
+          direction: "{{ rule.direction | safe }}"
     {% if rule.destination is defined %}
-          destination: "{{ rule.destination }}"
+          destination: "{{ rule.destination | safe }}"
     {% endif %}
     {% if rule.destination_type is defined %}
-          destination_type: "{{ rule.destination_type }}"
+          destination_type: "{{ rule.destination_type | safe }}"
     {% endif %}
     {% if rule.source is defined %}
-          source: "{{ rule.source }}"
+          source: "{{ rule.source | safe }}"
     {% endif %}
     {% if rule.source_type is defined %}
-          source_type: "{{ rule.source_type }}"
+          source_type: "{{ rule.source_type | safe }}"
     {% endif %}
-          protocol: "{{ rule.protocol }}"
+          protocol: "{{ rule.protocol | safe }}"
     {% if rule.tcp_options is defined %}
           tcp_options:
         {% if rule.tcp_options.destination_port_range is defined %}
             destination_port_range:
-                min: {{ rule.tcp_options.destination_port_range.min }}
-                max: {{ rule.tcp_options.destination_port_range.max }}
+                min: {{ rule.tcp_options.destination_port_range.min | safe }}
+                max: {{ rule.tcp_options.destination_port_range.max | safe }}
         {% endif %}
         {% if rule.tcp_options.source_port_range is defined %}
             source_port_range:
-                min: {{ rule.tcp_options.source_port_range.min }}
-                max: {{ rule.tcp_options.source_port_range.max }}
+                min: {{ rule.tcp_options.source_port_range.min | safe }}
+                max: {{ rule.tcp_options.source_port_range.max | safe }}
         {% endif %}
     {% endif %}
     {% if rule.udp_options is defined %}
           udp_options:
         {% if rule.udp_options.destination_port_range is defined %}
             destination_port_range:
-                min: {{ rule.udp_options.destination_port_range.min }}
-                max: {{ rule.udp_options.destination_port_range.max }}
+                min: {{ rule.udp_options.destination_port_range.min | safe }}
+                max: {{ rule.udp_options.destination_port_range.max | safe }}
         {% endif %}
         {% if rule.udp_options.source_port_range is defined %}
             source_port_range:
-                min: {{ rule.udp_options.source_port_range.min }}
-                max: {{ rule.udp_options.source_port_range.max }}
+                min: {{ rule.udp_options.source_port_range.min | safe }}
+                max: {{ rule.udp_options.source_port_range.max | safe }}
         {% endif %}
     {% endif %}
     {% if rule.icmp_options is defined %}
           icmp_options:
-            type: {{ rule.icmp_options.type }}
+            type: {{ rule.icmp_options.type | safe }}
         {% if rule.icmp_options.code is defined %}
-            code: {{ rule.icmp_options.code }}
+            code: {{ rule.icmp_options.code | safe }}
         {% endif %}
     {% endif %}
 {% endfor %}

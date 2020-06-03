@@ -28,6 +28,7 @@ let right_drag_bar_start_x = 0;
 let okitSettings = new OkitSettings();
 let ociRegions = [];
 let okitOciData = new OkitOCIData();
+let okitOciConfig = new OkitOCIConfig();
 
 function resetDesigner() {
     okitJson = new OkitJson();
@@ -36,6 +37,28 @@ function resetDesigner() {
     hideRegionTabBar();
     $(jqId(PROPERTIES_PANEL)).load('propertysheets/empty.html');
     displayOkitJson();
+}
+/*
+** Set OCI Link
+ */
+function setOCILink() {
+    $.ajax({
+        type: 'get',
+        url: `config/region/${okitSettings.profile}`,
+        dataType: 'text',
+        contentType: 'application/json',
+        success: function(resp) {
+            //console.info('Response : ' + resp);
+            let jsonBody = JSON.parse(resp)
+            let oci_href = `https://console.${jsonBody.name}.oraclecloud.com`;
+            console.info('OCI Console url :' + oci_href);
+            $(jqId('oci_link')).attr('href', oci_href);
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+        }
+    });
 }
 /*
 ** Navigation Menu handlers
@@ -242,20 +265,32 @@ function displayQueryDialog() {
         .attr('id', 'query_oci_form')
         .attr('action', window.location.href)
         .attr('method', 'post');
-    query_form.append('input')
-        .attr('class', 'okit-input')
-        .attr('id', "config_profile")
-        .attr('name', "config_profile")
-        .attr('type', 'text')
-        .attr('readonly', 'readonly')
-        .attr('hidden', 'hidden')
-        .attr('values', "DEFAULT");
     let table = query_form.append('div')
         .attr('class', 'table okit-table');
     let tbody = table.append('div')
         .attr('class', 'tbody');
-    // Compartment Id
+    // Profile
     let tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div')
+        .attr('class', 'td')
+        .text('Connection Profile');
+    let profile_select = tr.append('div')
+        .attr('class', 'td')
+        .append('select')
+            .attr('id', 'config_profile')
+            .on('change', () => {
+                console.info('Profile Select '+$(jqId('config_profile')).val());
+                loadCompartments();
+                loadRegions();
+            });
+    for (let section of okitOciConfig.sections) {
+        profile_select.append('option')
+            .attr('value', section)
+            .text(section);
+    }
+    // Compartment Id
+    tr = tbody.append('div')
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
@@ -263,10 +298,10 @@ function displayQueryDialog() {
     tr.append('div')
         .attr('class', 'td')
         .append('select')
-            .attr('id', 'query_compartment_id')
-            .append('option')
-                .attr('value', 'Retrieving')
-                .text('Retrieving..........');
+        .attr('id', 'query_compartment_id')
+        .append('option')
+            .attr('value', 'Retrieving')
+            .text('Retrieving..........');
     // Region Ids
     tr = tbody.append('div')
         .attr('class', 'tr');
@@ -305,13 +340,23 @@ function handleQueryOci(e) {
     okitSettings.home_region = '';
     ociRegions = [];
     $(jqId('config_profile')).val(okitSettings.profile);
+    // Load Compartment Select
+    loadCompartments();
+    // Load Region Select
+    loadRegions();
+}
+function loadCompartments() {
+    // Clear Select
+    let select = $(jqId('query_compartment_id'));
+    $(select).empty();
+    select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
     // Get Compartments
     $.ajax({
         type: 'get',
         url: 'oci/compartment',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify({config_profile: okitSettings.profile}),
+        data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
         success: function(resp) {
             //console.info('Response : ' + resp);
             let jsonBody = JSON.parse(resp)
@@ -333,13 +378,19 @@ function handleQueryOci(e) {
             console.info('Error : '+ error)
         }
     });
+}
+function loadRegions() {
+    // Clear Select
+    let select = $(jqId('query_region_id'));
+    $(select).empty();
+    select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
     // Get Regions
     $.ajax({
         type: 'get',
         url: 'oci/region',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify({config_profile: okitSettings.profile}),
+        data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
         success: function(resp) {
             //console.info('Response : ' + resp);
             let jsonBody = JSON.parse(resp)
@@ -374,8 +425,9 @@ let queryCount = 0;
 function showQueryResults() {
     console.group('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
-    okitQueryRequestJson = {}
+    okitQueryRequestJson = {};
     okitQueryRequestJson.compartment_id = $(jqId('query_compartment_id')).val();
+    okitQueryRequestJson.config_profile = $(jqId('config_profile')).val();
     okitQueryRequestJson.region = '';
     clearRegionTabBar();
     showRegionTabBar();
@@ -402,12 +454,14 @@ function showQueryResults() {
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     console.groupEnd();
 }
+// TODO: Delete
 function hideQueryProgressIfComplete() {
     console.info(`>>>>>>>>>>>>> Query Count: ${queryCount}`);
-    if (queryCount === 0) {
-        $(jqId('modal_loading_wrapper')).addClass('hidden');
-    }
 }
+$(document).ajaxStop(function() {
+    console.info('All Ajax Functions Stopped');
+    $(jqId('modal_loading_wrapper')).addClass('hidden');
+});
 /*
 ** Export the Model as various formats
  */
@@ -572,6 +626,7 @@ function setCenterColumnWidth() {
     $(jqId('designer_center_column')).css('min-width', 'calc(100% - ' + (leftAdjust + rightAdjust) + 'px)');
 }
 
+
 /*
 ** Ready function initiated on page load.
  */
@@ -683,6 +738,17 @@ $(document).ready(function() {
         }
     });
     /**/
+
+    setOCILink();
+
+    /*
+    ** Check Palette layout
+     */
+
+    if (!okitSettings.icons_only) {
+        $(jqId("icons_and_text")).prop('checked', 'checked');
+        $(jqId("icons_and_text")).click();
+    }
 
 
     /*

@@ -12,23 +12,23 @@ data "template_file" "{{ resource_name }}VolumeBackupPolicyNames" {
 }
 data "template_file" "{{ resource_name }}VolumeBackupPolicyIdx" {
     count    = length(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered)
-    template = index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy }})
+    template = index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})
 }
 
 # ------ Create Block Storage Volume
 resource "oci_core_volume" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_id }}
-    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(1) }} - 1]["name"]
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe | default(1) }} - 1]["name"]
     # Optional
-    display_name   = {{ display_name }}
-    size_in_gbs    = {{ size_in_gbs }}
-    vpus_per_gb    = {{ vpus_per_gb }}
+    display_name   = {{ display_name | safe }}
+    size_in_gbs    = {{ size_in_gbs | safe }}
+    vpus_per_gb    = {{ vpus_per_gb | safe }}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }
 
@@ -39,5 +39,5 @@ locals {
 # ------ Create Block Storage Backup Policy
 resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPolicy" {
     asset_id  = local.{{ resource_name }}_id
-    policy_id = data.template_file.{{ resource_name }}VolumeBackupPolicyIds.*.rendered[index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy }})]
+    policy_id = data.template_file.{{ resource_name }}VolumeBackupPolicyIds.*.rendered[index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})]
 }

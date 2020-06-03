@@ -6,14 +6,14 @@
         state: "present"
         # Required
         compartment_id: "{{ compartment_id }}"
-        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
         # Optional
-        display_name: "{{ display_name }}"
+        display_name: "{{ display_name | safe }}"
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
       register: {{ resource_name }}
 
@@ -28,20 +28,20 @@
         state: "present"
         # Required
         compartment_id: "{{ compartment_ocid }}"
-        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
         subnet_id: "{{ subnet_id }}"
         # Optional
-        display_name: "{{ display_name }}"
-        hostname_label: "{{ hostname_label }}"
+        display_name: "{{ display_name | safe }}"
+        hostname_label: "{{ hostname_label | safe }}"
         #ip_address: "{{ ip_address }}"
 {% if nsg_ids is defined %}
         nsg_ids: [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
       register: {{ resource_name }}MountTarget
 
@@ -55,7 +55,7 @@
       oci_export_set_facts:
         region: "{{ region }}"
 #        compartment_id: "{{ compartment_ocid }}"
-#        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+#        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
         export_set_id: "{{ '{{' }} {{ resource_name }}MountTarget_export_set_id {{ '}}' }}"
       register: {{ resource_name }}ExportSet
 
@@ -69,10 +69,10 @@
         state: 'present'
         file_system_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
         export_set_id: "{{ '{{' }} {{ resource_name }}MountTarget_export_set_id {{ '}}' }}"
-        path: "{{ path }}"
+        path: "{{ path | safe }}"
         export_options:
-            - source: "{{ source }}"
-              access: "{{ access }}"
+            - source: "{{ source | safe }}"
+              access: "{{ access | safe }}"
 #              require_privileged_source_port: False
 #              identity_squash: 'NONE'
       register: {{ resource_name }}Export

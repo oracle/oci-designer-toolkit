@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-     viewBox="0 0 288 288" style="enable-background:new 0 0 288 288;" xml:space="preserve">
-<style type="text/css">
-	.icon-colour-02{fill:#5f5f5f;}
-</style>
-	<g transform="translate(-140, -140) scale(2, 2)">
-		<path class="icon-colour-02" d="M200.4,104.2c-0.4,0-0.8,0-1.2,0.1c-1.6-5.2-6.5-9-12.3-9c-1.5,0-2.9,0.3-4.2,0.7c-2.6-3.8-7-6.3-12-6.3c-6.9,0-12.7,4.8-14.2,11.2c-0.1,0-0.3,0-0.4,0c-8,0-14.6,6.5-14.6,14.6c0,8,6.5,14.6,14.6,14.6h44.3c7.1,0,12.9-5.8,12.9-12.9C213.3,110,207.5,104.2,200.4,104.2z"/>
-		<path class="icon-colour-02" d="M129,151.8l-3.4-4l3.2-2.7l3.4,4L129,151.8z M135.4,146.4l-3.4-4l3.2-2.7l3.4,4L135.4,146.4z M141.7,141.1l-3.4-4l3.2-2.7l3.4,4L141.7,141.1z M148.1,135.7l-3.4-4l3.2-2.7l3.4,4L148.1,135.7z"/>
-		<path class="icon-colour-02" d="M103.5,140.8c-15.9,0-28.8,12.9-28.8,28.8c0,15.9,12.9,28.8,28.8,28.8c15.9,0,28.8-12.9,28.8-28.8C132.3,153.6,119.4,140.8,103.5,140.8z M82.2,171v-3h7.3v-4.5l10.4,6l-10.4,6V171H82.2z M103.7,190.7l-6-10.4h4.5v-21.6h-4.5l6-10.4l6,10.4h-4.5v21.6h4.5L103.7,190.7z M118.1,171v4.5l-10.4-6l10.4-6v4.5h7.3v3H118.1z"/>
+<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="NAT_Gateway" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	 y="0px" viewBox="0 0 161.9 162" enable-background="new 0 0 161.9 162" xml:space="preserve">
+	<g>
+<path fill="#312D2A" d="M140.3,90.1h-17.1V74.7L99.2,90.1H72.6V73.7H93V58.6l15.4-24.1H93V15.8h-9v18.7H68.6L84,58.4v6.3H63.6v25.4
+	H52V74.7L21,94.5l31,20V99.1h32v15L68.6,138H84v9.1h9V138h15.4L93,113.9V99.1h6.3l23.9,15.4V99.1h17.1V90.1z M95.6,41.5l-7.1,11.1
+	l-7.1-11.1H95.6z M45,101.7L34,94.5L45,87.5V101.7z M81.4,131l7.1-11.1l7.1,11.1H81.4z M116.2,101.7l-11.1-7.1l11.1-7.1V101.7z"/>
 	</g>
 </svg>

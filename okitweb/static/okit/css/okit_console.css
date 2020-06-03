@@ -226,7 +226,7 @@ textarea {
     overflow-y: auto;
     overflow-x: visible;
     position: absolute;
-    z-index: 100;
+    z-index: 101;
     width: 100%;
     height: 100%;
     /*background-color: rgba(37, 49, 65, 0.1);*/
@@ -314,7 +314,7 @@ ul.okit-navigation-list .dropdown-content {
     text-decoration: none;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1001;
+    z-index: 102;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -514,7 +514,7 @@ li a.parent-item:hover {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 1010;
+    z-index: 100;
     padding: 15px 15px;
     background: rgba(0, 0, 0, 0.6);
     width: 100%;
@@ -524,7 +524,7 @@ li a.parent-item:hover {
 .okit-modal-dialog {
     display: flex;
     flex-direction: column;
-    z-index:1000;
+    z-index:100;
     position: absolute;
     left: 30%;
     top: 20%;
@@ -593,6 +593,18 @@ li a.parent-item:hover {
     color: white;
     background-color: #0572ce;
     padding: 5px;
+}
+
+.okit-horizontal-radio {
+    display: block;
+    margin: auto;
+    vertical-align: middle;
+}
+
+.okit-horizontal-radio > label {
+    margin-left: 5px;
+    margin-right: 10px;
+    height: 100%;
 }
 
 /*
@@ -720,7 +732,7 @@ li a.parent-item:hover {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 1010;
+    z-index: 100;
     padding: 100px 100px;
     width: 100%;
     height: 100%;

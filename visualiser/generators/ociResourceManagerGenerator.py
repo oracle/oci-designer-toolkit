@@ -23,9 +23,9 @@ logger = getLogger()
 
 class OCIResourceManagerGenerator(OCITerraformGenerator):
 
-    def __init__(self, template_root, output_root, visualiser_json, tenancy_ocid=None, region=None, compartment_ocid=None):
+    def __init__(self, template_root, output_root, visualiser_json, use_vars=False, tenancy_ocid=None, region=None, compartment_ocid=None):
         DIRECTORY_SUFFIX = 'resource-manager'
-        super(OCIResourceManagerGenerator, self).__init__(template_root, output_root, visualiser_json)
+        super(OCIResourceManagerGenerator, self).__init__(template_root, output_root, visualiser_json, use_vars)
         self.output_dir = os.path.join(output_root, DIRECTORY_SUFFIX)
         logger.info('OCIResourceManagerGenerator : Template Directory {0!s:s}'.format(template_root))
         logger.info('OCIResourceManagerGenerator : Output Directory {0!s:s}'.format(output_root))

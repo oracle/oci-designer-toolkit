@@ -7,22 +7,22 @@ resource "oci_core_security_list" "{{ resource_name }}" {
 {% for rule in egress_rules %}
     egress_security_rules {
         # Required
-        protocol    = {{ rule.protocol }}
-        destination = {{ rule.destination }}
+        protocol    = {{ rule.protocol | safe }}
+        destination = {{ rule.destination | safe }}
         # Optional
     {% if rule.destination_type is defined %}
-        destination_type  = {{ rule.destination_type }}
+        destination_type  = {{ rule.destination_type | safe }}
     {% endif %}
     {% if rule.tcp_options is defined %}
         tcp_options {
         {% if rule.tcp_options.destination_port_range is defined %}
-            min = {{ rule.tcp_options.destination_port_range.min }}
-            max = {{ rule.tcp_options.destination_port_range.max }}
+            min = {{ rule.tcp_options.destination_port_range.min | safe }}
+            max = {{ rule.tcp_options.destination_port_range.max | safe }}
         {% endif %}
         {% if rule.tcp_options.source_port_range is defined %}
             source_port_range {
-                min = {{ rule.tcp_options.source_port_range.min }}
-                max = {{ rule.tcp_options.source_port_range.max }}
+                min = {{ rule.tcp_options.source_port_range.min | safe }}
+                max = {{ rule.tcp_options.source_port_range.max | safe }}
             }
         {% endif %}
         }
@@ -30,22 +30,22 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% if rule.udp_options is defined %}
         udp_options {
         {% if rule.udp_options.destination_port_range is defined %}
-            min = {{ rule.udp_options.destination_port_range.min }}
-            max = {{ rule.udp_options.destination_port_range.max }}
+            min = {{ rule.udp_options.destination_port_range.min | safe }}
+            max = {{ rule.udp_options.destination_port_range.max | safe }}
         {% endif %}
         {% if rule.udp_options.source_port_range is defined %}
             source_port_range {
-                min = {{ rule.udp_options.source_port_range.min }}
-                max = {{ rule.udp_options.source_port_range.max }}
+                min = {{ rule.udp_options.source_port_range.min | safe }}
+                max = {{ rule.udp_options.source_port_range.max | safe }}
             }
         {% endif %}
         }
     {% endif %}
     {% if rule.icmp_options is defined %}
         icmp_options {
-            type = {{ rule.icmp_options.type }}
+            type = {{ rule.icmp_options.type | safe }}
         {% if rule.icmp_options.code is defined %}
-            code = {{ rule.icmp_options.code }}
+            code = {{ rule.icmp_options.code | safe }}
         {% endif %}
         }
     {% endif %}
@@ -54,22 +54,22 @@ resource "oci_core_security_list" "{{ resource_name }}" {
 {% for rule in ingress_rules %}
     ingress_security_rules {
         # Required
-        protocol    = {{ rule.protocol }}
-        source      = {{ rule.source }}
+        protocol    = {{ rule.protocol | safe }}
+        source      = {{ rule.source | safe }}
         # Optional
     {% if rule.source_type is defined %}
-        source_type  = {{ rule.source_type }}
+        source_type  = {{ rule.source_type | safe }}
     {% endif %}
     {% if rule.tcp_options is defined %}
         tcp_options {
         {% if rule.tcp_options.destination_port_range is defined %}
-            min = {{ rule.tcp_options.destination_port_range.min }}
-            max = {{ rule.tcp_options.destination_port_range.max }}
+            min = {{ rule.tcp_options.destination_port_range.min | safe }}
+            max = {{ rule.tcp_options.destination_port_range.max | safe }}
         {% endif %}
         {% if rule.tcp_options.source_port_range is defined %}
             source_port_range {
-                min = {{ rule.tcp_options.source_port_range.min }}
-                max = {{ rule.tcp_options.source_port_range.max }}
+                min = {{ rule.tcp_options.source_port_range.min | safe }}
+                max = {{ rule.tcp_options.source_port_range.max | safe }}
             }
         {% endif %}
         }
@@ -77,34 +77,34 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% if rule.udp_options is defined %}
         udp_options {
         {% if rule.udp_options.destination_port_range is defined %}
-            min = {{ rule.udp_options.destination_port_range.min }}
-            max = {{ rule.udp_options.destination_port_range.max }}
+            min = {{ rule.udp_options.destination_port_range.min | safe }}
+            max = {{ rule.udp_options.destination_port_range.max | safe }}
         {% endif %}
         {% if rule.udp_options.source_port_range is defined %}
             source_port_range {
-                min = {{ rule.udp_options.source_port_range.min }}
-                max = {{ rule.udp_options.source_port_range.max }}
+                min = {{ rule.udp_options.source_port_range.min | safe }}
+                max = {{ rule.udp_options.source_port_range.max | safe }}
             }
         {% endif %}
         }
     {% endif %}
     {% if rule.icmp_options is defined %}
         icmp_options {
-            type = {{ rule.icmp_options.type }}
+            type = {{ rule.icmp_options.type | safe }}
         {% if rule.icmp_options.code is defined %}
-            code = {{ rule.icmp_options.code }}
+            code = {{ rule.icmp_options.code | safe }}
         {% endif %}
         }
     {% endif %}
     }
 {% endfor %}
     # Optional
-    display_name   = {{ display_name }}
+    display_name   = {{ display_name | safe }}
 {% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
+    defined_tags   = {{ defined_tags | safe }}
 {% endif %}
 {% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }
 

@@ -28,10 +28,10 @@ class OCIAnsibleGenerator(OCIGenerator):
     OUTPUTS_FILE_NAME = 'output.yml'
     JINJA2_VARIABLE_FORMAT = '{{{{ {0:s} }}}}'
 
-    def __init__(self, template_root, output_root, visualiser_json):
+    def __init__(self, template_root, output_root, visualiser_json, use_vars=True):
         template_dir = os.path.join(template_root, self.DIRECTORY_SUFFIX)
         output_dir = os.path.join(output_root, self.DIRECTORY_SUFFIX)
-        super(OCIAnsibleGenerator, self).__init__(template_dir, output_dir, visualiser_json)
+        super(OCIAnsibleGenerator, self).__init__(template_dir, output_dir, visualiser_json, use_vars)
 
     def writeFiles(self):
         main_rendered = self.getRenderedMain()
@@ -53,5 +53,8 @@ class OCIAnsibleGenerator(OCIGenerator):
 
     def formatJinja2Variable(self, variable_name):
         return '{{{{ {0:s} }}}}'.format(variable_name)
+
+    def formatJinja2Value(self, value):
+        return value
 
 

@@ -1,0 +1,56 @@
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Database System{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Subnet</div><div class='td'><label id="subnet_id" class="okit-property-value okit-property-label"></label></div></div>
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Hostname</div><div class='td'><input type="text" id="hostname" name="hostname" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="okit-property-value">
+        <option value="1" selected="selected">Availability Domain 1</option>
+        <option value="2">Availability Domain 2</option>
+        <option value="3">Availability Domain 3</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Database Edition</div><div class='td'><select id="database_edition" class="okit-property-value">
+        <option value="STANDARD_EDITION" selected="selected">Standard</option>
+        <option value="ENTERPRISE_EDITION">Enterprise</option>
+        <option value="ENTERPRISE_EDITION_HIGH_PERFORMANCE">High Performance</option>
+        <option value="ENTERPRISE_EDITION_EXTREME_PERFORMANCE">Extreme Performance</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Shape</div><div class='td'><select id="shape" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Version</div><div class='td'><select id="db_version" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Admin Password</div><div class='td'><input type="text" id="admin_password" name="admin_password" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Public Keys</div><div class='td'><input type="text" id="ssh_public_keys" name="ssh_public_keys" class="okit-property-value"></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Database Name</div><div class='td'><input type="text" id="db_name" name="db_name" class="okit-property-value" maxlength="8"></div></div>
+    <div class='tr'><div class='td'>Workload</div><div class='td'><select id="db_workload" class="okit-property-value">
+        <option value="OLTP" selected="selected">Transaction Processing</option>
+        <option value="DW">Data Warehouse</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Storage Management</div><div class='td'><select id="storage_management" class="okit-property-value">
+        <option value="ASM" selected="selected">Automatic Storage Management</option>
+        <option value="LVM">Logical Volume Management</option>
+    </select></div></div>
+    <div class='tr' id="data_storage_percentage_tr"><div class='td'>Storage Percentage</div><div class='td'><input type="text" id="data_storage_percentage" name="data_storage_percentage" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Size (in GB)</div><div class='td'><input type="text" id="data_storage_size_in_gb" name="data_storage_size_in_gb" class="okit-property-value"></div></div>
+    <div class='tr' id="cpu_core_count_tr"><div class='td'>CPU Core Count</div><div class='td'><select id="cpu_core_count" class="okit-property-value"></select></div></div>
+    <div class='tr' id="node_count_tr"><div class='td'>Node Count</div><div class='td'><select id="node_count" class="okit-property-value">
+        <option value="1" selected="selected">1</option>
+        <option value="2">2</option>
+    </select></div></div>
+    <div class='tr' id="cluster_name_tr"><div class='td'>Cluster Name</div><div class='td'><input type="text" id="cluster_name" name="cluster_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Fault Domain</div><div class='td'><select id="fault_domains" multiple="multiple" class="okit-property-value">
+        <option value="FAULT-DOMAIN-1">Fault Domain 1</option>
+        <option value="FAULT-DOMAIN-2">Fault Domain 2</option>
+        <option value="FAULT-DOMAIN-3">Fault Domain 3</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><select multiple="multiple" id="nsg_ids" class="okit-property-value"></select></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}

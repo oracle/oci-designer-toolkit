@@ -6,21 +6,21 @@
         state: "present"
         # Required
         compartment_id: "{{ compartment_id }}"
-        cidr_block: "{{ cidr_block }}"
+        cidr_block: "{{ cidr_block | safe }}"
         # Optional
-        dns_label: "{{ dns_label }}"
-        display_name: "{{ display_name }}"
+        dns_label: "{{ dns_label | safe }}"
+        display_name: "{{ display_name | safe }}"
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
 {% if is_ipv6enabled is defined %}
-        is_ipv6enabled: "{{ is_ipv6enabled }}"
+        is_ipv6enabled: "{{ is_ipv6enabled | safe }}"
 {% endif %}
 {% if ipv6cidr_block is defined %}
-        ipv6cidr_block: "{{ ipv6cidr_block }}"
+        ipv6cidr_block: "{{ ipv6cidr_block | safe }}"
 {% endif %}
       register: {{ resource_name }}
 

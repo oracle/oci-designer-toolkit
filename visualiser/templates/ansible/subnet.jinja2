@@ -7,13 +7,13 @@
         # Required
         compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
-        cidr_block: "{{ cidr_block }}"
+        cidr_block: "{{ cidr_block | safe }}"
         # Optional
 {% if availability_domain is defined %}
         availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
 {% endif %}
 {% if display_name is defined %}
-        display_name: "{{ display_name }}"
+        display_name: "{{ display_name | safe }}"
 {% endif %}
 {% if route_table_id is defined %}
         route_table_id: "{{ route_table_id }}"
@@ -22,19 +22,19 @@
         security_list_ids: [{% for security_list_id in security_list_ids %}"{{ security_list_id }}"{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 {% if dns_label is defined %}
-        dns_label: "{{ dns_label }}"
+        dns_label: "{{ dns_label | safe }}"
 {% endif %}
 {% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
+        defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
 {% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
+        freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
 {% if prohibit_public_ip_on_vnic is defined %}
-        prohibit_public_ip_on_vnic: "{{ prohibit_public_ip_on_vnic }}"
+        prohibit_public_ip_on_vnic: "{{ prohibit_public_ip_on_vnic | safe }}"
 {% endif %}
 {% if ipv6cidr_block is defined %}
-        ipv6cidr_block: "{{ ipv6cidr_block }}"
+        ipv6cidr_block: "{{ ipv6cidr_block | safe }}"
 {% endif %}
       register: {{ resource_name }}
 
