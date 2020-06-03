@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.7.0 
+**Release Date**: 24th June 2020
+### Features
+1. Windows PowerShell Docker Helper Scripts
+
+### Bug Fixes
+
+
 ## Version 0.6.0 
 **Release Date**: 3rd June 2020
 ### Features
