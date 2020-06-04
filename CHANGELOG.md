@@ -4,7 +4,9 @@
 ## Version 0.7.0 
 **Release Date**: 24th June 2020
 ### Features
-1. Windows PowerShell Docker Helper Scripts
+1. Windows PowerShell Docker Helper Scripts.
+2. Add setting for last selected Region and Compartment for Query and Resource Manager Export.
+3. Modify Resource Manager dialog to close when the stack has been created and display progress bar during creation.
 
 ### Bug Fixes
 
