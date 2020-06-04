@@ -1012,7 +1012,7 @@ class OCIGenerator(object):
         self.addJinja2Variable("service_name", service_gateway["service_name"], standardisedName)
         # --- Optional
         # ---- Route Table
-        if len(service_gateway['route_table_id']):
+        if service_gateway['route_table_id'] is not None and len(service_gateway['route_table_id']):
             self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['route_table_id']]))
         else:
             self.jinja2_variables.pop("route_table_id", None)

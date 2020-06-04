@@ -9,6 +9,7 @@
 3. Modify Resource Manager dialog to close when the stack has been created and display progress bar during creation.
 
 ### Bug Fixes
+1. Service Gateway with null route_table_id will not generate Terraform / Ansible / RM and we are unable to set Route table.
 
 
 ## Version 0.6.0 

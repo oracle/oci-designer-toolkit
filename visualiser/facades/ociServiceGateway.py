@@ -54,6 +54,11 @@ class OCIServiceGateways(OCIVirtualNetworkConnection):
             self.service_gateways_json = self.filterJsonObjectList(service_gateways_json, filter)
             logger.debug(str(self.service_gateways_json))
 
+            # Replace null route table with ""
+            for service_gateway in self.service_gateways_json:
+                if service_gateway['route_table_id'] is None:
+                    service_gateway['route_table_id'] = ''
+
             # Build List of ServiceGateway Objects
             self.service_gateways_obj = []
             for service_gateway in self.service_gateways_json:
