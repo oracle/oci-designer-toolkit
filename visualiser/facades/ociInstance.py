@@ -8,7 +8,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Stefan Hinker (Oracle Cloud Solutions A-Team)", "Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociInstance"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
