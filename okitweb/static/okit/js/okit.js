@@ -102,6 +102,8 @@ class OkitSettings {
         this.is_display_grid = false;
         this.is_variables = true;
         this.icons_only = true;
+        this.last_used_region = '';
+        this.last_used_compartment = '';
         this.load();
     }
 

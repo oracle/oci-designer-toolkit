@@ -184,6 +184,7 @@ function displayResourceManagerDialog() {
     div.append('label')
         .attr('for', 'rm_apply')
         .text('Apply');
+
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
@@ -204,6 +205,9 @@ function exportToResourceManager() {
     };
     hideNavMenu();
     setBusyIcon();
+    $(jqId('modal_dialog_progress')).removeClass('hidden');
+    $(jqId('submit_query_btn')).text('.........Creating Stack');
+    $(jqId('submit_query_btn')).attr('disabled', 'disabled');
     $.ajax({
         type: 'post',
         url: 'export/resourcemanager',
@@ -213,16 +217,18 @@ function exportToResourceManager() {
         success: function(resp) {
             console.info('Response : ' + resp);
             unsetBusyIcon();
-            alert('Created Stack ' + resp);
+            $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            $(jqId('modal_dialog_progress')).addClass('hidden');
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
             console.info('Error : '+ error)
             unsetBusyIcon();
+            $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            $(jqId('modal_dialog_progress')).addClass('hidden');
             alert(`Export to Resource Manager Failed (${error})`);
         }
     });
-    $(jqId('modal_dialog_wrapper')).addClass('hidden');
 }
 
 

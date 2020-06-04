@@ -96,6 +96,7 @@ textarea {
 .hidden {
     visibility: hidden;
     display: none;
+    max-height: 0;
 }
 
 /*
@@ -174,6 +175,10 @@ textarea {
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
     font-size: small;
     align-items: center;
+}
+
+.okit-progress {
+    width: 100%;
 }
 
 .okit-version-div {
@@ -559,6 +564,15 @@ li a.parent-item:hover {
     display: flex;
     align-items: center;
     padding: 0.2em;
+    width: 100%;
+}
+
+.okit-modal-dialog-progress {
+    display: flex;
+    width: 100%;
+}
+
+.okit-modal-dialog-progress > progress {
     width: 100%;
 }
 

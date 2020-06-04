@@ -280,7 +280,7 @@ function displayQueryDialog() {
         .append('select')
             .attr('id', 'config_profile')
             .on('change', () => {
-                console.info('Profile Select '+$(jqId('config_profile')).val());
+                console.info('Profile Select ' + $(jqId('config_profile')).val());
                 loadCompartments();
                 loadRegions();
             });
@@ -299,6 +299,11 @@ function displayQueryDialog() {
         .attr('class', 'td')
         .append('select')
         .attr('id', 'query_compartment_id')
+        .on('change', () => {
+            console.info('Compartment Select ' + $(jqId('query_compartment_id')).val());
+            okitSettings.last_used_compartment = $(jqId('query_compartment_id')).val();
+            okitSettings.save();
+        })
         .append('option')
             .attr('value', 'Retrieving')
             .text('Retrieving..........');
@@ -313,6 +318,11 @@ function displayQueryDialog() {
         .append('select')
             .attr('id', 'query_region_id')
             .attr('multiple', 'multiple')
+            .on('change', () => {
+                console.info('Region Select ' + $(jqId('query_region_id')).val());
+                okitSettings.last_used_region = $(jqId('query_region_id')).val();
+                okitSettings.save();
+            })
             .append('option')
                 .attr('value', 'Retrieving')
                 .text('Retrieving..........');
@@ -371,7 +381,7 @@ function loadCompartments() {
                     okitSettings.home_region_key = compartment.home_region_key;
                 }
             }
-            selectQueryHomeRegion();
+            selectQueryLastUsedCompartment();
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
@@ -403,7 +413,7 @@ function loadRegions() {
                     .attr('value', region['name'])
                     .text(region['display_name']);
             }
-            selectQueryHomeRegion();
+            selectQueryLastUsedRegion();
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
@@ -419,6 +429,16 @@ function selectQueryHomeRegion() {
                 break;
             }
         }
+    }
+}
+function selectQueryLastUsedRegion() {
+    if (okitSettings.last_used_region !== '') {
+       $(jqId('query_region_id')).val(okitSettings.last_used_region);
+    }
+}
+function selectQueryLastUsedCompartment() {
+    if (okitSettings.last_used_compartment !== '') {
+        $(jqId('query_compartment_id')).val(okitSettings.last_used_compartment);
     }
 }
 let queryCount = 0;
