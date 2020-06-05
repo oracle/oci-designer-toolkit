@@ -424,6 +424,7 @@ def export(destination):
     compartment_id = request.json.get('location', {}).get('compartment_id', None)
     region = request.json.get('location', {}).get('region', None)
     plan_or_apply = request.json.get('location', {}).get('plan_or_apply', 'PLAN')
+    stack_name = request.json.get('location', {}).get('stack_name', 'okit-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S')))
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     if request.method == 'POST':
         try:
@@ -431,7 +432,7 @@ def export(destination):
             destination_dir = tempfile.mkdtemp();
             logger.debug(">>>>>>>>>>>>> {0!s:s}".format(destination_dir))
             stack = {}
-            stack['display_name'] = 'okit-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S'))
+            stack['display_name'] = stack_name
             if destination == 'resourcemanager':
                 oci_compartments = OCICompartments(config=config, profile=config_profile)
                 # Generate Resource Manager Terraform zip
@@ -451,6 +452,7 @@ def export(destination):
                 stack_json = resource_manager.createStack(stack)
                 resource_manager.createJob(stack_json, plan_or_apply)
                 return_code = 200
+                resource_manager.list()
             shutil.rmtree(destination_dir)
             return stack['display_name'], return_code
         except Exception as e:

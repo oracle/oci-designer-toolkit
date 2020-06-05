@@ -129,6 +129,19 @@ function displayResourceManagerDialog() {
             .attr('value', section)
             .text(section);
     }
+    // Region Id
+    tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div')
+        .attr('class', 'td')
+        .text('Region');
+    tr.append('div')
+        .attr('class', 'td')
+        .append('select')
+        .attr('id', 'query_region_id')
+        .append('option')
+        .attr('value', 'Retrieving')
+        .text('Retrieving..........');
     // Compartment Id
     tr = tbody.append('div')
         .attr('class', 'tr');
@@ -142,19 +155,18 @@ function displayResourceManagerDialog() {
         .append('option')
         .attr('value', 'Retrieving')
         .text('Retrieving..........');
-    // Region Ids
+    // Stack name
     tr = tbody.append('div')
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
-        .text('Region');
+        .text('Stack Name');
     tr.append('div')
         .attr('class', 'td')
-        .append('select')
-        .attr('id', 'query_region_id')
-        .append('option')
-        .attr('value', 'Retrieving')
-        .text('Retrieving..........');
+        .append('input')
+            .attr('type','text')
+            .attr('id', 'stack_name')
+            .attr('value', 'okit-stack-' + getTimestamp());
     // Plan / Apply
     tr = tbody.append('div')
         .attr('class', 'tr');
@@ -201,6 +213,7 @@ function exportToResourceManager() {
         config_profile: $(jqId('config_profile')).val(),
         compartment_id: $(jqId('query_compartment_id')).val(),
         region: $(jqId('query_region_id')).val(),
+        stack_name: $(jqId('stack_name')).val().trim(),
         plan_or_apply: $('input[name=plan_apply_toggle]:checked').val()
     };
     hideNavMenu();

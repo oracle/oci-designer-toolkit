@@ -538,7 +538,7 @@ li a.parent-item:hover {
     background-color: white;
     opacity: 1;
     box-shadow: 0px 0px 5px black;
-    min-width: 200px;
+    min-width: 400px;
     min-height: 200px;
     overflow: hidden;
 }
@@ -559,6 +559,11 @@ li a.parent-item:hover {
     border-top: #555555 1px solid;
     border-bottom: #555555 1px solid;
 }
+
+#modal_dialog_body > div {
+    width: 100%;
+}
+
 
 .okit-modal-dialog-footer {
     display: flex;
