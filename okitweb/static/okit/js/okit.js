@@ -1505,8 +1505,6 @@ class OkitJson {
     // Dynamic Routing Gateway
     newDynamicRoutingGateway(data, parent=null) {
         console.info('New Dynamic Routing Gateway');
-        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
-        data.compartment_id = data.parent_id;
         this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
         return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
     }
