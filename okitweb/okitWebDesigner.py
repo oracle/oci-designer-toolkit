@@ -265,7 +265,25 @@ def saveas(savetype):
             logger.exception(e)
             return str(e), 500
 
-
+@bp.route('/oci/resourcemanager', methods=(['GET']))
+def ociResourceManger():
+    query_string = request.query_string
+    parsed_query_string = urllib.parse.unquote(query_string.decode())
+    query_json = json.loads(parsed_query_string)
+    logJson(query_json)
+    config_profile = query_json.get('location', {}).get('config_profile', 'DEFAULT')
+    compartment_id = query_json.get('location', {}).get('compartment_id', None)
+    region = query_json.get('location', {}).get('region', None)
+    if request.method == 'GET':
+        try:
+            config = {'region': region}
+            oci_resourcemanager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
+            stacks = oci_resourcemanager.list()
+            return json.dumps(stacks, sort_keys=False, indent=2, separators=(',', ': '))
+        except Exception as e:
+            logger.exception(e)
+            return str(e), 500
+    return
 
 @bp.route('/oci/compartment', methods=(['GET']))
 def ociCompartment():
@@ -424,6 +442,8 @@ def export(destination):
     compartment_id = request.json.get('location', {}).get('compartment_id', None)
     region = request.json.get('location', {}).get('region', None)
     plan_or_apply = request.json.get('location', {}).get('plan_or_apply', 'PLAN')
+    create_or_update = request.json.get('location', {}).get('create_or_update', 'CREATE')
+    stack_id = request.json.get('location', {}).get('stack_id', '')
     stack_name = request.json.get('location', {}).get('stack_name', 'okit-stack-{0!s:s}'.format(time.strftime('%Y%m%d%H%M%S')))
     logger.info('Using Profile : {0!s:s}'.format(config_profile))
     if request.method == 'POST':
@@ -449,7 +469,11 @@ def export(destination):
                 stack['zipfile'] = zipname
                 stack['variables'] = generator.getVariables()
                 resource_manager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
-                stack_json = resource_manager.createStack(stack)
+                if create_or_update == 'UPDATE':
+                    stack['id'] = stack_id
+                    stack_json = resource_manager.updateStack(stack)
+                else:
+                    stack_json = resource_manager.createStack(stack)
                 resource_manager.createJob(stack_json, plan_or_apply)
                 return_code = 200
                 resource_manager.list()

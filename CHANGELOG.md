@@ -7,7 +7,8 @@
 1. Windows PowerShell Docker Helper Scripts.
 2. Add setting for last selected Region and Compartment for Query and Resource Manager Export.
 3. Modify Resource Manager dialog to close when the stack has been created and display progress bar during creation.
-4. Allow user to specify stack name during export to Resource Manager
+4. Specify stack name during export to Resource Manager
+5. Update existing Resource Manager Stacks
 
 ### Bug Fixes
 1. Service Gateway with null route_table_id will not generate Terraform / Ansible / RM. Route table values can not be assigned within the GUI.
@@ -28,6 +29,7 @@
 7. Move DRG to VCN Parent rather than Compartment
 8. Check for Update
 9. Highlight selected artefact (Toggles on/off).
+10. Database Systems
 
 ### Bug Fixes
 1. Palette did not scroll

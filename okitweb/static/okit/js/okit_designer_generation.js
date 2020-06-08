@@ -138,10 +138,13 @@ function displayResourceManagerDialog() {
     tr.append('div')
         .attr('class', 'td')
         .append('select')
-        .attr('id', 'query_region_id')
-        .append('option')
-        .attr('value', 'Retrieving')
-        .text('Retrieving..........');
+            .attr('id', 'query_region_id')
+            .on('change', () => {
+                loadResourceManagerStacks();
+            })
+            .append('option')
+                .attr('value', 'Retrieving')
+                .text('Retrieving..........');
     // Compartment Id
     tr = tbody.append('div')
         .attr('class', 'tr');
@@ -151,12 +154,56 @@ function displayResourceManagerDialog() {
     tr.append('div')
         .attr('class', 'td')
         .append('select')
-        .attr('id', 'query_compartment_id')
-        .append('option')
-        .attr('value', 'Retrieving')
-        .text('Retrieving..........');
+            .attr('id', 'query_compartment_id')
+            .on('change', () => {
+                loadResourceManagerStacks();
+            })
+            .append('option')
+                .attr('value', 'Retrieving')
+                .text('Retrieving..........');
+    // Create / Update
+    tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div')
+        .attr('class', 'td')
+        .text('');
+    let td = tr.append('div')
+        .attr('class', 'td');
+    // Create
+    let div = td.append('div')
+        .attr('class', 'okit-horizontal-radio');
+    div.append('input')
+        .attr('type','radio')
+        .attr('id', 'rm_create')
+        .attr('name', 'create_update_toggle')
+        .attr('value', 'CREATE')
+        .attr('checked', 'checked')
+        .on('change', () => {
+            $(jqId('stack_name_tr')).removeClass('collapsed');
+            $(jqId('stack_id_tr')).addClass('collapsed');
+            $(jqId('submit_query_btn')).text('Create Stack');
+        });
+    div.append('label')
+        .attr('for', 'rm_create')
+        .text('Create');
+    // Update
+    div.append('input')
+        .attr('type','radio')
+        .attr('id', 'rm_update')
+        .attr('name', 'create_update_toggle')
+        .attr('value', 'UPDATE')
+        .on('change', () => {
+            $(jqId('stack_name_tr')).addClass('collapsed');
+            $(jqId('stack_id_tr')).removeClass('collapsed');
+            $(jqId('submit_query_btn')).text('Update Stack');
+            loadResourceManagerStacks();
+        });
+    div.append('label')
+        .attr('for', 'rm_update')
+        .text('Update');
     // Stack name
     tr = tbody.append('div')
+        .attr('id', 'stack_name_tr')
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
@@ -167,16 +214,30 @@ function displayResourceManagerDialog() {
             .attr('type','text')
             .attr('id', 'stack_name')
             .attr('value', 'okit-stack-' + getTimestamp());
+    // Stack Id
+    tr = tbody.append('div')
+        .attr('id', 'stack_id_tr')
+        .attr('class', 'tr collapsed');
+    tr.append('div')
+        .attr('class', 'td')
+        .text('Stacks');
+    tr.append('div')
+        .attr('class', 'td')
+        .append('select')
+        .attr('id', 'stack_id')
+        .append('option')
+        .attr('value', 'Retrieving')
+        .text('Retrieving..........');
     // Plan / Apply
     tr = tbody.append('div')
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
         .text('');
-    let td = tr.append('div')
+    td = tr.append('div')
         .attr('class', 'td');
     // Plan
-    let div = td.append('div')
+    div = td.append('div')
         .attr('class', 'okit-horizontal-radio');
     div.append('input')
         .attr('type','radio')
@@ -214,12 +275,14 @@ function exportToResourceManager() {
         compartment_id: $(jqId('query_compartment_id')).val(),
         region: $(jqId('query_region_id')).val(),
         stack_name: $(jqId('stack_name')).val().trim(),
+        stack_id: $(jqId('stack_id')).val().trim(),
+        create_or_update: $('input[name=create_update_toggle]:checked').val(),
         plan_or_apply: $('input[name=plan_apply_toggle]:checked').val()
     };
     hideNavMenu();
     setBusyIcon();
     $(jqId('modal_dialog_progress')).removeClass('hidden');
-    $(jqId('submit_query_btn')).text('.........Creating Stack');
+    $(jqId('submit_query_btn')).text('.........Processing Stack');
     $(jqId('submit_query_btn')).attr('disabled', 'disabled');
     $.ajax({
         type: 'post',
@@ -240,6 +303,40 @@ function exportToResourceManager() {
             $(jqId('modal_dialog_wrapper')).addClass('hidden');
             $(jqId('modal_dialog_progress')).addClass('hidden');
             alert(`Export to Resource Manager Failed (${error})`);
+        }
+    });
+}
+function loadResourceManagerStacks() {
+    // Clear Select
+    let select = $(jqId('stack_id'));
+    $(select).empty();
+    select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+    let request_json = {};
+    request_json.location = {
+        config_profile: $(jqId('config_profile')).val(),
+        compartment_id: $(jqId('query_compartment_id')).val(),
+        region: $(jqId('query_region_id')).val()
+    };
+    $.ajax({
+        type: 'get',
+        url: 'oci/resourcemanager',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            let jsonBody = JSON.parse(resp)
+            $(jqId('stack_id')).empty();
+            let stack_select = d3.select(d3Id('stack_id'));
+            for(let stack of jsonBody ){
+                stack_select.append('option')
+                    .attr('value', stack['id'])
+                    .text(stack['display_name']);
+            }
+            $(jqId('stack_id')).val($("#stack_id option:first").val());
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
         }
     });
 }

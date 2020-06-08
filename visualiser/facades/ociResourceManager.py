@@ -76,7 +76,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
     def updateStack(self, stack):
         logger.debug('<<<<<<<<<<<<< Stack Detail >>>>>>>>>>>>>: {0!s:s}'.format(str(stack)))
         zip_source = oci.resource_manager.models.UpdateZipUploadConfigSourceDetails(zip_file_base64_encoded=self.base64EncodeZip(stack))
-        stack_details = oci.resource_manager.models.UpdateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x')
+        stack_details = oci.resource_manager.models.UpdateStackDetails(display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x')
         response = self.client.update_stack(stack_id=stack['id'], update_stack_details=stack_details)
         logger.info('Update Stack Response : {0!s:s}'.format(str(response.data)))
         return self.toJson(response.data)
