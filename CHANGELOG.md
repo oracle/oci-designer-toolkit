@@ -13,6 +13,7 @@
 ### Bug Fixes
 1. Service Gateway with null route_table_id will not generate Terraform / Ansible / RM. Route table values can not be assigned within the GUI.
 2. Dynamic Routing Gateway assigning the VCN Id to Compartment Id (OKit-73).
+3. Defined Tags not generating correctly for Terraform.
 
 
 ## Version 0.6.0 

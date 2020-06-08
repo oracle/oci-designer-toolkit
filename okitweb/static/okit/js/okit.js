@@ -1540,8 +1540,10 @@ class OkitJson {
         for (let gateway of this.internet_gateways) {
             if (gateway.vcn_id === data.parent_id) {
                 // We are only allowed a single Internet Gateway peer VCN
-                alert('The maximum limit of 1 for Internet Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                return {error: 'Service Gateway Already Exists.'};
+                if (parent) {
+                    alert('The maximum limit of 1 for Internet Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                }
+                return null;
             }
         }
         this['internet_gateways'].push(new InternetGateway(data, this, parent));
@@ -1568,8 +1570,10 @@ class OkitJson {
         for (let gateway of this.nat_gateways) {
             if (gateway.vcn_id === data.parent_id) {
                 // We are only allowed a single NAT Gateway peer VCN
-                alert('The maximum limit of 1 for NAT Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                return {error: 'Service Gateway Already Exists.'};
+                if (parent) {
+                    alert('The maximum limit of 1 for NAT Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                }
+                return null;
             }
         }
         this['nat_gateways'].push(new NATGateway(data, this, parent));
@@ -1612,8 +1616,10 @@ class OkitJson {
         for (let gateway of this.service_gateways) {
             if (gateway.vcn_id === data.parent_id) {
                 // We are only allowed a single Service Gateway peer VCN
-                alert('The maximum limit of 1 for Service Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                return {error: 'Service Gateway Already Exists.'};
+                if (parent) {
+                    alert('The maximum limit of 1 for Service Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                }
+                return null;
             }
         }
         this['service_gateways'].push(new ServiceGateway(data, this, parent));
@@ -1865,6 +1871,17 @@ class OkitJson {
             if (this.nat_gateways[i].id === id) {
                 this.nat_gateways[i].delete();
                 this.nat_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Network Security Group
+    deleteNetworkSecurityGroup(id) {
+        for (let i = 0; i < this.network_security_groups.length; i++) {
+            if (this.network_security_groups[i].id === id) {
+                this.network_security_groups[i].delete();
+                this.network_security_groups.splice(i, 1);
                 break;
             }
         }
