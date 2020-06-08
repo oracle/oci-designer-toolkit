@@ -76,15 +76,20 @@ class OCITerraformGenerator(OCIGenerator):
     def renderDefinedTags(self, artifact):
         defined_tags = artifact.get("defined_tags", {})
         if len(defined_tags.keys()) > 0:
-            standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
-            # -- Defined Tags
-            variableName = '{0:s}_defined_tags'.format(standardisedName)
-            self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
             definedtags = {}
             for namespace, tags in defined_tags.items():
                 for key, value in tags.items():
                     definedtags["{0!s:s}.{1!s:s}".format(namespace, key)] = str(value)
-            self.run_variables[variableName] = definedtags
+            if self.use_vars:
+                standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+                # -- Defined Tags
+                variableName = '{0:s}_defined_tags'.format(standardisedName)
+                self.run_variables[variableName] = definedtags
+                self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["defined_tags"] = self.formatJinja2Value(definedtags)
+        else:
+            self.jinja2_variables.pop("defined_tags", None)
         return
 
 
