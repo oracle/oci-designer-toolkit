@@ -128,7 +128,9 @@ function dragDrop(evt) {
     console.info('Get Function : ' + getFunction);
     let parentArtifact = okitJson[getFunction](target_id);
     let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: artifact.getArtifactReference()}, parentArtifact);
-    console.debug(JSON.stringify(result, null, 2));
+    if (result) {
+        console.debug(JSON.stringify(result, null, 2));
+    }
     okitJson.draw();
     // Clear Drag class
     this.classList.remove('over');  // this / e.target is previous target element.

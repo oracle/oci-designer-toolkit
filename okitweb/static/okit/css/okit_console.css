@@ -99,6 +99,10 @@ textarea {
     max-height: 0;
 }
 
+.okit-pointer-cursor {
+    cursor: pointer;
+}
+
 /*
 ** OCI Console Classes
  */

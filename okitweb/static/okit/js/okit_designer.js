@@ -434,11 +434,13 @@ function selectQueryHomeRegion() {
 function selectQueryLastUsedRegion() {
     if (okitSettings.last_used_region !== '') {
        $(jqId('query_region_id')).val(okitSettings.last_used_region);
+        $(jqId('query_region_id')).change();
     }
 }
 function selectQueryLastUsedCompartment() {
     if (okitSettings.last_used_compartment !== '') {
         $(jqId('query_compartment_id')).val(okitSettings.last_used_compartment);
+        $(jqId('query_compartment_id')).change();
     }
 }
 let queryCount = 0;
@@ -658,7 +660,7 @@ $(document).ready(function() {
 
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_palette_button')
-        .attr('class', 'okit-bar-panel-displayed')
+        .attr('class', 'okit-bar-panel-displayed okit-pointer-cursor')
         .on('click', function () {
             $(jqId('designer_left_column')).toggleClass('okit-slide-hide-left');
             $(this).toggleClass('okit-bar-panel-displayed');
@@ -668,7 +670,7 @@ $(document).ready(function() {
 
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_properties_button')
-        //.attr('class', 'okit-bar-panel-displayed')
+        .attr('class', 'okit-pointer-cursor')
         .on('click', function () {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
@@ -684,6 +686,7 @@ $(document).ready(function() {
 
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_source_button')
+        .attr('class', 'okit-pointer-cursor')
         .on('click', function () {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
