@@ -10,4 +10,4 @@ $Rootfolder= (get-item $Scriptfolder ).parent
 Write-Host $Rootfolder
 
 
-docker run --rm -p 443:443/tcp -p 80:80/tcp --hostname okit --name okit -v $ENV:UserProfile\.oci:/root/.oci:Z  -v $Rootfolder\okitweb:/okit/okitweb:Z -v $Rootfolder\visualiser:/okit/visualiser:Z -v $Rootfolder\log:/okit/log:Z okit:latest
+docker run --rm -p 443:443/tcp -p 80:80/tcp --hostname okit --name okit -v $ENV:UserProfile\.oci:/root/.oci  -v $Rootfolder\okitweb:/okit/okitweb -v $Rootfolder\visualiser:/okit/visualiser -v $Rootfolder\log:/okit/log okit:latest
