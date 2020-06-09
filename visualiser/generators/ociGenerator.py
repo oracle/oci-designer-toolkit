@@ -19,7 +19,7 @@ import shutil
 
 from common.ociCommon import readYamlFile
 from common.ociLogging import getLogger
-from common.ociValidation import validateVisualiserJson
+from common.ociValidation import OCIJsonValidator
 
 # Configure logging
 logger = getLogger()
@@ -105,7 +105,8 @@ class OCIGenerator(object):
 
     def generate(self):
         # Validate input json
-        validateVisualiserJson(self.visualiser_json)
+        validator = OCIJsonValidator(self.visualiser_json)
+        validator.validate()
         # Build the Id to Name Map
         self.buildIdNameMap()
         # Process Provider Connection information

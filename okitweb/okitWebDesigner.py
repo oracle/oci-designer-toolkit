@@ -30,7 +30,7 @@ from common.ociCommon import readJsonFile
 from common.ociCommon import standardiseIds
 from common.ociCommon import writeJsonFile
 from common.ociLogging import getLogger
-from common.ociQuery import executeQuery
+from common.ociValidation import OCIJsonValidator
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments
@@ -265,6 +265,7 @@ def saveas(savetype):
             logger.exception(e)
             return str(e), 500
 
+
 @bp.route('/oci/resourcemanager', methods=(['GET']))
 def ociResourceManger():
     query_string = request.query_string
@@ -284,6 +285,7 @@ def ociResourceManger():
             logger.exception(e)
             return str(e), 500
     return
+
 
 @bp.route('/oci/compartment', methods=(['GET']))
 def ociCompartment():
@@ -314,6 +316,7 @@ def ociRegion():
     regions = oci_regions.list()
     logger.debug(">>>>>>>>> Regions: {0!s:s}".format(regions))
     return json.dumps(regions, sort_keys=False, indent=2, separators=(',', ': '))
+
 
 @bp.route('/oci/query/', methods=(['GET']))
 def ociQuery():
@@ -484,6 +487,7 @@ def export(destination):
             return str(e), 500
     return
 
+
 @bp.route('/dropdown/data', methods=(['GET', 'POST']))
 def dropdownData():
     dropdown_file = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown.json'))
@@ -495,6 +499,7 @@ def dropdownData():
         return request.json
     else:
         return 'Unknown Method', 500
+
 
 @bp.route('/dropdown/query', methods=(['GET']))
 def dropdownQuery():
@@ -510,6 +515,7 @@ def dropdownQuery():
     else:
         return 'Unknown Method', 500
 
+
 @bp.route('config/sections', methods=(['GET']))
 def configSections():
     if request.method == 'GET':
@@ -519,6 +525,7 @@ def configSections():
     else:
         return 'Unknown Method', 500
 
+
 @bp.route('config/region/<string:section>', methods=(['GET']))
 def configRegion(section):
     if request.method == 'GET':
@@ -526,4 +533,16 @@ def configRegion(section):
         return response
     else:
         return 'Unknown Method', 500
+
+
+@bp.route('oci/validate', methods=(['GET']))
+def ociValidate():
+    query_string = request.query_string
+    parsed_query_string = urllib.parse.unquote(query_string.decode())
+    query_json = json.loads(parsed_query_string)
+    logJson(query_json)
+    # Validate input json
+    validator = OCIJsonValidator(query_json)
+    result = {"valid": validator.validate(), "results": validator.results()}
+    return json.dumps(result, sort_keys=False, indent=2, separators=(',', ': '))
 

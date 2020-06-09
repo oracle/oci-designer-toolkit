@@ -18,5 +18,15 @@ from common.ociLogging import getLogger
 # Configure logging
 logger = getLogger()
 
-def validateVisualiserJson(json_data):
-    return
+class OCIJsonValidator(object):
+    def __init__(self, okit_json={}):
+        self.okit_json = okit_json
+        self.results = {}
+        self.valid = False
+
+    def validate(self):
+        return self.valid
+
+    def results(self):
+        return self.results
+
