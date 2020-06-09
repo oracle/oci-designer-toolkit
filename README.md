@@ -29,28 +29,33 @@ Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Insta
 
 ### Quick Start
 The docker image is the recommended runtime server and can be built and started using the following simple docker commands.
+For full connection to OCI you will need to follow the [Installation Create Config File instruction](documentation/Installation.md#oci-config-file) 
+prior to building.
 
 #### Build Docker Image
 ```bash
 cd oci-designer-toolkit
-docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./containers/docker/
+docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
 ```
+The __<OKIT_ROOT_DIR>/containers/scripts__ contains helper scripts for Linux/Mac and Windows PowerShell.
+
+- Linux/Mac : build-docker-image.sh
+- Windows PowerShell : build_docker_image_win.ps1 
 
 #### Start Docker Image
-- OKIT_ROOT_DIR  : Absolute directory name for the extracted / cloned OKIT repository
-- OCI_CONFIG_DIR : Directory containing the OCI config file. Details can be found in [OCI Designer Toolkit Installation Guide](documentation/Installation.md#oci-config-file).
-
 ```bash
 cd oci-designer-toolkit
 docker run -d --rm -p 80:80 \
            --name okit \
            --hostname okit \
-           -v <OCI_CONFIG_DIR>:/root/.oci \
-           -v <OKIT_ROOT_DIR>/okitweb:/okit/okitweb \
-           -v <OKIT_ROOT_DIR>/visualiser:/okit/visualiser \
-           -v <OKIT_ROOT_DIR>/log:/okit/log \
            okit
 ```
+The __<OKIT_ROOT_DIR>/containers/scripts__ contains helper scripts for Linux/Mac and Windows PowerShell.
+
+- Linux/Mac : start-okit-server.sh
+- Windows PowerShell : start_okit_server_win.ps1 
+
+If you want to run the image in and interactive mode then replace to _-d_ in the above command with _-it_.
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
 

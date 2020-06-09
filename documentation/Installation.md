@@ -73,28 +73,34 @@ The docker image is the recommended runtime server and can be built and started 
 It should be noted that the current Docker script is designed for development purposes and mounts the source directories
 at runtime. 
 
-### Build Docker Image
-```bash
-cd oci-designer-toolkit
-docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./containers/docker/
-```
-
-### Start Docker Image
-
 - OKIT_ROOT_DIR  : Absolute Root Directory of the extracted / cloned OKIT repository
 - OCI_CONFIG_DIR : Directory containing the OCI config file (OKIT_ROOT_DIR/containers/oci)
 
+### Build Docker Image
 ```bash
 cd oci-designer-toolkit
-docker run -d --rm -p 80:80 \
+docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
+```
+
+The __<OKIT_ROOT_DIR>/containers/scripts__ contains helper scripts for Linux/Mac and Windows PowerShell.
+
+- Linux/Mac : build-docker-image.sh
+- Windows PowerShell : build_docker_image_win.ps1 
+
+### Start Docker Image
+
+```bash
+cd oci-designer-toolkit
+docker run -d --rm -p 443:443 -p 80:80 \
            --name okit \
            --hostname okit \
-           -v <OCI_CONFIG_DIR>:/root/.oci \
-           -v <OKIT_ROOT_DIR>/okitweb:/okit/okitweb \
-           -v <OKIT_ROOT_DIR>/visualiser:/okit/visualiser \
-           -v <OKIT_ROOT_DIR>/log:/okit/log \
            okit
 ```
+
+The __<OKIT_ROOT_DIR>/containers/scripts__ contains helper scripts for Linux/Mac and Windows PowerShell.
+
+- Linux/Mac : start-okit-server.sh
+- Windows PowerShell : start_okit_server_win.ps1 
 
 If you want to run the image in and interactive mode then replace to _-d_ in the above command with _-it_.
 

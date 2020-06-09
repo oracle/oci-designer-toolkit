@@ -45,32 +45,29 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Autonomous Database
 - Block Storage Volumes
 - Object Storage Buckets
-
-### OCI Config File
-Before executing any of the docker container scripts OKIT requires an OCI connection configuration file. The information 
-for creating this file can be found in the [Installation Guide](Installation.md#oci-config-file).
+- Database Systems
 
 ### Web Interface
-To use the Web Application you will first need to start the docker container and run the web server; which can 
-be achieved by running the docker container created during [installation](Installation.md#build-docker-image).
+To access the Web Designer Interface you will need to start either the [Docker Container](Installation.md#build-docker-image) 
+or [Vagrant Image](Installation.md#build-vagrant-image) created during [Installation](Installation.md). This can be achieved 
+by executing one of the commands below depending on your choice of container.
 
-- OKIT_ROOT_DIR  : Absolute directory name for the extracted / cloned OKIT repository.
-- OCI_CONFIG_DIR : Directory containing the OCI config file. Details can be found in [OCI Designer Toolkit Installation Guide](Installation.md#oci-config-file).
-
+#### Docker
 ```bash
 cd oci-designer-toolkit
-docker run -d --rm -p 80:80 \
+docker run -d --rm -p 443:443 -p 80:80 \
            --name okit \
            --hostname okit \
-           -v <OCI_CONFIG_DIR>:/root/.oci \
-           -v <OKIT_ROOT_DIR>/okitweb:/okit/okitweb \
-           -v <OKIT_ROOT_DIR>/visualiser:/okit/visualiser \
-           -v <OKIT_ROOT_DIR>/log:/okit/log \
            okit
 ```
+The __<OKIT_ROOT_DIR>/containers/scripts__ contains helper scripts for Linux/Mac and Windows PowerShell.
 
-Alternatively if you have chosen to use Vagrant the server can be started as follows:
+- Linux/Mac : start-okit-server.sh
+- Windows PowerShell : start_okit_server_win.ps1 
 
+If you want to run the image in and interactive mode then replace to _-d_ in the above command with _-it_.
+
+#### Vagrant
 ```bash
 cd oci-designer-toolkit/containers/vagrant/
 vagrant up; vagrant ssh

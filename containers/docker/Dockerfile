@@ -46,6 +46,10 @@ RUN yum install -y \
         cryptography==2.8 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace}
+# Copy source code
+COPY okitweb /okit/okitweb
+COPY visualiser /okit/visualiser
+COPY containers/oci/* /root/.oci/
 # Add entrypoint to automatically start webserver
 #ENTRYPOINT gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:80 okitweb.wsgi:app
 ENTRYPOINT ["gunicorn"]

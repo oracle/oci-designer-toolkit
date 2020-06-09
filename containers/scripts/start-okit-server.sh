@@ -5,11 +5,7 @@
 
 export ROOT_DIR=$(cd $(dirname $0)/../..; pwd)
 
-docker run -d --rm -p 80:80 \
+docker run -d --rm -p 443:443 -p 80:80 \
        --name okit \
        --hostname okit \
-       -v ~/.oci:/root/.oci:Z \
-       -v ${ROOT_DIR}/okitweb:/okit/okitweb:Z \
-       -v ${ROOT_DIR}/visualiser:/okit/visualiser:Z \
-       -v ${ROOT_DIR}/log:/okit/log:Z \
        okit
