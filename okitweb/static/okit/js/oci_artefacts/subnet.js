@@ -293,7 +293,6 @@ class Subnet extends OkitContainerArtifact {
         let sub_query_request = JSON.clone(request);
         sub_query_request.subnet_id = id;
         LoadBalancer.query(sub_query_request, region);
-        FileStorageSystem.query(sub_query_request, region);
     }
 }
 

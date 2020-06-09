@@ -207,7 +207,6 @@ class FileStorageSystem extends OkitArtifact {
     static query(request = {}, region='') {
         console.info('------------- queryFileStorageSystemAjax --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
-        console.info('------------- Subnet      : ' + request.subnet_id);
         let me = this;
         queryCount++;
         $.ajax({
