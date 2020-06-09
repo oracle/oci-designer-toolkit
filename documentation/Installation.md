@@ -9,10 +9,11 @@ python modules are installed and in addition provide a simple flask server that 
 ## Table of Contents
 
 1. [Clone Repository](#clone-repository)
-2. [Docker](#docker)
+2. [Docker Compose](#docker-compose)
+3. [Docker](#docker)
     1. [Build Docker Image](#build-docker-image)
     2. [Start Docker Image](#start-docker-image)
-3. [Vagrant](#vagrant)
+4. [Vagrant](#vagrant)
     1. [Prerequisites](#prerequisites)
     2. [Copy the .oci folder](#copy-the-oci-folder)
     3. [Build Vagrant Image](#build-vagrant-image)
@@ -67,6 +68,14 @@ Your pem key associated with your OCI Tenancy / Account should now be copied to 
 
 Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
 
+
+## Docker Compose
+The docker image is the recommended runtime server OKIT provides a simple Docker Compose script to build and start the container.
+
+```bash
+cd oci-designer-toolkit/containers/docker
+docker-compose up
+```
 
 ## Docker 
 The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory.
