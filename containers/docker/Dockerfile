@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.6.0" \
+      "version"="0.7.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
@@ -49,4 +49,4 @@ RUN yum install -y \
 # Add entrypoint to automatically start webserver
 #ENTRYPOINT gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:80 okitweb.wsgi:app
 ENTRYPOINT ["gunicorn"]
-CMD ["--workers=2", "--limit-request-line", "0", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]
+CMD ["--workers=4", "--limit-request-line", "0", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]
