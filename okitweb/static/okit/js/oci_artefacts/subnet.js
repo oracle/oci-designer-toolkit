@@ -216,6 +216,11 @@ class Subnet extends OkitContainerArtifact {
             }
         }
         let vcn_octets = vcn_cidr.split('/')[0].split('.');
+        for (let i = 0; i < this.getOkitJson().subnets.length; i++) {
+            if (this.getOkitJson().subnets[i].id === this.id) {
+                return vcn_octets[0] + '.' + vcn_octets[1] + '.' + i + '.' + vcn_octets[3] + '/24';
+            }
+        }
         return vcn_octets[0] + '.' + vcn_octets[1] + '.' + this.getOkitJson().subnets.length + '.' + vcn_octets[3] + '/24';
     }
 
