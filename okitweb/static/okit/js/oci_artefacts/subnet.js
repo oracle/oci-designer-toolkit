@@ -119,18 +119,22 @@ class Subnet extends OkitContainerArtifact {
         let attachment_count = 0;
         // Draw Route Table
         if (this.route_table_id !== '') {
-            let artifact_clone = new RouteTable(this.getOkitJson().getRouteTable(this.route_table_id), this.getOkitJson(), this);
-            artifact_clone['parent_id'] = this.id;
-            console.info('Drawing ' + this.getArtifactReference() + ' Route Table : ' + artifact_clone.display_name);
-            artifact_clone.draw();
+            let attached_artefact = this.getOkitJson().getRouteTable(this.route_table_id);
+            let parent_id = attached_artefact['parent_id'];
+            attached_artefact['parent_id'] = this.id;
+            console.info('Drawing ' + this.getArtifactReference() + ' Route Table : ' + attached_artefact.display_name);
+            attached_artefact.draw();
+            attached_artefact['parent_id'] = parent_id;
             attachment_count += 1;
         }
         // Security Lists
         for (let security_list_id of this.security_list_ids) {
-            let artifact_clone = new SecurityList(this.getOkitJson().getSecurityList(security_list_id), this.getOkitJson(), this);
-            artifact_clone['parent_id'] = this.id;
-            console.info('Drawing ' + this.getArtifactReference() + ' Security List : ' + artifact_clone.display_name);
-            artifact_clone.draw();
+            let attached_artefact = this.getOkitJson().getSecurityList(security_list_id);
+            let parent_id = attached_artefact['parent_id'];
+            attached_artefact['parent_id'] = this.id;
+            console.info('Drawing ' + this.getArtifactReference() + ' Security List : ' + attached_artefact.display_name);
+            attached_artefact.draw();
+            attached_artefact['parent_id'] = parent_id;
             attachment_count += 1;
         }
     }
