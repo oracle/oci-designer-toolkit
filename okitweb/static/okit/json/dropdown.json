@@ -2,8 +2,15 @@
   "db_system_shapes": [
     {
       "available_core_count": 36,
+      "available_data_storage_in_t_bs": 9,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 2,
       "maximum_node_count": 1,
+      "min_core_count_per_node": 1,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 2,
       "minimum_node_count": 1,
       "name": "BM.DenseIO1.36",
@@ -12,8 +19,15 @@
     },
     {
       "available_core_count": 52,
+      "available_data_storage_in_t_bs": 16,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 2,
       "maximum_node_count": 1,
+      "min_core_count_per_node": 1,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 2,
       "minimum_node_count": 1,
       "name": "BM.DenseIO2.52",
@@ -22,8 +36,15 @@
     },
     {
       "available_core_count": 48,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 2,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 0,
       "minimum_node_count": 2,
       "name": "Exadata.Base.48",
@@ -32,8 +53,15 @@
     },
     {
       "available_core_count": 336,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 8,
       "maximum_node_count": 8,
+      "min_core_count_per_node": 44,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 88,
       "minimum_node_count": 8,
       "name": "Exadata.Full1.336",
@@ -42,8 +70,15 @@
     },
     {
       "available_core_count": 368,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 8,
       "maximum_node_count": 8,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 0,
       "minimum_node_count": 8,
       "name": "Exadata.Full2.368",
@@ -52,8 +87,15 @@
     },
     {
       "available_core_count": 400,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 8,
       "maximum_node_count": 8,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 0,
       "minimum_node_count": 8,
       "name": "Exadata.Full3.400",
@@ -62,8 +104,15 @@
     },
     {
       "available_core_count": 168,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 4,
       "maximum_node_count": 4,
+      "min_core_count_per_node": 22,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 44,
       "minimum_node_count": 4,
       "name": "Exadata.Half1.168",
@@ -72,8 +121,15 @@
     },
     {
       "available_core_count": 184,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 4,
       "maximum_node_count": 4,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 0,
       "minimum_node_count": 4,
       "name": "Exadata.Half2.184",
@@ -82,8 +138,15 @@
     },
     {
       "available_core_count": 200,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 4,
       "maximum_node_count": 4,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 0,
       "minimum_node_count": 4,
       "name": "Exadata.Half3.200",
@@ -92,8 +155,15 @@
     },
     {
       "available_core_count": 84,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 2,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 11,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 22,
       "minimum_node_count": 2,
       "name": "Exadata.Quarter1.84",
@@ -102,8 +172,15 @@
     },
     {
       "available_core_count": 92,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 2,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 0,
       "minimum_node_count": 2,
       "name": "Exadata.Quarter2.92",
@@ -112,8 +189,15 @@
     },
     {
       "available_core_count": 100,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 2,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 0,
       "minimum_node_count": 2,
       "name": "Exadata.Quarter3.100",
@@ -122,8 +206,15 @@
     },
     {
       "available_core_count": 44,
+      "available_data_storage_in_t_bs": 42,
+      "available_db_node_storage_in_g_bs": 2200,
+      "available_memory_in_gbs": 480,
       "core_count_increment": 2,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 1,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
       "minimum_node_count": 2,
       "name": "ExadataCC.Base2.44",
@@ -132,8 +223,15 @@
     },
     {
       "available_core_count": 48,
+      "available_data_storage_in_t_bs": 74,
+      "available_db_node_storage_in_g_bs": 1800,
+      "available_memory_in_gbs": 720,
       "core_count_increment": 2,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 1,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
       "minimum_node_count": 2,
       "name": "ExadataCC.Base3.48",
@@ -142,8 +240,15 @@
     },
     {
       "available_core_count": 368,
+      "available_data_storage_in_t_bs": 427,
+      "available_db_node_storage_in_g_bs": 8800,
+      "available_memory_in_gbs": 5760,
       "core_count_increment": 8,
       "maximum_node_count": 8,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 1,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 16,
       "minimum_node_count": 8,
       "name": "ExadataCC.Full2.368",
@@ -152,8 +257,15 @@
     },
     {
       "available_core_count": 400,
+      "available_data_storage_in_t_bs": 598,
+      "available_db_node_storage_in_g_bs": 7200,
+      "available_memory_in_gbs": 5760,
       "core_count_increment": 8,
       "maximum_node_count": 8,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 1,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 16,
       "minimum_node_count": 8,
       "name": "ExadataCC.Full3.400",
@@ -162,8 +274,15 @@
     },
     {
       "available_core_count": 184,
+      "available_data_storage_in_t_bs": 213,
+      "available_db_node_storage_in_g_bs": 4400,
+      "available_memory_in_gbs": 2880,
       "core_count_increment": 4,
       "maximum_node_count": 4,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 1,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 8,
       "minimum_node_count": 4,
       "name": "ExadataCC.Half2.184",
@@ -172,8 +291,15 @@
     },
     {
       "available_core_count": 200,
+      "available_data_storage_in_t_bs": 299,
+      "available_db_node_storage_in_g_bs": 3600,
+      "available_memory_in_gbs": 2880,
       "core_count_increment": 4,
       "maximum_node_count": 4,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 1,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 8,
       "minimum_node_count": 4,
       "name": "ExadataCC.Half3.200",
@@ -182,8 +308,15 @@
     },
     {
       "available_core_count": 92,
+      "available_data_storage_in_t_bs": 106,
+      "available_db_node_storage_in_g_bs": 2200,
+      "available_memory_in_gbs": 1440,
       "core_count_increment": 2,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 1,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
       "minimum_node_count": 2,
       "name": "ExadataCC.Quarter2.92",
@@ -192,8 +325,15 @@
     },
     {
       "available_core_count": 100,
+      "available_data_storage_in_t_bs": 149,
+      "available_db_node_storage_in_g_bs": 1800,
+      "available_memory_in_gbs": 1440,
       "core_count_increment": 2,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 1,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
       "minimum_node_count": 2,
       "name": "ExadataCC.Quarter3.100",
@@ -202,8 +342,15 @@
     },
     {
       "available_core_count": 1,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 1,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 1,
       "minimum_node_count": 1,
       "name": "VM.Standard1.1",
@@ -212,8 +359,15 @@
     },
     {
       "available_core_count": 16,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 8,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 16,
       "minimum_node_count": 1,
       "name": "VM.Standard1.16",
@@ -222,8 +376,15 @@
     },
     {
       "available_core_count": 2,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 1,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 2,
       "minimum_node_count": 1,
       "name": "VM.Standard1.2",
@@ -232,8 +393,15 @@
     },
     {
       "available_core_count": 4,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 4,
       "minimum_node_count": 1,
       "name": "VM.Standard1.4",
@@ -242,8 +410,15 @@
     },
     {
       "available_core_count": 8,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 4,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 8,
       "minimum_node_count": 1,
       "name": "VM.Standard1.8",
@@ -252,8 +427,15 @@
     },
     {
       "available_core_count": 1,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 1,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 1,
       "minimum_node_count": 1,
       "name": "VM.Standard2.1",
@@ -262,8 +444,15 @@
     },
     {
       "available_core_count": 16,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 8,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 16,
       "minimum_node_count": 1,
       "name": "VM.Standard2.16",
@@ -272,8 +461,15 @@
     },
     {
       "available_core_count": 2,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 1,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 2,
       "minimum_node_count": 1,
       "name": "VM.Standard2.2",
@@ -282,8 +478,15 @@
     },
     {
       "available_core_count": 24,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 12,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 24,
       "minimum_node_count": 1,
       "name": "VM.Standard2.24",
@@ -292,8 +495,15 @@
     },
     {
       "available_core_count": 4,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 4,
       "minimum_node_count": 1,
       "name": "VM.Standard2.4",
@@ -302,8 +512,15 @@
     },
     {
       "available_core_count": 8,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 4,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 8,
       "minimum_node_count": 1,
       "name": "VM.Standard2.8",
@@ -343,6 +560,424 @@
       "version": "19.0.0.0"
     }
   ],
+  "images": [
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-16.04-Gen2-GPU-2020.05.20-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaalvh6kr662y336bpie6ejv3drvfgzgoah4pbddl4vtzjmjs5mu3fq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "16.04",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 16.04",
+      "time_created": "2020-05-28T23:06:37.873000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-16.04-Minimal-2020.05.18-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaz5xh626t6uchmdnx7gc3jqwghzpsa2acdd6txoqvg44ch7bfj3cq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "16.04 Minimal",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 16.04 Minimal",
+      "time_created": "2020-05-28T23:20:56.427000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-18.04-2020.05.06-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaakgt35lyfplkaitq2v23fj4ixoeu2vsfsazaemdwhailydl6wyiia",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "18.04",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 18.04",
+      "time_created": "2020-05-28T23:05:40.949000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-18.04-Minimal-2020.05.20-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaafqdiu6rijxo6phdk3pnc5furdx7uhzi5ix5chfzcoi5fpvgpsctq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "18.04 Minimal",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 18.04 Minimal",
+      "time_created": "2020-05-28T23:07:33.901000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-20.04-2020.05.18-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaarfsrzy573557mj4gcrl2ddhzba3s2sn2anwta5c4xeuwtp4oka5q",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "20.04",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 20.04",
+      "time_created": "2020-05-28T23:05:53.340000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-20.04-Minimal-2020.05.19-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaabrsxasb7lpykfx5hzfss6n644ffx25m5ymy3najhoyebemfofsba",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "20.04 Minimal",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 20.04 Minimal",
+      "time_created": "2020-05-28T23:07:25.802000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "CentOS-6.10-2020.05.21-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaqjlmsltxacd77mywgurt2iz3yv2rgacbhemhqmyjeian65k2fb3a",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "CentOS",
+      "operating_system_version": "6.10",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "CentOS 6.10",
+      "time_created": "2020-05-26T17:34:48.714000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "CentOS-7-2020.05.20-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaauqugguwaackbg7rpg5fafqyttsbqhciglus5o47occm4ojvidb6q",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "CentOS",
+      "operating_system_version": "7",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "CentOS 7",
+      "time_created": "2020-05-26T17:35:53.117000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Oracle-Autonomous-Linux-7.8-2020.06-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaa5ys76p4fbcejyktuburxcm3nuboupzwcukyq6d5gzbib6rj4ztqa",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Oracle Autonomous Linux",
+      "operating_system_version": "7.8",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Oracle Autonomous Linux 7.8",
+      "time_created": "2020-06-08T18:01:12.435000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Oracle-Linux-6.10-2020.05.26-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaadjkjzrynqvqpuramvqru7uae7sksqssh3ta7b43c7qbjzpuue2cq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Oracle Linux",
+      "operating_system_version": "6.10",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Oracle Linux 6.10",
+      "time_created": "2020-05-28T21:32:50.936000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Oracle-Linux-7.8-Gen2-GPU-2020.06.09-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaqmhzqofqenqptx4cx35742fg3fvsy3j7rybk3haobwqku7aiu5aq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Oracle Linux",
+      "operating_system_version": "7.8",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Oracle Linux 7.8",
+      "time_created": "2020-06-05T23:00:58.942000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.05.19-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaa3sbwzsy3v6otzcopx47ecjtf7tgtpzn7z57e3tckdpm36l62d5yq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2012 R2 Datacenter",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2012 R2 Datacenter",
+      "time_created": "2020-05-27T01:23:37.487000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.05.19-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaauwrwpcq6l2nxknkhnu6uz62ivzm5ot5ntyiypctyhggcrv4aacda",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2012 R2 Standard",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2012 R2 Standard",
+      "time_created": "2020-05-27T01:24:48.639000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-E2-2020.05.19-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaoaralohcdbceydjin7a556h2smeuo5bc52kiez6f5qf6mdy7yh5a",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2016 Datacenter",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2016 Datacenter",
+      "time_created": "2020-05-27T21:51:45.614000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-Gen2-2020.05.19-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaan4am2w3o4qnuym5rcs2o5xllzddn7la6zn2xeiqt3ngghi5jljpq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2016 Standard",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2016 Standard",
+      "time_created": "2020-05-19T23:43:53.580000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.05.19-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaadjikgykbgctlp25dzsgxe7gxm4jemqu74q5f2uegoqkrhqiosknq",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-05-29T20:44:51.144000+00:00"
+    }
+  ],
   "shapes": [
     {
       "gpu_description": null,
@@ -360,7 +995,7 @@
       "ocpus": 52,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "BM.DenseIO2.52",
-      "sort_key": "BM.DenseIO2.52"
+      "sort_key": "BM-DenseIO2-052-768"
     },
     {
       "gpu_description": null,
@@ -378,7 +1013,7 @@
       "ocpus": 36,
       "processor_description": "3.0 GHz Intel\u00ae Xeon\u00ae Gold 6154 (Skylake)",
       "shape": "BM.HPC2.36",
-      "sort_key": "BM.HPC2.36"
+      "sort_key": "BM-HPC2-036-384"
     },
     {
       "gpu_description": null,
@@ -396,7 +1031,7 @@
       "ocpus": 44,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
       "shape": "BM.Standard.B1.44",
-      "sort_key": "BM.Standard.B1.44"
+      "sort_key": "BM-Standard-044-512"
     },
     {
       "gpu_description": null,
@@ -414,7 +1049,7 @@
       "ocpus": 64,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
       "shape": "BM.Standard.E2.64",
-      "sort_key": "BM.Standard.E2.64"
+      "sort_key": "BM-Standard-064-512"
     },
     {
       "gpu_description": null,
@@ -432,7 +1067,7 @@
       "ocpus": 128,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
       "shape": "BM.Standard.E3.128",
-      "sort_key": "BM.Standard.E3.128"
+      "sort_key": "BM-Standard-128-2048"
     },
     {
       "gpu_description": null,
@@ -450,7 +1085,7 @@
       "ocpus": 36,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
       "shape": "BM.Standard1.36",
-      "sort_key": "BM.Standard1.36"
+      "sort_key": "BM-Standard1-036-256"
     },
     {
       "gpu_description": null,
@@ -468,7 +1103,7 @@
       "ocpus": 52,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "BM.Standard2.52",
-      "sort_key": "BM.Standard2.52"
+      "sort_key": "BM-Standard2-052-768"
     },
     {
       "gpu_description": null,
@@ -485,8 +1120,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.16",
-      "sort_key": "VM.DenseIO2.16"
+      "shape": "VM.DenseIO2.8",
+      "sort_key": "VM-DenseIO2-008-120"
     },
     {
       "gpu_description": null,
@@ -503,8 +1138,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.24",
-      "sort_key": "VM.DenseIO2.24"
+      "shape": "VM.DenseIO2.16",
+      "sort_key": "VM-DenseIO2-016-240"
     },
     {
       "gpu_description": null,
@@ -521,8 +1156,8 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.8",
-      "sort_key": "VM.DenseIO2.8"
+      "shape": "VM.DenseIO2.24",
+      "sort_key": "VM-DenseIO2-024-320"
     },
     {
       "gpu_description": null,
@@ -540,7 +1175,7 @@
       "ocpus": 1,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
       "shape": "VM.Standard.E2.1",
-      "sort_key": "VM.Standard.E2.1"
+      "sort_key": "VM-Standard-001-008"
     },
     {
       "gpu_description": null,
@@ -572,8 +1207,8 @@
       },
       "ocpus": 1,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
-      "shape": "VM.Standard.E2.2",
-      "sort_key": "VM.Standard.E2.2"
+      "shape": "VM.Standard.E3.Flex",
+      "sort_key": "VM-Standard-001-016"
     },
     {
       "gpu_description": null,
@@ -590,8 +1225,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.4",
-      "sort_key": "VM.Standard.E2.4"
+      "shape": "VM.Standard.E2.2",
+      "sort_key": "VM-Standard-002-016"
     },
     {
       "gpu_description": null,
@@ -608,8 +1243,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.8",
-      "sort_key": "VM.Standard.E2.8"
+      "shape": "VM.Standard.E2.4",
+      "sort_key": "VM-Standard-004-032"
     },
     {
       "gpu_description": null,
@@ -626,8 +1261,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E3.Flex",
-      "sort_key": "VM.Standard.E3.Flex"
+      "shape": "VM.Standard.E2.8",
+      "sort_key": "VM-Standard-008-064"
     },
     {
       "gpu_description": null,
@@ -645,7 +1280,7 @@
       "ocpus": 1,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
       "shape": "VM.Standard1.1",
-      "sort_key": "VM.Standard1.1"
+      "sort_key": "VM-Standard1-001-007"
     },
     {
       "gpu_description": null,
@@ -662,8 +1297,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.16",
-      "sort_key": "VM.Standard1.16"
+      "shape": "VM.Standard1.2",
+      "sort_key": "VM-Standard1-002-014"
     },
     {
       "gpu_description": null,
@@ -680,8 +1315,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.2",
-      "sort_key": "VM.Standard1.2"
+      "shape": "VM.Standard1.4",
+      "sort_key": "VM-Standard1-004-028"
     },
     {
       "gpu_description": null,
@@ -698,8 +1333,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.4",
-      "sort_key": "VM.Standard1.4"
+      "shape": "VM.Standard1.8",
+      "sort_key": "VM-Standard1-008-056"
     },
     {
       "gpu_description": null,
@@ -716,8 +1351,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.8",
-      "sort_key": "VM.Standard1.8"
+      "shape": "VM.Standard1.16",
+      "sort_key": "VM-Standard1-016-112"
     },
     {
       "gpu_description": null,
@@ -735,7 +1370,7 @@
       "ocpus": 1,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "VM.Standard2.1",
-      "sort_key": "VM.Standard2.1"
+      "sort_key": "VM-Standard2-001-015"
     },
     {
       "gpu_description": null,
@@ -752,8 +1387,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.16",
-      "sort_key": "VM.Standard2.16"
+      "shape": "VM.Standard2.2",
+      "sort_key": "VM-Standard2-002-030"
     },
     {
       "gpu_description": null,
@@ -770,8 +1405,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.2",
-      "sort_key": "VM.Standard2.2"
+      "shape": "VM.Standard2.4",
+      "sort_key": "VM-Standard2-004-060"
     },
     {
       "gpu_description": null,
@@ -788,8 +1423,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.24",
-      "sort_key": "VM.Standard2.24"
+      "shape": "VM.Standard2.8",
+      "sort_key": "VM-Standard2-008-120"
     },
     {
       "gpu_description": null,
@@ -806,8 +1441,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.4",
-      "sort_key": "VM.Standard2.4"
+      "shape": "VM.Standard2.16",
+      "sort_key": "VM-Standard2-016-240"
     },
     {
       "gpu_description": null,
@@ -824,8 +1459,8 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.8",
-      "sort_key": "VM.Standard2.8"
+      "shape": "VM.Standard2.24",
+      "sort_key": "VM-Standard2-024-320"
     }
   ]
 }

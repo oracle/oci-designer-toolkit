@@ -287,7 +287,7 @@ class Instance extends OkitArtifact {
             // Build Instance Shape Select
             let shape_select = $(jqId('shape'));
             $(shape_select).empty();
-            for (let shape of okitOciData.shapes) {
+            for (let shape of okitOciData.getInstanceShapes()) {
                 if (!shape.shape.startsWith('BM.')) {
                     let shape_text = `${shape.shape} (${shape.ocpus} OCPU ${shape.memory_in_gbs} GB Memory)`;
                     // Simple Shape Text because we need to upgrade the oci module
@@ -300,6 +300,19 @@ class Instance extends OkitArtifact {
             // Secondary Vnics
             this.loadSecondaryVnics();
             $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
+            // Load OSs
+            let os_select = $(jqId('os'));
+            $(os_select).empty();
+            for (let os of okitOciData.getInstanceOS()) {
+                os_select.append($('<option>').attr('value', os).text(os));
+            }
+            // Load OS Versions
+            let version_select = $(jqId('version'));
+            $(version_select).empty();
+            for (let version of okitOciData.getInstanceOSVersions(this.source_details.os)) {
+                version_select.append($('<option>').attr('value', version).text(version));
+            }
+            $("#version").val($("#version option:first").val());
             // Load Properties
             loadPropertiesSheet(this);
         });

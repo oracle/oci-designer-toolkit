@@ -89,6 +89,33 @@ class OkitOCIData {
             return this.shapes.filter(function(s) {return s.shape.startsWith(type);});
         }
     }
+
+    getInstanceOS(shape='') {
+        let oss = [];
+        if (shape === '') {
+            for (let image of this.images) {
+                oss.push(image.operating_system);
+            }
+        } else {
+            for (image of this.images) {
+                if (image.shapes.includes(shape)) {
+                    oss.push(image.operating_system);
+                }
+            }
+        }
+        console.info('>>>>>>> Instance OS : ' + oss);
+        return [...new Set(oss)].sort();
+    }
+
+    getInstanceOSVersions(os='') {
+        let versions = [];
+        let os_images = this.images.filter(i => i.operating_system === os);
+        console.info(`${os} Versions ${os_images}`)
+        for (let image of os_images) {
+            versions.push(image.operating_system_version);
+        }
+        return [...new Set(versions)].sort((a, b) => b - a);
+    }
 }
 
 class OkitSettings {

@@ -40,7 +40,7 @@ RUN yum install -y \
         itsdangerous==1.1.0 \
         jinja2==2.10.3 \
         markupsafe==1.1.1 \
-        oci==2.6.0 \
+        oci \
         pyyaml==5.2 \
         werkzeug==0.16.0 \
         cryptography==2.8 \
@@ -53,4 +53,4 @@ COPY containers/oci/* /root/.oci/
 # Add entrypoint to automatically start webserver
 #ENTRYPOINT gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:80 okitweb.wsgi:app
 ENTRYPOINT ["gunicorn"]
-CMD ["--workers=4", "--limit-request-line", "0", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]
+CMD ["--workers=4", "--limit-request-line", "0", "--timeout", "120", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]
