@@ -14,7 +14,7 @@ Group=vagrant
 Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
 Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
 RuntimeDirectory=gunicorn
-WorkingDirectory=/home/vagrant/okit
+WorkingDirectory=/okit/workspace
 ExecStart=/usr/local/bin/gunicorn okitweb.wsgi:app
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed

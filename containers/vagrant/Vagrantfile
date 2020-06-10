@@ -17,10 +17,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "#{BOX_URL}/#{BOX_NAME}.json"
   config.vm.define NAME
 
-  # This will expose the OKIT repo folder inside the VM under ~/okit-repo
-  config.vm.synced_folder "../../okitweb", "/okit/okitweb"
-  config.vm.synced_folder "../../visualiser", "/okit/visualiser"
-
   # set cpu, memory size and vm name
   config.vm.provider "virtualbox" do |v|
     v.cpus = 1
@@ -51,6 +47,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Run external install script as root
   config.vm.provision "shell", inline: "echo '============== Running privileged commands ============== '"
+  config.vm.provision "shell", inline: "mkdir -p /okit; chmod 777 /okit", privileged: true
+  config.vm.provision "file", source: "../../okitweb", destination: "/okit/okitweb"
+  config.vm.provision "file", source: "../../visualiser", destination: "/okit/visualiser"
+  config.vm.provision "file", source: "../oci", destination: "/okit/config"
+  config.vm.provision "shell", inline: "ln -s /okit/config /root/.oci", privileged: true
+  config.vm.provision "shell", inline: "chown -R root:root /root/.oci", privileged: true
+  config.vm.provision "shell", inline: "chmod 666 /root/.oci/*.pem", privileged: true
   config.vm.provision "shell", path: "configure_software.sh", privileged: true
   config.vm.provision "file", source: "nginx.conf", destination: "/tmp/nginx.conf"
   config.vm.provision "file", source: "gunicorn.service", destination: "/tmp/gunicorn.service"
@@ -62,9 +65,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Run external install script as vagrant
   config.vm.provision "shell", inline: "echo '************** Running vagrant user commands ************** '"
+  config.vm.provision "shell", inline: "mkdir -p /okit/{log,workspace}", privileged: false
   config.vm.provision "shell", inline: "echo 'export PATH=/usr/local/bin:/opt/python/bin:${PATH}' >> /home/vagrant/.bash_profile", privileged: false
   config.vm.provision "shell", inline: "echo 'export OCI_CONFIG_DIR=~/.oci' >> /home/vagrant/.bash_profile", privileged: false
-  config.vm.provision "shell", inline: "ln -s /vagrant/oci ~/.oci", privileged: false
+  config.vm.provision "shell", inline: "ln -s /okit/config ~/.oci", privileged: false
   config.vm.provision "shell", inline: "echo '************** Finished vagrant user commands ************** '"
 
 end

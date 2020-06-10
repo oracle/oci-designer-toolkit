@@ -15,7 +15,7 @@ Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
 Environment="FLASK_APP=okitweb"
 Environment="FLASK_DEBUG=development"
 RuntimeDirectory=flask
-WorkingDirectory=/home/vagrant/okit
+WorkingDirectory=/okit/workspace
 ExecStart=/usr/bin/python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed

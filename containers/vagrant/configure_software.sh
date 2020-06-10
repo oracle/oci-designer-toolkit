@@ -46,7 +46,3 @@ pip3 install \
     pyyaml==5.2 \
     werkzeug==0.16.0
 
-# Create Directories
-mkdir -p /okit/{config,visualiser,okitweb,workspace};
-mkdir -p /home/vagrant/okit
-chown -R vagrant:vagrant /home/vagrant/okit
