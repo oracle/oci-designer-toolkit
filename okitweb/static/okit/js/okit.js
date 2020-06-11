@@ -134,23 +134,27 @@ class OkitSettings {
         this.load();
     }
 
+    getCookieName() {
+        return 'okit-settings';
+    }
+
     load() {
         let cookie_string = readCookie('okit-settings');
         if (cookie_string && cookie_string != '') {
             let cookie_json = JSON.parse(cookie_string);
             $.extend(this, cookie_json);
         } else {
-            this.save();
+            createCookie(this.getCookieName(), JSON.stringify(this));
         }
     }
 
     save() {
-        createCookie('okit-settings', JSON.stringify(this));
+        createCookie(this.getCookieName(), JSON.stringify(this));
         redrawSVGCanvas();
     }
 
     erase() {
-        eraseCookie('okit-settings');
+        eraseCookie(this.getCookieName());
     }
 
     edit() {
