@@ -252,7 +252,7 @@ def saveas(savetype):
                 filename = '{0!s:s}.json'.format(request.json['title'].replace(' ', '_').lower())
                 template_type = request.json['template_type']
                 if len(template_type.strip()) == 0:
-                    fullpath = os.path.abspath(os.path.join(bp.static_folder, 'templates', filename))
+                    fullpath = os.path.abspath(os.path.join(bp.static_folder, 'templates', 'uncategorised', filename))
                 else:
                     typedir = os.path.abspath(os.path.join(bp.static_folder, 'templates', template_type.strip().replace(' ', '_').lower()))
                     if not os.path.exists(typedir):

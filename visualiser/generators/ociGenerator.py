@@ -329,6 +329,8 @@ class OCIGenerator(object):
         self.addJinja2Variable("db_workload", database_system["db_home"]["database"]["db_workload"], standardisedName)
         # ---- Database Version
         self.addJinja2Variable("db_version", database_system["db_home"]["db_version"], standardisedName)
+        # ---- License Model
+        self.addJinja2Variable("license_model", database_system["license_model"], standardisedName)
         # ---- Data Storage Size
         self.addJinja2Variable("data_storage_size_in_gb", database_system["data_storage_size_in_gb"], standardisedName)
         # ---- Storage Management
