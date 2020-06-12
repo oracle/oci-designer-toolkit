@@ -73,6 +73,23 @@ $(document).ready(function() {
         })
         .text('Json');
 
+    d3.select(d3Id('console_right_bar')).append('label')
+        .attr('id', 'toggle_value_proposition_button')
+        .attr('class', 'okit-pointer-cursor')
+        .on('click', function () {
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideRightPanelsOffScreen();
+            if (!open) {
+                console.info("Opening Panel");
+                $(jqId(VALUE_PROPOSITION_PANEL)).removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+                $(jqId('right_column_dragbar')).removeClass('hidden');
+            }
+            // Check to see if Right Column needs to be hidden
+            checkRightColumn();
+        })
+        .text('Value Proposition');
+
     console.info('Added Designer Handlers');
 
     /*

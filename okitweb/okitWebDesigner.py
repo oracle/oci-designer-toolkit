@@ -213,6 +213,11 @@ def propertysheets(sheet):
     return render_template('okit/propertysheets/{0:s}'.format(sheet))
 
 
+@bp.route('/valueproposition/<string:sheet>', methods=(['GET']))
+def valueproposition(sheet):
+    return render_template('okit/valueproposition/{0:s}'.format(sheet))
+
+
 @bp.route('/generate/<string:language>', methods=(['GET', 'POST']))
 def generate(language):
     logger.info('Language : {0:s} - {1:s}'.format(str(language), str(request.method)))

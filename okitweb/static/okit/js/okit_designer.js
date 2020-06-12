@@ -11,6 +11,8 @@ const ROOT_CANVAS_ID = 'canvas';
 const PROPERTIES_PANEL = 'properties_panel';
 const SETTINGS_PANEL = 'settings_panel';
 const JSON_PANEL = 'json_panel';
+const VALUE_PROPOSITION_PANEL = 'value_proposition_panel';
+const COST_ESTIMATE_PANEL = 'cost_estimate_panel';
 const HTML5_CANVAS_PANEL  = 'html5_canvas_panel';
 // OKIT Json
 let regionOkitJson = {};
