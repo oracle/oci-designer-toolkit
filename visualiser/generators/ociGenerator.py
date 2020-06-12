@@ -223,6 +223,8 @@ class OCIGenerator(object):
         # ---- Free Tier
         self.addJinja2Variable("is_free_tier", autonomous_database["is_free_tier"], standardisedName)
         # --- Optional
+        # ---- License Model
+        self.addJinja2Variable("license_model", autonomous_database["license_model"], standardisedName)
         # ---- Tags
         self.renderTags(autonomous_database)
 

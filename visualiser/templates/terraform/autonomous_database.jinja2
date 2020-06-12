@@ -17,13 +17,15 @@ resource "oci_database_autonomous_database" "{{ resource_name }}" {
 #    is_dedicated             = tobool(lower({{ is_dedicated | safe }}))
     is_free_tier             = tobool(lower({{ is_free_tier | safe }}))
 #    is_preview_version_with_service_terms_accepted = {{ is_preview_version_with_service_terms_accepted | safe }}
-#    license_model = {{ license_model | safe }}
+{% if license_model is defined %}
+    license_model           = {{ license_model | safe }}
+{% endif %}
 #    source = {{ database_source | safe }}
 #    source_id = {{ source_id }}
-    {% if defined_tags is defined %}
-        defined_tags             = {{ defined_tags | safe }}
-    {% endif %}
-    {% if freeform_tags is defined %}
-        freeform_tags            = {{ freeform_tags | safe }}
-    {% endif %}
+{% if defined_tags is defined %}
+    defined_tags             = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags            = {{ freeform_tags | safe }}
+{% endif %}
 }

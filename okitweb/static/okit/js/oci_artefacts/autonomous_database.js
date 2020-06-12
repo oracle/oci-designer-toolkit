@@ -26,6 +26,7 @@ class AutonomousDatabase extends OkitArtifact {
         this.db_workload = 'OLTP';
         this.is_auto_scaling_enabled = true;
         this.is_free_tier = false;
+        this.license_model = 'BRING_YOUR_OWN_LICENSE';
         // Update with any passed data
         this.merge(data);
         this.convert();
