@@ -13,6 +13,7 @@ const SETTINGS_PANEL = 'settings_panel';
 const JSON_PANEL = 'json_panel';
 const VALUE_PROPOSITION_PANEL = 'value_proposition_panel';
 const COST_ESTIMATE_PANEL = 'cost_estimate_panel';
+const VALIDATION_PANEL = 'validation_panel';
 const HTML5_CANVAS_PANEL  = 'html5_canvas_panel';
 // OKIT Json
 let regionOkitJson = {};
@@ -645,6 +646,50 @@ function setCenterColumnWidth() {
     console.info('Center Width : ' + centerWidth);
     $(jqId('designer_center_column')).css('min-width', 'calc(100% - ' + (leftAdjust + rightAdjust) + 'px)');
 }
-
-
+/*
+** Model Validation
+ */
+function displayValidationResults(results) {
+    console.info('displaying Validation Results');
+    if (results.valid) {
+        $(jqId('validation_status')).text('Validation Successful');
+    } else {
+        $(jqId('validation_status')).text('Validation Failed');
+    }
+    // Process Errors
+    let tbody = d3.select(d3Id('validation_errors_tbody'));
+    $(jqId('validation_errors_tbody')).empty();
+    let tr = null;
+    for (let error of results.results.errors) {
+        tr = tbody.append('div')
+            .attr('class', 'tr');
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.type);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.artefact);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.message);
+    }
+    $(jqId('validation_errors_summary')).text(`Errors (${results.results.errors.length})`)
+    // Process Warnings
+    tbody = d3.select(d3Id('validation_warnings_tbody'));
+    $(jqId('validation_warnings_tbody')).empty();
+    for (let error of results.results.warnings) {
+        tr = tbody.append('div')
+            .attr('class', 'tr');
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.type);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.artefact);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.message);
+    }
+    $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
+}
 

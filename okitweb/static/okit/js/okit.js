@@ -1997,8 +1997,22 @@ class OkitJson {
     /*
     ** Data Validation
      */
-    validate() {
-
+    validate(callback=null) {
+        $.ajax({
+            type: 'post',
+            url: 'validate',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(this),
+            success: function(resp) {
+                console.info('Validation Response : ' + resp);
+                if (callback && callback !== null) callback(JSON.parse(resp));
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
     }
 }
 

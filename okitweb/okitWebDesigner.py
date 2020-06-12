@@ -543,14 +543,14 @@ def configRegion(section):
         return 'Unknown Method', 500
 
 
-@bp.route('oci/validate', methods=(['POST']))
-def ociValidate():
+@bp.route('validate', methods=(['POST']))
+def validateJson():
     logger.debug('JSON : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
         logJson(request.json)
         # Validate input json
         validator = OCIJsonValidator(request.json)
-        result = {"valid": validator.validate(), "results": validator.results()}
+        result = {"valid": validator.validate(), "results": validator.getResults()}
         return json.dumps(result, sort_keys=False, indent=2, separators=(',', ': '))
     else:
         return '404'
