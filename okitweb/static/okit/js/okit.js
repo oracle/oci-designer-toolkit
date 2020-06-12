@@ -1983,5 +1983,57 @@ class OkitJson {
             }
         }
     }
+
+    /*
+    ** Export Functions
+     */
+    // Terraform
+    exportTerraform() {}
+    // Ansible
+    exportAnsible() {}
+    // Resource Manager
+    exportResourceManager() {}
+
+    /*
+    ** Data Validation
+     */
+    validate() {
+
+    }
 }
 
+// TODO: Implement View Classes
+class OkitJsonView {
+    constructor(okitJson=null) {
+        if (okitJson === null || okitJson === undefined) {
+            this.okitJson = new OkitJson();
+        } else if (typeof okitJson === 'string') {
+            this.okitJson = JSON.parse(okitJson);
+        } else if (okitJson instanceof Object) {
+            this.okitJson = okitJson;
+        } else {
+            this.okitJson = new OkitJson();
+        }
+    }
+
+    draw() {}
+
+    /*
+    ** Artefact Processing
+     */
+    // Autonomous Database
+
+    // Block Storage
+
+    // Compartment
+    newCompartment() {}
+    getCompartment() {}
+    deleteCompartment() {}
+
+    // Database System
+}
+
+class OkitArtefactView {
+    constructor() {
+    }
+}
