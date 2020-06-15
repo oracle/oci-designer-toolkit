@@ -45,5 +45,7 @@ def create_app(test_config=None):
     app.register_blueprint(okitWebDesigner.bp)
     from . import okitPricing
     app.register_blueprint(okitPricing.bp)
+    from . import okitOci
+    app.register_blueprint(okitOci.bp)
 
     return app

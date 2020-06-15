@@ -286,7 +286,7 @@ function exportToResourceManager() {
     $(jqId('submit_query_btn')).attr('disabled', 'disabled');
     $.ajax({
         type: 'post',
-        url: 'export/resourcemanager',
+        url: 'oci/resourcemanager',
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(request_json),

@@ -58,7 +58,7 @@ class OkitOCIData {
 
     query() {
         let me = this;
-        $.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
+        $.getJSON('oci/dropdown', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
     }
 
     /*
