@@ -17,8 +17,8 @@ import jinja2
 import os
 import shutil
 
-from common.ociCommon import readYamlFile
-from common.ociLogging import getLogger
+from common.okitCommon import readYamlFile
+from common.okitLogging import getLogger
 from model.okitValidation import OCIJsonValidator
 
 # Configure logging

@@ -49,7 +49,7 @@ to the system.
     - Backend
         - **[Connection Facade](#connection-facade)**                 : [visualiser/facades/*ociConnection*.py](../visualiser/facades/ociConnection.py)
         - **[Python OCI Query](#python-oci-query)**                   : [visualiser/common/*ociQuery*.py](../visualiser/common/ociQuery.py)
-        - **[Python Generator](#python-generator)**                   : [visualiser/generators/*ociGenerator*.py](../visualiser/generators/ociGenerator.py)
+        - **[Python Generator](#python-generator)**                   : [visualiser/generators/*ociGenerator*.py](../visualiser/generators/okitGenerator.py)
 
 ## Naming Convention
 All files associated with an artifact will have file names based on the artifact. If we take the ***Block Storage Volume***
@@ -388,7 +388,7 @@ import re
 import sys
 
 from facades.ociConnection import OCIBlockStorageVolumeConnection
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 
 # Configure logging
 logger = getLogger()

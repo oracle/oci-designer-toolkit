@@ -13,9 +13,9 @@ __module__ = "ociQuery"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-from common.ociCommon import logJson
-from common.ociCommon import standardiseIds
-from common.ociLogging import getLogger
+from common.okitCommon import logJson
+from common.okitCommon import standardiseIds
+from common.okitLogging import getLogger
 from facades.ociCompartment import OCICompartments
 
 # Configure logging

@@ -13,7 +13,7 @@ __module__ = "ociTenancy"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociCompartment import OCICompartments
 
 # Configure logging

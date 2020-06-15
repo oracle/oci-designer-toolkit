@@ -24,11 +24,11 @@ from flask import send_from_directory
 from flask import jsonify
 
 import json
-from common.ociCommon import logJson
-from common.ociCommon import readJsonFile
-from common.ociCommon import standardiseIds
-from common.ociCommon import writeJsonFile
-from common.ociLogging import getLogger
+from common.okitCommon import logJson
+from common.okitCommon import readJsonFile
+from common.okitCommon import standardiseIds
+from common.okitCommon import writeJsonFile
+from common.okitLogging import getLogger
 from model.okitValidation import OCIJsonValidator
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
@@ -56,10 +56,10 @@ from facades.ociShape import OCIShapes
 from facades.ociSubnet import OCISubnets
 from facades.ociTenancy import OCITenancies
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
-from generators.ociAnsibleGenerator import OCIAnsibleGenerator
-from generators.ociResourceManagerGenerator import OCIResourceManagerGenerator
-from generators.ociTerraform11Generator import OCITerraform11Generator
-from generators.ociTerraformGenerator import OCITerraformGenerator
+from generators.okitAnsibleGenerator import OCIAnsibleGenerator
+from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
+from generators.okitTerraform11Generator import OCITerraform11Generator
+from generators.okitTerraformGenerator import OCITerraformGenerator
 
 # Configure logging
 logger = getLogger()

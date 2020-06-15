@@ -14,9 +14,9 @@ __module__ = "ociAnsibleGenerator"
 
 import os
 
-from common.ociCommon import writeAnsibleFile
-from common.ociLogging import getLogger
-from generators.ociGenerator import OCIGenerator
+from common.okitCommon import writeAnsibleFile
+from common.okitLogging import getLogger
+from generators.okitGenerator import OCIGenerator
 
 # Configure logging
 logger = getLogger()

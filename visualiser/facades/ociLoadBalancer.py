@@ -15,7 +15,7 @@ __module__ = "ociNetwork"
 
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociBackend import OCIBackends
 from facades.ociBackendSet import OCIBackendSets
 from facades.ociConnection import OCILoadBalancerConnection

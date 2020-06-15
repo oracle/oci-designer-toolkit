@@ -16,7 +16,7 @@ __module__ = "ociInstance"
 import base64
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociBootVolumeAttachment import OCIBootVolumeAttachments
 from facades.ociConnection import OCIComputeConnection, OCIVirtualNetworkConnection
 from facades.ociVnicAttachement import OCIVnicAttachments

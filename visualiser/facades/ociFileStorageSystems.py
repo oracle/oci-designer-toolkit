@@ -15,7 +15,7 @@ __module__ = "ociFileStorageSystems"
 
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociAvailabilityDomains import OCIAvailabilityDomains
 from facades.ociConnection import OCIFileStorageSystemConnection
 

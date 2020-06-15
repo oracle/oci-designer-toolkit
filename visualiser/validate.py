@@ -16,7 +16,7 @@ __module__ = "validator"
 import getopt
 import sys
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 
 # Configure logging
 logger = getLogger()

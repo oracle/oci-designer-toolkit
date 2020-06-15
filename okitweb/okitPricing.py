@@ -16,9 +16,9 @@ from flask import Blueprint
 from flask import request
 
 import json
-from common.ociCommon import logJson
+from common.okitCommon import logJson
 from model.okitCostEstimator import OCIPriceEstimator
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 
 # Configure logging
 logger = getLogger()

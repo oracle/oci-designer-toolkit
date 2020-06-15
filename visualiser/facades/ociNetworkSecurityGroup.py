@@ -15,7 +15,7 @@ __module__ = "ociNetworkSecurityGroup"
 
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
 
 # Configure logging

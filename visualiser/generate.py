@@ -17,11 +17,11 @@ import getopt
 import os
 import sys
 
-from common.ociCommon import readJsonFile
-from common.ociLogging import getLogger
-from generators.ociAnsibleGenerator import OCIAnsibleGenerator
-from generators.ociPythonGenerator import OCIPythonGenerator
-from generators.ociTerraformGenerator import OCITerraformGenerator
+from common.okitCommon import readJsonFile
+from common.okitLogging import getLogger
+from generators.okitAnsibleGenerator import OCIAnsibleGenerator
+from generators.okitPythonGenerator import OCIPythonGenerator
+from generators.okitTerraformGenerator import OCITerraformGenerator
 
 # Configure logging
 logger = getLogger()

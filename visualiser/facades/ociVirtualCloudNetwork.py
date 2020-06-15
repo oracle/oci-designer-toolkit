@@ -15,7 +15,7 @@ __module__ = "ociNetwork"
 
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociInternetGateway import OCIInternetGateways

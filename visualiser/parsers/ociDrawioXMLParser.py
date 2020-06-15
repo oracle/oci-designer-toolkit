@@ -12,9 +12,9 @@ __module__ = "drawioXMLParser"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-from common.ociCommon import parseJsonString
-from common.ociCommon import readXmlFile
-from common.ociLogging import getLogger
+from common.okitCommon import parseJsonString
+from common.okitCommon import readXmlFile
+from common.okitLogging import getLogger
 
 # Configure logging
 logger = getLogger()

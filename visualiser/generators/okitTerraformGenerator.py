@@ -15,9 +15,9 @@ __module__ = "ociTerraformGenerator"
 import os
 import json
 
-from common.ociCommon import writeTerraformFile
-from common.ociLogging import getLogger
-from generators.ociGenerator import OCIGenerator
+from common.okitCommon import writeTerraformFile
+from common.okitLogging import getLogger
+from generators.okitGenerator import OCIGenerator
 
 # Configure logging
 logger = getLogger()

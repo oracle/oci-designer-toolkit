@@ -15,7 +15,7 @@ __module__ = "ociVolumeAttachments"
 
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociConnection import OCIComputeConnection
 
 # Configure logging

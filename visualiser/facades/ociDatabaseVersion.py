@@ -16,8 +16,8 @@ __module__ = "ociDatabaseVersion"
 
 import oci
 
-from common.ociLogging import getLogger
-from common.ociCommon import logJson
+from common.okitLogging import getLogger
+from common.okitCommon import logJson
 from facades.ociConnection import OCIDatabaseConnection
 
 # Configure logging

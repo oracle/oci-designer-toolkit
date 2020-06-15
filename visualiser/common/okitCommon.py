@@ -20,7 +20,7 @@ import yaml
 from contextlib import closing
 
 import json
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 
 # Configure logging
 logger = getLogger()

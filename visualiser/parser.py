@@ -17,9 +17,9 @@ import getopt
 import os
 import sys
 
-from common.ociCommon import logJson
-from common.ociCommon import writeJsonFile
-from common.ociLogging import getLogger
+from common.okitCommon import logJson
+from common.okitCommon import writeJsonFile
+from common.okitLogging import getLogger
 from model.okitValidation import validateVisualiserJson
 from parsers.ociDrawioXMLParser import OCIDrawIoXMLParser
 

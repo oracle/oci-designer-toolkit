@@ -15,7 +15,7 @@ __module__ = "ociAvailabilityDomains"
 
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociConnection import OCIIdentityConnection
 
 # Configure logging

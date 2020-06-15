@@ -16,7 +16,7 @@ import oci
 import re
 
 import json
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 
 # Configure logging
 logger = getLogger()

@@ -16,7 +16,7 @@ __module__ = "ociFastConnect"
 import oci
 import sys
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
 
 # Configure logging
