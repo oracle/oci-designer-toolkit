@@ -25,6 +25,9 @@ let okitQueryRequestJson = null;
 // Dragbar
 let dragging_right_drag_bar = false;
 let right_drag_bar_start_x = 0;
+// Validation
+const validate_error_colour = "#ff4d4d";
+const validate_warning_colour = "#ffd633";
 
 // Automation details
 let ociRegions = [];
@@ -672,23 +675,39 @@ function displayValidationResults(results) {
         tr.append('div')
             .attr('class', 'td')
             .text(error.message);
+        // Highlight
+        let fill = d3.select(d3Id(error.id)).attr('fill');
+        tr.on('mouseover', () => {
+            d3.select(d3Id(error.id)).attr('fill', validate_error_colour);
+        });
+        tr.on('mouseout', () => {
+            d3.select(d3Id(error.id)).attr('fill', fill);
+        });
     }
     $(jqId('validation_errors_summary')).text(`Errors (${results.results.errors.length})`)
     // Process Warnings
     tbody = d3.select(d3Id('validation_warnings_tbody'));
     $(jqId('validation_warnings_tbody')).empty();
-    for (let error of results.results.warnings) {
+    for (let warning of results.results.warnings) {
         tr = tbody.append('div')
             .attr('class', 'tr');
         tr.append('div')
             .attr('class', 'td')
-            .text(error.type);
+            .text(warning.type);
         tr.append('div')
             .attr('class', 'td')
-            .text(error.artefact);
+            .text(warning.artefact);
         tr.append('div')
             .attr('class', 'td')
-            .text(error.message);
+            .text(warning.message);
+        // Highlight
+        let fill = d3.select(d3Id(warning.id)).attr('fill');
+        tr.on('mouseover', () => {
+            d3.select(d3Id(warning.id)).attr('fill', validate_warning_colour);
+        });
+        tr.on('mouseout', () => {
+            d3.select(d3Id(warning.id)).attr('fill', fill);
+        });
     }
     $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
 }

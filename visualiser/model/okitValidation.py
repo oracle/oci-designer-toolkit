@@ -29,10 +29,50 @@ class OCIJsonValidator(object):
         logger.info('Validating OKIT Json')
         self.validateVirtualCloudNetworks()
         self.validateSubnets()
+        self.validateAutonomousDatabases()
+        self.validateDatabaseSystems()
         return self.valid
 
     def getResults(self):
         return self.results
+
+    # Autonomous Database
+    def validateAutonomousDatabases(self):
+        for adb in self.okit_json.get('autonomous_databases', []):
+            # Check DB Name
+            if adb['db_name'] == '':
+                self.valid = False
+                error = {
+                    'id': adb['id'],
+                    'type': 'Autonomous Database',
+                    'artefact': adb['display_name'],
+                    'message': 'Database Name must be specified.'
+                }
+                self.results['errors'].append(error)
+
+    # Database Systems
+    def validateDatabaseSystems(self):
+        for dbs in self.okit_json.get('database_systems', []):
+            # Check ssh Key
+            if dbs['ssh_public_keys'] == '':
+                self.valid = False
+                error = {
+                    'id': dbs['id'],
+                    'type': 'Database Systems',
+                    'artefact': dbs['display_name'],
+                    'message': 'Public Keys must be specified.'
+                }
+                self.results['errors'].append(error)
+            # Check Hostname
+            if dbs['hostname'] == '':
+                self.valid = False
+                error = {
+                    'id': dbs['id'],
+                    'type': 'Database Systems',
+                    'artefact': dbs['display_name'],
+                    'message': 'Hostname must be specified.'
+                }
+                self.results['errors'].append(error)
 
     # Subnets
     def validateSubnets(self):
@@ -44,6 +84,7 @@ class OCIJsonValidator(object):
             if subnet['cidr_block'] == '':
                 self.valid = False
                 error = {
+                    'id': subnet['id'],
                     'type': 'Subnet',
                     'artefact': subnet['display_name'],
                     'message': 'Subnet does not have a CIDR.'
@@ -54,6 +95,7 @@ class OCIJsonValidator(object):
                 if not self.subnet_of(vcn_cidr_map[subnet['vcn_id']], subnet['cidr_block']):
                     self.valid = False
                     error = {
+                        'id': subnet['id'],
                         'type': 'Subnet',
                         'artefact': subnet['display_name'],
                         'message': 'Subnet CIDR {!s} is not part of VCN CIDR {!s}.'.format(subnet['cidr_block'],
@@ -65,6 +107,7 @@ class OCIJsonValidator(object):
                     if other['cidr_block'] != '' and self.overlaps(subnet['cidr_block'], other['cidr_block']):
                         self.valid = False
                         error = {
+                            'id': subnet['id'],
                             'type': 'Subnet',
                             'artefact': subnet['display_name'],
                             'message': 'Subnet CIDR {!s} overlaps Subnet {!s} CIDR {!s}.'.format(subnet['cidr_block'],
@@ -75,6 +118,7 @@ class OCIJsonValidator(object):
             # Check Route Table
             if (subnet['route_table_id'] == ''):
                 warning = {
+                    'id': subnet['id'],
                     'type': 'Subnet',
                     'artefact': subnet['display_name'],
                     'message': 'Subnet has no Route Table Assigned.'
@@ -83,6 +127,7 @@ class OCIJsonValidator(object):
             # Check Security Lists
             if (len(subnet['security_list_ids']) == 0):
                 warning = {
+                    'id': subnet['id'],
                     'type': 'Subnet',
                     'artefact': subnet['display_name'],
                     'message': 'Subnet has no Security Lists Assigned.'
@@ -96,6 +141,7 @@ class OCIJsonValidator(object):
             if vcn['cidr_block'] == '':
                 self.valid = False
                 error = {
+                    'id': vcn['id'],
                     'type': 'Virtual Cloud Network',
                     'artefact': vcn['display_name'],
                     'message': 'Virtual Cloud Network does not have a CIDR.'
@@ -107,6 +153,7 @@ class OCIJsonValidator(object):
                     if other['cidr_block'] != '' and self.overlaps(vcn['cidr_block'], other['cidr_block']):
                         self.valid = False
                         error = {
+                            'id': vcn['id'],
                             'type': 'Virtual Cloud Network',
                             'artefact': vcn['display_name'],
                             'message': 'VCN CIDR {!s} overlaps VCN {!s} CIDR {!s}.'.format(vcn['cidr_block'],
