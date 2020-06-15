@@ -112,7 +112,6 @@ $(document).ready(function() {
      */
 
     // TODO: Integrate Estimate Calculator
-    /*
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_cost_estimate_button')
         .attr('class', 'okit-pointer-cursor')
@@ -124,11 +123,13 @@ $(document).ready(function() {
                 $(jqId(COST_ESTIMATE_PANEL)).removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
                 $(jqId('right_column_dragbar')).removeClass('hidden');
+                okitJson.estimateCost(displayPricingResults);
             }
             // Check to see if Right Column needs to be hidden
             checkRightColumn();
         })
         .text('Cost Estimate');
+    /*
      */
 
     console.info('Added Designer Handlers');

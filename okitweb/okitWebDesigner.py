@@ -12,7 +12,6 @@ __module__ = "okitWebDesigner"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import configparser
-import oci
 import os
 import shutil
 import tempfile
@@ -30,7 +29,7 @@ from common.ociCommon import readJsonFile
 from common.ociCommon import standardiseIds
 from common.ociCommon import writeJsonFile
 from common.ociLogging import getLogger
-from common.ociValidation import OCIJsonValidator
+from model.okitValidation import OCIJsonValidator
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments

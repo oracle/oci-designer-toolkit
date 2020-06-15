@@ -19,7 +19,7 @@ import shutil
 
 from common.ociCommon import readYamlFile
 from common.ociLogging import getLogger
-from common.ociValidation import OCIJsonValidator
+from model.okitValidation import OCIJsonValidator
 
 # Configure logging
 logger = getLogger()

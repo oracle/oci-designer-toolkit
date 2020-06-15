@@ -650,7 +650,7 @@ function setCenterColumnWidth() {
 ** Model Validation
  */
 function displayValidationResults(results) {
-    console.info('displaying Validation Results');
+    console.info('Displaying Validation Results');
     if (results.valid) {
         $(jqId('validation_status')).text('Validation Successful');
     } else {
@@ -692,4 +692,10 @@ function displayValidationResults(results) {
     }
     $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
 }
-
+/*
+** Model Pricing
+ */
+function displayPricingResults(results) {
+    console.info('Displaying Pricing Results');
+    $(jqId(COST_ESTIMATE_PANEL)).text(JSON.stringify(results));
+}

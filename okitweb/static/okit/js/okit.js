@@ -1493,11 +1493,6 @@ class OkitJson {
     }
 
     /*
-    ** Calculate price
-     */
-    price(rate_card) {}
-
-    /*
     ** New Artifact Processing
      */
 
@@ -2014,6 +2009,28 @@ class OkitJson {
             }
         });
     }
+
+    /*
+    ** Calculate price
+     */
+    estimateCost(callback=null) {
+        $.ajax({
+            type: 'post',
+            url: 'pricing/estimate',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(this),
+            success: function(resp) {
+                console.info('Validation Response : ' + resp);
+                if (callback && callback !== null) callback(JSON.parse(resp));
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    }
+
 }
 
 // TODO: Implement View Classes

@@ -20,7 +20,7 @@ import sys
 from common.ociCommon import logJson
 from common.ociCommon import writeJsonFile
 from common.ociLogging import getLogger
-from common.ociValidation import validateVisualiserJson
+from model.okitValidation import validateVisualiserJson
 from parsers.ociDrawioXMLParser import OCIDrawIoXMLParser
 
 # Configure logging
