@@ -52,6 +52,9 @@ class OCIJsonValidator(object):
     def getResults(self):
         return self.results
 
+    def keyToType(self, key):
+        return key.replace('_', ' ').title()[:-1]
+
     # Common
     def validateCommon(self):
         # Build Display Name List
@@ -67,7 +70,7 @@ class OCIJsonValidator(object):
                         self.valid = False
                         error = {
                             'id': artefact['id'],
-                            'type': 'Common',
+                            'type': self.keyToType(key),
                             'artefact': artefact['display_name'],
                             'message': 'Duplicate Display Name.'
                         }
@@ -172,6 +175,14 @@ class OCIJsonValidator(object):
     def validateLoadBalancers(self):
         for artefact in self.okit_json.get('load_balancers', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+            if len(artefact['instance_ids']) == 0:
+                warning = {
+                    'id': artefact['id'],
+                    'type': 'Load Balancer',
+                    'artefact': artefact['display_name'],
+                    'message': 'No Backend Instances have been specified.'
+                }
+                self.results['warnings'].append(warning)
 
     # Local Peering Gateways
     def validateLocalPeeringGateways(self):
@@ -197,11 +208,35 @@ class OCIJsonValidator(object):
     def validateRouteTables(self):
         for artefact in self.okit_json.get('route_tables', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+            if len(artefact['route_rules']) == 0:
+                warning = {
+                    'id': artefact['id'],
+                    'type': 'Route Table',
+                    'artefact': artefact['display_name'],
+                    'message': 'No Rules have been specified.'
+                }
+                self.results['warnings'].append(warning)
 
     # Security Lists
     def validateSecurityLists(self):
         for artefact in self.okit_json.get('security_lists', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+            if len(artefact['egress_security_rules']) == 0:
+                warning = {
+                    'id': artefact['id'],
+                    'type': 'Security List',
+                    'artefact': artefact['display_name'],
+                    'message': 'No Egress Rules have been specified.'
+                }
+                self.results['warnings'].append(warning)
+            if len(artefact['ingress_security_rules']) == 0:
+                warning = {
+                    'id': artefact['id'],
+                    'type': 'Security List',
+                    'artefact': artefact['display_name'],
+                    'message': 'No Ingress Rules have been specified.'
+                }
+                self.results['warnings'].append(warning)
 
     # Service Gateways
     def validateServiceGateways(self):
