@@ -29,7 +29,7 @@ class Instance extends OkitArtifact {
         this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
         this.vnics = [];
         this.source_details = {os: 'Oracle Linux', version: '7.7', boot_volume_size_in_gbs: '50', source_type: 'image'};
-        this.metadata = {authorized_keys: '', user_data: ''};
+        this.metadata = {ssh_authorized_keys: '', user_data: ''};
         // TODO: Future
         //this.launch_options_specified = false;
         //this.launch_options = {boot_volume_type: '', firmware: '', is_consistent_volume_naming_enabled: false, is_pv_encryption_in_transit_enabled: false, network_type: '', remote_data_volume_type: ''};

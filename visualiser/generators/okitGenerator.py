@@ -494,7 +494,7 @@ class OCIGenerator(object):
             self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in instance["vnics"][0]["nsg_ids"]]
         # ---- Metadata
         # ----- Authorised Public SSH Keys
-        self.addJinja2Variable("authorized_keys", instance["metadata"]["authorized_keys"], standardisedName)
+        self.addJinja2Variable("ssh_authorized_keys", instance["metadata"]["ssh_authorized_keys"], standardisedName)
         # ----- Cloud Init YAML
         self.addJinja2Variable("user_data", instance["metadata"]["user_data"].replace('\n', '\\n').replace('"', '\\"'), standardisedName)
         # ---- Volume Attachments
