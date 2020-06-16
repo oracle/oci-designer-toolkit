@@ -120,8 +120,8 @@ class OkitOCIData {
 
 class OkitSettings {
     constructor() {
-        this.is_default_security_list = true;
-        this.is_default_route_table = true;
+        this.is_default_security_list = false;
+        this.is_default_route_table = false;
         this.is_timestamp_files = false;
         this.profile = 'DEFAULT';
         this.is_always_free = false;

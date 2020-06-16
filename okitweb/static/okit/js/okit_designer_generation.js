@@ -274,11 +274,12 @@ function exportToResourceManager() {
         config_profile: $(jqId('config_profile')).val(),
         compartment_id: $(jqId('query_compartment_id')).val(),
         region: $(jqId('query_region_id')).val(),
-        stack_name: $(jqId('stack_name')).val().trim(),
+        stack_name: $('input[name=create_update_toggle]:checked').val() === 'CREATE' ? $(jqId('stack_name')).val().trim() : $('#stack_id  option:selected').text().trim(),
         stack_id: $(jqId('stack_id')).val() ? $(jqId('stack_id')).val().trim() : '',
         create_or_update: $('input[name=create_update_toggle]:checked').val(),
         plan_or_apply: $('input[name=plan_apply_toggle]:checked').val()
     };
+    console.info('Resource Manager Options : ' + JSON.stringify(request_json));
     hideNavMenu();
     setBusyIcon();
     $(jqId('modal_dialog_progress')).removeClass('hidden');
