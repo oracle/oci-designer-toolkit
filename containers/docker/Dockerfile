@@ -40,7 +40,7 @@ RUN yum install -y \
         itsdangerous==1.1.0 \
         jinja2==2.10.3 \
         markupsafe==1.1.1 \
-        oci \
+        oci==2.6.0 \
         pyyaml==5.2 \
         werkzeug==0.16.0 \
         cryptography==2.8 \
