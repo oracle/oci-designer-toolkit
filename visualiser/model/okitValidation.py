@@ -27,136 +27,272 @@ class OCIJsonValidator(object):
 
     def validate(self):
         logger.info('Validating OKIT Json')
-        self.validateVirtualCloudNetworks()
-        self.validateSubnets()
+        self.validateCommon()
         self.validateAutonomousDatabases()
+        self.validateBlockStorageVolumes()
+        self.validateCompartments()
         self.validateDatabaseSystems()
+        self.validateDynamicRoutingGateways()
+        self.validateFastConnects()
+        self.validateFileStorageSystems()
+        self.validateInstances()
+        self.validateInternetGateways()
+        self.validateLoadBalancers()
+        self.validateLocalPeeringGateways()
+        self.validateNATGateways()
+        self.validateNetworkSecurityGroups()
+        self.validateObjectStorageBuckets()
+        self.validateRouteTables()
+        self.validateSecurityLists()
+        self.validateServiceGateways()
+        self.validateSubnets()
+        self.validateVirtualCloudNetworks()
         return self.valid
 
     def getResults(self):
         return self.results
 
+    # Common
+    def validateCommon(self):
+        # Build Display Name List
+        used_display_names = {}
+        for key in self.okit_json:
+            if isinstance(self.okit_json[key], list):
+                for artefact in self.okit_json[key]:
+                    used_display_names[artefact['display_name']] = used_display_names.get(artefact['display_name'], 0) + 1;
+        for key in self.okit_json:
+            if isinstance(self.okit_json[key], list):
+                for artefact in self.okit_json[key]:
+                    if used_display_names[artefact['display_name']] > 1:
+                        self.valid = False
+                        error = {
+                            'id': artefact['id'],
+                            'type': 'Common',
+                            'artefact': artefact['display_name'],
+                            'message': 'Duplicate Display Name.'
+                        }
+                        self.results['errors'].append(error)
+
     # Autonomous Database
     def validateAutonomousDatabases(self):
-        for adb in self.okit_json.get('autonomous_databases', []):
+        for artefact in self.okit_json.get('autonomous_databases', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
             # Check DB Name
-            if adb['db_name'] == '':
+            if artefact['db_name'] == '':
                 self.valid = False
                 error = {
-                    'id': adb['id'],
+                    'id': artefact['id'],
                     'type': 'Autonomous Database',
-                    'artefact': adb['display_name'],
+                    'artefact': artefact['display_name'],
                     'message': 'Database Name must be specified.'
                 }
                 self.results['errors'].append(error)
 
+    # Block Storage
+    def validateBlockStorageVolumes(self):
+        for artefact in self.okit_json.get('block_storage_volumes', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Compartment
+    def validateCompartments(self):
+        for artefact in self.okit_json.get('compartments', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
     # Database Systems
     def validateDatabaseSystems(self):
-        for dbs in self.okit_json.get('database_systems', []):
+        for artefact in self.okit_json.get('database_systems', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
             # Check ssh Key
-            if dbs['ssh_public_keys'] == '':
+            if artefact['ssh_public_keys'] == '':
                 self.valid = False
                 error = {
-                    'id': dbs['id'],
-                    'type': 'Database Systems',
-                    'artefact': dbs['display_name'],
+                    'id': artefact['id'],
+                    'type': 'Database System',
+                    'artefact': artefact['display_name'],
                     'message': 'Public Keys must be specified.'
                 }
                 self.results['errors'].append(error)
             # Check Hostname
-            if dbs['hostname'] == '':
+            if artefact['hostname'] == '':
                 self.valid = False
                 error = {
-                    'id': dbs['id'],
-                    'type': 'Database Systems',
-                    'artefact': dbs['display_name'],
+                    'id': artefact['id'],
+                    'type': 'Database System',
+                    'artefact': artefact['display_name'],
                     'message': 'Hostname must be specified.'
                 }
                 self.results['errors'].append(error)
+
+    # Dynamic Routing Gateway
+    def validateDynamicRoutingGateways(self):
+        for artefact in self.okit_json.get('dynamic_routing_gateways', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Fast Connect
+    def validateFastConnects(self):
+        for artefact in self.okit_json.get('fast_connects', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # File Storage
+    def validateFileStorageSystems(self):
+        for artefact in self.okit_json.get('file_storage_systems', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Instances
+    def validateInstances(self):
+        for artefact in self.okit_json.get('instances', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+            # Check ssh Key
+            if artefact['metadata']['ssh_authorized_keys'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': 'Public Keys must be specified.'
+                }
+                self.results['errors'].append(error)
+            # Check Hostname
+            if artefact['primary_vnic']['hostname_label'] == '':
+                self.valid = False
+                warning = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': 'Hostname should be specified.'
+                }
+                self.results['warnings'].append(warning)
+
+    # Internet Gateways
+    def validateInternetGateways(self):
+        for artefact in self.okit_json.get('internet_gateways', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Load Balancers
+    def validateLoadBalancers(self):
+        for artefact in self.okit_json.get('load_balancers', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Local Peering Gateways
+    def validateLocalPeeringGateways(self):
+        for artefact in self.okit_json.get('local_peering_gateways', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # NAT Gateways
+    def validateNATGateways(self):
+        for artefact in self.okit_json.get('nat_gateways', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Network Security Groups
+    def validateNetworkSecurityGroups(self):
+        for artefact in self.okit_json.get('network_security_groups', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Object Storage
+    def validateObjectStorageBuckets(self):
+        for artefact in self.okit_json.get('object_storage_buckets', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Route Tables
+    def validateRouteTables(self):
+        for artefact in self.okit_json.get('route_tables', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Security Lists
+    def validateSecurityLists(self):
+        for artefact in self.okit_json.get('security_lists', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Service Gateways
+    def validateServiceGateways(self):
+        for artefact in self.okit_json.get('service_gateways', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
 
     # Subnets
     def validateSubnets(self):
         vcn_cidr_map = {}
         for vcn in self.okit_json.get('virtual_cloud_networks', []):
             vcn_cidr_map[vcn['id']] = vcn['cidr_block']
-        for subnet in sorted(self.okit_json.get('subnets', []), key=lambda k: k['vcn_id']):
+        for artefact in sorted(self.okit_json.get('subnets', []), key=lambda k: k['vcn_id']):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
             # Check that CIDR exists
-            if subnet['cidr_block'] == '':
+            if artefact['cidr_block'] == '':
                 self.valid = False
                 error = {
-                    'id': subnet['id'],
+                    'id': artefact['id'],
                     'type': 'Subnet',
-                    'artefact': subnet['display_name'],
+                    'artefact': artefact['display_name'],
                     'message': 'Subnet does not have a CIDR.'
                 }
                 self.results['errors'].append(error)
             else:
                 # Check if part of VCN CIDR
-                if not self.subnet_of(vcn_cidr_map[subnet['vcn_id']], subnet['cidr_block']):
+                if not self.subnet_of(vcn_cidr_map[artefact['vcn_id']], artefact['cidr_block']):
                     self.valid = False
                     error = {
-                        'id': subnet['id'],
+                        'id': artefact['id'],
                         'type': 'Subnet',
-                        'artefact': subnet['display_name'],
-                        'message': 'Subnet CIDR {!s} is not part of VCN CIDR {!s}.'.format(subnet['cidr_block'],
-                                                                                           vcn_cidr_map[subnet['vcn_id']])
+                        'artefact': artefact['display_name'],
+                        'message': 'Subnet CIDR {!s} is not part of VCN CIDR {!s}.'.format(artefact['cidr_block'],
+                                                                                           vcn_cidr_map[artefact['vcn_id']])
                     }
                     self.results['errors'].append(error)
                 # Check for Subnet Overlap
-                for other in [s for s in self.okit_json.get('subnets', []) if s['vcn_id'] == subnet['vcn_id'] and s['id'] != subnet['id']]:
-                    if other['cidr_block'] != '' and self.overlaps(subnet['cidr_block'], other['cidr_block']):
+                for other in [s for s in self.okit_json.get('subnets', []) if s['vcn_id'] == artefact['vcn_id'] and s['id'] != artefact['id']]:
+                    if other['cidr_block'] != '' and self.overlaps(artefact['cidr_block'], other['cidr_block']):
                         self.valid = False
                         error = {
-                            'id': subnet['id'],
+                            'id': artefact['id'],
                             'type': 'Subnet',
-                            'artefact': subnet['display_name'],
-                            'message': 'Subnet CIDR {!s} overlaps Subnet {!s} CIDR {!s}.'.format(subnet['cidr_block'],
+                            'artefact': artefact['display_name'],
+                            'message': 'Subnet CIDR {!s} overlaps Subnet {!s} CIDR {!s}.'.format(artefact['cidr_block'],
                                                                                                  other['display_name'],
                                                                                                  other['cidr_block'])
                         }
                         self.results['errors'].append(error)
             # Check Route Table
-            if (subnet['route_table_id'] == ''):
+            if (artefact['route_table_id'] == ''):
                 warning = {
-                    'id': subnet['id'],
+                    'id': artefact['id'],
                     'type': 'Subnet',
-                    'artefact': subnet['display_name'],
+                    'artefact': artefact['display_name'],
                     'message': 'Subnet has no Route Table Assigned.'
                 }
                 self.results['warnings'].append(warning)
             # Check Security Lists
-            if (len(subnet['security_list_ids']) == 0):
+            if (len(artefact['security_list_ids']) == 0):
                 warning = {
-                    'id': subnet['id'],
+                    'id': artefact['id'],
                     'type': 'Subnet',
-                    'artefact': subnet['display_name'],
+                    'artefact': artefact['display_name'],
                     'message': 'Subnet has no Security Lists Assigned.'
                 }
                 self.results['warnings'].append(warning)
 
     # Virtual Cloud Networks
     def validateVirtualCloudNetworks(self):
-        for vcn in sorted(self.okit_json.get('virtual_cloud_networks', []), key=lambda k: k['compartment_id']):
+        for artefact in sorted(self.okit_json.get('virtual_cloud_networks', []), key=lambda k: k['compartment_id']):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
             # Check that CIDR exists
-            if vcn['cidr_block'] == '':
+            if artefact['cidr_block'] == '':
                 self.valid = False
                 error = {
-                    'id': vcn['id'],
+                    'id': artefact['id'],
                     'type': 'Virtual Cloud Network',
-                    'artefact': vcn['display_name'],
+                    'artefact': artefact['display_name'],
                     'message': 'Virtual Cloud Network does not have a CIDR.'
                 }
                 self.results['errors'].append(error)
             else:
                 # Check for CIDR Overlap
-                for other in [s for s in self.okit_json.get('virtual_cloud_networks', []) if s['compartment_id'] == vcn['compartment_id'] and s['id'] != vcn['id']]:
-                    if other['cidr_block'] != '' and self.overlaps(vcn['cidr_block'], other['cidr_block']):
+                for other in [s for s in self.okit_json.get('virtual_cloud_networks', []) if s['compartment_id'] == artefact['compartment_id'] and s['id'] != artefact['id']]:
+                    if other['cidr_block'] != '' and self.overlaps(artefact['cidr_block'], other['cidr_block']):
                         self.valid = False
                         error = {
-                            'id': vcn['id'],
+                            'id': artefact['id'],
                             'type': 'Virtual Cloud Network',
-                            'artefact': vcn['display_name'],
-                            'message': 'VCN CIDR {!s} overlaps VCN {!s} CIDR {!s}.'.format(vcn['cidr_block'],
+                            'artefact': artefact['display_name'],
+                            'message': 'VCN CIDR {!s} overlaps VCN {!s} CIDR {!s}.'.format(artefact['cidr_block'],
                                                                                                  other['display_name'],
                                                                                                  other['cidr_block'])
                         }
