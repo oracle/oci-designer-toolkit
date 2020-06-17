@@ -414,6 +414,7 @@ class OkitArtifact {
             $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
             $(jqId(me.id)).toggleClass('highlight');
             $(jqId(me.id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
+            me.loadValueProposition();
             d3.event.stopPropagation();
         });
         console.groupEnd();
@@ -467,6 +468,14 @@ class OkitArtifact {
     loadProperties() {
         alert('Load Properties function "loadProperties()" has not been implemented.')
         return;
+    }
+
+
+    /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/oci.html");
     }
 
 

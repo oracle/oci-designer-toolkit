@@ -45,7 +45,6 @@ $(document).ready(function() {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
             if (!open) {
-                console.info("Opening Panel");
                 $(jqId(PROPERTIES_PANEL)).removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
                 $(jqId('right_column_dragbar')).removeClass('hidden');
@@ -61,7 +60,6 @@ $(document).ready(function() {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
             if (!open) {
-                console.info("Opening Panel");
                 $(jqId(JSON_PANEL)).removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
                 $(jqId('right_column_dragbar')).removeClass('hidden');
@@ -80,7 +78,6 @@ $(document).ready(function() {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
             if (!open) {
-                console.info("Opening Panel");
                 $(jqId(VALIDATION_PANEL)).removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
                 $(jqId('right_column_dragbar')).removeClass('hidden');
@@ -91,7 +88,7 @@ $(document).ready(function() {
         })
         .text('Validate');
 
-    // TODO: Write artefact html
+    // TODO: Uncomment when Value Proposition files have been created
     /*
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_value_proposition_button')
@@ -100,7 +97,6 @@ $(document).ready(function() {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
             if (!open) {
-                console.info("Opening Panel");
                 $(jqId(VALUE_PROPOSITION_PANEL)).removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
                 $(jqId('right_column_dragbar')).removeClass('hidden');
@@ -112,6 +108,7 @@ $(document).ready(function() {
      */
 
     // TODO: Integrate Estimate Calculator
+    /*
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_cost_estimate_button')
         .attr('class', 'okit-pointer-cursor')
@@ -119,7 +116,6 @@ $(document).ready(function() {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
             if (!open) {
-                console.info("Opening Panel");
                 $(jqId(COST_ESTIMATE_PANEL)).removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
                 $(jqId('right_column_dragbar')).removeClass('hidden');
@@ -129,7 +125,6 @@ $(document).ready(function() {
             checkRightColumn();
         })
         .text('Cost Estimate');
-    /*
      */
 
     console.info('Added Designer Handlers');

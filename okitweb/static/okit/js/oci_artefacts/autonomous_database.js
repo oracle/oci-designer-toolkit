@@ -149,7 +149,6 @@ class AutonomousDatabase extends OkitArtifact {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/autonomous_database.html", () => {loadPropertiesSheet(me);});
-        this.loadValueProposition();
     }
 
     loadValueProposition() {

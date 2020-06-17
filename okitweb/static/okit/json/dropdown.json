@@ -879,9 +879,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.05.19-0",
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.06.11-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa3sbwzsy3v6otzcopx47ecjtf7tgtpzn7z57e3tckdpm36l62d5yq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaacbiytdq2uawalsbaeiwakudmxixytntjabrqvqwjo6wvu5fgymaa",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -897,7 +897,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-05-27T01:23:37.487000+00:00"
+      "time_created": "2020-06-12T18:51:32.326000+00:00"
     },
     {
       "agent_features": null,
@@ -905,9 +905,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.05.19-0",
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.06.11-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaauwrwpcq6l2nxknkhnu6uz62ivzm5ot5ntyiypctyhggcrv4aacda",
+      "id": "ocid1.image.oc1.phx.aaaaaaaatc4josfjc6psg236ns5s7snay2s5e7odfhzd333gehbcdseaxmdq",
       "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -923,7 +923,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
-      "time_created": "2020-05-27T01:24:48.639000+00:00"
+      "time_created": "2020-06-12T18:54:20.986000+00:00"
     },
     {
       "agent_features": null,
@@ -931,14 +931,14 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-E2-2020.05.19-0",
+      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-E2-2020.06.11-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaoaralohcdbceydjin7a556h2smeuo5bc52kiez6f5qf6mdy7yh5a",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaufegp6lojfnxxzuuvi66cpfvr2qmvdbh4zfp5p6u3bcawmj6av6q",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": true,
+        "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
         "network_type": "VFIO",
         "remote_data_volume_type": "PARAVIRTUALIZED"
@@ -949,7 +949,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Datacenter",
-      "time_created": "2020-05-27T21:51:45.614000+00:00"
+      "time_created": "2020-06-12T20:24:19.121000+00:00"
     },
     {
       "agent_features": null,
@@ -957,9 +957,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Standard-Edition-VM-Gen2-2020.05.19-0",
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-Gen2-2020.06.11-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaan4am2w3o4qnuym5rcs2o5xllzddn7la6zn2xeiqt3ngghi5jljpq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa6uj6xmoaomngvnfu52qehfbdd2b7mbot3m5gk2rpwnuvt2cxpjxa",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -975,7 +975,33 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Standard",
-      "time_created": "2020-05-19T23:43:53.580000+00:00"
+      "time_created": "2020-06-12T20:28:08.080000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Datacenter-Edition-BM-E3-2020.06.15-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaazyor76syclbxgasimwzsnqvjuoteapyuko2yqjcmhq55oonr4sua",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Datacenter",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Datacenter",
+      "time_created": "2020-06-16T00:14:56.113000+00:00"
     },
     {
       "agent_features": null,
@@ -1021,7 +1047,7 @@
       "ocpus": 52,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "BM.DenseIO2.52",
-      "sort_key": "BM-DenseIO2-052-768"
+      "sort_key": "BM.DenseIO2.52"
     },
     {
       "gpu_description": null,
@@ -1039,7 +1065,7 @@
       "ocpus": 36,
       "processor_description": "3.0 GHz Intel\u00ae Xeon\u00ae Gold 6154 (Skylake)",
       "shape": "BM.HPC2.36",
-      "sort_key": "BM-HPC2-036-384"
+      "sort_key": "BM.HPC2.36"
     },
     {
       "gpu_description": null,
@@ -1057,7 +1083,7 @@
       "ocpus": 44,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
       "shape": "BM.Standard.B1.44",
-      "sort_key": "BM-Standard-044-512"
+      "sort_key": "BM.Standard.B1.44"
     },
     {
       "gpu_description": null,
@@ -1075,7 +1101,7 @@
       "ocpus": 64,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
       "shape": "BM.Standard.E2.64",
-      "sort_key": "BM-Standard-064-512"
+      "sort_key": "BM.Standard.E2.64"
     },
     {
       "gpu_description": null,
@@ -1093,7 +1119,7 @@
       "ocpus": 128,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
       "shape": "BM.Standard.E3.128",
-      "sort_key": "BM-Standard-128-2048"
+      "sort_key": "BM.Standard.E3.128"
     },
     {
       "gpu_description": null,
@@ -1111,7 +1137,7 @@
       "ocpus": 36,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
       "shape": "BM.Standard1.36",
-      "sort_key": "BM-Standard1-036-256"
+      "sort_key": "BM.Standard1.36"
     },
     {
       "gpu_description": null,
@@ -1129,7 +1155,7 @@
       "ocpus": 52,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "BM.Standard2.52",
-      "sort_key": "BM-Standard2-052-768"
+      "sort_key": "BM.Standard2.52"
     },
     {
       "gpu_description": null,
@@ -1146,8 +1172,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.8",
-      "sort_key": "VM-DenseIO2-008-120"
+      "shape": "VM.DenseIO2.16",
+      "sort_key": "VM.DenseIO2.16"
     },
     {
       "gpu_description": null,
@@ -1164,8 +1190,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.16",
-      "sort_key": "VM-DenseIO2-016-240"
+      "shape": "VM.DenseIO2.24",
+      "sort_key": "VM.DenseIO2.24"
     },
     {
       "gpu_description": null,
@@ -1182,8 +1208,8 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.24",
-      "sort_key": "VM-DenseIO2-024-320"
+      "shape": "VM.DenseIO2.8",
+      "sort_key": "VM.DenseIO2.8"
     },
     {
       "gpu_description": null,
@@ -1201,7 +1227,7 @@
       "ocpus": 1,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
       "shape": "VM.Standard.E2.1",
-      "sort_key": "VM-Standard-001-008"
+      "sort_key": "VM.Standard.E2.1"
     },
     {
       "gpu_description": null,
@@ -1233,8 +1259,8 @@
       },
       "ocpus": 1,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
-      "shape": "VM.Standard.E3.Flex",
-      "sort_key": "VM-Standard-001-016"
+      "shape": "VM.Standard.E2.2",
+      "sort_key": "VM.Standard.E2.2"
     },
     {
       "gpu_description": null,
@@ -1251,8 +1277,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.2",
-      "sort_key": "VM-Standard-002-016"
+      "shape": "VM.Standard.E2.4",
+      "sort_key": "VM.Standard.E2.4"
     },
     {
       "gpu_description": null,
@@ -1269,8 +1295,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.4",
-      "sort_key": "VM-Standard-004-032"
+      "shape": "VM.Standard.E2.8",
+      "sort_key": "VM.Standard.E2.8"
     },
     {
       "gpu_description": null,
@@ -1287,8 +1313,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.8",
-      "sort_key": "VM-Standard-008-064"
+      "shape": "VM.Standard.E3.Flex",
+      "sort_key": "VM.Standard.E3.Flex"
     },
     {
       "gpu_description": null,
@@ -1306,7 +1332,7 @@
       "ocpus": 1,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
       "shape": "VM.Standard1.1",
-      "sort_key": "VM-Standard1-001-007"
+      "sort_key": "VM.Standard1.1"
     },
     {
       "gpu_description": null,
@@ -1323,8 +1349,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.2",
-      "sort_key": "VM-Standard1-002-014"
+      "shape": "VM.Standard1.16",
+      "sort_key": "VM.Standard1.16"
     },
     {
       "gpu_description": null,
@@ -1341,8 +1367,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.4",
-      "sort_key": "VM-Standard1-004-028"
+      "shape": "VM.Standard1.2",
+      "sort_key": "VM.Standard1.2"
     },
     {
       "gpu_description": null,
@@ -1359,8 +1385,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.8",
-      "sort_key": "VM-Standard1-008-056"
+      "shape": "VM.Standard1.4",
+      "sort_key": "VM.Standard1.4"
     },
     {
       "gpu_description": null,
@@ -1377,8 +1403,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.16",
-      "sort_key": "VM-Standard1-016-112"
+      "shape": "VM.Standard1.8",
+      "sort_key": "VM.Standard1.8"
     },
     {
       "gpu_description": null,
@@ -1396,7 +1422,7 @@
       "ocpus": 1,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "VM.Standard2.1",
-      "sort_key": "VM-Standard2-001-015"
+      "sort_key": "VM.Standard2.1"
     },
     {
       "gpu_description": null,
@@ -1413,8 +1439,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.2",
-      "sort_key": "VM-Standard2-002-030"
+      "shape": "VM.Standard2.16",
+      "sort_key": "VM.Standard2.16"
     },
     {
       "gpu_description": null,
@@ -1431,8 +1457,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.4",
-      "sort_key": "VM-Standard2-004-060"
+      "shape": "VM.Standard2.2",
+      "sort_key": "VM.Standard2.2"
     },
     {
       "gpu_description": null,
@@ -1449,8 +1475,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.8",
-      "sort_key": "VM-Standard2-008-120"
+      "shape": "VM.Standard2.24",
+      "sort_key": "VM.Standard2.24"
     },
     {
       "gpu_description": null,
@@ -1467,8 +1493,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.16",
-      "sort_key": "VM-Standard2-016-240"
+      "shape": "VM.Standard2.4",
+      "sort_key": "VM.Standard2.4"
     },
     {
       "gpu_description": null,
@@ -1485,8 +1511,8 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.24",
-      "sort_key": "VM-Standard2-024-320"
+      "shape": "VM.Standard2.8",
+      "sort_key": "VM.Standard2.8"
     }
   ]
 }

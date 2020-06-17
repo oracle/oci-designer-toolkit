@@ -235,6 +235,14 @@ function redrawSVGCanvas(region='') {
     }
 }
 /*
+** Validate Model
+ */
+function handleValidate(evt) {
+    hideNavMenu();
+    $('#toggle_validation_button').click();
+    return false;
+}
+/*
 ** Load Model From Template
  */
 function loadTemplate(template_url) {
@@ -683,6 +691,10 @@ function displayValidationResults(results) {
         tr.on('mouseout', () => {
             d3.select(d3Id(error.id)).attr('fill', fill);
         });
+        tr.on('click', () => {
+            d3.select(d3Id(error.id + '-svg')).on("click")();
+            $('#toggle_properties_button').click();
+        });
     }
     $(jqId('validation_errors_summary')).text(`Errors (${results.results.errors.length})`)
     // Process Warnings
@@ -707,6 +719,10 @@ function displayValidationResults(results) {
         });
         tr.on('mouseout', () => {
             d3.select(d3Id(warning.id)).attr('fill', fill);
+        });
+        tr.on('click', () => {
+            d3.select(d3Id(warning.id + '-svg')).on("click")();
+            $('#toggle_properties_button').click();
         });
     }
     $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
