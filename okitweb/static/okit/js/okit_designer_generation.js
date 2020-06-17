@@ -4,6 +4,12 @@
 */
 console.info('Loaded Generation Javascript');
 
+function validationFailedNotification() {
+    $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
+    $('#toggle_validation_button').click();
+    alert('Model Validation Failed. \nSee Validation Pane for results.')
+}
+
 /*
 ** Generate Button handlers
  */
@@ -17,45 +23,59 @@ function saveZip(url, filename="") {
 
 function handleGenerateTerraform(e) {
     hideNavMenu();
-    let requestJson = JSON.parse(JSON.stringify(okitJson));
-    requestJson.use_variables = okitSettings.is_variables;
-    $.ajax({
-        type: 'post',
-        url: 'generate/terraform',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(requestJson),
-        success: function(resp) {
-            console.info('Response : ' + resp);
-            //window.location = 'generate/terraform';
-            saveZip('generate/terraform');
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
-        }
-    });
+    okitJson.validate(generateTerraform);
+}
+function generateTerraform(results) {
+    if (results.valid) {
+        let requestJson = JSON.parse(JSON.stringify(okitJson));
+        requestJson.use_variables = okitSettings.is_variables;
+        $.ajax({
+            type: 'post',
+            url: 'generate/terraform',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(requestJson),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                //window.location = 'generate/terraform';
+                saveZip('generate/terraform');
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
 }
 
 function handleGenerateAnsible(e) {
     hideNavMenu();
-    let requestJson = JSON.parse(JSON.stringify(okitJson));
-    requestJson.use_variables = okitSettings.is_variables;
-    $.ajax({
-        type: 'post',
-        url: 'generate/ansible',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(requestJson),
-        success: function(resp) {
-            console.info('REST Response : ' + resp);
-            saveZip('generate/ansible');
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
-        }
-    });
+    okitJson.validate(generateAnsible);
+}
+function generateAnsible(results) {
+    if (results.valid) {
+        let requestJson = JSON.parse(JSON.stringify(okitJson));
+        requestJson.use_variables = okitSettings.is_variables;
+        $.ajax({
+            type: 'post',
+            url: 'generate/ansible',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(requestJson),
+            success: function(resp) {
+                console.info('REST Response : ' + resp);
+                saveZip('generate/ansible');
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
 }
 
 function handleGenerateTerraform11(e) {
@@ -79,22 +99,29 @@ function handleGenerateTerraform11(e) {
 
 function handleExportToResourceManager(e) {
     hideNavMenu();
-    // Display Dialog
-    displayResourceManagerDialog();
-    // Set Config Profile
-    console.info('Profile : ' + okitSettings.profile);
-    if (!okitSettings.profile) {
-        okitSettings.profile = 'DEFAULT';
+    okitJson.validate(generateResourceManager);
+}
+function generateResourceManager(results) {
+    if (results.valid) {
+        // Display Dialog
+        displayResourceManagerDialog();
+        // Set Config Profile
+        console.info('Profile : ' + okitSettings.profile);
+        if (!okitSettings.profile) {
+            okitSettings.profile = 'DEFAULT';
+        }
+        console.info('Profile : ' + okitSettings.profile);
+        okitSettings.home_region_key = '';
+        okitSettings.home_region = '';
+        ociRegions = [];
+        $(jqId('config_profile')).val(okitSettings.profile);
+        // Load Compartment Select
+        loadCompartments();
+        // Load Region Select
+        loadRegions();
+    } else {
+        validationFailedNotification();
     }
-    console.info('Profile : ' + okitSettings.profile);
-    okitSettings.home_region_key = '';
-    okitSettings.home_region = '';
-    ociRegions = [];
-    $(jqId('config_profile')).val(okitSettings.profile);
-    // Load Compartment Select
-    loadCompartments();
-    // Load Region Select
-    loadRegions();
 }
 
 function displayResourceManagerDialog() {

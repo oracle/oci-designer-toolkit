@@ -236,6 +236,7 @@ function redrawSVGCanvas(region='') {
  */
 function handleValidate(evt) {
     hideNavMenu();
+    $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
     $('#toggle_validation_button').click();
     return false;
 }
