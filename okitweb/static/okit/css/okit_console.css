@@ -821,3 +821,17 @@ li a.parent-item:hover {
     top: 15px;
     width: 110px
 }
+
+/*
+** Validation
+ */
+
+.okit-error {
+    border-color: red;
+    background-color: #ffe6e6;
+}
+
+.okit-warning {
+    border-color: yellow;
+    background-color: #ffffe6;
+}

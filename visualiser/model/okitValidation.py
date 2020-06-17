@@ -72,7 +72,8 @@ class OCIJsonValidator(object):
                             'id': artefact['id'],
                             'type': self.keyToType(key),
                             'artefact': artefact['display_name'],
-                            'message': 'Duplicate Display Name.'
+                            'message': 'Duplicate Display Name.',
+                            'element': 'display_name'
                         }
                         self.results['errors'].append(error)
 
@@ -87,7 +88,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Autonomous Database',
                     'artefact': artefact['display_name'],
-                    'message': 'Database Name must be specified.'
+                    'message': 'Database Name must be specified.',
+                    'element': 'db_name'
                 }
                 self.results['errors'].append(error)
 
@@ -112,7 +114,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Database System',
                     'artefact': artefact['display_name'],
-                    'message': 'Public Keys must be specified.'
+                    'message': 'Public Keys must be specified.',
+                    'element': 'ssh_public_keys'
                 }
                 self.results['errors'].append(error)
             # Check Hostname
@@ -122,7 +125,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Database System',
                     'artefact': artefact['display_name'],
-                    'message': 'Hostname must be specified.'
+                    'message': 'Hostname must be specified.',
+                    'element': 'hostname'
                 }
                 self.results['errors'].append(error)
 
@@ -148,13 +152,14 @@ class OCIJsonValidator(object):
             # Check ssh Key
             if artefact['metadata']['ssh_authorized_keys'] == '':
                 self.valid = False
-                error = {
+                warning = {
                     'id': artefact['id'],
                     'type': 'Instance',
                     'artefact': artefact['display_name'],
-                    'message': 'Public Keys must be specified.'
+                    'message': 'Public Keys must be specified.',
+                    'element': 'ssh_authorized_keys'
                 }
-                self.results['errors'].append(error)
+                self.results['warnings'].append(warning)
             # Check Hostname
             if artefact['primary_vnic']['hostname_label'] == '':
                 self.valid = False
@@ -162,7 +167,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Instance',
                     'artefact': artefact['display_name'],
-                    'message': 'Hostname should be specified.'
+                    'message': 'Hostname should be specified.',
+                    'element': 'hostname_label'
                 }
                 self.results['warnings'].append(warning)
 
@@ -180,7 +186,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Load Balancer',
                     'artefact': artefact['display_name'],
-                    'message': 'No Backend Instances have been specified.'
+                    'message': 'No Backend Instances have been specified.',
+                    'element': 'instance_ids'
                 }
                 self.results['warnings'].append(warning)
 
@@ -213,7 +220,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Route Table',
                     'artefact': artefact['display_name'],
-                    'message': 'No Rules have been specified.'
+                    'message': 'No Rules have been specified.',
+                    'element': 'route_rules'
                 }
                 self.results['warnings'].append(warning)
 
@@ -226,7 +234,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Security List',
                     'artefact': artefact['display_name'],
-                    'message': 'No Egress Rules have been specified.'
+                    'message': 'No Egress Rules have been specified.',
+                    'element': 'egress_security_rules'
                 }
                 self.results['warnings'].append(warning)
             if len(artefact['ingress_security_rules']) == 0:
@@ -234,7 +243,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Security List',
                     'artefact': artefact['display_name'],
-                    'message': 'No Ingress Rules have been specified.'
+                    'message': 'No Ingress Rules have been specified.',
+                    'element': 'ingress_security_rules'
                 }
                 self.results['warnings'].append(warning)
 
@@ -257,7 +267,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Subnet',
                     'artefact': artefact['display_name'],
-                    'message': 'Subnet does not have a CIDR.'
+                    'message': 'Subnet does not have a CIDR.',
+                    'element': 'cidr_block'
                 }
                 self.results['errors'].append(error)
             else:
@@ -269,7 +280,8 @@ class OCIJsonValidator(object):
                         'type': 'Subnet',
                         'artefact': artefact['display_name'],
                         'message': 'Subnet CIDR {!s} is not part of VCN CIDR {!s}.'.format(artefact['cidr_block'],
-                                                                                           vcn_cidr_map[artefact['vcn_id']])
+                                                                                           vcn_cidr_map[artefact['vcn_id']]),
+                        'element': 'cidr_block'
                     }
                     self.results['errors'].append(error)
                 # Check for Subnet Overlap
@@ -282,7 +294,8 @@ class OCIJsonValidator(object):
                             'artefact': artefact['display_name'],
                             'message': 'Subnet CIDR {!s} overlaps Subnet {!s} CIDR {!s}.'.format(artefact['cidr_block'],
                                                                                                  other['display_name'],
-                                                                                                 other['cidr_block'])
+                                                                                                 other['cidr_block']),
+                            'element': 'cidr_block'
                         }
                         self.results['errors'].append(error)
             # Check Route Table
@@ -291,7 +304,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Subnet',
                     'artefact': artefact['display_name'],
-                    'message': 'Subnet has no Route Table Assigned.'
+                    'message': 'Subnet has no Route Table Assigned.',
+                    'element': 'route_table_id'
                 }
                 self.results['warnings'].append(warning)
             # Check Security Lists
@@ -300,7 +314,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Subnet',
                     'artefact': artefact['display_name'],
-                    'message': 'Subnet has no Security Lists Assigned.'
+                    'message': 'Subnet has no Security Lists Assigned.',
+                    'element': 'security_list_ids'
                 }
                 self.results['warnings'].append(warning)
 
@@ -315,7 +330,8 @@ class OCIJsonValidator(object):
                     'id': artefact['id'],
                     'type': 'Virtual Cloud Network',
                     'artefact': artefact['display_name'],
-                    'message': 'Virtual Cloud Network does not have a CIDR.'
+                    'message': 'Virtual Cloud Network does not have a CIDR.',
+                    'element': 'cidr_block'
                 }
                 self.results['errors'].append(error)
             else:
@@ -329,7 +345,8 @@ class OCIJsonValidator(object):
                             'artefact': artefact['display_name'],
                             'message': 'VCN CIDR {!s} overlaps VCN {!s} CIDR {!s}.'.format(artefact['cidr_block'],
                                                                                                  other['display_name'],
-                                                                                                 other['cidr_block'])
+                                                                                                 other['cidr_block']),
+                            'element': 'cidr_block'
                         }
                         self.results['errors'].append(error)
 

@@ -41,6 +41,9 @@ function setDescendantProp(obj, desc, value) {
     return obj[arr[0]] = value;
 }
 
+let error_propeties = [];
+let warning_propeties = [];
+
 function loadPropertiesSheet(json_element) {
     console.groupCollapsed('Loading Properties');
     $.each(json_element, function(key, val) {
@@ -152,6 +155,16 @@ function loadPropertiesSheet(json_element) {
     if (okitSettings.is_optional_expanded) {
         d3.select(d3Id("optional_properties")).attr("open", "open");
     }
+    // Check for Errors & Warnings
+    for (let property_name of error_propeties) {
+        $(jqId(property_name)).addClass('okit-error');
+        $(jqId(property_name)).focus();
+    }
+    error_propeties = [];
+    for (let property_name of warning_propeties) {
+        $(jqId(property_name)).addClass('okit-warning');
+    }
+    warning_propeties = [];
     console.groupEnd();
 }
 

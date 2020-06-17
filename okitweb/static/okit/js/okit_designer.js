@@ -25,9 +25,6 @@ let okitQueryRequestJson = null;
 // Dragbar
 let dragging_right_drag_bar = false;
 let right_drag_bar_start_x = 0;
-// Validation
-const validate_error_colour = "#ff4d4d";
-const validate_warning_colour = "#ffd633";
 
 // Automation details
 let ociRegions = [];
@@ -692,6 +689,7 @@ function displayValidationResults(results) {
             d3.select(d3Id(error.id)).attr('fill', fill);
         });
         tr.on('click', () => {
+            error_propeties.push(error.element);
             d3.select(d3Id(error.id + '-svg')).on("click")();
             $('#toggle_properties_button').click();
         });
@@ -721,6 +719,7 @@ function displayValidationResults(results) {
             d3.select(d3Id(warning.id)).attr('fill', fill);
         });
         tr.on('click', () => {
+            warning_propeties.push(warning.element);
             d3.select(d3Id(warning.id + '-svg')).on("click")();
             $('#toggle_properties_button').click();
         });
