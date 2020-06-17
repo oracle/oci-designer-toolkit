@@ -52,12 +52,12 @@ resource "oci_load_balancer_backend_set" "{{ resource_name }}BackendSet" {
         # Required
         protocol            = {{ protocol | safe }}
         # Optional
-        interval_ms         = {{ health_check_interval | default(1000) }}
+        interval_ms         = {{ health_check_interval | default(5000) }}
         port                = {{ port | safe }}
 #        response_body_regex = {{ health_check_response_regex }}
 #        retries             = {{ health_check_retries | default(100) }}
 #        return_code         = {{ health_check_return_code | default(200) }}
-#        timeout_in_millis   = {{ health_check_timeout | default(3000) }}
+        timeout_in_millis   = {{ health_check_timeout | default(3000) }}
         url_path            = {{ url_path | safe }}
     }
     load_balancer_id = local.{{ resource_name }}_id

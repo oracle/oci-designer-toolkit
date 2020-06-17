@@ -44,7 +44,7 @@
 {% endfor %}
                 health_checker:
 {% if health_check_interval is defined %}
-                    interval_in_millis: "{{ health_check_interval | safe }}"
+                    interval_in_millis: "{{ health_check_interval | safe | default(5000) }}"
 {% else %}
                     interval_in_millis: 1000
 {% endif %}
@@ -60,7 +60,7 @@
 {% else %}
                     retries: 1000
 {% endif %}
-                    #timeout_in_millis: "{{ health_check_timeout | default(3000) }}"
+                    timeout_in_millis: "{{ health_check_timeout | safe | default(3000) }}"
                     #return_code: "{{ health_check_return_code | default(200) }}"
                     url_path: "{{ url_path | safe }}"
                 policy: "{{ backend_policy | default('ROUND_ROBIN') }}"
