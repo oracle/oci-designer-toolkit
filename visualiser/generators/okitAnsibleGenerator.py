@@ -48,8 +48,8 @@ class OCIAnsibleGenerator(OCIGenerator):
 
         return
 
-    def formatJinja2IdReference(self, resource_name):
-        return '{{{{ {0:s}_id }}}}'.format(resource_name)
+    def formatJinja2IdReference(self, resource_name, element='id'):
+        return '{{{{ {0!s:s}_{1!s:s} }}}}'.format(resource_name, element)
 
     def formatJinja2Variable(self, variable_name):
         return '{{{{ {0:s} }}}}'.format(variable_name)

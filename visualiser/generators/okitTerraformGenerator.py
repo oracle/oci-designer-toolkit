@@ -59,8 +59,8 @@ class OCITerraformGenerator(OCIGenerator):
     def formatJinja2Variable(self, variable_name):
         return 'var.{0:s}'.format(variable_name)
 
-    def formatJinja2IdReference(self, resource_name):
-        return 'local.{0:s}_id'.format(resource_name)
+    def formatJinja2IdReference(self, resource_name, element='id'):
+        return 'local.{0!s:s}_{1!s:s}'.format(resource_name, element)
 
     def formatJinja2DhcpReference(self, resource_name):
         return 'local.{0:s}_dhcp_options_id'.format(resource_name)

@@ -9,6 +9,8 @@
 3. Modify Resource Manager dialog to close when the stack has been created and display progress bar during creation.
 4. Specify stack name during export to Resource Manager
 5. Update existing Resource Manager Stacks
+6. When Creating Security List / Route Table modify the Default for the Security List / Route Table rather than create.
+7. First implementation of simple json validation and display of results. This can be manually executed or will be automatically execute during export to Terraform, Ansible or Resource Manager and only when successful will this be allowed.
 
 ### Bug Fixes
 1. Service Gateway with null route_table_id will not generate Terraform / Ansible / RM. Route table values can not be assigned within the GUI.
