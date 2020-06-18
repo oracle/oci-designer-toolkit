@@ -117,6 +117,7 @@ class LocalPeeringGateway extends OkitArtifact {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/local_peering_gateway.html", () => {
             // Load Referenced Ids
             let route_table_select = $(jqId('route_table_id'));
+            route_table_select.append($('<option>').attr('value', '').text(''));
             for (let route_table of okitJson.route_tables) {
                 if (me.vcn_id === route_table.vcn_id) {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
@@ -124,6 +125,7 @@ class LocalPeeringGateway extends OkitArtifact {
             }
             // Load Local Peering Gateways from other VCNs
             let remote_peering_gateway_select = $(jqId('peer_id'));
+            remote_peering_gateway_select.append($('<option>').attr('value', '').text(''));
             for (let local_peering_gateway of okitJson.local_peering_gateways) {
                 if (me.vcn_id !== local_peering_gateway.vcn_id) {
                     remote_peering_gateway_select.append($('<option>').attr('value', local_peering_gateway.id).text(local_peering_gateway.display_name));

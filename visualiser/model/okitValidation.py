@@ -151,12 +151,11 @@ class OCIJsonValidator(object):
             logger.info('Validating {!s}'.format(artefact['display_name']))
             # Check ssh Key
             if artefact['metadata']['ssh_authorized_keys'] == '':
-                self.valid = False
                 warning = {
                     'id': artefact['id'],
                     'type': 'Instance',
                     'artefact': artefact['display_name'],
-                    'message': 'Public Keys must be specified.',
+                    'message': 'No Public Keys specified.',
                     'element': 'ssh_authorized_keys'
                 }
                 self.results['warnings'].append(warning)
@@ -195,6 +194,26 @@ class OCIJsonValidator(object):
     def validateLocalPeeringGateways(self):
         for artefact in self.okit_json.get('local_peering_gateways', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+            # Check Peer Id
+            if artefact['peer_id'] == '':
+                warning = {
+                    'id': artefact['id'],
+                    'type': 'Local Peering Gateway',
+                    'artefact': artefact['display_name'],
+                    'message': 'Peer not specified.',
+                    'element': 'peer_id'
+                }
+                self.results['warnings'].append(warning)
+            # Check Route Table Id
+            if artefact['route_table_id'] == '':
+                warning = {
+                    'id': artefact['id'],
+                    'type': 'Local Peering Gateway',
+                    'artefact': artefact['display_name'],
+                    'message': 'Route Table not specified.',
+                    'element': 'route_table_id'
+                }
+                self.results['warnings'].append(warning)
 
     # NAT Gateways
     def validateNATGateways(self):
