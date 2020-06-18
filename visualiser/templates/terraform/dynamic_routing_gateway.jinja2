@@ -22,5 +22,5 @@ locals {
 resource "oci_core_drg_attachment" "{{ resource_name }}DRGAttachment" {
     drg_id        = local.{{ resource_name }}_id
     vcn_id        = {{ vcn_id }}
-    display_name  = {{ resource_name }}drgattm
+    display_name   = {{ display_name | safe }}
 }
