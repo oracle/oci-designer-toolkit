@@ -1009,16 +1009,16 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.06.10-0",
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.05.19-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa2uk7nfkcbuazuo23bk2ffsiq2z6usksv7ci6hzqznqonflgeuzxa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaadjikgykbgctlp25dzsgxe7gxm4jemqu74q5f2uegoqkrhqiosknq",
       "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
         "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
+        "network_type": "VFIO",
         "remote_data_volume_type": "PARAVIRTUALIZED"
       },
       "lifecycle_state": "AVAILABLE",
@@ -1027,7 +1027,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2019 Standard",
-      "time_created": "2020-06-11T23:55:06.327000+00:00"
+      "time_created": "2020-05-29T20:44:51.144000+00:00"
     }
   ],
   "shapes": [
