@@ -19,3 +19,13 @@
     - set_fact:
         {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.dynamic_routing_gateway.id {{ '}}' }}"
         {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.dynamic_routing_gateway.id {{ '}}' }}"
+
+
+# ------ Create DRG Attachment
+    - name: Create DRG Attachment {{ output_name }}
+      oci_drg_attachment:
+        state: "present"
+        drg_id = "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
+        vcn_id = "{{ vcn_id }}"
+        # Optional
+        display_name: "{{ display_name | safe }}"
