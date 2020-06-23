@@ -148,6 +148,8 @@ class LoadBalancer extends OkitArtifact {
                         if (instance.primary_vnic.private_ip === backend.ip_address) {
                             if (!this.instance_ids.includes(instance.id)) {
                                 this.instance_ids.push(instance.id);
+                                backend.instance_id = instance.id;
+                                delete backend.private_ip;
                             }
                         }
                     }
