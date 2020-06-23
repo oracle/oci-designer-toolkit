@@ -1716,8 +1716,11 @@ class OkitJson {
     }
 
     // Instance
+    getInstances() {
+        return this.instances;
+    }
     getInstance(id='') {
-        for (let artifact of this.instances) {
+        for (let artifact of this.getInstances()) {
             if (artifact.id === id) {
                 return artifact;
             }
