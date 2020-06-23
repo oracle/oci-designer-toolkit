@@ -297,24 +297,6 @@ function displayQueryDialog() {
             .attr('value', section)
             .text(section);
     }
-    // Compartment Id
-    tr = tbody.append('div')
-        .attr('class', 'tr');
-    tr.append('div')
-        .attr('class', 'td')
-        .text('Compartment');
-    tr.append('div')
-        .attr('class', 'td')
-        .append('select')
-        .attr('id', 'query_compartment_id')
-        .on('change', () => {
-            console.info('Compartment Select ' + $(jqId('query_compartment_id')).val());
-            okitSettings.last_used_compartment = $(jqId('query_compartment_id')).val();
-            okitSettings.save();
-        })
-        .append('option')
-            .attr('value', 'Retrieving')
-            .text('Retrieving..........');
     // Region Ids
     tr = tbody.append('div')
         .attr('class', 'tr');
@@ -329,6 +311,24 @@ function displayQueryDialog() {
             .on('change', () => {
                 console.info('Region Select ' + $(jqId('query_region_id')).val());
                 okitSettings.last_used_region = $(jqId('query_region_id')).val();
+                okitSettings.save();
+            })
+            .append('option')
+                .attr('value', 'Retrieving')
+                .text('Retrieving..........');
+    // Compartment Id
+    tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div')
+        .attr('class', 'td')
+        .text('Compartment');
+    tr.append('div')
+        .attr('class', 'td')
+        .append('select')
+            .attr('id', 'query_compartment_id')
+            .on('change', () => {
+                console.info('Compartment Select ' + $(jqId('query_compartment_id')).val());
+                okitSettings.last_used_compartment = $(jqId('query_compartment_id')).val();
                 okitSettings.save();
             })
             .append('option')

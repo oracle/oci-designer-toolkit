@@ -168,6 +168,8 @@ function displayResourceManagerDialog() {
             .attr('id', 'query_region_id')
             .on('change', () => {
                 loadResourceManagerStacks();
+                okitSettings.last_used_region = $(jqId('query_region_id')).val();
+                okitSettings.save();
             })
             .append('option')
                 .attr('value', 'Retrieving')
@@ -184,6 +186,8 @@ function displayResourceManagerDialog() {
             .attr('id', 'query_compartment_id')
             .on('change', () => {
                 loadResourceManagerStacks();
+                okitSettings.last_used_compartment = $(jqId('query_compartment_id')).val();
+                okitSettings.save();
             })
             .append('option')
                 .attr('value', 'Retrieving')
