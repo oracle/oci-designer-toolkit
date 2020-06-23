@@ -304,16 +304,21 @@ class Instance extends OkitArtifact {
             for (let os of okitOciData.getInstanceOS()) {
                 os_select.append($('<option>').attr('value', os).text(os));
             }
+            os_select.on('change', () => {me.loadOSVersions($("#os").val());});
             // Load OS Versions
-            let version_select = $(jqId('version'));
-            $(version_select).empty();
-            for (let version of okitOciData.getInstanceOSVersions(this.source_details.os)) {
-                version_select.append($('<option>').attr('value', version).text(version));
-            }
-            $("#version").val($("#version option:first").val());
+            this.loadOSVersions(this.source_details.os);
             // Load Properties
             loadPropertiesSheet(this);
         });
+    }
+
+    loadOSVersions(os) {
+        let version_select = $(jqId('version'));
+        $(version_select).empty();
+        for (let version of okitOciData.getInstanceOSVersions(os)) {
+            version_select.append($('<option>').attr('value', version).text(version));
+        }
+        $("#version").val($("#version option:first").val());
     }
 
     loadNetworkSecurityGroups(select_id, subnet_id) {
