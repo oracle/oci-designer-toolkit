@@ -92,6 +92,27 @@ class OCIJsonValidator(object):
                     'element': 'db_name'
                 }
                 self.results['errors'].append(error)
+            # Check Free Tier
+            if artefact['is_free_tier'] and artefact['is_auto_scaling_enabled']:
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Autonomous Database',
+                    'artefact': artefact['display_name'],
+                    'message': 'Auto Scaling is not available with Free Tier.',
+                    'element': 'is_auto_scaling_enabled'
+                }
+                self.results['errors'].append(error)
+            if artefact['is_free_tier'] and artefact['license_model' != 'LICENSE_INCLUDED']:
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Autonomous Database',
+                    'artefact': artefact['display_name'],
+                    'message': 'Free Tier only supports License Included.',
+                    'element': 'license_model'
+                }
+                self.results['errors'].append(error)
 
     # Block Storage
     def validateBlockStorageVolumes(self):
