@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.8.0 
+**Release Date**: 15th July 2020
+### Features
+
+### Bug Fixes
+
+
 ## Version 0.7.0 
 **Release Date**: 24th June 2020
 ### Features
