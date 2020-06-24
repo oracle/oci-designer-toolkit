@@ -1,0 +1,10 @@
+# Files / Directories to ignore during the Docker Build
+
+.git
+.idea
+.scannerwork
+documentation
+log
+*.md
+*.txt
+*.properties

@@ -136,7 +136,10 @@ class Fragment extends OkitArtifact {
                     artifact.vcn_id = vcn_id;
                 }
                 artifact.parent_id = artifact.vcn_id;
-                this.getOkitJson().newDynamicRoutingGateway(artifact);
+                if (this.getOkitJson().newDynamicRoutingGateway(artifact) === null) {
+                    // Gateway already exists so we need to update Route Table entries
+                    this.updateRouteTableRoutes(fragment_json, artifact, DynamicRoutingGateway.getArtifactReference());
+                }
             }, this);
         } else if (key === this.artifactToElement(FastConnect.getArtifactReference())) {
             // Process Fast Connects
@@ -167,7 +170,10 @@ class Fragment extends OkitArtifact {
                     artifact.vcn_id = vcn_id;
                 }
                 artifact.parent_id = artifact.vcn_id;
-                this.getOkitJson().newInternetGateway(artifact);
+                if (this.getOkitJson().newInternetGateway(artifact) === null) {
+                    // Gateway already exists so we need to update Route Table entries
+                    this.updateRouteTableRoutes(fragment_json, artifact, InternetGateway.getArtifactReference());
+                }
             }, this);
         } else if (key === this.artifactToElement(LoadBalancer.getArtifactReference())) {
             // Process Load Balancers
@@ -183,7 +189,10 @@ class Fragment extends OkitArtifact {
                     artifact.vcn_id = vcn_id;
                 }
                 artifact.parent_id = artifact.vcn_id;
-                this.getOkitJson().newNATGateway(artifact);
+                if (this.getOkitJson().newNATGateway(artifact) === null) {
+                    // Gateway already exists so we need to update Route Table entries
+                    this.updateRouteTableRoutes(fragment_json, artifact, NATGateway.getArtifactReference());
+                }
             }, this);
         } else if (key === this.artifactToElement(ObjectStorageBucket.getArtifactReference())) {
             // Process Object Storage Buckets
@@ -219,7 +228,10 @@ class Fragment extends OkitArtifact {
                     artifact.vcn_id = vcn_id;
                 }
                 artifact.parent_id = artifact.vcn_id;
-                this.getOkitJson().newServiceGateway(artifact);
+                if (this.getOkitJson().newServiceGateway(artifact) === null) {
+                    // Gateway already exists so we need to update Route Table entries
+                    this.updateRouteTableRoutes(fragment_json, artifact, ServiceGateway.getArtifactReference());
+                }
             }, this);
         } else {
             console.warn('Unknown Json Artifact List ' + key);
@@ -240,7 +252,7 @@ class Fragment extends OkitArtifact {
             dataType: 'text',
             contentType: 'application/json',
             success: function(resp) {
-                let fragment_json = JSON.parse(resp);
+                let fragment_json = me.updateIds(JSON.parse(resp));
                 // Add Fragment to Json
                 if (me.parent_type === Compartment.getArtifactReference()) {
                     me.addToCompartment(fragment_json, me.compartment_id);
@@ -259,6 +271,93 @@ class Fragment extends OkitArtifact {
         });
     }
 
+    // TODO: Code update processing. First we need to change the way we get parent_id
+    updateIds(fragment_json) {
+        // Regenerate all Ids so the fragment can be dropped multiple times
+        //this.updateCompartmentIds(fragment_json);
+        return fragment_json;
+    }
+    updateCompartmentIds(fragment_json) {
+        for (let compartment of fragment_json.compartments) {
+            let id = compartment.id;
+            let new_id = 'okit.compartment.' + uuidv4();
+            // Autonomous Database
+            for (let artefact of fragment_json.autonomous_databases) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Autonomous Database
+            for (let artefact of fragment_json.block_storage_volumes) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Compartments
+            for (let artefact of fragment_json.compartments) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Database Systems
+            for (let artefact of fragment_json.database_systems) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Dynamic Routing Gateway
+            for (let artefact of fragment_json.dynamic_routing_gateways) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Fast Connect
+            for (let artefact of fragment_json.fast_connects) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // File Storage Systems
+            for (let artefact of fragment_json.file_storage_systems) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Instance
+            for (let artefact of fragment_json.instances) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Internet Gateways
+            for (let artefact of fragment_json.internet_gateways) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Load Balancers
+            for (let artefact of fragment_json.load_balancers) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Local Peering Gateways
+            for (let artefact of fragment_json.local_peering_gateways) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // NAT Gateways
+            for (let artefact of fragment_json.nat_gateways) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Network Security Groups
+            for (let artefact of fragment_json.network_security_groups) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Object Storage Bucket
+            for (let artefact of fragment_json.object_storage_buckets) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Route Tables
+            for (let artefact of fragment_json.route_tables) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Security Lists
+            for (let artefact of fragment_json.security_lists) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Subnets
+            for (let artefact of fragment_json.subnets) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Virtual Cloud Network
+            for (let artefact of fragment_json.virtual_cloud_networks) {
+                if (artefact.compartment_id === id) {artefact.compartment_id = new_id;}
+            }
+            // Update this id
+            compartment.id = new_id;
+        }
+    }
+
 
     delete() {
 
@@ -266,6 +365,34 @@ class Fragment extends OkitArtifact {
 
     draw() {
 
+    }
+
+    updateRouteTableRoutes(fragment_json, artefact, gateway_type) {
+        let gateway_id = '';
+        if (gateway_type === InternetGateway.getArtifactReference()) {
+            for (let gateway of this.getOkitJson().internet_gateways) {
+                if (gateway.vcn_id === artefact.vcn_id) {
+                    gateway_id = gateway.id;
+                    break;
+                }
+            }
+        }
+        // Check main OKIT json in case the route table has already been processed
+        for (let route_table of this.getOkitJson().route_tables) {
+            for (let rule of route_table.route_rules) {
+                if (rule.network_entity_id === artefact.id) {
+                    rule.network_entity_id = gateway_id;
+                }
+            }
+        }
+        // Check main fragment json in case the route table has not been processed
+        for (let route_table of fragment_json.route_tables) {
+            for (let rule of route_table.route_rules) {
+                if (rule.network_entity_id === artefact.id) {
+                    rule.network_entity_id = gateway_id;
+                }
+            }
+        }
     }
 
     /*

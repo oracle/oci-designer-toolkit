@@ -22,8 +22,11 @@ resource "oci_core_vcn" "{{ resource_name }}" {
 }
 
 locals {
-    {{ resource_name }}_id              = oci_core_vcn.{{ resource_name }}.id
-    {{ resource_name }}_dhcp_options_id = oci_core_vcn.{{ resource_name }}.default_dhcp_options_id
-    {{ resource_name }}_domain_name     = oci_core_vcn.{{ resource_name }}.vcn_domain_name
+    {{ resource_name }}_id                       = oci_core_vcn.{{ resource_name }}.id
+    {{ resource_name }}_dhcp_options_id          = oci_core_vcn.{{ resource_name }}.default_dhcp_options_id
+    {{ resource_name }}_domain_name              = oci_core_vcn.{{ resource_name }}.vcn_domain_name
+    {{ resource_name }}_default_dhcp_options_id  = oci_core_vcn.{{ resource_name }}.default_dhcp_options_id
+    {{ resource_name }}_default_security_list_id = oci_core_vcn.{{ resource_name }}.default_security_list_id
+    {{ resource_name }}_default_route_table_id   = oci_core_vcn.{{ resource_name }}.default_route_table_id
 }
 

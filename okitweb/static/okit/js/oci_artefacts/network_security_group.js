@@ -43,11 +43,13 @@ class NetworkSecurityGroup extends OkitArtifact {
     ** Delete Processing
      */
     deleteChildren() {
-        // Remove Subnet references
-        for (let subnet of this.getOkitJson().subnets) {
-            for (let i=0; i < subnet.network_security_group_ids.length; i++) {
-                if (subnet.network_security_group_ids[i] === this.id) {
-                    subnet.network_security_group_ids.splice(i, 1);
+        // Remove Instance vnic references
+        for (let instance of this.getOkitJson().instances) {
+            for (let vnic of instance.vnics) {
+                for (let i = 0; i < vnic.nsg_ids.length; i++) {
+                    if (vnic.nsg_ids[i] === this.id) {
+                        vnic.nsg_ids.splice(i, 1);
+                    }
                 }
             }
         }

@@ -10,15 +10,15 @@ data "template_file" "AvailabilityDomainNames" {
 }
 # -------- Get a list of Fault Domains
 data "oci_identity_fault_domains" "FaultDomainsAD1" {
-    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[0]["name"]
+    availability_domain = element(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains, 0)["name"]
     compartment_id = {{ tenancy_ocid }}
 }
 data "oci_identity_fault_domains" "FaultDomainsAD2" {
-    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[1]["name"]
+    availability_domain = element(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains, 1)["name"]
     compartment_id = {{ tenancy_ocid }}
 }
 data "oci_identity_fault_domains" "FaultDomainsAD3" {
-    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[2]["name"]
+    availability_domain = element(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains, 2)["name"]
     compartment_id = {{ tenancy_ocid }}
 }
 # -------- Get Home Region Name

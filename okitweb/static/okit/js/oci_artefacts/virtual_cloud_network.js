@@ -175,7 +175,18 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {
+            loadPropertiesSheet(me);
+            $(jqId('cidr_block')).on('change', function() {
+                console.info('CIDR Block Changed ' + $(jqId('cidr_block')).val());
+                for (let subnet of me.getOkitJson().subnets) {
+                    if (subnet.vcn_id === me.id) {
+                        subnet.cidr_block = subnet.generateCIDR(me.id);
+                    }
+                }
+                redrawSVGCanvas();
+            });
+        });
     }
 
 

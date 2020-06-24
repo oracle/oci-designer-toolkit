@@ -5,8 +5,12 @@
         region: "{{ region }}"
         state: "present"
         # Required
+{% if manage_default_resource_id is defined %}
+        rt_id: "{{ manage_default_resource_id }}"
+{% else %}
         compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
+{% endif %}
         route_rules:
 {% for rule in route_rules %}
             - destination: "{{ rule.destination | safe }}"

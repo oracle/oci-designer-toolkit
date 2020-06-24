@@ -7,16 +7,16 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociTerraform11Generator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
 import os
 
-from common.ociCommon import writeTerraformFile
-from common.ociLogging import getLogger
-from generators.ociTerraformGenerator import OCITerraformGenerator
+from common.okitCommon import writeTerraformFile
+from common.okitLogging import getLogger
+from generators.okitTerraformGenerator import OCITerraformGenerator
 
 # Configure logging
 logger = getLogger()

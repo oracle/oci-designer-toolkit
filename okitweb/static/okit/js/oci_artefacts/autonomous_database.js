@@ -26,6 +26,7 @@ class AutonomousDatabase extends OkitArtifact {
         this.db_workload = 'OLTP';
         this.is_auto_scaling_enabled = true;
         this.is_free_tier = false;
+        this.license_model = 'BRING_YOUR_OWN_LICENSE';
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -147,7 +148,30 @@ class AutonomousDatabase extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/autonomous_database.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/autonomous_database.html", () => {
+            $('#is_free_tier').on('change', () => {
+                if($('#is_free_tier').is(':checked')) {
+                    $('#license_model').val("LICENSE_INCLUDED");
+                    $('#is_auto_scaling_enabled').prop('checked', false);
+                    $('#license_model').attr('disabled', true);
+                    $('#is_auto_scaling_enabled').attr('disabled', true);
+                } else {
+                    $('#license_model').removeAttr('disabled');
+                    $('#is_auto_scaling_enabled').removeAttr('disabled');
+                }
+            });
+            if (me.is_free_tier) {
+                me.license_model = "LICENSE_INCLUDED";
+                me.is_auto_scaling_enabled =  false;
+                $('#license_model').attr('disabled', true);
+                $('#is_auto_scaling_enabled').attr('disabled', true);
+            }
+            loadPropertiesSheet(me);
+        });
+    }
+
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/autonomous_database.html");
     }
 
 

@@ -7,16 +7,16 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociAnsibleGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
 import os
 
-from common.ociCommon import writePythonFile
-from common.ociLogging import getLogger
-from generators.ociGenerator import OCIGenerator
+from common.okitCommon import writePythonFile
+from common.okitLogging import getLogger
+from generators.okitGenerator import OCIGenerator
 
 # Configure logging
 logger = getLogger()

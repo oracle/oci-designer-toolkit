@@ -19,6 +19,10 @@
 {% endblock %}
 
 {% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>License Model</div><div class='td'><select id="license_model" class="okit-property-value">
+        <option value="LICENSE_INCLUDED" selected="selected">License Included</option>
+        <option value="BRING_YOUR_OWN_LICENSE">Bring Your Own License</option>
+    </select></div></div>
     <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_auto_scaling_enabled" name="is_auto_scaling_enabled" value="false">Auto Scaling</div></div>
     <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_free_tier" name="is_free_tier" value="false">Always Free</div></div>
 {% endblock %}

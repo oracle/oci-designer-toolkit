@@ -4,8 +4,11 @@
 */
 console.info('Loaded Console Javascript');
 
-const okitVersion = '0.6.0';
-const okitReleaseDate = '3rd June 2020';
+const okitVersion = '0.7.0';
+const okitReleaseDate = '24th June 2020';
+// Validation
+const validate_error_colour = "#ff4d4d";
+const validate_warning_colour = "#ffd633";
 
 function hideNavMenu() {
     $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');

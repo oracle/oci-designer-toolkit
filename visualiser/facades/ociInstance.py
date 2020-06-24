@@ -8,7 +8,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Stefan Hinker (Oracle Cloud Solutions A-Team)", "Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociInstance"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -16,7 +16,7 @@ __module__ = "ociInstance"
 import base64
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociBootVolumeAttachment import OCIBootVolumeAttachments
 from facades.ociConnection import OCIComputeConnection, OCIVirtualNetworkConnection
 from facades.ociVnicAttachement import OCIVnicAttachments

@@ -14,7 +14,9 @@
         # Optional
         display_name: "{{ display_name | safe }}"
         #initial_data_storage_size_in_tbs: 2
-        #license_model: "{{ license_model | safe }}"
+{% if license_model is defined %}
+        license_model: "{{ license_model | safe }}"
+{% endif %}
         #node_count: 1
 {% if defined_tags is defined %}
         defined_tags: "{{ defined_tags | safe }}"

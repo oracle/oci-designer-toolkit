@@ -8,14 +8,14 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociServiceGateway"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
 import oci
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
 
 # Configure logging
@@ -53,6 +53,11 @@ class OCIServiceGateways(OCIVirtualNetworkConnection):
             # Filter results
             self.service_gateways_json = self.filterJsonObjectList(service_gateways_json, filter)
             logger.debug(str(self.service_gateways_json))
+
+            # Replace null route table with ""
+            for service_gateway in self.service_gateways_json:
+                if service_gateway['route_table_id'] is None:
+                    service_gateway['route_table_id'] = ''
 
             # Build List of ServiceGateway Objects
             self.service_gateways_obj = []

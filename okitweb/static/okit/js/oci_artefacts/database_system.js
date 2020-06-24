@@ -27,7 +27,7 @@ class DatabaseSystem extends OkitArtifact {
                 db_name: this.display_name.replace('-', '').substr(4, 8),
                 db_workload: 'OLTP'
             },
-            db_version: ''
+            db_version: '12.2.0.1'
         };
         this.hostname = this.display_name.toLowerCase();
         this.shape = 'VM.Standard2.1';

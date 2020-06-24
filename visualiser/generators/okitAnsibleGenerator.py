@@ -7,16 +7,16 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociAnsibleGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
 import os
 
-from common.ociCommon import writeAnsibleFile
-from common.ociLogging import getLogger
-from generators.ociGenerator import OCIGenerator
+from common.okitCommon import writeAnsibleFile
+from common.okitLogging import getLogger
+from generators.okitGenerator import OCIGenerator
 
 # Configure logging
 logger = getLogger()
@@ -48,8 +48,8 @@ class OCIAnsibleGenerator(OCIGenerator):
 
         return
 
-    def formatJinja2IdReference(self, resource_name):
-        return '{{{{ {0:s}_id }}}}'.format(resource_name)
+    def formatJinja2IdReference(self, resource_name, element='id'):
+        return '{{{{ {0!s:s}_{1!s:s} }}}}'.format(resource_name, element)
 
     def formatJinja2Variable(self, variable_name):
         return '{{{{ {0:s} }}}}'.format(variable_name)

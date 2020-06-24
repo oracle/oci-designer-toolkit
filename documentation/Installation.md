@@ -9,10 +9,11 @@ python modules are installed and in addition provide a simple flask server that 
 ## Table of Contents
 
 1. [Clone Repository](#clone-repository)
-2. [Docker](#docker)
+2. [Docker Compose](#docker-compose)
+3. [Docker](#docker)
     1. [Build Docker Image](#build-docker-image)
     2. [Start Docker Image](#start-docker-image)
-3. [Vagrant](#vagrant)
+4. [Vagrant](#vagrant)
     1. [Prerequisites](#prerequisites)
     2. [Copy the .oci folder](#copy-the-oci-folder)
     3. [Build Vagrant Image](#build-vagrant-image)
@@ -21,17 +22,17 @@ python modules are installed and in addition provide a simple flask server that 
 ## Clone Repository
 Before the building either the Docker or Vagrant Images the project will nee to be cloned from the Git Repository (or downloaded)
 and it is recommended that the latest Stable Release be cloned. The latest stable version number if shown in the README
-and the associated Release tag is in the format vX.Y.Z hence for the version 0.6.0 the Release tag will be 
-**v0.6.0**. The command shows how this can be cloned to the local machine.
+and the associated Release tag is in the format vX.Y.Z hence for the version 0.7.0 the Release tag will be 
+**v0.7.0**. The command shows how this can be cloned to the local machine.
 
 ```bash
-git clone -b v0.6.0 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
+git clone -b v0.7.0 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
 ```
 
 or 
 
 ```bash
-git clone -b v0.6.0 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
+git clone -b v0.7.0 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
 ```
 
 ### Download
@@ -68,33 +69,47 @@ Your pem key associated with your OCI Tenancy / Account should now be copied to 
 Further information on the config file can be found on the OCI sdk page [SDK and CLI Configuration File](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm).
 
 
+## Docker Compose
+The docker image is the recommended runtime server OKIT provides a simple Docker Compose script to build and start the container.
+
+```bash
+cd oci-designer-toolkit/containers/docker
+docker-compose up
+```
+
 ## Docker 
 The docker image is the recommended runtime server and can be built and started using the scripts in the docker sub directory.
 It should be noted that the current Docker script is designed for development purposes and mounts the source directories
 at runtime. 
 
-### Build Docker Image
-```bash
-cd oci-designer-toolkit
-docker build --tag okit --file ./containers/docker/Dockerfile --force-rm ./containers/docker/
-```
-
-### Start Docker Image
-
 - OKIT_ROOT_DIR  : Absolute Root Directory of the extracted / cloned OKIT repository
 - OCI_CONFIG_DIR : Directory containing the OCI config file (OKIT_ROOT_DIR/containers/oci)
 
+### Build Docker Image
 ```bash
 cd oci-designer-toolkit
-docker run -d --rm -p 80:80 \
+docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
+```
+
+The __<OKIT_ROOT_DIR>/containers/scripts__ contains helper scripts for Linux/Mac and Windows PowerShell.
+
+- Linux/Mac : build-docker-image.sh
+- Windows PowerShell : build_docker_image_win.ps1 
+
+### Start Docker Image
+
+```bash
+cd oci-designer-toolkit
+docker run -d --rm -p 443:443 -p 80:80 \
            --name okit \
            --hostname okit \
-           -v <OCI_CONFIG_DIR>:/root/.oci \
-           -v <OKIT_ROOT_DIR>/okitweb:/okit/okitweb \
-           -v <OKIT_ROOT_DIR>/visualiser:/okit/visualiser \
-           -v <OKIT_ROOT_DIR>/log:/okit/log \
            okit
 ```
+
+The __<OKIT_ROOT_DIR>/containers/scripts__ contains helper scripts for Linux/Mac and Windows PowerShell.
+
+- Linux/Mac : start-okit-server.sh
+- Windows PowerShell : start_okit_server_win.ps1 
 
 If you want to run the image in and interactive mode then replace to _-d_ in the above command with _-it_.
 

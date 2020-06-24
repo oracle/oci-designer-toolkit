@@ -11,9 +11,11 @@ const ROOT_CANVAS_ID = 'canvas';
 const PROPERTIES_PANEL = 'properties_panel';
 const SETTINGS_PANEL = 'settings_panel';
 const JSON_PANEL = 'json_panel';
+const VALUE_PROPOSITION_PANEL = 'value_proposition_panel';
+const COST_ESTIMATE_PANEL = 'cost_estimate_panel';
+const VALIDATION_PANEL = 'validation_panel';
 const HTML5_CANVAS_PANEL  = 'html5_canvas_panel';
 // OKIT Json
-let okitJson = new OkitJson();
 let regionOkitJson = {};
 // Canvas
 let activeCanvas = null;
@@ -25,10 +27,7 @@ let dragging_right_drag_bar = false;
 let right_drag_bar_start_x = 0;
 
 // Automation details
-let okitSettings = new OkitSettings();
 let ociRegions = [];
-let okitOciData = new OkitOCIData();
-let okitOciConfig = new OkitOCIConfig();
 
 function resetDesigner() {
     okitJson = new OkitJson();
@@ -233,6 +232,15 @@ function redrawSVGCanvas(region='') {
     }
 }
 /*
+** Validate Model
+ */
+function handleValidate(evt) {
+    hideNavMenu();
+    $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
+    $('#toggle_validation_button').click();
+    return false;
+}
+/*
 ** Load Model From Template
  */
 function loadTemplate(template_url) {
@@ -280,7 +288,7 @@ function displayQueryDialog() {
         .append('select')
             .attr('id', 'config_profile')
             .on('change', () => {
-                console.info('Profile Select '+$(jqId('config_profile')).val());
+                console.info('Profile Select ' + $(jqId('config_profile')).val());
                 loadCompartments();
                 loadRegions();
             });
@@ -289,19 +297,6 @@ function displayQueryDialog() {
             .attr('value', section)
             .text(section);
     }
-    // Compartment Id
-    tr = tbody.append('div')
-        .attr('class', 'tr');
-    tr.append('div')
-        .attr('class', 'td')
-        .text('Compartment');
-    tr.append('div')
-        .attr('class', 'td')
-        .append('select')
-        .attr('id', 'query_compartment_id')
-        .append('option')
-            .attr('value', 'Retrieving')
-            .text('Retrieving..........');
     // Region Ids
     tr = tbody.append('div')
         .attr('class', 'tr');
@@ -313,6 +308,29 @@ function displayQueryDialog() {
         .append('select')
             .attr('id', 'query_region_id')
             .attr('multiple', 'multiple')
+            .on('change', () => {
+                console.info('Region Select ' + $(jqId('query_region_id')).val());
+                okitSettings.last_used_region = $(jqId('query_region_id')).val();
+                okitSettings.save();
+            })
+            .append('option')
+                .attr('value', 'Retrieving')
+                .text('Retrieving..........');
+    // Compartment Id
+    tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div')
+        .attr('class', 'td')
+        .text('Compartment');
+    tr.append('div')
+        .attr('class', 'td')
+        .append('select')
+            .attr('id', 'query_compartment_id')
+            .on('change', () => {
+                console.info('Compartment Select ' + $(jqId('query_compartment_id')).val());
+                okitSettings.last_used_compartment = $(jqId('query_compartment_id')).val();
+                okitSettings.save();
+            })
             .append('option')
                 .attr('value', 'Retrieving')
                 .text('Retrieving..........');
@@ -371,7 +389,7 @@ function loadCompartments() {
                     okitSettings.home_region_key = compartment.home_region_key;
                 }
             }
-            selectQueryHomeRegion();
+            selectQueryLastUsedCompartment();
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
@@ -403,7 +421,7 @@ function loadRegions() {
                     .attr('value', region['name'])
                     .text(region['display_name']);
             }
-            selectQueryHomeRegion();
+            selectQueryLastUsedRegion();
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
@@ -419,6 +437,18 @@ function selectQueryHomeRegion() {
                 break;
             }
         }
+    }
+}
+function selectQueryLastUsedRegion() {
+    if (okitSettings.last_used_region !== '') {
+       $(jqId('query_region_id')).val(okitSettings.last_used_region);
+        $(jqId('query_region_id')).change();
+    }
+}
+function selectQueryLastUsedCompartment() {
+    if (okitSettings.last_used_compartment !== '') {
+        $(jqId('query_compartment_id')).val(okitSettings.last_used_compartment);
+        $(jqId('query_compartment_id')).change();
     }
 }
 let queryCount = 0;
@@ -625,141 +655,82 @@ function setCenterColumnWidth() {
     console.info('Center Width : ' + centerWidth);
     $(jqId('designer_center_column')).css('min-width', 'calc(100% - ' + (leftAdjust + rightAdjust) + 'px)');
 }
-
-
 /*
-** Ready function initiated on page load.
+** Model Validation
  */
-$(document).ready(function() {
-    /*
-    ** Add handler functionality
-     */
-    console.info('Adding Designer Handlers');
-
-    d3.select(d3Id('console_left_bar')).append('label')
-        .attr('id', 'toggle_palette_button')
-        .attr('class', 'okit-bar-panel-displayed')
-        .on('click', function () {
-            $(jqId('designer_left_column')).toggleClass('okit-slide-hide-left');
-            $(this).toggleClass('okit-bar-panel-displayed');
-            setTimeout(redrawSVGCanvas, 260);
-        })
-        .text('Palette');
-
-    d3.select(d3Id('console_right_bar')).append('label')
-        .attr('id', 'toggle_properties_button')
-        //.attr('class', 'okit-bar-panel-displayed')
-        .on('click', function () {
-            let open = $(this).hasClass('okit-bar-panel-displayed');
-            slideRightPanelsOffScreen();
-            if (!open) {
-                console.info("Opening Panel");
-                $(jqId(PROPERTIES_PANEL)).removeClass('hidden');
-                $(this).addClass('okit-bar-panel-displayed');
-                $(jqId('right_column_dragbar')).removeClass('hidden');
-            }
-            checkRightColumn();
-        })
-        .text('Properties');
-
-    d3.select(d3Id('console_right_bar')).append('label')
-        .attr('id', 'toggle_source_button')
-        .on('click', function () {
-            let open = $(this).hasClass('okit-bar-panel-displayed');
-            slideRightPanelsOffScreen();
-            if (!open) {
-                console.info("Opening Panel");
-                $(jqId(JSON_PANEL)).removeClass('hidden');
-                $(this).addClass('okit-bar-panel-displayed');
-                $(jqId('right_column_dragbar')).removeClass('hidden');
-            }
-            // Check to see if Right Column needs to be hidden
-            checkRightColumn();
-            // Display Json
-            displayOkitJson();
-        })
-        .text('Json');
-
-    console.info('Added Designer Handlers');
-
-    /*
-    ** Add Load File Handling
-     */
-    document.getElementById('files').addEventListener('change', handleFileSelect, false);
-
-    /*
-    ** Load Empty Properties Sheet
-     */
-    $(jqId(PROPERTIES_PANEL)).load('propertysheets/empty.html');
-
-    /*
-    ** Add Drag Bar Functionality
-     */
-    $(jqId('right_column_dragbar')).mousedown(function(e) {
-        e.preventDefault();
-        right_drag_bar_start_x = e.pageX;
-        dragging_right_drag_bar = true;
-        let main_panel = $('.main');
-        let ghostbar = $('<div>',
-            {
-                id: 'ghostbar',
-                css: {
-                    height: main_panel.outerHeight(),
-                    top: main_panel.offset().top,
-                    left: main_panel.offset().left
-                },
-                class: 'okit-vertical-ghost-bar'
-            }).appendTo('body');
-
-        $(document).mousemove(function(e) {
-            ghostbar.css("left",e.pageX+2);
-        });
-    });
-
-    /**/
-    $(document).mouseup(function (e) {
-        if (dragging_right_drag_bar) {
-            let center_column_width = $(jqId('designer_center_column')).width();
-            let right_column_width = $(jqId('designer_right_column')).width();
-            let moved = right_drag_bar_start_x - e.pageX;
-            let new_width = right_column_width + moved;
-            // Remove Bar artifacts
-            $(jqId('ghostbar')).remove();
-            $(document).unbind('mousemove');
-            dragging_right_drag_bar = false;
-            // Set Width
-            $(jqId('designer_right_column')).width(new_width);
-            if (new_width > 250) {
-                $(jqId('designer_right_column')).css('min-width', new_width);
-            } else {
-                $(jqId('designer_right_column')).css('min-width', 250);
-            }
-            setTimeout(redrawSVGCanvas, 260);
-        }
-    });
-    /**/
-
-    setOCILink();
-
-    /*
-    ** Check Palette layout
-     */
-
-    if (!okitSettings.icons_only) {
-        $(jqId("icons_and_text")).prop('checked', 'checked');
-        $(jqId("icons_and_text")).click();
+function displayValidationResults(results) {
+    console.info('Displaying Validation Results');
+    if (results.valid) {
+        $(jqId('validation_status')).text('Validation Successful');
+    } else {
+        $(jqId('validation_status')).text('Validation Failed');
     }
-
-
-    /*
-    ** Display New Canvas
-     */
-    newDiagram();
-    redrawSVGCanvas();
-
-    /*
-    ** Add redraw on resize
-     */
-    window.addEventListener('resize', () => { redrawSVGCanvas() });
-});
-
+    // Process Errors
+    let tbody = d3.select(d3Id('validation_errors_tbody'));
+    $(jqId('validation_errors_tbody')).empty();
+    let tr = null;
+    for (let error of results.results.errors) {
+        tr = tbody.append('div')
+            .attr('class', 'tr');
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.type);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.artefact);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(error.message);
+        // Highlight
+        let fill = d3.select(d3Id(error.id)).attr('fill');
+        tr.on('mouseover', () => {
+            d3.select(d3Id(error.id)).attr('fill', validate_error_colour);
+        });
+        tr.on('mouseout', () => {
+            d3.select(d3Id(error.id)).attr('fill', fill);
+        });
+        tr.on('click', () => {
+            error_propeties.push(error.element);
+            d3.select(d3Id(error.id + '-svg')).on("click")();
+            $('#toggle_properties_button').click();
+        });
+    }
+    $(jqId('validation_errors_summary')).text(`Errors (${results.results.errors.length})`)
+    // Process Warnings
+    tbody = d3.select(d3Id('validation_warnings_tbody'));
+    $(jqId('validation_warnings_tbody')).empty();
+    for (let warning of results.results.warnings) {
+        tr = tbody.append('div')
+            .attr('class', 'tr');
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.type);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.artefact);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.message);
+        // Highlight
+        let fill = d3.select(d3Id(warning.id)).attr('fill');
+        tr.on('mouseover', () => {
+            d3.select(d3Id(warning.id)).attr('fill', validate_warning_colour);
+        });
+        tr.on('mouseout', () => {
+            d3.select(d3Id(warning.id)).attr('fill', fill);
+        });
+        tr.on('click', () => {
+            warning_propeties.push(warning.element);
+            d3.select(d3Id(warning.id + '-svg')).on("click")();
+            $('#toggle_properties_button').click();
+        });
+    }
+    $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
+}
+/*
+** Model Pricing
+ */
+function displayPricingResults(results) {
+    console.info('Displaying Pricing Results');
+    $(jqId(COST_ESTIMATE_PANEL)).text(JSON.stringify(results));
+}

@@ -7,7 +7,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "__init__"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -43,5 +43,9 @@ def create_app(test_config=None):
                                    'favicon.ico', mimetype='image/vnd.microsoft.icon')
     from . import okitWebDesigner
     app.register_blueprint(okitWebDesigner.bp)
+    from . import okitPricing
+    app.register_blueprint(okitPricing.bp)
+    from . import okitOci
+    app.register_blueprint(okitOci.bp)
 
     return app

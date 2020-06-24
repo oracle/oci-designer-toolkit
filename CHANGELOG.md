@@ -1,6 +1,26 @@
 # Release Notes
 
 
+## Version 0.7.0 
+**Release Date**: 24th June 2020
+### Features
+1. Windows PowerShell Docker Helper Scripts.
+2. Add setting for last selected Region and Compartment for Query and Resource Manager Export.
+3. Modify Resource Manager dialog to close when the stack has been created and display progress bar during creation.
+4. Specify stack name during export to Resource Manager
+5. Update existing Resource Manager Stacks
+6. When Creating Security List / Route Table modify the Default for the Security List / Route Table rather than create.
+7. First implementation of simple json validation and display of results. This can be manually executed or will be automatically execute during export to Terraform, Ansible or Resource Manager and only when successful will this be allowed.
+8. Hub & Spoke Network Topology Reference Architecture.
+9. Enable Bare Metal Shapes.
+
+### Bug Fixes
+1. Service Gateway with null route_table_id will not generate Terraform / Ansible / RM. Route table values can not be assigned within the GUI.
+2. Dynamic Routing Gateway assigning the VCN Id to Compartment Id (OKIT-73).
+3. Defined Tags not generating correctly for Terraform.
+4. Terraform being generated with invalid characters (OKIT-84).
+
+
 ## Version 0.6.0 
 **Release Date**: 3rd June 2020
 ### Features
@@ -15,6 +35,7 @@
 7. Move DRG to VCN Parent rather than Compartment
 8. Check for Update
 9. Highlight selected artefact (Toggles on/off).
+10. Database Systems
 
 ### Bug Fixes
 1. Palette did not scroll

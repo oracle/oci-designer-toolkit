@@ -3,6 +3,9 @@
 # Copyright (c) 2020, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
+export ROOT_DIR=$(cd $(dirname $0)/../..; pwd)
+
+docker kill okit
 docker rmi okit
 
 echo "*******************************************************************"
@@ -13,9 +16,9 @@ echo "*******************************************************************"
 
 docker build \
    --tag okit \
-   --file ../docker/Dockerfile \
+   --file ${ROOT_DIR}/containers/docker/Dockerfile \
    --force-rm \
-   ../docker/
+   ${ROOT_DIR}
 
 for dangling in $(docker images -f "dangling=true" -q)
 do

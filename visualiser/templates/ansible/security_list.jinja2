@@ -5,8 +5,12 @@
         region: "{{ region }}"
         state: "present"
         # Required
+{% if manage_default_resource_id is defined %}
+        security_list_id: "{{ manage_default_resource_id }}"
+{% else %}
         compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
+{% endif %}
         egress_security_rules:
 {% for rule in egress_rules %}
               # Required

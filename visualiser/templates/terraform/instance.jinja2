@@ -55,7 +55,7 @@ resource "oci_core_instance" "{{ resource_name }}" {
     fault_domain = {{ fault_domain | safe }}
 {% endif %}
     metadata = {
-        ssh_authorized_keys = {{ authorized_keys | safe }}
+        ssh_authorized_keys = {{ ssh_authorized_keys | safe }}
 {% if user_data is defined %}
         user_data           = base64encode({{ user_data | safe }})
 {% endif %}

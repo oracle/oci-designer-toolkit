@@ -58,7 +58,7 @@ class OkitOCIData {
 
     query() {
         let me = this;
-        $.getJSON('dropdown/query', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
+        $.getJSON('oci/dropdown', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
     }
 
     /*
@@ -89,12 +89,39 @@ class OkitOCIData {
             return this.shapes.filter(function(s) {return s.shape.startsWith(type);});
         }
     }
+
+    getInstanceOS(shape='') {
+        let oss = [];
+        if (shape === '') {
+            for (let image of this.images) {
+                oss.push(image.operating_system);
+            }
+        } else {
+            for (image of this.images) {
+                if (image.shapes.includes(shape)) {
+                    oss.push(image.operating_system);
+                }
+            }
+        }
+        console.info('>>>>>>> Instance OS : ' + oss);
+        return [...new Set(oss)].sort();
+    }
+
+    getInstanceOSVersions(os='') {
+        let versions = [];
+        let os_images = this.images.filter(i => i.operating_system === os);
+        console.info(`${os} Versions ${os_images}`)
+        for (let image of os_images) {
+            versions.push(image.operating_system_version);
+        }
+        return [...new Set(versions)].sort((a, b) => b - a);
+    }
 }
 
 class OkitSettings {
     constructor() {
-        this.is_default_security_list = true;
-        this.is_default_route_table = true;
+        this.is_default_security_list = false;
+        this.is_default_route_table = false;
         this.is_timestamp_files = false;
         this.profile = 'DEFAULT';
         this.is_always_free = false;
@@ -102,7 +129,13 @@ class OkitSettings {
         this.is_display_grid = false;
         this.is_variables = true;
         this.icons_only = true;
+        this.last_used_region = '';
+        this.last_used_compartment = '';
         this.load();
+    }
+
+    getCookieName() {
+        return 'okit-settings';
     }
 
     load() {
@@ -111,17 +144,17 @@ class OkitSettings {
             let cookie_json = JSON.parse(cookie_string);
             $.extend(this, cookie_json);
         } else {
-            this.save();
+            createCookie(this.getCookieName(), JSON.stringify(this));
         }
     }
 
     save() {
-        createCookie('okit-settings', JSON.stringify(this));
+        createCookie(this.getCookieName(), JSON.stringify(this));
         redrawSVGCanvas();
     }
 
     erase() {
-        eraseCookie('okit-settings');
+        eraseCookie(this.getCookieName());
     }
 
     edit() {
@@ -381,6 +414,7 @@ class OkitArtifact {
             $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
             $(jqId(me.id)).toggleClass('highlight');
             $(jqId(me.id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
+            me.loadValueProposition();
             d3.event.stopPropagation();
         });
         console.groupEnd();
@@ -434,6 +468,14 @@ class OkitArtifact {
     loadProperties() {
         alert('Load Properties function "loadProperties()" has not been implemented.')
         return;
+    }
+
+
+    /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/oci.html");
     }
 
 
@@ -1460,11 +1502,6 @@ class OkitJson {
     }
 
     /*
-    ** Calculate price
-     */
-    price(rate_card) {}
-
-    /*
     ** New Artifact Processing
      */
 
@@ -1505,8 +1542,6 @@ class OkitJson {
     // Dynamic Routing Gateway
     newDynamicRoutingGateway(data, parent=null) {
         console.info('New Dynamic Routing Gateway');
-        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
-        data.compartment_id = data.parent_id;
         this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
         return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
     }
@@ -1538,8 +1573,10 @@ class OkitJson {
         for (let gateway of this.internet_gateways) {
             if (gateway.vcn_id === data.parent_id) {
                 // We are only allowed a single Internet Gateway peer VCN
-                alert('The maximum limit of 1 for Internet Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                return {error: 'Service Gateway Already Exists.'};
+                if (parent) {
+                    alert('The maximum limit of 1 for Internet Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                }
+                return null;
             }
         }
         this['internet_gateways'].push(new InternetGateway(data, this, parent));
@@ -1566,8 +1603,10 @@ class OkitJson {
         for (let gateway of this.nat_gateways) {
             if (gateway.vcn_id === data.parent_id) {
                 // We are only allowed a single NAT Gateway peer VCN
-                alert('The maximum limit of 1 for NAT Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                return {error: 'Service Gateway Already Exists.'};
+                if (parent) {
+                    alert('The maximum limit of 1 for NAT Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                }
+                return null;
             }
         }
         this['nat_gateways'].push(new NATGateway(data, this, parent));
@@ -1610,8 +1649,10 @@ class OkitJson {
         for (let gateway of this.service_gateways) {
             if (gateway.vcn_id === data.parent_id) {
                 // We are only allowed a single Service Gateway peer VCN
-                alert('The maximum limit of 1 for Service Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                return {error: 'Service Gateway Already Exists.'};
+                if (parent) {
+                    alert('The maximum limit of 1 for Service Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
+                }
+                return null;
             }
         }
         this['service_gateways'].push(new ServiceGateway(data, this, parent));
@@ -1675,8 +1716,11 @@ class OkitJson {
     }
 
     // Instance
+    getInstances() {
+        return this.instances;
+    }
     getInstance(id='') {
-        for (let artifact of this.instances) {
+        for (let artifact of this.getInstances()) {
             if (artifact.id === id) {
                 return artifact;
             }
@@ -1868,6 +1912,17 @@ class OkitJson {
         }
     }
 
+    // Network Security Group
+    deleteNetworkSecurityGroup(id) {
+        for (let i = 0; i < this.network_security_groups.length; i++) {
+            if (this.network_security_groups[i].id === id) {
+                this.network_security_groups[i].delete();
+                this.network_security_groups.splice(i, 1);
+                break;
+            }
+        }
+    }
+
     // Object Storage Bucket
     deleteObjectStorageBucket(id) {
         for (let i = 0; i < this.object_storage_buckets.length; i++) {
@@ -1933,5 +1988,58 @@ class OkitJson {
             }
         }
     }
+
+    /*
+    ** Export Functions
+     */
+    // Terraform
+    exportTerraform() {}
+    // Ansible
+    exportAnsible() {}
+    // Resource Manager
+    exportResourceManager() {}
+
+    /*
+    ** Data Validation
+     */
+    validate(callback=null) {
+        $.ajax({
+            type: 'post',
+            url: 'validate',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(this),
+            success: function(resp) {
+                console.info('Validation Response : ' + resp);
+                if (callback && callback !== null) callback(JSON.parse(resp));
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    }
+
+    /*
+    ** Calculate price
+     */
+    estimateCost(callback=null) {
+        $.ajax({
+            type: 'post',
+            url: 'pricing/estimate',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(this),
+            success: function(resp) {
+                console.info('Validation Response : ' + resp);
+                if (callback && callback !== null) callback(JSON.parse(resp));
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    }
+
 }
 

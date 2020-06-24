@@ -41,6 +41,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='okit/js/oci_artefacts/' + oci_asset_js) }}"></script>
     {% endfor %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_fragments.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_ready.js') }}"></script>
 {% endblock %}
 
 {% block headcss %}
@@ -80,6 +81,7 @@
             </li>
             <li><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOci()">Query</a></li>
             <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li>
+            <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
         </ul>
         <ul class="okit-navigation-sub-list">
             <li>
@@ -222,6 +224,37 @@
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>
         <div id="properties_panel" class="okit-property-sheet hidden"></div>
         <div id="json_panel" class="okit-source-code hidden"></div>
+        <div id="validation_panel" class="okit-source-code">
+            <div id="validation_header_div"><label id="validation_status"></label></div>
+            <details open>
+                <summary><a>
+                    <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+                    <span id="validation_errors_summary">Errors</span></a>
+                </summary>
+                <div class="table okit-table okit-properties-table">
+                    <div class="thead">
+                        <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
+                    </div>
+                    <div id="validation_errors_tbody" class="tbody">
+                    </div>
+                </div>
+            </details>
+            <details open>
+                <summary><a>
+                    <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+                    <span id="validation_warnings_summary">Warnings</span></a>
+                </summary>
+                <div class="table okit-table okit-properties-table">
+                    <div class="thead">
+                        <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
+                    </div>
+                    <div id="validation_warnings_tbody" class="tbody">
+                    </div>
+                </div>
+            </details>
+        </div>
+        <div id="value_proposition_panel" class="okit-value-proposition hidden"></div>
+        <div id="cost_estimate_panel" class="okit-cost-estimate hidden"></div>
         <!--div id="settings_panel" class="okit-settings-sheet hidden"></div-->
     </div>
     <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json"></div>

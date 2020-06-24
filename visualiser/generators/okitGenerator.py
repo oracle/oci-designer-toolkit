@@ -8,7 +8,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
 __copyright__ = "Copyright (c) 2020, Oracle and/or its affiliates."
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -17,9 +17,9 @@ import jinja2
 import os
 import shutil
 
-from common.ociCommon import readYamlFile
-from common.ociLogging import getLogger
-from common.ociValidation import validateVisualiserJson
+from common.okitCommon import readYamlFile
+from common.okitLogging import getLogger
+from model.okitValidation import OCIJsonValidator
 
 # Configure logging
 logger = getLogger()
@@ -82,7 +82,7 @@ class OCIGenerator(object):
     def formatJinja2Variable(self, variable_name):
         pass
 
-    def formatJinja2IdReference(self, resource_name):
+    def formatJinja2IdReference(self, resource_name, element='id'):
         pass
 
     def formatJinja2DhcpReference(self, resource_name):
@@ -105,7 +105,8 @@ class OCIGenerator(object):
 
     def generate(self):
         # Validate input json
-        validateVisualiserJson(self.visualiser_json)
+        validator = OCIJsonValidator(self.visualiser_json)
+        validator.validate()
         # Build the Id to Name Map
         self.buildIdNameMap()
         # Process Provider Connection information
@@ -157,11 +158,15 @@ class OCIGenerator(object):
         for network_security_group in self.visualiser_json.get('network_security_groups', []):
             self.renderNetworkSecurityGroup(network_security_group)
         # -- Security Lists
+        index = 1
         for security_list in self.visualiser_json.get('security_lists', []):
-            self.renderSecurityList(security_list)
+            self.renderSecurityList(security_list, index)
+            index += 1
         # -- Route Tables
+        index = 1
         for route_table in self.visualiser_json.get('route_tables', []):
-            self.renderRouteTable(route_table)
+            self.renderRouteTable(route_table, index)
+            index += 1
         # -- Service Gateways
         for service_gateway in self.visualiser_json.get('service_gateways', []):
             self.renderServiceGateway(service_gateway)
@@ -222,6 +227,8 @@ class OCIGenerator(object):
         # ---- Free Tier
         self.addJinja2Variable("is_free_tier", autonomous_database["is_free_tier"], standardisedName)
         # --- Optional
+        # ---- License Model
+        self.addJinja2Variable("license_model", autonomous_database["license_model"], standardisedName)
         # ---- Tags
         self.renderTags(autonomous_database)
 
@@ -328,6 +335,8 @@ class OCIGenerator(object):
         self.addJinja2Variable("db_workload", database_system["db_home"]["database"]["db_workload"], standardisedName)
         # ---- Database Version
         self.addJinja2Variable("db_version", database_system["db_home"]["db_version"], standardisedName)
+        # ---- License Model
+        self.addJinja2Variable("license_model", database_system["license_model"], standardisedName)
         # ---- Data Storage Size
         self.addJinja2Variable("data_storage_size_in_gb", database_system["data_storage_size_in_gb"], standardisedName)
         # ---- Storage Management
@@ -489,7 +498,7 @@ class OCIGenerator(object):
             self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in instance["vnics"][0]["nsg_ids"]]
         # ---- Metadata
         # ----- Authorised Public SSH Keys
-        self.addJinja2Variable("authorized_keys", instance["metadata"]["authorized_keys"], standardisedName)
+        self.addJinja2Variable("ssh_authorized_keys", instance["metadata"]["ssh_authorized_keys"], standardisedName)
         # ----- Cloud Init YAML
         self.addJinja2Variable("user_data", instance["metadata"]["user_data"].replace('\n', '\\n').replace('"', '\\"'), standardisedName)
         # ---- Volume Attachments
@@ -500,6 +509,7 @@ class OCIGenerator(object):
             variableName = '{0:s}_volume_attachment_{1:02d}_block_storage_volume_id'.format(standardisedName, attachment_number)
             self.run_variables[variableName] = block_storage_volume_id
             jinja2_volume_attachment = {
+                "attachment_type": '"iscsi"',
                 "block_storage_volume_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume_id]))
             }
             # ---- Display Name
@@ -667,7 +677,10 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", local_peering_gateway["display_name"], standardisedName)
         # ---- Route Table
-        self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['route_table_id']]))
+        if len(local_peering_gateway['route_table_id']) > 0:
+            self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['route_table_id']]))
+        else:
+            self.jinja2_variables.pop("route_table_id", None)
         # ---- Remote Peering gateway
         if len(local_peering_gateway['peer_id']) > 0:
             self.jinja2_variables["peer_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['peer_id']]))
@@ -822,7 +835,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderRouteTable(self, route_table):
+    def renderRouteTable(self, route_table, index=0):
         # Read Data
         standardisedName = self.standardiseResourceName(route_table['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -832,6 +845,12 @@ class OCIGenerator(object):
         logger.info('Processing Route Table Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
+        # ---- If this is the first Route Table the update the Default Route Table
+        if index == 1:
+            self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
+                self.standardiseResourceName(self.id_name_map[route_table['vcn_id']]), 'default_route_table_id')
+        else:
+            self.removeJinja2Variable("manage_default_resource_id")
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_table['compartment_id']]))
         # ---- Virtual Cloud Network OCID
@@ -868,7 +887,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderSecurityList(self, security_list):
+    def renderSecurityList(self, security_list, index=0):
         # Read Data
         standardisedName = self.standardiseResourceName(security_list['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -878,6 +897,12 @@ class OCIGenerator(object):
         logger.info('Processing Security List Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
+        # ---- If this is the first Security List the update the Default Security List
+        if index == 1:
+            self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
+                self.standardiseResourceName(self.id_name_map[security_list['vcn_id']]), 'default_security_list_id')
+        else:
+            self.removeJinja2Variable("manage_default_resource_id")
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[security_list['compartment_id']]))
         # ---- Virtual Cloud Network OCID
@@ -1012,7 +1037,7 @@ class OCIGenerator(object):
         self.addJinja2Variable("service_name", service_gateway["service_name"], standardisedName)
         # --- Optional
         # ---- Route Table
-        if len(service_gateway['route_table_id']):
+        if service_gateway['route_table_id'] is not None and len(service_gateway['route_table_id']):
             self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[service_gateway['route_table_id']]))
         else:
             self.jinja2_variables.pop("route_table_id", None)

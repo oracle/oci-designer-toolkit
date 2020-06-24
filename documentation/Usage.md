@@ -4,22 +4,13 @@
 
 ## Table of Contents
 
-1. [Artifact Support Matrix](#artifact-support-matrix)
-2. [Installation](#installation)
-3. [Usage](#usage)
-    1. [Currently Implemented Artifacts](#currently-implemented-artifacts)
-    2. [OCI Config File](#oci-config-file)
-    3. [Web Interface](#web-interface)
+1. [Supported Browsers](#supported-browsers)
+2. [Currently Implemented Artifacts](#currently-implemented-artifacts)
+3. [Web Interface](#web-interface)
 4. [Examples](#examples)
-5. [Issues](#issues)
-6. [Development](#development)
-7. [3rd Party Libraries](#3rd-party-libraries)
-8. [Artifact Support Matrix Gap Analysis](#artifact-support-matrix-gap-analysis)
-9. [Release Notes](#release-notes)
 
 
-## Usage
-### Supported Browsers
+## Supported Browsers
 At present not all browsers are fully supported the following is a list of supported browsers and status.
 - Supported
    - Chrome
@@ -30,7 +21,8 @@ At present not all browsers are fully supported the following is a list of suppo
    - Safari
 - Unsupported
    - IE
-### Currently Implemented Artifacts
+
+## Currently Implemented Artifacts
 In the present release the following OCI artifacts have been implemented. The information captured in the properties may 
 only be the minimum to create the artifacts but will be extended in the future.
 
@@ -45,38 +37,41 @@ only be the minimum to create the artifacts but will be extended in the future.
 - Autonomous Database
 - Block Storage Volumes
 - Object Storage Buckets
+- Database Systems
 
-### OCI Config File
-Before executing any of the docker container scripts OKIT requires an OCI connection configuration file. The information 
-for creating this file can be found in the [Installation Guide](Installation.md#oci-config-file).
+## Web Interface
+To access the Web Designer Interface you will need to start either the [Docker Container](Installation.md#build-docker-image) 
+or [Vagrant Image](Installation.md#build-vagrant-image) created during [Installation](Installation.md). This can be achieved 
+by executing one of the commands below depending on your choice of container.
 
-### Web Interface
-To use the Web Application you will first need to start the docker container and run the web server; which can 
-be achieved by running the docker container created during [installation](Installation.md#build-docker-image).
-
-- OKIT_ROOT_DIR  : Absolute directory name for the extracted / cloned OKIT repository.
-- OCI_CONFIG_DIR : Directory containing the OCI config file. Details can be found in [OCI Designer Toolkit Installation Guide](Installation.md#oci-config-file).
-
+### Docker Compose
 ```bash
-cd oci-designer-toolkit
-docker run -d --rm -p 80:80 \
-           --name okit \
-           --hostname okit \
-           -v <OCI_CONFIG_DIR>:/root/.oci \
-           -v <OKIT_ROOT_DIR>/okitweb:/okit/okitweb \
-           -v <OKIT_ROOT_DIR>/visualiser:/okit/visualiser \
-           -v <OKIT_ROOT_DIR>/log:/okit/log \
-           okit
+cd oci-designer-toolkit/containers/docker
+docker-compose up
 ```
 
-Alternatively if you have chosen to use Vagrant the server can be started as follows:
+### Docker
+```bash
+cd oci-designer-toolkit
+docker run -d --rm -p 443:443 -p 80:80 \
+           --name okit \
+           --hostname okit \
+           okit
+```
+The __<OKIT_ROOT_DIR>/containers/scripts__ contains helper scripts for Linux/Mac and Windows PowerShell.
 
+- Linux/Mac : start-okit-server.sh
+- Windows PowerShell : start_okit_server_win.ps1 
+
+If you want to run the image in and interactive mode then replace to _-d_ in the above command with _-it_.
+
+### Vagrant
 ```bash
 cd oci-designer-toolkit/containers/vagrant/
 vagrant up; vagrant ssh
 ```
 
-#### Designer BUI
+### Designer BUI
 The Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer) and consists of 3 main areas.
 1. Palette
 2. Canvas
@@ -98,7 +93,7 @@ Instances fronted by a Load Balancer can be seen below.
 
 The hamburger menu in the top left will display a slide out menu with all available actions (described below).
 
-##### Palette
+#### Palette
 - Compute
     - <img src="../okitweb/static/okit/palette/compute/Instance.svg?raw=true" width="30" height="30"/>                  Instance
 - Containers
@@ -125,7 +120,7 @@ The hamburger menu in the top left will display a slide out menu with all availa
     - <img src="../okitweb/static/okit/palette/storage/File_Storage_System.svg?raw=true" width="30" height="30"/>       File Storage System
     - <img src="../okitweb/static/okit/palette/storage/Object_Storage_Bucket.svg?raw=true" width="30" height="30"/>     Object Storage Bucket
 
-##### Menu 
+#### Menu 
 ![OKIT Web Interface Menu](images/okit_menu.png?raw=true "OKIT Web Interface Menu")
 
 - Canvas
@@ -150,30 +145,30 @@ The hamburger menu in the top left will display a slide out menu with all availa
     - Ansible
     - Resource Manager
 
-###### Canvas/New
+##### Canvas/New
 Creates a new clear canvas.
-###### Canvas/Load
+##### Canvas/Load
 Allows the user to select a previously saved or command line generated json file.
-###### Canvas/Save
+##### Canvas/Save
 Saves the current diagram as a json representation.
-##### Canvas/Query
+#### Canvas/Query
 Opens Query pages and populates the Compartment list. Once the user has chosen the compartment and regions.  
 Submitting will query OCI and draw the returning assets on the new designer canvas.
-###### Canvas/Redraw
+##### Canvas/Redraw
 Redraws the existing canvas this will have the effect of grouping similar assets.
-###### Templates
+##### Templates
 This is a dynamic menu that represents the available templates that can be loaded as a starting point for system development.
-##### Export/Terraform
+#### Export/Terraform
 Generate a set of Terraform that can be used to build the designed OCI infrastructure currently loaded and return as a zip file.
-##### Export/Ansible
+#### Export/Ansible
 Generate a set of Ansible that can be used to build the designed OCI infrastructure currently loaded  and return as a zip file.
-###### Export/Image/png
+##### Export/Image/png
 Will export the current diagram as a png image that can be distributed.
-###### Export/Image/jpeg
+##### Export/Image/jpeg
 Will export the current diagram as a jpeg image that can be distributed.
-###### Export/Image/svg
+##### Export/Image/svg
 Will export the current diagram as an SVG object that can be distributed.
-###### Export/Resource Manager
+##### Export/Resource Manager
 Will generate Terraform code and export the resulting zip file into the OCI Resource Manager. Once uploaded it will initiate
 a plan or apply job.
 
@@ -186,7 +181,7 @@ a plan or apply job.
 
 
 
-## Examples
+# Examples
 The following short tutorial will take you through a worked example for creating a simple 2 Instance load balanced nginx
 implementation. The results of the worked example can be seen in the template (Simple Load Balancer).
 
@@ -195,7 +190,7 @@ and then ultimately generate Ansible 7 Terraform scripts that can be executed to
 built using simple HTML / JavaScript and provides an intuative Drag & Drop interface for placing artifacts on the canvas.
 Appropriate drop locations for an Artifact will be indicated by the addition of a green ***"+"*** over the Drag Icon.
 
-### Step 1 : Open OKIT Designer
+## Step 1 : Open OKIT Designer
 The first step to building a diagram is be to open the designer page. If you have the docker container running (executed {Project Root}/docker/start-nginx.sh)
 this will be located at [http://localhost/okit/designer](http://localhost/okit/designer) and will bring up a new
 empty diagram that contains only a top level Compartment. It can be seen that the Designer is split into 3 main panels.
@@ -206,7 +201,7 @@ empty diagram that contains only a top level Compartment. It can be seen that th
 The Compartment name can be edited by simply clicking on it and modifying the name in the displayed properties. Although 
 we can change the name it is for display purposes only because this Compartment will not be created just it's contents.
 ![Example Step 1](images/Example01.png)
-### Step 2 : Add Virtual Cloud Network
+## Step 2 : Add Virtual Cloud Network
 The first this we will need for our Load Balancer example is to create a Virtual Cloud Network and this can be achieved 
 by dragging the Virtual Cloud Network Icon <img src="../okitweb/static/okit/palette/networking/Virtual_Cloud_Network.svg?raw=true" width="20" height="20"/> 
 from the palette onto the compartment. Doing this will create a Simple Virtual Cloud Network and populate it with a default
@@ -217,25 +212,25 @@ be 10.0.0.0/16, If a second Virtual Cloud Network is added its CIDR will be 10.1
 These can be removed by Right-Clicking on them and selecting Delete but we will not do this because they are appropriate
 in this example. The generation of these is optional and configured in the settings window (see radio buttons at top of properties panel).
 ![Example Step 2](images/Example02.png)
-### Step 3 : Add Internet Gateway
+## Step 3 : Add Internet Gateway
 To allow access to our system we will need an Internet Gateway added to the Virtual Cloud Network. We will do this in the 
 same way we did for the Virtual Cloud Network but selecting the Internet Gateway Icon <img src="../okitweb/static/okit/palette/gateways/NAT_Gateway.svg?raw=true" width="20" height="20"/>
 from the palette and dragging it over the Virtual Cloud Network. You should note whilst doing this how the drag Icon changes
 to indicate allowable drop targets.
 ![Example Step 3](images/Example03.png)
-### Step 4 : Select Route Table
+## Step 4 : Select Route Table
 The auto generated Route Table will need to be modified to add a Route Rule to direct traffic to the Internet Gateway. Select
 the Route Table <img src="../okitweb/static/okit/palette/networking/Route_Table.svg?raw=true" width="20" height="20"/> on the Canvas and its
 properties will appear in the properties Panel. Click the Green ***"+"*** button on the rules table and a new Rule will be created.
 ![Example Step 4](images/Example04.png)
 Within the new Rule we will specify the Destination (CIDR Block) and the appropriate Gateway (Network Entity).
 ![Example Step 5](images/Example05.png)
-### Step 5 : Add Subnet
+## Step 5 : Add Subnet
 We will now add a Subnet to our diagram by selecting the Subnet Icon <img src="../okitweb/static/okit/palette/networking/Subnet.svg?raw=true" width="20" height="20"/>
 from the Palette and dragging it over the Virtual Cloud Network. Dropping this will create place a Subnet on our Virtual Cloud Network
 with a CIDR based on its parent (10.0.0.0/24) Additional Subnet will increment the 3rd Octet. 
 ![Example Step 6](images/Example06.png)
-### Step 6 : Connect Subnet to Route Table & Security List
+## Step 6 : Connect Subnet to Route Table & Security List
 To allow Artifacts within the network to access / be accessed by the internet we will need to provide it with a Route Table 
 and Security List. We can achieve this by selecting the Subnet and editing the properties to select the existing Route Table abd Security List.
 Once this has been done you will notice that the Route Table Icon <img src="../okitweb/static/okit/palette/networking/Route_Table.svg?raw=true" width="20" height="20"/>
@@ -243,29 +238,29 @@ and Security List Icon <img src="../okitweb/static/okit/palette/networking/Secur
 top edge of the Subnet to indicate that the Subnet has assigned Route Table and Security. Additional Subnet can also select the same 
 Route Table and Security List.
 ![Example Step 7](images/Example07.png)
-### Step 7 : Add Instances
+## Step 7 : Add Instances
 We will now create 2 Instances within the Subnet by dragging the Instance Icon <img src="../okitweb/static/okit/palette/compute/Instance.svg?raw=true" width="20" height="20"/>
 from the Palette and dropping it on the Subnet. You will notice that the second Instance will have the designation "002" 
 rather than "001".
 ![Example Step 8](images/Example08.png)
-### Step 8 : Add load Balancer
+## Step 8 : Add load Balancer
 Next well will create a Load Balancer by dragging the Load Balancer Icon <img src="../okitweb/static/okit/palette/networking/Load_Balancer.svg?raw=true" width="20" height="20"/>
 from the Palette onto the Subnet. You will notice that Instances move and this is because the Visualiser controls placement 
 and will dynamically move / resize components to best display the system.
 ![Example Step 9](images/Example09.png)
-### Step 9 : Connect Load Balancer to Instances
+## Step 9 : Connect Load Balancer to Instances
 Now we will need to connect the Load Balancer to the 2 backend Instance and we will do this by selecting the Load Balancer 
 and in the displayed Properties panel selecting the 2 Instances displayed in the "Backend Instance" Select box. On doing this
 you note that Load Balancer and the Instances become connected in the diagram.
 ![Example Step 10](images/Example10.png)
 ![Example Step 11](images/Example11.png)
-### Step 10 : Update Instance Properties
+## Step 10 : Update Instance Properties
 Our final step will be to update each of the instances to provide an Authorised Key for the instance and a Cloud Init YAML
 to install and configure nginx. We will do this by selecting each Instance individually and editing the properties and using 
 the [Cloud Init YAML](#cloud-init-yaml) below. Once this has been done our diagram is now complete and can be saved using the 
 "Save" option below the "Hamburger" menu. 
 ![Example Step 12](images/Example12.png)
-#### Cloud Init YAML
+### Cloud Init YAML
 ```yaml
 #cloud-config
 packages:
@@ -325,12 +320,12 @@ runcmd:
 final_message: "**** The system is finally up, after $UPTIME seconds ****"
 ```
 
-### Terraform Generation & Execution
+## Terraform Generation & Execution
 For the diagram you are able to select the menu option Generate->Terraform and this will generate a oci_terraform.zip 
 that can be saved and extracted to produce 3 files that can be used by terraform. If we assume that the export have been
 generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
 
-#### Unzip Generated File
+### Unzip Generated File
 ```bash
 lh
 total 20K
@@ -346,7 +341,7 @@ Archive:  okit-terraform.zip
   inflating: okit-terraform/terraform.tfvars
 ```
 
-#### Plan Terraform Build
+### Plan Terraform Build
 ```bash
 cd okit-terraform
 terraform init
@@ -360,7 +355,7 @@ persisted to local or remote state storage.
 ..........
 ```
 
-#### Apply Terraform Plan
+### Apply Terraform Plan
 ```bash
 terraform apply da.plan
 oci_core_vcn.Okit-Vcn001: Creating...
@@ -368,18 +363,18 @@ oci_core_volume.Okit-Bsv001: Creating...
 ..........
 ```
 
-### Ansible Generation & Execution
+## Ansible Generation & Execution
 For the diagram you are able to select the menu option Generate->Ansible and this will generate a oci_ansible.zip 
 that can be saved and extracted to produce 2 files that can be used by ansible. If we assume that the export have been
 generated from the 'Load Balanced Nginx Instances' Template then the infrastructure can be created as follows.
 
-#### Unzip Generated File
+### Unzip Generated File
 ```bash
 unzip okit-ansible.zip -d okit-ansible
 Archive:  okit-ansible.zip
 ```
 
-#### Run Playbook
+### Run Playbook
 ```bash
 ansible-playbook main.yml --extra-vars "@/okit/config/connection.yml" 
 ```

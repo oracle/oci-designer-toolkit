@@ -27,7 +27,7 @@
         freeform_tags: "{{ freeform_tags | safe }}"
 {% endif %}
         metadata:
-            ssh_authorized_keys: "{{ authorized_keys | safe }}"
+            ssh_authorized_keys: "{{ ssh_authorized_keys | safe }}"
 {% if cloud_init_yaml is defined %}
             user_data: "{{ cloud_init_yaml | replace(' }}', '') }} | b64encode {{ '}}' }}"
 {% endif %}

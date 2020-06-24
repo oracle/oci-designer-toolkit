@@ -1,4 +1,7 @@
 
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 #Start Docker image on windows
 #Assuming that OCI CLI it's configured in default path - oci setup config
 
@@ -42,5 +45,4 @@ if (-not (Test-Path -LiteralPath $OciCliFolder))
 }
 
 
-& "docker" run --rm -it -p 443:443/tcp -p 80:80/tcp --hostname okit --name okit -v $ENV:UserProfile\.oci:/root/.oci:Z  -v $Rootfolder\okitweb:/okit/okitweb:Z -v $Rootfolder\visualiser:/okit/visualiser:Z -v $Rootfolder\log:/okit/log:Z okit:latest
-
+& "docker" run --rm -it -p 443:443/tcp -p 80:80/tcp --hostname okit --name okit -v $ENV:UserProfile\.oci:/root/.oci  -v $Rootfolder\okitweb:/okit/okitweb -v $Rootfolder\visualiser:/okit/visualiser -v $Rootfolder\log:/okit/log okit:latest

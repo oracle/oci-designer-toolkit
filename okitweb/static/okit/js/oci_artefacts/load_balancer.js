@@ -49,9 +49,9 @@ class LoadBalancer extends OkitArtifact {
     }
 
 
-        /*
-        ** Clone Functionality
-         */
+    /*
+    ** Clone Functionality
+     */
     clone() {
         return new LoadBalancer(this, this.getOkitJson());
     }
@@ -95,6 +95,8 @@ class LoadBalancer extends OkitArtifact {
 
     drawConnectors() {
         console.groupCollapsed('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        // Check if there are any missing forllowing query
+        this.checkConnectors();
         // Get Grand Parent
         let grandparent_id = d3.select(d3Id(this.parent_id)).attr('data-parent-id');
         // Define Connector Parent
@@ -136,6 +138,24 @@ class LoadBalancer extends OkitArtifact {
             }
         }
         console.groupEnd();
+    }
+
+    checkConnectors() {
+        if (this.backend_sets) {
+            for (let [key, value] of Object.entries(this.backend_sets)) {
+                for (let backend of value.backends) {
+                    for (let instance of this.getOkitJson().getInstances()) {
+                        if (instance.primary_vnic.private_ip === backend.ip_address) {
+                            if (!this.instance_ids.includes(instance.id)) {
+                                this.instance_ids.push(instance.id);
+                                backend.instance_id = instance.id;
+                                delete backend.private_ip;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // Return Artifact Specific Definition.

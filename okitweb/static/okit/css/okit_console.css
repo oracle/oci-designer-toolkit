@@ -96,6 +96,11 @@ textarea {
 .hidden {
     visibility: hidden;
     display: none;
+    max-height: 0;
+}
+
+.okit-pointer-cursor {
+    cursor: pointer;
 }
 
 /*
@@ -174,6 +179,10 @@ textarea {
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
     font-size: small;
     align-items: center;
+}
+
+.okit-progress {
+    width: 100%;
 }
 
 .okit-version-div {
@@ -533,7 +542,7 @@ li a.parent-item:hover {
     background-color: white;
     opacity: 1;
     box-shadow: 0px 0px 5px black;
-    min-width: 200px;
+    min-width: 400px;
     min-height: 200px;
     overflow: hidden;
 }
@@ -555,10 +564,24 @@ li a.parent-item:hover {
     border-bottom: #555555 1px solid;
 }
 
+#modal_dialog_body > div {
+    width: 100%;
+}
+
+
 .okit-modal-dialog-footer {
     display: flex;
     align-items: center;
     padding: 0.2em;
+    width: 100%;
+}
+
+.okit-modal-dialog-progress {
+    display: flex;
+    width: 100%;
+}
+
+.okit-modal-dialog-progress > progress {
     width: 100%;
 }
 
@@ -797,4 +820,18 @@ li a.parent-item:hover {
     position: relative;
     top: 15px;
     width: 110px
+}
+
+/*
+** Validation
+ */
+
+.okit-error {
+    border-color: red;
+    background-color: #ffe6e6;
+}
+
+.okit-warning {
+    border-color: yellow;
+    background-color: #ffffe6;
 }

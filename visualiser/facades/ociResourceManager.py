@@ -8,7 +8,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociResourceManager"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -17,7 +17,8 @@ import base64
 import oci
 import time
 
-from common.ociLogging import getLogger
+from common.okitLogging import getLogger
+from common.okitCommon import logJson
 from facades.ociConnection import OCIResourceManagerConnection
 
 # Configure logging
@@ -39,7 +40,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         logger.info('Stack Count : {0:02d}'.format(len(resource_managers)))
         # Convert to Json object
         resource_managers_json = self.toJson(resource_managers)
-        logger.debug(str(resource_managers_json))
+        logJson(resource_managers_json)
 
         # Filter results
         self.resource_managers_json = self.filterJsonObjectList(resource_managers_json, filter)
@@ -53,10 +54,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
 
     def createStack(self, stack):
         logger.debug('<<<<<<<<<<<<< Stack Detail >>>>>>>>>>>>>: {0!s:s}'.format(str(stack)))
-        with open(stack['zipfile'], "rb") as f:
-            zip_bytes = f.read()
-            encoded_zip = base64.b64encode(zip_bytes).decode('ascii')
-        zip_source = oci.resource_manager.models.CreateZipUploadConfigSourceDetails(zip_file_base64_encoded=encoded_zip)
+        zip_source = oci.resource_manager.models.CreateZipUploadConfigSourceDetails(zip_file_base64_encoded=self.base64EncodeZip(stack))
         stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x')
         response = self.client.create_stack(stack_details)
         logger.info('Create Stack Response : {0!s:s}'.format(str(response.data)))
@@ -75,6 +73,19 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         self.client.create_job(job_details)
         return
 
+    def updateStack(self, stack):
+        logger.debug('<<<<<<<<<<<<< Stack Detail >>>>>>>>>>>>>: {0!s:s}'.format(str(stack)))
+        zip_source = oci.resource_manager.models.UpdateZipUploadConfigSourceDetails(zip_file_base64_encoded=self.base64EncodeZip(stack))
+        stack_details = oci.resource_manager.models.UpdateStackDetails(display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x')
+        response = self.client.update_stack(stack_id=stack['id'], update_stack_details=stack_details)
+        logger.info('Update Stack Response : {0!s:s}'.format(str(response.data)))
+        return self.toJson(response.data)
+
+    def base64EncodeZip(self, stack):
+        with open(stack['zipfile'], "rb") as f:
+            zip_bytes = f.read()
+            encoded_zip = base64.b64encode(zip_bytes).decode('ascii')
+        return encoded_zip
 
 class OCIResourceManager(OCIResourceManagerConnection):
     def __init__(self, config=None, configfile=None, profile=None, data=None):

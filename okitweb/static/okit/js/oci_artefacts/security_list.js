@@ -451,37 +451,13 @@ class SecurityList extends OkitArtifact {
         if (access_rule.icmp_options == null) {
             access_rule.icmp_options = {code: '', type: ''};
         }
-        // Code
-        let rule_row = rule_table.append('div')
-            .attr('class', 'tr collapsed')
-            .attr('id', 'imcp_code_' + rule_num + access_type);
-        rule_row.append('div').attr('class', 'td')
-            .text('Code');
-        let rule_cell = rule_row.append('div').attr('class', 'td');
-        let code_select = rule_cell.append('select')
-            .attr("class", "property-value")
-            .attr("id", "code" + rule_num + access_type)
-            .on("change", function() {
-                access_rule.icmp_options.code = this.options[this.selectedIndex].value;
-                console.info('Changed IMCP Code ' + this.selectedIndex);
-                displayOkitJson();
-            });
-        code_select.append('option')
-            .attr("value", '')
-            .text('');
-        for (let i=0; i<255; i++) {
-            code_select.append('option')
-                .attr("value", i)
-                .text(i);
-        }
-        code_select.node().value = access_rule.icmp_options.code;
         // Type
-        rule_row = rule_table.append('div')
+        let rule_row = rule_table.append('div')
             .attr('class', 'tr collapsed')
             .attr('id', 'imcp_type_' + rule_num + access_type);
         rule_row.append('div').attr('class', 'td')
             .text('Type');
-        rule_cell = rule_row.append('div').attr('class', 'td');
+        let rule_cell = rule_row.append('div').attr('class', 'td');
         let type_select = rule_cell.append('select')
             .attr("class", "property-value")
             .attr("id", "type" + rule_num + access_type)
@@ -499,6 +475,30 @@ class SecurityList extends OkitArtifact {
                 .text(i);
         }
         type_select.node().value = access_rule.icmp_options.type;
+        // Code
+        rule_row = rule_table.append('div')
+            .attr('class', 'tr collapsed')
+            .attr('id', 'imcp_code_' + rule_num + access_type);
+        rule_row.append('div').attr('class', 'td')
+            .text('Code');
+        rule_cell = rule_row.append('div').attr('class', 'td');
+        let code_select = rule_cell.append('select')
+            .attr("class", "property-value")
+            .attr("id", "code" + rule_num + access_type)
+            .on("change", function() {
+                access_rule.icmp_options.code = this.options[this.selectedIndex].value;
+                console.info('Changed IMCP Code ' + this.selectedIndex);
+                displayOkitJson();
+            });
+        code_select.append('option')
+            .attr("value", '')
+            .text('');
+        for (let i=0; i<255; i++) {
+            code_select.append('option')
+                .attr("value", i)
+                .text(i);
+        }
+        code_select.node().value = access_rule.icmp_options.code;
     }
 
     getNamePrefix() {

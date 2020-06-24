@@ -7,7 +7,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0.0"
+__version__ = "1.0.0"
 __module__ = "ociTerraformGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -15,9 +15,9 @@ __module__ = "ociTerraformGenerator"
 import os
 import json
 
-from common.ociCommon import writeTerraformFile
-from common.ociLogging import getLogger
-from generators.ociGenerator import OCIGenerator
+from common.okitCommon import writeTerraformFile
+from common.okitLogging import getLogger
+from generators.okitGenerator import OCIGenerator
 
 # Configure logging
 logger = getLogger()
@@ -59,8 +59,8 @@ class OCITerraformGenerator(OCIGenerator):
     def formatJinja2Variable(self, variable_name):
         return 'var.{0:s}'.format(variable_name)
 
-    def formatJinja2IdReference(self, resource_name):
-        return 'local.{0:s}_id'.format(resource_name)
+    def formatJinja2IdReference(self, resource_name, element='id'):
+        return 'local.{0!s:s}_{1!s:s}'.format(resource_name, element)
 
     def formatJinja2DhcpReference(self, resource_name):
         return 'local.{0:s}_dhcp_options_id'.format(resource_name)
@@ -76,15 +76,20 @@ class OCITerraformGenerator(OCIGenerator):
     def renderDefinedTags(self, artifact):
         defined_tags = artifact.get("defined_tags", {})
         if len(defined_tags.keys()) > 0:
-            standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
-            # -- Defined Tags
-            variableName = '{0:s}_defined_tags'.format(standardisedName)
-            self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
             definedtags = {}
             for namespace, tags in defined_tags.items():
                 for key, value in tags.items():
                     definedtags["{0!s:s}.{1!s:s}".format(namespace, key)] = str(value)
-            self.run_variables[variableName] = definedtags
+            if self.use_vars:
+                standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+                # -- Defined Tags
+                variableName = '{0:s}_defined_tags'.format(standardisedName)
+                self.run_variables[variableName] = definedtags
+                self.jinja2_variables["defined_tags"] = self.formatJinja2Variable(variableName)
+            else:
+                self.jinja2_variables["defined_tags"] = self.formatJinja2Value(definedtags)
+        else:
+            self.jinja2_variables.pop("defined_tags", None)
         return
 
 
