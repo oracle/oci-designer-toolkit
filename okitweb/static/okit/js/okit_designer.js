@@ -619,6 +619,27 @@ function displayOkitJson() {
 /*
 ** Slidebar handlers
  */
+// Left Panels
+function slideLeftPanelsOffScreen() {
+    $('#designer_left_column > div').addClass('hidden');
+    $('#console_left_bar > label').removeClass('okit-bar-panel-displayed');
+}
+function checkLeftColumn() {
+    // Check to see if Right Column needs to be hidden
+    let isHidden = $(jqId('designer_left_column')).hasClass('okit-slide-hide-left');
+    if ($('#designer_left_column > div:not(.hidden)').length === 0) {
+        $(jqId('designer_left_column')).addClass('okit-slide-hide-left');
+        if (!isHidden) {
+            setTimeout(redrawSVGCanvas, 260);
+        }
+    } else {
+        $(jqId('designer_left_column')).removeClass('okit-slide-hide-left');
+        if (isHidden) {
+            setTimeout(redrawSVGCanvas, 260);
+        }
+    }
+}
+// Right Panels
 function slideRightPanelsOffScreen() {
     $('#designer_right_column > div').addClass('hidden');
     $('#console_right_bar > label').removeClass('okit-bar-panel-displayed');

@@ -110,7 +110,7 @@
                 {% endif %}
             {% endfor %}
         </ul>
-        <!--ul class="okit-navigation-sub-list">
+        <ul class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -119,30 +119,10 @@
                     </span>
                 </div>
             </li>
-            <li><a id="view-designer-menu-item" class="parent-item" href="javascript:void(0)">Designer</a></li>
+            <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)">Compartment</a></li>
             <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)">Network</a></li>
-            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li>
-        </ul-->
-        <!--ul class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Query Menu"></div>
-                        <span>Query</span>
-                    </span>
-                </div>
-            </li>
-        </ul-->
-        <!--ul class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Generate Menu"></div>
-                        <span>Generate</span>
-                    </span>
-                </div>
-            </li>
-        </ul-->
+            <!--li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li-->
+        </ul>
         <ul class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -214,6 +194,8 @@
                 </div>
             </details>
         </div>
+        <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
+        <div id="explorer_panel" class="okit-model-explorer hidden"></div>
     </div>
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
