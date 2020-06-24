@@ -165,117 +165,8 @@ class OkitSettings {
         $(jqId('modal_dialog_title')).text('Preferences');
         $(jqId('modal_dialog_body')).empty();
         $(jqId('modal_dialog_footer')).empty();
+        // Build Body
         this.buildPanel('modal_dialog_body');
-        /*
-        let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
-            .attr('id', 'preferences_table')
-            .attr('class', 'table okit-table okit-modal-dialog-table');
-        let tbody = table.append('div').attr('class', 'tbody');
-        let tr = tbody.append('div').attr('class', 'tr');
-        // Display Grid
-        tr.append('div').attr('class', 'td').text('');
-        let td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_display_grid')
-            .attr('name', 'is_display_grid')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_display_grid)
-            .on('change', function () {
-                //me.is_display_grid = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_display_grid')
-            .text('Display Grid');
-        // Default route Table
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_default_route_table')
-            .attr('name', 'is_default_route_table')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_default_route_table)
-            .on('change', function () {
-                //me.is_default_route_table = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_default_route_table')
-            .text('Default Route Table');
-        // Default Security List
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_default_security_list')
-            .attr('name', 'is_default_security_list')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_default_security_list)
-            .on('change', function () {
-                //me.is_default_security_list = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_default_security_list')
-            .text('Default Security List');
-        // Timestamp File
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_timestamp_files')
-            .attr('name', 'is_timestamp_files')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_timestamp_files)
-            .on('change', function () {
-                //me.is_timestamp_files = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_timestamp_files')
-            .text('Timestamp File Names');
-        // Auto Expand Optional
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_optional_expanded')
-            .attr('name', 'is_optional_expanded')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_optional_expanded)
-            .on('change', function () {
-                //me.is_optional_expanded = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_optional_expanded')
-            .text('Auto Expanded Advanced');
-        // Generate Variables File
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_variables')
-            .attr('name', 'is_variables')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_variables)
-            .on('change', function () {
-                //me.is_optional_expanded = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_variables')
-            .text('Use Variables in Generate');
-        // Config Profile
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('Default Connection Profile');
-        let profile_select = tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'profile');
-        for (let section of okitOciConfig.sections) {
-            profile_select.append('option')
-                .attr('value', section)
-                .text(section);
-        }
-        $(jqId('profile')).val(this.profile);
-
-         */
         // Footer
         d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
             .attr('id', 'save_as_button')
@@ -299,7 +190,6 @@ class OkitSettings {
     buildPanel(panel_name='', autosave=false) {
         if (panel_name && panel_name !== '') {
             let me = this;
-            $(jqId(panel_name)).empty();
             let table = d3.select(d3Id(panel_name)).append('div').append('div')
                 .attr('id', 'preferences_table')
                 .attr('class', 'table okit-table okit-modal-dialog-table');
