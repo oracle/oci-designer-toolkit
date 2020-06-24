@@ -103,7 +103,7 @@ class OCIJsonValidator(object):
                     'element': 'is_auto_scaling_enabled'
                 }
                 self.results['errors'].append(error)
-            if artefact['is_free_tier'] and artefact['license_model' != 'LICENSE_INCLUDED']:
+            if artefact['is_free_tier'] and artefact['license_model'] != 'LICENSE_INCLUDED':
                 self.valid = False
                 error = {
                     'id': artefact['id'],
