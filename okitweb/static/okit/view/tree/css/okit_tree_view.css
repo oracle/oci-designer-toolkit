@@ -28,6 +28,7 @@ rect.okit-explorer-view-highlight {
 }
 
 .okit-explorer-view li > div {
+    display: inline-block;
     margin-left: 0;
     padding-left: 0;
     background-repeat: no-repeat;
