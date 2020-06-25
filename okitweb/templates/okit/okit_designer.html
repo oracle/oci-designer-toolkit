@@ -6,6 +6,8 @@
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
     <script type="text/javascript">
         let palette_svg = {}
@@ -46,6 +48,7 @@
 
 {% block headcss %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_designer.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
 {% endblock %}
 
 {% block navmenublock %}
@@ -195,7 +198,7 @@
             </details>
         </div>
         <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
-        <div id="explorer_panel" class="okit-model-explorer hidden"></div>
+        <div id="explorer_panel" class="okit-explorer-view hidden"></div>
     </div>
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">

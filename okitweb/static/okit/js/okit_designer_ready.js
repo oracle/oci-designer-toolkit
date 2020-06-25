@@ -49,6 +49,24 @@ $(document).ready(function() {
         .text('Palette');
 
     d3.select(d3Id('console_left_bar')).append('label')
+        .attr('id', 'toggle_explorer_button')
+        .attr('class', 'okit-pointer-cursor')
+        .on('click', function () {
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideLeftPanelsOffScreen();
+            if (!open) {
+                $('#explorer_panel').removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+                let okit_tree = new OkitJsonTreeView(okitJson, 'explorer_panel');
+                okit_tree.draw();
+            } else {
+                $('#explorer_panel').empty();
+            }
+            checkLeftColumn();
+        })
+        .text('Explorer');
+
+    d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_preferences_button')
         .attr('class', 'okit-pointer-cursor')
         .on('click', function () {
