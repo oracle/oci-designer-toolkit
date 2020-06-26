@@ -4,8 +4,10 @@
 ## Version 0.8.0 
 **Release Date**: 15th July 2020
 ### Features
+1. Add Explorer / Tree View for the Artefacts in the diagram (OKIT-90).
 
 ### Bug Fixes
+1. Resolve issues where by occasionally the Open/Load function would not reopen a file.
 
 
 ## Version 0.7.0 
