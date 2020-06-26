@@ -220,4 +220,4 @@ class OkitArtefactView {
 
 }
 
-let okitJsonView = new okitJsonView();
+let okitJsonView = null;

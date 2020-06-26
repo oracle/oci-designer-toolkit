@@ -242,7 +242,7 @@
         <div id="cost_estimate_panel" class="okit-cost-estimate hidden"></div>
         <!--div id="settings_panel" class="okit-settings-sheet hidden"></div-->
     </div>
-    <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json"></div>
+    <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json" onclick="this.value = null"></div>
     <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
 {% endblock %}
 

@@ -93,6 +93,8 @@ function handleLoad(evt) {
 }
 function handleFileSelect(evt) {
     let files = evt.target.files; // FileList object
+    console.info('Selected Files ' + files);
+    console.info('Selected File  ' + files[0]);
     getAsJson(files[0]);
 }
 function getAsJson(readFile) {
@@ -109,6 +111,7 @@ function loaded(evt) {
     clearRegionTabBar();
     // Obtain the read file data
     let fileString = evt.target.result;
+    console.info('Loaded ' + fileString);
     let fileJson = JSON.parse(fileString);
     if (fileJson.hasOwnProperty('compartments')) {
         console.info('>> Single Region File')
@@ -128,6 +131,7 @@ function loaded(evt) {
     }
     displayOkitJson();
     okitJson.draw();
+    displayTreeView();
 }
 function errorHandler(evt) {
     console.info('Error: ' + evt.target.error.name);
@@ -255,6 +259,7 @@ function loadTemplate(template_url) {
             okitJson = new OkitJson(resp);
             displayOkitJson();
             okitJson.draw();
+            displayTreeView();
         },
         error: function(xhr, status, error) {
             console.error('Status : '+ status);
@@ -491,6 +496,7 @@ function hideQueryProgressIfComplete() {
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
     $(jqId('modal_loading_wrapper')).addClass('hidden');
+    displayTreeView();
 });
 /*
 ** Export the Model as various formats
@@ -619,6 +625,13 @@ function displayOkitJson() {
 /*
 ** Slidebar handlers
  */
+// Tree View
+function displayTreeView() {
+    if ($('#toggle_explorer_button').hasClass('okit-bar-panel-displayed')) {
+        let okit_tree = new OkitJsonTreeView(okitJson, 'explorer_panel');
+        okit_tree.draw();
+    }
+}
 // Left Panels
 function slideLeftPanelsOffScreen() {
     $('#designer_left_column > div').addClass('hidden');

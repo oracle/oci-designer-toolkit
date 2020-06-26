@@ -37,7 +37,7 @@ rect.okit-explorer-view-highlight {
     white-space: nowrap;
 }
 
-.okit-explorer-view li > div::before {
+.okit-explorer-view-none-specific li > div::before {
     content: "-";
     color: #336600;
     display: inline-block;
@@ -66,6 +66,12 @@ rect.okit-explorer-view-highlight {
 
 .compartment-tree-view > div {
     background-image: url("/static/okit/palette/containers/Compartment.svg");
+}
+
+.compartment-tree-view > div::before {
+    content: "-";
+    color: #336600;
+    display: inline-block;
 }
 
 .database-system-tree-view > div {
@@ -128,7 +134,19 @@ rect.okit-explorer-view-highlight {
     background-image: url("/static/okit/palette/networking/Subnet.svg");
 }
 
+.subnet-tree-view > div::before {
+    content: "-";
+    color: #336600;
+    display: inline-block;
+}
+
 .vcn-tree-view > div {
     background-image: url("/static/okit/palette/networking/Virtual_Cloud_Network.svg");
+}
+
+.vcn-tree-view > div::before {
+    content: "-";
+    color: #336600;
+    display: inline-block;
 }
 
