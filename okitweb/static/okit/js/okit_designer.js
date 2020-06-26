@@ -93,8 +93,6 @@ function handleLoad(evt) {
 }
 function handleFileSelect(evt) {
     let files = evt.target.files; // FileList object
-    console.info('Selected Files ' + files);
-    console.info('Selected File  ' + files[0]);
     getAsJson(files[0]);
 }
 function getAsJson(readFile) {
@@ -111,7 +109,6 @@ function loaded(evt) {
     clearRegionTabBar();
     // Obtain the read file data
     let fileString = evt.target.result;
-    console.info('Loaded ' + fileString);
     let fileJson = JSON.parse(fileString);
     if (fileJson.hasOwnProperty('compartments')) {
         console.info('>> Single Region File')
