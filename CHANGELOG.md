@@ -8,6 +8,8 @@
 
 ### Bug Fixes
 1. Resolve issues where by occasionally the Open/Load function would not reopen a file.
+2. Modify Vagrant Box Url to the new location. (Issue: #37)
+3. Clean Hub & Spoke Template
 
 
 ## Version 0.7.0 
