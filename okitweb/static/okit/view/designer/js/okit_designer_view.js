@@ -23,7 +23,7 @@ class OkitDesignerJsonView extends OkitJsonView {
             width = Math.max(width, dimensions.width);
             height = Math.max(height, dimensions.height);
         }
-        let canvas_svg = newCanvas(this.parent_id, width, height);
+        let canvas_svg = this.newCanvas(this.parent_id, width, height);
 
         // Draw Compartments
         for (let compartment of this.compartments) {
@@ -141,7 +141,15 @@ class OkitDesignerJsonView extends OkitJsonView {
 
     newCanvas() {}
 
-    styleCanvas() {}
+    styleCanvas() {
+        let colours = '';
+        for (let key in this.stroke_colours) {
+            colours += '.' + key.replace(new RegExp('_', 'g'), '-') + '{fill:' + this.stroke_colours[key] + ';} ';
+        }
+        canvas_svg.append('style')
+            .attr("type", "text/css")
+            .text(colours + ' text{font-weight: normal; font-size: 10pt}');
+    }
 }
 
 class OkitDesignerArtefactView extends OkitArtefactView {

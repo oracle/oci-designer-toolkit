@@ -178,6 +178,21 @@ class OkitJsonView {
 }
 
 class OkitArtefactView {
+    small_grid_size = 8;
+    grid_size = small_grid_size * 10;
+    stroke_colours = {
+        red: "#F80000",
+        bark: "#312D2A",
+        gray: "#5f5f5f",
+        blue: "#0066cc",
+        orange: "#ff6600",
+        purple: "#400080",
+        icon_colour_01: "#F80000",
+        icon_colour_02: "#5f5f5f",
+        icon_colour_03: "#ff6600",
+    };
+    svg_highlight_colour = "#00cc00";
+
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.json_view = json_view;
