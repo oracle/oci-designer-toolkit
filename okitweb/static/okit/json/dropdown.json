@@ -775,9 +775,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Oracle-Autonomous-Linux-7.8-2020.06-0",
+      "display_name": "Oracle-Autonomous-Linux-7.8-2020.06-1",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa5ys76p4fbcejyktuburxcm3nuboupzwcukyq6d5gzbib6rj4ztqa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaqefh4ndpmt2wo6eob3o27i3wulxoaydu64knhydqnxazs7w7r73a",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -793,7 +793,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "Oracle Autonomous Linux 7.8",
-      "time_created": "2020-06-08T18:01:12.435000+00:00"
+      "time_created": "2020-07-02T01:14:37.272000+00:00"
     },
     {
       "agent_features": null,

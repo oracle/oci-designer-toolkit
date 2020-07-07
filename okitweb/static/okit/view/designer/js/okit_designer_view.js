@@ -24,7 +24,7 @@ class OkitDesignerJsonView extends OkitJsonView {
         let width = 0;
         let height = 0;
         for (let compartment of this.getOkitJson().compartments) {
-            let dimensions = this.newCompartment(compartment).getDimensions();
+            let dimensions = this.newCompartment(compartment).dimensions;
             width = Math.max(width, dimensions.width);
             height = Math.max(height, dimensions.height);
         }
