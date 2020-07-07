@@ -6,9 +6,14 @@ console.info('Loaded OKIT Designer View Javascript');
 
 // TODO: Implement View Classes
 class OkitDesignerJsonView extends OkitJsonView {
-    constructor(okitjson=null, parent_id = 'canvas-div') {
+    // Define Constants
+    static get CANVAS_SVG() {return 'canvas-svg'}
+
+    constructor(okitjson=null, parent_id = 'canvas-div', display_grid = false, palette_svg = []) {
         super(okitjson);
         this.parent_id = parent_id;
+        this.display_grid = display_grid;
+        this.palette_svg = palette_svg;
     }
 
     draw() {
@@ -141,7 +146,89 @@ class OkitDesignerJsonView extends OkitJsonView {
 
     newCanvas() {}
 
-    styleCanvas() {
+    clearCanvas() {
+        let canvas_svg = d3.select(d3Id(OkitDesignerJsonView.CANVAS_SVG));
+        canvas_svg.selectAll('*').remove();
+        this.styleCanvas(canvas_svg);
+        this.addDefinitions(canvas_svg);
+        canvas_svg.append('rect')
+            .attr("id", "canvas-rect")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("fill", "white");
+        if (this.display_grid) {
+            this.addGrid(canvas_svg);
+        }
+    }
+
+    addDefinitions(canvas_svg) {
+        // Add Palette Icons
+        let defs = canvas_svg.append('defs');
+        for (let key in this.palette_svg) {
+            let defid = key.replace(/ /g, '') + 'Svg';
+            defs.append('g')
+                .attr("id", defid)
+                //.attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
+                .attr("transform", "translate(-1, -1) scale(0.29, 0.29)")
+                .html(this.palette_svg[key]);
+        }
+        // Add Connector Markers
+        // Pointer
+        let marker = defs.append('marker')
+            .attr("id", "connector-end-triangle")
+            .attr("viewBox", "0 0 100 100")
+            .attr("refX", "1")
+            .attr("refY", "5")
+            .attr("markerUnits", "strokeWidth")
+            .attr("markerWidth", "35")
+            .attr("markerHeight", "35")
+            .attr("orient", "auto");
+        marker.append('path')
+            .attr("d", "M 0 0 L 10 5 L 0 10 z")
+            .attr("fill", "black");
+        // Circle
+        marker = defs.append('marker')
+            .attr("id", "connector-end-circle")
+            .attr("viewBox", "0 0 100 100")
+            .attr("refX", "5")
+            .attr("refY", "5")
+            .attr("markerUnits", "strokeWidth")
+            .attr("markerWidth", "35")
+            .attr("markerHeight", "35")
+            .attr("orient", "auto");
+        marker.append('circle')
+            .attr("cx", "5")
+            .attr("cy", "5")
+            .attr("r", "5")
+            .attr("fill", connector_colour);
+        // Grid
+        let small_grid = defs.append('pattern')
+            .attr("id", "small-grid")
+            .attr("width", small_grid_size)
+            .attr("height", small_grid_size)
+            .attr("patternUnits", "userSpaceOnUse");
+        small_grid.append('path')
+            .attr("d", "M "+ small_grid_size + " 0 L 0 0 0 " + small_grid_size)
+            .attr("fill", "none")
+            .attr("stroke", "gray")
+            .attr("stroke-width", "0.5");
+        let grid = defs.append('pattern')
+            .attr("id", "grid")
+            .attr("width", grid_size)
+            .attr("height", grid_size)
+            .attr("patternUnits", "userSpaceOnUse");
+        grid.append('rect')
+            .attr("width", grid_size)
+            .attr("height", grid_size)
+            .attr("fill", "url(#small-grid)");
+        grid.append('path')
+            .attr("d", "M " + grid_size + " 0 L 0 0 0 " + grid_size)
+            .attr("fill", "none")
+            .attr("stroke", "darkgray")
+            .attr("stroke-width", "1");
+    }
+
+    styleCanvas(canvas_svg) {
         let colours = '';
         for (let key in this.stroke_colours) {
             colours += '.' + key.replace(new RegExp('_', 'g'), '-') + '{fill:' + this.stroke_colours[key] + ';} ';

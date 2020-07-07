@@ -6,6 +6,21 @@ console.info('Loaded OKIT View Javascript');
 
 // TODO: Implement View Classes
 class OkitJsonView {
+    small_grid_size = 8;
+    grid_size = small_grid_size * 10;
+    stroke_colours = {
+        red: "#F80000",
+        bark: "#312D2A",
+        gray: "#5f5f5f",
+        blue: "#0066cc",
+        orange: "#ff6600",
+        purple: "#400080",
+        icon_colour_01: "#F80000",
+        icon_colour_02: "#5f5f5f",
+        icon_colour_03: "#ff6600",
+    };
+    svg_highlight_colour = "#00cc00";
+
     constructor(okitjson=null) {
         if (okitjson === null || okitjson === undefined) {
             this.okitjson = new OkitJson();
@@ -178,21 +193,6 @@ class OkitJsonView {
 }
 
 class OkitArtefactView {
-    small_grid_size = 8;
-    grid_size = small_grid_size * 10;
-    stroke_colours = {
-        red: "#F80000",
-        bark: "#312D2A",
-        gray: "#5f5f5f",
-        blue: "#0066cc",
-        orange: "#ff6600",
-        purple: "#400080",
-        icon_colour_01: "#F80000",
-        icon_colour_02: "#5f5f5f",
-        icon_colour_03: "#ff6600",
-    };
-    svg_highlight_colour = "#00cc00";
-
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.json_view = json_view;
@@ -224,13 +224,88 @@ class OkitArtefactView {
 
         return definition
     }
+
     getSvgDefinition() {
         alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.');
         return;
     }
 
+    addGrid(canvas_svg) {
+        canvas_svg.append('rect')
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("fill", "url(#grid)");
+    }
+
     draw() {
-        let definition = this.getSvgDefinition();
+        console.groupCollapsed('Drawing (Default) ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.getParentId() + ']');
+        let svg = this.getSvgDefinition();
+        /*
+        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
+        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
+        ** Artifact.
+         */
+        let me = this;
+        svg.on("click", function() {
+            me.loadProperties();
+            $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
+            $(jqId(me.id)).toggleClass('highlight');
+            $(jqId(me.id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
+            me.loadValueProposition();
+            d3.event.stopPropagation();
+        });
+        console.groupEnd();
+        return svg;
+    }
+
+    /*
+    ** Property Sheet Load function
+     */
+    loadProperties() {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/empty.html");
+    }
+
+
+    /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/oci.html");
+    }
+
+    /*
+    ** Static Functionality
+     */
+    static getArtifactReference() {
+        alert('Get Artifact Reference function "getArtifactReference()" has not been implemented.');
+        return;
+    }
+
+    static getDropTargets() {
+        console.warn('Get Drop Targets not implements');
+        return [];
+    }
+
+    static getConnectTargets() {
+        console.warn('Get Connect Targets not implements');
+        return [];
+    }
+
+    /*
+    ** Instance Versions of Static Functions
+     */
+
+    getArtifactReference() {
+        return this.constructor.getArtifactReference();
+    }
+
+    getDropTargets() {
+        // Return list of Artifact names
+        return this.constructor.getDropTargets();
+    }
+
+    getConnectTargets() {
+        return this.constructor.getgetConnectTargets();
     }
 
 }
