@@ -128,6 +128,7 @@ function loaded(evt) {
     }
     displayOkitJson();
     okitJson.draw();
+    displayTreeView();
 }
 function errorHandler(evt) {
     console.info('Error: ' + evt.target.error.name);
@@ -255,6 +256,7 @@ function loadTemplate(template_url) {
             okitJson = new OkitJson(resp);
             displayOkitJson();
             okitJson.draw();
+            displayTreeView();
         },
         error: function(xhr, status, error) {
             console.error('Status : '+ status);
@@ -491,6 +493,7 @@ function hideQueryProgressIfComplete() {
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
     $(jqId('modal_loading_wrapper')).addClass('hidden');
+    displayTreeView();
 });
 /*
 ** Export the Model as various formats
@@ -619,6 +622,34 @@ function displayOkitJson() {
 /*
 ** Slidebar handlers
  */
+// Tree View
+function displayTreeView() {
+    if ($('#toggle_explorer_button').hasClass('okit-bar-panel-displayed')) {
+        let okit_tree = new OkitJsonTreeView(okitJson, 'explorer_panel');
+        okit_tree.draw();
+    }
+}
+// Left Panels
+function slideLeftPanelsOffScreen() {
+    $('#designer_left_column > div').addClass('hidden');
+    $('#console_left_bar > label').removeClass('okit-bar-panel-displayed');
+}
+function checkLeftColumn() {
+    // Check to see if Right Column needs to be hidden
+    let isHidden = $(jqId('designer_left_column')).hasClass('okit-slide-hide-left');
+    if ($('#designer_left_column > div:not(.hidden)').length === 0) {
+        $(jqId('designer_left_column')).addClass('okit-slide-hide-left');
+        if (!isHidden) {
+            setTimeout(redrawSVGCanvas, 260);
+        }
+    } else {
+        $(jqId('designer_left_column')).removeClass('okit-slide-hide-left');
+        if (isHidden) {
+            setTimeout(redrawSVGCanvas, 260);
+        }
+    }
+}
+// Right Panels
 function slideRightPanelsOffScreen() {
     $('#designer_right_column > div').addClass('hidden');
     $('#console_right_bar > label').removeClass('okit-bar-panel-displayed');

@@ -72,7 +72,8 @@ class Instance extends OkitArtifact {
         // Move Metadata elements
         if (this.metadata === undefined) {this.metadata = {};}
         if (this.cloud_init_yaml !== undefined) {this.metadata.user_data = String(this.cloud_init_yaml); delete this.cloud_init_yaml;}
-        if (this.authorized_keys !== undefined) {this.metadata.authorized_keys = this.authorized_keys; delete this.authorized_keys;}
+        if (this.authorized_keys !== undefined) {this.metadata.ssh_authorized_keys = this.authorized_keys; delete this.authorized_keys;}
+        if (this.metadata.authorized_keys !== undefined) {this.metadata.ssh_authorized_keys = this.metadata.authorized_keys; delete this.metadata.authorized_keys;}
         // Move Source Details elements
         if (this.source_details === undefined) {this.source_details = {};}
         if (this.os !== undefined) {this.source_details.os = this.os; delete this.os;}
