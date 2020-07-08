@@ -10,6 +10,7 @@
 1. Resolve issues where by occasionally the Open/Load function would not reopen a file.
 2. Modify Vagrant Box Url to the new location. (Issue: #37)
 3. Clean Hub & Spoke Template
+4. Resolve pem key privilege issues.
 
 
 ## Version 0.7.0 
