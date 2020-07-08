@@ -40,7 +40,8 @@ const svg_highlight_colour = "#00cc00";
 ** SVG Drawing / Manipulating SVG Canvas
  */
 
-function styleCanvas(canvas_svg) {
+// TODO: Deprecated
+function styleCanvasDeprecated(canvas_svg) {
     let colours = '';
     for (let key in stroke_colours) {
         colours += '.' + key.replace(new RegExp('_', 'g'), '-') + '{fill:' + stroke_colours[key] + ';} ';
@@ -489,7 +490,8 @@ function coordString(coord) {
     return coord_str;
 }
 
-function clearCanvas() {
+// TODO: Deprecated
+function clearCanvasDeprecated() {
     let canvas_svg = d3.select(d3Id('canvas-svg'));
     canvas_svg.selectAll('*').remove();
     styleCanvas(canvas_svg);
@@ -504,7 +506,8 @@ function clearCanvas() {
     }
 }
 
-function addGrid(canvas_svg) {
+// TODO: Deprecated
+function addGridDeprecated(canvas_svg) {
     canvas_svg.append('rect')
         .attr("width", "100%")
         .attr("height", "100%")
@@ -540,8 +543,8 @@ function newCanvasWrapper(width=default_canvas_width, height=default_canvas_heig
     return canvas_wrapper_div;
 }
 
-
-function newCanvas(parent_id="canvas-div", width=400, height=300) {
+// TODO: Deprecated
+function newCanvasDeprecated(parent_id="canvas-div", width=400, height=300) {
     console.groupCollapsed('New Canvas');
     console.info('Parent                : ' + parent_id);
     console.info('Width                 : ' + width);

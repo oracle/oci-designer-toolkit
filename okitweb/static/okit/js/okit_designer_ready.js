@@ -22,6 +22,8 @@ $(document).ready(function() {
     okitOciData = new OkitOCIData();
     okitSettings = new OkitSettings();
     okitJson = new OkitJson();
+    okitJsonView = new OkitDesignerJsonView(okitJson);
+    console.info(okitJsonView);
 
     /*
     ** Add handler functionality

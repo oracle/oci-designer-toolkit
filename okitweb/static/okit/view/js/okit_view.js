@@ -7,6 +7,7 @@ console.info('Loaded OKIT View Javascript');
 // TODO: Implement View Classes
 class OkitJsonView {
     constructor(okitjson=null) {
+        // Specify / Assign Model
         if (okitjson === null || okitjson === undefined) {
             this.okitjson = new OkitJson();
         } else if (typeof okitjson === 'string') {
@@ -16,6 +17,10 @@ class OkitJsonView {
         } else {
             this.okitjson = new OkitJson();
         }
+        // Define View Lists
+        // Load Model to View
+        this.parent_map = {};
+        this.load();
     }
 
     get small_grid_size() {return 8;}
@@ -35,6 +40,13 @@ class OkitJsonView {
     }
     get svg_highlight_colour() {return "#00cc00";}
 
+    drop(source, target) {
+        let newFunction = 'new' + source.name;
+        let getFunction = 'get' + target.type.split(' ').join('');
+        console.info('New Function : ' + newFunction);
+        console.info('Get Function : ' + getFunction);
+    }
+
     load() {}
 
     draw() {}
@@ -44,26 +56,44 @@ class OkitJsonView {
     }
 
     /*
+    ** Common View Functions
+     */
+    addGrid(canvas_svg) {
+        canvas_svg.append('rect')
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("fill", "url(#grid)");
+    }
+
+    /*
     ** Artefact Processing
      */
 
     // Autonomous Database
     newAutonomousDatabase() {
-        return new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase());
+        return new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase(), this);
     }
     getAutonomousDatabase() {}
     deleteAutonomousDatabase() {}
 
     // Block Storage
     newBlockStorageVolume() {
-        return new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume());
+        return new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this);
     }
     getBlockStorageVolume() {}
     deleteBlockStorageVolume() {}
 
     // Compartment
-    newCompartment() {
-        return new CompartmentView(this.okitjson.newCompartment());
+    dropCompartment(target) {
+        let getFunction = 'get' + target.type.split(' ').join('');
+        let target_model_artefact = this.okitjson[getFunction](target.id);
+        let view_artefact = this.newCompartment();
+        view_artefact.compartment_id = target.type === Compartment.getArtifactReference() ? target.id : target.compartment_id;
+        return view_artefact;
+    }
+    newCompartment(compartment) {
+        console.info('New Compartment View');
+        return compartment ? new CompartmentView(new Compartment(compartment, this.okitjson), this) : new CompartmentView(this.okitjson.newCompartment(), this);
     }
     getCompartment() {}
     deleteCompartment() {}
@@ -75,119 +105,119 @@ class OkitJsonView {
 
     // Database System
     newDatabaseSystem() {
-        return new DatabaseSystemView(this.okitjson.newDatabaseSystem());
+        return new DatabaseSystemView(this.okitjson.newDatabaseSystem(), this);
     }
     getDatabaseSystem() {}
     deleteDatabaseSystem() {}
 
     // Dynamic Routing Gateway
     newDynamicRoutingGateway() {
-        return new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway());
+        return new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway(), this);
     }
     getDynamicRoutingGateway() {}
     deleteDynamicRoutingGateway() {}
 
     // Fast Connect
     newFastConnect() {
-        return new FastConnectView(this.okitjson.newFastConnect());
+        return new FastConnectView(this.okitjson.newFastConnect(), this);
     }
     getFastConnect() {}
     deleteFastConnect() {}
 
     // File Storage System
     newFileStorageSystem() {
-        return new FileStorageSystemView(this.okitjson.newFileStorageSystem());
+        return new FileStorageSystemView(this.okitjson.newFileStorageSystem(), this);
     }
     getFileStorageSystem() {}
     deleteFileStorageSystem() {}
 
     // Instance
     newInstance() {
-        return new InstanceView(this.okitjson.newInstance());
+        return new InstanceView(this.okitjson.newInstance(), this);
     }
     getInstance() {}
     deleteInstance() {}
 
     // Internet Gateway
     newInternetGateway() {
-        return new InternetGatewayView(this.okitjson.newInternetGateway());
+        return new InternetGatewayView(this.okitjson.newInternetGateway(), this);
     }
     getInternetGateway() {}
     deleteInternetGateway() {}
 
     // Load Balancer
     newLoadBalancer() {
-        return new LoadBalancerView(this.okitjson.newLoadBalancer());
+        return new LoadBalancerView(this.okitjson.newLoadBalancer(), this);
     }
     getLoadBalancer() {}
     deleteLoadBalancer() {}
 
     // Local Peering Gateway
     newLocalPeeringGateway() {
-        return new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway());
+        return new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway(), this);
     }
     getLocalPeeringGateway() {}
     deleteLocalPeeringGateway() {}
 
     // NAT Gateway
     newNATGateway() {
-        return new NATGatewayView(this.okitjson.newNATGateway());
+        return new NATGatewayView(this.okitjson.newNATGateway(), this);
     }
     getNATGateway() {}
     deleteNATGateway() {}
 
     // Network Security Group
     newNetworkSecurityGroup() {
-        return new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup());
+        return new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup(), this);
     }
     getNetworkSecurityGroup() {}
     deleteNetworkSecurityGroup() {}
 
     // Object Storage Bucket
     newObjectStorageBucket() {
-        return new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket());
+        return new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket(), this);
     }
     getObjectStorageBucket() {}
     deleteObjectStorageBucket() {}
 
     // Route Table
     newRouteTable() {
-        return new RouteTableView(this.okitjson.newRouteTable());
+        return new RouteTableView(this.okitjson.newRouteTable(), this);
     }
     getRouteTable() {}
     deleteRouteTable() {}
 
     // Security List
     newSecurityList() {
-        return new SecurityListView(this.okitjson.newSecurityList());
+        return new SecurityListView(this.okitjson.newSecurityList(), this);
     }
     getSecurityList() {}
     deleteSecurityList() {}
 
     // Service Gateway
     newServiceGateway() {
-        return new ServiceGatewayView(this.okitjson.newServiceGateway());
+        return new ServiceGatewayView(this.okitjson.newServiceGateway(), this);
     }
     getServiceGateway() {}
     deleteServiceGateway() {}
 
     // Subnet
     newSubnet() {
-        return new SubnetView(this.okitjson.newSubnet());
+        return new SubnetView(this.okitjson.newSubnet(), this);
     }
     getSubnet() {}
     deleteSubnet() {}
 
     // Virtual Cloud Network
     newVirtualCloudNetwork() {
-        return new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork());
+        return new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork(), this);
     }
     getVirtualCloudNetwork() {}
     deleteVirtualCloudNetwork() {}
 
     // Virtual Network Interface
     newVirtualNetworkInterface() {
-        return new VirtualNetworkInterface(this.okitjson.newVirtualNetworkInterface());
+        return new VirtualNetworkInterface(this.okitjson.newVirtualNetworkInterface(), this);
     }
     getVirtualNetworkInterface() {}
     deleteVirtualNetworkInterface() {}
@@ -200,6 +230,7 @@ class OkitArtefactView {
         this.json_view = json_view;
     }
 
+    get parent_id() {return null;}
     get icon_width() {return 45;}
     get icon_height() {return 45;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
@@ -211,7 +242,6 @@ class OkitArtefactView {
 
     getParentId() {return this.parent_id;}
 
-
     getJsonView() {
         return this.json_view;
     }
@@ -220,7 +250,7 @@ class OkitArtefactView {
         return this.artefact;
     }
 
-    newSvgDefinition() {
+    newSVGDefinition() {
         let definition = {};
         definition['artifact'] = this.getArtefact();
         definition['data_type'] = this.getArtefact().getArtifactReference();
@@ -242,13 +272,6 @@ class OkitArtefactView {
     getSvgDefinition() {
         alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.');
         return;
-    }
-
-    addGrid(canvas_svg) {
-        canvas_svg.append('rect')
-            .attr("width", "100%")
-            .attr("height", "100%")
-            .attr("fill", "url(#grid)");
     }
 
     draw() {

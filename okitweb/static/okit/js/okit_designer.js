@@ -78,8 +78,10 @@ function handleNew(evt) {
 function newDiagram() {
     console.groupCollapsed('Creating New Diagram');
     okitJson = new OkitJson();
-    newCanvas();
-    okitJson.newCompartment();
+    okitJsonView = new OkitDesignerJsonView(okitJson, 'canvas-div', okitSettings.is_display_grid, palette_svg);
+    okitJsonView.newCanvas();
+    okitJsonView.newCompartment();
+    console.info(okitJsonView);
     console.groupEnd();
 }
 /*
@@ -228,8 +230,9 @@ function handleRedraw(evt) {
 function redrawSVGCanvas(region='') {
     console.info('>>>>>>>>> Redrawing Canvas (Region : ' + region +')');
     console.info('>>>>>>>>> Active Region            : ' + activeRegion);
+    console.info(okitJsonView);
     if (region === '' || region === activeRegion) {
-        okitJson.draw();
+        okitJsonView.draw();
     }
 }
 /*

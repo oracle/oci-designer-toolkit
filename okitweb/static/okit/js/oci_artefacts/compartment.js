@@ -34,7 +34,6 @@ class Compartment extends OkitContainerArtifact {
      */
 
     isTopLevel() {
-        //if (this.compartment_id) {
         if (this.getParent()) {
                 return false;
         }

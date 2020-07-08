@@ -10,9 +10,9 @@ console.info('Loaded Designer Compartment View Javascript');
 class CompartmentView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
-        this.parent_id = artefact.compartment_id;
     }
 
+    get parent_id() {return this.artefact.compartment_id;}
     get minimum_dimensions() {
         if (this.isTopLevel()) {
             return {width: $(`#${this.json_view.parent_id}`).width(), height: $(`#${this.json_view.parent_id}`).height()};
@@ -34,7 +34,7 @@ class CompartmentView extends OkitDesignerArtefactView {
      */
 
     isTopLevel() {
-        return !this.getParent();
+        return this.getParent() ? false : true;
     }
 
     /*
@@ -48,7 +48,7 @@ class CompartmentView extends OkitDesignerArtefactView {
     ** SVG Processing
     */
     getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, Compartment.getArtifactReference());
+        let definition = this.newSVGDefinition();
         console.info('>>>>>>>> Parent');
         console.info(this.getParent());
         if (this.getParent()) {
