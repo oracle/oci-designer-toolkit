@@ -85,17 +85,15 @@ class OkitJsonView {
 
     // Compartment
     dropCompartment(target) {
-        let getFunction = 'get' + target.type.split(' ').join('');
-        let target_model_artefact = this.okitjson[getFunction](target.id);
         let view_artefact = this.newCompartment();
-        view_artefact.compartment_id = target.type === Compartment.getArtifactReference() ? target.id : target.compartment_id;
+        view_artefact.getArtefact().compartment_id = target.type === Compartment.getArtifactReference() ? target.id : target.compartment_id;
         return view_artefact;
     }
     newCompartment(compartment) {
         console.info('New Compartment View');
         return compartment ? new CompartmentView(new Compartment(compartment, this.okitjson), this) : new CompartmentView(this.okitjson.newCompartment(), this);
     }
-    getCompartment() {}
+    getCompartment(id) {return this.okitjson.getCompartment(id);}
     deleteCompartment() {}
 
     // Container
@@ -209,15 +207,20 @@ class OkitJsonView {
     deleteSubnet() {}
 
     // Virtual Cloud Network
+    dropVirtualCloudNetwork(target) {
+        let view_artefact = this.newVirtualCloudNetwork();
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        return view_artefact;
+    }
     newVirtualCloudNetwork() {
         return new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork(), this);
     }
-    getVirtualCloudNetwork() {}
+    getVirtualCloudNetwork(id) {return this.okitjson.getVirtualCloudNetwork(id);}
     deleteVirtualCloudNetwork() {}
 
     // Virtual Network Interface
     newVirtualNetworkInterface() {
-        return new VirtualNetworkInterface(this.okitjson.newVirtualNetworkInterface(), this);
+        return new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this);
     }
     getVirtualNetworkInterface() {}
     deleteVirtualNetworkInterface() {}
