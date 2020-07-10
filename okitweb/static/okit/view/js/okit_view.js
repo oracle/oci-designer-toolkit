@@ -443,15 +443,22 @@ class OkitArtefactView {
          */
         let me = this;
         svg.on("click", function() {
-            me.loadProperties();
+            me.loadSlidePanels();
             $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
             $(jqId(me.id)).toggleClass('highlight');
             $(jqId(me.id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
-            me.loadValueProposition();
             d3.event.stopPropagation();
         });
         console.groupEnd();
         return svg;
+    }
+
+    /*
+    ** Load Slide Panels Functions
+     */
+    loadSlidePanels() {
+        this.loadProperties();
+        this.loadValueProposition();
     }
 
     /*

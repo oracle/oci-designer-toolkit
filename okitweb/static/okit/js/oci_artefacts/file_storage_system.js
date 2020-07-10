@@ -13,7 +13,7 @@ class FileStorageSystem extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}, parent=null) {
+    constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.file_storage_systems.length + 1);
@@ -40,12 +40,7 @@ class FileStorageSystem extends OkitArtifact {
             this.primary_mount_target = {subnet_id: data.parent_id, hostname_label: this.display_name.toLowerCase(), nsg_ids: [], export_set: {max_fs_stat_bytes: '', max_fs_stat_files: ''}};
             this.mount_targets[0] = this.primary_mount_target;
         }
-        // Add Get Parent function
-        if (parent !== null) {
-            this.getParent = () => {return parent};
-        }
         this.convert();
-        this.parent_id = this.primary_mount_target.subnet_id;
     }
 
 
@@ -79,116 +74,6 @@ class FileStorageSystem extends OkitArtifact {
     deleteChildren() {}
 
 
-    /*
-     ** SVG Processing
-     */
-    draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        console.groupEnd();
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let dimensions = this.getDimensions();
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = dimensions['width'];
-        definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
-        return definition;
-    }
-
-    // Return Artifact Dimensions
-    getDimensions() {
-        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
-        let dimensions = this.getMinimumDimensions();
-        // Calculate Size based on Child Artifacts
-        // Check size against minimum
-        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
-        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
-        return dimensions;
-    }
-
-    getMinimumDimensions() {
-        return {width: icon_width, height:icon_height};
-    }
-
-
-    /*
-    ** Property Sheet Load function
-     */
-    loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_storage_system.html", () => {
-            // Build Network Security Groups
-            let nsg_select = $(jqId('nsg_ids'));
-            this.loadNetworkSecurityGroups(nsg_select, this.primary_mount_target.subnet_id);
-            // Load Properties
-            loadPropertiesSheet(me);
-        });
-    }
-
-    loadNetworkSecurityGroups(select, subnet_id) {
-        $(select).empty();
-        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-            if (networkSecurityGroup.vcn_id === vcn.id) {
-                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
-            }
-        }
-    }
-
-
-    /*
-    ** Child Offset Functions
-     */
-    getFirstChildOffset() {
-        let offset = {
-            dx: Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
-        };
-        return offset;
-    }
-
-    getContainerChildOffset() {
-        let offset = this.getFirstContainerChildOffset();
-        return offset;
-    }
-
-    getTopEdgeChildOffset() {
-        let offset = this.getFirstTopEdgeChildOffset();
-        return offset;
-    }
-
-    getBottomEdgeChildOffset() {}
-
-    getLeftEdgeChildOffset() {}
-
-    getRightEdgeChildOffset() {}
-
-    getTopChildOffset() {
-        let offset = this.getTopEdgeChildOffset();
-        return offset;
-    }
-
-    getBottomChildOffset() {}
-
-    getLeftChildOffset() {}
-
-    getRightChildOffset() {}
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'fss';
     }
@@ -198,10 +83,6 @@ class FileStorageSystem extends OkitArtifact {
      */
     static getArtifactReference() {
         return 'File Storage System';
-    }
-
-    static getDropTargets() {
-        return [Subnet.getArtifactReference()];
     }
 
     static query(request = {}, region='') {

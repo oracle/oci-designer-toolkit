@@ -10,8 +10,9 @@ console.info('Loaded Designer AutonomousDatabase View Javascript');
 class AutonomousDatabaseView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
-        this.parent_id = artefact.compartment_id;
     }
+
+    get parent_id() {return this.artefact.compartment_id;}
 
     getParent() {
         return this.getAutonomousDatabase(this.getParentId());
@@ -35,7 +36,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
      */
     // Additional draw Processing
     draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.parent_id + ']');
+        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.parent_id + ']');
         if (this.isAttached()) {
             console.groupEnd();
             return;
@@ -69,7 +70,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     }
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
@@ -121,9 +122,42 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
         });
     }
 
+    /*
+    ** Load and display Value Proposition
+     */
     loadValueProposition() {
         $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/autonomous_database.html");
     }
 
+    /*
+    ** Child Type Functions
+     */
+    getTopArtifacts() {
+        return [Instance.getArtifactReference()];
+    }
+
+    getContainerArtifacts() {
+        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
+    }
+
+    getLeftArtifacts() {
+        return [BlockStorageVolume.getArtifactReference()];
+    }
+
+    getRightArtifacts() {
+        return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
+            ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference()];
+    }
+
+    /*
+    ** Static Functionality
+     */
+    static getArtifactReference() {
+        return AutonomousDatabase.getArtifactReference();
+    }
+
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
 
 }

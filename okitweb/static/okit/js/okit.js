@@ -361,7 +361,9 @@ class OkitArtifact {
     /*
     ** Convert Functionality will be overridden to allow backwards compatibility
      */
-    convert() {}
+    convert() {
+        if (this.parent_id) {delete this.parent_id;}
+    }
 
     /*
     ** Get this Artifacts Parent Object

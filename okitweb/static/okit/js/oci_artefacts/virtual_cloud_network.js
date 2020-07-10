@@ -13,9 +13,8 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}, parent=null) {
+    constructor (data={}, okitjson={}) {
         super(okitjson);
-        this.parent_id = data.parent_id;
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.virtual_cloud_networks.length + 1);
         this.compartment_id = data.parent_id;
@@ -27,10 +26,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // Add Get Parent function
-        if (parent !== null) {
-            this.getParent = () => {return parent};
-        }
         console.groupCollapsed('Check if default Security List & Route Table Should be created.');
         if (okitSettings.is_default_route_table) {
             console.info('Creating Default Route Table');
@@ -124,72 +119,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         console.groupEnd();
     }
 
-
-    /*
-     ** SVG Processing
-     */
-    draw() {
-        this.parent_id = this.compartment_id;
-        console.groupCollapsed('Drawing ' + VirtualCloudNetwork.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        console.groupEnd();
-    }
-
-    getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let dimensions = this.getDimensions(this.id);
-        let definition = this.newSVGDefinition(this, VirtualCloudNetwork.getArtifactReference());
-        //let parent_first_child = getCompartmentFirstChildContainerOffset(this.compartment_id);
-        let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = parent_first_child.dx;
-        definition['svg']['y'] = parent_first_child.dy;
-        definition['svg']['width'] = dimensions['width'];
-        definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.orange;
-        definition['rect']['stroke']['dash'] = 5;
-        definition['rect']['stroke']['width'] = 2;
-        definition['icon']['x_translation'] = icon_translate_x_start;
-        definition['icon']['y_translation'] = icon_translate_y_start;
-        definition['name']['show'] = true;
-        definition['label']['show'] = true;
-        definition['info']['show'] = true;
-        definition['info']['text'] = this.cidr_block;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
-        return definition;
-    }
-
-    getDimensions() {
-        return super.getDimensions('vcn_id');
-    }
-
-    getMinimumDimensions() {
-        return {width: 400, height: 300};
-    }
-
-
-    /*
-    ** Property Sheet Load function
-     */
-    loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {
-            loadPropertiesSheet(me);
-            $(jqId('cidr_block')).on('change', function() {
-                console.info('CIDR Block Changed ' + $(jqId('cidr_block')).val());
-                for (let subnet of me.getOkitJson().subnets) {
-                    if (subnet.vcn_id === me.id) {
-                        subnet.cidr_block = subnet.generateCIDR(me.id);
-                    }
-                }
-                redrawSVGCanvas();
-            });
-        });
-    }
-
-
     /*
     ** Artifact Specific Functions
      */
@@ -281,39 +210,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
         return gateways;
     }
 
-
-    /*
-    ** Child Artifact Functions
-     */
-    getTopEdgeArtifacts() {
-        return [InternetGateway.getArtifactReference(), NATGateway.getArtifactReference()];
-    }
-
-    getTopArtifacts() {
-        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference(), NetworkSecurityGroup.getArtifactReference()];
-    }
-
-    getContainerArtifacts() {
-        return [Subnet.getArtifactReference()];
-    }
-
-    getRightEdgeArtifacts() {
-        return[ServiceGateway.getArtifactReference(), DynamicRoutingGateway.getArtifactReference(), LocalPeeringGateway.getArtifactReference()]
-    }
-
-    getBottomEdgeArtifacts() {
-        return [];
-    }
-
-
-    /*
-    ** Container Specific Overrides
-     */
-    // return the name of the element used by the child to reference this artifact
-    getParentKey() {
-        return 'vcn_id';
-    }
-
     getNamePrefix() {
         return super.getNamePrefix() + 'vcn';
     }
@@ -323,10 +219,6 @@ class VirtualCloudNetwork extends OkitContainerArtifact {
      */
     static getArtifactReference() {
         return 'Virtual Cloud Network';
-    }
-
-    static getDropTargets() {
-        return [Compartment.getArtifactReference()];
     }
 
     static query(request = {}, region='') {
