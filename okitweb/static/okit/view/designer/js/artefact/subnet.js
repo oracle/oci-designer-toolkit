@@ -127,6 +127,13 @@ class SubnetView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/subnet.html");
+    }
+
+    /*
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {

@@ -345,6 +345,13 @@ class InstanceView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/instance.html");
+    }
+
+    /*
     ** Child Offset Functions
      */
     getBottomEdgeChildOffset() {

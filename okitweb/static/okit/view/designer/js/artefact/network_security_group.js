@@ -485,6 +485,13 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/network_security_group.html");
+    }
+
+    /*
     ** Static Functionality
      */
     static getArtifactReference() {

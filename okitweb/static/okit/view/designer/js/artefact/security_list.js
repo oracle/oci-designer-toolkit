@@ -451,6 +451,13 @@ class SecurityListView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/security_list.html");
+    }
+
+    /*
     ** Static Functionality
      */
     static getArtifactReference() {

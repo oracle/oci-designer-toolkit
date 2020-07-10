@@ -164,6 +164,13 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/service_gateway.html");
+    }
+
+    /*
     ** Static Functionality
      */
     static getArtifactReference() {

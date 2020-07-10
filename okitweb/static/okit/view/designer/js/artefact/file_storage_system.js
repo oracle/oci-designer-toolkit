@@ -93,6 +93,13 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/file_storage_system.html");
+    }
+
+    /*
     ** Static Functionality
      */
     static getArtifactReference() {

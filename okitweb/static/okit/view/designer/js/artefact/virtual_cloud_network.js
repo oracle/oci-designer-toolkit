@@ -80,6 +80,13 @@ class VirtualCloudNetworkView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/virtual_cloud_network.html");
+    }
+
+    /*
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {

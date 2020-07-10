@@ -60,6 +60,13 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/virtual_network_interface.html");
+    }
+
+    /*
     ** Static Functionality
      */
     static getArtifactReference() {

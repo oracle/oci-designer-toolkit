@@ -285,6 +285,13 @@ class RouteTableView extends OkitDesignerArtefactView {
     }
 
     /*
+    ** Load and display Value Proposition
+     */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/route_table.html");
+    }
+
+    /*
     ** Static Functionality
      */
     static getArtifactReference() {
