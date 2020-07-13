@@ -144,6 +144,21 @@ class OkitDesignerJsonView extends OkitJsonView {
         console.groupEnd();
     }
 
+    /*
+    ** Draw Functions for each specific Artefact
+     */
+    drawRootCompartment() {
+        this.drawCompartments(null);
+    }
+    drawCompartments(parent_id) {
+        for (let compartment of this.getOkitJson().compartments) {
+            if (compartment.compartment_id === parent_id) {
+                this.newCompartment(compartment).draw();
+                // Draw Sub Compartments
+            }
+        }
+    }
+
     displayOkitJson() {}
 
     newCanvas(width=400, height=300) {
@@ -282,9 +297,21 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("type", "text/css")
             .text(colours + ' text{font-weight: normal; font-size: 10pt}');
     }
+
+    // Fragment
+    newFragment(data, parent=null) {
+        console.info('New Fragment');
+        return new Fragment(data, this, parent);
+    }
 }
 
 class OkitDesignerArtefactView extends OkitArtefactView {
+    constructor(artefact=null, json_view) {
+        super(artefact, json_view);
+    }
+}
+
+class OkitContainerDesignerArtefactView extends OkitContainerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
     }

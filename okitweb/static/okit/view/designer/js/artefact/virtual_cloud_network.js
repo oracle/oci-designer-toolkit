@@ -7,12 +7,13 @@ console.info('Loaded Designer VirtualCloudNetwork View Javascript');
 /*
 ** Define VirtualCloudNetwork View Artifact Class
  */
-class VirtualCloudNetworkView extends OkitDesignerArtefactView {
+class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
     }
 
     get parent_id() {return this.artefact.compartment_id;}
+    get parent_key() {return 'vcn_id';}
     get minimum_dimension() {return {width: this.vcn_width, height: this.vcn_height};}
     get vcn_width() {return 400;}
     get vcn_height() {return 300;}

@@ -7,12 +7,13 @@ console.info('Loaded Designer Subnet View Javascript');
 /*
 ** Define Subnet View Artifact Class
  */
-class SubnetView extends OkitDesignerArtefactView {
+class SubnetView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
     }
 
     get parent_id() {return this.artefact.vcn_id;}
+    get parent_key() {return 'subnet_id';}
     get minimum_dimension() {return {width: this.subnet_width, height: this.subnet_height};}
     get subnet_width() {return 400;}
     get subnet_height() {return 150;}

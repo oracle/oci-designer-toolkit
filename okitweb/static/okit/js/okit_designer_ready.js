@@ -7,7 +7,7 @@ console.info('Loaded Designer Ready Javascript');
 /*
 ** Define variables for Artefact classes
  */
-let okitJson = new OkitJson();
+let okitJsonModel = new OkitJson();
 let okitOciConfig = new OkitOCIConfig();
 let okitOciData = new OkitOCIData();
 let okitSettings = new OkitSettings();
@@ -21,8 +21,8 @@ $(document).ready(function() {
     okitOciConfig = new OkitOCIConfig();
     okitOciData = new OkitOCIData();
     okitSettings = new OkitSettings();
-    okitJson = new OkitJson();
-    okitJsonView = new OkitDesignerJsonView(okitJson);
+    okitJsonModel = new OkitJson();
+    okitJsonView = new OkitDesignerJsonView(okitJsonModel);
     console.info(okitJsonView);
 
     /*

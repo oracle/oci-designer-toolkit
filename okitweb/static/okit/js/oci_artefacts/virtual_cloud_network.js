@@ -9,7 +9,7 @@ const virtual_cloud_network_query_cb = "virtual-cloud-network-query-cb";
 /*
 ** Define Virtual Cloud Network Artifact Class
  */
-class VirtualCloudNetwork extends OkitContainerArtifact {
+class VirtualCloudNetwork extends OkitArtifact {
     /*
     ** Create
      */

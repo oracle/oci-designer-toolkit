@@ -18,6 +18,27 @@ class OkitJsonView {
             this.okitjson = new OkitJson();
         }
         // Define View Lists
+        this.compartments = [];
+        this.autonomous_databases = [];
+        this.block_storage_volumes = [];
+        this.containers = [];
+        this.database_systems = [];
+        this.dynamic_routing_gateways = [];
+        this.fast_connects = [];
+        this.file_storage_systems = [];
+        this.instances = [];
+        this.internet_gateways = [];
+        this.load_balancers = [];
+        this.local_peering_gateways = [];
+        this.nat_gateways = [];
+        this.network_security_groups = [];
+        this.object_storage_buckets = [];
+        this.remote_peering_gateways = [];
+        this.route_tables = [];
+        this.security_lists = [];
+        this.service_gateways = [];
+        this.subnets = [];
+        this.virtual_cloud_networks = [];
         // Load Model to View
         this.parent_map = {};
         this.load();
@@ -47,9 +68,58 @@ class OkitJsonView {
         console.info('Get Function : ' + getFunction);
     }
 
-    load() {}
+    clear() {
+        this.compartments = [];
+        this.autonomous_databases = [];
+        this.block_storage_volumes = [];
+        this.containers = [];
+        this.database_systems = [];
+        this.dynamic_routing_gateways = [];
+        this.fast_connects = [];
+        this.file_storage_systems = [];
+        this.instances = [];
+        this.internet_gateways = [];
+        this.load_balancers = [];
+        this.local_peering_gateways = [];
+        this.nat_gateways = [];
+        this.network_security_groups = [];
+        this.object_storage_buckets = [];
+        this.remote_peering_gateways = [];
+        this.route_tables = [];
+        this.security_lists = [];
+        this.service_gateways = [];
+        this.subnets = [];
+        this.virtual_cloud_networks = [];
+        this.virtual_network_interfaces = [];
+    }
 
-    draw() {}
+    load() {
+        this.clear();
+        for (artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
+        for (artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
+        for (artefact of this.okitjson.block_storage_volumes) {this.newBlockStorageVolume(artefact);}
+        for (artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
+        for (artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
+        for (artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
+        for (artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
+        for (artefact of this.okitjson.instances) {this.newInstance(artefact);}
+        for (artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
+        for (artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
+        for (artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
+        for (artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
+        for (artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
+        for (artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
+        //for (artefact of this.okitjson.remote_peering_gateways) {this.newRemotePeeringGateway(artefact);}
+        for (artefact of this.okitjson.route_tables) {this.newCompartment(this.newRouteTable());}
+        for (artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
+        for (artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
+        for (artefact of this.okitjson.subnets) {this.newSubnet(artefact);}
+        for (artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
+    }
+
+    draw() {
+        console.info('Top Level View Draw');
+    }
 
     getOkitJson() {
         return this.okitjson;
@@ -70,15 +140,17 @@ class OkitJsonView {
      */
 
     // Autonomous Database
-    newAutonomousDatabase() {
-        return new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase(), this);
+    newAutonomousDatabase(database) {
+        this.autonomous_databases.push(database ? new AutonomousDatabaseView(database, this) : new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase(), this));
+        return this.autonomous_databases[this.autonomous_databases.length - 1];
     }
     getAutonomousDatabase() {}
     deleteAutonomousDatabase() {}
 
     // Block Storage
-    newBlockStorageVolume() {
-        return new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this);
+    newBlockStorageVolume(volume) {
+        this.block_storage_volumes.push(volume ? new BlockStorageVolumeView(volume, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
+        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
     }
     getBlockStorageVolume() {}
     deleteBlockStorageVolume() {}
@@ -91,7 +163,8 @@ class OkitJsonView {
     }
     newCompartment(compartment) {
         console.info('New Compartment View');
-        return compartment ? new CompartmentView(new Compartment(compartment, this.okitjson), this) : new CompartmentView(this.okitjson.newCompartment(), this);
+        this.compartments.push(compartment ? new CompartmentView(new Compartment(compartment, this.okitjson), this) : new CompartmentView(this.okitjson.newCompartment(), this));
+        return this.compartments[this.compartments.length - 1];
     }
     getCompartment(id) {return this.okitjson.getCompartment(id);}
     deleteCompartment() {}
@@ -102,106 +175,129 @@ class OkitJsonView {
     deleteContainer() {}
 
     // Database System
-    newDatabaseSystem() {
-        return new DatabaseSystemView(this.okitjson.newDatabaseSystem(), this);
+    newDatabaseSystem(database) {
+        this.database_systems.push(database ? new DatabaseSystemView(database, this) : new DatabaseSystemView(this.okitjson.newDatabaseSystem(), this));
+        return this.database_systems[this.database_systems.length - 1];
     }
     getDatabaseSystem() {}
     deleteDatabaseSystem() {}
 
     // Dynamic Routing Gateway
-    newDynamicRoutingGateway() {
-        return new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway(), this);
+    newDynamicRoutingGateway(gateway) {
+        this.dynamic_routing_gateways.push(gateway ? new DynamicRoutingGatewayView(gateway, this) : new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway(), this));
+        return this.dynamic_routing_gateways[this.dynamic_routing_gateways.length - 1];
     }
     getDynamicRoutingGateway() {}
     deleteDynamicRoutingGateway() {}
 
     // Fast Connect
-    newFastConnect() {
-        return new FastConnectView(this.okitjson.newFastConnect(), this);
+    newFastConnect(connect) {
+        this.fast_connects.push(connect ? new FastConnectView(connect, this) : new FastConnectView(this.okitjson.newFastConnect(), this));
+        return this.fast_connects[this.fast_connects.length - 1];
     }
     getFastConnect() {}
     deleteFastConnect() {}
 
     // File Storage System
-    newFileStorageSystem() {
-        return new FileStorageSystemView(this.okitjson.newFileStorageSystem(), this);
+    newFileStorageSystem(storage) {
+        this.file_storage_systems.push(storage ? new FileStorageSystemView(storage, this) : new FileStorageSystemView(this.okitjson.newFileStorageSystem(), this));
+        return this.file_storage_systems[this.file_storage_systems.length - 1];
     }
     getFileStorageSystem() {}
     deleteFileStorageSystem() {}
 
     // Instance
-    newInstance() {
-        return new InstanceView(this.okitjson.newInstance(), this);
+    newInstance(instance) {
+        this.instances.push(instance ? new InstanceView(instance, this) : new InstanceView(this.okitjson.newInstance(), this));
+        return this.instances[this.instances.length - 1];
     }
     getInstance() {}
     deleteInstance() {}
 
     // Internet Gateway
-    newInternetGateway() {
-        return new InternetGatewayView(this.okitjson.newInternetGateway(), this);
+    newInternetGateway(gateway) {
+        let ig = gateway ? new InternetGatewayView(gateway, this) : new InternetGatewayView(this.okitjson.newInternetGateway(), this);
+        if (ig.artefact === null) {
+            return null;
+        }
+        this.internet_gateways.push(ig);
+        return this.internet_gateways[this.internet_gateways.length - 1];
     }
     getInternetGateway() {}
     deleteInternetGateway() {}
 
     // Load Balancer
-    newLoadBalancer() {
-        return new LoadBalancerView(this.okitjson.newLoadBalancer(), this);
+    newLoadBalancer(loadbalancer) {
+        this.load_balancers.push(loadbalancer ? new LoadBalancerView(loadbalancer, this) : new LoadBalancerView(this.okitjson.newLoadBalancer(), this));
+        return this.load_balancers[this.load_balancers.length - 1];
     }
     getLoadBalancer() {}
     deleteLoadBalancer() {}
 
     // Local Peering Gateway
-    newLocalPeeringGateway() {
-        return new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway(), this);
+    newLocalPeeringGateway(gateway) {
+        this.local_peering_gateways.push(gateway ? new LocalPeeringGatewayView(gateway, this) : new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway(), this));
+        return this.local_peering_gateways[this.local_peering_gateways.length - 1];
     }
     getLocalPeeringGateway() {}
     deleteLocalPeeringGateway() {}
 
     // NAT Gateway
-    newNATGateway() {
-        return new NATGatewayView(this.okitjson.newNATGateway(), this);
+    newNATGateway(gateway) {
+        let ng = gatway ? new NATGatewayView(gateway, this) : new NATGatewayView(this.okitjson.newNATGateway(), this);
+        if (ng.artefact === null) {
+            return null;
+        }
+        this.nat_gateways.push(ng);
+        return this.nat_gateways[this.nat_gateways.length - 1];
     }
     getNATGateway() {}
     deleteNATGateway() {}
 
     // Network Security Group
-    newNetworkSecurityGroup() {
-        return new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup(), this);
+    newNetworkSecurityGroup(security) {
+        this.network_security_groups.push(security ? new NetworkSecurityGroupView(security, this) : new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup(), this));
+        return this.network_security_groups[this.network_security_groups.length - 1];
     }
     getNetworkSecurityGroup() {}
     deleteNetworkSecurityGroup() {}
 
     // Object Storage Bucket
-    newObjectStorageBucket() {
-        return new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket(), this);
+    newObjectStorageBucket(storage) {
+        this.object_storage_buckets.push(storage ? new ObjectStorageBucketView(storage, this) : new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket(), this));
+        return this.object_storage_buckets[this.object_storage_buckets.length - 1];
     }
     getObjectStorageBucket() {}
     deleteObjectStorageBucket() {}
 
     // Route Table
-    newRouteTable() {
-        return new RouteTableView(this.okitjson.newRouteTable(), this);
+    newRouteTable(routetable) {
+        this.route_tables.push(routetable ? new RouteTableView(routetable, this) : new RouteTableView(this.okitjson.newRouteTable(), this));
+        return this.route_tables[this.route_tables.length - 1];
     }
     getRouteTable() {}
     deleteRouteTable() {}
 
     // Security List
-    newSecurityList() {
-        return new SecurityListView(this.okitjson.newSecurityList(), this);
+    newSecurityList(security) {
+        this.security_lists.push(security ? new SecurityListView(security, this) : new SecurityListView(this.okitjson.newSecurityList(), this));
+        return this.security_lists[this.security_lists.length - 1];
     }
     getSecurityList() {}
     deleteSecurityList() {}
 
     // Service Gateway
-    newServiceGateway() {
-        return new ServiceGatewayView(this.okitjson.newServiceGateway(), this);
+    newServiceGateway(gateway) {
+        this.service_gateways.push(gateway ? new ServiceGatewayView(gateway, this) : new ServiceGatewayView(this.okitjson.newServiceGateway(), this));
+        return this.service_gateways[this.service_gateways.length - 1];
     }
     getServiceGateway() {}
     deleteServiceGateway() {}
 
     // Subnet
-    newSubnet() {
-        return new SubnetView(this.okitjson.newSubnet(), this);
+    newSubnet(subnet) {
+        this.subnets.push(subnet ? new SubnetView(subnet, this) : new SubnetView(this.okitjson.newSubnet(), this));
+        return this.subnets[this.subnets.length - 1];
     }
     getSubnet() {}
     deleteSubnet() {}
@@ -212,28 +308,36 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         return view_artefact;
     }
-    newVirtualCloudNetwork() {
-        return new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork(), this);
+    newVirtualCloudNetwork(vcn) {
+        this.virtual_cloud_networks.push(vcn ? new VirtualCloudNetworkView(vcn, this) : new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork(), this));
+        return this.virtual_cloud_networks[this.virtual_cloud_networks.length - 1];
     }
     getVirtualCloudNetwork(id) {return this.okitjson.getVirtualCloudNetwork(id);}
     deleteVirtualCloudNetwork() {}
 
     // Virtual Network Interface
-    newVirtualNetworkInterface() {
-        return new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this);
+    newVirtualNetworkInterface(vnic) {
+        this.virtual_network_interfaces.push(vnic ? new VirtualNetworkInterfaceView(vnic, this) : new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this));
+        return this.virtual_network_interfaces[this.virtual_network_interfaces.length - 1];
     }
     getVirtualNetworkInterface() {}
     deleteVirtualNetworkInterface() {}
 
 }
 
+/*
+** Simple Artefact View Class for all artefacts that are not Containers
+ */
 class OkitArtefactView {
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.json_view = json_view;
     }
 
+    get artefact_id() {return this.artefact.id;}
+    get compartment_id() {return this.artefact.compartment_id;}
     get parent_id() {return null;}
+    get parent_key() {return null;}
     get icon_width() {return 45;}
     get icon_height() {return 45;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
@@ -278,22 +382,19 @@ class OkitArtefactView {
     }
 
     draw() {
-        console.group('Drawing (Default) ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.getParentId() + ']');
+        console.group('Drawing (Default) ' + this.getArtifactReference() + ' : ' + this.artefact_id + ' [' + this.parent_id + ']');
         // Get Definition from Sub class
         let definition = this.getSvgDefinition();
         /*
         ** Draw Artefact based of returned definition.
          */
-        let id             = definition['artifact']['id'];
-        let parent_id      = definition['artifact']['parent_id'];
-        let parent_svg_id  = parent_id + "-svg";
-        let compartment_id = definition['artifact']['compartment_id'];
+        let parent_svg_id  = this.parent_id + "-svg";
         let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
-        console.info('Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'])
-        console.info('Id             : ' + id )
-        console.info('Parent Id      : ' + parent_id)
+        console.info('Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name']);
+        console.info('Id             : ' + this.artefact_id );
+        console.info('Parent Id      : ' + this.parent_id);
         console.info('Parent SVG Id  : ' + parent_svg_id);
-        console.info('Compartment Id : ' + compartment_id);
+        console.info('Compartment Id : ' + this.compartment_id);
         let rect_x         = definition['rect']['x'];
         let rect_y         = definition['rect']['y'];
         let rect_width     = definition['svg']['width']  + definition['rect']['width_adjust'];
@@ -314,7 +415,7 @@ class OkitArtefactView {
         let parent_svg = d3.select(d3Id(parent_svg_id));
         // Wrapper SVG Element to define ViewBox etc
         let svg = parent_svg.append("svg")
-            .attr("id", id + '-svg')
+            .attr("id", this.artefact_id + '-svg')
             .attr("data-type", definition['data_type'])
             .attr("x",         definition['svg']['x'])
             .attr("y",         definition['svg']['y'])
@@ -324,7 +425,7 @@ class OkitArtefactView {
             .attr("preserveAspectRatio", "xMinYMax meet");
 
         let rect = svg.append("rect")
-            .attr("id", id)
+            .attr("id", this.artefact_id)
             .attr("x",            rect_x)
             .attr("y",            rect_y)
             .attr("rx",           corner_radius)
@@ -360,7 +461,7 @@ class OkitArtefactView {
                 .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
             let name = name_svg.append("text")
                 .attr("class", "svg-text")
-                .attr("id", id + '-display-name')
+                .attr("id", this.artefact_id + '-display-name')
                 .attr("x", text_align_x)
                 .attr("y", "55")
                 .attr("text-anchor", text_anchor)
@@ -377,7 +478,7 @@ class OkitArtefactView {
                 .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
             let name = label_svg.append("text")
                 .attr("class", "svg-text")
-                .attr("id", id + '-label')
+                .attr("id", this.artefact_id + '-label')
                 .attr("x", rect_x)
                 .attr("y", definition['svg']['height'] - Math.max(10, (rect_y * 2) - 10))
                 .attr("fill", definition['rect']['stroke']['colour'])
@@ -394,7 +495,7 @@ class OkitArtefactView {
                 .attr("viewBox", "0 0 " + container_artifact_info_width + " " + definition['svg']['height']);
             let name = info_svg.append("text")
                 .attr("class", "svg-text")
-                .attr("id", id + '-info')
+                .attr("id", this.artefact_id + '-info')
                 .attr("x", 0)
                 .attr("y", definition['svg']['height'] - Math.max(10, (rect_y * 2) - 10))
                 .attr("fill", definition['rect']['stroke']['colour'])
@@ -417,7 +518,7 @@ class OkitArtefactView {
             .attr("transform", svg_transform);
 
         svg.append("title")
-            .attr("id", id + '-title')
+            .attr("id", this.artefact_id + '-title')
             .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
 
         // Set common attributes on svg element and children
@@ -428,14 +529,14 @@ class OkitArtefactView {
             .on("drop",       dragDrop)
             .on("dragend",    dragEnd)
             .attr("data-type",           definition['data_type'])
-            .attr("data-okit-id",        id)
-            .attr("data-parent-id",      parent_id)
-            .attr("data-compartment-id", compartment_id)
+            .attr("data-okit-id",        this.artefact_id)
+            .attr("data-parent-id",      this.parent_id)
+            .attr("data-compartment-id", this.compartment_id)
             .selectAll("*")
             .attr("data-type",           definition['data_type'])
-            .attr("data-okit-id",        id)
-            .attr("data-parent-id",      parent_id)
-            .attr("data-compartment-id", compartment_id);
+            .attr("data-okit-id",        this.artefact_id)
+            .attr("data-parent-id",      this.parent_id)
+            .attr("data-compartment-id", this.compartment_id);
         /*
         ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
         ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
@@ -444,9 +545,9 @@ class OkitArtefactView {
         let me = this;
         svg.on("click", function() {
             me.loadSlidePanels();
-            $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
-            $(jqId(me.id)).toggleClass('highlight');
-            $(jqId(me.id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
+            $('.highlight:not(' + jqId(me.artefact_id) +')').removeClass('highlight');
+            $(jqId(me.artefact_id)).toggleClass('highlight');
+            $(jqId(me.artefact_id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
             d3.event.stopPropagation();
         });
         console.groupEnd();
@@ -474,6 +575,436 @@ class OkitArtefactView {
      */
     loadValueProposition() {
         $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/oci.html");
+    }
+
+    /*
+    ** Child Offset Functions
+     */
+    getChildOffset(child_type) {
+        console.group('Getting Offset for ' + child_type);
+        let offset = {dx: 0, dy: 0};
+        if (this.getTopEdgeArtifacts().includes(child_type)) {
+            console.info('Top Edge Artifact');
+            offset = this.getTopEdgeChildOffset();
+        } else if (this.getTopArtifacts().includes(child_type)) {
+            console.info('Top Artifact');
+            offset = this.getTopChildOffset();
+        } else if (this.getContainerArtifacts().includes(child_type)) {
+            console.info('Container Artifact');
+            offset = this.getContainerChildOffset();
+        } else if (this.getBottomArtifacts().includes(child_type)) {
+            console.info('Bottom Artifact');
+            offset = this.getBottomChildOffset();
+        } else if (this.getBottomEdgeArtifacts().includes(child_type)) {
+            console.info('Bottom Edge Artifact');
+            offset = this.getBottomEdgeChildOffset();
+        } else if (this.getLeftEdgeArtifacts().includes(child_type)) {
+            console.info('Left Edge Artifact');
+            offset = this.getLeftEdgeChildOffset();
+        } else if (this.getLeftArtifacts().includes(child_type)) {
+            console.info('Left Artifact');
+            offset = this.getLeftChildOffset();
+        } else if (this.getRightArtifacts().includes(child_type)) {
+            console.info('Right Artifact');
+            offset = this.getRightChildOffset();
+        } else if (this.getRightEdgeArtifacts().includes(child_type)) {
+            console.info('Right Edge Artifact');
+            offset = this.getRightEdgeChildOffset();
+        } else {
+            console.warn(child_type + ' Not Found for ' + this.display_name);
+        }
+        console.groupEnd();
+        return offset
+    }
+
+    getFirstChildOffset() {
+        alert('Get First Child function "getFirstChildOffset()" has not been implemented.');
+    }
+
+    // Top Edge
+    hasTopEdgeChildren() {
+        let children = false;
+        let key = this.getParentKey();
+        for (let group of this.getTopEdgeArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getTopEdgeChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.parent_key;
+        for (let group of this.getTopEdgeArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
+    getFirstTopEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.padding.x * 2 + positional_adjustments.spacing.x * 2),
+            dy: 0
+        };
+        return offset;
+    }
+
+    getTopEdgeChildOffset() {
+        alert('Get First Top Edge Child function "getTopEdgeChildOffset()" has not been implemented.');
+    }
+
+    // Top
+    hasTopChildren() {
+        let children = false;
+        let key = this.parent_key;
+        for (let group of this.getTopArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact.getParentId() === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getTopChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.parent_key;
+        for (let group of this.getTopArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact.getParentId() === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
+    getFirstTopChildOffset() {
+        let offset = this.getFirstLeftChildOffset();
+        if (this.hasLeftChildren()) {
+            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+        }
+        return offset;
+    }
+
+    getTopChildOffset() {
+        alert('Get Top Child function "getTopEdgeChildOffset()" has not been implemented.');
+    }
+
+    // Container
+    hasContainerChildren() {
+        let children = false;
+        let key = this.parent_key;
+        for (let group of this.getContainerArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getContainerChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.parent_key;
+        for (let group of this.getContainerArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
+    getFirstContainerChildOffset() {
+        let offset = this.getFirstTopChildOffset();
+        if (this.hasTopChildren()) {
+            let dimensions = this.getTopChildrenMaxDimensions();
+            offset.dy += Math.round(dimensions.height + positional_adjustments.spacing.y);
+        }
+        return offset;
+    }
+
+    getContainerChildOffset() {
+        alert('Get Container Child function "getContainerChildOffset()" has not been implemented.');
+    }
+
+    // Bottom
+    hasBottomChildren() {
+        let children = false;
+        let key = this.parent_key;
+        for (let group of this.getBottomArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact.getParentId() === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getBottomChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.parent_key;
+        for (let group of this.getBottomArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact.getParentId() === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
+    getFirstBottomChildOffset() {
+        let offset = this.getFirstTopChildOffset();
+        if (this.hasTopChildren()) {
+            let dimensions = this.getTopChildrenMaxDimensions();
+            offset.dy += Math.round(dimensions.height + positional_adjustments.spacing.y * 4);
+        }
+        if (this.hasContainerChildren()) {
+            let dimensions = this.getContainerChildrenMaxDimensions();
+            offset.dy += Math.round(dimensions.height + positional_adjustments.spacing.y);
+        }
+        return offset;
+    }
+
+    getBottomChildOffset() {
+        alert('Get Bottom Child function "getBottomEdgeChildOffset()" has not been implemented.');
+    }
+
+    // Bottom Edge
+    hasBottomEdgeChildren() {
+        let children = false;
+        let key = this.parent_key;
+        for (let group of this.getBottomEdgeArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getBottomEdgeChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.parent_key;
+        for (let group of this.getBottomEdgeArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
+    getFirstBottomEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.spacing.x),
+            dy: 0
+        };
+        return offset;
+    }
+
+    getBottomEdgeChildOffset() {
+        alert('Get Bottom Edge Child function "getBottomEdgeChildOffset()" has not been implemented.');
+    }
+
+    // Left Edge
+    getLeftEdgeChildOffset() {
+        alert('Get Left Edge Child function "getLeftEdgeChildOffset()" has not been implemented.');
+    }
+
+    // Left
+    hasLeftChildren() {
+        let children = false;
+        let key = this.parent_key;
+        for (let group of this.getLeftArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getLeftChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.parent_key;
+        for (let group of this.getLeftArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
+    getFirstLeftChildOffset() {
+        let offset = {
+            dx: Math.round(positional_adjustments.spacing.x * 4),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return offset;
+    }
+
+    getLeftChildOffset() {
+        alert('Get Left Child function "getLeftEdgeChildOffset()" has not been implemented.');
+    }
+
+    // Right
+    hasRightChildren() {
+        let children = false;
+        let key = this.parent_key;
+        for (let group of this.getRightArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getRightChildrenMaxDimensions() {
+        let max_dimensions = {height: 0, width: 0};
+        let key = this.parent_key;
+        for (let group of this.getRightArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    let dimension = artifact.getDimensions();
+                    max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
+                    max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
+                }
+            }
+        }
+        return max_dimensions;
+    }
+
+    getFirstRightChildOffset() {
+        let offset = this.getFirstLeftChildOffset();
+        if (this.hasLeftChildren()) {
+            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+        }
+        if (this.hasContainerChildren()) {
+            let dimensions = this.getContainerChildrenMaxDimensions();
+            offset.dx += dimensions.width;
+            offset.dx += positional_adjustments.spacing.x;
+            offset.dx += positional_adjustments.padding.x;
+        }
+        return offset;
+    }
+
+    getRightChildOffset() {
+        alert('Get Right Child function "getRightEdgeChildOffset()" has not been implemented.');
+    }
+
+    // Right Edge
+    hasRightEdgeChildren() {
+        let children = false;
+        let key = this.parent_key;
+        for (let group of this.getRightEdgeArtifacts()) {
+            for(let artifact of this.json_view.getOkitJson()[this.artefact.artifactToElement(group)]) {
+                if (artifact[key] === this.id) {
+                    children = true;
+                    break;
+                }
+            }
+        }
+        return children;
+    }
+
+    getFirstRightEdgeChildOffset() {
+        let offset = {
+            dx: Math.round(this.getDimensions().width - icon_width),
+            dy: Math.round(positional_adjustments.padding.x)
+        };
+        return offset;
+    }
+
+    getRightEdgeChildOffset() {
+        alert('Get Right Edge Child function "getRightEdgeChildOffset()" has not been implemented.');
+    }
+
+
+    /*
+    ** Child Type Functions
+     */
+    getTopEdgeArtifacts() {
+        return [];
+    }
+
+    getTopArtifacts() {
+        return [];
+    }
+
+    getContainerArtifacts() {
+        return [];
+    }
+
+    getBottomArtifacts() {
+        return [];
+    }
+
+    getBottomEdgeArtifacts() {
+        return [];
+    }
+
+    getLeftEdgeArtifacts() {
+        return [];
+    }
+
+    getLeftArtifacts() {
+        return [];
+    }
+
+    getRightArtifacts() {
+        return [];
+    }
+
+    getRightEdgeArtifacts() {
+        return [];
+    }
+
+    /*
+    ** Default name generation
+     */
+
+    generateConnectorId(sourceid, destinationid) {
+        return sourceid + '-' + destinationid;
     }
 
     /*
@@ -509,6 +1040,189 @@ class OkitArtefactView {
 
     getConnectTargets() {
         return this.constructor.getgetConnectTargets();
+    }
+
+}
+
+/*
+** Container Artefact View class for Compartments / VCN / Subnets that can contain other artefacts.
+ */
+class OkitContainerArtefactView extends OkitArtefactView {
+    constructor(artefact = null, json_view) {
+        super(artefact, json_view);
+    }
+
+    get dimensions() {
+        console.group('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        let padding = this.getPadding();
+        let dimensions = {width: 0, height: 0};
+        let offset = {dx: 0, dy: 0};
+        // Process Top Edge Artifacts
+        offset = this.getFirstTopEdgeChildOffset();
+        let top_edge_dimensions = this.getTopEdgeChildrenMaxDimensions();
+        dimensions.width  = Math.max(dimensions.width, top_edge_dimensions.width + offset.dx - padding.dx);
+        dimensions.height = Math.max(dimensions.height, top_edge_dimensions.height);
+        // Process Bottom Edge Artifacts
+        offset = this.getFirstBottomEdgeChildOffset();
+        let bottom_edge_dimensions = this.getBottomEdgeChildrenMaxDimensions();
+        dimensions.width  = Math.max(dimensions.width, bottom_edge_dimensions.width);
+        dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
+        // Process Top Artifacts
+        offset = this.getFirstTopChildOffset();
+        let top_dimensions = this.getTopChildrenMaxDimensions();
+        dimensions.width   = Math.max(dimensions.width, top_dimensions.width);
+        dimensions.height += top_dimensions.height;
+        // Process Container Artifacts
+        offset = this.getFirstContainerChildOffset();
+        let container_dimensions = this.getContainerChildrenMaxDimensions();
+        dimensions.width   = Math.max(dimensions.width, container_dimensions.width);
+        dimensions.height += container_dimensions.height;
+        // Process Bottom Artifacts
+        offset = this.getFirstBottomChildOffset();
+        let bottom_dimensions = this.getBottomChildrenMaxDimensions();
+        dimensions.width   = Math.max(dimensions.width, bottom_dimensions.width);
+        dimensions.height += bottom_dimensions.height;
+        // Process Left Edge Artifacts
+        // Process Right Edge Artifacts
+        // Process Left Artifacts
+        let left_dimensions = this.getLeftChildrenMaxDimensions();
+        dimensions.width += left_dimensions.width;
+        dimensions.height = Math.max(dimensions.height, left_dimensions.height);
+        // Process Right Artifacts
+        let right_dimensions = this.getRightChildrenMaxDimensions();
+        dimensions.width += right_dimensions.width;
+        dimensions.height = Math.max(dimensions.height, right_dimensions.height);
+        if (this.hasRightChildren()) {
+            dimensions.width += positional_adjustments.spacing.x;
+            dimensions.width += positional_adjustments.padding.x;
+        }
+        // Add Padding
+        dimensions.width += padding.dx * 2;
+        dimensions.height += padding.dy * 2;
+        // Check size against minimum
+        dimensions['width']  = Math.max(dimensions['width'],  this.minimum_dimensions.width);
+        dimensions['height'] = Math.max(dimensions['height'], this.minimum_dimensions.height);
+        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+        console.groupEnd();
+        return dimensions;
+    }
+
+    /*
+    ** SVG Functions
+     */
+    getPadding() {
+        let padding = {
+            dx: Math.round(positional_adjustments.spacing.x * 4),
+            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+        };
+        return padding;
+    }
+
+    getChildTypes() {
+        let child_types = this.getContainerArtifacts().concat(
+            this.getLeftEdgeArtifacts(),   this.getLeftArtifacts(),
+            this.getRightEdgeArtifacts(),  this.getRightArtifacts(),
+            this.getTopEdgeArtifacts(),    this.getTopArtifacts(),
+            this.getBottomEdgeArtifacts(), this.getBottomArtifacts()
+        );
+        console.info('Child Types : ' + child_types);
+        return child_types;
+    }
+
+    getChildElements() {
+        let child_elements = [];
+        this.getChildTypes().forEach(element => child_elements.push(this.artefact.artifactToElement(element)));
+        return child_elements;
+    }
+
+    /*
+    ** Child Offset Functions
+     */
+    getTopEdgeChildOffset() {
+        let offset = this.getFirstTopEdgeChildOffset();
+        // Count how many top edge children and adjust.
+        let count = 0;
+        for (let child of this.getTopEdgeArtifacts()) {
+            count += $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").length;
+        }
+        console.info('Top Edge Count : ' + count);
+        // Increment x position based on count
+        offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
+        return offset;
+    }
+
+    getTopChildOffset() {
+        let offset = this.getFirstTopChildOffset();
+        for (let child of this.getTopArtifacts()) {
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
+                function() {
+                    offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
+                });
+        }
+        return offset;
+    }
+
+    getContainerChildOffset() {
+        console.info('Get Container Child Offset');
+        let offset = this.getFirstContainerChildOffset();
+        // Count how many top edge children and adjust.
+        for (let child of this.getContainerArtifacts()) {
+            //console.info('Container Child Count : ' + $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "'][data-parent-id='" + this.id + "']").length);
+            $(jqId(this.id + '-svg')).children('svg[data-type="' + child + '"][data-parent-id="' + this.id + '"]').each(
+                function() {
+                    offset.dy += Math.round(Number($(this).attr('height')) + positional_adjustments.spacing.y);
+                });
+        }
+        console.info('Offset : ' + JSON.stringify(offset));
+        return offset;
+    }
+
+    getBottomChildOffset() {
+        let offset = this.getFirstBottomChildOffset();
+        for (let child of this.getBottomArtifacts()) {
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
+                function() {
+                    offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
+                });
+        }
+        return offset;
+    }
+
+    getBottomEdgeChildOffset() {}
+
+    getLeftEdgeChildOffset() {}
+
+    getLeftChildOffset() {
+        let offset = this.getFirstLeftChildOffset();
+        for (let child of this.getLeftArtifacts()) {
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
+                function() {
+                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
+                });
+        }
+        return offset;
+    }
+
+    getRightChildOffset() {
+        let offset = this.getFirstRightChildOffset();
+        for (let child of this.getRightArtifacts()) {
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
+                function() {
+                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
+                });
+        }
+        return offset;
+    }
+
+    getRightEdgeChildOffset() {
+        let offset = this.getFirstRightEdgeChildOffset();
+        for (let child of this.getRightEdgeArtifacts()) {
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
+                function() {
+                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
+                });
+        }
+        return offset;
     }
 
 }

@@ -77,8 +77,8 @@ function handleNew(evt) {
 }
 function newDiagram() {
     console.groupCollapsed('Creating New Diagram');
-    okitJson = new OkitJson();
-    okitJsonView = new OkitDesignerJsonView(okitJson, 'canvas-div', okitSettings.is_display_grid, palette_svg);
+    okitJsonModel = new OkitJson();
+    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', okitSettings.is_display_grid, palette_svg);
     okitJsonView.newCanvas();
     okitJsonView.newCompartment();
     console.info(okitJsonView);
@@ -619,7 +619,7 @@ function displayOkitJson() {
     if (Object.keys(regionOkitJson).length > 0) {
         $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(regionOkitJson, null, 2) + '</code></pre>');
     } else {
-        $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(okitJson, null, 2) + '</code></pre>');
+        $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonModel, null, 2) + '</code></pre>');
     }
 }
 /*

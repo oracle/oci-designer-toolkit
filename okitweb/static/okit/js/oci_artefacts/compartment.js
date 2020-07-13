@@ -9,7 +9,7 @@ const compartment_query_cb = "compartment-query-cb";
 /*
 ** Define Compartment Artifact Class
  */
-class Compartment extends OkitContainerArtifact {
+class Compartment extends OkitArtifact {
     /*
     ** Create
      */

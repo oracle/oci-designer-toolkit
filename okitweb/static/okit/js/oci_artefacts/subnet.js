@@ -10,7 +10,7 @@ const subnet_query_cb = "subnet-query-cb";
 /*
 ** Define Subnet Artifact Class
  */
-class Subnet extends OkitContainerArtifact {
+class Subnet extends OkitArtifact {
     /*
     ** Create
      */
