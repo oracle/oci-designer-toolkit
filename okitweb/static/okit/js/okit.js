@@ -436,6 +436,7 @@ class OkitArtifact {
          */
         let me = this;
         svg.on("click", function() {
+            console.info('Click........');
             me.loadProperties();
             $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
             $(jqId(me.id)).toggleClass('highlight');

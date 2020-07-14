@@ -36,6 +36,7 @@ class OkitJsonTreeView extends OkitJsonView {
                 .append('label')
                     .attr('id', id + '_label')
                     .text(text)
+                    .on('click', () => {d3.select(d3Id(id + '-svg')).on('click')()})
                     .on('mouseover', () => {$(jqId(id)).addClass('okit-explorer-view-highlight')})
                     .on('mouseleave', () => {$(jqId(id)).removeClass('okit-explorer-view-highlight')});
         if (collapsible) {
