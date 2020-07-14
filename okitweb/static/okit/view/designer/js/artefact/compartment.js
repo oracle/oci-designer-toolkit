@@ -26,7 +26,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     getParent() {
-        return this.artefact.getOkitJson().getCompartment(this.parent_id);
+        return this.getJsonView().getCompartment(this.parent_id);
     }
 
     /*

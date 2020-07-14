@@ -121,8 +121,6 @@ function dragDrop(evt) {
     // Add the Artifact to the OKIT Json / Canvas
     let dropFunction = 'drop' + artifact.name;
     console.info('Drop Function : ' + dropFunction);
-    dropFunction = dropFunction.slice(0, -4);
-    console.info('Drop Function : ' + dropFunction);
     let result = okitJsonView[dropFunction](target);
     if (result) {
         console.debug(JSON.stringify(result, null, 2));

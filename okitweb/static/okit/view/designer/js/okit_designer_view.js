@@ -24,99 +24,99 @@ class OkitDesignerJsonView extends OkitJsonView {
         // New canvas
         let width = 0;
         let height = 0;
-        for (let compartment of this.getOkitJson().compartments) {
-            console.info(`Processing ${compartment.display_name}`);
-            let dimensions = this.newCompartment(compartment).dimensions;
+        for (let compartment of this.compartments) {
+            console.info(`Processing ${compartment.artefact.display_name}`);
+            let dimensions = compartment.dimensions;
             width = Math.max(width, dimensions.width);
             height = Math.max(height, dimensions.height);
         }
         let canvas_svg = this.newCanvas(width, height);
 
         // Draw Compartments
-        for (let compartment of this.getOkitJson().compartments) {
-            this.newCompartment(compartment).draw();
+        for (let compartment of this.compartments) {
+            compartment.draw();
         }
 
         // Draw Compartment Sub Components
         // Virtual Cloud Networks
-        for (let virtual_cloud_network of this.getOkitJson().virtual_cloud_networks) {
-            this.newVirtualCloudNetwork(virtual_cloud_network).draw();
+        for (let virtual_cloud_network of this.virtual_cloud_networks) {
+            virtual_cloud_network.draw();
         }
         // Block Storage Volumes
-        for (let block_storage_volume of this.getOkitJson().block_storage_volumes) {
-            this.newBlockStorageVolume(block_storage_volume).draw();
+        for (let block_storage_volume of this.block_storage_volumes) {
+            block_storage_volume.draw();
         }
         // Object Storage Buckets
-        for (let object_storage_bucket of this.getOkitJson().object_storage_buckets) {
-            this.newObjectStorageBucket(object_storage_bucket).draw();
+        for (let object_storage_bucket of this.object_storage_buckets) {
+            object_storage_bucket.draw();
         }
         // Autonomous Databases
-        for (let autonomous_database of this.getOkitJson().autonomous_databases) {
-            this.newAutonomousDatabase(autonomous_database).draw();
+        for (let autonomous_database of this.autonomous_databases) {
+            autonomous_database.draw();
         }
         // FastConnects
-        for (let fast_connect of this.getOkitJson().fast_connects) {
-            this.newFastConnect(fast_connect).draw();
+        for (let fast_connect of this.fast_connects) {
+            fast_connect.draw();
         }
 
         // Draw Virtual Cloud Network Sub Components
         // Internet Gateways
-        for (let internet_gateway of this.getOkitJson().internet_gateways) {
-            this.newInternetGateway(internet_gateway).draw();
+        for (let internet_gateway of this.internet_gateways) {
+            internet_gateway.draw();
         }
         // NAT Gateways
-        for (let nat_gateway of this.getOkitJson().nat_gateways) {
-            this.newNATGateway(nat_gateway).draw();
+        for (let nat_gateway of this.nat_gateways) {
+            nat_gateway.draw();
         }
         // Service Gateways
-        for (let service_gateway of this.getOkitJson().service_gateways) {
-            this.newServiceGateway(service_gateway).draw();
+        for (let service_gateway of this.service_gateways) {
+            service_gateway.draw();
         }
         // Dynamic Routing Gateways
-        for (let dynamic_routing_gateway of this.getOkitJson().dynamic_routing_gateways) {
-            this.newDynamicRoutingGateway(dynamic_routing_gateway).draw();
+        for (let dynamic_routing_gateway of this.dynamic_routing_gateways) {
+            dynamic_routing_gateway.draw();
         }
         // Local Peering Gateways
-        for (let local_peering_gateway of this.getOkitJson().local_peering_gateways) {
-            this.newLocalPeeringGateway(local_peering_gateway).draw();
+        for (let local_peering_gateway of this.local_peering_gateways) {
+            local_peering_gateway.draw();
         }
         // Route Tables
-        for (let route_table of this.getOkitJson().route_tables) {
-            this.newRouteTable(route_table).draw();
+        for (let route_table of this.route_tables) {
+            route_table.draw();
         }
         // Security Lists
-        for (let security_list of this.getOkitJson().security_lists) {
-            this.newSecurityList(security_list).draw();
+        for (let security_list of this.security_lists) {
+            security_list.draw();
         }
         // Network Security Groups
-        for (let network_security_group of this.getOkitJson().network_security_groups) {
-            this.newNetworkSecurityGroup(network_security_group).draw();
+        for (let network_security_group of this.network_security_groups) {
+            network_security_group.draw();
         }
         // Subnets
-        for (let subnet of this.getOkitJson().subnets) {
-            this.newSubnet(subnet).draw();
+        for (let subnet of this.subnets) {
+            subnet.draw();
         }
 
         // Draw Subnet Sub Components
         // Database System
-        for (let database_system of this.getOkitJson().database_systems) {
-            this.newDatabaseSystem(database_system).draw();
+        for (let database_system of this.database_systems) {
+            database_system.draw();
         }
         // File Storage System
-        for (let file_storage_system of this.getOkitJson().file_storage_systems) {
-            this.newFileStorageSystem(file_storage_system).draw();
+        for (let file_storage_system of this.file_storage_systems) {
+            file_storage_system.draw();
         }
         // Containers
-        for (let container of this.getOkitJson().containers) {
-            this.newContainer(container).draw();
+        for (let container of this.containers) {
+            container.draw();
         }
         // Instances
-        for (let instance of this.getOkitJson().instances) {
-            this.newInstance(instance).draw();
+        for (let instance of this.instances) {
+            instance.draw();
         }
         // Load Balancers
-        for (let load_balancer of this.getOkitJson().load_balancers) {
-            this.newLoadBalancer(load_balancer).draw();
+        for (let load_balancer of this.load_balancers) {
+            load_balancer.draw();
         }
 
         // Resize Main Canvas if required
@@ -151,9 +151,9 @@ class OkitDesignerJsonView extends OkitJsonView {
         this.drawCompartments(null);
     }
     drawCompartments(parent_id) {
-        for (let compartment of this.getOkitJson().compartments) {
+        for (let compartment of this.compartments) {
             if (compartment.compartment_id === parent_id) {
-                this.newCompartment(compartment).draw();
+                compartment.draw();
                 // Draw Sub Compartments
             }
         }

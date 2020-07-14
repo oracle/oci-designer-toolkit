@@ -236,11 +236,11 @@ class OkitJson {
      */
 
     // Autonomous Database
-    newAutonomousDatabase(data, parent=null) {
+    newAutonomousDatabase(data) {
         console.info('New Autonomous Database');
         // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
         data.compartment_id = data.parent_id;
-        this.autonomous_databases.push(new AutonomousDatabase(data, this, parent));
+        this.autonomous_databases.push(new AutonomousDatabase(data, this));
         return this.autonomous_databases[this.autonomous_databases.length - 1];
     }
     getAutonomousDatabases() {
@@ -265,11 +265,11 @@ class OkitJson {
     }
 
     // Block Storage Volume
-    newBlockStorageVolume(data, parent=null) {
+    newBlockStorageVolume(data) {
         console.info('New Block Storage Volume');
         // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
         data.compartment_id = data.parent_id;
-        this.block_storage_volumes.push(new BlockStorageVolume(data, this, parent));
+        this.block_storage_volumes.push(new BlockStorageVolume(data, this));
         return this.block_storage_volumes[this.block_storage_volumes.length - 1];
     }
     getBlockStorageVolumes() {
@@ -294,16 +294,14 @@ class OkitJson {
     }
 
     // Compartment
-    newCompartment(data = {}, parent=null) {
+    newCompartment(data = {}) {
         console.info('New Compartment');
         // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
         data.compartment_id = data.parent_id;
-        this.compartments.push(new Compartment(data, this, parent));
+        this.compartments.push(new Compartment(data, this));
         return this.compartments[this.compartments.length - 1];
     }
-    getCompartments() {
-        return this.compartments;
-    }
+    getCompartments() {return this.compartments;}
     getCompartment(id='') {
         for (let artefact of this.getCompartments()) {
             if (artefact.id === id) {
@@ -323,9 +321,9 @@ class OkitJson {
     }
 
     // Database System
-    newDatabaseSystem(data, parent=null) {
+    newDatabaseSystem(data) {
         console.info('New Database System');
-        this.database_systems.push(new DatabaseSystem(data, this, parent));
+        this.database_systems.push(new DatabaseSystem(data, this));
         return this.database_systems[this.database_systems.length - 1];
     }
     getDatabaseSystems() {
@@ -350,9 +348,9 @@ class OkitJson {
     }
 
     // Dynamic Routing Gateway
-    newDynamicRoutingGateway(data, parent=null) {
+    newDynamicRoutingGateway(data) {
         console.info('New Dynamic Routing Gateway');
-        this.dynamic_routing_gateways.push(new DynamicRoutingGateway(data, this, parent));
+        this.dynamic_routing_gateways.push(new DynamicRoutingGateway(data, this));
         return this.dynamic_routing_gateways[this.dynamic_routing_gateways.length - 1];
     }
     getDynamicRoutingGateways() {
@@ -377,9 +375,9 @@ class OkitJson {
     }
 
     // FastConnect
-    newFastConnect(data, parent=null) {
+    newFastConnect(data) {
         console.info('New FastConnect');
-        this.fast_connects.push(new FastConnect(data, this, parent));
+        this.fast_connects.push(new FastConnect(data, this));
         return this.fast_connects[this.fast_connects.length - 1];
     }
     getFastConnects() {
@@ -404,9 +402,9 @@ class OkitJson {
     }
 
     // File Storage System
-    newFileStorageSystem(data, parent=null) {
+    newFileStorageSystem(data) {
         console.info('New File Storage System');
-        this.file_storage_systems.push(new FileStorageSystem(data, this, parent));
+        this.file_storage_systems.push(new FileStorageSystem(data, this));
         return this.file_storage_systems[this.file_storage_systems.length - 1];
     }
     getFileStorageSystems() {
@@ -431,9 +429,9 @@ class OkitJson {
     }
 
     // Instance
-    newInstance(data, parent=null) {
+    newInstance(data) {
         console.info('New Instance');
-        this.instances.push(new Instance(data, this, parent));
+        this.instances.push(new Instance(data, this));
         return this.instances[this.instances.length - 1];
     }
     getInstances() {
@@ -458,7 +456,7 @@ class OkitJson {
     }
 
     // Internet Gateway
-    newInternetGateway(data, parent=null) {
+    newInternetGateway(data) {
         console.info('New Internet Gateway');
         for (let gateway of this.internet_gateways) {
             if (gateway.vcn_id === data.parent_id) {
@@ -469,7 +467,7 @@ class OkitJson {
                 return null;
             }
         }
-        this.internet_gateways.push(new InternetGateway(data, this, parent));
+        this.internet_gateways.push(new InternetGateway(data, this));
         return this.internet_gateways[this.internet_gateways.length - 1];
     }
     getInternetGateways() {
@@ -494,9 +492,9 @@ class OkitJson {
     }
 
     // Load Balancer
-    newLoadBalancer(data, parent=null) {
+    newLoadBalancer(data) {
         console.info('New Load Balancer');
-        this.load_balancers.push(new LoadBalancer(data, this, parent));
+        this.load_balancers.push(new LoadBalancer(data, this));
         return this.load_balancers[this.load_balancers.length - 1];
     }
     getloadBalancers() {
@@ -521,9 +519,9 @@ class OkitJson {
     }
 
     // Local Peering Gateway
-    newLocalPeeringGateway(data, parent=null) {
+    newLocalPeeringGateway(data) {
         console.info('New Local Peering Gateway');
-        this.local_peering_gateways.push(new LocalPeeringGateway(data, this, parent));
+        this.local_peering_gateways.push(new LocalPeeringGateway(data, this));
         return this.local_peering_gateways[this.local_peering_gateways.length - 1];
     }
     getLocalPeeringGateways() {
@@ -548,7 +546,7 @@ class OkitJson {
     }
 
     // NAT Gateway
-    newNATGateway(data, parent=null) {
+    newNATGateway(data) {
         console.info('New NAT Gateway');
         for (let gateway of this.nat_gateways) {
             if (gateway.vcn_id === data.parent_id) {
@@ -559,7 +557,7 @@ class OkitJson {
                 return null;
             }
         }
-        this.nat_gateways.push(new NATGateway(data, this, parent));
+        this.nat_gateways.push(new NATGateway(data, this));
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
     getNATGateways() {
@@ -584,9 +582,9 @@ class OkitJson {
     }
 
     // Network Security Group
-    newNetworkSecurityGroup(data, parent=null) {
+    newNetworkSecurityGroup(data) {
         console.info('New Network Security Group');
-        this.network_security_groups.push(new NetworkSecurityGroup(data, this, parent));
+        this.network_security_groups.push(new NetworkSecurityGroup(data, this));
         return this.network_security_groups[this.network_security_groups.length - 1];
     }
     getNetworkSecurityGroups() {
@@ -611,11 +609,11 @@ class OkitJson {
     }
 
     // Object Storage Bucket
-    newObjectStorageBucket(data, parent=null) {
+    newObjectStorageBucket(data) {
         console.info('New Object Storage Bucket');
         // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
         data.compartment_id = data.parent_id;
-        this.object_storage_buckets.push(new ObjectStorageBucket(data, this, parent));
+        this.object_storage_buckets.push(new ObjectStorageBucket(data, this));
         return this.object_storage_buckets[this.object_storage_buckets.length - 1];
     }
     getObjectStorageBuckets() {
@@ -640,9 +638,9 @@ class OkitJson {
     }
 
     // Route Table
-    newRouteTable(data, parent=null) {
+    newRouteTable(data) {
         console.info('New Route Table');
-        this.route_tables.push(new RouteTable(data, this, parent));
+        this.route_tables.push(new RouteTable(data, this));
         return this.route_tables[this.route_tables.length - 1];
     }
     getRouteTables() {
@@ -667,9 +665,9 @@ class OkitJson {
     }
 
     // Security List
-    newSecurityList(data, parent=null) {
+    newSecurityList(data) {
         console.info('New Security List');
-        this.security_lists.push(new SecurityList(data, this, parent));
+        this.security_lists.push(new SecurityList(data, this));
         return this.security_lists[this.security_lists.length - 1];
     }
     getSecurityLists() {
@@ -694,7 +692,7 @@ class OkitJson {
     }
 
     // Service Gateway
-    newServiceGateway(data, parent=null) {
+    newServiceGateway(data) {
         console.info('New Service Gateway');
         for (let gateway of this.service_gateways) {
             if (gateway.vcn_id === data.parent_id) {
@@ -705,7 +703,7 @@ class OkitJson {
                 return null;
             }
         }
-        this.service_gateways.push(new ServiceGateway(data, this, parent));
+        this.service_gateways.push(new ServiceGateway(data, this));
         return this.service_gateways[this.service_gateways.length - 1];
     }
     getServiceGateways() {
@@ -730,9 +728,9 @@ class OkitJson {
     }
 
     // Subnet
-    newSubnet(data, parent=null) {
+    newSubnet(data) {
         console.info('New Subnet');
-        this.subnets.push(new Subnet(data, this, parent));
+        this.subnets.push(new Subnet(data, this));
         return this.subnets[this.subnets.length - 1];
     }
     getSubnets() {
@@ -757,11 +755,11 @@ class OkitJson {
     }
 
     // Virtual Cloud Network
-    newVirtualCloudNetwork(data, parent=null) {
+    newVirtualCloudNetwork(data) {
         console.info('New Virtual Cloud Network');
         // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
         data.compartment_id = data.parent_id;
-        this.virtual_cloud_networks.push(new VirtualCloudNetwork(data, this, parent));
+        this.virtual_cloud_networks.push(new VirtualCloudNetwork(data, this));
         return this.virtual_cloud_networks[this.virtual_cloud_networks.length - 1];
     }
     getVirtualCloudNetworks() {
@@ -843,7 +841,7 @@ class OkitJson {
 }
 
 /*
-** Model reptresentation of each artefact within OCI
+** Model representation of each artefact within OCI
  */
 class OkitArtifact {
     /*
@@ -853,7 +851,6 @@ class OkitArtifact {
         this.getOkitJson = function() {return okitjson};
         // Add Id
         this.id = 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();
-        this.parent_id = null;
         // Add default for common Tag variables
         this.freeform_tags = {};
         this.defined_tags = {};
@@ -879,7 +876,7 @@ class OkitArtifact {
     ** Convert Functionality will be overridden to allow backwards compatibility
      */
     convert() {
-        if (this.parent_id) {delete this.parent_id;}
+        if (this.parent_id !== undefined) {delete this.parent_id;}
     }
 
     /*
