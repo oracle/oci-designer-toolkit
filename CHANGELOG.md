@@ -5,6 +5,7 @@
 **Release Date**: 15th July 2020
 ### Features
 1. Add Explorer / Tree View for the Artefacts in the diagram (OKIT-90).
+2. When Creating Route Table / Security List for VCN modify the Default versions for the first Route Table / Security List defined.
 
 ### Bug Fixes
 1. Resolve issues where by occasionally the Open/Load function would not reopen a file.
