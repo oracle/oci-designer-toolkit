@@ -189,6 +189,7 @@ class OkitSettings {
 
     buildPanel(panel_name='', autosave=false) {
         if (panel_name && panel_name !== '') {
+            $(jqId(panel_name)).empty();
             let me = this;
             let table = d3.select(d3Id(panel_name)).append('div').append('div')
                 .attr('id', 'preferences_table')

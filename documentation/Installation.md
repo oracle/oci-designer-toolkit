@@ -37,7 +37,7 @@ git clone -b v0.8.0 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
 
 ### Download
 If you do not have git installed locally the current release of OKIT can be retrieved by downloading it as a zip file from
-https://github.com/oracle/oci-designer-toolkit/archive/v0.5.1.zip
+https://github.com/oracle/oci-designer-toolkit/archive/v0.8.0.zip
 
 
 ## OCI Config File
