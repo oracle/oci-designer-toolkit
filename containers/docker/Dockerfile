@@ -23,27 +23,25 @@ EXPOSE 443
 # Install new yum repos
 RUN yum install -y \
     oracle-softwarecollection-release-el7 \
+    oraclelinux-developer-release-el7 \
 # Update base image
  && yum update -y \
 # Install additional packages
  && yum install -y \
         python36 \
         python3-pip \
+#        python36-pyyaml \
+#        python36-oci-sdk \
+#        rh-nginx114 \
  && rm -rf /var/cache/yum \
 # Upgrade pip
  && python3 -m pip install --upgrade pip==20.0.2 \
 # Install required python modules
  && pip3 install --no-cache-dir \
-        click==7.0 \
         flask==1.1.1 \
         gunicorn==20.0.4 \
-        itsdangerous==1.1.0 \
-        jinja2==2.10.3 \
-        markupsafe==1.1.1 \
         oci==2.6.0 \
         pyyaml==5.2 \
-        werkzeug==0.16.0 \
-        cryptography==2.8 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace}
 # Copy source code
@@ -51,6 +49,5 @@ COPY okitweb /okit/okitweb
 COPY visualiser /okit/visualiser
 COPY containers/oci/* /root/.oci/
 # Add entrypoint to automatically start webserver
-#ENTRYPOINT gunicorn --workers=2 --limit-request-line 0 --bind=0.0.0.0:80 okitweb.wsgi:app
 ENTRYPOINT ["gunicorn"]
 CMD ["--workers=4", "--limit-request-line", "0", "--timeout", "120", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]
