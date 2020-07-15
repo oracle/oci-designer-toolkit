@@ -6,7 +6,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 # Box metadata location and box name
-BOX_URL = "https://oracle.github.io/vagrant-boxes/boxes"
+BOX_URL = "https://oracle.github.io/vagrant-projects/boxes"
 BOX_NAME = "oraclelinux/7"
 
 # define hostname
@@ -52,7 +52,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "../../visualiser", destination: "/okit/visualiser"
   config.vm.provision "file", source: "../oci", destination: "/okit/config"
   config.vm.provision "shell", inline: "ln -s /okit/config /root/.oci", privileged: true
-  config.vm.provision "shell", inline: "chown -R root:root /root/.oci", privileged: true
+  config.vm.provision "shell", inline: "chown -R root:root /okit/config", privileged: true
   config.vm.provision "shell", inline: "chmod 666 /root/.oci/*.pem", privileged: true
   config.vm.provision "shell", path: "configure_software.sh", privileged: true
   config.vm.provision "file", source: "nginx.conf", destination: "/tmp/nginx.conf"

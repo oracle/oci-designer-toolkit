@@ -165,122 +165,8 @@ class OkitSettings {
         $(jqId('modal_dialog_title')).text('Preferences');
         $(jqId('modal_dialog_body')).empty();
         $(jqId('modal_dialog_footer')).empty();
-        let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
-            .attr('id', 'preferences_table')
-            .attr('class', 'table okit-table okit-modal-dialog-table');
-        let tbody = table.append('div').attr('class', 'tbody');
-        let tr = tbody.append('div').attr('class', 'tr');
-        // Display Grid
-        tr.append('div').attr('class', 'td').text('');
-        let td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_display_grid')
-            .attr('name', 'is_display_grid')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_display_grid)
-            .on('change', function () {
-                //me.is_display_grid = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_display_grid')
-            .text('Display Grid');
-        // Default route Table
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_default_route_table')
-            .attr('name', 'is_default_route_table')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_default_route_table)
-            .on('change', function () {
-                //me.is_default_route_table = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_default_route_table')
-            .text('Default Route Table');
-        // Default Security List
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_default_security_list')
-            .attr('name', 'is_default_security_list')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_default_security_list)
-            .on('change', function () {
-                //me.is_default_security_list = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_default_security_list')
-            .text('Default Security List');
-        // Timestamp File
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_timestamp_files')
-            .attr('name', 'is_timestamp_files')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_timestamp_files)
-            .on('change', function () {
-                //me.is_timestamp_files = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_timestamp_files')
-            .text('Timestamp File Names');
-        // Auto Expand Optional
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_optional_expanded')
-            .attr('name', 'is_optional_expanded')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_optional_expanded)
-            .on('change', function () {
-                //me.is_optional_expanded = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_optional_expanded')
-            .text('Auto Expanded Advanced');
-        // Generate Variables File
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('');
-        td = tr.append('div').attr('class', 'td');
-        td.append('input')
-            .attr('id', 'is_variables')
-            .attr('name', 'is_variables')
-            .attr('type', 'checkbox')
-            .property('checked', this.is_variables)
-            .on('change', function () {
-                //me.is_optional_expanded = $(this).is(':checked');
-            });
-        td.append('label')
-            .attr('for', 'is_variables')
-            .text('Use Variables in Generate');
-        // Config Profile
-        tr = tbody.append('div').attr('class', 'tr');
-        tr.append('div').attr('class', 'td').text('Default Connection Profile');
-        /*
-        tr.append('div').attr('class', 'td').append('input')
-            .attr('class', 'okit-input')
-            .attr('id', 'profile')
-            .attr('name', 'profile')
-            .attr('type', 'text')
-            .attr('value', this.profile);
-
-         */
-        let profile_select = tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'profile');
-        for (let section of okitOciConfig.sections) {
-            profile_select.append('option')
-                .attr('value', section)
-                .text(section);
-        }
-        $(jqId('profile')).val(this.profile);
+        // Build Body
+        this.buildPanel('modal_dialog_body');
         // Footer
         d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
             .attr('id', 'save_as_button')
@@ -299,6 +185,146 @@ class OkitSettings {
                 $(jqId('modal_dialog_wrapper')).addClass('hidden');
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+    }
+
+    buildPanel(panel_name='', autosave=false) {
+        if (panel_name && panel_name !== '') {
+            $(jqId(panel_name)).empty();
+            let me = this;
+            let table = d3.select(d3Id(panel_name)).append('div').append('div')
+                .attr('id', 'preferences_table')
+                .attr('class', 'table okit-table okit-modal-dialog-table');
+            let tbody = table.append('div').attr('class', 'tbody');
+            let tr = tbody.append('div').attr('class', 'tr');
+            // Display Grid
+            tr.append('div').attr('class', 'td').text('');
+            let td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'is_display_grid')
+                .attr('name', 'is_display_grid')
+                .attr('type', 'checkbox')
+                .property('checked', this.is_display_grid)
+                .on('change', function () {
+                    if (autosave) {
+                        me.is_display_grid = $(this).is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'is_display_grid')
+                .text('Display Grid');
+            // Default route Table
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'is_default_route_table')
+                .attr('name', 'is_default_route_table')
+                .attr('type', 'checkbox')
+                .property('checked', this.is_default_route_table)
+                .on('change', function () {
+                    if (autosave) {
+                        me.is_default_route_table = $(this).is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'is_default_route_table')
+                .text('Default Route Table');
+            // Default Security List
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'is_default_security_list')
+                .attr('name', 'is_default_security_list')
+                .attr('type', 'checkbox')
+                .property('checked', this.is_default_security_list)
+                .on('change', function () {
+                    if (autosave) {
+                        me.is_default_security_list = $(this).is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'is_default_security_list')
+                .text('Default Security List');
+            // Timestamp File
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'is_timestamp_files')
+                .attr('name', 'is_timestamp_files')
+                .attr('type', 'checkbox')
+                .property('checked', this.is_timestamp_files)
+                .on('change', function () {
+                    if (autosave) {
+                        me.is_timestamp_files = $(this).is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'is_timestamp_files')
+                .text('Timestamp File Names');
+            // Auto Expand Optional
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'is_optional_expanded')
+                .attr('name', 'is_optional_expanded')
+                .attr('type', 'checkbox')
+                .property('checked', this.is_optional_expanded)
+                .on('change', function () {
+                    if (autosave) {
+                        me.is_optional_expanded = $(this).is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'is_optional_expanded')
+                .text('Auto Expanded Advanced');
+            // Generate Variables File
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'is_variables')
+                .attr('name', 'is_variables')
+                .attr('type', 'checkbox')
+                .property('checked', this.is_variables)
+                .on('change', function () {
+                    if (autosave) {
+                        me.is_optional_expanded = $(this).is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'is_variables')
+                .text('Use Variables in Generate');
+            /*
+            // Config Profile
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('Default Connection Profile');
+            let profile_select = tr.append('div')
+                .attr('class', 'td')
+                .append('select')
+                .attr('id', 'profile')
+                .on('change', function () {
+                    if (autosave) {
+                        me.profile = $(this).val();
+                        me.save();
+                    }
+                });
+            for (let section of okitOciConfig.sections) {
+                profile_select.append('option')
+                    .attr('value', section)
+                    .text(section);
+            }
+            $(jqId('profile')).val(this.profile);
+            */
+        }
     }
 
 }
@@ -410,6 +436,7 @@ class OkitArtifact {
          */
         let me = this;
         svg.on("click", function() {
+            console.info('Click........');
             me.loadProperties();
             $('.highlight:not(' + jqId(me.id) +')').removeClass('highlight');
             $(jqId(me.id)).toggleClass('highlight');
@@ -1502,7 +1529,7 @@ class OkitJson {
     }
 
     /*
-    ** New Artifact Processing
+    ** Artifact Processing
      */
 
     // Autonomous Database
@@ -1513,6 +1540,26 @@ class OkitJson {
         this.autonomous_databases.push(new AutonomousDatabase(data, this, parent));
         return this.autonomous_databases[this.autonomous_databases.length - 1];
     }
+    getAutonomousDatabases() {
+        return this.autonomous_databases;
+    }
+    getAutonomousDatabase(id='') {
+        for (let artefact of this.getAutonomousDatabases()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteAutonomousDatabase(id) {
+        for (let i = 0; i < this.autonomous_databases.length; i++) {
+            if (this.autonomous_databases[i].id === id) {
+                this.autonomous_databases[i].delete();
+                this.autonomous_databases.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // Block Storage Volume
     newBlockStorageVolume(data, parent=null) {
@@ -1521,6 +1568,26 @@ class OkitJson {
         data.compartment_id = data.parent_id;
         this.block_storage_volumes.push(new BlockStorageVolume(data, this, parent));
         return this.block_storage_volumes[this.block_storage_volumes.length - 1];
+    }
+    getBlockStorageVolumes() {
+        return this.block_storage_volumes;
+    }
+    getBlockStorageVolume(id='') {
+        for (let artefact of this.getBlockStorageVolumes()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteBlockStorageVolume(id) {
+        for (let i = 0; i < this.block_storage_volumes.length; i++) {
+            if (this.block_storage_volumes[i].id === id) {
+                this.block_storage_volumes[i].delete();
+                this.block_storage_volumes.splice(i, 1);
+                break;
+            }
+        }
     }
 
     // Compartment
@@ -1531,12 +1598,52 @@ class OkitJson {
         this['compartments'].push(new Compartment(data, this, parent));
         return this['compartments'][this['compartments'].length - 1];
     }
+    getCompartments() {
+        return this.compartments;
+    }
+    getCompartment(id='') {
+        for (let artefact of this.getCompartments()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteCompartment(id) {
+        for (let i = 0; i < this.compartments.length; i++) {
+            if (this.compartments[i].id === id) {
+                this.compartments[i].delete();
+                this.compartments.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // Database System
     newDatabaseSystem(data, parent=null) {
         console.info('New Database System');
         this['database_systems'].push(new DatabaseSystem(data, this, parent));
         return this['database_systems'][this['database_systems'].length - 1];
+    }
+    getDatabaseSystems() {
+        return this.database_systems;
+    }
+    getDatabaseSystem(id='') {
+        for (let artefact of this.getDatabaseSystems()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteDatabaseSystem(id) {
+        for (let i = 0; i < this.database_systems.length; i++) {
+            if (this.database_systems[i].id === id) {
+                this.database_systems[i].delete();
+                this.database_systems.splice(i, 1);
+                break;
+            }
+        }
     }
 
     // Dynamic Routing Gateway
@@ -1545,12 +1652,52 @@ class OkitJson {
         this['dynamic_routing_gateways'].push(new DynamicRoutingGateway(data, this, parent));
         return this['dynamic_routing_gateways'][this['dynamic_routing_gateways'].length - 1];
     }
+    getDynamicRoutingGateways() {
+        return this.dynamic_routing_gateways;
+    }
+    getDynamicRoutingGateway(id='') {
+        for (let artefact of this.getDynamicRoutingGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteDynamicRoutingGateway(id) {
+        for (let i = 0; i < this.dynamic_routing_gateways.length; i++) {
+            if (this.dynamic_routing_gateways[i].id === id) {
+                this.dynamic_routing_gateways[i].delete();
+                this.dynamic_routing_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // FastConnect
     newFastConnect(data, parent=null) {
         console.info('New FastConnect');
         this['fast_connects'].push(new FastConnect(data, this, parent));
         return this['fast_connects'][this['fast_connects'].length - 1];
+    }
+    getFastConnects() {
+        return this.fast_connects;
+    }
+    getFastConnect(id='') {
+        for (let artefact of this.getFastConnects()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteFastConnect(id) {
+        for (let i = 0; i < this.fast_connects.length; i++) {
+            if (this.fast_connects[i].id === id) {
+                this.fast_connects[i].delete();
+                this.fast_connects.splice(i, 1);
+                break;
+            }
+        }
     }
 
     // File Storage System
@@ -1559,12 +1706,52 @@ class OkitJson {
         this.file_storage_systems.push(new FileStorageSystem(data, this, parent));
         return this.file_storage_systems[this.file_storage_systems.length - 1];
     }
+    getFileStorageSystems() {
+        return this.file_storage_systems;
+    }
+    getFileStorageSystem(id='') {
+        for (let artefact of this.getFileStorageSystems()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteFileStorageSystem(id) {
+        for (let i = 0; i < this.file_storage_systems.length; i++) {
+            if (this.file_storage_systems[i].id === id) {
+                this.file_storage_systems[i].delete();
+                this.file_storage_systems.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // Instance
     newInstance(data, parent=null) {
         console.info('New Instance');
         this.instances.push(new Instance(data, this, parent));
         return this.instances[this.instances.length - 1];
+    }
+    getInstances() {
+        return this.instances;
+    }
+    getInstance(id='') {
+        for (let artefact of this.getInstances()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteInstance(id) {
+        for (let i = 0; i < this.instances.length; i++) {
+            if (this.instances[i].id === id) {
+                this.instances[i].delete();
+                this.instances.splice(i, 1);
+                break;
+            }
+        }
     }
 
     // Internet Gateway
@@ -1582,6 +1769,26 @@ class OkitJson {
         this['internet_gateways'].push(new InternetGateway(data, this, parent));
         return this['internet_gateways'][this['internet_gateways'].length - 1];
     }
+    getInternetGateways() {
+        return this.internet_gateways;
+    }
+    getInternetGateway(id='') {
+        for (let artefact of this.getInternetGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteInternetGateway(id) {
+        for (let i = 0; i < this.internet_gateways.length; i++) {
+            if (this.internet_gateways[i].id === id) {
+                this.internet_gateways[i].delete();
+                this.internet_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // Load Balancer
     newLoadBalancer(data, parent=null) {
@@ -1589,12 +1796,52 @@ class OkitJson {
         this.load_balancers.push(new LoadBalancer(data, this, parent));
         return this.load_balancers[this.load_balancers.length - 1];
     }
+    getloadBalancers() {
+        return this.load_balancers;
+    }
+    getLoadBalancer(id='') {
+        for (let artefact of this.getloadBalancers()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteLoadBalancer(id) {
+        for (let i = 0; i < this.load_balancers.length; i++) {
+            if (this.load_balancers[i].id === id) {
+                this.load_balancers[i].delete();
+                this.load_balancers.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // Local Peering Gateway
     newLocalPeeringGateway(data, parent=null) {
         console.info('New Local Peering Gateway');
         this['local_peering_gateways'].push(new LocalPeeringGateway(data, this, parent));
         return this['local_peering_gateways'][this['local_peering_gateways'].length - 1];
+    }
+    getLocalPeeringGateways() {
+        return this.local_peering_gateways;
+    }
+    getLocalPeeringGateway(id='') {
+        for (let artefact of this.getLocalPeeringGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteLocalPeeringGateway(id) {
+        for (let i = 0; i < this.local_peering_gateways.length; i++) {
+            if (this.local_peering_gateways[i].id === id) {
+                this.local_peering_gateways[i].delete();
+                this.local_peering_gateways.splice(i, 1);
+                break;
+            }
+        }
     }
 
     // NAT Gateway
@@ -1612,12 +1859,52 @@ class OkitJson {
         this['nat_gateways'].push(new NATGateway(data, this, parent));
         return this['nat_gateways'][this['nat_gateways'].length - 1];
     }
+    getNATGateways() {
+        return this.nat_gateways;
+    }
+    getNATGateway(id='') {
+        for (let artefact of this.getNATGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteNATGateway(id) {
+        for (let i = 0; i < this.nat_gateways.length; i++) {
+            if (this.nat_gateways[i].id === id) {
+                this.nat_gateways[i].delete();
+                this.nat_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // Network Security Group
     newNetworkSecurityGroup(data, parent=null) {
         console.info('New Network Security Group');
         this.network_security_groups.push(new NetworkSecurityGroup(data, this, parent));
         return this.network_security_groups[this.network_security_groups.length - 1];
+    }
+    getNetworkSecurityGroups() {
+        return this.network_security_groups;
+    }
+    getNetworkSecurityGroup(id='') {
+        for (let artefact of this.getNetworkSecurityGroups()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteNetworkSecurityGroup(id) {
+        for (let i = 0; i < this.network_security_groups.length; i++) {
+            if (this.network_security_groups[i].id === id) {
+                this.network_security_groups[i].delete();
+                this.network_security_groups.splice(i, 1);
+                break;
+            }
+        }
     }
 
     // Object Storage Bucket
@@ -1628,6 +1915,26 @@ class OkitJson {
         this.object_storage_buckets.push(new ObjectStorageBucket(data, this, parent));
         return this.object_storage_buckets[this.object_storage_buckets.length - 1];
     }
+    getObjectStorageBuckets() {
+        return this.object_storage_buckets;
+    }
+    getObjectStorageBucket(id='') {
+        for (let artefact of this.getObjectStorageBuckets()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteObjectStorageBucket(id) {
+        for (let i = 0; i < this.object_storage_buckets.length; i++) {
+            if (this.object_storage_buckets[i].id === id) {
+                this.object_storage_buckets[i].delete();
+                this.object_storage_buckets.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // Route Table
     newRouteTable(data, parent=null) {
@@ -1635,12 +1942,52 @@ class OkitJson {
         this.route_tables.push(new RouteTable(data, this, parent));
         return this.route_tables[this.route_tables.length - 1];
     }
+    getRouteTables() {
+        return this.route_tables;
+    }
+    getRouteTable(id='') {
+        for (let artefact of this.getRouteTables()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteRouteTable(id) {
+        for (let i = 0; i < this.route_tables.length; i++) {
+            if (this.route_tables[i].id === id) {
+                this.route_tables[i].delete();
+                this.route_tables.splice(i, 1);
+                break;
+            }
+        }
+    }
 
     // Security List
     newSecurityList(data, parent=null) {
         console.info('New Security List');
         this.security_lists.push(new SecurityList(data, this, parent));
         return this.security_lists[this.security_lists.length - 1];
+    }
+    getSecurityLists() {
+        return this.security_lists;
+    }
+    getSecurityList(id='') {
+        for (let artefact of this.getSecurityLists()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteSecurityList(id) {
+        for (let i = 0; i < this.security_lists.length; i++) {
+            if (this.security_lists[i].id === id) {
+                this.security_lists[i].delete();
+                this.security_lists.splice(i, 1);
+                break;
+            }
+        }
     }
 
     // Service Gateway
@@ -1658,305 +2005,17 @@ class OkitJson {
         this['service_gateways'].push(new ServiceGateway(data, this, parent));
         return this['service_gateways'][this['service_gateways'].length - 1];
     }
-
-    // Subnet
-    newSubnet(data, parent=null) {
-        console.info('New Subnet');
-        this['subnets'].push(new Subnet(data, this, parent));
-        return this['subnets'][this['subnets'].length - 1];
+    getServiceGateways() {
+        return this.service_gateways;
     }
-
-    // Virtual Cloud Network
-    newVirtualCloudNetwork(data, parent=null) {
-        console.info('New Virtual Cloud Network');
-        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
-        data.compartment_id = data.parent_id;
-        this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this, parent));
-        return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
-    }
-
-    // Fragment
-    newFragment(data, parent=null) {
-        console.info('New Fragment');
-        return new Fragment(data, this, parent);
-    }
-
-    /*
-    ** Get Artifact Processing
-     */
-
-    // Block Storage Volume
-    getBlockStorageVolume(id='') {
-        for (let artifact of this.block_storage_volumes) {
-            if (artifact.id === id) {
-                return artifact;
+    getServiceGateway(id='') {
+        for (let artefact of this.getServiceGateways()) {
+            if (artefact.id === id) {
+                return artefact;
             }
         }
         return undefined;
     }
-
-    // Compartment
-    getCompartment(id='') {
-        for (let artifact of this.compartments) {
-            if (artifact.id === id) {
-                return artifact;
-            }
-        }
-        return undefined;
-    }
-
-    // Database System
-    getDatabaseSystem(id='') {
-        for (let artifact of this.database_systems) {
-            if (artifact.id === id) {
-                return artifact;
-            }
-        }
-        return undefined;
-    }
-
-    // Instance
-    getInstances() {
-        return this.instances;
-    }
-    getInstance(id='') {
-        for (let artifact of this.getInstances()) {
-            if (artifact.id === id) {
-                return artifact;
-            }
-        }
-        return undefined;
-    }
-
-    getLocalPeeringGateway(id='') {
-        for (let artifact of this.local_peering_gateways) {
-            if (artifact.id === id) {
-                return artifact;
-            }
-        }
-        return undefined;
-    }
-
-    getRouteTable(id='') {
-        for (let artifact of this.route_tables) {
-            if (artifact.id === id) {
-                return artifact;
-            }
-        }
-        return undefined;
-    }
-
-    getSecurityList(id='') {
-        for (let artifact of this.security_lists) {
-            if (artifact.id === id) {
-                return artifact;
-            }
-        }
-        return undefined;
-    }
-
-    getSubnet(id='') {
-        for (let artifact of this.subnets) {
-            if (artifact.id === id) {
-                return artifact;
-            }
-        }
-        return undefined;
-    }
-
-    getVirtualCloudNetwork(id='') {
-        for (let artifact of this.virtual_cloud_networks) {
-            if (artifact.id === id) {
-                return artifact;
-            }
-        }
-        return undefined;
-    }
-
-    getVcn(id='') {
-        return this.getVirtualCloudNetwork(id);
-    }
-
-    /*
-    ** Delete Artifact Processing
-     */
-
-    // Autonomous Database
-    deleteAutonomousDatabase(id) {
-        for (let i = 0; i < this.autonomous_databases.length; i++) {
-            if (this.autonomous_databases[i].id === id) {
-                this.autonomous_databases[i].delete();
-                this.autonomous_databases.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Block Storage Volume
-    deleteBlockStorageVolume(id) {
-        for (let i = 0; i < this.block_storage_volumes.length; i++) {
-            if (this.block_storage_volumes[i].id === id) {
-                this.block_storage_volumes[i].delete();
-                this.block_storage_volumes.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Compartment
-    deleteCompartment(id) {
-        for (let i = 0; i < this.compartments.length; i++) {
-            if (this.compartments[i].id === id) {
-                this.compartments[i].delete();
-                this.compartments.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Database Systems
-    deleteDatabaseSystem(id) {
-        for (let i = 0; i < this.database_systems.length; i++) {
-            if (this.database_systems[i].id === id) {
-                this.database_systems[i].delete();
-                this.database_systems.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Dynamic Routing Gateway
-    deleteDynamicRoutingGateway(id) {
-        for (let i = 0; i < this.dynamic_routing_gateways.length; i++) {
-            if (this.dynamic_routing_gateways[i].id === id) {
-                this.dynamic_routing_gateways[i].delete();
-                this.dynamic_routing_gateways.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    deleteFastConnect(id) {
-        for (let i = 0; i < this.fast_connects.length; i++) {
-            if (this.fast_connects[i].id === id) {
-                this.fast_connects[i].delete();
-                this.fast_connects.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // File Storage System
-    deleteFileStorageSystem(id) {
-        for (let i = 0; i < this.file_storage_systems.length; i++) {
-            if (this.file_storage_systems[i].id === id) {
-                this.file_storage_systems[i].delete();
-                this.file_storage_systems.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Instance
-    deleteInstance(id) {
-        for (let i = 0; i < this.instances.length; i++) {
-            if (this.instances[i].id === id) {
-                this.instances[i].delete();
-                this.instances.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Internet Gateway
-    deleteInternetGateway(id) {
-        for (let i = 0; i < this.internet_gateways.length; i++) {
-            if (this.internet_gateways[i].id === id) {
-                this.internet_gateways[i].delete();
-                this.internet_gateways.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Load Balancer
-    deleteLoadBalancer(id) {
-        for (let i = 0; i < this.load_balancers.length; i++) {
-            if (this.load_balancers[i].id === id) {
-                this.load_balancers[i].delete();
-                this.load_balancers.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Local Peering Gateway
-    deleteLocalPeeringGateway(id) {
-        for (let i = 0; i < this.local_peering_gateways.length; i++) {
-            if (this.local_peering_gateways[i].id === id) {
-                this.local_peering_gateways[i].delete();
-                this.local_peering_gateways.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // NAT Gateway
-    deleteNATGateway(id) {
-        for (let i = 0; i < this.nat_gateways.length; i++) {
-            if (this.nat_gateways[i].id === id) {
-                this.nat_gateways[i].delete();
-                this.nat_gateways.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Network Security Group
-    deleteNetworkSecurityGroup(id) {
-        for (let i = 0; i < this.network_security_groups.length; i++) {
-            if (this.network_security_groups[i].id === id) {
-                this.network_security_groups[i].delete();
-                this.network_security_groups.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Object Storage Bucket
-    deleteObjectStorageBucket(id) {
-        for (let i = 0; i < this.object_storage_buckets.length; i++) {
-            if (this.object_storage_buckets[i].id === id) {
-                this.object_storage_buckets[i].delete();
-                this.object_storage_buckets.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Route Table
-    deleteRouteTable(id) {
-        for (let i = 0; i < this.route_tables.length; i++) {
-            if (this.route_tables[i].id === id) {
-                this.route_tables[i].delete();
-                this.route_tables.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Security List
-    deleteSecurityList(id) {
-        for (let i = 0; i < this.security_lists.length; i++) {
-            if (this.security_lists[i].id === id) {
-                this.security_lists[i].delete();
-                this.security_lists.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    // Service Gateway
     deleteServiceGateway(id) {
         for (let i = 0; i < this.service_gateways.length; i++) {
             if (this.service_gateways[i].id === id) {
@@ -1968,6 +2027,22 @@ class OkitJson {
     }
 
     // Subnet
+    newSubnet(data, parent=null) {
+        console.info('New Subnet');
+        this['subnets'].push(new Subnet(data, this, parent));
+        return this['subnets'][this['subnets'].length - 1];
+    }
+    getSubnets() {
+        return this.subnets;
+    }
+    getSubnet(id='') {
+        for (let artefact of this.getSubnets()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteSubnet(id) {
         for (let i = 0; i < this.subnets.length; i++) {
             if (this.subnets[i].id === id) {
@@ -1979,6 +2054,24 @@ class OkitJson {
     }
 
     // Virtual Cloud Network
+    newVirtualCloudNetwork(data, parent=null) {
+        console.info('New Virtual Cloud Network');
+        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
+        data.compartment_id = data.parent_id;
+        this['virtual_cloud_networks'].push(new VirtualCloudNetwork(data, this, parent));
+        return this['virtual_cloud_networks'][this['virtual_cloud_networks'].length - 1];
+    }
+    getVirtualCloudNetworks() {
+        return this.virtual_cloud_networks;
+    }
+    getVirtualCloudNetwork(id='') {
+        for (let artefact of this.virtual_cloud_networks) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteVirtualCloudNetwork(id) {
         for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
             if (this.virtual_cloud_networks[i].id === id) {
@@ -1987,6 +2080,16 @@ class OkitJson {
                 break;
             }
         }
+    }
+
+    // Fragment
+    newFragment(data, parent=null) {
+        console.info('New Fragment');
+        return new Fragment(data, this, parent);
+    }
+
+    getVcn(id='') {
+        return this.getVirtualCloudNetwork(id);
     }
 
     /*

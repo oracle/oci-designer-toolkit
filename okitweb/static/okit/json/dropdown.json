@@ -775,9 +775,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Oracle-Autonomous-Linux-7.8-2020.06-0",
+      "display_name": "Oracle-Autonomous-Linux-7.8-2020.06-1",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa5ys76p4fbcejyktuburxcm3nuboupzwcukyq6d5gzbib6rj4ztqa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaqefh4ndpmt2wo6eob3o27i3wulxoaydu64knhydqnxazs7w7r73a",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -793,7 +793,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "Oracle Autonomous Linux 7.8",
-      "time_created": "2020-06-08T18:01:12.435000+00:00"
+      "time_created": "2020-07-02T01:14:37.272000+00:00"
     },
     {
       "agent_features": null,
@@ -801,9 +801,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Oracle-Linux-6.10-2020.05.26-0",
+      "display_name": "Oracle-Linux-6.10-2020.06.30-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaadjkjzrynqvqpuramvqru7uae7sksqssh3ta7b43c7qbjzpuue2cq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaf6zv3ak5yz42tjs4manw45gi4d26qbjfk74wgcoysmfqe2h5jidq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -819,7 +819,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "Oracle Linux 6.10",
-      "time_created": "2020-05-28T21:32:50.936000+00:00"
+      "time_created": "2020-06-30T22:02:46.425000+00:00"
     },
     {
       "agent_features": null,
@@ -853,9 +853,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Oracle-Linux-7.8-Gen2-GPU-2020.06.09-0",
+      "display_name": "Oracle-Linux-7.8-Gen2-GPU-2020.06.30-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaqmhzqofqenqptx4cx35742fg3fvsy3j7rybk3haobwqku7aiu5aq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaawsooxhtnmok32wbqdvw56b2kyci3wjso42cmgn6bugqdmfvryuq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -871,7 +871,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "Oracle Linux 7.8",
-      "time_created": "2020-06-05T23:00:58.942000+00:00"
+      "time_created": "2020-06-30T22:02:42.672000+00:00"
     },
     {
       "agent_features": null,
@@ -1226,8 +1226,8 @@
       "ocpu_options": null,
       "ocpus": 1,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.1",
-      "sort_key": "VM.Standard.E2.1"
+      "shape": "VM.Standard.B1.1",
+      "sort_key": "VM.Standard.B1.1"
     },
     {
       "gpu_description": null,
@@ -1259,8 +1259,8 @@
       },
       "ocpus": 1,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
-      "shape": "VM.Standard.E2.2",
-      "sort_key": "VM.Standard.E2.2"
+      "shape": "VM.Standard.B1.16",
+      "sort_key": "VM.Standard.B1.16"
     },
     {
       "gpu_description": null,
@@ -1277,8 +1277,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.4",
-      "sort_key": "VM.Standard.E2.4"
+      "shape": "VM.Standard.B1.2",
+      "sort_key": "VM.Standard.B1.2"
     },
     {
       "gpu_description": null,
@@ -1295,8 +1295,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.8",
-      "sort_key": "VM.Standard.E2.8"
+      "shape": "VM.Standard.B1.4",
+      "sort_key": "VM.Standard.B1.4"
     },
     {
       "gpu_description": null,
@@ -1313,8 +1313,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E3.Flex",
-      "sort_key": "VM.Standard.E3.Flex"
+      "shape": "VM.Standard.B1.8",
+      "sort_key": "VM.Standard.B1.8"
     },
     {
       "gpu_description": null,
@@ -1331,8 +1331,8 @@
       "ocpu_options": null,
       "ocpus": 1,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.1",
-      "sort_key": "VM.Standard1.1"
+      "shape": "VM.Standard.E2.1",
+      "sort_key": "VM.Standard.E2.1"
     },
     {
       "gpu_description": null,
@@ -1349,8 +1349,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.16",
-      "sort_key": "VM.Standard1.16"
+      "shape": "VM.Standard.E2.2",
+      "sort_key": "VM.Standard.E2.2"
     },
     {
       "gpu_description": null,
@@ -1367,8 +1367,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.2",
-      "sort_key": "VM.Standard1.2"
+      "shape": "VM.Standard.E2.4",
+      "sort_key": "VM.Standard.E2.4"
     },
     {
       "gpu_description": null,
@@ -1385,8 +1385,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.4",
-      "sort_key": "VM.Standard1.4"
+      "shape": "VM.Standard.E2.8",
+      "sort_key": "VM.Standard.E2.8"
     },
     {
       "gpu_description": null,
@@ -1403,8 +1403,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.8",
-      "sort_key": "VM.Standard1.8"
+      "shape": "VM.Standard.E3.Flex",
+      "sort_key": "VM.Standard.E3.Flex"
     },
     {
       "gpu_description": null,
@@ -1421,8 +1421,8 @@
       "ocpu_options": null,
       "ocpus": 1,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.1",
-      "sort_key": "VM.Standard2.1"
+      "shape": "VM.Standard1.1",
+      "sort_key": "VM.Standard1.1"
     },
     {
       "gpu_description": null,
@@ -1439,8 +1439,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.16",
-      "sort_key": "VM.Standard2.16"
+      "shape": "VM.Standard1.16",
+      "sort_key": "VM.Standard1.16"
     },
     {
       "gpu_description": null,
@@ -1457,8 +1457,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.2",
-      "sort_key": "VM.Standard2.2"
+      "shape": "VM.Standard1.2",
+      "sort_key": "VM.Standard1.2"
     },
     {
       "gpu_description": null,
@@ -1475,8 +1475,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.24",
-      "sort_key": "VM.Standard2.24"
+      "shape": "VM.Standard1.4",
+      "sort_key": "VM.Standard1.4"
     },
     {
       "gpu_description": null,
@@ -1493,8 +1493,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.4",
-      "sort_key": "VM.Standard2.4"
+      "shape": "VM.Standard1.8",
+      "sort_key": "VM.Standard1.8"
     },
     {
       "gpu_description": null,
@@ -1511,6 +1511,26 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+      "shape": "VM.Standard2.1",
+      "sort_key": "VM.Standard2.1"
+    },
+    {
+      "shape": "VM.Standard2.16",
+      "sort_key": "VM.Standard2.16"
+    },
+    {
+      "shape": "VM.Standard2.2",
+      "sort_key": "VM.Standard2.2"
+    },
+    {
+      "shape": "VM.Standard2.24",
+      "sort_key": "VM.Standard2.24"
+    },
+    {
+      "shape": "VM.Standard2.4",
+      "sort_key": "VM.Standard2.4"
+    },
+    {
       "shape": "VM.Standard2.8",
       "sort_key": "VM.Standard2.8"
     }

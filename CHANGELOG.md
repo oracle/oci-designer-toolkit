@@ -1,6 +1,19 @@
 # Release Notes
 
 
+## Version 0.8.0 
+**Release Date**: 15th July 2020
+### Features
+1. Add Explorer / Tree View for the Artefacts in the diagram (OKIT-90).
+2. When Creating Route Table / Security List for VCN modify the Default versions for the first Route Table / Security List defined.
+
+### Bug Fixes
+1. Resolve issues where by occasionally the Open/Load function would not reopen a file.
+2. Modify Vagrant Box Url to the new location. (Issue: #37)
+3. Clean Hub & Spoke Template
+4. Resolve pem key privilege issues.
+
+
 ## Version 0.7.0 
 **Release Date**: 24th June 2020
 ### Features
