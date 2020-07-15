@@ -6,6 +6,9 @@
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/okit_designer_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
     <script type="text/javascript">
         let palette_svg = {}
@@ -31,7 +34,7 @@
                     }
                 });
             {% endfor %}
-            {% endfor %}
+        {% endfor %}
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
@@ -40,17 +43,21 @@
     {% for oci_asset_js in oci_assets_js %}
         <script type="text/javascript" src="{{ url_for('static', filename='okit/js/oci_artefacts/' + oci_asset_js) }}"></script>
     {% endfor %}
+    {% for view_js in artefact_view_js_files %}
+        <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/artefact/' + view_js) }}"></script>
+    {% endfor %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_fragments.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_ready.js') }}"></script>
 {% endblock %}
 
 {% block headcss %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_designer.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
 {% endblock %}
 
 {% block navmenublock %}
     <ul id="navigation_menu_list" class="okit-navigation-list">
-        <ul class="okit-navigation-sub-list">
+        <!--ul class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -60,7 +67,7 @@
                 </div>
             </li>
             <li><a id="okit_preferences" class="parent-item" href="javascript:void(0)" onclick="handlePreferences()">Preferences</a></li>
-        </ul>
+        </ul-->
         <ul class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -110,7 +117,7 @@
                 {% endif %}
             {% endfor %}
         </ul>
-        <!--ul class="okit-navigation-sub-list">
+        <ul class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -119,30 +126,10 @@
                     </span>
                 </div>
             </li>
-            <li><a id="view-designer-menu-item" class="parent-item" href="javascript:void(0)">Designer</a></li>
+            <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)">Compartment</a></li>
             <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)">Network</a></li>
-            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li>
-        </ul-->
-        <!--ul class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Query Menu"></div>
-                        <span>Query</span>
-                    </span>
-                </div>
-            </li>
-        </ul-->
-        <!--ul class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Generate Menu"></div>
-                        <span>Generate</span>
-                    </span>
-                </div>
-            </li>
-        </ul-->
+            <!--li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li-->
+        </ul>
         <ul class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -214,6 +201,8 @@
                 </div>
             </details>
         </div>
+        <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
+        <div id="explorer_panel" class="okit-explorer-view hidden"></div>
     </div>
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
@@ -257,7 +246,7 @@
         <div id="cost_estimate_panel" class="okit-cost-estimate hidden"></div>
         <!--div id="settings_panel" class="okit-settings-sheet hidden"></div-->
     </div>
-    <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json"></div>
+    <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json" onclick="this.value = null"></div>
     <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
 {% endblock %}
 

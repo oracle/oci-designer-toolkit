@@ -28,16 +28,62 @@ $(document).ready(function() {
      */
     console.info('Adding Designer Handlers');
 
+    // Left Bar & Panels
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_palette_button')
         .attr('class', 'okit-bar-panel-displayed okit-pointer-cursor')
         .on('click', function () {
+            /*
             $(jqId('designer_left_column')).toggleClass('okit-slide-hide-left');
             $(this).toggleClass('okit-bar-panel-displayed');
             setTimeout(redrawSVGCanvas, 260);
+            */
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideLeftPanelsOffScreen();
+            if (!open) {
+                $('#icons_palette').removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+            }
+            checkLeftColumn();
         })
         .text('Palette');
 
+    d3.select(d3Id('console_left_bar')).append('label')
+        .attr('id', 'toggle_explorer_button')
+        .attr('class', 'okit-pointer-cursor')
+        .on('click', function () {
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideLeftPanelsOffScreen();
+            if (!open) {
+                $('#explorer_panel').removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+                let okit_tree = new OkitJsonTreeView(okitJson, 'explorer_panel');
+                okit_tree.draw();
+            } else {
+                $('#explorer_panel').empty();
+            }
+            checkLeftColumn();
+        })
+        .text('Explorer');
+
+    d3.select(d3Id('console_left_bar')).append('label')
+        .attr('id', 'toggle_preferences_button')
+        .attr('class', 'okit-pointer-cursor')
+        .on('click', function () {
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideLeftPanelsOffScreen();
+            if (!open) {
+                $('#preferences_panel').removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+                okitSettings.buildPanel('preferences_panel', true);
+            } else {
+                $('#preferences_panel').empty();
+            }
+            checkLeftColumn();
+        })
+        .text('Preferences');
+
+    // Right Bar & Panels
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_properties_button')
         .attr('class', 'okit-pointer-cursor')

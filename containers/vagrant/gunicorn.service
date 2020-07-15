@@ -9,8 +9,8 @@ After=network.target
 [Service]
 Type=simple
 # the specific user that our service will run as
-User=vagrant
-Group=vagrant
+User=root
+Group=root
 Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
 Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
 RuntimeDirectory=gunicorn

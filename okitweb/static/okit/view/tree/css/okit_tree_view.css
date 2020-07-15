@@ -1,0 +1,152 @@
+/*
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+rect.okit-explorer-view-highlight {
+    fill: #336600;
+}
+
+.okit-explorer-view {
+    font-size: small;
+    overflow: scroll;
+    width: 100%;
+    height: 100%;
+    white-space: nowrap;
+}
+
+.okit-explorer-view ul {
+    list-style: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.okit-explorer-view li {
+    padding-left: 0.5em;
+    margin-top: 2px;
+}
+
+.okit-explorer-view li > div {
+    display: inline-block;
+    margin-left: 0;
+    padding-left: 0;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-position-x: 0.75em;
+    white-space: nowrap;
+}
+
+.okit-explorer-view-none-specific li > div::before {
+    content: "-";
+    color: #336600;
+    display: inline-block;
+}
+
+.okit-explorer-view li > div.tree_closed::before {
+    content: "+";
+    color: #336600;
+    display: inline-block;
+}
+
+.okit-explorer-view li > div > label {
+    clear: both;
+    margin-left: 2em;
+    text-wrap: none;
+    white-space: nowrap;
+}
+
+.autonomous-database-tree-view > div {
+    background-image: url("/static/okit/palette/database/Autonomous_Database.svg");
+}
+
+.block-storage-tree-view > div {
+    background-image: url("/static/okit/palette/storage/Block_Storage_Volume.svg");
+}
+
+.compartment-tree-view > div {
+    background-image: url("/static/okit/palette/containers/Compartment.svg");
+}
+
+.compartment-tree-view > div::before {
+    content: "-";
+    color: #336600;
+    display: inline-block;
+}
+
+.database-system-tree-view > div {
+    background-image: url("/static/okit/palette/database/Database_System.svg");
+}
+
+.drg-tree-view > div {
+    background-image: url("/static/okit/palette/gateways/Dynamic_Routing_Gateway.svg");
+}
+
+.fast-connect-tree-view > div {
+    background-image: url("/static/okit/palette/networking/Fast_Connect.svg");
+}
+
+.file-storage-tree-view > div {
+    background-image: url("/static/okit/palette/storage/File_Storage_System.svg");
+}
+
+.instance-tree-view > div {
+    background-image: url("/static/okit/palette/compute/Instance.svg");
+}
+
+.internet-gateway-tree-view > div {
+    background-image: url("/static/okit/palette/gateways/Internet_Gateway.svg");
+}
+
+.loadbalancer-tree-view > div {
+    background-image: url("/static/okit/palette/networking/Load_Balancer.svg");
+}
+
+.lpg-tree-view > div {
+    background-image: url("/static/okit/palette/gateways/Local_Peering_Gateway.svg");
+}
+
+.nat-gateway-tree-view > div {
+    background-image: url("/static/okit/palette/gateways/NAT_Gateway.svg");
+}
+
+.network-security-group-tree-view > div {
+    background-image: url("/static/okit/palette/networking/Network_Security_Group.svg");
+}
+
+.object-storage-tree-view > div {
+    background-image: url("/static/okit/palette/storage/Object_Storage_Bucket.svg");
+}
+
+.route-table-tree-view > div {
+    background-image: url("/static/okit/palette/networking/Route_Table.svg");
+}
+
+.security-list-tree-view > div {
+    background-image: url("/static/okit/palette/networking/Security_List.svg");
+}
+
+.service-gateway-tree-view > div {
+    background-image: url("/static/okit/palette/gateways/Service_Gateway.svg");
+}
+
+.subnet-tree-view > div {
+    background-image: url("/static/okit/palette/networking/Subnet.svg");
+}
+
+.subnet-tree-view > div::before {
+    content: "-";
+    color: #336600;
+    display: inline-block;
+}
+
+.vcn-tree-view > div {
+    background-image: url("/static/okit/palette/networking/Virtual_Cloud_Network.svg");
+}
+
+.vcn-tree-view > div::before {
+    content: "-";
+    color: #336600;
+    display: inline-block;
+}
+
