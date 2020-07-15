@@ -6,9 +6,10 @@
 ### Features
 1. Add Explorer / Tree View for the Artefacts in the diagram (OKIT-90).
 2. When Creating Route Table / Security List for VCN modify the Default versions for the first Route Table / Security List defined.
+3. HA Web Application Reference Architecture Template.
 
 ### Bug Fixes
-1. Resolve issues where by occasionally the Open/Load function would not reopen a file.
+1. Resolve issues where, occasionally, the Open/Load function would not reopen a file.
 2. Modify Vagrant Box Url to the new location. (Issue: #37)
 3. Clean Hub & Spoke Template
 4. Resolve pem key privilege issues.
