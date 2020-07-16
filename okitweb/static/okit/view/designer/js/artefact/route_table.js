@@ -12,7 +12,7 @@ class RouteTableView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.vcn_id;}
+    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
 
     getParent() {
         return this.getRouteTable(this.getParentId());

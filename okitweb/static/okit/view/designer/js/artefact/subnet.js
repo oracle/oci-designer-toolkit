@@ -14,12 +14,12 @@ class SubnetView extends OkitContainerDesignerArtefactView {
 
     get parent_id() {return this.artefact.vcn_id;}
     get parent_key() {return 'subnet_id';}
-    get minimum_dimension() {return {width: this.subnet_width, height: this.subnet_height};}
+    get minimum_dimensions() {return {width: this.subnet_width, height: this.subnet_height};}
     get subnet_width() {return 400;}
     get subnet_height() {return 150;}
 
     getParent() {
-        return this.getSubnet(this.getParentId());
+        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
     }
 
     getParentId() {
@@ -30,18 +30,18 @@ class SubnetView extends OkitContainerDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        this.parent_id = this.vcn_id;
-        let id = this.id;
-        console.group('Drawing ' + Subnet.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.group(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         let me = this;
         let svg = super.draw();
         let fill = d3.select(d3Id(this.id)).attr('fill');
         svg.on("mouseover", function () {
-            d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', svg_highlight_colour);
+            //d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', svg_highlight_colour);
+            $(jqId(me.id + '-vnic')).addClass('highlight-vnic');
             d3.event.stopPropagation();
         });
         svg.on("mouseout", function () {
-            d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', fill);
+            //d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', fill);
+            $(jqId(me.id + '-vnic')).removeClass('highlight-vnic');
             d3.event.stopPropagation();
         });
         this.drawAttachments();
@@ -49,26 +49,22 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     drawAttachments() {
-        console.info('Drawing ' + Subnet.getArtifactReference() + ' : ' + this.id + ' Attachments');
+        console.group(`Drawing ${this.getArtifactReference()} : ${this.display_name} Attachments (${this.artefact_id})`);
         let attachment_count = 0;
         // Draw Route Table
-        if (this.route_table_id !== '') {
-            let attached_artefact = new RouteTable(this.getOkitJson().getRouteTable(this.route_table_id), this.getOkitJson(), this);
-            let parent_id = attached_artefact['parent_id'];
-            attached_artefact['parent_id'] = this.id;
-            console.info('Drawing ' + this.getArtifactReference() + ' Route Table : ' + attached_artefact.display_name);
-            attached_artefact.draw();
-            attached_artefact['parent_id'] = parent_id;
+        if (this.artefact.route_table_id !== '') {
+            let attachment = new RouteTableView(this.getJsonView().getOkitJson().getRouteTable(this.route_table_id), this.getJsonView());
+            attachment.attached_id = this.id;
+            console.info(`Drawing ${this.getArtifactReference()} Route Table : ${attachment.display_name}`);
+            attachment.draw();
             attachment_count += 1;
         }
         // Security Lists
-        for (let security_list_id of this.security_list_ids) {
-            let attached_artefact = new SecurityList(this.getOkitJson().getSecurityList(security_list_id), this.getOkitJson(), this);
-            let parent_id = attached_artefact['parent_id'];
-            attached_artefact['parent_id'] = this.id;
-            console.info('Drawing ' + this.getArtifactReference() + ' Security List : ' + attached_artefact.display_name);
-            attached_artefact.draw();
-            attached_artefact['parent_id'] = parent_id;
+        for (let security_list_id of this.artefact.security_list_ids) {
+            let attachment = new SecurityListView(this.getOkitJson().getSecurityList(security_list_id), this);
+            attachment.attached_id = this.id;
+            console.info(`Drawing ${this.getArtifactReference()} Security : ${attachment.display_name}`);
+            attachment.draw();
             attachment_count += 1;
         }
     }
@@ -105,19 +101,18 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     ** Property Sheet Load function
      */
     loadProperties() {
-        let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/subnet.html", () => {
             // Load Referenced Ids
             let route_table_select = $(jqId('route_table_id'));
             route_table_select.append($('<option>').attr('value', '').text(''));
-            for (let route_table of okitJson.route_tables) {
+            for (let route_table of me.artefact.getOkitJson().route_tables) {
                 if (me.vcn_id === route_table.vcn_id) {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
                 }
             }
             let security_lists_select = $(jqId('security_list_ids'));
-            for (let security_list of okitJson.security_lists) {
+            for (let security_list of me.artefact.getOkitJson().security_lists) {
                 if (me.vcn_id === security_list.vcn_id) {
                     security_lists_select.append($('<option>').attr('value', security_list.id).text(security_list.display_name));
                 }

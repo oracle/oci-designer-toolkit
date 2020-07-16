@@ -144,7 +144,17 @@ class OkitJsonView {
         this.autonomous_databases.push(database ? new AutonomousDatabaseView(database, this) : new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase(), this));
         return this.autonomous_databases[this.autonomous_databases.length - 1];
     }
-    getAutonomousDatabase() {}
+    getAutonomousDatabases() {
+        return this.autonomous_databases;
+    }
+    getAutonomousDatabase(id='') {
+        for (let artefact of this.getAutonomousDatabases()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteAutonomousDatabase() {
         for (let i = 0; i < this.autonomous_databases.length; i++) {
             if (this.autonomous_databases[i].artefact_id === id) {
@@ -161,7 +171,17 @@ class OkitJsonView {
         this.block_storage_volumes.push(volume ? new BlockStorageVolumeView(volume, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
         return this.block_storage_volumes[this.block_storage_volumes.length - 1];
     }
-    getBlockStorageVolume() {}
+    getBlockStorageVolumes() {
+        return this.block_storage_volumes;
+    }
+    getBlockStorageVolume(id='') {
+        for (let artefact of this.getBlockStorageVolumes()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteBlockStorageVolume() {
         for (let i = 0; i < this.block_storage_volumes.length; i++) {
             if (this.block_storage_volumes[i].artefact_id === id) {
@@ -180,7 +200,7 @@ class OkitJsonView {
         let view_artefact = this.newCompartment();
         view_artefact.getArtefact().compartment_id = target.type === Compartment.getArtifactReference() ? target.id : target.compartment_id;
         console.info('View Artefact');
-        console.log(view_artefact)
+        console.info(view_artefact)
         return view_artefact;
     }
     newCompartment(compartment) {
@@ -210,6 +230,7 @@ class OkitJsonView {
 
     // Container
     newContainer() {}
+    getContainers() {}
     getContainer() {}
     deleteContainer() {}
 
@@ -218,7 +239,17 @@ class OkitJsonView {
         this.database_systems.push(database ? new DatabaseSystemView(database, this) : new DatabaseSystemView(this.okitjson.newDatabaseSystem(), this));
         return this.database_systems[this.database_systems.length - 1];
     }
-    getDatabaseSystem() {}
+    getDatabaseSystems() {
+        return this.database_systems;
+    }
+    getDatabaseSystem(id='') {
+        for (let artefact of this.getDatabaseSystems()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteDatabaseSystem() {
         for (let i = 0; i < this.database_systems.length; i++) {
             if (this.database_systems[i].artefact_id === id) {
@@ -235,7 +266,17 @@ class OkitJsonView {
         this.dynamic_routing_gateways.push(gateway ? new DynamicRoutingGatewayView(gateway, this) : new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway(), this));
         return this.dynamic_routing_gateways[this.dynamic_routing_gateways.length - 1];
     }
-    getDynamicRoutingGateway() {}
+    getDynamicRoutingGateways() {
+        return this.dynamic_routing_gateways;
+    }
+    getDynamicRoutingGateway(id='') {
+        for (let artefact of this.getDynamicRoutingGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteDynamicRoutingGateway() {
         for (let i = 0; i < this.dynamic_routing_gateways.length; i++) {
             if (this.dynamic_routing_gateways[i].artefact_id === id) {
@@ -252,7 +293,17 @@ class OkitJsonView {
         this.fast_connects.push(connect ? new FastConnectView(connect, this) : new FastConnectView(this.okitjson.newFastConnect(), this));
         return this.fast_connects[this.fast_connects.length - 1];
     }
-    getFastConnect() {}
+    getFastConnects() {
+        return this.fast_connects;
+    }
+    getFastConnect(id='') {
+        for (let artefact of this.getFastConnects()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteFastConnect() {
         for (let i = 0; i < this.fast_connects.length; i++) {
             if (this.fast_connects[i].artefact_id === id) {
@@ -269,7 +320,17 @@ class OkitJsonView {
         this.file_storage_systems.push(storage ? new FileStorageSystemView(storage, this) : new FileStorageSystemView(this.okitjson.newFileStorageSystem(), this));
         return this.file_storage_systems[this.file_storage_systems.length - 1];
     }
-    getFileStorageSystem() {}
+    getFileStorageSystems() {
+        return this.file_storage_systems;
+    }
+    getFileStorageSystem(id='') {
+        for (let artefact of this.getFileStorageSystems()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteFileStorageSystem() {
         for (let i = 0; i < this.file_storage_systems.length; i++) {
             if (this.file_storage_systems[i].artefact_id === id) {
@@ -286,7 +347,17 @@ class OkitJsonView {
         this.instances.push(instance ? new InstanceView(instance, this) : new InstanceView(this.okitjson.newInstance(), this));
         return this.instances[this.instances.length - 1];
     }
-    getInstance() {}
+    getInstances() {
+        return this.instances;
+    }
+    getInstance(id='') {
+        for (let artefact of this.getInstances()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteInstance() {
         for (let i = 0; i < this.instances.length; i++) {
             if (this.instances[i].artefact_id === id) {
@@ -307,7 +378,17 @@ class OkitJsonView {
         this.internet_gateways.push(ig);
         return this.internet_gateways[this.internet_gateways.length - 1];
     }
-    getInternetGateway() {}
+    getInternetGateways() {
+        return this.internet_gateways;
+    }
+    getInternetGateway(id='') {
+        for (let artefact of this.getInternetGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteInternetGateway() {
         for (let i = 0; i < this.internet_gateways.length; i++) {
             if (this.internet_gateways[i].artefact_id === id) {
@@ -324,7 +405,17 @@ class OkitJsonView {
         this.load_balancers.push(loadbalancer ? new LoadBalancerView(loadbalancer, this) : new LoadBalancerView(this.okitjson.newLoadBalancer(), this));
         return this.load_balancers[this.load_balancers.length - 1];
     }
-    getLoadBalancer() {}
+    getloadBalancers() {
+        return this.load_balancers;
+    }
+    getLoadBalancer(id='') {
+        for (let artefact of this.getloadBalancers()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteLoadBalancer() {
         for (let i = 0; i < this.load_balancers.length; i++) {
             if (this.load_balancers[i].artefact_id === id) {
@@ -341,7 +432,17 @@ class OkitJsonView {
         this.local_peering_gateways.push(gateway ? new LocalPeeringGatewayView(gateway, this) : new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway(), this));
         return this.local_peering_gateways[this.local_peering_gateways.length - 1];
     }
-    getLocalPeeringGateway() {}
+    getLocalPeeringGateways() {
+        return this.local_peering_gateways;
+    }
+    getLocalPeeringGateway(id='') {
+        for (let artefact of this.getLocalPeeringGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteLocalPeeringGateway() {
         for (let i = 0; i < this.local_peering_gateways.length; i++) {
             if (this.local_peering_gateways[i].artefact_id === id) {
@@ -362,7 +463,17 @@ class OkitJsonView {
         this.nat_gateways.push(ng);
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
-    getNATGateway() {}
+    getNATGateways() {
+        return this.nat_gateways;
+    }
+    getNATGateway(id='') {
+        for (let artefact of this.getNATGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteNATGateway() {
         for (let i = 0; i < this.nat_gateways.length; i++) {
             if (this.nat_gateways[i].artefact_id === id) {
@@ -379,7 +490,17 @@ class OkitJsonView {
         this.network_security_groups.push(security ? new NetworkSecurityGroupView(security, this) : new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup(), this));
         return this.network_security_groups[this.network_security_groups.length - 1];
     }
-    getNetworkSecurityGroup() {}
+    getNetworkSecurityGroups() {
+        return this.network_security_groups;
+    }
+    getNetworkSecurityGroup(id='') {
+        for (let artefact of this.getNetworkSecurityGroups()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteNetworkSecurityGroup() {
         for (let i = 0; i < this.network_security_groups.length; i++) {
             if (this.network_security_groups[i].artefact_id === id) {
@@ -396,7 +517,17 @@ class OkitJsonView {
         this.object_storage_buckets.push(storage ? new ObjectStorageBucketView(storage, this) : new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket(), this));
         return this.object_storage_buckets[this.object_storage_buckets.length - 1];
     }
-    getObjectStorageBucket() {}
+    getObjectStorageBuckets() {
+        return this.object_storage_buckets;
+    }
+    getObjectStorageBucket(id='') {
+        for (let artefact of this.getObjectStorageBuckets()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteObjectStorageBucket() {
         for (let i = 0; i < this.object_storage_buckets.length; i++) {
             if (this.object_storage_buckets[i].artefact_id === id) {
@@ -413,7 +544,17 @@ class OkitJsonView {
         this.route_tables.push(routetable ? new RouteTableView(routetable, this) : new RouteTableView(this.okitjson.newRouteTable(), this));
         return this.route_tables[this.route_tables.length - 1];
     }
-    getRouteTable() {}
+    getRouteTables() {
+        return this.route_tables;
+    }
+    getRouteTable(id='') {
+        for (let artefact of this.getRouteTables()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteRouteTable() {
         for (let i = 0; i < this.route_tables.length; i++) {
             if (this.route_tables[i].artefact_id === id) {
@@ -430,7 +571,17 @@ class OkitJsonView {
         this.security_lists.push(security ? new SecurityListView(security, this) : new SecurityListView(this.okitjson.newSecurityList(), this));
         return this.security_lists[this.security_lists.length - 1];
     }
-    getSecurityList() {}
+    getSecurityLists() {
+        return this.security_lists;
+    }
+    getSecurityList(id='') {
+        for (let artefact of this.getSecurityLists()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteSecurityList() {
         for (let i = 0; i < this.security_lists.length; i++) {
             if (this.security_lists[i].artefact_id === id) {
@@ -447,7 +598,17 @@ class OkitJsonView {
         this.service_gateways.push(gateway ? new ServiceGatewayView(gateway, this) : new ServiceGatewayView(this.okitjson.newServiceGateway(), this));
         return this.service_gateways[this.service_gateways.length - 1];
     }
-    getServiceGateway() {}
+    getServiceGateways() {
+        return this.service_gateways;
+    }
+    getServiceGateway(id='') {
+        for (let artefact of this.getServiceGateways()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteServiceGateway() {
         for (let i = 0; i < this.service_gateways.length; i++) {
             if (this.service_gateways[i].artefact_id === id) {
@@ -460,11 +621,31 @@ class OkitJsonView {
     }
 
     // Subnet
+    dropSubnetView(target) {
+        console.info('Drop Subnet View');
+        console.info(target);
+        let view_artefact = this.newSubnet();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newSubnet(subnet) {
         this.subnets.push(subnet ? new SubnetView(subnet, this) : new SubnetView(this.okitjson.newSubnet(), this));
         return this.subnets[this.subnets.length - 1];
     }
-    getSubnet() {}
+    getSubnets() {
+        return this.subnets;
+    }
+    getSubnet(id='') {
+        for (let artefact of this.getSubnets()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteSubnet() {
         for (let i = 0; i < this.subnets.length; i++) {
             if (this.subnets[i].artefact_id === id) {
@@ -477,16 +658,30 @@ class OkitJsonView {
     }
 
     // Virtual Cloud Network
-    dropVirtualCloudNetwork(target) {
+    dropVirtualCloudNetworkView(target) {
+        console.info('Drop Virtual Cloud Network View');
+        console.info(target);
         let view_artefact = this.newVirtualCloudNetwork();
-        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
         return view_artefact;
     }
     newVirtualCloudNetwork(vcn) {
         this.virtual_cloud_networks.push(vcn ? new VirtualCloudNetworkView(vcn, this) : new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork(), this));
         return this.virtual_cloud_networks[this.virtual_cloud_networks.length - 1];
     }
-    getVirtualCloudNetwork(id) {return this.okitjson.getVirtualCloudNetwork(id);}
+    getVirtualCloudNetworks() {
+        return this.virtual_cloud_networks;
+    }
+    getVirtualCloudNetwork(id='') {
+        for (let artefact of this.virtual_cloud_networks) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteVirtualCloudNetwork() {
         for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
             if (this.virtual_cloud_networks[i].artefact_id === id) {
@@ -503,6 +698,7 @@ class OkitJsonView {
         this.virtual_network_interfaces.push(vnic ? new VirtualNetworkInterfaceView(vnic, this) : new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this));
         return this.virtual_network_interfaces[this.virtual_network_interfaces.length - 1];
     }
+    getVirtualNetworkInterfaces() {}
     getVirtualNetworkInterface() {}
     deleteVirtualNetworkInterface() {}
 

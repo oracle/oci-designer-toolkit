@@ -757,8 +757,6 @@ class OkitJson {
     // Virtual Cloud Network
     newVirtualCloudNetwork(data) {
         console.info('New Virtual Cloud Network');
-        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
-        data.compartment_id = data.parent_id;
         this.virtual_cloud_networks.push(new VirtualCloudNetwork(data, this));
         return this.virtual_cloud_networks[this.virtual_cloud_networks.length - 1];
     }

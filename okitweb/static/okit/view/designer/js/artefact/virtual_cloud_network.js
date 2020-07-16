@@ -14,12 +14,12 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
 
     get parent_id() {return this.artefact.compartment_id;}
     get parent_key() {return 'vcn_id';}
-    get minimum_dimension() {return {width: this.vcn_width, height: this.vcn_height};}
+    get minimum_dimensions() {return {width: this.vcn_width, height: this.vcn_height};}
     get vcn_width() {return 400;}
     get vcn_height() {return 300;}
 
     getParent() {
-        return this.getVirtualCloudNetwork(this.getParentId());
+        return this.getJsonView().getCompartment(this.parent_id);
     }
 
     getParentId() {
@@ -29,14 +29,6 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     /*
      ** SVG Processing
      */
-    draw() {
-        this.parent_id = this.compartment_id;
-        console.group('Drawing ' + VirtualCloudNetwork.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        console.groupEnd();
-    }
-
     getSvgDefinition() {
         console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, VirtualCloudNetwork.getArtifactReference());
@@ -64,13 +56,12 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     ** Property Sheet Load function
      */
     loadProperties() {
-        let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {
             loadPropertiesSheet(me);
             $(jqId('cidr_block')).on('change', function() {
                 console.info('CIDR Block Changed ' + $(jqId('cidr_block')).val());
-                for (let subnet of me.getOkitJson().subnets) {
+                for (let subnet of me.artefact.getOkitJson().subnets) {
                     if (subnet.vcn_id === me.id) {
                         subnet.cidr_block = subnet.generateCIDR(me.id);
                     }
