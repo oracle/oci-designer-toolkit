@@ -13,9 +13,8 @@ class BlockStorageVolume extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}, parent=null) {
+    constructor (data={}, okitjson={}) {
         super(okitjson);
-        this.parent_id = data.parent_id;
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
         this.compartment_id = data.parent_id;
@@ -30,10 +29,6 @@ class BlockStorageVolume extends OkitArtifact {
         if (this.availability_domain.length > 1) {
             this.region_availability_domain = this.availability_domain;
             this.availability_domain = this.region_availability_domain.slice(-1);
-        }
-        // Add Get Parent function
-        if (parent !== null) {
-            this.getParent = () => {return parent};
         }
     }
 
@@ -61,78 +56,6 @@ class BlockStorageVolume extends OkitArtifact {
     }
 
 
-    /*
-     ** SVG Processing
-     */
-    draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        if (this.isAttached()) {
-            console.groupEnd();
-            return;
-        }
-        let svg = super.draw();
-        console.groupEnd();
-        return svg;
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let dimensions = this.getDimensions();
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = dimensions['width'];
-        definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
-        return definition;
-    }
-
-    // Return Artifact Dimensions
-    getDimensions() {
-        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
-        let dimensions = this.getMinimumDimensions();
-        // Calculate Size based on Child Artifacts
-        // Check size against minimum
-        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
-        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
-        return dimensions;
-    }
-
-    getMinimumDimensions() {
-        return {width: icon_width, height:icon_height};
-    }
-
-    isAttached() {
-        // Check if this is attached but exclude when parent is the attachment type.
-        if (this.getParent().getArtifactReference() !== Instance.getArtifactReference()) {
-            for (let instance of this.getOkitJson().instances) {
-                if (instance.block_storage_volume_ids.includes(this.id)) {
-                    console.info(this.display_name + ' attached to instance ' + instance.display_name);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-
-    /*
-    ** Property Sheet Load function
-     */
-    loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(me);});
-    }
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'bsv';
     }
@@ -142,10 +65,6 @@ class BlockStorageVolume extends OkitArtifact {
      */
     static getArtifactReference() {
         return 'Block Storage Volume';
-    }
-
-    static getDropTargets() {
-        return [Compartment.getArtifactReference()];
     }
 
     static query(request = {}, region='') {

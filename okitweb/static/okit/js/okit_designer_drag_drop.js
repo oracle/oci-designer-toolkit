@@ -116,22 +116,16 @@ function dragDrop(evt) {
     if (evt.preventDefault) {
         evt.preventDefault(); // Necessary. Allows us to drop.
     }
+    let target = {id: evt.target.id, type: evt.target.getAttribute('data-type'), compartment_id: evt.target.getAttribute('data-compartment-id')};
     let artifact = palette_drag_artifact;
-    let target_type = evt.target.getAttribute('data-type');
-    let compartment_id = evt.target.getAttribute('data-compartment-id');
-    let target_id = evt.target.id;
-    if (target_type === Compartment.getArtifactReference()) {compartment_id = target_id;}
     // Add the Artifact to the OKIT Json / Canvas
-    let newFunction = 'new' + artifact.name;
-    let getFunction = 'get' + target_type.split(' ').join('');
-    console.info('New Function : ' + newFunction);
-    console.info('Get Function : ' + getFunction);
-    let parentArtifact = okitJson[getFunction](target_id);
-    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: artifact.getArtifactReference()}, parentArtifact);
+    let dropFunction = 'drop' + artifact.name;
+    console.info('Drop Function : ' + dropFunction);
+    let result = okitJsonView[dropFunction](target);
     if (result) {
         console.debug(JSON.stringify(result, null, 2));
     }
-    okitJson.draw();
+    okitJsonView.draw();
     // Clear Drag class
     this.classList.remove('over');  // this / e.target is previous target element.
     palette_drag_artifact = null;

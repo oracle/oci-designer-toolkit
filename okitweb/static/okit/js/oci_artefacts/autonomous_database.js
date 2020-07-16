@@ -13,9 +13,8 @@ class AutonomousDatabase extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}, parent=null) {
+    constructor (data={}, okitjson={}) {
         super(okitjson);
-        this.parent_id = data.parent_id;
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.autonomous_databases.length + 1);
         this.compartment_id = data.parent_id;
@@ -30,10 +29,6 @@ class AutonomousDatabase extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // Add Get Parent function
-        if (parent !== null) {
-            this.getParent = () => {return parent};
-        }
     }
 
 
@@ -60,121 +55,6 @@ class AutonomousDatabase extends OkitArtifact {
     }
 
 
-    /*
-     ** SVG Processing
-     */
-    draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        if (this.isAttached()) {
-            console.groupEnd();
-            return;
-        }
-        let svg = super.draw();
-        /*
-        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
-        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
-        ** Artifact.
-         */
-        // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        // Add Connector Data
-        svg.attr("data-compartment-id", this.compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-start-x", boundingClientRect.x)
-            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-end-x", boundingClientRect.x)
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-start-x", boundingClientRect.x)
-            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-end-x", boundingClientRect.x)
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true);
-        console.groupEnd();
-        return svg;
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let dimensions = this.getDimensions();
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = dimensions['width'];
-        definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
-        return definition;
-    }
-
-    // Return Artifact Dimensions
-    getDimensions() {
-        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
-        let dimensions = this.getMinimumDimensions();
-        // Calculate Size based on Child Artifacts
-        // Check size against minimum
-        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
-        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
-        return dimensions;
-    }
-
-    getMinimumDimensions() {
-        return {width: icon_width, height:icon_height};
-    }
-
-    isAttached() {
-        for (let instance of this.getOkitJson().instances) {
-            if (instance.autonomous_database_ids.includes(this.id)) {
-                console.info(this.display_name + ' attached to instance '+ instance.display_name);
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /*
-    ** Property Sheet Load function
-     */
-    loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/autonomous_database.html", () => {
-            $('#is_free_tier').on('change', () => {
-                if($('#is_free_tier').is(':checked')) {
-                    $('#license_model').val("LICENSE_INCLUDED");
-                    $('#is_auto_scaling_enabled').prop('checked', false);
-                    $('#license_model').attr('disabled', true);
-                    $('#is_auto_scaling_enabled').attr('disabled', true);
-                } else {
-                    $('#license_model').removeAttr('disabled');
-                    $('#is_auto_scaling_enabled').removeAttr('disabled');
-                }
-            });
-            if (me.is_free_tier) {
-                me.license_model = "LICENSE_INCLUDED";
-                me.is_auto_scaling_enabled =  false;
-                $('#license_model').attr('disabled', true);
-                $('#is_auto_scaling_enabled').attr('disabled', true);
-            }
-            loadPropertiesSheet(me);
-        });
-    }
-
-    loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/autonomous_database.html");
-    }
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'ad';
     }
@@ -184,10 +64,6 @@ class AutonomousDatabase extends OkitArtifact {
      */
     static getArtifactReference() {
         return 'Autonomous Database';
-    }
-
-    static getDropTargets() {
-        return [Compartment.getArtifactReference()];
     }
 
     static query(request = {}, region='') {

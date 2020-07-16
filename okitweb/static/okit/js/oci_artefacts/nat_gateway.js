@@ -13,9 +13,8 @@ class NATGateway extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}, parent=null) {
+    constructor (data={}, okitjson={}) {
         super(okitjson);
-        this.parent_id = data.parent_id;
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.nat_gateways.length + 1);
         this.compartment_id = '';
@@ -24,10 +23,6 @@ class NATGateway extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // Add Get Parent function
-        if (parent !== null) {
-            this.getParent = () => {return parent};
-        }
     }
 
 
@@ -53,63 +48,6 @@ class NATGateway extends OkitArtifact {
         }
     }
 
-
-    /*
-     ** SVG Processing
-     */
-    draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        console.groupEnd();
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let position = 1;
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let dimensions = this.getDimensions();
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = dimensions['width'];
-        definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
-        return definition;
-    }
-
-    // Return Artifact Dimensions
-    getDimensions() {
-        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
-        let dimensions = this.getMinimumDimensions();
-        // Calculate Size based on Child Artifacts
-        // Check size against minimum
-        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
-        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
-        return dimensions;
-    }
-
-    getMinimumDimensions() {
-        return {width: icon_width, height:icon_height};
-    }
-
-
-    /*
-    ** Property Sheet Load function
-     */
-    loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/nat_gateway.html", () => {loadPropertiesSheet(me);});
-    }
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'ng';
     }
@@ -119,10 +57,6 @@ class NATGateway extends OkitArtifact {
      */
     static getArtifactReference() {
         return 'NAT Gateway';
-    }
-
-    static getDropTargets() {
-        return [VirtualCloudNetwork.getArtifactReference()];
     }
 
     static query(request = {}, region='') {

@@ -77,9 +77,11 @@ function handleNew(evt) {
 }
 function newDiagram() {
     console.groupCollapsed('Creating New Diagram');
-    okitJson = new OkitJson();
-    newCanvas();
-    okitJson.newCompartment();
+    okitJsonModel = new OkitJson();
+    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', okitSettings.is_display_grid, palette_svg);
+    okitJsonView.newCanvas();
+    okitJsonView.newCompartment();
+    console.info(okitJsonView);
     console.groupEnd();
 }
 /*
@@ -228,8 +230,9 @@ function handleRedraw(evt) {
 function redrawSVGCanvas(region='') {
     console.info('>>>>>>>>> Redrawing Canvas (Region : ' + region +')');
     console.info('>>>>>>>>> Active Region            : ' + activeRegion);
+    console.info(okitJsonView);
     if (region === '' || region === activeRegion) {
-        okitJson.draw();
+        okitJsonView.draw();
     }
 }
 /*
@@ -616,7 +619,7 @@ function displayOkitJson() {
     if (Object.keys(regionOkitJson).length > 0) {
         $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(regionOkitJson, null, 2) + '</code></pre>');
     } else {
-        $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(okitJson, null, 2) + '</code></pre>');
+        $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonModel, null, 2) + '</code></pre>');
     }
 }
 /*

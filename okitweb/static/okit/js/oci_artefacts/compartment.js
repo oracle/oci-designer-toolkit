@@ -9,38 +9,20 @@ const compartment_query_cb = "compartment-query-cb";
 /*
 ** Define Compartment Artifact Class
  */
-class Compartment extends OkitContainerArtifact {
+class Compartment extends OkitArtifact {
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}, parent=null) {
+    constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.parent_id = 'canvas';
         this.compartment_id = null;
         this.name = this.generateDefaultName(okitjson.compartments.length + 1);
         // Update with any passed data
         this.merge(data);
         this.convert();
         this.display_name = this.name;
-        // Add Get Parent function
-        if (parent !== null) {
-            this.getParent = () => {return parent};
-        }
     }
-
-    /*
-    ** Test If Top Level compartment
-     */
-
-    isTopLevel() {
-        //if (this.compartment_id) {
-        if (this.getParent()) {
-                return false;
-        }
-        return true;
-    }
-
 
     /*
     ** Clone Functionality
@@ -113,92 +95,6 @@ class Compartment extends OkitContainerArtifact {
     }
 
 
-    /*
-     ** SVG Processing
-     */
-    draw() {
-        console.groupCollapsed('Drawing ' + Compartment.getArtifactReference() + ' : ' + this.id);
-        let svg = super.draw();
-        console.groupEnd();
-    }
-
-    getSvgDefinition() {
-        let dimensions = this.getDimensions(this.id);
-        let definition = this.newSVGDefinition(this, Compartment.getArtifactReference());
-        console.info('>>>>>>>> Parent');
-        console.info(this.getParent());
-        if (this.getParent()) {
-            let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = parent_first_child.dx;
-            definition['svg']['y'] = parent_first_child.dy;
-        }
-        definition['svg']['width'] = dimensions['width'];
-        definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 5;
-        definition['rect']['stroke']['width'] = 2;
-        definition['icon']['x_translation'] = icon_translate_x_start;
-        definition['icon']['y_translation'] = icon_translate_y_start;
-        definition['name']['show'] = true;
-        definition['label']['show'] = true;
-        return definition;
-    }
-
-    getDimensions() {
-        return super.getDimensions('compartment_id');
-    }
-
-    getMinimumDimensions() {
-        // Check if this is the top level container
-        //if (this.id === this.compartment_id) {
-        if (this.isTopLevel()) {
-            return {width: $('#canvas-div').width(), height: $('#canvas-div').height()};
-        } else {
-            return {width: container_artifact_x_padding * 2, height: container_artifact_y_padding * 2};
-        }
-    }
-
-
-    /*
-    ** Property Sheet Load function
-     */
-    loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/compartment.html", () => {loadPropertiesSheet(me);});
-    }
-
-
-    /*
-    ** Child Type Functions
-     */
-    getTopArtifacts() {
-        return [Instance.getArtifactReference()];
-    }
-
-    getContainerArtifacts() {
-        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
-    }
-
-    getLeftArtifacts() {
-        return [BlockStorageVolume.getArtifactReference()];
-    }
-
-    getRightArtifacts() {
-        return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
-            ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference()];
-    }
-
-
-    /*
-    ** Container Specific Overrides
-     */
-    // return the name of the element used by the child to reference this artifact
-    getParentKey() {
-        return 'compartment_id';
-    }
-
-
     getNamePrefix() {
         return super.getNamePrefix() + 'comp';
     }
@@ -208,10 +104,6 @@ class Compartment extends OkitContainerArtifact {
      */
     static getArtifactReference() {
         return 'Compartment';
-    }
-
-    static getDropTargets() {
-        return [Compartment.getArtifactReference()];
     }
 
     static queryRoot(request = {}, region='') {

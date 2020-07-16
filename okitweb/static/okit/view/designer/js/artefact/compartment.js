@@ -7,12 +7,16 @@ console.info('Loaded Designer Compartment View Javascript');
 /*
 ** Define Compartment View Artifact Class
  */
-class CompartmentView extends OkitDesignerArtefactView {
+class CompartmentView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
-        this.parent_id = artefact.compartment_id;
     }
 
+    get parent_id() {
+        console.info(`Compartment Id ${this.artefact.compartment_id}`);
+        return this.artefact.compartment_id !== null ? this.artefact.compartment_id : 'canvas';
+    }
+    get parent_key() {return 'compartment_id';}
     get minimum_dimensions() {
         if (this.isTopLevel()) {
             return {width: $(`#${this.json_view.parent_id}`).width(), height: $(`#${this.json_view.parent_id}`).height()};
@@ -22,11 +26,7 @@ class CompartmentView extends OkitDesignerArtefactView {
     }
 
     getParent() {
-        return this.artefact.getOkitJson().getCompartment(this.getParentId());
-    }
-
-    getParentId() {
-        return this.parent_id;
+        return this.getJsonView().getCompartment(this.parent_id);
     }
 
     /*
@@ -34,7 +34,7 @@ class CompartmentView extends OkitDesignerArtefactView {
      */
 
     isTopLevel() {
-        return !this.getParent();
+        return this.getParent() ? false : true;
     }
 
     /*
@@ -48,7 +48,7 @@ class CompartmentView extends OkitDesignerArtefactView {
     ** SVG Processing
     */
     getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, Compartment.getArtifactReference());
+        let definition = this.newSVGDefinition();
         console.info('>>>>>>>> Parent');
         console.info(this.getParent());
         if (this.getParent()) {
@@ -76,6 +76,26 @@ class CompartmentView extends OkitDesignerArtefactView {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/compartment.html", () => {loadPropertiesSheet(me);});
     }
 
+
+    /*
+    ** Child Type Functions
+     */
+    getTopArtifacts() {
+        return [Instance.getArtifactReference()];
+    }
+
+    getContainerArtifacts() {
+        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
+    }
+
+    getLeftArtifacts() {
+        return [BlockStorageVolume.getArtifactReference()];
+    }
+
+    getRightArtifacts() {
+        return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
+            ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference()];
+    }
 
     /*
     ** Static Functionality
