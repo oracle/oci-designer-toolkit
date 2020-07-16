@@ -152,7 +152,7 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
                 }
             });
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
             // Click Select Lists we have added dynamic on click to
             $(shape_select).change();
         });

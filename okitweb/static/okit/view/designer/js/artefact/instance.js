@@ -149,7 +149,6 @@ class InstanceView extends OkitDesignerArtefactView {
     ** Property Sheet Load function
      */
     loadProperties() {
-        let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance.html", () => {
             // Load Referenced Ids
@@ -191,7 +190,7 @@ class InstanceView extends OkitDesignerArtefactView {
             // Load OS Versions
             this.loadOSVersions(this.source_details.os);
             // Load Properties
-            loadPropertiesSheet(this);
+            loadPropertiesSheet(me.artefact);
         });
     }
 

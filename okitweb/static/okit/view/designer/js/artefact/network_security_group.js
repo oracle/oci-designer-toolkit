@@ -62,7 +62,7 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/network_security_group.html", () => {
             // Load Referenced Ids
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
             // Egress Rules
             me.loadSecurityRules();
             // Add Handler to Add Button

@@ -126,7 +126,7 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
                 }
             }
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
         });
     }
 

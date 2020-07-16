@@ -55,7 +55,7 @@ class NATGatewayView extends OkitDesignerArtefactView {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/nat_gateway.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/nat_gateway.html", () => {loadPropertiesSheet(me.artefact);});
     }
 
     /*

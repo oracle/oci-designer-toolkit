@@ -73,7 +73,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
      */
     loadProperties() {
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/compartment.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/compartment.html", () => {loadPropertiesSheet(me.artefact);});
     }
 
 

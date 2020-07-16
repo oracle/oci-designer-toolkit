@@ -15,7 +15,7 @@ class SecurityListView extends OkitDesignerArtefactView {
     get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
 
     getParent() {
-        return this.getSecurityList(this.getParentId());
+        return this.attached_id ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getVirtualCloudNetwork(this.parent_id);
     }
 
     getParentId() {
@@ -70,12 +70,11 @@ class SecurityListView extends OkitDesignerArtefactView {
     ** Property Sheet Load function
      */
     loadProperties() {
-        let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/security_list.html", () => {
             // Load Referenced Ids
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
             // Egress Rules
             me.loadEgressRules();
             // Ingress Rules
@@ -91,7 +90,7 @@ class SecurityListView extends OkitDesignerArtefactView {
         $(jqId('egress_rules_table_body')).empty();
         // Egress Rules
         let rule_num = 1;
-        for (let security_rule of this.egress_security_rules) {
+        for (let security_rule of this.artefact.egress_security_rules) {
             this.addSecurityRuleHtml(security_rule, rule_num, 'egress');
             rule_num += 1;
         }
@@ -102,7 +101,7 @@ class SecurityListView extends OkitDesignerArtefactView {
         $(jqId('ingress_rules_table_body')).empty();
         // Ingress Rules
         let rule_num = 1;
-        for (let security_rule of this.ingress_security_rules) {
+        for (let security_rule of this.artefact.ingress_security_rules) {
             this.addSecurityRuleHtml(security_rule, rule_num, 'ingress');
             rule_num += 1;
         }

@@ -118,7 +118,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
                 }
             }
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
         });
     }
 

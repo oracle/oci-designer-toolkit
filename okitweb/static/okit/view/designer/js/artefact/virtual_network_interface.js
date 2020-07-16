@@ -56,7 +56,7 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artifact.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artifact.html", () => {loadPropertiesSheet(me.artefact);});
     }
 
     /*

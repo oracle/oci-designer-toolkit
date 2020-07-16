@@ -159,7 +159,7 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
                 }
             }
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
         });
     }
 

@@ -15,7 +15,7 @@ class RouteTableView extends OkitDesignerArtefactView {
     get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
 
     getParent() {
-        return this.getRouteTable(this.getParentId());
+        return this.attached_id ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getVirtualCloudNetwork(this.parent_id);
     }
 
     getParentId() {
@@ -75,7 +75,7 @@ class RouteTableView extends OkitDesignerArtefactView {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/route_table.html", () => {
             // Load Referenced Ids
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
             // Route Rules
             me.loadRouteRules();
             // Add Handler to Add Button

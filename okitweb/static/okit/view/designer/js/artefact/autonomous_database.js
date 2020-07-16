@@ -118,7 +118,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
                 $('#license_model').attr('disabled', true);
                 $('#is_auto_scaling_enabled').attr('disabled', true);
             }
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
         });
     }
 

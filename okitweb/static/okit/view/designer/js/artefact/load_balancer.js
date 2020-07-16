@@ -156,7 +156,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
                 network_security_groups_select.append($('<option>').attr('value', network_security_group.id).text(network_security_group.display_name));
             }
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
         });
     }
 

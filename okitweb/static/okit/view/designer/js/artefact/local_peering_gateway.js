@@ -108,7 +108,7 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
                 }
             }
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
             $(jqId('peer_id')).on('blur', () => {okitJson.getLocalPeeringGateway(me.peer_id).peer_id = me.id;});
         });
     }

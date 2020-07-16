@@ -75,7 +75,7 @@ class FastConnectView extends OkitDesignerArtefactView {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/fast_connect.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/fast_connect.html", () => {loadPropertiesSheet(me.artefact);});
     }
 
     /*

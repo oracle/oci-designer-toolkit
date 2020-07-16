@@ -540,6 +540,16 @@ class OkitJsonView {
     }
 
     // Route Table
+    dropRouteTableView(target) {
+        console.info('Drop Route Table View');
+        console.info(target);
+        let view_artefact = this.newRouteTable();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newRouteTable(routetable) {
         this.route_tables.push(routetable ? new RouteTableView(routetable, this) : new RouteTableView(this.okitjson.newRouteTable(), this));
         return this.route_tables[this.route_tables.length - 1];
@@ -567,6 +577,16 @@ class OkitJsonView {
     }
 
     // Security List
+    dropSecurityListView(target) {
+        console.info('Drop Security List View');
+        console.info(target);
+        let view_artefact = this.newSecurityList();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newSecurityList(security) {
         this.security_lists.push(security ? new SecurityListView(security, this) : new SecurityListView(this.okitjson.newSecurityList(), this));
         return this.security_lists[this.security_lists.length - 1];
@@ -714,6 +734,7 @@ class OkitArtefactView {
     }
 
     get json_view() {return this.getJsonView();}
+    get okit_json() {return this.json_view.getOkitJson();}
     get id() {return this.artefact.id;}
     get artefact_id() {return this.artefact.id;}
     get compartment_id() {return this.artefact.compartment_id;}
@@ -731,9 +752,9 @@ class OkitArtefactView {
 
     getParentId() {return this.parent_id;}
 
-    getArtefact() {
-        return this.artefact;
-    }
+    getArtefact() {return this.artefact;}
+
+    getOkitJson() {return this.okit_json;}
 
     newSVGDefinition() {
         let definition = {};
@@ -1016,10 +1037,9 @@ class OkitArtefactView {
 
     getTopEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
-        let key = this.parent_key;
         for (let group of this.getTopEdgeArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     let dimension = artifact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -1044,10 +1064,9 @@ class OkitArtefactView {
     // Top
     hasTopChildren() {
         let children = false;
-        let key = this.parent_key;
         for (let group of this.getTopArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.getParentId() === this.id) {
+                if (artifact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1058,10 +1077,9 @@ class OkitArtefactView {
 
     getTopChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
-        let key = this.parent_key;
         for (let group of this.getTopArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.getParentId() === this.id) {
+                if (artifact.parent_id === this.id) {
                     let dimension = artifact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -1086,10 +1104,9 @@ class OkitArtefactView {
     // Container
     hasContainerChildren() {
         let children = false;
-        let key = this.parent_key;
         for (let group of this.getContainerArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1100,10 +1117,9 @@ class OkitArtefactView {
 
     getContainerChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
-        let key = this.parent_key;
         for (let group of this.getContainerArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     let dimension = artifact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
                     max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
@@ -1129,10 +1145,9 @@ class OkitArtefactView {
     // Bottom
     hasBottomChildren() {
         let children = false;
-        let key = this.parent_key;
         for (let group of this.getBottomArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.getParentId() === this.id) {
+                if (artifact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1143,10 +1158,9 @@ class OkitArtefactView {
 
     getBottomChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
-        let key = this.parent_key;
         for (let group of this.getBottomArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.getParentId() === this.id) {
+                if (artifact.parent_id === this.id) {
                     let dimension = artifact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -1176,10 +1190,9 @@ class OkitArtefactView {
     // Bottom Edge
     hasBottomEdgeChildren() {
         let children = false;
-        let key = this.parent_key;
         for (let group of this.getBottomEdgeArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1190,10 +1203,9 @@ class OkitArtefactView {
 
     getBottomEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
-        let key = this.parent_key;
         for (let group of this.getBottomEdgeArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     let dimension = artifact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -1223,10 +1235,9 @@ class OkitArtefactView {
     // Left
     hasLeftChildren() {
         let children = false;
-        let key = this.parent_key;
         for (let group of this.getLeftArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1237,10 +1248,9 @@ class OkitArtefactView {
 
     getLeftChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
-        let key = this.parent_key;
         for (let group of this.getLeftArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     let dimension = artifact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
                     max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
@@ -1265,10 +1275,9 @@ class OkitArtefactView {
     // Right
     hasRightChildren() {
         let children = false;
-        let key = this.parent_key;
         for (let group of this.getRightArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1279,10 +1288,9 @@ class OkitArtefactView {
 
     getRightChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
-        let key = this.parent_key;
         for (let group of this.getRightArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     let dimension = artifact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
                     max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
@@ -1313,10 +1321,9 @@ class OkitArtefactView {
     // Right Edge
     hasRightEdgeChildren() {
         let children = false;
-        let key = this.parent_key;
         for (let group of this.getRightEdgeArtifacts()) {
             for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+                if (artifact.parent_id === this.id) {
                     children = true;
                     break;
                 }

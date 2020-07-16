@@ -78,7 +78,7 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
             let nsg_select = $(jqId('nsg_ids'));
             this.loadNetworkSecurityGroups(nsg_select, this.primary_mount_target.subnet_id);
             // Load Properties
-            loadPropertiesSheet(me);
+            loadPropertiesSheet(me.artefact);
         });
     }
 
