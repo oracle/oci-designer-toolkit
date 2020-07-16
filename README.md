@@ -1,4 +1,4 @@
-# OCI Designer Toolkit [0.8.0](CHANGELOG.md#version-0.8.0)
+# OCI Designer Toolkit [0.9.0](CHANGELOG.md#version-0.9.0)
 
 OCI designer toolKIT (OKIT) is a set of tools for enabling design, deploy and visualise OCI environments 
 through a graphical web based interface. 
@@ -29,6 +29,21 @@ Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Insta
 
 ### Quick Start
 The docker image is the recommended runtime server OKIT provides a simple Docker Compose script to build and start the container.
+
+#### Create Config File
+
+Create the directory __<OKIT_ROOT_DIR>/containers/oci__ and within it a file called __config__ with contents similar to
+that below.
+
+```properties
+[DEFAULT]
+user=ocid1.user.oc1..aaaaaaaak6z......
+fingerprint=3b:7e:37:ec:a0:86:1....
+key_file=~/.oci/oci_api_key.pem
+tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
+region=us-phoenix-1
+```
+#### Build and Start
 
 ```bash
 cd oci-designer-toolkit/containers/docker
