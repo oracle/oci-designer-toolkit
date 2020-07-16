@@ -67,15 +67,15 @@ class NATGateway extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/NATGateway',
+            url: 'oci/artefacts/NATGateway',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({nat_gateways: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                for (let artefact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + nat_gateway_query_cb).prop('checked', true);

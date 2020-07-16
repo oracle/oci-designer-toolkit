@@ -4,14 +4,14 @@
 */
 console.info('Loaded Fragments Javascript');
 
-const fragment_artifact = 'Fragment';
-asset_add_functions[fragment_artifact] = "addFragment";
+const fragment_artefact = 'Fragment';
+asset_add_functions[fragment_artefact] = "addFragment";
 
 /*
 ** Add Asset to JSON Model
  */
 function addFragment(parent_id, compartment_id, fragment_title) {
-    console.groupCollapsed('Adding ' + fragment_artifact + ' ' + fragment_title);
+    console.groupCollapsed('Adding ' + fragment_artefact + ' ' + fragment_title);
     let fragment = new Fragment(parent_id, compartment_id);
     fragment.add(fragment_title);
     console.groupEnd();
@@ -50,7 +50,7 @@ class Fragment extends OkitArtifact {
         if (parent !== null) {
             this.getParent = function() {return parent};
         } else {
-            for (let parent of okitjson[this.artifactToElement(this.parent_type)]) {
+            for (let parent of okitjson[this.artefactToElement(this.parent_type)]) {
                 if (parent.id === this.parent_id) {
                     this.getParent = function () {
                         return parent
@@ -80,10 +80,10 @@ class Fragment extends OkitArtifact {
 
         // Process Add Sub Compartments
         // process Add Virtual Cloud Networks
-        fragment_json.virtual_cloud_networks.forEach(function (artifact) {
-            artifact.compartment_id = compartment_id;
-            artifact.parent_id = compartment_id;
-            this.getOkitJson().newVirtualCloudNetwork(artifact);
+        fragment_json.virtual_cloud_networks.forEach(function (artefact) {
+            artefact.compartment_id = compartment_id;
+            artefact.parent_id = compartment_id;
+            this.getOkitJson().newVirtualCloudNetwork(artefact);
         }, this);
         // Remaining Artifacts
         this.addToVirtualCloudNetwork(fragment_json, null);
@@ -91,15 +91,15 @@ class Fragment extends OkitArtifact {
 
     addToVirtualCloudNetwork(fragment_json={}, vcn_id=null) {
         console.info('Adding Fragment to Virtual Cloud Network ' + vcn_id);
-        let ignore_elements = [this.artifactToElement(Compartment.getArtifactReference()), this.artifactToElement(VirtualCloudNetwork.getArtifactReference()), this.artifactToElement(Subnet.getArtifactReference())];
+        let ignore_elements = [this.artefactToElement(Compartment.getArtifactReference()), this.artefactToElement(VirtualCloudNetwork.getArtifactReference()), this.artefactToElement(Subnet.getArtifactReference())];
         // Process Subnets (Container)
-        fragment_json.subnets.forEach(function (artifact) {
-            artifact.compartment_id = this.compartment_id;
+        fragment_json.subnets.forEach(function (artefact) {
+            artefact.compartment_id = this.compartment_id;
             if (vcn_id !== null) {
-                artifact.vcn_id = vcn_id;
+                artefact.vcn_id = vcn_id;
             }
-            artifact.parent_id = artifact.vcn_id;
-            this.getOkitJson().newSubnet(artifact);
+            artefact.parent_id = artefact.vcn_id;
+            this.getOkitJson().newSubnet(artefact);
         }, this);
         // Process Remaining
         for (let key in fragment_json) {
@@ -116,121 +116,121 @@ class Fragment extends OkitArtifact {
     }
 
     addCommon(fragment_json, key, vcn_id=null) {
-        if (key === this.artifactToElement(AutonomousDatabase.getArtifactReference())) {
+        if (key === this.artefactToElement(AutonomousDatabase.getArtifactReference())) {
             // Process Autonomous Databases
-            fragment_json.autonomous_databases.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
-                this.getOkitJson().newAutonomousDatabase(artifact);
+            fragment_json.autonomous_databases.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
+                this.getOkitJson().newAutonomousDatabase(artefact);
             }, this);
-        } else if (key === this.artifactToElement(BlockStorageVolume.getArtifactReference())) {
+        } else if (key === this.artefactToElement(BlockStorageVolume.getArtifactReference())) {
             // Process Block Storage Volumes
-            fragment_json.block_storage_volumes.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
-                this.getOkitJson().newBlockStorageVolume(artifact);
+            fragment_json.block_storage_volumes.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
+                this.getOkitJson().newBlockStorageVolume(artefact);
             }, this);
-        } else if (key === this.artifactToElement(DynamicRoutingGateway.getArtifactReference())) {
+        } else if (key === this.artefactToElement(DynamicRoutingGateway.getArtifactReference())) {
             // Process Dynamic Routing Gateways
-            fragment_json.dynamic_routing_gateways.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
+            fragment_json.dynamic_routing_gateways.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
-                    artifact.vcn_id = vcn_id;
+                    artefact.vcn_id = vcn_id;
                 }
-                artifact.parent_id = artifact.vcn_id;
-                if (this.getOkitJson().newDynamicRoutingGateway(artifact) === null) {
+                artefact.parent_id = artefact.vcn_id;
+                if (this.getOkitJson().newDynamicRoutingGateway(artefact) === null) {
                     // Gateway already exists so we need to update Route Table entries
-                    this.updateRouteTableRoutes(fragment_json, artifact, DynamicRoutingGateway.getArtifactReference());
+                    this.updateRouteTableRoutes(fragment_json, artefact, DynamicRoutingGateway.getArtifactReference());
                 }
             }, this);
-        } else if (key === this.artifactToElement(FastConnect.getArtifactReference())) {
+        } else if (key === this.artefactToElement(FastConnect.getArtifactReference())) {
             // Process Fast Connects
-            fragment_json.fast_connects.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
+            fragment_json.fast_connects.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
-                    artifact.vcn_id = vcn_id;
+                    artefact.vcn_id = vcn_id;
                 }
-                this.getOkitJson().newFastConnect(artifact);
+                this.getOkitJson().newFastConnect(artefact);
             }, this);
-        } else if (key === this.artifactToElement(FileStorageSystem.getArtifactReference())) {
+        } else if (key === this.artefactToElement(FileStorageSystem.getArtifactReference())) {
             // Process File Storage System
-            fragment_json.file_storage_systems.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
-                this.getOkitJson().newFileStorageSystem(artifact);
+            fragment_json.file_storage_systems.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
+                this.getOkitJson().newFileStorageSystem(artefact);
             }, this);
-        } else if (key === this.artifactToElement(Instance.getArtifactReference())) {
+        } else if (key === this.artefactToElement(Instance.getArtifactReference())) {
             // Process Instances
-            fragment_json.instances.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
-                this.getOkitJson().newInstance(artifact);
+            fragment_json.instances.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
+                this.getOkitJson().newInstance(artefact);
             }, this);
-        } else if (key === this.artifactToElement(InternetGateway.getArtifactReference())) {
+        } else if (key === this.artefactToElement(InternetGateway.getArtifactReference())) {
             // Process Internet Gateways
-            fragment_json.internet_gateways.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
+            fragment_json.internet_gateways.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
-                    artifact.vcn_id = vcn_id;
+                    artefact.vcn_id = vcn_id;
                 }
-                artifact.parent_id = artifact.vcn_id;
-                if (this.getOkitJson().newInternetGateway(artifact) === null) {
+                artefact.parent_id = artefact.vcn_id;
+                if (this.getOkitJson().newInternetGateway(artefact) === null) {
                     // Gateway already exists so we need to update Route Table entries
-                    this.updateRouteTableRoutes(fragment_json, artifact, InternetGateway.getArtifactReference());
+                    this.updateRouteTableRoutes(fragment_json, artefact, InternetGateway.getArtifactReference());
                 }
             }, this);
-        } else if (key === this.artifactToElement(LoadBalancer.getArtifactReference())) {
+        } else if (key === this.artefactToElement(LoadBalancer.getArtifactReference())) {
             // Process Load Balancers
-            fragment_json.load_balancers.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
-                this.getOkitJson().newLoadBalancer(artifact);
+            fragment_json.load_balancers.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
+                this.getOkitJson().newLoadBalancer(artefact);
             }, this);
-        } else if (key === this.artifactToElement(NATGateway.getArtifactReference())) {
+        } else if (key === this.artefactToElement(NATGateway.getArtifactReference())) {
             // Process NAT Gateways
-            fragment_json.nat_gateways.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
+            fragment_json.nat_gateways.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
-                    artifact.vcn_id = vcn_id;
+                    artefact.vcn_id = vcn_id;
                 }
-                artifact.parent_id = artifact.vcn_id;
-                if (this.getOkitJson().newNATGateway(artifact) === null) {
+                artefact.parent_id = artefact.vcn_id;
+                if (this.getOkitJson().newNATGateway(artefact) === null) {
                     // Gateway already exists so we need to update Route Table entries
-                    this.updateRouteTableRoutes(fragment_json, artifact, NATGateway.getArtifactReference());
+                    this.updateRouteTableRoutes(fragment_json, artefact, NATGateway.getArtifactReference());
                 }
             }, this);
-        } else if (key === this.artifactToElement(ObjectStorageBucket.getArtifactReference())) {
+        } else if (key === this.artefactToElement(ObjectStorageBucket.getArtifactReference())) {
             // Process Object Storage Buckets
-            fragment_json.object_storage_buckets.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
-                this.getOkitJson().newObjectStorageBucket(artifact);
+            fragment_json.object_storage_buckets.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
+                this.getOkitJson().newObjectStorageBucket(artefact);
             }, this);
-        } else if (key === this.artifactToElement(RouteTable.getArtifactReference())) {
+        } else if (key === this.artefactToElement(RouteTable.getArtifactReference())) {
             // Process Route Tables
-            fragment_json.route_tables.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
+            fragment_json.route_tables.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
-                    artifact.vcn_id = vcn_id;
+                    artefact.vcn_id = vcn_id;
                 }
-                artifact.parent_id = artifact.vcn_id;
-                this.getOkitJson().newRouteTable(artifact);
+                artefact.parent_id = artefact.vcn_id;
+                this.getOkitJson().newRouteTable(artefact);
             }, this);
-        } else if (key === this.artifactToElement(SecurityList.getArtifactReference())) {
+        } else if (key === this.artefactToElement(SecurityList.getArtifactReference())) {
             // Process Security Lists
-            fragment_json.security_lists.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
+            fragment_json.security_lists.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
-                    artifact.vcn_id = vcn_id;
+                    artefact.vcn_id = vcn_id;
                 }
-                artifact.parent_id = artifact.vcn_id;
-                this.getOkitJson().newSecurityList(artifact);
+                artefact.parent_id = artefact.vcn_id;
+                this.getOkitJson().newSecurityList(artefact);
             }, this);
-        } else if (key === this.artifactToElement(ServiceGateway.getArtifactReference())) {
+        } else if (key === this.artefactToElement(ServiceGateway.getArtifactReference())) {
             // Process Service Gateways
-            fragment_json.service_gateways.forEach(function (artifact) {
-                artifact.compartment_id = this.compartment_id;
+            fragment_json.service_gateways.forEach(function (artefact) {
+                artefact.compartment_id = this.compartment_id;
                 if (vcn_id !== null) {
-                    artifact.vcn_id = vcn_id;
+                    artefact.vcn_id = vcn_id;
                 }
-                artifact.parent_id = artifact.vcn_id;
-                if (this.getOkitJson().newServiceGateway(artifact) === null) {
+                artefact.parent_id = artefact.vcn_id;
+                if (this.getOkitJson().newServiceGateway(artefact) === null) {
                     // Gateway already exists so we need to update Route Table entries
-                    this.updateRouteTableRoutes(fragment_json, artifact, ServiceGateway.getArtifactReference());
+                    this.updateRouteTableRoutes(fragment_json, artefact, ServiceGateway.getArtifactReference());
                 }
             }, this);
         } else {

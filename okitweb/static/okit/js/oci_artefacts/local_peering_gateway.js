@@ -60,15 +60,15 @@ class LocalPeeringGateway extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/LocalPeeringGateway',
+            url: 'oci/artefacts/LocalPeeringGateway',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({local_peering_gateways: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                for (let artefact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + local_peering_gateway_query_cb).prop('checked', true);
@@ -86,9 +86,9 @@ class LocalPeeringGateway extends OkitArtifact {
     }
 }
 
-function setPeeredGatewayPeerId(input_id, artifact) {
-    if (input_id === 'peer_id' && artifact.peer_id) {
-        okitJson.getLocalPeeringGateway(artifact.peer_id).peer_id = artifact.id;
+function setPeeredGatewayPeerId(input_id, artefact) {
+    if (input_id === 'peer_id' && artefact.peer_id) {
+        okitJson.getLocalPeeringGateway(artefact.peer_id).peer_id = artefact.id;
     }
 }
 

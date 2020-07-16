@@ -4,8 +4,8 @@
 */
 console.info('Loaded Okit Template Artifact Javascript');
 
-const template_artifact_stroke_colour = "#F80000";
-const template_artifact_query_cb = "template-artifact-query-cb";
+const template_artefact_stroke_colour = "#F80000";
+const template_artefact_query_cb = "template-artefact-query-cb";
 
 /*
 ** Define Okit Template Artifact Class
@@ -18,8 +18,8 @@ class OkitTemplateArtifact extends OkitArtifact {
         super(okitjson);
         this.parent_id = data.parent_id;
         // Configure default values
-        this.id = 'okit-' + template_artifact_prefix + '-' + uuidv4();
-        this.display_name = this.generateDefaultName(okitjson.template_artifacts.length + 1);
+        this.id = 'okit-' + template_artefact_prefix + '-' + uuidv4();
+        this.display_name = this.generateDefaultName(okitjson.template_artefacts.length + 1);
         this.compartment_id = '';
         // Update with any passed data
         this.merge(data);
@@ -84,7 +84,7 @@ class OkitTemplateArtifact extends OkitArtifact {
         definition['svg']['y'] = first_child.dy;
         definition['svg']['width'] = dimensions['width'];
         definition['svg']['height'] = dimensions['height'];
-        definition['rect']['stroke']['colour'] = template_artifact_stroke_colour;
+        definition['rect']['stroke']['colour'] = template_artefact_stroke_colour;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
         console.groupEnd();
@@ -115,7 +115,7 @@ class OkitTemplateArtifact extends OkitArtifact {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artifact.html", () => {loadPropertiesSheet(me);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artefact.html", () => {loadPropertiesSheet(me);});
     }
 
 
@@ -141,13 +141,13 @@ class OkitTemplateArtifact extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/OkitTemplateArtifact',
+            url: 'oci/artefacts/OkitTemplateArtifact',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request_json),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({template_artifacts: response_json});
+                regionOkitJson[region].load({template_artefacts: response_json});
                 let len =  response_json.length;
                 if (len > 0) {
                     for(let i=0;i<len;i++ ){
@@ -159,14 +159,14 @@ class OkitTemplateArtifact extends OkitArtifact {
                     me.querySubComponents(request, region, null);
                 }
                 redrawSVGCanvas(region);
-                $('#' + template_artifact_query_cb).prop('checked', true);
+                $('#' + template_artefact_query_cb).prop('checked', true);
                 queryCount--;
                 hideQueryProgressIfComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
-                $('#' + template_artifact_query_cb).prop('checked', true);
+                $('#' + template_artefact_query_cb).prop('checked', true);
                 queryCount--;
                 hideQueryProgressIfComplete();
             }
@@ -185,18 +185,18 @@ $(document).ready(function() {
     let cell = row.append('td');
     cell.append('input')
         .attr('type', 'checkbox')
-        .attr('id', template_artifact_query_cb);
-    cell.append('label').text(template_artifact_artifact);
+        .attr('id', template_artefact_query_cb);
+    cell.append('label').text(template_artefact_artefact);
 
     // Setup Query Display Form
     body = d3.select('#query-oci-tbody');
     row = body.append('tr');
     cell = row.append('td')
-        .text(template_artifact_artifact);
+        .text(template_artefact_artefact);
     cell = row.append('td');
     let input = cell.append('input')
         .attr('type', 'text')
         .attr('class', 'query-filter')
-        .attr('id', 'template_artifact_name_filter')
-        .attr('name', 'template_artifact_name_filter');
+        .attr('id', 'template_artefact_name_filter')
+        .attr('name', 'template_artefact_name_filter');
 });

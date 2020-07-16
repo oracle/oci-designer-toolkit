@@ -12,10 +12,10 @@ const icon_translate_y_start = -20;
 const icon_spacing = 10;
 const connector_colour = "#5f5f5f";
 const corner_radius = 0;
-const container_artifact_x_padding = Math.round(icon_width  * 3 / 2);
-const container_artifact_y_padding = Math.round(icon_height  * 3 / 2);
-const container_artifact_label_width = 300;
-const container_artifact_info_width = 100;
+const container_artefact_x_padding = Math.round(icon_width  * 3 / 2);
+const container_artefact_y_padding = Math.round(icon_height  * 3 / 2);
+const container_artefact_label_width = 300;
+const container_artefact_info_width = 100;
 const positional_adjustments = {
     padding: {x: Math.round(icon_width),   y: Math.round(icon_height)},
     spacing: {x: Math.round(icon_spacing), y: Math.round(icon_spacing)}
@@ -118,11 +118,11 @@ function createSVGDefinitions(canvas_svg) {
         .attr("stroke-width", "1");
 }
 
-function newArtifactSVGDefinition(artifact, data_type) {
+function newArtifactSVGDefinition(artefact, data_type) {
     let definition = {};
-    definition['artifact'] = artifact;
+    definition['artefact'] = artefact;
     definition['data_type'] = data_type;
-    definition['name'] = {show: false, text: artifact['display_name']};
+    definition['name'] = {show: false, text: artefact['display_name']};
     definition['label'] = {show: false, text: data_type};
     definition['info'] = {show: false, text: data_type};
     definition['svg'] = {x: 0, y: 0, width: icon_width, height: icon_height};
@@ -138,12 +138,12 @@ function newArtifactSVGDefinition(artifact, data_type) {
 }
 
 function drawArtifact(definition) {
-    let id             = definition['artifact']['id'];
-    let parent_id      = definition['artifact']['parent_id'];
+    let id             = definition['artefact']['id'];
+    let parent_id      = definition['artefact']['parent_id'];
     let parent_svg_id  = parent_id + "-svg";
-    let compartment_id = definition['artifact']['compartment_id'];
+    let compartment_id = definition['artefact']['compartment_id'];
     let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
-    console.info('Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name'])
+    console.info('Creating ' + definition['data_type'] + ' ' + definition['artefact']['display_name'])
     console.info('Id             : ' + id )
     console.info('Parent Id      : ' + parent_id)
     console.info('Parent SVG Id  : ' + parent_svg_id);
@@ -161,8 +161,8 @@ function drawArtifact(definition) {
         rect_width -= rect_x * 2;
     }
     // Check for Artifact Display Name and if it does not exist set it to Artifact Name
-    if (!definition['artifact'].hasOwnProperty('display_name')) {
-        definition['artifact']['display_name'] = definition['artifact']['name'];
+    if (!definition['artefact'].hasOwnProperty('display_name')) {
+        definition['artefact']['display_name'] = definition['artefact']['name'];
     }
     // Get Parent SVG
     let parent_svg = d3.select(d3Id(parent_svg_id));
@@ -208,10 +208,10 @@ function drawArtifact(definition) {
         let name_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
-            .attr("width", container_artifact_label_width) 
+            .attr("width", container_artefact_label_width) 
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
+            .attr("viewBox", "0 0 " + container_artefact_label_width + " " + definition['svg']['height']);
         let name = name_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-display-name')
@@ -225,10 +225,10 @@ function drawArtifact(definition) {
         let label_svg = svg.append('svg')
             .attr("x", "10")
             .attr("y", "0")
-            .attr("width", container_artifact_label_width)
+            .attr("width", container_artefact_label_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMax meet")
-            .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
+            .attr("viewBox", "0 0 " + container_artefact_label_width + " " + definition['svg']['height']);
         let name = label_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-label')
@@ -240,12 +240,12 @@ function drawArtifact(definition) {
     }
     if (definition['info']['show']) {
         let info_svg = svg.append('svg')
-            .attr("x", Math.round(definition['svg']['width'] - container_artifact_info_width))
+            .attr("x", Math.round(definition['svg']['width'] - container_artefact_info_width))
             .attr("y", "0")
-            .attr("width", container_artifact_info_width)
+            .attr("width", container_artefact_info_width)
             .attr("height", definition['svg']['height'])
             .attr("preserveAspectRatio", "xMinYMax meet")
-            .attr("viewBox", "0 0 " + container_artifact_info_width + " " + definition['svg']['height']);
+            .attr("viewBox", "0 0 " + container_artefact_info_width + " " + definition['svg']['height']);
         let name = info_svg.append("text")
             .attr("class", "svg-text")
             .attr("id", id + '-info')
@@ -272,7 +272,7 @@ function drawArtifact(definition) {
 
     svg.append("title")
         .attr("id", id + '-title')
-        .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
+        .text(definition['data_type'] + ": " + definition['artefact']['display_name']);
 
     // Set common attributes on svg element and children
     svg.on("contextmenu", handleContextMenu)

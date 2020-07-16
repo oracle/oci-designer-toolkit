@@ -112,7 +112,7 @@ class Compartment extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/Compartment',
+            url: 'oci/artefacts/Compartment',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
@@ -144,16 +144,16 @@ class Compartment extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/Compartments',
+            url: 'oci/artefacts/Compartments',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({compartments: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + 's Query : ' + artifact.display_name);
-                    me.querySubComponents(request, region, artifact.id);
+                for (let artefact of response_json) {
+                    console.info(me.getArtifactReference() + 's Query : ' + artefact.display_name);
+                    me.querySubComponents(request, region, artefact.id);
                 }
                 redrawSVGCanvas(region);
                 $('#' + compartment_query_cb).prop('checked', true);

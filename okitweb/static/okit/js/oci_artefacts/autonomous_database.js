@@ -73,15 +73,15 @@ class AutonomousDatabase extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/AutonomousDatabase',
+            url: 'oci/artefacts/AutonomousDatabase',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({autonomous_databases: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                for (let artefact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + autonomous_database_query_cb).prop('checked', true);

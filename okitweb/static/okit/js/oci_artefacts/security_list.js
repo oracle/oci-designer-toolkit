@@ -68,15 +68,15 @@ class SecurityList extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/SecurityList',
+            url: 'oci/artefacts/SecurityList',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({security_lists: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                for (let artefact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + security_list_query_cb).prop('checked', true);

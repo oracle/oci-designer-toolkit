@@ -74,15 +74,15 @@ class LoadBalancer extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/LoadBalancer',
+            url: 'oci/artefacts/LoadBalancer',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({load_balancers: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                for (let artefact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
                 }
                 redrawSVGCanvas(region);
                 $('#' + load_balancer_query_cb).prop('checked', true);

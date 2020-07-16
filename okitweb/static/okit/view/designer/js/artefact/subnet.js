@@ -13,7 +13,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.vcn_id;}
-    get parent_key() {return 'subnet_id';}
     get minimum_dimensions() {return {width: this.subnet_width, height: this.subnet_height};}
     get subnet_width() {return 400;}
     get subnet_height() {return 150;}
@@ -63,7 +62,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         for (let security_list_id of this.artefact.security_list_ids) {
             let attachment = new SecurityListView(this.getOkitJson().getSecurityList(security_list_id), this);
             attachment.attached_id = this.id;
-            console.info(`Drawing ${this.getArtifactReference()} Security : ${attachment.display_name}`);
+            console.info(`Drawing ${this.getArtifactReference()} Security List : ${attachment.display_name}`);
             attachment.draw();
             attachment_count += 1;
         }

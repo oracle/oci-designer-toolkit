@@ -702,6 +702,9 @@ class OkitJsonView {
         }
         return undefined;
     }
+    getVcn(id='') {
+        return this.getVirtualCloudNetwork(id);
+    }
     deleteVirtualCloudNetwork() {
         for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
             if (this.virtual_cloud_networks[i].artefact_id === id) {
@@ -731,6 +734,12 @@ class OkitArtefactView {
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.getJsonView = function() {return json_view};
+        // Raise Artefact Elements to View Class
+        if (this.artefact) {
+            for (let key in this.artefact) {
+                Object.defineProperty(this, key, { get: function() {return this.artefact[key];} });
+            }
+        }
     }
 
     get json_view() {return this.getJsonView();}
@@ -739,7 +748,6 @@ class OkitArtefactView {
     get artefact_id() {return this.artefact.id;}
     get compartment_id() {return this.artefact.compartment_id;}
     get parent_id() {return null;}
-    get parent_key() {return null;}
     get display_name() {return this.artefact.display_name;}
     get icon_width() {return 45;}
     get icon_height() {return 45;}
@@ -758,7 +766,7 @@ class OkitArtefactView {
 
     newSVGDefinition() {
         let definition = {};
-        definition['artifact'] = this.getArtefact();
+        definition['artefact'] = this.getArtefact();
         definition['data_type'] = this.getArtefact().getArtifactReference();
         definition['name'] = {show: false, text: this.getArtefact()['display_name']};
         definition['label'] = {show: false, text: this.getArtefact().getArtifactReference()};
@@ -789,7 +797,7 @@ class OkitArtefactView {
          */
         let parent_svg_id  = this.parent_id + "-svg";
         let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
-        console.info('Creating ' + definition['data_type'] + ' ' + definition['artifact']['display_name']);
+        console.info('Creating ' + definition['data_type'] + ' ' + definition['artefact']['display_name']);
         console.info('Id             : ' + this.artefact_id );
         console.info('Parent Id      : ' + this.parent_id);
         console.info('Parent SVG Id  : ' + parent_svg_id);
@@ -807,8 +815,8 @@ class OkitArtefactView {
             rect_width -= rect_x * 2;
         }
         // Check for Artifact Display Name and if it does not exist set it to Artifact Name
-        if (!definition['artifact'].hasOwnProperty('display_name')) {
-            definition['artifact']['display_name'] = definition['artifact']['name'];
+        if (!definition['artefact'].hasOwnProperty('display_name')) {
+            definition['artefact']['display_name'] = definition['artefact']['name'];
         }
         // Get Parent SVG
         let parent_svg = d3.select(d3Id(parent_svg_id));
@@ -854,10 +862,10 @@ class OkitArtefactView {
             let name_svg = svg.append('svg')
                 .attr("x", "10")
                 .attr("y", "0")
-                .attr("width", container_artifact_label_width)
+                .attr("width", container_artefact_label_width)
                 .attr("height", definition['svg']['height'])
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
+                .attr("viewBox", "0 0 " + container_artefact_label_width + " " + definition['svg']['height']);
             let name = name_svg.append("text")
                 .attr("class", "svg-text")
                 .attr("id", this.artefact_id + '-display-name')
@@ -871,10 +879,10 @@ class OkitArtefactView {
             let label_svg = svg.append('svg')
                 .attr("x", "10")
                 .attr("y", "0")
-                .attr("width", container_artifact_label_width)
+                .attr("width", container_artefact_label_width)
                 .attr("height", definition['svg']['height'])
                 .attr("preserveAspectRatio", "xMinYMax meet")
-                .attr("viewBox", "0 0 " + container_artifact_label_width + " " + definition['svg']['height']);
+                .attr("viewBox", "0 0 " + container_artefact_label_width + " " + definition['svg']['height']);
             let name = label_svg.append("text")
                 .attr("class", "svg-text")
                 .attr("id", this.artefact_id + '-label')
@@ -886,12 +894,12 @@ class OkitArtefactView {
         }
         if (definition['info']['show']) {
             let info_svg = svg.append('svg')
-                .attr("x", Math.round(definition['svg']['width'] - container_artifact_info_width))
+                .attr("x", Math.round(definition['svg']['width'] - container_artefact_info_width))
                 .attr("y", "0")
-                .attr("width", container_artifact_info_width)
+                .attr("width", container_artefact_info_width)
                 .attr("height", definition['svg']['height'])
                 .attr("preserveAspectRatio", "xMinYMax meet")
-                .attr("viewBox", "0 0 " + container_artifact_info_width + " " + definition['svg']['height']);
+                .attr("viewBox", "0 0 " + container_artefact_info_width + " " + definition['svg']['height']);
             let name = info_svg.append("text")
                 .attr("class", "svg-text")
                 .attr("id", this.artefact_id + '-info')
@@ -918,7 +926,7 @@ class OkitArtefactView {
 
         svg.append("title")
             .attr("id", this.artefact_id + '-title')
-            .text(definition['data_type'] + ": " + definition['artifact']['display_name']);
+            .text(definition['data_type'] + ": " + definition['artefact']['display_name']);
 
         // Set common attributes on svg element and children
         svg.on("contextmenu", handleContextMenu)
@@ -1025,8 +1033,8 @@ class OkitArtefactView {
         let children = false;
         let key = this.getParentKey();
         for (let group of this.getTopEdgeArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact[key] === this.id) {
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact[key] === this.id) {
                     children = true;
                     break;
                 }
@@ -1038,9 +1046,9 @@ class OkitArtefactView {
     getTopEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getTopEdgeArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
-                    let dimension = artifact.dimensions;
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
+                    let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
                 }
@@ -1065,8 +1073,8 @@ class OkitArtefactView {
     hasTopChildren() {
         let children = false;
         for (let group of this.getTopArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1078,9 +1086,9 @@ class OkitArtefactView {
     getTopChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getTopArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
-                    let dimension = artifact.dimensions;
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
+                    let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
                 }
@@ -1105,8 +1113,8 @@ class OkitArtefactView {
     hasContainerChildren() {
         let children = false;
         for (let group of this.getContainerArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1118,9 +1126,9 @@ class OkitArtefactView {
     getContainerChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getContainerArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
-                    let dimension = artifact.dimensions;
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
+                    let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
                     max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
                 }
@@ -1146,8 +1154,8 @@ class OkitArtefactView {
     hasBottomChildren() {
         let children = false;
         for (let group of this.getBottomArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1159,9 +1167,9 @@ class OkitArtefactView {
     getBottomChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getBottomArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
-                    let dimension = artifact.dimensions;
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
+                    let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
                 }
@@ -1191,8 +1199,8 @@ class OkitArtefactView {
     hasBottomEdgeChildren() {
         let children = false;
         for (let group of this.getBottomEdgeArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1204,9 +1212,9 @@ class OkitArtefactView {
     getBottomEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getBottomEdgeArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
-                    let dimension = artifact.dimensions;
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
+                    let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
                 }
@@ -1236,8 +1244,8 @@ class OkitArtefactView {
     hasLeftChildren() {
         let children = false;
         for (let group of this.getLeftArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1249,9 +1257,9 @@ class OkitArtefactView {
     getLeftChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getLeftArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
-                    let dimension = artifact.dimensions;
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
+                    let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
                     max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
                 }
@@ -1276,8 +1284,8 @@ class OkitArtefactView {
     hasRightChildren() {
         let children = false;
         for (let group of this.getRightArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1289,9 +1297,9 @@ class OkitArtefactView {
     getRightChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
-                    let dimension = artifact.dimensions;
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
+                    let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
                     max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
                 }
@@ -1322,8 +1330,8 @@ class OkitArtefactView {
     hasRightEdgeChildren() {
         let children = false;
         for (let group of this.getRightEdgeArtifacts()) {
-            for(let artifact of this.json_view[this.artefact.artifactToElement(group)]) {
-                if (artifact.parent_id === this.id) {
+            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+                if (artefact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -1516,7 +1524,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
 
     getChildElements() {
         let child_elements = [];
-        this.getChildTypes().forEach(element => child_elements.push(this.artefact.artifactToElement(element)));
+        this.getChildTypes().forEach(element => child_elements.push(this.artefact.artefactToElement(element)));
         return child_elements;
     }
 

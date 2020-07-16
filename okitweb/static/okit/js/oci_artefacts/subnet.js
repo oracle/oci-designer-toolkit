@@ -130,16 +130,16 @@ class Subnet extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/Subnet',
+            url: 'oci/artefacts/Subnet',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({subnets: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
-                    me.querySubComponents(request, region, artifact.id);
+                for (let artefact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
+                    me.querySubComponents(request, region, artefact.id);
                 }
                 redrawSVGCanvas(region);
                 $('#' + subnet_query_cb).prop('checked', true);

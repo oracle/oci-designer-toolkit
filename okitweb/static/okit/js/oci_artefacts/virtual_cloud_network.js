@@ -217,16 +217,16 @@ class VirtualCloudNetwork extends OkitArtifact {
         queryCount++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/VirtualCloudNetwork',
+            url: 'oci/artefacts/VirtualCloudNetwork',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[region].load({virtual_cloud_networks: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
-                    me.querySubComponents(request, region, artifact.id);
+                for (let artefact of response_json) {
+                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
+                    me.querySubComponents(request, region, artefact.id);
                 }
                 redrawSVGCanvas(region);
                 $('#' + virtual_cloud_network_query_cb).prop('checked', true);

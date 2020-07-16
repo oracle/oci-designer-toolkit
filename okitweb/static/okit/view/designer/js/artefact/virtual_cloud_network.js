@@ -24,7 +24,6 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.compartment_id;}
-    get parent_key() {return 'vcn_id';}
     get minimum_dimensions() {return {width: this.vcn_width, height: this.vcn_height};}
     get vcn_width() {return 400;}
     get vcn_height() {return 300;}

@@ -218,7 +218,7 @@ $(document).ready(function() {
             let right_column_width = $(jqId('designer_right_column')).width();
             let moved = right_drag_bar_start_x - e.pageX;
             let new_width = right_column_width + moved;
-            // Remove Bar artifacts
+            // Remove Bar artefacts
             $(jqId('ghostbar')).remove();
             $(document).unbind('mousemove');
             dragging_right_drag_bar = false;
