@@ -262,6 +262,16 @@ class OkitJsonView {
     }
 
     // Dynamic Routing Gateway
+    dropDynamicRoutingGatewayView(target) {
+        console.info('Drop Dynamic Routing Gateway View');
+        console.info(target);
+        let view_artefact = this.newDynamicRoutingGateway();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newDynamicRoutingGateway(gateway) {
         this.dynamic_routing_gateways.push(gateway ? new DynamicRoutingGatewayView(gateway, this) : new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway(), this));
         return this.dynamic_routing_gateways[this.dynamic_routing_gateways.length - 1];
@@ -370,6 +380,16 @@ class OkitJsonView {
     }
 
     // Internet Gateway
+    dropInternetGatewayView(target) {
+        console.info('Drop Internet Gateway View');
+        console.info(target);
+        let view_artefact = this.newInternetGateway();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newInternetGateway(gateway) {
         let ig = gateway ? new InternetGatewayView(gateway, this) : new InternetGatewayView(this.okitjson.newInternetGateway(), this);
         if (ig.artefact === null) {
@@ -428,6 +448,16 @@ class OkitJsonView {
     }
 
     // Local Peering Gateway
+    dropLocalPeeringGatewayView(target) {
+        console.info('Drop Local Peering Gateway View');
+        console.info(target);
+        let view_artefact = this.newLocalPeeringGateway();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newLocalPeeringGateway(gateway) {
         this.local_peering_gateways.push(gateway ? new LocalPeeringGatewayView(gateway, this) : new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway(), this));
         return this.local_peering_gateways[this.local_peering_gateways.length - 1];
@@ -455,6 +485,16 @@ class OkitJsonView {
     }
 
     // NAT Gateway
+    dropNATGatewayView(target) {
+        console.info('Drop NAT Gateway View');
+        console.info(target);
+        let view_artefact = this.newNATGateway();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newNATGateway(gateway) {
         let ng = gatway ? new NATGatewayView(gateway, this) : new NATGatewayView(this.okitjson.newNATGateway(), this);
         if (ng.artefact === null) {
