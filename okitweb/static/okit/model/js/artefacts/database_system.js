@@ -69,20 +69,6 @@ class DatabaseSystem extends OkitArtifact {
     }
 
 
-    /*
-    ** Delete Processing
-     */
-    deleteChildren() {
-        // Remove Instance references
-        for (let instance of this.getOkitJson().instances) {
-            for (let i=0; i < instance['database_system_ids'].length; i++) {
-                if (instance.database_system_ids[i] === this.id) {
-                    instance.database_system_ids.splice(i, 1);
-                }
-            }
-        }
-    }
-
     getNamePrefix() {
         return super.getNamePrefix() + 'ds';
     }
