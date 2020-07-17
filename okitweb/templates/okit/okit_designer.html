@@ -40,11 +40,11 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
-    {% for oci_asset_js in oci_assets_js %}
-        <script type="text/javascript" src="{{ url_for('static', filename='okit/js/oci_artefacts/' + oci_asset_js) }}"></script>
+    {% for model_js in artefact_model_js_files %}
+        <script type="text/javascript" src="{{ url_for('static', filename='okit/model/js/artefacts/' + model_js) }}"></script>
     {% endfor %}
     {% for view_js in artefact_view_js_files %}
-        <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/artefact/' + view_js) }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/artefacts/' + view_js) }}"></script>
     {% endfor %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_fragments.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_ready.js') }}"></script>

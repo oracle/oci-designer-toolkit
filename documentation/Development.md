@@ -36,7 +36,7 @@ to the system.
 - New Files
     - Frontend
         - **[Palette SVG](#palette-svg)**                             : [okitweb/static/okit/palette/storage/*Block_Storage_Volume*.svg](../okitweb/static/okit/palette/storage/Block_Storage_Volume.svg)
-        - **[Artifact Javascript](#artifact-javascript)**             : [okitweb/static/okit/js/oci_artefacts/*block_storage_volume*.js](../okitweb/static/okit/js/oci_artefacts/block_storage_volume.js)
+        - **[Artifact Javascript](#artifact-javascript)**             : [okitweb/static/okit/js/oci_artefacts/*block_storage_volume*.js](../okitweb/static/okit/model/js/artefacts/block_storage_volume.js)
         - **[Properties HTML](#properties-html)**                     : [okitweb/templates/okit/propertysheets/*block_storage_volume*.html](../okitweb/templates/okit/propertysheets/block_storage_volume.html)
     - Backend
         - **[Python OCI Facade](#python-oci-facade)**                 : [visualiser/facades/oci*BlockStorageVolume*.py](../visualiser/facades/ociBlockStorageVolume.py)

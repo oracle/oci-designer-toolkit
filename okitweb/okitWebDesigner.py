@@ -96,10 +96,10 @@ def handle_exception(error):
 
 @bp.route('/designer', methods=(['GET']))
 def designer():
-    # Read Artifact Specific JavaScript Files
-    oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_artefacts')))
+    # Read Artifact Model Specific JavaScript Files
+    artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
-    artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefact')))
+    artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts')))
 
     # Get Palette Icon Groups / Icons
     svg_files = []
@@ -176,7 +176,7 @@ def designer():
 
     #Render The Template
     return render_template('okit/okit_designer.html',
-                           oci_assets_js=oci_assets_js,
+                           artefact_model_js_files=artefact_model_js_files,
                            artefact_view_js_files=artefact_view_js_files,
                            palette_icon_groups=palette_icon_groups,
                            fragment_icons=fragment_icons,
