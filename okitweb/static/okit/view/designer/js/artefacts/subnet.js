@@ -60,7 +60,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         }
         // Security Lists
         for (let security_list_id of this.artefact.security_list_ids) {
-            let attachment = new SecurityListView(this.getOkitJson().getSecurityList(security_list_id), this);
+            let attachment = new SecurityListView(this.getJsonView().getOkitJson().getSecurityList(security_list_id), this.getJsonView());
             attachment.attached_id = this.id;
             console.info(`Drawing ${this.getArtifactReference()} Security List : ${attachment.display_name}`);
             attachment.draw();
