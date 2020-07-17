@@ -10,13 +10,12 @@ console.info('Loaded Designer ServiceGateway View Javascript');
 class ServiceGatewayView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
-        this.parent_id = artefact.compartment_id;
     }
 
     get parent_id() {return this.artefact.vcn_id;}
 
     getParent() {
-        return this.getServiceGateway(this.getParentId());
+        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
     }
 
     getParentId() {
@@ -27,7 +26,7 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
@@ -54,7 +53,7 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
     }
 
     drawConnectors() {
-        console.groupCollapsed('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.group('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         // Get Grand Parent
         let grandparent_id = d3.select(d3Id(this.parent_id)).attr('data-parent-id');
         // Define Connector Parent
@@ -117,7 +116,7 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;

@@ -16,11 +16,13 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
         console.info(`Compartment Id ${this.artefact.compartment_id}`);
         return this.artefact.compartment_id !== null ? this.artefact.compartment_id : 'canvas';
     }
+    get minimum_width() {return 400;}
+    get minimum_height() {return 150;}
     get minimum_dimensions() {
         if (this.isTopLevel()) {
             return {width: $(`#${this.json_view.parent_id}`).width(), height: $(`#${this.json_view.parent_id}`).height()};
         } else {
-            return {width: container_artefact_x_padding * 2, height: container_artefact_y_padding * 2};
+            return super.minimum_dimensions;
         }
     }
 

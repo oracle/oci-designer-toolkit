@@ -21,6 +21,8 @@ class InstanceView extends OkitDesignerArtefactView {
             return this.compartment_id;
         }
     }
+    get minimum_width() {return 135;}
+    get minimum_height() {return 100;}
     get dimensions() {
         console.group('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.minimum_dimensions;
@@ -37,15 +39,15 @@ class InstanceView extends OkitDesignerArtefactView {
         dimensions.width  = Math.max(dimensions.width, bottom_edge_dimensions.width);
         dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
         // Check size against minimum
-        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
-        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
+        dimensions.width  = Math.max(dimensions.width,  this.minimum_dimensions.width);
+        dimensions.height = Math.max(dimensions.height, this.minimum_dimensions.height);
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
         console.groupEnd();
         return dimensions;
     }
 
     getParent() {
-        return this.getInstance(this.getParentId());
+        return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);
     }
 
     getParentId() {

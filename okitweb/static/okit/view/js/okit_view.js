@@ -353,6 +353,18 @@ class OkitJsonView {
     }
 
     // Instance
+    dropInstanceView(target) {
+        console.info('Drop Instance View');
+        console.info(target);
+        let view_artefact = this.newInstance();
+        if (target.type === Subnet.getArtifactReference()) {
+            view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
+        }
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newInstance(instance) {
         this.instances.push(instance ? new InstanceView(instance, this) : new InstanceView(this.okitjson.newInstance(), this));
         return this.instances[this.instances.length - 1];
@@ -496,7 +508,7 @@ class OkitJsonView {
         return view_artefact;
     }
     newNATGateway(gateway) {
-        let ng = gatway ? new NATGatewayView(gateway, this) : new NATGatewayView(this.okitjson.newNATGateway(), this);
+        let ng = gateway ? new NATGatewayView(gateway, this) : new NATGatewayView(this.okitjson.newNATGateway(), this);
         if (ng.artefact === null) {
             return null;
         }
@@ -654,6 +666,16 @@ class OkitJsonView {
     }
 
     // Service Gateway
+    dropServiceGatewayView(target) {
+        console.info('Drop Service Gateway View');
+        console.info(target);
+        let view_artefact = this.newServiceGateway();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newServiceGateway(gateway) {
         this.service_gateways.push(gateway ? new ServiceGatewayView(gateway, this) : new ServiceGatewayView(this.okitjson.newServiceGateway(), this));
         return this.service_gateways[this.service_gateways.length - 1];
@@ -793,7 +815,9 @@ class OkitArtefactView {
     get icon_height() {return 45;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
     get collapsed_dimensions() {return this.icon_dimensions;}
-    get minimum_dimensions() {return this.icon_dimensions;}
+    get minimum_width() {return this.icon_width;}
+    get minimum_height() {return this.icon_height;}
+    get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
     get dimensions() {return this.minimum_dimensions;}
 
     getParent() {return null;}
@@ -1382,7 +1406,7 @@ class OkitArtefactView {
 
     getFirstRightEdgeChildOffset() {
         let offset = {
-            dx: Math.round(this.getDimensions().width - icon_width),
+            dx: Math.round(this.dimensions.width - icon_width),
             dy: Math.round(positional_adjustments.padding.x)
         };
         return offset;

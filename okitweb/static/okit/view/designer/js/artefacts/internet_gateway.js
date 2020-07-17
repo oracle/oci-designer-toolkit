@@ -15,7 +15,7 @@ class InternetGatewayView extends OkitDesignerArtefactView {
     get parent_id() {return this.artefact.vcn_id;}
 
     getParent() {
-        return this.getInternetGateway(this.getParentId());
+        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
     }
 
     getParentId() {

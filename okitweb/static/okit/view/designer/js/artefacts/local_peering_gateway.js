@@ -15,7 +15,7 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
     get parent_id() {return this.artefact.vcn_id;}
 
     getParent() {
-        return this.getLocalPeeringGateway(this.getParentId());
+        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
     }
 
     getParentId() {
@@ -26,7 +26,7 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Add Highlighting
@@ -51,7 +51,7 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let dimensions = this.getDimensions();
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
@@ -68,7 +68,7 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
 
     // Return Artifact Dimensions
     getDimensions() {
-        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.group('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getMinimumDimensions();
         // Calculate Size based on Child Artifacts
         // Check size against minimum

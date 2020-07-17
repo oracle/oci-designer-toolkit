@@ -13,9 +13,8 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.vcn_id;}
-    get minimum_dimensions() {return {width: this.subnet_width, height: this.subnet_height};}
-    get subnet_width() {return 400;}
-    get subnet_height() {return 150;}
+    get minimum_width() {return 400;}
+    get minimum_height() {return 150;}
 
     getParent() {
         return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
