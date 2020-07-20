@@ -15,7 +15,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     get parent_id() {return this.artefact.compartment_id;}
 
     getParent() {
-        return this.getAutonomousDatabase(this.getParentId());
+        return this.getJsonView().getCompartment(this.parent_id);
     }
 
     getParentId() {

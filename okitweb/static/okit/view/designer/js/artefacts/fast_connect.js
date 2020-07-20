@@ -15,7 +15,7 @@ class FastConnectView extends OkitDesignerArtefactView {
     get parent_id() {return this.artefact.compartment_id;}
 
     getParent() {
-        return this.getFastConnect(this.getParentId());
+        return this.getJsonView().getCompartment(this.parent_id);
     }
 
     getParentId() {
@@ -55,7 +55,6 @@ class FastConnectView extends OkitDesignerArtefactView {
     getSvgDefinition() {
         console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let dimensions = this.getDimensions();
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
         definition['svg']['y'] = first_child.dy;

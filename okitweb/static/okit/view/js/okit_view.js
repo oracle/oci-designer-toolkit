@@ -140,6 +140,15 @@ class OkitJsonView {
      */
 
     // Autonomous Database
+    dropAutonomousDatabaseView(target) {
+        console.info('Drop Autonomous Database View');
+        console.info(target);
+        let view_artefact = this.newAutonomousDatabase();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newAutonomousDatabase(database) {
         this.autonomous_databases.push(database ? new AutonomousDatabaseView(database, this) : new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase(), this));
         return this.autonomous_databases[this.autonomous_databases.length - 1];
@@ -167,6 +176,15 @@ class OkitJsonView {
     }
 
     // Block Storage
+    dropBlockStorageVolumeView(target) {
+        console.info('Drop Block Storage Volume View');
+        console.info(target);
+        let view_artefact = this.newBlockStorageVolume();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newBlockStorageVolume(volume) {
         this.block_storage_volumes.push(volume ? new BlockStorageVolumeView(volume, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
         return this.block_storage_volumes[this.block_storage_volumes.length - 1];
@@ -229,12 +247,23 @@ class OkitJsonView {
     }
 
     // Container
+    dropContainerView() {}
     newContainer() {}
     getContainers() {}
     getContainer() {}
     deleteContainer() {}
 
     // Database System
+    dropDatabaseSystemView(target) {
+        console.info('Drop Database System View');
+        console.info(target);
+        let view_artefact = this.newDatabaseSystem();
+        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newDatabaseSystem(database) {
         this.database_systems.push(database ? new DatabaseSystemView(database, this) : new DatabaseSystemView(this.okitjson.newDatabaseSystem(), this));
         return this.database_systems[this.database_systems.length - 1];
@@ -299,6 +328,15 @@ class OkitJsonView {
     }
 
     // Fast Connect
+    dropFastConnectView(target) {
+        console.info('Drop Fast Connect View');
+        console.info(target);
+        let view_artefact = this.newFastConnect();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newFastConnect(connect) {
         this.fast_connects.push(connect ? new FastConnectView(connect, this) : new FastConnectView(this.okitjson.newFastConnect(), this));
         return this.fast_connects[this.fast_connects.length - 1];
@@ -326,6 +364,16 @@ class OkitJsonView {
     }
 
     // File Storage System
+    dropFileStorageSystemView(target) {
+        console.info('Drop File Storage System View');
+        console.info(target);
+        let view_artefact = this.newFileStorageSystem();
+        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newFileStorageSystem(storage) {
         this.file_storage_systems.push(storage ? new FileStorageSystemView(storage, this) : new FileStorageSystemView(this.okitjson.newFileStorageSystem(), this));
         return this.file_storage_systems[this.file_storage_systems.length - 1];
@@ -359,8 +407,10 @@ class OkitJsonView {
         let view_artefact = this.newInstance();
         if (target.type === Subnet.getArtifactReference()) {
             view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
+            view_artefact.getArtefact().compartment_id = target.compartment_id;
+        } else if (target.type === Compartment.getArtifactReference()) {
+            view_artefact.getArtefact().compartment_id = target.id;
         }
-        view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
         return view_artefact;
@@ -433,6 +483,16 @@ class OkitJsonView {
     }
 
     // Load Balancer
+    dropLoadBalancerView(target) {
+        console.info('Drop Load Balancer View');
+        console.info(target);
+        let view_artefact = this.newLoadBalancer();
+        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newLoadBalancer(loadbalancer) {
         this.load_balancers.push(loadbalancer ? new LoadBalancerView(loadbalancer, this) : new LoadBalancerView(this.okitjson.newLoadBalancer(), this));
         return this.load_balancers[this.load_balancers.length - 1];
@@ -538,6 +598,16 @@ class OkitJsonView {
     }
 
     // Network Security Group
+    dropNetworkSecurityGroupView(target) {
+        console.info('Drop Network Security Group View');
+        console.info(target);
+        let view_artefact = this.newNetworkSecurityGroup();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newNetworkSecurityGroup(security) {
         this.network_security_groups.push(security ? new NetworkSecurityGroupView(security, this) : new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup(), this));
         return this.network_security_groups[this.network_security_groups.length - 1];
@@ -565,6 +635,15 @@ class OkitJsonView {
     }
 
     // Object Storage Bucket
+    dropObjectStorageBucketView(target) {
+        console.info('Drop Object Storage Bucket View');
+        console.info(target);
+        let view_artefact = this.newObjectStorageBucket();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
     newObjectStorageBucket(storage) {
         this.object_storage_buckets.push(storage ? new ObjectStorageBucketView(storage, this) : new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket(), this));
         return this.object_storage_buckets[this.object_storage_buckets.length - 1];

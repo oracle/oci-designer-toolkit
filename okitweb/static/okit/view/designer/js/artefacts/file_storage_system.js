@@ -15,7 +15,7 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
     get parent_id() {return this.artefact.primary_mount_target.subnet_id;}
 
     getParent() {
-        return this.getFileStorageSystem(this.getParentId());
+        return this.getJsonView().getSubnet(this.parent_id);
     }
 
     getParentId() {
@@ -36,12 +36,11 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
     getSvgDefinition() {
         console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let dimensions = this.getDimensions();
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
         definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = dimensions['width'];
-        definition['svg']['height'] = dimensions['height'];
+        definition['svg']['width'] = this.dimensions['width'];
+        definition['svg']['height'] = this.dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));

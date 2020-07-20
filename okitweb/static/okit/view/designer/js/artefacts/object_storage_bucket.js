@@ -10,13 +10,12 @@ console.info('Loaded Designer ObjectStorageBucket View Javascript');
 class ObjectStorageBucketView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
-        this.parent_id = artefact.compartment_id;
     }
 
     get parent_id() {return this.artefact.compartment_id;}
 
     getParent() {
-        return this.getObjectStorageBucket(this.getParentId());
+        return this.getJsonView().getCompartment(this.parent_id);
     }
 
     getParentId() {

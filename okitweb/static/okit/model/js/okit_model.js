@@ -238,8 +238,6 @@ class OkitJson {
     // Autonomous Database
     newAutonomousDatabase(data) {
         console.info('New Autonomous Database');
-        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
-        data.compartment_id = data.parent_id;
         this.autonomous_databases.push(new AutonomousDatabase(data, this));
         return this.autonomous_databases[this.autonomous_databases.length - 1];
     }
@@ -267,8 +265,6 @@ class OkitJson {
     // Block Storage Volume
     newBlockStorageVolume(data) {
         console.info('New Block Storage Volume');
-        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
-        data.compartment_id = data.parent_id;
         this.block_storage_volumes.push(new BlockStorageVolume(data, this));
         return this.block_storage_volumes[this.block_storage_volumes.length - 1];
     }
@@ -296,8 +292,6 @@ class OkitJson {
     // Compartment
     newCompartment(data = {}) {
         console.info('New Compartment');
-        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
-        data.compartment_id = data.parent_id;
         this.compartments.push(new Compartment(data, this));
         return this.compartments[this.compartments.length - 1];
     }
@@ -611,8 +605,6 @@ class OkitJson {
     // Object Storage Bucket
     newObjectStorageBucket(data) {
         console.info('New Object Storage Bucket');
-        // Because we are direct sub components of Compartment set compartment_id to parent_id not the parents compartment_id
-        data.compartment_id = data.parent_id;
         this.object_storage_buckets.push(new ObjectStorageBucket(data, this));
         return this.object_storage_buckets[this.object_storage_buckets.length - 1];
     }

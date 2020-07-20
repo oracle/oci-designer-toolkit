@@ -30,8 +30,8 @@ class FileStorageSystem extends OkitArtifact {
         }
         if (this.exports.length > 0) {
             this.primary_export = this.exports[0];
-        } else {
-            this.primary_export = {path: '/mnt', export_options: {source: this.getOkitJson().getSubnet(data.parent_id)['cidr_block'], access: 'READ_ONLY', anonymous_gid: '', anonymous_uid: '', identity_squash: 'NONE', require_privileged_source_port: true}};
+        } else if (this.subnet_id) {
+            this.primary_export = {path: '/mnt', export_options: {source: this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'], access: 'READ_ONLY', anonymous_gid: '', anonymous_uid: '', identity_squash: 'NONE', require_privileged_source_port: true}};
             this.exports[0] = this.primary_export;
         }
         if (this.mount_targets.length > 0) {
@@ -48,6 +48,7 @@ class FileStorageSystem extends OkitArtifact {
     ** Conversion Routine allowing loading of old json
      */
     convert() {
+        super.convert();
         // Export Element
         if (this.exports === undefined) {this.export = [];}
         if (this.exports[0].export_options === undefined) {this.exports[0].export_options = {};}
