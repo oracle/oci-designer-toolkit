@@ -13,12 +13,11 @@ class LoadBalancerView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.subnet_ids[0];}
-    get minimum_dimensions() {return {width: load_balancer_width, height: load_balancer_height};}
-    get load_balancer_width() {return Math.round(this.icon_width * 3);}
-    get load_balancer_height() {return Math.round(this.icon_height * 3 / 2);}
+    get minimum_width() {return 135;}
+    get minimum_height() {return 100;}
 
     getParent() {
-        return this.getLoadBalancer(this.getParentId());
+        return this.getJsonView().getSubnet(this.parent_id);
     }
 
     getParentId() {
@@ -29,7 +28,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
@@ -56,7 +55,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
     }
 
     drawConnectors() {
-        console.groupCollapsed('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.group('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         // Check if there are any missing forllowing query
         this.checkConnectors();
         // Get Grand Parent
@@ -122,7 +121,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;

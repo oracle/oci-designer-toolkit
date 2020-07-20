@@ -12,10 +12,10 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.compartment_id;}
+    get parent_id() {return this.artefact.subnet_id;}
 
     getParent() {
-        return this.getDatabaseSystem(this.getParentId());
+        return this.getJsonView().getSubnet(this.parent_id);
     }
 
     getParentId() {

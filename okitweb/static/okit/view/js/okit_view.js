@@ -487,7 +487,7 @@ class OkitJsonView {
         console.info('Drop Load Balancer View');
         console.info(target);
         let view_artefact = this.newLoadBalancer();
-        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().subnet_ids.push(target.id);
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
@@ -902,6 +902,8 @@ class OkitArtefactView {
     getParent() {return null;}
 
     getParentId() {return this.parent_id;}
+
+    isAttached() {return false;}
 
     getArtefact() {return this.artefact;}
 

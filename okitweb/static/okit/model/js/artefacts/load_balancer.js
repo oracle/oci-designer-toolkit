@@ -18,8 +18,7 @@ class LoadBalancer extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.load_balancers.length + 1);
         this.compartment_id = '';
-        this.subnet_id = data.parent_id;
-        this.subnet_ids = [data.parent_id];
+        this.subnet_ids = [];
         this.is_private = false;
         this.shape = '100Mbps';
         this.protocol = 'HTTP';
@@ -32,6 +31,8 @@ class LoadBalancer extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
+        // Expose subnet_id for the first Mount target at the top level
+        Object.defineProperty(this, 'subnet_id', { get: function() {return this.subnet_ids[0];}, enumerable: false });
     }
 
     /*
