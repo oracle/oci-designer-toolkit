@@ -33,6 +33,7 @@ class FileStorageSystem extends OkitArtifact {
         } else if (this.subnet_id) {
             this.primary_export = {path: '/mnt', export_options: {source: this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'], access: 'READ_ONLY', anonymous_gid: '', anonymous_uid: '', identity_squash: 'NONE', require_privileged_source_port: true}};
             this.exports[0] = this.primary_export;
+            delete this.subnet_id;
         }
         if (this.mount_targets.length > 0) {
             this.primary_mount_target = this.mount_targets[0];
@@ -41,6 +42,8 @@ class FileStorageSystem extends OkitArtifact {
             this.mount_targets[0] = this.primary_mount_target;
         }
         this.convert();
+        // Expose subnet_id for the first Mount target at the top level
+        //Object.defineProperty(this, 'subnet_id', { get: function() {return this.primary_mount_target.subnet_id;}, enumerable: true });
     }
 
 

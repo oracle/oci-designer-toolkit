@@ -367,10 +367,10 @@ class OkitJsonView {
     dropFileStorageSystemView(target) {
         console.info('Drop File Storage System View');
         console.info(target);
-        let view_artefact = this.newFileStorageSystem();
-        view_artefact.getArtefact().subnet_id = target.id;
+        // Pass in subnet so we create a default mount
+        let view_artefact = this.newFileStorageSystem(this.okitjson.newFileStorageSystem({subnet_id: target.id}));
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
+        console.info('View Artefact ' + view_artefact.subnet_id);
         console.info(view_artefact)
         return view_artefact;
     }

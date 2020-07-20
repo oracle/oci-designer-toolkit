@@ -26,7 +26,7 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         console.groupEnd();
@@ -34,7 +34,7 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
@@ -50,7 +50,7 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
 
     // Return Artifact Dimensions
     getDimensions() {
-        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.group('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getMinimumDimensions();
         // Calculate Size based on Child Artifacts
         // Check size against minimum

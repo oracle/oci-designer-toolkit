@@ -10,13 +10,12 @@ console.info('Loaded Designer NetworkSecurityGroup View Javascript');
 class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
-        this.parent_id = artefact.compartment_id;
     }
 
     get parent_id() {return this.artefact.vcn_id;}
 
     getParent() {
-        return this.getNetworkSecurityGroup(this.getParentId());
+        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
     }
 
     getParentId() {
@@ -27,7 +26,7 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         if (this.isAttached()) {
             console.groupEnd();
             return;
@@ -39,7 +38,7 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
