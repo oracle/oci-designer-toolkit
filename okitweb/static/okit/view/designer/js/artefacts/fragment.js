@@ -144,21 +144,35 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeDatabaseSystems(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getDatabaseSystems()) {
-            let clone = this.okit_json.newDatabaseSystem(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newDatabaseSystem(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newDatabaseSystem(clone);
+            } else {
+                let clone = this.okit_json.newDatabaseSystem(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newDatabaseSystem(clone);
             }
-            this.json_view.newDatabaseSystem(clone);
         }
     }
 
     mergeDynamicRoutingGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getDynamicRoutingGateways()) {
-            let clone = this.okit_json.newDynamicRoutingGateway(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newDynamicRoutingGateway(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newDynamicRoutingGateway(clone);
+            } else {
+                let clone = this.okit_json.newDynamicRoutingGateway(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newDynamicRoutingGateway(clone);
             }
-            this.json_view.newDynamicRoutingGateway(clone);
         }
     }
 
@@ -174,71 +188,120 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeFileStorageSystems(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getFileStorageSystems()) {
-            let clone = this.okit_json.newFileStorageSystem(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newFileStorageSystem(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newFileStorageSystem(clone);
+            } else {
+                let clone = this.okit_json.newFileStorageSystem(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newFileStorageSystem(clone);
             }
-            this.json_view.newFileStorageSystem(clone);
         }
     }
 
     mergeInstances(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getInstances()) {
-            let clone = this.okit_json.newInstance(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newInstance(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newInstance(clone);
+            } else {
+                let clone = this.okit_json.newInstance(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newInstance(clone);
             }
-            this.json_view.newInstance(clone);
         }
     }
 
     mergeInternetGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getInternetGateways()) {
-            let clone = this.okit_json.newInternetGateway(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newInternetGateway(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newInternetGateway(clone);
+            } else {
+                let clone = this.okit_json.newInternetGateway(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newInternetGateway(clone);
             }
-            this.json_view.newInternetGateway(clone);
         }
     }
 
     mergeLoadBalancers(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getLoadBalancers()) {
-            let clone = this.okit_json.newLoadBalancer(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newLoadBalancer(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newLoadBalancer(clone);
+            } else {
+                let clone = this.okit_json.newLoadBalancer(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newLoadBalancer(clone);
             }
-            this.json_view.newLoadBalancer(clone);
         }
     }
 
     mergeLocalPeeringGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getLocalPeeringGateways()) {
-            let clone = this.okit_json.newLocalPeeringGateway(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newLocalPeeringGateway(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newLocalPeeringGateway(clone);
+            } else {
+                let clone = this.okit_json.newLocalPeeringGateway(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newLocalPeeringGateway(clone);
             }
-            this.json_view.newLocalPeeringGateway(clone);
         }
     }
 
     mergeNATGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getNATGateways()) {
-            let clone = this.okit_json.newNATGateway(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newNATGateway(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newNATGateway(clone);
+            } else {
+                let clone = this.okit_json.newNATGateway(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newNATGateway(clone);
             }
-            this.json_view.newNATGateway(clone);
         }
     }
 
     mergeNetworkSecurityGroups(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getNetworkSecurityGroups()) {
-            let clone = this.okit_json.newNetworkSecurityGroup(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newNetworkSecurityGroup(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newNetworkSecurityGroup(clone);
+            } else {
+                let clone = this.okit_json.newNetworkSecurityGroup(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newNetworkSecurityGroup(clone);
             }
-            this.json_view.newNetworkSecurityGroup(clone);
         }
     }
 
@@ -254,41 +317,69 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeRouteTables(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getRouteTables()) {
-            let clone = this.okit_json.newRouteTable(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newRouteTable(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newRouteTable(clone);
+            } else {
+                let clone = this.okit_json.newRouteTable(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newRouteTable(clone);
             }
-            this.json_view.newRouteTable(clone);
         }
     }
 
     mergeSecurityLists(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getSecurityLists()) {
-            let clone = this.artefact.okit_json.newSecurityList(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newSecurityList(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newSecurityList(clone);
+            } else {
+                let clone = this.artefact.okit_json.newSecurityList(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newSecurityList(clone);
             }
-            this.json_view.newSecurityList(clone);
         }
     }
 
     mergeServiceGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getServiceGateways()) {
-            let clone = this.artefact.okit_json.newServiceGateway(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newServiceGateway(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newServiceGateway(clone);
+            } else {
+                let clone = this.okit_json.newServiceGateway(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newServiceGateway(clone);
             }
-            this.json_view.newServiceGateway(clone);
         }
     }
 
     mergeSubnets(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getSubnets()) {
-            let clone = this.okit_json.newSubnet(artefact);
-            if (clone.compartment_id === root_compartment_id) {
-                clone.compartment_id = this.target_id;
+            if (artefact.vcn_id === root_vcn_id) {
+                let clone = this.okit_json.newSubnet(artefact);
+                clone.vcn_id = this.target_id;
+                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                this.json_view.newSubnet(clone);
+            } else {
+                let clone = this.okit_json.newSubnet(artefact);
+                if (clone.compartment_id === root_compartment_id) {
+                    clone.compartment_id = this.target_id;
+                }
+                this.json_view.newSubnet(clone);
             }
-            this.json_view.newSubnet(clone);
         }
     }
 
