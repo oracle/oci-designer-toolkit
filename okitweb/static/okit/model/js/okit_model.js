@@ -491,11 +491,11 @@ class OkitJson {
         this.load_balancers.push(new LoadBalancer(data, this));
         return this.load_balancers[this.load_balancers.length - 1];
     }
-    getloadBalancers() {
+    getLoadBalancers() {
         return this.load_balancers;
     }
     getLoadBalancer(id='') {
-        for (let artefact of this.getloadBalancers()) {
+        for (let artefact of this.getLoadBalancers()) {
             if (artefact.id === id) {
                 return artefact;
             }
@@ -774,6 +774,12 @@ class OkitJson {
                 break;
             }
         }
+    }
+
+    // Fragment
+    newFragment(target) {
+        console.info('New Fragment');
+        return new Fragment(target, this);
     }
 
     /*

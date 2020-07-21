@@ -20,7 +20,7 @@ function addFragment(parent_id, compartment_id, fragment_title) {
 // Use global because the static class field fails in FireFox
 let fragmentType = null;
 
-class Fragment extends OkitArtifact {
+class Fragment1 extends OkitArtifact {
     //static _fragmentType = ''
 
     /*

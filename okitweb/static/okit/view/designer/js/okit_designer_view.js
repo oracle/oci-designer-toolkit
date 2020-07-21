@@ -297,12 +297,6 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("type", "text/css")
             .text(colours + ' text{font-weight: normal; font-size: 10pt}');
     }
-
-    // Fragment
-    newFragment(data, parent=null) {
-        console.info('New Fragment');
-        return new Fragment(data, this, parent);
-    }
 }
 
 class OkitDesignerArtefactView extends OkitArtefactView {

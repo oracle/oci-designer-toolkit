@@ -185,7 +185,7 @@
                 {% endif %}
             {% endfor %}
             <details  id="fragments" class="okit-palette-icon-group" open>
-                <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
+                <summary class="okit-palette-icon-group-header"><img id="okit-fragment-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
                 <div class="okit-palette-icon-group-icons okit-icons-only">
                     {% for fragment_icon in fragment_icons %}
                         <div>
@@ -194,7 +194,7 @@
                              title="{{ fragment_icon['title'] }}"
                              draggable="true"
                              alt="{{ fragment_icon['title'] }}"
-                             ondragstart="dragStart(event, Fragment); Fragment.setFragmentType('{{ fragment_icon['title'] }}')">
+                             ondragstart="dragFragmentStart(event, FragmentView, '{{ fragment_icon['title'] }}')">
                             <label>{{ fragment_icon['title'] }}</label>
                         </div>
                     {% endfor %}

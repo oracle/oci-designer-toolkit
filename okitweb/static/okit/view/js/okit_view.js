@@ -866,6 +866,17 @@ class OkitJsonView {
     getVirtualNetworkInterface() {}
     deleteVirtualNetworkInterface() {}
 
+    // Fragment
+    dropFragmentView(target) {
+        console.info('Drop Fragment View');
+        console.info(target);
+        let view_artefact = this.newFragment(target);
+        view_artefact.load();
+    }
+    newFragment(target) {
+        return new FragmentView(this.okitjson.newFragment(target), this);
+    }
+
 }
 
 /*

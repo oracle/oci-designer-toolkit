@@ -76,7 +76,14 @@ function dragStart(evt, artefact) {
     let palette_artefact_data = {artefact: artefact.getArtifactReference(), title: artefact.getArtifactReference()};
     let data_string = JSON.stringify(palette_artefact_data);
     evt.dataTransfer.setData('text/plain', data_string);
-    evt.dataTransfer.setData('any', artefact);
+    palette_drag_artefact = artefact;
+}
+
+function dragFragmentStart(evt, artefact, title) {
+    evt.dataTransfer.effectAllowed = 'copy';
+    let palette_artefact_data = {artefact: artefact.getArtifactReference(), title: title};
+    let data_string = JSON.stringify(palette_artefact_data);
+    evt.dataTransfer.setData('text/plain', data_string);
     palette_drag_artefact = artefact;
 }
 
@@ -116,7 +123,13 @@ function dragDrop(evt) {
     if (evt.preventDefault) {
         evt.preventDefault(); // Necessary. Allows us to drop.
     }
-    let target = {id: evt.target.id, type: evt.target.getAttribute('data-type'), compartment_id: evt.target.getAttribute('data-compartment-id')};
+    let palette_artefact_data = JSON.parse(evt.dataTransfer.getData('text/plain'));
+    let target = {
+        id: evt.target.id,
+        type: evt.target.getAttribute('data-type'),
+        compartment_id: evt.target.getAttribute('data-compartment-id'),
+        title: palette_artefact_data.title
+    };
     let artefact = palette_drag_artefact;
     // Add the Artifact to the OKIT Json / Canvas
     let dropFunction = 'drop' + artefact.name;
