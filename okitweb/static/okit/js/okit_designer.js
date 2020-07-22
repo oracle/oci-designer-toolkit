@@ -11,6 +11,7 @@ const ROOT_CANVAS_ID = 'canvas';
 const PROPERTIES_PANEL = 'properties_panel';
 const SETTINGS_PANEL = 'settings_panel';
 const JSON_PANEL = 'json_panel';
+const JSON_VIEW_PANEL = 'json_view_panel';
 const VALUE_PROPOSITION_PANEL = 'value_proposition_panel';
 const COST_ESTIMATE_PANEL = 'cost_estimate_panel';
 const VALIDATION_PANEL = 'validation_panel';
@@ -621,6 +622,7 @@ function displayOkitJson() {
     } else {
         $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonModel, null, 2) + '</code></pre>');
     }
+    $(jqId(JSON_VIEW_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonView, null, 2) + '</code></pre>');
 }
 /*
 ** Slidebar handlers

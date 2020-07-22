@@ -61,6 +61,7 @@ class Instance extends OkitArtifact {
     ** Conversion Routine allowing loading of old json
      */
     convert() {
+        super.convert();
         // Move Metadata elements
         if (this.metadata === undefined) {this.metadata = {};}
         if (this.cloud_init_yaml !== undefined) {this.metadata.user_data = String(this.cloud_init_yaml); delete this.cloud_init_yaml;}

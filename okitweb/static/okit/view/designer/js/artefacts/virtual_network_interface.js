@@ -10,13 +10,12 @@ console.info('Loaded Designer VirtualNetworkInterface View Javascript');
 class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
-        this.parent_id = artefact.compartment_id;
     }
 
-    get parent_id() {return this.artefact.instance_id;}
+    get parent_id() {return this.attached_id;}
 
     getParent() {
-        return this.getVirtualNetworkInterface(this.getParentId());
+        return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : null;
     }
 
     getParentId() {
@@ -38,6 +37,7 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
     getSvgDefinition() {
         console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
+        console.info(this.getParent());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
         definition['svg']['y'] = first_child.dy;

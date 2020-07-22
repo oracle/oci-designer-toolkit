@@ -12,10 +12,10 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.compartment_id;}
+    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.compartment_id;}
 
     getParent() {
-        return this.getJsonView().getCompartment(this.parent_id);
+        return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);
     }
 
     getParentId() {

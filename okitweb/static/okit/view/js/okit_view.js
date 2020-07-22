@@ -425,6 +425,7 @@ class OkitJsonView {
     getInstance(id='') {
         for (let artefact of this.getInstances()) {
             if (artefact.id === id) {
+                console.info(artefact);
                 return artefact;
             }
         }

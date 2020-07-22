@@ -13,8 +13,7 @@ class InstanceView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {
-        let primary_subnet = this.artefact.getOkitJson().getSubnet(this.artefact.primary_vnic.subnet_id);
-        console.info(`Primary Subnet ${JSON.stringify(primary_subnet)}`);
+        let primary_subnet = this.getJsonView().getSubnet(this.artefact.primary_vnic.subnet_id);
         if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
             return this.primary_vnic.subnet_id;
         } else {
@@ -91,31 +90,31 @@ class InstanceView extends OkitDesignerArtefactView {
         console.group('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
-            let artefact_clone = new BlockStorageVolume(this.getOkitJson().getBlockStorageVolume(block_storage_id), this.getOkitJson(), this);
-            artefact_clone['parent_id'] = this.id;
-            console.info('Drawing ' + this.getArtifactReference() + ' Block Storage Volume : ' + artefact_clone.display_name);
-            artefact_clone.draw();
+            let attachment = new BlockStorageVolumeView(this.getJsonView().getOkitJson().getBlockStorageVolume(block_storage_id), this.getJsonView());
+            attachment.attached_id = this.id;
+            console.info('Drawing ' + this.getArtifactReference() + ' Block Storage Volume : ' + attachment.display_name);
+            attachment.draw();
             attachment_count += 1;
         }
         let start_idx = 1;
         if (this.getParent().getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') {start_idx = 0;}
         for (let idx = start_idx;  idx < this.vnics.length; idx++) {
             let vnic = this.vnics[idx];
-            let artefact_clone = new VirtualNetworkInterface(this.getOkitJson().getSubnet(vnic.subnet_id), this.getOkitJson(), this);
+            let attachment = new VirtualNetworkInterfaceView(this.getJsonView().getOkitJson().getSubnet(vnic.subnet_id), this.getJsonView());
+            attachment.attached_id = this.id;
             // Add the -vnic suffix
-            artefact_clone.id += '-vnic';
-            artefact_clone['parent_id'] = this.id;
-            console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + artefact_clone.display_name);
-            let svg = artefact_clone.draw();
+            //attachment.artefact.id += '-vnic';
+            console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + attachment.display_name);
+            let svg = attachment.draw();
             // Add Highlighting
-            let fill = d3.select(d3Id(artefact_clone.id)).attr('fill');
+            let fill = d3.select(d3Id(attachment.id)).attr('fill');
             svg.on("mouseover", function () {
-                d3.selectAll(d3Id(artefact_clone.id)).attr('fill', svg_highlight_colour);
+                d3.selectAll(d3Id(attachment.id)).attr('fill', svg_highlight_colour);
                 d3.select(d3Id(vnic.subnet_id)).attr('fill', svg_highlight_colour);
                 d3.event.stopPropagation();
             });
             svg.on("mouseout", function () {
-                d3.selectAll(d3Id(artefact_clone.id)).attr('fill', fill);
+                d3.selectAll(d3Id(attachment.id)).attr('fill', fill);
                 d3.select(d3Id(vnic.subnet_id)).attr('fill', fill);
                 d3.event.stopPropagation();
             });
@@ -363,10 +362,9 @@ class InstanceView extends OkitDesignerArtefactView {
             count += $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").length;
         }
         console.info('Bottom Edge Count : ' + count);
-        let dimensions = this.getDimensions();
         // Increment x position based on count
         offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
-        offset.dy = Math.round(dimensions.height - positional_adjustments.padding.y);
+        offset.dy = Math.round(this.dimensions.height - positional_adjustments.padding.y);
         return offset;
     }
 

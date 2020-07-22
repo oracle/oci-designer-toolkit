@@ -111,7 +111,9 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeAutonomousDatabases(root_compartment_id) {
         for (let artefact of this.artefact.getAutonomousDatabases()) {
-            let clone = this.okit_json.newAutonomousDatabase(artefact);
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
+            let clone = this.json_view.getOkitJson().newAutonomousDatabase(artefact);
             if (clone.compartment_id === root_compartment_id) {
                 clone.compartment_id = this.target_id;
             }
@@ -121,7 +123,9 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeBlockStorageVolumes(root_compartment_id) {
         for (let artefact of this.artefact.getBlockStorageVolumes()) {
-            let clone = this.okit_json.newBlockStorageVolume(artefact);
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
+            let clone = this.json_view.getOkitJson().newBlockStorageVolume(artefact);
             if (clone.compartment_id === root_compartment_id) {
                 clone.compartment_id = this.target_id;
             }
@@ -131,9 +135,11 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeCompartments(root_compartment_id) {
         // Merge Sub Compartments
-        for (let compartment of this.artefact.getCompartments()) {
-            if (root_compartment_id && compartment.id !== root_compartment_id) {
-                let clone = this.okit_json.newCompartment(compartment);
+        for (let artefact of this.artefact.getCompartments()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
+            if (root_compartment_id && artefact.id !== root_compartment_id) {
+                let clone = this.json_view.getOkitJson().newCompartment(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -144,13 +150,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeDatabaseSystems(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getDatabaseSystems()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newDatabaseSystem(artefact);
+                let clone = this.json_view.getOkitJson().newDatabaseSystem(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newDatabaseSystem(clone);
             } else {
-                let clone = this.okit_json.newDatabaseSystem(artefact);
+                let clone = this.json_view.getOkitJson().newDatabaseSystem(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -161,13 +169,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeDynamicRoutingGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getDynamicRoutingGateways()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newDynamicRoutingGateway(artefact);
+                let clone = this.json_view.getOkitJson().newDynamicRoutingGateway(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newDynamicRoutingGateway(clone);
             } else {
-                let clone = this.okit_json.newDynamicRoutingGateway(artefact);
+                let clone = this.json_view.getOkitJson().newDynamicRoutingGateway(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -178,7 +188,9 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeFastConnects(root_compartment_id) {
         for (let artefact of this.artefact.getFastConnects()) {
-            let clone = this.okit_json.newFastConnect(artefact);
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
+            let clone = this.json_view.getOkitJson().newFastConnect(artefact);
             if (clone.compartment_id === root_compartment_id) {
                 clone.compartment_id = this.target_id;
             }
@@ -188,13 +200,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeFileStorageSystems(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getFileStorageSystems()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newFileStorageSystem(artefact);
+                let clone = this.json_view.getOkitJson().newFileStorageSystem(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newFileStorageSystem(clone);
             } else {
-                let clone = this.okit_json.newFileStorageSystem(artefact);
+                let clone = this.json_view.getOkitJson().newFileStorageSystem(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -205,13 +219,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeInstances(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getInstances()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newInstance(artefact);
+                let clone = this.json_view.getOkitJson().newInstance(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newInstance(clone);
             } else {
-                let clone = this.okit_json.newInstance(artefact);
+                let clone = this.json_view.getOkitJson().newInstance(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -222,13 +238,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeInternetGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getInternetGateways()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newInternetGateway(artefact);
+                let clone = this.json_view.getOkitJson().newInternetGateway(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newInternetGateway(clone);
             } else {
-                let clone = this.okit_json.newInternetGateway(artefact);
+                let clone = this.json_view.getOkitJson().newInternetGateway(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -239,13 +257,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeLoadBalancers(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getLoadBalancers()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newLoadBalancer(artefact);
+                let clone = this.json_view.getOkitJson().newLoadBalancer(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newLoadBalancer(clone);
             } else {
-                let clone = this.okit_json.newLoadBalancer(artefact);
+                let clone = this.json_view.getOkitJson().newLoadBalancer(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -256,13 +276,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeLocalPeeringGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getLocalPeeringGateways()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newLocalPeeringGateway(artefact);
+                let clone = this.json_view.getOkitJson().newLocalPeeringGateway(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newLocalPeeringGateway(clone);
             } else {
-                let clone = this.okit_json.newLocalPeeringGateway(artefact);
+                let clone = this.json_view.getOkitJson().newLocalPeeringGateway(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -273,13 +295,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeNATGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getNATGateways()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newNATGateway(artefact);
+                let clone = this.json_view.getOkitJson().newNATGateway(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newNATGateway(clone);
             } else {
-                let clone = this.okit_json.newNATGateway(artefact);
+                let clone = this.json_view.getOkitJson().newNATGateway(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -290,13 +314,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeNetworkSecurityGroups(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getNetworkSecurityGroups()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newNetworkSecurityGroup(artefact);
+                let clone = this.json_view.getOkitJson().newNetworkSecurityGroup(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newNetworkSecurityGroup(clone);
             } else {
-                let clone = this.okit_json.newNetworkSecurityGroup(artefact);
+                let clone = this.json_view.getOkitJson().newNetworkSecurityGroup(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -307,7 +333,9 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeObjectStorageBuckets(root_compartment_id) {
         for (let artefact of this.artefact.getObjectStorageBuckets()) {
-            let clone = this.okit_json.newObjectStorageBucket(artefact);
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
+            let clone = this.json_view.getOkitJson().newObjectStorageBucket(artefact);
             if (clone.compartment_id === root_compartment_id) {
                 clone.compartment_id = this.target_id;
             }
@@ -317,13 +345,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeRouteTables(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getRouteTables()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newRouteTable(artefact);
+                let clone = this.json_view.getOkitJson().newRouteTable(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newRouteTable(clone);
             } else {
-                let clone = this.okit_json.newRouteTable(artefact);
+                let clone = this.json_view.getOkitJson().newRouteTable(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -334,10 +364,12 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeSecurityLists(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getSecurityLists()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newSecurityList(artefact);
+                let clone = this.json_view.getOkitJson().newSecurityList(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newSecurityList(clone);
             } else {
                 let clone = this.artefact.okit_json.newSecurityList(artefact);
@@ -351,13 +383,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeServiceGateways(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getServiceGateways()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newServiceGateway(artefact);
+                let clone = this.json_view.getOkitJson().newServiceGateway(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newServiceGateway(clone);
             } else {
-                let clone = this.okit_json.newServiceGateway(artefact);
+                let clone = this.json_view.getOkitJson().newServiceGateway(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -368,13 +402,15 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeSubnets(root_compartment_id, root_vcn_id = null) {
         for (let artefact of this.artefact.getSubnets()) {
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.okit_json.newSubnet(artefact);
+                let clone = this.json_view.getOkitJson().newSubnet(artefact);
                 clone.vcn_id = this.target_id;
-                clone.compartment_id = this.okit_json.getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
                 this.json_view.newSubnet(clone);
             } else {
-                let clone = this.okit_json.newSubnet(artefact);
+                let clone = this.json_view.getOkitJson().newSubnet(artefact);
                 if (clone.compartment_id === root_compartment_id) {
                     clone.compartment_id = this.target_id;
                 }
@@ -385,7 +421,9 @@ class FragmentView extends OkitContainerDesignerArtefactView {
 
     mergeVirtualCloudNetworks(root_compartment_id) {
         for (let artefact of this.artefact.getVirtualCloudNetworks()) {
-            let clone = this.okit_json.newVirtualCloudNetwork(artefact);
+            // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
+            delete artefact.getOkitJson;
+            let clone = this.json_view.getOkitJson().newVirtualCloudNetwork(artefact);
             console.info('Root Compartment Id : ' + root_compartment_id);
             console.info('VCN Compartment Id  : ' + clone.compartment_id);
             console.info('Target Id           : ' + this.target_id);
