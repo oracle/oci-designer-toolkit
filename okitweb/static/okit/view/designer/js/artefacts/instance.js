@@ -14,9 +14,13 @@ class InstanceView extends OkitDesignerArtefactView {
 
     get parent_id() {
         let primary_subnet = this.getJsonView().getSubnet(this.artefact.primary_vnic.subnet_id);
+        console.info(`Primary Subnet Compartment Id : ${primary_subnet.compartment_id}`);
+        console.info(`Artefact Compartment Id       : ${this.artefact.compartment_id}`);
         if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
+            console.info('Using Subnet as parent');
             return this.primary_vnic.subnet_id;
         } else {
+            console.info('Using Compartment as parent');
             return this.compartment_id;
         }
     }

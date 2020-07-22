@@ -3,9 +3,9 @@
   "description": "Bastion Server Fragment.",
   "compartments": [
     {
-      "id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
+      "id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
       "name": "okit",
-      "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
+      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
       "parent_id": "canvas",
       "display_name": "okit-comp001"
     }
@@ -16,9 +16,9 @@
   "file_storage_systems": [],
   "instances": [
     {
-      "subnet_id": "okit-sn-a2cada96-6f11-436e-b4f1-41ee96f739dd",
+      "subnet_id": "okit.subnet.a2cada96-6f11-436e-b4f1-41ee96f739dd",
       "subnet": "okit-bastion-sn",
-      "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
+      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
       "availability_domain": "1",
       "id": "okit-in-2f526c6d-3d93-442f-bc15-3d05689406f9",
       "display_name": "okit-bastion-server",
@@ -32,17 +32,17 @@
       "block_storage_volume_ids": [],
       "block_storage_volumes": [],
       "subnet_ids": [],
-      "parent_id": "okit-sn-a2cada96-6f11-436e-b4f1-41ee96f739dd"
+      "parent_id": "okit.subnet.a2cada96-6f11-436e-b4f1-41ee96f739dd"
     }
   ],
   "internet_gateways": [
     {
-      "vcn_id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7",
+      "vcn_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
       "virtual_cloud_network": "okit-bastion-vcn",
-      "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit-ig-d77f1212-81d7-4524-8927-722904202641",
+      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
+      "id": "okit.internetgateway.d77f1212-81d7-4524-8927-722904202641",
       "display_name": "okit-bastion-ig",
-      "parent_id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7"
+      "parent_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7"
     }
   ],
   "load_balancers": [],
@@ -50,27 +50,27 @@
   "object_storage_buckets": [],
   "route_tables": [
     {
-      "vcn_id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7",
+      "vcn_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
       "virtual_cloud_network": "okit-bastion-vcn",
-      "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit-rt-0ec379c2-9a1b-4a01-9203-9b5f3cc283c7",
+      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
+      "id": "okit.routetable.0ec379c2-9a1b-4a01-9203-9b5f3cc283c7",
       "display_name": "okit-bastion-rt",
       "route_rules": [
         {
           "destination_type": "CIDR_BLOCK",
           "destination": "0.0.0.0/0",
-          "network_entity_id": "okit-ig-d77f1212-81d7-4524-8927-722904202641"
+          "network_entity_id": "okit.internetgateway.d77f1212-81d7-4524-8927-722904202641"
         }
       ],
-      "parent_id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7"
+      "parent_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7"
     }
   ],
   "security_lists": [
     {
-      "vcn_id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7",
+      "vcn_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
       "virtual_cloud_network": "okit-bastion-vcn",
-      "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit-sl-ff510077-a9af-41be-8fad-f6430c2a7732",
+      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
+      "id": "okit.securitylist.ff510077-a9af-41be-8fad-f6430c2a7732",
       "display_name": "okit-bastion-sl",
       "egress_security_rules": [
         {
@@ -124,37 +124,37 @@
           "udp_options": null
         }
       ],
-      "parent_id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7"
+      "parent_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7"
     }
   ],
   "service_gateways": [],
   "subnets": [
     {
-      "vcn_id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7",
+      "vcn_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
       "virtual_cloud_network": "okit-bastion-vcn",
-      "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit-sn-a2cada96-6f11-436e-b4f1-41ee96f739dd",
+      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
+      "id": "okit.subnet.a2cada96-6f11-436e-b4f1-41ee96f739dd",
       "display_name": "okit-bastion-sn",
       "cidr_block": "10.0.0.0/24",
       "dns_label": "bastionsn",
       "prohibit_public_ip_on_vnic": false,
       "route_table": "",
-      "route_table_id": "okit-rt-0ec379c2-9a1b-4a01-9203-9b5f3cc283c7",
+      "route_table_id": "okit.routetable.0ec379c2-9a1b-4a01-9203-9b5f3cc283c7",
       "security_lists": [],
       "security_list_ids": [
-        "okit-sl-ff510077-a9af-41be-8fad-f6430c2a7732"
+        "okit.securitylist.ff510077-a9af-41be-8fad-f6430c2a7732"
       ],
-      "parent_id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7"
+      "parent_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7"
     }
   ],
   "virtual_cloud_networks": [
     {
-      "compartment_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit-vcn-a4b9e410-9527-43f2-8d46-d953ab1149b7",
+      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
+      "id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
       "display_name": "okit-bastion-vcn",
       "cidr_block": "10.0.0.0/16",
       "dns_label": "bastionvcn",
-      "parent_id": "okit-comp-86396bd7-50e7-4935-8747-6dd507b3ddf9"
+      "parent_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9"
     }
   ]
 }

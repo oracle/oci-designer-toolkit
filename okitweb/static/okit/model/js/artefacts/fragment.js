@@ -26,7 +26,6 @@ class Fragment extends  OkitJson {
     get target_id() {return this.target.id;}
     get target_type() {return this.target.type;}
 
-    // TODO: Code update processing. First we need to change the way we get parent_id
     updateIds() {
         console.group('Updating Ids');
         // Regenerate all Ids so the fragment can be dropped multiple times
@@ -43,7 +42,7 @@ class Fragment extends  OkitJson {
         } else if (typeof fragment_json === 'object' && fragment_json !== null) {
             for (let [key, val] of Object.entries(fragment_json)) {
                 if (key === 'id') {
-                    id_map[val] = 'okit-fragment-' + uuidv4();
+                    id_map[val] = `okit.${val.split('.')[1]}.${uuidv4()}`;
                     fragment_json[key] = id_map[val];
                 } else if (!Array.isArray(val) && typeof val === 'object' && val !== null) {
                     this.updatePrimaryIds(val, id_map);

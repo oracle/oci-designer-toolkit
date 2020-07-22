@@ -64,9 +64,13 @@ class FragmentView extends OkitContainerDesignerArtefactView {
                 break;
             }
         }
+        // Merge Containers Artefacts
+        this.mergeCompartments(root_compartment_id);
+        this.mergeVirtualCloudNetworks(root_compartment_id);
+        this.mergeSubnets(root_compartment_id);
+        // Merge Simple Artefacts
         this.mergeAutonomousDatabases(root_compartment_id);
         this.mergeBlockStorageVolumes(root_compartment_id);
-        this.mergeCompartments(root_compartment_id);
         this.mergeDatabaseSystems(root_compartment_id);
         this.mergeDynamicRoutingGateways(root_compartment_id);
         this.mergeFastConnects(root_compartment_id);
@@ -81,8 +85,6 @@ class FragmentView extends OkitContainerDesignerArtefactView {
         this.mergeRouteTables(root_compartment_id);
         this.mergeSecurityLists(root_compartment_id);
         this.mergeServiceGateways(root_compartment_id);
-        this.mergeSubnets(root_compartment_id);
-        this.mergeVirtualCloudNetworks(root_compartment_id);
     }
 
     mergeToVirtualCloudNetwork() {
@@ -93,6 +95,9 @@ class FragmentView extends OkitContainerDesignerArtefactView {
             console.info(`Processing ${vcn.display_name}`);
             root_vcn_id = vcn.id;
             root_compartment_id = vcn.compartment_id;
+            // Merge Containers Artefacts
+            this.mergeSubnets(root_compartment_id, root_vcn_id);
+            // Merge Simple Artefacts
             this.mergeDatabaseSystems(root_compartment_id, root_vcn_id);
             this.mergeDynamicRoutingGateways(root_compartment_id, root_vcn_id);
             this.mergeFileStorageSystems(root_compartment_id, root_vcn_id);
@@ -105,7 +110,6 @@ class FragmentView extends OkitContainerDesignerArtefactView {
             this.mergeRouteTables(root_compartment_id, root_vcn_id);
             this.mergeSecurityLists(root_compartment_id, root_vcn_id);
             this.mergeServiceGateways(root_compartment_id, root_vcn_id);
-            this.mergeSubnets(root_compartment_id, root_vcn_id);
         }
     }
 
@@ -221,10 +225,9 @@ class FragmentView extends OkitContainerDesignerArtefactView {
         for (let artefact of this.artefact.getInstances()) {
             // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
             delete artefact.getOkitJson;
-            if (artefact.vcn_id === root_vcn_id) {
+            if (root_vcn_id !== null && artefact.primary_vnic.subnet_id && artefact.primary_vnic.subnet_id !== '') {
                 let clone = this.json_view.getOkitJson().newInstance(artefact);
-                clone.vcn_id = this.target_id;
-                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
+                clone.compartment_id = this.json_view.getOkitJson().getSubnet(clone.primary_vnic.subnet_id).compartment_id;
                 this.json_view.newInstance(clone);
             } else {
                 let clone = this.json_view.getOkitJson().newInstance(artefact);
@@ -241,10 +244,20 @@ class FragmentView extends OkitContainerDesignerArtefactView {
             // Remove existing reference to fragment OKIT Json so it can be replaced with the Json View version.
             delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
-                let clone = this.json_view.getOkitJson().newInternetGateway(artefact);
-                clone.vcn_id = this.target_id;
-                clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
-                this.json_view.newInternetGateway(clone);
+                let existing_ig = false;
+                for (let gateway of this.json_view.getOkitJson().internet_gateways) {
+                    if (gateway.vcn_id === this.target_id) {
+                        existing_ig = true;
+                    }
+                }
+                if (existing_ig) {
+                    // Update Route Table Routes
+                } else {
+                    let clone = this.json_view.getOkitJson().newInternetGateway(artefact);
+                    clone.vcn_id = this.target_id;
+                    clone.compartment_id = this.json_view.getOkitJson().getVirtualCloudNetwork(this.target_id).compartment_id;
+                    this.json_view.newInternetGateway(clone);
+                }
             } else {
                 let clone = this.json_view.getOkitJson().newInternetGateway(artefact);
                 if (clone.compartment_id === root_compartment_id) {
