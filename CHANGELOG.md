@@ -9,6 +9,7 @@
 ### Bug Fixes
 1. Resolve issue with the "description" for Network Security Groups which was being incorrectly rendered in the generated Terraform.
 2. Attached Route Tables / Security List property edits were lost. (OKIT-70).
+3. Resolve issue with the "compartment_id" for Compartment which was being incorrectly rendered in the generated Terraform.
 
 
 ## Version 0.8.0 
