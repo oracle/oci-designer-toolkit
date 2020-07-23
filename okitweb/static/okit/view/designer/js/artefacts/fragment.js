@@ -98,6 +98,8 @@ class FragmentView extends OkitContainerDesignerArtefactView {
             // Merge Containers Artefacts
             this.mergeSubnets(root_compartment_id, root_vcn_id);
             // Merge Simple Artefacts
+            // Merge Route Tables first because they may need to be update as part of later merge
+            this.mergeRouteTables(root_compartment_id, root_vcn_id);
             this.mergeDatabaseSystems(root_compartment_id, root_vcn_id);
             this.mergeDynamicRoutingGateways(root_compartment_id, root_vcn_id);
             this.mergeFileStorageSystems(root_compartment_id, root_vcn_id);
@@ -107,7 +109,6 @@ class FragmentView extends OkitContainerDesignerArtefactView {
             this.mergeLocalPeeringGateways(root_compartment_id, root_vcn_id);
             this.mergeNATGateways(root_compartment_id, root_vcn_id);
             this.mergeNetworkSecurityGroups(root_compartment_id, root_vcn_id);
-            this.mergeRouteTables(root_compartment_id, root_vcn_id);
             this.mergeSecurityLists(root_compartment_id, root_vcn_id);
             this.mergeServiceGateways(root_compartment_id, root_vcn_id);
         }
@@ -245,13 +246,21 @@ class FragmentView extends OkitContainerDesignerArtefactView {
             delete artefact.getOkitJson;
             if (artefact.vcn_id === root_vcn_id) {
                 let existing_ig = false;
-                for (let gateway of this.json_view.getOkitJson().internet_gateways) {
+                let gateway = null;
+                for (gateway of this.json_view.getOkitJson().internet_gateways) {
                     if (gateway.vcn_id === this.target_id) {
                         existing_ig = true;
                     }
                 }
                 if (existing_ig) {
                     // Update Route Table Routes
+                    for (let route_table of this.json_view.getOkitJson().route_tables) {
+                        for (let rule of route_table.route_rules) {
+                            if (rule.network_entity_id === artefact.id) {
+                                rule.network_entity_id = gateway.id;
+                            }
+                        }
+                    }
                 } else {
                     let clone = this.json_view.getOkitJson().newInternetGateway(artefact);
                     clone.vcn_id = this.target_id;
