@@ -296,7 +296,7 @@ class OkitSettings {
                 .property('checked', this.is_variables)
                 .on('change', function () {
                     if (autosave) {
-                        me.is_optional_expanded = $(this).is(':checked');
+                        me.is_variables = $(this).is(':checked');
                         me.save();
                     }
                 });

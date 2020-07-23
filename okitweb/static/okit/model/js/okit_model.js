@@ -786,16 +786,16 @@ class OkitJson {
     ** Export Functions
      */
     // Terraform
-    exportTerraform() {}
+    exportTerraform(callback=null) {}
     // Ansible
-    exportAnsible() {}
+    exportAnsible(callback=null) {}
     // Resource Manager
-    exportResourceManager() {}
+    exportResourceManager(callback=null) {}
 
     /*
     ** Data Validation
      */
-    validate(callback=null) {
+    validate(successCallback = null, errorCallback = null) {
         $.ajax({
             type: 'post',
             url: 'validate',
@@ -804,11 +804,12 @@ class OkitJson {
             data: JSON.stringify(this),
             success: function(resp) {
                 console.info('Validation Response : ' + resp);
-                if (callback && callback !== null) callback(JSON.parse(resp));
+                if (successCallback && successCallback !== null) successCallback(JSON.parse(resp));
             },
             error: function(xhr, status, error) {
                 console.info('Status : '+ status)
                 console.info('Error : '+ error)
+                if (errorCallback && errorCallback !== null) errorCallback(error);
             }
         });
     }

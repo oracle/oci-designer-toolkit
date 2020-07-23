@@ -25,6 +25,15 @@ class Compartment extends OkitArtifact {
     }
 
     /*
+    ** Conversion Routine allowing loading of old json
+     */
+    convert() {
+        super.convert();
+        // Check if Root
+        if (this.id === this.compartment_id) {this.compartment_id = null;}
+    }
+
+    /*
     ** Clone Functionality
      */
     clone() {
