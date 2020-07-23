@@ -4,8 +4,11 @@
 ## Version 0.9.0 
 **Release Date**: 5th August 2020
 ### Features
+1. Split Designer View functionality from OKIT Model (OKIT-89).
 
 ### Bug Fixes
+1. Resolve issue with the "description" for Network Security Groups which was being incorrectly rendered in the generated Terraform.
+2. Attached Route Tables / Security List property edits were lost. (OKIT-70).
 
 
 ## Version 0.8.0 
