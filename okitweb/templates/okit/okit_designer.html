@@ -46,7 +46,6 @@
     {% for view_js in artefact_view_js_files %}
         <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/artefacts/' + view_js) }}"></script>
     {% endfor %}
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_fragments.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_ready.js') }}"></script>
 {% endblock %}
 
