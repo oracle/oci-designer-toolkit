@@ -4,7 +4,7 @@
 */
 console.info('Loaded OKIT Common Javascript');
 
-const debug = true;
+const developer_mode = true;
 
 function jqId(id) {
     return '#' + safeId(id);

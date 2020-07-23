@@ -11,7 +11,7 @@ class OkitJsonView {
         if (okitjson === null || okitjson === undefined) {
             this.okitjson = new OkitJson();
         } else if (typeof okitjson === 'string') {
-            this.okitjson = JSON.parse(okitjson);
+            this.okitjson = new OkitJson(okitjson);
         } else if (okitjson instanceof Object) {
             this.okitjson = okitjson;
         } else {
@@ -40,7 +40,6 @@ class OkitJsonView {
         this.subnets = [];
         this.virtual_cloud_networks = [];
         // Load Model to View
-        this.parent_map = {};
         this.load();
     }
 
@@ -95,26 +94,26 @@ class OkitJsonView {
 
     load() {
         this.clear();
-        for (artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
-        for (artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
-        for (artefact of this.okitjson.block_storage_volumes) {this.newBlockStorageVolume(artefact);}
-        for (artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
-        for (artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
-        for (artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
-        for (artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
-        for (artefact of this.okitjson.instances) {this.newInstance(artefact);}
-        for (artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
-        for (artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
-        for (artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
-        for (artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
-        for (artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
-        for (artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
-        //for (artefact of this.okitjson.remote_peering_gateways) {this.newRemotePeeringGateway(artefact);}
-        for (artefact of this.okitjson.route_tables) {this.newCompartment(this.newRouteTable());}
-        for (artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
-        for (artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
-        for (artefact of this.okitjson.subnets) {this.newSubnet(artefact);}
-        for (artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
+        for (let artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
+        for (let artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
+        for (let artefact of this.okitjson.block_storage_volumes) {this.newBlockStorageVolume(artefact);}
+        for (let artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
+        for (let artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
+        for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
+        for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
+        for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
+        for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
+        for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
+        for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
+        for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
+        for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
+        for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
+        //for (let artefact of this.okitjson.remote_peering_gateways) {this.newRemotePeeringGateway(artefact);}
+        for (let artefact of this.okitjson.route_tables) {this.newRouteTable(artefact);}
+        for (let artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
+        for (let artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
+        for (let artefact of this.okitjson.subnets) {this.newSubnet(artefact);}
+        for (let artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
     }
 
     draw() {
@@ -222,8 +221,8 @@ class OkitJsonView {
         return view_artefact;
     }
     newCompartment(compartment) {
-        console.info('New Compartment View');
-        this.compartments.push(compartment ? new CompartmentView(new Compartment(compartment, this.okitjson), this) : new CompartmentView(this.okitjson.newCompartment(), this));
+        console.info('New Compartment View ' + compartment);
+        this.compartments.push(compartment ? new CompartmentView(compartment, this) : new CompartmentView(this.okitjson.newCompartment(), this));
         return this.compartments[this.compartments.length - 1];
     }
     getCompartments() {return this.compartments;}

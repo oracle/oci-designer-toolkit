@@ -59,7 +59,7 @@ $(document).ready(function() {
             if (!open) {
                 $('#explorer_panel').removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
-                let okit_tree = new OkitJsonTreeView(okitJson, 'explorer_panel');
+                let okit_tree = new OkitJsonTreeView(okitJsonModel, 'explorer_panel');
                 okit_tree.draw();
             } else {
                 $('#explorer_panel').empty();
@@ -112,7 +112,7 @@ $(document).ready(function() {
                 $(jqId(VALIDATION_PANEL)).removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
                 $(jqId('right_column_dragbar')).removeClass('hidden');
-                okitJson.validate(displayValidationResults);
+                okitJsonModel.validate(displayValidationResults);
             }
             // Check to see if Right Column needs to be hidden
             checkRightColumn();
@@ -159,7 +159,7 @@ $(document).ready(function() {
         })
         .text('Cost Estimate');
      */
-    if (debug) {
+    if (developer_mode) {
         // OKIT Json
         d3.select(d3Id('console_right_bar')).append('label')
             .attr('id', 'toggle_source_button')

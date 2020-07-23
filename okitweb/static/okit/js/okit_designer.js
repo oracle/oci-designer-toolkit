@@ -31,7 +31,8 @@ let right_drag_bar_start_x = 0;
 let ociRegions = [];
 
 function resetDesigner() {
-    okitJson = new OkitJson();
+    newModel();
+    newDesignerView();
     regionOkitJson = {};
     clearRegionTabBar();
     hideRegionTabBar();
@@ -78,13 +79,20 @@ function handleNew(evt) {
 }
 function newDiagram() {
     console.groupCollapsed('Creating New Diagram');
-    okitJsonModel = new OkitJson();
-    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', okitSettings.is_display_grid, palette_svg);
+    newModel();
+    newDesignerView();
     okitJsonView.newCanvas();
     okitJsonView.newCompartment();
     console.info(okitJsonView);
     console.groupEnd();
 }
+function newDesignerView() {
+    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', okitSettings.is_display_grid, palette_svg);
+}
+function newModel() {
+    okitJsonModel = new OkitJson();
+}
+
 /*
 ** Load Existing Json
  */
@@ -107,15 +115,17 @@ function getAsJson(readFile) {
 function loaded(evt) {
     // Clear Existing Region
     regionOkitJson = {};
-    okitJson = null
+    okitJsonModel = null
     hideRegionTabBar();
     clearRegionTabBar();
     // Obtain the read file data
     let fileString = evt.target.result;
     let fileJson = JSON.parse(fileString);
+    console.info(fileJson);
     if (fileJson.hasOwnProperty('compartments')) {
         console.info('>> Single Region File')
-        okitJson = new OkitJson(fileString);
+        okitJsonModel = new OkitJson(fileString);
+        newDesignerView();
     } else {
         console.info('>> Multi Region File.')
         showRegionTabBar();
@@ -123,14 +133,15 @@ function loaded(evt) {
             console.info('>>>> Add Tab For ' + region);
             addRegionTab(region);
             regionOkitJson[region] = new OkitJson(JSON.stringify(fileJson[region]));
-            if (okitJson === null) {
-                okitJson = regionOkitJson[region];
+            if (okitJsonModel === null) {
+                okitJsonModel = regionOkitJson[region];
+                newDesignerView();
                 $(jqId(regionTabName(region))).trigger("click");
             }
         }
     }
     displayOkitJson();
-    okitJson.draw();
+    displayDesignerView();
     displayTreeView();
 }
 function errorHandler(evt) {
@@ -150,7 +161,7 @@ function handleSave(evt) {
         saveJson(JSON.stringify(regionOkitJson, null, 2), filename);
     } else {
         console.info('>> Saving Single Region File');
-        saveJson(JSON.stringify(okitJson, null, 2), filename);
+        saveJson(JSON.stringify(okitJsonModel, null, 2), filename);
     }
 }
 function saveJson(text, filename){
@@ -198,15 +209,15 @@ function handleSaveAs(evt) {
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleSaveAsTemplate(e) {
-    okitJson.title = $(jqId('template_title')).val();
-    okitJson.description = $(jqId('template_description')).val();
-    okitJson.template_type = $(jqId('template_type')).val();
+    okitJsonModel.title = $(jqId('template_title')).val();
+    okitJsonModel.description = $(jqId('template_description')).val();
+    okitJsonModel.template_type = $(jqId('template_type')).val();
     $.ajax({
         type: 'post',
         url: 'saveas/template',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(okitJson),
+        data: JSON.stringify(okitJsonModel),
         success: function(resp) {
             console.info('Response : ' + resp);
             // Hide modal dialog
@@ -233,7 +244,7 @@ function redrawSVGCanvas(region='') {
     console.info('>>>>>>>>> Active Region            : ' + activeRegion);
     console.info(okitJsonView);
     if (region === '' || region === activeRegion) {
-        okitJsonView.draw();
+        displayDesignerView();
     }
 }
 /*
@@ -257,9 +268,10 @@ function loadTemplate(template_url) {
         dataType: 'text',
         contentType: 'application/json',
         success: function(resp) {
-            okitJson = new OkitJson(resp);
+            okitJsonModel = new OkitJson(resp);
+            newDesignerView();
             displayOkitJson();
-            okitJson.draw();
+            displayDesignerView();
             displayTreeView();
         },
         error: function(xhr, status, error) {
@@ -467,7 +479,7 @@ function showQueryResults() {
     okitQueryRequestJson.region = '';
     clearRegionTabBar();
     showRegionTabBar();
-    okitJson = new OkitJson('', 'canvas-div');
+    okitJsonModel = new OkitJson('', 'canvas-div');
     newCanvas();
     console.info('Regions Ids : ' + regions);
     regionOkitJson = {};
@@ -507,11 +519,8 @@ $(document).ajaxStop(function() {
  */
 function handleExportToSVG(evt) {
     hideNavMenu();
-    if (!okitJson.hasOwnProperty('open_compartment_index')) {
-        okitJson['open_compartment_index'] = 0;
-    }
     let okitcanvas = document.getElementById("canvas-svg");
-    let name = okitJson.compartments[okitJson['open_compartment_index']]['name'];
+    let name = okitJsonModel.compartments[0]['name'];
     let filename = name + '.svg';
     if (okitSettings.is_timestamp_files) {
         filename = name + getTimestamp() + '.svg';
@@ -601,7 +610,8 @@ function addRegionTab(region) {
             $('#region_tab_bar > button').removeClass("okit-tab-active");
             $(jqId(regionTabName(region))).addClass("okit-tab-active");
             activeRegion = region;
-            okitJson = regionOkitJson[region];
+            okitJsonModel = regionOkitJson[region];
+            newDesignerView();
             redrawSVGCanvas(region);
         });
 }
@@ -625,12 +635,18 @@ function displayOkitJson() {
     $(jqId(JSON_VIEW_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonView, null, 2) + '</code></pre>');
 }
 /*
+** Draw Canvas
+ */
+function displayDesignerView() {
+    okitJsonView.draw();
+}
+/*
 ** Slidebar handlers
  */
 // Tree View
 function displayTreeView() {
     if ($('#toggle_explorer_button').hasClass('okit-bar-panel-displayed')) {
-        let okit_tree = new OkitJsonTreeView(okitJson, 'explorer_panel');
+        let okit_tree = new OkitJsonTreeView(okitJsonModel, 'explorer_panel');
         okit_tree.draw();
     }
 }
