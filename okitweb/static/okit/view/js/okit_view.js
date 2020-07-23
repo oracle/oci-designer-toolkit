@@ -4,7 +4,6 @@
 */
 console.info('Loaded OKIT View Javascript');
 
-// TODO: Implement View Classes
 class OkitJsonView {
     constructor(okitjson=null) {
         // Specify / Assign Model

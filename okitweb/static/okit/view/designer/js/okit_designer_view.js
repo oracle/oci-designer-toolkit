@@ -4,7 +4,6 @@
 */
 console.info('Loaded OKIT Designer View Javascript');
 
-// TODO: Implement View Classes
 class OkitDesignerJsonView extends OkitJsonView {
     // Define Constants
     static get CANVAS_SVG() {return 'canvas-svg'}

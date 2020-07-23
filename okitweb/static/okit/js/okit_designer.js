@@ -479,8 +479,10 @@ function showQueryResults() {
     okitQueryRequestJson.region = '';
     clearRegionTabBar();
     showRegionTabBar();
-    okitJsonModel = new OkitJson('', 'canvas-div');
-    newCanvas();
+    //okitJsonModel = new OkitJson('', 'canvas-div');
+    newModel();
+    newDesignerView();
+    okitJsonView.newCanvas();
     console.info('Regions Ids : ' + regions);
     regionOkitJson = {};
     if (regions.length > 0) {
