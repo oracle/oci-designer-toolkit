@@ -27,7 +27,7 @@ class SecurityListView extends OkitDesignerArtefactView {
      */
     draw() {
         console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        if (this.isAttached()) {
+        if (this.attached) {
             console.groupEnd();
             return;
         }

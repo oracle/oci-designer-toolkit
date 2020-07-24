@@ -115,6 +115,12 @@ class OkitJsonView {
         for (let artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
     }
 
+    update(model) {
+        this.okitjson = model;
+        this.load();
+        this.draw();
+    }
+
     draw() {
         console.info('Top Level View Draw');
     }
@@ -908,11 +914,13 @@ class OkitArtefactView {
     get minimum_height() {return this.icon_height;}
     get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
     get dimensions() {return this.minimum_dimensions;}
+    get attached() {return false;}
 
     getParent() {return null;}
 
     getParentId() {return this.parent_id;}
 
+    // TODO: Delete replaced by attached variable
     isAttached() {return false;}
 
     getArtefact() {return this.artefact;}

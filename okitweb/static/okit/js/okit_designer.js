@@ -486,8 +486,23 @@ function showQueryResults() {
     console.info('Regions Ids : ' + regions);
     regionOkitJson = {};
     if (regions.length > 0) {
+        let okitQuery = new OkitOCIQuery(okitJsonModel, okitJsonView, regions);
         queryCount = 0;
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
+        for (const [i, region] of regions.entries()) {
+            console.info(`${i} - Processing Selected Region : ${region}`);
+            let request = JSON.clone(okitQueryRequestJson);
+            request.region = region;
+            request.refresh = false;
+            addRegionTab(region);
+            regionOkitJson[region] = new OkitJson();
+            if (i === 0) {
+                okitJson = regionOkitJson[region];
+                newDesignerView();
+                request.refresh = true;
+            }
+        }
+        /*
         for (let region of regions) {
             console.info('Processing Selected Region : ' + region);
             okitQueryRequestJson.region = region;
@@ -497,6 +512,7 @@ function showQueryResults() {
             request.region = region;
             Compartment.queryRoot(request, region);
         }
+        */
         $(jqId(regionTabName(regions[0]))).trigger("click");
     } else {
         console.info('Region Not Selected.');
