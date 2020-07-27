@@ -99,7 +99,7 @@ def designer():
     # Read Artifact Model Specific JavaScript Files
     artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
-    artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts')))
+    artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'okit_view', 'designer', 'js', 'artefacts')))
 
     # Get Palette Icon Groups / Icons
     svg_files = []

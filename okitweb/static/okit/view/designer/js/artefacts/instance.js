@@ -14,8 +14,6 @@ class InstanceView extends OkitDesignerArtefactView {
 
     get parent_id() {
         let primary_subnet = this.getJsonView().getSubnet(this.artefact.primary_vnic.subnet_id);
-        console.info(`Primary Subnet Compartment Id : ${primary_subnet.compartment_id}`);
-        console.info(`Artefact Compartment Id       : ${this.artefact.compartment_id}`);
         if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
             console.info('Using Subnet as parent');
             return this.primary_vnic.subnet_id;
@@ -111,15 +109,14 @@ class InstanceView extends OkitDesignerArtefactView {
             console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + attachment.display_name);
             let svg = attachment.draw();
             // Add Highlighting
-            let fill = d3.select(d3Id(attachment.id)).attr('fill');
             svg.on("mouseover", function () {
-                d3.selectAll(d3Id(attachment.id)).attr('fill', svg_highlight_colour);
-                d3.select(d3Id(vnic.subnet_id)).attr('fill', svg_highlight_colour);
+                $('[id=' + attachment.id +']').addClass('highlight-vnic');
+                $(jqId(vnic.subnet_id)).addClass('highlight-vnic');
                 d3.event.stopPropagation();
             });
             svg.on("mouseout", function () {
-                d3.selectAll(d3Id(attachment.id)).attr('fill', fill);
-                d3.select(d3Id(vnic.subnet_id)).attr('fill', fill);
+                $('[id=' + attachment.id +']').removeClass('highlight-vnic');
+                $(jqId(vnic.subnet_id)).removeClass('highlight-vnic');
                 d3.event.stopPropagation();
             });
             attachment_count += 1;

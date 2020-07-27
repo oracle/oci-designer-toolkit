@@ -67,7 +67,7 @@ class BlockStorageVolume extends OkitArtifact {
         return 'Block Storage Volume';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Block Storage Volume Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;

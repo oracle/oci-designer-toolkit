@@ -15,6 +15,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         this.palette_svg = palette_svg;
     }
 
+    static newView(model, parent_id, display_grid = false, palette = []) {
+        return new OkitDesignerJsonView((model, parent_id, display_grid, palette))
+    }
+
     draw() {
         console.group('Drawing Designer Canvas');
         console.info(this);

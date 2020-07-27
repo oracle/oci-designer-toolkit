@@ -60,7 +60,7 @@ class ObjectStorageBucket extends OkitArtifact {
         return 'Object Storage Bucket';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Object Storage Bucket Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;

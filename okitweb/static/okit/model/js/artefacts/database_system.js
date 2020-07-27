@@ -80,7 +80,7 @@ class DatabaseSystem extends OkitArtifact {
         return 'Database System';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Autonomous Database Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;

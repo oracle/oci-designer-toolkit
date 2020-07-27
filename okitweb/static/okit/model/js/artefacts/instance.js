@@ -116,7 +116,7 @@ class Instance extends OkitArtifact {
         return 'Instance';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Instance Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         console.info('------------- Subnet      : ' + request.subnet_id);

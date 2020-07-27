@@ -9,6 +9,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/okit_designer_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
     <script type="text/javascript">
         let palette_svg = {}
@@ -127,7 +128,7 @@
             </li>
             <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)">Compartment</a></li>
             <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)">Network</a></li>
-            <!--li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li-->
+            <!--li><a id="okit_view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li-->
         </ul>
         <ul class="okit-navigation-sub-list">
             <li>
@@ -211,8 +212,9 @@
     <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>
         <div id="properties_panel" class="okit-property-sheet hidden"></div>
-        <div id="json_panel" class="okit-source-code hidden"></div>
+        <div id="json_model_panel" class="okit-source-code hidden"></div>
         <div id="json_view_panel" class="okit-source-code hidden"></div>
+        <div id="json_region_panel" class="okit-source-code hidden"></div>
         <div id="validation_panel" class="okit-source-code">
             <div id="validation_header_div"><label id="validation_status"></label></div>
             <details open>

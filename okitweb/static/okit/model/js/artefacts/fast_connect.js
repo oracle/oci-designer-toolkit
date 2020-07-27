@@ -49,7 +49,7 @@ class FastConnect extends OkitArtifact {
         return 'Fast Connect';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Fast Connect Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;

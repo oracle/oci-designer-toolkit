@@ -52,7 +52,7 @@ class LocalPeeringGateway extends OkitArtifact {
         return 'Local Peering Gateway';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Local Peering Gateway Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);

@@ -59,7 +59,7 @@ class NATGateway extends OkitArtifact {
         return 'NAT Gateway';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- NAT Gateway Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);

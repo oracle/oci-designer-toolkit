@@ -10,8 +10,9 @@ console.info('Loaded Designer Javascript');
 const ROOT_CANVAS_ID = 'canvas';
 const PROPERTIES_PANEL = 'properties_panel';
 const SETTINGS_PANEL = 'settings_panel';
-const JSON_PANEL = 'json_panel';
+const JSON_MODEL_PANEL = 'json_model_panel';
 const JSON_VIEW_PANEL = 'json_view_panel';
+const JSON_REGION_PANEL = 'json_region_panel';
 const VALUE_PROPOSITION_PANEL = 'value_proposition_panel';
 const COST_ESTIMATE_PANEL = 'cost_estimate_panel';
 const VALIDATION_PANEL = 'validation_panel';
@@ -473,47 +474,26 @@ let queryCount = 0;
 function showQueryResults() {
     console.group('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
-    okitQueryRequestJson = {};
-    okitQueryRequestJson.compartment_id = $(jqId('query_compartment_id')).val();
-    okitQueryRequestJson.config_profile = $(jqId('config_profile')).val();
-    okitQueryRequestJson.region = '';
+    let request = {};
+    request.compartment_id = $(jqId('query_compartment_id')).val();
+    request.config_profile = $(jqId('config_profile')).val();
+    request.region = '';
     clearRegionTabBar();
     showRegionTabBar();
-    //okitJsonModel = new OkitJson('', 'canvas-div');
     newModel();
     newDesignerView();
     okitJsonView.newCanvas();
     console.info('Regions Ids : ' + regions);
     regionOkitJson = {};
     if (regions.length > 0) {
-        let okitQuery = new OkitOCIQuery(okitJsonModel, okitJsonView, regions);
-        queryCount = 0;
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
+        let okitQuery = new OkitOCIQuery(okitJsonView, regions, regionOkitJson);
+        // Add Tabs
         for (const [i, region] of regions.entries()) {
-            console.info(`${i} - Processing Selected Region : ${region}`);
-            let request = JSON.clone(okitQueryRequestJson);
-            request.region = region;
-            request.refresh = false;
             addRegionTab(region);
-            regionOkitJson[region] = new OkitJson();
-            if (i === 0) {
-                okitJson = regionOkitJson[region];
-                newDesignerView();
-                request.refresh = true;
-            }
         }
-        /*
-        for (let region of regions) {
-            console.info('Processing Selected Region : ' + region);
-            okitQueryRequestJson.region = region;
-            addRegionTab(region);
-            regionOkitJson[region] = new OkitJson();
-            let request = JSON.clone(okitQueryRequestJson);
-            request.region = region;
-            Compartment.queryRoot(request, region);
-        }
-        */
         $(jqId(regionTabName(regions[0]))).trigger("click");
+        okitQuery.query(request);
     } else {
         console.info('Region Not Selected.');
     }
@@ -527,6 +507,8 @@ function hideQueryProgressIfComplete() {
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
     $(jqId('modal_loading_wrapper')).addClass('hidden');
+    console.info(okitJsonView);
+    console.info(okitJsonModel);
     displayTreeView();
 });
 /*
@@ -644,13 +626,9 @@ function regionTabName(region) {
 ** Json / Source Code
  */
 function displayOkitJson() {
-    console.info('>>> Region Count ' + Object.keys(regionOkitJson).length);
-    if (Object.keys(regionOkitJson).length > 0) {
-        $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(regionOkitJson, null, 2) + '</code></pre>');
-    } else {
-        $(jqId(JSON_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonModel, null, 2) + '</code></pre>');
-    }
+    $(jqId(JSON_MODEL_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonModel, null, 2) + '</code></pre>');
     $(jqId(JSON_VIEW_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonView, null, 2) + '</code></pre>');
+    $(jqId(JSON_REGION_PANEL)).html('<pre><code>' + JSON.stringify(regionOkitJson, null, 2) + '</code></pre>');
 }
 /*
 ** Draw Canvas

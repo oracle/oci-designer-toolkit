@@ -62,7 +62,7 @@ class DynamicRoutingGateway extends OkitArtifact {
         return 'Dynamic Routing Gateway';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Dynamic Routing Gateway Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;

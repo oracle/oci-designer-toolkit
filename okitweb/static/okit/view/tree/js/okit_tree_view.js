@@ -53,20 +53,20 @@ class OkitJsonTreeView extends OkitJsonView {
     // Autonomous Database
     drawAutonomousDatabase(id, parent_id) {
         console.info('Drawing Autonomous Database ' + id);
-        this.addItemToTree(parent_id, id, 'autonomous-database-tree-view', this.getOkitJson().getAutonomousDatabase(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'autonomous-database-tree-okit_view', this.getOkitJson().getAutonomousDatabase(id).display_name, false);
     }
 
     // Block Storage Volume
     drawBlockStorageVolume(id, parent_id) {
         console.info('Drawing Block Storage ' + id);
-        this.addItemToTree(parent_id, id, 'block-storage-tree-view', this.getOkitJson().getBlockStorageVolume(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'block-storage-tree-okit_view', this.getOkitJson().getBlockStorageVolume(id).display_name, false);
     }
 
 
     // Compartments
     drawCompartment(id, parent_id) {
         console.info('Drawing Compartment ' + id);
-        this.addItemToTree(parent_id, id, 'compartment-tree-view', this.getOkitJson().getCompartment(id).display_name, true);
+        this.addItemToTree(parent_id, id, 'compartment-tree-okit_view', this.getOkitJson().getCompartment(id).display_name, true);
         this.drawCompartmentSubComponents(id);
     }
 
@@ -106,91 +106,91 @@ class OkitJsonTreeView extends OkitJsonView {
     // Database Systems
     drawDatabaseSystem(id, parent_id) {
         console.info('Drawing Database System ' + id);
-        this.addItemToTree(parent_id, id, 'database-system-tree-view', this.getOkitJson().getDatabaseSystem(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'database-system-tree-okit_view', this.getOkitJson().getDatabaseSystem(id).display_name, false);
     }
 
     // Dynamic Routing Gateway
     drawDynamicRoutingGateway(id, parent_id) {
         console.info('Drawing Dynamic Routing Gateway ' + id);
-        this.addItemToTree(parent_id, id, 'drg-tree-view', this.getOkitJson().getDynamicRoutingGateway(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'drg-tree-okit_view', this.getOkitJson().getDynamicRoutingGateway(id).display_name, false);
     }
 
     // Fast Connect
     drawFastConnect(id, parent_id) {
         console.info('Drawing Fast Connect ' + id);
-        this.addItemToTree(parent_id, id, 'fast-connect-tree-view', this.getOkitJson().getFastConnect(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'fast-connect-tree-okit_view', this.getOkitJson().getFastConnect(id).display_name, false);
     }
 
     // File Storage System
     drawFileStorageSystem(id, parent_id) {
         console.info('Drawing File Storage System ' + id);
-        this.addItemToTree(parent_id, id, 'file-storage-tree-view', this.getOkitJson().getFileStorageSystem(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'file-storage-tree-okit_view', this.getOkitJson().getFileStorageSystem(id).display_name, false);
     }
 
     // Instance
     drawInstance(id, parent_id) {
         console.info('Drawing Instance ' + id);
-        this.addItemToTree(parent_id, id, 'instance-tree-view', this.getOkitJson().getInstance(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'instance-tree-okit_view', this.getOkitJson().getInstance(id).display_name, false);
     }
 
     // InternetGateway
     drawInternetGateway(id, parent_id) {
         console.info('Drawing Internet gateway ' + id);
-        this.addItemToTree(parent_id, id, 'internet-gateway-tree-view', this.getOkitJson().getInternetGateway(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'internet-gateway-tree-okit_view', this.getOkitJson().getInternetGateway(id).display_name, false);
     }
 
     // Load Balancers
     drawLoadBalancer(id, parent_id) {
         console.info('Drawing Load Balancer ' + id);
-        this.addItemToTree(parent_id, id, 'loadbalancer-tree-view', this.getOkitJson().getLoadBalancer(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'loadbalancer-tree-okit_view', this.getOkitJson().getLoadBalancer(id).display_name, false);
     }
 
     // Local Peering Gateway
     drawLocalPeeringGateway(id, parent_id) {
         console.info('Drawing Local Peering Gateway ' + id);
-        this.addItemToTree(parent_id, id, 'lpg-tree-view', this.getOkitJson().getLocalPeeringGateway(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'lpg-tree-okit_view', this.getOkitJson().getLocalPeeringGateway(id).display_name, false);
     }
 
     // NAT Gateway
     drawNATGateway(id, parent_id) {
         console.info('Drawing NAT Gateway ' + id);
-        this.addItemToTree(parent_id, id, 'nat-gateway-tree-view', this.getOkitJson().getNATGateway(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'nat-gateway-tree-okit_view', this.getOkitJson().getNATGateway(id).display_name, false);
     }
 
     // Network Security Group
     drawNetworkSecurityGroup(id, parent_id) {
         console.info('Drawing Network Security Group ' + id);
-        this.addItemToTree(parent_id, id, 'network-security-group-tree-view', this.getOkitJson().getNetworkSecurityGroup(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'network-security-group-tree-okit_view', this.getOkitJson().getNetworkSecurityGroup(id).display_name, false);
     }
 
     // Object Storage Bucket
     drawObjectStorageBucket(id, parent_id) {
         console.info('Drawing Object Storage Bucket ' + id);
-        this.addItemToTree(parent_id, id, 'object-storage-tree-view', this.getOkitJson().getObjectStorageBucket(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'object-storage-tree-okit_view', this.getOkitJson().getObjectStorageBucket(id).display_name, false);
     }
 
     // Route Table
     drawRouteTable(id, parent_id) {
         console.info('Drawing Route Table ' + id);
-        this.addItemToTree(parent_id, id, 'route-table-tree-view', this.getOkitJson().getRouteTable(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'route-table-tree-okit_view', this.getOkitJson().getRouteTable(id).display_name, false);
     }
 
     // Security List
     drawSecurityList(id, parent_id) {
         console.info('Drawing Security List ' + id);
-        this.addItemToTree(parent_id, id, 'security-list-tree-view', this.getOkitJson().getSecurityList(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'security-list-tree-okit_view', this.getOkitJson().getSecurityList(id).display_name, false);
     }
 
     // Service Gateway
     drawServiceGateway(id, parent_id) {
         console.info('Drawing Service Gateway ' + id);
-        this.addItemToTree(parent_id, id, 'service-gateway-tree-view', this.getOkitJson().getServiceGateway(id).display_name, false);
+        this.addItemToTree(parent_id, id, 'service-gateway-tree-okit_view', this.getOkitJson().getServiceGateway(id).display_name, false);
     }
 
     // Subnets
     drawSubnet(id, parent_id) {
         console.info('Drawing Subnet ' + id);
-        this.addItemToTree(parent_id, id, 'subnet-tree-view', this.getOkitJson().getSubnet(id).display_name, true);
+        this.addItemToTree(parent_id, id, 'subnet-tree-okit_view', this.getOkitJson().getSubnet(id).display_name, true);
         this.drawSubnetSubComponents(id);
     }
 
@@ -236,7 +236,7 @@ class OkitJsonTreeView extends OkitJsonView {
     // Virtual Cloud Networks
     drawVirtualCloudNetwork(id, parent_id) {
         console.info('Drawing Virtual Cloud Network ' + id);
-        this.addItemToTree(parent_id, id, 'vcn-tree-view', this.getOkitJson().getVirtualCloudNetwork(id).display_name, true);
+        this.addItemToTree(parent_id, id, 'vcn-tree-okit_view', this.getOkitJson().getVirtualCloudNetwork(id).display_name, true);
         this.drawVirtualCloudNetworkSubComponents(id);
     }
 

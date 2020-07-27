@@ -89,7 +89,7 @@ class FileStorageSystem extends OkitArtifact {
         return 'File Storage System';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- queryFileStorageSystemAjax --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;

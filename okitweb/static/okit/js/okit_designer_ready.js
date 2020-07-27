@@ -160,7 +160,7 @@ $(document).ready(function() {
         .text('Cost Estimate');
      */
     if (developer_mode) {
-        // OKIT Json
+        // OKIT Model Json
         d3.select(d3Id('console_right_bar')).append('label')
             .attr('id', 'toggle_source_button')
             .attr('class', 'okit-pointer-cursor')
@@ -168,7 +168,7 @@ $(document).ready(function() {
                 let open = $(this).hasClass('okit-bar-panel-displayed');
                 slideRightPanelsOffScreen();
                 if (!open) {
-                    $(jqId(JSON_PANEL)).removeClass('hidden');
+                    $(jqId(JSON_MODEL_PANEL)).removeClass('hidden');
                     $(this).addClass('okit-bar-panel-displayed');
                     $(jqId('right_column_dragbar')).removeClass('hidden');
                 }
@@ -177,7 +177,7 @@ $(document).ready(function() {
                 // Display Json
                 displayOkitJson();
             })
-            .text('Json');
+            .text('Model');
         // OKIT View Json
         d3.select(d3Id('console_right_bar')).append('label')
             .attr('id', 'toggle_source_button')
@@ -195,7 +195,25 @@ $(document).ready(function() {
                 // Display Json
                 displayOkitJson();
             })
-            .text('View Json');
+            .text('View');
+        // OKIT Region Json
+        d3.select(d3Id('console_right_bar')).append('label')
+            .attr('id', 'toggle_source_button')
+            .attr('class', 'okit-pointer-cursor')
+            .on('click', function () {
+                let open = $(this).hasClass('okit-bar-panel-displayed');
+                slideRightPanelsOffScreen();
+                if (!open) {
+                    $(jqId(JSON_REGION_PANEL)).removeClass('hidden');
+                    $(this).addClass('okit-bar-panel-displayed');
+                    $(jqId('right_column_dragbar')).removeClass('hidden');
+                }
+                // Check to see if Right Column needs to be hidden
+                checkRightColumn();
+                // Display Json
+                displayOkitJson();
+            })
+            .text('Regions Model');
     }
 
     console.info('Added Designer Handlers');

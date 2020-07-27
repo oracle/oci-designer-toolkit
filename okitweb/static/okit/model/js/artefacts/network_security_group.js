@@ -61,7 +61,7 @@ class NetworkSecurityGroup extends OkitArtifact {
         return 'Network Security Group';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Network Security Group Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);

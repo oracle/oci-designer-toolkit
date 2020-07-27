@@ -67,7 +67,7 @@ class LoadBalancer extends OkitArtifact {
         return 'Load Balancer';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Load Balancer Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         console.info('------------- Subnet      : ' + request.subnet_id);

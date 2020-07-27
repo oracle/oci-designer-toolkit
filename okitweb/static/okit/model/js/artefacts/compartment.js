@@ -115,7 +115,7 @@ class Compartment extends OkitArtifact {
         return 'Compartment';
     }
 
-    static queryRoot(request = {}, region='') {
+    static queryRoot1(request = {}, region='') {
         console.info('------------- Compartment Query --------------------');
         let me = this;
         queryCount++;
@@ -146,7 +146,7 @@ class Compartment extends OkitArtifact {
         });
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Compartments Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         let me = this;

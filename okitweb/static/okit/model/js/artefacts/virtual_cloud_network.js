@@ -210,7 +210,7 @@ class VirtualCloudNetwork extends OkitArtifact {
         return 'Virtual Cloud Network';
     }
 
-    static query(request = {}, region='') {
+    static query1(request = {}, region='') {
         console.info('------------- Virtual Cloud Network Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         let me = this;
