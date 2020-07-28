@@ -294,3 +294,7 @@ rect.highlight {
     stroke-width: 3;
     stroke-dasharray: none;
 }
+
+rect.highlight-vnic {
+    fill: #00cc00;
+}

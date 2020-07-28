@@ -723,9 +723,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "CentOS-6.10-2020.06.16-0",
+      "display_name": "CentOS-6.10-2020.07.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa3katbupltm2drnulz2rsiyyrsvheq6als65lm2orrpwzcnvc6oxa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaarl7ey7evp6ygzf6cz5yair4ohh4rg56kyvocq2oijbm3btbokc7a",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -741,7 +741,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "CentOS 6.10",
-      "time_created": "2020-06-19T16:30:05.763000+00:00"
+      "time_created": "2020-07-24T17:01:11.290000+00:00"
     },
     {
       "agent_features": null,
@@ -749,9 +749,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "CentOS-7-2020.06.16-0",
+      "display_name": "CentOS-7-2020.07.20-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaajw5o3qf7cha2mgov5vxnwyctmcy4eqayy7o4w7s6cqeyppqd3smq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaexd47pbho2zo2q6wjxrrnnesomx7a4p35pckvaimmyrbfeb32mwq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -767,7 +767,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "CentOS 7",
-      "time_created": "2020-06-19T16:31:02.199000+00:00"
+      "time_created": "2020-07-24T17:01:07.879000+00:00"
     },
     {
       "agent_features": null,
@@ -879,9 +879,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.06.11-0",
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.07.17-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaacbiytdq2uawalsbaeiwakudmxixytntjabrqvqwjo6wvu5fgymaa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaa66wky2u6m3657yzem4kmshe7e5cp2nlsqw57aaonjc2fhulk66q",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -897,7 +897,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-06-12T18:51:32.326000+00:00"
+      "time_created": "2020-07-20T23:14:34.317000+00:00"
     },
     {
       "agent_features": null,
@@ -905,9 +905,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.06.11-0",
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.07.17-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaatc4josfjc6psg236ns5s7snay2s5e7odfhzd333gehbcdseaxmdq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaamm3ebizhsbhs2i4wefala2y6bv4xqaqh72qpnzw42ae3rdv6crgq",
       "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -923,7 +923,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
-      "time_created": "2020-06-12T18:54:20.986000+00:00"
+      "time_created": "2020-07-20T23:17:48.662000+00:00"
     },
     {
       "agent_features": null,

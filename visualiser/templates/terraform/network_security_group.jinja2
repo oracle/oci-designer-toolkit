@@ -26,7 +26,7 @@ resource "oci_core_network_security_group_security_rule" "{{ resource_name }}_Ru
     direction    = {{ rule.direction | safe }}
     protocol    = {{ rule.protocol | safe }}
     # Optional
-    description   = {{ description }}
+    description   = {{ description| safe }}
     {% if rule.destination is defined %}
         destination = {{ rule.destination | safe }}
     {% endif %}

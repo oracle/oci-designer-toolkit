@@ -8,7 +8,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
 __version__ = "1.0.0"
-__module__ = "okitPriceEstimator"
+__module__ = "okitOci"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import os
@@ -179,7 +179,7 @@ def ociQuery():
         return '404'
 
 
-@bp.route('/artifacts/<string:artifact>', methods=(['GET']))
+@bp.route('/artefacts/<string:artifact>', methods=(['GET']))
 def ociArtifacts(artifact):
     logger.info('Artifact : {0:s}'.format(str(artifact)))
     query_string = request.query_string

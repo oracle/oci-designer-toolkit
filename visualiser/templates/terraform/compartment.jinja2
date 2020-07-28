@@ -28,7 +28,7 @@ data "oci_identity_compartments" "{{ resource_name }}Compartments" {
     access_level   = "ACCESSIBLE"
 }
 locals {
-    {{ resource_name }}ActiveCompartments = [for x in data.oci_identity_compartments.{{ resource_name }}Compartments.compartments: x if x.state == "ACTIVE" && x.name == {{ display_name }}]
+    {{ resource_name }}ActiveCompartments = [for x in data.oci_identity_compartments.{{ resource_name }}Compartments.compartments: x if x.state == "ACTIVE" && x.name == {{ display_name | safe }}]
 }
 
 output "{{ resource_name }}ActiveCompartments" {
