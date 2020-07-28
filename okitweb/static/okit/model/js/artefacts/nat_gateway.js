@@ -59,38 +59,6 @@ class NATGateway extends OkitArtifact {
         return 'NAT Gateway';
     }
 
-    static query1(request = {}, region='') {
-        console.info('------------- NAT Gateway Query --------------------');
-        console.info('------------- Compartment           : ' + request.compartment_id);
-        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
-        let me = this;
-        queryCount++;
-        $.ajax({
-            type: 'get',
-            url: 'oci/artefacts/NATGateway',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(request),
-            success: function(resp) {
-                let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({nat_gateways: response_json});
-                for (let artefact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
-                }
-                redrawSVGCanvas(region);
-                $('#' + nat_gateway_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            },
-            error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
-                $('#' + nat_gateway_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            }
-        });
-    }
 }
 
 $(document).ready(function() {

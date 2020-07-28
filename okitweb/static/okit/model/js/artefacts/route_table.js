@@ -57,38 +57,6 @@ class RouteTable extends OkitArtifact {
         return 'Route Table';
     }
 
-    static query1(request = {}, region='') {
-        console.info('------------- Route Table Query --------------------');
-        console.info('------------- Compartment           : ' + request.compartment_id);
-        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
-        let me = this;
-        queryCount++;
-        $.ajax({
-            type: 'get',
-            url: 'oci/artefacts/RouteTable',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(request),
-            success: function(resp) {
-                let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({route_tables: response_json});
-                for (let artefact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
-                }
-                redrawSVGCanvas(region);
-                $('#' + route_table_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            },
-            error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
-                $('#' + route_table_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            }
-        });
-    }
 }
 
 $(document).ready(function() {

@@ -67,38 +67,6 @@ class LoadBalancer extends OkitArtifact {
         return 'Load Balancer';
     }
 
-    static query1(request = {}, region='') {
-        console.info('------------- Load Balancer Query --------------------');
-        console.info('------------- Compartment : ' + request.compartment_id);
-        console.info('------------- Subnet      : ' + request.subnet_id);
-        let me = this;
-        queryCount++;
-        $.ajax({
-            type: 'get',
-            url: 'oci/artefacts/LoadBalancer',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(request),
-            success: function (resp) {
-                let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({load_balancers: response_json});
-                for (let artefact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
-                }
-                redrawSVGCanvas(region);
-                $('#' + load_balancer_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            },
-            error: function (xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
-                $('#' + load_balancer_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            }
-        });
-    }
 }
 
 $(document).ready(function () {

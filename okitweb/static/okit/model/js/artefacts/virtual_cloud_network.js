@@ -210,39 +210,6 @@ class VirtualCloudNetwork extends OkitArtifact {
         return 'Virtual Cloud Network';
     }
 
-    static query1(request = {}, region='') {
-        console.info('------------- Virtual Cloud Network Query --------------------');
-        console.info('------------- Compartment           : ' + request.compartment_id);
-        let me = this;
-        queryCount++;
-        $.ajax({
-            type: 'get',
-            url: 'oci/artefacts/VirtualCloudNetwork',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(request),
-            success: function(resp) {
-                let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({virtual_cloud_networks: response_json});
-                for (let artefact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
-                    me.querySubComponents(request, region, artefact.id);
-                }
-                redrawSVGCanvas(region);
-                $('#' + virtual_cloud_network_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            },
-            error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error  : ' + error)
-                $('#' + virtual_cloud_network_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            }
-        });
-    }
-
     static querySubComponents(request = {}, region='', id='') {
         let sub_query_request = JSON.clone(request);
         sub_query_request.vcn_id = id;

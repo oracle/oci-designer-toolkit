@@ -57,7 +57,5 @@ class VirtualNetworkInterface extends OkitArtifact {
         return 'Virtual Network Interface';
     }
 
-    static query(request = {}, region='') {}
-
 }
 

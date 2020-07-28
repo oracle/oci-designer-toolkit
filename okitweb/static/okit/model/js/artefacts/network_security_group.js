@@ -61,43 +61,6 @@ class NetworkSecurityGroup extends OkitArtifact {
         return 'Network Security Group';
     }
 
-    static query1(request = {}, region='') {
-        console.info('------------- Network Security Group Query --------------------');
-        console.info('------------- Compartment           : ' + request.compartment_id);
-        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
-        let me = this;
-        queryCount++;
-        $.ajax({
-            type: 'get',
-            url: 'oci/artefacts/NetworkSecurityGroup',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(request),
-            success: function(resp) {
-                let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({network_security_groups: response_json});
-                for (let artefact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
-                }
-                redrawSVGCanvas(region);
-                $('#' + network_security_group_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            },
-            error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
-                $('#' + network_security_group_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            }
-        });
-    }
-
-
-    /*
-    ** Artifact Specific Functions
-     */
 }
 
 $(document).ready(function() {

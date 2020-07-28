@@ -116,38 +116,6 @@ class Instance extends OkitArtifact {
         return 'Instance';
     }
 
-    static query1(request = {}, region='') {
-        console.info('------------- Instance Query --------------------');
-        console.info('------------- Compartment : ' + request.compartment_id);
-        console.info('------------- Subnet      : ' + request.subnet_id);
-        let me = this;
-        queryCount++;
-        $.ajax({
-            type: 'get',
-            url: 'oci/artefacts/Instance',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(request),
-            success: function (resp) {
-                let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({instances: response_json});
-                for (let artefact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
-                }
-                redrawSVGCanvas(region);
-                $('#' + instance_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            },
-            error: function (xhr, status, error) {
-                console.warn('Status : ' + status);
-                console.warn('Error : ' + error);
-                $('#' + instance_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            }
-        });
-    }
 }
 
 $(document).ready(function () {

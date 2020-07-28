@@ -60,39 +60,6 @@ class SecurityList extends OkitArtifact {
         return 'Security List';
     }
 
-    static query1(request = {}, region='') {
-        console.info('------------- Security List Query --------------------');
-        console.info('------------- Compartment           : ' + request.compartment_id);
-        console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
-        let me = this;
-        queryCount++;
-        $.ajax({
-            type: 'get',
-            url: 'oci/artefacts/SecurityList',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(request),
-            success: function(resp) {
-                let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({security_lists: response_json});
-                for (let artefact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artefact.display_name);
-                }
-                redrawSVGCanvas(region);
-                $('#' + security_list_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            },
-            error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
-                $('#' + security_list_query_cb).prop('checked', true);
-                queryCount--;
-                hideQueryProgressIfComplete();
-            }
-        });
-    }
-
 
     /*
     ** Artifact Specific Functions
