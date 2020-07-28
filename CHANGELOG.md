@@ -5,6 +5,7 @@
 **Release Date**: 5th August 2020
 ### Features
 1. Split Designer View functionality from OKIT Model (OKIT-89).
+2. Update Json associated with the Fragments to conform to new structure and remove non Reference Architecture templates because these are fragments. (OKIT-101).
 
 ### Bug Fixes
 1. Resolve issue with the "description" for Network Security Groups which was being incorrectly rendered in the generated Terraform.
