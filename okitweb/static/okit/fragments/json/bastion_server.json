@@ -1,91 +1,156 @@
 {
-  "title": "Bastion Server",
-  "description": "Bastion Server Fragment.",
+  "title": "OKIT OCI Visualiser Json",
+  "description": "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......",
+  "okit_version": "0.9.0",
   "compartments": [
     {
-      "id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "name": "okit",
-      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "parent_id": "canvas",
+      "id": "okit.compartment.49f9e05d-9e95-419c-a7d9-4771935f9f6e",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "compartment_id": null,
+      "name": "okit-comp001",
       "display_name": "okit-comp001"
     }
   ],
   "autonomous_databases": [],
   "block_storage_volumes": [],
+  "containers": [],
+  "database_systems": [],
   "dynamic_routing_gateways": [],
+  "fast_connects": [],
   "file_storage_systems": [],
   "instances": [
     {
-      "subnet_id": "okit.subnet.a2cada96-6f11-436e-b4f1-41ee96f739dd",
-      "subnet": "okit-bastion-sn",
-      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "availability_domain": "1",
-      "id": "okit-in-2f526c6d-3d93-442f-bc15-3d05689406f9",
+      "id": "okit.undefined.00bb10a8-a694-46b7-a461-e19ee26df8c6",
+      "freeform_tags": {},
+      "defined_tags": {},
       "display_name": "okit-bastion-server",
-      "hostname_label": "okit-in001",
-      "os": "Oracle Linux",
-      "version": "7.7",
+      "availability_domain": "1",
+      "compartment_id": "okit.compartment.49f9e05d-9e95-419c-a7d9-4771935f9f6e",
       "shape": "VM.Standard.E2.1",
-      "boot_volume_size_in_gbs": "50",
-      "authorized_keys": "",
-      "cloud_init_yaml": "#cloud-config\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias ssh='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10 -i /etc/ssh/ssh_host_rsa_key '\n\nssh_keys:\n  rsa_private: |\n    -----BEGIN OPENSSH PRIVATE KEY-----\n    Add Private Key\n    -----END OPENSSH PRIVATE KEY-----\n  rsa_public: ssh-rsa Add Public Key\n\nruncmd:\n  # Set Private Key to read everyone\n  - sudo chmod a+r /etc/ssh/ssh_host_rsa_key*\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The Bastion Instance is finally up, after $UPTIME seconds ****\"\n",
+      "fault_domain": "",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.5ce7287f-3c85-4546-81c4-f456850a2a8d",
+          "hostname_label": "okit-in001",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.7",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias ssh='/usr/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oConnectTimeout=10 -i /etc/ssh/ssh_host_rsa_key '\n\nssh_keys:\n  rsa_private: |\n    -----BEGIN OPENSSH PRIVATE KEY-----\n    Add Private Key\n    -----END OPENSSH PRIVATE KEY-----\n  rsa_public: ssh-rsa Add Public Key\n\nruncmd:\n  # Set Private Key to read everyone\n  - sudo chmod a+r /etc/ssh/ssh_host_rsa_key*\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The Bastion Instance is finally up, after $UPTIME seconds ****\"\n"
+      },
       "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "subnet": "okit-bastion-sn",
       "block_storage_volumes": [],
-      "subnet_ids": [],
-      "parent_id": "okit.subnet.a2cada96-6f11-436e-b4f1-41ee96f739dd"
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.5ce7287f-3c85-4546-81c4-f456850a2a8d",
+        "hostname_label": "okit-in001",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      }
     }
   ],
   "internet_gateways": [
     {
-      "vcn_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
-      "virtual_cloud_network": "okit-bastion-vcn",
-      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit.internetgateway.d77f1212-81d7-4524-8927-722904202641",
+      "id": "okit.internetgateway.922b0191-85f9-46a2-8309-9d12de9ec8aa",
+      "freeform_tags": {},
+      "defined_tags": {},
       "display_name": "okit-bastion-ig",
-      "parent_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7"
+      "compartment_id": "okit.compartment.49f9e05d-9e95-419c-a7d9-4771935f9f6e",
+      "vcn_id": "okit.virtualcloudnetwork.d7bfcd1f-fb58-43fa-99b7-c8271819ace3",
+      "enabled": true,
+      "virtual_cloud_network": "okit-bastion-vcn"
     }
   ],
   "load_balancers": [],
+  "local_peering_gateways": [],
   "nat_gateways": [],
+  "network_security_groups": [],
   "object_storage_buckets": [],
+  "remote_peering_gateways": [],
   "route_tables": [
     {
-      "vcn_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
-      "virtual_cloud_network": "okit-bastion-vcn",
-      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit.routetable.0ec379c2-9a1b-4a01-9203-9b5f3cc283c7",
+      "id": "okit.routetable.04fc2d1b-c707-4456-8a0c-30f8507a0624",
+      "freeform_tags": {},
+      "defined_tags": {},
       "display_name": "okit-bastion-rt",
+      "compartment_id": "okit.compartment.49f9e05d-9e95-419c-a7d9-4771935f9f6e",
+      "vcn_id": "okit.virtualcloudnetwork.d7bfcd1f-fb58-43fa-99b7-c8271819ace3",
       "route_rules": [
         {
           "destination_type": "CIDR_BLOCK",
           "destination": "0.0.0.0/0",
-          "network_entity_id": "okit.internetgateway.d77f1212-81d7-4524-8927-722904202641"
+          "network_entity_id": "okit.internetgateway.922b0191-85f9-46a2-8309-9d12de9ec8aa",
+          "target_type": "internet_gateways"
         }
       ],
-      "parent_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7"
+      "virtual_cloud_network": "okit-bastion-vcn"
     }
   ],
   "security_lists": [
     {
-      "vcn_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
-      "virtual_cloud_network": "okit-bastion-vcn",
-      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit.securitylist.ff510077-a9af-41be-8fad-f6430c2a7732",
+      "id": "okit.securitylist.6ce13e7b-4609-4f00-b641-7f4a99e6d61f",
+      "freeform_tags": {},
+      "defined_tags": {},
       "display_name": "okit-bastion-sl",
+      "compartment_id": "okit.compartment.49f9e05d-9e95-419c-a7d9-4771935f9f6e",
+      "vcn_id": "okit.virtualcloudnetwork.d7bfcd1f-fb58-43fa-99b7-c8271819ace3",
       "egress_security_rules": [
         {
           "destination": "0.0.0.0/0",
           "destination_type": "CIDR_BLOCK",
-          "icmp_options": null,
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          },
           "is_stateless": false,
           "protocol": "all",
-          "tcp_options": null,
-          "udp_options": null
+          "tcp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          }
         }
       ],
       "ingress_security_rules": [
         {
-          "icmp_options": null,
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          },
           "is_stateless": false,
           "protocol": "6",
           "source": "0.0.0.0/0",
@@ -95,9 +160,21 @@
               "max": 22,
               "min": 22
             },
-            "source_port_range": null
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            }
           },
-          "udp_options": null
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          }
         },
         {
           "icmp_options": {
@@ -108,8 +185,26 @@
           "protocol": "1",
           "source": "0.0.0.0/0",
           "source_type": "CIDR_BLOCK",
-          "tcp_options": null,
-          "udp_options": null
+          "tcp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          }
         },
         {
           "icmp_options": {
@@ -120,41 +215,66 @@
           "protocol": "1",
           "source": "10.0.0.0/16",
           "source_type": "CIDR_BLOCK",
-          "tcp_options": null,
-          "udp_options": null
+          "tcp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          }
         }
       ],
-      "parent_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7"
+      "virtual_cloud_network": "okit-bastion-vcn"
     }
   ],
   "service_gateways": [],
   "subnets": [
     {
-      "vcn_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
-      "virtual_cloud_network": "okit-bastion-vcn",
-      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit.subnet.a2cada96-6f11-436e-b4f1-41ee96f739dd",
+      "id": "okit.subnet.5ce7287f-3c85-4546-81c4-f456850a2a8d",
+      "freeform_tags": {},
+      "defined_tags": {},
       "display_name": "okit-bastion-sn",
-      "cidr_block": "10.0.0.0/24",
+      "compartment_id": "okit.compartment.49f9e05d-9e95-419c-a7d9-4771935f9f6e",
+      "vcn_id": "okit.virtualcloudnetwork.d7bfcd1f-fb58-43fa-99b7-c8271819ace3",
+      "cidr_block": "10.1.0.0/24",
       "dns_label": "bastionsn",
       "prohibit_public_ip_on_vnic": false,
-      "route_table": "",
-      "route_table_id": "okit.routetable.0ec379c2-9a1b-4a01-9203-9b5f3cc283c7",
-      "security_lists": [],
+      "route_table_id": "okit.routetable.04fc2d1b-c707-4456-8a0c-30f8507a0624",
       "security_list_ids": [
-        "okit.securitylist.ff510077-a9af-41be-8fad-f6430c2a7732"
+        "okit.securitylist.6ce13e7b-4609-4f00-b641-7f4a99e6d61f"
       ],
-      "parent_id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7"
+      "availability_domain": "0",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": "",
+      "virtual_cloud_network": "okit-bastion-vcn",
+      "route_table": "",
+      "security_lists": []
     }
   ],
   "virtual_cloud_networks": [
     {
-      "compartment_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9",
-      "id": "okit.virtualcloudnetwork.a4b9e410-9527-43f2-8d46-d953ab1149b7",
+      "id": "okit.virtualcloudnetwork.d7bfcd1f-fb58-43fa-99b7-c8271819ace3",
+      "freeform_tags": {},
+      "defined_tags": {},
       "display_name": "okit-bastion-vcn",
-      "cidr_block": "10.0.0.0/16",
+      "compartment_id": "okit.compartment.49f9e05d-9e95-419c-a7d9-4771935f9f6e",
+      "cidr_block": "10.1.0.0/16",
       "dns_label": "bastionvcn",
-      "parent_id": "okit.compartment.86396bd7-50e7-4935-8747-6dd507b3ddf9"
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": ""
     }
   ]
 }
