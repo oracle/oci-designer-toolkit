@@ -54,9 +54,25 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
     ** Property Sheet Load function
      */
     loadProperties() {
-        let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/template_artefact.html", () => {loadPropertiesSheet(me.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_network_interface.html", () => {
+            // Load Referenced Ids
+            let route_table_select = $(jqId('route_table_id'));
+            route_table_select.append($('<option>').attr('value', '').text(''));
+            for (let route_table of me.artefact.getOkitJson().route_tables) {
+                if (me.vcn_id === route_table.vcn_id) {
+                    route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
+                }
+            }
+            let security_lists_select = $(jqId('security_list_ids'));
+            for (let security_list of me.artefact.getOkitJson().security_lists) {
+                if (me.vcn_id === security_list.vcn_id) {
+                    security_lists_select.append($('<option>').attr('value', security_list.id).text(security_list.display_name));
+                }
+            }
+            // Load Properties
+            loadPropertiesSheet(me.artefact);}
+            );
     }
 
     /*

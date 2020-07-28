@@ -93,6 +93,9 @@ function newDesignerView() {
 function newModel() {
     okitJsonModel = new OkitJson();
 }
+function newRegionsModel() {
+    regionOkitJson = new OkitRegions();
+}
 
 /*
 ** Load Existing Json
@@ -436,6 +439,7 @@ function loadRegions() {
             ociRegions = jsonBody;
             for(let region of jsonBody ){
                 //console.info(region['display_name']);
+                //console.info(region['name']);
                 region_select.append('option')
                     .attr('value', region['name'])
                     .text(region['display_name']);
@@ -484,32 +488,36 @@ function showQueryResults() {
     newDesignerView();
     okitJsonView.newCanvas();
     console.info('Regions Ids : ' + regions);
-    regionOkitJson = {};
+    newRegionsModel();
     if (regions.length > 0) {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
-        let okitQuery = new OkitOCIQuery(okitJsonView, regions, regionOkitJson);
+        okitOCIQuery = new OkitOCIQuery(regions);
         // Add Tabs
         for (const [i, region] of regions.entries()) {
             addRegionTab(region);
         }
         $(jqId(regionTabName(regions[0]))).trigger("click");
-        okitQuery.query(request);
+        okitOCIQuery.query(request, function(region) {
+            console.info('Complete ' + region);
+            okitJsonModel = regionOkitJson[region];
+            newDesignerView();
+            redrawSVGCanvas(region);
+            displayTreeView();
+            $(jqId('modal_loading_wrapper')).addClass('hidden');
+        });
     } else {
         console.info('Region Not Selected.');
     }
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     console.groupEnd();
 }
-// TODO: Delete
-function hideQueryProgressIfComplete() {
-    console.info(`>>>>>>>>>>>>> Query Count: ${queryCount}`);
-}
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
-    $(jqId('modal_loading_wrapper')).addClass('hidden');
+    //$(jqId('modal_loading_wrapper')).addClass('hidden');
     console.info(okitJsonView);
     console.info(okitJsonModel);
-    displayTreeView();
+    //displayTreeView();
+    console.info(okitOCIQuery);
 });
 /*
 ** Export the Model as various formats

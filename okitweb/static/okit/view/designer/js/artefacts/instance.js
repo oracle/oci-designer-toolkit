@@ -110,12 +110,12 @@ class InstanceView extends OkitDesignerArtefactView {
             let svg = attachment.draw();
             // Add Highlighting
             svg.on("mouseover", function () {
-                $('[id=' + attachment.id +']').addClass('highlight-vnic');
+                $(`[id^='${attachment.id}']`).addClass('highlight-vnic');
                 $(jqId(vnic.subnet_id)).addClass('highlight-vnic');
                 d3.event.stopPropagation();
             });
             svg.on("mouseout", function () {
-                $('[id=' + attachment.id +']').removeClass('highlight-vnic');
+                $(`[id^='${attachment.id}']`).removeClass('highlight-vnic');
                 $(jqId(vnic.subnet_id)).removeClass('highlight-vnic');
                 d3.event.stopPropagation();
             });
