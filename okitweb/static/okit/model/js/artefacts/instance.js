@@ -4,10 +4,6 @@
 */
 console.info('Loaded Instance Javascript');
 
-const instance_query_cb = "instance-query-cb";
-const min_instance_width = Math.round(icon_width * 3);
-const min_instance_height = Math.round(icon_height * 5 / 2);
-
 /*
 ** Define Instance Class
  */
@@ -117,27 +113,3 @@ class Instance extends OkitArtifact {
     }
 
 }
-
-$(document).ready(function () {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', instance_query_cb);
-    cell.append('label').text(Instance.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(Instance.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'instance_name_filter')
-        .attr('name', 'instance_name_filter');
-});
-

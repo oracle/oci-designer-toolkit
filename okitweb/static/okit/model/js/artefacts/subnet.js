@@ -4,9 +4,6 @@
 */
 console.info('Loaded Subnet Javascript');
 
-
-const subnet_query_cb = "subnet-query-cb";
-
 /*
 ** Define Subnet Artifact Class
  */
@@ -128,26 +125,3 @@ class Subnet extends OkitArtifact {
         LoadBalancer.query(sub_query_request, region);
     }
 }
-
-$(document).ready(function () {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', subnet_query_cb);
-    cell.append('label').text(Subnet.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(Subnet.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'subnet_name_filter')
-        .attr('name', 'subnet_name_filter');
-});

@@ -4,8 +4,6 @@
 */
 console.info('Loaded Compartment Javascript');
 
-const compartment_query_cb = "compartment-query-cb";
-
 /*
 ** Define Compartment Artifact Class
  */
@@ -116,13 +114,3 @@ class Compartment extends OkitArtifact {
     }
 
 }
-
-$(document).ready(function() {
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', compartment_query_cb);
-    cell.append('label').text(Compartment.getArtifactReference());
-});

@@ -4,8 +4,6 @@
 */
 console.info('Loaded Network Security Group Javascript');
 
-const network_security_group_query_cb = "network-security-group-query-cb";
-
 /*
 ** Define Network Security Group Class
  */
@@ -62,41 +60,3 @@ class NetworkSecurityGroup extends OkitArtifact {
     }
 
 }
-
-$(document).ready(function() {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', network_security_group_query_cb);
-    cell.append('label').text(NetworkSecurityGroup.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(NetworkSecurityGroup.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'network_security_group_name_filter')
-        .attr('name', 'network_security_group_name_filter');
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
