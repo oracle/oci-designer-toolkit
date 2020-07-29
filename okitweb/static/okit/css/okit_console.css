@@ -161,6 +161,21 @@ textarea {
     align-items: center;
 }
 
+.okit-console-header-right {
+    display: block;
+    width: 80px;
+    text-align: right;
+    align-items: end;
+}
+
+.okit-console-header-right > a {
+}
+
+.config-icon {
+    width: 32px;
+    height: 32px;
+}
+
 .okit-console-main {
 }
 
