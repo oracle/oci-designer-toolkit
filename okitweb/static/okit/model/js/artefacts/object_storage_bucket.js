@@ -4,8 +4,6 @@
 */
 console.info('Loaded Object Storage Bucket Javascript');
 
-const object_storage_bucket_query_cb = "object-storage-bucket-query-cb";
-
 /*
 ** Define Object Storage Bucket Class
  */
@@ -61,26 +59,3 @@ class ObjectStorageBucket extends OkitArtifact {
     }
 
 }
-
-$(document).ready(function() {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', object_storage_bucket_query_cb);
-    cell.append('label').text(ObjectStorageBucket.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(ObjectStorageBucket.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'object_storage_bucket_name_filter')
-        .attr('name', 'object_storage_bucket_name_filter');
-});

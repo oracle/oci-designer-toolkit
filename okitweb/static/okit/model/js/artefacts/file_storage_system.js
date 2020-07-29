@@ -4,8 +4,6 @@
 */
 console.info('Loaded File Storage System Javascript');
 
-const file_storage_system_query_cb = "file-storage-system-query-cb";
-
 /*
 ** Define File Storage System Class
  */
@@ -90,26 +88,3 @@ class FileStorageSystem extends OkitArtifact {
     }
 
 }
-
-$(document).ready(function() {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', file_storage_system_query_cb);
-    cell.append('label').text(FileStorageSystem.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(FileStorageSystem.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'file_storage_system_name_filter')
-        .attr('name', 'file_storage_system_name_filter');
-});

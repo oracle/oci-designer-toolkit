@@ -4,8 +4,6 @@
 */
 console.info('Loaded Database System Javascript');
 
-const database_system_query_cb = "database-system-query-cb";
-
 /*
 ** Define Autonomous Database Class
  */
@@ -81,26 +79,3 @@ class DatabaseSystem extends OkitArtifact {
     }
 
 }
-
-$(document).ready(function() {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', database_system_query_cb);
-    cell.append('label').text(DatabaseSystem.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(DatabaseSystem.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'database_system_name_filter')
-        .attr('name', 'database_system_name_filter');
-});

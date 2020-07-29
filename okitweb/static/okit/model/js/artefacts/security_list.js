@@ -4,8 +4,6 @@
 */
 console.info('Loaded Security List Javascript');
 
-const security_list_query_cb = "security-list-query-cb";
-
 /*
 ** Define Security List Class
  */
@@ -130,41 +128,3 @@ class SecurityList extends OkitArtifact {
         );
     }
 }
-
-$(document).ready(function() {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', security_list_query_cb);
-    cell.append('label').text(SecurityList.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(SecurityList.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'security_list_name_filter')
-        .attr('name', 'security_list_name_filter');
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

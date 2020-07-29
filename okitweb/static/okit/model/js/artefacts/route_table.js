@@ -4,8 +4,6 @@
 */
 console.info('Loaded Route Table Javascript');
 
-const route_table_query_cb = "route-table-query-cb";
-
 /*
 ** Define Route Table Class
  */
@@ -58,41 +56,3 @@ class RouteTable extends OkitArtifact {
     }
 
 }
-
-$(document).ready(function() {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', route_table_query_cb);
-    cell.append('label').text(RouteTable.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(RouteTable.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'route_table_name_filter')
-        .attr('name', 'route_table_name_filter');
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
