@@ -19,13 +19,26 @@ let selectedArtefact = null;
  */
 class OkitOCIConfig {
     constructor() {
+        this.results = [];
+        this.validate();
         this.load();
     }
 
     load() {
         let me = this;
-        $.getJSON('config/sections', function(resp) {$.extend(true, me, resp);console.info('Sections Response '+resp);});
+        $.getJSON('config/sections', function(resp) {$.extend(true, me, resp);console.info('Sections Response ' + JSON.stringify(resp));});
         console.info(this);
+    }
+
+    validate() {
+        let me = this;
+        $.getJSON('config/validate', function(resp) {
+            console.info('Validate Response ' + JSON.stringify(resp));
+            me.results = resp.results;
+            if (me.results.length > 0) {
+                $('#config_link').removeClass('hidden');
+            }
+        });
     }
 }
 

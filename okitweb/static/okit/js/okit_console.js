@@ -25,6 +25,11 @@ function checkForUpdate() {
     });
 }
 
+function showConfigErrors() {
+    let msg = okitOciConfig.results.join('\n');
+    alert(msg);
+}
+
 $(document).ready(function() {
     /*
     ** Add handler functionality
