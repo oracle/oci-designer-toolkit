@@ -174,15 +174,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteAutonomousDatabase() {
-        for (let i = 0; i < this.autonomous_databases.length; i++) {
-            if (this.autonomous_databases[i].artefact_id === id) {
-                this.autonomous_databases[i].delete();
-                this.autonomous_databases.splice(i, 1);
-                break;
-            }
-        }
+    deleteAutonomousDatabase(id='') {
         this.okitjson.deleteAutonomousDatabase(id);
+        this.update();
     }
     loadAutonomousDatabases(autonomous_databases) {
         for (const artefact of autonomous_databases) {
@@ -215,15 +209,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteBlockStorageVolume() {
-        for (let i = 0; i < this.block_storage_volumes.length; i++) {
-            if (this.block_storage_volumes[i].artefact_id === id) {
-                this.block_storage_volumes[i].delete();
-                this.block_storage_volumes.splice(i, 1);
-                break;
-            }
-        }
+    deleteBlockStorageVolume(id='') {
         this.okitjson.deleteBlockStorageVolume(id);
+        this.update();
     }
     loadBlockStorageVolumes(block_storage_volumes) {
         for (const artefact of block_storage_volumes) {
@@ -255,15 +243,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteCompartment(id) {
-        for (let i = 0; i < this.compartments.length; i++) {
-            if (this.compartments[i].artefact_id === id) {
-                this.compartments[i].delete();
-                this.compartments.splice(i, 1);
-                break;
-            }
-        }
+    deleteCompartment(id='') {
         this.okitjson.deleteCompartment(id);
+        this.update();
     }
     loadCompartments(compartments) {
         for (const artefact of compartments) {
@@ -306,15 +288,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteDatabaseSystem() {
-        for (let i = 0; i < this.database_systems.length; i++) {
-            if (this.database_systems[i].artefact_id === id) {
-                this.database_systems[i].delete();
-                this.database_systems.splice(i, 1);
-                break;
-            }
-        }
+    deleteDatabaseSystem(id='') {
         this.okitjson.deleteDatabaseSystem(id);
+        this.update();
     }
     loadDatabaseSystems(database_systems) {
         for (const artefact of database_systems) {
@@ -348,15 +324,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteDynamicRoutingGateway() {
-        for (let i = 0; i < this.dynamic_routing_gateways.length; i++) {
-            if (this.dynamic_routing_gateways[i].artefact_id === id) {
-                this.dynamic_routing_gateways[i].delete();
-                this.dynamic_routing_gateways.splice(i, 1);
-                break;
-            }
-        }
+    deleteDynamicRoutingGateway(id='') {
         this.okitjson.deleteDynamicRoutingGateway(id);
+        this.update();
     }
     loadDynamicRoutingGateways(dynamic_routing_gateways) {
         for (const artefact of dynamic_routing_gateways) {
@@ -389,15 +359,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteFastConnect() {
-        for (let i = 0; i < this.fast_connects.length; i++) {
-            if (this.fast_connects[i].artefact_id === id) {
-                this.fast_connects[i].delete();
-                this.fast_connects.splice(i, 1);
-                break;
-            }
-        }
+    deleteFastConnect(id='') {
         this.okitjson.deleteFastConnect(id);
+        this.update();
     }
     loadFastConnects(fast_connects) {
         for (const artefact of fast_connects) {
@@ -431,15 +395,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteFileStorageSystem() {
-        for (let i = 0; i < this.file_storage_systems.length; i++) {
-            if (this.file_storage_systems[i].artefact_id === id) {
-                this.file_storage_systems[i].delete();
-                this.file_storage_systems.splice(i, 1);
-                break;
-            }
-        }
+    deleteFileStorageSystem(id='') {
         this.okitjson.deleteFileStorageSystem(id);
+        this.update();
     }
     loadFileStorageSystems(file_storage_systems) {
         for (const artefact of file_storage_systems) {
@@ -478,15 +436,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteInstance() {
-        for (let i = 0; i < this.instances.length; i++) {
-            if (this.instances[i].artefact_id === id) {
-                this.instances[i].delete();
-                this.instances.splice(i, 1);
-                break;
-            }
-        }
+    deleteInstance(id='') {
         this.okitjson.deleteInstance(id);
+        this.update();
     }
     loadInstances(instances) {
         for (const artefact of instances) {
@@ -524,15 +476,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteInternetGateway() {
-        for (let i = 0; i < this.internet_gateways.length; i++) {
-            if (this.internet_gateways[i].artefact_id === id) {
-                this.internet_gateways[i].delete();
-                this.internet_gateways.splice(i, 1);
-                break;
-            }
-        }
+    deleteInternetGateway(id='') {
         this.okitjson.deleteInternetGateway(id);
+        this.update();
     }
     loadInternetGateways(internet_gateways) {
         for (const artefact of internet_gateways) {
@@ -566,15 +512,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteLoadBalancer() {
-        for (let i = 0; i < this.load_balancers.length; i++) {
-            if (this.load_balancers[i].artefact_id === id) {
-                this.load_balancers[i].delete();
-                this.load_balancers.splice(i, 1);
-                break;
-            }
-        }
+    deleteLoadBalancer(id='') {
         this.okitjson.deleteLoadBalancer(id);
+        this.update();
     }
     loadLoadBalancers(load_balancers) {
         for (const artefact of load_balancers) {
@@ -608,15 +548,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteLocalPeeringGateway() {
-        for (let i = 0; i < this.local_peering_gateways.length; i++) {
-            if (this.local_peering_gateways[i].artefact_id === id) {
-                this.local_peering_gateways[i].delete();
-                this.local_peering_gateways.splice(i, 1);
-                break;
-            }
-        }
+    deleteLocalPeeringGateway(id='') {
         this.okitjson.deleteLocalPeeringGateway(id);
+        this.update();
     }
     loadLocalPeeringGateways(local_peering_gateways) {
         for (const artefact of local_peering_gateways) {
@@ -654,15 +588,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteNATGateway() {
-        for (let i = 0; i < this.nat_gateways.length; i++) {
-            if (this.nat_gateways[i].artefact_id === id) {
-                this.nat_gateways[i].delete();
-                this.nat_gateways.splice(i, 1);
-                break;
-            }
-        }
+    deleteNATGateway(id='') {
         this.okitjson.deleteNATGateway(id);
+        this.update();
     }
     loadNATGateways(nat_gateways) {
         for (const artefact of nat_gateways) {
@@ -696,15 +624,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteNetworkSecurityGroup() {
-        for (let i = 0; i < this.network_security_groups.length; i++) {
-            if (this.network_security_groups[i].artefact_id === id) {
-                this.network_security_groups[i].delete();
-                this.network_security_groups.splice(i, 1);
-                break;
-            }
-        }
+    deleteNetworkSecurityGroup(id='') {
         this.okitjson.deleteNetworkSecurityGroup(id);
+        this.update();
     }
     loadNetworkSecurityGroups(network_security_groups) {
         for (const artefact of network_security_groups) {
@@ -737,15 +659,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteObjectStorageBucket() {
-        for (let i = 0; i < this.object_storage_buckets.length; i++) {
-            if (this.object_storage_buckets[i].artefact_id === id) {
-                this.object_storage_buckets[i].delete();
-                this.object_storage_buckets.splice(i, 1);
-                break;
-            }
-        }
+    deleteObjectStorageBucket(id='') {
         this.okitjson.deleteObjectStorageBucket(id);
+        this.update();
     }
     loadObjectStorageBuckets(object_storage_buckets) {
         for (const artefact of object_storage_buckets) {
@@ -779,15 +695,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteRouteTable() {
-        for (let i = 0; i < this.route_tables.length; i++) {
-            if (this.route_tables[i].artefact_id === id) {
-                this.route_tables[i].delete();
-                this.route_tables.splice(i, 1);
-                break;
-            }
-        }
+    deleteRouteTable(id='') {
         this.okitjson.deleteRouteTable(id);
+        this.update();
     }
     loadRouteTables(route_tables) {
         for (const artefact of route_tables) {
@@ -821,15 +731,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteSecurityList() {
-        for (let i = 0; i < this.security_lists.length; i++) {
-            if (this.security_lists[i].artefact_id === id) {
-                this.security_lists[i].delete();
-                this.security_lists.splice(i, 1);
-                break;
-            }
-        }
+    deleteSecurityList(id='') {
         this.okitjson.deleteSecurityList(id);
+        this.update();
     }
     loadSecurityLists(security_lists) {
         for (const artefact of security_lists) {
@@ -863,15 +767,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteServiceGateway() {
-        for (let i = 0; i < this.service_gateways.length; i++) {
-            if (this.service_gateways[i].artefact_id === id) {
-                this.service_gateways[i].delete();
-                this.service_gateways.splice(i, 1);
-                break;
-            }
-        }
+    deleteServiceGateway(id='') {
         this.okitjson.deleteServiceGateway(id);
+        this.update();
     }
     loadServiceGateways(service_gateways) {
         for (const artefact of service_gateways) {
@@ -905,15 +803,9 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteSubnet() {
-        for (let i = 0; i < this.subnets.length; i++) {
-            if (this.subnets[i].artefact_id === id) {
-                this.subnets[i].delete();
-                this.subnets.splice(i, 1);
-                break;
-            }
-        }
+    deleteSubnet(id='') {
         this.okitjson.deleteSubnet(id);
+        this.update();
     }
     loadSubnets(subnets) {
         for (const artefact of subnets) {
@@ -949,15 +841,9 @@ class OkitJsonView {
     getVcn(id='') {
         return this.getVirtualCloudNetwork(id);
     }
-    deleteVirtualCloudNetwork() {
-        for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
-            if (this.virtual_cloud_networks[i].artefact_id === id) {
-                this.virtual_cloud_networks[i].delete();
-                this.virtual_cloud_networks.splice(i, 1);
-                break;
-            }
-        }
+    deleteVirtualCloudNetwork(id='') {
         this.okitjson.deleteVirtualCloudNetwork(id);
+        this.update();
     }
     loadVirtualCloudNetworks(virtual_cloud_networks) {
         for (const artefact of virtual_cloud_networks) {
@@ -971,8 +857,8 @@ class OkitJsonView {
         return this.virtual_network_interfaces[this.virtual_network_interfaces.length - 1];
     }
     getVirtualNetworkInterfaces() {}
-    getVirtualNetworkInterface() {}
-    deleteVirtualNetworkInterface() {}
+    getVirtualNetworkInterface(id='') {}
+    deleteVirtualNetworkInterface(id='') {}
 
     // Fragment
     dropFragmentView(target) {
@@ -1221,6 +1107,11 @@ class OkitArtefactView {
         });
         console.groupEnd();
         return svg;
+    }
+
+    delete() {
+        // Remove SVG Element
+        if ($(jqId(this.id + "-svg")).length) {$(jqId(this.id + "-svg")).remove()}
     }
 
     /*

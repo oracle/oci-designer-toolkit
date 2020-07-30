@@ -913,9 +913,6 @@ class OkitArtifact {
         console.groupCollapsed('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
         // Delete Child Artifacts
         this.deleteChildren();
-        // Remove SVG Element
-        if ($(jqId(this.id + "-svg")).length) {$(jqId(this.id + "-svg")).remove()}
-        //d3.select("#" + this.id + "-svg").remove()
         console.groupEnd();
     }
 
