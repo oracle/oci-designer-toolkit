@@ -13,6 +13,17 @@ class SecurityListView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
+    get attached() {
+        if (!this.attached_id) {
+            for (let subnet of this.getOkitJson().subnets) {
+                if (subnet.security_list_ids.includes(this.id)) {
+                    console.info(this.display_name + ' attached to subnet '+ subnet.display_name);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     getParent() {
         return this.attached_id ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getVirtualCloudNetwork(this.parent_id);
@@ -27,18 +38,17 @@ class SecurityListView extends OkitDesignerArtefactView {
      */
     draw() {
         console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        if (this.attached) {
-            console.groupEnd();
-            return;
+        console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
+        console.info(`Is Attached   : ${this.attached}.`)
+        if (!okitSettings.hide_attached || !this.attached) {
+            console.info(`${this.display_name} is either not attached and we are displaying attached`);
+            let svg = super.draw();
         }
-        let me = this;
-        let svg = super.draw();
         console.groupEnd();
     }
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
@@ -47,24 +57,8 @@ class SecurityListView extends OkitDesignerArtefactView {
         definition['svg']['height'] = this.dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
     }
-
-    isAttached() {
-        // Check if this is attached but exclude when parent is the attachment type.
-        if (this.getParent().getArtifactReference() !== Subnet.getArtifactReference()) {
-            for (let subnet of this.getOkitJson().subnets) {
-                if (subnet.security_list_ids.includes(this.id)) {
-                    console.info(this.display_name + ' attached to subnet '+ subnet.display_name);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 
     /*
     ** Property Sheet Load function

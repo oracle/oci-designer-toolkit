@@ -12,7 +12,7 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.vcn_id;}
+    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
 
     getParent() {
         return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
@@ -27,18 +27,17 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
      */
     draw() {
         console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        if (this.isAttached()) {
-            console.groupEnd();
-            return;
+        console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
+        console.info(`Is Attached   : ${this.attached}.`)
+        if (!okitSettings.hide_attached || !this.attached) {
+            console.info(`${this.display_name} is either not attached and we are displaying attached`);
+            let svg = super.draw();
         }
-        let me = this;
-        let svg = super.draw();
         console.groupEnd();
     }
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
@@ -47,8 +46,6 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
         definition['svg']['height'] = this.dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
     }
 

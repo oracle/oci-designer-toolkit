@@ -13,6 +13,17 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.attached_id ? this.attached_id : this.artefact.compartment_id;}
+    get attached() {
+        if (!this.attached_id) {
+            for (let instance of this.getOkitJson().instances) {
+                if (instance.block_storage_volume_ids.includes(this.id)) {
+                    console.info(this.display_name + ' attached to instance ' + instance.display_name);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     getParent() {
         return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);
@@ -28,18 +39,17 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
     // Additional draw Processing
     draw() {
         console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        if (this.isAttached()) {
-            console.groupEnd();
-            return;
+        console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
+        console.info(`Is Attached   : ${this.attached}.`)
+        if (!okitSettings.hide_attached || !this.attached) {
+            console.info(`${this.display_name} is either not attached and we are displaying attached`);
+            let svg = super.draw();
         }
-        let svg = super.draw();
         console.groupEnd();
-        return svg;
     }
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
@@ -48,22 +58,7 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
         definition['svg']['height'] = this.dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
-    }
-
-    isAttached() {
-        // Check if this is attached but exclude when parent is the attachment type.
-        if (this.getParent() && this.getParent().getArtifactReference() !== Instance.getArtifactReference()) {
-            for (let instance of this.getOkitJson().instances) {
-                if (instance.block_storage_volume_ids.includes(this.id)) {
-                    console.info(this.display_name + ' attached to instance ' + instance.display_name);
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /*

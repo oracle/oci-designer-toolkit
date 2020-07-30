@@ -68,7 +68,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, Subnet.getArtifactReference());
         // Get Parents First Child Container Offset
         let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
@@ -90,8 +89,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         }
         definition['info']['show'] = true;
         definition['info']['text'] = this.cidr_block;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
     }
 

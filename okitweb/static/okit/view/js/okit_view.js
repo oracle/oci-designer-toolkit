@@ -1055,7 +1055,7 @@ class OkitArtefactView {
     }
 
     draw() {
-        console.group(`Drawing (Default) ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+        console.group(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         // Get Definition from Sub class
         let definition = this.getSvgDefinition();
         /*

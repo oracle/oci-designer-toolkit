@@ -37,10 +37,6 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     // Additional draw Processing
     draw() {
         console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.parent_id + ']');
-        if (this.isAttached()) {
-            console.groupEnd();
-            return;
-        }
         let svg = super.draw();
         /*
         ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
@@ -70,7 +66,6 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     }
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
@@ -79,19 +74,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
         definition['svg']['height'] = this.dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
-    }
-
-    isAttached() {
-        for (let instance of this.getOkitJson().instances) {
-            if (instance.autonomous_database_ids.includes(this.id)) {
-                console.info(this.display_name + ' attached to instance '+ instance.display_name);
-                return true;
-            }
-        }
-        return false;
     }
 
     /*
