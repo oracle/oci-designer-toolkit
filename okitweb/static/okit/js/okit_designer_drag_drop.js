@@ -23,29 +23,9 @@ let asset_delete_functions = {};
 let asset_query_functions = {};
 let asset_clear_functions = [];
 
-// TODO: Delete
-function addAssetToDropTarget(artefact, title, target_id, compartment_id, target_type) {
-    console.info('addAssetToDropTarget - Artifact       : ' + artefact);
-    console.info('addAssetToDropTarget - Title          : ' + title);
-    console.info('addAssetToDropTarget - Target Id      : ' + target_id);
-    console.info('addAssetToDropTarget - Target Type    : ' + target_type);
-    console.info('addAssetToDropTarget - Compartment Id : ' + compartment_id);
-    console.info('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
-    let newFunction = 'new' + artefact.split(' ').join('');
-    let getFunction = 'get' + target_type.split(' ').join('');
-    console.info('addAssetToDropTarget - New Function   : ' + newFunction);
-    console.info('addAssetToDropTarget - Get Function   : ' + getFunction);
-    //window[asset_add_functions[artefact]](target_id, compartment_id, title);
-    let parentArtifact = okitJson[getFunction](target_id);
-    console.info('addAssetToDropTarget - Parent         : ' + JSON.stringify(parentArtifact));
-    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: title}, parentArtifact);
-    console.info(JSON.stringify(result, null, 2));
-    okitJson.draw();
-}
-
 function updateAssetTarget(title, source_type, source_id, target_id) {
     window[asset_update_functions[title]](source_type, source_id, target_id);
-    okitJson.draw();
+    okitJsonView.draw();
 }
 
 function deleteAssetFromSVG(artefact, id) {
@@ -53,12 +33,9 @@ function deleteAssetFromSVG(artefact, id) {
     console.info('deleteAssetFromSVG - Id             : ' + id);
     let deleteFunction = 'delete' + artefact.split(' ').join('');
     console.info('Delete Function : ' + deleteFunction);
-    //window[asset_delete_functions[artefact]](id);
-    okitJson[deleteFunction](id);
+    okitJsonView[deleteFunction](id);
     // Hide Context Menu
     $("#context-menu").addClass("hidden");
-    // Redraw
-    redrawSVGCanvas();
 }
 
 /*
