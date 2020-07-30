@@ -51,7 +51,6 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let dimensions = this.getDimensions();
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
@@ -61,8 +60,6 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
         definition['svg']['height'] = dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
     }
 

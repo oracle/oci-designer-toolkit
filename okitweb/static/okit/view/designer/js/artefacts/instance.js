@@ -126,7 +126,6 @@ class InstanceView extends OkitDesignerArtefactView {
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         let parent = this.getParent();
         if (parent) {
@@ -142,8 +141,6 @@ class InstanceView extends OkitDesignerArtefactView {
         definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
         definition['name']['show'] = true;
         definition['name']['align'] = "center";
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
     }
 

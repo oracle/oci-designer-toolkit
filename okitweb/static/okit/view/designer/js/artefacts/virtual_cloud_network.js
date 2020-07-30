@@ -39,7 +39,6 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
      ** SVG Processing
      */
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, VirtualCloudNetwork.getArtifactReference());
         //let parent_first_child = getCompartmentFirstChildContainerOffset(this.compartment_id);
         let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
@@ -56,8 +55,6 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
         definition['label']['show'] = true;
         definition['info']['show'] = true;
         definition['info']['text'] = this.cidr_block;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
     }
 

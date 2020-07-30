@@ -7,7 +7,7 @@ console.info('Loaded Designer Instance Pool View Javascript');
 /*
 ** Define Compartment View Artifact Class
  */
-class InstancePool extends OkitContainerDesignerArtefactView {
+class InstancePoolView extends OkitContainerDesignerArtefactView {
     constructor(artefact = null, json_view) {
         super(artefact, json_view);
     }

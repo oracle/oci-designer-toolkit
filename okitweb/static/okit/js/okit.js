@@ -144,6 +144,7 @@ class OkitSettings {
         this.icons_only = true;
         this.last_used_region = '';
         this.last_used_compartment = '';
+        this.hide_attached = true;
         this.load();
     }
 
@@ -163,6 +164,7 @@ class OkitSettings {
 
     save() {
         createCookie(this.getCookieName(), JSON.stringify(this));
+        console.info(this);
         redrawSVGCanvas();
     }
 
@@ -193,6 +195,7 @@ class OkitSettings {
                 me.is_timestamp_files = $(jqId('is_timestamp_files')).is(':checked');
                 me.is_optional_expanded = $(jqId('is_optional_expanded')).is(':checked');
                 me.is_variables = $(jqId('is_variables')).is(':checked');
+                me.hide_attached = $(jqId('hide_attached')).is(':checked');
                 me.profile = $(jqId('profile')).val();
                 me.save();
                 $(jqId('modal_dialog_wrapper')).addClass('hidden');
@@ -204,6 +207,7 @@ class OkitSettings {
         if (panel_name && panel_name !== '') {
             $(jqId(panel_name)).empty();
             let me = this;
+            // Build Table
             let table = d3.select(d3Id(panel_name)).append('div').append('div')
                 .attr('id', 'preferences_table')
                 .attr('class', 'table okit-table okit-modal-dialog-table');
@@ -219,7 +223,7 @@ class OkitSettings {
                 .property('checked', this.is_display_grid)
                 .on('change', function () {
                     if (autosave) {
-                        me.is_display_grid = $(this).is(':checked');
+                        me.is_display_grid = $('#is_display_grid').is(':checked');
                         me.save();
                     }
                 });
@@ -237,7 +241,7 @@ class OkitSettings {
                 .property('checked', this.is_default_route_table)
                 .on('change', function () {
                     if (autosave) {
-                        me.is_default_route_table = $(this).is(':checked');
+                        me.is_default_route_table = $('#is_default_route_table').is(':checked');
                         me.save();
                     }
                 });
@@ -255,7 +259,7 @@ class OkitSettings {
                 .property('checked', this.is_default_security_list)
                 .on('change', function () {
                     if (autosave) {
-                        me.is_default_security_list = $(this).is(':checked');
+                        me.is_default_security_list = $('#is_default_security_list').is(':checked');
                         me.save();
                     }
                 });
@@ -273,7 +277,7 @@ class OkitSettings {
                 .property('checked', this.is_timestamp_files)
                 .on('change', function () {
                     if (autosave) {
-                        me.is_timestamp_files = $(this).is(':checked');
+                        me.is_timestamp_files = $('#is_timestamp_files').is(':checked');
                         me.save();
                     }
                 });
@@ -291,7 +295,7 @@ class OkitSettings {
                 .property('checked', this.is_optional_expanded)
                 .on('change', function () {
                     if (autosave) {
-                        me.is_optional_expanded = $(this).is(':checked');
+                        me.is_optional_expanded = $('#is_optional_expanded').is(':checked');
                         me.save();
                     }
                 });
@@ -309,13 +313,31 @@ class OkitSettings {
                 .property('checked', this.is_variables)
                 .on('change', function () {
                     if (autosave) {
-                        me.is_variables = $(this).is(':checked');
+                        me.is_variables = $('#is_variables').is(':checked');
                         me.save();
                     }
                 });
             td.append('label')
                 .attr('for', 'is_variables')
                 .text('Use Variables in Generate');
+            // Hide Attached Artefacts
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'hide_attached')
+                .attr('name', 'hide_attached')
+                .attr('type', 'checkbox')
+                .property('checked', this.hide_attached)
+                .on('change', function () {
+                    if (autosave) {
+                        me.hide_attached = $('#hide_attached').is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'hide_attached')
+                .text('Hide Attached Artefacts');
             /*
             // Config Profile
             tr = tbody.append('div').attr('class', 'tr');
