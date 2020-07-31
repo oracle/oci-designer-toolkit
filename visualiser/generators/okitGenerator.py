@@ -677,7 +677,7 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", local_peering_gateway["display_name"], standardisedName)
         # ---- Route Table
-        if len(local_peering_gateway['route_table_id']) > 0:
+        if local_peering_gateway.get('route_table_id') and len(local_peering_gateway['route_table_id']) > 0:
             self.jinja2_variables["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[local_peering_gateway['route_table_id']]))
         else:
             self.jinja2_variables.pop("route_table_id", None)
@@ -1091,7 +1091,7 @@ class OCIGenerator(object):
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # --- Optional
         # ---- Availability Domain
-        if subnet.get("availability_domain", None) is not None and int(subnet["availability_domain"]) > 0:
+        if subnet.get("availability_domain", None) is not None and len(subnet["availability_domain"]) > 0:
             self.addJinja2Variable("availability_domain", subnet["availability_domain"], standardisedName)
         else:
             self.jinja2_variables.pop("availability_domain", None)
