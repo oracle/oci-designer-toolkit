@@ -14,6 +14,7 @@
 2. Attached Route Tables / Security List property edits were lost. (OKIT-70).
 3. Resolve issue with the "compartment_id" for Compartment which was being incorrectly rendered in the generated Terraform.
 4. During query AD specific Subnets return Availability Domain as string not integer value, this is now converted (OKIT-105).
+5. Deleting Defined Tags did not remove them from the model (OKIT-106).
 
 
 ## Version 0.8.0 
