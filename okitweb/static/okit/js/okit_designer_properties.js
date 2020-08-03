@@ -140,7 +140,7 @@ function loadPropertiesSheet(json_element) {
                     .attr('type', 'button')
                     .text('X');
                 button.on('click', function () {
-                    delete json_element.defined_tags[key];
+                    delete json_element.defined_tags[namespace][key];
                     loadPropertiesSheet(json_element);
                     d3.event.stopPropagation();
                 });
