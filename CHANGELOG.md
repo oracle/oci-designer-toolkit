@@ -8,6 +8,7 @@
 2. Update Json associated with the Fragments to conform to new structure and remove non Reference Architecture templates because these are fragments. (OKIT-101).
 3. Check oci config file to identify if the key file exists in the container and if not display error icon with associated click / alert message (OKIT-48 / OKIT-96).
 4. Add preferences option (Hide Attached Artefacts) to indicate if Route Tables / Security List should be displayed as part of the Virtual Cloud Networks as well as an attachment.
+5. Hide Service CIDR when Service Gateway in Route Rule is selected.
 
 ### Bug Fixes
 1. Resolve issue with the "description" for Network Security Groups which was being incorrectly rendered in the generated Terraform.
