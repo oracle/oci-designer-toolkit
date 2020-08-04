@@ -1,0 +1,483 @@
+{
+  "autonomous_databases": [],
+  "block_storage_volumes": [],
+  "compartments": [
+    {
+      "compartment_id": null,
+      "defined_tags": {},
+      "display_name": "okit-comp001",
+      "freeform_tags": {},
+      "id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "name": "okit-comp001"
+    }
+  ],
+  "containers": [],
+  "database_systems": [],
+  "description": "Postgresql Cluster",
+  "dynamic_routing_gateways": [],
+  "fast_connects": [],
+  "file_storage_systems": [],
+  "instances": [
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "autonomous_database_ids": [],
+      "availability_domain": "1",
+      "block_storage_volume_ids": [],
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "master-in",
+      "fault_domain": "FAULT-DOMAIN-1",
+      "freeform_tags": {},
+      "id": "okit.instance.01e6cf88-d6fd-446f-b11e-dfaaed4a7142",
+      "is_pv_encryption_in_transit_enabled": false,
+      "metadata": {
+        "ssh_authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI9j/nnep+4EQhrFLBCgxw2zv8ocZ00n99As7MWQhHeE9VSi5czQcRJlNXllis0M3PzwjUOaK3edaLBR7m7i4xZXofPgK20bfEbUqdZh6hGFwmr5VYCVwta7XjBotuc5fGFYbZtSbPg9Tw3GfxTwjCm9khZle82J2wOR+n0tSxGyDrQgNgtgSI+MzZ+vcsGR0hE4f+Mp0XZM+Qo4w6Of0xIn/rIpzzA/DUUOBRlW7DQrow7JeCxTz0ixurlBLTF5B66zj3DMQT+vGX0ZJusHgH+dk9xEu8yuu+JY5qRIGCBwVQYWeTSNAbbKzj+HZceNw+CW5z/iyPHf3DlpMF5C7B claus-ulrich.dustmann@oracle.com",
+        "user_data": ""
+      },
+      "name": "master-in",
+      "object_storage_bucket_ids": [],
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "hostname_label": "postgresqlmaster",
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.3263ebe3-147d-4d3b-9eb8-bf20dd9ae0da"
+      },
+      "shape": "VM.Standard.E2.1",
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "os": "Oracle Linux",
+        "source_type": "image",
+        "version": "7.8"
+      },
+      "title": "Instance",
+      "vnics": [
+        {
+          "assign_public_ip": true,
+          "hostname_label": "postgresqlmaster",
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.3263ebe3-147d-4d3b-9eb8-bf20dd9ae0da"
+        }
+      ]
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "autonomous_database_ids": [],
+      "availability_domain": "1",
+      "block_storage_volume_ids": [],
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "stb1-in",
+      "fault_domain": "FAULT-DOMAIN-2",
+      "freeform_tags": {},
+      "id": "okit.instance.dc8fe894-ff09-438a-b8ed-b4fc463fa97d",
+      "is_pv_encryption_in_transit_enabled": false,
+      "metadata": {
+        "ssh_authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI9j/nnep+4EQhrFLBCgxw2zv8ocZ00n99As7MWQhHeE9VSi5czQcRJlNXllis0M3PzwjUOaK3edaLBR7m7i4xZXofPgK20bfEbUqdZh6hGFwmr5VYCVwta7XjBotuc5fGFYbZtSbPg9Tw3GfxTwjCm9khZle82J2wOR+n0tSxGyDrQgNgtgSI+MzZ+vcsGR0hE4f+Mp0XZM+Qo4w6Of0xIn/rIpzzA/DUUOBRlW7DQrow7JeCxTz0ixurlBLTF5B66zj3DMQT+vGX0ZJusHgH+dk9xEu8yuu+JY5qRIGCBwVQYWeTSNAbbKzj+HZceNw+CW5z/iyPHf3DlpMF5C7B claus-ulrich.dustmann@oracle.com",
+        "user_data": ""
+      },
+      "name": "stb1-in",
+      "object_storage_bucket_ids": [],
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "hostname_label": "postgresqlstb1",
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.3263ebe3-147d-4d3b-9eb8-bf20dd9ae0da"
+      },
+      "shape": "VM.Standard.E2.1",
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "os": "Oracle Linux",
+        "source_type": "image",
+        "version": "7.8"
+      },
+      "title": "Instance",
+      "vnics": [
+        {
+          "assign_public_ip": true,
+          "hostname_label": "postgresqlstb1",
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.3263ebe3-147d-4d3b-9eb8-bf20dd9ae0da"
+        }
+      ]
+    },
+    {
+      "agent_config": {
+        "is_management_disabled": false,
+        "is_monitoring_disabled": false
+      },
+      "autonomous_database_ids": [],
+      "availability_domain": "1",
+      "block_storage_volume_ids": [],
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "stb2-in",
+      "fault_domain": "FAULT-DOMAIN-3",
+      "freeform_tags": {},
+      "id": "okit.instance.d6d80f8a-2920-4c2f-b6b7-0871df9615b9",
+      "is_pv_encryption_in_transit_enabled": false,
+      "metadata": {
+        "ssh_authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI9j/nnep+4EQhrFLBCgxw2zv8ocZ00n99As7MWQhHeE9VSi5czQcRJlNXllis0M3PzwjUOaK3edaLBR7m7i4xZXofPgK20bfEbUqdZh6hGFwmr5VYCVwta7XjBotuc5fGFYbZtSbPg9Tw3GfxTwjCm9khZle82J2wOR+n0tSxGyDrQgNgtgSI+MzZ+vcsGR0hE4f+Mp0XZM+Qo4w6Of0xIn/rIpzzA/DUUOBRlW7DQrow7JeCxTz0ixurlBLTF5B66zj3DMQT+vGX0ZJusHgH+dk9xEu8yuu+JY5qRIGCBwVQYWeTSNAbbKzj+HZceNw+CW5z/iyPHf3DlpMF5C7B claus-ulrich.dustmann@oracle.com",
+        "user_data": ""
+      },
+      "name": "stb2-in",
+      "object_storage_bucket_ids": [],
+      "preserve_boot_volume": false,
+      "primary_vnic": {
+        "assign_public_ip": true,
+        "hostname_label": "postgresqlstb2",
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "subnet_id": "okit.subnet.3263ebe3-147d-4d3b-9eb8-bf20dd9ae0da"
+      },
+      "shape": "VM.Standard.E2.1",
+      "source_details": {
+        "boot_volume_size_in_gbs": "50",
+        "os": "Oracle Linux",
+        "source_type": "image",
+        "version": "7.8"
+      },
+      "title": "Instance",
+      "vnics": [
+        {
+          "assign_public_ip": true,
+          "hostname_label": "postgresqlstb2",
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "subnet_id": "okit.subnet.3263ebe3-147d-4d3b-9eb8-bf20dd9ae0da"
+        }
+      ]
+    }
+  ],
+  "internet_gateways": [
+    {
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "okit-ig001",
+      "enabled": true,
+      "freeform_tags": {},
+      "id": "okit.internetgateway.b86c3168-52e3-4dfb-923d-b8fb638fac8c",
+      "title": "Internet Gateway",
+      "vcn_id": "okit.virtualcloudnetwork.ca33127a-6109-4332-a894-70034806b044"
+    }
+  ],
+  "load_balancers": [],
+  "local_peering_gateways": [],
+  "nat_gateways": [],
+  "network_security_groups": [],
+  "object_storage_buckets": [],
+  "okit_version": "0.9.0",
+  "remote_peering_gateways": [],
+  "route_tables": [
+    {
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "okit-rt001",
+      "freeform_tags": {},
+      "id": "okit.routetable.4f6e7c65-579d-4bb0-8959-3f13a3600101",
+      "route_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "network_entity_id": "okit.internetgateway.b86c3168-52e3-4dfb-923d-b8fb638fac8c",
+          "target_type": "internet_gateways"
+        }
+      ],
+      "vcn_id": "okit.virtualcloudnetwork.ca33127a-6109-4332-a894-70034806b044"
+    },
+    {
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "okit-rt002",
+      "freeform_tags": {},
+      "id": "okit.routetable.c4de66ec-91fe-4b86-ba79-77c70967a456",
+      "route_rules": [],
+      "vcn_id": "okit.virtualcloudnetwork.ca33127a-6109-4332-a894-70034806b044"
+    }
+  ],
+  "security_lists": [
+    {
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "okit-sl001",
+      "egress_security_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          },
+          "is_stateless": false,
+          "protocol": "all",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": "",
+              "min": ""
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          },
+          "udp_options": {
+            "destination_port_range": {
+              "max": "",
+              "min": ""
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        }
+      ],
+      "freeform_tags": {},
+      "id": "okit.securitylist.f14dbf8b-2cdb-45ea-b344-39f12ac65a81",
+      "ingress_security_rules": [
+        {
+          "description": "",
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          },
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": 22,
+              "min": 22
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          },
+          "udp_options": {
+            "destination_port_range": {
+              "max": "",
+              "min": ""
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "code": 4,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": "",
+              "min": ""
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          },
+          "udp_options": {
+            "destination_port_range": {
+              "max": "",
+              "min": ""
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "code": null,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "10.0.0.0/16",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": "",
+              "min": ""
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          },
+          "udp_options": {
+            "destination_port_range": {
+              "max": "",
+              "min": ""
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          },
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": "5432",
+              "min": "5432"
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          },
+          "udp_options": {
+            "destination_port_range": {
+              "max": "",
+              "min": ""
+            },
+            "source_port_range": {
+              "max": "",
+              "min": ""
+            }
+          }
+        }
+      ],
+      "vcn_id": "okit.virtualcloudnetwork.ca33127a-6109-4332-a894-70034806b044"
+    },
+    {
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "okit-sl002",
+      "egress_security_rules": [
+        {
+          "description": "",
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "icmp_options": null,
+          "is_stateless": false,
+          "protocol": "all",
+          "tcp_options": null,
+          "udp_options": null
+        }
+      ],
+      "freeform_tags": {},
+      "id": "okit.securitylist.d21e63f4-a07e-4515-9a19-e23eadcf9bb2",
+      "ingress_security_rules": [
+        {
+          "description": "",
+          "icmp_options": null,
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": 22,
+              "min": 22
+            },
+            "source_port_range": null
+          },
+          "udp_options": null
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "code": 4,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": null,
+          "udp_options": null
+        },
+        {
+          "description": "",
+          "icmp_options": {
+            "code": null,
+            "type": 3
+          },
+          "is_stateless": false,
+          "protocol": "1",
+          "source": "10.0.0.0/16",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": null,
+          "udp_options": null
+        }
+      ],
+      "vcn_id": "okit.virtualcloudnetwork.ca33127a-6109-4332-a894-70034806b044"
+    }
+  ],
+  "service_gateways": [],
+  "subnets": [
+    {
+      "availability_domain": "0",
+      "cidr_block": "10.0.0.0/24",
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "postgresql-sn",
+      "dns_label": "sn001",
+      "freeform_tags": {},
+      "id": "okit.subnet.3263ebe3-147d-4d3b-9eb8-bf20dd9ae0da",
+      "ipv6cidr_block": "",
+      "is_ipv6enabled": false,
+      "name": "postgresql-sn",
+      "prohibit_public_ip_on_vnic": false,
+      "route_table_id": "okit.routetable.4f6e7c65-579d-4bb0-8959-3f13a3600101",
+      "security_list_ids": [
+        "okit.securitylist.f14dbf8b-2cdb-45ea-b344-39f12ac65a81"
+      ],
+      "title": "Subnet",
+      "vcn_id": "okit.virtualcloudnetwork.ca33127a-6109-4332-a894-70034806b044"
+    }
+  ],
+  "template_type": "Reference Architecture",
+  "title": "Postgresql Cluster",
+  "virtual_cloud_networks": [
+    {
+      "cidr_block": "10.0.0.0/16",
+      "compartment_id": "okit.compartment.65957e2a-3dd8-45ba-a78d-1a8ccdcd9ea3",
+      "defined_tags": {},
+      "display_name": "postgresql-vcn",
+      "dns_label": "vcn001",
+      "freeform_tags": {},
+      "id": "okit.virtualcloudnetwork.ca33127a-6109-4332-a894-70034806b044",
+      "ipv6cidr_block": "",
+      "is_ipv6enabled": false,
+      "name": "postgresql-vcn",
+      "title": "Virtual Cloud Network"
+    }
+  ]
+}
