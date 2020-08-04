@@ -30,6 +30,13 @@ class OCIImages(OCIComputeConnection):
         self.images_obj = []
         super(OCIImages, self).__init__(config=config, configfile=configfile, profile=profile)
 
+    def get(self, image_id):
+        image = self.client.get_image(image_id).data
+        logger.info('Images : ' + str(image))
+        image_json = self.toJson(image)
+        logger.info(str(image_json))
+        return image_json
+
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None and self.compartment_id is None:
             compartment_id = self.config['tenancy']

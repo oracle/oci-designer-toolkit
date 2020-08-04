@@ -17,7 +17,9 @@ import base64
 import oci
 
 from common.okitLogging import getLogger
+from common.okitCommon import logJson
 from facades.ociBootVolumeAttachment import OCIBootVolumeAttachments
+from facades.ociImage import OCIImages
 from facades.ociConnection import OCIComputeConnection, OCIVirtualNetworkConnection
 from facades.ociVnicAttachement import OCIVnicAttachments
 from facades.ociVolumeAttachment import OCIVolumeAttachments
@@ -88,11 +90,9 @@ class OCIInstances(OCIComputeConnection):
 
         # Convert to Json object
         instances_json = self.toJson(instances)
-        logger.debug(str(instances_json))
- 
+
         # Filter results
         self.instances_json = self.filterJsonObjectList(instances_json, filter)
-        logger.debug(str(self.instances_json))
 
 
         # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
@@ -102,6 +102,10 @@ class OCIInstances(OCIComputeConnection):
         vnic_attachments = OCIVnicAttachments(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).list()
 
         for instance in self.instances_json:
+            # Get OS Details
+            image = OCIImages(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).get(instance['source_details']['image_id'])
+            instance['source_details']['os'] = image['operating_system']
+            instance['source_details']['version'] = image['operating_system_version']
             # Decode Cloud Init Yaml
             if 'metadata' in instance and 'user_data' in instance['metadata']:
                 instance['metadata']['user_data'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
@@ -120,6 +124,8 @@ class OCIInstances(OCIComputeConnection):
             # Build object list
             self.instances_obj.append(OCIInstance(self.config, self.configfile, self.profile, instance))
 
+        logJson(self.instances_json)
+        logger.info(str(self.instances_json))
         return self.instances_json
 
 class OCIInstance(object):
