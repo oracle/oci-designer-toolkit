@@ -11,6 +11,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
         console.group('Check if default Security List & Route Table Should be created.');
+        /*
         if (okitSettings.is_default_route_table) {
             console.info('Creating Default Route Table');
             let route_table = json_view.newRouteTable(json_view.getOkitJson().newRouteTable({vcn_id: this.id, compartment_id: this.compartment_id}));
@@ -20,6 +21,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
             let security_list = json_view.newSecurityList(json_view.getOkitJson().newSecurityList({vcn_id: this.id, compartment_id: this.compartment_id}));
             security_list.artefact.addDefaultSecurityListRules(this.artefact.cidr_block);
         }
+        */
         console.groupEnd();
     }
 
