@@ -122,10 +122,4 @@ class Subnet extends OkitArtifact {
     static getArtifactReference() {
         return 'Subnet';
     }
-
-    static querySubComponents(request = {}, region='', id='') {
-        let sub_query_request = JSON.clone(request);
-        sub_query_request.subnet_id = id;
-        LoadBalancer.query(sub_query_request, region);
-    }
 }

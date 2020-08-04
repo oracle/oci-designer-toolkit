@@ -207,17 +207,4 @@ class VirtualCloudNetwork extends OkitArtifact {
     static getArtifactReference() {
         return 'Virtual Cloud Network';
     }
-
-    static querySubComponents(request = {}, region='', id='') {
-        let sub_query_request = JSON.clone(request);
-        sub_query_request.vcn_id = id;
-        InternetGateway.query(sub_query_request, region);
-        NATGateway.query(sub_query_request, region);
-        NetworkSecurityGroup.query(sub_query_request, region);
-        ServiceGateway.query(sub_query_request, region);
-        LocalPeeringGateway.query(sub_query_request, region);
-        RouteTable.query(sub_query_request, region);
-        SecurityList.query(sub_query_request, region);
-        Subnet.query(sub_query_request, region);
-    }
 }

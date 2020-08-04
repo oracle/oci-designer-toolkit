@@ -821,6 +821,15 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.id;
         console.info('View Artefact');
         console.info(view_artefact)
+        if (okitSettings.is_default_route_table) {
+            console.info('Creating Default Route Table');
+            let route_table = this.newRouteTable(this.getOkitJson().newRouteTable({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
+        }
+        if (okitSettings.is_default_security_list) {
+            console.info('Creating Default Security List');
+            let security_list = this.newSecurityList(this.getOkitJson().newSecurityList({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
+            security_list.artefact.addDefaultSecurityListRules(view_artefact.artefact.cidr_block);
+        }
         return view_artefact;
     }
     newVirtualCloudNetwork(vcn) {
