@@ -17,6 +17,7 @@
 4. During query AD specific Subnets return Availability Domain as string not integer value, this is now converted (OKIT-105).
 5. Deleting Defined Tags did not remove them from the model (OKIT-106).
 6. Instance OS & Version information not retrieved during Query (OKIT-108).
+7. DRG Ansible template contains '=' not ':' (GitHub Issue #61)
 
 
 ## Version 0.8.0 
