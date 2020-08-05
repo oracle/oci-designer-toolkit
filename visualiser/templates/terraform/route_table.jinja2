@@ -13,8 +13,12 @@ resource "oci_core_route_table" "{{ resource_name }}" {
 {% endif %}
 {% for rule in route_rules %}
     route_rules    {
-        destination       = {{ rule.destination | safe }}
         destination_type  = {{ rule.destination_type | safe }}
+    {% if rule.destination is defined %}
+        destination       = {{ rule.destination | safe }}
+    {% else %}
+        destination       = data.oci_core_services.RegionServices.services[0]["cidr_block"]
+    {% endif %}
         network_entity_id = {{ rule.network_entity_id }}
         description       = {{ rule.description | safe }}
     }

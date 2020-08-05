@@ -162,12 +162,11 @@ class RouteTableView extends OkitDesignerArtefactView {
                     if (target_type !== 'service_gateways') {
                         $(jqId("destination_type" + rule_num)).val('CIDR_BLOCK');
                         route_rule['destination_type'] = 'CIDR_BLOCK';
-                        $(jqId("destination_row" + rule_num)).removeClass('collapsed')
+                        $(jqId("destination_row" + rule_num)).removeClass('collapsed');
                     } else {
                         $(jqId("destination_type" + rule_num)).val('SERVICE_CIDR_BLOCK');
                         route_rule['destination_type'] = 'SERVICE_CIDR_BLOCK';
-                        $(jqId("destination_row" + rule_num)).addClass('collapsed')
-                        $(jqId("destination" + rule_num)).val('0.0.0.0/0');
+                        $(jqId("destination_row" + rule_num)).addClass('collapsed');
                     }
                     console.info('Processing list ' + JSON.stringify(me.getOkitJson()[target_type]));
                     $(jqId("network_entity_id" + rule_num)).empty();
@@ -279,6 +278,10 @@ class RouteTableView extends OkitDesignerArtefactView {
                 console.info('Changed description: ' + this.value);
                 displayOkitJson();
             });
+        // Check if we need to hide destination
+        if (route_rule.target_type === 'service_gateways') {
+            $(jqId("destination_row" + rule_num)).addClass('collapsed');
+        }
     }
 
     /*

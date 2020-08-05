@@ -20,3 +20,8 @@
 #    - debug: msg="{{ '{{' }} HomeRegion {{ '}}' }}"
     - debug: msg="Home Region {{ '{{' }} HomeRegionName {{ '}}' }}"
     - debug: msg="Working Region {{ region }}"
+
+    - name: Get details of all the available services
+      oci_service_facts:
+      register: RegionServices
+

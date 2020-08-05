@@ -13,8 +13,12 @@
 {% endif %}
         route_rules:
 {% for rule in route_rules %}
-            - destination: "{{ rule.destination | safe }}"
-              destination_type: "{{ rule.destination_type | safe }}"
+            - destination_type: "{{ rule.destination_type | safe }}"
+    {% if rule.destination is defined %}
+              destination: "{{ rule.destination | safe }}"
+    {% else %}
+              destination: "{{ '{{' }} (RegionServices.service[0] | map(attribute='cidr_block')) {{ '}}' }}"
+    {% endif %}
               network_entity_id: "{{ rule.network_entity_id }}"
               description: "{{ rule.description | safe }}"
 {% endfor %}
