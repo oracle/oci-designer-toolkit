@@ -28,4 +28,7 @@ data "oci_identity_region_subscriptions" "RegionSubscriptions" {
 locals {
     HomeRegion = [for x in data.oci_identity_region_subscriptions.RegionSubscriptions.region_subscriptions: x if x.is_home_region][0]
 }
+# ------ Get List Service OCIDs
+data "oci_core_services" "RegionServices" {
+}
 
