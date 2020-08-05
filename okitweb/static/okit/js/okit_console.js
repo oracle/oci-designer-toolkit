@@ -17,7 +17,12 @@ function hideNavMenu() {
 function checkForUpdate() {
     $.getJSON('https://raw.githubusercontent.com/oracle/oci-designer-toolkit/master/okitweb/static/okit/json/release.json', function(resp) {
         console.info(resp);
-        if (resp.release > okitVersion) {
+        const release = resp.release.split('.');
+        const version = okitVersion.split('.');
+        if ((Number(release[0]) > Number(version[0])) ||
+            (Number(release[0]) === Number(version[0]) && Number(release[1]) > Number(version[1])) ||
+            (Number(release[0]) === Number(version[0]) && Number(release[1]) === Number(version[01]) && Number(release[2]) > Number(version[2]))
+        ) {
             console.info('OKIT Update Available');
             $(jqId('okit_update')).text(`Update: OKIT ${resp.release} Available for Download`);
             $(jqId('okit_update')).attr(`href`, `https://github.com/oracle/oci-designer-toolkit/tree/${resp.tag}`);
