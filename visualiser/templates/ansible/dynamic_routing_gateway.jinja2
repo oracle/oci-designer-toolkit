@@ -25,7 +25,7 @@
     - name: Create DRG Attachment {{ output_name }}
       oci_drg_attachment:
         state: "present"
-        drg_id = "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
-        vcn_id = "{{ vcn_id }}"
+        drg_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
+        vcn_id: "{{ vcn_id }}"
         # Optional
         display_name: "{{ display_name | safe }}"

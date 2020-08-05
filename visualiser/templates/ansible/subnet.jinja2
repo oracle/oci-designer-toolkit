@@ -10,7 +10,7 @@
         cidr_block: "{{ cidr_block | safe }}"
         # Optional
 {% if availability_domain is defined %}
-        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
 {% endif %}
 {% if display_name is defined %}
         display_name: "{{ display_name | safe }}"

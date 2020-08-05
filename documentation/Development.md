@@ -36,7 +36,7 @@ to the system.
 - New Files
     - Frontend
         - **[Palette SVG](#palette-svg)**                             : [okitweb/static/okit/palette/storage/*Block_Storage_Volume*.svg](../okitweb/static/okit/palette/storage/Block_Storage_Volume.svg)
-        - **[Artifact Javascript](#artifact-javascript)**             : [okitweb/static/okit/js/oci_artefacts/*block_storage_volume*.js](../okitweb/static/okit/js/oci_artefacts/block_storage_volume.js)
+        - **[Artifact Model Javascript](#artifact-javascript)**       : [okitweb/static/okit/model/js/artefacts/*block_storage_volume*.js](../okitweb/static/okit/model/js/artefacts/block_storage_volume.js)
         - **[Properties HTML](#properties-html)**                     : [okitweb/templates/okit/propertysheets/*block_storage_volume*.html](../okitweb/templates/okit/propertysheets/block_storage_volume.html)
     - Backend
         - **[Python OCI Facade](#python-oci-facade)**                 : [visualiser/facades/oci*BlockStorageVolume*.py](../visualiser/facades/ociBlockStorageVolume.py)
@@ -62,7 +62,7 @@ file name will be manipulated (removing the underscore) and used to dynamically 
 
 ## Palette SVG
 The palette svg defines the icon that will be displayed in the Drag & Drop palette. A number of existing SVG files can be
-downloaded from the confluence page [OCI Icon Set draw.io Stencils](https://confluence.oci.oraclecorp.com/pages/viewpage.action?spaceKey=~scross&title=OCI+Icon+Set+draw.io+Stencils).
+downloaded from the confluence page OCI Icon Set draw.io Stencils.
 
 One key requirement for this svg file is that all elements that draw the icon be contained within an "g" tag. The reason
 for this is that the common javascript svg display routine will look for this and extract it to use as the definition for
@@ -88,32 +88,22 @@ the icon. Hence the Block Storage Volume would look like the following
 Although the svg will display in the palette image without the "g" it will cause the designer to fail later if it is missing.
 
 ## Artifact Javascript
-The artifact javascript file is the key files for the BUI specifying all core code for the creation, drawing and querying 
+When creating an Artefact you will need to define two artefact specific files that provide the Model Definition and the associated Designer View
+functionality. The artifact javascript files are the key files for the BUI specifying all core code for the creation, drawing and querying 
 of the artifact. Each file has a standard set of variable definitions and function definitions which again are based on 
-the name of the artifact as follows. To add an artifact to the OKIT BUI you should copy the okit_template_artifact.js to 
-the "oci_artefacts" subdirectory and name it appropriately (In out example that would be block_storage_volume.js).
+the name of the artifact as follows. 
 
-Once the file has been copied to the oci_artefacts directory then is can be opened and the following global Find/Replace modification applied:
+All the example code in the following sections will be based on the **Block Storage Volume** Artefact.
 
-1. 'Okit Template Artifact' replaced by 'Artifact Name' - in our example this would be 'Block Storage Volume'.
-2. 'OkitTemplateArtifact' replaced by 'ArtifactName' - in our example this would be 'BlockStorageVolume'.
-3. 'template_artifact' replaced by 'artifact_name' - in our example this would be 'block_storage_volume'.
-4. 'parent_type_id' replaced by the id field associated with the parent container - in our example this would be 'compartment_id'.
-5. 'parent_type_list' replace by the okitJson list element corresponding to the parent - in our example this would be 'compartments'.
+### Artefact Model
+The Model javascript will be located in [okitweb/static/okit/model/js/artefacts](../okitweb/static/okit/model/js/artefacts) 
+directory and contains the definition of the Artefact and all properties will be in a structured format. Before fixing your
+model check the structure return from an OCI SDK Query of the Artefact.
 
-### Standard Definitions
-```javascript
-console.log('Loaded Block Storage Javascript');
-
-const block_storage_volume_query_cb = "block-storage-volume-query-cb";
-```
-Within this section we will define the target artifact where the new artifact can be dropped. For example the **Block Storage Volume** can be dropped on the *Compartment*. 
-
-### Class Definition
+#### Class Definition
 Each artifact is described by a JavaScript class inherited from the **OkitArtifact** Class and has a number of standard 
 methods associated with the class. for the majority of these you will not need to modify the code because the underlying
-super class will do all the work. If you are creating a new container then you will need to modify the class definition 
-to inherit from **OkitContainerArtifact** class.
+super class will do all the work. 
 
 The following will list the methods that need modification.
 
@@ -122,15 +112,15 @@ The following will list the methods that need modification.
     /*
     ** Create
      */
-    constructor (data={}, okitjson={}, parent=null) {
+    constructor (data={}, okitjson={}) {
         super(okitjson);
-        this.parent_id = data.parent_id;
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
         this.compartment_id = data.parent_id;
         this.availability_domain = '1';
         this.size_in_gbs = 1024;
         this.backup_policy = 'bronze';
+        this.vpus_per_gb = '10';
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -139,15 +129,11 @@ The following will list the methods that need modification.
             this.region_availability_domain = this.availability_domain;
             this.availability_domain = this.region_availability_domain.slice(-1);
         }
-        // Add Get Parent function
-        if (parent !== null) {
-            this.getParent = () => {return parent};
-        }
     }
 ```
 This function is used to create a new json element to the OKIT json structure. The elements within this json will match those 
 that are returned from querying OCI. All artifacts will be contained within a top level list with a name that matches that
-of the artifact (e.g. block_storage_volumes). Once that new json element has been added it will be drawn on the SVG canvas.
+of the artifact (e.g. block_storage_volumes). Once that new json element has been added it will be drawn on the SVG canvas using an appropriate View class.
 
 #### Delete Children
 ```javascript
@@ -168,26 +154,11 @@ of the artifact (e.g. block_storage_volumes). Once that new json element has bee
 Although the main **delete** method will not need modifying the **deleteChildren** will need modification to remove any 
 references within linked artifacts or actual children in the case of a container.
 
+### Artefact View
+The Model javascript will be located in [okitweb/static/okit/view/designer/js/artefacts](../okitweb/static/okit/view/designer/js/artefacts) 
+directory and contains the definition of the SVG representation for the Artefact.
+
 #### Artifact Dimensions
-```javascript
-    // Return Artifact Dimensions
-    getDimensions() {
-        console.groupCollapsed('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
-        let dimensions = this.getMinimumDimensions();
-        // Calculate Size based on Child Artifacts
-        // Check size against minimum
-        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
-        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
-        return dimensions;
-    }
-
-    getMinimumDimensions() {
-        return {width: icon_width, height:icon_height};
-    }
-```
-
 The function is used to calculate the dimensions of the artifact and will be called by container function to determine 
 how much space to reserve for drawing this artifact. If you are building a container artifact (e.g. subnet) then this
 function will call the dimensions function for all contained artifacts to calculate it's dimensions.
@@ -195,40 +166,26 @@ function will call the dimensions function for all contained artifacts to calcul
 #### Draw
 ```javascript
     draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        if (this.isAttached()) {
-            console.groupEnd();
-            return;
+        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
+        console.info(`Is Attached   : ${this.attached}.`)
+        if (!okitSettings.hide_attached || !this.attached) {
+            console.info(`${this.display_name} is either not attached and we are displaying attached`);
+            let svg = super.draw();
         }
-        let svg = drawArtifact(this.getSvgDefinition());
-        /*
-        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
-        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
-        ** Artifact.
-         */
-        let me = this;
-        svg.on("click", function() {
-            me.loadProperties();
-            d3.event.stopPropagation();
-        });
         console.groupEnd();
-        return svg;
     }
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.groupCollapsed('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let dimensions = this.getDimensions();
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
         definition['svg']['x'] = first_child.dx;
         definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = dimensions['width'];
-        definition['svg']['height'] = dimensions['height'];
+        definition['svg']['width'] = this.dimensions['width'];
+        definition['svg']['height'] = this.dimensions['height'];
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
         return definition;
     }
 ``` 
@@ -256,66 +213,82 @@ properties sheet into the "properties" pane and then load each of the form field
 json element. This method will only need modification if the properties sheet needs to select references of other artifacts. 
 For an example of this see the Subnet class which will load Route Table and security list information.
 
-### Query OCI
+### OkitJsonView
+To enable the Drag & Drop / Creation functionality you will need to modify the [okitweb/static/okit/view/js/okit_view.js](../okitweb/static/okit/view/js/okit_view.js) 
+adding 
 ```javascript
-    static query(request = {}, region='') {
+    // Block Storage
+    dropBlockStorageVolumeView(target) {
+        console.info('Drop Block Storage Volume View');
+        console.info(target);
+        let view_artefact = this.newBlockStorageVolume();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newBlockStorageVolume(volume) {
+        this.block_storage_volumes.push(volume ? new BlockStorageVolumeView(volume, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
+        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
+    }
+    getBlockStorageVolumes() {
+        return this.block_storage_volumes;
+    }
+    getBlockStorageVolume(id='') {
+        for (let artefact of this.getBlockStorageVolumes()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteBlockStorageVolume(id='') {
+        this.okitjson.deleteBlockStorageVolume(id);
+        this.update();
+    }
+    loadBlockStorageVolumes(block_storage_volumes) {
+        for (const artefact of block_storage_volumes) {
+            this.block_storage_volumes.push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
+        }
+    }
+```
+
+### OkitOCIQuery
+To enable query functionality the [okitweb/static/okit/query/oci/js/okit_query.js](../okitweb/static/okit/query/oci/js/okit_query.js) will
+need to be modified to provide a new function to query the Artefact and an appropriate call from it's parent should be added.
+
+```javascript
+    queryBlockStorageVolumes(request) {
         console.info('------------- Block Storage Volume Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
+        this.region_query_count[request.region]++;
         $.ajax({
             type: 'get',
-            url: 'oci/artifacts/BlockStorageVolume',
+            url: 'oci/artefacts/BlockStorageVolume',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(request),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
-                regionOkitJson[region].load({block_storage_volumes: response_json});
-                for (let artifact of response_json) {
-                    console.info(me.getArtifactReference() + ' Query : ' + artifact.display_name);
+                regionOkitJson[request.region].load({block_storage_volumes: response_json});
+                //okitJsonView.loadBlockStorageVolumes(response_json);
+                for (let artefact of response_json) {
+                    console.info(artefact.display_name);
                 }
-                redrawSVGCanvas(region);
-                $('#' + block_storage_volume_query_cb).prop('checked', true);
-                hideQueryProgressIfComplete();
+                if (request.refresh) {okitJsonView.draw();}
+                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
-                $('#' + block_storage_volume_query_cb).prop('checked', true);
-                hideQueryProgressIfComplete();
+                me.region_query_count[request.region]-- && me.isComplete();
             }
         });
     }
 ```
 Uses Ajax to call the flask url to initiate an asynchronous query of OCI to retrieve all artifacts and then redraw the 
 svg canvas. On completion it will set the query progress for this artifact as complete.
-
-### Ready Function
-```javascript
-$(document).ready(function() {
-    // Setup Search Checkbox
-    let body = d3.select('#query-progress-tbody');
-    let row = body.append('tr');
-    let cell = row.append('td');
-    cell.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', block_storage_volume_query_cb);
-    cell.append('label').text(BlockStorageVolume.getArtifactReference());
-
-    // Setup Query Display Form
-    body = d3.select('#query-oci-tbody');
-    row = body.append('tr');
-    cell = row.append('td')
-        .text(BlockStorageVolume.getArtifactReference());
-    cell = row.append('td');
-    let input = cell.append('input')
-        .attr('type', 'text')
-        .attr('class', 'query-filter')
-        .attr('id', 'block_storage_volume_name_filter')
-        .attr('name', 'block_storage_volume_name_filter');
-});
-```
-Add the query checkbox to the query progress table.
 
 ## Properties HTML
 The properties html is a simple piece of html that displays the properties associated with the artifact and as a minimum

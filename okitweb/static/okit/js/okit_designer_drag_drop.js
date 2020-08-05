@@ -23,42 +23,19 @@ let asset_delete_functions = {};
 let asset_query_functions = {};
 let asset_clear_functions = [];
 
-// TODO: Delete
-function addAssetToDropTarget(artifact, title, target_id, compartment_id, target_type) {
-    console.info('addAssetToDropTarget - Artifact       : ' + artifact);
-    console.info('addAssetToDropTarget - Title          : ' + title);
-    console.info('addAssetToDropTarget - Target Id      : ' + target_id);
-    console.info('addAssetToDropTarget - Target Type    : ' + target_type);
-    console.info('addAssetToDropTarget - Compartment Id : ' + compartment_id);
-    console.info('addAssetToDropTarget - Add Functions  : ' + JSON.stringify(asset_add_functions));
-    let newFunction = 'new' + artifact.split(' ').join('');
-    let getFunction = 'get' + target_type.split(' ').join('');
-    console.info('addAssetToDropTarget - New Function   : ' + newFunction);
-    console.info('addAssetToDropTarget - Get Function   : ' + getFunction);
-    //window[asset_add_functions[artifact]](target_id, compartment_id, title);
-    let parentArtifact = okitJson[getFunction](target_id);
-    console.info('addAssetToDropTarget - Parent         : ' + JSON.stringify(parentArtifact));
-    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: title}, parentArtifact);
-    console.info(JSON.stringify(result, null, 2));
-    okitJson.draw();
-}
-
 function updateAssetTarget(title, source_type, source_id, target_id) {
     window[asset_update_functions[title]](source_type, source_id, target_id);
-    okitJson.draw();
+    okitJsonView.draw();
 }
 
-function deleteAssetFromSVG(artifact, id) {
-    console.info('deleteAssetFromSVG - Artifact       : ' + artifact);
+function deleteAssetFromSVG(artefact, id) {
+    console.info('deleteAssetFromSVG - Artifact       : ' + artefact);
     console.info('deleteAssetFromSVG - Id             : ' + id);
-    let deleteFunction = 'delete' + artifact.split(' ').join('');
+    let deleteFunction = 'delete' + artefact.split(' ').join('');
     console.info('Delete Function : ' + deleteFunction);
-    //window[asset_delete_functions[artifact]](id);
-    okitJson[deleteFunction](id);
+    okitJsonView[deleteFunction](id);
     // Hide Context Menu
     $("#context-menu").addClass("hidden");
-    // Redraw
-    redrawSVGCanvas();
 }
 
 /*
@@ -69,15 +46,22 @@ function deleteAssetFromSVG(artifact, id) {
 ** Define palette Drag & Drop functions
  */
 
-let palette_drag_artifact = null;
+let palette_drag_artefact = null;
 
-function dragStart(evt, artifact) {
+function dragStart(evt, artefact) {
     evt.dataTransfer.effectAllowed = 'copy';
-    let palette_artifact_data = {artifact: artifact.getArtifactReference(), title: artifact.getArtifactReference()};
-    let data_string = JSON.stringify(palette_artifact_data);
+    let palette_artefact_data = {artefact: artefact.getArtifactReference(), title: artefact.getArtifactReference()};
+    let data_string = JSON.stringify(palette_artefact_data);
     evt.dataTransfer.setData('text/plain', data_string);
-    evt.dataTransfer.setData('any', artifact);
-    palette_drag_artifact = artifact;
+    palette_drag_artefact = artefact;
+}
+
+function dragFragmentStart(evt, artefact, title) {
+    evt.dataTransfer.effectAllowed = 'copy';
+    let palette_artefact_data = {artefact: artefact.getArtifactReference(), title: title};
+    let data_string = JSON.stringify(palette_artefact_data);
+    evt.dataTransfer.setData('text/plain', data_string);
+    palette_drag_artefact = artefact;
 }
 
 function dragEnter(evt) {
@@ -100,7 +84,7 @@ function dragLeave(evt) {
 function dragEnterOverLeave(evt) {
     evt = evt || d3.event;
     let type = evt.target.getAttribute('data-type');
-    if (palette_drag_artifact !== undefined && palette_drag_artifact.getDropTargets().indexOf(type) >= 0) {
+    if (palette_drag_artefact !== undefined && palette_drag_artefact.getDropTargets().indexOf(type) >= 0) {
         evt.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
     } else {
         evt.dataTransfer.effectAllowed = "none";
@@ -116,25 +100,25 @@ function dragDrop(evt) {
     if (evt.preventDefault) {
         evt.preventDefault(); // Necessary. Allows us to drop.
     }
-    let artifact = palette_drag_artifact;
-    let target_type = evt.target.getAttribute('data-type');
-    let compartment_id = evt.target.getAttribute('data-compartment-id');
-    let target_id = evt.target.id;
-    if (target_type === Compartment.getArtifactReference()) {compartment_id = target_id;}
+    let palette_artefact_data = JSON.parse(evt.dataTransfer.getData('text/plain'));
+    let target = {
+        id: evt.target.id,
+        type: evt.target.getAttribute('data-type'),
+        compartment_id: evt.target.getAttribute('data-compartment-id'),
+        title: palette_artefact_data.title
+    };
+    let artefact = palette_drag_artefact;
     // Add the Artifact to the OKIT Json / Canvas
-    let newFunction = 'new' + artifact.name;
-    let getFunction = 'get' + target_type.split(' ').join('');
-    console.info('New Function : ' + newFunction);
-    console.info('Get Function : ' + getFunction);
-    let parentArtifact = okitJson[getFunction](target_id);
-    let result = okitJson[newFunction]({parent_id: target_id, compartment_id: compartment_id, title: artifact.getArtifactReference()}, parentArtifact);
+    let dropFunction = 'drop' + artefact.name;
+    console.info('Drop Function : ' + dropFunction);
+    let result = okitJsonView[dropFunction](target);
     if (result) {
         console.debug(JSON.stringify(result, null, 2));
     }
-    okitJson.draw();
+    okitJsonView.draw();
     // Clear Drag class
     this.classList.remove('over');  // this / e.target is previous target element.
-    palette_drag_artifact = null;
+    palette_drag_artefact = null;
     return false;
 }
 
@@ -277,7 +261,7 @@ function getMousePosition(evt) {
 function handleContextMenu() {
     let thisid = d3.select(this).attr('id');
     let okit_id = d3.select(this).attr('data-okit-id');
-    let artifact = d3.select(this).attr('data-type');
+    let artefact = d3.select(this).attr('data-type');
     console.info('Right Click on ' + thisid);
     d3.event.preventDefault();
     d3.event.stopPropagation();
@@ -286,6 +270,6 @@ function handleContextMenu() {
     element.style.top =  d3.event.clientY + 'px';
     element.style.left = d3.event.clientX + 'px';
     $("#context-menu").find("*").off();
-    $("#right-click-delete").on('click', function() {deleteAssetFromSVG(artifact, okit_id);});
+    $("#right-click-delete").on('click', function() {deleteAssetFromSVG(artefact, okit_id);});
 }
 

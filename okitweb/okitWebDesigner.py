@@ -70,6 +70,23 @@ def getConfigFileValue(section, key, config_file='~/.oci/config'):
     config.read(abs_config_file)
     return config[section][key]
 
+def validateConfigFile(config_file='~/.oci/config'):
+    logger.debug('Config File {0!s:s}'.format(config_file))
+    abs_config_file = os.path.expanduser(config_file)
+    logger.debug('Config File {0!s:s}'.format(abs_config_file))
+    config = configparser.ConfigParser()
+    config.read(abs_config_file)
+    results = []
+    if len(config.sections()) == 0:
+        results.append('OCI Connect Config file is either missing or empty.')
+    else:
+        for section in config:
+            key_file = config[section]['key_file']
+            if not os.path.exists(os.path.expanduser(key_file)):
+                results.append('[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file))
+    logger.info(results)
+    return results
+
 #
 # Define Error Handlers
 #
@@ -96,10 +113,10 @@ def handle_exception(error):
 
 @bp.route('/designer', methods=(['GET']))
 def designer():
-    # Read Artifact Specific JavaScript Files
-    oci_assets_js = sorted(os.listdir(os.path.join(bp.static_folder, 'js', 'oci_artefacts')))
+    # Read Artifact Model Specific JavaScript Files
+    artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
-    artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefact')))
+    artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts')))
 
     # Get Palette Icon Groups / Icons
     svg_files = []
@@ -176,7 +193,7 @@ def designer():
 
     #Render The Template
     return render_template('okit/okit_designer.html',
-                           oci_assets_js=oci_assets_js,
+                           artefact_model_js_files=artefact_model_js_files,
                            artefact_view_js_files=artefact_view_js_files,
                            palette_icon_groups=palette_icon_groups,
                            fragment_icons=fragment_icons,
@@ -274,6 +291,14 @@ def configSections():
 def configRegion(section):
     if request.method == 'GET':
         response = {"name": getConfigFileValue(section, 'region')}
+        return response
+    else:
+        return 'Unknown Method', 500
+
+@bp.route('config/validate', methods=(['GET']))
+def configValidate():
+    if request.method == 'GET':
+        response = {"results": validateConfigFile()}
         return response
     else:
         return 'Unknown Method', 500

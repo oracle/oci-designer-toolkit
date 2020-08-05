@@ -83,9 +83,9 @@ function loadPropertiesSheet(json_element) {
             console.info(key + ' is label.');
             if (key.endsWith('_id')) {
                 // Get Artifact Associated With Id
-                let artifact_type = key.substr(0, (key.length - 3));
-                console.info('Label : Artifact Type ' + titleCase(artifact_type) + ' - ' + key);
-                $(jqId(key)).html(okitJson['get' + titleCase(artifact_type)](val).display_name);
+                let artefact_type = key.substr(0, (key.length - 3));
+                console.info('Label : Artifact Type ' + titleCase(artefact_type) + ' - ' + key);
+                $(jqId(key)).html(okitJsonView['get' + titleCase(artefact_type)](val).display_name);
             } else {
                 $(jqId(key)).html(val);
             }
@@ -140,7 +140,8 @@ function loadPropertiesSheet(json_element) {
                     .attr('type', 'button')
                     .text('X');
                 button.on('click', function () {
-                    delete json_element.defined_tags[key];
+                    delete json_element.defined_tags[namespace][key];
+                    if (Object.keys(json_element.defined_tags[namespace]).length === 0) {delete json_element.defined_tags[namespace];}
                     loadPropertiesSheet(json_element);
                     d3.event.stopPropagation();
                 });

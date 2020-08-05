@@ -8,7 +8,7 @@ resource "oci_core_subnet" "{{ resource_name }}" {
     cidr_block                 = {{ cidr_block | safe }}
     # Optional
 {% if availability_domain is defined %}
-    availability_domain        = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(1) }} - 1]["name"]
+    availability_domain        = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
 {% endif %}
 {% if display_name is defined %}
     display_name               = {{ display_name | safe }}

@@ -1,75 +1,331 @@
 {
-  "title": "Load Balanced Nginx Instances",
-  "description": "Four load balanced nginx servers",
+  "title": "OKIT OCI Visualiser Json",
+  "description": "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......",
+  "okit_version": "0.9.0",
   "compartments": [
     {
-      "id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "name": "okit",
-      "parent_id": "canvas",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
+      "id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "compartment_id": null,
+      "name": "okit-comp001",
       "display_name": "okit-comp001"
     }
   ],
-  "open_compartment_index": 0,
-  "virtual_cloud_networks": [
+  "autonomous_databases": [],
+  "block_storage_volumes": [],
+  "containers": [],
+  "database_systems": [],
+  "dynamic_routing_gateways": [],
+  "fast_connects": [],
+  "file_storage_systems": [],
+  "instances": [
     {
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "display_name": "okit-vcn001",
-      "cidr_block": "10.0.0.0/16",
-      "dns_label": "vcn001",
-      "parent_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536"
-    }
-  ],
-  "subnets": [
-    {
-      "vcn_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "virtual_cloud_network": "okit-vcn001",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "display_name": "okit-sn001",
-      "cidr_block": "10.0.0.0/24",
-      "dns_label": "sn001",
-      "prohibit_public_ip_on_vnic": false,
-      "route_table": "",
-      "route_table_id": "okit-rt-9634a102-9de8-4d3a-8124-821f036e0ac0",
-      "security_lists": [],
-      "security_list_ids": [
-        "okit-sl-912892db-b457-441e-b2c1-9ef9691154d2"
+      "id": "okit.undefined.db39f276-9616-47db-8008-d7510e65a41e",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "nginx-server-01",
+      "availability_domain": "1",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "shape": "VM.Standard2.1",
+      "fault_domain": "",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+          "hostname_label": "nginx001",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
       ],
-      "parent_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8"
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.7",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n"
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "subnet": "okit-sn001",
+      "block_storage_volumes": [],
+      "virtual_cloud_network": "okit-sn001",
+      "primary_vnic": {
+        "subnet_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+        "hostname_label": "nginx001",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      },
+      "name": "nginx-server-01"
+    },
+    {
+      "id": "okit.undefined.00e1e3e6-edf0-4102-ab24-8a47e749c5ea",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "nginx-server-02",
+      "availability_domain": "1",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "shape": "VM.Standard.E2.1",
+      "fault_domain": "",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+          "hostname_label": "nginx002",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.7",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n"
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "subnet": "okit-sn001",
+      "block_storage_volumes": [],
+      "virtual_cloud_network": "okit-sn001",
+      "primary_vnic": {
+        "subnet_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+        "hostname_label": "nginx002",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      },
+      "name": "nginx-server-02"
+    },
+    {
+      "id": "okit.undefined.933abf36-5c79-44b8-9b5a-d2f544b7d9f4",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "nginx-server-03",
+      "availability_domain": "1",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "shape": "VM.Standard.E2.1",
+      "fault_domain": "",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+          "hostname_label": "nginx003",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.7",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n"
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "subnet": "okit-sn001",
+      "block_storage_volumes": [],
+      "virtual_cloud_network": "okit-sn001",
+      "primary_vnic": {
+        "subnet_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+        "hostname_label": "nginx003",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      },
+      "name": "nginx-server-03"
+    },
+    {
+      "id": "okit.undefined.6152088d-4dbb-4d52-bf7c-9c0a2efb5f5d",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "nginx-server-04",
+      "availability_domain": "1",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "shape": "VM.Standard.E2.1",
+      "fault_domain": "",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+          "hostname_label": "nginx004",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.7",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n"
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "subnet": "okit-sn001",
+      "block_storage_volumes": [],
+      "virtual_cloud_network": "okit-sn001",
+      "primary_vnic": {
+        "subnet_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+        "hostname_label": "nginx004",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      },
+      "name": "nginx-server-04"
     }
   ],
+  "internet_gateways": [
+    {
+      "id": "okit.undefined.5aa22dc1-f626-4b67-800b-8c22ae549d05",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-ig001",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "vcn_id": "okit.undefined.3e3f1f86-16f6-4433-963f-b52d70ba2452",
+      "enabled": true,
+      "virtual_cloud_network": "okit-vcn001"
+    }
+  ],
+  "load_balancers": [
+    {
+      "id": "okit.undefined.a63bb5a1-197e-4050-bb6c-351f04fdd0c9",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-lb001",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "subnet_ids": [
+        "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b"
+      ],
+      "is_private": false,
+      "shape": "100Mbps",
+      "protocol": "HTTP",
+      "port": "80",
+      "instance_ids": [
+        "okit.undefined.db39f276-9616-47db-8008-d7510e65a41e",
+        "okit.undefined.00e1e3e6-edf0-4102-ab24-8a47e749c5ea",
+        "okit.undefined.933abf36-5c79-44b8-9b5a-d2f544b7d9f4",
+        "okit.undefined.6152088d-4dbb-4d52-bf7c-9c0a2efb5f5d"
+      ],
+      "ip_mode": "",
+      "network_security_group_ids": [],
+      "backend_policy": "ROUND_ROBIN",
+      "health_checker": {
+        "url_path": "/"
+      },
+      "subnets": [
+        ""
+      ],
+      "instances": [],
+      "parent_id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+      "virtual_cloud_network": "okit-sn001"
+    }
+  ],
+  "local_peering_gateways": [],
+  "nat_gateways": [],
+  "network_security_groups": [],
+  "object_storage_buckets": [],
+  "remote_peering_gateways": [],
   "route_tables": [
     {
-      "vcn_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "virtual_cloud_network": "okit-vcn001",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "id": "okit-rt-9634a102-9de8-4d3a-8124-821f036e0ac0",
-      "display_name": "okit-rt001",
+      "id": "okit.undefined.ed178ac3-df4d-4a84-a17a-f18dab229e63",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-lb-rt",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "vcn_id": "okit.undefined.3e3f1f86-16f6-4433-963f-b52d70ba2452",
       "route_rules": [
         {
           "destination_type": "CIDR_BLOCK",
           "destination": "0.0.0.0/0",
-          "network_entity_id": "okit-ig-9b4a5d64-9346-4c7f-a97a-a0c323500224"
+          "network_entity_id": "okit.undefined.5aa22dc1-f626-4b67-800b-8c22ae549d05",
+          "target_type": "internet_gateways"
         }
       ],
-      "parent_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8"
+      "virtual_cloud_network": "okit-vcn001",
+      "name": "okit-lb-rt"
     }
   ],
   "security_lists": [
     {
-      "vcn_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
-      "virtual_cloud_network": "okit-vcn001",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "id": "okit-sl-912892db-b457-441e-b2c1-9ef9691154d2",
-      "display_name": "okit-sl001",
+      "id": "okit.undefined.a9285860-6743-44fb-bd1e-b5cff6e19fad",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-lb-sl",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "vcn_id": "okit.undefined.3e3f1f86-16f6-4433-963f-b52d70ba2452",
       "egress_security_rules": [
         {
           "protocol": "all",
           "is_stateless": false,
           "destination_type": "CIDR_BLOCK",
-          "destination": "0.0.0.0/0"
+          "destination": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
         }
       ],
       "ingress_security_rules": [
@@ -77,127 +333,74 @@
           "protocol": "all",
           "is_stateless": false,
           "source_type": "CIDR_BLOCK",
-          "source": "0.0.0.0/0"
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
         }
       ],
-      "parent_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8"
-    }
-  ],
-  "instances": [
-    {
-      "subnet_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "subnet": "okit-sn001",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "availability_domain": "1",
-      "id": "okit-in-ee74310b-457b-4b18-b566-ae7351a17d7a",
-      "display_name": "okit-in001",
-      "hostname_label": "okit-in001",
-      "os": "Oracle Linux",
-      "version": "7.7",
-      "shape": "VM.Standard2.1",
-      "boot_volume_size_in_gbs": "50",
-      "authorized_keys": "",
-      "cloud_init_yaml": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n",
-      "block_storage_volume_ids": [],
-      "block_storage_volumes": [],
-      "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001",
-      "subnet_ids": []
-    },
-    {
-      "subnet_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "subnet": "okit-sn001",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "availability_domain": "1",
-      "id": "okit-in-6ce3195d-7119-4666-8966-6555874819a8",
-      "display_name": "okit-in002",
-      "hostname_label": "okit-in002",
-      "os": "Oracle Linux",
-      "version": "7.7",
-      "shape": "VM.Standard.E2.1",
-      "boot_volume_size_in_gbs": "50",
-      "authorized_keys": "",
-      "cloud_init_yaml": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n",
-      "block_storage_volume_ids": [],
-      "block_storage_volumes": [],
-      "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001",
-      "subnet_ids": []
-    },
-    {
-      "subnet_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "subnet": "okit-sn001",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "availability_domain": "1",
-      "id": "okit-in-2195d4b3-07bc-4a57-a06b-627cf69b8c46",
-      "display_name": "okit-in003",
-      "hostname_label": "okit-in003",
-      "os": "Oracle Linux",
-      "version": "7.7",
-      "shape": "VM.Standard.E2.1",
-      "boot_volume_size_in_gbs": "50",
-      "authorized_keys": "",
-      "cloud_init_yaml": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n",
-      "block_storage_volume_ids": [],
-      "block_storage_volumes": [],
-      "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001",
-      "subnet_ids": []
-    },
-    {
-      "subnet_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "subnet": "okit-sn001",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "availability_domain": "1",
-      "id": "okit-in-f59e4c4c-012f-45de-a81a-8772131f1df1",
-      "display_name": "okit-in004",
-      "hostname_label": "okit-in004",
-      "os": "Oracle Linux",
-      "version": "7.7",
-      "shape": "VM.Standard.E2.1",
-      "boot_volume_size_in_gbs": "50",
-      "authorized_keys": "",
-      "cloud_init_yaml": "#cloud-config\npackages:\n  - nginx\n  - oci-utils\n  - python36\n  - python-oci-cli\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo systemctl restart firewalld\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n",
-      "block_storage_volume_ids": [],
-      "block_storage_volumes": [],
-      "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001",
-      "subnet_ids": []
-    }
-  ],
-  "load_balancers": [
-    {
-      "subnet_ids": [
-        "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb"
-      ],
-      "subnets": [
-        ""
-      ],
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "id": "okit-lb-95c8b99f-3c7b-4e7a-94e8-a4622788f1fa",
-      "display_name": "okit-lb001",
-      "is_private": false,
-      "shape_name": "100Mbps",
-      "instances": [],
-      "instance_ids": [
-        "okit-in-ee74310b-457b-4b18-b566-ae7351a17d7a",
-        "okit-in-6ce3195d-7119-4666-8966-6555874819a8",
-        "okit-in-2195d4b3-07bc-4a57-a06b-627cf69b8c46",
-        "okit-in-f59e4c4c-012f-45de-a81a-8772131f1df1"
-      ],
-      "parent_id": "okit-sn-e8536648-721d-473f-828e-e6cfaa5c59eb",
-      "virtual_cloud_network": "okit-sn001"
-    }
-  ],
-  "internet_gateways": [
-    {
-      "vcn_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8",
       "virtual_cloud_network": "okit-vcn001",
-      "compartment_id": "okit-comp-94636a16-5595-4a4b-b819-6aff3bee6536",
-      "id": "okit-ig-9b4a5d64-9346-4c7f-a97a-a0c323500224",
-      "display_name": "okit-ig001",
-      "parent_id": "okit-vcn-dcb74d63-9ae8-44c5-9913-1ba70e11d2b8"
+      "name": "okit-lb-sl"
     }
   ],
-  "block_storage_volumes": []
+  "service_gateways": [],
+  "subnets": [
+    {
+      "id": "okit.undefined.d3967bc6-40e8-42d3-adaf-9c5f374bca0b",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-lb-sn",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "vcn_id": "okit.undefined.3e3f1f86-16f6-4433-963f-b52d70ba2452",
+      "cidr_block": "10.2.0.0/24",
+      "dns_label": "sn001",
+      "prohibit_public_ip_on_vnic": false,
+      "route_table_id": "okit.undefined.ed178ac3-df4d-4a84-a17a-f18dab229e63",
+      "security_list_ids": [
+        "okit.undefined.a9285860-6743-44fb-bd1e-b5cff6e19fad"
+      ],
+      "availability_domain": "0",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": "",
+      "virtual_cloud_network": "okit-vcn001",
+      "route_table": "",
+      "security_lists": [],
+      "name": "okit-lb-sn"
+    }
+  ],
+  "virtual_cloud_networks": [
+    {
+      "id": "okit.undefined.3e3f1f86-16f6-4433-963f-b52d70ba2452",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-lb-vcn",
+      "compartment_id": "okit.compartment.87b90aa7-4c56-4800-b4d7-e404b89c6ceb",
+      "cidr_block": "10.2.0.0/16",
+      "dns_label": "vcn001",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": "",
+      "name": "okit-lb-vcn"
+    }
+  ]
 }
