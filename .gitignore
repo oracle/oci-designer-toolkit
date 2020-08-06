@@ -1,39 +1,31 @@
+# IntelliJ Files
 .idea
 **/*.iml
 **/.DS_Store
-
+# Key Files
+**/*.pem
+# OCI Config Files
+config/
+containers/.oci
+containers/oci/*
+!containers/oci/example_config
+# Runtime
 venv/
-
 *.pyc
 __pycache__/
-
 **/instance
-
 .pytest_cache/
 .coverage
 htmlcov/
-
+output/
+log/
+.vagrant
+# Build
 dist/
 build/
 *.egg-info/
-
 okit.wpr
-
-output/
-log/
-
+# Code Scanning
 .scannerwork
-#/.scannerwork/
-#sonar-project.properties
 
-.vagrant
 
-config/
-
-containers/.oci
-**/*.pem
-
-containers/oci/*
-!containers/oci/example_config
-
-!okitweb/static/model
