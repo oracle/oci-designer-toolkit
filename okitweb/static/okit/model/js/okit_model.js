@@ -51,12 +51,6 @@ class OkitJson {
         // Compartments
         if (okit_json.hasOwnProperty('compartments')) {
             for (let artefact of okit_json['compartments']) {
-                if (artefact.parent_id && artefact.parent_id === ROOT_CANVAS_ID) {
-                    artefact.parent_id = ROOT_CANVAS_ID;
-                    console.info('Adding Root Compartment ' + artefact.name);
-                } else {
-                    artefact.parent_id = artefact.compartment_id;
-                }
                 let obj = this.newCompartment(artefact);
                 console.info(obj);
             }
@@ -66,7 +60,6 @@ class OkitJson {
         // Autonomous Databases
         if (okit_json.hasOwnProperty('autonomous_databases')) {
             for (let artefact of okit_json['autonomous_databases']) {
-                artefact.parent_id = artefact.compartment_id;
                 let obj = this.newAutonomousDatabase(artefact);
                 console.info(obj);
             }
@@ -74,7 +67,6 @@ class OkitJson {
         // Block Storage Volumes
         if (okit_json.hasOwnProperty('block_storage_volumes')) {
             for (let artefact of okit_json['block_storage_volumes']) {
-                artefact.parent_id = artefact.compartment_id;
                 let obj = this.newBlockStorageVolume(artefact);
                 console.info(obj);
             }
@@ -82,7 +74,6 @@ class OkitJson {
         // Object Storage Buckets
         if (okit_json.hasOwnProperty('object_storage_buckets')) {
             for (let artefact of okit_json['object_storage_buckets']) {
-                artefact.parent_id = artefact.compartment_id;
                 let obj = this.newObjectStorageBucket(artefact);
                 console.info(obj);
             }
@@ -94,7 +85,6 @@ class OkitJson {
         okitSettings.is_default_security_list = false;
         if (okit_json.hasOwnProperty('virtual_cloud_networks')) {
             for (let artefact of okit_json['virtual_cloud_networks']) {
-                artefact.parent_id = artefact.compartment_id;
                 let obj = this.newVirtualCloudNetwork(artefact);
                 console.info(obj);
             }
@@ -105,7 +95,6 @@ class OkitJson {
         // Web Application Firewall
         if (okit_json.hasOwnProperty('web_application_firewalls')) {
             for (let artefact of okit_json['web_application_firewalls']) {
-                artefact.parent_id = artefact.compartment_id;
                 let obj = this.newWebApplicationFirewall(artefact);
                 console.info(obj);
             }
@@ -113,7 +102,6 @@ class OkitJson {
         // Dynamic Routing Gateways
         if (okit_json.hasOwnProperty('dynamic_routing_gateways')) {
             for (let artefact of okit_json['dynamic_routing_gateways']) {
-                artefact.parent_id = artefact.compartment_id;
                 let obj = this.newDynamicRoutingGateway(artefact);
                 console.info(obj);
             }
@@ -123,7 +111,6 @@ class OkitJson {
         // Internet Gateways
         if (okit_json.hasOwnProperty('internet_gateways')) {
             for (let artefact of okit_json['internet_gateways']) {
-                artefact.parent_id = artefact.vcn_id;
                 let obj = this.newInternetGateway(artefact);
                 console.info(obj);
             }
@@ -131,7 +118,6 @@ class OkitJson {
         // NAT Gateway
         if (okit_json.hasOwnProperty('nat_gateways')) {
             for (let artefact of okit_json['nat_gateways']) {
-                artefact.parent_id = artefact.vcn_id;
                 let obj = this.newNATGateway(artefact);
                 console.info(obj);
             }
@@ -139,7 +125,6 @@ class OkitJson {
         // Route Tables
         if (okit_json.hasOwnProperty('route_tables')) {
             for (let artefact of okit_json['route_tables']) {
-                artefact.parent_id = artefact.vcn_id;
                 let obj = this.newRouteTable(artefact);
                 console.info(obj);
             }
@@ -147,7 +132,6 @@ class OkitJson {
         // Security Lists
         if (okit_json.hasOwnProperty('security_lists')) {
             for (let artefact of okit_json['security_lists']) {
-                artefact.parent_id = artefact.vcn_id;
                 let obj = this.newSecurityList(artefact);
                 console.info(obj);
             }
@@ -155,7 +139,6 @@ class OkitJson {
         // Network Security Groups
         if (okit_json.hasOwnProperty('network_security_groups')) {
             for (let artefact of okit_json['network_security_groups']) {
-                artefact.parent_id = artefact.vcn_id;
                 let obj = this.newNetworkSecurityGroup(artefact);
                 console.info(obj);
             }
@@ -163,7 +146,6 @@ class OkitJson {
         // Service Gateways
         if (okit_json.hasOwnProperty('service_gateways')) {
             for (let artefact of okit_json['service_gateways']) {
-                artefact.parent_id = artefact.vcn_id;
                 let obj = this.newServiceGateway(artefact);
                 console.info(obj);
             }
@@ -171,7 +153,6 @@ class OkitJson {
         // Local Peering Gateways
         if (okit_json.hasOwnProperty('local_peering_gateways')) {
             for (let artefact of okit_json['local_peering_gateways']) {
-                artefact.parent_id = artefact.vcn_id;
                 let obj = this.newLocalPeeringGateway(artefact);
                 console.info(obj);
             }
@@ -179,7 +160,6 @@ class OkitJson {
         // Subnets
         if (okit_json.hasOwnProperty('subnets')) {
             for (let artefact of okit_json['subnets']) {
-                artefact.parent_id = artefact.vcn_id;
                 let obj = this.newSubnet(artefact);
                 console.info(obj);
             }
@@ -189,7 +169,6 @@ class OkitJson {
         // File Storage Systems
         if (okit_json.hasOwnProperty('file_storage_systems')) {
             for (let artefact of okit_json['file_storage_systems']) {
-                artefact.parent_id = artefact.subnet_id;
                 let obj = this.newFileStorageSystem(artefact);
                 console.info(obj);
             }
@@ -197,7 +176,6 @@ class OkitJson {
         // Database Systems
         if (okit_json.hasOwnProperty('database_systems')) {
             for (let artefact of okit_json['database_systems']) {
-                artefact.parent_id = artefact.subnet_id;
                 let obj = this.newDatabaseSystem(artefact);
                 console.info(obj);
             }
@@ -206,11 +184,6 @@ class OkitJson {
         if (okit_json.hasOwnProperty('instances')) {
             for (let artefact of okit_json['instances']) {
                 let subnet = this.getSubnet(artefact.subnet_id)
-                if (subnet && subnet.compartment_id === artefact.compartment_id) {
-                    artefact.parent_id = artefact.subnet_id;
-                } else {
-                    artefact.parent_id = artefact.compartment_id;
-                }
                 let obj = this.newInstance(artefact);
                 console.info(obj);
             }
@@ -218,12 +191,6 @@ class OkitJson {
         // Load Balancers
         if (okit_json.hasOwnProperty('load_balancers')) {
             for (let artefact of okit_json['load_balancers']) {
-                if (artefact.hasOwnProperty('subnet_id')) {
-                    artefact.parent_id = artefact.subnet_id;
-                } else {
-                    artefact.parent_id = artefact.subnet_ids[0];
-                    artefact.subnet_id = artefact.subnet_ids[0];
-                }
                 let obj = this.newLoadBalancer(artefact);
                 console.info(obj);
             }
@@ -452,15 +419,6 @@ class OkitJson {
     // Internet Gateway
     newInternetGateway(data) {
         console.info('New Internet Gateway');
-        for (let gateway of this.internet_gateways) {
-            if (gateway.vcn_id === data.parent_id) {
-                // We are only allowed a single Internet Gateway peer VCN
-                if (parent) {
-                    alert('The maximum limit of 1 for Internet Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                }
-                return null;
-            }
-        }
         this.internet_gateways.push(new InternetGateway(data, this));
         return this.internet_gateways[this.internet_gateways.length - 1];
     }
@@ -542,15 +500,6 @@ class OkitJson {
     // NAT Gateway
     newNATGateway(data) {
         console.info('New NAT Gateway');
-        for (let gateway of this.nat_gateways) {
-            if (gateway.vcn_id === data.parent_id) {
-                // We are only allowed a single NAT Gateway peer VCN
-                if (parent) {
-                    alert('The maximum limit of 1 for NAT Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                }
-                return null;
-            }
-        }
         this.nat_gateways.push(new NATGateway(data, this));
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
@@ -686,15 +635,6 @@ class OkitJson {
     // Service Gateway
     newServiceGateway(data) {
         console.info('New Service Gateway');
-        for (let gateway of this.service_gateways) {
-            if (gateway.vcn_id === data.parent_id) {
-                // We are only allowed a single Service Gateway peer VCN
-                if (parent) {
-                    alert('The maximum limit of 1 for Service Gateway per Virtual Cloud Network has been exceeded in ' + parent.display_name);
-                }
-                return null;
-            }
-        }
         this.service_gateways.push(new ServiceGateway(data, this));
         return this.service_gateways[this.service_gateways.length - 1];
     }
@@ -876,23 +816,6 @@ class OkitArtifact {
         if (this.parent_id !== undefined) {delete this.parent_id;}
     }
 
-    /*
-    ** Get this Artifacts Parent Object
-     */
-    getParent() {
-        if (this.getParentId() && $(jqId(this.getParentId())).data('type')) {
-            console.info('Parent Id : ' + this.getParentId());
-            const getFunction = 'get' + $(jqId(this.getParentId())).data('type').split(' ').join('');
-            console.info('>>>>>>>>> Parent ' + this.getOkitJson()[getFunction](this.getParentId()).display_name);
-            return this.getOkitJson()[getFunction](this.getParentId());
-        }
-        console.info('>>>>>>>>> Parent NULL');
-        return null;
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
     /*
     ** Get the Artifact name this Artifact will be know by.
      */
