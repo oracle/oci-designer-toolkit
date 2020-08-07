@@ -2,7 +2,7 @@
 
 
 ## Version 0.9.2 
-**Release Date**: 2th August 2020
+**Release Date**: 7th August 2020
 ### Bug Fixes
 1. Unable to drop gateways on second or subsequent VCNs (Issue #73).
 
