@@ -13,4 +13,8 @@ services:
     ports:
       - 443:443/tcp
       - 80:80/tcp
+    environment:
+      - USE_INSTANCE_PRINCIPAL=true
+    volumes:
+      - "/okit/log:/okit/log"
 ...
