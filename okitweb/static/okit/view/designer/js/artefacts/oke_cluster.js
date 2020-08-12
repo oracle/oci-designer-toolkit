@@ -7,7 +7,7 @@ console.info('Loaded Designer OKE View Javascript');
 /*
 ** Define Compartment View Artifact Class
  */
-class OkeView extends OkitContainerDesignerArtefactView {
+class OkeClusterView extends OkitContainerDesignerArtefactView {
     constructor(artefact = null, json_view) {
         super(artefact, json_view);
     }

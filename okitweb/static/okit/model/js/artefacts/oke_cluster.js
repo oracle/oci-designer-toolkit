@@ -7,7 +7,7 @@ console.info('Loaded OKE Javascript');
 /*
 ** Define Compartment Artifact Class
  */
-class Oke extends OkitArtifact {
+class OkeCluster extends OkitArtifact {
     /*
     ** Create
      */
@@ -51,6 +51,6 @@ class Oke extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new Oke(this, this.getOkitJson());
+        return new OkeCluster(this, this.getOkitJson());
     }
 }
