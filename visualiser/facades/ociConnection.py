@@ -46,7 +46,7 @@ class OCIConnection(object):
             self.config.update(config)
         logger.debug('>>>>>>>>>>>>>>>> Merged Config  : {0!s:s}'.format(self.config))
         # Create Instance Security Signer
-        if os.getenv('USE_INSTANCE_PRINCIPAL', False):
+        if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
             self.signerFromInstancePrincipal()
         else:
             self.signerFromConfig()
