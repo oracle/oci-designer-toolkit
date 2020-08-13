@@ -53,10 +53,6 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let object_storage_bucket of this.object_storage_buckets) {
             object_storage_bucket.draw();
         }
-        // Autonomous Databases
-        for (let autonomous_database of this.autonomous_databases) {
-            autonomous_database.draw();
-        }
         // FastConnects
         for (let fast_connect of this.fast_connects) {
             fast_connect.draw();
@@ -120,6 +116,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Load Balancers
         for (let load_balancer of this.load_balancers) {
             load_balancer.draw();
+        }
+        // Autonomous Databases
+        for (let autonomous_database of this.autonomous_databases) {
+            autonomous_database.draw();
         }
 
         // Resize Main Canvas if required

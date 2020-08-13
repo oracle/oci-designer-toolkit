@@ -155,7 +155,12 @@ class OkitJsonView {
         console.info('Drop Autonomous Database View');
         console.info(target);
         let view_artefact = this.newAutonomousDatabase();
-        view_artefact.getArtefact().compartment_id = target.id;
+        if (target.type === Subnet.getArtifactReference()) {
+            view_artefact.getArtefact().subnet_id = target.id;
+            view_artefact.getArtefact().compartment_id = target.compartment_id;
+        } else if (target.type === Compartment.getArtifactReference()) {
+            view_artefact.getArtefact().compartment_id = target.id;
+        }
         console.info('View Artefact');
         console.info(view_artefact)
         return view_artefact;

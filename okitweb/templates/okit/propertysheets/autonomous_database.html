@@ -25,6 +25,8 @@
     </select></div></div>
     <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_auto_scaling_enabled" name="is_auto_scaling_enabled" value="false">Auto Scaling</div></div>
     <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_free_tier" name="is_free_tier" value="false">Always Free</div></div>
+    <div class='tr'><div class='td'>Subnet</div><div class='td'><select id="subnet_id" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><select multiple="multiple" id="network_security_group_ids" class="okit-property-value"></select></div></div>
 {% endblock %}
 
 {% block optional_properties_block %}{% endblock %}

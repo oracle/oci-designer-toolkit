@@ -140,9 +140,6 @@ class OCIGenerator(object):
         # -- Object Storage Buckets
         for object_storage_bucket in self.visualiser_json.get('object_storage_buckets', []):
             self.renderObjectStorageBucket(object_storage_bucket)
-        # -- Autonomous Databases
-        for autonomous_database in self.visualiser_json.get('autonomous_databases', []):
-            self.renderAutonomousDatabase(autonomous_database)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
@@ -183,6 +180,9 @@ class OCIGenerator(object):
             self.renderLocalPeeringGateway(local_peering_gateway)
 
         # - Subnet Sub components
+        # -- Autonomous Databases
+        for autonomous_database in self.visualiser_json.get('autonomous_databases', []):
+            self.renderAutonomousDatabase(autonomous_database)
         # -- File Storage System
         for file_storage_system in self.visualiser_json.get('file_storage_systems', []):
             self.renderFileStorageSystem(file_storage_system)
@@ -229,6 +229,27 @@ class OCIGenerator(object):
         # --- Optional
         # ---- License Model
         self.addJinja2Variable("license_model", autonomous_database["license_model"], standardisedName)
+        # ---- White List IPs
+        if len(autonomous_database['whitelisted_ips']):
+            self.jinja2_variables["whitelisted_ips"] = autonomous_database['whitelisted_ips']
+        else:
+            self.jinja2_variables.pop("whitelisted_ips", None)
+        # ---- Subnet
+        if autonomous_database['subnet_id'] != '':
+            self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[autonomous_database["subnet_id"]]))
+            self.removeJinja2Variable("whitelisted_ips")
+        else:
+            self.removeJinja2Variable("subnet_id")
+        # ---- Network Security Groups
+        if len(autonomous_database['nsg_ids']):
+            jinja2_network_security_group_ids = []
+            for network_security_group_id in autonomous_database.get('nsg_ids', []):
+                network_security_group = self.id_name_map[network_security_group_id]
+                jinja2_network_security_group_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(network_security_group)))
+            self.jinja2_variables["nsg_ids"] = jinja2_network_security_group_ids
+        else:
+            self.jinja2_variables.pop("nsg_ids", None)
+
         # ---- Tags
         self.renderTags(autonomous_database)
 

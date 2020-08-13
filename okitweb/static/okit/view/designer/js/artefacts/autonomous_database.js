@@ -12,10 +12,19 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.compartment_id;}
+    get parent_id() {
+        let subnet = this.getJsonView().getSubnet(this.artefact.subnet_id);
+        if (subnet && subnet.compartment_id === this.artefact.compartment_id) {
+            console.info('Using Subnet as parent');
+            return this.subnet_id;
+        } else {
+            console.info('Using Compartment as parent');
+            return this.compartment_id;
+        }
+    }
 
     getParent() {
-        return this.getJsonView().getCompartment(this.parent_id);
+        return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);
     }
 
     getParentId() {
@@ -45,22 +54,24 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
          */
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        // Add Connector Data
-        svg.attr("data-compartment-id", this.compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-start-x", boundingClientRect.x)
-            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-end-x", boundingClientRect.x)
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-start-x", boundingClientRect.x)
-            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-end-x", boundingClientRect.x)
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true);
+        if (rect && rect.node()) {
+            let boundingClientRect = rect.node().getBoundingClientRect();
+            // Add Connector Data
+            svg.attr("data-compartment-id", this.compartment_id)
+                .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
+                .attr("data-connector-start-x", boundingClientRect.x)
+                .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
+                .attr("data-connector-end-x", boundingClientRect.x)
+                .attr("data-connector-id", this.id)
+                .attr("dragable", true)
+                .selectAll("*")
+                .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
+                .attr("data-connector-start-x", boundingClientRect.x)
+                .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
+                .attr("data-connector-end-x", boundingClientRect.x)
+                .attr("data-connector-id", this.id)
+                .attr("dragable", true);
+        }
         console.groupEnd();
         return svg;
     }
@@ -101,6 +112,18 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
                 $('#license_model').attr('disabled', true);
                 $('#is_auto_scaling_enabled').attr('disabled', true);
             }
+            // Load Reference Ids
+            // Network Security Groups
+            let network_security_groups_select = $(jqId('network_security_group_ids'));
+            for (let network_security_group of okitJson.network_security_groups) {
+                network_security_groups_select.append($('<option>').attr('value', network_security_group.id).text(network_security_group.display_name));
+            }
+            // Subnets
+            let subnet_select = $(jqId('subnet_id'));
+            subnet_select.append($('<option>').attr('value', '').text(''));
+            for (let subnet of okitJson.subnets) {
+                subnet_select.append($('<option>').attr('value', subnet.id).text(subnet.display_name));
+            }
             loadPropertiesSheet(me.artefact);
         });
     }
@@ -113,26 +136,6 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     }
 
     /*
-    ** Child Type Functions
-     */
-    getTopArtifacts() {
-        return [Instance.getArtifactReference()];
-    }
-
-    getContainerArtifacts() {
-        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
-    }
-
-    getLeftArtifacts() {
-        return [BlockStorageVolume.getArtifactReference()];
-    }
-
-    getRightArtifacts() {
-        return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
-            ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference()];
-    }
-
-    /*
     ** Static Functionality
      */
     static getArtifactReference() {
@@ -140,7 +143,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     }
 
     static getDropTargets() {
-        return [Compartment.getArtifactReference()];
+        return [Compartment.getArtifactReference(), Subnet.getArtifactReference()];
     }
 
 }

@@ -10,18 +10,37 @@ resource "oci_database_autonomous_database" "{{ resource_name }}" {
 
     #Optional
     display_name             = {{ display_name | safe }}
-#    autonomous_container_database_id = {{ autonomous_container_database_id }}
-#    clone_type               = {{ clone_type | safe }}
+{% if subnet_id is defined %}
+    subnet_id                = {{ subnet_id }}
+{% endif %}
+{% if whitelisted_ips is defined %}
+    whitelisted_ips          = [{% for wl_id in whitelisted_ips %}{{ wl_id }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
+{% if nsg_ids is defined %}
+    nsg_ids                  = [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
+{% if autonomous_container_database_id is defined %}
+    autonomous_container_database_id = {{ autonomous_container_database_id }}
+{% endif %}
+{% if clone_type is defined %}
+    clone_type               = {{ clone_type | safe }}
+{% endif %}
     db_workload              = {{ db_workload | safe }}
     is_auto_scaling_enabled  = tobool(lower({{ is_auto_scaling_enabled | safe }}))
-#    is_dedicated             = tobool(lower({{ is_dedicated | safe }}))
+{% if is_dedicated is defined %}
+    is_dedicated             = tobool(lower({{ is_dedicated | safe }}))
+{% endif %}
     is_free_tier             = tobool(lower({{ is_free_tier | safe }}))
 #    is_preview_version_with_service_terms_accepted = {{ is_preview_version_with_service_terms_accepted | safe }}
 {% if license_model is defined %}
-    license_model           = {{ license_model | safe }}
+    license_model            = {{ license_model | safe }}
 {% endif %}
-#    source = {{ database_source | safe }}
-#    source_id = {{ source_id }}
+{% if source is defined %}
+    source = {{ database_source | safe }}
+    {% if source_id is defined %}
+    source_id = {{ source_id }}
+    {% endif %}
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags             = {{ defined_tags | safe }}
 {% endif %}
