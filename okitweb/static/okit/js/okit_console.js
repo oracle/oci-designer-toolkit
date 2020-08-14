@@ -51,27 +51,6 @@ $(document).ready(function() {
         $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
     });
 
-    /*
-    $(jqId('navigation_menu_button')).mouseover(function(e) {
-        e.preventDefault();
-        $(jqId('navigation_menu')).addClass('okit-navigation-menu-show');
-    });
-
-    $(jqId('navigation_menu_button')).mouseleave(function(e) {
-        e.preventDefault();
-        $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
-    });
-
-    $(jqId('navigation_menu_list')).mouseover(function(e) {
-        e.preventDefault();
-        $(jqId('navigation_menu')).addClass('okit-navigation-menu-show');
-    });
-
-    $(jqId('navigation_menu_list')).mouseleave(function(e) {
-        e.preventDefault();
-        $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
-    });
-    */
     $(jqId('okit_version')).text('Version: ' + okitVersion + '  (' + okitReleaseDate + ')');
 
     $('li.dropdown').on('mouseover', function() {
