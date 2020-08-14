@@ -856,6 +856,16 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderOkeCluster(self, artefact):
+        # Read Data
+        standardisedName = self.standardiseResourceName(artefact['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = artefact['display_name']
+        # Process Object Storage Bucket Data
+        logger.info('Processing OKE Cluster Information {0!s:s}'.format(standardisedName))
+        return
+
     def renderRouteTable(self, route_table, index=0):
         # Read Data
         standardisedName = self.standardiseResourceName(route_table['display_name'])

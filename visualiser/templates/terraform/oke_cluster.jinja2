@@ -1,0 +1,71 @@
+# ------ Create OKE Cluster
+resource "oci_containerengine_cluster" "{{ resource_name }}" {
+    #Required
+    compartment_id     = {{ compartment_ocid }}
+    kubernetes_version = {{ kubernetes_version | safe }}
+    name               = {{ display_name | safe }}
+    vcn_id             = {{ vcn_id }}
+
+    #Optional
+{% if kms_key_id is defined %}
+    kms_key_id         = {{ kms_key_id | safe}}
+{% endif %}
+{% if is_kubernetes_dashboard_enabled is defined or is_tiller_enabled is defined or is_pod_security_policy_enabled is defined or pods_cidr is defined or services_cidr is defined or service_lb_subnet_ids is defined %}
+    options {
+        #Optional
+    {% if is_kubernetes_dashboard_enabled is defined or is_tiller_enabled is defined %}
+        add_ons {
+            #Optional
+            is_kubernetes_dashboard_enabled = {{ is_kubernetes_dashboard_enabled | safe }}
+            is_tiller_enabled               = {{ is_tiller_enabled | safe }}
+        }
+    {% endif %}
+    {% if is_pod_security_policy_enabled is defined %}
+        admission_controller_options {
+            #Optional
+            is_pod_security_policy_enabled  = {{ is_pod_security_policy_enabled | safe }}
+        }
+    {% endif %}
+    {% if pods_cidr is defined or services_cidr is defined %}
+        kubernetes_network_config {
+            #Optional
+            pods_cidr                       = {{ pods_cidr | safe }}
+            services_cidr                   = {{ services_cidr | safe }}
+        }
+    {% endif %}
+    {% if service_lb_subnet_ids is defined %}
+        service_lb_subnet_ids = {{ service_lb_subnet_ids | safe }}
+    {% endif %}
+    }
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
+}
+
+# ------ Create Container Node Pool
+resource "oci_containerengine_node_pool" "{{ resource_name }}NodePool" {
+    #Required
+    cluster_id         = local.{{ resource_name }}_id
+    compartment_id     = {{ compartment_ocid }}
+    kubernetes_version = {{ kubernetes_version | safe }}
+    name               = {{ display_name | safe }}
+    node_shape         = {{ node_shape | safe }}
+
+    #Optional
+    initial_node_labels {
+        #Optional
+        key = "${var.node_pool_initial_node_labels_key}"
+        value = "${var.node_pool_initial_node_labels_value}"
+    }
+    node_image_name = "${oci_core_image.test_image.name}"
+    node_metadata = "${var.node_pool_node_metadata}"
+    node_source_details {
+        #Required
+        image_id = "${oci_core_image.test_image.id}"
+        source_type = "${var.node_pool_node_source_details_source_type}"
+    }
+    quantity_per_subnet = "${var.node_pool_quantity_per_subnet}"
+    ssh_public_key = "${var.node_pool_ssh_public_key}"
+}
