@@ -4,6 +4,7 @@
 ## Version 0.10.0 
 **Release Date**: 26th August 2020
 ### Features
+1. Modify the Hamburger menu to replace the mouseover events for menu display to mouse click events.
 
 ### Bug Fixes
 
