@@ -41,6 +41,17 @@ $(document).ready(function() {
      */
     console.info('Adding Console Handlers');
 
+    $(jqId('navigation_menu_button')).click(function(e) {
+        e.preventDefault();
+        $(jqId('navigation_menu')).toggleClass('okit-navigation-menu-show');
+    });
+
+    $(jqId('navigation_menu')).click(function(e) {
+        e.preventDefault();
+        $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
+    });
+
+    /*
     $(jqId('navigation_menu_button')).mouseover(function(e) {
         e.preventDefault();
         $(jqId('navigation_menu')).addClass('okit-navigation-menu-show');
@@ -60,7 +71,7 @@ $(document).ready(function() {
         e.preventDefault();
         $(jqId('navigation_menu')).removeClass('okit-navigation-menu-show');
     });
-
+    */
     $(jqId('okit_version')).text('Version: ' + okitVersion + '  (' + okitReleaseDate + ')');
 
     $('li.dropdown').on('mouseover', function() {
