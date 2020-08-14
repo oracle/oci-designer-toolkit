@@ -55,14 +55,20 @@ $(document).ready(function() {
 
     $('li.dropdown').on('mouseover', function() {
         console.info(`>>>>>>> Over ${this.id}`);
-        let menu_pos = $(this).position();
-        let width = $(this).outerWidth();
-        console.info(`>>>>>>> Position y: ${menu_pos.top} x: ${menu_pos.left} w: ${width}`);
+        let menuX = $(this).position().left;
+        let menuY = $(this).position().top;
+        let scrollX = $('#navigation_menu').scrollLeft();
+        let scrollY = $('#navigation_menu').scrollTop();
+        let width = $(this).innerWidth();
+        let navX = $('#navigation_menu').offset().left;
+        let navY = $('#navigation_menu').offset().top;
+        console.log(`Navigation Menu Offset x : ${navX} y : ${navY}`);
+        console.log(`Navigation Scroll Offset x : ${scrollX} y : ${scrollY}`);
+        console.info(`>>>>>>> Position       x : ${menuY} y : ${menuX} w : ${width}`);
         let $slideout = $('> .dropdown-content', $(this));
-        // TODO: Implement as part of Slide Out Menu fix
         $slideout.css('position', 'absolute');
-        $slideout.css('top', menu_pos.top);
-        $slideout.css('left', menu_pos.left + width);
+        $slideout.css('top', menuY + scrollY);
+        $slideout.css('left', menuX + width);
     });
 
     checkForUpdate();
