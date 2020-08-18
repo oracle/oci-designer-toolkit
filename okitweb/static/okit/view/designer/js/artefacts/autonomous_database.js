@@ -107,8 +107,8 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
                 }
             });
             if (me.is_free_tier) {
-                me.license_model = "LICENSE_INCLUDED";
-                me.is_auto_scaling_enabled =  false;
+                me.artefact.license_model = "LICENSE_INCLUDED";
+                me.artefact.is_auto_scaling_enabled =  false;
                 $('#license_model').attr('disabled', true);
                 $('#is_auto_scaling_enabled').attr('disabled', true);
             }
