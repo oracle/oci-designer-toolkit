@@ -129,6 +129,18 @@ class OkitOCIData {
         }
         return [...new Set(versions)].sort((a, b) => b - a);
     }
+
+    getInstanceImages(os='', version='') {
+        let images = [];
+        let os_images = this.images.filter(i => i.operating_system === os);
+        console.info(`${os} Images ${os_images}`)
+        let version_images = os_images.filter(i => i.operating_system_version === version);
+        console.info(`${os} Images ${version_images}`)
+        for (let image of version_images) {
+            images.push(image.display_name);
+        }
+        return [...new Set(images)].sort((a, b) => b - a);
+    }
 }
 
 class OkitSettings {

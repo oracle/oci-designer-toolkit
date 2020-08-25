@@ -29,43 +29,68 @@ resource "oci_containerengine_cluster" "{{ resource_name }}" {
     {% if pods_cidr is defined or services_cidr is defined %}
         kubernetes_network_config {
             #Optional
+        {% if pods_cidr is defined %}
             pods_cidr                       = {{ pods_cidr | safe }}
+        {% endif %}
+        {% if services_cidr is defined %}
             services_cidr                   = {{ services_cidr | safe }}
+        {% endif %}
         }
     {% endif %}
     {% if service_lb_subnet_ids is defined %}
-        service_lb_subnet_ids = {{ service_lb_subnet_ids | safe }}
+        service_lb_subnet_ids = [{% for id in service_lb_subnet_ids %}{{ id }}{% if not loop.last %},{% endif %}{% endfor %}]
     {% endif %}
     }
 {% endif %}
 }
 
 locals {
-    {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
+    {{ resource_name }}_id            = oci_containerengine_cluster.{{ resource_name }}.id
 }
 
 # ------ Create Container Node Pool
-resource "oci_containerengine_node_pool" "{{ resource_name }}NodePool" {
+{% for pool in node_pools %}
+resource "oci_containerengine_node_pool" "{{ resource_name }}NodePool{{ loop.index }}" {
     #Required
     cluster_id         = local.{{ resource_name }}_id
     compartment_id     = {{ compartment_ocid }}
     kubernetes_version = {{ kubernetes_version | safe }}
     name               = {{ display_name | safe }}
-    node_shape         = {{ node_shape | safe }}
+    node_shape         = {{ pool.node_shape | safe }}
 
     #Optional
+{% if pool.key is defined and pool.value is defined %}
     initial_node_labels {
         #Optional
-        key = "${var.node_pool_initial_node_labels_key}"
-        value = "${var.node_pool_initial_node_labels_value}"
+        key = {{ pool.key | safe }}
+        value = {{ pool.value | safe }}
     }
-    node_image_name = "${oci_core_image.test_image.name}"
-    node_metadata = "${var.node_pool_node_metadata}"
+{% endif %}
+{% if pool.node_config_details is defined %}
+    node_config_details {
+    {% for config in pool.node_config_details.placement_configs %}
+        placement_configs {
+            availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ config.availability_domain | safe }} - 1]["name"]
+            subnet_id        = {{ config.subnet_id }}
+            }
+    {% endfor %}
+        size = {{ pool.node_config_details.size | safe }}
+    }
+{% endif %}
+{% if pool.node_metadata is defined %}
+    node_metadata = {{ pool.node_metadata }}
+{% endif %}
+{% if pool.node_source_details is defined %}
     node_source_details {
         #Required
-        image_id = "${oci_core_image.test_image.id}"
-        source_type = "${var.node_pool_node_source_details_source_type}"
+        #image_id = {{ pool.node_source_details.image | safe }}
+        image_id = lookup([for x in data.oci_core_images.InstanceImages.images: x if x.display_name == {{ pool.node_source_details.image | safe }}][0], "id")
+        source_type = {{ pool.node_source_details.source_type | safe }}
     }
-    quantity_per_subnet = "${var.node_pool_quantity_per_subnet}"
-    ssh_public_key = "${var.node_pool_ssh_public_key}"
+{% endif %}
+{% if pool.ssh_public_key is defined %}
+    ssh_public_key = {{ pool.ssh_public_key | safe }}
+{% endif %}
 }
+{% endfor %}
+

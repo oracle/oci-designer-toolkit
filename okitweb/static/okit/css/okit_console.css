@@ -103,6 +103,14 @@ textarea {
     cursor: pointer;
 }
 
+.okit-width-100 {
+    min-width: 100%;
+}
+
+.okit-bottom-margin {
+    margin-bottom: 5px;
+}
+
 /*
 ** OCI Console Classes
  */
@@ -510,7 +518,6 @@ li a.parent-item:hover {
 }
 
 .okit-properties-table {
-    margin-top: 10px;
 }
 
 .okit-properties-table > .thead > .tr > .th:first-child {
@@ -520,6 +527,23 @@ li a.parent-item:hover {
 .okit-properties-table > .tbody > .tr > .td:first-child {
     width: 10em;
     font-weight: bold;
+}
+
+.okit-properties-table select[multiple="multiple"] > option:before {content: "☐ "}
+.okit-properties-table select[multiple="multiple"] > option:checked:before {content: "☑ "}
+.okit-multiple-select {
+    border: #253141 solid 1px;
+    min-height: 3em;
+}
+
+.okit-properties-table .okit-row-details {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.okit-properties-table .okit-row-details > summary {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .collapsed {

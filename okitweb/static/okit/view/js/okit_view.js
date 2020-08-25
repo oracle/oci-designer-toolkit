@@ -108,6 +108,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
         for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
         for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
+        for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
         //for (let artefact of this.okitjson.remote_peering_gateways) {this.newRemotePeeringGateway(artefact);}
         for (let artefact of this.okitjson.route_tables) {this.newRouteTable(artefact);}
         for (let artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
@@ -979,6 +980,7 @@ class OkitArtefactView {
     get artefact_id() {return this.artefact ? this.artefact.id : '';}
     get compartment_id() {return this.artefact ? this.artefact.compartment_id : '';}
     get parent_id() {return null;}
+    get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
     get icon_width() {return 45;}
     get icon_height() {return 45;}
@@ -988,14 +990,15 @@ class OkitArtefactView {
     get minimum_height() {return this.icon_height;}
     get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
     get dimensions() {return this.minimum_dimensions;}
+    get definition() {}
     get attached() {return false;}
 
-    getParent() {return null;}
+    getParent() {return this.parent;}
 
     getParentId() {return this.parent_id;}
 
     // TODO: Delete replaced by attached variable
-    isAttached() {return false;}
+    isAttached() {return this.attached;}
 
     getArtefact() {return this.artefact;}
 

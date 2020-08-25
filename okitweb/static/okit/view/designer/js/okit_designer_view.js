@@ -95,6 +95,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let subnet of this.subnets) {
             subnet.draw();
         }
+        // OKE Clusters
+        for (let oke_cluster of this.oke_clusters) {
+            oke_cluster.draw();
+        }
 
         // Draw Subnet Sub Components
         // Database System
