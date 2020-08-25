@@ -20,6 +20,7 @@ class Instance extends OkitArtifact {
         this.compartment_id = '';
         this.shape = 'VM.Standard.E2.1';
         // # Optional
+        this.count = 1;
         this.fault_domain = '';
         this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
         this.vnics = [];
