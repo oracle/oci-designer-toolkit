@@ -168,7 +168,7 @@ class OkeClusterView extends OkitDesignerArtefactView {
             .attr("class", "property-value")
             .attr("id", "os_version" + pool_num)
             .on("change", function() {
-                pool.node_source_details.version = this.options[this.selectedIndex].value;
+                pool.node_source_details.os_version = this.options[this.selectedIndex].value;
                 console.info('Changed Node Version: ' + this.value);
                 me.loadImages($("#os" + pool_num).val(), $("#os_version" + pool_num).val(), pool_num);
                 displayOkitJson();
