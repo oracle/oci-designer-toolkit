@@ -249,6 +249,7 @@ function redrawSVGCanvas(region='') {
     console.info(okitJsonView);
     if (region === '' || region === activeRegion) {
         displayDesignerView();
+        displayOkitJson();
     }
 }
 /*

@@ -94,16 +94,17 @@ function loadPropertiesSheet(json_element) {
             });
         } else if ($(jqId(key)).is("select")) {                        // Select
             console.info(key + ' is select with value ' + val);
+            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val(); $(jqId(key)).removeClass('okit-warning'); redrawSVGCanvas();});
             $(jqId(key)).val(val);
-            if (!$(jqId(key)).val() && !Array.isArray(val) && val.trim() !== '') {
+            if (!$(jqId(key)).val() && !Array.isArray(val) && String(val).trim() !== '') {
                 console.warn(`Value ${val} not in select list ${key}`);
                 $(jqId(key)).addClass('okit-warning');
-            } else if (!val || (!Array.isArray(val) && val.trim() === '')) {
+                $(jqId(key)).change();
+            } else if (!val || (!Array.isArray(val) && String(val).trim() === '')) {
                 $(jqId(key)).val($(jqId(key) + ' option:first').val());
                 json_element[key] = $(jqId(key)).val();
                 console.info(`Value unspecified setting ${key} to first entry ${json_element[key]}`);
             }
-            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val(); redrawSVGCanvas();});
         } else if ($(jqId(key)).is("label")) {                         // Label
             console.info(key + ' is label.');
             if (key.endsWith('_id')) {
