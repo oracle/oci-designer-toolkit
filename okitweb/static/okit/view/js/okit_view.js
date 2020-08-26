@@ -965,6 +965,7 @@ class OkitJsonView {
 class OkitArtefactView {
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
+        this.collapsed = false;
         this.getJsonView = function() {return json_view};
         // Raise Artefact Elements to View Class
         if (this.artefact) {

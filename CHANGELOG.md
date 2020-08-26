@@ -8,6 +8,7 @@
 2. Add OKE Cluster functionality. Corrently works in a similar way to the advanced console create (OKIT-13).
 3. Add count field to instance to allow generation of X duplicate version of an instance. Save time and space creating duplicates.
 4. Add ability to specify Subnet for Autonomous Database (Issue: #76 & Issue: #81).
+5. Add OKE example fragment.
 
 ### Bug Fixes
 1. Add test for existing of image_id for edge cases when it is missing from query (Issue: #79).
