@@ -990,8 +990,6 @@ class OCIGenerator(object):
         for route_rule in route_table.get('route_rules', []):
             jinja2_route_rule = {}
             # ------ Network End Point
-            #variableName = '{0:s}_route_rule_{1:02d}_network_entity_id'.format(standardisedName, rule_number)
-            #self.run_variables[variableName] = route_rule["network_entity_id"]
             jinja2_route_rule["network_entity_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[route_rule["network_entity_id"]]))
             # ------ Destination
             if route_rule["destination_type"] == 'CIDR_BLOCK':
