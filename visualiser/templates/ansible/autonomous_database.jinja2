@@ -34,7 +34,7 @@
 
 # -------- If Workload DW
     - name: Create Autonomous Database Warehouse
-      oci_autonomous_database:
+      oci_autonomous_data_warehouse:
         state:  "{{ '{{' }} state | default('present') {{ '}}' }}"
         # Required
         compartment_id: "{{ compartment_ocid }}"

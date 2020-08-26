@@ -59,7 +59,7 @@ class FileStorageSystem extends OkitArtifact {
         // Mount Target
         if (this.mount_targets === undefined) {this.mount_target = [{}];}
         if (this.subnet_id !== undefined) {this.mount_targets[0].subnet_id = this.subnet_id; delete this.subnet_id;}
-        if (this.hostname_label !== undefined) {this.mount_target[0].hostname_label = this.hostname_label; delete this.hostname_label;}
+        if (this.hostname_label !== undefined) {this.mount_targets[0].hostname_label = this.hostname_label; delete this.hostname_label;}
     }
 
     /*

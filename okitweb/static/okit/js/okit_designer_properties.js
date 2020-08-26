@@ -71,14 +71,40 @@ function loadPropertiesSheet(json_element) {
                     $(jqId(json_element['id'] + '-display-name')).text(json_element[key]);
                 }
             });
+        } else if ($(jqId(key)).is('input[type="number"]')) {                     // Number
+            console.info(key + ' is input:number.');
+            $(jqId(key)).val(val);
+            $(jqId(key)).on('input', () => {
+                json_element[key] = $(jqId(key)).val();
+            });
         } else if ($(jqId(key)).is("input:checkbox")) {                // CheckBox
             console.info(key + ' is input:checkbox.');
             $(jqId(key)).on('input', () => {json_element[key] = $(jqId(key)).is(':checked'); redrawSVGCanvas();});
             $(jqId(key)).attr('checked', val);
+        } else if ($(jqId(key)).is('div[class="okit-multiple-select"]')) { // Multiple Select
+            console.info(key + ' is multiple select with value ' + val);
+            $(jqId(key)).find("input:checkbox").each(function() {
+                $(this).on('input', () => {
+                    json_element[key] = [];
+                    $(jqId(key)).find("input:checkbox").each(function() {
+                        if ($(this).prop('checked')) {json_element[key].push($(this).val());}
+                    });
+                });
+                if (val.includes($(this).val())) {$(this).prop("checked", true);}
+            });
         } else if ($(jqId(key)).is("select")) {                        // Select
             console.info(key + ' is select with value ' + val);
+            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val(); $(jqId(key)).removeClass('okit-warning'); redrawSVGCanvas();});
             $(jqId(key)).val(val);
-            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val(); redrawSVGCanvas();});
+            if (!$(jqId(key)).val() && !Array.isArray(val) && String(val).trim() !== '') {
+                console.warn(`Value ${val} not in select list ${key}`);
+                $(jqId(key)).addClass('okit-warning');
+                $(jqId(key)).change();
+            } else if (!val || (!Array.isArray(val) && String(val).trim() === '')) {
+                $(jqId(key)).val($(jqId(key) + ' option:first').val());
+                json_element[key] = $(jqId(key)).val();
+                console.info(`Value unspecified setting ${key} to first entry ${json_element[key]}`);
+            }
         } else if ($(jqId(key)).is("label")) {                         // Label
             console.info(key + ' is label.');
             if (key.endsWith('_id')) {
@@ -166,6 +192,8 @@ function loadPropertiesSheet(json_element) {
         $(jqId(property_name)).addClass('okit-warning');
     }
     warning_propeties = [];
+    // Set up Multi Select boxes to toggle select
+    //$("select[multiple] option").mousedown(function() {let $self = $(this); $self.prop('selected', !$self.prop('selected')); return false;});
     console.groupEnd();
 }
 

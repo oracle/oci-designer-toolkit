@@ -113,6 +113,16 @@ class OCIJsonValidator(object):
                     'element': 'license_model'
                 }
                 self.results['errors'].append(error)
+            if artefact['subnet_id'] != '' and len(artefact['nsg_ids']) == 0:
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Autonomous Database',
+                    'artefact': artefact['display_name'],
+                    'message': 'Autonomous Databases with private access (Subnet) require at least 1 Network Security Group.',
+                    'element': 'nsg_ids'
+                }
+                self.results['errors'].append(error)
 
     # Block Storage
     def validateBlockStorageVolumes(self):

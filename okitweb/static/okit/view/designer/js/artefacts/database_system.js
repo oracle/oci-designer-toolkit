@@ -108,7 +108,7 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
                     cpu_count_select.append($('<option>').attr('value', i).text(i));
                 }
                 $(cpu_count_select).val(0);
-                $(cpu_count_select).select();
+                $(cpu_count_select).select().change();
                 if (shape.shape_family === 'VIRTUALMACHINE') {
                     $(jqId('data_storage_percentage_tr')).addClass('collapsed');
                     $(jqId('cpu_core_count_tr')).addClass('collapsed');

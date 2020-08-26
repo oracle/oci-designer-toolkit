@@ -92,8 +92,8 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
         return[ServiceGateway.getArtifactReference(), DynamicRoutingGateway.getArtifactReference(), LocalPeeringGateway.getArtifactReference()]
     }
 
-    getBottomEdgeArtifacts() {
-        return [];
+    getLeftArtifacts() {
+        return [OkeCluster.getArtifactReference()];
     }
 
     /*

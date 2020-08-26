@@ -14,7 +14,24 @@ class InstancePool extends OkitArtifact {
     constructor(data = {}, okitjson = {}) {
         super(okitjson);
         // Configure default values
-        this.name = this.generateDefaultName(okitjson.compartments.length + 1);
+        this.compartment_id = '';
+        this.display_name = this.generateDefaultName(okitjson.instance_pools.length + 1);
+        this.placement_configurations = [
+            {
+                availability_domain: '1',
+                primary_subnet_id: '',
+                fault_domains: [],
+                secondary_vnic_subnets: []
+            }
+        ];
+        this.size = 3;
+        this.load_balancers = [];
+        this.instance_configuration = {
+            source: 'NONE',
+            instance_details: {
+                instance_type: 'compute'
+            }
+        };
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -32,5 +49,16 @@ class InstancePool extends OkitArtifact {
      */
     clone() {
         return new InstancePool(this, this.getOkitJson());
+    }
+
+    getNamePrefix() {
+        return super.getNamePrefix() + 'inp';
+    }
+
+    /*
+    ** Static Functionality
+     */
+    static getArtifactReference() {
+        return 'Instance Pool';
     }
 }

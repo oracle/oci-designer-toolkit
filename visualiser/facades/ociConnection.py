@@ -61,32 +61,12 @@ class OCIConnection(object):
         return json_list
 
 
-class OCIIdentityConnection(OCIConnection):
+class OCIBlockStorageVolumeConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
-        self.compartment_ocid = None
-        super(OCIIdentityConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+        super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        self.client = oci.identity.IdentityClient(self.config)
-        self.compartment_ocid = self.config["tenancy"]
-        return
-
-
-class OCIVirtualNetworkConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIVirtualNetworkConnection, self).__init__(config=config, configfile=configfile, profile=profile)
-
-    def connect(self):
-        self.client = oci.core.VirtualNetworkClient(self.config)
-        return
-
-
-class OCILoadBalancerConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
-
-    def connect(self):
-        self.client = oci.load_balancer.LoadBalancerClient(self.config)
+        self.client = oci.core.BlockstorageClient(self.config)
         return
 
 
@@ -99,21 +79,12 @@ class OCIComputeConnection(OCIConnection):
         return
 
 
-class OCIResourceManagerConnection(OCIConnection):
+class OCIContainerConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+        super(OCIContainerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        self.client = oci.resource_manager.ResourceManagerClient(self.config)
-        return
-
-
-class OCIBlockStorageVolumeConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
-
-    def connect(self):
-        self.client = oci.core.BlockstorageClient(self.config)
+        self.client = oci.container_engine.ContainerEngineClient(self.config)
         return
 
 
@@ -126,6 +97,35 @@ class OCIDatabaseConnection(OCIConnection):
         return
 
 
+class OCIFileStorageSystemConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIFileStorageSystemConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.file_storage.FileStorageClient(self.config)
+        return
+
+
+class OCIIdentityConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        self.compartment_ocid = None
+        super(OCIIdentityConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.identity.IdentityClient(self.config)
+        self.compartment_ocid = self.config["tenancy"]
+        return
+
+
+class OCILoadBalancerConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.load_balancer.LoadBalancerClient(self.config)
+        return
+
+
 class OCIObjectStorageBucketConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
         super(OCIObjectStorageBucketConnection, self).__init__(config=config, configfile=configfile, profile=profile)
@@ -135,10 +135,20 @@ class OCIObjectStorageBucketConnection(OCIConnection):
         return
 
 
-class OCIFileStorageSystemConnection(OCIConnection):
+class OCIResourceManagerConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIFileStorageSystemConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+        super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def connect(self):
-        self.client = oci.file_storage.FileStorageClient(self.config)
+        self.client = oci.resource_manager.ResourceManagerClient(self.config)
         return
+
+
+class OCIVirtualNetworkConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIVirtualNetworkConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.core.VirtualNetworkClient(self.config)
+        return
+

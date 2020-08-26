@@ -18,12 +18,13 @@ class OkitJson {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
-        this.containers = [];
+        this.oke_clusters = [];
         this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
         this.file_storage_systems = [];
         this.instances = [];
+        this.instance_pools = [];
         this.internet_gateways = [];
         this.load_balancers = [];
         this.local_peering_gateways = [];
@@ -164,6 +165,13 @@ class OkitJson {
                 console.info(obj);
             }
         }
+        // OkeClusters
+        if (okit_json.hasOwnProperty('oke_clusters')) {
+            for (let artefact of okit_json['oke_clusters']) {
+                let obj = this.newOkeCluster(artefact);
+                console.info(obj);
+            }
+        }
 
         // Subnet Subcomponents
         // File Storage Systems
@@ -185,6 +193,13 @@ class OkitJson {
             for (let artefact of okit_json['instances']) {
                 let subnet = this.getSubnet(artefact.subnet_id)
                 let obj = this.newInstance(artefact);
+                console.info(obj);
+            }
+        }
+        // InstancePools
+        if (okit_json.hasOwnProperty('instance_pools')) {
+            for (let artefact of okit_json['instance_pools']) {
+                let obj = this.newInstancePool(artefact);
                 console.info(obj);
             }
         }
@@ -416,6 +431,33 @@ class OkitJson {
         }
     }
 
+    // InstancePool
+    newInstancePool(data) {
+        console.info('New InstancePool');
+        this.instance_pools.push(new InstancePool(data, this));
+        return this.instance_pools[this.instance_pools.length - 1];
+    }
+    getInstancePools() {
+        return this.instance_pools;
+    }
+    getInstancePool(id='') {
+        for (let artefact of this.getInstancePools()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteInstancePool(id) {
+        for (let i = 0; i < this.instance_pools.length; i++) {
+            if (this.instance_pools[i].id === id) {
+                this.instance_pools[i].delete();
+                this.instance_pools.splice(i, 1);
+                break;
+            }
+        }
+    }
+
     // Internet Gateway
     newInternetGateway(data) {
         console.info('New Internet Gateway');
@@ -573,6 +615,33 @@ class OkitJson {
             if (this.object_storage_buckets[i].id === id) {
                 this.object_storage_buckets[i].delete();
                 this.object_storage_buckets.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // OkeCluster
+    newOkeCluster(data) {
+        console.info('New OkeCluster');
+        this.oke_clusters.push(new OkeCluster(data, this));
+        return this.oke_clusters[this.oke_clusters.length - 1];
+    }
+    getOkeClusters() {
+        return this.oke_clusters;
+    }
+    getOkeCluster(id='') {
+        for (let artefact of this.getOkeClusters()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteOkeCluster(id) {
+        for (let i = 0; i < this.oke_clusters.length; i++) {
+            if (this.oke_clusters[i].id === id) {
+                this.oke_clusters[i].delete();
+                this.oke_clusters.splice(i, 1);
                 break;
             }
         }

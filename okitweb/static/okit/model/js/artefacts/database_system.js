@@ -27,7 +27,7 @@ class DatabaseSystem extends OkitArtifact {
             db_version: '12.2.0.1'
         };
         this.hostname = this.display_name.toLowerCase();
-        this.shape = 'VM.Standard2.1';
+        this.shape = '';
         this.ssh_public_keys = '';
         this.subnet_id = data.parent_id;
         this.backup_network_nsg_ids = [];

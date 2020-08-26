@@ -31,4 +31,8 @@ locals {
 # ------ Get List Service OCIDs
 data "oci_core_services" "RegionServices" {
 }
+# ------ Get List Images
+data "oci_core_images" "InstanceImages" {
+    compartment_id           = {{ compartment_ocid }}
+}
 

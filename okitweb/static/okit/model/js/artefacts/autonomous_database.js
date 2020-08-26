@@ -24,6 +24,9 @@ class AutonomousDatabase extends OkitArtifact {
         this.is_auto_scaling_enabled = true;
         this.is_free_tier = false;
         this.license_model = 'BRING_YOUR_OWN_LICENSE';
+        this.subnet_id = '';
+        this.whitelisted_ips = [];
+        this.nsg_ids = [];
         // Update with any passed data
         this.merge(data);
         this.convert();

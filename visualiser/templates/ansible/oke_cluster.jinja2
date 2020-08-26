@@ -1,0 +1,87 @@
+
+# ------ Create OKE Cluster
+    - name: Create OKE Cluster {{ output_name }}
+      oci_cluster:
+        region: "{{ region }}"
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_id }}"
+        kubernetes_version: "{{ kubernetes_version | safe }}"
+        name: "{{ display_name | safe }}"
+        vcn_id: "{{ vcn_id }}"
+        # Optional
+{% if is_kubernetes_dashboard_enabled is defined or is_tiller_enabled is defined or is_pod_security_policy_enabled is defined or pods_cidr is defined or services_cidr is defined or service_lb_subnet_ids is defined %}
+        options:
+    {% if is_kubernetes_dashboard_enabled is defined or is_tiller_enabled is defined %}
+            add_ons:
+                is_kubernetes_dashboard_enabled: "{{ is_kubernetes_dashboard_enabled | safe }}"
+                is_tiller_enabled: "{{ is_tiller_enabled | safe }}"
+    {% endif %}
+    {% if is_pod_security_policy_enabled is defined %}
+            admission_controller_options:
+                #Optional
+                is_pod_security_policy_enabled: "{{ is_pod_security_policy_enabled | safe }}"
+    {% endif %}
+    {% if pods_cidr is defined or services_cidr is defined %}
+            kubernetes_network_config:
+                #Optional
+            {% if pods_cidr is defined %}
+                pods_cidr: "{{ pods_cidr | safe }}"
+            {% endif %}
+            {% if services_cidr is defined %}
+                services_cidr: "{{ services_cidr | safe }}"
+            {% endif %}
+    {% endif %}
+    {% if service_lb_subnet_ids is defined %}
+            service_lb_subnet_ids:
+        {% for id in service_lb_subnet_ids %}
+                - "{{ id }}"
+        {% endfor %}]
+    {% endif %}
+{% endif %}
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags | safe }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags | safe }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.cluster.id {{ '}}' }}"
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.cluster.id {{ '}}' }}"
+
+{% for pool in node_pools %}
+# ------ Create Container Node Pool
+    - name: Create OKE Cluster {{ output_name }} Pool {{ loop.index }}
+      oci_cluster:
+        region: "{{ region }}"
+        state: "present"
+        # Required
+        cluster_id: "{{ '{{' }} {{ resource_name }}_ocid {{ '}}' }}"
+        compartment_id: "{{ compartment_id }}"
+        kubernetes_version: "{{ kubernetes_version | safe }}"
+        name: "{{ display_name | safe }}"
+        node_shape: "{{ pool.node_shape | safe }}"
+        node_image_name: "{{ pool.node_source_details.image | safe }}"
+    {% if pool.node_config_details is defined %}
+        node_config_details:
+        {% if pool.node_config_details.placement_configs is defined %}
+            placement_configs:
+            {% for config in pool.node_config_details.placement_configs %}
+                - availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ config.availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+                  subnet_id: "{{ config.subnet_id }}"
+            {% endfor %}
+        {% endif %}
+        size: "{{ pool.node_config_details.size | safe }}"
+    {% endif %}
+    {% if pool.ssh_public_key is defined %}
+        ssh_public_key: "{{ pool.ssh_public_key | safe }}"
+    {% endif %}
+    {% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags | safe }}"
+    {% endif %}
+    {% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags | safe }}"
+    {% endif %}
+{% endfor %}
