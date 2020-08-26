@@ -20,18 +20,19 @@ class OkitJsonView {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
-        this.containers = [];
         this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
         this.file_storage_systems = [];
         this.instances = [];
+        this.instance_clusters = [];
         this.internet_gateways = [];
         this.load_balancers = [];
         this.local_peering_gateways = [];
         this.nat_gateways = [];
         this.network_security_groups = [];
         this.object_storage_buckets = [];
+        this.oke_clusters = [];
         this.remote_peering_gateways = [];
         this.route_tables = [];
         this.security_lists = [];
@@ -107,6 +108,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
         for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
         for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
+        for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
         //for (let artefact of this.okitjson.remote_peering_gateways) {this.newRemotePeeringGateway(artefact);}
         for (let artefact of this.okitjson.route_tables) {this.newRouteTable(artefact);}
         for (let artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
@@ -154,7 +156,12 @@ class OkitJsonView {
         console.info('Drop Autonomous Database View');
         console.info(target);
         let view_artefact = this.newAutonomousDatabase();
-        view_artefact.getArtefact().compartment_id = target.id;
+        if (target.type === Subnet.getArtifactReference()) {
+            view_artefact.getArtefact().subnet_id = target.id;
+            view_artefact.getArtefact().compartment_id = target.compartment_id;
+        } else if (target.type === Compartment.getArtifactReference()) {
+            view_artefact.getArtefact().compartment_id = target.id;
+        }
         console.info('View Artefact');
         console.info(view_artefact)
         return view_artefact;
@@ -254,13 +261,6 @@ class OkitJsonView {
         console.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Loaded Compartments>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
         console.info(this);
     }
-
-    // Container
-    dropContainerView() {}
-    newContainer() {}
-    getContainers() {}
-    getContainer() {}
-    deleteContainer() {}
 
     // Database System
     dropDatabaseSystemView(target) {
@@ -443,6 +443,47 @@ class OkitJsonView {
     loadInstances(instances) {
         for (const artefact of instances) {
             this.instances.push(new InstanceView(new Instance(artefact, this.okitjson), this));
+        }
+    }
+
+    // InstancePool
+    dropInstancePoolView(target) {
+        console.info('Drop InstancePool View');
+        console.info(target);
+        let view_artefact = this.newInstancePool();
+        if (target.type === Subnet.getArtifactReference()) {
+            view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
+            view_artefact.getArtefact().compartment_id = target.compartment_id;
+        } else if (target.type === Compartment.getArtifactReference()) {
+            view_artefact.getArtefact().compartment_id = target.id;
+        }
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newInstancePool(instance_pool) {
+        this.instance_pools.push(instance_pool ? new InstancePoolView(instance_pool, this) : new InstancePoolView(this.okitjson.newInstancePool(), this));
+        return this.instance_pools[this.instance_pools.length - 1];
+    }
+    getInstancePools() {
+        return this.instances;
+    }
+    getInstancePool(id='') {
+        for (let artefact of this.getInstancePools()) {
+            if (artefact.id === id) {
+                console.info(artefact);
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteInstancePool(id='') {
+        this.okitjson.deleteInstancePool(id);
+        this.update();
+    }
+    loadInstancePools(instance_pools) {
+        for (const artefact of instance_pools) {
+            this.instance_pools.push(new InstancePoolView(new InstancePool(artefact, this.okitjson), this));
         }
     }
 
@@ -666,6 +707,42 @@ class OkitJsonView {
     loadObjectStorageBuckets(object_storage_buckets) {
         for (const artefact of object_storage_buckets) {
             this.object_storage_buckets.push(new ObjectStorageBucketView(new ObjectStorageBucket(artefact, this.okitjson), this));
+        }
+    }
+
+    // OkeCluster
+    dropOkeClusterView(target) {
+        console.info('Drop OKE Cluster View');
+        console.info(target);
+        let view_artefact = this.newOkeCluster();
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newOkeCluster(cluster) {
+        this.oke_clusters.push(cluster ? new OkeClusterView(cluster, this) : new OkeClusterView(this.okitjson.newOkeCluster(), this));
+        return this.oke_clusters[this.oke_clusters.length - 1];
+    }
+    getOkeClusters() {
+        return this.oke_clusters;
+    }
+    getOkeCluster(id='') {
+        for (let artefact of this.getOkeClusters()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteOkeCluster() {
+        this.okitjson.deleteOkeCluster(id);
+        this.update();
+    }
+    loadOkeClusters(oke_clusters) {
+        for (const artefact of oke_clusters) {
+            this.oke_clusters.push(new OkeClusterView(new OkeCluster(artefact, this.okitjson), this));
         }
     }
 
@@ -903,6 +980,7 @@ class OkitArtefactView {
     get artefact_id() {return this.artefact ? this.artefact.id : '';}
     get compartment_id() {return this.artefact ? this.artefact.compartment_id : '';}
     get parent_id() {return null;}
+    get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
     get icon_width() {return 45;}
     get icon_height() {return 45;}
@@ -912,14 +990,15 @@ class OkitArtefactView {
     get minimum_height() {return this.icon_height;}
     get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
     get dimensions() {return this.minimum_dimensions;}
+    get definition() {}
     get attached() {return false;}
 
-    getParent() {return null;}
+    getParent() {return this.parent;}
 
     getParentId() {return this.parent_id;}
 
     // TODO: Delete replaced by attached variable
-    isAttached() {return false;}
+    isAttached() {return this.attached;}
 
     getArtefact() {return this.artefact;}
 

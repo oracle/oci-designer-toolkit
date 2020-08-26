@@ -1,5 +1,5 @@
 
-# ------ Get List OL7 Images
+# ------ Get List Images
 data "oci_core_images" "{{ resource_name }}Images" {
     compartment_id           = {{ compartment_ocid }}
     operating_system         = {{ os | safe }}

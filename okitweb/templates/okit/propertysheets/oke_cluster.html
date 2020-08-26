@@ -1,0 +1,38 @@
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}OKE Cluster{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="vcn_id" class="okit-property-value okit-property-label"></label></div></div>
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Kubernetes Version</div><div class='td'><select id="kubernetes_version" class="okit-property-value">
+        <option value="v1.16.8" selected="selected">v1.16.8</option>
+        <option value="v1.15.7">v1.15.7</option>
+        <option value="v1.14.8">v1.14.8</option>
+    </select></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="is_kubernetes_dashboard_enabled" name="is_kubernetes_dashboard_enabled" value="false">Kubernetes Dashboard</label></div></div>
+    <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="is_tiller_enabled" name="is_tiller_enabled" value="false">Tiller</label></div></div>
+    <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="is_pod_security_policy_enabled" name="is_pod_security_policy_enabled" value="false">Pod Security</label></div></div>
+    <div class='tr'><div class='td'>Pods CIDR</div><div class='td'><input type="text" id="pods_cidr" name="pods_cidr" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Services CIDR</div><div class='td'><input type="text" id="services_cidr" name="services_cidr" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Service Load Balancer Subnets</div><div class='td'><div id="service_lb_subnet_ids" class="okit-multiple-select"></div></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}
+<details class="node-pools" open="open">
+    <summary>Node Pools</summary>
+    <div id="node_pools_table" class="table okit-table okit-properties-table okit-dynamic-table">
+        <div class="thead">
+            <div class="tr"><div class="th"></div><div class="th"><button type="button" id="add_node_pool" class="okit-add-button">+</button></div></div>
+        </div>
+        <div class="tbody" id="node_pools_table_body"></div>
+    </div>
+</details>
+{% endblock %}

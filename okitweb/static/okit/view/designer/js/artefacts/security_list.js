@@ -327,9 +327,9 @@ class SecurityListView extends OkitDesignerArtefactView {
         rule_row.append('div').attr('class', 'td')
             .text("Source Port Range");
         let rule_cell = rule_row.append('div').attr('class', 'td property-min-max-range');
-        let cell_div = rule_cell.append('div');
-        cell_div.append('label').text('Min:');
-        cell_div.append('input')
+        let cell_div = rule_cell.append('div').attr('class', 'tr');
+        cell_div.append('div').attr('class', 'td').append('label').text('Min:');
+        cell_div.append('div').attr('class', 'td').append('input')
             .attr("type", "text")
             .attr("class", "property-value property-min-max")
             .attr("id", type + '_source_port_min_' + rule_num + access_type)
@@ -340,9 +340,8 @@ class SecurityListView extends OkitDesignerArtefactView {
                 console.info('Changed min source port: ' + this.value);
                 displayOkitJson();
             });
-        cell_div = rule_cell.append('div');
-        cell_div.append('label').text('Max:');
-        cell_div.append('input')
+        cell_div.append('div').attr('class', 'td').append('label').text('Max:');
+        cell_div.append('div').attr('class', 'td').append('input')
             .attr("type", "text")
             .attr("class", "property-value property-min-max")
             .attr("id", type + '_source_port_max_' + rule_num + access_type)
@@ -360,9 +359,9 @@ class SecurityListView extends OkitDesignerArtefactView {
         rule_row.append('div').attr('class', 'td')
             .text("Destination Port Range");
         rule_cell = rule_row.append('div').attr('class', 'td property-min-max-range');
-        cell_div = rule_cell.append('div');
-        cell_div.append('label').text('Min:');
-        cell_div.append('input')
+        cell_div = rule_cell.append('div').attr('class', 'tr');
+        cell_div.append('div').attr('class', 'td').append('label').text('Min:');
+        cell_div.append('div').attr('class', 'td').append('input')
             .attr("type", "text")
             .attr("class", "property-value property-min-max")
             .attr("id", type + '_destination_port_min_' + rule_num + access_type)
@@ -373,9 +372,8 @@ class SecurityListView extends OkitDesignerArtefactView {
                 console.info('Changed min destination port: ' + this.value);
                 displayOkitJson();
             });
-        cell_div = rule_cell.append('div');
-        cell_div.append('label').text('Max:');
-        cell_div.append('input')
+        cell_div.append('div').attr('class', 'td').append('label').text('Max:');
+        cell_div.append('div').attr('class', 'td').append('input')
             .attr("type", "text")
             .attr("class", "property-value property-min-max")
             .attr("id", type + '_destination_port_max_' + rule_num + access_type)

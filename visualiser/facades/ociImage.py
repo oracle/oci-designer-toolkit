@@ -64,7 +64,7 @@ class OCIImages(OCIComputeConnection):
                 seen.append(image['sort_key'])
         logger.debug('============================== Images De-Duplicate ==============================')
         logJson(deduplicated)
-        images_json = deduplicated
+        #images_json = deduplicated
         # Add Shape Compatibility
         # TODO: Upgade oci sdk
         #shape_capabilities = OCIImageShapeCompatibility()

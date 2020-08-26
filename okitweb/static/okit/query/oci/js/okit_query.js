@@ -173,6 +173,7 @@ class OkitOCIQuery {
         this.queryInstances(request);
         this.queryDatabaseSystems(request);
         this.queryFileStorageSystems(request);
+        this.queryOkeClusters(request);
     }
 
     queryDatabaseSystems(request) {
@@ -486,6 +487,34 @@ class OkitOCIQuery {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({object_storage_buckets: response_json});
                 //okitJsonView.loadObjectStorageBuckets(response_json);
+                for (let artefact of response_json) {
+                    console.info(artefact.display_name);
+                }
+                if (request.refresh) {okitJsonView.draw();}
+                me.region_query_count[request.region]-- && me.isComplete();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
+    }
+
+    queryOkeClusters(request) {
+        console.info('------------- OKE Cluster Query --------------------');
+        console.info('------------- Compartment           : ' + request.compartment_id);
+        let me = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/OkeCluster',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({oke_clusters: response_json});
                 for (let artefact of response_json) {
                     console.info(artefact.display_name);
                 }

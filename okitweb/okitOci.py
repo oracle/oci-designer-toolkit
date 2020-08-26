@@ -29,6 +29,7 @@ from model.okitValidation import OCIJsonValidator
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments
+from facades.ociContainer import OCIContainers
 from facades.ociDatabaseSystem import OCIDatabaseSystems
 from facades.ociDatabaseSystemShape import OCIDatabaseSystemShapes
 from facades.ociDatabaseVersion import OCIDatabaseVersions
@@ -253,6 +254,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Object Storage Buckets')
         oci_object_storage_buckets = OCIObjectStorageBuckets(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_object_storage_buckets.list(filter=query_json.get('object_storage_bucket_filter', None))
+    elif artifact == 'OkeCluster':
+        logger.info('---- Processing OKE Clusters')
+        oke_clusters = OCIContainers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oke_clusters.list(filter=query_json.get('oke_cluster_filter', None))
     elif artifact == 'RouteTable':
         logger.info('---- Processing Route Tables')
         oci_route_tables = OCIRouteTables(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])

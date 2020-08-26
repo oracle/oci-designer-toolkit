@@ -75,7 +75,7 @@ class OCIInstances(OCIComputeConnection):
         self.instances_obj = []
         super(OCIInstances, self).__init__(config=config, configfile=configfile, profile=profile)
 
-    def list(self, compartment_id=None, filter=None):
+    def list(self, compartment_id=None, filter=None, exclude_oke=True):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
@@ -101,11 +101,21 @@ class OCIInstances(OCIComputeConnection):
         # Get VNic Attachments as a single call and loop through them to see if they are associated with the instance.
         vnic_attachments = OCIVnicAttachments(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).list()
 
+        # Filter out OKE Created Instances
+        logger.info('Filtering out OKE Instances from list ({0!s:s}).'.format(len(self.instances_json)))
+        if exclude_oke:
+            self.instances_json = [i for i in self.instances_json if 'oke-cluster-id' not in i['metadata']]
+        logger.info('Filtered OKE Instances from list ({0!s:s}).'.format(len(self.instances_json)))
+
         for instance in self.instances_json:
             # Get OS Details
-            image = OCIImages(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).get(instance['source_details']['image_id'])
-            instance['source_details']['os'] = image['operating_system']
-            instance['source_details']['version'] = image['operating_system_version']
+            if ('source_details' in instance and 'image_id' in instance['source_details']):
+                image = OCIImages(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).get(instance['source_details']['image_id'])
+                instance['source_details']['os'] = image['operating_system']
+                instance['source_details']['version'] = image['operating_system_version']
+            else:
+                instance['source_details']['os'] = ''
+                instance['source_details']['version'] = ''
             # Decode Cloud Init Yaml
             if 'metadata' in instance and 'user_data' in instance['metadata']:
                 instance['metadata']['user_data'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
@@ -125,7 +135,7 @@ class OCIInstances(OCIComputeConnection):
             self.instances_obj.append(OCIInstance(self.config, self.configfile, self.profile, instance))
 
         logJson(self.instances_json)
-        logger.info(str(self.instances_json))
+        #logger.info(str(self.instances_json))
         return self.instances_json
 
 class OCIInstance(object):
