@@ -42,14 +42,20 @@ resource "oci_containerengine_cluster" "{{ resource_name }}" {
     {% endif %}
     }
 {% endif %}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
 }
 
 locals {
     {{ resource_name }}_id            = oci_containerengine_cluster.{{ resource_name }}.id
 }
 
-# ------ Create Container Node Pool
 {% for pool in node_pools %}
+# ------ Create Container Node Pool
 resource "oci_containerengine_node_pool" "{{ resource_name }}NodePool{{ loop.index }}" {
     #Required
     cluster_id         = local.{{ resource_name }}_id
@@ -83,13 +89,18 @@ resource "oci_containerengine_node_pool" "{{ resource_name }}NodePool{{ loop.ind
 {% if pool.node_source_details is defined %}
     node_source_details {
         #Required
-        #image_id = {{ pool.node_source_details.image | safe }}
         image_id = lookup([for x in data.oci_core_images.InstanceImages.images: x if x.display_name == {{ pool.node_source_details.image | safe }}][0], "id")
         source_type = {{ pool.node_source_details.source_type | safe }}
     }
 {% endif %}
 {% if pool.ssh_public_key is defined %}
     ssh_public_key = {{ pool.ssh_public_key | safe }}
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
 }
 {% endfor %}
