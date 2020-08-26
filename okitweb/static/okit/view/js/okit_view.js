@@ -491,6 +491,13 @@ class OkitJsonView {
     dropInternetGatewayView(target) {
         console.info('Drop Internet Gateway View');
         console.info(target);
+        // Check if Gateway Already exists
+        for (let gateway of this.internet_gateways) {
+            if (gateway.vcn_id === target.id) {
+                alert('The maximum limit of 1 Internet Gateway per Virtual Cloud Network has been exceeded for ' + this.getVirtualCloudNetwork(target.id).display_name);
+                return null;
+            }
+        }
         let view_artefact = this.newInternetGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
@@ -603,6 +610,13 @@ class OkitJsonView {
     dropNATGatewayView(target) {
         console.info('Drop NAT Gateway View');
         console.info(target);
+        // Check if Gateway Already exists
+        for (let gateway of this.nat_gateways) {
+            if (gateway.vcn_id === target.id) {
+                alert('The maximum limit of 1 NAT Gateway per Virtual Cloud Network has been exceeded for ' + this.getVirtualCloudNetwork(target.id).display_name);
+                return null;
+            }
+        }
         let view_artefact = this.newNATGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
@@ -822,6 +836,13 @@ class OkitJsonView {
     dropServiceGatewayView(target) {
         console.info('Drop Service Gateway View');
         console.info(target);
+        // Check if Gateway Already exists
+        for (let gateway of this.service_gateways) {
+            if (gateway.vcn_id === target.id) {
+                alert('The maximum limit of 1 Service Gateway per Virtual Cloud Network has been exceeded for ' + this.getVirtualCloudNetwork(target.id).display_name);
+                return null;
+            }
+        }
         let view_artefact = this.newServiceGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;

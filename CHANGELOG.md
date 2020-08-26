@@ -16,6 +16,18 @@
 3. Internet Gateways could only be created on the first subnet in a vcn (Issue: #71).
 
 
+## Version 0.9.2 
+**Release Date**: 7th August 2020
+### Bug Fixes
+1. Unable to drop gateways on second or subsequent VCNs (Issue #73).
+
+
+## Version 0.9.1 
+**Release Date**: 6th August 2020
+### Bug Fixes
+1. Config file warning being displayed when only [DEFAULT] section defined (OKIT-110).
+
+
 ## Version 0.9.0 
 **Release Date**: 5th August 2020
 ### Features
