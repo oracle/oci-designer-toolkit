@@ -18,7 +18,6 @@ class OkitJson {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
-        this.oke_clusters = [];
         this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
@@ -31,6 +30,7 @@ class OkitJson {
         this.nat_gateways = [];
         this.network_security_groups = [];
         this.object_storage_buckets = [];
+        this.oke_clusters = [];
         this.remote_peering_gateways = [];
         this.route_tables = [];
         this.security_lists = [];
