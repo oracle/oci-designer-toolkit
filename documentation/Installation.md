@@ -22,22 +22,22 @@ python modules are installed and in addition provide a simple flask server that 
 ## Clone Repository
 Before the building either the Docker or Vagrant Images the project will nee to be cloned from the Git Repository (or downloaded)
 and it is recommended that the latest Stable Release be cloned. The latest stable version number if shown in the README
-and the associated Release tag is in the format vX.Y.Z hence for the version 0.10.1 the Release tag will be 
-**v0.10.1**. The command shows how this can be cloned to the local machine.
+and the associated Release tag is in the format vX.Y.Z hence for the version 0.10.2 the Release tag will be 
+**v0.10.2**. The command shows how this can be cloned to the local machine.
 
 ```bash
-git clone -b v0.10.1 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
+git clone -b v0.10.2 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
 ```
 
 or 
 
 ```bash
-git clone -b v0.10.1 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
+git clone -b v0.10.2 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
 ```
 
 ### Download
 If you do not have git installed locally the current release of OKIT can be retrieved by downloading it as a zip file from
-https://github.com/oracle/oci-designer-toolkit/archive/v0.10.1.zip
+https://github.com/oracle/oci-designer-toolkit/archive/v0.10.2.zip
 
 
 ## OCI Config File

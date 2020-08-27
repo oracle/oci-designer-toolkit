@@ -47,5 +47,7 @@ def create_app(test_config=None):
     app.register_blueprint(okitPricing.bp)
     from . import okitOci
     app.register_blueprint(okitOci.bp)
+    from . import okitImport
+    app.register_blueprint(okitImport.bp)
 
     return app

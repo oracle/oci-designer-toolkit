@@ -109,10 +109,6 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let file_storage_system of this.file_storage_systems) {
             file_storage_system.draw();
         }
-        // Containers
-        for (let container of this.containers) {
-            container.draw();
-        }
         // Instances
         for (let instance of this.instances) {
             instance.draw();

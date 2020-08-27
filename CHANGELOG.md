@@ -1,10 +1,16 @@
 # Release Notes
 
 
+## Version 0.10.2 
+**Release Date**: 27th August 2020
+### Bug Fixes
+1. Resolve issue where deleting an artefact would cause an addition OKE cluster to be created if one exists on the canvas. In addition deleteing OKE caused it to be removed from the model but not the view. 
+
+
 ## Version 0.10.1 
 **Release Date**: 27th August 2020
 ### Bug Fixes
-1. Querying occasionally hit a condition where the SVG rectangle does not exist before attempting to get the bounding client information (Issuse: #86) 
+1. Querying occasionally hit a condition where the SVG rectangle does not exist before attempting to get the bounding client information (Issue: #86) 
 
 
 ## Version 0.10.0 
