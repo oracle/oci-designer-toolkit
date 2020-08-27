@@ -56,6 +56,18 @@ rect.okit-explorer-view-highlight {
     white-space: nowrap;
 }
 
+.collapsible-view-element > div::before {
+    content: "-";
+    color: #336600;
+    display: inline-block;
+}
+
+.simple-view-element > div::before {
+    content: "├";
+    color: #336600;
+    display: inline-block;
+}
+
 .autonomous-database-tree-view > div {
     background-image: url("/static/okit/palette/database/Autonomous_Database.svg");
 }
@@ -68,7 +80,7 @@ rect.okit-explorer-view-highlight {
     background-image: url("/static/okit/palette/containers/Compartment.svg");
 }
 
-.compartment-tree-view > div::before {
+.compartment-tree-view1 > div::before {
     content: "-";
     color: #336600;
     display: inline-block;
@@ -134,7 +146,7 @@ rect.okit-explorer-view-highlight {
     background-image: url("/static/okit/palette/networking/Subnet.svg");
 }
 
-.subnet-tree-view > div::before {
+.subnet-tree-view1 > div::before {
     content: "-";
     color: #336600;
     display: inline-block;
@@ -144,7 +156,7 @@ rect.okit-explorer-view-highlight {
     background-image: url("/static/okit/palette/networking/Virtual_Cloud_Network.svg");
 }
 
-.vcn-tree-view > div::before {
+.vcn-tree-view1 > div::before {
     content: "-";
     color: #336600;
     display: inline-block;

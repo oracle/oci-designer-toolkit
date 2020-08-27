@@ -71,7 +71,6 @@ class OkitJsonView {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
-        this.containers = [];
         this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
@@ -83,6 +82,7 @@ class OkitJsonView {
         this.nat_gateways = [];
         this.network_security_groups = [];
         this.object_storage_buckets = [];
+        this.oke_clusters = [];
         this.remote_peering_gateways = [];
         this.route_tables = [];
         this.security_lists = [];
@@ -750,7 +750,7 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteOkeCluster() {
+    deleteOkeCluster(id='') {
         this.okitjson.deleteOkeCluster(id);
         this.update();
     }
