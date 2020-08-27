@@ -208,7 +208,7 @@ class OkitJsonTreeView extends OkitJsonView {
             }
         }
         // Load Balancers
-        for (let loadbalancer of this.getOkitJson().getloadBalancers()) {
+        for (let loadbalancer of this.getOkitJson().getLoadBalancers()) {
             if (loadbalancer.subnet_id === id) {
                 this.drawLoadBalancer(loadbalancer.id, `${id}_ul`);
             }
