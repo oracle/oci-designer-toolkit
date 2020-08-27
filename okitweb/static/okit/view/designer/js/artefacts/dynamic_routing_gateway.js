@@ -30,23 +30,25 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        // Add Connector Data
-        svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true);
-        // Draw Connectors
-        // this.drawConnectors();
+        if (rect && rect.node()) {
+            let boundingClientRect = rect.node().getBoundingClientRect();
+            // Add Connector Data
+            svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
+                .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
+                .attr("data-connector-id", this.id)
+                .attr("dragable", true)
+                .selectAll("*")
+                .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
+                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
+                .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
+                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
+                .attr("data-connector-id", this.id)
+                .attr("dragable", true);
+            // Draw Connectors
+            // this.drawConnectors();
+        }
         console.groupEnd();
         return svg;
     }
