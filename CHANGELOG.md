@@ -1,6 +1,12 @@
 # Release Notes
 
 
+## Version 0.10.1 
+**Release Date**: 27th August 2020
+### Bug Fixes
+1. Querying occasionally hit a condition where the SVG rectangle does not exist before attempting to get the bounding client information (Issuse: #86) 
+
+
 ## Version 0.10.0 
 **Release Date**: 26th August 2020
 ### Features

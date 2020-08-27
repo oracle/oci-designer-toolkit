@@ -1,4 +1,4 @@
-# OCI Designer Toolkit [0.10.0](CHANGELOG.md#version-0.10.0)
+# OCI Designer Toolkit [0.10.1](CHANGELOG.md#version-0.10.1)
 
 OCI designer toolKIT (OKIT) is a set of tools for enabling design, deploy and visualise OCI environments 
 through a graphical web based interface. 
