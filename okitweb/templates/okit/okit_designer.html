@@ -40,6 +40,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_import.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
     {% for model_js in artefact_model_js_files %}
         <script type="text/javascript" src="{{ url_for('static', filename='okit/model/js/artefacts/' + model_js) }}"></script>
@@ -160,7 +161,7 @@
                     </span>
                 </div>
             </li>
-            <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)">Terraform Json</a></li>
+            <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
         </ul-->
     </ul>
 {% endblock %}
