@@ -221,7 +221,7 @@ $(document).ready(function() {
     /*
     ** Add Load File Handling
      */
-    document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    //document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
     /*
     ** Load Empty Properties Sheet

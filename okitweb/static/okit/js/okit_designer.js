@@ -103,6 +103,11 @@ function newRegionsModel() {
 function handleLoad(evt) {
     hideNavMenu();
     resetDesigner();
+    /*
+    ** Add Load File Handling
+     */
+    $('#files').off('change').on('change', handleFileSelect);
+    // Click Files Element
     let fileinput = document.getElementById("files");
     fileinput.click();
 }
