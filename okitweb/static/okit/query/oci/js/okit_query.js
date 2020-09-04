@@ -163,7 +163,11 @@ class OkitOCIQuery {
         });
     }
     queryCompartmentSubComponents(request) {
-        this.queryCompartments(request);
+        console.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Request >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+        console.info(request);
+        if (request.sub_compartments) {
+            this.queryCompartments(request);
+        }
         this.queryVirtualCloudNetworks(request);
         this.queryBlockStorageVolumes(request);
         this.queryDynamicRoutingGateways(request);
@@ -171,6 +175,7 @@ class OkitOCIQuery {
         this.queryObjectStorageBuckets(request);
         this.queryFastConnects(request);
         this.queryInstances(request);
+        this.queryInstancePools(request);
         this.queryDatabaseSystems(request);
         this.queryFileStorageSystems(request);
         this.queryOkeClusters(request);
@@ -317,6 +322,36 @@ class OkitOCIQuery {
             error: function (xhr, status, error) {
                 console.warn('Status : ' + status);
                 console.warn('Error : ' + error);
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
+    }
+
+    queryInstancePools(request) {
+        console.info('------------- Instance Pool Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        console.info('------------- Subnet      : ' + request.subnet_id);
+        let me = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/InstancePool',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function (resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({instance_pools: response_json});
+                for (let artefact of response_json) {
+                    console.info(artefact.display_name);
+                }
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function (xhr, status, error) {
+                console.warn('Status : ' + status);
+                console.warn('Error : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });

@@ -39,6 +39,7 @@ function resetDesigner() {
     hideRegionTabBar();
     $(jqId(PROPERTIES_PANEL)).load('propertysheets/empty.html');
     displayOkitJson();
+    $(jqId('file-save-regional-menu-item-li')).addClass('hidden');
 }
 /*
 ** Set OCI Link
@@ -165,13 +166,17 @@ function handleSave(evt) {
     if (okitSettings.is_timestamp_files) {
         filename = 'okit-' + getTimestamp() + '.json'
     }
-    if (Object.keys(regionOkitJson).length > 0) {
-        console.info('>> Saving Multi Region File');
-        saveJson(JSON.stringify(regionOkitJson, null, 2), filename);
-    } else {
-        console.info('>> Saving Single Region File');
-        saveJson(JSON.stringify(okitJsonModel, null, 2), filename);
+    console.info('>> Saving Single Region File');
+    saveJson(JSON.stringify(okitJsonModel, null, 2), filename);
+}
+function handleSaveRegional(evt) {
+    hideNavMenu();
+    let filename = "okit-regional.json";
+    if (okitSettings.is_timestamp_files) {
+        filename = 'okit-regional-' + getTimestamp() + '.json'
     }
+    console.info('>> Saving Multi Region File');
+    saveJson(JSON.stringify(regionOkitJson, null, 2), filename);
 }
 function saveJson(text, filename){
     let uri = 'data:text/plain;charset=utf-u,'+encodeURIComponent(text);
@@ -362,6 +367,18 @@ function displayQueryDialog() {
             .append('option')
                 .attr('value', 'Retrieving')
                 .text('Retrieving..........');
+    // Sub-Compartment
+    tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('');
+    let td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('id', 'include_sub_compartments')
+        .attr('name', 'include_sub_compartments')
+        .attr('type', 'checkbox');
+    td.append('label')
+        .attr('for', 'include_sub_compartments')
+        .text('Include Sub Compartments');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
@@ -487,6 +504,7 @@ function showQueryResults() {
     let request = {};
     request.compartment_id = $(jqId('query_compartment_id')).val();
     request.config_profile = $(jqId('config_profile')).val();
+    request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
     request.region = '';
     clearRegionTabBar();
     showRegionTabBar();
@@ -502,6 +520,7 @@ function showQueryResults() {
         for (const [i, region] of regions.entries()) {
             addRegionTab(region);
         }
+        $(jqId('file-save-regional-menu-item-li')).removeClass('hidden');
         $(jqId(regionTabName(regions[0]))).trigger("click");
         okitOCIQuery.query(request, function(region) {
             console.info('Complete ' + region);

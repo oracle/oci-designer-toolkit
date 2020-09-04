@@ -78,12 +78,13 @@
                     </span>
                 </div>
             </li>
-            <li><a id="file-new-menu-item"     class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
-            <li><a id="file-load-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
+            <li><a id="file-new-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
+            <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
             <li id="save_file" class="sub-header-item dropdown">
                 <span>Save</span>
                 <ul class="dropdown-content">
-                    <li><a id="file-save-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
+                    <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
+                    <li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li>
                     <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAs()">Save As Template</a></li>
                 </ul>
             </li>
@@ -152,7 +153,7 @@
             <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleGenerateAnsible()">Ansible</a></li>
             <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
         </ul>
-        <!--ul class="okit-navigation-sub-list">
+        <ul class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -162,7 +163,7 @@
                 </div>
             </li>
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
-        </ul-->
+        </ul>
     </ul>
 {% endblock %}
 

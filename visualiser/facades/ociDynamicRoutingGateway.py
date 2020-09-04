@@ -17,6 +17,7 @@ import oci
 
 from common.okitLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
+from facades.ociDynamicRoutingGatewayAttachment import OCIDynamicRoutingGatewayAttachments
 
 # Configure logging
 logger = getLogger()
@@ -51,9 +52,13 @@ class OCIDynamicRoutingGateways(OCIVirtualNetworkConnection):
         logger.debug(str(self.dynamic_routing_gateways_json))
 
         # Build List of DynamicRoutingGateway Objects
-        self.dynamic_routing_gateways_obj = []
+        # self.dynamic_routing_gateways_obj = []
+        dynamic_routing_gateway_attachments = OCIDynamicRoutingGatewayAttachments(config=self.config, configfile=self.configfile, profile=self.profile)
         for dynamic_routing_gateway in self.dynamic_routing_gateways_json:
-            self.dynamic_routing_gateways_obj.append(OCIDynamicRoutingGateway(self.config, self.configfile, self.profile, dynamic_routing_gateway))
+            attachment = dynamic_routing_gateway_attachments.get(dynamic_routing_gateway["id"])
+            dynamic_routing_gateway["vcn_id"] = attachment["vcn_id"]
+            dynamic_routing_gateway["route_table_id"] = attachment["route_table_id"]
+            # self.dynamic_routing_gateways_obj.append(OCIDynamicRoutingGateway(self.config, self.configfile, self.profile, dynamic_routing_gateway))
         return self.dynamic_routing_gateways_json
 
 

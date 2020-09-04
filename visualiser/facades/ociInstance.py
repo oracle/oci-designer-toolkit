@@ -18,6 +18,7 @@ import oci
 
 from common.okitLogging import getLogger
 from common.okitCommon import logJson
+from common.okitCommon import userDataDecode
 from facades.ociBootVolumeAttachment import OCIBootVolumeAttachments
 from facades.ociImage import OCIImages
 from facades.ociConnection import OCIComputeConnection, OCIVirtualNetworkConnection
@@ -118,7 +119,8 @@ class OCIInstances(OCIComputeConnection):
                 instance['source_details']['version'] = ''
             # Decode Cloud Init Yaml
             if 'metadata' in instance and 'user_data' in instance['metadata']:
-                instance['metadata']['user_data'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
+                # instance['metadata']['user_data'] = base64.b64decode(instance['metadata']['user_data']).decode('utf-8')
+                instance['metadata']['user_data'] = userDataDecode(instance['metadata']['user_data'])
             # Add Attached Block Storage Volumes
             instance['block_storage_volume_ids'] = [va['volume_id'] for va in volume_attachments if va['instance_id'] == instance['id']]
             # Add Vnic Attachments
