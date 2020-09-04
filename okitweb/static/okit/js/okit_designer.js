@@ -362,6 +362,18 @@ function displayQueryDialog() {
             .append('option')
                 .attr('value', 'Retrieving')
                 .text('Retrieving..........');
+    // Sub-Compartment
+    tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('');
+    let td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('id', 'include_sub_compartments')
+        .attr('name', 'include_sub_compartments')
+        .attr('type', 'checkbox');
+    td.append('label')
+        .attr('for', 'include_sub_compartments')
+        .text('Include Sub Compartments');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
@@ -487,6 +499,7 @@ function showQueryResults() {
     let request = {};
     request.compartment_id = $(jqId('query_compartment_id')).val();
     request.config_profile = $(jqId('config_profile')).val();
+    request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
     request.region = '';
     clearRegionTabBar();
     showRegionTabBar();

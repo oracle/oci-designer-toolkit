@@ -275,6 +275,13 @@ $(document).ready(function() {
     });
     /**/
 
+    $(jqId('navigation_menu_button')).click(function(e) {
+        slideRightPanelsOffScreen();
+        $(jqId('designer_right_column')).addClass('okit-slide-hide-right');
+    });
+
+
+
     setOCILink();
 
     /*
