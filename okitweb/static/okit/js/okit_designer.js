@@ -194,6 +194,7 @@ function handleSaveAs(evt) {
         .attr('id', 'save_as_template_table')
         .attr('class', 'table okit-table okit-modal-dialog-table');
     let tbody = table.append('div').attr('class', 'tbody');
+    // Title
     let tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').text('Title');
     tr.append('div').attr('class', 'td').append('input')
@@ -201,6 +202,7 @@ function handleSaveAs(evt) {
         .attr('id', 'template_title')
         .attr('name', 'template_title')
         .attr('type', 'text');
+    // Description
     tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').text('Description');
     tr.append('div').attr('class', 'td').append('input')
@@ -208,6 +210,8 @@ function handleSaveAs(evt) {
         .attr('id', 'template_description')
         .attr('name', 'template_description')
         .attr('type', 'text');
+    // Type
+    /* TODO: Reinstate when sub template types are implemented
     tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').text('Type');
     tr.append('div').attr('class', 'td').append('input')
@@ -215,6 +219,8 @@ function handleSaveAs(evt) {
         .attr('id', 'template_type')
         .attr('name', 'template_type')
         .attr('type', 'text');
+    */
+    // Save
     let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'save_as_button')
         .attr('type', 'button')
@@ -225,7 +231,8 @@ function handleSaveAs(evt) {
 function handleSaveAsTemplate(e) {
     okitJsonModel.title = $(jqId('template_title')).val();
     okitJsonModel.description = $(jqId('template_description')).val();
-    okitJsonModel.template_type = $(jqId('template_type')).val();
+    //okitJsonModel.template_type = $(jqId('template_type')).val();
+    okitJsonModel.template_type = 'User';
     $.ajax({
         type: 'post',
         url: 'saveas/template',
