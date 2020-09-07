@@ -38,6 +38,7 @@ from facades.ociFastConnect import OCIFastConnects
 from facades.ociFileStorageSystems import OCIFileStorageSystems
 from facades.ociImage import OCIImages
 from facades.ociInstance import OCIInstances
+from facades.ociInstancePool import OCIInstancePools
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociLocalPeeringGateway import OCILocalPeeringGateways
@@ -229,6 +230,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Instances')
         oci_instances = OCIInstances(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_instances.list(filter=query_json.get('instance_filter', None))
+    elif artifact == 'InstancePool':
+        logger.info('---- Processing Instance Pools')
+        oci_instance_pools = OCIInstancePools(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_instance_pools.list(filter=query_json.get('instance_filter', None))
     elif artifact == 'InternetGateway':
         logger.info('---- Processing Internet Gateways')
         oci_internet_gateways = OCIInternetGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
