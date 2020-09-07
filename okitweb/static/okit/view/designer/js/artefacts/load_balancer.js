@@ -143,13 +143,31 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/load_balancer.html", () => {
             // Load Referenced Ids
-            let instances_select = $(jqId('instance_ids'));
-            for (let instance of okitJson.instances) {
-                instances_select.append($('<option>').attr('value', instance.id).text(instance.display_name));
+            //let instances_select = $(jqId('instance_ids'));
+            let instances_select = d3.select(d3Id('instance_ids'));
+            for (let instance of me.artefact.getOkitJson().instances) {
+                //    instances_select.append($('<option>').attr('value', instance.id).text(instance.display_name));
+                let div = instances_select.append('div');
+                div.append('input')
+                    .attr('type', 'checkbox')
+                    .attr('id', safeId(instance.id))
+                    .attr('value', instance.id);
+                div.append('label')
+                    .attr('for', safeId(instance.id))
+                    .text(instance.display_name);
             }
-            let network_security_groups_select = $(jqId('network_security_group_ids'));
+            //let network_security_groups_select = $(jqId('network_security_group_ids'));
+            let network_security_groups_select = d3.select(d3Id('network_security_group_ids'));
             for (let network_security_group of okitJson.network_security_groups) {
-                network_security_groups_select.append($('<option>').attr('value', network_security_group.id).text(network_security_group.display_name));
+                //network_security_groups_select.append($('<option>').attr('value', network_security_group.id).text(network_security_group.display_name));
+                let div = network_security_groups_select.append('div');
+                div.append('input')
+                    .attr('type', 'checkbox')
+                    .attr('id', safeId(network_security_group.id))
+                    .attr('value', network_security_group.id);
+                div.append('label')
+                    .attr('for', safeId(network_security_group.id))
+                    .text(network_security_group.display_name);
             }
             // Load Properties
             loadPropertiesSheet(me.artefact);

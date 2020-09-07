@@ -89,6 +89,7 @@ function loadPropertiesSheet(json_element) {
                     $(jqId(key)).find("input:checkbox").each(function() {
                         if ($(this).prop('checked')) {json_element[key].push($(this).val());}
                     });
+                    redrawSVGCanvas();
                 });
                 if (val.includes($(this).val())) {$(this).prop("checked", true);}
             });

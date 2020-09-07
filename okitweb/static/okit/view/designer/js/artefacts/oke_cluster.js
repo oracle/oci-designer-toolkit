@@ -43,10 +43,10 @@ class OkeClusterView extends OkitDesignerArtefactView {
                 let div = service_lb_subnet_select.append('div');
                 div.append('input')
                     .attr('type', 'checkbox')
-                    .attr('id', subnet.id)
+                    .attr('id', safeId(subnet.id))
                     .attr('value', subnet.id);
                 div.append('label')
-                    .attr('for', subnet.id)
+                    .attr('for', safeId(subnet.id))
                     .text(subnet.display_name);
             }
             // Load Properties
