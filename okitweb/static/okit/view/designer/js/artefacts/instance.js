@@ -204,11 +204,20 @@ class InstanceView extends OkitDesignerArtefactView {
 
     loadNetworkSecurityGroups(select_id, subnet_id) {
         $(jqId(select_id)).empty();
+        let multi_select = d3.select(d3Id(select_id));
         if (subnet_id && subnet_id !== '') {
             let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
             for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
                 if (networkSecurityGroup.vcn_id === vcn.id) {
-                    $(jqId(select_id)).append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+                    //$(jqId(select_id)).append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+                    let div = multi_select.append('div');
+                    div.append('input')
+                        .attr('type', 'checkbox')
+                        .attr('id', safeId(networkSecurityGroup.id))
+                        .attr('value', networkSecurityGroup.id);
+                    div.append('label')
+                        .attr('for', safeId(networkSecurityGroup.id))
+                        .text(networkSecurityGroup.display_name);
                 }
             }
         }
@@ -330,6 +339,7 @@ class InstanceView extends OkitDesignerArtefactView {
         row.append('div').attr('class', 'td')
             .text("Network Security Groups");
         cell = row.append('div').attr('class', 'td');
+        /*
         select = cell.append('select')
             .attr("class", "okit-property-value")
             .attr("id", "nsg_ids" + idx)
@@ -338,8 +348,22 @@ class InstanceView extends OkitDesignerArtefactView {
                 vnic.nsg_ids = $(jqId("nsg_ids" + idx)).val();
                 displayOkitJson();
             });
+         */
+        select = cell.append('div')
+            .attr("class", "okit-multiple-select")
+            .attr("id", "nsg_ids" + idx)
+            .on("change", function() {
+                vnic.nsg_ids = [];
+                $(jqId("nsg_ids" + idx)).find("input:checkbox").each(function() {
+                    if ($(this).prop('checked')) {vnic.nsg_ids.push($(this).val());}
+                });
+                displayOkitJson();
+            });
         this.loadNetworkSecurityGroups("nsg_ids" + idx, vnic.subnet_id);
-        $(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
+        //$(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
+        $(jqId("nsg_ids" + idx)).find("input:checkbox").each(function() {
+            if (vnic.nsg_ids.includes($(this).val())) {$(this).prop("checked", true);}
+        });
     }
 
     /*
