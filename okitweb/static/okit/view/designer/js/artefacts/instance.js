@@ -209,7 +209,6 @@ class InstanceView extends OkitDesignerArtefactView {
             let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
             for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
                 if (networkSecurityGroup.vcn_id === vcn.id) {
-                    //$(jqId(select_id)).append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
                     let div = multi_select.append('div');
                     div.append('input')
                         .attr('type', 'checkbox')
@@ -339,16 +338,6 @@ class InstanceView extends OkitDesignerArtefactView {
         row.append('div').attr('class', 'td')
             .text("Network Security Groups");
         cell = row.append('div').attr('class', 'td');
-        /*
-        select = cell.append('select')
-            .attr("class", "okit-property-value")
-            .attr("id", "nsg_ids" + idx)
-            .attr("multiple", "multiple")
-            .on("change", function() {
-                vnic.nsg_ids = $(jqId("nsg_ids" + idx)).val();
-                displayOkitJson();
-            });
-         */
         select = cell.append('div')
             .attr("class", "okit-multiple-select")
             .attr("id", "nsg_ids" + idx)
