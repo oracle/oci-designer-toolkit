@@ -137,8 +137,7 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
                 db_version_select.append($('<option>').attr('value', version.version).text(version.version));
             }
             // Build Network Security Groups
-            let nsg_select = $(jqId('nsg_ids'));
-            this.loadNetworkSecurityGroups(nsg_select, this.subnet_id);
+            this.loadNetworkSecurityGroups('nsg_ids', this.subnet_id);
             // Add change event to node count to hide/display cluster name
             $(jqId('node_count')).on('change', () => {
                 if ($(jqId('node_count')).val() > 1) {
@@ -155,12 +154,22 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
         });
     }
 
-    loadNetworkSecurityGroups(select, subnet_id) {
-        $(select).empty();
-        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-            if (networkSecurityGroup.vcn_id === vcn.id) {
-                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
+    loadNetworkSecurityGroups(select_id, subnet_id) {
+        $(jqId(select_id)).empty();
+        let multi_select = d3.select(d3Id(select_id));
+        if (subnet_id && subnet_id !== '') {
+            let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
+            for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+                if (networkSecurityGroup.vcn_id === vcn.id) {
+                    let div = multi_select.append('div');
+                    div.append('input')
+                        .attr('type', 'checkbox')
+                        .attr('id', safeId(networkSecurityGroup.id))
+                        .attr('value', networkSecurityGroup.id);
+                    div.append('label')
+                        .attr('for', safeId(networkSecurityGroup.id))
+                        .text(networkSecurityGroup.display_name);
+                }
             }
         }
     }
