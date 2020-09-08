@@ -114,12 +114,6 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
             }
             // Load Reference Ids
             // Network Security Groups
-            /*
-            let network_security_groups_select = $(jqId('nsg_ids'));
-            for (let network_security_group of okitJson.network_security_groups) {
-                network_security_groups_select.append($('<option>').attr('value', network_security_group.id).text(network_security_group.display_name));
-            }
-             */
             let network_security_groups_select = d3.select(d3Id('nsg_ids'));
             for (let network_security_group of okitJson.network_security_groups) {
                 let div = network_security_groups_select.append('div');
