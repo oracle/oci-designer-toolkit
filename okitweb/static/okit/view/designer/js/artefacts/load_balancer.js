@@ -154,17 +154,8 @@ class LoadBalancerView extends OkitDesignerArtefactView {
                     .attr('for', safeId(instance.id))
                     .text(instance.display_name);
             }
-            let network_security_groups_select = d3.select(d3Id('network_security_group_ids'));
-            for (let network_security_group of okitJson.network_security_groups) {
-                let div = network_security_groups_select.append('div');
-                div.append('input')
-                    .attr('type', 'checkbox')
-                    .attr('id', safeId(network_security_group.id))
-                    .attr('value', network_security_group.id);
-                div.append('label')
-                    .attr('for', safeId(network_security_group.id))
-                    .text(network_security_group.display_name);
-            }
+            // Build Network Security Groups
+            this.loadNetworkSecurityGroups('network_security_group_ids', this.subnet_ids[0]);
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });

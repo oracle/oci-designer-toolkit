@@ -71,21 +71,10 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_storage_system.html", () => {
             // Build Network Security Groups
-            let nsg_select = $(jqId('nsg_ids'));
-            this.loadNetworkSecurityGroups(nsg_select, this.primary_mount_target.subnet_id);
+            this.loadNetworkSecurityGroups('nsg_ids', this.primary_mount_target.subnet_id);
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });
-    }
-
-    loadNetworkSecurityGroups(select, subnet_id) {
-        $(select).empty();
-        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-            if (networkSecurityGroup.vcn_id === vcn.id) {
-                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
-            }
-        }
     }
 
     /*
