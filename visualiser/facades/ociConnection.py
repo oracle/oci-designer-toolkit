@@ -86,6 +86,15 @@ class OCIConnection(object):
         return json_list
 
 
+class OCIAutoScalingConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIAutoScalingConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.autoscaling.AutoScalingClient(config=self.config, signer=self.signer)
+        return
+
+
 class OCIBlockStorageVolumeConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
         super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
@@ -101,6 +110,15 @@ class OCIComputeConnection(OCIConnection):
 
     def connect(self):
         self.client = oci.core.ComputeClient(config=self.config, signer=self.signer)
+        return
+
+
+class OCIComputeManagementConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIComputeManagementConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.core.ComputeManagementClient(config=self.config, signer=self.signer)
         return
 
 

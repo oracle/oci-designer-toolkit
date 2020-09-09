@@ -202,18 +202,6 @@ class InstanceView extends OkitDesignerArtefactView {
         $("#version").val($("#version option:first").val());
     }
 
-    loadNetworkSecurityGroups(select_id, subnet_id) {
-        $(jqId(select_id)).empty();
-        if (subnet_id && subnet_id !== '') {
-            let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-            for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-                if (networkSecurityGroup.vcn_id === vcn.id) {
-                    $(jqId(select_id)).append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
-                }
-            }
-        }
-    }
-
     loadSecondaryVnics() {
         // Empty Existing VNICs
         $(jqId('vnics_table_body')).empty();
@@ -330,16 +318,21 @@ class InstanceView extends OkitDesignerArtefactView {
         row.append('div').attr('class', 'td')
             .text("Network Security Groups");
         cell = row.append('div').attr('class', 'td');
-        select = cell.append('select')
-            .attr("class", "okit-property-value")
+        select = cell.append('div')
+            .attr("class", "okit-multiple-select")
             .attr("id", "nsg_ids" + idx)
-            .attr("multiple", "multiple")
             .on("change", function() {
-                vnic.nsg_ids = $(jqId("nsg_ids" + idx)).val();
+                vnic.nsg_ids = [];
+                $(jqId("nsg_ids" + idx)).find("input:checkbox").each(function() {
+                    if ($(this).prop('checked')) {vnic.nsg_ids.push($(this).val());}
+                });
                 displayOkitJson();
             });
         this.loadNetworkSecurityGroups("nsg_ids" + idx, vnic.subnet_id);
-        $(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
+        //$(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
+        $(jqId("nsg_ids" + idx)).find("input:checkbox").each(function() {
+            if (vnic.nsg_ids.includes($(this).val())) {$(this).prop("checked", true);}
+        });
     }
 
     /*

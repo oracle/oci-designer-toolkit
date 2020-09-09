@@ -33,6 +33,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Disable Audio to prevent CPU spikes
     v.customize ["modifyvm", :id, "--audio", "none"]
   end
+  # This will expose the local OKIT Template folder within the VM
+  config.vm.synced_folder "~/okit/user/templates", "/okit/templates"
 
   # VM hostname
   config.vm.hostname = NAME

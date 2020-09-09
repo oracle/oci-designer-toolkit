@@ -137,8 +137,7 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
                 db_version_select.append($('<option>').attr('value', version.version).text(version.version));
             }
             // Build Network Security Groups
-            let nsg_select = $(jqId('nsg_ids'));
-            this.loadNetworkSecurityGroups(nsg_select, this.subnet_id);
+            this.loadNetworkSecurityGroups('nsg_ids', this.subnet_id);
             // Add change event to node count to hide/display cluster name
             $(jqId('node_count')).on('change', () => {
                 if ($(jqId('node_count')).val() > 1) {
@@ -153,16 +152,6 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
             // Click Select Lists we have added dynamic on click to
             $(shape_select).change();
         });
-    }
-
-    loadNetworkSecurityGroups(select, subnet_id) {
-        $(select).empty();
-        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-            if (networkSecurityGroup.vcn_id === vcn.id) {
-                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
-            }
-        }
     }
 
     /*

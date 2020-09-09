@@ -103,6 +103,7 @@ cd oci-designer-toolkit
 docker run -d --rm -p 443:443 -p 80:80 \
            --name okit \
            --hostname okit \
+           --volume ~/okit/user/templates:/okit/templates \
            okit
 ```
 

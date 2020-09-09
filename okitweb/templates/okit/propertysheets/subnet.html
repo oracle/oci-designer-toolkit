@@ -22,7 +22,7 @@
     <div class='tr'><div class='td'>DNS Label</div><div class='td'><input type="text" id="dns_label" name="dns_label" class="okit-property-value"></div></div>
     <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="prohibit_public_ip_on_vnic" name="prohibit_public_ip_on_vnic" value="false">Private</label></div></div>
     <div class='tr'><div class='td'>Route Table</div><div class='td'><select id="route_table_id" class="okit-property-value"></select></div></div>
-    <div class='tr'><div class='td'>Security List</div><div class='td'><select multiple="multiple" id="security_list_ids" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Security List</div><div class='td'><div id="security_list_ids" class="okit-multiple-select"></div></div></div>
     <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_ipv6enabled" name="is_ipv6enabled" value="false"><label>IPV6 Enabled</label></div></div>
     <div class='tr'><div class='td'>IPv6 CIDR</div><div class='td'><input type="text" id="ipv6cidr_block" name="ipv6cidr_block" class="okit-property-value"></div></div>
 {% endblock %}
