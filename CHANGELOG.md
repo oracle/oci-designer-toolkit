@@ -9,6 +9,7 @@
 3. Modify start functionality to allow the user to specify a local directory where the user templates will be saved.
 
 ### Bug Fixes
+1. Database System CPU Count causing error when generating Terraform (Issue: #98)
 
 
 ## Version 0.10.2 
