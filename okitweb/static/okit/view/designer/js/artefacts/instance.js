@@ -152,9 +152,16 @@ class InstanceView extends OkitDesignerArtefactView {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance.html", () => {
             // Load Referenced Ids
             // Build Block Storage Select
-            let block_storage_volume_select = $(jqId('block_storage_volume_ids'));
+            let block_storage_volume_select = d3.select(d3Id('block_storage_volume_ids'));
             for (let block_storage_volume of me.getOkitJson().block_storage_volumes) {
-                block_storage_volume_select.append($('<option>').attr('value', block_storage_volume.id).text(block_storage_volume.display_name));
+                let div = block_storage_volume_select.append('div');
+                div.append('input')
+                    .attr('type', 'checkbox')
+                    .attr('id', safeId(block_storage_volume.id))
+                    .attr('value', block_storage_volume.id);
+                div.append('label')
+                    .attr('for', safeId(block_storage_volume.id))
+                    .text(block_storage_volume.display_name);
             }
             // Build Primary Vnic / Subnet List
             let subnet_select = $(jqId('subnet_id'));
