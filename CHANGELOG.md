@@ -1,6 +1,16 @@
 # Release Notes
 
 
+## Version 0.11.0 
+**Release Date**: 16th September 2020
+### Features
+1. Modify Multiple Select Options to Checkbox Group
+2. Add Option to Query Dialog to allow the user to specify if the query will drill down into Sub-Compartments.
+3. Modify start functionality to allow the user to specify a local directory where the user templates will be saved.
+
+### Bug Fixes
+
+
 ## Version 0.10.2 
 **Release Date**: 27th August 2020
 ### Bug Fixes
