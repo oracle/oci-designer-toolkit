@@ -103,6 +103,15 @@ class VirtualCloudNetwork extends OkitArtifact {
             }
             return true;
         }, this);
+        // Network Security Groups
+        this.getOkitJson().network_security_groups = this.getOkitJson().network_security_groups.filter(function(child) {
+            if (child.vcn_id === this.id) {
+                console.info('Deleting ' + child.display_name);
+                child.delete();
+                return false; // So the filter removes the element
+            }
+            return true;
+        }, this);
         console.groupEnd();
     }
 

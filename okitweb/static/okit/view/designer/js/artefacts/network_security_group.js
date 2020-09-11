@@ -39,13 +39,15 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     // Return Artifact Specific Definition.
     getSvgDefinition() {
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
+        if (this.getParent()) {
+            let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+            definition['svg']['x'] = first_child.dx;
+            definition['svg']['y'] = first_child.dy;
+            definition['svg']['width'] = this.dimensions['width'];
+            definition['svg']['height'] = this.dimensions['height'];
+            definition['rect']['stroke']['colour'] = stroke_colours.bark;
+            definition['rect']['stroke']['dash'] = 1;
+        }
         return definition;
     }
 
