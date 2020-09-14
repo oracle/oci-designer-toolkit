@@ -80,13 +80,13 @@ function handleNew(evt) {
     redrawSVGCanvas();
 }
 function newDiagram() {
-    console.groupCollapsed('Creating New Diagram');
+    console.log('Creating New Diagram');
     newModel();
     newDesignerView();
     okitJsonView.newCanvas();
     okitJsonView.newCompartment();
     console.info(okitJsonView);
-    console.groupEnd();
+    console.log();
 }
 function newDesignerView() {
     okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', okitSettings.is_display_grid, palette_svg);
@@ -506,7 +506,7 @@ function selectQueryLastUsedCompartment() {
 }
 let queryCount = 0;
 function showQueryResults() {
-    console.group('Generating Query Results');
+    console.log('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
     let request = {};
     request.compartment_id = $(jqId('query_compartment_id')).val();
@@ -541,7 +541,7 @@ function showQueryResults() {
         console.info('Region Not Selected.');
     }
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
-    console.groupEnd();
+    console.log();
 }
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
@@ -592,7 +592,7 @@ function handleExportToJPG(evt) {
     saveAsImage('jpeg');
 }
 function saveAsImage(type='jpeg') {
-    console.group("Saving As " + type);
+    console.log("Saving As " + type);
     let svg = d3.select(d3Id("canvas-svg")).node();
     let serializer = new XMLSerializer();
     let svgStr = serializer.serializeToString(svg);
@@ -622,7 +622,7 @@ function saveAsImage(type='jpeg') {
     }
 
     img.src = 'data:image/svg+xml;base64,' + window.btoa(svgStr);
-    console.groupEnd();
+    console.log();
 }
 /*
 ** Resource Manager

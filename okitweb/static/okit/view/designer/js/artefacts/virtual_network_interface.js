@@ -26,16 +26,16 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
     // Return Artifact Specific Definition.
     getSvgDefinition() {
-        console.group('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.log('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
         console.info(this.getParent());
         let first_child = this.getParent().getChildOffset(this.getArtifactReference());
@@ -46,7 +46,7 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
         definition['rect']['stroke']['colour'] = stroke_colours.bark;
         definition['rect']['stroke']['dash'] = 1;
         console.info(JSON.stringify(definition, null, 2));
-        console.groupEnd();
+        console.log();
         return definition;
     }
 

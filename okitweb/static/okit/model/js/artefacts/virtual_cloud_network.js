@@ -39,7 +39,7 @@ class VirtualCloudNetwork extends OkitArtifact {
     ** Delete Processing
      */
     deleteChildren() {
-        console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
+        console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Subnets
         this.getOkitJson().subnets = this.getOkitJson().subnets.filter(function(child) {
             if (child.vcn_id === this.id) {
@@ -112,7 +112,7 @@ class VirtualCloudNetwork extends OkitArtifact {
             }
             return true;
         }, this);
-        console.groupEnd();
+        console.log();
     }
 
     /*

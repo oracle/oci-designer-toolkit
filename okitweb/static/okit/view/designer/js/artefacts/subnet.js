@@ -28,7 +28,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         let me = this;
         let svg = super.draw();
         let fill = d3.select(d3Id(this.id)).attr('fill');
@@ -43,11 +43,11 @@ class SubnetView extends OkitContainerDesignerArtefactView {
             d3.event.stopPropagation();
         });
         this.drawAttachments();
-        console.groupEnd();
+        console.log();
     }
 
     drawAttachments() {
-        console.group(`Drawing ${this.getArtifactReference()} : ${this.display_name} Attachments (${this.artefact_id})`);
+        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} Attachments (${this.artefact_id})`);
         let attachment_count = 0;
         // Draw Route Table
         if (this.artefact.route_table_id !== '') {

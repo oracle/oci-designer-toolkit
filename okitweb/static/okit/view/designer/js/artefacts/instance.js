@@ -25,7 +25,7 @@ class InstanceView extends OkitDesignerArtefactView {
     get minimum_width() {return 135;}
     get minimum_height() {return 100;}
     get dimensions() {
-        console.group('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.minimum_dimensions;
         // Calculate Size based on Child Artifacts
         // Process Bottom Edge Artifacts
@@ -43,7 +43,7 @@ class InstanceView extends OkitDesignerArtefactView {
         dimensions.width  = Math.max(dimensions.width,  this.minimum_dimensions.width);
         dimensions.height = Math.max(dimensions.height, this.minimum_dimensions.height);
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
+        console.log();
         return dimensions;
     }
 
@@ -59,7 +59,7 @@ class InstanceView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
@@ -84,12 +84,12 @@ class InstanceView extends OkitDesignerArtefactView {
             // Draw Attachments
             this.drawAttachments();
         }
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
     drawAttachments() {
-        console.group('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
+        console.log('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
             let attachment = new BlockStorageVolumeView(this.getJsonView().getOkitJson().getBlockStorageVolume(block_storage_id), this.getJsonView());
@@ -121,7 +121,7 @@ class InstanceView extends OkitDesignerArtefactView {
             });
             attachment_count += 1;
         }
-        console.groupEnd();
+        console.log();
     }
 
     // Return Artifact Specific Definition.

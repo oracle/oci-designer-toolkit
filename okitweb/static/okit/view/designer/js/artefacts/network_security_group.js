@@ -26,14 +26,14 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
         console.info(`Is Attached   : ${this.attached}.`)
         if (!okitSettings.hide_attached || !this.attached) {
             console.info(`${this.display_name} is either not attached and we are displaying attached`);
             let svg = super.draw();
         }
-        console.groupEnd();
+        console.log();
     }
 
     // Return Artifact Specific Definition.

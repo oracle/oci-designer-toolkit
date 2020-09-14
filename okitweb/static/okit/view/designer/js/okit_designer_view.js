@@ -20,7 +20,7 @@ class OkitDesignerJsonView extends OkitJsonView {
     }
 
     draw() {
-        console.group('Drawing Designer Canvas');
+        console.log('Drawing Designer Canvas');
         console.info(this);
         // Display Json
         this.displayOkitJson();
@@ -144,7 +144,7 @@ class OkitDesignerJsonView extends OkitJsonView {
 
         console.info(this);
 
-        console.groupEnd();
+        console.log();
     }
 
     /*
@@ -165,7 +165,7 @@ class OkitDesignerJsonView extends OkitJsonView {
     displayOkitJson() {}
 
     newCanvas(width=400, height=300) {
-        console.group('New Canvas');
+        console.log('New Canvas');
         console.info('Parent                : ' + this.parent_id);
         console.info('Width                 : ' + width);
         console.info('Height                : ' + height);
@@ -204,7 +204,7 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("preserveAspectRatio", "xMinYMin meet");
 
         this.clearCanvas();
-        console.groupEnd();
+        console.log();
 
         return canvas_svg;
     }

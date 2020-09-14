@@ -26,7 +26,7 @@ class ObjectStorageBucketView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.groupCollapsed('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
@@ -47,7 +47,7 @@ class ObjectStorageBucketView extends OkitDesignerArtefactView {
             .attr("data-connector-end-x", boundingClientRect.x)
             .attr("data-connector-id", this.id)
             .attr("dragable", true);
-        console.groupEnd();
+        console.log();
         return svg;
     }
 

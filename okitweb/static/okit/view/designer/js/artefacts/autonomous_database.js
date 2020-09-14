@@ -45,7 +45,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
      */
     // Additional draw Processing
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.parent_id + ']');
         let svg = super.draw();
         /*
         ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
@@ -72,7 +72,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
                 .attr("data-connector-id", this.id)
                 .attr("dragable", true);
         }
-        console.groupEnd();
+        console.log();
         return svg;
     }
     // Return Artifact Specific Definition.
