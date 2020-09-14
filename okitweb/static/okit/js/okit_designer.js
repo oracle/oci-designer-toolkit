@@ -97,6 +97,16 @@ function newModel() {
 function newRegionsModel() {
     regionOkitJson = new OkitRegions();
 }
+function setTitleDescription() {
+    $('#title').val(okitJsonModel.title);
+    $('#description').val(okitJsonModel.description);
+}
+function updateJsonTitle() {
+    okitJsonModel.title = $('#title').val();
+}
+function updateJsonDescription() {
+    okitJsonModel.description = $('#description').val();
+}
 
 /*
 ** Load Existing Json
@@ -675,6 +685,7 @@ function displayOkitJson() {
  */
 function displayDesignerView() {
     okitJsonView.draw();
+    setTitleDescription();
 }
 /*
 ** Slidebar handlers

@@ -13,7 +13,7 @@ class OkitJson {
      */
     constructor(okit_json_string = '') {
         this.title = "OKIT OCI Visualiser Json";
-        this.description = "OKIT Generic OCI Json which can be used to generate ansible, terraform, .......";
+        this.description = "";
         this.okit_version = okitVersion;
         this.compartments = [];
         this.autonomous_databases = [];
@@ -49,6 +49,9 @@ class OkitJson {
      */
     load(okit_json) {
         console.log('Load OKIT Json');
+        // Title & Description
+        this.title = okit_json.title;
+        this.description = okit_json.description;
         // Compartments
         if (okit_json.hasOwnProperty('compartments')) {
             for (let artefact of okit_json['compartments']) {

@@ -184,6 +184,30 @@
     overflow: scroll;
 }
 
+.okit-canvas-details {
+    display: block;
+    padding-bottom: 5px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.okit-canvas-details > div > div > label {
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: bold;
+    font-size: small;
+    margin-left: 1em;
+}
+
+.okit-canvas-details > div > div > input {
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    margin-left: 1em;
+}
+
+.okit-canvas-details > div {
+    overflow: hidden;
+}
+
 /*
 ** Property Sheet (Right Column) Classes
  */
