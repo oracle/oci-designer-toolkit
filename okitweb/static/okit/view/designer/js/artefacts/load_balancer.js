@@ -28,7 +28,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
@@ -50,12 +50,12 @@ class LoadBalancerView extends OkitDesignerArtefactView {
             .attr("dragable", true);
         // Draw Connectors
         this.drawConnectors();
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
     drawConnectors() {
-        console.group('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         // Check if there are any missing forllowing query
         this.checkConnectors();
         // Get Grand Parent
@@ -98,7 +98,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
                 }
             }
         }
-        console.groupEnd();
+        console.log();
     }
 
     checkConnectors() {

@@ -175,7 +175,7 @@ class OkitOCIQuery {
         this.queryObjectStorageBuckets(request);
         this.queryFastConnects(request);
         this.queryInstances(request);
-        this.queryInstancePools(request);
+        //this.queryInstancePools(request);
         this.queryDatabaseSystems(request);
         this.queryFileStorageSystems(request);
         this.queryOkeClusters(request);

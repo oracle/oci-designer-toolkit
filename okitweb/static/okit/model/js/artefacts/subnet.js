@@ -47,7 +47,7 @@ class Subnet extends OkitArtifact {
     ** Delete Processing
      */
     deleteChildren() {
-        console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
+        console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Instances
         this.getOkitJson().instances = this.getOkitJson().instances.filter(function(child) {
             if (child.primary_vnic.subnet_id === this.id) {
@@ -84,7 +84,7 @@ class Subnet extends OkitArtifact {
             }
             return true;
         }, this);
-        console.groupEnd();
+        console.log();
     }
 
     /*

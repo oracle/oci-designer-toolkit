@@ -43,7 +43,7 @@ class Compartment extends OkitArtifact {
     ** Delete Processing
      */
     deleteChildren() {
-        console.groupCollapsed('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
+        console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Compartments
         this.getOkitJson().compartments = this.getOkitJson().compartments.filter(function(child) {
             if (child.compartment_id === this.id && child.id !== this.id) {
@@ -89,7 +89,7 @@ class Compartment extends OkitArtifact {
             }
             return true;
         }, this);
-        console.groupEnd();
+        console.log();
         // Dynamic Routing Gateways
         this.getOkitJson().dynamic_routing_gateways = this.getOkitJson().dynamic_routing_gateways.filter(function(child) {
             if (child.compartment_id === this.id) {

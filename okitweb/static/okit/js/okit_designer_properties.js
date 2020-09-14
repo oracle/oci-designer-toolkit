@@ -45,7 +45,7 @@ let error_propeties = [];
 let warning_propeties = [];
 
 function loadPropertiesSheet(json_element) {
-    console.groupCollapsed('Loading Properties');
+    console.log('Loading Properties');
     $.each(json_element, function(key, val) {
         console.info('Key : ' + key + ' = ' + val);
         if (val == null) {
@@ -195,7 +195,7 @@ function loadPropertiesSheet(json_element) {
     warning_propeties = [];
     // Set up Multi Select boxes to toggle select
     //$("select[multiple] option").mousedown(function() {let $self = $(this); $self.prop('selected', !$self.prop('selected')); return false;});
-    console.groupEnd();
+    console.log();
 }
 
 function addFreeformTag(json_element) {

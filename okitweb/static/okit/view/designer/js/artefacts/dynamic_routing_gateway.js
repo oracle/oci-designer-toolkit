@@ -26,7 +26,7 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
         let rect = svg.select("rect[id='" + safeId(this.id) + "']");
@@ -49,12 +49,12 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
             // Draw Connectors
             // this.drawConnectors();
         }
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
     drawConnectors() {
-        console.group('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         // Get Grand Parent
         let grandparent_id = d3.select(d3Id(this.parent_id)).attr('data-parent-id');
         // Define Connector Parent
@@ -93,7 +93,7 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
                 }
             }
         }
-        console.groupEnd();
+        console.log();
     }
 
     // Return Artifact Specific Definition.

@@ -1051,7 +1051,7 @@ class OkitArtefactView {
     }
 
     draw() {
-        console.group(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         // Get Definition from Sub class
         let definition = this.getSvgDefinition();
         /*
@@ -1215,7 +1215,7 @@ class OkitArtefactView {
             $(jqId(me.artefact_id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
             d3.event.stopPropagation();
         });
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
@@ -1251,7 +1251,7 @@ class OkitArtefactView {
     ** Child Offset Functions
      */
     getChildOffset(child_type) {
-        console.group('Getting Offset for ' + child_type);
+        console.log('Getting Offset for ' + child_type);
         let offset = {dx: 0, dy: 0};
         if (this.getTopEdgeArtifacts().includes(child_type)) {
             console.info('Top Edge Artifact');
@@ -1283,7 +1283,7 @@ class OkitArtefactView {
         } else {
             console.warn(child_type + ' Not Found for ' + this.display_name);
         }
-        console.groupEnd();
+        console.log();
         return offset
     }
 
@@ -1709,7 +1709,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
     }
 
     get dimensions() {
-        console.group(`Getting Dimensions of ${this.getArtifactReference() } : ${this.display_name} (${this.artefact_id})`);
+        console.log(`Getting Dimensions of ${this.getArtifactReference() } : ${this.display_name} (${this.artefact_id})`);
         let padding = this.getPadding();
         let dimensions = {width: 0, height: 0};
         let offset = {dx: 0, dy: 0};
@@ -1759,7 +1759,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
         dimensions['width']  = Math.max(dimensions['width'],  this.minimum_dimensions.width);
         dimensions['height'] = Math.max(dimensions['height'], this.minimum_dimensions.height);
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
+        console.log();
         return dimensions;
     }
 

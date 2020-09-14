@@ -26,9 +26,9 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         //if (this.isAttached()) {
-        //    console.groupEnd();
+        //    console.log();
         //    return;
         //}
         let me = this;
@@ -53,7 +53,7 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
                 .attr("data-connector-id", this.id)
                 .attr("dragable", true);
         }
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
