@@ -7,6 +7,7 @@
 1. Modify Multiple Select Options to Checkbox Group
 2. Add Option to Query Dialog to allow the user to specify if the query will drill down into Sub-Compartments.
 3. Modify start functionality to allow the user to specify a local directory where the user templates will be saved.
+4. Add display/edit of the Model Title and Description to the web interface.
 
 ### Bug Fixes
 1. Database System CPU Count causing error when generating Terraform (Issue: #98)

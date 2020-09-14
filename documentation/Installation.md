@@ -74,7 +74,7 @@ The docker image is the recommended runtime server OKIT provides a simple Docker
 
 ```bash
 cd oci-designer-toolkit/containers/docker
-docker-compose up
+docker-compose up --detach
 ```
 
 ## Docker 

@@ -54,7 +54,7 @@ region=us-phoenix-1
 
 ```bash
 cd oci-designer-toolkit/containers/docker
-docker-compose up
+docker-compose up --detach
 ```
 
 __*Note:*__ For full connection to OCI you will need to follow the [Installation Create Config File instruction](documentation/Installation.md#oci-config-file) 
