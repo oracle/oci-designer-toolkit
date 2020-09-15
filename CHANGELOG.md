@@ -12,6 +12,7 @@
 ### Bug Fixes
 1. Database System CPU Count causing error when generating Terraform (Issue: #98)
 2. Network Security Groups, for a VCN, were not deleted when the VCN is deleted.
+3. DRG not being displayed if it was not attached to a VCN following a query.
 
 
 ## Version 0.10.2 
