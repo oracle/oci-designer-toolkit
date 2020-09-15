@@ -789,7 +789,7 @@ function displayValidationResults(results) {
             d3.select(d3Id(error.id)).attr('fill', fill);
         });
         tr.on('click', () => {
-            error_propeties.push(error.element);
+            error_properties.push(error.element);
             d3.select(d3Id(error.id + '-svg')).on("click")();
             $('#toggle_properties_button').click();
         });
@@ -819,7 +819,7 @@ function displayValidationResults(results) {
             d3.select(d3Id(warning.id)).attr('fill', fill);
         });
         tr.on('click', () => {
-            warning_propeties.push(warning.element);
+            warning_properties.push(warning.element);
             d3.select(d3Id(warning.id + '-svg')).on("click")();
             $('#toggle_properties_button').click();
         });

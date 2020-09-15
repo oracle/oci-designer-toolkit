@@ -41,8 +41,8 @@ function setDescendantProp(obj, desc, value) {
     return obj[arr[0]] = value;
 }
 
-let error_propeties = [];
-let warning_propeties = [];
+let error_properties = [];
+let warning_properties = [];
 
 function loadPropertiesSheet(json_element) {
     console.log('Loading Properties');
@@ -184,15 +184,15 @@ function loadPropertiesSheet(json_element) {
         d3.select(d3Id("optional_properties")).attr("open", "open");
     }
     // Check for Errors & Warnings
-    for (let property_name of error_propeties) {
+    for (let property_name of error_properties) {
         $(jqId(property_name)).addClass('okit-error');
         $(jqId(property_name)).focus();
     }
-    error_propeties = [];
-    for (let property_name of warning_propeties) {
+    error_properties = [];
+    for (let property_name of warning_properties) {
         $(jqId(property_name)).addClass('okit-warning');
     }
-    warning_propeties = [];
+    warning_properties = [];
     // Set up Multi Select boxes to toggle select
     //$("select[multiple] option").mousedown(function() {let $self = $(this); $self.prop('selected', !$self.prop('selected')); return false;});
     console.log();
