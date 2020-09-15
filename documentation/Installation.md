@@ -123,7 +123,7 @@ If you want to run the image in and interactive mode then replace to _-d_ in the
 2. Install [Vagrant](https://vagrantup.com/)
 
 ### Copy the OCI_CONFIG_DIR folder 
-Copy the contents of the OCI_CONFIG_DIR directory to the oci-designer-toolkit/containers/vagrant/__oci__ folder. 
+Copy the contents of the OCI_CONFIG_DIR directory to the oci-designer-toolkit/containers/__oci__ folder. 
 
 The vagrant should now have these folders & files: 
 - Vagrantfile
