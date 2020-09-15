@@ -132,7 +132,7 @@ The vagrant should now have these folders & files:
 ### Build Vagrant Image
 ```bash
 cd oci-designer-toolkit/containers/vagrant/
-vagrant up; vagrant ssh
+vagrant up; vagrant reload; vagrant ssh
 ```
 **NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
 is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
