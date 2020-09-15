@@ -409,7 +409,10 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['compartment_id']]))
         # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
+        if dynamic_routing_gateway.get('vcn_id', '') != '':
+            self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
+        else:
+            self.removeJinja2Variable('vcn_id')
         # ---- Display Name
         self.addJinja2Variable("display_name", dynamic_routing_gateway["display_name"], standardisedName)
         # --- Optional
