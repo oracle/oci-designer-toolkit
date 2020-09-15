@@ -14,7 +14,7 @@ class OkitOCIQuery {
 
     query(request = null, complete_callback) {
         this.complete_callback = complete_callback;
-        if (request && request !== null) {
+        if (request) {
             for (const [i, region] of this.regions.entries()) {
                 console.info(`${i} - Processing Selected Region : ${region}`);
                 let region_request = JSON.clone(request);
@@ -31,7 +31,7 @@ class OkitOCIQuery {
     }
 
     isComplete() {
-        if (this.complete_callback && this.complete_callback !== null) {
+        if (this.complete_callback) {
             console.info(this.region_query_count);
             for (let key of Object.keys(this.region_query_count)) {
                 if (this.region_query_count[key] > 0) {
