@@ -44,8 +44,8 @@ https://github.com/oracle/oci-designer-toolkit/archive/v0.11.0.zip
 Before executing any of the docker container scripts OKIT requires an OCI connection configuration file. This file 
 contains the connection information used by OKIT when executing queries or exporting to Resource Manager.
 
-<div class="text-red">__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine. The config directory will be copied
-to the docker linux root user ~/.oci directory which will be created during the build.</div>
+__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine. The config directory will be copied
+to the docker linux root user ~/.oci directory which will be created during the build.
 
 If you have already installed the OCI SDK/CLI on you machine then you will have already created this file. If you do not 
 have the sdk or cli installed then we will need to create a config as defined in the next section.
