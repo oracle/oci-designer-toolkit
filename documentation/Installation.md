@@ -47,8 +47,7 @@ contains the connection information used by OKIT when executing queries or expor
 __*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine. The config directory will be copied
 to the docker linux root user ~/.oci directory which will be created during the build.
 ```diff
-- Note: The key_file entry __must not__ be an Absolute path on the host machine. The config directory will be copied
-to the docker linux root user ~/.oci directory which will be created during the build.
+-- Note: The key_file entry __must not__ be an Absolute path on the host machine. The config directory will be copied to the docker linux root user ~/.oci directory which will be created during the build.
 ```
 
 If you have already installed the OCI SDK/CLI on you machine then you will have already created this file. If you do not 
