@@ -20,32 +20,66 @@ python modules are installed and in addition provide a simple flask server that 
 
 
 ## Clone Repository
-Before the building either the Docker or Vagrant Images the project will nee to be cloned from the Git Repository (or downloaded)
-and it is recommended that the latest Stable Release be cloned. The latest stable version number if shown in the README
-and the associated Release tag is in the format vX.Y.Z hence for the version 0.11.0 the Release tag will be 
-**v0.11.0**. The command shows how this can be cloned to the local machine.
+Before the building either the Docker or Vagrant Images the project will need to be cloned, or downloaded, from the GitHub 
+Repository (or downloaded). The master branch is always the latest Stable Release but previous releases can be found using 
+associated Release tag is in the format vX.Y.Z hence for the version 0.11.0 the Release tag will be **v0.11.0**. 
+
+The command shows how this can be cloned to the local machine.
 
 ```bash
-git clone -b v0.11.0 --depth 1 git@github.com:oracle/oci-designer-toolkit.git
+git clone --depth 1 git@github.com:oracle/oci-designer-toolkit.git
 ```
 
 or 
 
 ```bash
-git clone -b v0.11.0 --depth 1 https://github.com/oracle/oci-designer-toolkit.git
+git clone --depth 1 https://github.com/oracle/oci-designer-toolkit.git
 ```
 
 ### Download
 If you do not have git installed locally the current release of OKIT can be retrieved by downloading it as a zip file from
-https://github.com/oracle/oci-designer-toolkit/archive/v0.11.0.zip
+[https://github.com/oracle/oci-designer-toolkit/archive/master.zip](https://github.com/oracle/oci-designer-toolkit/archive/master.zip)
 
+### Update
+If you have previously cloned the GitHub Repository you can update to the latest release by pulling it from the repository 
+with the following command.
+
+```bash
+cd oci-designer-toolkit
+git pull
+```
+
+Your Docker / Vangrant image will need to be rebuilt using one of the following commands:
+
+#### Docker Compose
+```bash
+cd oci-designer-toolkit/containers/docker
+docker-compose stop
+docker-compose build
+```
+
+#### Docker
+```bash
+cd oci-designer-toolkit
+docker rmi okit
+docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
+```
+
+#### Vagrant
+```bash
+cd oci-designer-toolkit/containers/vagrant
+vagrant halt
+vagrant destroy -f
+vagrant up
+vangrant reload
+```
 
 ## OCI Config File
 Before executing any of the docker container scripts OKIT requires an OCI connection configuration file. This file 
 contains the connection information used by OKIT when executing queries or exporting to Resource Manager.
 
-__*Note:*__ The key_file entry __must not__ be an Absolute path on the host machine. The config directory will be copied
-to the docker linux root user ~/.oci directory which will be created during the build.
+__*Note:* The key_file entry *must not* be an Absolute path on the host machine. The config directory will be copied
+to the docker linux root user ~/.oci directory which will be created during the build.__
 
 If you have already installed the OCI SDK/CLI on you machine then you will have already created this file. If you do not 
 have the sdk or cli installed then we will need to create a config as defined in the next section.
