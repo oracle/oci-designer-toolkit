@@ -26,10 +26,10 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
-        console.groupEnd();
+        console.log();
     }
 
     // Return Artifact Specific Definition.
@@ -47,14 +47,14 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
 
     // Return Artifact Dimensions
     getDimensions() {
-        console.group('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getMinimumDimensions();
         // Calculate Size based on Child Artifacts
         // Check size against minimum
         dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
         dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
+        console.log();
         return dimensions;
     }
 
@@ -71,21 +71,10 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_storage_system.html", () => {
             // Build Network Security Groups
-            let nsg_select = $(jqId('nsg_ids'));
-            this.loadNetworkSecurityGroups(nsg_select, this.primary_mount_target.subnet_id);
+            this.loadNetworkSecurityGroups('nsg_ids', this.primary_mount_target.subnet_id);
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });
-    }
-
-    loadNetworkSecurityGroups(select, subnet_id) {
-        $(select).empty();
-        let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-        for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-            if (networkSecurityGroup.vcn_id === vcn.id) {
-                select.append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
-            }
-        }
     }
 
     /*

@@ -368,7 +368,7 @@ class OCIGenerator(object):
         # ---- Node Count
         self.addJinja2Variable("node_count", database_system["node_count"], standardisedName)
         # ---- CPU Core Count
-        if database_system["cpu_core_count"] > 0:
+        if int(database_system["cpu_core_count"]) > 0:
             self.addJinja2Variable("cpu_core_count", database_system["cpu_core_count"], standardisedName)
         else:
             self.removeJinja2Variable("cpu_core_count")
@@ -409,7 +409,10 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['compartment_id']]))
         # ---- Virtual Cloud Network OCID
-        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
+        if dynamic_routing_gateway.get('vcn_id', '') != '':
+            self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
+        else:
+            self.removeJinja2Variable('vcn_id')
         # ---- Display Name
         self.addJinja2Variable("display_name", dynamic_routing_gateway["display_name"], standardisedName)
         # --- Optional

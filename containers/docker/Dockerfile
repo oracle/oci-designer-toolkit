@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.9.2" \
+      "version"="0.11.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
@@ -43,7 +43,9 @@ RUN yum install -y \
         oci==2.6.0 \
         pyyaml==5.2 \
 # Create Workspace
- && mkdir -p /okit/{config,log,visualiser,okitweb,workspace}
+ && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \
+ && mkdir -p /okit/okitweb/static/okit/templates \
+ && ln -s /okit/templates /okit/okitweb/static/okit/templates/user
 # Copy source code
 COPY okitweb /okit/okitweb
 COPY visualiser /okit/visualiser

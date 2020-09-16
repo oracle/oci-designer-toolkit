@@ -41,7 +41,7 @@
                 <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="assign_public_ip" name="assign_public_ip" value="true">Assign Public IP</label></div></div>
                 <div class='tr'><div class='td'>Hostname</div><div class='td'><input type="text" id="hostname_label" name="hostname_label" class="okit-property-value"></div></div>
                 <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="skip_source_dest_check" name="skip_source_dest_check" value="false">Skip Source / Destination Check</label></div></div>
-                <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><select multiple="multiple" id="nsg_ids" class="okit-property-value"></select></div></div>
+                <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><div id="nsg_ids" class="okit-multiple-select"></div></div></div>
             </div>
         </div>
         <details class="secondary-vnics ingress-rules" >
@@ -74,7 +74,7 @@
     </select></div></div>
     <div class='tr'><div class='td'>Boot Volume Size (in GB)</div><div class='td'><input type="text" id="boot_volume_size_in_gbs" name="boot_volume_size_in_gbs" class="okit-property-value"></div></div>
     <div class='tr'><div class='td'>Authorised Keys</div><div class='td'><input type="text" id="ssh_authorized_keys" name="ssh_authorized_keys" class="okit-property-value"></div></div>
-    <div class='tr'><div class='td'>Block Storage Volumes</div><div class='td'><select multiple="multiple" id="block_storage_volume_ids" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Block Storage Volumes</div><div class='td'><div id="block_storage_volume_ids" class="okit-multiple-select"></div></div></div>
     <div class='tr'><div class='td'>Cloud Init YAML</div><div class='td'><code><textarea id="user_data" name="user_data" class="okit-property-value okit-source-code" rows="10" wrap="off"></textarea></code></div></div>
     <div class='tr'><div class='td'>Agent</div><div class='td'><div id="agent_config">
         <label><input type="checkbox" id="is_management_disabled" name="is_management_disabled" value="false">Management Disabled</label>

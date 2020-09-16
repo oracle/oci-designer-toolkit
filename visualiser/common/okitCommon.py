@@ -13,6 +13,7 @@ __module__ = "ociCommon"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
+import base64
 import jinja2
 import os
 import xml.etree.ElementTree as ET
@@ -163,21 +164,15 @@ def writePythonFile(python_file, contents):
 def standardiseIds(json_data={}, from_char='.', to_char='-'):
     return json_data
 
-def standardiseIds1(json_data={}, from_char='.', to_char='-'):
-    if isinstance(json_data, dict):
-        for key, val in json_data.items():
-            logger.debug('{0!s:s} : {1!s:s}'.format(key, val))
-            if isinstance(val, dict):
-                json_data[key] = standardiseIds(val, from_char, to_char)
-            elif key == 'id' or key.endswith('_id') or key.endswith('_ids'):
-                if isinstance(val, list):
-                    json_data[key] = [id.replace(from_char, to_char) for id in val]
-                elif val is not None:
-                    json_data[key] = val.replace(from_char, to_char)
-            elif isinstance(val, list):
-                json_data[key] = [standardiseIds(element, from_char, to_char) for element in val]
-    elif isinstance(json_data, list):
-        json_data = [standardiseIds(element, from_char, to_char) for element in json_data]
-    return json_data
-
+def userDataDecode(data):
+    encodings = ['utf-8', 'utf-16', 'ascii', 'windows-1256']
+    for encoding in encodings:
+        try:
+            # TODO: Switch to chardet
+            # encoding = chardet.detect(data)
+            return base64.b64decode(data).decode(encoding)
+        except UnicodeDecodeError as e:
+            logger.warn(e)
+            pass
+    return ''
 

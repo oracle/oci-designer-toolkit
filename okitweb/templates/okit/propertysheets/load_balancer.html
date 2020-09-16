@@ -17,9 +17,9 @@
 {% endblock %}
 
 {% block optional_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Backend Instances</div><div class='td'><select multiple="multiple" id="instance_ids" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Backend Instances</div><div class='td'><div id="instance_ids" class="okit-multiple-select"></div></div></div>
     <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_private" name="is_private" value="false">Private</div></div>
-    <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><select multiple="multiple" id="network_security_group_ids" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><div id="network_security_group_ids" class="okit-multiple-select"></div></div></div>
     <div class='tr'><div class='td'>IP Mode</div><div class='td'><select id="ip_mode" class="okit-property-value">
         <option value="" selected="selected">IPv4</option>
         <option value="IPV6">IPv6</option>

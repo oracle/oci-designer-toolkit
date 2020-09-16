@@ -221,7 +221,7 @@ $(document).ready(function() {
     /*
     ** Add Load File Handling
      */
-    document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    //document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
     /*
     ** Load Empty Properties Sheet
@@ -274,6 +274,13 @@ $(document).ready(function() {
         }
     });
     /**/
+
+    $(jqId('navigation_menu_button')).click(function(e) {
+        slideRightPanelsOffScreen();
+        $(jqId('designer_right_column')).addClass('okit-slide-hide-right');
+    });
+
+
 
     setOCILink();
 

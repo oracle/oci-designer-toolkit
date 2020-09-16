@@ -45,7 +45,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
      */
     // Additional draw Processing
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.parent_id + ']');
         let svg = super.draw();
         /*
         ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
@@ -72,7 +72,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
                 .attr("data-connector-id", this.id)
                 .attr("dragable", true);
         }
-        console.groupEnd();
+        console.log();
         return svg;
     }
     // Return Artifact Specific Definition.
@@ -114,10 +114,20 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
             }
             // Load Reference Ids
             // Network Security Groups
-            let network_security_groups_select = $(jqId('nsg_ids'));
+            this.loadNetworkSecurityGroups('nsg_ids', this.subnet_id);
+            /*
+            let network_security_groups_select = d3.select(d3Id('nsg_ids'));
             for (let network_security_group of okitJson.network_security_groups) {
-                network_security_groups_select.append($('<option>').attr('value', network_security_group.id).text(network_security_group.display_name));
+                let div = network_security_groups_select.append('div');
+                div.append('input')
+                    .attr('type', 'checkbox')
+                    .attr('id', safeId(network_security_group.id))
+                    .attr('value', network_security_group.id);
+                div.append('label')
+                    .attr('for', safeId(network_security_group.id))
+                    .text(network_security_group.display_name);
             }
+            */
             // Subnets
             let subnet_select = $(jqId('subnet_id'));
             subnet_select.append($('<option>').attr('value', '').text(''));

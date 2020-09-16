@@ -28,7 +28,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
@@ -50,12 +50,12 @@ class LoadBalancerView extends OkitDesignerArtefactView {
             .attr("dragable", true);
         // Draw Connectors
         this.drawConnectors();
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
     drawConnectors() {
-        console.group('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         // Check if there are any missing forllowing query
         this.checkConnectors();
         // Get Grand Parent
@@ -98,7 +98,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
                 }
             }
         }
-        console.groupEnd();
+        console.log();
     }
 
     checkConnectors() {
@@ -143,14 +143,19 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/load_balancer.html", () => {
             // Load Referenced Ids
-            let instances_select = $(jqId('instance_ids'));
-            for (let instance of okitJson.instances) {
-                instances_select.append($('<option>').attr('value', instance.id).text(instance.display_name));
+            let instances_select = d3.select(d3Id('instance_ids'));
+            for (let instance of me.artefact.getOkitJson().instances) {
+                let div = instances_select.append('div');
+                div.append('input')
+                    .attr('type', 'checkbox')
+                    .attr('id', safeId(instance.id))
+                    .attr('value', instance.id);
+                div.append('label')
+                    .attr('for', safeId(instance.id))
+                    .text(instance.display_name);
             }
-            let network_security_groups_select = $(jqId('network_security_group_ids'));
-            for (let network_security_group of okitJson.network_security_groups) {
-                network_security_groups_select.append($('<option>').attr('value', network_security_group.id).text(network_security_group.display_name));
-            }
+            // Build Network Security Groups
+            this.loadNetworkSecurityGroups('network_security_group_ids', this.subnet_ids[0]);
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });

@@ -57,7 +57,7 @@ function standardiseId(id) {
 }
 
 function getTimestamp() {
-    console.groupCollapsed('Get TimeStamp');
+    console.log('Get TimeStamp');
     let dateTimeNow = new Date();
     let year   = '' + dateTimeNow.getFullYear();
     let month  = ('00' + dateTimeNow.getMonth()).slice(-2);
@@ -73,7 +73,7 @@ function getTimestamp() {
     console.info('Second    : ' + second);
     let timestamp = year + month + day + '-' + hour + minute + second;
     console.info('Timestamp : ' + timestamp);
-    console.groupEnd();
+    console.log();
     return timestamp;
 }
 

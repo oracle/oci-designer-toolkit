@@ -28,7 +28,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         let me = this;
         let svg = super.draw();
         let fill = d3.select(d3Id(this.id)).attr('fill');
@@ -43,11 +43,11 @@ class SubnetView extends OkitContainerDesignerArtefactView {
             d3.event.stopPropagation();
         });
         this.drawAttachments();
-        console.groupEnd();
+        console.log();
     }
 
     drawAttachments() {
-        console.group(`Drawing ${this.getArtifactReference()} : ${this.display_name} Attachments (${this.artefact_id})`);
+        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} Attachments (${this.artefact_id})`);
         let attachment_count = 0;
         // Draw Route Table
         if (this.artefact.route_table_id !== '') {
@@ -106,10 +106,17 @@ class SubnetView extends OkitContainerDesignerArtefactView {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
                 }
             }
-            let security_lists_select = $(jqId('security_list_ids'));
+            let security_lists_select = d3.select(d3Id('security_list_ids'));
             for (let security_list of me.artefact.getOkitJson().security_lists) {
                 if (me.vcn_id === security_list.vcn_id) {
-                    security_lists_select.append($('<option>').attr('value', security_list.id).text(security_list.display_name));
+                    let div = security_lists_select.append('div');
+                    div.append('input')
+                        .attr('type', 'checkbox')
+                        .attr('id', safeId(security_list.id))
+                        .attr('value', security_list.id);
+                    div.append('label')
+                        .attr('for', safeId(security_list.id))
+                        .text(security_list.display_name);
                 }
             }
             // Load Properties

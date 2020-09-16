@@ -30,20 +30,22 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     getSvgDefinition() {
         let definition = this.newSVGDefinition(this, VirtualCloudNetwork.getArtifactReference());
         //let parent_first_child = getCompartmentFirstChildContainerOffset(this.compartment_id);
-        let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = parent_first_child.dx;
-        definition['svg']['y'] = parent_first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.orange;
-        definition['rect']['stroke']['dash'] = 5;
-        definition['rect']['stroke']['width'] = 2;
-        definition['icon']['x_translation'] = icon_translate_x_start;
-        definition['icon']['y_translation'] = icon_translate_y_start;
-        definition['name']['show'] = true;
-        definition['label']['show'] = true;
-        definition['info']['show'] = true;
-        definition['info']['text'] = this.cidr_block;
+        if (this.getParent()) {
+            let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
+            definition['svg']['x'] = parent_first_child.dx;
+            definition['svg']['y'] = parent_first_child.dy;
+            definition['svg']['width'] = this.dimensions['width'];
+            definition['svg']['height'] = this.dimensions['height'];
+            definition['rect']['stroke']['colour'] = stroke_colours.orange;
+            definition['rect']['stroke']['dash'] = 5;
+            definition['rect']['stroke']['width'] = 2;
+            definition['icon']['x_translation'] = icon_translate_x_start;
+            definition['icon']['y_translation'] = icon_translate_y_start;
+            definition['name']['show'] = true;
+            definition['label']['show'] = true;
+            definition['info']['show'] = true;
+            definition['info']['text'] = this.cidr_block;
+        }
         return definition;
     }
 

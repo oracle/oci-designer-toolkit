@@ -20,7 +20,7 @@ class OkitDesignerJsonView extends OkitJsonView {
     }
 
     draw() {
-        console.group('Drawing Designer Canvas');
+        console.log('Drawing Designer Canvas');
         console.info(this);
         // Display Json
         this.displayOkitJson();
@@ -144,7 +144,7 @@ class OkitDesignerJsonView extends OkitJsonView {
 
         console.info(this);
 
-        console.groupEnd();
+        console.log();
     }
 
     /*
@@ -165,7 +165,7 @@ class OkitDesignerJsonView extends OkitJsonView {
     displayOkitJson() {}
 
     newCanvas(width=400, height=300) {
-        console.group('New Canvas');
+        console.log('New Canvas');
         console.info('Parent                : ' + this.parent_id);
         console.info('Width                 : ' + width);
         console.info('Height                : ' + height);
@@ -204,7 +204,7 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("preserveAspectRatio", "xMinYMin meet");
 
         this.clearCanvas();
-        console.groupEnd();
+        console.log();
 
         return canvas_svg;
     }
@@ -305,6 +305,26 @@ class OkitDesignerJsonView extends OkitJsonView {
 class OkitDesignerArtefactView extends OkitArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
+    }
+
+    loadNetworkSecurityGroups(select_id, subnet_id) {
+        $(jqId(select_id)).empty();
+        let multi_select = d3.select(d3Id(select_id));
+        if (subnet_id && subnet_id !== '') {
+            let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
+            for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+                if (networkSecurityGroup.vcn_id === vcn.id) {
+                    let div = multi_select.append('div');
+                    div.append('input')
+                        .attr('type', 'checkbox')
+                        .attr('id', safeId(networkSecurityGroup.id))
+                        .attr('value', networkSecurityGroup.id);
+                    div.append('label')
+                        .attr('for', safeId(networkSecurityGroup.id))
+                        .text(networkSecurityGroup.display_name);
+                }
+            }
+        }
     }
 }
 

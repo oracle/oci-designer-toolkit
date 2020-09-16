@@ -39,6 +39,7 @@ function resetDesigner() {
     hideRegionTabBar();
     $(jqId(PROPERTIES_PANEL)).load('propertysheets/empty.html');
     displayOkitJson();
+    $(jqId('file-save-regional-menu-item-li')).addClass('hidden');
 }
 /*
 ** Set OCI Link
@@ -79,13 +80,13 @@ function handleNew(evt) {
     redrawSVGCanvas();
 }
 function newDiagram() {
-    console.groupCollapsed('Creating New Diagram');
+    console.log('Creating New Diagram');
     newModel();
     newDesignerView();
     okitJsonView.newCanvas();
     okitJsonView.newCompartment();
     console.info(okitJsonView);
-    console.groupEnd();
+    console.log();
 }
 function newDesignerView() {
     okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', okitSettings.is_display_grid, palette_svg);
@@ -96,6 +97,16 @@ function newModel() {
 function newRegionsModel() {
     regionOkitJson = new OkitRegions();
 }
+function setTitleDescription() {
+    $('#title').val(okitJsonModel.title);
+    $('#description').val(okitJsonModel.description);
+}
+function updateJsonTitle() {
+    okitJsonModel.title = $('#title').val();
+}
+function updateJsonDescription() {
+    okitJsonModel.description = $('#description').val();
+}
 
 /*
 ** Load Existing Json
@@ -103,6 +114,11 @@ function newRegionsModel() {
 function handleLoad(evt) {
     hideNavMenu();
     resetDesigner();
+    /*
+    ** Add Load File Handling
+     */
+    $('#files').off('change').on('change', handleFileSelect);
+    // Click Files Element
     let fileinput = document.getElementById("files");
     fileinput.click();
 }
@@ -160,13 +176,17 @@ function handleSave(evt) {
     if (okitSettings.is_timestamp_files) {
         filename = 'okit-' + getTimestamp() + '.json'
     }
-    if (Object.keys(regionOkitJson).length > 0) {
-        console.info('>> Saving Multi Region File');
-        saveJson(JSON.stringify(regionOkitJson, null, 2), filename);
-    } else {
-        console.info('>> Saving Single Region File');
-        saveJson(JSON.stringify(okitJsonModel, null, 2), filename);
+    console.info('>> Saving Single Region File');
+    saveJson(JSON.stringify(okitJsonModel, null, 2), filename);
+}
+function handleSaveRegional(evt) {
+    hideNavMenu();
+    let filename = "okit-regional.json";
+    if (okitSettings.is_timestamp_files) {
+        filename = 'okit-regional-' + getTimestamp() + '.json'
     }
+    console.info('>> Saving Multi Region File');
+    saveJson(JSON.stringify(regionOkitJson, null, 2), filename);
 }
 function saveJson(text, filename){
     let uri = 'data:text/plain;charset=utf-u,'+encodeURIComponent(text);
@@ -184,6 +204,7 @@ function handleSaveAs(evt) {
         .attr('id', 'save_as_template_table')
         .attr('class', 'table okit-table okit-modal-dialog-table');
     let tbody = table.append('div').attr('class', 'tbody');
+    // Title
     let tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').text('Title');
     tr.append('div').attr('class', 'td').append('input')
@@ -191,6 +212,7 @@ function handleSaveAs(evt) {
         .attr('id', 'template_title')
         .attr('name', 'template_title')
         .attr('type', 'text');
+    // Description
     tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').text('Description');
     tr.append('div').attr('class', 'td').append('input')
@@ -198,6 +220,8 @@ function handleSaveAs(evt) {
         .attr('id', 'template_description')
         .attr('name', 'template_description')
         .attr('type', 'text');
+    // Type
+    /* TODO: Reinstate when sub template types are implemented
     tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').text('Type');
     tr.append('div').attr('class', 'td').append('input')
@@ -205,6 +229,8 @@ function handleSaveAs(evt) {
         .attr('id', 'template_type')
         .attr('name', 'template_type')
         .attr('type', 'text');
+    */
+    // Save
     let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'save_as_button')
         .attr('type', 'button')
@@ -215,7 +241,8 @@ function handleSaveAs(evt) {
 function handleSaveAsTemplate(e) {
     okitJsonModel.title = $(jqId('template_title')).val();
     okitJsonModel.description = $(jqId('template_description')).val();
-    okitJsonModel.template_type = $(jqId('template_type')).val();
+    //okitJsonModel.template_type = $(jqId('template_type')).val();
+    okitJsonModel.template_type = 'User';
     $.ajax({
         type: 'post',
         url: 'saveas/template',
@@ -357,6 +384,18 @@ function displayQueryDialog() {
             .append('option')
                 .attr('value', 'Retrieving')
                 .text('Retrieving..........');
+    // Sub-Compartment
+    tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('');
+    let td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('id', 'include_sub_compartments')
+        .attr('name', 'include_sub_compartments')
+        .attr('type', 'checkbox');
+    td.append('label')
+        .attr('for', 'include_sub_compartments')
+        .text('Include Sub Compartments');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
@@ -477,11 +516,12 @@ function selectQueryLastUsedCompartment() {
 }
 let queryCount = 0;
 function showQueryResults() {
-    console.group('Generating Query Results');
+    console.log('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
     let request = {};
     request.compartment_id = $(jqId('query_compartment_id')).val();
     request.config_profile = $(jqId('config_profile')).val();
+    request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
     request.region = '';
     clearRegionTabBar();
     showRegionTabBar();
@@ -497,6 +537,7 @@ function showQueryResults() {
         for (const [i, region] of regions.entries()) {
             addRegionTab(region);
         }
+        $(jqId('file-save-regional-menu-item-li')).removeClass('hidden');
         $(jqId(regionTabName(regions[0]))).trigger("click");
         okitOCIQuery.query(request, function(region) {
             console.info('Complete ' + region);
@@ -510,7 +551,7 @@ function showQueryResults() {
         console.info('Region Not Selected.');
     }
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
-    console.groupEnd();
+    console.log();
 }
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
@@ -561,7 +602,7 @@ function handleExportToJPG(evt) {
     saveAsImage('jpeg');
 }
 function saveAsImage(type='jpeg') {
-    console.group("Saving As " + type);
+    console.log("Saving As " + type);
     let svg = d3.select(d3Id("canvas-svg")).node();
     let serializer = new XMLSerializer();
     let svgStr = serializer.serializeToString(svg);
@@ -591,7 +632,7 @@ function saveAsImage(type='jpeg') {
     }
 
     img.src = 'data:image/svg+xml;base64,' + window.btoa(svgStr);
-    console.groupEnd();
+    console.log();
 }
 /*
 ** Resource Manager
@@ -644,6 +685,7 @@ function displayOkitJson() {
  */
 function displayDesignerView() {
     okitJsonView.draw();
+    setTitleDescription();
 }
 /*
 ** Slidebar handlers
@@ -747,7 +789,7 @@ function displayValidationResults(results) {
             d3.select(d3Id(error.id)).attr('fill', fill);
         });
         tr.on('click', () => {
-            error_propeties.push(error.element);
+            error_properties.push(error.element);
             d3.select(d3Id(error.id + '-svg')).on("click")();
             $('#toggle_properties_button').click();
         });
@@ -777,7 +819,7 @@ function displayValidationResults(results) {
             d3.select(d3Id(warning.id)).attr('fill', fill);
         });
         tr.on('click', () => {
-            warning_propeties.push(warning.element);
+            warning_properties.push(warning.element);
             d3.select(d3Id(warning.id + '-svg')).on("click")();
             $('#toggle_properties_button').click();
         });

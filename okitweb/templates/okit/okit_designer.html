@@ -40,6 +40,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_generation.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_import.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_properties.js') }}"></script>
     {% for model_js in artefact_model_js_files %}
         <script type="text/javascript" src="{{ url_for('static', filename='okit/model/js/artefacts/' + model_js) }}"></script>
@@ -77,12 +78,13 @@
                     </span>
                 </div>
             </li>
-            <li><a id="file-new-menu-item"     class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
-            <li><a id="file-load-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
+            <li><a id="file-new-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
+            <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
             <li id="save_file" class="sub-header-item dropdown">
                 <span>Save</span>
                 <ul class="dropdown-content">
-                    <li><a id="file-save-menu-item"    class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
+                    <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
+                    <li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li>
                     <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAs()">Save As Template</a></li>
                 </ul>
             </li>
@@ -160,7 +162,7 @@
                     </span>
                 </div>
             </li>
-            <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)">Terraform Json</a></li>
+            <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
         </ul-->
     </ul>
 {% endblock %}
@@ -218,6 +220,10 @@
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
         <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
+        <div id="canvas_details" class="okit-canvas-details tr">
+            <div class="td"><div class="td"><label>Title</label></div><div class="td"><input id="title" type="text" size="50" onchange="updateJsonTitle()"/></div></div>
+            <div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="description" type="text" size="100" onchange="updateJsonDescription()"/></div></div>
+        </div>
         <div id="canvas-div" class="okit-svg-canvas"></div>
     </div>
     <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">

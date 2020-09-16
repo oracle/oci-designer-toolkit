@@ -44,7 +44,7 @@
       ],
       "source_details": {
         "os": "Oracle Linux",
-        "version": "7.7",
+        "version": "",
         "boot_volume_size_in_gbs": "50",
         "source_type": "image"
       },
@@ -93,7 +93,7 @@
       ],
       "source_details": {
         "os": "Oracle Linux",
-        "version": "7.7",
+        "version": "",
         "boot_volume_size_in_gbs": "50",
         "source_type": "image"
       },
@@ -142,7 +142,7 @@
       ],
       "source_details": {
         "os": "Oracle Linux",
-        "version": "7.7",
+        "version": "",
         "boot_volume_size_in_gbs": "50",
         "source_type": "image"
       },
@@ -191,7 +191,7 @@
       ],
       "source_details": {
         "os": "Oracle Linux",
-        "version": "7.7",
+        "version": "",
         "boot_volume_size_in_gbs": "50",
         "source_type": "image"
       },

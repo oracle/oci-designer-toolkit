@@ -300,7 +300,7 @@ function generateArc(radius, clockwise, xmod, ymod) {
 }
 
 function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}, horizontal=false) {
-    console.groupCollapsed('Generating Connector');
+    console.log('Generating Connector');
     console.info('Start Coordinates : ' + JSON.stringify(start));
     console.info('End Coordinates   : ' + JSON.stringify(end));
     if (horizontal) {
@@ -308,11 +308,11 @@ function drawConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}, horizon
     } else {
         drawVerticalConnector(parent_svg, id, start, end);
     }
-    console.groupEnd();
+    console.log();
 }
 
 function drawVerticalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0},) {
-    console.groupCollapsed('Generating Vertical Connector');
+    console.log('Generating Vertical Connector');
     console.info('Start Coordinates : ' + JSON.stringify(start));
     console.info('End Coordinates   : ' + JSON.stringify(end));
     if (path_connector) {
@@ -396,11 +396,11 @@ function drawVerticalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0},
             .attr("marker-end", "url(#connector-end-circle)");
         //return polyline;
     }
-    console.groupEnd();
+    console.log();
 }
 
 function drawHorizontalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
-    console.groupCollapsed('Generating Horizontal Connector');
+    console.log('Generating Horizontal Connector');
     console.info('Start Coordinates : ' + JSON.stringify(start));
     console.info('End Coordinates   : ' + JSON.stringify(end));
     if (path_connector) {
@@ -482,7 +482,7 @@ function drawHorizontalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0
             .attr("marker-start", "url(#connector-end-circle)")
             .attr("marker-end", "url(#connector-end-circle)");
     }
-    console.groupEnd();
+    console.log();
 }
 
 function coordString(coord) {
@@ -518,7 +518,7 @@ const default_canvas_width = Math.round($(window).width() / 10) * 10;
 const default_canvas_height = Math.round(($(window).height() * 2) / 10) * 10;
 
 function newCanvasWrapper(width=default_canvas_width, height=default_canvas_height) {
-    console.groupCollapsed('New Canvas Wrapper');
+    console.log('New Canvas Wrapper');
     let parent_id = 'canvas-wrapper';
     let canvas_wrapper_div = d3.select(d3Id(parent_id));
     let parent_width  = $(jqId(parent_id)).width();
@@ -538,14 +538,14 @@ function newCanvasWrapper(width=default_canvas_width, height=default_canvas_heig
     console.info('Window Height : ' + $(window).height());
     console.info('Canvas Width  : ' + width);
     console.info('Canvas Height : ' + height);
-    console.groupEnd();
+    console.log();
 
     return canvas_wrapper_div;
 }
 
 // TODO: Deprecated
 function newCanvasDeprecated(parent_id="canvas-div", width=400, height=300) {
-    console.groupCollapsed('New Canvas');
+    console.log('New Canvas');
     console.info('Parent                : ' + parent_id);
     console.info('Width                 : ' + width);
     console.info('Height                : ' + height);
@@ -584,7 +584,7 @@ function newCanvasDeprecated(parent_id="canvas-div", width=400, height=300) {
         .attr("preserveAspectRatio", "xMinYMin meet");
 
     clearCanvas();
-    console.groupEnd();
+    console.log();
 
     return canvas_svg;
 }

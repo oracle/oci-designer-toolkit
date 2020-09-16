@@ -1,0 +1,151 @@
+
+# ------ Create Instance Pool
+# ------- Instance Configuration
+resource "oci_core_instance_configuration" "{{ resource_name }}Config" {
+    # Required
+    compartment_id      = {{ compartment_id }}
+
+    # Optional
+    display_name        = {{ display_name | safe }}
+{% if instance_details is defined %}
+    instance_details {
+        # Required
+        instance_type = {{ instance_details.instance_type | safe }}
+    }
+{% endif %}
+
+{% if defined_tags is defined %}
+    defined_tags               = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags              = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}Config_id            = oci_core_instance.{{ resource_name }}Config.id
+}
+
+# ------- Instance Pool
+resource "oci_core_instance_pool" "{{ resource_name }}" {
+    # Required
+    compartment_id      = {{ compartment_id }}
+    instance_configuration_id = local.{{ resource_name }}Config_id
+    display_name        = {{ display_name | safe }}
+{% for placement_configuration in placement_configurations %}
+    placement_configurations {
+        #Required
+        availability_domain = lookup(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain.placement_configuration | safe }} - 1], "name")
+        primary_subnet_id = {{ placement_configuration.primary_subnet_id }}
+        #Optional
+{% if placement_configuration.fault_domains is defioned %}
+        fault_domains = [{% for fd in placement_configuration.fault_domains %}{{ fd }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
+{% if placement_configuration.secondary_vnic_subnets is defioned %}
+    {% for vinc in placement_configuration.secondary_vnic_subnets %}
+        secondary_vnic_subnets {
+            #Required
+            subnet_id = {{ vnic.subnet_id | safe }}
+            #Optional
+            display_name = {{ display_name | safe }}
+        }
+    {% endfor %}
+{% endif %}
+    }
+{
+    size = {{ size }}
+    # Optional
+{% if load_balancers is defined %}
+    {% for load_balancer in load_balancers %}
+    load_balancers {
+        #Required
+        backend_set_name = {{ load_balancer.backend_set_name | safe }}
+        load_balancer_id = {{ load_balancer.load_balancer_id | safe }}
+        port = {{ load_balancer.port | safe }}
+        vnic_selection = {{ load_balancer.vnic_selection | safe }}
+    }
+    {% endfor %}
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags               = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags              = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
+}
+
+# ------- Auto Scaling
+resource "oci_autoscaling_auto_scaling_configuration" "{{ resource_name }}AutoScaling" {
+    # Required
+    compartment_id      = {{ compartment_id }}
+    auto_scaling_resources {
+        #Required
+        id = local.{{ resource_name }}_id
+        type = "instancePool"
+    }
+    policies {
+        # Required
+        capacity {
+            #Optional
+{% if policies.capacity.initial is defined %}
+            initial = {{ policies.capacity.initial | safe }}
+{% endif %}
+{% if policies.capacity.max is defined %}
+            max = {{ policies.capacity.max | safe }}
+{% endif %}
+{% if policies.capacity.min is defined %}
+            min = {{ policies.capacity.min | safe }}
+{% endif %}
+        }
+        policy_type = {{ policies.policy_type | safe }}
+
+        #Optional
+        display_name = {{ display_name | safe }}
+{% if policies.execution_schedule is defined %}
+        execution_schedule {
+            #Required
+            expression = {{ policies.execution_schedule.expression | safe }}
+            timezone = {{ policies.execution_schedule.timezone | safe }}
+            type = {{ policies.execution_schedule.type | safe }}
+        }
+{% endif %}
+{% if policies.is_enabled is defined %}
+        is_enabled = {{ policies.is_enabled | safe }}
+{% endif %}
+{% if policies.rules is defined %}
+    {% for rule in policies.rules %}
+        rules {
+            #Optional
+            action {
+                #Optional
+                type = {{ rule.type | safe }}
+                value = {{ rule.value | safe }}
+            }
+            display_name = {{ display_name | safe }}
+            metric {
+                #Optional
+                metric_type = {{ rule.metric.metric_type }}
+                threshold {
+                    #Optional
+                    operator = {{ rule.metric.threshold.operator }}
+                    value = {{ rule.metric.threshold.operator }}
+                }
+            }
+        }
+    {% endfor %}
+{% endif %}
+    }
+    # Optional
+    display_name        = {{ display_name | safe }}
+
+{% if defined_tags is defined %}
+    defined_tags               = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags              = {{ freeform_tags | safe }}
+{% endif %}
+}

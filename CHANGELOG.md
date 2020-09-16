@@ -1,10 +1,24 @@
 # Release Notes
 
 
+## Version 0.11.0 
+**Release Date**: 16th September 2020
+### Features
+1. Modify Multiple Select Options to Checkbox Group
+2. Add Option to Query Dialog to allow the user to specify if the query will drill down into Sub-Compartments.
+3. Modify start functionality to allow the user to specify a local directory where the user templates will be saved.
+4. Add display/edit of the Model Title and Description to the web interface.
+
+### Bug Fixes
+1. Database System CPU Count causing error when generating Terraform (Issue: #98)
+2. Network Security Groups, for a VCN, were not deleted when the VCN is deleted.
+3. DRG not being displayed if it was not attached to a VCN following a query.
+
+
 ## Version 0.10.2 
 **Release Date**: 27th August 2020
 ### Bug Fixes
-1. Resolve issue where deleting an artefact would cause an addition OKE cluster to be created if one exists on the canvas. In addition deleteing OKE caused it to be removed from the model but not the view. 
+1. Resolve issue where deleting an artefact would cause an addition OKE cluster to be created if one exists on the canvas. In addition deleting OKE caused it to be removed from the model but not the view. 
 
 
 ## Version 0.10.1 

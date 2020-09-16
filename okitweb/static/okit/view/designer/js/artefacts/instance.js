@@ -25,7 +25,7 @@ class InstanceView extends OkitDesignerArtefactView {
     get minimum_width() {return 135;}
     get minimum_height() {return 100;}
     get dimensions() {
-        console.group('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.minimum_dimensions;
         // Calculate Size based on Child Artifacts
         // Process Bottom Edge Artifacts
@@ -43,7 +43,7 @@ class InstanceView extends OkitDesignerArtefactView {
         dimensions.width  = Math.max(dimensions.width,  this.minimum_dimensions.width);
         dimensions.height = Math.max(dimensions.height, this.minimum_dimensions.height);
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
+        console.log();
         return dimensions;
     }
 
@@ -59,7 +59,7 @@ class InstanceView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Get Inner Rect to attach Connectors
@@ -84,12 +84,12 @@ class InstanceView extends OkitDesignerArtefactView {
             // Draw Attachments
             this.drawAttachments();
         }
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
     drawAttachments() {
-        console.group('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
+        console.log('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
             let attachment = new BlockStorageVolumeView(this.getJsonView().getOkitJson().getBlockStorageVolume(block_storage_id), this.getJsonView());
@@ -121,7 +121,7 @@ class InstanceView extends OkitDesignerArtefactView {
             });
             attachment_count += 1;
         }
-        console.groupEnd();
+        console.log();
     }
 
     // Return Artifact Specific Definition.
@@ -152,9 +152,16 @@ class InstanceView extends OkitDesignerArtefactView {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance.html", () => {
             // Load Referenced Ids
             // Build Block Storage Select
-            let block_storage_volume_select = $(jqId('block_storage_volume_ids'));
+            let block_storage_volume_select = d3.select(d3Id('block_storage_volume_ids'));
             for (let block_storage_volume of me.getOkitJson().block_storage_volumes) {
-                block_storage_volume_select.append($('<option>').attr('value', block_storage_volume.id).text(block_storage_volume.display_name));
+                let div = block_storage_volume_select.append('div');
+                div.append('input')
+                    .attr('type', 'checkbox')
+                    .attr('id', safeId(block_storage_volume.id))
+                    .attr('value', block_storage_volume.id);
+                div.append('label')
+                    .attr('for', safeId(block_storage_volume.id))
+                    .text(block_storage_volume.display_name);
             }
             // Build Primary Vnic / Subnet List
             let subnet_select = $(jqId('subnet_id'));
@@ -200,18 +207,6 @@ class InstanceView extends OkitDesignerArtefactView {
             version_select.append($('<option>').attr('value', version).text(version));
         }
         $("#version").val($("#version option:first").val());
-    }
-
-    loadNetworkSecurityGroups(select_id, subnet_id) {
-        $(jqId(select_id)).empty();
-        if (subnet_id && subnet_id !== '') {
-            let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-            for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-                if (networkSecurityGroup.vcn_id === vcn.id) {
-                    $(jqId(select_id)).append($('<option>').attr('value', networkSecurityGroup.id).text(networkSecurityGroup.display_name));
-                }
-            }
-        }
     }
 
     loadSecondaryVnics() {
@@ -330,16 +325,21 @@ class InstanceView extends OkitDesignerArtefactView {
         row.append('div').attr('class', 'td')
             .text("Network Security Groups");
         cell = row.append('div').attr('class', 'td');
-        select = cell.append('select')
-            .attr("class", "okit-property-value")
+        select = cell.append('div')
+            .attr("class", "okit-multiple-select")
             .attr("id", "nsg_ids" + idx)
-            .attr("multiple", "multiple")
             .on("change", function() {
-                vnic.nsg_ids = $(jqId("nsg_ids" + idx)).val();
+                vnic.nsg_ids = [];
+                $(jqId("nsg_ids" + idx)).find("input:checkbox").each(function() {
+                    if ($(this).prop('checked')) {vnic.nsg_ids.push($(this).val());}
+                });
                 displayOkitJson();
             });
         this.loadNetworkSecurityGroups("nsg_ids" + idx, vnic.subnet_id);
-        $(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
+        //$(jqId("nsg_ids" + idx)).val(vnic.nsg_ids);
+        $(jqId("nsg_ids" + idx)).find("input:checkbox").each(function() {
+            if (vnic.nsg_ids.includes($(this).val())) {$(this).prop("checked", true);}
+        });
     }
 
     /*

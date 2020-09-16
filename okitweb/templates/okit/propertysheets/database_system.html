@@ -49,12 +49,12 @@
         <option value="2">2</option>
     </select></div></div>
     <div class='tr' id="cluster_name_tr"><div class='td'>Cluster Name</div><div class='td'><input type="text" id="cluster_name" name="cluster_name" class="okit-property-value"></div></div>
-    <div class='tr'><div class='td'>Fault Domain</div><div class='td'><select id="fault_domains" multiple="multiple" class="okit-property-value">
-        <option value="FAULT-DOMAIN-1">Fault Domain 1</option>
-        <option value="FAULT-DOMAIN-2">Fault Domain 2</option>
-        <option value="FAULT-DOMAIN-3">Fault Domain 3</option>
-    </select></div></div>
-    <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><select multiple="multiple" id="nsg_ids" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Fault Domain</div><div class='td'><div id="fault_domains" class="okit-multiple-select">
+        <div><label><input type="checkbox" value="FAULT-DOMAIN-1"/>Fault Domain 1</label></div>
+        <div><label><input type="checkbox" value="FAULT-DOMAIN-2"/>Fault Domain 2</label></div>
+        <div><label><input type="checkbox" value="FAULT-DOMAIN-3"/>Fault Domain 3</label></div>
+    </div></div></div>
+    <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><div id="nsg_ids" class="okit-multiple-select"></div></div></div>
 {% endblock %}
 
 {% block optional_properties_block %}{% endblock %}

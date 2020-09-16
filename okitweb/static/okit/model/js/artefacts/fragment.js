@@ -27,12 +27,12 @@ class Fragment extends  OkitJson {
     get target_type() {return this.target.type;}
 
     updateIds() {
-        console.group('Updating Ids');
+        console.log('Updating Ids');
         // Regenerate all Ids so the fragment can be dropped multiple times
         let id_map = {};
         this.updatePrimaryIds(this, id_map);
         this.updateIdAssociations(this, id_map);
-        console.groupEnd();
+        console.log();
     }
 
     updatePrimaryIds(fragment_json, id_map) {

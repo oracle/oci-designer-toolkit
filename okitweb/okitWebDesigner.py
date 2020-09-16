@@ -159,7 +159,7 @@ def designer():
     template_dirs = {}
     logger.debug('Walking the template directories')
     rootdir = os.path.join(bp.static_folder, 'templates')
-    for (dirpath, dirnames, filenames) in os.walk(rootdir):
+    for (dirpath, dirnames, filenames) in os.walk(rootdir, followlinks=True):
         logger.debug('dirpath : {0!s:s}'.format(dirpath))
         logger.debug('dirnames : {0!s:s}'.format(dirnames))
         logger.debug('filenames : {0!s:s}'.format(filenames))

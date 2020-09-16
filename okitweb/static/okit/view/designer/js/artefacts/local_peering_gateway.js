@@ -26,7 +26,7 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
+        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
         // Add Highlighting
@@ -45,7 +45,7 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
             }
             d3.event.stopPropagation();
         });
-        console.groupEnd();
+        console.log();
         return svg;
     }
 
@@ -65,14 +65,14 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
 
     // Return Artifact Dimensions
     getDimensions() {
-        console.group('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
+        console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.getMinimumDimensions();
         // Calculate Size based on Child Artifacts
         // Check size against minimum
         dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
         dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.groupEnd();
+        console.log();
         return dimensions;
     }
 
