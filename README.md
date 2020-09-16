@@ -37,19 +37,30 @@ Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Insta
 ### Quick Start
 The docker image is the recommended runtime server OKIT provides a simple Docker Compose script to build and start the container.
 
+#### Clone Repository
+```bash
+git clone --depth 1 https://github.com/oracle/oci-designer-toolkit.git
+```
+
 #### Create Config File
 
-Create the directory __<OKIT_ROOT_DIR>/containers/oci__ and within it a file called __config__ with contents similar to
-that below.
+Create the OCI cli __config__ file in the directory __oci-designer-toolkit/containers/oci__ with contents similar to that below.
+The __*key_file*__ is a fixed value because the contents of the __oci-designer-toolkit/containers/oci__ will be copied to the
+appropriate users home directory, as __~/.oci__, during the build process.
 
 ```properties
 [DEFAULT]
 user=ocid1.user.oc1..aaaaaaaak6z......
 fingerprint=3b:7e:37:ec:a0:86:1....
-key_file=~/.oci/oci_api_key.pem
+key_file=~/.oci/oci_api_key.pem  
 tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
 region=us-phoenix-1
 ```
+
+#### Copy Key File
+
+Copy your __oci_api_key.pem__ to the __oci-designer-toolkit/containers/oci__ directory.
+
 #### Build and Start
 
 ```bash
