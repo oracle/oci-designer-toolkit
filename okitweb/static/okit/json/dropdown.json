@@ -607,9 +607,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-Gen2-GPU-2020.06.11-0",
+      "display_name": "Canonical-Ubuntu-16.04-Gen2-GPU-2020.09.11-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaamzhlsblmr7keoyh7ss2o7hjv2k7c3gywhy4reoar224yz5zvxq6q",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa2v6cjmd7amwh4c3qgid5eoblpv4yhapqzy7qdxq2wwwfzr4vztga",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -625,7 +625,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "Canonical Ubuntu 16.04",
-      "time_created": "2020-06-12T18:44:15.987000+00:00"
+      "time_created": "2020-09-11T04:26:21.564000+00:00"
     },
     {
       "agent_features": null,
@@ -685,6 +685,32 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-16.04-2020.09.08-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaxx5rtokz3ieto6z5rsiosh4diglkacbilz37edcvmqt2wlh4jzmq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "16.04",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 16.04",
+      "time_created": "2020-09-11T16:55:34.138000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
       "display_name": "Canonical-Ubuntu-16.04-2020.08.22-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaaiwnf6fs4kepafusmchvrvm7g2fiv4rehk5hodkl24bcupk46s2ra",
@@ -737,9 +763,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-2020.06.11-0",
+      "display_name": "Canonical-Ubuntu-16.04-Minimal-2020.09.08-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaatrkb3nejqezqr2hazbzgqjzsjb5jmw7xhvqafiuxtkhailmnwivq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaas6vfj6o3nvgdxagq6sc64gcvcmjlbpke7jcidwddwe2q425v4oya",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -751,11 +777,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "16.04",
+      "operating_system_version": "16.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 16.04",
-      "time_created": "2020-06-12T18:42:20.616000+00:00"
+      "sort_key": "Canonical Ubuntu 16.04 Minimal",
+      "time_created": "2020-09-11T04:27:11.769000+00:00"
     },
     {
       "agent_features": null,
@@ -815,9 +841,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-Minimal-2020.06.11-0",
+      "display_name": "Canonical-Ubuntu-18.04-2020.09.10-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaetnvdvw2lsuwrtdirbvhfcm33pdxk66dhfcjzkqi2tjidbgl3yga",
+      "id": "ocid1.image.oc1.phx.aaaaaaaawzjacdq4gcbtfl2nwe53fusymdc6o56g6pnfbw2v3466j4czdk7a",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -829,11 +855,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "16.04 Minimal",
+      "operating_system_version": "18.04",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 16.04 Minimal",
-      "time_created": "2020-06-12T18:44:51.216000+00:00"
+      "sort_key": "Canonical Ubuntu 18.04",
+      "time_created": "2020-09-11T04:27:04.714000+00:00"
     },
     {
       "agent_features": null,
@@ -893,9 +919,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-18.04-2020.06.11-0",
+      "display_name": "Canonical-Ubuntu-18.04-Minimal-2020.09.10-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa2idgsogk3ialam2xdzoeipz4wli5itgjaki5n72objvaiygcyzwa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaegwxhu6zbvjfrb43omsfo2tle5qjiqj7su72rwo624jdmfe2pfeq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -907,11 +933,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "18.04",
+      "operating_system_version": "18.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 18.04",
-      "time_created": "2020-06-12T18:42:58.028000+00:00"
+      "sort_key": "Canonical Ubuntu 18.04 Minimal",
+      "time_created": "2020-09-11T17:18:28.552000+00:00"
     },
     {
       "agent_features": null,
@@ -971,9 +997,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-18.04-Minimal-2020.06.11-0",
+      "display_name": "Canonical-Ubuntu-20.04-2020.09.07-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa45lzmijcz4iavrfxg4czkcufpqkvrd2rqhdyq6lykxpetfyfxkea",
+      "id": "ocid1.image.oc1.phx.aaaaaaaao6hcptgplqxdm2wcocrislrmb67wdqytypw3mlzv2ivrusxnflzq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -985,11 +1011,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "18.04 Minimal",
+      "operating_system_version": "20.04",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 18.04 Minimal",
-      "time_created": "2020-06-12T18:44:15.568000+00:00"
+      "sort_key": "Canonical Ubuntu 20.04",
+      "time_created": "2020-09-11T19:36:09.750000+00:00"
     },
     {
       "agent_features": null,
@@ -1049,9 +1075,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-20.04-2020.06.11-0",
+      "display_name": "Canonical-Ubuntu-20.04-Minimal-2020.09.07-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaagxjw52zc22yyyqtid5737elillsqt2vxokj5wdnvhvswhyol74qq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaizxszm6byd2azc5hz5hfxx7gr3r4f5v3inm2ukopzr5juvpslofa",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1063,11 +1089,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "20.04",
+      "operating_system_version": "20.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 20.04",
-      "time_created": "2020-06-12T18:44:14.738000+00:00"
+      "sort_key": "Canonical Ubuntu 20.04 Minimal",
+      "time_created": "2020-09-11T19:34:04.433000+00:00"
     },
     {
       "agent_features": null,
@@ -1120,32 +1146,6 @@
       "size_in_mbs": 47694,
       "sort_key": "Canonical Ubuntu 20.04 Minimal",
       "time_created": "2020-07-22T20:24:30.596000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-20.04-Minimal-2020.06.11-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaoigo34hq77miw7synhozkrmonwij7qcs6smntlsp5cf4lixbgm4a",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": true,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "20.04 Minimal",
-      "shapes": [],
-      "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 20.04 Minimal",
-      "time_created": "2020-06-12T18:46:02.787000+00:00"
     },
     {
       "agent_features": null,
@@ -1751,6 +1751,32 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.08.26-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaopy32lgqiazzcccuaonheaq3hdegl27dvpaesy4q2j3yi3tup27a",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2012 R2 Datacenter",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2012 R2 Datacenter",
+      "time_created": "2020-09-01T22:19:18.917000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
       "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.07.17-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaaa66wky2u6m3657yzem4kmshe7e5cp2nlsqw57aaonjc2fhulk66q",
@@ -1803,9 +1829,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.05.19-0",
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-DenseIO-2020.08.31-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa3sbwzsy3v6otzcopx47ecjtf7tgtpzn7z57e3tckdpm36l62d5yq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaitfr3bbz2nkfwi4f4spd33lvod2brjgvzsvpwbpchngqw3zkynuq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1821,7 +1847,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-05-27T01:23:37.487000+00:00"
+      "time_created": "2020-09-01T22:18:51.838000+00:00"
     },
     {
       "agent_features": null,
@@ -1881,9 +1907,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-DenseIO-2020.05.19-0",
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-2020.08.26-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaukpf5ovr2niehs5jcqwhv4f72iai74u4eam4fywwfl4gn3ihdgza",
+      "id": "ocid1.image.oc1.phx.aaaaaaaapazc6izdinxd4ihfpflnhqiw4yyprru3cbwvatnvyurr6znbh4ga",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1899,7 +1925,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-05-26T20:23:02.921000+00:00"
+      "time_created": "2020-09-01T22:16:59.844000+00:00"
     },
     {
       "agent_features": null,
@@ -1959,9 +1985,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-2020.05.19-0",
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-2020.08.26-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaamgwan7u4o3pa7fxjqvubt7xkqk7bpnlibn6vrdhmj5y6ryli4bnq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa4zxr45dqgmqevwgchxn6pxn6qvowynosrre4crofbfh4ojyu5mlq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1977,7 +2003,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-05-26T20:23:47.465000+00:00"
+      "time_created": "2020-09-01T22:19:17.816000+00:00"
     },
     {
       "agent_features": null,
@@ -2037,25 +2063,25 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-2020.05.19-0",
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.08.27-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaug32foq3h3hdkralflbnstlvudugrlpkeckjmy4wyf4ab2z35dea",
-      "launch_mode": "NATIVE",
+      "id": "ocid1.image.oc1.phx.aaaaaaaawzxvick5aconxusn7u2yl5sc6pka57jp5ucopa43h7qcflnzwj2q",
+      "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
         "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
+        "network_type": "PARAVIRTUALIZED",
         "remote_data_volume_type": "PARAVIRTUALIZED"
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Windows",
-      "operating_system_version": "Server 2012 R2 Datacenter",
+      "operating_system_version": "Server 2012 R2 Standard",
       "shapes": [],
       "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-05-26T20:24:55.518000+00:00"
+      "sort_key": "Windows Server 2012 R2 Standard",
+      "time_created": "2020-09-01T22:18:28.810000+00:00"
     },
     {
       "agent_features": null,
@@ -2115,16 +2141,16 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.05.19-0",
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-2020.08.26-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaauwrwpcq6l2nxknkhnu6uz62ivzm5ot5ntyiypctyhggcrv4aacda",
-      "launch_mode": "PARAVIRTUALIZED",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa2qh6tmjcnz4f5gas3izogscyejihtiytpo7pyws2erfai6k7yrva",
+      "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
         "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
+        "network_type": "VFIO",
         "remote_data_volume_type": "PARAVIRTUALIZED"
       },
       "lifecycle_state": "AVAILABLE",
@@ -2133,7 +2159,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
-      "time_created": "2020-05-27T01:24:48.639000+00:00"
+      "time_created": "2020-09-02T16:47:52.101000+00:00"
     },
     {
       "agent_features": null,
@@ -2193,9 +2219,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-2020.05.19-0",
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-2020.08.26-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaa6hsa7qdjxuhs6r7ehgdu3sknjagkxobfuzeddu7ojxmp3vst6dq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaai7tvw72cljtgywsg5dgfz47i7vy74equqzibxvxkgdgksnb4cafq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2211,7 +2237,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
-      "time_created": "2020-05-29T23:13:39.042000+00:00"
+      "time_created": "2020-09-01T22:17:20.868000+00:00"
     },
     {
       "agent_features": null,
@@ -2264,32 +2290,6 @@
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
       "time_created": "2020-06-12T18:52:30.040000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-2020.05.19-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaauwbr5hcfy3rg4advxedc4qpfuguougoynm3fhzblxue5wfe7hl4a",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": false,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Windows",
-      "operating_system_version": "Server 2012 R2 Standard",
-      "shapes": [],
-      "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2012 R2 Standard",
-      "time_created": "2020-05-26T20:24:52.291000+00:00"
     },
     {
       "agent_features": null,
@@ -2531,32 +2531,6 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Standard-Edition-VM-Gen2-2020.08.26-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaalmpp3iu7emu3a6vdzul4vgn3ibzxnjwgknshhygdfp6nzhlll6za",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": false,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Windows",
-      "operating_system_version": "Server 2016 Standard",
-      "shapes": [],
-      "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2016 Standard",
-      "time_created": "2020-08-27T06:56:40.761000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
       "display_name": "Windows-Server-2016-Standard-Edition-VM-Gen2-2020.07.17-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaavvmygtfbzualhseetppebiqunkohug4axwzubgz3jmn7h3mbh34q",
@@ -2602,32 +2576,6 @@
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Standard",
       "time_created": "2020-06-12T20:28:08.080000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Windows-Server-2016-Standard-Edition-VM-E3-2020.08.26-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaafwkpnyue24ldea75hwp5efu6lqgbdc6wqhzfogsek4hxn3dhmn6a",
-      "launch_mode": "PARAVIRTUALIZED",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": false,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Windows",
-      "operating_system_version": "Server 2016 Standard",
-      "shapes": [],
-      "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2016 Standard",
-      "time_created": "2020-08-31T05:02:40.232000+00:00"
     },
     {
       "agent_features": null,
@@ -2895,32 +2843,6 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.08.28-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaxj2cachojmpi3vzok4u5gfeff5a3ozhkareyxomh6z2po7egnsla",
-      "launch_mode": "PARAVIRTUALIZED",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": false,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Windows",
-      "operating_system_version": "Server 2019 Standard",
-      "shapes": [],
-      "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2019 Standard",
-      "time_created": "2020-08-31T05:36:47.896000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
       "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.07.17-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaafruz4sutfyotjvrqjhl72ogzbb5hphzra5us2454zgrtgdmrwe7a",
@@ -2966,6 +2888,84 @@
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2019 Standard",
       "time_created": "2020-06-11T23:55:06.327000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.08.28-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaa4sbfynqzp65hr2ldkyv7espg3yw6yy2blwg4kmdnk3x6yxt4h2ea",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-08-31T05:36:40.341000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.07.17-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaave37qksnqh5koegipc3kat2xoiafuuyudwxripvbmuncwrd43bjq",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-07-23T06:21:58.083000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.06.10-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaa7t2atiuif357ijbianc4z2jb2xcrydpqp3o4xty4nyxa5twuo62a",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-06-11T23:54:19.666000+00:00"
     },
     {
       "agent_features": null,
@@ -3096,6 +3096,389 @@
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2019 Standard",
       "time_created": "2020-05-26T21:50:51.365000+00:00"
+    }
+  ],
+  "regions": [
+    {
+      "display_name": "AP Chuncheon",
+      "id": "ap-chuncheon-1",
+      "key": "YNY",
+      "name": "ap-chuncheon-1"
+    },
+    {
+      "display_name": "AP Hyderabad",
+      "id": "ap-hyderabad-1",
+      "key": "HYD",
+      "name": "ap-hyderabad-1"
+    },
+    {
+      "display_name": "AP Melbourne",
+      "id": "ap-melbourne-1",
+      "key": "MEL",
+      "name": "ap-melbourne-1"
+    },
+    {
+      "display_name": "AP Mumbai",
+      "id": "ap-mumbai-1",
+      "key": "BOM",
+      "name": "ap-mumbai-1"
+    },
+    {
+      "display_name": "AP Osaka",
+      "id": "ap-osaka-1",
+      "key": "KIX",
+      "name": "ap-osaka-1"
+    },
+    {
+      "display_name": "AP Seoul",
+      "id": "ap-seoul-1",
+      "key": "ICN",
+      "name": "ap-seoul-1"
+    },
+    {
+      "display_name": "AP Sydney",
+      "id": "ap-sydney-1",
+      "key": "SYD",
+      "name": "ap-sydney-1"
+    },
+    {
+      "display_name": "AP Tokyo",
+      "id": "ap-tokyo-1",
+      "key": "NRT",
+      "name": "ap-tokyo-1"
+    },
+    {
+      "display_name": "CA Montreal",
+      "id": "ca-montreal-1",
+      "key": "YUL",
+      "name": "ca-montreal-1"
+    },
+    {
+      "display_name": "CA Toronto",
+      "id": "ca-toronto-1",
+      "key": "YYZ",
+      "name": "ca-toronto-1"
+    },
+    {
+      "display_name": "EU Amsterdam",
+      "id": "eu-amsterdam-1",
+      "key": "AMS",
+      "name": "eu-amsterdam-1"
+    },
+    {
+      "display_name": "EU Frankfurt",
+      "id": "eu-frankfurt-1",
+      "key": "FRA",
+      "name": "eu-frankfurt-1"
+    },
+    {
+      "display_name": "EU Zurich",
+      "id": "eu-zurich-1",
+      "key": "ZRH",
+      "name": "eu-zurich-1"
+    },
+    {
+      "display_name": "ME Jeddah",
+      "id": "me-jeddah-1",
+      "key": "JED",
+      "name": "me-jeddah-1"
+    },
+    {
+      "display_name": "SA Saopaulo",
+      "id": "sa-saopaulo-1",
+      "key": "GRU",
+      "name": "sa-saopaulo-1"
+    },
+    {
+      "display_name": "UK London",
+      "id": "uk-london-1",
+      "key": "LHR",
+      "name": "uk-london-1"
+    },
+    {
+      "display_name": "US Ashburn",
+      "id": "us-ashburn-1",
+      "key": "IAD",
+      "name": "us-ashburn-1"
+    },
+    {
+      "display_name": "US Phoenix",
+      "id": "us-phoenix-1",
+      "key": "PHX",
+      "name": "us-phoenix-1"
+    },
+    {
+      "display_name": "US Sanjose",
+      "id": "us-sanjose-1",
+      "key": "SJC",
+      "name": "us-sanjose-1"
+    }
+  ],
+  "services": [
+    {
+      "description": "Analytics",
+      "display_name": "analytics",
+      "name": "analytics"
+    },
+    {
+      "description": "API Gateway",
+      "display_name": "api-gateway",
+      "name": "api-gateway"
+    },
+    {
+      "description": "Application Performance Monitoring",
+      "display_name": "apm",
+      "name": "apm"
+    },
+    {
+      "description": "Application Migration",
+      "display_name": "application-migration",
+      "name": "application-migration"
+    },
+    {
+      "description": "Auto Scaling",
+      "display_name": "auto-scaling",
+      "name": "auto-scaling"
+    },
+    {
+      "description": "Big Data",
+      "display_name": "big-data",
+      "name": "big-data"
+    },
+    {
+      "description": "Block Volume",
+      "display_name": "block-storage",
+      "name": "block-storage"
+    },
+    {
+      "description": "Blockchain",
+      "display_name": "blockchain",
+      "name": "blockchain"
+    },
+    {
+      "description": "Caching",
+      "display_name": "caching",
+      "name": "caching"
+    },
+    {
+      "description": "Cloud Shell",
+      "display_name": "cloud-shell",
+      "name": "cloud-shell"
+    },
+    {
+      "description": "Cloud Guard",
+      "display_name": "cloudguard",
+      "name": "cloudguard"
+    },
+    {
+      "description": "Compartments",
+      "display_name": "compartments",
+      "name": "compartments"
+    },
+    {
+      "description": "Compute",
+      "display_name": "compute",
+      "name": "compute"
+    },
+    {
+      "description": "Compute Management",
+      "display_name": "compute-management",
+      "name": "compute-management"
+    },
+    {
+      "description": "Container Engine",
+      "display_name": "container-engine",
+      "name": "container-engine"
+    },
+    {
+      "description": "Data Catalog",
+      "display_name": "data-catalog",
+      "name": "data-catalog"
+    },
+    {
+      "description": "Data Flow",
+      "display_name": "data-flow",
+      "name": "data-flow"
+    },
+    {
+      "description": "Data Flow Interactive",
+      "display_name": "data-flow-interactive",
+      "name": "data-flow-interactive"
+    },
+    {
+      "description": "Data Integration",
+      "display_name": "data-integration",
+      "name": "data-integration"
+    },
+    {
+      "description": "Data Science",
+      "display_name": "data-science",
+      "name": "data-science"
+    },
+    {
+      "description": "Data Transfer",
+      "display_name": "data-transfer",
+      "name": "data-transfer"
+    },
+    {
+      "description": "Database",
+      "display_name": "database",
+      "name": "database"
+    },
+    {
+      "description": "Database Migration",
+      "display_name": "database-migration",
+      "name": "database-migration"
+    },
+    {
+      "description": "Digital Assistant",
+      "display_name": "digital-assistant",
+      "name": "digital-assistant"
+    },
+    {
+      "description": "DNS",
+      "display_name": "dns",
+      "name": "dns"
+    },
+    {
+      "description": "Email Delivery",
+      "display_name": "email-delivery",
+      "name": "email-delivery"
+    },
+    {
+      "description": "Events",
+      "display_name": "events",
+      "name": "events"
+    },
+    {
+      "description": "Functions",
+      "display_name": "faas",
+      "name": "faas"
+    },
+    {
+      "description": "Fast Connect",
+      "display_name": "fast-connect",
+      "name": "fast-connect"
+    },
+    {
+      "description": "File Storage",
+      "display_name": "filesystem",
+      "name": "filesystem"
+    },
+    {
+      "description": "Health Check",
+      "display_name": "health-checks",
+      "name": "health-checks"
+    },
+    {
+      "description": "Integration",
+      "display_name": "integration",
+      "name": "integration"
+    },
+    {
+      "description": "Key Management",
+      "display_name": "kms",
+      "name": "kms"
+    },
+    {
+      "description": "Limits",
+      "display_name": "limits",
+      "name": "limits"
+    },
+    {
+      "description": "LbaaS",
+      "display_name": "load-balancer",
+      "name": "load-balancer"
+    },
+    {
+      "description": "Logging",
+      "display_name": "logging",
+      "name": "logging"
+    },
+    {
+      "description": "Management Agent",
+      "display_name": "management-agent",
+      "name": "management-agent"
+    },
+    {
+      "description": "MySQL",
+      "display_name": "mysql",
+      "name": "mysql"
+    },
+    {
+      "description": "NoSQL",
+      "display_name": "nosql",
+      "name": "nosql"
+    },
+    {
+      "description": "Notifications",
+      "display_name": "notifications",
+      "name": "notifications"
+    },
+    {
+      "description": "Object Storage",
+      "display_name": "object-storage",
+      "name": "object-storage"
+    },
+    {
+      "description": "VMware Solution",
+      "display_name": "ocvp",
+      "name": "ocvp"
+    },
+    {
+      "description": "Optimizer",
+      "display_name": "optimizer",
+      "name": "optimizer"
+    },
+    {
+      "description": "Regions",
+      "display_name": "regions",
+      "name": "regions"
+    },
+    {
+      "description": "Resource Manager",
+      "display_name": "resource-manager",
+      "name": "resource-manager"
+    },
+    {
+      "description": "Service Connector Hub",
+      "display_name": "service-connector-hub",
+      "name": "service-connector-hub"
+    },
+    {
+      "description": "Splat canary",
+      "display_name": "splat-canary",
+      "name": "splat-canary"
+    },
+    {
+      "description": "Splat test",
+      "display_name": "splat-store-test-quota-family",
+      "name": "splat-store-test-quota-family"
+    },
+    {
+      "description": "Streaming",
+      "display_name": "streaming",
+      "name": "streaming"
+    },
+    {
+      "description": "Test",
+      "display_name": "test-family",
+      "name": "test-family"
+    },
+    {
+      "description": "Virtual Cloud Network",
+      "display_name": "vcn",
+      "name": "vcn"
+    },
+    {
+      "description": "VPN",
+      "display_name": "vpn",
+      "name": "vpn"
+    },
+    {
+      "description": "WaaS",
+      "display_name": "waas",
+      "name": "waas"
     }
   ],
   "shapes": [

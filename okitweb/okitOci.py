@@ -50,6 +50,7 @@ from facades.ociResourceManager import OCIResourceManagers
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
 from facades.ociServiceGateway import OCIServiceGateways
+from facades.ociServices import OCIServices
 from facades.ociShape import OCIShapes
 from facades.ociSubnet import OCISubnets
 from facades.ociTenancy import OCITenancies
@@ -295,14 +296,24 @@ def ociArtifacts(artifact):
 def dropdownQuery():
     if request.method == 'GET':
         dropdown_json = {}
+        # Regions
+        oci_regions = OCIRegions()
+        dropdown_json["regions"] = sorted(oci_regions.list(), key=lambda k: k['name'])
+        # Services
+        oci_services = OCIServices()
+        dropdown_json["services"] = sorted(oci_services.list(), key=lambda k: k['name'])
+        # Instance Shapes
         oci_shapes = OCIShapes()
         dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
-        db_system_shapes = OCIDatabaseSystemShapes()
-        dropdown_json["db_system_shapes"] = sorted(db_system_shapes.list(), key=lambda k: k['shape'])
-        db_versions = OCIDatabaseVersions()
-        dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
         oci_images = OCIImages()
         dropdown_json["images"] = sorted(oci_images.list(), key=lambda k: k['sort_key'])
+        # Database System Shapes
+        db_system_shapes = OCIDatabaseSystemShapes()
+        dropdown_json["db_system_shapes"] = sorted(db_system_shapes.list(), key=lambda k: k['shape'])
+        # Database Versions
+        db_versions = OCIDatabaseVersions()
+        dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
+        # Instance Images
         return dropdown_json
     else:
         return 'Unknown Method', 500
