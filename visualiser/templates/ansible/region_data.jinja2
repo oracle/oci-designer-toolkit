@@ -23,5 +23,6 @@
 
     - name: Get details of all the available services
       oci_service_facts:
+        region: "{{ region }}"
       register: RegionServices
 
