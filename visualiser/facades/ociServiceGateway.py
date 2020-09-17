@@ -58,21 +58,27 @@ class OCIServiceGateways(OCIVirtualNetworkConnection):
             for service_gateway in self.service_gateways_json:
                 if service_gateway['route_table_id'] is None:
                     service_gateway['route_table_id'] = ''
+                for service in service_gateway['services']:
+                    service_elements = service['service_name'].split()
+                    del service_elements[1]
+                    service_gateway['service_name'] = " ".join(service_elements)
+                    # At the moment we only have 2 optiona All or OCI Object Storage hence we just need the first 3 characters
+                    service_gateway['service_name'] = service_elements[0]
 
             # Build List of ServiceGateway Objects
-            self.service_gateways_obj = []
-            for service_gateway in self.service_gateways_json:
-                self.service_gateways_obj.append(OCIServiceGateway(self.config, self.configfile, self.profile, service_gateway))
+            #self.service_gateways_obj = []
+            #for service_gateway in self.service_gateways_json:
+            #    self.service_gateways_obj.append(OCIServiceGateway(self.config, self.configfile, self.profile, service_gateway))
         else:
             logger.warn('Virtual Cloud Network Id has not been specified.')
 
         return self.service_gateways_json
 
 
-class OCIServiceGateway(object):
-    def __init__(self, config=None, configfile=None, profile=None, data=None):
-        self.config = config
-        self.configfile = configfile
-        self.profile = profile
-        self.data = data
+#class OCIServiceGateway(object):
+#    def __init__(self, config=None, configfile=None, profile=None, data=None):
+#        self.config = config
+#        self.configfile = configfile
+#        self.profile = profile
+#        self.data = data
 

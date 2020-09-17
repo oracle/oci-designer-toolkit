@@ -160,6 +160,17 @@ class OCIIdentityConnection(OCIConnection):
         return
 
 
+class OCILimitsConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        self.compartment_ocid = None
+        super(OCILimitsConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.limits.LimitsClient(config=self.config, signer=self.signer)
+        self.compartment_ocid = self.config["tenancy"]
+        return
+
+
 class OCILoadBalancerConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
         super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile, profile=profile)

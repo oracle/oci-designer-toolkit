@@ -109,7 +109,7 @@ class OkitHclJsonParser(object):
         if self.hcl_json is not None:
             # Loop through resource
             for resource in self.hcl_json["resource"]:
-                for resource_key, resource_value  in resource.items():
+                for resource_key, resource_value in resource.items():
                     for artefact in resource_value:
                         for artefact_key, artefact_value in artefact.items():
                             for artefact_json in artefact_value:
