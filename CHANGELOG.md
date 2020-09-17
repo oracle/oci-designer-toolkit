@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.12.0 
+**Release Date**: 7th October 2020
+### Features
+
+### Bug Fixes
+1. Fix Service Gateway only offers all services when drawn but then provisions Object Storage #107
+
+
 ## Version 0.11.0 
 **Release Date**: 16th September 2020
 ### Features
