@@ -14,10 +14,10 @@ resource "oci_core_route_table" "{{ resource_name }}" {
 {% for rule in route_rules %}
     route_rules    {
         destination_type  = {{ rule.destination_type | safe }}
-    {% if rule.destination is defined %}
+    {% if rule.destination_type == "CIDR_BLOCK" %}
         destination       = {{ rule.destination | safe }}
     {% else %}
-        destination       = data.oci_core_services.RegionServices.services[0]["cidr_block"]
+        destination       = lookup([for x in data.oci_core_services.RegionServices.services: x if substr(x.name, 0, 3) == {{ rule.destination | safe }}][0], "cidr_block")
     {% endif %}
         network_entity_id = {{ rule.network_entity_id }}
         description       = {{ rule.description | safe }}
@@ -34,7 +34,7 @@ resource "oci_core_route_table" "{{ resource_name }}" {
 }
 
 {% if manage_default_resource_id is defined %}
-    locals {
+locals {
     {{ resource_name }}_id = oci_core_default_route_table.{{ resource_name }}.id
     }
 {% else %}

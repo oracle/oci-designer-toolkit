@@ -17,7 +17,7 @@
 
 {% block optional_properties_table_rows_block %}
     <div class='tr'><div class='td'>Route Table</div><div class='td'><select id="route_table_id" class="okit-property-value"></select></div></div>
-    <div class='tr'><div class='td'>Autonomous Databases</div><div class='td'><select multiple="multiple" id="autonomous_database_ids" class="okit-property-value"></select></div></div>
+    <div class='tr' id="autonomous_database_ids_row"><div class='td'>Autonomous Databases</div><div class='td'><select multiple="multiple" id="autonomous_database_ids" class="okit-property-value"></select></div></div>
     <div class='tr'><div class='td'>Object Storage Buckets</div><div class='td'><select multiple="multiple" id="object_storage_bucket_ids" class="okit-property-value"></select></div></div>
 {% endblock %}
 
