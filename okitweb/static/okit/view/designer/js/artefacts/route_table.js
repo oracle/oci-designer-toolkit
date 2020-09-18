@@ -180,6 +180,9 @@ class RouteTableView extends OkitDesignerArtefactView {
                         }
                     }
                     $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
+                    if (route_rule.target_type === 'service_gateways') {
+                        route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
+                    }
                 } else {
                     $(jqId("destination_type_row" + rule_num)).removeClass('collapsed');
                 }
@@ -195,6 +198,9 @@ class RouteTableView extends OkitDesignerArtefactView {
             route_rule.target_type = 'internet_gateways';
         }
         $(jqId("target_type" + rule_num)).val(route_rule.target_type);
+        if (route_rule.target_type === 'service_gateways') {
+            route_rule.destination = this.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
+        }
 
         // Destination Type
         const destination_types_map = new Map([
@@ -248,6 +254,9 @@ class RouteTableView extends OkitDesignerArtefactView {
             .on("change", function() {
                 route_rule['network_entity_id'] = this.options[this.selectedIndex].value;
                 console.info('Changed Network Entity: ' + this.value);
+                if (route_rule.target_type === 'service_gateways') {
+                    route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
+                }
                 displayOkitJson();
             });
         let target_type = $(jqId("target_type" + rule_num)).val();
@@ -281,6 +290,7 @@ class RouteTableView extends OkitDesignerArtefactView {
         // Check if we need to hide destination
         if (route_rule.target_type === 'service_gateways') {
             $(jqId("destination_row" + rule_num)).addClass('collapsed');
+            route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
         }
     }
 
