@@ -7,6 +7,7 @@
 
 ### Bug Fixes
 1. Fix Service Gateway only offers all services when drawn but then provisions Object Storage #107
+2. Fix Service Gateway related route rules do not allow setting a Destination Service #109
 
 
 ## Version 0.11.0 
