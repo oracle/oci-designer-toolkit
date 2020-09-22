@@ -149,6 +149,8 @@ function displayResourceManagerDialog() {
         .attr('id', 'config_profile')
         .on('change', () => {
             console.info('Profile Select '+$(jqId('config_profile')).val());
+            okitSettings.profile = $(jqId('config_profile')).val();
+            okitSettings.save();
             loadCompartments();
             loadRegions();
         });

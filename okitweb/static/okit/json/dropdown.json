@@ -3226,11 +3226,6 @@
       "name": "api-gateway"
     },
     {
-      "description": "Application Performance Monitoring",
-      "display_name": "apm",
-      "name": "apm"
-    },
-    {
       "description": "Application Migration",
       "display_name": "application-migration",
       "name": "application-migration"
@@ -3474,6 +3469,11 @@
       "description": "VPN",
       "display_name": "vpn",
       "name": "vpn"
+    },
+    {
+      "description": "WaaS",
+      "display_name": "waas",
+      "name": "waas"
     },
     {
       "description": "WaaS",

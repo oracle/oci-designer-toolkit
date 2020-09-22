@@ -141,6 +141,10 @@ class OkitOCIData {
         }
         return [...new Set(images)].sort((a, b) => b - a);
     }
+
+    getRegions() {
+        return this.regions;
+    }
 }
 
 class OkitSettings {

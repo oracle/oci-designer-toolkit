@@ -339,6 +339,8 @@ function displayQueryDialog() {
             .attr('id', 'config_profile')
             .on('change', () => {
                 console.info('Profile Select ' + $(jqId('config_profile')).val());
+                okitSettings.profile = $(jqId('config_profile')).val();
+                okitSettings.save();
                 loadCompartments();
                 loadRegions();
             });
@@ -419,6 +421,7 @@ function handleQueryOci(e) {
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
     ociRegions = [];
+    // Load Previous Profile
     $(jqId('config_profile')).val(okitSettings.profile);
     // Load Compartment Select
     loadCompartments();
@@ -460,6 +463,19 @@ function loadCompartments() {
     });
 }
 function loadRegions() {
+    // Clear Select
+    let select = $(jqId('query_region_id'));
+    $(select).empty();
+    let region_select = d3.select(d3Id('query_region_id'));
+    for(let region of okitOciData.getRegions() ){
+        region_select.append('option')
+            .attr('value', region['name'])
+            .text(region['display_name']);
+    }
+    selectQueryLastUsedRegion();
+}
+// TODO: Delete
+function loadRegions1() {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
