@@ -186,7 +186,8 @@
 
 .okit-canvas-details {
     display: block;
-    padding-bottom: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     width: 100%;
     overflow: hidden;
 }

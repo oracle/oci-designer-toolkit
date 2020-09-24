@@ -1,0 +1,20 @@
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Customer Premise Equipment{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>On-Premise Router IP</div><div class='td'><input type="text" id="ip_address" name="ip_address" class="okit-property-value"></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Shape</div><div class='td'><select id="cpe_device_shape_id" class="okit-property-value">
+        <option value="" selected="selected"></option>
+    </select></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}

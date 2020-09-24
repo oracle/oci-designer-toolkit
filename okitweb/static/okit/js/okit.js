@@ -78,6 +78,10 @@ class OkitOCIData {
     ** Get functions to retrieve drop-down data.
      */
 
+    getCpeDeviceShapes() {
+        return this.cpe_device_shapes;
+    }
+
     getDBSystemShapes(family='') {
         if (family === '') {
             return this.db_system_shapes;

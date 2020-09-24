@@ -53,6 +53,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let object_storage_bucket of this.object_storage_buckets) {
             object_storage_bucket.draw();
         }
+        // Customer Premise Equipment
+        for (let customer_premise_equipment of this.customer_premise_equipments) {
+            customer_premise_equipment.draw();
+        }
         // FastConnects
         for (let fast_connect of this.fast_connects) {
             fast_connect.draw();
