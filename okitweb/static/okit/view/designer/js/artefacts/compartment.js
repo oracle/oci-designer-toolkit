@@ -98,6 +98,10 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
             ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference()];
     }
 
+    getRightEdgeArtifacts() {
+        return [CustomerPremiseEquipment.getArtifactReference()];
+    }
+
     /*
     ** Static Functionality
      */

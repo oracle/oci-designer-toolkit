@@ -1,4 +1,111 @@
 {
+  "cpe_device_shapes": [
+    {
+      "cpe_device_info": {
+        "platform_software_version": "R80.20",
+        "vendor": "Check Point"
+      },
+      "id": "33623514-e21a-4719-a61c-3f8a67d4a88b"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "IOS version 15.4M or later",
+        "vendor": "Cisco"
+      },
+      "id": "12763256-4003-4780-9375-ce378d6b7bae"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "ASA Policy-Based VPN 8.5+ (single tunnel, static)",
+        "vendor": "Cisco"
+      },
+      "id": "4aaa4867-e141-4571-b804-be45fcf9de8b"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "ASA Route-Based VPN 9.7.1 or later",
+        "vendor": "Cisco"
+      },
+      "id": "50143b23-bab0-4c22-a207-6582d77431e6"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "FortiGate 6.0.4 or later",
+        "vendor": "Fortinet"
+      },
+      "id": "0e894a65-3ebd-4af0-a1ca-a46d526b24e4"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "FITELnet-F220/F221 Firmware 01.00(00)[0]00.00.0 [2019/07/05 15:00]",
+        "vendor": "Furukawa"
+      },
+      "id": "306a77d1-90e2-4ec9-a721-42930efbf217"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "MX Series - JunOS 15.1 or later",
+        "vendor": "Juniper"
+      },
+      "id": "16d40738-1549-477b-9692-38b33c5f2674"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "SRX Series - JunOS 11.0 or later",
+        "vendor": "Juniper"
+      },
+      "id": "3b3d918a-ec27-4c5a-9fa0-ee39b146e072"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "3.18 or later",
+        "vendor": "Libreswan"
+      },
+      "id": "c4be89f9-3d73-41db-a64d-40d244b1b6f3"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "IX Series 10.1.16",
+        "vendor": "NEC"
+      },
+      "id": "d79e2880-4cfc-4af2-b476-1ec0ed71173f"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "N.A",
+        "vendor": "Other"
+      },
+      "id": "52bf4ff4-4c91-4876-8f56-0e01f1b6b04a"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "PAN-OS 8.0.0",
+        "vendor": "Palo Alto"
+      },
+      "id": "a1480b49-1575-48de-877b-f432359ccd58"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "Firebox with Fireware v12",
+        "vendor": "WatchGuard"
+      },
+      "id": "f8509c5e-9d5a-4f85-9c10-1dac741106d3"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "RTX RTX1210 Firmware Rev.14.01.28",
+        "vendor": "Yamaha"
+      },
+      "id": "5ce7fbf4-966a-4dff-88d3-2d5dfe634453"
+    },
+    {
+      "cpe_device_info": {
+        "platform_software_version": "RTX RTX830 Firmware Rev.15.02.03",
+        "vendor": "Yamaha"
+      },
+      "id": "e96b8eab-72ce-4ec7-9f9d-3abb2830b9b7"
+    }
+  ],
   "db_system_shapes": [
     {
       "available_core_count": 36,
@@ -212,7 +319,7 @@
       "core_count_increment": 2,
       "maximum_node_count": 2,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": 1,
+      "min_data_storage_in_t_bs": 2,
       "min_db_node_storage_per_node_in_g_bs": 60,
       "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
@@ -229,7 +336,7 @@
       "core_count_increment": 2,
       "maximum_node_count": 2,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": 1,
+      "min_data_storage_in_t_bs": 2,
       "min_db_node_storage_per_node_in_g_bs": 60,
       "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
@@ -240,13 +347,13 @@
     },
     {
       "available_core_count": 48,
-      "available_data_storage_in_t_bs": 427,
-      "available_db_node_storage_in_g_bs": 8800,
-      "available_memory_in_gbs": 5760,
+      "available_data_storage_in_t_bs": 74,
+      "available_db_node_storage_in_g_bs": 1800,
+      "available_memory_in_gbs": 656,
       "core_count_increment": 2,
       "maximum_node_count": 2,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": 1,
+      "min_data_storage_in_t_bs": 2,
       "min_db_node_storage_per_node_in_g_bs": 60,
       "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
@@ -257,13 +364,13 @@
     },
     {
       "available_core_count": 368,
-      "available_data_storage_in_t_bs": 598,
-      "available_db_node_storage_in_g_bs": 7200,
+      "available_data_storage_in_t_bs": 427,
+      "available_db_node_storage_in_g_bs": 8800,
       "available_memory_in_gbs": 5760,
       "core_count_increment": 8,
       "maximum_node_count": 8,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": 1,
+      "min_data_storage_in_t_bs": 2,
       "min_db_node_storage_per_node_in_g_bs": 60,
       "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 16,
@@ -274,13 +381,13 @@
     },
     {
       "available_core_count": 400,
-      "available_data_storage_in_t_bs": 213,
-      "available_db_node_storage_in_g_bs": 4400,
-      "available_memory_in_gbs": 2880,
+      "available_data_storage_in_t_bs": 598,
+      "available_db_node_storage_in_g_bs": 7200,
+      "available_memory_in_gbs": 5760,
       "core_count_increment": 8,
       "maximum_node_count": 8,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": 1,
+      "min_data_storage_in_t_bs": 2,
       "min_db_node_storage_per_node_in_g_bs": 60,
       "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 16,
@@ -291,13 +398,13 @@
     },
     {
       "available_core_count": 400,
-      "available_data_storage_in_t_bs": 299,
-      "available_db_node_storage_in_g_bs": 3600,
-      "available_memory_in_gbs": 2880,
+      "available_data_storage_in_t_bs": 598,
+      "available_db_node_storage_in_g_bs": 7200,
+      "available_memory_in_gbs": 11120,
       "core_count_increment": 2,
       "maximum_node_count": 8,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": 1,
+      "min_data_storage_in_t_bs": 2,
       "min_db_node_storage_per_node_in_g_bs": 60,
       "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 16,
@@ -308,13 +415,13 @@
     },
     {
       "available_core_count": 184,
-      "available_data_storage_in_t_bs": 106,
-      "available_db_node_storage_in_g_bs": 2200,
-      "available_memory_in_gbs": 1440,
+      "available_data_storage_in_t_bs": 213,
+      "available_db_node_storage_in_g_bs": 4400,
+      "available_memory_in_gbs": 2880,
       "core_count_increment": 4,
       "maximum_node_count": 4,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": 1,
+      "min_data_storage_in_t_bs": 2,
       "min_db_node_storage_per_node_in_g_bs": 60,
       "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 8,
@@ -325,13 +432,13 @@
     },
     {
       "available_core_count": 200,
-      "available_data_storage_in_t_bs": 149,
-      "available_db_node_storage_in_g_bs": 1800,
-      "available_memory_in_gbs": 1440,
+      "available_data_storage_in_t_bs": 299,
+      "available_db_node_storage_in_g_bs": 3600,
+      "available_memory_in_gbs": 2880,
       "core_count_increment": 4,
       "maximum_node_count": 4,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": 1,
+      "min_data_storage_in_t_bs": 2,
       "min_db_node_storage_per_node_in_g_bs": 60,
       "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 8,
@@ -342,15 +449,15 @@
     },
     {
       "available_core_count": 200,
-      "available_data_storage_in_t_bs": null,
-      "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_data_storage_in_t_bs": 299,
+      "available_db_node_storage_in_g_bs": 3600,
+      "available_memory_in_gbs": 5560,
       "core_count_increment": 2,
       "maximum_node_count": 4,
-      "min_core_count_per_node": 0,
-      "min_data_storage_in_t_bs": null,
-      "min_db_node_storage_per_node_in_g_bs": null,
-      "min_memory_per_node_in_g_bs": null,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 2,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 8,
       "minimum_node_count": 4,
       "name": "ExadataCC.HalfX8M.200",
@@ -359,15 +466,15 @@
     },
     {
       "available_core_count": 92,
-      "available_data_storage_in_t_bs": null,
-      "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_data_storage_in_t_bs": 106,
+      "available_db_node_storage_in_g_bs": 2200,
+      "available_memory_in_gbs": 1440,
       "core_count_increment": 2,
       "maximum_node_count": 2,
-      "min_core_count_per_node": 8,
-      "min_data_storage_in_t_bs": null,
-      "min_db_node_storage_per_node_in_g_bs": null,
-      "min_memory_per_node_in_g_bs": null,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 2,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
       "minimum_node_count": 2,
       "name": "ExadataCC.Quarter2.92",
@@ -376,15 +483,15 @@
     },
     {
       "available_core_count": 100,
-      "available_data_storage_in_t_bs": null,
-      "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_data_storage_in_t_bs": 149,
+      "available_db_node_storage_in_g_bs": 1800,
+      "available_memory_in_gbs": 1440,
       "core_count_increment": 2,
       "maximum_node_count": 2,
-      "min_core_count_per_node": 1,
-      "min_data_storage_in_t_bs": null,
-      "min_db_node_storage_per_node_in_g_bs": null,
-      "min_memory_per_node_in_g_bs": null,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": 2,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
       "minimum_node_count": 2,
       "name": "ExadataCC.Quarter3.100",
@@ -393,15 +500,15 @@
     },
     {
       "available_core_count": 100,
-      "available_data_storage_in_t_bs": null,
-      "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_data_storage_in_t_bs": 149,
+      "available_db_node_storage_in_g_bs": 1800,
+      "available_memory_in_gbs": 2780,
       "core_count_increment": 2,
       "maximum_node_count": 2,
       "min_core_count_per_node": 2,
-      "min_data_storage_in_t_bs": null,
-      "min_db_node_storage_per_node_in_g_bs": null,
-      "min_memory_per_node_in_g_bs": null,
+      "min_data_storage_in_t_bs": 2,
+      "min_db_node_storage_per_node_in_g_bs": 60,
+      "min_memory_per_node_in_g_bs": 30,
       "minimum_core_count": 4,
       "minimum_node_count": 2,
       "name": "ExadataCC.QuarterX8M.100",
@@ -412,10 +519,10 @@
       "available_core_count": 1,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_memory_in_gbs": 7,
       "core_count_increment": 0,
       "maximum_node_count": 1,
-      "min_core_count_per_node": 4,
+      "min_core_count_per_node": 0,
       "min_data_storage_in_t_bs": null,
       "min_db_node_storage_per_node_in_g_bs": null,
       "min_memory_per_node_in_g_bs": null,
@@ -429,10 +536,10 @@
       "available_core_count": 16,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_memory_in_gbs": 112,
       "core_count_increment": 0,
       "maximum_node_count": 2,
-      "min_core_count_per_node": 0,
+      "min_core_count_per_node": 8,
       "min_data_storage_in_t_bs": null,
       "min_db_node_storage_per_node_in_g_bs": null,
       "min_memory_per_node_in_g_bs": null,
@@ -446,10 +553,10 @@
       "available_core_count": 2,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_memory_in_gbs": 14,
       "core_count_increment": 0,
       "maximum_node_count": 2,
-      "min_core_count_per_node": 8,
+      "min_core_count_per_node": 1,
       "min_data_storage_in_t_bs": null,
       "min_db_node_storage_per_node_in_g_bs": null,
       "min_memory_per_node_in_g_bs": null,
@@ -463,10 +570,10 @@
       "available_core_count": 4,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_memory_in_gbs": 28,
       "core_count_increment": 0,
       "maximum_node_count": 2,
-      "min_core_count_per_node": 1,
+      "min_core_count_per_node": 2,
       "min_data_storage_in_t_bs": null,
       "min_db_node_storage_per_node_in_g_bs": null,
       "min_memory_per_node_in_g_bs": null,
@@ -480,10 +587,10 @@
       "available_core_count": 8,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_memory_in_gbs": 56,
       "core_count_increment": 0,
       "maximum_node_count": 2,
-      "min_core_count_per_node": 12,
+      "min_core_count_per_node": 4,
       "min_data_storage_in_t_bs": null,
       "min_db_node_storage_per_node_in_g_bs": null,
       "min_memory_per_node_in_g_bs": null,
@@ -497,10 +604,10 @@
       "available_core_count": 1,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_memory_in_gbs": 15,
       "core_count_increment": 0,
       "maximum_node_count": 1,
-      "min_core_count_per_node": 2,
+      "min_core_count_per_node": 0,
       "min_data_storage_in_t_bs": null,
       "min_db_node_storage_per_node_in_g_bs": null,
       "min_memory_per_node_in_g_bs": null,
@@ -514,10 +621,10 @@
       "available_core_count": 16,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
-      "available_memory_in_gbs": null,
+      "available_memory_in_gbs": 240,
       "core_count_increment": 0,
       "maximum_node_count": 2,
-      "min_core_count_per_node": 4,
+      "min_core_count_per_node": 8,
       "min_data_storage_in_t_bs": null,
       "min_db_node_storage_per_node_in_g_bs": null,
       "min_memory_per_node_in_g_bs": null,
@@ -529,8 +636,15 @@
     },
     {
       "available_core_count": 2,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": 30,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 1,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 2,
       "minimum_node_count": 1,
       "name": "VM.Standard2.2",
@@ -539,8 +653,15 @@
     },
     {
       "available_core_count": 24,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": 320,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 12,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 24,
       "minimum_node_count": 1,
       "name": "VM.Standard2.24",
@@ -549,8 +670,15 @@
     },
     {
       "available_core_count": 4,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": 60,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 2,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 4,
       "minimum_node_count": 1,
       "name": "VM.Standard2.4",
@@ -559,8 +687,15 @@
     },
     {
       "available_core_count": 8,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": 120,
       "core_count_increment": 0,
       "maximum_node_count": 2,
+      "min_core_count_per_node": 4,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
       "minimum_core_count": 8,
       "minimum_node_count": 1,
       "name": "VM.Standard2.8",
@@ -598,6 +733,223 @@
       "is_preview_db_version": null,
       "supports_pdb": true,
       "version": "19.0.0.0"
+    }
+  ],
+  "fast_connect_provider_services": [
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "PROVIDER_MANAGED",
+      "description": "https://www.synaptic.att.com/clouduser/html/productdetail/ATT_NetBond.htm\t",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaatvmylnjdhfldcxy7jmkwghq3qz2svi26p5u7gal6wxbed2fyioxq",
+      "private_peering_bgp_management": "PROVIDER_MANAGED",
+      "provider_name": "AT&T",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "NetBond",
+      "public_peering_bgp_management": "PROVIDER_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER3"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https:c3ntro.com",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaaly42pwdcfm2c7l4vgiuj37a2e6ljkpuxzo7mc4hl4ronpffbvxva",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "C3ntro",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Cloud Connectivity ",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://www.centurylink.com/business/hybrid-it-cloud/cloud-connect.html",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaa5dbfeyv4ndgbbd7j26a7yjzttgyxrh37jvrmmei6w7rikubd7lkq",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "CenturyLink",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Cloud Connect",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "http://www.coresite.com\t",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaahriodfhfpjpunyzpt75dbdjw7vzwae5qo7w6wgkgdn7abweq5zdq",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "CoreSite",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Open Cloud Exchange",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://marketplaceportal.com/web/guest/login",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaashhewqxvazysllofspiuang2osntf5x4qjua2u2v4brcsjpmnlya",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "Digital Realty",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Service Exchange",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://www.edgeconnex.com/",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaakaplcuq6oxfdcbeb2g2syfudupywyfelaajfbvoupz2ulljho3jq",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "EdgeConneX",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Cloud Services",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "http://www.equinix.com/services/interconnection-connectivity/cloud-exchange/",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaavaux3ugttlfiwv3mctfikgt4ofm4r7eyvly3a2usvrec34aamv7q",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "Equinix",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "CloudExchange",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://megaport.al/",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaamj33a2ebotdg5jzwjmlrp7ufslcgl2r4skusfse4ijlgzqonvy3a",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "Megaport",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Service",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": null,
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "PROVIDER_MANAGED",
+      "description": "https://cloudmarketplace.oracle.com/marketplace/listing/6808950",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaa4sy3byqh5dpaqhow3deqy5eq5oo2255rjo26hvlf5mnayzktr5aq",
+      "private_peering_bgp_management": "PROVIDER_MANAGED",
+      "provider_name": "OMCS",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "OMCS FastConnect",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER3"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://www.packetfabric.com/packetcor",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaawwxrzsc7d3d633xcd3n6al3jwiukjxi7aghikbdj4eygztgf5oza",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "PacketFabric",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "PacketCOR",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://qtsdatacenters.com",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaarzjvobr2cyhz2h4eujhlpyoltjo4zlfu74fre46kggiwkabuyxjq",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "QTS",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Cloud Connect",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": null,
+      "type": "LAYER2"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "PROVIDER_MANAGED",
+      "description": "Verizon",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaa7qf6aygb5iuis7oadx4ij4vmn2nisneaqkbvcvjty547tihxiama",
+      "private_peering_bgp_management": "PROVIDER_MANAGED",
+      "provider_name": "Verizon",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Service",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 2,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER3"
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://www.zayo.com/services/cloud-connectivity/\t",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaaiscawhoymnpkudonpna3ohvh5bcu4e7bllxymfgtuavc4wwwliea",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "Zayo",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "CloudLink",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2"
     }
   ],
   "images": [
@@ -3498,7 +3850,7 @@
       "ocpus": 52,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "BM.DenseIO2.52",
-      "sort_key": "BM.DenseIO2.52"
+      "sort_key": "BM-DenseIO2-052-768"
     },
     {
       "gpu_description": null,
@@ -3516,7 +3868,7 @@
       "ocpus": 36,
       "processor_description": "3.0 GHz Intel\u00ae Xeon\u00ae Gold 6154 (Skylake)",
       "shape": "BM.HPC2.36",
-      "sort_key": "BM.HPC2.36"
+      "sort_key": "BM-HPC2-036-384"
     },
     {
       "gpu_description": null,
@@ -3534,7 +3886,7 @@
       "ocpus": 44,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
       "shape": "BM.Standard.B1.44",
-      "sort_key": "BM.Standard.B1.44"
+      "sort_key": "BM-Standard-044-512"
     },
     {
       "gpu_description": null,
@@ -3552,7 +3904,7 @@
       "ocpus": 64,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
       "shape": "BM.Standard.E2.64",
-      "sort_key": "BM.Standard.E2.64"
+      "sort_key": "BM-Standard-064-512"
     },
     {
       "gpu_description": null,
@@ -3570,7 +3922,7 @@
       "ocpus": 128,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
       "shape": "BM.Standard.E3.128",
-      "sort_key": "BM.Standard.E3.128"
+      "sort_key": "BM-Standard-128-2048"
     },
     {
       "gpu_description": null,
@@ -3588,7 +3940,7 @@
       "ocpus": 36,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
       "shape": "BM.Standard1.36",
-      "sort_key": "BM.Standard1.36"
+      "sort_key": "BM-Standard1-036-256"
     },
     {
       "gpu_description": null,
@@ -3606,7 +3958,7 @@
       "ocpus": 52,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "BM.Standard2.52",
-      "sort_key": "BM.Standard2.52"
+      "sort_key": "BM-Standard2-052-768"
     },
     {
       "gpu_description": null,
@@ -3623,8 +3975,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.16",
-      "sort_key": "VM.DenseIO2.16"
+      "shape": "VM.DenseIO2.8",
+      "sort_key": "VM-DenseIO2-008-120"
     },
     {
       "gpu_description": null,
@@ -3641,8 +3993,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.24",
-      "sort_key": "VM.DenseIO2.24"
+      "shape": "VM.DenseIO2.16",
+      "sort_key": "VM-DenseIO2-016-240"
     },
     {
       "gpu_description": null,
@@ -3659,8 +4011,8 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.DenseIO2.8",
-      "sort_key": "VM.DenseIO2.8"
+      "shape": "VM.DenseIO2.24",
+      "sort_key": "VM-DenseIO2-024-320"
     },
     {
       "gpu_description": null,
@@ -3677,8 +4029,8 @@
       "ocpu_options": null,
       "ocpus": 1,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.B1.1",
-      "sort_key": "VM.Standard.B1.1"
+      "shape": "VM.Standard.E2.1",
+      "sort_key": "VM-Standard-001-008"
     },
     {
       "gpu_description": null,
@@ -3695,8 +4047,8 @@
       "ocpu_options": null,
       "ocpus": 1,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
-      "shape": "VM.Standard.B1.16",
-      "sort_key": "VM.Standard.B1.16"
+      "shape": "VM.Standard.B1.1",
+      "sort_key": "VM-Standard-001-012"
     },
     {
       "gpu_description": null,
@@ -3728,8 +4080,8 @@
       },
       "ocpus": 1,
       "processor_description": "2.25 GHz AMD EPYC\u2122 7742 (Rome)",
-      "shape": "VM.Standard.B1.2",
-      "sort_key": "VM.Standard.B1.2"
+      "shape": "VM.Standard.E3.Flex",
+      "sort_key": "VM-Standard-001-016"
     },
     {
       "gpu_description": null,
@@ -3746,8 +4098,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.B1.4",
-      "sort_key": "VM.Standard.B1.4"
+      "shape": "VM.Standard.E2.2",
+      "sort_key": "VM-Standard-002-016"
     },
     {
       "gpu_description": null,
@@ -3764,8 +4116,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
-      "shape": "VM.Standard.B1.8",
-      "sort_key": "VM.Standard.B1.8"
+      "shape": "VM.Standard.B1.2",
+      "sort_key": "VM-Standard-002-024"
     },
     {
       "gpu_description": null,
@@ -3782,8 +4134,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.1",
-      "sort_key": "VM.Standard.E2.1"
+      "shape": "VM.Standard.E2.4",
+      "sort_key": "VM-Standard-004-032"
     },
     {
       "gpu_description": null,
@@ -3800,8 +4152,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
-      "shape": "VM.Standard.E2.2",
-      "sort_key": "VM.Standard.E2.2"
+      "shape": "VM.Standard.B1.4",
+      "sort_key": "VM-Standard-004-048"
     },
     {
       "gpu_description": null,
@@ -3818,8 +4170,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
-      "shape": "VM.Standard.E2.4",
-      "sort_key": "VM.Standard.E2.4"
+      "shape": "VM.Standard.E2.8",
+      "sort_key": "VM-Standard-008-064"
     },
     {
       "gpu_description": null,
@@ -3836,8 +4188,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
-      "shape": "VM.Standard.E2.8",
-      "sort_key": "VM.Standard.E2.8"
+      "shape": "VM.Standard.B1.8",
+      "sort_key": "VM-Standard-008-096"
     },
     {
       "gpu_description": null,
@@ -3854,8 +4206,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.2 GHz Intel\u00ae Xeon\u00ae E5-2669 v4 (Broadwell)",
-      "shape": "VM.Standard.E3.Flex",
-      "sort_key": "VM.Standard.E3.Flex"
+      "shape": "VM.Standard.B1.16",
+      "sort_key": "VM-Standard-016-192"
     },
     {
       "gpu_description": null,
@@ -3873,7 +4225,7 @@
       "ocpus": 1,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
       "shape": "VM.Standard1.1",
-      "sort_key": "VM.Standard1.1"
+      "sort_key": "VM-Standard1-001-007"
     },
     {
       "gpu_description": null,
@@ -3890,8 +4242,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.16",
-      "sort_key": "VM.Standard1.16"
+      "shape": "VM.Standard1.2",
+      "sort_key": "VM-Standard1-002-014"
     },
     {
       "gpu_description": null,
@@ -3908,8 +4260,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.2",
-      "sort_key": "VM.Standard1.2"
+      "shape": "VM.Standard1.4",
+      "sort_key": "VM-Standard1-004-028"
     },
     {
       "gpu_description": null,
@@ -3926,8 +4278,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.4",
-      "sort_key": "VM.Standard1.4"
+      "shape": "VM.Standard1.8",
+      "sort_key": "VM-Standard1-008-056"
     },
     {
       "gpu_description": null,
@@ -3944,8 +4296,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.3 GHz Intel\u00ae Xeon\u00ae E5-2699 v3 (Haswell)",
-      "shape": "VM.Standard1.8",
-      "sort_key": "VM.Standard1.8"
+      "shape": "VM.Standard1.16",
+      "sort_key": "VM-Standard1-016-112"
     },
     {
       "gpu_description": null,
@@ -3963,7 +4315,7 @@
       "ocpus": 1,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
       "shape": "VM.Standard2.1",
-      "sort_key": "VM.Standard2.1"
+      "sort_key": "VM-Standard2-001-015"
     },
     {
       "gpu_description": null,
@@ -3980,8 +4332,8 @@
       "ocpu_options": null,
       "ocpus": 2,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.16",
-      "sort_key": "VM.Standard2.16"
+      "shape": "VM.Standard2.2",
+      "sort_key": "VM-Standard2-002-030"
     },
     {
       "gpu_description": null,
@@ -3998,8 +4350,8 @@
       "ocpu_options": null,
       "ocpus": 4,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.2",
-      "sort_key": "VM.Standard2.2"
+      "shape": "VM.Standard2.4",
+      "sort_key": "VM-Standard2-004-060"
     },
     {
       "gpu_description": null,
@@ -4016,8 +4368,8 @@
       "ocpu_options": null,
       "ocpus": 8,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.24",
-      "sort_key": "VM.Standard2.24"
+      "shape": "VM.Standard2.8",
+      "sort_key": "VM-Standard2-008-120"
     },
     {
       "gpu_description": null,
@@ -4034,8 +4386,8 @@
       "ocpu_options": null,
       "ocpus": 16,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.4",
-      "sort_key": "VM.Standard2.4"
+      "shape": "VM.Standard2.16",
+      "sort_key": "VM-Standard2-016-240"
     },
     {
       "gpu_description": null,
@@ -4052,8 +4404,8 @@
       "ocpu_options": null,
       "ocpus": 24,
       "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
-      "shape": "VM.Standard2.8",
-      "sort_key": "VM.Standard2.8"
+      "shape": "VM.Standard2.24",
+      "sort_key": "VM-Standard2-024-320"
     }
   ]
 }

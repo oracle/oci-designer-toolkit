@@ -861,6 +861,13 @@ li a.parent-item:hover {
     width: 110px
 }
 
+#region_progress {
+    height: 80px;
+    width: 140px;
+    margin: 50px auto;
+    position: relative
+}
+
 /*
 ** Validation
  */

@@ -78,6 +78,10 @@ class OkitOCIData {
     ** Get functions to retrieve drop-down data.
      */
 
+    getCpeDeviceShapes() {
+        return this.cpe_device_shapes;
+    }
+
     getDBSystemShapes(family='') {
         if (family === '') {
             return this.db_system_shapes;
@@ -140,6 +144,10 @@ class OkitOCIData {
             images.push(image.display_name);
         }
         return [...new Set(images)].sort((a, b) => b - a);
+    }
+
+    getRegions() {
+        return this.regions;
     }
 }
 

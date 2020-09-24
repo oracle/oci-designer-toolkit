@@ -16,6 +16,7 @@ class OkitJson {
         this.description = "";
         this.okit_version = okitVersion;
         this.compartments = [];
+        this.customer_premise_equipments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
         this.database_systems = [];
@@ -100,6 +101,13 @@ class OkitJson {
         if (okit_json.hasOwnProperty('web_application_firewalls')) {
             for (let artefact of okit_json['web_application_firewalls']) {
                 let obj = this.newWebApplicationFirewall(artefact);
+                console.info(obj);
+            }
+        }
+        // Customer Premise Equipments
+        if (okit_json.hasOwnProperty('customer_premise_equipments')) {
+            for (let artefact of okit_json['customer_premise_equipments']) {
+                let obj = this.newCustomerPremiseEquipment(artefact);
                 console.info(obj);
             }
         }
@@ -294,6 +302,31 @@ class OkitJson {
             if (this.compartments[i].id === id) {
                 this.compartments[i].delete();
                 this.compartments.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Customer Premise Equipment
+    newCustomerPremiseEquipment(data = {}) {
+        console.info('New CustomerPremiseEquipment');
+        this.customer_premise_equipments.push(new CustomerPremiseEquipment(data, this));
+        return this.customer_premise_equipments[this.customer_premise_equipments.length - 1];
+    }
+    getCustomerPremiseEquipments() {return this.customer_premise_equipments;}
+    getCustomerPremiseEquipment(id='') {
+        for (let artefact of this.getCustomerPremiseEquipments()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteCustomerPremiseEquipment(id) {
+        for (let i = 0; i < this.customer_premise_equipments.length; i++) {
+            if (this.customer_premise_equipments[i].id === id) {
+                this.customer_premise_equipments[i].delete();
+                this.customer_premise_equipments.splice(i, 1);
                 break;
             }
         }

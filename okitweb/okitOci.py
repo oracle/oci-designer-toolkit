@@ -30,16 +30,20 @@ from facades.ociAutonomousDatabases import OCIAutonomousDatabases
 from facades.ociBlockStorageVolumes import OCIBlockStorageVolumes
 from facades.ociCompartment import OCICompartments
 from facades.ociContainer import OCIContainers
+from facades.ociCpeDeviceShapes import OCICpeDeviceShapes
+from facades.ociCustomerPremiseEquipment import OCICustomerPremiseEquipments
 from facades.ociDatabaseSystem import OCIDatabaseSystems
 from facades.ociDatabaseSystemShape import OCIDatabaseSystemShapes
 from facades.ociDatabaseVersion import OCIDatabaseVersions
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociFastConnect import OCIFastConnects
+from facades.ociFastConnectProviderServices import OCIFastConnectProviderServices
 from facades.ociFileStorageSystems import OCIFileStorageSystems
 from facades.ociImage import OCIImages
 from facades.ociInstance import OCIInstances
 from facades.ociInstancePool import OCIInstancePools
 from facades.ociInternetGateway import OCIInternetGateways
+from facades.ociIPSecConnection import OCIIPSecConnections
 from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociLocalPeeringGateway import OCILocalPeeringGateways
 from facades.ociNATGateway import OCINATGateways
@@ -211,6 +215,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Compartments')
         oci_compartments = OCICompartments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_compartments.list(filter=query_json.get('compartment_filter', None))
+    elif artifact == 'CustomerPremiseEquipment':
+        logger.info('---- Processing Customer Premise Equipment')
+        oci_cpes = OCICustomerPremiseEquipments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_cpes.list(filter=query_json.get('cpe_filter', None))
     elif artifact == 'DatabaseSystem':
         logger.info('---- Processing Database Systems')
         oci_database_systems = OCIDatabaseSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
@@ -239,6 +247,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Internet Gateways')
         oci_internet_gateways = OCIInternetGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
+    elif artifact == 'IPSecConnection':
+        logger.info('---- Processing Customer Premise Equipment')
+        oci_ipsec_connections = OCIIPSecConnections(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_ipsec_connections.list(filter=query_json.get('ipsec_connection_filter', None))
     elif artifact == 'LoadBalancer':
         logger.info('---- Processing Load Balancers')
         oci_load_balancers = OCILoadBalancers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
@@ -305,6 +317,7 @@ def dropdownQuery():
         # Instance Shapes
         oci_shapes = OCIShapes()
         dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
+        # Instance Images
         oci_images = OCIImages()
         dropdown_json["images"] = sorted(oci_images.list(), key=lambda k: k['sort_key'])
         # Database System Shapes
@@ -313,7 +326,12 @@ def dropdownQuery():
         # Database Versions
         db_versions = OCIDatabaseVersions()
         dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
-        # Instance Images
+        # CPE Device Shapes
+        cpe_device_shapes = OCICpeDeviceShapes()
+        dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
+        # Fast Connect Provider Services
+        fast_connect_provider_services = OCIFastConnectProviderServices()
+        dropdown_json["fast_connect_provider_services"] = sorted(fast_connect_provider_services.list(), key=lambda k: k['provider_name'])
         return dropdown_json
     else:
         return 'Unknown Method', 500

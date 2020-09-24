@@ -17,28 +17,7 @@ class OkitJsonView {
             this.okitjson = new OkitJson();
         }
         // Define View Lists
-        this.compartments = [];
-        this.autonomous_databases = [];
-        this.block_storage_volumes = [];
-        this.database_systems = [];
-        this.dynamic_routing_gateways = [];
-        this.fast_connects = [];
-        this.file_storage_systems = [];
-        this.instances = [];
-        this.instance_clusters = [];
-        this.internet_gateways = [];
-        this.load_balancers = [];
-        this.local_peering_gateways = [];
-        this.nat_gateways = [];
-        this.network_security_groups = [];
-        this.object_storage_buckets = [];
-        this.oke_clusters = [];
-        this.remote_peering_gateways = [];
-        this.route_tables = [];
-        this.security_lists = [];
-        this.service_gateways = [];
-        this.subnets = [];
-        this.virtual_cloud_networks = [];
+        this.clear();
         // Load Model to View
         this.load();
     }
@@ -71,6 +50,7 @@ class OkitJsonView {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
+        this.customer_premise_equipments = [];
         this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
@@ -97,6 +77,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
         for (let artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
         for (let artefact of this.okitjson.block_storage_volumes) {this.newBlockStorageVolume(artefact);}
+        for (let artefact of this.okitjson.customer_premise_equipments) {this.newCustomerPremiseEquipment(artefact);}
         for (let artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
         for (let artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
         for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
@@ -260,6 +241,41 @@ class OkitJsonView {
         }
         console.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Loaded Compartments>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
         console.info(this);
+    }
+
+    // Customer Premise Equipment
+    dropCustomerPremiseEquipmentView(target) {
+        console.info('Drop Fast Connect View');
+        console.info(target);
+        let view_artefact = this.newCustomerPremiseEquipment();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newCustomerPremiseEquipment(connect) {
+        this.customer_premise_equipments.push(connect ? new CustomerPremiseEquipmentView(connect, this) : new CustomerPremiseEquipmentView(this.okitjson.newCustomerPremiseEquipment(), this));
+        return this.customer_premise_equipments[this.customer_premise_equipments.length - 1];
+    }
+    getCustomerPremiseEquipments() {
+        return this.customer_premise_equipments;
+    }
+    getCustomerPremiseEquipment(id='') {
+        for (let artefact of this.getCustomerPremiseEquipments()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteCustomerPremiseEquipment(id='') {
+        this.okitjson.deleteCustomerPremiseEquipment(id);
+        this.update();
+    }
+    loadCustomerPremiseEquipments(fast_connects) {
+        for (const artefact of fast_connects) {
+            this.customer_premise_equipments.push(new CustomerPremiseEquipmentView(new CustomerPremiseEquipment(artefact, this.okitjson), this));
+        }
     }
 
     // Database System
@@ -1007,6 +1023,7 @@ class OkitArtefactView {
     get icon_width() {return 45;}
     get icon_height() {return 45;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    get icon_definition_id() {return}
     get collapsed_dimensions() {return this.icon_dimensions;}
     get minimum_width() {return this.icon_width;}
     get minimum_height() {return this.icon_height;}
