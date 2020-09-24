@@ -12,8 +12,9 @@ class OkitOCIQuery {
         this.active_region = '';
     }
 
-    query(request = null, complete_callback) {
+    query(request = null, complete_callback, region_complete_callback) {
         this.complete_callback = complete_callback;
+        this.region_complete_callback = region_complete_callback;
         if (request) {
             for (const [i, region] of this.regions.entries()) {
                 console.info(`${i} - Processing Selected Region : ${region}`);
@@ -33,6 +34,13 @@ class OkitOCIQuery {
     isComplete() {
         if (this.complete_callback) {
             console.info(this.region_query_count);
+            // Check if Region is complete
+            for (let key of Object.keys(this.region_query_count)) {
+                if (this.region_query_count[key] === 0) {
+                    this.region_complete_callback(key);
+                }
+            }
+            // Check if all Regions complete
             for (let key of Object.keys(this.region_query_count)) {
                 if (this.region_query_count[key] > 0) {
                     return;
@@ -170,15 +178,46 @@ class OkitOCIQuery {
         }
         this.queryVirtualCloudNetworks(request);
         this.queryBlockStorageVolumes(request);
+        this.queryCustomerPremiseEquipments(request);
         this.queryDynamicRoutingGateways(request);
         this.queryAutonomousDatabases(request);
         this.queryObjectStorageBuckets(request);
         this.queryFastConnects(request);
         this.queryInstances(request);
-        //this.queryInstancePools(request);
+        this.queryInstancePools(request);
+        this.queryIPSecConnections(request);
         this.queryDatabaseSystems(request);
         this.queryFileStorageSystems(request);
         this.queryOkeClusters(request);
+    }
+
+    queryCustomerPremiseEquipments(request) {
+        console.info('------------- Autonomous Customer Premise Equipment Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/CustomerPremiseEquipment',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({customer_premise_equipments: response_json});
+                for (let artefact of response_json) {
+                    console.info(artefact.display_name);
+                }
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+            },
+            complete: function () {
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
     }
 
     queryDatabaseSystems(request) {
@@ -382,6 +421,35 @@ class OkitOCIQuery {
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
+    }
+
+    queryIPSecConnections(request) {
+        console.info('------------- Autonomous IPSec Connection Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/IPSecConnection',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({ipsec_connections: response_json});
+                for (let artefact of response_json) {
+                    console.info(artefact.display_name);
+                }
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });

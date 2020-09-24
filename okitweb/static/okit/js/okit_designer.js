@@ -550,8 +550,10 @@ function showQueryResults() {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
         okitOCIQuery = new OkitOCIQuery(regions);
         // Add Tabs
+        $(jqId('region_progress')).empty();
         for (const [i, region] of regions.entries()) {
             addRegionTab(region);
+            addRegionProgressCheckbox(region);
         }
         $(jqId('file-save-regional-menu-item-li')).removeClass('hidden');
         $(jqId(regionTabName(regions[0]))).trigger("click");
@@ -562,6 +564,8 @@ function showQueryResults() {
             redrawSVGCanvas(region);
             displayTreeView();
             $(jqId('modal_loading_wrapper')).addClass('hidden');
+        }, function (region) {
+            $(jqId(regionCheckboxName(region))).prop('checked', true);
         });
     } else {
         console.info('Region Not Selected.');
@@ -683,6 +687,18 @@ function addRegionTab(region) {
 }
 function regionTabName(region) {
     return region + '_tab';
+}
+function addRegionProgressCheckbox(region) {
+    let td = d3.select(d3Id('region_progress')).append('div').attr('class', 'tr')
+        .append('div').attr('class', 'td');
+    td.append('input')
+        .attr('id', regionCheckboxName(region))
+        .attr('type', 'checkbox');
+    td.append('label')
+        .text(region);
+}
+function regionCheckboxName(region) {
+    return region + '_checkbox';
 }
 
 /*
