@@ -44,6 +44,7 @@ class OkitOCIConfig {
 
 class OkitOCIData {
     constructor() {
+        this.compartments = [];
         this.load();
     }
 
@@ -148,6 +149,14 @@ class OkitOCIData {
 
     getRegions() {
         return this.regions;
+    }
+
+    getCompartments() {
+        return this.compartments;
+    }
+
+    setCompartments(compartments) {
+        this.compartments = compartments;
     }
 }
 
