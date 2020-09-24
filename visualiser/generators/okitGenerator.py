@@ -236,7 +236,7 @@ class OCIGenerator(object):
         # ---- License Model
         self.addJinja2Variable("license_model", autonomous_database["license_model"], standardisedName)
         # ---- White List IPs
-        if len(autonomous_database['whitelisted_ips']):
+        if autonomous_database.get('whitelisted_ips', []) is not None and len(autonomous_database.get('whitelisted_ips', [])):
             self.jinja2_variables["whitelisted_ips"] = autonomous_database['whitelisted_ips']
         else:
             self.jinja2_variables.pop("whitelisted_ips", None)

@@ -33,6 +33,7 @@ from model.okitValidation import OCIJsonValidator
 from generators.okitAnsibleGenerator import OCIAnsibleGenerator
 from generators.okitTerraform11Generator import OCITerraform11Generator
 from generators.okitTerraformGenerator import OCITerraformGenerator
+from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
 
 # Configure logging
 logger = getLogger()
@@ -224,6 +225,8 @@ def generate(language):
                 generator = OCIAnsibleGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'terraform11':
                 generator = OCITerraform11Generator(template_root, destination_dir, request.json)
+            elif language == 'resource-manager':
+                generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json)
             generator.generate()
             generator.writeFiles()
             zipname = generator.createZipArchive(os.path.join(destination_dir, language), "/tmp/okit-{0:s}".format(str(language)))
