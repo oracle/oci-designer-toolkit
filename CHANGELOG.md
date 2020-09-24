@@ -4,6 +4,10 @@
 ## Version 0.12.0 
 **Release Date**: 7th October 2020
 ### Features
+1. Enhanced feedback for multi region query.
+2. Cache Regions
+3. Cache Compartments for specific Profile.
+4. Add functionality for Customer Premise Equipment.
 
 ### Bug Fixes
 1. Fix Service Gateway only offers all services when drawn but then provisions Object Storage #107
