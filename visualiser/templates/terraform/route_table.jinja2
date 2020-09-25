@@ -14,7 +14,7 @@ resource "oci_core_route_table" "{{ resource_name }}" {
 {% for rule in route_rules %}
     route_rules    {
         destination_type  = {{ rule.destination_type | safe }}
-    {% if rule.destination_type == "CIDR_BLOCK" %}
+    {% if rule.use_cidr_block %}
         destination       = {{ rule.destination | safe }}
     {% else %}
         destination       = lookup([for x in data.oci_core_services.RegionServices.services: x if substr(x.name, 0, 3) == {{ rule.destination | safe }}][0], "cidr_block")

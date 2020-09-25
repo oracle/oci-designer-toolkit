@@ -14,7 +14,7 @@
         route_rules:
 {% for rule in route_rules %}
             - destination_type: "{{ rule.destination_type | safe }}"
-    {% if rule.destination_type == "CIDR_BLOCK" %}
+    {% if rule.use_cidr_block %}
               destination: "{{ rule.destination | safe }}"
     {% else %}
               destination: "{{ '{{' }} (RegionServices.services | selectattr('service_name', 'match', '{{ rule.destination }}') | map(attribute='cidr_block')) {{ '}}' }}"
