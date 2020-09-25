@@ -61,6 +61,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let fast_connect of this.fast_connects) {
             fast_connect.draw();
         }
+        // IPSec Connections
+        for (let ipsec_connection of this.ipsec_connections) {
+            ipsec_connection.draw();
+        }
 
         // Draw Virtual Cloud Network Sub Components
         // Internet Gateways
@@ -147,8 +151,20 @@ class OkitDesignerJsonView extends OkitJsonView {
         }
 
         console.info(this);
-
+        // Draw Connection
+        this.drawConnections();
         console.log();
+    }
+
+    drawConnections() {
+        // IPSec Connections
+        for (let ipsec_connection of this.ipsec_connections) {
+            ipsec_connection.drawConnections();
+        }
+        // Load Balancers
+        for (let load_balancer of this.load_balancers) {
+            load_balancer.drawConnections();
+        }
     }
 
     /*

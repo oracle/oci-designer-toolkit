@@ -26,6 +26,7 @@ class OkitJson {
         this.instances = [];
         this.instance_pools = [];
         this.internet_gateways = [];
+        this.ipsec_connections = [];
         this.load_balancers = [];
         this.local_peering_gateways = [];
         this.nat_gateways = [];
@@ -115,6 +116,13 @@ class OkitJson {
         if (okit_json.hasOwnProperty('dynamic_routing_gateways')) {
             for (let artefact of okit_json['dynamic_routing_gateways']) {
                 let obj = this.newDynamicRoutingGateway(artefact);
+                console.info(obj);
+            }
+        }
+        // IPSec Connections
+        if (okit_json.hasOwnProperty('ipsec_connections')) {
+            for (let artefact of okit_json['ipsec_connections']) {
+                let obj = this.newIPSecConnection(artefact);
                 console.info(obj);
             }
         }
@@ -516,6 +524,31 @@ class OkitJson {
             if (this.internet_gateways[i].id === id) {
                 this.internet_gateways[i].delete();
                 this.internet_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // IPSec Connection
+    newIPSecConnection(data) {
+        console.info('New IPSec Connection');
+        this.ipsec_connections.push(new IPSecConnection(data, this));
+        return this.ipsec_connections[this.ipsec_connections.length - 1];
+    }
+    getIPSecConnections() {return this.ipsec_connections;}
+    getIPSecConnection(id='') {
+        for (let artefact of this.getIPSecConnections()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteIPSecConnection(id) {
+        for (let i = 0; i < this.ipsec_connections.length; i++) {
+            if (this.ipsec_connections[i].id === id) {
+                this.ipsec_connections[i].delete();
+                this.ipsec_connections.splice(i, 1);
                 break;
             }
         }

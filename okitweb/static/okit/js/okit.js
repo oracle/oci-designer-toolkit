@@ -59,7 +59,7 @@ class OkitOCIData {
             url: 'dropdown/data',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify(this),
+            data: JSON.stringify(this.cloneForSave()),
             success: function(resp) {
                 console.info('OKIT Dropdown Data Saved');
             },
@@ -68,6 +68,12 @@ class OkitOCIData {
                 console.warn('Error : '+ error)
             }
         });
+    }
+
+    cloneForSave() {
+        let clone = JSON.clone(this);
+        clone.compartments = [];
+        return clone;
     }
 
     query() {
@@ -174,6 +180,7 @@ class OkitSettings {
         this.last_used_region = '';
         this.last_used_compartment = '';
         this.hide_attached = true;
+        this.highlight_association = true;
         this.load();
     }
 
@@ -367,6 +374,24 @@ class OkitSettings {
             td.append('label')
                 .attr('for', 'hide_attached')
                 .text('Hide Attached Artefacts');
+            // Highlight Associations
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'highlight_association')
+                .attr('name', 'highlight_association')
+                .attr('type', 'checkbox')
+                .property('checked', this.highlight_association)
+                .on('change', function () {
+                    if (autosave) {
+                        me.highlight_association = $('#highlight_association').is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'highlight_association')
+                .text('Highlight Associations');
             /*
             // Config Profile
             tr = tbody.append('div').attr('class', 'tr');
