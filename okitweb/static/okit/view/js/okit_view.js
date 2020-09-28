@@ -1290,7 +1290,7 @@ class OkitArtefactView {
         const svgStartPoint = canvas_svg.node().createSVGPoint();
         const svgEndPoint = canvas_svg.node().createSVGPoint();
         const screenCTM = canvas_rect.node().getScreenCTM();
-        if (start_id && start_id !== '' && end_id && end_id !== '') {
+        if (start_id && start_id !== '' && end_id && end_id !== '' && document.getElementById(start_id) && document.getElementById(end_id)) {
             let start_bcr = document.getElementById(start_id).getBoundingClientRect();
             let end_bcr = document.getElementById(end_id).getBoundingClientRect();
             console.info(`Start BCR : ${start_bcr}`);

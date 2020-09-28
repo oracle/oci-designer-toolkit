@@ -11,7 +11,9 @@ if (typeof JSON.clone !== "function") {
         return JSON.parse(JSON.stringify(obj));
     };
 }
-
+/*
+** Add Clean function to JSON to remove null & undefined elements
+ */
 if (typeof JSON.clean !== "function") {
     JSON.clean = obj => {
         if (Array.isArray(obj)) {

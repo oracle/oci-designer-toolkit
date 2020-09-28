@@ -143,9 +143,6 @@ class OCIGenerator(object):
         # -- Customer Premise Equipments
         for customer_premise_equipment in self.visualiser_json.get('customer_premise_equipments', []):
             self.renderCustomerPremiseEquipment(customer_premise_equipment)
-        # -- IPSec Connections
-        for ipsec_connection in self.visualiser_json.get('ipsec_connections', []):
-            self.renderIPSecConnection(ipsec_connection)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
@@ -157,6 +154,9 @@ class OCIGenerator(object):
         # -- Dynamic Routing Gateways
         for dynamic_routing_gateway in self.visualiser_json.get('dynamic_routing_gateways', []):
             self.renderDynamicRoutingGateway(dynamic_routing_gateway)
+        # -- IPSec Connections
+        for ipsec_connection in self.visualiser_json.get('ipsec_connections', []):
+            self.renderIPSecConnection(ipsec_connection)
         # -- Network Security Group
         for network_security_group in self.visualiser_json.get('network_security_groups', []):
             self.renderNetworkSecurityGroup(network_security_group)
@@ -694,16 +694,25 @@ class OCIGenerator(object):
         # --- Required
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['compartment_id']]))
-        # ---- Router IP Address
-        self.addJinja2Variable("ip_address", artefact["ip_address"], standardisedName)
+        # ---- Static Routes
+        self.addJinja2Variable("static_routes", artefact["static_routes"], standardisedName)
+        # ---- Customer Premise Equipment
+        self.jinja2_variables["cpe_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['cpe_id']]))
+        # ---- Dynamic Routing Gateway
+        self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['drg_id']]))
         # ---- Display Name
         self.addJinja2Variable("display_name", artefact["display_name"], standardisedName)
         # --- Optional
-        # ---- CPE Shape
-        if artefact.get('cpe_device_shape_id', '') != '':
-            self.addJinja2Variable("cpe_device_shape_id", artefact["cpe_device_shape_id"], standardisedName)
+        # ---- CPE Local Identifier Type
+        if artefact.get('cpe_local_identifier_type', '') != '':
+            self.addJinja2Variable("cpe_local_identifier_type", artefact["cpe_local_identifier_type"], standardisedName)
         else:
-            self.removeJinja2Variable('cpe_device_shape_id')
+            self.removeJinja2Variable('cpe_local_identifier_type')
+        # ---- CPE Local Identifier
+        if artefact.get('cpe_local_identifier', '') != '':
+            self.addJinja2Variable("cpe_local_identifier", artefact["cpe_local_identifier"], standardisedName)
+        else:
+            self.removeJinja2Variable('cpe_local_identifier')
         # ---- Tags
         self.renderTags(artefact)
 

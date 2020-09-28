@@ -55,9 +55,10 @@ class OCIDynamicRoutingGateways(OCIVirtualNetworkConnection):
         # self.dynamic_routing_gateways_obj = []
         dynamic_routing_gateway_attachments = OCIDynamicRoutingGatewayAttachments(config=self.config, configfile=self.configfile, profile=self.profile)
         for dynamic_routing_gateway in self.dynamic_routing_gateways_json:
-            attachment = dynamic_routing_gateway_attachments.get(dynamic_routing_gateway["id"])
-            dynamic_routing_gateway["vcn_id"] = attachment["vcn_id"]
-            dynamic_routing_gateway["route_table_id"] = attachment["route_table_id"]
+            attachments = dynamic_routing_gateway_attachments.list(compartment_id=compartment_id, drg_id=dynamic_routing_gateway["id"])
+            logger.info(attachments)
+            dynamic_routing_gateway["vcn_id"] = attachments[0]["vcn_id"]
+            dynamic_routing_gateway["route_table_id"] = attachments[0]["route_table_id"]
             # self.dynamic_routing_gateways_obj.append(OCIDynamicRoutingGateway(self.config, self.configfile, self.profile, dynamic_routing_gateway))
         return self.dynamic_routing_gateways_json
 
