@@ -143,6 +143,9 @@ class OCIGenerator(object):
         # -- Customer Premise Equipments
         for customer_premise_equipment in self.visualiser_json.get('customer_premise_equipments', []):
             self.renderCustomerPremiseEquipment(customer_premise_equipment)
+        # -- IPSec Connections
+        for ipsec_connection in self.visualiser_json.get('ipsec_connections', []):
+            self.renderIPSecConnection(ipsec_connection)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
@@ -675,6 +678,37 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("internet_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderIPSecConnection(self, artefact):
+        # Read Data
+        standardisedName = self.standardiseResourceName(artefact['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = artefact['display_name']
+        # Process Block Storage Volume Data
+        logger.info('Processing Customer Premise Equipment Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['compartment_id']]))
+        # ---- Router IP Address
+        self.addJinja2Variable("ip_address", artefact["ip_address"], standardisedName)
+        # ---- Display Name
+        self.addJinja2Variable("display_name", artefact["display_name"], standardisedName)
+        # --- Optional
+        # ---- CPE Shape
+        if artefact.get('cpe_device_shape_id', '') != '':
+            self.addJinja2Variable("cpe_device_shape_id", artefact["cpe_device_shape_id"], standardisedName)
+        else:
+            self.removeJinja2Variable('cpe_device_shape_id')
+        # ---- Tags
+        self.renderTags(artefact)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("ipsec_connection.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

@@ -941,10 +941,18 @@ class OkitArtifact {
     }
 
     /*
+    ** Clean - Remove null & undefined
+     */
+    clean(obj) {
+        return JSON.clean(obj);
+    }
+
+    /*
     ** Merge Functionality
      */
     merge(update) {
-        $.extend(true, this, update);
+        $.extend(true, this, this.clean(update));
+        //$.extend(true, this, update);
     }
 
     /*
