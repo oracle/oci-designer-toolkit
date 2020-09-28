@@ -57,6 +57,7 @@ class OkitJsonView {
         this.file_storage_systems = [];
         this.instances = [];
         this.internet_gateways = [];
+        this.ipsec_connections = [];
         this.load_balancers = [];
         this.local_peering_gateways = [];
         this.nat_gateways = [];
@@ -84,6 +85,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
         for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
         for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
+        for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
         for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
         for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
         for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
@@ -245,7 +247,7 @@ class OkitJsonView {
 
     // Customer Premise Equipment
     dropCustomerPremiseEquipmentView(target) {
-        console.info('Drop Fast Connect View');
+        console.info('Drop Customer Premise Equipment View');
         console.info(target);
         let view_artefact = this.newCustomerPremiseEquipment();
         view_artefact.getArtefact().compartment_id = target.id;
@@ -547,6 +549,41 @@ class OkitJsonView {
     loadInternetGateways(internet_gateways) {
         for (const artefact of internet_gateways) {
             this.internet_gateways.push(new InternetGatewayView(new InternetGateway(artefact, this.okitjson), this));
+        }
+    }
+
+    // IPSec Connection
+    dropIPSecConnectionView(target) {
+        console.info('Drop IPSec Connection');
+        console.info(target);
+        let view_artefact = this.newIPSecConnection();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newIPSecConnection(connect) {
+        this.ipsec_connections.push(connect ? new IPSecConnectionView(connect, this) : new IPSecConnectionView(this.okitjson.newIPSecConnection(), this));
+        return this.ipsec_connections[this.ipsec_connections.length - 1];
+    }
+    getIPSecConnections() {
+        return this.ipsec_connections;
+    }
+    getIPSecConnection(id='') {
+        for (let artefact of this.getIPSecConnections()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteIPSecConnection(id='') {
+        this.okitjson.deleteIPSecConnection(id);
+        this.update();
+    }
+    loadIPSecConnections(fast_connects) {
+        for (const artefact of fast_connects) {
+            this.ipsec_connections.push(new IPSecConnectionView(new IPSecConnection(artefact, this.okitjson), this));
         }
     }
 
@@ -1031,6 +1068,7 @@ class OkitArtefactView {
     get dimensions() {return this.minimum_dimensions;}
     get definition() {}
     get attached() {return false;}
+    get top_bottom_connectors_preferred() {return true;}
 
     getParent() {return this.parent;}
 
@@ -1233,7 +1271,259 @@ class OkitArtefactView {
             d3.event.stopPropagation();
         });
         console.log();
+        // Add Mouse Over / Exist Events
+        this.addMouseEvents(svg);
+        // Draw Connections
+        //this.drawConnections();
         return svg;
+    }
+
+    addMouseEvents(svg) {}
+
+    drawConnections() {}
+
+    drawConnection(start_id, end_id) {
+        console.info(`Start Id : ${start_id}`);
+        console.info(`End Id   : ${end_id}`);
+        const canvas_svg = d3.select(d3Id('canvas-svg'));
+        const canvas_rect = d3.select(d3Id('canvas-rect'));
+        const svgStartPoint = canvas_svg.node().createSVGPoint();
+        const svgEndPoint = canvas_svg.node().createSVGPoint();
+        const screenCTM = canvas_rect.node().getScreenCTM();
+        if (start_id && start_id !== '' && end_id && end_id !== '') {
+            let start_bcr = document.getElementById(start_id).getBoundingClientRect();
+            let end_bcr = document.getElementById(end_id).getBoundingClientRect();
+            console.info(`Start BCR : ${start_bcr}`);
+            console.info(start_bcr);
+            console.info(`End BCR : ${end_bcr}`);
+            console.info(end_bcr);
+            let horizontal = false;
+            if (this.top_bottom_connectors_preferred && start_bcr.y > end_bcr.y) {
+                // Start Connector on the top edge
+                svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
+                svgStartPoint.y = start_bcr.y;
+                // End Connector on the bottom edge
+                svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
+                svgEndPoint.y = Math.round(end_bcr.y + end_bcr.height);
+            } else if (this.top_bottom_connectors_preferred && start_bcr.y < end_bcr.y) {
+                // Start Connector on the bottom edge
+                svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
+                svgStartPoint.y = Math.round(start_bcr.y + start_bcr.height);
+                // End Connector on top edge
+                svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
+                svgEndPoint.y = end_bcr.y;
+            } else if (start_bcr.x < end_bcr.x) {
+                // Start Connector on right edge
+                svgStartPoint.x = Math.round(start_bcr.x + start_bcr.width);
+                svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
+                // End Connector on left edge
+                svgEndPoint.x = end_bcr.x;
+                svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
+                // Draw Horizontal
+                horizontal = true;
+            } else if (start_bcr.x > end_bcr.x) {
+                // Start Connector on left edge
+                svgStartPoint.x = start_bcr.x;
+                svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
+                // End Connector on right edge
+                svgEndPoint.x = Math.round(end_bcr.x + end_bcr.width);
+                svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
+                // Draw Horizontal
+                horizontal = true;
+            }
+            let connector_start = svgStartPoint.matrixTransform(screenCTM.inverse());
+            let connector_end = svgEndPoint.matrixTransform(screenCTM.inverse());
+            console.info('Connector Start');
+            console.info(connector_start);
+            console.info('Connector End');
+            console.info(connector_end);
+
+            if (horizontal) {
+                this.drawHorizontalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
+            } else {
+                this.drawVerticalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
+            }
+
+        }
+    }
+
+    drawVerticalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0},) {
+        console.log('Generating Vertical Connector');
+        console.info('Start Coordinates : ' + JSON.stringify(start));
+        console.info('End Coordinates   : ' + JSON.stringify(end));
+        if (path_connector) {
+            let radius = corner_radius;
+            let dy = Math.round((end['y'] - start['y']) / 2);
+            let dx = end['x'] - start['x'];
+            let arc1 = '';
+            let arc2 = '';
+            console.info('dx                : ' + dx);
+            console.info('dy                : ' + dy);
+            if (dy > 0 && dx > 0) {
+                // First turn down and right with counter clockwise arc
+                arc1 = 'a5,5 0 0 0 5,5';
+                arc1 = generateArc(radius, 0, '', '');
+                // Second turn right and down with clockwise arc
+                arc2 = 'a5,5 0 0 1 5,5';
+                arc2 = generateArc(radius, 1, '', '');
+                // Reduce dy by radius
+                dy -= radius;
+                // Reduce dx by 2 * radius
+                dx -= radius * 2;
+            } else if (dy > 0 && dx < 0) {
+                // First turn down and left with counter clockwise arc
+                arc1 = 'a5,5 0 0 1 -5,5';
+                arc1 = generateArc(radius, 1, '-', '');
+                // Second turn left and down with clockwise arc
+                arc2 = 'a5,5 0 0 0 -5,5';
+                arc2 = generateArc(radius, 0, '-', '');
+                // Reduce dy by radius
+                dy -= radius;
+                // Increase dx by 2 * radius
+                dx += radius * 2;
+            } else if (dy < 0 && dx < 0) {
+                // First turn up and left with counter clockwise arc
+                arc2 = 'a5,5 0 0 1 -5,-5';
+                arc2 = generateArc(radius, 1, '-', '-');
+                // Second turn left and up with clockwise arc
+                arc1 = 'a5,5 0 0 0 -5,-5';
+                arc1 = generateArc(radius, 0, '-', '-');
+                // Increase dy by radius
+                dy += radius;
+                // Reduce dx by 2 * radius
+                dx -= radius * 2;
+            } else if (dy < 0 && dx > 0) {
+                // First turn up and right with counter clockwise arc
+                arc2 = 'a5,5 0 0 0 5,-5';
+                arc2 = generateArc(radius, 0, '', '-');
+                // Second turn right and up with clockwise arc
+                arc1 = 'a5,5 0 0 1 5,-5';
+                arc1 = generateArc(radius, 1, '', '-');
+                // Reduce dy by radius
+                dy += radius;
+                // Increase dx by 2 * radius
+                dx -= radius * 2;
+            }
+            let points = "m" + this.coordString(start) + " v" + dy + " " + arc1 + " h" + dx + " " + arc2 + " v" + dy;
+            let path = parent_svg.append('path')
+                .attr("id", id)
+                .attr("d", points)
+                //.attr("d", "M100,100 h50 a5,5 0 0 0 5,5 v50 a5,5 0 0 1 -5,5 h-50 a5,5 0 0 1 -5,-5 v-50 a5,5 0 0 1 5,-5 z")
+                .attr("stroke-width", "2")
+                .attr("stroke", connector_colour)
+                .attr("fill", "none")
+                .attr("marker-start", "url(#connector-end-circle)")
+                .attr("marker-end", "url(#connector-end-circle)");
+            //return path;
+        } else {
+            // Calculate Polyline points
+            let ydiff = end['y'] - start['y'];
+            let ymid = Math.round(start['y'] + ydiff / 2);
+            let mid1 = {x: start['x'], y: ymid};
+            let mid2 = {x: end['x'], y: ymid};
+            let points = this.coordString(start) + " " + this.coordString(mid1) + " " + this.coordString(mid2) + " " + this.coordString(end);
+            let polyline = parent_svg.append('polyline')
+                .attr("id", id)
+                .attr("points", points)
+                .attr("stroke-width", "2")
+                .attr("stroke", connector_colour)
+                .attr("fill", "none")
+                .attr("marker-start", "url(#connector-end-circle)")
+                .attr("marker-end", "url(#connector-end-circle)");
+            //return polyline;
+        }
+        console.log();
+    }
+
+    drawHorizontalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
+        console.log('Generating Horizontal Connector');
+        console.info('Start Coordinates : ' + JSON.stringify(start));
+        console.info('End Coordinates   : ' + JSON.stringify(end));
+        if (path_connector) {
+            let radius = corner_radius;
+            let dy = end['y'] - start['y'];
+            let dx = Math.round((end['x'] - start['x']) / 2);
+            let arc1 = '';
+            let arc2 = '';
+            console.info('dx                : ' + dx);
+            console.info('dy                : ' + dy);
+            if (dy > 0 && dx > 0) {
+                // First turn right and down with clockwise arc
+                arc1 = 'a5,5 0 0 1 5,5';
+                arc1 = generateArc(radius, 1, '', '');
+                // Second turn down and right with counter clockwise arc
+                arc2 = 'a5,5 0 0 0 5,5';
+                arc2 = generateArc(radius, 0, '', '');
+                // Reduce dx by radius
+                dx -= radius;
+                // Reduce dy by 2 * radius
+                dy -= radius * 2;
+            } else if (dy > 0 && dx < 0) {
+                // First turn down and left with counter clockwise arc
+                arc1 = 'a5,5 0 0 1 -5,5';
+                arc1 = generateArc(radius, 1, '-', '');
+                // Second turn left and down with clockwise arc
+                arc2 = 'a5,5 0 0 0 -5,5';
+                arc2 = generateArc(radius, 0, '-', '');
+                // Increase dx by radius
+                dx += radius;
+                // Reduce dy by 2 * radius
+                dy -= radius * 2;
+            } else if (dy < 0 && dx < 0) {
+                // First turn up and left with counter clockwise arc
+                arc1 = 'a5,5 0 0 1 -5,-5';
+                arc1 = generateArc(radius, 1, '-', '-');
+                // Second turn left and up with clockwise arc
+                arc2 = 'a5,5 0 0 0 -5,-5';
+                arc2 = generateArc(radius, 0, '-', '-');
+                // Reduce dx by radius
+                dx -= radius;
+                // Increase dy by 2 * radius
+                dy += radius * 2;
+            } else if (dy < 0 && dx > 0) {
+                // First turn up and right with counter clockwise arc
+                arc1 = 'a5,5 0 0 0 5,-5';
+                arc1 = generateArc(radius, 0, '', '-');
+                // Second turn right and up with clockwise arc
+                arc2 = 'a5,5 0 0 1 5,-5';
+                arc2 = generateArc(radius, 1, '', '-');
+                // Reduce dx by radius
+                dx -= radius;
+                // Increase dy by 2 * radius
+                dy += radius * 2;
+            }
+            let points = "m" + this.coordString(start) + " h" + dx + " " + arc1 + " " + " v" + dy + arc2 + " h" + dx;
+            let path = parent_svg.append('path')
+                .attr("id", id)
+                .attr("d", points)
+                //.attr("d", "M100,100 h50 a5,5 0 0 0 5,5 v50 a5,5 0 0 1 -5,5 h-50 a5,5 0 0 1 -5,-5 v-50 a5,5 0 0 1 5,-5 z")
+                .attr("stroke-width", "2")
+                .attr("stroke", connector_colour)
+                .attr("fill", "none")
+                .attr("marker-start", "url(#connector-end-circle)")
+                .attr("marker-end", "url(#connector-end-circle)");
+        } else {
+            // Calculate Polyline points
+            let ydiff = end['y'] - start['y'];
+            let ymid = Math.round(start['y'] + ydiff / 2);
+            let mid1 = {x: start['x'], y: ymid};
+            let mid2 = {x: end['x'], y: ymid};
+            let points = this.coordString(start) + " " + this.coordString(mid1) + " " + this.coordString(mid2) + " " + this.coordString(end);
+            let polyline = parent_svg.append('polyline')
+                .attr("id", id)
+                .attr("points", points)
+                .attr("stroke-width", "2")
+                .attr("stroke", connector_colour)
+                .attr("fill", "none")
+                .attr("marker-start", "url(#connector-end-circle)")
+                .attr("marker-end", "url(#connector-end-circle)");
+        }
+        console.log();
+    }
+
+    coordString(coord) {
+        let coord_str = coord['x'] + ',' + coord['y'];
+        return coord_str;
     }
 
     delete() {

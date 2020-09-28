@@ -95,7 +95,7 @@ function loadPropertiesSheet(json_element) {
             });
         } else if ($(jqId(key)).is("select")) {                        // Select
             console.info(key + ' is select with value ' + val);
-            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val(); $(jqId(key)).removeClass('okit-warning'); redrawSVGCanvas();});
+            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val() ? $(jqId(key)).val() : ''; $(jqId(key)).removeClass('okit-warning'); redrawSVGCanvas();});
             $(jqId(key)).val(val);
             if (!$(jqId(key)).val() && !Array.isArray(val) && String(val).trim() !== '') {
                 console.warn(`Value ${val} not in select list ${key}`);
@@ -103,7 +103,7 @@ function loadPropertiesSheet(json_element) {
                 $(jqId(key)).change();
             } else if (!val || (!Array.isArray(val) && String(val).trim() === '')) {
                 $(jqId(key)).val($(jqId(key) + ' option:first').val());
-                json_element[key] = $(jqId(key)).val();
+                json_element[key] = $(jqId(key)).val() ? $(jqId(key)).val() : '';
                 console.info(`Value unspecified setting ${key} to first entry ${json_element[key]}`);
             }
         } else if ($(jqId(key)).is("label")) {                         // Label

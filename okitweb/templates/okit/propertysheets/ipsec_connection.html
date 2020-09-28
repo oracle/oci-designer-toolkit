@@ -1,0 +1,24 @@
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}IPSec Connection{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Customer Premise Equipment</div><div class='td'><select id="cpe_id" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Dynamic Routing Gateway</div><div class='td'><select id="drg_id" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Static Route</div><div class='td'><input type="text" id="static_routes" name="static_routes" class="okit-property-value"></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>CPE Identifier Type</div><div class='td'><select id="cpe_local_identifier_type" class="okit-property-value">
+        <option value="" selected="selected"></option>
+        <option value="IP_ADDRESS">IP Address</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>CPE Identifier</div><div class='td'><input type="text" id="cpe_local_identifier" name="static_routes" class="okit-property-value"></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}

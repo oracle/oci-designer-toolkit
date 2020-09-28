@@ -346,3 +346,7 @@ rect.highlight {
 rect.highlight-vnic {
     fill: #00cc00;
 }
+
+rect.highlight-association {
+    fill: #336600;
+}
