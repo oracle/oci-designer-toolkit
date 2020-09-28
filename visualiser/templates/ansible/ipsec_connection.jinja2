@@ -1,17 +1,17 @@
 
-# ------ Create Customer Premise Equipment {{ output_name }}
-    - name: Create Customer Premise Equipment {{ output_name }}
-      oci_cpe:
+# ------ IPSec Connection {{ output_name }}
+    - name: IPSec Connection {{ output_name }}
+      oci_ip_sec_connection:
         region: "{{ region }}"
         state: "present"
         # Required
         compartment_id: "{{ compartment_id }}"
-        ip_address: "{{ ip_address | safe }}"
+        cpe_id: "{{ cpe_id | safe }}"
+        drg_id: "{{ drg_id | safe }}"
+        static_routes:
+            - "{{ cpe_id | safe }}"
         # Optional
         display_name: "{{ display_name | safe }}"
-{% if cpe_device_shape_id is defined %}
-        cpe_device_shape_id: "{{ cpe_device_shape_id | safe }}"
-{% endif %}
 {% if defined_tags is defined %}
         defined_tags: "{{ defined_tags | safe }}"
 {% endif %}
