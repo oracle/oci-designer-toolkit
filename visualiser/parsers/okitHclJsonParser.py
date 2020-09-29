@@ -181,4 +181,4 @@ class OkitHclJsonParser(object):
 
 
     def replaceReferenceSyntax(self, value):
-        return value.replace('$', '').replace('{', '').replace('}', '')
+        return value.replace('$', '').replace('{', '').replace('}', '').replace(' ', '')
