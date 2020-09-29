@@ -8,10 +8,14 @@
 2. Cache Regions
 3. Cache Compartments for specific Profile.
 4. Add functionality for Customer Premise Equipment.
+5. IPSec Connections added.
+6. Remote peering functionality added but current the user will still need to add the peering id.
+7. Dynamic Routing Gateway simplified and connections created from the new IPSec Connection & Remote Peering Connection.
 
 ### Bug Fixes
 1. Fix Service Gateway only offers all services when drawn but then provisions Object Storage #107
 2. Fix Service Gateway related route rules do not allow setting a Destination Service #109
+3. Add clean functionality to the json object to remove null / undefined to resolve null element issue in Autonomous Databases.
 
 
 ## Version 0.11.0 
