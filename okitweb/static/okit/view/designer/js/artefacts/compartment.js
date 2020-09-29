@@ -95,7 +95,8 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
 
     getRightArtifacts() {
         return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
-            ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference(), IPSecConnection.getArtifactReference()];
+            ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference(),
+            IPSecConnection.getArtifactReference(), RemotePeeringConnection.getArtifactReference()];
     }
 
     getRightEdgeArtifacts() {

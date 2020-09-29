@@ -65,6 +65,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let ipsec_connection of this.ipsec_connections) {
             ipsec_connection.draw();
         }
+        // Remote Peering Connections
+        for (let remote_peering_connection of this.remote_peering_connections) {
+            remote_peering_connection.draw();
+        }
 
         // Draw Virtual Cloud Network Sub Components
         // Internet Gateways
@@ -160,6 +164,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         // IPSec Connections
         for (let ipsec_connection of this.ipsec_connections) {
             ipsec_connection.drawConnections();
+        }
+        // Remote Peering Connections
+        for (let remote_peering_connection of this.remote_peering_connections) {
+            remote_peering_connection.drawConnections();
         }
         // Load Balancers
         for (let load_balancer of this.load_balancers) {

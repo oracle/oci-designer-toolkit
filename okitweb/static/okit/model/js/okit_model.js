@@ -33,7 +33,7 @@ class OkitJson {
         this.network_security_groups = [];
         this.object_storage_buckets = [];
         this.oke_clusters = [];
-        this.remote_peering_gateways = [];
+        this.remote_peering_connections = [];
         this.route_tables = [];
         this.security_lists = [];
         this.service_gateways = [];
@@ -123,6 +123,13 @@ class OkitJson {
         if (okit_json.hasOwnProperty('ipsec_connections')) {
             for (let artefact of okit_json['ipsec_connections']) {
                 let obj = this.newIPSecConnection(artefact);
+                console.info(obj);
+            }
+        }
+        // RemotePeering Connections
+        if (okit_json.hasOwnProperty('remote_peering_connections')) {
+            for (let artefact of okit_json['remote_peering_connections']) {
+                let obj = this.newRemotePeeringConnection(artefact);
                 console.info(obj);
             }
         }
@@ -711,6 +718,31 @@ class OkitJson {
             if (this.oke_clusters[i].id === id) {
                 this.oke_clusters[i].delete();
                 this.oke_clusters.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // RemotePeeringConnection
+    newRemotePeeringConnection(data) {
+        console.info('New Remote Peering Connection');
+        this.remote_peering_connections.push(new RemotePeeringConnection(data, this));
+        return this.remote_peering_connections[this.remote_peering_connections.length - 1];
+    }
+    getRemotePeeringConnections() {return this.remote_peering_connections;}
+    getRemotePeeringConnection(id='') {
+        for (let artefact of this.getRemotePeeringConnections()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteRemotePeeringConnection(id) {
+        for (let i = 0; i < this.remote_peering_connections.length; i++) {
+            if (this.remote_peering_connections[i].id === id) {
+                this.remote_peering_connections[i].delete();
+                this.remote_peering_connections.splice(i, 1);
                 break;
             }
         }

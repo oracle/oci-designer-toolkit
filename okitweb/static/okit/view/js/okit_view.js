@@ -64,7 +64,7 @@ class OkitJsonView {
         this.network_security_groups = [];
         this.object_storage_buckets = [];
         this.oke_clusters = [];
-        this.remote_peering_gateways = [];
+        this.remote_peering_connections = [];
         this.route_tables = [];
         this.security_lists = [];
         this.service_gateways = [];
@@ -92,7 +92,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
         for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
         for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
-        //for (let artefact of this.okitjson.remote_peering_gateways) {this.newRemotePeeringGateway(artefact);}
+        for (let artefact of this.okitjson.remote_peering_connections) {this.newRemotePeeringConnection(artefact);}
         for (let artefact of this.okitjson.route_tables) {this.newRouteTable(artefact);}
         for (let artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
         for (let artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
@@ -810,6 +810,41 @@ class OkitJsonView {
     loadOkeClusters(oke_clusters) {
         for (const artefact of oke_clusters) {
             this.oke_clusters.push(new OkeClusterView(new OkeCluster(artefact, this.okitjson), this));
+        }
+    }
+
+    // RemotePeeringConnection
+    dropRemotePeeringConnectionView(target) {
+        console.info('Drop IPSec Connection');
+        console.info(target);
+        let view_artefact = this.newRemotePeeringConnection();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newRemotePeeringConnection(connect) {
+        this.remote_peering_connections.push(connect ? new RemotePeeringConnectionView(connect, this) : new RemotePeeringConnectionView(this.okitjson.newRemotePeeringConnection(), this));
+        return this.remote_peering_connections[this.remote_peering_connections.length - 1];
+    }
+    getRemotePeeringConnections() {
+        return this.remote_peering_connections;
+    }
+    getRemotePeeringConnection(id='') {
+        for (let artefact of this.getRemotePeeringConnections()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteRemotePeeringConnection(id='') {
+        this.okitjson.deleteRemotePeeringConnection(id);
+        this.update();
+    }
+    loadRemotePeeringConnections(fast_connects) {
+        for (const artefact of fast_connects) {
+            this.remote_peering_connections.push(new RemotePeeringConnectionView(new RemotePeeringConnection(artefact, this.okitjson), this));
         }
     }
 
