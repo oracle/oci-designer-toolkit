@@ -2,12 +2,12 @@
 ** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Designer IPSecConnection View Javascript');
+console.info('Loaded Designer RemotePeeringConnection View Javascript');
 
 /*
-** Define IPSecConnection View Artifact Class
+** Define RemotePeeringConnection View Artifact Class
  */
-class IPSecConnectionView extends OkitDesignerArtefactView {
+class RemotePeeringConnectionView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
     }
@@ -26,21 +26,18 @@ class IPSecConnectionView extends OkitDesignerArtefactView {
         svg.on('mouseenter', () => {
             if (okitSettings.highlight_association) {
                 if (self.drg_id !== '') {$(jqId(self.drg_id)).addClass('highlight-association');}
-                if (self.cpe_id !== '') {$(jqId(self.cpe_id)).addClass('highlight-association');}
                 $(jqId(id)).addClass('highlight-association');
             }
         })
         svg.on('mouseleave', () => {
             if (okitSettings.highlight_association) {
                 if (self.drg_id !== '') {$(jqId(self.drg_id)).removeClass('highlight-association');}
-                if (self.cpe_id !== '') {$(jqId(self.cpe_id)).removeClass('highlight-association');}
                 $(jqId(id)).removeClass('highlight-association');
             }
         });
     }
     // Draw Connections
     drawConnections() {
-        if (this.cpe_id !== '') {this.drawConnection(this.id, this.cpe_id);}
         if (this.drg_id !== '') {this.drawConnection(this.id, this.drg_id);}
     }
     // Return Artifact Specific Definition.
@@ -62,7 +59,7 @@ class IPSecConnectionView extends OkitDesignerArtefactView {
     loadProperties() {
         let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/ipsec_connection.html", () => {
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/remote_peering_connection.html", () => {
             // Build Dynamic Routing Gateways
             let drg_select = $(jqId('drg_id'));
             $(drg_select).empty();
@@ -70,12 +67,12 @@ class IPSecConnectionView extends OkitDesignerArtefactView {
             for (const drg of me.getOkitJson().getDynamicRoutingGateways()) {
                 drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
             }
-            // Build Customer Premise Equipments
-            let cpe_select = $(jqId('cpe_id'));
-            $(cpe_select).empty();
-            cpe_select.append($('<option>').attr('value', '').text(''));
-            for (const cpe of me.getOkitJson().getCustomerPremiseEquipments()) {
-                cpe_select.append($('<option>').attr('value', cpe.id).text(cpe.display_name));
+            // Regions
+            let region_select = $(jqId('peer_region_name'));
+            $(region_select).empty();
+            region_select.append($('<option>').attr('value', '').text(''));
+            for (const region of okitOciData.getRegions()) {
+                region_select.append($('<option>').attr('value', region.id).text(region.display_name));
             }
             // Load Sheet
             loadPropertiesSheet(me.artefact);
@@ -86,14 +83,14 @@ class IPSecConnectionView extends OkitDesignerArtefactView {
     ** Load and display Value Proposition
      */
     loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/ipsec_connection.html");
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/remote_peering_connection.html");
     }
 
     /*
     ** Static Functionality
      */
     static getArtifactReference() {
-        return IPSecConnection.getArtifactReference();
+        return RemotePeeringConnection.getArtifactReference();
     }
 
     static getDropTargets() {

@@ -50,6 +50,7 @@ from facades.ociNATGateway import OCINATGateways
 from facades.ociNetworkSecurityGroup import OCINetworkSecurityGroups
 from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
 from facades.ociRegion import OCIRegions
+from facades.ociRemotePeeringConnection import OCIRemotePeeringConnections
 from facades.ociResourceManager import OCIResourceManagers
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
@@ -248,7 +249,7 @@ def ociArtifacts(artifact):
         oci_internet_gateways = OCIInternetGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_internet_gateways.list(filter=query_json.get('internet_gateway_filter', None))
     elif artifact == 'IPSecConnection':
-        logger.info('---- Processing Customer Premise Equipment')
+        logger.info('---- Processing IPSec Connections')
         oci_ipsec_connections = OCIIPSecConnections(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_ipsec_connections.list(filter=query_json.get('ipsec_connection_filter', None))
     elif artifact == 'LoadBalancer':
@@ -276,6 +277,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing OKE Clusters')
         oke_clusters = OCIContainers(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oke_clusters.list(filter=query_json.get('oke_cluster_filter', None))
+    elif artifact == 'RemotePeeringConnection':
+        logger.info('---- Processing Remote Peering Connections')
+        oci_remote_peering_connections = OCIRemotePeeringConnections(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_remote_peering_connections.list(filter=query_json.get('remote_peering_connection_filter', None))
     elif artifact == 'RouteTable':
         logger.info('---- Processing Route Tables')
         oci_route_tables = OCIRouteTables(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])

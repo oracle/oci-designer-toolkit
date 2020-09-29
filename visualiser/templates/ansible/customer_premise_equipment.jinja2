@@ -1,7 +1,7 @@
 
 # ------ Create Customer Premise Equipment {{ output_name }}
     - name: Create Customer Premise Equipment {{ output_name }}
-      oci_volume:
+      oci_cpe:
         region: "{{ region }}"
         state: "present"
         # Required

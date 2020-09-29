@@ -143,9 +143,6 @@ class OCIGenerator(object):
         # -- Customer Premise Equipments
         for customer_premise_equipment in self.visualiser_json.get('customer_premise_equipments', []):
             self.renderCustomerPremiseEquipment(customer_premise_equipment)
-        # -- IPSec Connections
-        for ipsec_connection in self.visualiser_json.get('ipsec_connections', []):
-            self.renderIPSecConnection(ipsec_connection)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
@@ -157,6 +154,12 @@ class OCIGenerator(object):
         # -- Dynamic Routing Gateways
         for dynamic_routing_gateway in self.visualiser_json.get('dynamic_routing_gateways', []):
             self.renderDynamicRoutingGateway(dynamic_routing_gateway)
+        # -- IPSec Connections
+        for ipsec_connection in self.visualiser_json.get('ipsec_connections', []):
+            self.renderIPSecConnection(ipsec_connection)
+        # -- Remote Peering Connections
+        for remote_peering_connection in self.visualiser_json.get('remote_peering_connections', []):
+            self.renderRemotePeeringConnection(remote_peering_connection)
         # -- Network Security Group
         for network_security_group in self.visualiser_json.get('network_security_groups', []):
             self.renderNetworkSecurityGroup(network_security_group)
@@ -689,21 +692,30 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = artefact['display_name']
         # Process Block Storage Volume Data
-        logger.info('Processing Customer Premise Equipment Information {0!s:s}'.format(standardisedName))
+        logger.info('Processing IPSec Connection Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['compartment_id']]))
-        # ---- Router IP Address
-        self.addJinja2Variable("ip_address", artefact["ip_address"], standardisedName)
+        # ---- Static Routes
+        self.addJinja2Variable("static_routes", artefact["static_routes"], standardisedName)
+        # ---- Customer Premise Equipment
+        self.jinja2_variables["cpe_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['cpe_id']]))
+        # ---- Dynamic Routing Gateway
+        self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['drg_id']]))
         # ---- Display Name
         self.addJinja2Variable("display_name", artefact["display_name"], standardisedName)
         # --- Optional
-        # ---- CPE Shape
-        if artefact.get('cpe_device_shape_id', '') != '':
-            self.addJinja2Variable("cpe_device_shape_id", artefact["cpe_device_shape_id"], standardisedName)
+        # ---- CPE Local Identifier Type
+        if artefact.get('cpe_local_identifier_type', '') != '':
+            self.addJinja2Variable("cpe_local_identifier_type", artefact["cpe_local_identifier_type"], standardisedName)
         else:
-            self.removeJinja2Variable('cpe_device_shape_id')
+            self.removeJinja2Variable('cpe_local_identifier_type')
+        # ---- CPE Local Identifier
+        if artefact.get('cpe_local_identifier', '') != '':
+            self.addJinja2Variable("cpe_local_identifier", artefact["cpe_local_identifier"], standardisedName)
+        else:
+            self.removeJinja2Variable('cpe_local_identifier')
         # ---- Tags
         self.renderTags(artefact)
 
@@ -1029,6 +1041,42 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("oke_cluster.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderRemotePeeringConnection(self, artefact):
+        # Read Data
+        standardisedName = self.standardiseResourceName(artefact['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = artefact['display_name']
+        # Process Block Storage Volume Data
+        logger.info('Processing Remote Peering Connection Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['compartment_id']]))
+        # ---- Dynamic Routing Gateway
+        self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['drg_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", artefact["display_name"], standardisedName)
+        # --- Optional
+        # ---- Peer Id
+        if artefact.get('peer_id', '') != '':
+            self.addJinja2Variable("peer_id", artefact["peer_id"], standardisedName)
+        else:
+            self.removeJinja2Variable('cpe_local_identifier_type')
+        # ---- Peer Region
+        if artefact.get('peer_region_name', '') != '':
+            self.addJinja2Variable("peer_region_name", artefact["peer_region_name"], standardisedName)
+        else:
+            self.removeJinja2Variable('cpe_local_identifier')
+        # ---- Tags
+        self.renderTags(artefact)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("remote_peering_connection.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
