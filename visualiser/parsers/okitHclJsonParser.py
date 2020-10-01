@@ -67,13 +67,14 @@ class OkitHclJsonParser(object):
             "instances": [],
             "instance_pools": [],
             "internet_gateways": [],
+            "ipsec_connections": [],
             "load_balancers": [],
             "local_peering_gateways": [],
             "nat_gateways": [],
             "network_security_groups": [],
             "object_storage_buckets": [],
             "oke_clusters": [],
-            "remote_peering_gateways": [],
+            "remote_peering_connections": [],
             "route_tables": [],
             "security_lists": [],
             "service_gateways": [],
@@ -99,6 +100,32 @@ class OkitHclJsonParser(object):
         return artefact
 
 
+    def processUnknown(self, resource_key, artefact_json):
+        if resource_key == "oci_core_network_security_group_security_rule":
+            # Process Security Group Rules
+            logger.info("Looking For NSG - {0!s:s}".format(self.replaceReferenceSyntax(artefact_json["network_security_group_id"])))
+            for nsg in self.okit_json["network_security_groups"]:
+                if nsg["id"] == self.replaceReferenceSyntax(artefact_json["network_security_group_id"]):
+                    del artefact_json["network_security_group_id"]
+                    del artefact_json["id"]
+                    if "security_rules" in nsg:
+                        nsg["security_rules"].append(artefact_json)
+                    else:
+                        nsg["security_rules"] = [artefact_json]
+                    break
+        else:
+            return False
+        return True
+
+
+    def postParse(self):
+        for instance in self.okit_json["instances"]:
+            if isinstance(instance["metadata"], list):
+                instance["metadata"] = instance["metadata"][0]
+            if isinstance(instance["source_details"], list):
+                instance["source_details"] = instance["source_details"][0]
+
+
     def parse(self, hcl_json=None):
         if hcl_json is not None:
             self.hcl_json = hcl_json
@@ -107,19 +134,31 @@ class OkitHclJsonParser(object):
         result_json = {"okit_json": {}, "warnings": {}}
 
         if self.hcl_json is not None:
-            # Loop through resource
+            # Loop through resources looking for simple matches
+            logger.info("Processing Simple Mapped Resources")
             for resource in self.hcl_json["resource"]:
                 for resource_key, resource_value in resource.items():
-                    for artefact in resource_value:
-                        for artefact_key, artefact_value in artefact.items():
-                            for artefact_json in artefact_value:
-                                artefact_json["id"] = "{0!s:s}.{1!s:s}.id".format(resource_key, artefact_key)
-                                if resource_key in self.tf_map:
+                    if resource_key in self.tf_map:
+                        for artefact in resource_value:
+                            for artefact_key, artefact_value in artefact.items():
+                                for artefact_json in artefact_value:
+                                    artefact_json["id"] = "{0!s:s}.{1!s:s}.id".format(resource_key, artefact_key)
                                     self.okit_json[self.tf_map[resource_key]].append(self.processOddities(artefact_json))
-                                else:
-                                    logger.warn("Unknown Resource {0!s:s}".format(resource_key))
-                                    result_json["warnings"][resource_key] = "Unknown Resource {0!s:s}".format(resource_key)
+            # Loop through resources looking for complex matches
+            logger.info("Processing Complex Unmapped Resources")
+            for resource in self.hcl_json["resource"]:
+                for resource_key, resource_value in resource.items():
+                    if resource_key not in self.tf_map:
+                        for artefact in resource_value:
+                            for artefact_key, artefact_value in artefact.items():
+                                for artefact_json in artefact_value:
+                                    artefact_json["id"] = "{0!s:s}.{1!s:s}.id".format(resource_key, artefact_key)
+                                    if not self.processUnknown(resource_key, artefact_json):
+                                        logger.warn("Unknown Resource {0!s:s}".format(resource_key))
+                                        result_json["warnings"][resource_key] = "Unknown Resource {0!s:s}".format(resource_key)
+            self.postParse()
             result_json["okit_json"] = self.standardiseIds(self.okit_json)
+            logger.info("Parsed Resources")
         return result_json
 
 
@@ -142,4 +181,4 @@ class OkitHclJsonParser(object):
 
 
     def replaceReferenceSyntax(self, value):
-        return value.replace('$', '').replace('{', '').replace('}', '')
+        return value.replace('$', '').replace('{', '').replace('}', '').replace(' ', '')
