@@ -31,6 +31,7 @@ $(document).ready(function() {
     console.info('Adding Designer Handlers');
 
     // Left Bar & Panels
+    // Palette
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_palette_button')
         .attr('class', 'okit-bar-panel-displayed okit-pointer-cursor')
@@ -49,7 +50,7 @@ $(document).ready(function() {
             checkLeftColumn();
         })
         .text('Palette');
-
+    // Compartment Explorer
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_explorer_button')
         .attr('class', 'okit-pointer-cursor')
@@ -67,7 +68,7 @@ $(document).ready(function() {
             checkLeftColumn();
         })
         .text('Explorer');
-
+    // Preferences
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_preferences_button')
         .attr('class', 'okit-pointer-cursor')

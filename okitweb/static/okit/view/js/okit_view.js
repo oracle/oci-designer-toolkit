@@ -2040,6 +2040,19 @@ class OkitArtefactView {
         return this.constructor.getgetConnectTargets();
     }
 
+    /*
+    ** Common Single Select Input build & load functions
+     */
+
+    loadDynamicRoutingGatewaySelect(id) {
+        // Build Dynamic Routing Gateways
+        let drg_select = $(jqId(id));
+        $(drg_select).empty();
+        drg_select.append($('<option>').attr('value', '').text(''));
+        for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
+            drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+        }
+    }
 }
 
 /*

@@ -16,6 +16,7 @@ class FastConnect extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.fast_connects.length + 1);
         this.compartment_id = data.parent_id;
+        this.drg_id = '';
         // Update with any passed data
         this.merge(data);
         this.convert();
