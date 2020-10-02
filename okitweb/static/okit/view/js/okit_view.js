@@ -1359,6 +1359,12 @@ class OkitArtefactView {
     newDraw() {
         console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         const svg = this.drawSvg();
+        this.drawRect(svg);
+        // Add standard / common click event
+        this.addClickEvent(svg);
+        // Add Mouse Over / Exist Events
+        this.addMouseEvents(svg);
+        return svg;
     }
 
     drawSvg() {
@@ -1402,6 +1408,17 @@ class OkitArtefactView {
             .attr("stroke-width", this.rect_stroke_width)
             .attr("stroke-dasharray", `${this.rect_stroke_dash}, ${this.rect_stroke_dash}`);
         return rect;
+    }
+
+    addClickEvent(svg) {
+        const self = this;
+        svg.on("click", function() {
+            self.loadSlidePanels();
+            $('.highlight:not(' + jqId(self.artefact_id) +')').removeClass('highlight');
+            $(jqId(self.artefact_id)).toggleClass('highlight');
+            $(jqId(self.artefact_id)).hasClass('highlight') ? selectedArtefact = self.id : selectedArtefact = null;
+            d3.event.stopPropagation();
+        });
     }
 
     addMouseEvents(svg) {}

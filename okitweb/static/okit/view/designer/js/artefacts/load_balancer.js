@@ -13,16 +13,9 @@ class LoadBalancerView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.subnet_ids[0];}
+    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
     get minimum_width() {return 135;}
     get minimum_height() {return 100;}
-
-    getParent() {
-        return this.getJsonView().getSubnet(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
 
     /*
      ** SVG Processing
@@ -49,7 +42,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
             .attr("data-connector-id", this.id)
             .attr("dragable", true);
         // Draw Connectors
-        this.drawConnectors();
+        //this.drawConnectors();
         console.log();
         return svg;
     }
@@ -119,6 +112,12 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         }
     }
 
+    // Draw Connections
+    drawConnections() {
+        for (let instance_id of this.artefact.instance_ids) {
+            if (instance_id !== '') {this.drawConnection(this.id, instance_id);}
+        }
+    }
     // Return Artifact Specific Definition.
     getSvgDefinition() {
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
