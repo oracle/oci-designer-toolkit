@@ -169,6 +169,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let remote_peering_connection of this.remote_peering_connections) {
             remote_peering_connection.drawConnections();
         }
+        // Fast Connects
+        for (let fast_connect of this.fast_connects) {
+            fast_connect.drawConnections();
+        }
         // Load Balancers
         for (let load_balancer of this.load_balancers) {
             load_balancer.drawConnections();

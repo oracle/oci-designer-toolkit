@@ -22,6 +22,7 @@ class InstanceView extends OkitDesignerArtefactView {
             return this.compartment_id;
         }
     }
+    get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     get minimum_width() {return 135;}
     get minimum_height() {return 100;}
     get dimensions() {
@@ -47,44 +48,14 @@ class InstanceView extends OkitDesignerArtefactView {
         return dimensions;
     }
 
-    getParent() {
-        return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
-
     /*
      ** SVG Processing
      */
     draw() {
         console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
         let svg = super.draw();
-        // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        if (rect && rect.node()) {
-            let boundingClientRect = rect.node().getBoundingClientRect();
-            // Add Connector Data
-            svg.attr("data-compartment-id", this.compartment_id)
-                .attr("data-connector-start-y", boundingClientRect.y)
-                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-end-y", boundingClientRect.y)
-                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-id", this.id)
-                .attr("dragable", true)
-                .selectAll("*")
-                .attr("data-connector-start-y", boundingClientRect.y)
-                .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-end-y", boundingClientRect.y)
-                .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width / 2))
-                .attr("data-connector-id", this.id)
-                .attr("dragable", true);
-            // Draw Attachments
-            this.drawAttachments();
-        }
-        console.log();
+        // Draw Attachments
+        this.drawAttachments();
         return svg;
     }
 
