@@ -22,6 +22,7 @@ class InstanceView extends OkitDesignerArtefactView {
             return this.compartment_id;
         }
     }
+    get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     get minimum_width() {return 135;}
     get minimum_height() {return 100;}
     get dimensions() {
@@ -45,14 +46,6 @@ class InstanceView extends OkitDesignerArtefactView {
         console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
         console.log();
         return dimensions;
-    }
-
-    getParent() {
-        return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
     }
 
     /*
