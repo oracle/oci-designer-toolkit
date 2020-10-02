@@ -13,19 +13,33 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.vcn_id;}
-
-    getParent() {
-        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
 
     /*
      ** SVG Processing
      */
-    draw() {
+    // Add Specific Mouse Events
+    addMouseEvents(svg) {
+        let self = this;
+        let id = this.artefact_id;
+        svg.on('mouseenter', () => {
+            if (okitSettings.highlight_association) {
+                if (self.peer_id !== '') {$(jqId(self.peer_id)).addClass('highlight-association');}
+                $(jqId(id)).addClass('highlight-association');
+            }
+        })
+        svg.on('mouseleave', () => {
+            if (okitSettings.highlight_association) {
+                if (self.peer_id !== '') {$(jqId(self.peer_id)).removeClass('highlight-association');}
+                $(jqId(id)).removeClass('highlight-association');
+            }
+        });
+    }
+    // Draw Connections
+    drawConnections() {
+        if (this.peer_id !== '') {this.drawConnection(this.id, this.peer_id);}
+    }
+    draw1() {
         console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let me = this;
         let svg = super.draw();
