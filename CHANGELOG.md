@@ -11,6 +11,7 @@
 5. IPSec Connections added.
 6. Remote peering functionality added but current the user will still need to add the peering id.
 7. Dynamic Routing Gateway simplified and connections created from the new IPSec Connection & Remote Peering Connection.
+8. Database System/Autonomous name displayed on the canvas (ENH REQ: Issue: #120).
 
 ### Bug Fixes
 1. Fix Service Gateway only offers all services when drawn but then provisions Object Storage #107
