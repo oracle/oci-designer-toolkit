@@ -13,9 +13,10 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.primary_mount_target.subnet_id;}
+    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
 
     getParent() {
-        return this.getJsonView().getSubnet(this.parent_id);
+        return this.parent;
     }
 
     getParentId() {
@@ -35,13 +36,15 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
     // Return Artifact Specific Definition.
     getSvgDefinition() {
         let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
+        if (this.parent) {
+            let first_child = this.getParent().getChildOffset(this.getArtifactReference());
+            definition['svg']['x'] = first_child.dx;
+            definition['svg']['y'] = first_child.dy;
+            definition['svg']['width'] = this.dimensions['width'];
+            definition['svg']['height'] = this.dimensions['height'];
+            definition['rect']['stroke']['colour'] = stroke_colours.bark;
+            definition['rect']['stroke']['dash'] = 1;
+        }
         return definition;
     }
 
