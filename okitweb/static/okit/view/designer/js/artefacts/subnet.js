@@ -143,11 +143,11 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     getBottomArtifacts() {
-        return [Instance.getArtifactReference(), DatabaseSystem.getArtifactReference()];
+        return [Instance.getArtifactReference(), DatabaseSystem.getArtifactReference(), AutonomousDatabase.getArtifactReference()];
     }
 
     getLeftArtifacts() {
-        return [FileStorageSystem.getArtifactReference(), AutonomousDatabase.getArtifactReference()];
+        return [FileStorageSystem.getArtifactReference()];
     }
 
     /*
