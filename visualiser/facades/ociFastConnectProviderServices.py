@@ -17,6 +17,7 @@ import oci
 
 from common.okitLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
+from facades.ociVirtualCircuitBandwidthShape import OCIVirtualCircuitBandwidthShapes
 
 # Configure logging
 logger = getLogger()
@@ -41,5 +42,9 @@ class OCIFastConnectProviderServices(OCIVirtualNetworkConnection):
         self.fast_connect_provider_services_json = self.filterJsonObjectList(fast_connect_provider_services_json, filter)
         logger.debug(str(self.fast_connect_provider_services_json))
 
-        return self.fast_connect_provider_services_json
+        # Fast Connect Virtual Service Bandwidth Shapes
+        virtual_circuit_bandwidth_shape = OCIVirtualCircuitBandwidthShapes()
+        for fast_connect_provider_service in self.fast_connect_provider_services_json:
+            fast_connect_provider_service["virtual_circuit_bandwidth_shape"] = sorted(virtual_circuit_bandwidth_shape.list(fast_connect_provider_service['id']), key=lambda k: k['bandwidth_in_mbps'])
 
+        return self.fast_connect_provider_services_json

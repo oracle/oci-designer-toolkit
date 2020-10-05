@@ -88,7 +88,9 @@ class OkitOCIData {
 
     cloneForSave() {
         let clone = JSON.clone(this);
-        clone.compartments = [];
+        if (developer_mode) {
+            clone.compartments = [];
+        }
         return clone;
     }
 

@@ -62,7 +62,7 @@ class FastConnectView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/fast_connect.html", () => {
             // Load DRG Select
-            me.loadDynamicRoutingGatewaySelect('drg_id');
+            me.loadDynamicRoutingGatewaySelect('gateway_id');
             loadPropertiesSheet(me.artefact);
         });
     }

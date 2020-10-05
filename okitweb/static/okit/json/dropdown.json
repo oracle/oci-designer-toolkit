@@ -313,6 +313,23 @@
       "shape_family": "EXADATA"
     },
     {
+      "available_core_count": null,
+      "available_data_storage_in_t_bs": null,
+      "available_db_node_storage_in_g_bs": null,
+      "available_memory_in_gbs": null,
+      "core_count_increment": null,
+      "maximum_node_count": 32,
+      "min_core_count_per_node": 0,
+      "min_data_storage_in_t_bs": null,
+      "min_db_node_storage_per_node_in_g_bs": null,
+      "min_memory_per_node_in_g_bs": null,
+      "minimum_core_count": 0,
+      "minimum_node_count": 2,
+      "name": "Exadata.X8M",
+      "shape": "Exadata.X8M",
+      "shape_family": "EXADATA"
+    },
+    {
       "available_core_count": 44,
       "available_data_storage_in_t_bs": 42,
       "available_db_node_storage_in_g_bs": 2200,
@@ -752,7 +769,17 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER3"
+      "type": "LAYER3",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -769,7 +796,13 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -786,7 +819,45 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 2000,
+          "name": "2 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 3000,
+          "name": "3 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 4000,
+          "name": "4 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 5000,
+          "name": "5 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 20000,
+          "name": "20 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 30000,
+          "name": "30 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 40000,
+          "name": "40 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -803,7 +874,13 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -820,7 +897,17 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -837,7 +924,17 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -854,7 +951,33 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 2000,
+          "name": "2 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 3000,
+          "name": "3 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 4000,
+          "name": "4 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 5000,
+          "name": "5 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -868,7 +991,17 @@
       "public_peering_bgp_management": "ORACLE_MANAGED",
       "required_total_cross_connects": 1,
       "supported_virtual_circuit_types": null,
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -885,7 +1018,17 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER3"
+      "type": "LAYER3",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -902,7 +1045,17 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -916,7 +1069,13 @@
       "public_peering_bgp_management": "ORACLE_MANAGED",
       "required_total_cross_connects": 1,
       "supported_virtual_circuit_types": null,
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -933,7 +1092,17 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER3"
+      "type": "LAYER3",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     },
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
@@ -950,7 +1119,33 @@
         "PRIVATE",
         "PUBLIC"
       ],
-      "type": "LAYER2"
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 2000,
+          "name": "2 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 3000,
+          "name": "3 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 4000,
+          "name": "4 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 5000,
+          "name": "5 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
     }
   ],
   "images": [
@@ -1506,6 +1701,32 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
+      "display_name": "CentOS-6.10-2020.09.21-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaa4krne6bs2onsnjbyo7vo2fa2wt4cp4jpra2fjbprumpmcjuhqwuq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "CentOS",
+      "operating_system_version": "6.10",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "CentOS 6.10",
+      "time_created": "2020-09-30T05:14:13.700000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
       "display_name": "CentOS-6.10-2020.08.25-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaajsmivftoqhtadcipo43fwg4e5hqyoe5obacjbffn2f5ybkxpioga",
@@ -1558,9 +1779,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "CentOS-6.10-2020.06.16-0",
+      "display_name": "CentOS-7-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa3katbupltm2drnulz2rsiyyrsvheq6als65lm2orrpwzcnvc6oxa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa3urt3vh264ghzzny4e4klfhzvptq5x2tojdjfphmudy7fk37pmja",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1572,11 +1793,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "CentOS",
-      "operating_system_version": "6.10",
+      "operating_system_version": "7",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "CentOS 6.10",
-      "time_created": "2020-06-19T16:30:05.763000+00:00"
+      "sort_key": "CentOS 7",
+      "time_created": "2020-09-30T05:12:33.190000+00:00"
     },
     {
       "agent_features": null,
@@ -1629,32 +1850,6 @@
       "size_in_mbs": 47694,
       "sort_key": "CentOS 7",
       "time_created": "2020-07-24T17:01:07.879000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "CentOS-7-2020.06.16-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaajw5o3qf7cha2mgov5vxnwyctmcy4eqayy7o4w7s6cqeyppqd3smq",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": true,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "CentOS",
-      "operating_system_version": "7",
-      "shapes": [],
-      "size_in_mbs": 47694,
-      "sort_key": "CentOS 7",
-      "time_created": "2020-06-19T16:31:02.199000+00:00"
     },
     {
       "agent_features": null,
@@ -1740,6 +1935,32 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
+      "display_name": "Oracle-Linux-6.10-2020.09.22-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaasmphyymx2soyt5cz4mb3rc7mnppjjnacm5gbkz7cmgwaopvqaniq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Oracle Linux",
+      "operating_system_version": "6.10",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Oracle Linux 6.10",
+      "time_created": "2020-09-23T22:07:27.284000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
       "display_name": "Oracle-Linux-6.10-2020.09.03-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaayubpaghyiylwq43vtigfufamjg6ixzqkhrnvbmss577kdwrbvlpa",
@@ -1792,9 +2013,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Oracle-Linux-6.10-2020.06.30-0",
+      "display_name": "Oracle-Linux-7.8-Gen2-GPU-2020.09.23-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaf6zv3ak5yz42tjs4manw45gi4d26qbjfk74wgcoysmfqe2h5jidq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaagzc46hy4isurb2cgytksjxjtrqmweijhpfv7n62s4v6nexlnwbyq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1806,11 +2027,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Oracle Linux",
-      "operating_system_version": "6.10",
+      "operating_system_version": "7.8",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Oracle Linux 6.10",
-      "time_created": "2020-06-30T22:02:46.425000+00:00"
+      "sort_key": "Oracle Linux 7.8",
+      "time_created": "2020-09-23T22:08:07.586000+00:00"
     },
     {
       "agent_features": null,
@@ -1870,9 +2091,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Oracle-Linux-7.8-Gen2-GPU-2020.06.30-0",
+      "display_name": "Oracle-Linux-7.8-2020.09.23-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaawsooxhtnmok32wbqdvw56b2kyci3wjso42cmgn6bugqdmfvryuq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaauhf5hmgjm5vb7c5kllxgydveooeiyiwxa222k62tcjr4bhucyjha",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1888,33 +2109,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "Oracle Linux 7.8",
-      "time_created": "2020-06-30T22:02:42.672000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Oracle-Linux-7.8-Gen2-GPU-2020.06.09-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaqmhzqofqenqptx4cx35742fg3fvsy3j7rybk3haobwqku7aiu5aq",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": true,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Oracle Linux",
-      "operating_system_version": "7.8",
-      "shapes": [],
-      "size_in_mbs": 47694,
-      "sort_key": "Oracle Linux 7.8",
-      "time_created": "2020-06-05T23:00:58.942000+00:00"
+      "time_created": "2020-09-23T22:10:52.156000+00:00"
     },
     {
       "agent_features": null,
@@ -1974,58 +2169,6 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Oracle-Linux-7.8-2020.06.30-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaxdwzaqqvxvmyznmcx2n766fxatd6owcojqapkih7oqq4qt3o4wwa",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": true,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Oracle Linux",
-      "operating_system_version": "7.8",
-      "shapes": [],
-      "size_in_mbs": 47694,
-      "sort_key": "Oracle Linux 7.8",
-      "time_created": "2020-06-30T22:00:06.221000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Oracle-Linux-7.8-2020.06.09-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaiqmtu5jaqezxl6jz6ozopb4l3vfl7dt3hmf4o6yseuvw3rzeabxa",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": true,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Oracle Linux",
-      "operating_system_version": "7.8",
-      "shapes": [],
-      "size_in_mbs": 47694,
-      "sort_key": "Oracle Linux 7.8",
-      "time_created": "2020-06-05T23:00:53.709000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
       "display_name": "Oracle-Linux-7.8-2020.05.26-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaay2kmwg3owseae3ppamxzegb3x4ezitizh6pyhnahzqmubfhxvmhq",
@@ -2045,6 +2188,32 @@
       "size_in_mbs": 47694,
       "sort_key": "Oracle Linux 7.8",
       "time_created": "2020-05-28T22:43:10.902000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Oracle-Linux-8.2-2020.09.23-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaac6f7x3lvmsweish5gkqbvpnst3ucluzjygjjszjtlfhb3pt2kgbq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Oracle Linux",
+      "operating_system_version": "8",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Oracle Linux 8",
+      "time_created": "2020-09-23T22:49:50.507000+00:00"
     },
     {
       "agent_features": null,
@@ -2104,6 +2273,32 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.09.21-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaqonl6ydsgjvrr2nqp5i3w4ojeooxfdkjwgnyt62s5ra6e5jfx5ma",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2012 R2 Datacenter",
+      "shapes": [],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2012 R2 Datacenter",
+      "time_created": "2020-09-24T23:19:46.405000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
       "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.08.26-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaaopy32lgqiazzcccuaonheaq3hdegl27dvpaesy4q2j3yi3tup27a",
@@ -2156,9 +2351,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-E2-2020.06.11-0",
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-DenseIO-2020.09.25-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaacbiytdq2uawalsbaeiwakudmxixytntjabrqvqwjo6wvu5fgymaa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaatdajfex3ektat2h6qilh5lj5do7rzelxd5p4tz6ecguf5zxxwuba",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2174,7 +2369,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-06-12T18:51:32.326000+00:00"
+      "time_created": "2020-09-26T17:08:36.903000+00:00"
     },
     {
       "agent_features": null,
@@ -2234,9 +2429,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-DenseIO-2020.06.11-0",
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaavo27wn2sfx2s37a7obltkt3drewtgzglikycknya2ujz6vkjitxq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaankl7g7nah3qtlvdc7k6felg7nxfgdfwtnxgdxtwvp54emz5ftl3q",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2252,7 +2447,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-06-12T18:52:26.030000+00:00"
+      "time_created": "2020-09-24T23:11:52.220000+00:00"
     },
     {
       "agent_features": null,
@@ -2312,9 +2507,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-Gen2-2020.06.10-0",
+      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-2020.09.22-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaafwkp5giprtgcursv3r6usnh4zxak5x2kzsqrjamafhdo2i7wlqdq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa72wkgco2rxpjqdxmlxybu5s2cny5c2fijdxqga26sshqi7dsexga",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2330,7 +2525,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-06-12T18:53:28.893000+00:00"
+      "time_created": "2020-09-24T23:19:19.481000+00:00"
     },
     {
       "agent_features": null,
@@ -2390,25 +2585,25 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Datacenter-Edition-BM-2020.06.11-0",
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaakqaxjhtn4kkgszci2qltf3yz7cbgxdyjiqxbfp7jgyznjij2cfpq",
-      "launch_mode": "NATIVE",
+      "id": "ocid1.image.oc1.phx.aaaaaaaalet36svosahqdf7ckzrpmwtb7k3po6oqhoupnw5hrynzq6lhhe6a",
+      "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
         "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
+        "network_type": "PARAVIRTUALIZED",
         "remote_data_volume_type": "PARAVIRTUALIZED"
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Windows",
-      "operating_system_version": "Server 2012 R2 Datacenter",
+      "operating_system_version": "Server 2012 R2 Standard",
       "shapes": [],
       "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2012 R2 Datacenter",
-      "time_created": "2020-06-12T18:52:30.645000+00:00"
+      "sort_key": "Windows Server 2012 R2 Standard",
+      "time_created": "2020-09-24T23:18:55.530000+00:00"
     },
     {
       "agent_features": null,
@@ -2468,16 +2663,16 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-E2-2020.06.11-0",
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaatc4josfjc6psg236ns5s7snay2s5e7odfhzd333gehbcdseaxmdq",
-      "launch_mode": "PARAVIRTUALIZED",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa2pyj36z2gwo6pwh6il7oxxhfkabjjqzjjqzvr7e3cf3o2t7si3sq",
+      "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
         "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
+        "network_type": "VFIO",
         "remote_data_volume_type": "PARAVIRTUALIZED"
       },
       "lifecycle_state": "AVAILABLE",
@@ -2486,7 +2681,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
-      "time_created": "2020-06-12T18:54:20.986000+00:00"
+      "time_created": "2020-09-25T00:10:09.419000+00:00"
     },
     {
       "agent_features": null,
@@ -2546,9 +2741,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-Gen2-2020.06.11-0",
+      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaek6jh7kbh7n7sqepk7dpzflm6rnqavasc34j3onuhp6qlqgzwcpq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaanhmtpuesn7urj2oab5eum7yh7tpu2qwbvcqj4yb3iwtwdzy3t4zq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2564,7 +2759,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
-      "time_created": "2020-06-12T18:52:28.205000+00:00"
+      "time_created": "2020-09-24T23:16:45.721000+00:00"
     },
     {
       "agent_features": null,
@@ -2624,9 +2819,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2012-R2-Standard-Edition-VM-2020.06.11-0",
+      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-E2-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa6etfvxtjus7t5vk54dx53tqn5mmexeyfjcss35sgmr3khd3lvjza",
+      "id": "ocid1.image.oc1.phx.aaaaaaaakwfb5b5jzrwtrfeb6zg5ct3orqj4dglwmzzvgneadpznjpdk2uzq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2638,11 +2833,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Windows",
-      "operating_system_version": "Server 2012 R2 Standard",
+      "operating_system_version": "Server 2016 Datacenter",
       "shapes": [],
       "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2012 R2 Standard",
-      "time_created": "2020-06-12T18:52:30.040000+00:00"
+      "sort_key": "Windows Server 2016 Datacenter",
+      "time_created": "2020-09-24T23:21:19.014000+00:00"
     },
     {
       "agent_features": null,
@@ -2702,9 +2897,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-E2-2020.06.11-0",
+      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-DenseIO-2020.09.25-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaufegp6lojfnxxzuuvi66cpfvr2qmvdbh4zfp5p6u3bcawmj6av6q",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa2muyfzreyynlyhjrjz3nhex7pkjeg5w2hz5nsgrb6opgpcwbzhwa",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2720,7 +2915,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Datacenter",
-      "time_created": "2020-06-12T20:24:19.121000+00:00"
+      "time_created": "2020-09-26T17:08:36.082000+00:00"
     },
     {
       "agent_features": null,
@@ -2780,9 +2975,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-DenseIO-2020.06.11-0",
+      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaid2nno5vpklvs6h4w3wu7aqgqxevctwmie2ldi6f5dpo5nsek5oq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaakzm72cslsf4muab4jt334blzsciwcg4truyjlw5ezcea5ytod5ta",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2798,7 +2993,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Datacenter",
-      "time_created": "2020-06-12T20:24:25.625000+00:00"
+      "time_created": "2020-09-24T23:18:34.568000+00:00"
     },
     {
       "agent_features": null,
@@ -2832,9 +3027,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Datacenter-Edition-BM-Gen2-2020.06.11-0",
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-Gen2-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaff6ub7rm52jazpacn4zgu5tnnmwc76rat5ya44geocxhgjmquqdq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaavujnbkxuozlc3zmngs2m7os57xxomlgpq22h4xnajwrt7vfqpohq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -2846,11 +3041,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Windows",
-      "operating_system_version": "Server 2016 Datacenter",
+      "operating_system_version": "Server 2016 Standard",
       "shapes": [],
       "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2016 Datacenter",
-      "time_created": "2020-06-12T20:25:25.447000+00:00"
+      "sort_key": "Windows Server 2016 Standard",
+      "time_created": "2020-09-25T00:35:23.212000+00:00"
     },
     {
       "agent_features": null,
@@ -2910,10 +3105,10 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Standard-Edition-VM-Gen2-2020.06.11-0",
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-E3-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa6uj6xmoaomngvnfu52qehfbdd2b7mbot3m5gk2rpwnuvt2cxpjxa",
-      "launch_mode": "NATIVE",
+      "id": "ocid1.image.oc1.phx.aaaaaaaarezbsmio46haefich7kbf3ci5kopjojxyypmy4gpyccddrw5refq",
+      "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
@@ -2928,7 +3123,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Standard",
-      "time_created": "2020-06-12T20:28:08.080000+00:00"
+      "time_created": "2020-09-27T04:40:06.152000+00:00"
     },
     {
       "agent_features": null,
@@ -2988,9 +3183,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Standard-Edition-VM-E3-2020.06.11-0",
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-B1-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaq3zhhsufbvqm5f55it7e7ne4g33w6rjvmkp76wbnvoysxoug5cca",
+      "id": "ocid1.image.oc1.phx.aaaaaaaanfjgphubpa4qjju7dto7qkr52mv7zhjwdudwqvapm6g4qm3vnrgq",
       "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -3006,7 +3201,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Standard",
-      "time_created": "2020-06-12T20:26:07.032000+00:00"
+      "time_created": "2020-09-28T20:00:07.472000+00:00"
     },
     {
       "agent_features": null,
@@ -3014,10 +3209,10 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Standard-Edition-VM-B1-2020.06.11-0",
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaadf37vgzovckk5ckgnf5s4yvv4d4i6ip755gh2beb2omlm2zcjcaa",
-      "launch_mode": "PARAVIRTUALIZED",
+      "id": "ocid1.image.oc1.phx.aaaaaaaan47bwnxu5ow3clmjjlpkwltwmlydsd22pzjscsphpgvtjbvjhrta",
+      "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
@@ -3032,7 +3227,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Standard",
-      "time_created": "2020-06-12T20:27:10.785000+00:00"
+      "time_created": "2020-09-24T23:21:29.587000+00:00"
     },
     {
       "agent_features": null,
@@ -3092,9 +3287,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2016-Standard-Edition-VM-2020.06.11-0",
+      "display_name": "Windows-Server-2019-Datacenter-Edition-BM-E3-2020.09.22-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa2fbgufm6dqwqnvucwqhomlh7qkzhanlakmmg5zkw2umlg637ffma",
+      "id": "ocid1.image.oc1.phx.aaaaaaaabyvxlwdlwi4znkuioi7qrzst5v7ie7eoa5cbeekorbbmqikhkwzq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -3106,11 +3301,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Windows",
-      "operating_system_version": "Server 2016 Standard",
+      "operating_system_version": "Server 2019 Datacenter",
       "shapes": [],
       "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2016 Standard",
-      "time_created": "2020-06-12T20:24:25.798000+00:00"
+      "sort_key": "Windows Server 2019 Datacenter",
+      "time_created": "2020-09-27T02:48:59.894000+00:00"
     },
     {
       "agent_features": null,
@@ -3144,25 +3339,25 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2019-Datacenter-Edition-BM-E3-2020.06.15-0",
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaazyor76syclbxgasimwzsnqvjuoteapyuko2yqjcmhq55oonr4sua",
-      "launch_mode": "NATIVE",
+      "id": "ocid1.image.oc1.phx.aaaaaaaafn3mm6sojdrjva3wwuzgb3j7pzxhqyqhfwrz2thboibrtsp252ua",
+      "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
         "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
+        "network_type": "PARAVIRTUALIZED",
         "remote_data_volume_type": "PARAVIRTUALIZED"
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Windows",
-      "operating_system_version": "Server 2019 Datacenter",
+      "operating_system_version": "Server 2019 Standard",
       "shapes": [],
       "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2019 Datacenter",
-      "time_created": "2020-06-16T00:14:56.113000+00:00"
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-09-25T13:41:27.161000+00:00"
     },
     {
       "agent_features": null,
@@ -3222,16 +3417,16 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.06.10-0",
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.09.21-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa2uk7nfkcbuazuo23bk2ffsiq2z6usksv7ci6hzqznqonflgeuzxa",
+      "id": "ocid1.image.oc1.phx.aaaaaaaa4gjenruslmx7t3ilh6zcp424xcnj3mae72atk246nhvvizzhqbra",
       "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
         "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
+        "network_type": "VFIO",
         "remote_data_volume_type": "PARAVIRTUALIZED"
       },
       "lifecycle_state": "AVAILABLE",
@@ -3240,7 +3435,7 @@
       "shapes": [],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2019 Standard",
-      "time_created": "2020-06-11T23:55:06.327000+00:00"
+      "time_created": "2020-09-25T00:09:10.565000+00:00"
     },
     {
       "agent_features": null,
@@ -3529,6 +3724,12 @@
       "id": "eu-zurich-1",
       "key": "ZRH",
       "name": "eu-zurich-1"
+    },
+    {
+      "display_name": "ME Dubai",
+      "id": "me-dubai-1",
+      "key": "DXB",
+      "name": "me-dubai-1"
     },
     {
       "display_name": "ME Jeddah",

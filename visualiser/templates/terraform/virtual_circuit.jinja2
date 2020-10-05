@@ -1,0 +1,74 @@
+
+# ------ Create Virtual Circuit
+resource "oci_core_virtual_circuit" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    type = {{ type | safe }}
+
+    #Optional
+{% if display_name is defined %}
+    display_name         = {{ display_name | safe }}
+{% endif %}
+{% if bandwidth_shape_name is defined %}
+    bandwidth_shape_name = {{ bandwidth_shape_name | safe }}
+{% endif %}
+{% if cross_connect_mappings is defined %}
+    cross_connect_mappings {
+        #Optional
+    {% if cross_connect_mappings.bgp_md5auth_key is defined %}
+        bgp_md5auth_key = {{ bgp_md5auth_key | safe }}
+    {% endif %}
+    {% if cross_connect_mappings.cross_connect_or_cross_connect_group_id is defined %}
+        cross_connect_or_cross_connect_group_id = {{ cross_connect_or_cross_connect_group_id | safe }}
+    {% endif %}
+    {% if cross_connect_mappings.customer_bgp_peering_ip is defined %}
+        customer_bgp_peering_ip = {{ customer_bgp_peering_ip | safe }}
+    {% endif %}
+    {% if cross_connect_mappings.customer_bgp_peering_ipv6 is defined %}
+        customer_bgp_peering_ipv6 = {{ customer_bgp_peering_ipv6 | safe }}
+    {% endif %}
+    {% if cross_connect_mappings.oracle_bgp_peering_ip is defined %}
+        oracle_bgp_peering_ip = {{ oracle_bgp_peering_ip | safe }}
+    {% endif %}
+    {% if cross_connect_mappings.oracle_bgp_peering_ipv6 is defined %}
+        oracle_bgp_peering_ipv6 = {{ oracle_bgp_peering_ipv6 | safe }}
+    {% endif %}
+    {% if cross_connect_mappings.vlan is defined %}
+        vlan = {{ vlan | safe }}
+    {% endif %}
+    }
+{% endif %}
+{% if customer_asn is defined %}
+    customer_asn = {{ customer_asn | safe }}
+{% endif %}
+{% if customer_bgp_asn is defined %}
+    customer_bgp_asn = {{ customer_bgp_asn | safe }}
+{% endif %}
+{% if gateway_id is defined %}
+    gateway_id = {{ gateway_id | safe }}
+{% if provider_service_id %}
+    provider_service_id = data.oci_core_fast_connect_provider_services.test_fast_connect_provider_services.fast_connect_provider_services.0.id
+{% endif %}
+{% if provider_service_key_name is defined %}
+    provider_service_key_name = {{ provider_service_key_name | safe }}
+{% endif %}
+{% if public_prefixes is define %}
+    public_prefixes {
+        #Required
+        cidr_block = {{ cidr_block | safe }}
+    }
+{% endif %}
+{% if region is defined %}
+    region = {{ region | safe }}
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags               = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags              = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id = oci_core_virtual_circuit.{{ resource_name }}.id
+}

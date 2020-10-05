@@ -9,12 +9,11 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
 __version__ = "1.0.0"
-__module__ = "ociFastConnect"
+__module__ = "ociVirtualCircuit"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
 import oci
-import sys
 
 from common.okitLogging import getLogger
 from facades.ociConnection import OCIVirtualNetworkConnection
@@ -23,32 +22,30 @@ from facades.ociConnection import OCIVirtualNetworkConnection
 logger = getLogger()
 
 
-class OCIFastConnects(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, **kwargs):
+class OCIVirtualCircuits(OCIVirtualNetworkConnection):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
-        self.fast_connects_json = []
-        super(OCIFastConnects, self).__init__(config=config, configfile=configfile, profile=profile)
+        self.virtual_circuits_json = []
+        super(OCIVirtualCircuits, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
             compartment_id = self.compartment_id
 
-        # Add filter to only return AVAILABLE Compartments
+        # Add filter
         if filter is None:
             filter = {}
 
         if 'lifecycle_state' not in filter:
-            filter['lifecycle_state'] = 'AVAILABLE'
+            filter['lifecycle_state'] = ["PROVISIONING", "AVAILABLE"]
 
-        fast_connects = oci.pagination.list_call_get_all_results(self.client.list_virtual_circuits, compartment_id=compartment_id).data
-
+        virtual_circuits = oci.pagination.list_call_get_all_results(self.client.list_virtual_circuits, compartment_id=compartment_id).data
         # Convert to Json object
-        fast_connects_json = self.toJson(fast_connects)
-        logger.debug(str(fast_connects_json))
+        virtual_circuits_json = self.toJson(virtual_circuits)
+        logger.debug(str(virtual_circuits_json))
 
         # Filter results
-        self.fast_connects_json = self.filterJsonObjectList(fast_connects_json, filter)
-        logger.debug(str(self.fast_connects_json))
+        self.virtual_circuits_json = self.filterJsonObjectList(virtual_circuits_json, filter)
+        logger.debug(str(self.virtual_circuits_json))
 
-        return self.fast_connects_json
-
+        return self.virtual_circuits_json

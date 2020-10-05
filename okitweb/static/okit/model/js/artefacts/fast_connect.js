@@ -16,10 +16,25 @@ class FastConnect extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.fast_connects.length + 1);
         this.compartment_id = data.parent_id;
-        this.drg_id = '';
+        this.gateway_id = '';
+        this.cross_connect_group = this.newCrossConnectGroup()
         // Update with any passed data
         this.merge(data);
         this.convert();
+    }
+
+    newCrossConnectGroup() {
+        return {
+            customer_reference_name: '',
+            cross_connect: [this.newCrossConnect()]
+        };
+    }
+
+    newCrossConnect() {
+        return {
+            location_name: '',
+            port_speed_shape_name: ''
+        };
     }
 
 

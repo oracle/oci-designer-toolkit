@@ -293,16 +293,16 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({fast_connects: response_json});
-                //okitJsonView.loadFastConnects(response_json);
                 for (let artefact of response_json) {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
