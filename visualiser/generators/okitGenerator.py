@@ -465,6 +465,51 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderFastConnect(self, artefact):
+        # Read Data
+        standardisedName = self.standardiseResourceName(artefact['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = artefact['display_name']
+        # Process Block Storage Volume Data
+        logger.info('Processing Remote Peering Connection Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['compartment_id']]))
+        # ---- Dynamic Routing Gateway
+        self.jinja2_variables["gateway_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['gateway_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", artefact["display_name"], standardisedName)
+        # --- Optional
+        # ---- Customer Reference
+        if artefact.get('customer_reference_name', '') != '':
+            self.addJinja2Variable("customer_reference_name", artefact["customer_reference_name"], standardisedName)
+        else:
+            self.removeJinja2Variable('cpe_local_identifier_type')
+        # ---- Bandwidth Shape Name
+        if artefact.get('bandwidth_shape_name', '') != '':
+            self.addJinja2Variable("bandwidth_shape_name", artefact["bandwidth_shape_name"], standardisedName)
+        else:
+            self.removeJinja2Variable('bandwidth_shape_name')
+        # ---- Tags
+        self.renderTags(artefact)
+
+        # -- Render Templates
+        # --- Cross Connect Groups
+        jinja2_template = self.jinja2_environment.get_template("cross_connect_group.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        # --- Cross Connect
+        jinja2_template = self.jinja2_environment.get_template("cross_connect.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        # --- Virtual Circuit
+        jinja2_template = self.jinja2_environment.get_template("virtual_circuit.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderFileStorageSystem(self, file_storage_system):
         # Read Data
         standardisedName = self.standardiseResourceName(file_storage_system['display_name'])
@@ -1066,12 +1111,12 @@ class OCIGenerator(object):
         if artefact.get('peer_id', '') != '':
             self.addJinja2Variable("peer_id", artefact["peer_id"], standardisedName)
         else:
-            self.removeJinja2Variable('cpe_local_identifier_type')
+            self.removeJinja2Variable('peer_id')
         # ---- Peer Region
         if artefact.get('peer_region_name', '') != '':
             self.addJinja2Variable("peer_region_name", artefact["peer_region_name"], standardisedName)
         else:
-            self.removeJinja2Variable('cpe_local_identifier')
+            self.removeJinja2Variable('peer_region_name')
         # ---- Tags
         self.renderTags(artefact)
 

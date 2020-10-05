@@ -177,6 +177,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let load_balancer of this.load_balancers) {
             load_balancer.drawConnections();
         }
+        // Local Peering Connections
+        for (let local_peering_gateway of this.local_peering_gateways) {
+            local_peering_gateway.drawConnections();
+        }
     }
 
     /*
