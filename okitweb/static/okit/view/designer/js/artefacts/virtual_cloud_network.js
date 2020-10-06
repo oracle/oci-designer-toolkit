@@ -60,7 +60,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
                 console.info('CIDR Block Changed ' + $(jqId('cidr_block')).val());
                 for (let subnet of me.artefact.getOkitJson().subnets) {
                     if (subnet.vcn_id === me.id) {
-                        subnet.cidr_block = subnet.generateCIDR(me.id);
+                        subnet.generateCIDR();
                     }
                 }
                 redrawSVGCanvas();
