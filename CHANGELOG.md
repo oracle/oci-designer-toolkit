@@ -19,6 +19,7 @@
 1. Fix Service Gateway only offers all services when drawn but then provisions Object Storage #107
 2. Fix Service Gateway related route rules do not allow setting a Destination Service #109
 3. Add clean functionality to the json object to remove null / undefined to resolve null element issue in Autonomous Databases.
+4. Update Virtual Cloud Network and Subnet CIDR generation to check existing CIDRs. This resolves the duplicate CIDR issue.
 
 
 ## Version 0.11.0 
