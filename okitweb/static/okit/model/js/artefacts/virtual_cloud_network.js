@@ -17,7 +17,7 @@ class VirtualCloudNetwork extends OkitArtifact {
         this.display_name = this.generateDefaultName(okitjson.virtual_cloud_networks.length + 1);
         this.compartment_id = data.parent_id;
         // Generate Cidr
-        this.cidr_block = '10.' + okitjson.virtual_cloud_networks.length + '.0.0/16';
+        this.cidr_block = '';
         this.dns_label = this.display_name.toLowerCase().slice(-6);
         this.is_ipv6enabled = false;
         this.ipv6cidr_block = '';
@@ -208,6 +208,29 @@ class VirtualCloudNetwork extends OkitArtifact {
 
     getNamePrefix() {
         return super.getNamePrefix() + 'vcn';
+    }
+
+    /*
+    ** Utility Methods
+     */
+    generateCIDR() {
+        let vcn_cidr = '10.0.0.0/16';
+        let vcn_octets = vcn_cidr.split('/')[0].split('.');
+        let vcn_cidrs = [];
+        for (let vcn of this.getOkitJson().getVirtualCloudNetworks()) {
+            if (this.id !== vcn.id) {
+                vcn_cidrs.push(vcn.cidr_block.split('/')[0]);
+            }
+        }
+        let second_octet = 0;
+        let ip = '';
+        do {
+            ip = `${vcn_octets[0]}.${second_octet}.${vcn_octets[2]}.${vcn_octets[3]}`
+            second_octet += 1;
+        } while (vcn_cidrs.includes(ip));
+
+        this.cidr_block = `${ip}/16`;
+        return this.cidr_block;
     }
 
     /*

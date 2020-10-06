@@ -90,7 +90,7 @@ class Subnet extends OkitArtifact {
     /*
     ** Utility Methods
      */
-    generateCIDR(vcn_id) {
+    generateCIDR() {
         let vcn_cidr = '10.0.0.0/16';
         const vcn = this.getOkitJson().getVirtualCloudNetwork(this.vcn_id);
         if (vcn) {

@@ -1006,6 +1006,7 @@ class OkitJsonView {
         console.info(target);
         let view_artefact = this.newVirtualCloudNetwork();
         view_artefact.getArtefact().compartment_id = target.id;
+        view_artefact.getArtefact().generateCIDR();
         console.info('View Artefact');
         console.info(view_artefact)
         if (okitSettings.is_default_route_table) {
