@@ -72,6 +72,10 @@ rect.okit-explorer-view-highlight {
     background-image: url("/static/okit/palette/database/Autonomous_Database.svg");
 }
 
+.availability-domain-tree-view > div {
+    background-image: url("/static/okit/palette/hidden/Availability_Domain.svg");
+}
+
 .block-storage-tree-view > div {
     background-image: url("/static/okit/palette/storage/Block_Storage_Volume.svg");
 }
@@ -95,7 +99,7 @@ rect.okit-explorer-view-highlight {
 }
 
 .fast-connect-tree-view > div {
-    background-image: url("/static/okit/palette/networking/Fast_Connect.svg");
+    background-image: url("/static/okit/palette/hidden/Fast_Connect.svg");
 }
 
 .file-storage-tree-view > div {

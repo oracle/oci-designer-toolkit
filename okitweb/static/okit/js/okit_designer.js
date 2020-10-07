@@ -339,6 +339,10 @@ function displayQueryDialog() {
             .attr('id', 'config_profile')
             .on('change', () => {
                 console.info('Profile Select ' + $(jqId('config_profile')).val());
+                okitSettings.profile = $(jqId('config_profile')).val();
+                okitSettings.save();
+                // Clear Existing Compartments
+                okitOciData.setCompartments([]);
                 loadCompartments();
                 loadRegions();
             });
@@ -419,6 +423,7 @@ function handleQueryOci(e) {
     okitSettings.home_region_key = '';
     okitSettings.home_region = '';
     ociRegions = [];
+    // Load Previous Profile
     $(jqId('config_profile')).val(okitSettings.profile);
     // Load Compartment Select
     loadCompartments();
@@ -429,37 +434,60 @@ function loadCompartments() {
     // Clear Select
     let select = $(jqId('query_compartment_id'));
     $(select).empty();
-    select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
-    // Get Compartments
-    $.ajax({
-        type: 'get',
-        url: 'oci/compartment',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
-        success: function(resp) {
-            //console.info('Response : ' + resp);
-            let jsonBody = JSON.parse(resp)
-            $(jqId('query_compartment_id')).empty();
-            let compartment_select = d3.select(d3Id('query_compartment_id'));
-            for(let compartment of jsonBody ){
-                //console.info(compartment['display_name']);
-                compartment_select.append('option')
-                    .attr('value', compartment['id'])
-                    .text(compartment['display_name']);
-                if (okitSettings.home_region_key === '') {
-                    okitSettings.home_region_key = compartment.home_region_key;
-                }
-            }
-            selectQueryLastUsedCompartment();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+    if (okitOciData.getCompartments().length > 0) {
+        let compartment_select = d3.select(d3Id('query_compartment_id'));
+        for (let compartment of okitOciData.getCompartments()) {
+            compartment_select.append('option')
+                .attr('value', compartment['id'])
+                .text(compartment['display_name']);
         }
-    });
+        selectQueryLastUsedCompartment();
+     } else {
+        select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+        // Get Compartments
+        $.ajax({
+            type: 'get',
+            url: 'oci/compartment',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
+            success: function (resp) {
+                let jsonBody = JSON.parse(resp)
+                okitOciData.setCompartments(jsonBody);
+                $(jqId('query_compartment_id')).empty();
+                let compartment_select = d3.select(d3Id('query_compartment_id'));
+                for (let compartment of jsonBody) {
+                    //console.info(compartment['display_name']);
+                    compartment_select.append('option')
+                        .attr('value', compartment['id'])
+                        .text(compartment['display_name']);
+                    if (okitSettings.home_region_key === '') {
+                        okitSettings.home_region_key = compartment.home_region_key;
+                    }
+                }
+                selectQueryLastUsedCompartment();
+            },
+            error: function (xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+            }
+        });
+    }
 }
 function loadRegions() {
+    // Clear Select
+    let select = $(jqId('query_region_id'));
+    $(select).empty();
+    let region_select = d3.select(d3Id('query_region_id'));
+    for(let region of okitOciData.getRegions() ){
+        region_select.append('option')
+            .attr('value', region['name'])
+            .text(region['display_name']);
+    }
+    selectQueryLastUsedRegion();
+}
+// TODO: Delete
+function loadRegions1() {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
@@ -534,8 +562,11 @@ function showQueryResults() {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
         okitOCIQuery = new OkitOCIQuery(regions);
         // Add Tabs
+        $(jqId('region_progress')).empty();
         for (const [i, region] of regions.entries()) {
             addRegionTab(region);
+            addRegionTabProgress(region);
+            addRegionProgressCheckbox(region);
         }
         $(jqId('file-save-regional-menu-item-li')).removeClass('hidden');
         $(jqId(regionTabName(regions[0]))).trigger("click");
@@ -546,6 +577,9 @@ function showQueryResults() {
             redrawSVGCanvas(region);
             displayTreeView();
             $(jqId('modal_loading_wrapper')).addClass('hidden');
+        }, function (region) {
+            $(jqId(regionCheckboxName(region))).prop('checked', true);
+            removeRegionTabProgress(region);
         });
     } else {
         console.info('Region Not Selected.');
@@ -665,8 +699,26 @@ function addRegionTab(region) {
             redrawSVGCanvas(region);
         });
 }
+function addRegionTabProgress(region) {
+    $(jqId(regionTabName(region))).addClass('okit-tab-progress');
+}
+function removeRegionTabProgress(region) {
+    $(jqId(regionTabName(region))).removeClass('okit-tab-progress');
+}
 function regionTabName(region) {
     return region + '_tab';
+}
+function addRegionProgressCheckbox(region) {
+    let td = d3.select(d3Id('region_progress')).append('div').attr('class', 'tr')
+        .append('div').attr('class', 'td');
+    td.append('input')
+        .attr('id', regionCheckboxName(region))
+        .attr('type', 'checkbox');
+    td.append('label')
+        .text(region);
+}
+function regionCheckboxName(region) {
+    return region + '_checkbox';
 }
 
 /*

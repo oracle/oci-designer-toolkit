@@ -16,8 +16,8 @@ class Subnet extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.subnets.length + 1);
         this.compartment_id = '';
-        this.vcn_id = data.parent_id;
-        this.cidr_block = this.generateCIDR(this.vcn_id);
+        this.vcn_id = '';
+        this.cidr_block = '';
         this.dns_label = this.display_name.toLowerCase().slice(-5);
         this.prohibit_public_ip_on_vnic = false;
         this.route_table_id = '';
@@ -90,21 +90,28 @@ class Subnet extends OkitArtifact {
     /*
     ** Utility Methods
      */
-    generateCIDR(vcn_id) {
+    generateCIDR() {
         let vcn_cidr = '10.0.0.0/16';
-        for (let virtual_cloud_network of this.getOkitJson()['virtual_cloud_networks']) {
-            if (virtual_cloud_network['id'] == vcn_id) {
-                vcn_cidr = virtual_cloud_network['cidr_block'];
-                break;
-            }
+        const vcn = this.getOkitJson().getVirtualCloudNetwork(this.vcn_id);
+        if (vcn) {
+            vcn_cidr = vcn.cidr_block;
         }
         let vcn_octets = vcn_cidr.split('/')[0].split('.');
-        for (let i = 0; i < this.getOkitJson().subnets.length; i++) {
-            if (this.getOkitJson().subnets[i].id === this.id) {
-                return vcn_octets[0] + '.' + vcn_octets[1] + '.' + i + '.' + vcn_octets[3] + '/24';
+        let subnet_cidrs = [];
+        for (let subnet of this.getOkitJson().getSubnets()) {
+            if (subnet.vcn_id === this.vcn_id && subnet.id !== this.id) {
+                subnet_cidrs.push(subnet.cidr_block.split('/')[0]);
             }
         }
-        return vcn_octets[0] + '.' + vcn_octets[1] + '.' + this.getOkitJson().subnets.length + '.' + vcn_octets[3] + '/24';
+        let third_octet = 0;
+        let subnet_ip = '';
+        do {
+            subnet_ip = `${vcn_octets[0]}.${vcn_octets[1]}.${third_octet}.${vcn_octets[3]}`
+            third_octet += 1;
+        } while (subnet_cidrs.includes(subnet_ip));
+
+        this.cidr_block = `${subnet_ip}/24`;
+        return this.cidr_block;
     }
 
 

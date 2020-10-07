@@ -14,10 +14,10 @@
         route_rules:
 {% for rule in route_rules %}
             - destination_type: "{{ rule.destination_type | safe }}"
-    {% if rule.destination is defined %}
+    {% if rule.use_cidr_block %}
               destination: "{{ rule.destination | safe }}"
     {% else %}
-              destination: "{{ '{{' }} (RegionServices.service[0] | map(attribute='cidr_block')) {{ '}}' }}"
+              destination: "{{ '{{' }} (RegionServices.services | selectattr('service_name', 'match', '{{ rule.destination }}') | map(attribute='cidr_block')) {{ '}}' }}"
     {% endif %}
               network_entity_id: "{{ rule.network_entity_id }}"
               description: "{{ rule.description | safe }}"

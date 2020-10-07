@@ -7,10 +7,12 @@
 {% block title_block %}Fast Connect{% endblock %}
 
 {% block required_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="vcn_id" class="okit-property-value okit-property-label"></label></div></div>
     <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Dynamic Routing Gateway</div><div class='td'><select id="gateway_id" class="okit-property-value"></select></div></div>
 {% endblock %}
 
-{% block optional_properties_table_block %}{% endblock %}
+{% block optional_properties_table_block %}
+<div class='tr'><div class='td'>Customer Reference</div><div class='td'><input type="text" id="customer_reference_name" name="customer_reference_name" class="okit-property-value"></div></div>
+{% endblock %}
 
 {% block optional_properties_block %}{% endblock %}

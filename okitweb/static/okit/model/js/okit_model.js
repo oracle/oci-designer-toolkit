@@ -16,6 +16,7 @@ class OkitJson {
         this.description = "";
         this.okit_version = okitVersion;
         this.compartments = [];
+        this.customer_premise_equipments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
         this.database_systems = [];
@@ -25,13 +26,14 @@ class OkitJson {
         this.instances = [];
         this.instance_pools = [];
         this.internet_gateways = [];
+        this.ipsec_connections = [];
         this.load_balancers = [];
         this.local_peering_gateways = [];
         this.nat_gateways = [];
         this.network_security_groups = [];
         this.object_storage_buckets = [];
         this.oke_clusters = [];
-        this.remote_peering_gateways = [];
+        this.remote_peering_connections = [];
         this.route_tables = [];
         this.security_lists = [];
         this.service_gateways = [];
@@ -103,10 +105,31 @@ class OkitJson {
                 console.info(obj);
             }
         }
+        // Customer Premise Equipments
+        if (okit_json.hasOwnProperty('customer_premise_equipments')) {
+            for (let artefact of okit_json['customer_premise_equipments']) {
+                let obj = this.newCustomerPremiseEquipment(artefact);
+                console.info(obj);
+            }
+        }
         // Dynamic Routing Gateways
         if (okit_json.hasOwnProperty('dynamic_routing_gateways')) {
             for (let artefact of okit_json['dynamic_routing_gateways']) {
                 let obj = this.newDynamicRoutingGateway(artefact);
+                console.info(obj);
+            }
+        }
+        // IPSec Connections
+        if (okit_json.hasOwnProperty('ipsec_connections')) {
+            for (let artefact of okit_json['ipsec_connections']) {
+                let obj = this.newIPSecConnection(artefact);
+                console.info(obj);
+            }
+        }
+        // RemotePeering Connections
+        if (okit_json.hasOwnProperty('remote_peering_connections')) {
+            for (let artefact of okit_json['remote_peering_connections']) {
+                let obj = this.newRemotePeeringConnection(artefact);
                 console.info(obj);
             }
         }
@@ -294,6 +317,31 @@ class OkitJson {
             if (this.compartments[i].id === id) {
                 this.compartments[i].delete();
                 this.compartments.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // Customer Premise Equipment
+    newCustomerPremiseEquipment(data = {}) {
+        console.info('New CustomerPremiseEquipment');
+        this.customer_premise_equipments.push(new CustomerPremiseEquipment(data, this));
+        return this.customer_premise_equipments[this.customer_premise_equipments.length - 1];
+    }
+    getCustomerPremiseEquipments() {return this.customer_premise_equipments;}
+    getCustomerPremiseEquipment(id='') {
+        for (let artefact of this.getCustomerPremiseEquipments()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteCustomerPremiseEquipment(id) {
+        for (let i = 0; i < this.customer_premise_equipments.length; i++) {
+            if (this.customer_premise_equipments[i].id === id) {
+                this.customer_premise_equipments[i].delete();
+                this.customer_premise_equipments.splice(i, 1);
                 break;
             }
         }
@@ -488,6 +536,31 @@ class OkitJson {
         }
     }
 
+    // IPSec Connection
+    newIPSecConnection(data) {
+        console.info('New IPSec Connection');
+        this.ipsec_connections.push(new IPSecConnection(data, this));
+        return this.ipsec_connections[this.ipsec_connections.length - 1];
+    }
+    getIPSecConnections() {return this.ipsec_connections;}
+    getIPSecConnection(id='') {
+        for (let artefact of this.getIPSecConnections()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteIPSecConnection(id) {
+        for (let i = 0; i < this.ipsec_connections.length; i++) {
+            if (this.ipsec_connections[i].id === id) {
+                this.ipsec_connections[i].delete();
+                this.ipsec_connections.splice(i, 1);
+                break;
+            }
+        }
+    }
+
     // Load Balancer
     newLoadBalancer(data) {
         console.info('New Load Balancer');
@@ -645,6 +718,31 @@ class OkitJson {
             if (this.oke_clusters[i].id === id) {
                 this.oke_clusters[i].delete();
                 this.oke_clusters.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // RemotePeeringConnection
+    newRemotePeeringConnection(data) {
+        console.info('New Remote Peering Connection');
+        this.remote_peering_connections.push(new RemotePeeringConnection(data, this));
+        return this.remote_peering_connections[this.remote_peering_connections.length - 1];
+    }
+    getRemotePeeringConnections() {return this.remote_peering_connections;}
+    getRemotePeeringConnection(id='') {
+        for (let artefact of this.getRemotePeeringConnections()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteRemotePeeringConnection(id) {
+        for (let i = 0; i < this.remote_peering_connections.length; i++) {
+            if (this.remote_peering_connections[i].id === id) {
+                this.remote_peering_connections[i].delete();
+                this.remote_peering_connections.splice(i, 1);
                 break;
             }
         }
@@ -875,10 +973,18 @@ class OkitArtifact {
     }
 
     /*
+    ** Clean - Remove null & undefined
+     */
+    clean(obj) {
+        return JSON.clean(obj);
+    }
+
+    /*
     ** Merge Functionality
      */
     merge(update) {
-        $.extend(true, this, update);
+        $.extend(true, this, this.clean(update));
+        //$.extend(true, this, update);
     }
 
     /*

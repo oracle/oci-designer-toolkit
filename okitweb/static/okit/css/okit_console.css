@@ -835,7 +835,7 @@ li a.parent-item:hover {
     height: 80px;
     width: 140px;
     margin: 50px auto;
-    position: relative
+    position: relative;
 }
 
 #misshapen-doughnut:before {
@@ -859,6 +859,13 @@ li a.parent-item:hover {
     position: relative;
     top: 15px;
     width: 110px
+}
+
+#region_progress {
+    height: 80px;
+    width: 140px;
+    margin: 50px auto;
+    position: relative
 }
 
 /*

@@ -10,13 +10,14 @@
     <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="vcn_id" class="okit-property-value okit-property-label"></label></div></div>
     <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
     <div class='tr'><div class='td'>Services</div><div class='td'><select id="service_name" class="okit-property-value">
-        <option value="All Services" selected="selected">All Services</option>
+        <option value="All" selected="selected">All Services</option>
+        <option value="OCI">Object Storage</option>
     </select></div></div>
 {% endblock %}
 
 {% block optional_properties_table_rows_block %}
     <div class='tr'><div class='td'>Route Table</div><div class='td'><select id="route_table_id" class="okit-property-value"></select></div></div>
-    <div class='tr'><div class='td'>Autonomous Databases</div><div class='td'><select multiple="multiple" id="autonomous_database_ids" class="okit-property-value"></select></div></div>
+    <div class='tr' id="autonomous_database_ids_row"><div class='td'>Autonomous Databases</div><div class='td'><select multiple="multiple" id="autonomous_database_ids" class="okit-property-value"></select></div></div>
     <div class='tr'><div class='td'>Object Storage Buckets</div><div class='td'><select multiple="multiple" id="object_storage_bucket_ids" class="okit-property-value"></select></div></div>
 {% endblock %}
 

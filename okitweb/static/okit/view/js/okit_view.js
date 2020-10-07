@@ -17,28 +17,7 @@ class OkitJsonView {
             this.okitjson = new OkitJson();
         }
         // Define View Lists
-        this.compartments = [];
-        this.autonomous_databases = [];
-        this.block_storage_volumes = [];
-        this.database_systems = [];
-        this.dynamic_routing_gateways = [];
-        this.fast_connects = [];
-        this.file_storage_systems = [];
-        this.instances = [];
-        this.instance_clusters = [];
-        this.internet_gateways = [];
-        this.load_balancers = [];
-        this.local_peering_gateways = [];
-        this.nat_gateways = [];
-        this.network_security_groups = [];
-        this.object_storage_buckets = [];
-        this.oke_clusters = [];
-        this.remote_peering_gateways = [];
-        this.route_tables = [];
-        this.security_lists = [];
-        this.service_gateways = [];
-        this.subnets = [];
-        this.virtual_cloud_networks = [];
+        this.clear();
         // Load Model to View
         this.load();
     }
@@ -71,19 +50,21 @@ class OkitJsonView {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
+        this.customer_premise_equipments = [];
         this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
         this.file_storage_systems = [];
         this.instances = [];
         this.internet_gateways = [];
+        this.ipsec_connections = [];
         this.load_balancers = [];
         this.local_peering_gateways = [];
         this.nat_gateways = [];
         this.network_security_groups = [];
         this.object_storage_buckets = [];
         this.oke_clusters = [];
-        this.remote_peering_gateways = [];
+        this.remote_peering_connections = [];
         this.route_tables = [];
         this.security_lists = [];
         this.service_gateways = [];
@@ -97,19 +78,21 @@ class OkitJsonView {
         for (let artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
         for (let artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
         for (let artefact of this.okitjson.block_storage_volumes) {this.newBlockStorageVolume(artefact);}
+        for (let artefact of this.okitjson.customer_premise_equipments) {this.newCustomerPremiseEquipment(artefact);}
         for (let artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
         for (let artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
         for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
         for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
         for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
         for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
+        for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
         for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
         for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
         for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
         for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
         for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
         for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
-        //for (let artefact of this.okitjson.remote_peering_gateways) {this.newRemotePeeringGateway(artefact);}
+        for (let artefact of this.okitjson.remote_peering_connections) {this.newRemotePeeringConnection(artefact);}
         for (let artefact of this.okitjson.route_tables) {this.newRouteTable(artefact);}
         for (let artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
         for (let artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
@@ -260,6 +243,41 @@ class OkitJsonView {
         }
         console.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Loaded Compartments>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
         console.info(this);
+    }
+
+    // Customer Premise Equipment
+    dropCustomerPremiseEquipmentView(target) {
+        console.info('Drop Customer Premise Equipment View');
+        console.info(target);
+        let view_artefact = this.newCustomerPremiseEquipment();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newCustomerPremiseEquipment(connect) {
+        this.customer_premise_equipments.push(connect ? new CustomerPremiseEquipmentView(connect, this) : new CustomerPremiseEquipmentView(this.okitjson.newCustomerPremiseEquipment(), this));
+        return this.customer_premise_equipments[this.customer_premise_equipments.length - 1];
+    }
+    getCustomerPremiseEquipments() {
+        return this.customer_premise_equipments;
+    }
+    getCustomerPremiseEquipment(id='') {
+        for (let artefact of this.getCustomerPremiseEquipments()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteCustomerPremiseEquipment(id='') {
+        this.okitjson.deleteCustomerPremiseEquipment(id);
+        this.update();
+    }
+    loadCustomerPremiseEquipments(fast_connects) {
+        for (const artefact of fast_connects) {
+            this.customer_premise_equipments.push(new CustomerPremiseEquipmentView(new CustomerPremiseEquipment(artefact, this.okitjson), this));
+        }
     }
 
     // Database System
@@ -534,6 +552,41 @@ class OkitJsonView {
         }
     }
 
+    // IPSec Connection
+    dropIPSecConnectionView(target) {
+        console.info('Drop IPSec Connection');
+        console.info(target);
+        let view_artefact = this.newIPSecConnection();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newIPSecConnection(connect) {
+        this.ipsec_connections.push(connect ? new IPSecConnectionView(connect, this) : new IPSecConnectionView(this.okitjson.newIPSecConnection(), this));
+        return this.ipsec_connections[this.ipsec_connections.length - 1];
+    }
+    getIPSecConnections() {
+        return this.ipsec_connections;
+    }
+    getIPSecConnection(id='') {
+        for (let artefact of this.getIPSecConnections()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteIPSecConnection(id='') {
+        this.okitjson.deleteIPSecConnection(id);
+        this.update();
+    }
+    loadIPSecConnections(fast_connects) {
+        for (const artefact of fast_connects) {
+            this.ipsec_connections.push(new IPSecConnectionView(new IPSecConnection(artefact, this.okitjson), this));
+        }
+    }
+
     // Load Balancer
     dropLoadBalancerView(target) {
         console.info('Drop Load Balancer View');
@@ -760,6 +813,41 @@ class OkitJsonView {
         }
     }
 
+    // RemotePeeringConnection
+    dropRemotePeeringConnectionView(target) {
+        console.info('Drop IPSec Connection');
+        console.info(target);
+        let view_artefact = this.newRemotePeeringConnection();
+        view_artefact.getArtefact().compartment_id = target.id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newRemotePeeringConnection(connect) {
+        this.remote_peering_connections.push(connect ? new RemotePeeringConnectionView(connect, this) : new RemotePeeringConnectionView(this.okitjson.newRemotePeeringConnection(), this));
+        return this.remote_peering_connections[this.remote_peering_connections.length - 1];
+    }
+    getRemotePeeringConnections() {
+        return this.remote_peering_connections;
+    }
+    getRemotePeeringConnection(id='') {
+        for (let artefact of this.getRemotePeeringConnections()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteRemotePeeringConnection(id='') {
+        this.okitjson.deleteRemotePeeringConnection(id);
+        this.update();
+    }
+    loadRemotePeeringConnections(fast_connects) {
+        for (const artefact of fast_connects) {
+            this.remote_peering_connections.push(new RemotePeeringConnectionView(new RemotePeeringConnection(artefact, this.okitjson), this));
+        }
+    }
+
     // Route Table
     dropRouteTableView(target) {
         console.info('Drop Route Table View');
@@ -882,6 +970,7 @@ class OkitJsonView {
         let view_artefact = this.newSubnet();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
+        view_artefact.getArtefact().generateCIDR();
         console.info('View Artefact');
         console.info(view_artefact)
         return view_artefact;
@@ -917,6 +1006,7 @@ class OkitJsonView {
         console.info(target);
         let view_artefact = this.newVirtualCloudNetwork();
         view_artefact.getArtefact().compartment_id = target.id;
+        view_artefact.getArtefact().generateCIDR();
         console.info('View Artefact');
         console.info(view_artefact)
         if (okitSettings.is_default_route_table) {
@@ -1000,20 +1090,65 @@ class OkitArtefactView {
     get okit_json() {return this.json_view.getOkitJson();}
     get id() {return this.artefact ? this.artefact.id : '';}
     get artefact_id() {return this.artefact ? this.artefact.id : '';}
+    get attached() {return false;}
     get compartment_id() {return this.artefact ? this.artefact.compartment_id : '';}
     get parent_id() {return null;}
     get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
-    get icon_width() {return 45;}
-    get icon_height() {return 45;}
-    get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    // -- SVG Definition
+    get stroke_colours() {return {
+            red: "#F80000",
+            bark: "#312D2A",
+            gray: "#5f5f5f",
+            blue: "#0066cc",
+            orange: "#ff6600",
+            purple: "#400080",
+            icon_colour_01: "#F80000",
+            icon_colour_02: "#5f5f5f",
+            icon_colour_03: "#ff6600",
+        };
+    }
     get collapsed_dimensions() {return this.icon_dimensions;}
-    get minimum_width() {return this.icon_width;}
-    get minimum_height() {return this.icon_height;}
-    get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
-    get dimensions() {return this.minimum_dimensions;}
     get definition() {}
-    get attached() {return false;}
+    get dimensions() {return this.minimum_dimensions;}
+    get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
+    get minimum_height() {return this.icon_height;}
+    get minimum_width() {return this.icon_width;}
+    get parent_svg_id() {return this.parent_id + "-svg";}
+    // ---- Rectangle
+    get rect_x() {return 0;}
+    get rect_y() {return 0;}
+    get rect_rx() {return 0;}
+    get rect_ry() {return 0;}
+    get rect_height() {return this.icon_height;}
+    get rect_width() {return this.icon_width;}
+    get rect_height_adjust() {return 0;}
+    get rect_width_adjust() {return 0;}
+    get rect_fill() {return 'white';}
+    get rect_fill_style() {return 'fill-opacity: .25;';}
+    get rect_stroke_colour() {return this.stroke_colours.bark;}
+    get rect_stroke_width() {return 1;}
+    get rect_stroke_dash() {return 1;}
+    // ---- Svg
+    get svg_id() {this.artefact_id + '-svg';}
+    get svg_x() {return 0;}
+    get svg_y() {return 0;}
+    get svg_height() {return this.icon_height;}
+    get svg_width() {return this.icon_width;}
+    // ---- ViewBox
+    get viewbox_x() {return 0;}
+    get viewbox_y() {return 0;}
+    get viewbox_height() {return this.svg_height;}
+    get viewbox_width() {return this.svg_width;}
+    // ---- Icon
+    get icon_definition_id() {return this.getArtifactReference().replace(/ /g, '') + 'Svg';}
+    get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    get icon_height() {return 45;}
+    get icon_width() {return 45;}
+    get icon_x_tranlation() {return 0;}
+    get icon_y_tranlation() {return 0;}
+    // ---- Connectors
+    get top_bottom_connectors_preferred() {return true;}
 
     getParent() {return this.parent;}
 
@@ -1216,7 +1351,324 @@ class OkitArtefactView {
             d3.event.stopPropagation();
         });
         console.log();
+        // Add Mouse Over / Exist Events
+        this.addMouseEvents(svg);
+        // Draw Connections
+        //this.drawConnections();
         return svg;
+    }
+
+    newDraw() {
+        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+        const svg = this.drawSvg();
+        this.drawRect(svg);
+        // Add standard / common click event
+        this.addClickEvent(svg);
+        // Add Mouse Over / Exist Events
+        this.addMouseEvents(svg);
+        return svg;
+    }
+
+    drawSvg() {
+        const parent_svg = d3.select(d3Id(this.parent_svg_id));
+        const svg = parent_svg.append("svg")
+            .attr("id", this.svg_id)
+            .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
+            .attr("x",         this.svg_x)
+            .attr("y",         this.svg_y)
+            .attr("width",     this.svg_width)
+            .attr("height",    this.svg_height)
+            .attr("viewBox", `${this.viewbox_x} ${this.viewbox_y} ${this.viewbox_width} ${this.viewbox_height}`)
+            .attr("preserveAspectRatio", "xMinYMax meet");
+        return svg;
+    }
+
+    drawRect(svg) {
+        let rect_x = this.rect_x;
+        let rect_y = this.rect_y;
+        let rect_width = this.rect_width + this.rect_width_adjust;
+        let rect_height = this.rect_height + this.rect_height_adjust;
+        if (this.icon_y_tranlation < 0) {
+            rect_y = Math.abs(this.icon_y_tranlation);
+            rect_height -= rect_y * 2;
+        }
+        if (this.icon_x_tranlation < 0) {
+            rect_x = Math.abs(this.icon_x_tranlation);
+            rect_width -= rect_x * 2;
+        }
+        const rect = svg.append("rect")
+            .attr("id", this.artefact_id)
+            .attr("x",            rect_x)
+            .attr("y",            rect_y)
+            .attr("rx",           this.rect_rx)
+            .attr("ry",           this.rect_ry)
+            .attr("width",        rect_width)
+            .attr("height",       rect_height)
+            .attr("fill",         this.rect_fill)
+            .attr("style",        this.rect_fill_style)
+            .attr("stroke",       this.rect_stroke_colour)
+            .attr("stroke-width", this.rect_stroke_width)
+            .attr("stroke-dasharray", `${this.rect_stroke_dash}, ${this.rect_stroke_dash}`);
+        return rect;
+    }
+
+    addClickEvent(svg) {
+        const self = this;
+        svg.on("click", function() {
+            self.loadSlidePanels();
+            $('.highlight:not(' + jqId(self.artefact_id) +')').removeClass('highlight');
+            $(jqId(self.artefact_id)).toggleClass('highlight');
+            $(jqId(self.artefact_id)).hasClass('highlight') ? selectedArtefact = self.id : selectedArtefact = null;
+            d3.event.stopPropagation();
+        });
+    }
+
+    addMouseEvents(svg) {}
+
+    drawConnections() {}
+
+    drawConnection(start_id, end_id) {
+        console.info(`Start Id : ${start_id}`);
+        console.info(`End Id   : ${end_id}`);
+        const canvas_svg = d3.select(d3Id('canvas-svg'));
+        const canvas_rect = d3.select(d3Id('canvas-rect'));
+        const svgStartPoint = canvas_svg.node().createSVGPoint();
+        const svgEndPoint = canvas_svg.node().createSVGPoint();
+        const screenCTM = canvas_rect.node().getScreenCTM();
+        if (start_id && start_id !== '' && end_id && end_id !== '' && document.getElementById(start_id) && document.getElementById(end_id)) {
+            let start_bcr = document.getElementById(start_id).getBoundingClientRect();
+            let end_bcr = document.getElementById(end_id).getBoundingClientRect();
+            console.info(`Start BCR : ${start_bcr}`);
+            console.info(start_bcr);
+            console.info(`End BCR : ${end_bcr}`);
+            console.info(end_bcr);
+            let horizontal = false;
+            if (this.top_bottom_connectors_preferred && start_bcr.y > end_bcr.y) {
+                // Start Connector on the top edge
+                svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
+                svgStartPoint.y = start_bcr.y;
+                // End Connector on the bottom edge
+                svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
+                svgEndPoint.y = Math.round(end_bcr.y + end_bcr.height);
+            } else if (this.top_bottom_connectors_preferred && start_bcr.y < end_bcr.y) {
+                // Start Connector on the bottom edge
+                svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
+                svgStartPoint.y = Math.round(start_bcr.y + start_bcr.height);
+                // End Connector on top edge
+                svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
+                svgEndPoint.y = end_bcr.y;
+            } else if (start_bcr.x < end_bcr.x) {
+                // Start Connector on right edge
+                svgStartPoint.x = Math.round(start_bcr.x + start_bcr.width);
+                svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
+                // End Connector on left edge
+                svgEndPoint.x = end_bcr.x;
+                svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
+                // Draw Horizontal
+                horizontal = true;
+            } else if (start_bcr.x > end_bcr.x) {
+                // Start Connector on left edge
+                svgStartPoint.x = start_bcr.x;
+                svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
+                // End Connector on right edge
+                svgEndPoint.x = Math.round(end_bcr.x + end_bcr.width);
+                svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
+                // Draw Horizontal
+                horizontal = true;
+            }
+            let connector_start = svgStartPoint.matrixTransform(screenCTM.inverse());
+            let connector_end = svgEndPoint.matrixTransform(screenCTM.inverse());
+            console.info('Connector Start');
+            console.info(connector_start);
+            console.info('Connector End');
+            console.info(connector_end);
+
+            if (horizontal) {
+                this.drawHorizontalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
+            } else {
+                this.drawVerticalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
+            }
+
+        }
+    }
+
+    drawVerticalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0},) {
+        console.log('Generating Vertical Connector');
+        console.info('Start Coordinates : ' + JSON.stringify(start));
+        console.info('End Coordinates   : ' + JSON.stringify(end));
+        if (path_connector) {
+            let radius = corner_radius;
+            let dy = Math.round((end['y'] - start['y']) / 2);
+            let dx = end['x'] - start['x'];
+            let arc1 = '';
+            let arc2 = '';
+            console.info('dx                : ' + dx);
+            console.info('dy                : ' + dy);
+            if (dy > 0 && dx > 0) {
+                // First turn down and right with counter clockwise arc
+                arc1 = 'a5,5 0 0 0 5,5';
+                arc1 = generateArc(radius, 0, '', '');
+                // Second turn right and down with clockwise arc
+                arc2 = 'a5,5 0 0 1 5,5';
+                arc2 = generateArc(radius, 1, '', '');
+                // Reduce dy by radius
+                dy -= radius;
+                // Reduce dx by 2 * radius
+                dx -= radius * 2;
+            } else if (dy > 0 && dx < 0) {
+                // First turn down and left with counter clockwise arc
+                arc1 = 'a5,5 0 0 1 -5,5';
+                arc1 = generateArc(radius, 1, '-', '');
+                // Second turn left and down with clockwise arc
+                arc2 = 'a5,5 0 0 0 -5,5';
+                arc2 = generateArc(radius, 0, '-', '');
+                // Reduce dy by radius
+                dy -= radius;
+                // Increase dx by 2 * radius
+                dx += radius * 2;
+            } else if (dy < 0 && dx < 0) {
+                // First turn up and left with counter clockwise arc
+                arc2 = 'a5,5 0 0 1 -5,-5';
+                arc2 = generateArc(radius, 1, '-', '-');
+                // Second turn left and up with clockwise arc
+                arc1 = 'a5,5 0 0 0 -5,-5';
+                arc1 = generateArc(radius, 0, '-', '-');
+                // Increase dy by radius
+                dy += radius;
+                // Reduce dx by 2 * radius
+                dx -= radius * 2;
+            } else if (dy < 0 && dx > 0) {
+                // First turn up and right with counter clockwise arc
+                arc2 = 'a5,5 0 0 0 5,-5';
+                arc2 = generateArc(radius, 0, '', '-');
+                // Second turn right and up with clockwise arc
+                arc1 = 'a5,5 0 0 1 5,-5';
+                arc1 = generateArc(radius, 1, '', '-');
+                // Reduce dy by radius
+                dy += radius;
+                // Increase dx by 2 * radius
+                dx -= radius * 2;
+            }
+            let points = "m" + this.coordString(start) + " v" + dy + " " + arc1 + " h" + dx + " " + arc2 + " v" + dy;
+            let path = parent_svg.append('path')
+                .attr("id", id)
+                .attr("d", points)
+                //.attr("d", "M100,100 h50 a5,5 0 0 0 5,5 v50 a5,5 0 0 1 -5,5 h-50 a5,5 0 0 1 -5,-5 v-50 a5,5 0 0 1 5,-5 z")
+                .attr("stroke-width", "2")
+                .attr("stroke", connector_colour)
+                .attr("fill", "none")
+                .attr("marker-start", "url(#connector-end-circle)")
+                .attr("marker-end", "url(#connector-end-circle)");
+            //return path;
+        } else {
+            // Calculate Polyline points
+            let ydiff = end['y'] - start['y'];
+            let ymid = Math.round(start['y'] + ydiff / 2);
+            let mid1 = {x: start['x'], y: ymid};
+            let mid2 = {x: end['x'], y: ymid};
+            let points = this.coordString(start) + " " + this.coordString(mid1) + " " + this.coordString(mid2) + " " + this.coordString(end);
+            let polyline = parent_svg.append('polyline')
+                .attr("id", id)
+                .attr("points", points)
+                .attr("stroke-width", "2")
+                .attr("stroke", connector_colour)
+                .attr("fill", "none")
+                .attr("marker-start", "url(#connector-end-circle)")
+                .attr("marker-end", "url(#connector-end-circle)");
+            //return polyline;
+        }
+        console.log();
+    }
+
+    drawHorizontalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
+        console.log('Generating Horizontal Connector');
+        console.info('Start Coordinates : ' + JSON.stringify(start));
+        console.info('End Coordinates   : ' + JSON.stringify(end));
+        if (path_connector) {
+            let radius = corner_radius;
+            let dy = end['y'] - start['y'];
+            let dx = Math.round((end['x'] - start['x']) / 2);
+            let arc1 = '';
+            let arc2 = '';
+            console.info('dx                : ' + dx);
+            console.info('dy                : ' + dy);
+            if (dy > 0 && dx > 0) {
+                // First turn right and down with clockwise arc
+                arc1 = 'a5,5 0 0 1 5,5';
+                arc1 = generateArc(radius, 1, '', '');
+                // Second turn down and right with counter clockwise arc
+                arc2 = 'a5,5 0 0 0 5,5';
+                arc2 = generateArc(radius, 0, '', '');
+                // Reduce dx by radius
+                dx -= radius;
+                // Reduce dy by 2 * radius
+                dy -= radius * 2;
+            } else if (dy > 0 && dx < 0) {
+                // First turn down and left with counter clockwise arc
+                arc1 = 'a5,5 0 0 1 -5,5';
+                arc1 = generateArc(radius, 1, '-', '');
+                // Second turn left and down with clockwise arc
+                arc2 = 'a5,5 0 0 0 -5,5';
+                arc2 = generateArc(radius, 0, '-', '');
+                // Increase dx by radius
+                dx += radius;
+                // Reduce dy by 2 * radius
+                dy -= radius * 2;
+            } else if (dy < 0 && dx < 0) {
+                // First turn up and left with counter clockwise arc
+                arc1 = 'a5,5 0 0 1 -5,-5';
+                arc1 = generateArc(radius, 1, '-', '-');
+                // Second turn left and up with clockwise arc
+                arc2 = 'a5,5 0 0 0 -5,-5';
+                arc2 = generateArc(radius, 0, '-', '-');
+                // Reduce dx by radius
+                dx -= radius;
+                // Increase dy by 2 * radius
+                dy += radius * 2;
+            } else if (dy < 0 && dx > 0) {
+                // First turn up and right with counter clockwise arc
+                arc1 = 'a5,5 0 0 0 5,-5';
+                arc1 = generateArc(radius, 0, '', '-');
+                // Second turn right and up with clockwise arc
+                arc2 = 'a5,5 0 0 1 5,-5';
+                arc2 = generateArc(radius, 1, '', '-');
+                // Reduce dx by radius
+                dx -= radius;
+                // Increase dy by 2 * radius
+                dy += radius * 2;
+            }
+            let points = "m" + this.coordString(start) + " h" + dx + " " + arc1 + " " + " v" + dy + arc2 + " h" + dx;
+            let path = parent_svg.append('path')
+                .attr("id", id)
+                .attr("d", points)
+                //.attr("d", "M100,100 h50 a5,5 0 0 0 5,5 v50 a5,5 0 0 1 -5,5 h-50 a5,5 0 0 1 -5,-5 v-50 a5,5 0 0 1 5,-5 z")
+                .attr("stroke-width", "2")
+                .attr("stroke", connector_colour)
+                .attr("fill", "none")
+                .attr("marker-start", "url(#connector-end-circle)")
+                .attr("marker-end", "url(#connector-end-circle)");
+        } else {
+            // Calculate Polyline points
+            let ydiff = end['y'] - start['y'];
+            let ymid = Math.round(start['y'] + ydiff / 2);
+            let mid1 = {x: start['x'], y: ymid};
+            let mid2 = {x: end['x'], y: ymid};
+            let points = this.coordString(start) + " " + this.coordString(mid1) + " " + this.coordString(mid2) + " " + this.coordString(end);
+            let polyline = parent_svg.append('polyline')
+                .attr("id", id)
+                .attr("points", points)
+                .attr("stroke-width", "2")
+                .attr("stroke", connector_colour)
+                .attr("fill", "none")
+                .attr("marker-start", "url(#connector-end-circle)")
+                .attr("marker-end", "url(#connector-end-circle)");
+        }
+        console.log();
+    }
+
+    coordString(coord) {
+        let coord_str = coord['x'] + ',' + coord['y'];
+        return coord_str;
     }
 
     delete() {
@@ -1698,6 +2150,19 @@ class OkitArtefactView {
         return this.constructor.getgetConnectTargets();
     }
 
+    /*
+    ** Common Single Select Input build & load functions
+     */
+
+    loadDynamicRoutingGatewaySelect(id) {
+        // Build Dynamic Routing Gateways
+        let drg_select = $(jqId(id));
+        $(drg_select).empty();
+        drg_select.append($('<option>').attr('value', '').text(''));
+        for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
+            drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+        }
+    }
 }
 
 /*

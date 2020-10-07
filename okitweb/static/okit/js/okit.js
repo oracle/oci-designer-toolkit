@@ -11,6 +11,22 @@ if (typeof JSON.clone !== "function") {
         return JSON.parse(JSON.stringify(obj));
     };
 }
+/*
+** Add Clean function to JSON to remove null & undefined elements
+ */
+if (typeof JSON.clean !== "function") {
+    JSON.clean = obj => {
+        if (Array.isArray(obj)) {
+            return obj
+                .map(v => (v && v instanceof Object) ? JSON.clean(v) : v)
+                .filter(v => !(v == null));
+        } else {
+            return Object.entries(obj)
+                .map(([k, v]) => [k, v && v instanceof Object ? JSON.clean(v) : v])
+                .reduce((a, [k, v]) => (v == null ? a : (a[k]=v, a)), {});
+        }
+    }
+}
 
 let selectedArtefact = null;
 
@@ -44,6 +60,7 @@ class OkitOCIConfig {
 
 class OkitOCIData {
     constructor() {
+        this.compartments = [];
         this.load();
     }
 
@@ -58,7 +75,7 @@ class OkitOCIData {
             url: 'dropdown/data',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify(this),
+            data: JSON.stringify(this.cloneForSave()),
             success: function(resp) {
                 console.info('OKIT Dropdown Data Saved');
             },
@@ -69,6 +86,14 @@ class OkitOCIData {
         });
     }
 
+    cloneForSave() {
+        let clone = JSON.clone(this);
+        if (developer_mode) {
+            clone.compartments = [];
+        }
+        return clone;
+    }
+
     query() {
         let me = this;
         $.getJSON('oci/dropdown', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
@@ -77,6 +102,10 @@ class OkitOCIData {
     /*
     ** Get functions to retrieve drop-down data.
      */
+
+    getCpeDeviceShapes() {
+        return this.cpe_device_shapes;
+    }
 
     getDBSystemShapes(family='') {
         if (family === '') {
@@ -141,6 +170,18 @@ class OkitOCIData {
         }
         return [...new Set(images)].sort((a, b) => b - a);
     }
+
+    getRegions() {
+        return this.regions;
+    }
+
+    getCompartments() {
+        return this.compartments;
+    }
+
+    setCompartments(compartments) {
+        this.compartments = compartments;
+    }
 }
 
 class OkitSettings {
@@ -157,6 +198,7 @@ class OkitSettings {
         this.last_used_region = '';
         this.last_used_compartment = '';
         this.hide_attached = true;
+        this.highlight_association = true;
         this.load();
     }
 
@@ -350,6 +392,24 @@ class OkitSettings {
             td.append('label')
                 .attr('for', 'hide_attached')
                 .text('Hide Attached Artefacts');
+            // Highlight Associations
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'highlight_association')
+                .attr('name', 'highlight_association')
+                .attr('type', 'checkbox')
+                .property('checked', this.highlight_association)
+                .on('change', function () {
+                    if (autosave) {
+                        me.highlight_association = $('#highlight_association').is(':checked');
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'highlight_association')
+                .text('Highlight Associations');
             /*
             // Config Profile
             tr = tbody.append('div').attr('class', 'tr');

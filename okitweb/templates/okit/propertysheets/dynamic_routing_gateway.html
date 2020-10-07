@@ -11,10 +11,6 @@
     <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
 {% endblock %}
 
-{% block optional_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Fast Connect</div><div class='td'><select multiple="multiple" id="fast_connect_ids" class="okit-property-value"></select></div></div>
-    <div class='tr'><div class='td'>IPSec Connection</div><div class='td'><select multiple="multiple" id="ipsec_connection_ids" class="okit-property-value"></select></div></div>
-    <div class='tr'><div class='td'>Remote Peering Connection</div><div class='td'><select multiple="multiple" id="remote_peering_connection_ids" class="okit-property-value"></select></div></div>
-{% endblock %}
+{% block optional_properties_table_block %}{% endblock %}
 
 {% block optional_properties_block %}{% endblock %}

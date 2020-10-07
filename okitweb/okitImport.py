@@ -35,8 +35,8 @@ def parseHclJson():
         query_json = json.loads(parsed_query_string)
         logJson(query_json)
         # Import HCL
-        parser = OkitHclJsonParser(query_json)
-        response_json = parser.parse()
+        parser = OkitHclJsonParser()
+        response_json = parser.parse(query_json)
         logJson(response_json)
         return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
     else:

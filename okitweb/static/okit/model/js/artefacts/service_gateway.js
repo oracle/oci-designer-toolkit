@@ -17,7 +17,7 @@ class ServiceGateway extends OkitArtifact {
         this.display_name = this.generateDefaultName(okitjson.service_gateways.length + 1);
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;
-        this.service_name = 'All Services';
+        this.service_name = '';
         this.autonomous_database_ids = [];
         this.object_storage_bucket_ids = [];
         this.route_table_id = '';

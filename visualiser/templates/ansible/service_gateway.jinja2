@@ -14,7 +14,7 @@
         compartment_id: "{{ compartment_id }}"
         vcn_id: "{{ vcn_id }}"
         services:
-            - service_id: "{{ '{{' }} ({{ resource_name }}Service.services | map(attribute='id') | list)[0] {{ '}}' }}"
+            - service_id: "{{ '{{' }} ({{ resource_name }}Service.services | selectattr('service_name', 'match', '{{ service_name }}') | map(attribute='id') | list)[0] {{ '}}' }}"
         # Optional
         display_name: "{{ display_name | safe }}"
 {% if route_table_id is defined %}

@@ -1,6 +1,27 @@
 # Release Notes
 
 
+## Version 0.12.0 
+**Release Date**: 7th October 2020
+### Features
+1. Enhanced feedback for multi region query.
+2. Cache Regions
+3. Cache Compartments for specific Profile.
+4. Add functionality for Customer Premise Equipment.
+5. IPSec Connections added.
+6. Remote peering functionality added but current the user will still need to add the peering id.
+7. Dynamic Routing Gateway simplified and connections created from the new IPSec Connection & Remote Peering Connection.
+8. Database System/Autonomous name displayed on the canvas (ENH REQ: Issue: #120).
+9. Experimental Import from Terraform JSON Format file.
+10. Export to Resource Manage local GitHub directory.
+
+### Bug Fixes
+1. Fix Service Gateway only offers all services when drawn but then provisions Object Storage #107
+2. Fix Service Gateway related route rules do not allow setting a Destination Service #109
+3. Add clean functionality to the json object to remove null / undefined to resolve null element issue in Autonomous Databases.
+4. Update Virtual Cloud Network and Subnet CIDR generation to check existing CIDRs. This resolves the duplicate CIDR issue.
+
+
 ## Version 0.11.0 
 **Release Date**: 16th September 2020
 ### Features

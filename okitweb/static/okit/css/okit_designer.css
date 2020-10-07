@@ -175,6 +175,29 @@
     color: black;
 }
 
+.okit-tab-progress {
+    animation: animate-icing 2.2s linear infinite;
+    background: linear-gradient(#eee, #eee) no-repeat;
+    position: relative;
+}
+
+.okit-tab-progress:before {
+    background: linear-gradient(90deg, #a3f022, #3e9fff);
+    content: "";
+    position: absolute;
+    height: 1.1em;
+    width: 87%;
+    z-index: -1
+}
+
+.okit-tab-progress:after {
+    background-color: #fff;
+    content: "";
+    position: relative;
+    height: 1.1em;
+    width: 87%;
+}
+
 .okit-svg-canvas {
     display: block;
     padding: 0;
@@ -186,7 +209,8 @@
 
 .okit-canvas-details {
     display: block;
-    padding-bottom: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     width: 100%;
     overflow: hidden;
 }
@@ -321,4 +345,8 @@ rect.highlight {
 
 rect.highlight-vnic {
     fill: #00cc00;
+}
+
+rect.highlight-association {
+    fill: #336600;
 }

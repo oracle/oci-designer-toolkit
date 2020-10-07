@@ -13,42 +13,32 @@ class FastConnectView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.compartment_id;}
-
-    getParent() {
-        return this.getJsonView().getCompartment(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
+    get top_bottom_connectors_preferred() {return false;}
 
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        // Add Connector Data
-        svg.attr("data-compartment-id", this.compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-start-x", boundingClientRect.x)
-            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-end-x", boundingClientRect.x)
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-start-x", boundingClientRect.x)
-            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-end-x", boundingClientRect.x)
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true);
-        console.log();
-        return svg;
+    // Add Specific Mouse Events
+    addMouseEvents(svg) {
+        let self = this;
+        let id = this.artefact_id;
+        svg.on('mouseenter', () => {
+            if (okitSettings.highlight_association) {
+                if (self.drg_id !== '') {$(jqId(self.drg_id)).addClass('highlight-association');}
+                $(jqId(id)).addClass('highlight-association');
+            }
+        })
+        svg.on('mouseleave', () => {
+            if (okitSettings.highlight_association) {
+                if (self.drg_id !== '') {$(jqId(self.drg_id)).removeClass('highlight-association');}
+                $(jqId(id)).removeClass('highlight-association');
+            }
+        });
+    }
+    // Draw Connections
+    drawConnections() {
+        if (this.drg_id !== '') {this.drawConnection(this.id, this.drg_id);}
     }
 
     // Return Artifact Specific Definition.
@@ -69,9 +59,12 @@ class FastConnectView extends OkitDesignerArtefactView {
     ** Property Sheet Load function
      */
     loadProperties() {
-        let okitJson = this.getOkitJson();
         let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/fast_connect.html", () => {loadPropertiesSheet(me.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/fast_connect.html", () => {
+            // Load DRG Select
+            me.loadDynamicRoutingGatewaySelect('gateway_id');
+            loadPropertiesSheet(me.artefact);
+        });
     }
 
     /*

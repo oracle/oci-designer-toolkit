@@ -53,9 +53,21 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let object_storage_bucket of this.object_storage_buckets) {
             object_storage_bucket.draw();
         }
+        // Customer Premise Equipment
+        for (let customer_premise_equipment of this.customer_premise_equipments) {
+            customer_premise_equipment.draw();
+        }
         // FastConnects
         for (let fast_connect of this.fast_connects) {
             fast_connect.draw();
+        }
+        // IPSec Connections
+        for (let ipsec_connection of this.ipsec_connections) {
+            ipsec_connection.draw();
+        }
+        // Remote Peering Connections
+        for (let remote_peering_connection of this.remote_peering_connections) {
+            remote_peering_connection.draw();
         }
 
         // Draw Virtual Cloud Network Sub Components
@@ -143,8 +155,32 @@ class OkitDesignerJsonView extends OkitJsonView {
         }
 
         console.info(this);
-
+        // Draw Connection
+        this.drawConnections();
         console.log();
+    }
+
+    drawConnections() {
+        // IPSec Connections
+        for (let ipsec_connection of this.ipsec_connections) {
+            ipsec_connection.drawConnections();
+        }
+        // Remote Peering Connections
+        for (let remote_peering_connection of this.remote_peering_connections) {
+            remote_peering_connection.drawConnections();
+        }
+        // Fast Connects
+        for (let fast_connect of this.fast_connects) {
+            fast_connect.drawConnections();
+        }
+        // Load Balancers
+        for (let load_balancer of this.load_balancers) {
+            load_balancer.drawConnections();
+        }
+        // Local Peering Connections
+        for (let local_peering_gateway of this.local_peering_gateways) {
+            local_peering_gateway.drawConnections();
+        }
     }
 
     /*
