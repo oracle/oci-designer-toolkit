@@ -1,4 +1,4 @@
-# OCI Designer Toolkit [0.12.0](CHANGELOG.md#version-0.12.0)
+# OCI Designer Toolkit [0.13.0](CHANGELOG.md#version-0.13.0)
 
 OCI designer toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 

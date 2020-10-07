@@ -22,7 +22,7 @@ python modules are installed and in addition provide a simple flask server that 
 ## Clone Repository
 Before the building either the Docker or Vagrant Images the project will need to be cloned, or downloaded, from the GitHub 
 Repository (or downloaded). The master branch is always the latest Stable Release but previous releases can be found using 
-associated Release tag is in the format vX.Y.Z hence for the version 0.12.0 the Release tag will be **v0.12.0**. 
+associated Release tag is in the format vX.Y.Z hence for the version 0.13.0 the Release tag will be **v0.13.0**. 
 
 The command shows how this can be cloned to the local machine.
 
