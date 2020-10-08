@@ -1,0 +1,126 @@
+#cloud-config
+packages:
+  - git
+
+write_files:
+  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)
+  - path: /etc/.bashrc
+    append: true
+    content: |
+      alias lh='ls -lash'
+      alias lt='ls -last'
+      alias env='/usr/bin/env | sort'
+  # Create empty config
+  - path: /root/config
+    permissions: '0644'
+    content: |
+      [DEFAULT]
+      user=
+      fingerprint=
+      key_file=
+      tenancy=ocid1.tenancy.oc1..aaaaaaaaa3qmjxr43tjexx75r6gwk6vjw22ermohbw2vbxyhczksgjir7xdq
+      region=us-phoenix-1
+  # Create Flask Service File
+  - path: /etc/systemd/system/flask.service
+    permissions: '644'
+    content: |
+      # Copyright (c) 2020, Oracle and/or its affiliates.
+      # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+      [Unit]
+      Description=Flask daemon
+      After=network.target
+
+      [Service]
+      Type=simple
+      # the specific user that our service will run as
+      User=root
+      Group=root
+      Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+      Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
+      Environment="FLASK_APP=okitweb"
+      Environment="FLASK_DEBUG=development"
+      RuntimeDirectory=flask
+      WorkingDirectory=/okit/workspace
+      ExecStart=/usr/bin/python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger
+      ExecReload=/bin/kill -s HUP $MAINPID
+      KillMode=mixed
+      TimeoutStopSec=5
+      TimeoutStartSec=300
+      PrivateTmp=true
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+  # Create GUnicorn Service File
+  - path: /etc/systemd/system/gunicorn.service
+    permissions: '644'
+    content: |
+      # Copyright (c) 2020, Oracle and/or its affiliates.
+      # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+      [Unit]
+      Description=gunicorn daemon
+      Requires=gunicorn.socket
+      After=network.target
+
+      [Service]
+      Type=simple
+      # the specific user that our service will run as
+      User=root
+      Group=root
+      Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+      Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
+      RuntimeDirectory=gunicorn
+      WorkingDirectory=/okit/workspace
+      ExecStart=/usr/local/bin/gunicorn okitweb.wsgi:app
+      ExecReload=/bin/kill -s HUP $MAINPID
+      KillMode=mixed
+      TimeoutStopSec=5
+      TimeoutStartSec=300
+      PrivateTmp=true
+
+      [Install]
+      WantedBy=multi-user.target
+  # Create GUnicorn Socket File
+  - path: /etc/systemd/system/gunicorn.socket
+    permissions: '644'
+    content: |
+      # Copyright (c) 2020, Oracle and/or its affiliates.
+      # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+      [Unit]
+      Description=gunicorn socket
+
+      [Socket]
+      ListenStream=/var/run/gunicorn.sock
+      # Our service won't need permissions for the socket, since it
+      # inherits the file descriptor by socket activation
+      # only the nginx daemon will need access to the socket
+      User=nginx
+      # Optionally restrict the socket permissions even more.
+      # Mode=600
+
+      [Install]
+      WantedBy=sockets.target
+
+runcmd:
+  # Clone OKIT
+  - sudo git clone --depth 1 https://github.com/oracle/oci-designer-toolkit.git /
+  - sudo ln -s /oci-designer-toolkit /okit
+  - sudo mkdir /okit/log
+  # Set Firewall Rules
+  - sudo firewall-offline-cmd  --add-port=80/tcp
+  - sudo systemctl restart firewalld
+  # Add additional environment information because append does not appear to work in write_file
+  - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
+  # Enable Flask Service
+  - sudo systemctl enable flask.service
+  - sudo systemctl start flask.service
+  # Enable Gunicorn Service
+  - sudo systemctl enable gunicorn.socket
+  - sudo systemctl start gunicorn.socket
+  - sudo systemctl enable gunicorn.service
+  - sudo systemctl start gunicorn.service
+
+final_message: "**** The system is finally up, after $UPTIME seconds ****"
