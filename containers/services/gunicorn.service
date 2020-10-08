@@ -3,7 +3,7 @@
 
 [Unit]
 Description=gunicorn daemon
-Requires=gunicorn.socket
+#Requires=gunicorn.socket
 After=network.target
 
 [Service]
