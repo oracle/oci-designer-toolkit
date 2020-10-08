@@ -32,16 +32,9 @@ runcmd:
   - sudo systemctl restart firewalld
   # Add additional environment information because append does not appear to work in write_file
   - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
-  # Copy Flask / GUnicorn Service Files
-  - sudo cp /okit/containers/services/flask.service /etc/systemd/system/flask.service
+  # Copy GUnicorn Service File
   - sudo cp /okit/containers/services/gunicorn.service /etc/systemd/system/gunicorn.service
-  - sudo cp /okit/containers/services/gunicorn.socket /etc/systemd/system/gunicorn.socket
-  # Enable Flask Service
-  #- sudo systemctl enable flask.service
-  #- sudo systemctl start flask.service
   # Enable Gunicorn Service
-  #- sudo systemctl enable gunicorn.socket
-  #- sudo systemctl start gunicorn.socket
   - sudo systemctl enable gunicorn.service
   - sudo systemctl start gunicorn.service
 
