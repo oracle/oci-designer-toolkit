@@ -44,6 +44,7 @@ RUN yum install -y \
         pandas==1.1.2 \
         pyyaml==5.2 \
         requests==2.24.0 \
+        xlswriter==1.3.6 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \
  && mkdir -p /okit/okitweb/static/okit/templates \
