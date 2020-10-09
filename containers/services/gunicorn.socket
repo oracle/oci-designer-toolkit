@@ -1,0 +1,17 @@
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/var/run/gunicorn.sock
+# Our service won't need permissions for the socket, since it
+# inherits the file descriptor by socket activation
+# only the nginx daemon will need access to the socket
+User=nginx
+# Optionally restrict the socket permissions even more.
+# Mode=600
+
+[Install]
+WantedBy=sockets.target

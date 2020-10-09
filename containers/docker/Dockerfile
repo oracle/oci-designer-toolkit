@@ -40,8 +40,10 @@ RUN yum install -y \
  && pip3 install --no-cache-dir \
         flask==1.1.1 \
         gunicorn==20.0.4 \
-        oci==2.6.0 \
+        oci==2.22.0 \
+        pandas==1.1.2 \
         pyyaml==5.2 \
+        requests==2.24.0 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \
  && mkdir -p /okit/okitweb/static/okit/templates \
