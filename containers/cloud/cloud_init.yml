@@ -23,7 +23,7 @@ write_files:
 
 runcmd:
   # Install Required Python Modules
-  - sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gunicorn==20.0.4 oci==2.22.0 pyyaml==5.2"
+  - sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gunicorn==20.0.4 oci==2.22.0 pandas==1.1.2 pyyaml==5.2 requests==2.24.0"
   # Clone OKIT
   - sudo bash -c "git clone -b toxophilist/sprint-11 --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
   - sudo bash -c "mkdir /okit/{log,workspace}"
@@ -33,7 +33,7 @@ runcmd:
   # Add additional environment information because append does not appear to work in write_file
   - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
   # Copy GUnicorn Service File
-  - sudo cp /okit/containers/services/gunicorn.service /etc/systemd/system/gunicorn.service
+  - sudo bash -c "cp -v /okit/containers/services/gunicorn.service /etc/systemd/system/gunicorn.service"
   # Enable Gunicorn Service
   - sudo systemctl enable gunicorn.service
   - sudo systemctl start gunicorn.service
