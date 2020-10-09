@@ -60,6 +60,7 @@ class OkitJsonView {
         this.ipsec_connections = [];
         this.load_balancers = [];
         this.local_peering_gateways = [];
+        this.mysql_database_systems = [];
         this.nat_gateways = [];
         this.network_security_groups = [];
         this.object_storage_buckets = [];
@@ -88,6 +89,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
         for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
         for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
+        for (let artefact of this.okitjson.mysql_database_systems) {this.newMySQLDatabaseSystem(artefact);}
         for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
         for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
         for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
@@ -656,6 +658,42 @@ class OkitJsonView {
     loadLocalPeeringGateways(local_peering_gateways) {
         for (const artefact of local_peering_gateways) {
             this.local_peering_gateways.push(new LocalPeeringGatewayView(new LocalPeeringGateway(artefact, this.okitjson), this));
+        }
+    }
+
+    // MySQL Database System
+    dropMySQLDatabaseSystemView(target) {
+        console.info('Drop Database System View');
+        console.info(target);
+        let view_artefact = this.newMySQLDatabaseSystem();
+        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        console.info('View Artefact');
+        console.info(view_artefact)
+        return view_artefact;
+    }
+    newMySQLDatabaseSystem(database) {
+        this.mysql_database_systems.push(database ? new MySQLDatabaseSystemView(database, this) : new MySQLDatabaseSystemView(this.okitjson.newMySQLDatabaseSystem(), this));
+        return this.mysql_database_systems[this.mysql_database_systems.length - 1];
+    }
+    getMySQLDatabaseSystems() {
+        return this.mysql_database_systems;
+    }
+    getMySQLDatabaseSystem(id='') {
+        for (let artefact of this.getMySQLDatabaseSystems()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteMySQLDatabaseSystem(id='') {
+        this.okitjson.deleteMySQLDatabaseSystem(id);
+        this.update();
+    }
+    loadMySQLDatabaseSystems(database_systems) {
+        for (const artefact of database_systems) {
+            this.mysql_database_systems.push(new MySQLDatabaseSystemView(new MySQLDatabaseSystem(artefact, this.okitjson), this));
         }
     }
 

@@ -1,0 +1,38 @@
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}MySql Database System{% endblock %}
+
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Subnet</div><div class='td'><label id="subnet_id" class="okit-property-value okit-property-label"></label></div></div>
+    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="okit-property-value">
+        <option value="1" selected="selected">Availability Domain 1</option>
+        <option value="2">Availability Domain 2</option>
+        <option value="3">Availability Domain 3</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Shape</div><div class='td'><select id="shape_name" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Configuration</div><div class='td'><select id="configuration_id" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Admin Username</div><div class='td'><input type="text" id="admin_username" name="admin_username" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Admin Password</div><div class='td'><input type="text" id="admin_password" name="admin_password" class="okit-property-value"></div></div>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Hostname</div><div class='td'><input type="text" id="hostname_label" name="hostname_label" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Version</div><div class='td'><select id="mysql_version" class="okit-property-value"></select></div></div>
+    <div class='tr'><div class='td'>Port</div><div class='td'><input type="text" id="port" name="port" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Port X</div><div class='td'><input type="text" id="port_x" name="port_x" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Size (in GB)</div><div class='td'><input type="text" id="data_storage_size_in_gb" name="data_storage_size_in_gb" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Fault Domain</div><div class='td'><select id="fault_domain" class="okit-property-value">
+        <option value="" selected="selected">System Selected</option>
+        <option value="FAULT-DOMAIN-1">Fault Domain 1</option>
+        <option value="FAULT-DOMAIN-2">Fault Domain 2</option>
+        <option value="FAULT-DOMAIN-3">Fault Domain 3</option>
+    </select></div></div>
+<div class='tr'><div class='td'>Description</div><div class='td'><input type="text" id="description" name="description" class="okit-property-value"></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}

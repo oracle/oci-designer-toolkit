@@ -133,6 +133,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let autonomous_database of this.autonomous_databases) {
             autonomous_database.draw();
         }
+        // MySQL Database System
+        for (let mysql_database_system of this.mysql_database_systems) {
+            mysql_database_system.draw();
+        }
 
         // Resize Main Canvas if required
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));

@@ -171,6 +171,22 @@ class OkitOCIData {
         return [...new Set(images)].sort((a, b) => b - a);
     }
 
+    getMySQLConfigurations(shape_name='') {
+        if (shape_name === '') {
+            return this.mysql_configurations;
+        } else {
+            return this.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
+        }
+    }
+
+    getMySQLShapes() {
+        return this.mysql_shapes;
+    }
+
+    getMySQLVersions(family='') {
+        return this.mysql_versions[0].versions;
+    }
+
     getRegions() {
         return this.regions;
     }

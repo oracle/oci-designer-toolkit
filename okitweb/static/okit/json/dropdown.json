@@ -110,6 +110,7 @@
   "db_system_shapes": [
     {
       "available_core_count": 36,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 9,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -127,6 +128,7 @@
     },
     {
       "available_core_count": 52,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 16,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -144,6 +146,7 @@
     },
     {
       "available_core_count": 48,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -161,6 +164,7 @@
     },
     {
       "available_core_count": 336,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -178,6 +182,7 @@
     },
     {
       "available_core_count": 368,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -195,6 +200,7 @@
     },
     {
       "available_core_count": 400,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -212,6 +218,7 @@
     },
     {
       "available_core_count": 168,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -229,6 +236,7 @@
     },
     {
       "available_core_count": 184,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -246,6 +254,7 @@
     },
     {
       "available_core_count": 200,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -263,6 +272,7 @@
     },
     {
       "available_core_count": 84,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -280,6 +290,7 @@
     },
     {
       "available_core_count": 92,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -297,6 +308,7 @@
     },
     {
       "available_core_count": 100,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -314,6 +326,7 @@
     },
     {
       "available_core_count": null,
+      "available_core_count_per_node": 50,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -331,6 +344,7 @@
     },
     {
       "available_core_count": 44,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 42,
       "available_db_node_storage_in_g_bs": 2200,
       "available_memory_in_gbs": 480,
@@ -348,6 +362,7 @@
     },
     {
       "available_core_count": 48,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 74,
       "available_db_node_storage_in_g_bs": 1800,
       "available_memory_in_gbs": 720,
@@ -365,6 +380,7 @@
     },
     {
       "available_core_count": 48,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 74,
       "available_db_node_storage_in_g_bs": 1800,
       "available_memory_in_gbs": 656,
@@ -382,6 +398,7 @@
     },
     {
       "available_core_count": 368,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 427,
       "available_db_node_storage_in_g_bs": 8800,
       "available_memory_in_gbs": 5760,
@@ -399,6 +416,7 @@
     },
     {
       "available_core_count": 400,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 598,
       "available_db_node_storage_in_g_bs": 7200,
       "available_memory_in_gbs": 5760,
@@ -416,6 +434,7 @@
     },
     {
       "available_core_count": 400,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 598,
       "available_db_node_storage_in_g_bs": 7200,
       "available_memory_in_gbs": 11120,
@@ -433,6 +452,7 @@
     },
     {
       "available_core_count": 184,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 213,
       "available_db_node_storage_in_g_bs": 4400,
       "available_memory_in_gbs": 2880,
@@ -450,6 +470,7 @@
     },
     {
       "available_core_count": 200,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 299,
       "available_db_node_storage_in_g_bs": 3600,
       "available_memory_in_gbs": 2880,
@@ -467,6 +488,7 @@
     },
     {
       "available_core_count": 200,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 299,
       "available_db_node_storage_in_g_bs": 3600,
       "available_memory_in_gbs": 5560,
@@ -484,6 +506,7 @@
     },
     {
       "available_core_count": 92,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 106,
       "available_db_node_storage_in_g_bs": 2200,
       "available_memory_in_gbs": 1440,
@@ -501,6 +524,7 @@
     },
     {
       "available_core_count": 100,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 149,
       "available_db_node_storage_in_g_bs": 1800,
       "available_memory_in_gbs": 1440,
@@ -518,6 +542,7 @@
     },
     {
       "available_core_count": 100,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 149,
       "available_db_node_storage_in_g_bs": 1800,
       "available_memory_in_gbs": 2780,
@@ -535,6 +560,7 @@
     },
     {
       "available_core_count": 1,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 7,
@@ -552,6 +578,7 @@
     },
     {
       "available_core_count": 16,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 112,
@@ -569,6 +596,7 @@
     },
     {
       "available_core_count": 2,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 14,
@@ -586,6 +614,7 @@
     },
     {
       "available_core_count": 4,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 28,
@@ -603,6 +632,7 @@
     },
     {
       "available_core_count": 8,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 56,
@@ -620,6 +650,7 @@
     },
     {
       "available_core_count": 1,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 15,
@@ -637,6 +668,7 @@
     },
     {
       "available_core_count": 16,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 240,
@@ -654,6 +686,7 @@
     },
     {
       "available_core_count": 2,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 30,
@@ -671,6 +704,7 @@
     },
     {
       "available_core_count": 24,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 320,
@@ -688,6 +722,7 @@
     },
     {
       "available_core_count": 4,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 60,
@@ -705,6 +740,7 @@
     },
     {
       "available_core_count": 8,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 120,
@@ -807,12 +843,12 @@
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
       "customer_asn_management": "CUSTOMER_MANAGED",
-      "description": "https://www.centurylink.com/business/hybrid-it-cloud/cloud-connect.html",
-      "id": "ocid1.providerservice.oc1.phx.aaaaaaaa5dbfeyv4ndgbbd7j26a7yjzttgyxrh37jvrmmei6w7rikubd7lkq",
+      "description": "http://www.coresite.com\t",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaahriodfhfpjpunyzpt75dbdjw7vzwae5qo7w6wgkgdn7abweq5zdq",
       "private_peering_bgp_management": "CUSTOMER_MANAGED",
-      "provider_name": "CenturyLink",
+      "provider_name": "CoreSite",
       "provider_service_key_management": "PROVIDER_MANAGED",
-      "provider_service_name": "Cloud Connect",
+      "provider_service_name": "Open Cloud Exchange",
       "public_peering_bgp_management": "ORACLE_MANAGED",
       "required_total_cross_connects": 1,
       "supported_virtual_circuit_types": [
@@ -856,29 +892,6 @@
         {
           "bandwidth_in_mbps": 40000,
           "name": "40 Gbps"
-        }
-      ]
-    },
-    {
-      "bandwith_shape_management": "CUSTOMER_MANAGED",
-      "customer_asn_management": "CUSTOMER_MANAGED",
-      "description": "http://www.coresite.com\t",
-      "id": "ocid1.providerservice.oc1.phx.aaaaaaaahriodfhfpjpunyzpt75dbdjw7vzwae5qo7w6wgkgdn7abweq5zdq",
-      "private_peering_bgp_management": "CUSTOMER_MANAGED",
-      "provider_name": "CoreSite",
-      "provider_service_key_management": "PROVIDER_MANAGED",
-      "provider_service_name": "Open Cloud Exchange",
-      "public_peering_bgp_management": "ORACLE_MANAGED",
-      "required_total_cross_connects": 1,
-      "supported_virtual_circuit_types": [
-        "PRIVATE",
-        "PUBLIC"
-      ],
-      "type": "LAYER2",
-      "virtual_circuit_bandwidth_shape": [
-        {
-          "bandwidth_in_mbps": 1000,
-          "name": "1 Gbps"
         }
       ]
     },
@@ -960,6 +973,49 @@
         {
           "bandwidth_in_mbps": 2000,
           "name": "2 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 3000,
+          "name": "3 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 4000,
+          "name": "4 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 5000,
+          "name": "5 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://www.centurylink.com/business/hybrid-it-cloud/cloud-connect.html",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaa5dbfeyv4ndgbbd7j26a7yjzttgyxrh37jvrmmei6w7rikubd7lkq",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "Lumen",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Cloud Connect",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
         },
         {
           "bandwidth_in_mbps": 3000,
@@ -3646,6 +3702,110 @@
       "time_created": "2020-05-26T21:50:51.365000+00:00"
     }
   ],
+  "loadbalancer_shapes": [
+    {
+      "name": "100Mbps"
+    },
+    {
+      "name": "10Mbps"
+    },
+    {
+      "name": "10Mbps-Micro"
+    },
+    {
+      "name": "400Mbps"
+    },
+    {
+      "name": "8000Mbps"
+    }
+  ],
+  "mysql_configurations": [
+    {
+      "compartment_id": null,
+      "defined_tags": null,
+      "description": "Default configuration for the VM.Standard.E2.1 MySQL Shape",
+      "display_name": "VM.Standard.E2.1.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaah6o6qu3gdbxnqg6aw56amnosmnaycusttaa7abyq2tdgpgubvsgi",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "VM.Standard.E2.1",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    },
+    {
+      "compartment_id": null,
+      "defined_tags": null,
+      "description": "Default configuration for the VM.Standard.E2.2 MySQL Shape",
+      "display_name": "VM.Standard.E2.2.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaah6o6qu3gdbxnqg6aw56amnosmnaycusttaa7abyq2tdgpgubvsgj",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "VM.Standard.E2.2",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    },
+    {
+      "compartment_id": null,
+      "defined_tags": null,
+      "description": "Default configuration for the VM.Standard.E2.4 MySQL Shape",
+      "display_name": "VM.Standard.E2.4.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaah6o6qu3gdbxnqg6aw56amnosmnaycusttaa7abyq2tdgpgubvsgk",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "VM.Standard.E2.4",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    },
+    {
+      "compartment_id": null,
+      "defined_tags": null,
+      "description": "Default configuration for the VM.Standard.E2.8 MySQL Shape",
+      "display_name": "VM.Standard.E2.8.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaah6o6qu3gdbxnqg6aw56amnosmnaycusttaa7abyq2tdgpgubvsgl",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "VM.Standard.E2.8",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    }
+  ],
+  "mysql_shapes": [
+    {
+      "cpu_core_count": 1,
+      "memory_size_in_gbs": 8,
+      "name": "VM.Standard.E2.1"
+    },
+    {
+      "cpu_core_count": 2,
+      "memory_size_in_gbs": 16,
+      "name": "VM.Standard.E2.2"
+    },
+    {
+      "cpu_core_count": 4,
+      "memory_size_in_gbs": 32,
+      "name": "VM.Standard.E2.4"
+    },
+    {
+      "cpu_core_count": 8,
+      "memory_size_in_gbs": 64,
+      "name": "VM.Standard.E2.8"
+    }
+  ],
+  "mysql_versions": [
+    {
+      "version_family": "8.0",
+      "versions": [
+        {
+          "description": "8.0.21",
+          "version": "8.0.21"
+        }
+      ]
+    }
+  ],
   "regions": [
     {
       "display_name": "AP Chuncheon",
@@ -4023,6 +4183,11 @@
       "description": "Virtual Cloud Network",
       "display_name": "vcn",
       "name": "vcn"
+    },
+    {
+      "description": "IP Management",
+      "display_name": "vcnip",
+      "name": "vcnip"
     },
     {
       "description": "VPN",
