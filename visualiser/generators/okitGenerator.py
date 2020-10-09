@@ -201,6 +201,9 @@ class OCIGenerator(object):
         # -- Database Systems
         for database_system in self.visualiser_json.get('database_systems', []):
             self.renderDatabaseSystem(database_system)
+        # -- MySQL Database Systems
+        for mysql_database_system in self.visualiser_json.get('mysql_database_systems', []):
+            self.renderMySQLDatabaseSystem(mysql_database_system)
         # -- Instances
         for instance in self.visualiser_json.get('instances', []):
             self.renderInstance(instance)
@@ -862,6 +865,80 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("local_peering_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderMySQLDatabaseSystem(self, artefact):
+        # Read Data
+        standardisedName = self.standardiseResourceName(artefact['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = artefact['display_name']
+        # Process Database System Data
+        logger.info('Processing Database System Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['compartment_id']]))
+        # ---- Availability Domain
+        self.addJinja2Variable("availability_domain", artefact["availability_domain"], standardisedName)
+        # ---- Display Name
+        self.addJinja2Variable("display_name", artefact["display_name"], standardisedName)
+        # ---- Subnet
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['subnet_id']]))
+        # ---- Admin Username
+        self.addJinja2Variable("admin_username", artefact["admin_username"], standardisedName)
+        # ---- Admin Password
+        self.addJinja2Variable("admin_password", artefact["admin_password"], standardisedName)
+        # ---- Hostname
+        self.addJinja2Variable("hostname_label", artefact["hostname_label"], standardisedName)
+        # ---- Shape
+        self.addJinja2Variable("shape_name", artefact["shape_name"], standardisedName)
+        # ---- Configuration Id
+        self.addJinja2Variable("configuration_id", artefact["configuration_id"], standardisedName)
+        # --- Optional
+        # ---- Data Storage Size
+        if artefact.get('data_storage_size_in_gb', '') != '':
+            self.addJinja2Variable("data_storage_size_in_gb", artefact["data_storage_size_in_gb"], standardisedName)
+        else:
+            self.removeJinja2Variable('data_storage_size_in_gb')
+        # ---- Description
+        if artefact.get('description', '') != '':
+            self.addJinja2Variable("description", artefact["description"], standardisedName)
+        else:
+            self.removeJinja2Variable('description')
+        # ---- Fault Domain
+        if artefact.get('fault_domain', '') != '':
+            self.addJinja2Variable("fault_domain", artefact["fault_domain"], standardisedName)
+        else:
+            self.removeJinja2Variable('fault_domain')
+        # ---- IP Address
+        if artefact.get('ip_address', '') != '':
+            self.addJinja2Variable("ip_address", artefact["ip_address"], standardisedName)
+        else:
+            self.removeJinja2Variable('ip_address')
+        # ---- MySQL Version
+        if artefact.get('mysql_version', '') != '':
+            self.addJinja2Variable("mysql_version", artefact["mysql_version"], standardisedName)
+        else:
+            self.removeJinja2Variable('mysql_version')
+        # ---- Port
+        if artefact.get('port_x', '') != '':
+            self.addJinja2Variable("port_x", artefact["port_x"], standardisedName)
+        else:
+            self.removeJinja2Variable('port_x')
+        # ---- Port X
+        if artefact.get('port', '') != '':
+            self.addJinja2Variable("port", artefact["port"], standardisedName)
+        else:
+            self.removeJinja2Variable('port')
+
+        # ---- Tags
+        self.renderTags(artefact)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("mysql_database_system.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
