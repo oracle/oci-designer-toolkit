@@ -341,9 +341,8 @@ def dropdownQuery():
         db_versions = OCIDatabaseVersions()
         dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
         # CPE Device Shapes
-        # TODO: Upgrade OCI Python Module
-        #cpe_device_shapes = OCICpeDeviceShapes()
-        #dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
+        cpe_device_shapes = OCICpeDeviceShapes()
+        dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
         # Fast Connect Provider Services
         fast_connect_provider_services = OCIFastConnectProviderServices()
         dropdown_json["fast_connect_provider_services"] = sorted(fast_connect_provider_services.list(), key=lambda k: k['provider_name'])
