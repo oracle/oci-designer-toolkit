@@ -4,6 +4,9 @@
 ## Version 0.13.0 
 **Release Date**: 28th October 2020
 ### Features
+1. Read Load Balancer Shapes from OCI / Cached OCI Values
+2. Simple Command Line generator (visualiser/okit_generator) to convert OKIT.
+3. Add MySQL Resource / Artefact.
 
 ### Bug Fixes
 
