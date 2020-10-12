@@ -357,7 +357,7 @@ def dropdownQuery():
         dropdown_json["mysql_configurations"] = sorted(mysql_configurations.list(), key=lambda k: k['display_name'])
         # Instance Shapes
         oci_loadbalancer_shapes = OCILoadBalancerShapes()
-        dropdown_json["loadbalancer_shapes"] = oci_loadbalancer_shapes.list()
+        dropdown_json["loadbalancer_shapes"] = sorted(oci_loadbalancer_shapes.list(), key=lambda k: k['name'])
         return dropdown_json
     else:
         return 'Unknown Method', 500

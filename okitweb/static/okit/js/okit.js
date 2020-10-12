@@ -171,6 +171,10 @@ class OkitOCIData {
         return [...new Set(images)].sort((a, b) => b - a);
     }
 
+    getLoadBalaancerShapes() {
+        return this.loadbalancer_shapes;
+    }
+
     getMySQLConfigurations(shape_name='') {
         if (shape_name === '') {
             return this.mysql_configurations;
