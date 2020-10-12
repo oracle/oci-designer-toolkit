@@ -341,9 +341,8 @@ def dropdownQuery():
         db_versions = OCIDatabaseVersions()
         dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
         # CPE Device Shapes
-        # TODO: Upgrade OCI Python Module
-        #cpe_device_shapes = OCICpeDeviceShapes()
-        #dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
+        cpe_device_shapes = OCICpeDeviceShapes()
+        dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
         # Fast Connect Provider Services
         fast_connect_provider_services = OCIFastConnectProviderServices()
         dropdown_json["fast_connect_provider_services"] = sorted(fast_connect_provider_services.list(), key=lambda k: k['provider_name'])
@@ -358,7 +357,7 @@ def dropdownQuery():
         dropdown_json["mysql_configurations"] = sorted(mysql_configurations.list(), key=lambda k: k['display_name'])
         # Instance Shapes
         oci_loadbalancer_shapes = OCILoadBalancerShapes()
-        dropdown_json["loadbalancer_shapes"] = oci_loadbalancer_shapes.list()
+        dropdown_json["loadbalancer_shapes"] = sorted(oci_loadbalancer_shapes.list(), key=lambda k: k['name'])
         return dropdown_json
     else:
         return 'Unknown Method', 500

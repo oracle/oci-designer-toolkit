@@ -83,6 +83,8 @@ class LoadBalancerView extends OkitDesignerArtefactView {
             }
             // Build Network Security Groups
             this.loadNetworkSecurityGroups('network_security_group_ids', this.subnet_ids[0]);
+            // Build Loadbalancer Shapes
+            this.loadLoadBalancerShapes('shape');
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });

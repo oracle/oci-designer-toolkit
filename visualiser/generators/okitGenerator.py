@@ -306,6 +306,35 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderCompartment(self, compartment):
+        # Read Data
+        standardisedName = self.standardiseResourceName(compartment['name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = compartment['name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Compartment Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Root Compartment
+        self.jinja2_variables["root_compartment"] = compartment["root_compartment"]
+        # ---- Parent Compartment Id
+        if not compartment["root_compartment"]:
+            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", compartment["name"], standardisedName)
+        # ---- Description
+        self.addJinja2Variable("description", compartment.get("description", compartment["name"]), standardisedName)
+        # --- Optional
+        # ---- Tags
+        self.renderTags(compartment)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("compartment.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderCustomerPremiseEquipment(self, artefact):
         # Read Data
         standardisedName = self.standardiseResourceName(artefact['display_name'])
@@ -334,36 +363,6 @@ class OCIGenerator(object):
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("customer_premise_equipment.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-        return
-
-    def renderCompartment(self, compartment):
-        # Read Data
-        standardisedName = self.standardiseResourceName(compartment['name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = compartment['name']
-        # Process Virtual Cloud Networks Data
-        logger.info('Processing Compartment Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # --- Required
-        # ---- Root Compartment
-        self.jinja2_variables["root_compartment"] = compartment["root_compartment"]
-        # ---- Parent Compartment Id
-        if not compartment["root_compartment"]:
-            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
-        # ---- Display Name
-        self.addJinja2Variable("display_name", compartment["name"], standardisedName)
-        # ---- Description
-        self.addJinja2Variable("description", compartment.get("description", compartment["name"]), standardisedName)
-        # --- Optional
-        # ---- Tags
-        self.renderTags(compartment)
-
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("compartment.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.info(self.create_sequence[-1])
         logger.debug(self.create_sequence[-1])
         return
 
