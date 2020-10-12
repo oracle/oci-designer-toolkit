@@ -133,6 +133,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let autonomous_database of this.autonomous_databases) {
             autonomous_database.draw();
         }
+        // MySQL Database System
+        for (let mysql_database_system of this.mysql_database_systems) {
+            mysql_database_system.draw();
+        }
 
         // Resize Main Canvas if required
         console.info('Canvas Width   : ' + canvas_svg.attr('width'));
@@ -360,6 +364,14 @@ class OkitDesignerArtefactView extends OkitArtefactView {
                         .text(networkSecurityGroup.display_name);
                 }
             }
+        }
+    }
+
+    loadLoadBalancerShapes(select_id) {
+        $(jqId(select_id)).empty();
+        const lb_select = $(jqId(select_id));
+        for (let shape of okitOciData.getLoadBalaancerShapes()) {
+            lb_select.append($('<option>').attr('value', shape.name).text(shape.name));
         }
     }
 }

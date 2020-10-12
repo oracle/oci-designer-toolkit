@@ -180,6 +180,24 @@ class OCILoadBalancerConnection(OCIConnection):
         return
 
 
+class OCIMySQLDatabaseConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIMySQLDatabaseConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.mysql.DbSystemClient(config=self.config, signer=self.signer)
+        return
+
+
+class OCIMySQLaaSConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIMySQLaaSConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.mysql.MysqlaasClient(config=self.config, signer=self.signer)
+        return
+
+
 class OCIObjectStorageBucketConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
         super(OCIObjectStorageBucketConnection, self).__init__(config=config, configfile=configfile, profile=profile)
