@@ -27,11 +27,12 @@ class InstancePool extends OkitArtifact {
         this.size = 3;
         this.load_balancers = [];
         this.instance_configuration = {
-            source: 'NONE',
-            instance_details: {
-                instance_type: 'compute'
-            }
+            source: 'INSTANCE',
+            instance_id: ''
         };
+        this.auto_scaling = {
+            policies: []
+        }
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -60,5 +61,19 @@ class InstancePool extends OkitArtifact {
      */
     static getArtifactReference() {
         return 'Instance Pool';
+    }
+
+    /*
+    ** Initialisation Functions
+     */
+    initialisePolicy() {
+        const policy = {
+            capacity: {
+                initial: 2,
+                max: 2,
+                min: 1
+            },
+            policy_type: ''
+        }
     }
 }
