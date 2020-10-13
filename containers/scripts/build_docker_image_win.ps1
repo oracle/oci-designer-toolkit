@@ -14,5 +14,5 @@ Write-Host $Rootfolder
 $DockerFolder = Join-Path -Path $Scriptfolder -ChildPath "docker"
 Write-Host $DockerFolder
 
-docker build --tag $DOCKERIMAGE --file $DockerFolder/Dockerfile --force-rm  $DockerFolder
+docker build --tag $DOCKERIMAGE --file $DockerFolder/Dockerfile --force-rm  $Rootfolder
 

@@ -43,5 +43,5 @@ pip3 install --no-cache-dir \
       pandas==1.1.2 \
       pyyaml==5.2 \
       requests==2.24.0 \
-      xlswriter==1.3.6
+      xlsxwriter==1.3.6
 

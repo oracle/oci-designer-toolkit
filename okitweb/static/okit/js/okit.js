@@ -213,7 +213,7 @@ class OkitSettings {
         this.is_always_free = false;
         this.is_optional_expanded = true;
         this.is_display_grid = false;
-        this.is_variables = true;
+        this.is_variables = false;
         this.icons_only = true;
         this.last_used_region = '';
         this.last_used_compartment = '';
