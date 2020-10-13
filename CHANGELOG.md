@@ -7,6 +7,7 @@
 1. Read Load Balancer Shapes from OCI / Cached OCI Values
 2. Simple Command Line generator (visualiser/okit_generator) to convert OKIT.
 3. Add MySQL Resource / Artefact.
+4. Add Cost Estimation functionality for the designed model. This is based on the Oracle public APIs. 
 
 ### Bug Fixes
 1. Build script on Windows fail (Issue: #135)
