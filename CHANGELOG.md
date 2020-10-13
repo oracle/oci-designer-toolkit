@@ -9,7 +9,7 @@
 3. Add MySQL Resource / Artefact.
 
 ### Bug Fixes
-
+1. Build script on Windows fail (Issue: #135)
 
 ## Version 0.12.0 
 **Release Date**: 7th October 2020
