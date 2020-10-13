@@ -38,4 +38,17 @@ def pricingEstimate():
     else:
         return '404'
 
+@bp.route('downloadbom', methods=(['GET', 'POST']))
+def pricingEstimateDownload():
+    logger.debug('JSON : {0:s}'.format(str(request.form['hdnJson'])))
+    #logger.debug('JSON : {0:s}'.format(str(request.json)))
+    if request.method == 'GET' or request.method == 'POST':
+        # logJson(request.json)
+        logJson(request.form['hdnJson'])
+        estimator = OCIPriceEstimator(request.form['hdnJson'])
+        #estimator = OCIPriceEstimator(request.json)
+        xlsx_data = estimator.downloadbom()
+        return xlsx_data
+    else:
+        return '404'
 

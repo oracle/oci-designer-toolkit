@@ -121,8 +121,8 @@ $(document).ready(function() {
         .text('Validate');
 
     // TODO: Uncomment when Value Proposition files have been created
+    // Value Proposition
     /*
-    // Cost Estimate
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_value_proposition_button')
         .attr('class', 'okit-pointer-cursor')
@@ -140,9 +140,7 @@ $(document).ready(function() {
         .text('Value Proposition');
      */
 
-    // TODO: Integrate Estimate Calculator
-    /*
-    // Value Proposition
+    // Cost Estimate
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_cost_estimate_button')
         .attr('class', 'okit-pointer-cursor')
@@ -150,16 +148,18 @@ $(document).ready(function() {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
             if (!open) {
+                $(jqId(COST_ESTIMATE_PANEL)).empty();
+                $(jqId(COST_ESTIMATE_PANEL)).text('Estimating...');
                 $(jqId(COST_ESTIMATE_PANEL)).removeClass('hidden');
                 $(this).addClass('okit-bar-panel-displayed');
                 $(jqId('right_column_dragbar')).removeClass('hidden');
-                okitJson.estimateCost(displayPricingResults);
+                okitJsonModel.estimateCost(displayPricingResults);
             }
             // Check to see if Right Column needs to be hidden
             checkRightColumn();
         })
         .text('Cost Estimate');
-     */
+
     if (developer_mode) {
         // OKIT Model Json
         d3.select(d3Id('console_right_bar')).append('label')
