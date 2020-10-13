@@ -201,6 +201,18 @@ class OCIJsonValidator(object):
                     'element': 'hostname_label'
                 }
                 self.results['warnings'].append(warning)
+            for vnic in artefact['vnics']:
+                if vnic['subnet_id'] == '':
+                    self.valid = False
+                    error = {
+                        'id': artefact['id'],
+                        'type': 'Instance',
+                        'artefact': artefact['display_name'],
+                        'message': 'VNIC Must be connected to Subnet.',
+                        'element': 'subnet_id'
+                    }
+                    self.results['errors'].append(error)
+
 
     # Internet Gateways
     def validateInternetGateways(self):
