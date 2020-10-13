@@ -24,6 +24,8 @@ EXPOSE 443
 RUN yum install -y \
     oracle-softwarecollection-release-el7 \
     oraclelinux-developer-release-el7 \
+# Disable oci config repo
+ && yum-config-manager --disable ol7_ociyum_config \
 # Update base image
  && yum update -y \
 # Install additional packages
@@ -44,7 +46,7 @@ RUN yum install -y \
         pandas==1.1.2 \
         pyyaml==5.2 \
         requests==2.24.0 \
-        xlswriter==1.3.6 \
+        xlsxwriter==1.3.6 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \
  && mkdir -p /okit/okitweb/static/okit/templates \
