@@ -125,6 +125,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let instance of this.instances) {
             instance.draw();
         }
+        // Instance Pools
+        for (let instance_pool of this.instance_pools) {
+            instance_pool.draw();
+        }
         // Load Balancers
         for (let load_balancer of this.load_balancers) {
             load_balancer.draw();
