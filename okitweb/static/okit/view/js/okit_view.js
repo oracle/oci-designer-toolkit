@@ -56,6 +56,7 @@ class OkitJsonView {
         this.fast_connects = [];
         this.file_storage_systems = [];
         this.instances = [];
+        this.instance_pools = [];
         this.internet_gateways = [];
         this.ipsec_connections = [];
         this.load_balancers = [];
@@ -85,6 +86,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
         for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
         for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
+        for (let artefact of this.okitjson.instance_pools) {this.newInstancePool(artefact);}
         for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
         for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
         for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
@@ -471,12 +473,8 @@ class OkitJsonView {
         console.info('Drop InstancePool View');
         console.info(target);
         let view_artefact = this.newInstancePool();
-        if (target.type === Subnet.getArtifactReference()) {
-            view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
-            view_artefact.getArtefact().compartment_id = target.compartment_id;
-        } else if (target.type === Compartment.getArtifactReference()) {
-            view_artefact.getArtefact().compartment_id = target.id;
-        }
+        view_artefact.getArtefact().placement_configurations[0].primary_subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
         return view_artefact;
@@ -1169,8 +1167,22 @@ class OkitArtefactView {
     get rect_stroke_dash() {return 1;}
     // ---- Svg
     get svg_id() {this.artefact_id + '-svg';}
-    get svg_x() {return 0;}
-    get svg_y() {return 0;}
+    get svg_x() {
+        if (this.parent) {
+            const offset = this.parent.getChildOffset(this.getArtifactReference());
+            return offset.dx;
+        } else {
+            return 0;
+        }
+    }
+    get svg_y() {
+        if (this.parent) {
+            const offset = this.parent.getChildOffset(this.getArtifactReference());
+            return offset.dy;
+        } else {
+            return 0;
+        }
+    }
     get svg_height() {return this.icon_height;}
     get svg_width() {return this.icon_width;}
     // ---- ViewBox
@@ -1218,9 +1230,56 @@ class OkitArtefactView {
         return definition
     }
 
-    getSvgDefinition() {
+    // TODO: Delete
+    getSvgDefinitionOld() {
         alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.');
         return;
+    }
+
+    getSvgDefinition() {
+        let definition = {
+            artefact: this.artefact,
+            data_type: this.artefact ? this.artefact.getArtifactReference() : '',
+            name: {
+                show: false,
+                text: this.display_name
+            },
+            label: {
+                show: false,
+                text: this.artefact ? this.artefact.getArtifactReference() : ''
+            },
+            info: {
+                show: false,
+                text: this.artefact ? this.artefact.getArtifactReference() : ''
+            },
+            svg: {
+                x: this.svg_x,
+                y: this.svg_y,
+                width: this.svg_width,
+                height: this.svg_height
+            },
+            rect: {
+                x: this.rect_x,
+                y: this.rect_y,
+                width: this.rect_width,
+                height: this.rect_height,
+                width_adjust: this.rect_width_adjust,
+                height_adjust: this.rect_height_adjust,
+                stroke: {
+                    colour: this.rect_stroke_colour,
+                    dash: this.rect_stroke_dash
+                },
+                fill: this.rect_fill,
+                style: this.rect_fill_style
+            }, icon: {
+                show: true,
+                x_translation: this.icon_x_tranlation,
+                y_translation: this.icon_y_tranlation
+            },
+            title_keys: []
+        };
+
+        return definition
     }
 
     draw() {
