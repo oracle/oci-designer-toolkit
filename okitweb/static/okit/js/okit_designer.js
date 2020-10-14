@@ -883,5 +883,178 @@ function displayValidationResults(results) {
  */
 function displayPricingResults(results) {
     console.info('Displaying Pricing Results');
-    $(jqId(COST_ESTIMATE_PANEL)).text(JSON.stringify(results));
+    $(jqId(COST_ESTIMATE_PANEL)).empty();
+    let summary = results.pop();
+
+    d3.select(d3Id("cost_estimate_panel")).append('p')
+        .attr('class', 'okit-cost-small-print')
+        .text("The values displayed are purely for estimation purposes only and are generated from our public pricing pages. For accurate costing you will need to consult your OCI Account Manager.");
+
+    let download_button = d3.select(d3Id('cost_estimate_panel')).append('p')
+        .append('div').append('button')
+        .attr('id', 'download_button')
+        .attr('type', 'button')
+        .text('Download BoM');
+    download_button.on("click", handleDownloadBoM);
+
+    // Hidden form is required to download the retrieved file from python
+    let hidden_form = d3.select(d3Id('cost_estimate_panel')).append('form')
+        .attr('id', 'hidden_form')
+        .attr('action', 'pricing/downloadbom')
+        .attr("target", "_blank")
+        .attr('method', 'POST');
+
+    hidden_form.append("input")
+        .attr("type", "hidden")
+        .attr("name", "hdnJson")
+        .attr("id", "hdnJson")
+
+    // d3.select(d3Id('cost_estimate_panel')).append('p').append('a')
+    //     .attr('href', 'pricing/downloadbom').text('Export BoM');
+
+
+    tabulateHorizontal("cost_estimate_panel", results,
+        [{
+            "label": "RESOURCENAME",
+            "align": "left",
+            "width": "50%"
+        },
+            {
+                "label": "PAYG",
+                "align": "right",
+                "width": "25%"
+            },
+            {
+                "label": "ANNUAL_FLEX",
+                "align": "right",
+                "width": "25%"
+            }
+        ]);
+    d3.select(d3Id("cost_estimate_panel")).append('p').text("SUMMARY").style('font-weight', 'bold');
+    tabulateVertical("cost_estimate_panel", summary,
+        [{
+            "label": "PAYG",
+            "align": "right",
+            "labelWidth": "50%",
+            "dataWidth": "50%"
+        },
+            {
+                "label": "ANNUAL_FLEX",
+                "align": "right",
+                "labelWidth": "50%",
+                "dataWidth": "50%"
+            },
+            {
+                "label": "YEARLY_PAYG",
+                "align": "right",
+                "labelWidth": "50%",
+                "dataWidth": "50%"
+            },
+            {
+                "label": "YEARLY_ANNUAL_FLEX",
+                "align": "right",
+                "labelWidth": "50%",
+                "dataWidth": "50%"
+            }
+        ]);
+}
+function tabulateVertical(element, data, columns) {
+    let table = d3.select(d3Id(element)).append('div')
+        .attr('class', 'table okit-table');
+
+    let tbody = table.append('div')
+        .attr('class', 'tbody');
+
+    for (let key in data) {
+        for (i in columns) {
+            if (columns[i].label == key) {
+                let formatter = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                });
+                row = tbody.append("div").attr('class', 'tr');
+                row.append("div")
+                    .attr('class', 'th')
+                    .style('text-align', "left")
+                    .style("width", columns[i].labelWidth)
+                    .text(titleCase(replaceAll(key, '_', ' ')));
+                row.append("div")
+                    .attr('class', 'td')
+                    .style('text-align', columns[i].align)
+                    .style("width", columns[i].dataWidth)
+                    .text(formatter.format(data[key]));
+                break;
+            }
+        }
+    }
+}
+function tabulateHorizontal(element, data, columns) {
+    let table = d3.select(d3Id(element)).append('div')
+        .attr('class', 'table okit-table');
+
+    let thead = table.append('div').attr('class', 'thead');
+    let tbody = table.append('div').attr('class', 'tbody');
+
+    // append the header row
+    thead.append('div')
+        .attr('class', 'tr')
+        .selectAll('div')
+        .data(columns).enter()
+        .append('div')
+        .attr('class', 'th')
+        .text(function (column) {
+            return titleCase(replaceAll(column.label, '_', ' '));
+        })
+        .style("text-align", function (column) {
+            return column.align;
+        })
+        .style("width", function (column) {
+            return column.width;
+        });
+
+    // create a row for each object in the data
+    let rows = tbody.selectAll('div')
+        .data(data)
+        .enter()
+        .append('div')
+        .attr('class', 'tr')
+
+    // create a cell in each row for each column
+    let cells = rows.selectAll('div')
+        .data(function (row) {
+            return columns.map(function (column) {
+                if (typeof row[column.label] == 'number') {
+                    let formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                    });
+                    return {
+                        column: column.label,
+                        value: formatter.format(row[column.label]),
+                        align: 'right'
+                    };
+                } else
+                    return {
+                        column: column.label,
+                        value: titleCase(replaceAll(row[column.label], '_', ' ')),
+                        align: 'left'
+                    };
+            });
+        })
+        .enter()
+        .append('div')
+        .attr('class', 'td')
+        .text(function (d) {
+            return d.value;
+        })
+        .style("white-space", "nowrap")
+        // .style("flex-wrap", "nowrap")
+        .style("text-align", function (d) {
+            return d.align;
+        });
+    return table;
+}
+function handleDownloadBoM(event) {
+    document.getElementById("hdnJson").value = JSON.stringify(okitJsonModel);
+    document.getElementById("hidden_form").submit();
 }

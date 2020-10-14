@@ -4,9 +4,13 @@
 ## Version 0.13.0 
 **Release Date**: 28th October 2020
 ### Features
+1. Read Load Balancer Shapes from OCI / Cached OCI Values
+2. Simple Command Line generator (visualiser/okit_generator) to convert OKIT.
+3. Add MySQL Resource / Artefact.
+4. Add Cost Estimation functionality for the designed model. This is based on the Oracle public APIs. 
 
 ### Bug Fixes
-
+1. Build script on Windows fail (Issue: #135)
 
 ## Version 0.12.0 
 **Release Date**: 7th October 2020
