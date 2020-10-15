@@ -1132,7 +1132,8 @@ class OkitArtefactView {
     get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
     // -- SVG Definition
-    get stroke_colours() {return {
+    get stroke_colours() {
+        return {
             red: "#F80000",
             bark: "#312D2A",
             gray: "#5f5f5f",
@@ -1145,99 +1146,8 @@ class OkitArtefactView {
         };
     }
     get collapsed_dimensions() {return this.icon_dimensions;}
-    get definition() {}
-    get dimensions() {return this.minimum_dimensions;}
-    get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
-    get minimum_height() {return this.icon_height;}
-    get minimum_width() {return this.icon_width;}
-    get parent_svg_id() {return this.parent_id + "-svg";}
-    // ---- Rectangle
-    get rect_x() {return 0;}
-    get rect_y() {return 0;}
-    get rect_rx() {return 0;}
-    get rect_ry() {return 0;}
-    get rect_height() {return this.icon_height;}
-    get rect_width() {return this.icon_width;}
-    get rect_height_adjust() {return 0;}
-    get rect_width_adjust() {return 0;}
-    get rect_fill() {return 'white';}
-    get rect_fill_style() {return 'fill-opacity: .25;';}
-    get rect_stroke_colour() {return this.stroke_colours.bark;}
-    get rect_stroke_width() {return 1;}
-    get rect_stroke_dash() {return 1;}
-    // ---- Svg
-    get svg_id() {this.artefact_id + '-svg';}
-    get svg_x() {
-        if (this.parent) {
-            const offset = this.parent.getChildOffset(this.getArtifactReference());
-            return offset.dx;
-        } else {
-            return 0;
-        }
-    }
-    get svg_y() {
-        if (this.parent) {
-            const offset = this.parent.getChildOffset(this.getArtifactReference());
-            return offset.dy;
-        } else {
-            return 0;
-        }
-    }
-    get svg_height() {return this.icon_height;}
-    get svg_width() {return this.icon_width;}
-    // ---- ViewBox
-    get viewbox_x() {return 0;}
-    get viewbox_y() {return 0;}
-    get viewbox_height() {return this.svg_height;}
-    get viewbox_width() {return this.svg_width;}
-    // ---- Icon
-    get icon_definition_id() {return this.getArtifactReference().replace(/ /g, '') + 'Svg';}
-    get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
-    get icon_height() {return 45;}
-    get icon_width() {return 45;}
-    get icon_x_tranlation() {return 0;}
-    get icon_y_tranlation() {return 0;}
-    // ---- Connectors
-    get top_bottom_connectors_preferred() {return true;}
-
-    getParent() {return this.parent;}
-
-    getParentId() {return this.parent_id;}
-
-    // TODO: Delete replaced by attached variable
-    isAttached() {return this.attached;}
-
-    getArtefact() {return this.artefact;}
-
-    getOkitJson() {return this.okit_json;}
-
-    newSVGDefinition() {
-        let definition = {};
-        definition['artefact'] = this.artefact;
-        definition['data_type'] = this.artefact ? this.artefact.getArtifactReference() : '';
-        definition['name'] = {show: false, text: this.display_name };
-        definition['label'] = {show: false, text: this.artefact ? this.artefact.getArtifactReference() : ''};
-        definition['info'] = {show: false, text: this.artefact ? this.artefact.getArtifactReference() : ''};
-        definition['svg'] = {x: 0, y: 0, width: this.icon_width, height: this.icon_height};
-        definition['rect'] = {x: 0, y: 0,
-            width: this.icon_width, height: this.icon_height,
-            width_adjust: 0, height_adjust: 0,
-            stroke: {colour: '#F80000', dash: 5},
-            fill: 'white', style: 'fill-opacity: .25;'};
-        definition['icon'] = {show: true, x_translation: 0, y_translation: 0};
-        definition['title_keys'] = [];
-
-        return definition
-    }
-
-    // TODO: Delete
-    getSvgDefinitionOld() {
-        alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.');
-        return;
-    }
-
-    getSvgDefinition() {
-        let definition = {
+    get definition() {
+        return {
             artefact: this.artefact,
             data_type: this.artefact ? this.artefact.getArtifactReference() : '',
             name: {
@@ -1278,8 +1188,103 @@ class OkitArtefactView {
             },
             title_keys: []
         };
+    }
+    get dimensions() {return this.minimum_dimensions;}
+    get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
+    get minimum_height() {return this.icon_height;}
+    get minimum_width() {return this.icon_width;}
+    get parent_svg_id() {return this.parent_id + "-svg";}
+    // ---- Rectangle
+    get rect_x() {return 0;}
+    get rect_y() {return 0;}
+    get rect_rx() {return 0;}
+    get rect_ry() {return 0;}
+    get rect_height() {return this.icon_height;}
+    get rect_width() {return this.icon_width;}
+    get rect_height_adjust() {return 0;}
+    get rect_width_adjust() {return 0;}
+    get rect_fill() {return 'white';}
+    get rect_fill_style() {return 'fill-opacity: .25;';}
+    get rect_stroke_colour() {return this.stroke_colours.bark;}
+    get rect_stroke_width() {return 1;}
+    get rect_stroke_dash() {return 1;}
+    // ---- Svg
+    get svg_id() {this.artefact_id + '-svg';}
+    get svg_x() {
+        if (this.parent) {
+            const offset = this.parent.getChildOffset(this.getArtifactReference());
+            return offset.dx;
+        } else {
+            return 0;
+        }
+    }
+    get svg_y() {
+        if (this.parent) {
+            const offset = this.parent.getChildOffset(this.getArtifactReference());
+            return offset.dy;
+        } else {
+            return 0;
+        }
+    }
+    get svg_height() {return this.collapsed ? this.collapsed_dimensions.height : this.dimensions.height;}
+    get svg_width() {return this.collapsed ? this.collapsed_dimensions.width : this.dimensions.width;}
+    // ---- ViewBox
+    get viewbox_x() {return 0;}
+    get viewbox_y() {return 0;}
+    get viewbox_height() {return this.svg_height;}
+    get viewbox_width() {return this.svg_width;}
+    // ---- Icon
+    get icon_definition_id() {return this.getArtifactReference().replace(/ /g, '') + 'Svg';}
+    get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    get icon_height() {return 45;}
+    get icon_width() {return 45;}
+    get icon_x_tranlation() {return 0;}
+    get icon_y_tranlation() {return 0;}
+    // ---- Padding
+    get padding_dx() {return 0;}
+    get padding_dy() {return 0;}
+    get padding() {return {dx: this.padding_dx, dy: this.padding_dy};}
+    // ---- Connectors
+    get top_bottom_connectors_preferred() {return true;}
 
-        return definition
+    getParent() {return this.parent;}
+
+    getParentId() {return this.parent_id;}
+
+    // TODO: Delete replaced by attached variable
+    isAttached() {return this.attached;}
+
+    getArtefact() {return this.artefact;}
+
+    getOkitJson() {return this.okit_json;}
+
+    newSVGDefinition() {
+        let definition = {};
+        definition['artefact'] = this.artefact;
+        definition['data_type'] = this.artefact ? this.artefact.getArtifactReference() : '';
+        definition['name'] = {show: false, text: this.display_name };
+        definition['label'] = {show: false, text: this.artefact ? this.artefact.getArtifactReference() : ''};
+        definition['info'] = {show: false, text: this.artefact ? this.artefact.getArtifactReference() : ''};
+        definition['svg'] = {x: 0, y: 0, width: this.icon_width, height: this.icon_height};
+        definition['rect'] = {x: 0, y: 0,
+            width: this.icon_width, height: this.icon_height,
+            width_adjust: 0, height_adjust: 0,
+            stroke: {colour: '#F80000', dash: 5},
+            fill: 'white', style: 'fill-opacity: .25;'};
+        definition['icon'] = {show: true, x_translation: 0, y_translation: 0};
+        definition['title_keys'] = [];
+
+        return this.definition
+    }
+
+    // TODO: Delete
+    getSvgDefinitionOld() {
+        alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.');
+        return;
+    }
+
+    getSvgDefinition() {
+        return this.definition;
     }
 
     draw() {
