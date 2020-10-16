@@ -1132,7 +1132,8 @@ class OkitArtefactView {
     get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
     // -- SVG Definition
-    get stroke_colours() {return {
+    get stroke_colours() {
+        return {
             red: "#F80000",
             bark: "#312D2A",
             gray: "#5f5f5f",
@@ -1145,7 +1146,50 @@ class OkitArtefactView {
         };
     }
     get collapsed_dimensions() {return this.icon_dimensions;}
-    get definition() {}
+    get definition() {
+        return {
+            artefact: this.artefact,
+            data_type: this.artefact ? this.artefact.getArtifactReference() : '',
+            name: {
+                show: false,
+                text: this.display_name
+            },
+            label: {
+                show: false,
+                text: this.artefact ? this.artefact.getArtifactReference() : ''
+            },
+            info: {
+                show: false,
+                text: this.artefact ? this.artefact.getArtifactReference() : ''
+            },
+            svg: {
+                x: this.svg_x,
+                y: this.svg_y,
+                width: this.svg_width,
+                height: this.svg_height
+            },
+            rect: {
+                x: this.rect_x,
+                y: this.rect_y,
+                width: this.rect_width,
+                height: this.rect_height,
+                width_adjust: this.rect_width_adjust,
+                height_adjust: this.rect_height_adjust,
+                stroke: {
+                    colour: this.rect_stroke_colour,
+                    dash: this.rect_stroke_dash,
+                    opacity: this.rect_stroke_opacity
+                },
+                fill: this.rect_fill,
+                style: this.rect_fill_style
+            }, icon: {
+                show: true,
+                x_translation: this.icon_x_tranlation,
+                y_translation: this.icon_y_tranlation
+            },
+            title_keys: []
+        };
+    }
     get dimensions() {return this.minimum_dimensions;}
     get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
     get minimum_height() {return this.icon_height;}
@@ -1156,15 +1200,17 @@ class OkitArtefactView {
     get rect_y() {return 0;}
     get rect_rx() {return 0;}
     get rect_ry() {return 0;}
-    get rect_height() {return this.icon_height;}
-    get rect_width() {return this.icon_width;}
+    get rect_height() {return this.svg_height;}
+    get rect_width() {return this.svg_width;}
     get rect_height_adjust() {return 0;}
     get rect_width_adjust() {return 0;}
     get rect_fill() {return 'white';}
     get rect_fill_style() {return 'fill-opacity: .25;';}
     get rect_stroke_colour() {return this.stroke_colours.bark;}
-    get rect_stroke_width() {return 1;}
-    get rect_stroke_dash() {return 1;}
+    get rect_stroke_width() {return 0;}
+    get rect_stroke_dash() {return 0;}
+    get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_dash}`;}
+    get rect_stroke_opacity() {return 0;}
     // ---- Svg
     get svg_id() {this.artefact_id + '-svg';}
     get svg_x() {
@@ -1183,13 +1229,14 @@ class OkitArtefactView {
             return 0;
         }
     }
-    get svg_height() {return this.icon_height;}
-    get svg_width() {return this.icon_width;}
+    get svg_height() {return this.collapsed ? this.collapsed_dimensions.height : this.dimensions.height;}
+    get svg_width() {return this.collapsed ? this.collapsed_dimensions.width : this.dimensions.width;}
     // ---- ViewBox
     get viewbox_x() {return 0;}
     get viewbox_y() {return 0;}
     get viewbox_height() {return this.svg_height;}
     get viewbox_width() {return this.svg_width;}
+    get viewbox() {return `${this.viewbox_x} ${this.viewbox_y} ${this.viewbox_width} ${this.viewbox_height}`;}
     // ---- Icon
     get icon_definition_id() {return this.getArtifactReference().replace(/ /g, '') + 'Svg';}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
@@ -1197,6 +1244,48 @@ class OkitArtefactView {
     get icon_width() {return 45;}
     get icon_x_tranlation() {return 0;}
     get icon_y_tranlation() {return 0;}
+    get icon_v_align() {return 'top';}
+    get icon_h_align() {return 'middle';}
+    get icon_transform() {
+        let dx = 0;
+        let dy = 0;
+        // Horizontal
+        if (this.icon_h_align === 'middle' || this.icon_h_align === 'center' || this.icon_h_align === 'centre') {
+            dx = this.svg_width/2 - this.icon_width/2;
+        } else if (this.icon_h_align === 'end' || this.icon_h_align === 'right') {
+            dx = this.svg_width - this.icon_width;
+        }
+        // Vertical
+        if (this.icon_v_align === 'middle' || this.icon_v_align === 'center' || this.icon_v_align === 'centre') {
+            dy = this.svg_height/2 - this.icon_height/2;
+        } else if (this.icon_v_align === 'end' || this.icon_v_align === 'bottom') {
+            dy = this.svg_height - this.icon_height;
+        }
+        return `translate(${dx}, ${dy})`;
+    }
+    // ---- Padding
+    get padding_dx() {return 0;}
+    get padding_dy() {return 0;}
+    get padding() {return {dx: this.padding_dx, dy: this.padding_dy};}
+    // ---- Text
+    get svg_name_text() {return {show: false, v_align: 'top', h_align: 'middle', text: this.display_name};}
+    get svg_type_text() {return {show: false, v_align: 'top', h_align: 'middle', text: this.getArtifactReference()};}
+    get svg_info_text() {return {show: false, v_align: 'top', h_align: 'middle', text: ''};}
+    // ----- Name
+    get name_show() {return okitSettings.show_name ? okitSettings.show_name : false;}
+    get name_v_align() {return 'top';}
+    get name_h_align() {return 'middle';}
+    get name_text() {return this.display_name;}
+    // ----- Type
+    get type_show() {return okitSettings.show_type ? okitSettings.show_type : false;}
+    get type_v_align() {return 'top';}
+    get type_h_align() {return 'middle';}
+    get type_text() {return this.getArtifactReference();}
+    // ----- Type
+    get info_show() {return okitSettings.show_info ? okitSettings.show_info : false;}
+    get info_v_align() {return 'bottom';}
+    get info_h_align() {return 'end';}
+    get info_text() {return '';}
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
 
@@ -1227,59 +1316,11 @@ class OkitArtefactView {
         definition['icon'] = {show: true, x_translation: 0, y_translation: 0};
         definition['title_keys'] = [];
 
-        return definition
-    }
-
-    // TODO: Delete
-    getSvgDefinitionOld() {
-        alert('Get Svg Definition function "getSvgDefinition()" has not been implemented.');
-        return;
+        return this.definition
     }
 
     getSvgDefinition() {
-        let definition = {
-            artefact: this.artefact,
-            data_type: this.artefact ? this.artefact.getArtifactReference() : '',
-            name: {
-                show: false,
-                text: this.display_name
-            },
-            label: {
-                show: false,
-                text: this.artefact ? this.artefact.getArtifactReference() : ''
-            },
-            info: {
-                show: false,
-                text: this.artefact ? this.artefact.getArtifactReference() : ''
-            },
-            svg: {
-                x: this.svg_x,
-                y: this.svg_y,
-                width: this.svg_width,
-                height: this.svg_height
-            },
-            rect: {
-                x: this.rect_x,
-                y: this.rect_y,
-                width: this.rect_width,
-                height: this.rect_height,
-                width_adjust: this.rect_width_adjust,
-                height_adjust: this.rect_height_adjust,
-                stroke: {
-                    colour: this.rect_stroke_colour,
-                    dash: this.rect_stroke_dash
-                },
-                fill: this.rect_fill,
-                style: this.rect_fill_style
-            }, icon: {
-                show: true,
-                x_translation: this.icon_x_tranlation,
-                y_translation: this.icon_y_tranlation
-            },
-            title_keys: []
-        };
-
-        return definition
+        return this.definition;
     }
 
     draw() {
@@ -1459,6 +1500,10 @@ class OkitArtefactView {
         console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         const svg = this.drawSvg();
         this.drawRect(svg);
+        this.drawText(svg, this.svg_name_text);
+        this.drawText(svg, this.svg_type_text);
+        this.drawText(svg, this.svg_info_text);
+        this.drawIcon(svg);
         // Add standard / common click event
         this.addClickEvent(svg);
         // Add Mouse Over / Exist Events
@@ -1469,14 +1514,17 @@ class OkitArtefactView {
     drawSvg() {
         const parent_svg = d3.select(d3Id(this.parent_svg_id));
         const svg = parent_svg.append("svg")
-            .attr("id", this.svg_id)
+            .attr("id",        this.svg_id)
             .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
             .attr("x",         this.svg_x)
             .attr("y",         this.svg_y)
             .attr("width",     this.svg_width)
             .attr("height",    this.svg_height)
-            .attr("viewBox", `${this.viewbox_x} ${this.viewbox_y} ${this.viewbox_width} ${this.viewbox_height}`)
+            .attr("viewBox",   this.viewbox)
             .attr("preserveAspectRatio", "xMinYMax meet");
+        svg.append("title")
+            .attr("id", `${this.artefact_id}-title`)
+            .text(this.display_name);
         return svg;
     }
 
@@ -1494,20 +1542,30 @@ class OkitArtefactView {
             rect_width -= rect_x * 2;
         }
         const rect = svg.append("rect")
-            .attr("id", this.artefact_id)
-            .attr("x",            rect_x)
-            .attr("y",            rect_y)
-            .attr("rx",           this.rect_rx)
-            .attr("ry",           this.rect_ry)
-            .attr("width",        rect_width)
-            .attr("height",       rect_height)
-            .attr("fill",         this.rect_fill)
-            .attr("style",        this.rect_fill_style)
-            .attr("stroke",       this.rect_stroke_colour)
-            .attr("stroke-width", this.rect_stroke_width)
-            .attr("stroke-dasharray", `${this.rect_stroke_dash}, ${this.rect_stroke_dash}`);
+            .attr("id",               this.artefact_id)
+            .attr("x",                rect_x)
+            .attr("y",                rect_y)
+            .attr("rx",               this.rect_rx)
+            .attr("ry",               this.rect_ry)
+            .attr("width",            rect_width)
+            .attr("height",           rect_height)
+            .attr("fill",             this.rect_fill)
+            .attr("style",            this.rect_fill_style)
+            .attr("stroke",           this.rect_stroke_colour)
+            .attr("stroke-width",     this.rect_stroke_width)
+            .attr("strok-opacity",    this.rect_stroke_opacity)
+            .attr("stroke-dasharray", this.rect_stroke_dasharray);
         return rect;
     }
+
+    drawIcon(svg) {
+        svg.append('g')
+            .append("use")
+            .attr("xlink:href",`#${this.icon_definition_id}`)
+            .attr("transform", this.icon_transform);
+    }
+
+    drawText(svg, text) {}
 
     addClickEvent(svg) {
         const self = this;
