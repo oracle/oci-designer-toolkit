@@ -36,9 +36,6 @@ RUN yum install -y \
         git \
         python36 \
         python3-pip \
-#        python36-pyyaml \
-#        python36-oci-sdk \
-#        rh-nginx114 \
  && rm -rf /var/cache/yum \
 # Upgrade pip
  && python3 -m pip install --upgrade pip==20.0.2 \
@@ -53,7 +50,7 @@ RUN yum install -y \
         xlsxwriter==1.3.6 \
 # Create Workspace
  && mkdir -p /github \
- && git clone -b toxophilist/sprint-11 https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
+ && git clone https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
  && mkdir -p /okit/{log,workspace} \
  && ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb \
  && ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser \
