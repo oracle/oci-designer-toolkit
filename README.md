@@ -34,19 +34,36 @@ OCI environments through a graphical web based interface.
 ## Installation
 Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
 
-### Quick Start
-The docker image is the recommended runtime server OKIT provides a simple Docker Compose script to build and start the container.
+### Runtime Quick Start
+Docker is the recommended runtime container for OKIT and the project contains a top-level Dockerfile to facilitate direct
+building, of the runtime environment, from the docker command line.
 
-#### Clone Repository
+#### Build Docker Container
 ```bash
-git clone --depth 1 https://github.com/oracle/oci-designer-toolkit.git
+docker build --tag okit --force-rm https://github.com/oracle/oci-designer-toolkit.git
 ```
 
-#### Create Config File
+#### Create / Generate Connection Information
+If you already have the OCI sdk/cli installed on you machine you can use the previously generated pem key and config file
+we will assume that this exists in <USER HOME DIR>/.oci 
 
-Create the OCI cli __config__ file in the directory __oci-designer-toolkit/containers/oci__ with contents similar to that below.
-The __*key_file*__ is a fixed value because the contents of the __oci-designer-toolkit/containers/oci__ will be copied to the
-appropriate users home directory, as __~/.oci__, during the build process.
+##### Key File
+
+If you do not have a previously generated private key you will need to create a private/public key pair for use with OKIT and OCI.
+These keys can be generated using the following commands as defined in [Required Keys and OCIDs](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm).
+
+```bash
+openssl genrsa -out <USER HOME DIR>/.oci/oci_api_key.pem 2048   
+openssl rsa -pubout -in <USER HOME DIR>/.oci/oci_api_key.pem -out <USER HOME DIR>/.oci/oci_api_key_public.pem                                  
+```
+
+Upload the generated __oci_api_key_public.pem__ to OCI through the [console](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm) and record the associated fingerprint following upload.
+
+##### Config File
+
+Create the OCI cli __config__ file in the directory __<USER HOME DIR>/.oci__ with contents similar to that below.
+The __*key_file*__ is a fixed value because the contents of the __<USER HOME DIR>/.oci__ will be mounted to the
+appropriate users home directory, as __~/.oci__, during the run process.
 
 ```properties
 [DEFAULT]
@@ -57,19 +74,11 @@ tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
 region=us-phoenix-1
 ```
 
-#### Copy Key File
-
-Copy your __oci_api_key.pem__ to the __oci-designer-toolkit/containers/oci__ directory.
-
-#### Build and Start
+#### Run Container
 
 ```bash
-cd oci-designer-toolkit/containers/docker
-docker-compose up --detach
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --name okit okit
 ```
-
-__*Note:*__ For full connection to OCI you will need to follow the [Installation Create Config File instruction](documentation/Installation.md#oci-config-file) 
-prior to building.
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
 
