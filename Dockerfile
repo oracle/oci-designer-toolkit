@@ -53,7 +53,7 @@ RUN yum install -y \
         xlsxwriter==1.3.6 \
 # Create Workspace
  && mkdir -p /github \
- && git clone -b sprint-11 https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
+ && git clone -b toxophilist/sprint-11 https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
  && mkdir -p /okit/{log,workspace} \
  && ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb \
  && ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser \
