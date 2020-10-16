@@ -45,7 +45,7 @@ docker build --tag okit --force-rm https://github.com/oracle/oci-designer-toolki
 
 #### Create / Generate Connection Information
 If you already have the OCI sdk/cli installed on you machine you can use the previously generated pem key and config file
-we will assume that this exists in <USER HOME DIR>/.oci 
+we will assume that this exists in &lt;USER HOME DIR&gt;/.oci 
 
 ##### Key File
 
@@ -61,8 +61,8 @@ Upload the generated __oci_api_key_public.pem__ to OCI through the [console](htt
 
 ##### Config File
 
-Create the OCI cli __config__ file in the directory __<USER HOME DIR>/.oci__ with contents similar to that below.
-The __*key_file*__ is a fixed value because the contents of the __<USER HOME DIR>/.oci__ will be mounted to the
+Create the OCI cli __config__ file in the directory __&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
+The __*key_file*__ is a fixed value because the contents of the __&lt;USER HOME DIR&gt;/.oci__ will be mounted to the
 appropriate users home directory, as __~/.oci__, during the run process.
 
 ```properties
