@@ -1,0 +1,18 @@
+---
+# file: docker-compose
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+version: '3.1'
+services:
+  okit:
+    build:
+      context: ../../../
+      dockerfile: ./containers/docker/8-slim/Dockerfile
+    image: okit-8-slim
+    container_name: okit-8-slim
+    ports:
+      - 443:443/tcp
+      - 80:80/tcp
+    volumes:
+      - "~/okit/user/templates:/okit/templates"
+...
