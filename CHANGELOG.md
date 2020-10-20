@@ -12,6 +12,7 @@
 
 ### Bug Fixes
 1. Build script on Windows fail (Issue: #135)
+2. Instances were picking up Network Security Groups assing to Autonomous Database during Terraform generation.
 
 ## Version 0.12.0 
 **Release Date**: 7th October 2020
