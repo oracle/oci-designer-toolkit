@@ -1612,36 +1612,6 @@ class OkitArtefactView {
         return rect;
     }
 
-    drawRect1(svg) {
-        let rect_x = this.rect_x;
-        let rect_y = this.rect_y;
-        let rect_width = this.rect_width + this.rect_width_adjust;
-        let rect_height = this.rect_height + this.rect_height_adjust;
-        if (this.icon_y_tranlation < 0) {
-            rect_y = Math.abs(this.icon_y_tranlation);
-            rect_height -= rect_y * 2;
-        }
-        if (this.icon_x_tranlation < 0) {
-            rect_x = Math.abs(this.icon_x_tranlation);
-            rect_width -= rect_x * 2;
-        }
-        const rect = svg.append("rect")
-            .attr("id",               this.artefact_id)
-            .attr("x",                rect_x)
-            .attr("y",                rect_y)
-            .attr("rx",               this.rect_rx)
-            .attr("ry",               this.rect_ry)
-            .attr("width",            rect_width)
-            .attr("height",           rect_height)
-            .attr("fill",             this.rect_fill)
-            .attr("style",            this.rect_fill_style)
-            .attr("stroke",           this.rect_stroke_colour)
-            .attr("stroke-width",     this.rect_stroke_width)
-            .attr("stroke-opacity",    this.rect_stroke_opacity)
-            .attr("stroke-dasharray", this.rect_stroke_dasharray);
-        return rect;
-    }
-
     drawIcon(svg) {
         svg.append('g')
             .append("use")
@@ -1651,6 +1621,7 @@ class OkitArtefactView {
 
     drawText(svg, svg_text) {
         if (svg_text.show) {
+            const rect = this.rect_definition;
             let text_anchor = 'start';
             let dx = 10;
             let dy = 10;
@@ -1661,17 +1632,21 @@ class OkitArtefactView {
             } else if (svg_text.h_align === 'end' || svg_text.h_align === 'right') {
                 dx = this.svg_width - 10;
                 text_anchor = 'end';
+                if (!this.collapsed) {dx -= rect.x;}
             } else {
                 dx = 10;
                 text_anchor = 'start';
+                if (!this.collapsed) {dx += rect.x;}
             }
             // Vertical Positioning
             if (svg_text.v_align === 'middle' || svg_text.v_align === 'centre' || svg_text.v_align === 'center') {
                 dy = Math.round(this.svg_height / 2);
             } else if (svg_text.v_align === 'end' || svg_text.v_align === 'bottom') {
                 dy = this.svg_height - 10;
+                if (!this.collapsed) {dy -= rect.y;}
             } else {
                 dy = 10;
+                if (!this.collapsed) {dy += rect.y + this.icon_height / 2;}
             }
             const text = svg.append("text")
                 .attr("class", "svg-text")
