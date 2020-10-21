@@ -1122,6 +1122,7 @@ class OkitArtefactView {
         }
     }
 
+    // -- Reference
     get json_view() {return this.getJsonView();}
     get okit_json() {return this.json_view.getOkitJson();}
     get id() {return this.artefact ? this.artefact.id : '';}
@@ -1132,6 +1133,7 @@ class OkitArtefactView {
     get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
     // -- SVG Definition
+    // --- Standard
     get stroke_colours() {
         return {
             red: "#F80000",
@@ -1145,7 +1147,7 @@ class OkitArtefactView {
             icon_colour_03: "#ff6600",
         };
     }
-    get collapsed_dimensions() {return this.icon_dimensions;}
+    get parent_svg_id() {return this.parent_id + "-svg";}
     get definition() {
         return {
             artefact: this.artefact,
@@ -1190,32 +1192,18 @@ class OkitArtefactView {
             title_keys: []
         };
     }
-    get dimensions() {return this.minimum_dimensions;}
-    get minimum_dimensions() {return {width: this.minimum_width, height: this.minimum_height};}
-    get minimum_height() {return this.icon_height;}
-    get minimum_width() {return this.icon_width;}
-    get parent_svg_id() {return this.parent_id + "-svg";}
-    // ---- Rectangle
-    get rect_x() {return 0;}
-    get rect_y() {return 0;}
-    get rect_rx() {return 0;}
-    get rect_ry() {return 0;}
-    get rect_height() {return this.svg_height;}
-    get rect_width() {return this.svg_width;}
-    get rect_height_adjust() {return 0;}
-    get rect_width_adjust() {return 0;}
-    get rect_fill() {return 'white';}
-    get rect_fill_style() {return 'fill-opacity: .25;';}
-    get rect_stroke_colour() {return this.stroke_colours.bark;}
-    get rect_stroke_width() {return 0;}
-    get rect_stroke_dash() {return 0;}
-    get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_dash}`;}
-    get rect_stroke_opacity() {return 0;}
+    // --- Dimensions
+    get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    get collapsed_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
+    get minimum_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    get dimensions() {return this.collapsed ? this.collapsed_dimensions : this.minimum_dimensions;}
     // ---- Svg
     get svg_id() {this.artefact_id + '-svg';}
     get svg_x() {
         if (this.parent) {
             const offset = this.parent.getChildOffset(this.getArtifactReference());
+            console.info(`>>>>>> svg_x Offset : ${offset}`);
+            console.info(offset);
             return offset.dx;
         } else {
             return 0;
@@ -1224,6 +1212,8 @@ class OkitArtefactView {
     get svg_y() {
         if (this.parent) {
             const offset = this.parent.getChildOffset(this.getArtifactReference());
+            console.info(`>>>>>> svg_y Offset : ${offset}`);
+            console.info(offset);
             return offset.dy;
         } else {
             return 0;
@@ -1237,9 +1227,24 @@ class OkitArtefactView {
     get viewbox_height() {return this.svg_height;}
     get viewbox_width() {return this.svg_width;}
     get viewbox() {return `${this.viewbox_x} ${this.viewbox_y} ${this.viewbox_width} ${this.viewbox_height}`;}
+    // ---- Rectangle
+    get rect_x() {return 0;}
+    get rect_y() {return 0;}
+    get rect_rx() {return 0;}
+    get rect_ry() {return 0;}
+    get rect_height() {return this.svg_height;}
+    get rect_width() {return this.svg_width;}
+    get rect_height_adjust() {return 0;}
+    get rect_width_adjust() {return 0;}
+    get rect_fill() {return 'white';}
+    get rect_fill_style() {return 'fill-opacity: .25;';}
+    get rect_stroke_colour() {return this.stroke_colours.bark;}
+    get rect_stroke_width() {return 1;}
+    get rect_stroke_dash() {return 1;}
+    get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_dash}`;}
+    get rect_stroke_opacity() {return 0;}
     // ---- Icon
     get icon_definition_id() {return this.getArtifactReference().replace(/ /g, '') + 'Svg';}
-    get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
     get icon_height() {return 45;}
     get icon_width() {return 45;}
     get icon_x_tranlation() {return 0;}
@@ -1268,24 +1273,40 @@ class OkitArtefactView {
     get padding_dy() {return 0;}
     get padding() {return {dx: this.padding_dx, dy: this.padding_dy};}
     // ---- Text
-    get svg_name_text() {return {show: false, v_align: 'top', h_align: 'middle', text: this.display_name};}
-    get svg_type_text() {return {show: false, v_align: 'top', h_align: 'middle', text: this.getArtifactReference()};}
-    get svg_info_text() {return {show: false, v_align: 'top', h_align: 'middle', text: ''};}
+    get svg_name_text() {return {show: this.show_name, v_align: this.name_v_align, h_align: this.name_h_align, text: this.name_text, suffix: 'display-name'};}
+    get svg_type_text() {return {show: this.show_type, v_align: this.type_v_align, h_align: this.type_h_align, text: this.type_text, suffix: 'type-name'};}
+    get svg_info_text() {return {show: this.show_info, v_align: this.info_v_align, h_align: this.info_h_align, text: this.info_text, suffix: 'info'};}
+    get svg_label_text() {return {show: this.show_label, v_align: this.label_v_align, h_align: this.label_h_align, text: this.label_text, suffix: 'label'};}
     // ----- Name
-    get name_show() {return okitSettings.show_name ? okitSettings.show_name : false;}
+    get show_name() {return false;}
     get name_v_align() {return 'top';}
-    get name_h_align() {return 'middle';}
+    get name_h_align() {return 'start';}
     get name_text() {return this.display_name;}
     // ----- Type
-    get type_show() {return okitSettings.show_type ? okitSettings.show_type : false;}
-    get type_v_align() {return 'top';}
-    get type_h_align() {return 'middle';}
+    get show_type() {return false;}
+    get type_v_align() {return 'bottom';}
+    get type_h_align() {return 'start';}
     get type_text() {return this.getArtifactReference();}
-    // ----- Type
-    get info_show() {return okitSettings.show_info ? okitSettings.show_info : false;}
+    // ----- Info
+    get show_info() {return false;}
     get info_v_align() {return 'bottom';}
     get info_h_align() {return 'end';}
     get info_text() {return '';}
+    // ----- Label
+    get show_label() {return okitSettings.show_label && okitSettings.show_label !== 'none';}
+    get label_v_align() {return 'bottom';}
+    get label_h_align() {return 'middle';}
+    get label_text() {
+        if (okitSettings.show_label) {
+            if (okitSettings.show_label === 'name') {
+                return this.name_text;
+            } else if (okitSettings.show_label === 'type') {
+                return this.type_text;
+            } else {
+                return '';
+            }
+        }
+    }
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
 
@@ -1503,7 +1524,9 @@ class OkitArtefactView {
         this.drawText(svg, this.svg_name_text);
         this.drawText(svg, this.svg_type_text);
         this.drawText(svg, this.svg_info_text);
+        this.drawText(svg, this.svg_label_text);
         this.drawIcon(svg);
+        this.drawTitle(svg);
         // Add standard / common click event
         this.addClickEvent(svg);
         // Add Mouse Over / Exist Events
@@ -1513,18 +1536,22 @@ class OkitArtefactView {
 
     drawSvg() {
         const parent_svg = d3.select(d3Id(this.parent_svg_id));
+        // Get attributes as local constant before create to stop NaN because append adds element before adding attributes.
+        const svg_x = this.svg_x;
+        const svg_y = this.svg_y;
+        const svg_width = this.svg_width;
+        const svg_height = this.svg_height;
+        const viewbox = this.viewbox;
+        const id = this.svg_id;
         const svg = parent_svg.append("svg")
-            .attr("id",        this.svg_id)
+            .attr("id",        id)
             .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
-            .attr("x",         this.svg_x)
-            .attr("y",         this.svg_y)
-            .attr("width",     this.svg_width)
-            .attr("height",    this.svg_height)
-            .attr("viewBox",   this.viewbox)
+            .attr("x",         svg_x)
+            .attr("y",         svg_y)
+            .attr("width",     svg_width)
+            .attr("height",    svg_height)
+            .attr("viewBox",   viewbox)
             .attr("preserveAspectRatio", "xMinYMax meet");
-        svg.append("title")
-            .attr("id", `${this.artefact_id}-title`)
-            .text(this.display_name);
         return svg;
     }
 
@@ -1553,7 +1580,7 @@ class OkitArtefactView {
             .attr("style",            this.rect_fill_style)
             .attr("stroke",           this.rect_stroke_colour)
             .attr("stroke-width",     this.rect_stroke_width)
-            .attr("strok-opacity",    this.rect_stroke_opacity)
+            .attr("stroke-opacity",    this.rect_stroke_opacity)
             .attr("stroke-dasharray", this.rect_stroke_dasharray);
         return rect;
     }
@@ -1565,7 +1592,46 @@ class OkitArtefactView {
             .attr("transform", this.icon_transform);
     }
 
-    drawText(svg, text) {}
+    drawText(svg, svg_text) {
+        if (svg_text.show) {
+            let text_anchor = 'start';
+            let dx = 0;
+            let dy = 0;
+            // Horizontal Positioning
+            if (svg_text.h_align === 'middle' || svg_text.h_align === 'centre' || svg_text.h_align === 'center') {
+                dx = Math.round(this.svg_width / 2);
+                text_anchor = 'middle';
+            } else if (svg_text.h_align === 'end' || svg_text.h_align === 'right') {
+                dx = 10;
+                text_anchor = 'start';
+            } else {
+                dx = this.svg_width - 10;
+                text_anchor = 'end';
+            }
+            // Vertical Positioning
+            if (svg_text.v_align === 'middle' || svg_text.v_align === 'centre' || svg_text.v_align === 'center') {
+                dy = Math.round(this.svg_height / 2);
+            } else if (svg_text.h_align === 'end' || svg_text.h_align === 'bottom') {
+                dy = 10;
+            } else {
+                dy = this.svg_height - 10;
+            }
+            const text = svg.append("text")
+                .attr("class", "svg-text")
+                .attr("id", `${this.artefact_id}-${svg_text.suffix}`)
+                .attr("x", dx)
+                .attr("y", dy)
+                .attr("text-anchor", text_anchor)
+                .attr("vector-effects", "non-scaling-size")
+                .text(svg_text.text);
+        }
+    }
+
+    drawTitle(svg) {
+        svg.append("title")
+            .attr("id", `${this.artefact_id}-title`)
+            .text(this.display_name);
+    }
 
     addClickEvent(svg) {
         const self = this;
@@ -2458,6 +2524,9 @@ class OkitContainerArtefactView extends OkitArtefactView {
         for (let child of this.getBottomArtifacts()) {
             $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
                 function() {
+                    console.info(child);
+                    console.info($(this));
+                    console.info($(this).attr('id'));
                     offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
                 });
         }
