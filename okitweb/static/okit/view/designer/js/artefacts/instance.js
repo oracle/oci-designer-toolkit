@@ -23,8 +23,7 @@ class InstanceView extends OkitDesignerArtefactView {
         }
     }
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
-    get minimum_width() {return 135;}
-    get minimum_height() {return 100;}
+    //get minimum_dimensions() {return {width: 135, height: 100};}
     get dimensions() {
         console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.minimum_dimensions;

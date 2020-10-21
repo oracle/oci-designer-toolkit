@@ -1132,7 +1132,7 @@ class OkitArtefactView {
     get parent_id() {return null;}
     get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
-    // -- SVG Definition
+    // -- SVG Definitions
     // --- Standard
     get stroke_colours() {
         return {
@@ -1195,8 +1195,38 @@ class OkitArtefactView {
     // --- Dimensions
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
     get collapsed_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
-    get minimum_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    get minimum_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
     get dimensions() {return this.collapsed ? this.collapsed_dimensions : this.minimum_dimensions;}
+    // --- Definitions
+    get rect_definition() {
+        let rect_x = this.rect_x;
+        let rect_y = this.rect_y;
+        let rect_width = this.rect_width + this.rect_width_adjust;
+        let rect_height = this.rect_height + this.rect_height_adjust;
+        if (this.icon_y_tranlation < 0) {
+            rect_y = Math.abs(this.icon_y_tranlation);
+            rect_height -= rect_y * 2;
+        }
+        if (this.icon_x_tranlation < 0) {
+            rect_x = Math.abs(this.icon_x_tranlation);
+            rect_width -= rect_x * 2;
+        }
+        return {
+            id: this.artefact_id,
+            x: rect_x,
+            y: rect_y,
+            rx: this.rect_rx,
+            ry: this.rect_ry,
+            width: rect_width,
+            height: rect_height,
+            fill: this.rect_fill,
+            style: this.rect_fill_style,
+            stroke_colour: this.rect_stroke_colour,
+            stroke_width: this.rect_stroke_width,
+            stroke_opacity: this.rect_stroke_opacity,
+            stroke_dasharray: this.rect_stroke_dasharray
+        };
+    }
     // ---- Svg
     get svg_id() {this.artefact_id + '-svg';}
     get svg_x() {
@@ -1241,7 +1271,8 @@ class OkitArtefactView {
     get rect_stroke_colour() {return this.stroke_colours.bark;}
     get rect_stroke_width() {return 1;}
     get rect_stroke_dash() {return 1;}
-    get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_dash}`;}
+    get rect_stroke_space() {return 1;}
+    get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_space}`;}
     get rect_stroke_opacity() {return 0;}
     // ---- Icon
     get icon_definition_id() {return this.getArtifactReference().replace(/ /g, '') + 'Svg';}
@@ -1517,7 +1548,7 @@ class OkitArtefactView {
         return svg;
     }
 
-    newDraw() {
+    newdraw() {
         console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         const svg = this.drawSvg();
         this.drawRect(svg);
@@ -1531,6 +1562,13 @@ class OkitArtefactView {
         this.addClickEvent(svg);
         // Add Mouse Over / Exist Events
         this.addMouseEvents(svg);
+        // Add Drag Handling Events
+        this.addDragEvents(svg);
+        // Add Context Menu (Right-Click)
+        //this.addContextMenu(svg);
+        // Add Custom Data Attributes
+        this.addCustomAttributes(svg)
+        // Return
         return svg;
     }
 
@@ -1556,6 +1594,25 @@ class OkitArtefactView {
     }
 
     drawRect(svg) {
+        const definition = this.rect_definition;
+        const rect = svg.append("rect")
+            .attr("id",               definition.id)
+            .attr("x",                definition.x)
+            .attr("y",                definition.y)
+            .attr("rx",               definition.rx)
+            .attr("ry",               definition.ry)
+            .attr("width",            definition.width)
+            .attr("height",           definition.height)
+            .attr("fill",             definition.fill)
+            .attr("style",            definition.style)
+            .attr("stroke",           definition.stroke_colour)
+            .attr("stroke-width",     definition.stroke_width)
+            .attr("stroke-opacity",   definition.stroke_opacity)
+            .attr("stroke-dasharray", definition.stroke_dasharray);
+        return rect;
+    }
+
+    drawRect1(svg) {
         let rect_x = this.rect_x;
         let rect_y = this.rect_y;
         let rect_width = this.rect_width + this.rect_width_adjust;
@@ -1595,26 +1652,26 @@ class OkitArtefactView {
     drawText(svg, svg_text) {
         if (svg_text.show) {
             let text_anchor = 'start';
-            let dx = 0;
-            let dy = 0;
+            let dx = 10;
+            let dy = 10;
             // Horizontal Positioning
             if (svg_text.h_align === 'middle' || svg_text.h_align === 'centre' || svg_text.h_align === 'center') {
                 dx = Math.round(this.svg_width / 2);
                 text_anchor = 'middle';
             } else if (svg_text.h_align === 'end' || svg_text.h_align === 'right') {
-                dx = 10;
-                text_anchor = 'start';
-            } else {
                 dx = this.svg_width - 10;
                 text_anchor = 'end';
+            } else {
+                dx = 10;
+                text_anchor = 'start';
             }
             // Vertical Positioning
             if (svg_text.v_align === 'middle' || svg_text.v_align === 'centre' || svg_text.v_align === 'center') {
                 dy = Math.round(this.svg_height / 2);
-            } else if (svg_text.h_align === 'end' || svg_text.h_align === 'bottom') {
-                dy = 10;
-            } else {
+            } else if (svg_text.v_align === 'end' || svg_text.v_align === 'bottom') {
                 dy = this.svg_height - 10;
+            } else {
+                dy = 10;
             }
             const text = svg.append("text")
                 .attr("class", "svg-text")
@@ -1642,6 +1699,30 @@ class OkitArtefactView {
             $(jqId(self.artefact_id)).hasClass('highlight') ? selectedArtefact = self.id : selectedArtefact = null;
             d3.event.stopPropagation();
         });
+    }
+
+    addDragEvents(svg) {
+        svg.on("dragenter",  dragEnter)
+            .on("dragover",  dragOver)
+            .on("dragleave", dragLeave)
+            .on("drop",      dragDrop)
+            .on("dragend",   dragEnd);
+    }
+
+    addContextMenu(svg) {
+        svg.on("contextmenu", handleContextMenu);
+    }
+
+    addCustomAttributes(svg) {
+        svg.attr("data-type",                  this.artefact ? this.artefact.getArtifactReference() : '')
+            .attr("data-okit-id",        this.artefact_id)
+            .attr("data-parent-id",      this.parent_id)
+            .attr("data-compartment-id", this.compartment_id)
+            .selectAll("*")
+                .attr("data-type",                 this.artefact ? this.artefact.getArtifactReference() : '')
+                .attr("data-okit-id",        this.artefact_id)
+                .attr("data-parent-id",      this.parent_id)
+                .attr("data-compartment-id", this.compartment_id);
     }
 
     addMouseEvents(svg) {}
@@ -2394,6 +2475,9 @@ class OkitContainerArtefactView extends OkitArtefactView {
         super(artefact, json_view);
     }
 
+    // -- SVG Definitions
+    // --- Dimensions
+    get minimum_dimensions() {return {width: 400, height: 300};}
     get dimensions() {
         console.log(`Getting Dimensions of ${this.getArtifactReference() } : ${this.display_name} (${this.artefact_id})`);
         let padding = this.getPadding();
@@ -2448,6 +2532,23 @@ class OkitContainerArtefactView extends OkitArtefactView {
         console.log();
         return dimensions;
     }
+    // ---- Icon
+    get icon_x_tranlation() {return this.collapsed ? super.icon_x_tranlation : -20;}
+    get icon_y_tranlation() {return this.collapsed ? super.icon_y_tranlation : -20;}
+    get icon_h_align() {return 'start';}
+    // ---- Rectangle
+    get rect_stroke_dash() {return this.collapsed ? super.rect_stroke_dash : 5;}
+    get rect_stroke_space() {return this.collapsed ? super.rect_stroke_space : 2;}
+    get rect_stroke_opacity() {return this.collapsed ? super.rect_stroke_opacity : 1;}
+    // ---- Text
+    // ----- Name
+    get show_name() {return this.collapsed ? super.show_name : true;}
+    // ----- Type
+    get show_type() {return this.collapsed ? super.show_type : true;}
+    // ----- Info
+    get show_info() {return this.collapsed ? super.show_info : true;}
+    // ----- Label
+    get show_label() {return this.collapsed ? super.show_label : false;}
 
     /*
     ** SVG Functions

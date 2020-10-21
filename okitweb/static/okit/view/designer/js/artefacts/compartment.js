@@ -16,8 +16,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
         console.info(`Compartment Id ${this.artefact.compartment_id}`);
         return (this.artefact.compartment_id !== null && this.artefact.compartment_id !== this.artefact.id) ? this.artefact.compartment_id : 'canvas';
     }
-    get minimum_width() {return 400;}
-    get minimum_height() {return 150;}
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     get minimum_dimensions() {
         if (this.isTopLevel()) {
             return {width: $(`#${this.json_view.parent_id}`).width(), height: $(`#${this.json_view.parent_id}`).height()};
@@ -26,16 +25,12 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
         }
     }
 
-    getParent() {
-        return this.getJsonView().getCompartment(this.parent_id);
-    }
-
     /*
     ** Test if Top Level compartment
      */
 
     isTopLevel() {
-        return this.getParent() ? false : true;
+        return this.parent ? false : true;
     }
 
     /*
