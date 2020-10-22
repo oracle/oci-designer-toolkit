@@ -35,8 +35,11 @@ OCI environments through a graphical web based interface.
 Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
 
 ### Runtime Quick Start
-Docker is the recommended runtime container for OKIT and the project contains a top-level Dockerfile to facilitate direct
+[Docker](https://www.docker.com/products/docker-desktop) is the recommended runtime container for OKIT. The project contains a top-level Dockerfile to facilitate direct
 building, of the runtime environment, from the docker command line.
+
+#### Prerequisites 
+Before building / running OKIT you will need to install [Docker / Docker Desktop](https://www.docker.com/products/docker-desktop).
 
 #### Build Docker Container
 ```bash
