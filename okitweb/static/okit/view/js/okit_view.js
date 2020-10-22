@@ -1195,7 +1195,8 @@ class OkitArtefactView {
     // --- Dimensions
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
     get collapsed_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
-    get minimum_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
+    // TODO: New Draw requires {width: this.icon_width * 1.5, height: this.icon_height * 1.5}
+    get minimum_dimensions() {return {width: this.icon_width, height: this.icon_height};}
     get dimensions() {return this.collapsed ? this.collapsed_dimensions : this.minimum_dimensions;}
     // --- Definitions
     get svg_definition() {
