@@ -1198,6 +1198,16 @@ class OkitArtefactView {
     get minimum_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
     get dimensions() {return this.collapsed ? this.collapsed_dimensions : this.minimum_dimensions;}
     // --- Definitions
+    get svg_definition() {
+        return {
+            id: this.svg_id,
+            x: this.svg_x,
+            y: this.svg_y,
+            width: this.svg_width,
+            height: this.svg_height,
+            viewbox: this.viewbox
+        }
+    }
     get rect_definition() {
         let rect_x = this.rect_x;
         let rect_y = this.rect_y;
@@ -1575,20 +1585,15 @@ class OkitArtefactView {
     drawSvg() {
         const parent_svg = d3.select(d3Id(this.parent_svg_id));
         // Get attributes as local constant before create to stop NaN because append adds element before adding attributes.
-        const svg_x = this.svg_x;
-        const svg_y = this.svg_y;
-        const svg_width = this.svg_width;
-        const svg_height = this.svg_height;
-        const viewbox = this.viewbox;
-        const id = this.svg_id;
+        const definition = this.svg_definition;
         const svg = parent_svg.append("svg")
-            .attr("id",        id)
+            .attr("id",        definition.id)
             .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
-            .attr("x",         svg_x)
-            .attr("y",         svg_y)
-            .attr("width",     svg_width)
-            .attr("height",    svg_height)
-            .attr("viewBox",   viewbox)
+            .attr("x",         definition.x)
+            .attr("y",         definition.y)
+            .attr("width",     definition.width)
+            .attr("height",    definition.height)
+            .attr("viewBox",   definition.viewbox)
             .attr("preserveAspectRatio", "xMinYMax meet");
         return svg;
     }
@@ -1613,10 +1618,11 @@ class OkitArtefactView {
     }
 
     drawIcon(svg) {
-        svg.append('g')
+        const icon = svg.append('g')
             .append("use")
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
+        return icon;
     }
 
     drawText(svg, svg_text) {
@@ -2528,6 +2534,16 @@ class OkitContainerArtefactView extends OkitArtefactView {
     /*
     ** SVG Functions
      */
+    drawIcon(svg) {
+        const icon = super.drawIcon(svg);
+        // Add Click Event to toggle collapsed
+        const self = this;
+        icon.on("click", function() {
+            self.collapsed = !self.collapsed;
+            self.getJsonView().draw();
+        });
+    }
+
     getPadding() {
         let padding = {
             dx: Math.round(positional_adjustments.spacing.x * 4),
