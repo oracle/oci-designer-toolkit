@@ -1566,8 +1566,8 @@ class OkitArtefactView {
         this.drawText(svg, this.svg_type_text);
         this.drawText(svg, this.svg_info_text);
         this.drawText(svg, this.svg_label_text);
-        this.drawIcon(svg);
         this.drawTitle(svg);
+        this.drawIcon(svg);
         // Add standard / common click event
         this.addClickEvent(svg);
         // Add Mouse Over / Exist Events
@@ -1619,6 +1619,7 @@ class OkitArtefactView {
 
     drawIcon(svg) {
         const icon = svg.append('g')
+            .attr("style", "pointer-events: bounding-box;")
             .append("use")
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
