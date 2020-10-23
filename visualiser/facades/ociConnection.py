@@ -77,16 +77,19 @@ class OCIConnection(object):
     def getTenancy(self):
         if self.tenancy_ocid is None or self.tenancy_ocid == '':
             if self.instance_principal:
+                logger.info('<<<<<<<<<<<<< Instance Principal >>>>>>>>>>>>>')
                 client = oci.identity.IdentityClient(config=self.config, signer=self.signer)
                 compartment_id = os.getenv('OKIT_VM_COMPARTMENT', '')
                 if compartment_id is not None and compartment_id != '':
                     while '.tenancy.' not in compartment_id:
-                        logger.info('Compartment Id : {!s0:s}'.format(compartment_id))
+                        logger.info('<<<<<<<<<<<<< Compartment Id : {!s0:s} >>>>>>>>>>>>>'.format(compartment_id))
                         compartment = self.toJson(client.get_compartment(compartment_id=compartment_id).data)
                         compartment_id = compartment['compartment_id']
                 self.tenancy_ocid = compartment_id
             else:
+                logger.info('<<<<<<<<<<<<< Config File >>>>>>>>>>>>>')
                 self.tenancy_ocid = self.config["tenancy"]
+        logger.info('<<<<<<<<<<<<< {!s0:s} >>>>>>>>>>>>>'.format(self.tenancy_ocid))
         return self.tenancy_ocid
 
     def toJson(self, data):
