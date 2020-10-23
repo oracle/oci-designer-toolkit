@@ -14,6 +14,7 @@ Group=root
 Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
 Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
 Environment="OCI_CLI_AUTH=instance_principal"
+Environment="OKIT_VM_COMPARTMENT={COMPARTMENT_OCID}"
 RuntimeDirectory=gunicorn
 WorkingDirectory=/okit/workspace
 ExecStart=/usr/local/bin/gunicorn --workers=4 --limit-request-line 0 --timeout 120 --bind=0.0.0.0:80 okitweb.wsgi:app
