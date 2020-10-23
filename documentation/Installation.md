@@ -196,3 +196,22 @@ vagrant destroy -f
 vagrant up
 vagrant reload
 ```
+
+
+
+
+
+
+
+
+
+
+## Install on OCI Instance
+```diff
+- THIS IS NOT RECOMMENDED BUT THESE NOTES ARE FOR THOSE WHO INSIST ON TRYING THIS.
+```
+
+### SSH Tunnel
+```bash
+ssh -v -N -L 8888:127.0.0.1:80 opc@<Instance IP> -i <Private Key File>
+```
