@@ -177,7 +177,6 @@ class OCIIdentityConnection(OCIConnection):
 
     def connect(self):
         self.client = oci.identity.IdentityClient(config=self.config, signer=self.signer)
-        #self.compartment_ocid = self.config["tenancy"]
         self.compartment_ocid = self.getTenancy()
         return
 
@@ -189,7 +188,6 @@ class OCILimitsConnection(OCIConnection):
 
     def connect(self):
         self.client = oci.limits.LimitsClient(config=self.config, signer=self.signer)
-        #self.compartment_ocid = self.config["tenancy"]
         self.compartment_ocid = self.getTenancy()
         return
 

@@ -34,6 +34,7 @@ runcmd:
   - sudo systemctl restart firewalld
   # Add additional environment information because append does not appear to work in write_file
   - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
+  - sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
   - sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g "compartmentID" --value-only`' >> /etc/bashrc"
   # Copy GUnicorn Service File
   #- sudo bash -c "cp -v /okit/containers/services/gunicorn.service /etc/systemd/system/gunicorn.service"

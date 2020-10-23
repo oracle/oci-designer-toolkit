@@ -36,8 +36,8 @@ class OCITenancies(OCICompartments):
         return self.tenancies_json
 
     def listCompartments(self, filter={}):
-        tenancy_json = self.get(self.config['tenancy'])
-        tenancy_json['compartments'] = super(OCITenancies, self).list(compartment_id=self.config['tenancy'], filter=filter, recursive=True)
+        tenancy_json = self.get(self.getTenancy())
+        tenancy_json['compartments'] = super(OCITenancies, self).list(compartment_id=self.getTenancy(), filter=filter, recursive=True)
         return tenancy_json
 
     def getTenancyForCompartment(self, compartment_id):

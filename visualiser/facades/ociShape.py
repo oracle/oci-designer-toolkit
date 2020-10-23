@@ -32,7 +32,7 @@ class OCIShapes(OCIComputeConnection):
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None and self.compartment_id is None:
-            compartment_id = self.config['tenancy']
+            compartment_id = self.getTenancy()
         elif compartment_id is None:
             compartment_id = self.compartment_id
 
