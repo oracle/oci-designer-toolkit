@@ -213,5 +213,5 @@ vagrant reload
 
 ### SSH Tunnel
 ```bash
-ssh -v -N -L 8888:127.0.0.1:80 opc@<Instance IP> -i <Private Key File>
+ssh -v -N -L 8080:127.0.0.1:80 opc@<Instance IP> -i <Private Key File>
 ```
