@@ -27,6 +27,7 @@ class OCIConnection(object):
     PAGINATION_LIMIT = 1000;
 
     def __init__(self, config=None, configfile=None, profile=None):
+        self.tenancy_ocid = ''
         self.config = config
         self.configfile = configfile
         self.client = None
@@ -58,6 +59,7 @@ class OCIConnection(object):
             # Get Signer from Instance Principal
             self.signer = oci.auth.signers.InstancePrincipalsSecurityTokenSigner()
             self.config = {}
+            self.instance_principal = True
         except Exception:
             logger.warn('Instance Principal is not available')
             self.signerFromConfig()
@@ -70,6 +72,22 @@ class OCIConnection(object):
             private_key_file_location=self.config.get("key_file"),
             pass_phrase=oci.config.get_config_value_or_default(self.config, "pass_phrase")
         )
+        self.instance_principal = False
+
+    def getTenancy(self):
+        if self.tenancy_ocid is None or self.tenancy_ocid == '':
+            if self.instance_principal:
+                client = oci.identity.IdentityClient(config=self.config, signer=self.signer)
+                compartment_id = os.getenv('OKIT_VM_COMPARTMENT', '')
+                if compartment_id is not None and compartment_id != '':
+                    while '.tenancy.' not in compartment_id:
+                        logger.info('Compartment Id : {!s0:s}'.format(compartment_id))
+                        compartment = self.toJson(client.get_compartment(compartment_id=compartment_id).data)
+                        compartment_id = compartment['compartment_id']
+                self.tenancy_ocid = compartment_id
+            else:
+                self.tenancy_ocid = self.config["tenancy"]
+        return self.tenancy_ocid
 
     def toJson(self, data):
         return json.loads(str(data))
@@ -156,7 +174,8 @@ class OCIIdentityConnection(OCIConnection):
 
     def connect(self):
         self.client = oci.identity.IdentityClient(config=self.config, signer=self.signer)
-        self.compartment_ocid = self.config["tenancy"]
+        #self.compartment_ocid = self.config["tenancy"]
+        self.compartment_ocid = self.getTenancy()
         return
 
 
@@ -167,7 +186,8 @@ class OCILimitsConnection(OCIConnection):
 
     def connect(self):
         self.client = oci.limits.LimitsClient(config=self.config, signer=self.signer)
-        self.compartment_ocid = self.config["tenancy"]
+        #self.compartment_ocid = self.config["tenancy"]
+        self.compartment_ocid = self.getTenancy()
         return
 
 

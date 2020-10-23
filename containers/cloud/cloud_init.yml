@@ -1,6 +1,8 @@
 #cloud-config
 packages:
   - git
+  - python-oci-cli
+  - oci-utils
 
 write_files:
   # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)
@@ -32,6 +34,7 @@ runcmd:
   - sudo systemctl restart firewalld
   # Add additional environment information because append does not appear to work in write_file
   - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
+  - sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g "compartmentID" --value-only`' >> /etc/bashrc"
   # Copy GUnicorn Service File
   - sudo bash -c "cp -v /okit/containers/services/gunicorn.service /etc/systemd/system/gunicorn.service"
   # Enable Gunicorn Service
