@@ -32,20 +32,6 @@ class OCIConnection(object):
         self.configfile = configfile
         self.client = None
         self.profile = profile
-        if self.profile is None or len(self.profile.strip()) == 0:
-            self.profile = 'DEFAULT'
-        logger.debug('>>>>>>>>>>>>>>>> Config         : {0!s:s}'.format(self.config))
-        logger.debug('>>>>>>>>>>>>>>>> Config File    : {0!s:s}'.format(self.configfile))
-        logger.debug('>>>>>>>>>>>>>>>> Profile        : {0!s:s}'.format(self.profile))
-        # Read Config
-        if self.configfile is None:
-            self.config = oci.config.from_file(profile_name=self.profile)
-        else:
-            self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
-        logger.debug('>>>>>>>>>>>>>>>> Profile Config : {0!s:s}'.format(self.config))
-        if config is not None:
-            self.config.update(config)
-        logger.debug('>>>>>>>>>>>>>>>> Merged Config  : {0!s:s}'.format(self.config))
         # Create Instance Security Signer
         if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
             self.signerFromInstancePrincipal()
@@ -65,6 +51,7 @@ class OCIConnection(object):
             self.signerFromConfig()
 
     def signerFromConfig(self):
+        self.loadConfig()
         self.signer = oci.Signer(
             tenancy=self.config["tenancy"],
             user=self.config["user"],
@@ -73,6 +60,27 @@ class OCIConnection(object):
             pass_phrase=oci.config.get_config_value_or_default(self.config, "pass_phrase")
         )
         self.instance_principal = False
+
+    def loadConfig(self):
+        # Copy pass config
+        if self.config is not None:
+            config = dict(self.config)
+        else:
+            config = {}
+        if self.profile is None or len(self.profile.strip()) == 0:
+            self.profile = 'DEFAULT'
+        logger.debug('>>>>>>>>>>>>>>>> Config         : {0!s:s}'.format(self.config))
+        logger.debug('>>>>>>>>>>>>>>>> Config File    : {0!s:s}'.format(self.configfile))
+        logger.debug('>>>>>>>>>>>>>>>> Profile        : {0!s:s}'.format(self.profile))
+        # Read Config
+        if self.configfile is None:
+            self.config = oci.config.from_file(profile_name=self.profile)
+        else:
+            self.config = oci.config.from_file(file_location=self.configfile, profile_name=self.profile)
+        logger.debug('>>>>>>>>>>>>>>>> Profile Config : {0!s:s}'.format(self.config))
+        if config is not None:
+            self.config.update(config)
+        logger.debug('>>>>>>>>>>>>>>>> Merged Config  : {0!s:s}'.format(self.config))
 
     def getTenancy(self):
         if self.tenancy_ocid is None or self.tenancy_ocid == '':

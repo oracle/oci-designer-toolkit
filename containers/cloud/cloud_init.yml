@@ -12,17 +12,6 @@ write_files:
       alias lh='ls -lash'
       alias lt='ls -last'
       alias env='/usr/bin/env | sort'
-  # Create empty config
-  - path: /root/.oci/config
-    permissions: '0644'
-    content: |
-      [DEFAULT]
-      instance_principal=true
-      user=
-      fingerprint=
-      key_file=
-      tenancy=
-      region=
 
 runcmd:
   # Install Required Python Modules
