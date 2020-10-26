@@ -228,7 +228,7 @@ sudo bash -c "yum install -y git python-oci-cli oci-utils"
 # Install Required Python Modules
 sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 pandas==1.1.2 pyyaml==5.2 requests==2.24.0 xlsxwriter==1.3.6"
 # Clone OKIT
-sudo bash -c "git clone -b toxophilist/sprint-11 --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
+sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
 sudo bash -c "mkdir /okit/{log,workspace}"
 # Add additional environment information because append does not appear to work in write_file
 sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
