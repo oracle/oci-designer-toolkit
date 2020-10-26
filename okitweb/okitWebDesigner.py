@@ -51,41 +51,48 @@ def standardiseJson(json_data={}, **kwargs):
     return json_data
 
 def readConfigFileSections(config_file='~/.oci/config'):
-    logger.debug('Config File {0!s:s}'.format(config_file))
-    abs_config_file = os.path.expanduser(config_file)
-    logger.debug('Config File {0!s:s}'.format(abs_config_file))
-    config = configparser.ConfigParser()
-    config.read(abs_config_file)
-    config_sections = []
-    if 'DEFAULT' in config:
-        config_sections = ['DEFAULT']
-    config_sections.extend(config.sections())
-    logger.info('Config Sections {0!s:s}'.format(config_sections))
+    if os.getenv('OCI_CLI_AUTH', 'config') != 'instance_principal':
+        logger.debug('Config File {0!s:s}'.format(config_file))
+        abs_config_file = os.path.expanduser(config_file)
+        logger.debug('Config File {0!s:s}'.format(abs_config_file))
+        config = configparser.ConfigParser()
+        config.read(abs_config_file)
+        config_sections = []
+        if 'DEFAULT' in config:
+            config_sections = ['DEFAULT']
+        config_sections.extend(config.sections())
+        logger.info('Config Sections {0!s:s}'.format(config_sections))
+    else:
+        config_sections = ['Instance Principal']
     return config_sections
 
 def getConfigFileValue(section, key, config_file='~/.oci/config'):
-    logger.debug('Config File {0!s:s}'.format(config_file))
-    abs_config_file = os.path.expanduser(config_file)
-    logger.debug('Config File {0!s:s}'.format(abs_config_file))
-    config = configparser.ConfigParser()
-    config.read(abs_config_file)
-    return config[section][key]
+    value = ''
+    if os.getenv('OCI_CLI_AUTH', 'config') != 'instance_principal':
+        logger.debug('Config File {0!s:s}'.format(config_file))
+        abs_config_file = os.path.expanduser(config_file)
+        logger.debug('Config File {0!s:s}'.format(abs_config_file))
+        config = configparser.ConfigParser()
+        config.read(abs_config_file)
+        value = config[section][key]
+    return value
 
 def validateConfigFile(config_file='~/.oci/config'):
-    logger.debug('Config File {0!s:s}'.format(config_file))
-    abs_config_file = os.path.expanduser(config_file)
-    logger.debug('Config File {0!s:s}'.format(abs_config_file))
-    config = configparser.ConfigParser()
-    config.read(abs_config_file)
     results = []
-    if len(config.sections()) == 0 and 'DEFAULT' not in config:
-        results.append('OCI Connect Config file is either missing or empty.')
-    else:
-        for section in config:
-            key_file = config[section]['key_file']
-            if not os.path.exists(os.path.expanduser(key_file)):
-                results.append('[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file))
-    logger.info(results)
+    if os.getenv('OCI_CLI_AUTH', 'config') != 'instance_principal':
+        logger.debug('Config File {0!s:s}'.format(config_file))
+        abs_config_file = os.path.expanduser(config_file)
+        logger.debug('Config File {0!s:s}'.format(abs_config_file))
+        config = configparser.ConfigParser()
+        config.read(abs_config_file)
+        if len(config.sections()) == 0 and 'DEFAULT' not in config:
+            results.append('OCI Connect Config file is either missing or empty.')
+        else:
+            for section in config:
+                key_file = config[section]['key_file']
+                if not os.path.exists(os.path.expanduser(key_file)):
+                    results.append('[{0!s:s}] Key File {1!s:s} does not exist.'.format(section, key_file))
+        logger.info(results)
     return results
 
 #

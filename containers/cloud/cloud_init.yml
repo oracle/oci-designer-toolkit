@@ -17,11 +17,12 @@ write_files:
     permissions: '0644'
     content: |
       [DEFAULT]
+      instance_principal=true
       user=
       fingerprint=
       key_file=
-      tenancy=ocid1.tenancy.oc1..aaaaaaaaa3qmjxr43tjexx75r6gwk6vjw22ermohbw2vbxyhczksgjir7xdq
-      region=us-phoenix-1
+      tenancy=
+      region=
 
 runcmd:
   # Install Required Python Modules
