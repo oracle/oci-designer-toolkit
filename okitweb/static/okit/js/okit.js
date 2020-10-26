@@ -219,6 +219,7 @@ class OkitSettings {
         this.last_used_compartment = '';
         this.hide_attached = true;
         this.highlight_association = true;
+        this.show_label = 'none';
         this.load();
     }
 
@@ -271,6 +272,7 @@ class OkitSettings {
                 me.is_variables = $(jqId('is_variables')).is(':checked');
                 me.hide_attached = $(jqId('hide_attached')).is(':checked');
                 me.profile = $(jqId('profile')).val();
+                me.show_label = $("input:radio[name='show_label']:checked").val();
                 me.save();
                 $(jqId('modal_dialog_wrapper')).addClass('hidden');
             });
@@ -430,6 +432,68 @@ class OkitSettings {
             td.append('label')
                 .attr('for', 'highlight_association')
                 .text('Highlight Associations');
+            // Display Label
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('label')
+                .text('Icon Label');
+            // -- Display Name
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'name_label')
+                .attr('name', 'show_label')
+                .attr('type', 'radio')
+                .attr('value', 'name')
+                .on('change', function () {
+                    if (autosave) {
+                        me.show_label = $("input:radio[name='show_label']:checked").val();
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'name_label')
+                .text('Resource Name');
+            // -- Resource Type
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'type_label')
+                .attr('name', 'show_label')
+                .attr('type', 'radio')
+                .attr('value', 'type')
+                .on('change', function () {
+                    if (autosave) {
+                        me.show_label = $("input:radio[name='show_label']:checked").val();
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'type_label')
+                .text('Resource Type');
+            // -- Resource Type
+            tr = tbody.append('div').attr('class', 'tr');
+            tr.append('div').attr('class', 'td').text('');
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('id', 'none_label')
+                .attr('name', 'show_label')
+                .attr('type', 'radio')
+                .attr('value', 'none')
+                .on('change', function () {
+                    if (autosave) {
+                        me.show_label = $("input:radio[name='show_label']:checked").val();
+                        me.save();
+                    }
+                });
+            td.append('label')
+                .attr('for', 'none_label')
+                .text('None');
+            // Set Show Label Value
+            $("input:radio[name='show_label'][value=" + me.show_label + "]").prop('checked', true);
             /*
             // Config Profile
             tr = tbody.append('div').attr('class', 'tr');

@@ -13,16 +13,8 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.compartment_id;}
-    get minimum_width() {return 400;}
-    get minimum_height() {return 300;}
-
-    getParent() {
-        return this.getJsonView().getCompartment(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
+    get minimum_dimensions() {return {width: 400, height: 300};}
 
     /*
      ** SVG Processing
