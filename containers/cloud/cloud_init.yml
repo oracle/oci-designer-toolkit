@@ -1,9 +1,4 @@
 #cloud-config
-packages:
-  - git
-  - python-oci-cli
-  - oci-utils
-
 write_files:
   # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)
   - path: /etc/.bashrc
@@ -14,6 +9,8 @@ write_files:
       alias env='/usr/bin/env | sort'
 
 runcmd:
+  # Install Required Packages because the packages section may not complete before the runcmd
+  - sudo bash -c "yum install -y git python-oci-cli oci-utils"
   # Install Required Python Modules
   - sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 pandas==1.1.2 pyyaml==5.2 requests==2.24.0 xlsxwriter==1.3.6"
   # Clone OKIT

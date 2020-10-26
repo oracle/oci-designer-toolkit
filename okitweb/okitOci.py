@@ -116,7 +116,7 @@ def ociResourceManger():
             oci_compartments = OCICompartments(config=config, profile=config_profile)
             # Generate Resource Manager Terraform zip
             generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json,
-                                                    tenancy_ocid=oci_compartments.config['tenancy'],
+                                                    tenancy_ocid=oci_compartments.getTenancy(),
                                                     region=region,
                                                     compartment_ocid=compartment_id)
             generator.generate()
