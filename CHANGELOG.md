@@ -8,11 +8,12 @@
 2. Simple Command Line generator (visualiser/okit_generator) to convert OKIT.
 3. Add MySQL Resource / Artefact.
 4. Add Cost Estimation functionality for the designed model. This is based on the Oracle public APIs.
-5. Add top level Dockerfile and update Runtime build documentation. 
+5. Add top-level Dockerfile and update Runtime build documentation. 
+6. Enable Instance Principal Authentication for Query/Resource Manager.
 
 ### Bug Fixes
 1. Build script on Windows fail (Issue: #135)
-2. Instances were picking up Network Security Groups assing to Autonomous Database during Terraform generation.
+2. Instances were picking up Network Security Groups assined to Autonomous Database during Terraform generation.
 
 ## Version 0.12.0 
 **Release Date**: 7th October 2020
