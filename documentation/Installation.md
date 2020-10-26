@@ -18,6 +18,9 @@ python modules are installed and in addition provide a simple flask server that 
         1. [Docker Compose](#docker-compose)
         2. [Docker](#docker)
         3. [Vagrant](#vagrant)
+4. [Install on OCI Instance](#install-on-oci-instance)
+    1. [Policies](#policies)
+    2. [SSH Tunnel](#ssh-tunnel)
 
 
 
@@ -211,8 +214,41 @@ vagrant reload
 - THIS IS NOT RECOMMENDED BUT THESE NOTES ARE FOR THOSE WHO INSIST ON TRYING THIS
 - THE FOLLOWING WILL SHOW HOW TO CONFIGURE OKIT WITH INSTANCE PRINCIPAL FUNCTIONALITY.
 ```
+To install OKIT and run it within an OCI instance you will need to configure [Instance Principal](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm)
+functionality within your Tenancy to allow the OKIT Instance to access OCI API and Query the Tenancy / Access Resource Manager.
+
+When creating the Instance it is recommended that it be placed within it's own Virtual Cloud Network and Subnet. The Subnet should 
+be secured with a Security List that __only__ allows TCP/22 port access to the Instance to allow the configuration of a [SSH Tunnel](#ssh-tunnel)
+to restrict access to the Instance to authorised users. Within the containers/cloud sub-directory there is an okit json file to created the
+vcn/subnet/instance and install OKIT.
+
+### Dynamic Group
+A Tenancy level Dynamic Group will need to be created to enable Instance Principal access for the instance.
+#### OKITInstanceGroup
+Create the OKITInstanceGroup Dynamic Group and add a single Rule relating to the OKIT Instance.
+![OKIT Dynamic Group](images/DynamicGroup.png?raw=true "OKIT Dynamic Group")
+
+### Policies
+Tenancy level policies will need to be created for the Dynamic Group and depending on the required level of access either
+the Query or Resource Manager level policies defined below should be specified.
+#### Query
+```text
+Allow dynamic-group OKITInstanceGroup to read all-resources in tenancy
+Allow dynamic-group OKITInstanceGroup to use instances in tenancy
+```
+#### Resource Manager
+```text
+Allow dynamic-group OKITInstanceGroup to manage orm-stacks in tenancy
+Allow dynamic-group OKITInstanceGroup to manage orm-jobs in tenancy
+Allow dynamic-group OKITInstanceGroup to manage all-resources in tenancy
+```
+#### OKITInstancePrincipal
+Create the OKITInstancePrincipal Policy and add either the Query or Resource Manager Policies.
+![OKIT Dynamic Group Policies](images/DynamicGroupPolicies.png?raw=true "OKIT Dynamic Group Policies")
 
 ### SSH Tunnel
 ```bash
-ssh -v -N -L 8080:127.0.0.1:80 opc@<Instance IP> -i <Private Key File>
+ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -N -L 8080:127.0.0.1:80 opc@<Instance IP> -i <Private Key File>
 ```
+
+Once the tunnel has been created the OKIT Designer BUI can be accessed on [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer).
