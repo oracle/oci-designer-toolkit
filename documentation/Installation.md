@@ -217,10 +217,30 @@ vagrant reload
 To install OKIT and run it within an OCI instance you will need to configure [Instance Principal](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm)
 functionality within your Tenancy to allow the OKIT Instance to access OCI API and Query the Tenancy / Access Resource Manager.
 
-When creating the Instance it is recommended that it be placed within it's own Virtual Cloud Network and Subnet. The Subnet should 
+When creating the Instance it is recommended the Instance is within its own Virtual Cloud Network / Subnet. The Subnet should 
 be secured with a Security List that __only__ allows TCP/22 port access to the Instance to allow the configuration of a [SSH Tunnel](#ssh-tunnel)
-to restrict access to the Instance to authorised users. Within the containers/cloud sub-directory there is an okit json file to created the
-vcn/subnet/instance and install OKIT.
+to restrict access to the Instance to authorised users. 
+
+Once the Instance has been created the following commands will install OKIT and create the service to run the WebServer.
+```bash
+# Install Required Packages because the packages section may not complete before the runcmd
+sudo bash -c "yum install -y git python-oci-cli oci-utils"
+# Install Required Python Modules
+sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 pandas==1.1.2 pyyaml==5.2 requests==2.24.0 xlsxwriter==1.3.6"
+# Clone OKIT
+sudo bash -c "git clone -b toxophilist/sprint-11 --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
+sudo bash -c "mkdir /okit/{log,workspace}"
+# Add additional environment information because append does not appear to work in write_file
+sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
+sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g "compartmentID" --value-only`' >> /etc/bashrc"
+# Copy GUnicorn Service File
+sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.service > /etc/systemd/system/gunicorn.service'
+# Enable Gunicorn Service
+sudo systemctl enable gunicorn.service
+sudo systemctl start gunicorn.service
+```
+
+The __okit-ws.json__ file in the containers/cloud sub-directory can be used to create vcn/subnet/instance.
 
 ### Dynamic Group
 A Tenancy level Dynamic Group will need to be created to enable Instance Principal access for the instance.
