@@ -49,6 +49,8 @@ class OkeClusterView extends OkitDesignerArtefactView {
                     .attr('for', safeId(subnet.id))
                     .text(subnet.display_name);
             }
+            // Load K8 versions
+            me.loadKubernetesVersions();
             // Load Properties
             loadPropertiesSheet(me.artefact);
             // Node Pools
@@ -224,7 +226,16 @@ class OkeClusterView extends OkitDesignerArtefactView {
         for (let image of okitOciData.getInstanceImages(os, version)) {
             image_select.append($('<option>').attr('value', image).text(image));
         }
-        $("#image" + pool_num).val($("#image" + pool_num + " option:first").val());
+        $("#image" + pool_num).val($("#image" + pool_num + " option:first").val()       );
+    }
+
+    loadKubernetesVersions() {
+        let kubernetes_version = $(jqId('kubernetes_version'));
+        $(kubernetes_version).empty();
+        for (let version of okitOciData.getKubernetesVersions()) {
+            kubernetes_version.append($('<option>').attr('value', version.version).text(version.name));
+        }
+        $("#kubernetes_version").val($("#kubernetes_version option:first").val());
     }
 
     addPlacementAD(ad, table, pool, pool_num) {
