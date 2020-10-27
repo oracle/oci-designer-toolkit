@@ -41,6 +41,7 @@ pip3 install --no-cache-dir \
       gunicorn==20.0.4 \
       oci==2.22.0 \
       pandas==1.1.2 \
+      python-magic==0.4.18 \
       pyyaml==5.2 \
       requests==2.24.0 \
       xlsxwriter==1.3.6

@@ -39,6 +39,7 @@ RUN microdnf install -y \
         flask==1.1.1 \
         gunicorn==20.0.4 \
         oci==2.6.0 \
+        python-magic==0.4.18 \
         pyyaml==5.2 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \

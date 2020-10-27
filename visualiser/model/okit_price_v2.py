@@ -504,7 +504,7 @@ def price_calculator(okitjson, all_resources):
             for pool in oke['pools']:
                 number_of_instance = int(pool['node_config_details']['size'])
                 shape = pool['node_shape']
-                boot_volume = int(pool['node_source_details']['boot_volume_size_in_gbs'])
+                boot_volume = int(pool['node_source_details'].get('boot_volume_size_in_gbs', 50))
                 OCPU, MEM, SSD, Compute_SKU = shapes.ComputeShape(shape)
                 ocpu_price = calculator.get_oci_price_ords(Compute_SKU)
                 # total number of ocpu based on number of instance
