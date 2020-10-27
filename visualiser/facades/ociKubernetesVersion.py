@@ -38,7 +38,6 @@ class OCIKubernetesVersions(OCIContainerConnection):
         for version in kubernetes_versions:
             self.kubernetes_versions_json.append({"name": version, "version": version})
         logJson(self.kubernetes_versions_json)
-        logger.info(str(self.kubernetes_versions_json))
 
         return self.kubernetes_versions_json
 
