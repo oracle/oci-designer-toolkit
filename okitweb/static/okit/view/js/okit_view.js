@@ -1349,6 +1349,8 @@ class OkitArtefactView {
             }
         }
     }
+    // ----- Tooltop (title)
+    get title() {return this.display_name;}
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
 
@@ -1670,7 +1672,7 @@ class OkitArtefactView {
     drawTitle(svg) {
         svg.append("title")
             .attr("id", `${this.artefact_id}-title`)
-            .text(this.display_name);
+            .text(this.title);
     }
 
     addClickEvent(svg) {
