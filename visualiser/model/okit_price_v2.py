@@ -21,7 +21,6 @@ from io import BytesIO
 from flask import Flask, send_file
 
 oci_url = "https://itra.oraclecloud.com/itas/.anon/myservices/api/v1/products"
-# ociprice_url = "https://guk9elytviiyjhz-devadw.adb.uk-london-1.oraclecloudapps.com/ords/ociprice/okit/ociprice/"
 # aws_url = "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/"
 
 
@@ -486,6 +485,84 @@ def price_calculator(okitjson, all_resources):
     else:
         results.update({'object_storage_buckets': (0, 0)})
 
+
+    #############################################
+    # Oracke Kubernetes Engine price calculator
+    #############################################
+    if okitjson['oke_clusters']:
+        PAYG_Compute_OCPU = 0
+        Monthly_Flex_Compute_OCPU = 0
+        Windows_os_ocpu = 0
+        Windows_PAYG = 0
+        Windows_Monthly_Flex = 0
+        boot_volume_gb = 0
+        total_boot_volume_gb = 0
+        # Block volume price for PAYG and Monthly Flex are same vpus_per_gb for boot volume is 10 be default
+        boot_volume_vpus_per_gb = 10
+
+        for oke in okitjson['oke_clusters']:
+            for pool in oke['pools']:
+                number_of_instance = int(pool['node_config_details']['size'])
+                shape = pool['node_shape']
+                boot_volume = int(pool['node_source_details']['boot_volume_size_in_gbs'])
+                OCPU, MEM, SSD, Compute_SKU = shapes.ComputeShape(shape)
+                ocpu_price = calculator.get_oci_price_ords(Compute_SKU)
+                # total number of ocpu based on number of instance
+                OCPU = OCPU * number_of_instance
+                PAYG, Monthly_Flex = calculator.OCPU_per_hr(ocpu_price, OCPU)
+                PAYG_Compute_OCPU += PAYG
+                Monthly_Flex_Compute_OCPU += Monthly_Flex
+
+                # total number of ocpu
+                bom.update_bom(df, Compute_SKU, OCPU, ocpu_per_month)
+
+                """
+                # check if OS is windows, However, Kubernetes engine will run only linux at this moment.
+                instance_os = str(pool['node_source_details']['os']).lower()
+
+
+                # All Linux at this moment
+                if instance_os == "windows":
+                    windows_price = calculator.get_oci_price_ords("B88318")
+                    Windows_PAYG, Windows_Monthly_Flex = calculator.OCPU_per_hr(windows_price, OCPU)
+                    Windows_os_ocpu += OCPU
+                    # number of ocpu for windows os
+                    bom.update_bom(df, 'B88318', Windows_os_ocpu, ocpu_per_month)
+                    # print(instance_os, windows_os_ocpu)
+                """
+                # block storage price
+                block_storage_price = calculator.get_oci_price_ords('B91961')
+                # get vpus price
+                vpus_ocpu_price = calculator.get_oci_price_ords('B91962')
+                # Accumulate the size of boot volumes, this will be all balanced performence
+                boot_volume_gb = float(boot_volume * number_of_instance)
+                total_boot_volume_gb += float(boot_volume * number_of_instance)
+
+                # parsing instance storage to bom format
+
+                # boot colume
+                bom.update_bom(df, 'B91961', boot_volume_gb, storage_per_month)
+                bom.update_bom(df, 'B91962', boot_volume_gb *
+                               boot_volume_vpus_per_gb, storage_per_month)
+
+
+        PAYG_Boot_volume_price, Monthly_Flex_Boot_volume_price = calculator.Block_volume_GB_per_month(
+            block_storage_price, total_boot_volume_gb, vpus_ocpu_price, boot_volume_vpus_per_gb)
+
+        PAYG_Compute_price = round(
+            PAYG_Compute_OCPU + PAYG_Boot_volume_price + Windows_PAYG, 2)
+        Monthly_Flex_Compute_price = round(
+            Monthly_Flex_Compute_OCPU + Monthly_Flex_Boot_volume_price + Windows_Monthly_Flex, 2)
+        print(PAYG_Compute_price, Monthly_Flex_Compute_price)
+
+
+        results.update({'oke_clusters': (PAYG_Compute_price, PAYG_Compute_price)})
+
+    else:
+        results.update({'oke_clusters': (0, 0)})
+
+
+
     # call result app
     OKIT_RESULTS = parse_results_app(results, df)
 
@@ -512,7 +589,7 @@ def parse_results_app(results, df):
             Monthly_Flex_Monthly += prices[1]
             # Price per resource will be saved into RESULTS as PAYG and Monthly FLEX
             RESULTS.append(row_data)
-        # print("Price per resource:{}".format(RESULTS))
+        print("Price per resource:{}".format(RESULTS))
 
         # Get total PAYG/Monthle FLEX per Monthly/ARR
         Total_PAYG_Monthly = round(PAYG_Monthly, 2)
@@ -539,4 +616,3 @@ def parse_results_app(results, df):
         print("\nError insering data into ARR - " + str(e) + "\n")
         raise SystemExit
     return OKIT_RESULTS, xls_data
-
