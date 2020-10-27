@@ -255,7 +255,7 @@ def price_calculator(okitjson, all_resources):
 
                 if dbaas_shape == "vm":
                     # RAC VM - DB license cose will be double/ 656GB storage will be added
-                    dbaas_storage = dbaas['data_storage_size_in_gb'] + 656
+                    dbaas_storage = int(dbaas['data_storage_size_in_gb']) + 656
 
         # DBaaS block storage price
         block_storage_price = calculator.get_oci_price_ords('B91961')

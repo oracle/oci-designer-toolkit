@@ -1211,6 +1211,32 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-16.04-Gen2-GPU-2020.10.17-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaakrpo525cbdlmxnb6fv4lzrvtuf5saiztg6ep457qff2uxuijpbva",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "16.04",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 16.04",
+      "time_created": "2020-10-17T06:10:47.756000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
       "display_name": "Canonical-Ubuntu-16.04-Gen2-GPU-2020.09.11-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaa2v6cjmd7amwh4c3qgid5eoblpv4yhapqzy7qdxq2wwwfzr4vztga",
@@ -1263,9 +1289,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-GPU-2020.07.20-0",
+      "display_name": "Canonical-Ubuntu-16.04-2020.10.14-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaazr4mr3udwptryhqqqv36ixzwqligkxea3olqxk5avr5ejaygupeq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaylgfzjbb5bl7ugranvp6jk3d2niqwjs5dqu3ftesmihaqlp3fduq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1281,7 +1307,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "Canonical Ubuntu 16.04",
-      "time_created": "2020-07-22T20:24:11.371000+00:00"
+      "time_created": "2020-10-17T01:10:16.621000+00:00"
     },
     {
       "agent_features": null,
@@ -1341,9 +1367,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-2020.07.16-0",
+      "display_name": "Canonical-Ubuntu-16.04-Minimal-2020.10.14-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaelml4jzpj6vgga2lpj2ujl6e3m6wfpzdpt3rzjdper5oeztfg3za",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaulhs5moiigqei3xtkuzpel7irbte2iao2d6avilnx2sig2xqjvla",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1355,11 +1381,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "16.04",
+      "operating_system_version": "16.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 16.04",
-      "time_created": "2020-07-23T19:45:10.435000+00:00"
+      "sort_key": "Canonical Ubuntu 16.04 Minimal",
+      "time_created": "2020-10-17T01:09:59.474000+00:00"
     },
     {
       "agent_features": null,
@@ -1419,9 +1445,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-Minimal-2020.07.07-0",
+      "display_name": "Canonical-Ubuntu-18.04-2020.10.16-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaefsjgrjlxkgmrpxcj2gmvroyjme7j7vjrywiudnadpzptp7aobxq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaqpfr4ttra3tngnyr7blmpwvzuqa753mjxjltx2a65evrtp5wj3eq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1433,11 +1459,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "16.04 Minimal",
+      "operating_system_version": "18.04",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 16.04 Minimal",
-      "time_created": "2020-07-22T20:24:16.173000+00:00"
+      "sort_key": "Canonical Ubuntu 18.04",
+      "time_created": "2020-10-17T02:21:19.931000+00:00"
     },
     {
       "agent_features": null,
@@ -1497,9 +1523,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-18.04-2020.07.17-0",
+      "display_name": "Canonical-Ubuntu-18.04-Minimal-2020.10.15-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaadjtptjgzvn6ws5yhhe5vsyxmtzz7jithtx64e5xoost2n2xhnwuq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaosuvccvo2rcps2gdcsc26yt4z2d5qhbjrfrs3wst444y75pow2fa",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1511,11 +1537,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "18.04",
+      "operating_system_version": "18.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 18.04",
-      "time_created": "2020-07-22T20:24:18.688000+00:00"
+      "sort_key": "Canonical Ubuntu 18.04 Minimal",
+      "time_created": "2020-10-17T02:44:05.737000+00:00"
     },
     {
       "agent_features": null,
@@ -1575,9 +1601,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-18.04-Minimal-2020.07.14-0",
+      "display_name": "Canonical-Ubuntu-20.04-2020.10.14-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaawi6cqak3bqs4zbdil2qlqkrymym7kkj4ofmjdwrehmya6m2bvc5a",
+      "id": "ocid1.image.oc1.phx.aaaaaaaah454432fg7zf5h2ufqxvfhzqokkaufgf5znua36p4puwnog7akcq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1589,11 +1615,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "18.04 Minimal",
+      "operating_system_version": "20.04",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 18.04 Minimal",
-      "time_created": "2020-07-22T20:24:15.820000+00:00"
+      "sort_key": "Canonical Ubuntu 20.04",
+      "time_created": "2020-10-17T03:32:47.380000+00:00"
     },
     {
       "agent_features": null,
@@ -1653,9 +1679,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-20.04-2020.07.16-0",
+      "display_name": "Canonical-Ubuntu-20.04-Minimal-2020.10.14-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaao3t2yjoowutaq2h66d5i4h424i2tyhycad7qeqpryjit4phv2t7q",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaky4luenz7yvuzz26zipiun6dzbkm7hkon7tppynpm2l6p32aen7a",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1667,11 +1693,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "20.04",
+      "operating_system_version": "20.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 20.04",
-      "time_created": "2020-07-22T20:24:03.079000+00:00"
+      "sort_key": "Canonical Ubuntu 20.04 Minimal",
+      "time_created": "2020-10-17T03:34:27.562000+00:00"
     },
     {
       "agent_features": null,
@@ -1724,32 +1750,6 @@
       "size_in_mbs": 47694,
       "sort_key": "Canonical Ubuntu 20.04 Minimal",
       "time_created": "2020-09-01T19:26:11.046000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-20.04-Minimal-2020.07.14-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaansrki6ckagvtvap7nrp4kuijo4tw64nrltqmiam4elpeycnt5s7q",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": true,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "20.04 Minimal",
-      "shapes": [],
-      "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 20.04 Minimal",
-      "time_created": "2020-07-22T20:24:30.596000+00:00"
     },
     {
       "agent_features": null,
@@ -3802,6 +3802,10 @@
         {
           "description": "8.0.21",
           "version": "8.0.21"
+        },
+        {
+          "description": "8.0.22",
+          "version": "8.0.22"
         }
       ]
     }
@@ -4015,7 +4019,7 @@
       "name": "data-flow"
     },
     {
-      "description": "Data Flow Interactive",
+      "description": "Data Flow SQL Cluster",
       "display_name": "data-flow-interactive",
       "name": "data-flow-interactive"
     },
@@ -4110,9 +4114,19 @@
       "name": "logging"
     },
     {
+      "description": "Logging Analytics",
+      "display_name": "logging-analytics",
+      "name": "logging-analytics"
+    },
+    {
       "description": "Management Agent",
       "display_name": "management-agent",
       "name": "management-agent"
+    },
+    {
+      "description": "Management Dashboard",
+      "display_name": "management-dashboard",
+      "name": "management-dashboard"
     },
     {
       "description": "MySQL",
