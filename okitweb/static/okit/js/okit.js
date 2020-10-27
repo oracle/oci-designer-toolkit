@@ -414,6 +414,7 @@ class OkitSettings {
             td.append('label')
                 .attr('for', 'hide_attached')
                 .text('Hide Attached Artefacts');
+            /*
             // Highlight Associations
             tr = tbody.append('div').attr('class', 'tr');
             tr.append('div').attr('class', 'td').text('');
@@ -494,6 +495,7 @@ class OkitSettings {
                 .text('None');
             // Set Show Label Value
             $("input:radio[name='show_label'][value=" + me.show_label + "]").prop('checked', true);
+            */
             /*
             // Config Profile
             tr = tbody.append('div').attr('class', 'tr');
