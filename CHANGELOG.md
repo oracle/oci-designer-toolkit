@@ -13,7 +13,8 @@
 
 ### Bug Fixes
 1. Build script on Windows fail (Issue: #135)
-2. Instances were picking up Network Security Groups assined to Autonomous Database during Terraform generation.
+2. Instances were picking up Network Security Groups assigned to Autonomous Database during Terraform generation.
+3. Decoding Instance Metadata cloud-init data fails to decode .(Issue: #55)
 
 ## Version 0.12.0 
 **Release Date**: 7th October 2020
