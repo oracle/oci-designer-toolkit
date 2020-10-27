@@ -171,13 +171,3 @@ def userDataDecode(data):
     logger.info('<<<<<<<<<<<user-data encoding {0!s:s}>>>>>>>>>>>'.format(encoding))
     return base64.b64decode(data).decode(encoding)
 
-def userDataDecodeLoop(data):
-    encodings = ['utf-8', 'utf-16', 'ascii', 'windows-1256']
-    for encoding in encodings:
-        try:
-            return base64.b64decode(data).decode(encoding)
-        except UnicodeDecodeError as e:
-            logger.warn(e)
-            pass
-    return ''
-
