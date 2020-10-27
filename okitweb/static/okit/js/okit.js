@@ -171,6 +171,10 @@ class OkitOCIData {
         return [...new Set(images)].sort((a, b) => b - a);
     }
 
+    getKubernetesVersions() {
+        return this.kubernetes_versions;
+    }
+
     getLoadBalaancerShapes() {
         return this.loadbalancer_shapes;
     }
