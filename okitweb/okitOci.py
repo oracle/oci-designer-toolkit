@@ -44,6 +44,7 @@ from facades.ociInstance import OCIInstances
 from facades.ociInstancePool import OCIInstancePools
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociIPSecConnection import OCIIPSecConnections
+from facades.ociKubernetesVersion import OCIKubernetesVersions
 from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociLoadBalancerShape import OCILoadBalancerShapes
 from facades.ociLocalPeeringGateway import OCILocalPeeringGateways
@@ -358,6 +359,9 @@ def dropdownQuery():
         # Instance Shapes
         oci_loadbalancer_shapes = OCILoadBalancerShapes()
         dropdown_json["loadbalancer_shapes"] = sorted(oci_loadbalancer_shapes.list(), key=lambda k: k['name'])
+        # Kubernetes Versions
+        k8_versions = OCIKubernetesVersions()
+        dropdown_json["kubernetes_versions"] = sorted(k8_versions.list(), key=lambda k: k['version'], reverse=True)
         return dropdown_json
     else:
         return 'Unknown Method', 500
