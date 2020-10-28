@@ -46,7 +46,7 @@ class OCICompartments(OCIIdentityConnection):
         if compartment_id is None:
             compartment_id = self.compartment_id
         # Recursive only valid if we are querying the root / tenancy
-        recursive = (recursive and (compartment_id == self.config['tenancy']))
+        recursive = (recursive and (compartment_id == self.getTenancy()))
 
         # Add filter to only return ACTIVE Compartments
         if filter is None:
@@ -78,7 +78,7 @@ class OCICompartments(OCIIdentityConnection):
         return self.compartments_json
 
     def listTenancy(self, filter={}):
-        return self.list(compartment_id=self.config['tenancy'], filter=filter, recursive=True)
+        return self.list(compartment_id=self.getTenancy(), filter=filter, recursive=True)
 
     def listHierarchicalNames(self, filter={}):
         compartments = self.listTenancy(filter=filter)

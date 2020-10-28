@@ -1,6 +1,21 @@
 # Release Notes
 
 
+## Version 0.13.0 
+**Release Date**: 28th October 2020
+### Features
+1. Read Load Balancer Shapes from OCI / Cached OCI Values
+2. Simple Command Line generator (visualiser/okit_generator) to convert OKIT.
+3. Add MySQL Resource / Artefact.
+4. Add Cost Estimation functionality for the designed model. This is based on the Oracle public APIs.
+5. Add top-level Dockerfile and update Runtime build documentation. 
+6. Enable Instance Principal Authentication for Query/Resource Manager.
+
+### Bug Fixes
+1. Build script on Windows fail (Issue: #135)
+2. Instances were picking up Network Security Groups assigned to Autonomous Database during Terraform generation.
+3. Decoding Instance Metadata cloud-init data fails to decode .(Issue: #55)
+
 ## Version 0.12.0 
 **Release Date**: 7th October 2020
 ### Features

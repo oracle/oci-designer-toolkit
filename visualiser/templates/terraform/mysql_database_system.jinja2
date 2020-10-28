@@ -1,0 +1,77 @@
+
+# ------ Create MySQL Database System
+resource "oci_mysql_mysql_db_system" "{{ resource_name }}" {
+    #Required
+    admin_password = {{ admin_password | safe }}
+    admin_username = {{ admin_username | safe }}
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
+    compartment_id      = {{ compartment_ocid }}
+    configuration_id = {{ configuration_id | safe }}
+    shape_name = {{ shape_name | safe }}
+    subnet_id = {{ subnet_id }}
+
+    #Optional
+{% if backup_policy is defined %}
+    backup_policy {
+        #Optional
+    {% if defined_tags is defined %}
+        defined_tags             = {{ defined_tags | safe }}
+    {% endif %}
+    {% if freeform_tags is defined %}
+        freeform_tags            = {{ freeform_tags | safe }}
+    {% endif %}
+        is_enabled = var.mysql_db_system_backup_policy_is_enabled
+        retention_in_days = var.mysql_db_system_backup_policy_retention_in_days
+        window_start_time = var.mysql_db_system_backup_policy_window_start_time
+    }
+{% endif %}
+{% if data_storage_size_in_gb is defined %}
+    data_storage_size_in_gb = {{ data_storage_size_in_gb | safe }}
+{% endif %}
+{% if description is defined %}
+    description = {{ description | safe }}
+{% endif %}
+{% if display_name is defined %}
+    display_name = {{ display_name | safe }}
+{% endif %}
+{% if fault_domain is defined %}
+    fault_domain = {{ fault_domain | safe }}
+{% endif %}
+{% if hostname_label is defined %}
+    hostname_label = {{ hostname_label | safe }}
+{% endif %}
+{% if ip_address is defined %}
+    ip_address = {{ ip_address | safe }}
+{% endif %}
+{% if maintenance is defined %}
+    maintenance {
+        #Required
+        window_start_time = var.mysql_db_system_maintenance_window_start_time
+    }
+{% endif %}
+{% if mysql_version is defined %}
+    mysql_version = {{ mysql_version | safe }}
+{% endif %}
+{% if port is defined %}
+    port = {{ port | safe }}
+{% endif %}
+{% if port_x is defined %}
+    port_x = {{ port_x | safe }}
+{% endif %}
+{% if source is defined %}
+    source {
+        #Required
+        source_type = var.mysql_db_system_source_source_type
+
+        #Optional
+        backup_id = oci_mysql_mysql_backup.test_backup.id
+    }
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags             = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags            = {{ freeform_tags | safe }}
+{% endif %}
+}
+

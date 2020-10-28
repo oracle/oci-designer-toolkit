@@ -44,8 +44,14 @@ from facades.ociInstance import OCIInstances
 from facades.ociInstancePool import OCIInstancePools
 from facades.ociInternetGateway import OCIInternetGateways
 from facades.ociIPSecConnection import OCIIPSecConnections
+from facades.ociKubernetesVersion import OCIKubernetesVersions
 from facades.ociLoadBalancer import OCILoadBalancers
+from facades.ociLoadBalancerShape import OCILoadBalancerShapes
 from facades.ociLocalPeeringGateway import OCILocalPeeringGateways
+from facades.ociMySQLConfiguration import OCIMySQLConfigurations
+from facades.ociMySQLDatabaseSystem import OCIMySQLDatabaseSystems
+from facades.ociMySQLShape import OCIMySQLShapes
+from facades.ociMySQLVersion import OCIMySQLVersions
 from facades.ociNATGateway import OCINATGateways
 from facades.ociNetworkSecurityGroup import OCINetworkSecurityGroups
 from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
@@ -111,7 +117,7 @@ def ociResourceManger():
             oci_compartments = OCICompartments(config=config, profile=config_profile)
             # Generate Resource Manager Terraform zip
             generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json,
-                                                    tenancy_ocid=oci_compartments.config['tenancy'],
+                                                    tenancy_ocid=oci_compartments.getTenancy(),
                                                     region=region,
                                                     compartment_ocid=compartment_id)
             generator.generate()
@@ -261,6 +267,10 @@ def ociArtifacts(artifact):
         logger.info('---- Processing LocalPeeringGateways')
         oci_local_peering_gateways = OCILocalPeeringGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
         response_json = oci_local_peering_gateways.list(filter=query_json.get('local_peering_gateway_filter', None))
+    elif artifact == 'MySQLDatabaseSystem':
+        logger.info('---- Processing MySQL Database Systems')
+        oci_mysql_database_systems = OCIMySQLDatabaseSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_mysql_database_systems.list(filter=query_json.get('mysql_database_system_filter', None))
     elif artifact == 'NATGateway':
         logger.info('---- Processing NAT Gateways')
         oci_nat_gateways = OCINATGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vcn_id=query_json['vcn_id'])
@@ -332,12 +342,26 @@ def dropdownQuery():
         db_versions = OCIDatabaseVersions()
         dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
         # CPE Device Shapes
-        # TODO: Upgrade OCI Python Module
-        #cpe_device_shapes = OCICpeDeviceShapes()
-        #dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
+        cpe_device_shapes = OCICpeDeviceShapes()
+        dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
         # Fast Connect Provider Services
         fast_connect_provider_services = OCIFastConnectProviderServices()
         dropdown_json["fast_connect_provider_services"] = sorted(fast_connect_provider_services.list(), key=lambda k: k['provider_name'])
+        # MySQL Shapes
+        mysql_shapes = OCIMySQLShapes()
+        dropdown_json["mysql_shapes"] = sorted(mysql_shapes.list(), key=lambda k: k['name'])
+        # Database Versions
+        mysql_versions = OCIMySQLVersions()
+        dropdown_json["mysql_versions"] = sorted(mysql_versions.list(), key=lambda k: k['version_family'])
+        # MySQL Configurations
+        mysql_configurations = OCIMySQLConfigurations()
+        dropdown_json["mysql_configurations"] = sorted(mysql_configurations.list(), key=lambda k: k['display_name'])
+        # Instance Shapes
+        oci_loadbalancer_shapes = OCILoadBalancerShapes()
+        dropdown_json["loadbalancer_shapes"] = sorted(oci_loadbalancer_shapes.list(), key=lambda k: k['name'])
+        # Kubernetes Versions
+        k8_versions = OCIKubernetesVersions()
+        dropdown_json["kubernetes_versions"] = sorted(k8_versions.list(), key=lambda k: k['version'], reverse=True)
         return dropdown_json
     else:
         return 'Unknown Method', 500

@@ -14,8 +14,8 @@ class LoadBalancerView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.subnet_ids[0];}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
-    get minimum_width() {return 135;}
-    get minimum_height() {return 100;}
+    // TODO: Remove for new draw
+    get minimum_dimensions() {return {width: 135, height: 100};}
 
     /*
      ** SVG Processing
@@ -83,6 +83,8 @@ class LoadBalancerView extends OkitDesignerArtefactView {
             }
             // Build Network Security Groups
             this.loadNetworkSecurityGroups('network_security_group_ids', this.subnet_ids[0]);
+            // Build Loadbalancer Shapes
+            this.loadLoadBalancerShapes('shape');
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });

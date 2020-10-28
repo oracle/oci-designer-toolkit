@@ -125,6 +125,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let instance of this.instances) {
             instance.draw();
         }
+        // Instance Pools
+        for (let instance_pool of this.instance_pools) {
+            instance_pool.draw();
+        }
         // Load Balancers
         for (let load_balancer of this.load_balancers) {
             load_balancer.draw();
@@ -132,6 +136,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Autonomous Databases
         for (let autonomous_database of this.autonomous_databases) {
             autonomous_database.draw();
+        }
+        // MySQL Database System
+        for (let mysql_database_system of this.mysql_database_systems) {
+            mysql_database_system.draw();
         }
 
         // Resize Main Canvas if required
@@ -343,6 +351,24 @@ class OkitDesignerArtefactView extends OkitArtefactView {
         super(artefact, json_view);
     }
 
+    loadCustomerPremiseEquipments(select_id) {
+        $(jqId(select_id)).empty();
+        const cpe_select = $(jqId(select_id));
+        cpe_select.append($('<option>').attr('value', '').text(''));
+        for (const cpe of this.getOkitJson().getCustomerPremiseEquipments()) {
+            cpe_select.append($('<option>').attr('value', cpe.id).text(cpe.display_name));
+        }
+    }
+
+    loadDynamicRoutingGateways(select_id) {
+        $(jqId(select_id)).empty();
+        const drg_select = $(jqId(select_id));
+        drg_select.append($('<option>').attr('value', '').text(''));
+        for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
+            drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+        }
+    }
+
     loadNetworkSecurityGroups(select_id, subnet_id) {
         $(jqId(select_id)).empty();
         let multi_select = d3.select(d3Id(select_id));
@@ -360,6 +386,14 @@ class OkitDesignerArtefactView extends OkitArtefactView {
                         .text(networkSecurityGroup.display_name);
                 }
             }
+        }
+    }
+
+    loadLoadBalancerShapes(select_id) {
+        $(jqId(select_id)).empty();
+        const lb_select = $(jqId(select_id));
+        for (let shape of okitOciData.getLoadBalaancerShapes()) {
+            lb_select.append($('<option>').attr('value', shape.name).text(shape.name));
         }
     }
 }

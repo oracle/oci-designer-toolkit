@@ -171,6 +171,30 @@ class OkitOCIData {
         return [...new Set(images)].sort((a, b) => b - a);
     }
 
+    getKubernetesVersions() {
+        return this.kubernetes_versions;
+    }
+
+    getLoadBalaancerShapes() {
+        return this.loadbalancer_shapes;
+    }
+
+    getMySQLConfigurations(shape_name='') {
+        if (shape_name === '') {
+            return this.mysql_configurations;
+        } else {
+            return this.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
+        }
+    }
+
+    getMySQLShapes() {
+        return this.mysql_shapes;
+    }
+
+    getMySQLVersions(family='') {
+        return this.mysql_versions[0].versions;
+    }
+
     getRegions() {
         return this.regions;
     }
@@ -193,12 +217,13 @@ class OkitSettings {
         this.is_always_free = false;
         this.is_optional_expanded = true;
         this.is_display_grid = false;
-        this.is_variables = true;
+        this.is_variables = false;
         this.icons_only = true;
         this.last_used_region = '';
         this.last_used_compartment = '';
         this.hide_attached = true;
         this.highlight_association = true;
+        this.show_label = 'none';
         this.load();
     }
 
@@ -251,6 +276,7 @@ class OkitSettings {
                 me.is_variables = $(jqId('is_variables')).is(':checked');
                 me.hide_attached = $(jqId('hide_attached')).is(':checked');
                 me.profile = $(jqId('profile')).val();
+                me.show_label = $("input:radio[name='show_label']:checked").val();
                 me.save();
                 $(jqId('modal_dialog_wrapper')).addClass('hidden');
             });
@@ -266,172 +292,289 @@ class OkitSettings {
                 .attr('id', 'preferences_table')
                 .attr('class', 'table okit-table okit-modal-dialog-table');
             let tbody = table.append('div').attr('class', 'tbody');
-            let tr = tbody.append('div').attr('class', 'tr');
             // Display Grid
-            tr.append('div').attr('class', 'td').text('');
-            let td = tr.append('div').attr('class', 'td');
-            td.append('input')
-                .attr('id', 'is_display_grid')
-                .attr('name', 'is_display_grid')
-                .attr('type', 'checkbox')
-                .property('checked', this.is_display_grid)
-                .on('change', function () {
-                    if (autosave) {
-                        me.is_display_grid = $('#is_display_grid').is(':checked');
-                        me.save();
-                    }
-                });
-            td.append('label')
-                .attr('for', 'is_display_grid')
-                .text('Display Grid');
-            // Default route Table
-            tr = tbody.append('div').attr('class', 'tr');
-            tr.append('div').attr('class', 'td').text('');
-            td = tr.append('div').attr('class', 'td');
-            td.append('input')
-                .attr('id', 'is_default_route_table')
-                .attr('name', 'is_default_route_table')
-                .attr('type', 'checkbox')
-                .property('checked', this.is_default_route_table)
-                .on('change', function () {
-                    if (autosave) {
-                        me.is_default_route_table = $('#is_default_route_table').is(':checked');
-                        me.save();
-                    }
-                });
-            td.append('label')
-                .attr('for', 'is_default_route_table')
-                .text('Default Route Table');
+            this.addDisplayGrid(tbody, autosave);
+            // Default Route Table
+            this.addDefaultRouteTable(tbody, autosave)
             // Default Security List
-            tr = tbody.append('div').attr('class', 'tr');
-            tr.append('div').attr('class', 'td').text('');
-            td = tr.append('div').attr('class', 'td');
-            td.append('input')
-                .attr('id', 'is_default_security_list')
-                .attr('name', 'is_default_security_list')
-                .attr('type', 'checkbox')
-                .property('checked', this.is_default_security_list)
-                .on('change', function () {
-                    if (autosave) {
-                        me.is_default_security_list = $('#is_default_security_list').is(':checked');
-                        me.save();
-                    }
-                });
-            td.append('label')
-                .attr('for', 'is_default_security_list')
-                .text('Default Security List');
+            this.addDefaultSecurityList(tbody, autosave);
             // Timestamp File
-            tr = tbody.append('div').attr('class', 'tr');
-            tr.append('div').attr('class', 'td').text('');
-            td = tr.append('div').attr('class', 'td');
-            td.append('input')
-                .attr('id', 'is_timestamp_files')
-                .attr('name', 'is_timestamp_files')
-                .attr('type', 'checkbox')
-                .property('checked', this.is_timestamp_files)
-                .on('change', function () {
-                    if (autosave) {
-                        me.is_timestamp_files = $('#is_timestamp_files').is(':checked');
-                        me.save();
-                    }
-                });
-            td.append('label')
-                .attr('for', 'is_timestamp_files')
-                .text('Timestamp File Names');
+            this.addTimestamp(tbody, autosave);
             // Auto Expand Optional
-            tr = tbody.append('div').attr('class', 'tr');
-            tr.append('div').attr('class', 'td').text('');
-            td = tr.append('div').attr('class', 'td');
-            td.append('input')
-                .attr('id', 'is_optional_expanded')
-                .attr('name', 'is_optional_expanded')
-                .attr('type', 'checkbox')
-                .property('checked', this.is_optional_expanded)
-                .on('change', function () {
-                    if (autosave) {
-                        me.is_optional_expanded = $('#is_optional_expanded').is(':checked');
-                        me.save();
-                    }
-                });
-            td.append('label')
-                .attr('for', 'is_optional_expanded')
-                .text('Auto Expanded Advanced');
+            this.addAutoExpandAdvanced(tbody, autosave);
             // Generate Variables File
-            tr = tbody.append('div').attr('class', 'tr');
-            tr.append('div').attr('class', 'td').text('');
-            td = tr.append('div').attr('class', 'td');
-            td.append('input')
-                .attr('id', 'is_variables')
-                .attr('name', 'is_variables')
-                .attr('type', 'checkbox')
-                .property('checked', this.is_variables)
-                .on('change', function () {
-                    if (autosave) {
-                        me.is_variables = $('#is_variables').is(':checked');
-                        me.save();
-                    }
-                });
-            td.append('label')
-                .attr('for', 'is_variables')
-                .text('Use Variables in Generate');
+            this.addUseVariables(tbody, autosave);
             // Hide Attached Artefacts
-            tr = tbody.append('div').attr('class', 'tr');
-            tr.append('div').attr('class', 'td').text('');
-            td = tr.append('div').attr('class', 'td');
-            td.append('input')
-                .attr('id', 'hide_attached')
-                .attr('name', 'hide_attached')
-                .attr('type', 'checkbox')
-                .property('checked', this.hide_attached)
-                .on('change', function () {
-                    if (autosave) {
-                        me.hide_attached = $('#hide_attached').is(':checked');
-                        me.save();
-                    }
-                });
-            td.append('label')
-                .attr('for', 'hide_attached')
-                .text('Hide Attached Artefacts');
+            this.addHideAttachedArtefacts(tbody, autosave);
             // Highlight Associations
-            tr = tbody.append('div').attr('class', 'tr');
-            tr.append('div').attr('class', 'td').text('');
-            td = tr.append('div').attr('class', 'td');
-            td.append('input')
-                .attr('id', 'highlight_association')
-                .attr('name', 'highlight_association')
-                .attr('type', 'checkbox')
-                .property('checked', this.highlight_association)
-                .on('change', function () {
-                    if (autosave) {
-                        me.highlight_association = $('#highlight_association').is(':checked');
-                        me.save();
-                    }
-                });
-            td.append('label')
-                .attr('for', 'highlight_association')
-                .text('Highlight Associations');
-            /*
+            this.addHighlightAssociations(tbody, autosave);
+            // Display Label
+            // TODO: Uncomment when label display code fully implemented
+            // this.addDisplayLabel(tbody, autosave);
             // Config Profile
-            tr = tbody.append('div').attr('class', 'tr');
-            tr.append('div').attr('class', 'td').text('Default Connection Profile');
-            let profile_select = tr.append('div')
-                .attr('class', 'td')
-                .append('select')
-                .attr('id', 'profile')
-                .on('change', function () {
-                    if (autosave) {
-                        me.profile = $(this).val();
-                        me.save();
-                    }
-                });
-            for (let section of okitOciConfig.sections) {
-                profile_select.append('option')
-                    .attr('value', section)
-                    .text(section);
-            }
-            $(jqId('profile')).val(this.profile);
-            */
+            //this.addConfigProfile(tbody, autosave);
         }
+    }
+
+    addDisplayGrid(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_display_grid')
+            .attr('name', 'is_display_grid')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_display_grid)
+            .on('change', function () {
+                if (autosave) {
+                    self.is_display_grid = $('#is_display_grid').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'is_display_grid')
+            .text('Display Grid');
+    }
+
+    addDefaultRouteTable(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_default_route_table')
+            .attr('name', 'is_default_route_table')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_default_route_table)
+            .on('change', function () {
+                if (autosave) {
+                    self.is_default_route_table = $('#is_default_route_table').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'is_default_route_table')
+            .text('Default Route Table');
+    }
+
+    addDefaultSecurityList(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_default_security_list')
+            .attr('name', 'is_default_security_list')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_default_security_list)
+            .on('change', function () {
+                if (autosave) {
+                    self.is_default_security_list = $('#is_default_security_list').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'is_default_security_list')
+            .text('Default Security List');
+    }
+
+    addTimestamp(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_timestamp_files')
+            .attr('name', 'is_timestamp_files')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_timestamp_files)
+            .on('change', function () {
+                if (autosave) {
+                    self.is_timestamp_files = $('#is_timestamp_files').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'is_timestamp_files')
+            .text('Timestamp File Names');
+    }
+
+    addUseVariables(tbody, autosave) {
+        // Generate Variables File
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_variables')
+            .attr('name', 'is_variables')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_variables)
+            .on('change', function () {
+                if (autosave) {
+                    self.is_variables = $('#is_variables').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'is_variables')
+            .text('Use Variables in Generate');
+    }
+
+    addAutoExpandAdvanced(tbody, autosave) {
+        // Auto Expand Optional
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_optional_expanded')
+            .attr('name', 'is_optional_expanded')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_optional_expanded)
+            .on('change', function () {
+                if (autosave) {
+                    self.is_optional_expanded = $('#is_optional_expanded').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'is_optional_expanded')
+            .text('Auto Expanded Advanced');
+    }
+
+    addHideAttachedArtefacts(tbody, autosave) {
+        // Hide Attached Artefacts
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'hide_attached')
+            .attr('name', 'hide_attached')
+            .attr('type', 'checkbox')
+            .property('checked', this.hide_attached)
+            .on('change', function () {
+                if (autosave) {
+                    self.hide_attached = $('#hide_attached').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'hide_attached')
+            .text('Hide Attached Artefacts');
+    }
+
+    addHighlightAssociations(tbody, autosave) {
+        // Highlight Associations
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'highlight_association')
+            .attr('name', 'highlight_association')
+            .attr('type', 'checkbox')
+            .property('checked', this.highlight_association)
+            .on('change', function () {
+                if (autosave) {
+                    self.highlight_association = $('#highlight_association').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'highlight_association')
+            .text('Highlight Associations');
+    }
+
+    addDisplayLabel(tbody, autosave) {
+        // Display Label
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('label')
+            .text('Icon Label');
+        // -- Display Name
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'name_label')
+            .attr('name', 'show_label')
+            .attr('type', 'radio')
+            .attr('value', 'name')
+            .on('change', function () {
+                if (autosave) {
+                    self.show_label = $("input:radio[name='show_label']:checked").val();
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'name_label')
+            .text('Resource Name');
+        // -- Resource Type
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'type_label')
+            .attr('name', 'show_label')
+            .attr('type', 'radio')
+            .attr('value', 'type')
+            .on('change', function () {
+                if (autosave) {
+                    self.show_label = $("input:radio[name='show_label']:checked").val();
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'type_label')
+            .text('Resource Type');
+        // -- Resource Type
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'none_label')
+            .attr('name', 'show_label')
+            .attr('type', 'radio')
+            .attr('value', 'none')
+            .on('change', function () {
+                if (autosave) {
+                    self.show_label = $("input:radio[name='show_label']:checked").val();
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'none_label')
+            .text('None');
+        // Set Show Label Value
+        $("input:radio[name='show_label'][value=" + this.show_label + "]").prop('checked', true);
+    }
+
+    addConfigProfile(tbody, autosave) {
+        // Config Profile
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('Default Connection Profile');
+        let profile_select = tr.append('div')
+            .attr('class', 'td')
+            .append('select')
+            .attr('id', 'profile')
+            .on('change', function () {
+                if (autosave) {
+                    self.profile = $(this).val();
+                    self.save();
+                }
+            });
+        for (let section of okitOciConfig.sections) {
+            profile_select.append('option')
+                .attr('value', section)
+                .text(section);
+        }
+        $(jqId('profile')).val(this.profile);
     }
 
 }

@@ -110,6 +110,7 @@
   "db_system_shapes": [
     {
       "available_core_count": 36,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 9,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -127,6 +128,7 @@
     },
     {
       "available_core_count": 52,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 16,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -144,6 +146,7 @@
     },
     {
       "available_core_count": 48,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -161,6 +164,7 @@
     },
     {
       "available_core_count": 336,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -178,6 +182,7 @@
     },
     {
       "available_core_count": 368,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -195,6 +200,7 @@
     },
     {
       "available_core_count": 400,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -212,6 +218,7 @@
     },
     {
       "available_core_count": 168,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -229,6 +236,7 @@
     },
     {
       "available_core_count": 184,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -246,6 +254,7 @@
     },
     {
       "available_core_count": 200,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -263,6 +272,7 @@
     },
     {
       "available_core_count": 84,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -280,6 +290,7 @@
     },
     {
       "available_core_count": 92,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -297,6 +308,7 @@
     },
     {
       "available_core_count": 100,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -314,6 +326,7 @@
     },
     {
       "available_core_count": null,
+      "available_core_count_per_node": 50,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": null,
@@ -331,6 +344,7 @@
     },
     {
       "available_core_count": 44,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 42,
       "available_db_node_storage_in_g_bs": 2200,
       "available_memory_in_gbs": 480,
@@ -348,6 +362,7 @@
     },
     {
       "available_core_count": 48,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 74,
       "available_db_node_storage_in_g_bs": 1800,
       "available_memory_in_gbs": 720,
@@ -365,6 +380,7 @@
     },
     {
       "available_core_count": 48,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 74,
       "available_db_node_storage_in_g_bs": 1800,
       "available_memory_in_gbs": 656,
@@ -382,6 +398,7 @@
     },
     {
       "available_core_count": 368,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 427,
       "available_db_node_storage_in_g_bs": 8800,
       "available_memory_in_gbs": 5760,
@@ -399,6 +416,7 @@
     },
     {
       "available_core_count": 400,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 598,
       "available_db_node_storage_in_g_bs": 7200,
       "available_memory_in_gbs": 5760,
@@ -416,6 +434,7 @@
     },
     {
       "available_core_count": 400,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 598,
       "available_db_node_storage_in_g_bs": 7200,
       "available_memory_in_gbs": 11120,
@@ -433,6 +452,7 @@
     },
     {
       "available_core_count": 184,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 213,
       "available_db_node_storage_in_g_bs": 4400,
       "available_memory_in_gbs": 2880,
@@ -450,6 +470,7 @@
     },
     {
       "available_core_count": 200,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 299,
       "available_db_node_storage_in_g_bs": 3600,
       "available_memory_in_gbs": 2880,
@@ -467,6 +488,7 @@
     },
     {
       "available_core_count": 200,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 299,
       "available_db_node_storage_in_g_bs": 3600,
       "available_memory_in_gbs": 5560,
@@ -484,6 +506,7 @@
     },
     {
       "available_core_count": 92,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 106,
       "available_db_node_storage_in_g_bs": 2200,
       "available_memory_in_gbs": 1440,
@@ -501,6 +524,7 @@
     },
     {
       "available_core_count": 100,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 149,
       "available_db_node_storage_in_g_bs": 1800,
       "available_memory_in_gbs": 1440,
@@ -518,6 +542,7 @@
     },
     {
       "available_core_count": 100,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": 149,
       "available_db_node_storage_in_g_bs": 1800,
       "available_memory_in_gbs": 2780,
@@ -535,6 +560,7 @@
     },
     {
       "available_core_count": 1,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 7,
@@ -552,6 +578,7 @@
     },
     {
       "available_core_count": 16,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 112,
@@ -569,6 +596,7 @@
     },
     {
       "available_core_count": 2,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 14,
@@ -586,6 +614,7 @@
     },
     {
       "available_core_count": 4,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 28,
@@ -603,6 +632,7 @@
     },
     {
       "available_core_count": 8,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 56,
@@ -620,6 +650,7 @@
     },
     {
       "available_core_count": 1,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 15,
@@ -637,6 +668,7 @@
     },
     {
       "available_core_count": 16,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 240,
@@ -654,6 +686,7 @@
     },
     {
       "available_core_count": 2,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 30,
@@ -671,6 +704,7 @@
     },
     {
       "available_core_count": 24,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 320,
@@ -688,6 +722,7 @@
     },
     {
       "available_core_count": 4,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 60,
@@ -705,6 +740,7 @@
     },
     {
       "available_core_count": 8,
+      "available_core_count_per_node": null,
       "available_data_storage_in_t_bs": null,
       "available_db_node_storage_in_g_bs": null,
       "available_memory_in_gbs": 120,
@@ -807,12 +843,12 @@
     {
       "bandwith_shape_management": "CUSTOMER_MANAGED",
       "customer_asn_management": "CUSTOMER_MANAGED",
-      "description": "https://www.centurylink.com/business/hybrid-it-cloud/cloud-connect.html",
-      "id": "ocid1.providerservice.oc1.phx.aaaaaaaa5dbfeyv4ndgbbd7j26a7yjzttgyxrh37jvrmmei6w7rikubd7lkq",
+      "description": "http://www.coresite.com\t",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaahriodfhfpjpunyzpt75dbdjw7vzwae5qo7w6wgkgdn7abweq5zdq",
       "private_peering_bgp_management": "CUSTOMER_MANAGED",
-      "provider_name": "CenturyLink",
+      "provider_name": "CoreSite",
       "provider_service_key_management": "PROVIDER_MANAGED",
-      "provider_service_name": "Cloud Connect",
+      "provider_service_name": "Open Cloud Exchange",
       "public_peering_bgp_management": "ORACLE_MANAGED",
       "required_total_cross_connects": 1,
       "supported_virtual_circuit_types": [
@@ -856,29 +892,6 @@
         {
           "bandwidth_in_mbps": 40000,
           "name": "40 Gbps"
-        }
-      ]
-    },
-    {
-      "bandwith_shape_management": "CUSTOMER_MANAGED",
-      "customer_asn_management": "CUSTOMER_MANAGED",
-      "description": "http://www.coresite.com\t",
-      "id": "ocid1.providerservice.oc1.phx.aaaaaaaahriodfhfpjpunyzpt75dbdjw7vzwae5qo7w6wgkgdn7abweq5zdq",
-      "private_peering_bgp_management": "CUSTOMER_MANAGED",
-      "provider_name": "CoreSite",
-      "provider_service_key_management": "PROVIDER_MANAGED",
-      "provider_service_name": "Open Cloud Exchange",
-      "public_peering_bgp_management": "ORACLE_MANAGED",
-      "required_total_cross_connects": 1,
-      "supported_virtual_circuit_types": [
-        "PRIVATE",
-        "PUBLIC"
-      ],
-      "type": "LAYER2",
-      "virtual_circuit_bandwidth_shape": [
-        {
-          "bandwidth_in_mbps": 1000,
-          "name": "1 Gbps"
         }
       ]
     },
@@ -960,6 +973,49 @@
         {
           "bandwidth_in_mbps": 2000,
           "name": "2 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 3000,
+          "name": "3 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 4000,
+          "name": "4 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 5000,
+          "name": "5 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
+        }
+      ]
+    },
+    {
+      "bandwith_shape_management": "CUSTOMER_MANAGED",
+      "customer_asn_management": "CUSTOMER_MANAGED",
+      "description": "https://www.centurylink.com/business/hybrid-it-cloud/cloud-connect.html",
+      "id": "ocid1.providerservice.oc1.phx.aaaaaaaa5dbfeyv4ndgbbd7j26a7yjzttgyxrh37jvrmmei6w7rikubd7lkq",
+      "private_peering_bgp_management": "CUSTOMER_MANAGED",
+      "provider_name": "Lumen",
+      "provider_service_key_management": "PROVIDER_MANAGED",
+      "provider_service_name": "Cloud Connect",
+      "public_peering_bgp_management": "ORACLE_MANAGED",
+      "required_total_cross_connects": 1,
+      "supported_virtual_circuit_types": [
+        "PRIVATE",
+        "PUBLIC"
+      ],
+      "type": "LAYER2",
+      "virtual_circuit_bandwidth_shape": [
+        {
+          "bandwidth_in_mbps": 1000,
+          "name": "1 Gbps"
+        },
+        {
+          "bandwidth_in_mbps": 10000,
+          "name": "10 Gbps"
         },
         {
           "bandwidth_in_mbps": 3000,
@@ -1155,6 +1211,32 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
+      "display_name": "Canonical-Ubuntu-16.04-Gen2-GPU-2020.10.17-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaakrpo525cbdlmxnb6fv4lzrvtuf5saiztg6ep457qff2uxuijpbva",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": true,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Canonical Ubuntu",
+      "operating_system_version": "16.04",
+      "shapes": [],
+      "size_in_mbs": 47694,
+      "sort_key": "Canonical Ubuntu 16.04",
+      "time_created": "2020-10-17T06:10:47.756000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
       "display_name": "Canonical-Ubuntu-16.04-Gen2-GPU-2020.09.11-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaa2v6cjmd7amwh4c3qgid5eoblpv4yhapqzy7qdxq2wwwfzr4vztga",
@@ -1207,9 +1289,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-GPU-2020.07.20-0",
+      "display_name": "Canonical-Ubuntu-16.04-2020.10.14-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaazr4mr3udwptryhqqqv36ixzwqligkxea3olqxk5avr5ejaygupeq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaylgfzjbb5bl7ugranvp6jk3d2niqwjs5dqu3ftesmihaqlp3fduq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1225,7 +1307,7 @@
       "shapes": [],
       "size_in_mbs": 47694,
       "sort_key": "Canonical Ubuntu 16.04",
-      "time_created": "2020-07-22T20:24:11.371000+00:00"
+      "time_created": "2020-10-17T01:10:16.621000+00:00"
     },
     {
       "agent_features": null,
@@ -1285,9 +1367,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-2020.07.16-0",
+      "display_name": "Canonical-Ubuntu-16.04-Minimal-2020.10.14-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaelml4jzpj6vgga2lpj2ujl6e3m6wfpzdpt3rzjdper5oeztfg3za",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaulhs5moiigqei3xtkuzpel7irbte2iao2d6avilnx2sig2xqjvla",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1299,11 +1381,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "16.04",
+      "operating_system_version": "16.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 16.04",
-      "time_created": "2020-07-23T19:45:10.435000+00:00"
+      "sort_key": "Canonical Ubuntu 16.04 Minimal",
+      "time_created": "2020-10-17T01:09:59.474000+00:00"
     },
     {
       "agent_features": null,
@@ -1363,9 +1445,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-16.04-Minimal-2020.07.07-0",
+      "display_name": "Canonical-Ubuntu-18.04-2020.10.16-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaaefsjgrjlxkgmrpxcj2gmvroyjme7j7vjrywiudnadpzptp7aobxq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaqpfr4ttra3tngnyr7blmpwvzuqa753mjxjltx2a65evrtp5wj3eq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1377,11 +1459,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "16.04 Minimal",
+      "operating_system_version": "18.04",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 16.04 Minimal",
-      "time_created": "2020-07-22T20:24:16.173000+00:00"
+      "sort_key": "Canonical Ubuntu 18.04",
+      "time_created": "2020-10-17T02:21:19.931000+00:00"
     },
     {
       "agent_features": null,
@@ -1441,9 +1523,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-18.04-2020.07.17-0",
+      "display_name": "Canonical-Ubuntu-18.04-Minimal-2020.10.15-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaadjtptjgzvn6ws5yhhe5vsyxmtzz7jithtx64e5xoost2n2xhnwuq",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaosuvccvo2rcps2gdcsc26yt4z2d5qhbjrfrs3wst444y75pow2fa",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1455,11 +1537,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "18.04",
+      "operating_system_version": "18.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 18.04",
-      "time_created": "2020-07-22T20:24:18.688000+00:00"
+      "sort_key": "Canonical Ubuntu 18.04 Minimal",
+      "time_created": "2020-10-17T02:44:05.737000+00:00"
     },
     {
       "agent_features": null,
@@ -1519,9 +1601,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-18.04-Minimal-2020.07.14-0",
+      "display_name": "Canonical-Ubuntu-20.04-2020.10.14-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaawi6cqak3bqs4zbdil2qlqkrymym7kkj4ofmjdwrehmya6m2bvc5a",
+      "id": "ocid1.image.oc1.phx.aaaaaaaah454432fg7zf5h2ufqxvfhzqokkaufgf5znua36p4puwnog7akcq",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1533,11 +1615,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "18.04 Minimal",
+      "operating_system_version": "20.04",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 18.04 Minimal",
-      "time_created": "2020-07-22T20:24:15.820000+00:00"
+      "sort_key": "Canonical Ubuntu 20.04",
+      "time_created": "2020-10-17T03:32:47.380000+00:00"
     },
     {
       "agent_features": null,
@@ -1597,9 +1679,9 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-20.04-2020.07.16-0",
+      "display_name": "Canonical-Ubuntu-20.04-Minimal-2020.10.14-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaao3t2yjoowutaq2h66d5i4h424i2tyhycad7qeqpryjit4phv2t7q",
+      "id": "ocid1.image.oc1.phx.aaaaaaaaky4luenz7yvuzz26zipiun6dzbkm7hkon7tppynpm2l6p32aen7a",
       "launch_mode": "NATIVE",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
@@ -1611,11 +1693,11 @@
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "20.04",
+      "operating_system_version": "20.04 Minimal",
       "shapes": [],
       "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 20.04",
-      "time_created": "2020-07-22T20:24:03.079000+00:00"
+      "sort_key": "Canonical Ubuntu 20.04 Minimal",
+      "time_created": "2020-10-17T03:34:27.562000+00:00"
     },
     {
       "agent_features": null,
@@ -1668,32 +1750,6 @@
       "size_in_mbs": 47694,
       "sort_key": "Canonical Ubuntu 20.04 Minimal",
       "time_created": "2020-09-01T19:26:11.046000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Canonical-Ubuntu-20.04-Minimal-2020.07.14-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaansrki6ckagvtvap7nrp4kuijo4tw64nrltqmiam4elpeycnt5s7q",
-      "launch_mode": "NATIVE",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": true,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "PARAVIRTUALIZED",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Canonical Ubuntu",
-      "operating_system_version": "20.04 Minimal",
-      "shapes": [],
-      "size_in_mbs": 47694,
-      "sort_key": "Canonical Ubuntu 20.04 Minimal",
-      "time_created": "2020-07-22T20:24:30.596000+00:00"
     },
     {
       "agent_features": null,
@@ -3646,6 +3702,132 @@
       "time_created": "2020-05-26T21:50:51.365000+00:00"
     }
   ],
+  "kubernetes_versions": [
+    {
+      "name": "v1.17.9",
+      "version": "v1.17.9"
+    },
+    {
+      "name": "v1.16.8",
+      "version": "v1.16.8"
+    },
+    {
+      "name": "v1.15.7",
+      "version": "v1.15.7"
+    },
+    {
+      "name": "v1.14.8",
+      "version": "v1.14.8"
+    }
+  ],
+  "loadbalancer_shapes": [
+    {
+      "name": "100Mbps"
+    },
+    {
+      "name": "10Mbps"
+    },
+    {
+      "name": "10Mbps-Micro"
+    },
+    {
+      "name": "400Mbps"
+    },
+    {
+      "name": "8000Mbps"
+    }
+  ],
+  "mysql_configurations": [
+    {
+      "compartment_id": null,
+      "defined_tags": null,
+      "description": "Default configuration for the VM.Standard.E2.1 MySQL Shape",
+      "display_name": "VM.Standard.E2.1.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaah6o6qu3gdbxnqg6aw56amnosmnaycusttaa7abyq2tdgpgubvsgi",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "VM.Standard.E2.1",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    },
+    {
+      "compartment_id": null,
+      "defined_tags": null,
+      "description": "Default configuration for the VM.Standard.E2.2 MySQL Shape",
+      "display_name": "VM.Standard.E2.2.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaah6o6qu3gdbxnqg6aw56amnosmnaycusttaa7abyq2tdgpgubvsgj",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "VM.Standard.E2.2",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    },
+    {
+      "compartment_id": null,
+      "defined_tags": null,
+      "description": "Default configuration for the VM.Standard.E2.4 MySQL Shape",
+      "display_name": "VM.Standard.E2.4.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaah6o6qu3gdbxnqg6aw56amnosmnaycusttaa7abyq2tdgpgubvsgk",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "VM.Standard.E2.4",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    },
+    {
+      "compartment_id": null,
+      "defined_tags": null,
+      "description": "Default configuration for the VM.Standard.E2.8 MySQL Shape",
+      "display_name": "VM.Standard.E2.8.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaah6o6qu3gdbxnqg6aw56amnosmnaycusttaa7abyq2tdgpgubvsgl",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "VM.Standard.E2.8",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    }
+  ],
+  "mysql_shapes": [
+    {
+      "cpu_core_count": 1,
+      "memory_size_in_gbs": 8,
+      "name": "VM.Standard.E2.1"
+    },
+    {
+      "cpu_core_count": 2,
+      "memory_size_in_gbs": 16,
+      "name": "VM.Standard.E2.2"
+    },
+    {
+      "cpu_core_count": 4,
+      "memory_size_in_gbs": 32,
+      "name": "VM.Standard.E2.4"
+    },
+    {
+      "cpu_core_count": 8,
+      "memory_size_in_gbs": 64,
+      "name": "VM.Standard.E2.8"
+    }
+  ],
+  "mysql_versions": [
+    {
+      "version_family": "8.0",
+      "versions": [
+        {
+          "description": "8.0.21",
+          "version": "8.0.21"
+        },
+        {
+          "description": "8.0.22",
+          "version": "8.0.22"
+        }
+      ]
+    }
+  ],
   "regions": [
     {
       "display_name": "AP Chuncheon",
@@ -3855,7 +4037,7 @@
       "name": "data-flow"
     },
     {
-      "description": "Data Flow Interactive",
+      "description": "Data Flow SQL Cluster",
       "display_name": "data-flow-interactive",
       "name": "data-flow-interactive"
     },
@@ -3950,9 +4132,19 @@
       "name": "logging"
     },
     {
+      "description": "Logging Analytics",
+      "display_name": "logging-analytics",
+      "name": "logging-analytics"
+    },
+    {
       "description": "Management Agent",
       "display_name": "management-agent",
       "name": "management-agent"
+    },
+    {
+      "description": "Management Dashboard",
+      "display_name": "management-dashboard",
+      "name": "management-dashboard"
     },
     {
       "description": "MySQL",
@@ -4023,6 +4215,11 @@
       "description": "Virtual Cloud Network",
       "display_name": "vcn",
       "name": "vcn"
+    },
+    {
+      "description": "IP Management",
+      "display_name": "vcnip",
+      "name": "vcnip"
     },
     {
       "description": "VPN",

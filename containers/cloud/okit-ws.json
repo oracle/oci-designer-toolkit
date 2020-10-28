@@ -1,0 +1,226 @@
+{
+  "title": "OKIT OCI Visualiser Json",
+  "description": "",
+  "okit_version": "0.13.0",
+  "compartments": [
+    {
+      "id": "okit.compartment.9f14caee-3ea9-4a6f-9a17-b246448a7faa",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "compartment_id": null,
+      "name": "okit-comp001",
+      "display_name": "okit-comp001"
+    }
+  ],
+  "customer_premise_equipments": [],
+  "autonomous_databases": [],
+  "block_storage_volumes": [],
+  "database_systems": [],
+  "dynamic_routing_gateways": [],
+  "fast_connects": [],
+  "file_storage_systems": [],
+  "instances": [
+    {
+      "id": "okit.instance.9877fd4e-6311-469c-acb7-f6e5a0c712e3",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-webserver",
+      "availability_domain": "1",
+      "compartment_id": "okit.compartment.9f14caee-3ea9-4a6f-9a17-b246448a7faa",
+      "shape": "VM.Standard.E2.1",
+      "count": 1,
+      "fault_domain": "",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.bf83b51b-7172-4008-9463-401987e8201d",
+          "assign_public_ip": true,
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "hostname_label": "okit-web"
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.8",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n\nruncmd:\n  # Install Required Packages because the packages section may not complete before the runcmd\n  - sudo bash -c \"yum install -y git python-oci-cli oci-utils\"\n  # Install Required Python Modules\n  - sudo bash -c \"pip3 install --no-cache-dir flask==1.1.1 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 pandas==1.1.2 python-magic==0.4.18 pyyaml==5.2 requests==2.24.0 xlsxwriter==1.3.6\"\n  # Clone OKIT\n  - sudo bash -c \"git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit\"\n  - sudo bash -c \"mkdir /okit/{log,workspace}\"\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n  - sudo bash -c \"echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc\"\n  - sudo bash -c \"echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g \"compartmentID\" --value-only`' >> /etc/bashrc\"\n  # Copy GUnicorn Service File\n  - sudo bash -c 'sed \"s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/\" /okit/containers/services/gunicorn.service > /etc/systemd/system/gunicorn.service'\n  # Enable Gunicorn Service\n  - sudo systemctl enable gunicorn.service\n  - sudo systemctl start gunicorn.service\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"\n"
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.bf83b51b-7172-4008-9463-401987e8201d",
+        "assign_public_ip": true,
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "hostname_label": "okit-web"
+      },
+      "name": "okit-webserver"
+    }
+  ],
+  "instance_pools": [],
+  "internet_gateways": [
+    {
+      "id": "okit.internetgateway.7650a71a-ba42-4757-920e-c9993ff6bb58",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-ig",
+      "compartment_id": "okit.compartment.9f14caee-3ea9-4a6f-9a17-b246448a7faa",
+      "vcn_id": "okit.virtualcloudnetwork.f52b533d-7711-4494-a0b6-b6c932859e65",
+      "enabled": true,
+      "name": "okit-ig"
+    }
+  ],
+  "ipsec_connections": [],
+  "load_balancers": [],
+  "local_peering_gateways": [],
+  "mysql_database_systems": [],
+  "nat_gateways": [],
+  "network_security_groups": [],
+  "object_storage_buckets": [],
+  "oke_clusters": [],
+  "remote_peering_connections": [],
+  "route_tables": [
+    {
+      "id": "okit.routetable.75cf5b59-ed49-48cf-b298-f345f00d48bc",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-rt",
+      "compartment_id": "okit.compartment.9f14caee-3ea9-4a6f-9a17-b246448a7faa",
+      "vcn_id": "okit.virtualcloudnetwork.f52b533d-7711-4494-a0b6-b6c932859e65",
+      "route_rules": [
+        {
+          "target_type": "internet_gateways",
+          "destination_type": "CIDR_BLOCK",
+          "destination": "0.0.0.0/0",
+          "network_entity_id": "okit.internetgateway.7650a71a-ba42-4757-920e-c9993ff6bb58",
+          "description": ""
+        }
+      ],
+      "name": "okit-rt"
+    }
+  ],
+  "security_lists": [
+    {
+      "id": "okit.securitylist.2869794e-63c4-4c20-b846-7f3c3e065be0",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-sl",
+      "compartment_id": "okit.compartment.9f14caee-3ea9-4a6f-9a17-b246448a7faa",
+      "vcn_id": "okit.virtualcloudnetwork.f52b533d-7711-4494-a0b6-b6c932859e65",
+      "egress_security_rules": [
+        {
+          "destination": "0.0.0.0/0",
+          "destination_type": "CIDR_BLOCK",
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          },
+          "is_stateless": false,
+          "protocol": "all",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "description": ""
+        }
+      ],
+      "ingress_security_rules": [
+        {
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          },
+          "is_stateless": false,
+          "protocol": "6",
+          "source": "0.0.0.0/0",
+          "source_type": "CIDR_BLOCK",
+          "tcp_options": {
+            "destination_port_range": {
+              "max": 22,
+              "min": 22
+            },
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "description": ""
+        }
+      ],
+      "name": "okit-sl"
+    }
+  ],
+  "service_gateways": [],
+  "subnets": [
+    {
+      "id": "okit.subnet.bf83b51b-7172-4008-9463-401987e8201d",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-sn",
+      "compartment_id": "okit.compartment.9f14caee-3ea9-4a6f-9a17-b246448a7faa",
+      "vcn_id": "okit.virtualcloudnetwork.f52b533d-7711-4494-a0b6-b6c932859e65",
+      "cidr_block": "10.0.0.0/24",
+      "dns_label": "sn001",
+      "prohibit_public_ip_on_vnic": false,
+      "route_table_id": "okit.routetable.75cf5b59-ed49-48cf-b298-f345f00d48bc",
+      "security_list_ids": [
+        "okit.securitylist.2869794e-63c4-4c20-b846-7f3c3e065be0"
+      ],
+      "availability_domain": "0",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": "",
+      "name": "okit-sn"
+    }
+  ],
+  "virtual_cloud_networks": [
+    {
+      "id": "okit.virtualcloudnetwork.f52b533d-7711-4494-a0b6-b6c932859e65",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "display_name": "okit-vcn",
+      "compartment_id": "okit.compartment.9f14caee-3ea9-4a6f-9a17-b246448a7faa",
+      "cidr_block": "10.0.0.0/16",
+      "dns_label": "okitvcn",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": "",
+      "name": "okit-vcn"
+    }
+  ]
+}

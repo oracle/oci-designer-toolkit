@@ -188,6 +188,7 @@ class OkitOCIQuery {
         this.queryIPSecConnections(request);
         this.queryRemotePeeringConnections(request);
         this.queryDatabaseSystems(request);
+        this.queryMySQLDatabaseSystems(request);
         this.queryFileStorageSystems(request);
         this.queryOkeClusters(request);
     }
@@ -511,6 +512,35 @@ class OkitOCIQuery {
             error: function(xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
+    }
+
+    queryMySQLDatabaseSystems(request) {
+        console.info('------------- Autonomous Database Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/MySQLDatabaseSystem',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({mysql_database_systems: response_json});
+                for (let artefact of response_json) {
+                    console.info(artefact.display_name);
+                }
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });

@@ -150,6 +150,8 @@ function displayResourceManagerDialog() {
             console.info('Profile Select '+$(jqId('config_profile')).val());
             okitSettings.profile = $(jqId('config_profile')).val();
             okitSettings.save();
+            // Clear Existing Compartments
+            okitOciData.setCompartments([]);
             loadCompartments();
             loadRegions();
         });

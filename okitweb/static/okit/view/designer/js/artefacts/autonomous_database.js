@@ -23,8 +23,8 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
         }
     }
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
-    get minimum_width() {return 135;}
-    get minimum_height() {return 100;}
+    // TODO: Remove for new draw
+    get minimum_dimensions() {return {width: 135, height: 100};}
 
 
     /*
@@ -114,19 +114,6 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
             // Load Reference Ids
             // Network Security Groups
             this.loadNetworkSecurityGroups('nsg_ids', this.subnet_id);
-            /*
-            let network_security_groups_select = d3.select(d3Id('nsg_ids'));
-            for (let network_security_group of okitJson.network_security_groups) {
-                let div = network_security_groups_select.append('div');
-                div.append('input')
-                    .attr('type', 'checkbox')
-                    .attr('id', safeId(network_security_group.id))
-                    .attr('value', network_security_group.id);
-                div.append('label')
-                    .attr('for', safeId(network_security_group.id))
-                    .text(network_security_group.display_name);
-            }
-            */
             // Subnets
             let subnet_select = $(jqId('subnet_id'));
             subnet_select.append($('<option>').attr('value', '').text(''));

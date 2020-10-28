@@ -6,7 +6,7 @@
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-__author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
+__author__ = "Andrew Hopkinson (Oracle Cloud Solutions A-Team)"
 __copyright__ = "Copyright (c) 2020, Oracle and/or its affiliates."
 __version__ = "1.0.0"
 __module__ = "ociGenerator"
@@ -39,19 +39,24 @@ class OCIGenerator(object):
         self.getCheckOutputDirectory()
         # Read common variables
         self.variables_yml_file = os.path.join(template_dir, 'variables.yml')
-        self.jinja2_variables = readYamlFile(self.variables_yml_file)
+        self.yaml_variables = readYamlFile(self.variables_yml_file)
         # -- Add Common variables to run variables
-        for key in self.jinja2_variables.keys():
+        for key in self.yaml_variables.keys():
             self.run_variables[key] = ''
-        # -- Add Standard Author / Copyright variables
-        self.jinja2_variables["author"] = __author__
-        self.jinja2_variables["copyright"] = __copyright__
+        # Initialise Jinja2 Variables
+        self.initialiseJinja2Variables()
         # Initialise Jinja2
         self.template_loader = jinja2.FileSystemLoader(searchpath=template_dir)
         self.jinja2_environment = jinja2.Environment(loader=self.template_loader, trim_blocks=True, lstrip_blocks=True, autoescape=True)
         # Initialise working variables
         self.id_name_map = {}
 
+    def initialiseJinja2Variables(self):
+        # Copy common variables
+        self.jinja2_variables = dict(self.yaml_variables)
+        # -- Add Standard Author / Copyright variables
+        self.jinja2_variables["author"] = __author__
+        self.jinja2_variables["copyright"] = __copyright__
 
     def get(self, artifact_type, id):
         artifact = {};
@@ -201,6 +206,9 @@ class OCIGenerator(object):
         # -- Database Systems
         for database_system in self.visualiser_json.get('database_systems', []):
             self.renderDatabaseSystem(database_system)
+        # -- MySQL Database Systems
+        for mysql_database_system in self.visualiser_json.get('mysql_database_systems', []):
+            self.renderMySQLDatabaseSystem(mysql_database_system)
         # -- Instances
         for instance in self.visualiser_json.get('instances', []):
             self.renderInstance(instance)
@@ -210,7 +218,11 @@ class OCIGenerator(object):
 
         return
 
+    # OCI Resource Specific Render methods, one exists for each resource we use
+
     def renderAutonomousDatabase(self, autonomous_database):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(autonomous_database['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -272,6 +284,8 @@ class OCIGenerator(object):
         return
 
     def renderBlockStorageVolume(self, block_storage_volume):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(block_storage_volume['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -303,7 +317,40 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderCompartment(self, compartment):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(compartment['name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = compartment['name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Compartment Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Root Compartment
+        self.jinja2_variables["root_compartment"] = compartment["root_compartment"]
+        # ---- Parent Compartment Id
+        if not compartment["root_compartment"]:
+            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", compartment["name"], standardisedName)
+        # ---- Description
+        self.addJinja2Variable("description", compartment.get("description", compartment["name"]), standardisedName)
+        # --- Optional
+        # ---- Tags
+        self.renderTags(compartment)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("compartment.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderCustomerPremiseEquipment(self, artefact):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(artefact['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -334,37 +381,9 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderCompartment(self, compartment):
-        # Read Data
-        standardisedName = self.standardiseResourceName(compartment['name'])
-        resourceName = '{0:s}'.format(standardisedName)
-        self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = compartment['name']
-        # Process Virtual Cloud Networks Data
-        logger.info('Processing Compartment Information {0!s:s}'.format(standardisedName))
-        # -- Define Variables
-        # --- Required
-        # ---- Root Compartment
-        self.jinja2_variables["root_compartment"] = compartment["root_compartment"]
-        # ---- Parent Compartment Id
-        if not compartment["root_compartment"]:
-            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
-        # ---- Display Name
-        self.addJinja2Variable("display_name", compartment["name"], standardisedName)
-        # ---- Description
-        self.addJinja2Variable("description", compartment.get("description", compartment["name"]), standardisedName)
-        # --- Optional
-        # ---- Tags
-        self.renderTags(compartment)
-
-        # -- Render Template
-        jinja2_template = self.jinja2_environment.get_template("compartment.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.info(self.create_sequence[-1])
-        logger.debug(self.create_sequence[-1])
-        return
-
     def renderDatabaseSystem(self, database_system):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(database_system['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -437,6 +456,8 @@ class OCIGenerator(object):
         return
 
     def renderDynamicRoutingGateway(self, dynamic_routing_gateway):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(dynamic_routing_gateway['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -466,6 +487,8 @@ class OCIGenerator(object):
         return
 
     def renderFastConnect(self, artefact):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(artefact['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -511,6 +534,8 @@ class OCIGenerator(object):
         return
 
     def renderFileStorageSystem(self, file_storage_system):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(file_storage_system['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -566,12 +591,15 @@ class OCIGenerator(object):
         return
 
     def renderInstance(self, instance):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         count = int(instance.get('count', 1))
         if count < 1:
             count = 1
         # Loop for specified count and render template
         for i in range(count):
+            self.initialiseJinja2Variables()
             if count == 1:
                 standardisedName = self.standardiseResourceName(instance['display_name'])
                 self.jinja2_variables['output_name'] = instance['display_name']
@@ -623,6 +651,8 @@ class OCIGenerator(object):
             # ----- Network Security Groups
             if len(instance["vnics"][0]["nsg_ids"]):
                 self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in instance["vnics"][0]["nsg_ids"]]
+            #else:
+            #    self.removeJinja2Variable("nsg_ids")
             # ---- Metadata
             # ----- Authorised Public SSH Keys
             self.addJinja2Variable("ssh_authorized_keys", instance["metadata"]["ssh_authorized_keys"], standardisedName)
@@ -703,6 +733,8 @@ class OCIGenerator(object):
         return
 
     def renderInternetGateway(self, internet_gateway):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(internet_gateway['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -731,6 +763,8 @@ class OCIGenerator(object):
         return
 
     def renderIPSecConnection(self, artefact):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(artefact['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -771,6 +805,8 @@ class OCIGenerator(object):
         return
 
     def renderLoadbalancer(self, loadbalancer):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(loadbalancer['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -831,6 +867,8 @@ class OCIGenerator(object):
         return
 
     def renderLocalPeeringGateway(self, local_peering_gateway):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(local_peering_gateway['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -866,7 +904,85 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderMySQLDatabaseSystem(self, artefact):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(artefact['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = artefact['display_name']
+        # Process Database System Data
+        logger.info('Processing Database System Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['compartment_id']]))
+        # ---- Availability Domain
+        self.addJinja2Variable("availability_domain", artefact["availability_domain"], standardisedName)
+        # ---- Display Name
+        self.addJinja2Variable("display_name", artefact["display_name"], standardisedName)
+        # ---- Subnet
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['subnet_id']]))
+        # ---- Admin Username
+        self.addJinja2Variable("admin_username", artefact["admin_username"], standardisedName)
+        # ---- Admin Password
+        self.addJinja2Variable("admin_password", artefact["admin_password"], standardisedName)
+        # ---- Hostname
+        self.addJinja2Variable("hostname_label", artefact["hostname_label"], standardisedName)
+        # ---- Shape
+        self.addJinja2Variable("shape_name", artefact["shape_name"], standardisedName)
+        # ---- Configuration Id
+        self.addJinja2Variable("configuration_id", artefact["configuration_id"], standardisedName)
+        # --- Optional
+        # ---- Data Storage Size
+        if artefact.get('data_storage_size_in_gb', '') != '':
+            self.addJinja2Variable("data_storage_size_in_gb", artefact["data_storage_size_in_gb"], standardisedName)
+        else:
+            self.removeJinja2Variable('data_storage_size_in_gb')
+        # ---- Description
+        if artefact.get('description', '') != '':
+            self.addJinja2Variable("description", artefact["description"], standardisedName)
+        else:
+            self.removeJinja2Variable('description')
+        # ---- Fault Domain
+        if artefact.get('fault_domain', '') != '':
+            self.addJinja2Variable("fault_domain", artefact["fault_domain"], standardisedName)
+        else:
+            self.removeJinja2Variable('fault_domain')
+        # ---- IP Address
+        if artefact.get('ip_address', '') != '':
+            self.addJinja2Variable("ip_address", artefact["ip_address"], standardisedName)
+        else:
+            self.removeJinja2Variable('ip_address')
+        # ---- MySQL Version
+        if artefact.get('mysql_version', '') != '':
+            self.addJinja2Variable("mysql_version", artefact["mysql_version"], standardisedName)
+        else:
+            self.removeJinja2Variable('mysql_version')
+        # ---- Port
+        if artefact.get('port_x', '') != '':
+            self.addJinja2Variable("port_x", artefact["port_x"], standardisedName)
+        else:
+            self.removeJinja2Variable('port_x')
+        # ---- Port X
+        if artefact.get('port', '') != '':
+            self.addJinja2Variable("port", artefact["port"], standardisedName)
+        else:
+            self.removeJinja2Variable('port')
+
+        # ---- Tags
+        self.renderTags(artefact)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("mysql_database_system.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderNATGateway(self, nat_gateway):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(nat_gateway['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -895,6 +1011,8 @@ class OCIGenerator(object):
         return
 
     def renderNetworkSecurityGroup(self, network_security_group):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(network_security_group['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -974,6 +1092,8 @@ class OCIGenerator(object):
         return
 
     def renderObjectStorageBucket(self, object_storage_bucket):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(object_storage_bucket['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -1006,6 +1126,8 @@ class OCIGenerator(object):
         return
 
     def renderOkeCluster(self, artefact):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(artefact['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -1091,6 +1213,8 @@ class OCIGenerator(object):
         return
 
     def renderRemotePeeringConnection(self, artefact):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(artefact['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -1127,6 +1251,8 @@ class OCIGenerator(object):
         return
 
     def renderRouteTable(self, route_table, index=0):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(route_table['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -1178,6 +1304,8 @@ class OCIGenerator(object):
         return
 
     def renderSecurityList(self, security_list, index=0):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(security_list['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -1314,6 +1442,8 @@ class OCIGenerator(object):
         return options
 
     def renderServiceGateway(self, service_gateway):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(service_gateway['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -1347,6 +1477,8 @@ class OCIGenerator(object):
         return
 
     def renderSubnet(self, subnet):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(subnet['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -1412,6 +1544,8 @@ class OCIGenerator(object):
         return
 
     def renderVirtualCloudNetwork(self, virtual_cloud_network):
+        # Reset Variables
+        self.initialiseJinja2Variables()
         # Read Data
         standardisedName = self.standardiseResourceName(virtual_cloud_network['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
@@ -1448,6 +1582,60 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderResource(self, artefact):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(artefact['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = artefact['display_name']
+        logger.info('Processing Resource {0!s:s}'.format(standardisedName))
+
+    def processResourceElements(self, json_data, standardisedName, parent=None, idx=0):
+        # Process Elements in Json Data
+        if isinstance(json_data, dict):
+            for key, val in json_data.items():
+                logger.debug('{0!s:s} : {1!s:s}'.format(key, val))
+                if isinstance(val, str):
+                    # Process Simple Elements First
+                    if key.endswith('_ids') and isinstance(val, list):
+                        # List of Reference Ids
+                        ids = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in val]
+                        self.addJinja2Variable(key, ids, standardisedName)
+                    elif key.endswith('_id'):
+                        # Simple Reference
+                        self.addJinja2Variable(key, self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[val])), standardisedName)
+                    elif val != '':
+                        # Add Simple Value
+                        self.addJinja2Variable(key, val, standardisedName)
+                    else:
+                        # Remove empty / optional value
+                        self.removeJinja2Variable(key)
+                elif isinstance(val, dict):
+                    # Child Dict so recursively call routine
+                    self.addJinja2Variable(key, {}, standardisedName)
+                    self.processResourceElements(val, standardisedName, key)
+                    if not self.getJinja2Variable(key):
+                        # Dictionary is empty
+                        self.removeJinja2Variable(key)
+                elif isinstance(val, list):
+                    if len(val) > 0 and isinstance(val[0], dict):
+                        for element in json_data:
+                            self.processResourceElements(val, standardisedName, key)
+                    elif len(val) > 0:
+                        # TODO: Build names for key based on parent
+                        vals = [self.generateJinja2Variable(key, val, standardisedName) for v in val]
+                        self.addJinja2Variable(key, vals, standardisedName)
+                    else:
+                        self.removeJinja2Variable(key)
+                elif val != '':
+                    self.addJinja2Variable(key, val, standardisedName)
+                else:
+                    self.removeJinja2Variable(key)
+        return
+
+
     def addJinja2Variable(self, name, value, resource):
         self.jinja2_variables[name] = self.generateJinja2Variable(name, value, resource)
         return
@@ -1455,6 +1643,9 @@ class OCIGenerator(object):
     def removeJinja2Variable(self, name):
         self.jinja2_variables.pop(name, None)
         return
+
+    def getJinja2Variable(self, name):
+        return self.jinja2_variables[name]
 
     def generateJinja2Variable(self, name, value, resource):
         # We will assume that Variables are not being used

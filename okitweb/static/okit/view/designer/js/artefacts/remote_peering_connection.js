@@ -61,12 +61,7 @@ class RemotePeeringConnectionView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/remote_peering_connection.html", () => {
             // Build Dynamic Routing Gateways
-            let drg_select = $(jqId('drg_id'));
-            $(drg_select).empty();
-            drg_select.append($('<option>').attr('value', '').text(''));
-            for (const drg of me.getOkitJson().getDynamicRoutingGateways()) {
-                drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
-            }
+            this.loadDynamicRoutingGateways('drg_id');
             // Regions
             let region_select = $(jqId('peer_region_name'));
             $(region_select).empty();

@@ -35,5 +35,6 @@ containers/.oci
 
 containers/oci/*
 !containers/oci/example_config
+!containers/cloud
 
 !okitweb/static/model

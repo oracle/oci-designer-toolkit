@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.12.0" \
+      "version"="0.13.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
@@ -24,6 +24,8 @@ EXPOSE 443
 RUN yum install -y \
     oracle-softwarecollection-release-el7 \
     oraclelinux-developer-release-el7 \
+# Disable oci config repo
+ && yum-config-manager --disable ol7_ociyum_config \
 # Update base image
  && yum update -y \
 # Install additional packages
@@ -40,8 +42,12 @@ RUN yum install -y \
  && pip3 install --no-cache-dir \
         flask==1.1.1 \
         gunicorn==20.0.4 \
-        oci==2.6.0 \
+        oci==2.22.0 \
+        pandas==1.1.2 \
+        python-magic==0.4.18 \
         pyyaml==5.2 \
+        requests==2.24.0 \
+        xlsxwriter==1.3.6 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \
  && mkdir -p /okit/okitweb/static/okit/templates \

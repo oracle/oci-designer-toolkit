@@ -12,16 +12,15 @@ class InstancePoolView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.vcn_id;}
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    get parent_id() {return this.artefact.placement_configurations[0].primary_subnet_id;}
+    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
 
     /*
     ** Property Sheet Load function
      */
     loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance_pool.html", () => {loadPropertiesSheet(me.artefact);});
+        let self = this;
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance_pool.html", () => {loadPropertiesSheet(self.artefact);});
     }
 
     /*
@@ -35,11 +34,11 @@ class InstancePoolView extends OkitDesignerArtefactView {
     ** Static Functionality
      */
     static getArtifactReference() {
-        return OkeCluster.getArtifactReference();
+        return InstancePool.getArtifactReference();
     }
 
     static getDropTargets() {
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Subnet.getArtifactReference()];
     }
 
 }

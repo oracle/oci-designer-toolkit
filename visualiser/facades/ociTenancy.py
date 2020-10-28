@@ -22,7 +22,6 @@ logger = getLogger()
 
 class OCITenancies(OCICompartments):
     def __init__(self, config=None, configfile=None, profile=None):
-        self.tenancies_obj = []
         self.tenancies_json = []
         self.home_region_key = ''
         super(OCITenancies, self).__init__(config=config, configfile=configfile, profile=profile)
@@ -30,7 +29,6 @@ class OCITenancies(OCICompartments):
     def get(self, tenancy_id):
         tenancy = self.client.get_tenancy(tenancy_id=tenancy_id).data
         self.tenancies_json = [self.toJson(tenancy)]
-        self.tenancies_obj = [OCITenancy(self.config, self.configfile, self.tenancies_json[0])]
         return self.tenancies_json[0]
 
     def list(self, id=None, filter={}, recursive=False):
@@ -38,15 +36,14 @@ class OCITenancies(OCICompartments):
         return self.tenancies_json
 
     def listCompartments(self, filter={}):
-        tenancy_json = self.get(self.config['tenancy'])
-        tenancy_json['compartments'] = super(OCITenancies, self).list(compartment_id=self.config['tenancy'], filter=filter, recursive=True)
+        tenancy_json = self.get(self.getTenancy())
+        tenancy_json['compartments'] = super(OCITenancies, self).list(compartment_id=self.getTenancy(), filter=filter, recursive=True)
         return tenancy_json
 
-
-class OCITenancy(object):
-    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
-        self.config = config
-        self.configfile = configfile
-        self.profile = profile
-        self.data = data
+    def getTenancyForCompartment(self, compartment_id):
+        if compartment_id is not None and compartment_id != '':
+            while '.tenancy.' not in compartment_id:
+                compartment = super(OCITenancies, self).get(compartment_id)
+                compartment_id = compartment['compartment_id']
+        return compartment_id
 

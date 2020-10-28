@@ -16,6 +16,7 @@ __module__ = "ociCommon"
 import base64
 import jinja2
 import os
+import magic
 import xml.etree.ElementTree as ET
 import yaml
 from contextlib import closing
@@ -165,14 +166,8 @@ def standardiseIds(json_data={}, from_char='.', to_char='-'):
     return json_data
 
 def userDataDecode(data):
-    encodings = ['utf-8', 'utf-16', 'ascii', 'windows-1256']
-    for encoding in encodings:
-        try:
-            # TODO: Switch to chardet
-            # encoding = chardet.detect(data)
-            return base64.b64decode(data).decode(encoding)
-        except UnicodeDecodeError as e:
-            logger.warn(e)
-            pass
-    return ''
+    m = magic.Magic(mime_encoding=True)
+    encoding = m.from_buffer(base64.b64decode(data))
+    logger.info('<<<<<<<<<<<user-data encoding {0!s:s}>>>>>>>>>>>'.format(encoding))
+    return base64.b64decode(data).decode(encoding)
 

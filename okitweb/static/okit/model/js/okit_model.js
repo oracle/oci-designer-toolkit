@@ -29,6 +29,7 @@ class OkitJson {
         this.ipsec_connections = [];
         this.load_balancers = [];
         this.local_peering_gateways = [];
+        this.mysql_database_systems = [];
         this.nat_gateways = [];
         this.network_security_groups = [];
         this.object_storage_buckets = [];
@@ -211,6 +212,13 @@ class OkitJson {
         if (okit_json.hasOwnProperty('database_systems')) {
             for (let artefact of okit_json['database_systems']) {
                 let obj = this.newDatabaseSystem(artefact);
+                console.info(obj);
+            }
+        }
+        // MySQL Database Systems
+        if (okit_json.hasOwnProperty('mysql_database_systems')) {
+            for (let artefact of okit_json['mysql_database_systems']) {
+                let obj = this.newMySQLDatabaseSystem(artefact);
                 console.info(obj);
             }
         }
@@ -610,6 +618,33 @@ class OkitJson {
             if (this.local_peering_gateways[i].id === id) {
                 this.local_peering_gateways[i].delete();
                 this.local_peering_gateways.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    // MySQL Database System
+    newMySQLDatabaseSystem(data) {
+        console.info('New MySQL Database System');
+        this.mysql_database_systems.push(new MySQLDatabaseSystem(data, this));
+        return this.mysql_database_systems[this.mysql_database_systems.length - 1];
+    }
+    getMySQLDatabaseSystems() {
+        return this.mysql_database_systems;
+    }
+    getMySQLDatabaseSystem(id='') {
+        for (let artefact of this.getMySQLDatabaseSystems()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    deleteMySQLDatabaseSystem(id) {
+        for (let i = 0; i < this.mysql_database_systems.length; i++) {
+            if (this.mysql_database_systems[i].id === id) {
+                this.database_systems[i].delete();
+                this.database_systems.splice(i, 1);
                 break;
             }
         }

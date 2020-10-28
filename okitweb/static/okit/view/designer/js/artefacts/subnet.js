@@ -13,16 +13,8 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.vcn_id;}
-    get minimum_width() {return 400;}
-    get minimum_height() {return 150;}
-
-    getParent() {
-        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    get minimum_dimensions() {return {width: 300, height: 150};}
 
     /*
      ** SVG Processing
@@ -143,7 +135,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     getBottomArtifacts() {
-        return [Instance.getArtifactReference(), DatabaseSystem.getArtifactReference(), AutonomousDatabase.getArtifactReference()];
+        return [Instance.getArtifactReference(), InstancePool.getArtifactReference(), DatabaseSystem.getArtifactReference(), AutonomousDatabase.getArtifactReference(), MySQLDatabaseSystem.getArtifactReference()];
     }
 
     getLeftArtifacts() {

@@ -31,7 +31,7 @@ class OCIFastConnectProviderServices(OCIVirtualNetworkConnection):
 
     def list(self, compartment_id=None, filter=None):
         if compartment_id is None:
-            compartment_id = self.config['tenancy']
+            compartment_id = self.getTenancy()
 
         fast_connect_provider_services = oci.pagination.list_call_get_all_results(self.client.list_fast_connect_provider_services, compartment_id=compartment_id).data
         # Convert to Json object
