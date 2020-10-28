@@ -14,8 +14,8 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
-    get minimum_width() {return 135;}
-    get minimum_height() {return 100;}
+    // TODO: Remove for new draw
+    get minimum_dimensions() {return {width: 135, height: 100};}
 
     /*
      ** SVG Processing
