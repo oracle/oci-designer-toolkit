@@ -89,7 +89,7 @@ function newDiagram() {
     console.log();
 }
 function newDesignerView() {
-    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', okitSettings.is_display_grid, palette_svg);
+    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
 }
 function newModel() {
     okitJsonModel = new OkitJson();
