@@ -64,19 +64,25 @@ class IPSecConnectionView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/ipsec_connection.html", () => {
             // Build Dynamic Routing Gateways
+            this.loadDynamicRoutingGateways('drg_id');
+            /*
             let drg_select = $(jqId('drg_id'));
             $(drg_select).empty();
             drg_select.append($('<option>').attr('value', '').text(''));
             for (const drg of me.getOkitJson().getDynamicRoutingGateways()) {
                 drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
             }
+            */
             // Build Customer Premise Equipments
+            this.loadCustomerPremiseEquipments('cpe_id');
+            /*
             let cpe_select = $(jqId('cpe_id'));
             $(cpe_select).empty();
             cpe_select.append($('<option>').attr('value', '').text(''));
             for (const cpe of me.getOkitJson().getCustomerPremiseEquipments()) {
                 cpe_select.append($('<option>').attr('value', cpe.id).text(cpe.display_name));
             }
+            */
             // Load Sheet
             loadPropertiesSheet(me.artefact);
         });
