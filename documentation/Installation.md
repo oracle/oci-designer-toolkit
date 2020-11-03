@@ -135,6 +135,7 @@ If you do not have git installed locally the current release of OKIT can be retr
 
 ### Create Container
 
+#### Copy Config & Key Files
 Before building/rebuilding your chosen container you will need to copy the contents of [&lt;USER HOME DIR&gt;/.oci](#config-file) 
 to the __oci-designer-toolkit/containers/oci__ directory.
 
@@ -144,6 +145,7 @@ The docker image is the recommended runtime server OKIT provides a simple Docker
 ##### Prerequisites
 - Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
 - Create local directory __~/okit/user/templates__ for storage of custom templates.
+- [Copy Config & Key Files](#copy-config--key-files)
 
 ##### Docker Compose Build
 ```bash
@@ -166,6 +168,7 @@ at runtime.
 ##### Prerequisites
 - Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
 - Create local directory __~/okit/user/templates__ for storage of custom templates.
+- [Copy Config & Key Files](#copy-config--key-files)
 
 ##### Docker Build
 ```bash
@@ -196,6 +199,7 @@ docker run -d --rm -p 443:443 -p 80:80 \
 - Install [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - Install [Vagrant](https://vagrantup.com/)
 - Create local directory __~/okit/user/templates__ for storage of custom templates.
+- [Copy Config & Key Files](#copy-config--key-files)
 
 ##### Vagrant Build
 ```bash
