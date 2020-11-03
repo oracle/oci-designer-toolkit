@@ -8,16 +8,18 @@ class OkitDesignerJsonView extends OkitJsonView {
     // Define Constants
     static get CANVAS_SVG() {return 'canvas-svg'}
 
-    constructor(okitjson=null, parent_id = 'canvas-div', display_grid = false, palette_svg = []) {
+    constructor(okitjson=null, parent_id = 'canvas-div', palette_svg = []) {
         super(okitjson);
         this.parent_id = parent_id;
-        this.display_grid = display_grid;
+        //this.display_grid = display_grid;
         this.palette_svg = palette_svg;
     }
 
-    static newView(model, parent_id, display_grid = false, palette = []) {
-        return new OkitDesignerJsonView((model, parent_id, display_grid, palette))
+    static newView(model, parent_id, palette = []) {
+        return new OkitDesignerJsonView((model, parent_id, palette))
     }
+
+    get display_grid() {return okitSettings.is_display_grid;}
 
     draw() {
         console.log('Drawing Designer Canvas');
@@ -263,7 +265,7 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("width", "100%")
             .attr("height", "100%")
             .attr("fill", "white");
-        if (this.display_grid) {
+        if (okitSettings.is_display_grid) {
             this.addGrid(canvas_svg);
         }
     }

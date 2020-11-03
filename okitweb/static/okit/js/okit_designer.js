@@ -89,7 +89,7 @@ function newDiagram() {
     console.log();
 }
 function newDesignerView() {
-    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', okitSettings.is_display_grid, palette_svg);
+    okitJsonView = new OkitDesignerJsonView(okitJsonModel, 'canvas-div', palette_svg);
 }
 function newModel() {
     okitJsonModel = new OkitJson();
@@ -98,14 +98,14 @@ function newRegionsModel() {
     regionOkitJson = new OkitRegions();
 }
 function setTitleDescription() {
-    $('#title').val(okitJsonModel.title);
-    $('#description').val(okitJsonModel.description);
+    $('#json_title').val(okitJsonModel.title);
+    $('#json_description').val(okitJsonModel.description);
 }
 function updateJsonTitle() {
-    okitJsonModel.title = $('#title').val();
+    okitJsonModel.title = $('#json_title').val();
 }
 function updateJsonDescription() {
-    okitJsonModel.description = $('#description').val();
+    okitJsonModel.description = $('#json_description').val();
 }
 
 /*

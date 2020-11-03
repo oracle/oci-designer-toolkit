@@ -33,7 +33,7 @@ RUN microdnf install -y \
 #        python36-oci-sdk \
         nginx \
 # Upgrade pip
- && python3 -m pip install --upgrade pip==20.0.2 \
+ && python3 -m pip install --upgrade pip \
 # Install required python modules
  && pip3 install --no-cache-dir \
         flask==1.1.1 \

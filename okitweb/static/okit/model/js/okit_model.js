@@ -993,11 +993,15 @@ class OkitArtifact {
         this.getOkitJson = function() {return okitjson};
         // Add Id
         this.id = 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();
+        // All Artefacts will have compartment id, display name & description
+        this.compartment_id = '';
+        this.display_name = '';
+        this.name = '';
+        this.description = '';
         // Add default for common Tag variables
         this.freeform_tags = {};
         this.defined_tags = {};
     }
-
 
     /*
     ** Clone Functionality
