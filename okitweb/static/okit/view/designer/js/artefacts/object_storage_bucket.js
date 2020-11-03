@@ -13,14 +13,7 @@ class ObjectStorageBucketView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.compartment_id;}
-
-    getParent() {
-        return this.getJsonView().getCompartment(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
 
     /*
      ** SVG Processing

@@ -12,7 +12,6 @@ class SecurityListView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
     get attached() {
         if (!this.attached_id) {
             for (let subnet of this.getOkitJson().subnets) {
@@ -24,14 +23,8 @@ class SecurityListView extends OkitDesignerArtefactView {
         }
         return false;
     }
-
-    getParent() {
-        return this.attached_id ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getVirtualCloudNetwork(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
+    get parent() {return this.attached_id ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
 
     /*
      ** SVG Processing

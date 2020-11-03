@@ -13,14 +13,7 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.attached_id;}
-
-    getParent() {
-        return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : null;
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : null;}
 
     /*
      ** SVG Processing

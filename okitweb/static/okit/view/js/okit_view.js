@@ -1239,7 +1239,7 @@ class OkitArtefactView {
         };
     }
     // ---- Svg
-    get svg_id() {this.artefact_id + '-svg';}
+    get svg_id() {return this.artefact_id + '-svg';}
     get svg_x() {
         if (this.parent) {
             const offset = this.parent.getChildOffset(this.getArtifactReference());
@@ -1354,11 +1354,11 @@ class OkitArtefactView {
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
 
+    // TODO: Deprecated Delete replaced by parent variable
     getParent() {return this.parent;}
-
+    // TODO: Deprecated Delete replaced by parent_id variable
     getParentId() {return this.parent_id;}
-
-    // TODO: Delete replaced by attached variable
+    // TODO: Deprecated Delete replaced by attached variable
     isAttached() {return this.attached;}
 
     getArtefact() {return this.artefact;}
@@ -1562,7 +1562,7 @@ class OkitArtefactView {
     }
 
     newdraw() {
-        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+        console.info(`>>>>>>>>>>>>>>>>>>>> Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         const svg = this.drawSvg();
         this.drawRect(svg);
         this.drawText(svg, this.svg_name_text);

@@ -15,14 +15,6 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
     get parent_id() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.artefact.vcn_id : this.artefact.compartment_id;}
     get parent() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
 
-    getParent() {
-        return this.parent;
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
-
     /*
      ** SVG Processing
      */

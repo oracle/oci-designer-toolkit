@@ -13,14 +13,7 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
-
-    getParent() {
-        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
 
     /*
      ** SVG Processing
