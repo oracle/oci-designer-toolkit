@@ -49,6 +49,8 @@ class InstanceView extends OkitDesignerArtefactView {
     }
     // ---- Icon
     get icon_definition_id() {return this.shape.startsWith('BM.') ? 'BareMetalInstanceSvg' : super.icon_definition_id;}
+    // ---- Text
+    get summary_tooltip() {return `Name: ${this.display_name} \nAvailability Domain: ${this.artefact.availability_domain} \nShape: ${this.artefact.shape} \nOS: ${this.source_details.os} ${this.source_details.version}`;}
 
     /*
      ** SVG Processing

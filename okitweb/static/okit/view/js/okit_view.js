@@ -1132,6 +1132,7 @@ class OkitArtefactView {
     get parent_id() {return null;}
     get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
+    get description() {return this.artefact ? this.artefact.description : '';}
     // -- SVG Definitions
     // --- Standard
     get stroke_colours() {
@@ -1348,9 +1349,26 @@ class OkitArtefactView {
                 return '';
             }
         }
+        return '';
     }
-    // ----- Tooltop (title)
-    get title() {return this.display_name;}
+    // ----- Tooltip (title)
+    get title() {
+        if (okitSettings.tooltip_type) {
+            if (okitSettings.tooltip_type === 'simple') {
+                return this.simple_tooltip;
+            } else if (okitSettings.tooltip_type === 'description') {
+                return this.description_tooltip;
+            } else if (okitSettings.tooltip_type === 'summary') {
+                return this.summary_tooltip;
+            } else {
+                return '';
+            }
+        }
+        return this.display_name;
+    }
+    get simple_tooltip() {return this.display_name;}
+    get description_tooltip() {return `Name: ${this.display_name} \nDescription: ${this.description}`;}
+    get summary_tooltip() {return this.display_name;}
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
 

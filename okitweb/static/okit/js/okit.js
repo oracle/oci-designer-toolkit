@@ -224,6 +224,7 @@ class OkitSettings {
         this.hide_attached = true;
         this.highlight_association = true;
         this.show_label = 'none';
+        this.tooltip_type = 'simple';
         this.load();
     }
 
@@ -310,6 +311,8 @@ class OkitSettings {
             this.addHighlightAssociations(tbody, autosave);
             // Display Label
             this.addDisplayLabel(tbody, autosave);
+            // Tooltip Style
+            this.addTooltipType(tbody, autosave);
             // Config Profile
             //this.addConfigProfile(tbody, autosave);
         }
@@ -551,6 +554,72 @@ class OkitSettings {
             .text('None');
         // Set Show Label Value
         $("input:radio[name='show_label'][value=" + this.show_label + "]").prop('checked', true);
+    }
+
+    addTooltipType(tbody, autosave) {
+        // Display Label
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('label')
+            .text('Tooltip Style');
+        // -- Display Name
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'simple_tooltip')
+            .attr('name', 'tooltip_type')
+            .attr('type', 'radio')
+            .attr('value', 'simple')
+            .on('change', function () {
+                if (autosave) {
+                    self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'simple_tooltip')
+            .text('Simple');
+        // -- Resource Type
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'description_tooltip')
+            .attr('name', 'tooltip_type')
+            .attr('type', 'radio')
+            .attr('value', 'description')
+            .on('change', function () {
+                if (autosave) {
+                    self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'description_tooltip')
+            .text('Description');
+        // -- Resource Type
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'summary_tooltip')
+            .attr('name', 'tooltip_type')
+            .attr('type', 'radio')
+            .attr('value', 'summary')
+            .on('change', function () {
+                if (autosave) {
+                    self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'summary_tooltip')
+            .text('Summary');
+        // Set Show Label Value
+        $("input:radio[name='tooltip_type'][value=" + this.tooltip_type + "]").prop('checked', true);
     }
 
     addConfigProfile(tbody, autosave) {

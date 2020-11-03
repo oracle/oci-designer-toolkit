@@ -16,6 +16,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     get minimum_dimensions() {return {width: 400, height: 300};}
     get info_text() {return this.artefact.cidr_block;}
+    get summary_tooltip() {return `Name: ${this.display_name} \nCIDR: ${this.artefact.cidr_block} \nDNS: ${this.artefact.dns_label}`;}
 
     /*
      ** SVG Processing

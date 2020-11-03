@@ -16,6 +16,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
     get minimum_dimensions() {return {width: 300, height: 150};}
     get info_text() {return this.artefact.cidr_block;}
+    get summary_tooltip() {return `Name: ${this.display_name} \nCIDR: ${this.artefact.cidr_block} \nDNS: ${this.artefact.dns_label}`;}
 
     /*
      ** SVG Processing
