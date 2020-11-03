@@ -12,6 +12,7 @@ class InstanceView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
+    // -- Reference
     get parent_id() {
         let primary_subnet = this.getJsonView().getSubnet(this.artefact.primary_vnic.subnet_id);
         if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
@@ -23,8 +24,7 @@ class InstanceView extends OkitDesignerArtefactView {
         }
     }
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
-    // TODO: Remove for new draw
-    get minimum_dimensions() {return {width: 135, height: 100};}
+    // --- Dimensions
     get dimensions() {
         console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.minimum_dimensions;
@@ -47,6 +47,8 @@ class InstanceView extends OkitDesignerArtefactView {
         console.log();
         return dimensions;
     }
+    // ---- Icon
+    get icon_definition_id() {return this.shape.startsWith('BM.') ? 'BareMetalInstanceSvg' : super.icon_definition_id;}
 
     /*
      ** SVG Processing
@@ -143,27 +145,15 @@ class InstanceView extends OkitDesignerArtefactView {
                 let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
                 subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
             }
-            // Build Instance Shape Select
-            let shape_select = $(jqId('shape'));
-            $(shape_select).empty();
-            for (let shape of okitOciData.getInstanceShapes()) {
-                let shape_text = `${shape.shape} (${shape.ocpus} OCPU ${shape.memory_in_gbs} GB Memory)`;
-                // Simple Shape Text because we need to upgrade the oci module
-                shape_text = `${shape.shape}`;
-                shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
-            }
+            // Load Shapes
+            this.loadShapes();
             // Build Network Security Groups
             this.loadNetworkSecurityGroups('nsg_ids', this.primary_vnic.subnet_id);
             // Secondary Vnics
             this.loadSecondaryVnics();
             $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
             // Load OSs
-            let os_select = $(jqId('os'));
-            $(os_select).empty();
-            for (let os of okitOciData.getInstanceOS()) {
-                os_select.append($('<option>').attr('value', os).text(os));
-            }
-            os_select.on('change', () => {me.loadOSVersions($("#os").val());});
+            this.loadOSs(this.shape);
             // Load OS Versions
             this.loadOSVersions(this.source_details.os);
             // Load Properties
@@ -171,13 +161,48 @@ class InstanceView extends OkitDesignerArtefactView {
         });
     }
 
+    loadShapes() {
+        const self = this;
+        const shape_select = $(jqId('shape'));
+        $(shape_select).empty();
+        for (let shape of okitOciData.getInstanceShapes()) {
+            let shape_text = `${shape.shape} (${shape.ocpus} OCPU ${shape.memory_in_gbs} GB Memory)`;
+            // Simple Shape Text because we need to upgrade the oci module
+            shape_text = `${shape.shape}`;
+            shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
+        }
+        shape_select.on('change', () => {self.loadOSs($("#shape").val());});
+    }
+
+    loadOSs(shape) {
+        const self = this;
+        const os_select = $(jqId('os'));
+        let os_exists = false;
+        $(os_select).empty();
+        for (let os of okitOciData.getInstanceOS(shape)) {
+            os_select.append($('<option>').attr('value', os).text(os));
+            os_exists = os_exists | this.source_details.os === os;
+        }
+        os_select.on('change', () => {self.loadOSVersions($("#os").val());});
+        if (!os_exists) {
+            this.source_details.os = $("#os option:first").val();
+        }
+        $("#os").val(this.source_details.os);
+    }
+
     loadOSVersions(os) {
-        let version_select = $(jqId('version'));
+        const self = this;
+        const version_select = $(jqId('version'));
+        let version_exists = false;
         $(version_select).empty();
         for (let version of okitOciData.getInstanceOSVersions(os)) {
             version_select.append($('<option>').attr('value', version).text(version));
+            version_exists = version_exists | this.source_details.version === version;
         }
-        $("#version").val($("#version option:first").val());
+        if (!version_exists) {
+            this.source_details.version = $("#version option:first").val();
+        }
+        $("#version").val(this.source_details.version);
     }
 
     loadSecondaryVnics() {

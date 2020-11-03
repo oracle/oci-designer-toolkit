@@ -139,7 +139,7 @@ class OkitOCIData {
                 oss.push(image.operating_system);
             }
         } else {
-            for (image of this.images) {
+            for (let image of this.images) {
                 if (image.shapes.includes(shape)) {
                     oss.push(image.operating_system);
                 }
@@ -309,8 +309,7 @@ class OkitSettings {
             // Highlight Associations
             this.addHighlightAssociations(tbody, autosave);
             // Display Label
-            // TODO: Uncomment when label display code fully implemented
-            // this.addDisplayLabel(tbody, autosave);
+            this.addDisplayLabel(tbody, autosave);
             // Config Profile
             //this.addConfigProfile(tbody, autosave);
         }

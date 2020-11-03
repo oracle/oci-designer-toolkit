@@ -1196,7 +1196,7 @@ class OkitArtefactView {
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
     get collapsed_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
     // TODO: New Draw requires {width: this.icon_width * 1.5, height: this.icon_height * 1.5}
-    get minimum_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    get minimum_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
     get dimensions() {return this.collapsed ? this.collapsed_dimensions : this.minimum_dimensions;}
     // --- Definitions
     get svg_definition() {
@@ -1388,7 +1388,7 @@ class OkitArtefactView {
         return this.definition;
     }
 
-    draw() {
+    drawOrig() {
         console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         // Get Definition from Sub class
         let definition = this.getSvgDefinition();
@@ -1561,8 +1561,8 @@ class OkitArtefactView {
         return svg;
     }
 
-    newdraw() {
-        console.info(`>>>>>>>>>>>>>>>>>>>> Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+    draw() {
+        console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         const svg = this.drawSvg();
         this.drawRect(svg);
         this.drawText(svg, this.svg_name_text);
@@ -1578,7 +1578,7 @@ class OkitArtefactView {
         // Add Drag Handling Events
         this.addDragEvents(svg);
         // Add Context Menu (Right-Click)
-        //this.addContextMenu(svg);
+        this.addContextMenu(svg);
         // Add Custom Data Attributes
         this.addCustomAttributes(svg)
         // Return
@@ -2520,7 +2520,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
     // ---- Icon
     get icon_x_tranlation() {return this.collapsed ? super.icon_x_tranlation : -20;}
     get icon_y_tranlation() {return this.collapsed ? super.icon_y_tranlation : -20;}
-    get icon_h_align() {return 'start';}
+    get icon_h_align() {return this.collapsed ? super.icon_h_align : 'start';}
     // ---- Rectangle
     get rect_stroke_dash() {return this.collapsed ? super.rect_stroke_dash : 5;}
     get rect_stroke_space() {return this.collapsed ? super.rect_stroke_space : 2;}

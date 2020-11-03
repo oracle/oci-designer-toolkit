@@ -163,16 +163,18 @@ class RouteTableView extends OkitDesignerArtefactView {
                     }
                     console.info('Processing list ' + JSON.stringify(me.getOkitJson()[target_type]));
                     $(jqId("network_entity_id" + rule_num)).empty();
-                    for (let gateway of me.getOkitJson()[target_type]) {
-                        if (gateway.vcn_id === vcn_id) {
-                            $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
-                            if (route_rule.network_entity_id === '') {
-                                // No Network Entity Specified will assume the first of "Target Type"
-                                route_rule.network_entity_id = gateway.id;
+                    if (me.getOkitJson()[target_type]) {
+                        for (let gateway of me.getOkitJson()[target_type]) {
+                            if (gateway.vcn_id === vcn_id) {
+                                $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
+                                if (route_rule.network_entity_id === '') {
+                                    // No Network Entity Specified will assume the first of "Target Type"
+                                    route_rule.network_entity_id = gateway.id;
+                                }
                             }
                         }
+                        $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
                     }
-                    $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
                     if (route_rule.target_type === 'service_gateways') {
                         route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
                     }
@@ -254,16 +256,18 @@ class RouteTableView extends OkitDesignerArtefactView {
             });
         let target_type = $(jqId("target_type" + rule_num)).val();
         $(jqId("network_entity_id" + rule_num)).empty();
-        for (let gateway of this.getOkitJson()[target_type]) {
-            if (gateway.vcn_id === vcn_id) {
-                $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
-                if (route_rule.network_entity_id === '') {
-                    // No Network Entity Specified will assume the first of "Target Type"
-                    route_rule.network_entity_id = gateway.id;
+        if (this.getOkitJson()[target_type]) {
+            for (let gateway of this.getOkitJson()[target_type]) {
+                if (gateway.vcn_id === vcn_id) {
+                    $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
+                    if (route_rule.network_entity_id === '') {
+                        // No Network Entity Specified will assume the first of "Target Type"
+                        route_rule.network_entity_id = gateway.id;
+                    }
                 }
             }
+            $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
         }
-        $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
         // Description
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td')
