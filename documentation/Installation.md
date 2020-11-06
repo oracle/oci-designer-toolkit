@@ -83,6 +83,19 @@ building, of the runtime environment, from the docker command line.
 docker build --tag okit --force-rm https://github.com/oracle/oci-designer-toolkit.git
 ```
 
+In some situations the above mentioned command can lead to an error as shown below;
+```bash
+unable to prepare context: unable to 'git clone' to temporary context directory: error initializing submodules
+```
+A quick workarround for this is to manually clone the repository to the local machine where you want to build the Docker container. Example shown below:
+```bash
+git clone https://github.com/oracle/oci-designer-toolkit.git
+
+cd oci-designer-toolkit/
+
+docker build --tag okit ./
+```
+
 ### Run Container
 
 ```bash
