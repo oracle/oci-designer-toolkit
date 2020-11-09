@@ -1194,10 +1194,11 @@ class OkitArtefactView {
         };
     }
     // --- Dimensions
+    get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 1.5 : 2 : 1;}
+    get height_multiplier() {return this.show_label ?  1.5 : 1;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
-    get collapsed_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
-    // TODO: New Draw requires {width: this.icon_width * 1.5, height: this.icon_height * 1.5}
-    get minimum_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
+    get collapsed_dimensions() {return {width: this.icon_width * this.width_multiplier, height: this.icon_height * this.height_multiplier};}
+    get minimum_dimensions() {return {width: this.icon_width * this.width_multiplier, height: this.icon_height * this.height_multiplier};}
     get dimensions() {return this.collapsed ? this.collapsed_dimensions : this.minimum_dimensions;}
     // --- Definitions
     get svg_definition() {
@@ -1282,7 +1283,7 @@ class OkitArtefactView {
     get rect_fill_style() {return 'fill-opacity: .25;';}
     get rect_stroke_colour() {return this.stroke_colours.bark;}
     get rect_stroke_width() {return 1;}
-    get rect_stroke_dash() {return 1;}
+    get rect_stroke_dash() {return 2;}
     get rect_stroke_space() {return 1;}
     get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_space}`;}
     get rect_stroke_opacity() {return 0;}
@@ -1591,6 +1592,8 @@ class OkitArtefactView {
         this.drawIcon(svg);
         // Add standard / common click event
         this.addClickEvent(svg);
+        // Add standard / common mouse over event
+        this.addMouseOverEvents(svg);
         // Add Mouse Over / Exist Events
         this.addMouseEvents(svg);
         // Add Drag Handling Events
@@ -1701,6 +1704,16 @@ class OkitArtefactView {
             $(jqId(self.artefact_id)).toggleClass('highlight');
             $(jqId(self.artefact_id)).hasClass('highlight') ? selectedArtefact = self.id : selectedArtefact = null;
             d3.event.stopPropagation();
+        });
+    }
+
+    addMouseOverEvents(svg) {
+        const id = this.artefact_id;
+        svg.on('mouseenter', () => {
+            $(jqId(id)).addClass('highlight-rect');
+        })
+        svg.on('mouseleave', () => {
+            $(jqId(id)).removeClass('highlight-rect');
         });
     }
 
@@ -2600,10 +2613,22 @@ class OkitContainerArtefactView extends OkitArtefactView {
         let count = 0;
         for (let child of this.getTopEdgeArtifacts()) {
             count += $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").length;
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(function() {
+                console.warn(this);
+                console.warn(this.id);
+                console.warn(this.getBBox());
+                console.warn(this.getBBox().x);
+                console.warn(this.getBBox().y);
+                console.warn(this.getBBox().height);
+                console.warn(this.getBBox().width);
+                console.warn(this.height);
+                console.warn(this.width);
+                offset.dx += (this.getBBox().width + positional_adjustments.spacing.x);
+            });
         }
         console.info('Top Edge Count : ' + count);
         // Increment x position based on count
-        offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
+        //offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
         return offset;
     }
 

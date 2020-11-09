@@ -341,6 +341,12 @@
 rect.highlight {
     stroke-width: 3;
     stroke-dasharray: none;
+    stroke-opacity: 1;
+}
+
+rect.highlight-rect {
+    stroke-width: 2;
+    stroke-opacity: 1;
 }
 
 rect.highlight-vnic {
