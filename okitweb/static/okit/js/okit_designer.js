@@ -590,10 +590,10 @@ function showQueryResults() {
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
     //$(jqId('modal_loading_wrapper')).addClass('hidden');
-    console.info(okitJsonView);
-    console.info(okitJsonModel);
+    okitJsonView ? console.info(okitJsonView) : console.info('okitJsonView not defined');
+    okitJsonModel ? console.info(okitJsonModel) : console.info('okitJsonModel not defined');
     //displayTreeView();
-    console.info(okitOCIQuery);
+    okitOCIQuery ? console.info(okitOCIQuery) : console.info('okitOCIQuery not defined');
 });
 /*
 ** Export the Model as various formats
