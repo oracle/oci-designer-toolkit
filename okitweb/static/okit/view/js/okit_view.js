@@ -2627,56 +2627,18 @@ class OkitContainerArtefactView extends OkitArtefactView {
 
     getTopEdgeChildOffset() {
         return this.getDxOffset(this.getFirstTopEdgeChildOffset(), this.getTopEdgeArtifacts());
-
-        let offset = this.getFirstTopEdgeChildOffset();
-        for (let child of this.getTopEdgeArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(function() {
-                offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
-            });
-        }
-        return offset;
     }
 
     getTopChildOffset() {
         return this.getDxOffset(this.getFirstTopChildOffset(), this.getTopArtifacts());
-
-        let offset = this.getFirstTopChildOffset();
-        for (let child of this.getTopArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(function() {
-                    offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
-                });
-        }
-        return offset;
     }
 
     getContainerChildOffset() {
         return this.getDxOffset(this.getFirstContainerChildOffset(), this.getContainerArtifacts());
-
-        console.info('Get Container Child Offset');
-        let offset = this.getFirstContainerChildOffset();
-        for (let child of this.getContainerArtifacts()) {
-            $(jqId(this.id + '-svg')).children('svg[data-type="' + child + '"][data-parent-id="' + this.id + '"]').each(function() {
-                    offset.dy += Math.round(Number($(this).attr('height')) + positional_adjustments.spacing.y);
-                });
-        }
-        console.info('Offset : ' + JSON.stringify(offset));
-        return offset;
     }
 
     getBottomChildOffset() {
         return this.getDxOffset(this.getFirstBottomChildOffset(), this.getBottomArtifacts());
-
-        let offset = this.getFirstBottomChildOffset();
-        for (let child of this.getBottomArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    console.info(child);
-                    console.info($(this));
-                    console.info($(this).attr('id'));
-                    offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
-                });
-        }
-        return offset;
     }
 
     getBottomEdgeChildOffset() {
@@ -2689,41 +2651,14 @@ class OkitContainerArtefactView extends OkitArtefactView {
 
     getLeftChildOffset() {
         return this.getDyOffset(this.getFirstLeftChildOffset(), this.getLeftArtifacts());
-
-        let offset = this.getFirstLeftChildOffset();
-        for (let child of this.getLeftArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
-                });
-        }
-        return offset;
     }
 
     getRightChildOffset() {
         return this.getDyOffset(this.getFirstRightChildOffset(), this.getRightArtifacts());
-
-        let offset = this.getFirstRightChildOffset();
-        for (let child of this.getRightArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
-                });
-        }
-        return offset;
     }
 
     getRightEdgeChildOffset() {
         return this.getDyOffset(this.getFirstRightEdgeChildOffset(), this.getRightEdgeArtifacts());
-
-        let offset = this.getFirstRightEdgeChildOffset();
-        for (let child of this.getRightEdgeArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
-                });
-        }
-        return offset;
     }
 
 }
