@@ -129,12 +129,14 @@ class OkitOCIQuery {
                 sub_query_request.compartment_id = response_json.id;
                 me.queryCompartmentSubComponents(sub_query_request);
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
-
             },
             error: function(xhr, status, error) {
                 console.error('Status : ' + status);
                 console.error('Error  : ' + error);
+                const empty_compartment = {compartment_id: null, display_name: request.compartment_name, name: request.compartment_name};
+                regionOkitJson[request.region].load({compartments: [empty_compartment]})
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });

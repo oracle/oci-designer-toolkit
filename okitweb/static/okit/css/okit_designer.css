@@ -355,6 +355,8 @@ rect.highlight-vnic {
 
 rect.highlight-association {
     fill: #336600;
+    stroke-width: 2;
+    stroke-opacity: 1;
 }
 
 /*

@@ -20,24 +20,18 @@ class IPSecConnectionView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     // Add Specific Mouse Events
-    addMouseEvents(svg) {
-        let self = this;
-        let id = this.artefact_id;
-        svg.on('mouseenter', () => {
-            if (okitSettings.highlight_association) {
-                if (self.drg_id !== '') {$(jqId(self.drg_id)).addClass('highlight-association');}
-                if (self.cpe_id !== '') {$(jqId(self.cpe_id)).addClass('highlight-association');}
-                $(jqId(id)).addClass('highlight-association');
-            }
-        })
-        svg.on('mouseleave', () => {
-            if (okitSettings.highlight_association) {
-                if (self.drg_id !== '') {$(jqId(self.drg_id)).removeClass('highlight-association');}
-                if (self.cpe_id !== '') {$(jqId(self.cpe_id)).removeClass('highlight-association');}
-                $(jqId(id)).removeClass('highlight-association');
-            }
-        });
+    addAssociationHighlighting() {
+        if (this.drg_id !== '') {$(jqId(this.drg_id)).addClass('highlight-association');}
+        if (this.cpe_id !== '') {$(jqId(this.cpe_id)).addClass('highlight-association');}
+        $(jqId(this.artefact_id)).addClass('highlight-association');
     }
+
+    removeAssociationHighlighting() {
+        if (this.drg_id !== '') {$(jqId(this.drg_id)).removeClass('highlight-association');}
+        if (this.cpe_id !== '') {$(jqId(this.cpe_id)).removeClass('highlight-association');}
+        $(jqId(this.artefact_id)).removeClass('highlight-association');
+    }
+
     // Draw Connections
     drawConnections() {
         if (this.cpe_id !== '') {this.drawConnection(this.id, this.cpe_id);}

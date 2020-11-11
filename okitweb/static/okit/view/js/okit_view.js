@@ -1709,13 +1709,20 @@ class OkitArtefactView {
 
     addMouseOverEvents(svg) {
         const id = this.artefact_id;
+        const self = this;
         svg.on('mouseenter', () => {
             $(jqId(id)).addClass('highlight-rect');
+            if (okitSettings.highlight_association) {self.addAssociationHighlighting();}
         })
         svg.on('mouseleave', () => {
             $(jqId(id)).removeClass('highlight-rect');
+            if (okitSettings.highlight_association) {self.removeAssociationHighlighting();}
         });
     }
+
+    addAssociationHighlighting() {}
+
+    removeAssociationHighlighting() {}
 
     addDragEvents(svg) {
         svg.on("dragenter",  dragEnter)
@@ -2099,7 +2106,7 @@ class OkitArtefactView {
     }
 
     getTopEdgeChildOffset() {
-        alert('Get First Top Edge Child function "getTopEdgeChildOffset()" has not been implemented.');
+        alert('Get Top Edge Child function "getTopEdgeChildOffset()" has not been implemented.');
     }
 
     // Top
@@ -2374,9 +2381,12 @@ class OkitArtefactView {
     }
 
     getFirstRightEdgeChildOffset() {
+        const width = this.dimensions.width;
+        const icon_width = this.icon_width;
+        const width_multiplier = OkitArtefactView.prototype.width_multiplier;
         let offset = {
-            dx: Math.round(this.dimensions.width - icon_width),
-            dy: Math.round(positional_adjustments.padding.x)
+            dx: Math.round(width - (icon_width * width_multiplier)),
+            dy: Math.round(positional_adjustments.padding.y)
         };
         return offset;
     }
