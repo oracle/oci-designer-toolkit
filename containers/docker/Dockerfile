@@ -45,7 +45,7 @@ RUN yum install -y \
         oci==2.22.0 \
         pandas==1.1.2 \
         python-magic==0.4.18 \
-        pyyaml==5.2 \
+        pyyaml==5.3.1 \
         requests==2.24.0 \
         xlsxwriter==1.3.6 \
 # Create Workspace
