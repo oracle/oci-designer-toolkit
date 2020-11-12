@@ -6,6 +6,7 @@
 ### Features
 
 ### Bug Fixes
+1. Fix issue where MySQL Databases could not be deleted.
 
 
 ## Version 0.13.0 
