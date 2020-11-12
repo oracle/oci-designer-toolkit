@@ -21,7 +21,11 @@ function saveZip(url, filename="") {
     a.click();
 }
 
-function handleGenerateTerraform(e) {
+function handleExportToTerraformLocal(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateTerraform);
+}
+function handleExportToTerraformGit(e) {
     hideNavMenu();
     okitJsonModel.validate(generateTerraform);
 }
@@ -50,7 +54,11 @@ function generateTerraform(results) {
     }
 }
 
-function handleGenerateAnsible(e) {
+function handleExportToAnsibleLocal(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateAnsible);
+}
+function handleExportToAnsibleGit(e) {
     hideNavMenu();
     okitJsonModel.validate(generateAnsible);
 }
