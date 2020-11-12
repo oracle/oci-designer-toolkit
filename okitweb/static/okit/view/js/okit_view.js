@@ -1358,7 +1358,7 @@ class OkitArtefactView {
             if (okitSettings.tooltip_type === 'simple') {
                 return this.simple_tooltip;
             } else if (okitSettings.tooltip_type === 'description') {
-                return this.description_tooltip;
+                return this.definition_tooltip;
             } else if (okitSettings.tooltip_type === 'summary') {
                 return this.summary_tooltip;
             } else {
@@ -1368,7 +1368,7 @@ class OkitArtefactView {
         return this.display_name;
     }
     get simple_tooltip() {return this.display_name;}
-    get description_tooltip() {return `Name: ${this.display_name} \nDescription: ${this.description}`;}
+    get definition_tooltip() {return `Name: ${this.display_name} \nDefinition: ${this.definition}`;}
     get summary_tooltip() {return this.display_name;}
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}

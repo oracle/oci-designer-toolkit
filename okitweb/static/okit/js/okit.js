@@ -587,10 +587,10 @@ class OkitSettings {
         tr.append('div').attr('class', 'td').text('');
         td = tr.append('div').attr('class', 'td');
         td.append('input')
-            .attr('id', 'description_tooltip')
+            .attr('id', 'definition_tooltip')
             .attr('name', 'tooltip_type')
             .attr('type', 'radio')
-            .attr('value', 'description')
+            .attr('value', 'definition')
             .on('change', function () {
                 if (autosave) {
                     self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
@@ -598,8 +598,8 @@ class OkitSettings {
                 }
             });
         td.append('label')
-            .attr('for', 'description_tooltip')
-            .text('Description');
+            .attr('for', 'definition_tooltip')
+            .text('Definition');
         // -- Resource Type
         tr = tbody.append('div').attr('class', 'tr');
         tr.append('div').attr('class', 'td').text('');

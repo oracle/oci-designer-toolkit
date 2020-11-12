@@ -997,7 +997,7 @@ class OkitArtifact {
         this.compartment_id = '';
         this.display_name = '';
         this.name = '';
-        this.description = '';
+        this.definition = '';
         // Add default for common Tag variables
         this.freeform_tags = {};
         this.defined_tags = {};
