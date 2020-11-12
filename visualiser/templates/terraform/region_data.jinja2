@@ -35,9 +35,9 @@ locals {
 #    HomeRegion = [for x in data.oci_identity_region_subscriptions.RegionSubscriptions.region_subscriptions: x if x.is_home_region][0]
     home_region = lookup(
         {
-            for r in data.oci_identity_regions.regions.regions : r.key => r.name
+            for r in data.oci_identity_regions.Regions.regions : r.key => r.name
         },
-        data.oci_identity_tenancy.tenancy.home_region_key
+        data.oci_identity_tenancy.Tenancy.home_region_key
     )
 }
 # ------ Get List Service OCIDs
@@ -51,9 +51,11 @@ data "oci_core_images" "InstanceImages" {
 # ------ Home Region Provider
 provider "oci" {
     alias            = "home_region"
+{% if resource_manager is not defined %}
     tenancy_ocid     = {{ tenancy_ocid }}
     user_ocid        = {{ user_ocid }}
     fingerprint      = {{ fingerprint }}
     private_key_path = {{ private_key_path }}
+{% endif %}
     region           = local.home_region
 }

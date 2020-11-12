@@ -37,6 +37,10 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
         self.resource_manager_keys['compartment_ocid'] = compartment_ocid
         logger.info('Resource Manager Keys : {0!s:s}'.format(self.resource_manager_keys))
 
+    def initialiseJinja2Variables(self):
+        super(OCIResourceManagerGenerator, self).initialiseJinja2Variables()
+        self.jinja2_variables["resource_manager"] = True
+
     def writeFiles(self):
         main_rendered = self.getRenderedMain()
         # Write Main tf processing file
