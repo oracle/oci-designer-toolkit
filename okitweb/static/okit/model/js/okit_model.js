@@ -643,8 +643,8 @@ class OkitJson {
     deleteMySQLDatabaseSystem(id) {
         for (let i = 0; i < this.mysql_database_systems.length; i++) {
             if (this.mysql_database_systems[i].id === id) {
-                this.database_systems[i].delete();
-                this.database_systems.splice(i, 1);
+                this.mysql_database_systems[i].delete();
+                this.mysql_database_systems.splice(i, 1);
                 break;
             }
         }
