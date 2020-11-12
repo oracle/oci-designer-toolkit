@@ -1357,7 +1357,7 @@ class OkitArtefactView {
         if (okitSettings.tooltip_type) {
             if (okitSettings.tooltip_type === 'simple') {
                 return this.simple_tooltip;
-            } else if (okitSettings.tooltip_type === 'description') {
+            } else if (okitSettings.tooltip_type === 'definition') {
                 return this.definition_tooltip;
             } else if (okitSettings.tooltip_type === 'summary') {
                 return this.summary_tooltip;
