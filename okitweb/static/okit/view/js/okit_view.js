@@ -1125,14 +1125,15 @@ class OkitArtefactView {
     // -- Reference
     get json_view() {return this.getJsonView();}
     get okit_json() {return this.json_view.getOkitJson();}
-    get id() {return this.artefact ? this.artefact.id : '';}
+    //get id() {return this.artefact ? this.artefact.id : '';}
     get artefact_id() {return this.artefact ? this.artefact.id : '';}
     get attached() {return false;}
     get compartment_id() {return this.artefact ? this.artefact.compartment_id : '';}
     get parent_id() {return null;}
     get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
-    get description() {return this.artefact ? this.artefact.description : '';}
+    get definition() {return this.artefact ? this.artefact.definition : '';}
+    get is_collapsed() {return this.parent ? this.collapsed || this.parent.is_collapsed : this.collapsed;}
     // -- SVG Definitions
     // --- Standard
     get stroke_colours() {
@@ -1225,7 +1226,7 @@ class OkitArtefactView {
             rect_width -= rect_x * 2;
         }
         return {
-            id: this.artefact_id,
+            id: this.rect_id,
             x: rect_x,
             y: rect_y,
             rx: this.rect_rx,
@@ -1271,6 +1272,7 @@ class OkitArtefactView {
     get viewbox_width() {return this.svg_width;}
     get viewbox() {return `${this.viewbox_x} ${this.viewbox_y} ${this.viewbox_width} ${this.viewbox_height}`;}
     // ---- Rectangle
+    get rect_id() {return this.artefact_id;}
     get rect_x() {return 0;}
     get rect_y() {return 0;}
     get rect_rx() {return 0;}
@@ -1581,29 +1583,33 @@ class OkitArtefactView {
     }
 
     draw() {
-        console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
-        const svg = this.drawSvg();
-        this.drawRect(svg);
-        this.drawText(svg, this.svg_name_text);
-        this.drawText(svg, this.svg_type_text);
-        this.drawText(svg, this.svg_info_text);
-        this.drawText(svg, this.svg_label_text);
-        this.drawTitle(svg);
-        this.drawIcon(svg);
-        // Add standard / common click event
-        this.addClickEvent(svg);
-        // Add standard / common mouse over event
-        this.addMouseOverEvents(svg);
-        // Add Mouse Over / Exist Events
-        this.addMouseEvents(svg);
-        // Add Drag Handling Events
-        this.addDragEvents(svg);
-        // Add Context Menu (Right-Click)
-        this.addContextMenu(svg);
-        // Add Custom Data Attributes
-        this.addCustomAttributes(svg)
-        // Return
-        return svg;
+        if (!this.parent || !this.parent.is_collapsed) {
+            console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+            const svg = this.drawSvg();
+            this.drawRect(svg);
+            this.drawText(svg, this.svg_name_text);
+            this.drawText(svg, this.svg_type_text);
+            this.drawText(svg, this.svg_info_text);
+            this.drawText(svg, this.svg_label_text);
+            this.drawTitle(svg);
+            this.drawIcon(svg);
+            // Add standard / common click event
+            this.addClickEvent(svg);
+            // Add standard / common mouse over event
+            this.addMouseOverEvents(svg);
+            // Add Mouse Over / Exist Events
+            this.addMouseEvents(svg);
+            // Add Drag Handling Events
+            this.addDragEvents(svg);
+            // Add Context Menu (Right-Click)
+            this.addContextMenu(svg);
+            // Add Custom Data Attributes
+            this.addCustomAttributes(svg)
+            // Add Attached Resources
+            this.drawAttachments();
+            // Return
+            return svg;
+        }
     }
 
     drawSvg() {
@@ -1750,70 +1756,74 @@ class OkitArtefactView {
 
     addMouseEvents(svg) {}
 
+    drawAttachments() {}
+
     drawConnections() {}
 
     drawConnection(start_id, end_id) {
-        console.info(`Start Id : ${start_id}`);
-        console.info(`End Id   : ${end_id}`);
-        const canvas_svg = d3.select(d3Id('canvas-svg'));
-        const canvas_rect = d3.select(d3Id('canvas-rect'));
-        const svgStartPoint = canvas_svg.node().createSVGPoint();
-        const svgEndPoint = canvas_svg.node().createSVGPoint();
-        const screenCTM = canvas_rect.node().getScreenCTM();
-        if (start_id && start_id !== '' && end_id && end_id !== '' && document.getElementById(start_id) && document.getElementById(end_id)) {
-            let start_bcr = document.getElementById(start_id).getBoundingClientRect();
-            let end_bcr = document.getElementById(end_id).getBoundingClientRect();
-            console.info(`Start BCR : ${start_bcr}`);
-            console.info(start_bcr);
-            console.info(`End BCR : ${end_bcr}`);
-            console.info(end_bcr);
-            let horizontal = false;
-            if (this.top_bottom_connectors_preferred && start_bcr.y > end_bcr.y) {
-                // Start Connector on the top edge
-                svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
-                svgStartPoint.y = start_bcr.y;
-                // End Connector on the bottom edge
-                svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
-                svgEndPoint.y = Math.round(end_bcr.y + end_bcr.height);
-            } else if (this.top_bottom_connectors_preferred && start_bcr.y < end_bcr.y) {
-                // Start Connector on the bottom edge
-                svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
-                svgStartPoint.y = Math.round(start_bcr.y + start_bcr.height);
-                // End Connector on top edge
-                svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
-                svgEndPoint.y = end_bcr.y;
-            } else if (start_bcr.x < end_bcr.x) {
-                // Start Connector on right edge
-                svgStartPoint.x = Math.round(start_bcr.x + start_bcr.width);
-                svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
-                // End Connector on left edge
-                svgEndPoint.x = end_bcr.x;
-                svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
-                // Draw Horizontal
-                horizontal = true;
-            } else if (start_bcr.x > end_bcr.x) {
-                // Start Connector on left edge
-                svgStartPoint.x = start_bcr.x;
-                svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
-                // End Connector on right edge
-                svgEndPoint.x = Math.round(end_bcr.x + end_bcr.width);
-                svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
-                // Draw Horizontal
-                horizontal = true;
-            }
-            let connector_start = svgStartPoint.matrixTransform(screenCTM.inverse());
-            let connector_end = svgEndPoint.matrixTransform(screenCTM.inverse());
-            console.info('Connector Start');
-            console.info(connector_start);
-            console.info('Connector End');
-            console.info(connector_end);
+        if (!this.parent.is_collapsed) {
+            console.info(`Start Id : ${start_id}`);
+            console.info(`End Id   : ${end_id}`);
+            const canvas_svg = d3.select(d3Id('canvas-svg'));
+            const canvas_rect = d3.select(d3Id('canvas-rect'));
+            const svgStartPoint = canvas_svg.node().createSVGPoint();
+            const svgEndPoint = canvas_svg.node().createSVGPoint();
+            const screenCTM = canvas_rect.node().getScreenCTM();
+            if (start_id && start_id !== '' && end_id && end_id !== '' && document.getElementById(start_id) && document.getElementById(end_id)) {
+                let start_bcr = document.getElementById(start_id).getBoundingClientRect();
+                let end_bcr = document.getElementById(end_id).getBoundingClientRect();
+                console.info(`Start BCR : ${start_bcr}`);
+                console.info(start_bcr);
+                console.info(`End BCR : ${end_bcr}`);
+                console.info(end_bcr);
+                let horizontal = false;
+                if (this.top_bottom_connectors_preferred && start_bcr.y > end_bcr.y) {
+                    // Start Connector on the top edge
+                    svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
+                    svgStartPoint.y = start_bcr.y;
+                    // End Connector on the bottom edge
+                    svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
+                    svgEndPoint.y = Math.round(end_bcr.y + end_bcr.height);
+                } else if (this.top_bottom_connectors_preferred && start_bcr.y < end_bcr.y) {
+                    // Start Connector on the bottom edge
+                    svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
+                    svgStartPoint.y = Math.round(start_bcr.y + start_bcr.height);
+                    // End Connector on top edge
+                    svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
+                    svgEndPoint.y = end_bcr.y;
+                } else if (start_bcr.x < end_bcr.x) {
+                    // Start Connector on right edge
+                    svgStartPoint.x = Math.round(start_bcr.x + start_bcr.width);
+                    svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
+                    // End Connector on left edge
+                    svgEndPoint.x = end_bcr.x;
+                    svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
+                    // Draw Horizontal
+                    horizontal = true;
+                } else if (start_bcr.x > end_bcr.x) {
+                    // Start Connector on left edge
+                    svgStartPoint.x = start_bcr.x;
+                    svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
+                    // End Connector on right edge
+                    svgEndPoint.x = Math.round(end_bcr.x + end_bcr.width);
+                    svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
+                    // Draw Horizontal
+                    horizontal = true;
+                }
+                let connector_start = svgStartPoint.matrixTransform(screenCTM.inverse());
+                let connector_end = svgEndPoint.matrixTransform(screenCTM.inverse());
+                console.info('Connector Start');
+                console.info(connector_start);
+                console.info('Connector End');
+                console.info(connector_end);
 
-            if (horizontal) {
-                this.drawHorizontalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
-            } else {
-                this.drawVerticalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
-            }
+                if (horizontal) {
+                    this.drawHorizontalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
+                } else {
+                    this.drawVerticalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
+                }
 
+            }
         }
     }
 

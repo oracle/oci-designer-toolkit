@@ -21,7 +21,16 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     /*
      ** SVG Processing
      */
-    draw() {
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        $(jqId(`${this.artefact_id}-vnic`)).addClass('highlight-association');
+    }
+
+    removeAssociationHighlighting() {
+        $(jqId(`${this.artefact_id}-vnic`)).removeClass('highlight-association');
+    }
+    // TODO: Delete
+    draw1() {
         console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         let me = this;
         let svg = super.draw();

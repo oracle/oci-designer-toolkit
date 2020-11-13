@@ -55,7 +55,8 @@ class InstanceView extends OkitDesignerArtefactView {
     /*
      ** SVG Processing
      */
-    draw() {
+    // TODO: Delete
+    draw1() {
         console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         let svg = super.draw();
         // Draw Attachments
@@ -83,17 +84,6 @@ class InstanceView extends OkitDesignerArtefactView {
             //attachment.artefact.id += '-vnic';
             console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + attachment.display_name);
             let svg = attachment.draw();
-            // Add Highlighting
-            svg.on("mouseover", function () {
-                $(`[id^='${attachment.id}']`).addClass('highlight-vnic');
-                $(jqId(vnic.subnet_id)).addClass('highlight-vnic');
-                d3.event.stopPropagation();
-            });
-            svg.on("mouseout", function () {
-                $(`[id^='${attachment.id}']`).removeClass('highlight-vnic');
-                $(jqId(vnic.subnet_id)).removeClass('highlight-vnic');
-                d3.event.stopPropagation();
-            });
             attachment_count += 1;
         }
         console.log();
