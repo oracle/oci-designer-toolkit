@@ -1089,8 +1089,15 @@ class OkitJsonView {
         this.virtual_network_interfaces.push(vnic ? new VirtualNetworkInterfaceView(vnic, this) : new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this));
         return this.virtual_network_interfaces[this.virtual_network_interfaces.length - 1];
     }
-    getVirtualNetworkInterfaces() {}
-    getVirtualNetworkInterface(id='') {}
+    getVirtualNetworkInterfaces() {return this.virtual_network_interfaces;}
+    getVirtualNetworkInterface(id='') {
+        for (let artefact of this.getVirtualNetworkInterfaces()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteVirtualNetworkInterface(id='') {}
 
     // Fragment
@@ -1386,6 +1393,7 @@ class OkitArtefactView {
 
     getOkitJson() {return this.okit_json;}
 
+    // TODO: Deprecated Delete replaced by attached variable
     newSVGDefinition() {
         let definition = {};
         definition['artefact'] = this.artefact;
@@ -1405,10 +1413,12 @@ class OkitArtefactView {
         return this.definition
     }
 
+    // TODO: Deprecated Delete replaced by attached variable
     getSvgDefinition() {
         return this.definition;
     }
 
+    // TODO: Deprecated Delete
     drawOrig() {
         console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
         // Get Definition from Sub class

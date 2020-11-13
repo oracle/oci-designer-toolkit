@@ -34,7 +34,8 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     // Additional draw Processing
-    draw() {
+    // TODO: Delete
+    draw1() {
         console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
         console.info(`Is Attached   : ${this.attached}.`)

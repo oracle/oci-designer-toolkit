@@ -29,26 +29,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     removeAssociationHighlighting() {
         $(jqId(`${this.artefact_id}-vnic`)).removeClass('highlight-association');
     }
-    // TODO: Delete
-    draw1() {
-        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
-        let me = this;
-        let svg = super.draw();
-        let fill = d3.select(d3Id(this.id)).attr('fill');
-        svg.on("mouseover", function () {
-            //d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', svg_highlight_colour);
-            $(jqId(me.id + '-vnic')).addClass('highlight-vnic');
-            d3.event.stopPropagation();
-        });
-        svg.on("mouseout", function () {
-            //d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', fill);
-            $(jqId(me.id + '-vnic')).removeClass('highlight-vnic');
-            d3.event.stopPropagation();
-        });
-        this.drawAttachments();
-        console.log();
-    }
-
     drawAttachments() {
         console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} Attachments (${this.artefact_id})`);
         let attachment_count = 0;

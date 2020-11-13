@@ -25,7 +25,26 @@ class InstanceView extends OkitDesignerArtefactView {
     }
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // --- Dimensions
-    get dimensions() {
+    // TODO: Decide if show attachments is required
+    get minimum_dimensions_orig() {
+        let minimum_dimensions = super.minimum_dimensions;
+        let attachments = false;
+        for (let id of this.block_storage_volume_ids) {
+            const dimensions = this.json_view.getBlockStorageVolume(id).dimensions();
+            minimum_dimensions.width += dimensions.width + positional_adjustments.padding.x;
+            attachments = true;
+        }
+        for (let vnic of this.getVnicAttachments()) {
+            console.warn(vnic);
+            const dimensions = this.json_view.getSubnet(vnic.subnet_id).collapsed_dimensions;
+            console.warn(dimensions);
+            minimum_dimensions.width += dimensions.width + positional_adjustments.padding.x;
+            attachments = true;
+        }
+        if (attachments) {minimum_dimensions.height += this.icon_height;}
+        return minimum_dimensions;
+    }
+    get dimensions1() {
         console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.minimum_dimensions;
         // Calculate Size based on Child Artifacts
@@ -55,16 +74,18 @@ class InstanceView extends OkitDesignerArtefactView {
     /*
      ** SVG Processing
      */
-    // TODO: Delete
-    draw1() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let svg = super.draw();
-        // Draw Attachments
-        this.drawAttachments();
-        return svg;
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        for (let id of this.block_storage_volume_ids) {$(jqId(id)).addClass('highlight-association');}
+        for (let vnic of this.getVnicAttachments()) {$(jqId(vnic.subnet_id)).addClass('highlight-association');}
     }
 
-    drawAttachments() {
+    removeAssociationHighlighting() {
+        for (let id of this.block_storage_volume_ids) {$(jqId(id)).removeClass('highlight-association');}
+        for (let vnic of this.getVnicAttachments()) {$(jqId(vnic.subnet_id)).removeClass('highlight-association');}
+    }
+    // TODO: Decide If Required
+    drawAttachmentsOrig() {
         console.log('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
@@ -87,6 +108,10 @@ class InstanceView extends OkitDesignerArtefactView {
             attachment_count += 1;
         }
         console.log();
+    }
+
+    getVnicAttachments() {
+        return (this.getParent().getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') ? this.vnics : this.vnics.slice(1);
     }
 
     // Return Artifact Specific Definition.
