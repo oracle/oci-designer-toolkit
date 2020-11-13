@@ -1716,23 +1716,17 @@ class OkitArtefactView {
         const self = this;
         svg.on("click", function() {
             self.loadSlidePanels();
-            //$('.highlight:not(' + jqId(self.artefact_id) +')').removeClass('highlight');
-            //$(jqId(self.artefact_id)).toggleClass('highlight');
-            //$(jqId(self.artefact_id)).hasClass('highlight') ? selectedArtefact = self.id : selectedArtefact = null;
             d3.event.stopPropagation();
         });
     }
 
     addMouseOverEvents(svg) {
-        const id = this.artefact_id;
         const self = this;
         svg.on('mouseenter', () => {
-            //$(jqId(id)).addClass('highlight-rect');
             if (okitSettings.highlight_association) {self.addAssociationHighlighting();}
             d3.event.stopPropagation();
         })
         svg.on('mouseleave', () => {
-            //$(jqId(id)).removeClass('highlight-rect');
             if (okitSettings.highlight_association) {self.removeAssociationHighlighting();}
             d3.event.stopPropagation();
         });
