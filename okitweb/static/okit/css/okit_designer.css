@@ -359,6 +359,13 @@ rect.highlight-association {
     stroke-opacity: 1;
 }
 
+rect.highlight-properties {
+    fill: #336600;
+    stroke: red;
+    stroke-width: 2;
+    stroke-opacity: 1;
+}
+
 /*
 ** Cost Estimate and Value Proposition
  */
