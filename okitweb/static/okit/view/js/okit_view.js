@@ -1716,10 +1716,10 @@ class OkitArtefactView {
         const self = this;
         svg.on("click", function() {
             self.loadSlidePanels();
-            $('.highlight:not(' + jqId(self.artefact_id) +')').removeClass('highlight');
-            $(jqId(self.artefact_id)).toggleClass('highlight');
-            $(jqId(self.artefact_id)).hasClass('highlight') ? selectedArtefact = self.id : selectedArtefact = null;
-            d3.event.stopPropagation();
+            //$('.highlight:not(' + jqId(self.artefact_id) +')').removeClass('highlight');
+            //$(jqId(self.artefact_id)).toggleClass('highlight');
+            //$(jqId(self.artefact_id)).hasClass('highlight') ? selectedArtefact = self.id : selectedArtefact = null;
+            //d3.event.stopPropagation();
         });
     }
 

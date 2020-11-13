@@ -16,10 +16,8 @@ class InstanceView extends OkitDesignerArtefactView {
     get parent_id() {
         let primary_subnet = this.getJsonView().getSubnet(this.artefact.primary_vnic.subnet_id);
         if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
-            console.info('Using Subnet as parent');
             return this.primary_vnic.subnet_id;
         } else {
-            console.info('Using Compartment as parent');
             return this.compartment_id;
         }
     }
@@ -35,9 +33,7 @@ class InstanceView extends OkitDesignerArtefactView {
             attachments = true;
         }
         for (let vnic of this.getVnicAttachments()) {
-            console.warn(vnic);
             const dimensions = this.json_view.getSubnet(vnic.subnet_id).collapsed_dimensions;
-            console.warn(dimensions);
             minimum_dimensions.width += dimensions.width + positional_adjustments.padding.x;
             attachments = true;
         }
