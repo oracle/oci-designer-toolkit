@@ -14,8 +14,8 @@ class LoadBalancerView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.subnet_ids[0];}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
-    // TODO: Remove for new draw
-    get minimum_dimensions() {return {width: 135, height: 100};}
+    // Test Functions variables
+    get subnet_id() {return this.artefact.subnet_ids[0];}
 
     /*
      ** SVG Processing
@@ -45,21 +45,6 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         for (let instance_id of this.artefact.instance_ids) {
             if (instance_id !== '') {this.drawConnection(this.id, instance_id);}
         }
-    }
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['svg']['align'] = "center";
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        definition['name']['show'] = true;
-        definition['name']['align'] = "center";
-        return definition;
     }
 
     /*

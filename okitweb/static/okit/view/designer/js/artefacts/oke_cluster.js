@@ -18,19 +18,6 @@ class OkeClusterView extends OkitDesignerArtefactView {
     /*
     ** SVG Processing
      */
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        if (this.parent) {
-            let first_child = this.parent.getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = first_child.dx;
-            definition['svg']['y'] = first_child.dy;
-            definition['svg']['width'] = this.dimensions['width'];
-            definition['svg']['height'] = this.dimensions['height'];
-            definition['rect']['stroke']['colour'] = stroke_colours.bark;
-            definition['rect']['stroke']['dash'] = 1;
-        }
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function

@@ -14,30 +14,10 @@ class MySQLDatabaseSystemView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
-    // TODO: Remove for new draw
-    get minimum_dimensions() {return {width: 135, height: 100};}
 
     /*
      ** SVG Processing
      */
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        if (this.getParent()) {
-            let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = first_child.dx;
-            definition['svg']['y'] = first_child.dy;
-        }
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['svg']['align'] = "center";
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
-        definition['name']['show'] = true;
-        definition['name']['align'] = "center";
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function

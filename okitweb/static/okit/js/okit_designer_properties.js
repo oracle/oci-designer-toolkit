@@ -195,7 +195,10 @@ function loadPropertiesSheet(json_element) {
     warning_properties = [];
     // Set up Multi Select boxes to toggle select
     //$("select[multiple] option").mousedown(function() {let $self = $(this); $self.prop('selected', !$self.prop('selected')); return false;});
-    console.log();
+
+    // Add Highlight functions
+    $(jqId('property-editor')).mouseenter(function() {$(jqId($('#id').val())).addClass('highlight-properties');});
+    $(jqId('property-editor')).mouseleave(function() {$(jqId($('#id').val())).removeClass('highlight-properties');});
 }
 
 function addFreeformTag(json_element) {

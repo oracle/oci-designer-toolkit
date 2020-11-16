@@ -133,6 +133,16 @@ class OCIJsonValidator(object):
     def validateCompartments(self):
         for artefact in self.okit_json.get('compartments', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+            if artefact['description'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Compartment',
+                    'artefact': artefact['display_name'],
+                    'message': 'Compartment Description must be specified.',
+                    'element': 'description'
+                }
+                self.results['errors'].append(error)
 
     # Database Systems
     def validateDatabaseSystems(self):

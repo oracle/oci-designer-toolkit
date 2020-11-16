@@ -12,42 +12,20 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
+    get rect_id() {return this.artefact ? `${this.artefact.id}-vnic` : '';}
     get parent_id() {return this.attached_id;}
-
-    getParent() {
-        return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : null;
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : null;}
 
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        console.log();
-        return svg;
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        $(jqId(this.artefact_id)).addClass('highlight-association');
     }
 
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        console.log('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        console.info(this.getParent());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.log();
-        return definition;
+    removeAssociationHighlighting() {
+        $(jqId(this.artefact_id)).removeClass('highlight-association');
     }
 
     /*

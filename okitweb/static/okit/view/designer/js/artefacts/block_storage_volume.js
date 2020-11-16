@@ -12,53 +12,40 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.compartment_id;}
-    get attached() {
+    // TODO: Enable when Instance code added
+    get attached1() {
         if (!this.attached_id) {
             for (let instance of this.getOkitJson().instances) {
                 if (instance.block_storage_volume_ids.includes(this.id)) {
-                    console.info(this.display_name + ' attached to instance ' + instance.display_name);
                     return true;
                 }
             }
         }
         return false;
     }
-
-    getParent() {
-        return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.compartment_id;}
+    get parent() {return this.attached_id ? this.getJsonView().getInstance(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
 
     /*
      ** SVG Processing
      */
-    // Additional draw Processing
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
-        console.info(`Is Attached   : ${this.attached}.`)
-        if (!okitSettings.hide_attached || !this.attached) {
-            console.info(`${this.display_name} is either not attached and we are displaying attached`);
-            let svg = super.draw();
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        for (let instance of this.getOkitJson().instances) {
+            if (instance.block_storage_volume_ids.includes(this.id)) {
+                $(jqId(instance.id)).addClass('highlight-association');
+            }
         }
-        console.log();
+        $(jqId(this.artefact_id)).addClass('highlight-association');
     }
 
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        return definition;
+    removeAssociationHighlighting() {
+        for (let instance of this.getOkitJson().instances) {
+            if (instance.block_storage_volume_ids.includes(this.id)) {
+                $(jqId(instance.id)).removeClass('highlight-association');
+            }
+        }
+        $(jqId(this.artefact_id)).removeClass('highlight-association');
     }
 
     /*

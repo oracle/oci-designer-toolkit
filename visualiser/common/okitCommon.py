@@ -166,8 +166,12 @@ def standardiseIds(json_data={}, from_char='.', to_char='-'):
     return json_data
 
 def userDataDecode(data):
-    m = magic.Magic(mime_encoding=True)
-    encoding = m.from_buffer(base64.b64decode(data))
-    logger.info('<<<<<<<<<<<user-data encoding {0!s:s}>>>>>>>>>>>'.format(encoding))
-    return base64.b64decode(data).decode(encoding)
+    try:
+        m = magic.Magic(mime_encoding=True)
+        encoding = m.from_buffer(base64.b64decode(data))
+        logger.info('<<<<<<<<<<<user-data encoding {0!s:s}>>>>>>>>>>>'.format(encoding))
+        return base64.b64decode(data).decode(encoding)
+    except Exception as e:
+        logger.error(e)
+        return ''
 

@@ -8,7 +8,7 @@ locals {
 {% else %}
 # ------ Create Compartment
 resource "oci_identity_compartment" "{{ resource_name }}" {
-    count = local.HomeRegion.region_name == var.region ? 1 : 0
+    provider       = oci.home_region
     #Required
     compartment_id = {{ compartment_id }}
     description = {{ description | safe }}
@@ -23,22 +23,9 @@ resource "oci_identity_compartment" "{{ resource_name }}" {
     {% endif %}
     enable_delete = false
 }
-data "oci_identity_compartments" "{{ resource_name }}Compartments" {
-    compartment_id = local.HomeRegion.region_name == var.region ? oci_identity_compartment.{{ resource_name }}[0].compartment_id : {{ compartment_id }}
-    access_level   = "ACCESSIBLE"
-}
-locals {
-    {{ resource_name }}ActiveCompartments = [for x in data.oci_identity_compartments.{{ resource_name }}Compartments.compartments: x if x.state == "ACTIVE" && x.name == {{ display_name | safe }}]
-}
-
-output "{{ resource_name }}ActiveCompartments" {
-    value = local.{{ resource_name }}ActiveCompartments
-}
 
 locals {
-    {{ resource_name }}_id              = local.HomeRegion.region_name == var.region ? oci_identity_compartment.{{ resource_name }}[0].id : local.{{ resource_name }}ActiveCompartments[0].id
-    #    {{ resource_name }}_id              = oci_identity_compartment.{{ resource_name }}[0].id
-    #{{ resource_name }}_id              = local.{{ resource_name }}ActiveCompartments[0].id
+    {{ resource_name }}_id = oci_identity_compartment.{{ resource_name }}.id
 }
 {% endif %}
 

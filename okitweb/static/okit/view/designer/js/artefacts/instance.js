@@ -12,20 +12,35 @@ class InstanceView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
+    // -- Reference
     get parent_id() {
         let primary_subnet = this.getJsonView().getSubnet(this.artefact.primary_vnic.subnet_id);
         if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
-            console.info('Using Subnet as parent');
             return this.primary_vnic.subnet_id;
         } else {
-            console.info('Using Compartment as parent');
             return this.compartment_id;
         }
     }
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
-    // TODO: Remove for new draw
-    get minimum_dimensions() {return {width: 135, height: 100};}
-    get dimensions() {
+    // --- Dimensions
+    // TODO: Decide if show attachments is required
+    get minimum_dimensions_orig() {
+        let minimum_dimensions = super.minimum_dimensions;
+        let attachments = false;
+        for (let id of this.block_storage_volume_ids) {
+            const dimensions = this.json_view.getBlockStorageVolume(id).dimensions();
+            minimum_dimensions.width += dimensions.width + positional_adjustments.padding.x;
+            attachments = true;
+        }
+        for (let vnic of this.getVnicAttachments()) {
+            const dimensions = this.json_view.getSubnet(vnic.subnet_id).collapsed_dimensions;
+            minimum_dimensions.width += dimensions.width + positional_adjustments.padding.x;
+            attachments = true;
+        }
+        if (attachments) {minimum_dimensions.height += this.icon_height;}
+        return minimum_dimensions;
+    }
+    get dimensions1() {
         console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
         let dimensions = this.minimum_dimensions;
         // Calculate Size based on Child Artifacts
@@ -47,19 +62,30 @@ class InstanceView extends OkitDesignerArtefactView {
         console.log();
         return dimensions;
     }
+    // ---- Icon
+    get icon_definition_id() {return this.shape.startsWith('BM.') ? 'BareMetalInstanceSvg' : super.icon_definition_id;}
+    // ---- Text
+    get summary_tooltip() {return `Name: ${this.display_name} \nAvailability Domain: ${this.artefact.availability_domain} \nShape: ${this.artefact.shape} \nOS: ${this.source_details.os} ${this.source_details.version}`;}
+    // Test Functions variables
+    get subnet_id() {return this.artefact.primary_vnic.subnet_id;}
 
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let svg = super.draw();
-        // Draw Attachments
-        this.drawAttachments();
-        return svg;
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        for (let id of this.block_storage_volume_ids) {$(jqId(id)).addClass('highlight-association');}
+        for (let vnic of this.getVnicAttachments()) {$(jqId(vnic.subnet_id)).addClass('highlight-association');}
+        for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).addClass('highlight-association');}
     }
 
-    drawAttachments() {
+    removeAssociationHighlighting() {
+        for (let id of this.block_storage_volume_ids) {$(jqId(id)).removeClass('highlight-association');}
+        for (let vnic of this.getVnicAttachments()) {$(jqId(vnic.subnet_id)).removeClass('highlight-association');}
+        for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).removeClass('highlight-association');}
+    }
+    // TODO: Decide If Required
+    drawAttachmentsOrig() {
         console.log('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
@@ -70,7 +96,7 @@ class InstanceView extends OkitDesignerArtefactView {
             attachment_count += 1;
         }
         let start_idx = 1;
-        if (this.getParent().getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') {start_idx = 0;}
+        if (this.parent.getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') {start_idx = 0;}
         for (let idx = start_idx;  idx < this.vnics.length; idx++) {
             let vnic = this.vnics[idx];
             let attachment = new VirtualNetworkInterfaceView(this.getJsonView().getOkitJson().getSubnet(vnic.subnet_id), this.getJsonView());
@@ -79,40 +105,13 @@ class InstanceView extends OkitDesignerArtefactView {
             //attachment.artefact.id += '-vnic';
             console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + attachment.display_name);
             let svg = attachment.draw();
-            // Add Highlighting
-            svg.on("mouseover", function () {
-                $(`[id^='${attachment.id}']`).addClass('highlight-vnic');
-                $(jqId(vnic.subnet_id)).addClass('highlight-vnic');
-                d3.event.stopPropagation();
-            });
-            svg.on("mouseout", function () {
-                $(`[id^='${attachment.id}']`).removeClass('highlight-vnic');
-                $(jqId(vnic.subnet_id)).removeClass('highlight-vnic');
-                d3.event.stopPropagation();
-            });
             attachment_count += 1;
         }
         console.log();
     }
 
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let parent = this.getParent();
-        if (parent) {
-            let first_child = parent.getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = first_child.dx;
-            definition['svg']['y'] = first_child.dy;
-        }
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['svg']['align'] = "center";
-        definition['rect']['stroke']['colour'] = stroke_colours.blue;
-        definition['rect']['stroke']['dash'] = 1;
-        definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
-        definition['name']['show'] = true;
-        definition['name']['align'] = "center";
-        return definition;
+    getVnicAttachments() {
+        return (this.parent.getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') ? this.vnics : this.vnics.slice(1);
     }
 
     /*
@@ -143,27 +142,15 @@ class InstanceView extends OkitDesignerArtefactView {
                 let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
                 subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
             }
-            // Build Instance Shape Select
-            let shape_select = $(jqId('shape'));
-            $(shape_select).empty();
-            for (let shape of okitOciData.getInstanceShapes()) {
-                let shape_text = `${shape.shape} (${shape.ocpus} OCPU ${shape.memory_in_gbs} GB Memory)`;
-                // Simple Shape Text because we need to upgrade the oci module
-                shape_text = `${shape.shape}`;
-                shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
-            }
+            // Load Shapes
+            this.loadShapes();
             // Build Network Security Groups
             this.loadNetworkSecurityGroups('nsg_ids', this.primary_vnic.subnet_id);
             // Secondary Vnics
             this.loadSecondaryVnics();
             $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
             // Load OSs
-            let os_select = $(jqId('os'));
-            $(os_select).empty();
-            for (let os of okitOciData.getInstanceOS()) {
-                os_select.append($('<option>').attr('value', os).text(os));
-            }
-            os_select.on('change', () => {me.loadOSVersions($("#os").val());});
+            this.loadOSs(this.shape);
             // Load OS Versions
             this.loadOSVersions(this.source_details.os);
             // Load Properties
@@ -171,13 +158,48 @@ class InstanceView extends OkitDesignerArtefactView {
         });
     }
 
+    loadShapes() {
+        const self = this;
+        const shape_select = $(jqId('shape'));
+        $(shape_select).empty();
+        for (let shape of okitOciData.getInstanceShapes()) {
+            let shape_text = `${shape.shape} (${shape.ocpus} OCPU ${shape.memory_in_gbs} GB Memory)`;
+            // Simple Shape Text because we need to upgrade the oci module
+            shape_text = `${shape.shape}`;
+            shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
+        }
+        shape_select.on('change', () => {self.loadOSs($("#shape").val());});
+    }
+
+    loadOSs(shape) {
+        const self = this;
+        const os_select = $(jqId('os'));
+        let os_exists = false;
+        $(os_select).empty();
+        for (let os of okitOciData.getInstanceOS(shape)) {
+            os_select.append($('<option>').attr('value', os).text(os));
+            os_exists = os_exists | this.source_details.os === os;
+        }
+        os_select.on('change', () => {self.loadOSVersions($("#os").val());});
+        if (!os_exists) {
+            this.source_details.os = $("#os option:first").val();
+        }
+        $("#os").val(this.source_details.os);
+    }
+
     loadOSVersions(os) {
-        let version_select = $(jqId('version'));
+        const self = this;
+        const version_select = $(jqId('version'));
+        let version_exists = false;
         $(version_select).empty();
         for (let version of okitOciData.getInstanceOSVersions(os)) {
             version_select.append($('<option>').attr('value', version).text(version));
+            version_exists = version_exists | this.source_details.version === version;
         }
-        $("#version").val($("#version option:first").val());
+        if (!version_exists) {
+            this.source_details.version = $("#version option:first").val();
+        }
+        $("#version").val(this.source_details.version);
     }
 
     loadSecondaryVnics() {

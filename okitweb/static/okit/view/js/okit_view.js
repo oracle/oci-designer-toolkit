@@ -602,11 +602,11 @@ class OkitJsonView {
         this.load_balancers.push(loadbalancer ? new LoadBalancerView(loadbalancer, this) : new LoadBalancerView(this.okitjson.newLoadBalancer(), this));
         return this.load_balancers[this.load_balancers.length - 1];
     }
-    getloadBalancers() {
+    getLoadBalancers() {
         return this.load_balancers;
     }
     getLoadBalancer(id='') {
-        for (let artefact of this.getloadBalancers()) {
+        for (let artefact of this.getLoadBalancers()) {
             if (artefact.id === id) {
                 return artefact;
             }
@@ -1089,8 +1089,15 @@ class OkitJsonView {
         this.virtual_network_interfaces.push(vnic ? new VirtualNetworkInterfaceView(vnic, this) : new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this));
         return this.virtual_network_interfaces[this.virtual_network_interfaces.length - 1];
     }
-    getVirtualNetworkInterfaces() {}
-    getVirtualNetworkInterface(id='') {}
+    getVirtualNetworkInterfaces() {return this.virtual_network_interfaces;}
+    getVirtualNetworkInterface(id='') {
+        for (let artefact of this.getVirtualNetworkInterfaces()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
     deleteVirtualNetworkInterface(id='') {}
 
     // Fragment
@@ -1113,6 +1120,7 @@ class OkitArtefactView {
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.collapsed = false;
+        this.recalculate_minimum_dimensions = true;
         this.getJsonView = function() {return json_view};
         // Raise Artefact Elements to View Class
         if (this.artefact) {
@@ -1125,13 +1133,15 @@ class OkitArtefactView {
     // -- Reference
     get json_view() {return this.getJsonView();}
     get okit_json() {return this.json_view.getOkitJson();}
-    get id() {return this.artefact ? this.artefact.id : '';}
+    //get id() {return this.artefact ? this.artefact.id : '';}
     get artefact_id() {return this.artefact ? this.artefact.id : '';}
     get attached() {return false;}
     get compartment_id() {return this.artefact ? this.artefact.compartment_id : '';}
     get parent_id() {return null;}
     get parent() {return null;}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
+    get definition() {return this.artefact ? this.artefact.definition : '';}
+    get is_collapsed() {return this.parent ? this.collapsed || this.parent.is_collapsed : this.collapsed;}
     // -- SVG Definitions
     // --- Standard
     get stroke_colours() {
@@ -1193,10 +1203,13 @@ class OkitArtefactView {
         };
     }
     // --- Dimensions
+    get recalculate_dimensions() {return this.recalculate_minimum_dimensions;}
+    set recalculate_dimensions(recalculate) {this.recalculate_minimum_dimensions = recalculate; this.parent ? this.parent.recalculate_dimensions = recalculate : recalculate = recalculate;}
+    get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 1.5 : 2 : 1;}
+    get height_multiplier() {return this.show_label ?  1.5 : 1;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
-    get collapsed_dimensions() {return {width: this.icon_width * 1.5, height: this.icon_height * 1.5};}
-    // TODO: New Draw requires {width: this.icon_width * 1.5, height: this.icon_height * 1.5}
-    get minimum_dimensions() {return {width: this.icon_width, height: this.icon_height};}
+    get collapsed_dimensions() {return {width: this.icon_width * this.width_multiplier, height: this.icon_height * this.height_multiplier};}
+    get minimum_dimensions() {return {width: this.icon_width * this.width_multiplier, height: this.icon_height * this.height_multiplier};}
     get dimensions() {return this.collapsed ? this.collapsed_dimensions : this.minimum_dimensions;}
     // --- Definitions
     get svg_definition() {
@@ -1223,7 +1236,7 @@ class OkitArtefactView {
             rect_width -= rect_x * 2;
         }
         return {
-            id: this.artefact_id,
+            id: this.rect_id,
             x: rect_x,
             y: rect_y,
             rx: this.rect_rx,
@@ -1239,7 +1252,7 @@ class OkitArtefactView {
         };
     }
     // ---- Svg
-    get svg_id() {this.artefact_id + '-svg';}
+    get svg_id() {return this.artefact_id + '-svg';}
     get svg_x() {
         if (this.parent) {
             const offset = this.parent.getChildOffset(this.getArtifactReference());
@@ -1269,6 +1282,7 @@ class OkitArtefactView {
     get viewbox_width() {return this.svg_width;}
     get viewbox() {return `${this.viewbox_x} ${this.viewbox_y} ${this.viewbox_width} ${this.viewbox_height}`;}
     // ---- Rectangle
+    get rect_id() {return this.artefact_id;}
     get rect_x() {return 0;}
     get rect_y() {return 0;}
     get rect_rx() {return 0;}
@@ -1281,7 +1295,7 @@ class OkitArtefactView {
     get rect_fill_style() {return 'fill-opacity: .25;';}
     get rect_stroke_colour() {return this.stroke_colours.bark;}
     get rect_stroke_width() {return 1;}
-    get rect_stroke_dash() {return 1;}
+    get rect_stroke_dash() {return 2;}
     get rect_stroke_space() {return 1;}
     get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_space}`;}
     get rect_stroke_opacity() {return 0;}
@@ -1348,241 +1362,61 @@ class OkitArtefactView {
                 return '';
             }
         }
+        return '';
     }
-    // ----- Tooltop (title)
-    get title() {return this.display_name;}
+    // ----- Tooltip (title)
+    get title() {
+        if (okitSettings.tooltip_type) {
+            if (okitSettings.tooltip_type === 'simple') {
+                return this.simple_tooltip;
+            } else if (okitSettings.tooltip_type === 'definition') {
+                return this.definition_tooltip;
+            } else if (okitSettings.tooltip_type === 'summary') {
+                return this.summary_tooltip;
+            } else {
+                return '';
+            }
+        }
+        return this.display_name;
+    }
+    get simple_tooltip() {return this.display_name;}
+    get definition_tooltip() {return `Name: ${this.display_name} \nDefinition: ${this.definition}`;}
+    get summary_tooltip() {return this.display_name;}
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
-
-    getParent() {return this.parent;}
-
-    getParentId() {return this.parent_id;}
-
-    // TODO: Delete replaced by attached variable
-    isAttached() {return this.attached;}
 
     getArtefact() {return this.artefact;}
 
     getOkitJson() {return this.okit_json;}
 
-    newSVGDefinition() {
-        let definition = {};
-        definition['artefact'] = this.artefact;
-        definition['data_type'] = this.artefact ? this.artefact.getArtifactReference() : '';
-        definition['name'] = {show: false, text: this.display_name };
-        definition['label'] = {show: false, text: this.artefact ? this.artefact.getArtifactReference() : ''};
-        definition['info'] = {show: false, text: this.artefact ? this.artefact.getArtifactReference() : ''};
-        definition['svg'] = {x: 0, y: 0, width: this.icon_width, height: this.icon_height};
-        definition['rect'] = {x: 0, y: 0,
-            width: this.icon_width, height: this.icon_height,
-            width_adjust: 0, height_adjust: 0,
-            stroke: {colour: '#F80000', dash: 5},
-            fill: 'white', style: 'fill-opacity: .25;'};
-        definition['icon'] = {show: true, x_translation: 0, y_translation: 0};
-        definition['title_keys'] = [];
-
-        return this.definition
-    }
-
-    getSvgDefinition() {
-        return this.definition;
-    }
-
     draw() {
-        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
-        // Get Definition from Sub class
-        let definition = this.getSvgDefinition();
-        /*
-        ** Draw Artefact based of returned definition.
-         */
-        let parent_svg_id  = this.parent_id + "-svg";
-        let def_id         = definition['data_type'].replace(/ /g, '') + 'Svg';
-        console.info('Creating ' + this.getArtifactReference() + ' ' + this.display_name);
-        console.info('Id             : ' + this.artefact_id );
-        console.info('Parent Id      : ' + this.parent_id);
-        console.info('Parent SVG Id  : ' + parent_svg_id);
-        console.info('Compartment Id : ' + this.compartment_id);
-        let rect_x         = definition['rect']['x'];
-        let rect_y         = definition['rect']['y'];
-        let rect_width     = definition['svg']['width']  + definition['rect']['width_adjust'];
-        let rect_height    = definition['svg']['height'] + definition['rect']['height_adjust'];
-        if (definition['icon']['y_translation'] < 0) {
-            rect_y = Math.abs(definition['icon']['y_translation']);
-            rect_height -= rect_y * 2;
+        if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
+            console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+            const svg = this.drawSvg();
+            this.drawRect(svg);
+            this.drawText(svg, this.svg_name_text);
+            this.drawText(svg, this.svg_type_text);
+            this.drawText(svg, this.svg_info_text);
+            this.drawText(svg, this.svg_label_text);
+            this.drawTitle(svg);
+            this.drawIcon(svg);
+            // Add standard / common click event
+            this.addClickEvent(svg);
+            // Add standard / common mouse over event
+            this.addMouseOverEvents(svg);
+            // Add Mouse Over / Exist Events
+            this.addMouseEvents(svg);
+            // Add Drag Handling Events
+            this.addDragEvents(svg);
+            // Add Context Menu (Right-Click)
+            this.addContextMenu(svg);
+            // Add Custom Data Attributes
+            this.addCustomAttributes(svg)
+            // Add Attached Resources
+            this.drawAttachments();
+            // Return
+            return svg;
         }
-        if (definition['icon']['x_translation'] < 0) {
-            rect_x = Math.abs(definition['icon']['x_translation']);
-            rect_width -= rect_x * 2;
-        }
-        // Get Parent SVG
-        let parent_svg = d3.select(d3Id(parent_svg_id));
-        // Wrapper SVG Element to define ViewBox etc
-        let svg = parent_svg.append("svg")
-            .attr("id", this.artefact_id + '-svg')
-            .attr("data-type", definition['data_type'])
-            .attr("x",         definition['svg']['x'])
-            .attr("y",         definition['svg']['y'])
-            .attr("width",     definition['svg']['width'])
-            .attr("height",    definition['svg']['height'])
-            .attr("viewBox", "0 0 " + definition['svg']['width'] + " " + definition['svg']['height'])
-            .attr("preserveAspectRatio", "xMinYMax meet");
-
-        let rect = svg.append("rect")
-            .attr("id", this.artefact_id)
-            .attr("x",            rect_x)
-            .attr("y",            rect_y)
-            .attr("rx",           corner_radius)
-            .attr("ry",           corner_radius)
-            .attr("width",        rect_width)
-            .attr("height",       rect_height)
-            .attr("fill",         definition['rect']['fill'])
-            .attr("style",        definition['rect']['style'])
-            .attr("stroke",       definition['rect']['stroke']['colour'])
-            .attr("stroke-width", definition['rect']['stroke']['width'])
-            .attr("stroke-dasharray",
-                definition['rect']['stroke']['dash'] + ", " + definition['rect']['stroke']['dash']);
-
-        let text_align_x = rect_x;
-        let text_anchor = "start"
-        if (definition['name']['align']) {
-            if (definition['name']['align'] === 'center') {
-                text_align_x = (Math.round(definition['svg']['width']-20) / 2)
-                text_anchor = "middle"
-            }
-            else if (definition['name']['align'] === 'right') {
-                text_align_x = definition['svg']['width']-20
-                text_anchor = "end"
-            }
-        }
-        if (definition['name']['show']) {
-            let name_svg = svg.append('svg')
-                .attr("x", "10")
-                .attr("y", "0")
-                .attr("width", container_artefact_label_width)
-                .attr("height", definition['svg']['height'])
-                .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + container_artefact_label_width + " " + definition['svg']['height']);
-            let name = name_svg.append("text")
-                .attr("class", "svg-text")
-                .attr("id", this.artefact_id + '-display-name')
-                .attr("x", text_align_x)
-                .attr("y", "55")
-                .attr("text-anchor", text_anchor)
-                .attr("vector-effects", "non-scaling-size")
-                .text(definition['name']['text']);
-        }
-        if (definition['label']['show']) {
-            let label_svg = svg.append('svg')
-                .attr("x", "10")
-                .attr("y", "0")
-                .attr("width", container_artefact_label_width)
-                .attr("height", definition['svg']['height'])
-                .attr("preserveAspectRatio", "xMinYMax meet")
-                .attr("viewBox", "0 0 " + container_artefact_label_width + " " + definition['svg']['height']);
-            let name = label_svg.append("text")
-                .attr("class", "svg-text")
-                .attr("id", this.artefact_id + '-label')
-                .attr("x", rect_x)
-                .attr("y", definition['svg']['height'] - Math.max(10, (rect_y * 2) - 10))
-                .attr("fill", definition['rect']['stroke']['colour'])
-                .attr("vector-effects", "non-scaling-size")
-                .text(definition['label']['text']);
-        }
-        if (definition['info']['show']) {
-            let info_svg = svg.append('svg')
-                .attr("x", Math.round(definition['svg']['width'] - container_artefact_info_width))
-                .attr("y", "0")
-                .attr("width", container_artefact_info_width)
-                .attr("height", definition['svg']['height'])
-                .attr("preserveAspectRatio", "xMinYMax meet")
-                .attr("viewBox", "0 0 " + container_artefact_info_width + " " + definition['svg']['height']);
-            let name = info_svg.append("text")
-                .attr("class", "svg-text")
-                .attr("id", this.artefact_id + '-info')
-                .attr("x", 0)
-                .attr("y", definition['svg']['height'] - Math.max(10, (rect_y * 2) - 10))
-                .attr("fill", definition['rect']['stroke']['colour'])
-                .attr("vector-effects", "non-scaling-size")
-                .text(definition['info']['text']);
-        }
-
-        let svg_transform = ""
-        if (definition['svg']['align']) {
-            if (definition['svg']['align'] === 'center') {
-                svg_transform = "translate(" + (definition['svg']['width']/2 - icon_width/2) + " , 0)"
-            } else if (definition['svg']['align'] === 'right') {
-                svg_transform = "translate(" + (definition['svg']['width'] - icon_width - icon_spacing) + " , 0)"
-            }
-        }
-
-        svg.append('g')
-            .append("use")
-            .attr("xlink:href","#" + def_id)
-            .attr("transform", svg_transform);
-
-        svg.append("title")
-            .attr("id", this.artefact_id + '-title')
-            .text(this.display_name);
-
-        // Set common attributes on svg element and children
-        svg.on("contextmenu", handleContextMenu)
-            .on("dragenter",  dragEnter)
-            .on("dragover",   dragOver)
-            .on("dragleave",  dragLeave)
-            .on("drop",       dragDrop)
-            .on("dragend",    dragEnd)
-            .attr("data-type",           definition['data_type'])
-            .attr("data-okit-id",        this.artefact_id)
-            .attr("data-parent-id",      this.parent_id)
-            .attr("data-compartment-id", this.compartment_id)
-            .selectAll("*")
-            .attr("data-type",           definition['data_type'])
-            .attr("data-okit-id",        this.artefact_id)
-            .attr("data-parent-id",      this.parent_id)
-            .attr("data-compartment-id", this.compartment_id);
-        /*
-        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
-        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
-        ** Artifact.
-         */
-        let me = this;
-        svg.on("click", function() {
-            me.loadSlidePanels();
-            $('.highlight:not(' + jqId(me.artefact_id) +')').removeClass('highlight');
-            $(jqId(me.artefact_id)).toggleClass('highlight');
-            $(jqId(me.artefact_id)).hasClass('highlight') ? selectedArtefact = me.id : selectedArtefact = null;
-            d3.event.stopPropagation();
-        });
-        console.log();
-        // Add Mouse Over / Exist Events
-        this.addMouseEvents(svg);
-        // Draw Connections
-        //this.drawConnections();
-        return svg;
-    }
-
-    newdraw() {
-        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
-        const svg = this.drawSvg();
-        this.drawRect(svg);
-        this.drawText(svg, this.svg_name_text);
-        this.drawText(svg, this.svg_type_text);
-        this.drawText(svg, this.svg_info_text);
-        this.drawText(svg, this.svg_label_text);
-        this.drawTitle(svg);
-        this.drawIcon(svg);
-        // Add standard / common click event
-        this.addClickEvent(svg);
-        // Add Mouse Over / Exist Events
-        this.addMouseEvents(svg);
-        // Add Drag Handling Events
-        this.addDragEvents(svg);
-        // Add Context Menu (Right-Click)
-        //this.addContextMenu(svg);
-        // Add Custom Data Attributes
-        this.addCustomAttributes(svg)
-        // Return
-        return svg;
     }
 
     drawSvg() {
@@ -1679,12 +1513,27 @@ class OkitArtefactView {
         const self = this;
         svg.on("click", function() {
             self.loadSlidePanels();
-            $('.highlight:not(' + jqId(self.artefact_id) +')').removeClass('highlight');
-            $(jqId(self.artefact_id)).toggleClass('highlight');
-            $(jqId(self.artefact_id)).hasClass('highlight') ? selectedArtefact = self.id : selectedArtefact = null;
             d3.event.stopPropagation();
         });
     }
+
+    addMouseOverEvents(svg) {
+        const self = this;
+        svg.on('mouseenter', () => {
+            if (okitSettings.highlight_association) {self.addAssociationHighlighting();}
+            $(jqId(self.id)).addClass('highlight-rect');
+            d3.event.stopPropagation();
+        })
+        svg.on('mouseleave', () => {
+            if (okitSettings.highlight_association) {self.removeAssociationHighlighting();}
+            $(jqId(self.id)).removeClass('highlight-rect');
+            d3.event.stopPropagation();
+        });
+    }
+
+    addAssociationHighlighting() {}
+
+    removeAssociationHighlighting() {}
 
     addDragEvents(svg) {
         svg.on("dragenter",  dragEnter)
@@ -1712,70 +1561,74 @@ class OkitArtefactView {
 
     addMouseEvents(svg) {}
 
+    drawAttachments() {}
+
     drawConnections() {}
 
     drawConnection(start_id, end_id) {
-        console.info(`Start Id : ${start_id}`);
-        console.info(`End Id   : ${end_id}`);
-        const canvas_svg = d3.select(d3Id('canvas-svg'));
-        const canvas_rect = d3.select(d3Id('canvas-rect'));
-        const svgStartPoint = canvas_svg.node().createSVGPoint();
-        const svgEndPoint = canvas_svg.node().createSVGPoint();
-        const screenCTM = canvas_rect.node().getScreenCTM();
-        if (start_id && start_id !== '' && end_id && end_id !== '' && document.getElementById(start_id) && document.getElementById(end_id)) {
-            let start_bcr = document.getElementById(start_id).getBoundingClientRect();
-            let end_bcr = document.getElementById(end_id).getBoundingClientRect();
-            console.info(`Start BCR : ${start_bcr}`);
-            console.info(start_bcr);
-            console.info(`End BCR : ${end_bcr}`);
-            console.info(end_bcr);
-            let horizontal = false;
-            if (this.top_bottom_connectors_preferred && start_bcr.y > end_bcr.y) {
-                // Start Connector on the top edge
-                svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
-                svgStartPoint.y = start_bcr.y;
-                // End Connector on the bottom edge
-                svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
-                svgEndPoint.y = Math.round(end_bcr.y + end_bcr.height);
-            } else if (this.top_bottom_connectors_preferred && start_bcr.y < end_bcr.y) {
-                // Start Connector on the bottom edge
-                svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
-                svgStartPoint.y = Math.round(start_bcr.y + start_bcr.height);
-                // End Connector on top edge
-                svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
-                svgEndPoint.y = end_bcr.y;
-            } else if (start_bcr.x < end_bcr.x) {
-                // Start Connector on right edge
-                svgStartPoint.x = Math.round(start_bcr.x + start_bcr.width);
-                svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
-                // End Connector on left edge
-                svgEndPoint.x = end_bcr.x;
-                svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
-                // Draw Horizontal
-                horizontal = true;
-            } else if (start_bcr.x > end_bcr.x) {
-                // Start Connector on left edge
-                svgStartPoint.x = start_bcr.x;
-                svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
-                // End Connector on right edge
-                svgEndPoint.x = Math.round(end_bcr.x + end_bcr.width);
-                svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
-                // Draw Horizontal
-                horizontal = true;
-            }
-            let connector_start = svgStartPoint.matrixTransform(screenCTM.inverse());
-            let connector_end = svgEndPoint.matrixTransform(screenCTM.inverse());
-            console.info('Connector Start');
-            console.info(connector_start);
-            console.info('Connector End');
-            console.info(connector_end);
+        if (!this.parent.is_collapsed) {
+            console.info(`Start Id : ${start_id}`);
+            console.info(`End Id   : ${end_id}`);
+            const canvas_svg = d3.select(d3Id('canvas-svg'));
+            const canvas_rect = d3.select(d3Id('canvas-rect'));
+            const svgStartPoint = canvas_svg.node().createSVGPoint();
+            const svgEndPoint = canvas_svg.node().createSVGPoint();
+            const screenCTM = canvas_rect.node().getScreenCTM();
+            if (start_id && start_id !== '' && end_id && end_id !== '' && document.getElementById(start_id) && document.getElementById(end_id)) {
+                let start_bcr = document.getElementById(start_id).getBoundingClientRect();
+                let end_bcr = document.getElementById(end_id).getBoundingClientRect();
+                console.info(`Start BCR : ${start_bcr}`);
+                console.info(start_bcr);
+                console.info(`End BCR : ${end_bcr}`);
+                console.info(end_bcr);
+                let horizontal = false;
+                if (this.top_bottom_connectors_preferred && start_bcr.y > end_bcr.y) {
+                    // Start Connector on the top edge
+                    svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
+                    svgStartPoint.y = start_bcr.y;
+                    // End Connector on the bottom edge
+                    svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
+                    svgEndPoint.y = Math.round(end_bcr.y + end_bcr.height);
+                } else if (this.top_bottom_connectors_preferred && start_bcr.y < end_bcr.y) {
+                    // Start Connector on the bottom edge
+                    svgStartPoint.x = Math.round(start_bcr.x + (start_bcr.width / 2));
+                    svgStartPoint.y = Math.round(start_bcr.y + start_bcr.height);
+                    // End Connector on top edge
+                    svgEndPoint.x = Math.round(end_bcr.x + (end_bcr.width / 2));
+                    svgEndPoint.y = end_bcr.y;
+                } else if (start_bcr.x < end_bcr.x) {
+                    // Start Connector on right edge
+                    svgStartPoint.x = Math.round(start_bcr.x + start_bcr.width);
+                    svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
+                    // End Connector on left edge
+                    svgEndPoint.x = end_bcr.x;
+                    svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
+                    // Draw Horizontal
+                    horizontal = true;
+                } else if (start_bcr.x > end_bcr.x) {
+                    // Start Connector on left edge
+                    svgStartPoint.x = start_bcr.x;
+                    svgStartPoint.y = Math.round(start_bcr.y + (start_bcr.height / 2));
+                    // End Connector on right edge
+                    svgEndPoint.x = Math.round(end_bcr.x + end_bcr.width);
+                    svgEndPoint.y = Math.round(end_bcr.y + (end_bcr.height / 2));
+                    // Draw Horizontal
+                    horizontal = true;
+                }
+                let connector_start = svgStartPoint.matrixTransform(screenCTM.inverse());
+                let connector_end = svgEndPoint.matrixTransform(screenCTM.inverse());
+                console.info('Connector Start');
+                console.info(connector_start);
+                console.info('Connector End');
+                console.info(connector_end);
 
-            if (horizontal) {
-                this.drawHorizontalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
-            } else {
-                this.drawVerticalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
-            }
+                if (horizontal) {
+                    this.drawHorizontalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
+                } else {
+                    this.drawVerticalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
+                }
 
+            }
         }
     }
 
@@ -2068,7 +1921,7 @@ class OkitArtefactView {
     }
 
     getTopEdgeChildOffset() {
-        alert('Get First Top Edge Child function "getTopEdgeChildOffset()" has not been implemented.');
+        alert('Get Top Edge Child function "getTopEdgeChildOffset()" has not been implemented.');
     }
 
     // Top
@@ -2089,7 +1942,7 @@ class OkitArtefactView {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getTopArtifacts()) {
             for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
-                if (artefact.parent_id === this.id) {
+                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -2102,7 +1955,7 @@ class OkitArtefactView {
     getFirstTopChildOffset() {
         let offset = this.getFirstLeftChildOffset();
         if (this.hasLeftChildren()) {
-            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+            offset.dx += Math.round(this.getLeftChildrenMaxDimensions().width + positional_adjustments.spacing.x);
         }
         return offset;
     }
@@ -2129,7 +1982,7 @@ class OkitArtefactView {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getContainerArtifacts()) {
             for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
-                if (artefact.parent_id === this.id) {
+                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
                     max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
@@ -2170,7 +2023,7 @@ class OkitArtefactView {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getBottomArtifacts()) {
             for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
-                if (artefact.parent_id === this.id) {
+                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -2273,7 +2126,7 @@ class OkitArtefactView {
     getFirstLeftChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.spacing.x * 4),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+            dy: Math.round((this.icon_height * OkitArtefactView.prototype.height_multiplier) + positional_adjustments.spacing.y * 2)
         };
         return offset;
     }
@@ -2325,7 +2178,7 @@ class OkitArtefactView {
     }
 
     getRightChildOffset() {
-        alert('Get Right Child function "getRightEdgeChildOffset()" has not been implemented.');
+        alert('Get Right Child function "getRightChildOffset()" has not been implemented.');
     }
 
     // Right Edge
@@ -2343,9 +2196,12 @@ class OkitArtefactView {
     }
 
     getFirstRightEdgeChildOffset() {
+        const width = this.dimensions.width;
+        const icon_width = this.icon_width;
+        const width_multiplier = OkitArtefactView.prototype.width_multiplier;
         let offset = {
-            dx: Math.round(this.dimensions.width - icon_width),
-            dy: Math.round(positional_adjustments.padding.x)
+            dx: Math.round(width - (icon_width * width_multiplier)),
+            dy: Math.round(positional_adjustments.padding.y)
         };
         return offset;
     }
@@ -2462,65 +2318,69 @@ class OkitContainerArtefactView extends OkitArtefactView {
 
     // -- SVG Definitions
     // --- Dimensions
-    get minimum_dimensions() {return {width: 400, height: 300};}
+    get minimum_dimensions() {return {width: 300, height: 150};}
     get dimensions() {
-        console.log(`Getting Dimensions of ${this.getArtifactReference() } : ${this.display_name} (${this.artefact_id})`);
-        let padding = this.getPadding();
-        let dimensions = {width: 0, height: 0};
-        let offset = {dx: 0, dy: 0};
-        // Process Top Edge Artifacts
-        offset = this.getFirstTopEdgeChildOffset();
-        let top_edge_dimensions = this.getTopEdgeChildrenMaxDimensions();
-        dimensions.width  = Math.max(dimensions.width, top_edge_dimensions.width + offset.dx - padding.dx);
-        dimensions.height = Math.max(dimensions.height, top_edge_dimensions.height);
-        // Process Bottom Edge Artifacts
-        offset = this.getFirstBottomEdgeChildOffset();
-        let bottom_edge_dimensions = this.getBottomEdgeChildrenMaxDimensions();
-        dimensions.width  = Math.max(dimensions.width, bottom_edge_dimensions.width);
-        dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
-        // Process Top Artifacts
-        offset = this.getFirstTopChildOffset();
-        let top_dimensions = this.getTopChildrenMaxDimensions();
-        dimensions.width   = Math.max(dimensions.width, top_dimensions.width);
-        dimensions.height += top_dimensions.height;
-        // Process Container Artifacts
-        offset = this.getFirstContainerChildOffset();
-        let container_dimensions = this.getContainerChildrenMaxDimensions();
-        dimensions.width   = Math.max(dimensions.width, container_dimensions.width);
-        dimensions.height += container_dimensions.height;
-        // Process Bottom Artifacts
-        offset = this.getFirstBottomChildOffset();
-        let bottom_dimensions = this.getBottomChildrenMaxDimensions();
-        dimensions.width   = Math.max(dimensions.width, bottom_dimensions.width);
-        dimensions.height += bottom_dimensions.height;
-        // Process Left Edge Artifacts
-        // Process Right Edge Artifacts
-        // Process Left Artifacts
-        let left_dimensions = this.getLeftChildrenMaxDimensions();
-        dimensions.width += left_dimensions.width;
-        dimensions.height = Math.max(dimensions.height, left_dimensions.height);
-        // Process Right Artifacts
-        let right_dimensions = this.getRightChildrenMaxDimensions();
-        dimensions.width += right_dimensions.width;
-        dimensions.height = Math.max(dimensions.height, right_dimensions.height);
-        if (this.hasRightChildren()) {
-            dimensions.width += positional_adjustments.spacing.x;
-            dimensions.width += positional_adjustments.padding.x;
+        if (this.collapsed) {
+            return this.collapsed_dimensions;
+        } else {
+            console.log(`Getting Dimensions of ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id})`);
+            let padding = this.getPadding();
+            let dimensions = {width: 0, height: 0};
+            let offset = {dx: 0, dy: 0};
+            // Process Top Edge Artifacts
+            offset = this.getFirstTopEdgeChildOffset();
+            let top_edge_dimensions = this.getTopEdgeChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, top_edge_dimensions.width + offset.dx - padding.dx);
+            dimensions.height = Math.max(dimensions.height, top_edge_dimensions.height);
+            // Process Top Artifacts
+            offset = this.getFirstTopChildOffset();
+            let top_dimensions = this.getTopChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, top_dimensions.width);
+            dimensions.height += top_dimensions.height;
+            // Process Container Artifacts
+            offset = this.getFirstContainerChildOffset();
+            let container_dimensions = this.getContainerChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, container_dimensions.width);
+            dimensions.height += container_dimensions.height;
+            // Process Bottom Artifacts
+            offset = this.getFirstBottomChildOffset();
+            let bottom_dimensions = this.getBottomChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, bottom_dimensions.width);
+            dimensions.height += bottom_dimensions.height;
+            // Process Bottom Edge Artifacts
+            offset = this.getFirstBottomEdgeChildOffset();
+            let bottom_edge_dimensions = this.getBottomEdgeChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, bottom_edge_dimensions.width);
+            dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
+            // Process Left Edge Artifacts
+            // Process Left Artifacts
+            let left_dimensions = this.getLeftChildrenMaxDimensions();
+            dimensions.width += left_dimensions.width;
+            dimensions.height = Math.max(dimensions.height, left_dimensions.height);
+            // Process Right Artifacts
+            let right_dimensions = this.getRightChildrenMaxDimensions();
+            dimensions.width += right_dimensions.width;
+            dimensions.height = Math.max(dimensions.height, right_dimensions.height);
+            if (this.hasRightChildren()) {
+                dimensions.width += positional_adjustments.spacing.x;
+                dimensions.width += positional_adjustments.padding.x;
+            }
+            // Process Right Edge Artifacts
+            // Add Padding
+            dimensions.width += padding.dx * 2;
+            dimensions.height += padding.dy * 2;
+            // Check size against minimum
+            dimensions['width'] = Math.max(dimensions['width'], this.minimum_dimensions.width);
+            dimensions['height'] = Math.max(dimensions['height'], this.minimum_dimensions.height);
+            console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+            console.log();
+            return dimensions;
         }
-        // Add Padding
-        dimensions.width += padding.dx * 2;
-        dimensions.height += padding.dy * 2;
-        // Check size against minimum
-        dimensions['width']  = Math.max(dimensions['width'],  this.minimum_dimensions.width);
-        dimensions['height'] = Math.max(dimensions['height'], this.minimum_dimensions.height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.log();
-        return dimensions;
     }
     // ---- Icon
     get icon_x_tranlation() {return this.collapsed ? super.icon_x_tranlation : -20;}
     get icon_y_tranlation() {return this.collapsed ? super.icon_y_tranlation : -20;}
-    get icon_h_align() {return 'start';}
+    get icon_h_align() {return this.collapsed ? super.icon_h_align : 'start';}
     // ---- Rectangle
     get rect_stroke_dash() {return this.collapsed ? super.rect_stroke_dash : 5;}
     get rect_stroke_space() {return this.collapsed ? super.rect_stroke_space : 2;}
@@ -2576,94 +2436,58 @@ class OkitContainerArtefactView extends OkitArtefactView {
     /*
     ** Child Offset Functions
      */
-    getTopEdgeChildOffset() {
-        let offset = this.getFirstTopEdgeChildOffset();
-        // Count how many top edge children and adjust.
-        let count = 0;
-        for (let child of this.getTopEdgeArtifacts()) {
-            count += $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").length;
+    getDxOffset(offset, artefacts) {
+        for (let child of artefacts) {
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(function() {
+                offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
+            });
         }
-        console.info('Top Edge Count : ' + count);
-        // Increment x position based on count
-        offset.dx += Math.round((icon_width * count) + (positional_adjustments.spacing.x * count));
         return offset;
+    }
+
+    getDyOffset(offset, artefacts) {
+        for (let child of artefacts) {
+            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(function() {
+                offset.dy += Math.round(Number($(this).attr('height')) + positional_adjustments.spacing.y);
+            });
+        }
+        return offset;
+    }
+
+    getTopEdgeChildOffset() {
+        return this.getDxOffset(this.getFirstTopEdgeChildOffset(), this.getTopEdgeArtifacts());
     }
 
     getTopChildOffset() {
-        let offset = this.getFirstTopChildOffset();
-        for (let child of this.getTopArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
-                });
-        }
-        return offset;
+        return this.getDxOffset(this.getFirstTopChildOffset(), this.getTopArtifacts());
     }
 
     getContainerChildOffset() {
-        console.info('Get Container Child Offset');
-        let offset = this.getFirstContainerChildOffset();
-        // Count how many top edge children and adjust.
-        for (let child of this.getContainerArtifacts()) {
-            //console.info('Container Child Count : ' + $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "'][data-parent-id='" + this.id + "']").length);
-            $(jqId(this.id + '-svg')).children('svg[data-type="' + child + '"][data-parent-id="' + this.id + '"]').each(
-                function() {
-                    offset.dy += Math.round(Number($(this).attr('height')) + positional_adjustments.spacing.y);
-                });
-        }
-        console.info('Offset : ' + JSON.stringify(offset));
-        return offset;
+        return this.getDyOffset(this.getFirstContainerChildOffset(), this.getContainerArtifacts());
     }
 
     getBottomChildOffset() {
-        let offset = this.getFirstBottomChildOffset();
-        for (let child of this.getBottomArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    console.info(child);
-                    console.info($(this));
-                    console.info($(this).attr('id'));
-                    offset.dx += Math.round(Number($(this).attr('width')) + positional_adjustments.spacing.x);
-                });
-        }
-        return offset;
+        return this.getDxOffset(this.getFirstBottomChildOffset(), this.getBottomArtifacts());
     }
 
-    getBottomEdgeChildOffset() {}
+    getBottomEdgeChildOffset() {
+        return this.getDxOffset(this.getFirstBottomEdgeChildOffset(), this.getBottomEdgeArtifacts());
+    }
 
-    getLeftEdgeChildOffset() {}
+    getLeftEdgeChildOffset() {
+        return this.getDyOffset(this.getFirstLeftEdgeChildOffset(), this.getLeftEdgeArtifacts());
+    }
 
     getLeftChildOffset() {
-        let offset = this.getFirstLeftChildOffset();
-        for (let child of this.getLeftArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
-                });
-        }
-        return offset;
+        return this.getDyOffset(this.getFirstLeftChildOffset(), this.getLeftArtifacts());
     }
 
     getRightChildOffset() {
-        let offset = this.getFirstRightChildOffset();
-        for (let child of this.getRightArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
-                });
-        }
-        return offset;
+        return this.getDyOffset(this.getFirstRightChildOffset(), this.getRightArtifacts());
     }
 
     getRightEdgeChildOffset() {
-        let offset = this.getFirstRightEdgeChildOffset();
-        for (let child of this.getRightEdgeArtifacts()) {
-            $(jqId(this.id + '-svg')).children("svg[data-type='" + child + "']").each(
-                function() {
-                    offset.dy += Math.round(icon_height + positional_adjustments.spacing.y);
-                });
-        }
-        return offset;
+        return this.getDyOffset(this.getFirstRightEdgeChildOffset(), this.getRightEdgeArtifacts());
     }
 
 }

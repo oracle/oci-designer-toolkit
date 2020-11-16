@@ -2,7 +2,7 @@
 # ------ Retrieve Regional / Cloud Data
 # -------- Get a list of Availability Domains
 data "oci_identity_availability_domains" "AvailabilityDomains" {
-    compartment_id = {{ tenancy_ocid }}
+    compartment_id = {{ compartment_ocid }}
 }
 data "template_file" "AvailabilityDomainNames" {
     count    = length(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains)
@@ -11,22 +11,34 @@ data "template_file" "AvailabilityDomainNames" {
 # -------- Get a list of Fault Domains
 data "oci_identity_fault_domains" "FaultDomainsAD1" {
     availability_domain = element(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains, 0)["name"]
-    compartment_id = {{ tenancy_ocid }}
+    compartment_id = {{ compartment_ocid }}
 }
 data "oci_identity_fault_domains" "FaultDomainsAD2" {
     availability_domain = element(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains, 1)["name"]
-    compartment_id = {{ tenancy_ocid }}
+    compartment_id = {{ compartment_ocid }}
 }
 data "oci_identity_fault_domains" "FaultDomainsAD3" {
     availability_domain = element(data.oci_identity_availability_domains.AvailabilityDomains.availability_domains, 2)["name"]
-    compartment_id = {{ tenancy_ocid }}
+    compartment_id = {{ compartment_ocid }}
 }
 # -------- Get Home Region Name
 data "oci_identity_region_subscriptions" "RegionSubscriptions" {
     tenancy_id = {{ tenancy_ocid }}
 }
+data "oci_identity_regions" "Regions" {
+}
+data "oci_identity_tenancy" "Tenancy" {
+    tenancy_id = {{ tenancy_ocid }}
+}
+
 locals {
-    HomeRegion = [for x in data.oci_identity_region_subscriptions.RegionSubscriptions.region_subscriptions: x if x.is_home_region][0]
+#    HomeRegion = [for x in data.oci_identity_region_subscriptions.RegionSubscriptions.region_subscriptions: x if x.is_home_region][0]
+    home_region = lookup(
+        {
+            for r in data.oci_identity_regions.Regions.regions : r.key => r.name
+        },
+        data.oci_identity_tenancy.Tenancy.home_region_key
+    )
 }
 # ------ Get List Service OCIDs
 data "oci_core_services" "RegionServices" {
@@ -36,3 +48,14 @@ data "oci_core_images" "InstanceImages" {
     compartment_id           = {{ compartment_ocid }}
 }
 
+# ------ Home Region Provider
+provider "oci" {
+    alias            = "home_region"
+{% if resource_manager is not defined %}
+    tenancy_ocid     = {{ tenancy_ocid }}
+    user_ocid        = {{ user_ocid }}
+    fingerprint      = {{ fingerprint }}
+    private_key_path = {{ private_key_path }}
+{% endif %}
+    region           = local.home_region
+}

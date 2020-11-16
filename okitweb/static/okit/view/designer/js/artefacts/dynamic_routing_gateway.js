@@ -15,32 +15,9 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
     get parent_id() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.artefact.vcn_id : this.artefact.compartment_id;}
     get parent() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
 
-    getParent() {
-        return this.parent;
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
-
     /*
      ** SVG Processing
      */
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        if (this.getParent()) {
-            let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = first_child.dx;
-            definition['svg']['y'] = first_child.dy;
-            definition['svg']['width'] = this.dimensions['width'];
-            definition['svg']['height'] = this.dimensions['height'];
-            definition['rect']['stroke']['colour'] = stroke_colours.bark;
-            definition['rect']['stroke']['dash'] = 1;
-        }
-        return definition;
-    }
-
 
     /*
     ** Property Sheet Load function

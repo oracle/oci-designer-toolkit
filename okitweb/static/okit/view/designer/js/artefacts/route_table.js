@@ -12,7 +12,6 @@ class RouteTableView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
     get attached() {
         if (!this.attached_id) {
             for (let subnet of this.getOkitJson().subnets) {
@@ -24,41 +23,12 @@ class RouteTableView extends OkitDesignerArtefactView {
         }
         return false;
     }
-
-    getParent() {
-        return this.attached_id ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getVirtualCloudNetwork(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
+    get parent() {return this.attached_id ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
 
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
-        console.info(`Is Attached   : ${this.attached}.`)
-        if (!okitSettings.hide_attached || !this.attached) {
-            console.info(`${this.display_name} is either not attached and we are displaying attached`);
-            let svg = super.draw();
-        }
-        console.log();
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function
@@ -110,11 +80,11 @@ class RouteTableView extends OkitDesignerArtefactView {
     addRouteRuleHtml(route_rule, rule_num=1) {
         let me = this;
         let vcn_id = '';
-        if (this.getParent().getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
-            vcn_id = this.getParent().id;
+        if (this.parent.getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
+            vcn_id = this.parent_id;
         } else {
             // Must be a child of the Virtual Cloud Network
-            vcn_id = this.getParent().getParent().id;
+            vcn_id = this.parent.parent_id;
         }
 
         let rules_table_body = d3.select('#route_rules_table_body');
@@ -170,16 +140,18 @@ class RouteTableView extends OkitDesignerArtefactView {
                     }
                     console.info('Processing list ' + JSON.stringify(me.getOkitJson()[target_type]));
                     $(jqId("network_entity_id" + rule_num)).empty();
-                    for (let gateway of me.getOkitJson()[target_type]) {
-                        if (gateway.vcn_id === vcn_id) {
-                            $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
-                            if (route_rule.network_entity_id === '') {
-                                // No Network Entity Specified will assume the first of "Target Type"
-                                route_rule.network_entity_id = gateway.id;
+                    if (me.getOkitJson()[target_type]) {
+                        for (let gateway of me.getOkitJson()[target_type]) {
+                            if (gateway.vcn_id === vcn_id) {
+                                $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
+                                if (route_rule.network_entity_id === '') {
+                                    // No Network Entity Specified will assume the first of "Target Type"
+                                    route_rule.network_entity_id = gateway.id;
+                                }
                             }
                         }
+                        $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
                     }
-                    $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
                     if (route_rule.target_type === 'service_gateways') {
                         route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
                     }
@@ -261,16 +233,18 @@ class RouteTableView extends OkitDesignerArtefactView {
             });
         let target_type = $(jqId("target_type" + rule_num)).val();
         $(jqId("network_entity_id" + rule_num)).empty();
-        for (let gateway of this.getOkitJson()[target_type]) {
-            if (gateway.vcn_id === vcn_id) {
-                $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
-                if (route_rule.network_entity_id === '') {
-                    // No Network Entity Specified will assume the first of "Target Type"
-                    route_rule.network_entity_id = gateway.id;
+        if (this.getOkitJson()[target_type]) {
+            for (let gateway of this.getOkitJson()[target_type]) {
+                if (gateway.vcn_id === vcn_id) {
+                    $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
+                    if (route_rule.network_entity_id === '') {
+                        // No Network Entity Specified will assume the first of "Target Type"
+                        route_rule.network_entity_id = gateway.id;
+                    }
                 }
             }
+            $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
         }
-        $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
         // Description
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td')

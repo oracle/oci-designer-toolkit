@@ -14,30 +14,20 @@ class SubnetView extends OkitContainerDesignerArtefactView {
 
     get parent_id() {return this.artefact.vcn_id;}
     get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    get minimum_dimensions() {return {width: 300, height: 150};}
+    get info_text() {return this.artefact.cidr_block;}
+    get summary_tooltip() {return `Name: ${this.display_name} \nCIDR: ${this.artefact.cidr_block} \nDNS: ${this.artefact.dns_label}`;}
 
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
-        let me = this;
-        let svg = super.draw();
-        let fill = d3.select(d3Id(this.id)).attr('fill');
-        svg.on("mouseover", function () {
-            //d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', svg_highlight_colour);
-            $(jqId(me.id + '-vnic')).addClass('highlight-vnic');
-            d3.event.stopPropagation();
-        });
-        svg.on("mouseout", function () {
-            //d3.selectAll(d3Id(me.id + '-vnic')).attr('fill', fill);
-            $(jqId(me.id + '-vnic')).removeClass('highlight-vnic');
-            d3.event.stopPropagation();
-        });
-        this.drawAttachments();
-        console.log();
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        $(jqId(`${this.artefact_id}-vnic`)).addClass('highlight-association');
     }
 
+    removeAssociationHighlighting() {
+        $(jqId(`${this.artefact_id}-vnic`)).removeClass('highlight-association');
+    }
     drawAttachments() {
         console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} Attachments (${this.artefact_id})`);
         let attachment_count = 0;
@@ -57,31 +47,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
             attachment.draw();
             attachment_count += 1;
         }
-    }
-
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, Subnet.getArtifactReference());
-        // Get Parents First Child Container Offset
-        let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = parent_first_child.dx;
-        definition['svg']['y'] = parent_first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.orange;
-        definition['rect']['stroke']['dash'] = 5;
-        definition['rect']['stroke']['width'] = 2;
-        definition['icon']['x_translation'] = icon_translate_x_start;
-        definition['icon']['y_translation'] = icon_translate_y_start;
-        definition['name']['show'] = true;
-        definition['label']['show'] = true;
-        if (this.prohibit_public_ip_on_vnic) {
-            definition['label']['text'] = 'Private ' + Subnet.getArtifactReference();
-        } else  {
-            definition['label']['text'] = 'Public ' + Subnet.getArtifactReference();
-        }
-        definition['info']['show'] = true;
-        definition['info']['text'] = this.cidr_block;
-        return definition;
     }
 
     /*
@@ -121,6 +86,23 @@ class SubnetView extends OkitContainerDesignerArtefactView {
      */
     loadValueProposition() {
         $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/subnet.html");
+    }
+
+    /*
+    ** Dimension Overrides
+     */
+    getTopEdgeChildrenMaxDimensions() {
+        let top_edge_dimensions = {width: 0, height: this.icon_height};
+        if (this.artefact.route_table_id !== '') {
+            const dimensions = this.json_view.getRouteTable(this.artefact.route_table_id).dimensions;
+            top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
+        }
+        // Security Lists
+        for (let security_list_id of this.artefact.security_list_ids) {
+            const dimensions = this.json_view.getSecurityList(security_list_id).dimensions;
+            top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
+        }
+        return top_edge_dimensions;
     }
 
     /*

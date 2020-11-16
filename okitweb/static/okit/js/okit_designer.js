@@ -98,8 +98,8 @@ function newRegionsModel() {
     regionOkitJson = new OkitRegions();
 }
 function setTitleDescription() {
-    $('#json_title').val(okitJsonModel.title);
-    $('#json_description').val(okitJsonModel.description);
+    okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
+    okitJsonModel ? $('#json_description').val(okitJsonModel.description) : $('#json_description').val('');
 }
 function updateJsonTitle() {
     okitJsonModel.title = $('#json_title').val();
@@ -548,6 +548,7 @@ function showQueryResults() {
     let regions = $(jqId('query_region_id')).val();
     let request = {};
     request.compartment_id = $(jqId('query_compartment_id')).val();
+    request.compartment_name = $(`${jqId('query_compartment_id')} option:selected`).text();
     request.config_profile = $(jqId('config_profile')).val();
     request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
     request.region = '';
@@ -590,10 +591,10 @@ function showQueryResults() {
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
     //$(jqId('modal_loading_wrapper')).addClass('hidden');
-    console.info(okitJsonView);
-    console.info(okitJsonModel);
+    okitJsonView ? console.info(okitJsonView) : console.info('okitJsonView not defined');
+    okitJsonModel ? console.info(okitJsonModel) : console.info('okitJsonModel not defined');
     //displayTreeView();
-    console.info(okitOCIQuery);
+    okitOCIQuery ? console.info(okitOCIQuery) : console.info('okitOCIQuery not defined');
 });
 /*
 ** Export the Model as various formats

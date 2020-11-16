@@ -20,37 +20,18 @@ class RemotePeeringConnectionView extends OkitDesignerArtefactView {
      ** SVG Processing
      */
     // Add Specific Mouse Events
-    addMouseEvents(svg) {
-        let self = this;
-        let id = this.artefact_id;
-        svg.on('mouseenter', () => {
-            if (okitSettings.highlight_association) {
-                if (self.drg_id !== '') {$(jqId(self.drg_id)).addClass('highlight-association');}
-                $(jqId(id)).addClass('highlight-association');
-            }
-        })
-        svg.on('mouseleave', () => {
-            if (okitSettings.highlight_association) {
-                if (self.drg_id !== '') {$(jqId(self.drg_id)).removeClass('highlight-association');}
-                $(jqId(id)).removeClass('highlight-association');
-            }
-        });
+    addAssociationHighlighting() {
+        if (this.drg_id !== '') {$(jqId(this.drg_id)).addClass('highlight-association');}
+        $(jqId(this.artefact_id)).addClass('highlight-association');
+    }
+
+    removeAssociationHighlighting() {
+        if (this.drg_id !== '') {$(jqId(this.drg_id)).removeClass('highlight-association');}
+        $(jqId(this.artefact_id)).removeClass('highlight-association');
     }
     // Draw Connections
     drawConnections() {
         if (this.drg_id !== '') {this.drawConnection(this.id, this.drg_id);}
-    }
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        return definition;
     }
 
     /*
