@@ -12,40 +12,23 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
+    // TODO: Enable when Instance code added
+    get attached1() {
+        if (!this.attached_id) {
+            for (let instance of this.getOkitJson().instances) {
+                if (instance.database_system_ids.includes(this.id)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
 
     /*
      ** SVG Processing
      */
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        if (this.getParent()) {
-            let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = first_child.dx;
-            definition['svg']['y'] = first_child.dy;
-        }
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['svg']['align'] = "center";
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
-        definition['name']['show'] = true;
-        definition['name']['align'] = "center";
-        return definition;
-    }
-
-    isAttached() {
-        for (let instance of this.getOkitJson().instances) {
-            if (instance.database_system_ids.includes(this.id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     /*
     ** Property Sheet Load function

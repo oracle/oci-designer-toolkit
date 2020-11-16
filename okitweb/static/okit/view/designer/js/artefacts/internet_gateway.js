@@ -18,25 +18,6 @@ class InternetGatewayView extends OkitDesignerArtefactView {
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        console.log();
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.purple;
-        definition['rect']['stroke']['dash'] = 1;
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function

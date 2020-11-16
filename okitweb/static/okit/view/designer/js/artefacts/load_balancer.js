@@ -46,21 +46,6 @@ class LoadBalancerView extends OkitDesignerArtefactView {
             if (instance_id !== '') {this.drawConnection(this.id, instance_id);}
         }
     }
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['svg']['align'] = "center";
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        definition['name']['show'] = true;
-        definition['name']['align'] = "center";
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function

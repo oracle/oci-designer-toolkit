@@ -36,54 +36,6 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     /*
      ** SVG Processing
      */
-    // Additional draw Processing
-    draw1() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.getArtefact().id + ' [' + this.parent_id + ']');
-        let svg = super.draw();
-        /*
-        ** Add Properties Load Event to created svg. We require the definition of the local variable "me" so that it can
-        ** be used in the function dur to the fact that using "this" in the function will refer to the function not the
-        ** Artifact.
-         */
-        // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        if (rect && rect.node()) {
-            let boundingClientRect = rect.node().getBoundingClientRect();
-            // Add Connector Data
-            svg.attr("data-compartment-id", this.compartment_id)
-                .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-                .attr("data-connector-start-x", boundingClientRect.x)
-                .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-                .attr("data-connector-end-x", boundingClientRect.x)
-                .attr("data-connector-id", this.id)
-                .attr("dragable", true)
-                .selectAll("*")
-                .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-                .attr("data-connector-start-x", boundingClientRect.x)
-                .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-                .attr("data-connector-end-x", boundingClientRect.x)
-                .attr("data-connector-id", this.id)
-                .attr("dragable", true);
-        }
-        console.log();
-        return svg;
-    }
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['align'] = "center";
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        definition['rect']['height_adjust'] = (Math.round(icon_height / 2) * -1);
-        definition['name']['show'] = true;
-        definition['name']['align'] = "center";
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function
