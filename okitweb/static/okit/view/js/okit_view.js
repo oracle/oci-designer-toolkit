@@ -1727,10 +1727,12 @@ class OkitArtefactView {
         const self = this;
         svg.on('mouseenter', () => {
             if (okitSettings.highlight_association) {self.addAssociationHighlighting();}
+            $(jqId(self.id)).addClass('highlight-rect');
             d3.event.stopPropagation();
         })
         svg.on('mouseleave', () => {
             if (okitSettings.highlight_association) {self.removeAssociationHighlighting();}
+            $(jqId(self.id)).removeClass('highlight-rect');
             d3.event.stopPropagation();
         });
     }
@@ -2330,7 +2332,7 @@ class OkitArtefactView {
     getFirstLeftChildOffset() {
         let offset = {
             dx: Math.round(positional_adjustments.spacing.x * 4),
-            dy: Math.round(positional_adjustments.padding.y + positional_adjustments.spacing.y * 2)
+            dy: Math.round((this.icon_height * OkitArtefactView.prototype.height_multiplier) + positional_adjustments.spacing.y * 2)
         };
         return offset;
     }
@@ -2382,7 +2384,7 @@ class OkitArtefactView {
     }
 
     getRightChildOffset() {
-        alert('Get Right Child function "getRightEdgeChildOffset()" has not been implemented.');
+        alert('Get Right Child function "getRightChildOffset()" has not been implemented.');
     }
 
     // Right Edge
