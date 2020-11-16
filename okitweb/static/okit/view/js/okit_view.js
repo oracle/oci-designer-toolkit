@@ -602,11 +602,11 @@ class OkitJsonView {
         this.load_balancers.push(loadbalancer ? new LoadBalancerView(loadbalancer, this) : new LoadBalancerView(this.okitjson.newLoadBalancer(), this));
         return this.load_balancers[this.load_balancers.length - 1];
     }
-    getloadBalancers() {
+    getLoadBalancers() {
         return this.load_balancers;
     }
     getLoadBalancer(id='') {
-        for (let artefact of this.getloadBalancers()) {
+        for (let artefact of this.getLoadBalancers()) {
             if (artefact.id === id) {
                 return artefact;
             }
@@ -1120,6 +1120,7 @@ class OkitArtefactView {
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.collapsed = false;
+        this.recalculate_minimum_dimensions = true;
         this.getJsonView = function() {return json_view};
         // Raise Artefact Elements to View Class
         if (this.artefact) {
@@ -1202,6 +1203,8 @@ class OkitArtefactView {
         };
     }
     // --- Dimensions
+    get recalculate_dimensions() {return this.recalculate_minimum_dimensions;}
+    set recalculate_dimensions(recalculate) {this.recalculate_minimum_dimensions = recalculate; this.parent ? this.parent.recalculate_dimensions = recalculate : recalculate = recalculate;}
     get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 1.5 : 2 : 1;}
     get height_multiplier() {return this.show_label ?  1.5 : 1;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
@@ -2143,7 +2146,7 @@ class OkitArtefactView {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getTopArtifacts()) {
             for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
-                if (artefact.parent_id === this.id) {
+                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -2156,7 +2159,7 @@ class OkitArtefactView {
     getFirstTopChildOffset() {
         let offset = this.getFirstLeftChildOffset();
         if (this.hasLeftChildren()) {
-            offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
+            offset.dx += Math.round(this.getLeftChildrenMaxDimensions().width + positional_adjustments.spacing.x);
         }
         return offset;
     }
@@ -2183,7 +2186,7 @@ class OkitArtefactView {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getContainerArtifacts()) {
             for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
-                if (artefact.parent_id === this.id) {
+                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
                     max_dimensions.width = Math.max(max_dimensions.width, dimension.width);
@@ -2224,7 +2227,7 @@ class OkitArtefactView {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getBottomArtifacts()) {
             for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
-                if (artefact.parent_id === this.id) {
+                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
                     max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
@@ -2519,60 +2522,64 @@ class OkitContainerArtefactView extends OkitArtefactView {
 
     // -- SVG Definitions
     // --- Dimensions
-    get minimum_dimensions() {return {width: 400, height: 300};}
+    get minimum_dimensions() {return {width: 300, height: 150};}
     get dimensions() {
-        console.log(`Getting Dimensions of ${this.getArtifactReference() } : ${this.display_name} (${this.artefact_id})`);
-        let padding = this.getPadding();
-        let dimensions = {width: 0, height: 0};
-        let offset = {dx: 0, dy: 0};
-        // Process Top Edge Artifacts
-        offset = this.getFirstTopEdgeChildOffset();
-        let top_edge_dimensions = this.getTopEdgeChildrenMaxDimensions();
-        dimensions.width  = Math.max(dimensions.width, top_edge_dimensions.width + offset.dx - padding.dx);
-        dimensions.height = Math.max(dimensions.height, top_edge_dimensions.height);
-        // Process Bottom Edge Artifacts
-        offset = this.getFirstBottomEdgeChildOffset();
-        let bottom_edge_dimensions = this.getBottomEdgeChildrenMaxDimensions();
-        dimensions.width  = Math.max(dimensions.width, bottom_edge_dimensions.width);
-        dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
-        // Process Top Artifacts
-        offset = this.getFirstTopChildOffset();
-        let top_dimensions = this.getTopChildrenMaxDimensions();
-        dimensions.width   = Math.max(dimensions.width, top_dimensions.width);
-        dimensions.height += top_dimensions.height;
-        // Process Container Artifacts
-        offset = this.getFirstContainerChildOffset();
-        let container_dimensions = this.getContainerChildrenMaxDimensions();
-        dimensions.width   = Math.max(dimensions.width, container_dimensions.width);
-        dimensions.height += container_dimensions.height;
-        // Process Bottom Artifacts
-        offset = this.getFirstBottomChildOffset();
-        let bottom_dimensions = this.getBottomChildrenMaxDimensions();
-        dimensions.width   = Math.max(dimensions.width, bottom_dimensions.width);
-        dimensions.height += bottom_dimensions.height;
-        // Process Left Edge Artifacts
-        // Process Right Edge Artifacts
-        // Process Left Artifacts
-        let left_dimensions = this.getLeftChildrenMaxDimensions();
-        dimensions.width += left_dimensions.width;
-        dimensions.height = Math.max(dimensions.height, left_dimensions.height);
-        // Process Right Artifacts
-        let right_dimensions = this.getRightChildrenMaxDimensions();
-        dimensions.width += right_dimensions.width;
-        dimensions.height = Math.max(dimensions.height, right_dimensions.height);
-        if (this.hasRightChildren()) {
-            dimensions.width += positional_adjustments.spacing.x;
-            dimensions.width += positional_adjustments.padding.x;
+        if (this.collapsed) {
+            return this.collapsed_dimensions;
+        } else {
+            console.log(`Getting Dimensions of ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id})`);
+            let padding = this.getPadding();
+            let dimensions = {width: 0, height: 0};
+            let offset = {dx: 0, dy: 0};
+            // Process Top Edge Artifacts
+            offset = this.getFirstTopEdgeChildOffset();
+            let top_edge_dimensions = this.getTopEdgeChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, top_edge_dimensions.width + offset.dx - padding.dx);
+            dimensions.height = Math.max(dimensions.height, top_edge_dimensions.height);
+            // Process Top Artifacts
+            offset = this.getFirstTopChildOffset();
+            let top_dimensions = this.getTopChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, top_dimensions.width);
+            dimensions.height += top_dimensions.height;
+            // Process Container Artifacts
+            offset = this.getFirstContainerChildOffset();
+            let container_dimensions = this.getContainerChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, container_dimensions.width);
+            dimensions.height += container_dimensions.height;
+            // Process Bottom Artifacts
+            offset = this.getFirstBottomChildOffset();
+            let bottom_dimensions = this.getBottomChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, bottom_dimensions.width);
+            dimensions.height += bottom_dimensions.height;
+            // Process Bottom Edge Artifacts
+            offset = this.getFirstBottomEdgeChildOffset();
+            let bottom_edge_dimensions = this.getBottomEdgeChildrenMaxDimensions();
+            dimensions.width = Math.max(dimensions.width, bottom_edge_dimensions.width);
+            dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
+            // Process Left Edge Artifacts
+            // Process Left Artifacts
+            let left_dimensions = this.getLeftChildrenMaxDimensions();
+            dimensions.width += left_dimensions.width;
+            dimensions.height = Math.max(dimensions.height, left_dimensions.height);
+            // Process Right Artifacts
+            let right_dimensions = this.getRightChildrenMaxDimensions();
+            dimensions.width += right_dimensions.width;
+            dimensions.height = Math.max(dimensions.height, right_dimensions.height);
+            if (this.hasRightChildren()) {
+                dimensions.width += positional_adjustments.spacing.x;
+                dimensions.width += positional_adjustments.padding.x;
+            }
+            // Process Right Edge Artifacts
+            // Add Padding
+            dimensions.width += padding.dx * 2;
+            dimensions.height += padding.dy * 2;
+            // Check size against minimum
+            dimensions['width'] = Math.max(dimensions['width'], this.minimum_dimensions.width);
+            dimensions['height'] = Math.max(dimensions['height'], this.minimum_dimensions.height);
+            console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
+            console.log();
+            return dimensions;
         }
-        // Add Padding
-        dimensions.width += padding.dx * 2;
-        dimensions.height += padding.dy * 2;
-        // Check size against minimum
-        dimensions['width']  = Math.max(dimensions['width'],  this.minimum_dimensions.width);
-        dimensions['height'] = Math.max(dimensions['height'], this.minimum_dimensions.height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.log();
-        return dimensions;
     }
     // ---- Icon
     get icon_x_tranlation() {return this.collapsed ? super.icon_x_tranlation : -20;}
@@ -2660,7 +2667,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
     }
 
     getContainerChildOffset() {
-        return this.getDxOffset(this.getFirstContainerChildOffset(), this.getContainerArtifacts());
+        return this.getDyOffset(this.getFirstContainerChildOffset(), this.getContainerArtifacts());
     }
 
     getBottomChildOffset() {

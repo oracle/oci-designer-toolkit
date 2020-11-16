@@ -14,7 +14,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
 
     get parent_id() {return this.artefact.vcn_id;}
     get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    get minimum_dimensions() {return {width: 300, height: 150};}
     get info_text() {return this.artefact.cidr_block;}
     get summary_tooltip() {return `Name: ${this.display_name} \nCIDR: ${this.artefact.cidr_block} \nDNS: ${this.artefact.dns_label}`;}
 
@@ -112,6 +111,23 @@ class SubnetView extends OkitContainerDesignerArtefactView {
      */
     loadValueProposition() {
         $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/subnet.html");
+    }
+
+    /*
+    ** Dimension Overrides
+     */
+    getTopEdgeChildrenMaxDimensions() {
+        let top_edge_dimensions = {width: 0, height: this.icon_height};
+        if (this.artefact.route_table_id !== '') {
+            const dimensions = this.json_view.getRouteTable(this.artefact.route_table_id).dimensions;
+            top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
+        }
+        // Security Lists
+        for (let security_list_id of this.artefact.security_list_ids) {
+            const dimensions = this.json_view.getSecurityList(security_list_id).dimensions;
+            top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
+        }
+        return top_edge_dimensions;
     }
 
     /*

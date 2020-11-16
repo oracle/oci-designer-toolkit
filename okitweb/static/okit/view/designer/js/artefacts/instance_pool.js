@@ -14,6 +14,8 @@ class InstancePoolView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.placement_configurations[0].primary_subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
+    // Test Functions variables
+    get subnet_id() {return this.artefact.placement_configurations[0].primary_subnet_id;}
 
     /*
     ** Property Sheet Load function
