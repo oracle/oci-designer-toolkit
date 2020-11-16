@@ -86,6 +86,7 @@
                     <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
                     <li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li>
                     <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAs()">Save As Template</a></li>
+                    <!--li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save to Git</a></li-->
                 </ul>
             </li>
             <li><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOci()">Query</a></li>
@@ -149,6 +150,27 @@
                     <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">jpeg</a></li>
                 </ul>
             </li>
+            <!--li id="image_export" class="sub-header-item dropdown">
+                <span>Terraform</span>
+                <ul class="dropdown-content">
+                    <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Local Zip</a></li>
+                    <li><a id="generate-terraform-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformGit()">Git</a></li>
+                </ul>
+            </li>
+            <li id="image_export" class="sub-header-item dropdown">
+                <span>Ansible</span>
+                <ul class="dropdown-content">
+                    <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Local Zip</a></li>
+                    <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleGit()">Git</a></li>
+                </ul>
+            </li>
+            <li id="image_export" class="sub-header-item dropdown">
+                <span>Resource Manager</span>
+                <ul class="dropdown-content">
+                    <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
+                    <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerGitLab()">Git</a></li>
+                </ul>
+            </li-->
             <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
             <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li>
             <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
