@@ -94,7 +94,7 @@ class InstanceView extends OkitDesignerArtefactView {
             attachment_count += 1;
         }
         let start_idx = 1;
-        if (this.getParent().getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') {start_idx = 0;}
+        if (this.parent.getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') {start_idx = 0;}
         for (let idx = start_idx;  idx < this.vnics.length; idx++) {
             let vnic = this.vnics[idx];
             let attachment = new VirtualNetworkInterfaceView(this.getJsonView().getOkitJson().getSubnet(vnic.subnet_id), this.getJsonView());
@@ -109,7 +109,7 @@ class InstanceView extends OkitDesignerArtefactView {
     }
 
     getVnicAttachments() {
-        return (this.getParent().getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') ? this.vnics : this.vnics.slice(1);
+        return (this.parent.getArtifactReference() === Compartment.getArtifactReference() && this.primary_vnic.subnet_id !== '') ? this.vnics : this.vnics.slice(1);
     }
 
     /*

@@ -80,11 +80,11 @@ class RouteTableView extends OkitDesignerArtefactView {
     addRouteRuleHtml(route_rule, rule_num=1) {
         let me = this;
         let vcn_id = '';
-        if (this.getParent().getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
-            vcn_id = this.getParent().id;
+        if (this.parent.getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
+            vcn_id = this.parent_id;
         } else {
             // Must be a child of the Virtual Cloud Network
-            vcn_id = this.getParent().getParent().id;
+            vcn_id = this.parent.parent_id;
         }
 
         let rules_table_body = d3.select('#route_rules_table_body');

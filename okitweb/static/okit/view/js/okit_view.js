@@ -1385,13 +1385,6 @@ class OkitArtefactView {
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
 
-    // TODO: Deprecated Delete replaced by parent variable
-    getParent() {return this.parent;}
-    // TODO: Deprecated Delete replaced by parent_id variable
-    getParentId() {return this.parent_id;}
-    // TODO: Deprecated Delete replaced by attached variable
-    isAttached() {return this.attached;}
-
     getArtefact() {return this.artefact;}
 
     getOkitJson() {return this.okit_json;}
