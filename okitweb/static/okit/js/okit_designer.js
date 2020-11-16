@@ -262,6 +262,7 @@ function handleSaveAsTemplate(e) {
         }
     });
 }
+function handleSaveToGit(e) {}
 /*
 ** Redraw / Redisplay the existing Json
  */
