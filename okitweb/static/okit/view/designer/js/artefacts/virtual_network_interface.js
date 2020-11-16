@@ -27,22 +27,6 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
     removeAssociationHighlighting() {
         $(jqId(this.artefact_id)).removeClass('highlight-association');
     }
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        console.log('Getting Definition of ' + this.getArtifactReference() + ' : ' + this.id);
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        console.info(this.getParent());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        console.info(JSON.stringify(definition, null, 2));
-        console.log();
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function
