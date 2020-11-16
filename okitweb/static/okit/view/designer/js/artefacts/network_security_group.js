@@ -18,6 +18,34 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     /*
      ** SVG Processing
      */
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        for (let instance of this.getOkitJson().instances) {
+            if (instance.primary_vnic.nsg_ids.includes(this.id)) {
+                $(jqId(instance.id)).addClass('highlight-association');
+            }
+        }
+        for (let ad of this.getOkitJson().autonomous_databases) {
+            if (ad.nsg_ids.includes(this.id)) {
+                $(jqId(ad.id)).addClass('highlight-association');
+            }
+        }
+        $(jqId(this.artefact_id)).addClass('highlight-association');
+    }
+
+    removeAssociationHighlighting() {
+        for (let instance of this.getOkitJson().instances) {
+            if (instance.primary_vnic.nsg_ids.includes(this.id)) {
+                $(jqId(instance.id)).removeClass('highlight-association');
+            }
+        }
+        for (let ad of this.getOkitJson().autonomous_databases) {
+            if (ad.nsg_ids.includes(this.id)) {
+                $(jqId(ad.id)).removeClass('highlight-association');
+            }
+        }
+        $(jqId(this.artefact_id)).removeClass('highlight-association');
+    }
 
     /*
     ** Property Sheet Load function

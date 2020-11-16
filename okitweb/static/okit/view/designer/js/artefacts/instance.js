@@ -76,11 +76,13 @@ class InstanceView extends OkitDesignerArtefactView {
     addAssociationHighlighting() {
         for (let id of this.block_storage_volume_ids) {$(jqId(id)).addClass('highlight-association');}
         for (let vnic of this.getVnicAttachments()) {$(jqId(vnic.subnet_id)).addClass('highlight-association');}
+        for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).addClass('highlight-association');}
     }
 
     removeAssociationHighlighting() {
         for (let id of this.block_storage_volume_ids) {$(jqId(id)).removeClass('highlight-association');}
         for (let vnic of this.getVnicAttachments()) {$(jqId(vnic.subnet_id)).removeClass('highlight-association');}
+        for (let id of this.primary_vnic.nsg_ids) {$(jqId(id)).removeClass('highlight-association');}
     }
     // TODO: Decide If Required
     drawAttachmentsOrig() {
