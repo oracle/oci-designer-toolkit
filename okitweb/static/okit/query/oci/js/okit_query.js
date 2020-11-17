@@ -33,7 +33,6 @@ class OkitOCIQuery {
 
     isComplete() {
         if (this.complete_callback) {
-            console.info(this.region_query_count);
             // Check if Region is complete
             for (let key of Object.keys(this.region_query_count)) {
                 if (this.region_query_count[key] === 0) {
@@ -46,7 +45,6 @@ class OkitOCIQuery {
                     return;
                 }
             }
-            console.info('Executing Callback ' + this.complete_callback + ' ' + this.active_region);
             this.complete_callback(this.active_region);
         }
     }
@@ -65,10 +63,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({autonomous_databases: response_json});
-                //okitJsonView.loadAutonomousDatabases(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -95,10 +89,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({block_storage_volumes: response_json});
-                //okitJsonView.loadBlockStorageVolumes(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -125,8 +115,6 @@ class OkitOCIQuery {
                 let response_json = JSON.parse(resp);
                 response_json.compartment_id = null;
                 regionOkitJson[request.region].load({compartments: [response_json]})
-                //okitJsonView.loadCompartments([response_json]);
-                console.info(response_json.name);
                 let sub_query_request = JSON.clone(request);
                 sub_query_request.compartment_id = response_json.id;
                 me.queryCompartmentSubComponents(sub_query_request);
@@ -157,9 +145,7 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({compartments: response_json});
-                //okitJsonView.loadCompartments(response_json);
                 for (let artefact of response_json) {
-                    console.info(artefact.display_name);
                     let sub_query_request = JSON.clone(request);
                     sub_query_request.compartment_id = artefact.id;
                     me.queryCompartmentSubComponents(sub_query_request);
@@ -176,8 +162,6 @@ class OkitOCIQuery {
         });
     }
     queryCompartmentSubComponents(request) {
-        console.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Request >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-        console.info(request);
         if (request.sub_compartments) {
             this.queryCompartments(request);
         }
@@ -212,9 +196,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({customer_premise_equipments: response_json});
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -241,10 +222,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({database_systems: response_json});
-                //okitJsonView.loadDatabaseSystems(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -271,10 +248,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({dynamic_routing_gateways: response_json});
-                //okitJsonView.loadDynamicRoutingGateways(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -301,9 +274,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({fast_connects: response_json});
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -330,10 +300,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({file_storage_systems: response_json});
-                //okitJsonView.loadFileStorageSystems(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -361,10 +327,6 @@ class OkitOCIQuery {
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({instances: response_json});
-                //okitJsonView.loadInstances(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function (xhr, status, error) {
@@ -392,9 +354,6 @@ class OkitOCIQuery {
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({instance_pools: response_json});
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function (xhr, status, error) {
@@ -422,10 +381,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({internet_gateways: response_json});
-                //okitJsonView.loadInternetGateways(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -452,9 +407,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({ipsec_connections: response_json});
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -482,10 +434,6 @@ class OkitOCIQuery {
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({load_balancers: response_json});
-                //okitJsonView.loadLoadBalancers(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function (xhr, status, error) {
@@ -513,10 +461,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({local_peering_gateways: response_json});
-                //okitJsonView.loadLocalPeeringGateways(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -543,9 +487,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({mysql_database_systems: response_json});
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -573,10 +514,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({nat_gateways: response_json});
-                //okitJsonView.loadNATGateways(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -604,10 +541,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({network_security_groups: response_json});
-                //okitJsonView.loadNetworkSecurityGroups(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -634,10 +567,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({object_storage_buckets: response_json});
-                //okitJsonView.loadObjectStorageBuckets(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -664,9 +593,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({oke_clusters: response_json});
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -693,9 +619,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({remote_peering_connections: response_json});
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -723,10 +646,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({route_tables: response_json});
-                //okitJsonView.loadRouteTables(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -754,10 +673,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({security_lists: response_json});
-                //okitJsonView.loadSecurityLists(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -785,10 +700,6 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({service_gateways: response_json});
-                //okitJsonView.loadServiceGateways(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -816,9 +727,7 @@ class OkitOCIQuery {
             success: function (resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({subnets: response_json});
-                //okitJsonView.loadSubnets(response_json);
                 for (let artefact of response_json) {
-                    console.info(artefact.display_name);
                     let sub_query_request = JSON.clone(request);
                     sub_query_request.subnet_id = artefact.id;
                     me.querySubnetSubComponents(sub_query_request);
@@ -852,9 +761,7 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({virtual_cloud_networks: response_json});
-                //okitJsonView.loadVirtualCloudNetworks(response_json);
                 for (let artefact of response_json) {
-                    console.info(artefact.display_name);
                     let sub_query_request = JSON.clone(request);
                     sub_query_request.vcn_id = artefact.id;
                     me.queryVirtualCLoudNetworkSubComponents(sub_query_request);

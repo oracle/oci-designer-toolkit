@@ -16,7 +16,6 @@ class RouteTableView extends OkitDesignerArtefactView {
         if (!this.attached_id) {
             for (let subnet of this.getOkitJson().subnets) {
                 if (subnet.route_table_id === this.id) {
-                    console.info(this.display_name + ' attached to subnet ' + subnet.display_name);
                     return true;
                 }
             }
@@ -122,7 +121,6 @@ class RouteTableView extends OkitDesignerArtefactView {
             .attr("id", "target_type" + rule_num)
             .on("change", function() {
                 let target_type = this.options[this.selectedIndex].value;
-                console.info('Selected ' + target_type);
                 // Reset Network Entity
                 route_rule.network_entity_id = '';
                 // Get Type
@@ -138,7 +136,6 @@ class RouteTableView extends OkitDesignerArtefactView {
                         route_rule['destination_type'] = 'SERVICE_CIDR_BLOCK';
                         $(jqId("destination_row" + rule_num)).addClass('collapsed');
                     }
-                    console.info('Processing list ' + JSON.stringify(me.getOkitJson()[target_type]));
                     $(jqId("network_entity_id" + rule_num)).empty();
                     if (me.getOkitJson()[target_type]) {
                         for (let gateway of me.getOkitJson()[target_type]) {
@@ -188,7 +185,6 @@ class RouteTableView extends OkitDesignerArtefactView {
             .attr("id", "destination_type" + rule_num)
             .on("change", function() {
                 let destination_type = this.options[this.selectedIndex].value;
-                console.info('Selected ' + destination_type);
                 route_rule['destination_type'] = destination_type;
                 displayOkitJson();
             });
@@ -211,7 +207,6 @@ class RouteTableView extends OkitDesignerArtefactView {
             .attr("value", route_rule['destination'])
             .on("change", function() {
                 route_rule['destination'] = this.value;
-                console.info('Changed destination: ' + this.value);
                 displayOkitJson();
             });
 
@@ -225,7 +220,6 @@ class RouteTableView extends OkitDesignerArtefactView {
             .attr("id", "network_entity_id" + rule_num)
             .on("change", function() {
                 route_rule['network_entity_id'] = this.options[this.selectedIndex].value;
-                console.info('Changed Network Entity: ' + this.value);
                 if (route_rule.target_type === 'service_gateways') {
                     route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
                 }
@@ -258,7 +252,6 @@ class RouteTableView extends OkitDesignerArtefactView {
             .attr("value", route_rule['description'])
             .on("change", function() {
                 route_rule['description'] = this.value;
-                console.info('Changed description: ' + this.value);
                 displayOkitJson();
             });
         // Check if we need to hide destination

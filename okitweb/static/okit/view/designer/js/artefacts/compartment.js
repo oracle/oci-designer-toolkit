@@ -13,7 +13,6 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     get parent_id() {
-        console.info(`Compartment Id ${this.artefact.compartment_id}`);
         return (this.artefact.compartment_id !== null && this.artefact.compartment_id !== this.artefact.id) ? this.artefact.compartment_id : 'canvas';
     }
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}

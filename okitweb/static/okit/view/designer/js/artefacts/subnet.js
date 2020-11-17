@@ -35,7 +35,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         if (this.artefact.route_table_id !== '') {
             let attachment = new RouteTableView(this.getJsonView().getOkitJson().getRouteTable(this.route_table_id), this.getJsonView());
             attachment.attached_id = this.id;
-            console.info(`Drawing ${this.getArtifactReference()} Route Table : ${attachment.display_name}`);
             attachment.draw();
             attachment_count += 1;
         }
@@ -43,7 +42,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         for (let security_list_id of this.artefact.security_list_ids) {
             let attachment = new SecurityListView(this.getJsonView().getOkitJson().getSecurityList(security_list_id), this.getJsonView());
             attachment.attached_id = this.id;
-            console.info(`Drawing ${this.getArtifactReference()} Security List : ${attachment.display_name}`);
             attachment.draw();
             attachment_count += 1;
         }
