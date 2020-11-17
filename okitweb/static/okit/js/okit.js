@@ -218,6 +218,7 @@ class OkitSettings {
         this.show_label = 'none';
         this.tooltip_type = 'simple';
         this.name_prefix = 'okit-';
+        this.auto_save = false;
         this.load();
     }
 
@@ -283,6 +284,8 @@ class OkitSettings {
                 .attr('id', 'preferences_table')
                 .attr('class', 'table okit-table okit-modal-dialog-table');
             let tbody = table.append('div').attr('class', 'tbody');
+            // Auto Save
+            this.addAutoSave(tbody, autosave);
             // Display Grid
             this.addDisplayGrid(tbody, autosave);
             // Default Route Table
@@ -308,6 +311,32 @@ class OkitSettings {
             // Config Profile
             //this.addConfigProfile(tbody, autosave);
         }
+    }
+
+    addAutoSave(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'auto_save')
+            .attr('name', 'auto_save')
+            .attr('type', 'checkbox')
+            .property('checked', this.auto_save)
+            .on('change', function () {
+                if (autosave) {
+                    self.auto_save = $('#auto_save').is(':checked');
+                    self.save();
+                }
+                if ($('#auto_save').is(':checked')) {
+                    if (okitAutoSave) {okitAutoSave.startAutoSave();}
+                } else {
+                    if (okitAutoSave) {okitAutoSave.stopAutoSave();}
+                }
+            });
+        td.append('label')
+            .attr('for', 'auto_save')
+            .text('Auto Save');
     }
 
     addDisplayGrid(tbody, autosave) {
@@ -662,4 +691,41 @@ class OkitSettings {
         $(jqId('profile')).val(this.profile);
     }
 
+}
+
+class OkitAutoSave {
+    key = "okitJson";
+    constructor() {
+        this.autoInterval = undefined;
+    }
+
+    startAutoSave(timeout = 30000) {
+        this.stopAutoSave();
+        this.autoInterval = setInterval(() => {
+            localStorage.setItem(this.key, JSON.stringify(okitJsonModel));
+            console.warn('Saved to Local Storage');
+            console.warn(localStorage.getItem(this.key));
+        }, timeout);
+        localStorage.setItem(this.key, JSON.stringify(okitJsonModel));
+    }
+
+    stopAutoSave() {
+        console.warn('Stop Auto Save');
+        console.warn(localStorage.getItem(this.key));
+        this.autoInterval ? clearInterval(this.autoInterval) : this.autoInterval = undefined;
+        this.removeAutoSave();
+    }
+
+    getOkitJsonModel() {
+        console.warn('Get Auto Save');
+        console.warn(localStorage.getItem(this.key));
+        const okitJson = localStorage.getItem(this.key);
+        return okitJson ? JSON.parse(okitJson) : undefined;
+    }
+
+    removeAutoSave() {
+        localStorage.removeItem(this.key);
+        console.warn('Remove Auto Save');
+        console.warn(localStorage.getItem(this.key));
+    }
 }

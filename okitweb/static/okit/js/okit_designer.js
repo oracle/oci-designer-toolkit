@@ -71,6 +71,21 @@ function handlePreferences(evt) {
     okitSettings.edit();
 }
 /*
+** Recover from AutoSave
+ */
+let recovered_model = undefined;
+function handleRecover(evt) {
+    if (recovered_model) {
+        resetDesigner();
+        okitJsonModel = new OkitJson(JSON.stringify(recovered_model));
+        newDesignerView();
+        displayOkitJson();
+        displayDesignerView();
+        displayTreeView();
+    }
+    $(jqId('file_recover_menu_item_li')).addClass('hidden');
+}
+/*
 ** New Canvas
  */
 function handleNew(evt) {
@@ -191,6 +206,7 @@ function handleSaveRegional(evt) {
 function saveJson(text, filename){
     let uri = 'data:text/plain;charset=utf-u,'+encodeURIComponent(text);
     triggerDownload(uri, filename);
+    okitAutoSave.removeAutoSave();
 }
 /*
 ** Save Model As Template
