@@ -70,11 +70,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -99,11 +100,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -163,11 +165,12 @@ class OkitOCIQuery {
                     me.queryCompartmentSubComponents(sub_query_request);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
                 console.error('Status : ' + status);
                 console.error('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -215,8 +218,8 @@ class OkitOCIQuery {
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
             },
             complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
@@ -243,11 +246,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -272,11 +276,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -302,8 +307,8 @@ class OkitOCIQuery {
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
             },
             complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
@@ -330,11 +335,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -360,11 +366,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function (xhr, status, error) {
                 console.warn('Status : ' + status);
-                console.warn('Error : ' + error);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -392,7 +399,7 @@ class OkitOCIQuery {
             },
             error: function (xhr, status, error) {
                 console.warn('Status : ' + status);
-                console.warn('Error : ' + error);
+                console.warn('Error  : ' + error);
             },
             complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
@@ -420,11 +427,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -450,8 +458,8 @@ class OkitOCIQuery {
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
             },
             complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
@@ -479,11 +487,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function (xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -509,11 +518,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -539,8 +549,8 @@ class OkitOCIQuery {
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
             },
             complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
@@ -568,11 +578,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -598,11 +609,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -627,11 +639,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -655,11 +668,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -685,8 +699,8 @@ class OkitOCIQuery {
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
             },
             complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
@@ -714,11 +728,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -744,11 +759,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -774,11 +790,12 @@ class OkitOCIQuery {
                     console.info(artefact.display_name);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -807,11 +824,12 @@ class OkitOCIQuery {
                     me.querySubnetSubComponents(sub_query_request);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function (xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
@@ -842,11 +860,12 @@ class OkitOCIQuery {
                     me.queryVirtualCLoudNetworkSubComponents(sub_query_request);
                 }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error  : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
