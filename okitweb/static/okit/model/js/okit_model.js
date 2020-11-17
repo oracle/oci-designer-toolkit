@@ -1082,7 +1082,7 @@ class OkitArtifact {
     }
 
     getNamePrefix() {
-        return 'okit-';
+        return okitSettings ? okitSettings.name_prefix : 'okit-';
     }
 
     getAvailabilityDomainNumber(availability_domain) {

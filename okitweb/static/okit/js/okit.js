@@ -225,6 +225,7 @@ class OkitSettings {
         this.highlight_association = true;
         this.show_label = 'none';
         this.tooltip_type = 'simple';
+        this.name_prefix = 'okit-';
         this.load();
     }
 
@@ -313,6 +314,8 @@ class OkitSettings {
             this.addDisplayLabel(tbody, autosave);
             // Tooltip Style
             this.addTooltipType(tbody, autosave);
+            // Name Prefix
+            this.addNamePrefix(tbody, autosave);
             // Config Profile
             //this.addConfigProfile(tbody, autosave);
         }
@@ -620,6 +623,31 @@ class OkitSettings {
             .text('Summary');
         // Set Show Label Value
         $("input:radio[name='tooltip_type'][value=" + this.tooltip_type + "]").prop('checked', true);
+    }
+
+    addNamePrefix(tbody, autosave) {
+        // Display Label
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('label')
+            .text('Name Prefix');
+        // -- Display Name
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'name_prefix')
+            .attr('name', 'name_prefix')
+            .attr('type', 'text')
+            .attr('value', this.name_prefix)
+            .on('input', function () {
+                if (autosave) {
+                    self.name_prefix = $("input:text[name='name_prefix']").val();
+                    self.save();
+                }
+            });
     }
 
     addConfigProfile(tbody, autosave) {
