@@ -151,6 +151,7 @@ class OkitJsonView {
         }
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newAutonomousDatabase(database) {
@@ -186,6 +187,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newBlockStorageVolume(volume) {
@@ -221,6 +223,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.type === Compartment.getArtifactReference() ? target.id : target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newCompartment(compartment) {
@@ -257,6 +260,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newCustomerPremiseEquipment(connect) {
@@ -293,6 +297,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newDatabaseSystem(database) {
@@ -329,6 +334,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newDynamicRoutingGateway(gateway) {
@@ -364,6 +370,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newFastConnect(connect) {
@@ -400,6 +407,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact ' + view_artefact.subnet_id);
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newFileStorageSystem(storage) {
@@ -440,6 +448,7 @@ class OkitJsonView {
         }
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newInstance(instance) {
@@ -477,6 +486,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newInstancePool(instance_pool) {
@@ -521,6 +531,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newInternetGateway(gateway) {
@@ -560,6 +571,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newIPSecConnection(connect) {
@@ -596,6 +608,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newLoadBalancer(loadbalancer) {
@@ -632,6 +645,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newLocalPeeringGateway(gateway) {
@@ -668,6 +682,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newMySQLDatabaseSystem(database) {
@@ -711,6 +726,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newNATGateway(gateway) {
@@ -751,6 +767,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newNetworkSecurityGroup(security) {
@@ -786,6 +803,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newObjectStorageBucket(storage) {
@@ -822,6 +840,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newOkeCluster(cluster) {
@@ -857,6 +876,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newRemotePeeringConnection(connect) {
@@ -893,6 +913,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newRouteTable(routetable) {
@@ -929,6 +950,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newSecurityList(security) {
@@ -972,6 +994,7 @@ class OkitJsonView {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newServiceGateway(gateway) {
@@ -1009,6 +1032,7 @@ class OkitJsonView {
         view_artefact.getArtefact().generateCIDR();
         console.info('View Artefact');
         console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newSubnet(subnet) {
@@ -1054,6 +1078,7 @@ class OkitJsonView {
             let security_list = this.newSecurityList(this.getOkitJson().newSecurityList({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
             security_list.artefact.addDefaultSecurityListRules(view_artefact.artefact.cidr_block);
         }
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newVirtualCloudNetwork(vcn) {
@@ -1120,7 +1145,7 @@ class OkitArtefactView {
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.collapsed = false;
-        this.recalculate_minimum_dimensions = true;
+        this._recalculate_dimensions = true;
         this.getJsonView = function() {return json_view};
         // Raise Artefact Elements to View Class
         if (this.artefact) {
@@ -1203,8 +1228,8 @@ class OkitArtefactView {
         };
     }
     // --- Dimensions
-    get recalculate_dimensions() {return this.recalculate_minimum_dimensions;}
-    set recalculate_dimensions(recalculate) {this.recalculate_minimum_dimensions = recalculate; this.parent ? this.parent.recalculate_dimensions = recalculate : recalculate = recalculate;}
+    get recalculate_dimensions() {return this._recalculate_dimensions;}
+    set recalculate_dimensions(recalculate) {this._recalculate_dimensions = true; this.parent ? this.parent.recalculate_dimensions = true : recalculate = false;}
     get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 1.5 : 2 : 1;}
     get height_multiplier() {return this.show_label ?  1.5 : 1;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
@@ -2314,6 +2339,7 @@ class OkitArtefactView {
 class OkitContainerArtefactView extends OkitArtefactView {
     constructor(artefact = null, json_view) {
         super(artefact, json_view);
+        this._dimensions = {width: 0, height: 0};
     }
 
     // -- SVG Definitions
@@ -2322,7 +2348,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
     get dimensions() {
         if (this.collapsed) {
             return this.collapsed_dimensions;
-        } else {
+        } else if (this.recalculate_dimensions) {
             console.log(`Getting Dimensions of ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id})`);
             let padding = this.getPadding();
             let dimensions = {width: 0, height: 0};
@@ -2374,7 +2400,11 @@ class OkitContainerArtefactView extends OkitArtefactView {
             dimensions['height'] = Math.max(dimensions['height'], this.minimum_dimensions.height);
             console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
             console.log();
+            this._recalculate_dimensions = false;
+            this._dimensions = dimensions;
             return dimensions;
+        } else {
+            return this._dimensions;
         }
     }
     // ---- Icon
