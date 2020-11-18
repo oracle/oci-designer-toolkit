@@ -318,6 +318,8 @@
 .context-menu {
     z-index:102;
     position: absolute;
+    border: 1px black;
+    padding: 2px;
 }
 
 .right-click-delete {

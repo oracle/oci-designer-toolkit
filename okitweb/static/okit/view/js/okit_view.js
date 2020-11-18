@@ -1291,6 +1291,11 @@ class OkitArtefactView {
     get summary_tooltip() {return this.display_name;}
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
+    // ---- Okit View Functions
+    get delete_function() {return `delete${this.getArtifactReference().split(' ').join('')}`}
+    get clone_function() {return `clone${this.getArtifactReference().split(' ').join('')}`}
+    get move_function() {return `move${this.getArtifactReference().split(' ').join('')}`}
+    get new_function() {return `new${this.getArtifactReference().split(' ').join('')}`}
 
     getArtefact() {return this.artefact;}
 
@@ -1451,7 +1456,23 @@ class OkitArtefactView {
     }
 
     addContextMenu(svg) {
-        svg.on("contextmenu", handleContextMenu);
+        const self = this;
+        svg.on("contextmenu", function() {
+            console.warn(`Context Menu for ${self.display_name}`);
+            d3.event.preventDefault();
+            d3.event.stopPropagation();
+            $(jqId("context-menu")).empty();
+            $(jqId("context-menu")).removeClass("hidden");
+            const contextmenu = d3.select(d3Id("context-menu"));
+            contextmenu.append('button')
+                .attr('id', 'context-menu-delete')
+                .text('Delete')
+                .on('click', function() {
+                    self.json_view[self.delete_function](self.id);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+        });
+        //svg.on("contextmenu", handleContextMenu);
     }
 
     addCustomAttributes(svg) {
