@@ -1426,6 +1426,7 @@ class OkitArtefactView {
         svg.on("click", function() {
             self.loadSlidePanels();
             d3.event.stopPropagation();
+            $(jqId("context-menu")).addClass("hidden");
         });
     }
 
@@ -1458,11 +1459,12 @@ class OkitArtefactView {
     addContextMenu(svg) {
         const self = this;
         svg.on("contextmenu", function() {
-            console.warn(`Context Menu for ${self.display_name}`);
             d3.event.preventDefault();
             d3.event.stopPropagation();
+            const canvas_position = $(jqId("canvas-div")).offset();
+            const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX};
             $(jqId("context-menu")).empty();
-            $(jqId("context-menu")).removeClass("hidden");
+            $(jqId("context-menu")).css(position);
             const contextmenu = d3.select(d3Id("context-menu"));
             contextmenu.append('button')
                 .attr('id', 'context-menu-delete')
@@ -1471,6 +1473,21 @@ class OkitArtefactView {
                     self.json_view[self.delete_function](self.id);
                     $(jqId("context-menu")).addClass("hidden");
                 });
+            contextmenu.append('button')
+                .attr('id', 'context-menu-move')
+                .text('Move')
+                .on('click', function() {
+                    self.json_view[self.move_function](self.id);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+            contextmenu.append('button')
+                .attr('id', 'context-menu-clone')
+                .text('Clone')
+                .on('click', function() {
+                    self.json_view[self.clone_function](self.id);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+            $(jqId("context-menu")).removeClass("hidden");
         });
         //svg.on("contextmenu", handleContextMenu);
     }
