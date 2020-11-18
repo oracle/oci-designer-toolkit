@@ -7,9 +7,11 @@
 1. Add collapse / expand to container style artefacts Compartment / VCN / Subnet.
 2. Implement updated, Oracle Standard, Look and Feel for diagram elements.
 3. Add Preferences option to choose display label (Name / Resource / None) this will be displayed below the element on the SVG.
-4. Add OKIT specific "Definition" field to all artefacts to allow a free text definition of the artefact.
+4. Add OKIT specific "Definition" field to all artefacts to allow a free text definition of the artefact (Enhancement: #149).
 5. Add preference to specify the type of tooltip to be displayed (Name / Definition / Summary) when hovering over elements in the diagram.
 6. Add artefact element highlighting when the properties sheet is open. Moving the cursor over the properties sheet will highlight the associated artefact. 
+7. Implement simple Auto Save functionality to save model every 30 seconds to local storage (Enhancement: #169).
+8. Generate Title & description for queried diagrams (Enhancement: #164).
 
 ### Bug Fixes
 1. Fix issue where MySQL Databases could not be deleted.
