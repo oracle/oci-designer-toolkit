@@ -12,6 +12,7 @@ __module__ = "okitWebDesigner"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import configparser
+import oci
 import os
 import shutil
 import tempfile

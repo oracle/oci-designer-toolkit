@@ -703,29 +703,21 @@ class OkitAutoSave {
         this.stopAutoSave();
         this.autoInterval = setInterval(() => {
             localStorage.setItem(this.key, JSON.stringify(okitJsonModel));
-            console.warn('Saved to Local Storage');
-            console.warn(localStorage.getItem(this.key));
         }, timeout);
         localStorage.setItem(this.key, JSON.stringify(okitJsonModel));
     }
 
     stopAutoSave() {
-        console.warn('Stop Auto Save');
-        console.warn(localStorage.getItem(this.key));
         this.autoInterval ? clearInterval(this.autoInterval) : this.autoInterval = undefined;
         this.removeAutoSave();
     }
 
     getOkitJsonModel() {
-        console.warn('Get Auto Save');
-        console.warn(localStorage.getItem(this.key));
         const okitJson = localStorage.getItem(this.key);
         return okitJson ? JSON.parse(okitJson) : undefined;
     }
 
     removeAutoSave() {
         localStorage.removeItem(this.key);
-        console.warn('Remove Auto Save');
-        console.warn(localStorage.getItem(this.key));
     }
 }

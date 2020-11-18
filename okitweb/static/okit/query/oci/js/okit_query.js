@@ -113,8 +113,12 @@ class OkitOCIQuery {
             data: JSON.stringify(request),
             success: function(resp) {
                 let response_json = JSON.parse(resp);
+                let title = request.sub_compartments ? `Queried Compartment ${response_json.name} and Sub-Compartments` : `Queried Compartment ${response_json.name}`;
+                let description = `${title} in Region ${request.region}`;
                 response_json.compartment_id = null;
                 regionOkitJson[request.region].load({compartments: [response_json]})
+                regionOkitJson[request.region].title = title;
+                regionOkitJson[request.region].description = description;
                 let sub_query_request = JSON.clone(request);
                 sub_query_request.compartment_id = response_json.id;
                 me.queryCompartmentSubComponents(sub_query_request);
@@ -125,6 +129,13 @@ class OkitOCIQuery {
                 console.error('Error  : ' + error);
                 const empty_compartment = {compartment_id: null, display_name: request.compartment_name, name: request.compartment_name};
                 regionOkitJson[request.region].load({compartments: [empty_compartment]})
+                regionOkitJson[request.region].title = 'Query Failed';
+                regionOkitJson[request.region].description = error;
+                if (error === 'UNAUTHORIZED') {
+                    const response = JSON.parse(xhr.responseText);
+                    console.error(response);
+                    regionOkitJson[request.region].description = `${response.error.code}: ${response.error.message}`;
+                }
             },
             complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();

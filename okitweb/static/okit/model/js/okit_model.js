@@ -53,8 +53,12 @@ class OkitJson {
     load(okit_json) {
         console.log('Load OKIT Json');
         // Title & Description
-        this.title = okit_json.title;
-        this.description = okit_json.description;
+        if (okit_json.title) {
+            this.title = okit_json.title;
+        }
+        if (okit_json.description) {
+            this.description = okit_json.description;
+        }
         // Compartments
         if (okit_json.hasOwnProperty('compartments')) {
             for (let artefact of okit_json['compartments']) {
