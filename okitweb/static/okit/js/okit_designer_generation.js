@@ -385,11 +385,15 @@ function loadResourceManagerStacks() {
     });
 }
 
-function handleExportToResourceManagerGitLab(e) {
+function handleExportToResourceManagerLocal(e) {
     hideNavMenu();
-    okitJsonModel.validate(generateResourceManagerGitLab);
+    okitJsonModel.validate(generateResourceManagerLocal);
 }
-function generateResourceManagerGitLab(results) {
+function handleExportToResourceManagerGit(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateResourceManagerLocal);
+}
+function generateResourceManagerLocal(results) {
     if (results.valid) {
         let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
         console.info(okitSettings);
