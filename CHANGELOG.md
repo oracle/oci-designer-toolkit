@@ -1,6 +1,13 @@
 # Release Notes
 
 
+## Version 0.14.1 
+**Release Date**: 18th November 2020
+### Bug Fixes
+1. Reinstate Public / Private to Subnet description
+2. Fix delete issue with IPSec
+3. Fix delete issue with CPE
+
 ## Version 0.14.0 
 **Release Date**: 18th November 2020
 ### Features
