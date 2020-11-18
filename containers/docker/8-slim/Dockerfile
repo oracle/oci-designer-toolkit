@@ -33,14 +33,14 @@ RUN microdnf install -y \
 #        python36-oci-sdk \
         nginx \
 # Upgrade pip
- && python3 -m pip install --upgrade pip==20.0.2 \
+ && python3 -m pip install --upgrade pip \
 # Install required python modules
  && pip3 install --no-cache-dir \
         flask==1.1.1 \
         gunicorn==20.0.4 \
         oci==2.6.0 \
         python-magic==0.4.18 \
-        pyyaml==5.2 \
+        pyyaml==5.3.1 \
 # Create Workspace
  && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \
  && mkdir -p /okit/okitweb/static/okit/templates \

@@ -13,42 +13,38 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
-
-    getParent() {
-        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
 
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
-        console.info(`Is Attached   : ${this.attached}.`)
-        if (!okitSettings.hide_attached || !this.attached) {
-            console.info(`${this.display_name} is either not attached and we are displaying attached`);
-            let svg = super.draw();
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        for (let instance of this.getOkitJson().instances) {
+            if (instance.primary_vnic.nsg_ids.includes(this.id)) {
+                $(jqId(instance.id)).addClass('highlight-association');
+            }
         }
-        console.log();
+        for (let ad of this.getOkitJson().autonomous_databases) {
+            if (ad.nsg_ids.includes(this.id)) {
+                $(jqId(ad.id)).addClass('highlight-association');
+            }
+        }
+        $(jqId(this.artefact_id)).addClass('highlight-association');
     }
 
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        if (this.getParent()) {
-            let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = first_child.dx;
-            definition['svg']['y'] = first_child.dy;
-            definition['svg']['width'] = this.dimensions['width'];
-            definition['svg']['height'] = this.dimensions['height'];
-            definition['rect']['stroke']['colour'] = stroke_colours.bark;
-            definition['rect']['stroke']['dash'] = 1;
+    removeAssociationHighlighting() {
+        for (let instance of this.getOkitJson().instances) {
+            if (instance.primary_vnic.nsg_ids.includes(this.id)) {
+                $(jqId(instance.id)).removeClass('highlight-association');
+            }
         }
-        return definition;
+        for (let ad of this.getOkitJson().autonomous_databases) {
+            if (ad.nsg_ids.includes(this.id)) {
+                $(jqId(ad.id)).removeClass('highlight-association');
+            }
+        }
+        $(jqId(this.artefact_id)).removeClass('highlight-association');
     }
 
     /*

@@ -8,7 +8,6 @@
 
 {% block required_properties_table_rows_block %}
     <div class='tr'><div class='td'>Subnet</div><div class='td'><label id="subnet_id" class="okit-property-value okit-property-label"></label></div></div>
-    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
     <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="okit-property-value">
         <option value="1" selected="selected">Availability Domain 1</option>
         <option value="2">Availability Domain 2</option>
@@ -32,7 +31,7 @@
         <option value="FAULT-DOMAIN-2">Fault Domain 2</option>
         <option value="FAULT-DOMAIN-3">Fault Domain 3</option>
     </select></div></div>
-<div class='tr'><div class='td'>Description</div><div class='td'><input type="text" id="description" name="description" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Description</div><div class='td'><input type="text" id="description" name="description" class="okit-property-value"></div></div>
 {% endblock %}
 
 {% block optional_properties_block %}{% endblock %}

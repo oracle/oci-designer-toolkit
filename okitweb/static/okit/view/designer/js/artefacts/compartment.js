@@ -13,7 +13,6 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     get parent_id() {
-        console.info(`Compartment Id ${this.artefact.compartment_id}`);
         return (this.artefact.compartment_id !== null && this.artefact.compartment_id !== this.artefact.id) ? this.artefact.compartment_id : 'canvas';
     }
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
@@ -43,26 +42,6 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     /*
     ** SVG Processing
     */
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition();
-        console.info('>>>>>>>> Parent');
-        console.info(this.getParent());
-        if (this.getParent()) {
-            let parent_first_child = this.getParent().getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = parent_first_child.dx;
-            definition['svg']['y'] = parent_first_child.dy;
-        }
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 5;
-        definition['rect']['stroke']['width'] = 2;
-        definition['icon']['x_translation'] = icon_translate_x_start;
-        definition['icon']['y_translation'] = icon_translate_y_start;
-        definition['name']['show'] = true;
-        definition['label']['show'] = true;
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function

@@ -11,6 +11,8 @@ __version__ = "1.0.0"
 __module__ = "okitOci"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import json
+import oci
 import os
 import shutil
 import tempfile
@@ -18,6 +20,7 @@ import time
 import urllib
 from flask import Blueprint
 from flask import request
+from flask import jsonify
 
 import json
 from common.okitCommon import logJson
@@ -78,6 +81,37 @@ template_root = '/okit/visualiser/templates'
 
 #
 # Define Error Handlers
+#
+
+@bp.errorhandler(oci.exceptions.ServiceError)
+def handle_oci_service_error(error):
+    status_code = 500
+    success = False
+    message = ''
+    code = ''
+    for x in error.args:
+        logger.info(x)
+        if 'opc-request-id' in x:
+            code = x['code']
+            message = x['message']
+            status_code = x['status']
+            break
+    logger.info(message)
+    response = {
+        'success': success,
+        'error': {
+            'type': error.__class__.__name__,
+            'code': code,
+            'message': message
+        }
+    }
+    logger.exception(error)
+    logJson(response)
+    return jsonify(response), status_code
+
+
+#
+# Define Endpoints
 #
 
 @bp.route('/resourcemanager', methods=(['GET', 'POST']))

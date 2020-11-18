@@ -13,56 +13,11 @@ class ObjectStorageBucketView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.compartment_id;}
-
-    getParent() {
-        return this.getJsonView().getCompartment(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
 
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        // Add Connector Data
-        svg.attr("data-compartment-id", this.compartment_id)
-            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-start-x", boundingClientRect.x)
-            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-end-x", boundingClientRect.x)
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-start-x", boundingClientRect.x)
-            .attr("data-connector-end-y", boundingClientRect.y + (boundingClientRect.height / 2))
-            .attr("data-connector-end-x", boundingClientRect.x)
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true);
-        console.log();
-        return svg;
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        return definition;
-    }
 
     /*
     ** Property Sheet Load function

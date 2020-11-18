@@ -135,11 +135,17 @@ If you do not have git installed locally the current release of OKIT can be retr
 
 ### Create Container
 
+#### Copy Config & Key Files
 Before building/rebuilding your chosen container you will need to copy the contents of [&lt;USER HOME DIR&gt;/.oci](#config-file) 
 to the __oci-designer-toolkit/containers/oci__ directory.
 
 #### Docker Compose
 The docker image is the recommended runtime server OKIT provides a simple Docker Compose script to build and start the container.
+
+##### Prerequisites
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+- Create local directory __~/okit/user/templates__ for storage of custom templates.
+- [Copy Config & Key Files](#copy-config--key-files)
 
 ##### Docker Compose Build
 ```bash
@@ -159,17 +165,24 @@ The docker image  can be built and started using the scripts in the docker sub d
 It should be noted that the current Docker script is designed for development purposes and mounts the source directories
 at runtime. 
 
+##### Prerequisites
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+- Create local directory __~/okit/user/templates__ for storage of custom templates.
+- [Copy Config & Key Files](#copy-config--key-files)
+
 ##### Docker Build
 ```bash
 cd oci-designer-toolkit
 docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
 ```
+
 ##### Docker Update
 ```bash
 cd oci-designer-toolkit
 docker rmi okit
 docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
 ```
+
 ##### Start Docker Container
 ```bash
 cd oci-designer-toolkit
@@ -181,9 +194,13 @@ docker run -d --rm -p 443:443 -p 80:80 \
 ```
 
 #### Vagrant
+
 ##### Prerequisites
-1. Install [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-2. Install [Vagrant](https://vagrantup.com/)
+- Install [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+- Install [Vagrant](https://vagrantup.com/)
+- Create local directory __~/okit/user/templates__ for storage of custom templates.
+- [Copy Config & Key Files](#copy-config--key-files)
+
 ##### Vagrant Build
 ```bash
 cd oci-designer-toolkit/containers/vagrant/
@@ -191,6 +208,7 @@ vagrant up; vagrant reload; vagrant ssh
 ```
 **NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
 is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
+
 ##### Vagrant
 ```bash
 cd oci-designer-toolkit/containers/vagrant

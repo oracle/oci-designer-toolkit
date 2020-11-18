@@ -20,6 +20,7 @@ class Compartment extends OkitArtifact {
         this.merge(data);
         this.convert();
         this.display_name = this.name;
+        this.description = this.name;
     }
 
     /*

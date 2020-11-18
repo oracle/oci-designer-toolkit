@@ -13,47 +13,12 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
     }
 
     get parent_id() {return this.artefact.vcn_id;}
-
-    getParent() {
-        return this.getJsonView().getVirtualCloudNetwork(this.parent_id);
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
 
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        // Get Inner Rect to attach Connectors
-        let rect = svg.select("rect[id='" + safeId(this.id) + "']");
-        let boundingClientRect = rect.node().getBoundingClientRect();
-        // Add Connector Data
-        svg.attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true)
-            .selectAll("*")
-            .attr("data-connector-start-y", boundingClientRect.y + boundingClientRect.height / 2)
-            .attr("data-connector-start-x", boundingClientRect.x + (boundingClientRect.width))
-            .attr("data-connector-end-y", boundingClientRect.y + boundingClientRect.height / 2)
-            .attr("data-connector-end-x", boundingClientRect.x + (boundingClientRect.width))
-            .attr("data-connector-id", this.id)
-            .attr("dragable", true);
-        // Draw Connectors
-        this.drawConnectors();
-        console.log();
-        return svg;
-    }
-
     drawConnectors() {
-        console.log('Drawing Connectors for ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
         // Get Grand Parent
         let grandparent_id = d3.select(d3Id(this.parent_id)).attr('data-parent-id');
         // Define Connector Parent
@@ -63,17 +28,12 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
         parent_rect = d3.select(d3Id('canvas-rect'));
         // Only Draw if parent exists
         if (parent_svg.node()) {
-            console.info('Parent SVG     : ' + parent_svg.attr('id'));
             // Define SVG position manipulation variables
             let svgPoint = parent_svg.node().createSVGPoint();
             let screenCTM = parent_rect.node().getScreenCTM();
             svgPoint.x = d3.select(d3Id(this.id)).attr('data-connector-start-x');
             svgPoint.y = d3.select(d3Id(this.id)).attr('data-connector-start-y');
             let connector_start = svgPoint.matrixTransform(screenCTM.inverse());
-            console.info('Start svgPoint.x : ' + svgPoint.x);
-            console.info('Start svgPoint.y : ' + svgPoint.y);
-            console.info('Start matrixTransform.x : ' + connector_start.x);
-            console.info('Start matrixTransform.y : ' + connector_start.y);
 
             let connector_end = null;
 
@@ -84,10 +44,6 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
                         svgPoint.x = autonomous_database_svg.attr('data-connector-start-x');
                         svgPoint.y = autonomous_database_svg.attr('data-connector-start-y');
                         connector_end = svgPoint.matrixTransform(screenCTM.inverse());
-                        console.info('End svgPoint.x   : ' + svgPoint.x);
-                        console.info('End svgPoint.y   : ' + svgPoint.y);
-                        console.info('End matrixTransform.x : ' + connector_end.x);
-                        console.info('End matrixTransform.y : ' + connector_end.y);
                         let polyline = drawConnector(parent_svg, this.generateConnectorId(this.autonomous_database_ids[i], this.id),
                             {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y}, true);
                     }
@@ -101,30 +57,12 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
                         svgPoint.x = object_storage_bucket_svg.attr('data-connector-start-x');
                         svgPoint.y = object_storage_bucket_svg.attr('data-connector-start-y');
                         connector_end = svgPoint.matrixTransform(screenCTM.inverse());
-                        console.info('End svgPoint.x   : ' + svgPoint.x);
-                        console.info('End svgPoint.y   : ' + svgPoint.y);
-                        console.info('End matrixTransform.x : ' + connector_end.x);
-                        console.info('End matrixTransform.y : ' + connector_end.y);
                         let polyline = drawConnector(parent_svg, this.generateConnectorId(this.object_storage_bucket_ids[i], this.id),
                             {x:connector_start.x, y:connector_start.y}, {x:connector_end.x, y:connector_end.y}, true);
                     }
                 }
             }
         }
-        console.log();
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.purple;
-        definition['rect']['stroke']['dash'] = 1;
-        return definition;
     }
 
     /*

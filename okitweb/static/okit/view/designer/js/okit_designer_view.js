@@ -8,27 +8,27 @@ class OkitDesignerJsonView extends OkitJsonView {
     // Define Constants
     static get CANVAS_SVG() {return 'canvas-svg'}
 
-    constructor(okitjson=null, parent_id = 'canvas-div', display_grid = false, palette_svg = []) {
+    constructor(okitjson=null, parent_id = 'canvas-div', palette_svg = []) {
         super(okitjson);
         this.parent_id = parent_id;
-        this.display_grid = display_grid;
+        //this.display_grid = display_grid;
         this.palette_svg = palette_svg;
     }
 
-    static newView(model, parent_id, display_grid = false, palette = []) {
-        return new OkitDesignerJsonView((model, parent_id, display_grid, palette))
+    static newView(model, parent_id, palette = []) {
+        return new OkitDesignerJsonView((model, parent_id, palette))
     }
 
+    get display_grid() {return okitSettings.is_display_grid;}
+
     draw() {
-        console.log('Drawing Designer Canvas');
-        console.info(this);
+        console.info('Drawing Designer Canvas');
         // Display Json
         this.displayOkitJson();
         // New canvas
         let width = 0;
         let height = 0;
         for (let compartment of this.compartments) {
-            console.info(`Processing ${compartment.artefact.display_name}`);
             let dimensions = compartment.dimensions;
             width = Math.max(width, dimensions.width);
             height = Math.max(height, dimensions.height);
@@ -143,29 +143,17 @@ class OkitDesignerJsonView extends OkitJsonView {
         }
 
         // Resize Main Canvas if required
-        console.info('Canvas Width   : ' + canvas_svg.attr('width'));
-        console.info('Canvas Height  : ' + canvas_svg.attr('height'));
-        console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
         $(jqId("canvas-svg")).children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
-            console.info('Id      : ' + this.getAttribute('id'));
-            console.info('Width   : ' + this.getAttribute('width'));
-            console.info('Height  : ' + this.getAttribute('height'));
-            console.info('viewBox : ' + this.getAttribute('viewBox'));
             canvas_svg.attr('width', Math.max(Number(canvas_svg.attr('width')), Number(this.getAttribute('width'))));
             canvas_svg.attr('height', Math.max(Number(canvas_svg.attr('height')), Number(this.getAttribute('height'))));
             canvas_svg.attr('viewBox', '0 0 ' + canvas_svg.attr('width') + ' ' + canvas_svg.attr('height'));
         });
-        console.info('Canvas Width   : ' + canvas_svg.attr('width'));
-        console.info('Canvas Height  : ' + canvas_svg.attr('height'));
-        console.info('Canvas viewBox : ' + canvas_svg.attr('viewBox'));
         if (selectedArtefact) {
             $(jqId(selectedArtefact)).toggleClass('highlight');
         }
 
-        console.info(this);
         // Draw Connection
         this.drawConnections();
-        console.log();
     }
 
     drawConnections() {
@@ -209,32 +197,17 @@ class OkitDesignerJsonView extends OkitJsonView {
     displayOkitJson() {}
 
     newCanvas(width=400, height=300) {
-        console.log('New Canvas');
-        console.info('Parent                : ' + this.parent_id);
-        console.info('Width                 : ' + width);
-        console.info('Height                : ' + height);
+        console.info('New Canvas');
         let canvas_div = d3.select(d3Id(this.parent_id));
         let parent_width  = $(jqId(this.parent_id)).width();
         let parent_height = $(jqId(this.parent_id)).height();
         width  = Math.round(Math.max(width, parent_width));
         height = Math.round(Math.max(height, parent_height));
-        console.info('Width                 : ' + width);
-        console.info('Height                : ' + height);
         // Round up to next grid size to display full grid.
         if (okitSettings.is_display_grid) {
             width += (grid_size - (width % grid_size) + 1);
             height += (grid_size - (height % grid_size) + 1);
         }
-        console.info('Default Canvas Width  : ' + default_canvas_width);
-        console.info('Default Canvas Height : ' + default_canvas_height);
-        console.info('JQuery Parent Width   : ' + $(jqId(this.parent_id)).width());
-        console.info('JQuery Parent Height  : ' + $(jqId(this.parent_id)).height());
-        console.info('Client Parent Width   : ' + document.getElementById(this.parent_id).clientWidth);
-        console.info('Client Parent Height  : ' + document.getElementById(this.parent_id).clientHeight);
-        console.info('Window Width          : ' + $(window).width());
-        console.info('Window Height         : ' + $(window).height());
-        console.info('Canvas Width          : ' + width);
-        console.info('Canvas Height         : ' + height);
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
         // Wrapper SVG Element to define ViewBox etc
@@ -248,7 +221,6 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("preserveAspectRatio", "xMinYMin meet");
 
         this.clearCanvas();
-        console.log();
 
         return canvas_svg;
     }
@@ -263,7 +235,7 @@ class OkitDesignerJsonView extends OkitJsonView {
             .attr("width", "100%")
             .attr("height", "100%")
             .attr("fill", "white");
-        if (this.display_grid) {
+        if (okitSettings.is_display_grid) {
             this.addGrid(canvas_svg);
         }
     }

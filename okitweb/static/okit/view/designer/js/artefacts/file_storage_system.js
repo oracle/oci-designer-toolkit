@@ -15,56 +15,9 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
     get parent_id() {return this.artefact.primary_mount_target.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
 
-    getParent() {
-        return this.parent;
-    }
-
-    getParentId() {
-        return this.parent_id;
-    }
-
     /*
      ** SVG Processing
      */
-    draw() {
-        console.log('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        let me = this;
-        let svg = super.draw();
-        console.log();
-    }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        if (this.parent) {
-            let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-            definition['svg']['x'] = first_child.dx;
-            definition['svg']['y'] = first_child.dy;
-            definition['svg']['width'] = this.dimensions['width'];
-            definition['svg']['height'] = this.dimensions['height'];
-            definition['rect']['stroke']['colour'] = stroke_colours.bark;
-            definition['rect']['stroke']['dash'] = 1;
-        }
-        return definition;
-    }
-
-    // Return Artifact Dimensions
-    getDimensions() {
-        console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
-        let dimensions = this.getMinimumDimensions();
-        // Calculate Size based on Child Artifacts
-        // Check size against minimum
-        dimensions.width  = Math.max(dimensions.width,  this.getMinimumDimensions().width);
-        dimensions.height = Math.max(dimensions.height, this.getMinimumDimensions().height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.log();
-        return dimensions;
-    }
-
-    getMinimumDimensions() {
-        return {width: icon_width, height:icon_height};
-    }
-
 
     /*
     ** Property Sheet Load function

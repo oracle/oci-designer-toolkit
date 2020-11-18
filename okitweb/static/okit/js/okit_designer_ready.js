@@ -11,6 +11,7 @@ let okitJsonModel = new OkitJson();
 let okitOciConfig = new OkitOCIConfig();
 let okitOciData = new OkitOCIData();
 let okitSettings = new OkitSettings();
+let okitAutoSave = undefined;
 /*
 ** Ready function initiated on page load.
  */
@@ -24,7 +25,16 @@ $(document).ready(function() {
     okitJsonModel = new OkitJson();
     okitJsonView = new OkitDesignerJsonView(okitJsonModel);
     console.info(okitJsonView);
-
+    /*
+    ** Configure Auto Save
+     */
+    okitAutoSave = new OkitAutoSave(hideRecoverMenuItem);
+    // Test is Auto Save exists
+    recovered_model = okitAutoSave.getOkitJsonModel();
+    if (recovered_model) {$(jqId('file_recover_menu_item_li')).removeClass('hidden');}
+    if (okitSettings && okitSettings.auto_save) {
+        okitAutoSave.startAutoSave();
+    }
     /*
     ** Add handler functionality
      */
