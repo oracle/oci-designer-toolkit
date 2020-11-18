@@ -16,7 +16,6 @@ class SecurityListView extends OkitDesignerArtefactView {
         if (!this.attached_id) {
             for (let subnet of this.getOkitJson().subnets) {
                 if (subnet.security_list_ids.includes(this.id)) {
-                    console.info(this.display_name + ' attached to subnet '+ subnet.display_name);
                     return true;
                 }
             }
@@ -158,7 +157,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("name", "is_stateless")
             .on("change", function() {
                 access_rule['is_stateless'] = this.checked;
-                console.info('Changed is_stateless: ' + this.checked);
                 displayOkitJson();
             });
         $(jqId("is_stateless" + rule_num + access_type)).prop('checked', access_rule.is_stateless);
@@ -179,7 +177,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("value", access_rule[source_dest])
             .on("change", function() {
                 access_rule[source_dest] = this.value;
-                console.info('Changed destination: ' + this.value);
                 displayOkitJson();
             });
         // Add Protocol
@@ -192,7 +189,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("id", "protocol" + rule_num + access_type)
             .on("change", function() {
                 access_rule['protocol'] = this.options[this.selectedIndex].value;
-                console.info('Changed network_entity_id ' + this.selectedIndex);
                 // Hide
                 // IMCP
                 $(jqId('imcp_code_' + rule_num + access_type)).addClass('collapsed');
@@ -258,7 +254,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("value", access_rule['description'])
             .on("change", function() {
                 access_rule['description'] = this.value;
-                console.info('Changed description: ' + this.value);
                 displayOkitJson();
             });
         // Show Appropriate Protocol rows
@@ -307,7 +302,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("value", access_rule[options].source_port_range.min)
             .on("change", function() {
                 access_rule[options].source_port_range.min = this.value;
-                console.info('Changed min source port: ' + this.value);
                 displayOkitJson();
             });
         cell_div.append('div').attr('class', 'td').append('label').text('Max:');
@@ -319,7 +313,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("value", access_rule[options].source_port_range.max)
             .on("change", function() {
                 access_rule[options].source_port_range.max = this.value;
-                console.info('Changed max source port: ' + this.value);
                 displayOkitJson();
             });
         // Destination Port
@@ -339,7 +332,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("value", access_rule[options].destination_port_range.min)
             .on("change", function() {
                 access_rule[options].destination_port_range.min = this.value;
-                console.info('Changed min destination port: ' + this.value);
                 displayOkitJson();
             });
         cell_div.append('div').attr('class', 'td').append('label').text('Max:');
@@ -351,7 +343,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("value", access_rule[options].destination_port_range.max)
             .on("change", function() {
                 access_rule[options].destination_port_range.max = this.value;
-                console.info('Changed max destination port: ' + this.value);
                 displayOkitJson();
             });
     }
@@ -373,7 +364,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("id", "type" + rule_num + access_type)
             .on("change", function() {
                 access_rule.icmp_options.type = this.options[this.selectedIndex].value;
-                console.info('Changed IMCP Type ' + this.selectedIndex);
                 displayOkitJson();
             });
         type_select.append('option')
@@ -397,7 +387,6 @@ class SecurityListView extends OkitDesignerArtefactView {
             .attr("id", "code" + rule_num + access_type)
             .on("change", function() {
                 access_rule.icmp_options.code = this.options[this.selectedIndex].value;
-                console.info('Changed IMCP Code ' + this.selectedIndex);
                 displayOkitJson();
             });
         code_select.append('option')

@@ -16,7 +16,6 @@ function hideNavMenu() {
 
 function checkForUpdate() {
     $.getJSON('https://raw.githubusercontent.com/oracle/oci-designer-toolkit/master/okitweb/static/okit/json/release.json', function(resp) {
-        console.info(resp);
         const release = resp.release.split('.');
         const version = okitVersion.split('.');
         if ((Number(release[0]) > Number(version[0])) ||
@@ -54,7 +53,6 @@ $(document).ready(function() {
     $(jqId('okit_version')).text('Version: ' + okitVersion + '  (' + okitReleaseDate + ')');
 
     $('li.dropdown').on('mouseover', function() {
-        console.info(`>>>>>>> Over ${this.id}`);
         let menuX = $(this).position().left;
         let menuY = $(this).position().top;
         let scrollX = $('#navigation_menu').scrollLeft();
@@ -62,9 +60,6 @@ $(document).ready(function() {
         let width = $(this).innerWidth();
         let navX = $('#navigation_menu').offset().left;
         let navY = $('#navigation_menu').offset().top;
-        console.log(`Navigation Menu Offset x : ${navX} y : ${navY}`);
-        console.log(`Navigation Scroll Offset x : ${scrollX} y : ${scrollY}`);
-        console.info(`>>>>>>> Position       x : ${menuY} y : ${menuX} w : ${width}`);
         let $slideout = $('> .dropdown-content', $(this));
         $slideout.css('position', 'absolute');
         $slideout.css('top', menuY + scrollY);

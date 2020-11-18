@@ -42,8 +42,6 @@ class OkitJsonView {
     drop(source, target) {
         let newFunction = 'new' + source.name;
         let getFunction = 'get' + target.type.split(' ').join('');
-        console.info('New Function : ' + newFunction);
-        console.info('Get Function : ' + getFunction);
     }
 
     clear() {
@@ -111,13 +109,10 @@ class OkitJsonView {
         }
         this.load();
         this.draw();
-        console.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Updating View With Model>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-        console.info(this);
-        console.info(okitJsonView);
     }
 
     draw() {
-        console.info('Top Level View Draw');
+        console.warn('draw() function has not been implemented.');
     }
 
     getOkitJson() {
@@ -140,8 +135,6 @@ class OkitJsonView {
 
     // Autonomous Database
     dropAutonomousDatabaseView(target) {
-        console.info('Drop Autonomous Database View');
-        console.info(target);
         let view_artefact = this.newAutonomousDatabase();
         if (target.type === Subnet.getArtifactReference()) {
             view_artefact.getArtefact().subnet_id = target.id;
@@ -149,8 +142,7 @@ class OkitJsonView {
         } else if (target.type === Compartment.getArtifactReference()) {
             view_artefact.getArtefact().compartment_id = target.id;
         }
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newAutonomousDatabase(database) {
@@ -180,12 +172,9 @@ class OkitJsonView {
 
     // Block Storage
     dropBlockStorageVolumeView(target) {
-        console.info('Drop Block Storage Volume View');
-        console.info(target);
         let view_artefact = this.newBlockStorageVolume();
         view_artefact.getArtefact().compartment_id = target.id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newBlockStorageVolume(volume) {
@@ -215,16 +204,12 @@ class OkitJsonView {
 
     // Compartment
     dropCompartmentView(target) {
-        console.info('Drop Compartment View');
-        console.info(target);
         let view_artefact = this.newCompartment();
         view_artefact.getArtefact().compartment_id = target.type === Compartment.getArtifactReference() ? target.id : target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newCompartment(compartment) {
-        console.info('New Compartment View ' + compartment);
         this.compartments.push(compartment ? new CompartmentView(compartment, this) : new CompartmentView(this.okitjson.newCompartment(), this));
         return this.compartments[this.compartments.length - 1];
     }
@@ -245,18 +230,13 @@ class OkitJsonView {
         for (const artefact of compartments) {
             this.compartments.push(new CompartmentView(new Compartment(artefact, this.okitjson), this));
         }
-        console.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Loaded Compartments>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-        console.info(this);
     }
 
     // Customer Premise Equipment
     dropCustomerPremiseEquipmentView(target) {
-        console.info('Drop Customer Premise Equipment View');
-        console.info(target);
         let view_artefact = this.newCustomerPremiseEquipment();
         view_artefact.getArtefact().compartment_id = target.id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newCustomerPremiseEquipment(connect) {
@@ -286,13 +266,10 @@ class OkitJsonView {
 
     // Database System
     dropDatabaseSystemView(target) {
-        console.info('Drop Database System View');
-        console.info(target);
         let view_artefact = this.newDatabaseSystem();
         view_artefact.getArtefact().subnet_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newDatabaseSystem(database) {
@@ -322,13 +299,10 @@ class OkitJsonView {
 
     // Dynamic Routing Gateway
     dropDynamicRoutingGatewayView(target) {
-        console.info('Drop Dynamic Routing Gateway View');
-        console.info(target);
         let view_artefact = this.newDynamicRoutingGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newDynamicRoutingGateway(gateway) {
@@ -358,12 +332,9 @@ class OkitJsonView {
 
     // Fast Connect
     dropFastConnectView(target) {
-        console.info('Drop Fast Connect View');
-        console.info(target);
         let view_artefact = this.newFastConnect();
         view_artefact.getArtefact().compartment_id = target.id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newFastConnect(connect) {
@@ -393,13 +364,10 @@ class OkitJsonView {
 
     // File Storage System
     dropFileStorageSystemView(target) {
-        console.info('Drop File Storage System View');
-        console.info(target);
         // Pass in subnet so we create a default mount
         let view_artefact = this.newFileStorageSystem(this.okitjson.newFileStorageSystem({subnet_id: target.id}));
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact ' + view_artefact.subnet_id);
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newFileStorageSystem(storage) {
@@ -429,8 +397,6 @@ class OkitJsonView {
 
     // Instance
     dropInstanceView(target) {
-        console.info('Drop Instance View');
-        console.info(target);
         let view_artefact = this.newInstance();
         if (target.type === Subnet.getArtifactReference()) {
             view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
@@ -438,8 +404,7 @@ class OkitJsonView {
         } else if (target.type === Compartment.getArtifactReference()) {
             view_artefact.getArtefact().compartment_id = target.id;
         }
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newInstance(instance) {
@@ -452,7 +417,6 @@ class OkitJsonView {
     getInstance(id='') {
         for (let artefact of this.getInstances()) {
             if (artefact.id === id) {
-                console.info(artefact);
                 return artefact;
             }
         }
@@ -470,13 +434,10 @@ class OkitJsonView {
 
     // InstancePool
     dropInstancePoolView(target) {
-        console.info('Drop InstancePool View');
-        console.info(target);
         let view_artefact = this.newInstancePool();
         view_artefact.getArtefact().placement_configurations[0].primary_subnet_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newInstancePool(instance_pool) {
@@ -489,7 +450,6 @@ class OkitJsonView {
     getInstancePool(id='') {
         for (let artefact of this.getInstancePools()) {
             if (artefact.id === id) {
-                console.info(artefact);
                 return artefact;
             }
         }
@@ -507,8 +467,6 @@ class OkitJsonView {
 
     // Internet Gateway
     dropInternetGatewayView(target) {
-        console.info('Drop Internet Gateway View');
-        console.info(target);
         // Check if Gateway Already exists
         for (let gateway of this.internet_gateways) {
             if (gateway.vcn_id === target.id) {
@@ -519,8 +477,7 @@ class OkitJsonView {
         let view_artefact = this.newInternetGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newInternetGateway(gateway) {
@@ -554,12 +511,9 @@ class OkitJsonView {
 
     // IPSec Connection
     dropIPSecConnectionView(target) {
-        console.info('Drop IPSec Connection');
-        console.info(target);
         let view_artefact = this.newIPSecConnection();
         view_artefact.getArtefact().compartment_id = target.id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newIPSecConnection(connect) {
@@ -589,13 +543,10 @@ class OkitJsonView {
 
     // Load Balancer
     dropLoadBalancerView(target) {
-        console.info('Drop Load Balancer View');
-        console.info(target);
         let view_artefact = this.newLoadBalancer();
         view_artefact.getArtefact().subnet_ids.push(target.id);
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newLoadBalancer(loadbalancer) {
@@ -625,13 +576,10 @@ class OkitJsonView {
 
     // Local Peering Gateway
     dropLocalPeeringGatewayView(target) {
-        console.info('Drop Local Peering Gateway View');
-        console.info(target);
         let view_artefact = this.newLocalPeeringGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newLocalPeeringGateway(gateway) {
@@ -661,13 +609,10 @@ class OkitJsonView {
 
     // MySQL Database System
     dropMySQLDatabaseSystemView(target) {
-        console.info('Drop Database System View');
-        console.info(target);
         let view_artefact = this.newMySQLDatabaseSystem();
         view_artefact.getArtefact().subnet_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newMySQLDatabaseSystem(database) {
@@ -697,8 +642,6 @@ class OkitJsonView {
 
     // NAT Gateway
     dropNATGatewayView(target) {
-        console.info('Drop NAT Gateway View');
-        console.info(target);
         // Check if Gateway Already exists
         for (let gateway of this.nat_gateways) {
             if (gateway.vcn_id === target.id) {
@@ -709,8 +652,7 @@ class OkitJsonView {
         let view_artefact = this.newNATGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newNATGateway(gateway) {
@@ -744,13 +686,10 @@ class OkitJsonView {
 
     // Network Security Group
     dropNetworkSecurityGroupView(target) {
-        console.info('Drop Network Security Group View');
-        console.info(target);
         let view_artefact = this.newNetworkSecurityGroup();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newNetworkSecurityGroup(security) {
@@ -780,12 +719,9 @@ class OkitJsonView {
 
     // Object Storage Bucket
     dropObjectStorageBucketView(target) {
-        console.info('Drop Object Storage Bucket View');
-        console.info(target);
         let view_artefact = this.newObjectStorageBucket();
         view_artefact.getArtefact().compartment_id = target.id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newObjectStorageBucket(storage) {
@@ -815,13 +751,10 @@ class OkitJsonView {
 
     // OkeCluster
     dropOkeClusterView(target) {
-        console.info('Drop OKE Cluster View');
-        console.info(target);
         let view_artefact = this.newOkeCluster();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newOkeCluster(cluster) {
@@ -851,12 +784,9 @@ class OkitJsonView {
 
     // RemotePeeringConnection
     dropRemotePeeringConnectionView(target) {
-        console.info('Drop IPSec Connection');
-        console.info(target);
         let view_artefact = this.newRemotePeeringConnection();
         view_artefact.getArtefact().compartment_id = target.id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newRemotePeeringConnection(connect) {
@@ -886,13 +816,10 @@ class OkitJsonView {
 
     // Route Table
     dropRouteTableView(target) {
-        console.info('Drop Route Table View');
-        console.info(target);
         let view_artefact = this.newRouteTable();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newRouteTable(routetable) {
@@ -922,13 +849,10 @@ class OkitJsonView {
 
     // Security List
     dropSecurityListView(target) {
-        console.info('Drop Security List View');
-        console.info(target);
         let view_artefact = this.newSecurityList();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newSecurityList(security) {
@@ -958,8 +882,6 @@ class OkitJsonView {
 
     // Service Gateway
     dropServiceGatewayView(target) {
-        console.info('Drop Service Gateway View');
-        console.info(target);
         // Check if Gateway Already exists
         for (let gateway of this.service_gateways) {
             if (gateway.vcn_id === target.id) {
@@ -970,8 +892,7 @@ class OkitJsonView {
         let view_artefact = this.newServiceGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newServiceGateway(gateway) {
@@ -1001,14 +922,11 @@ class OkitJsonView {
 
     // Subnet
     dropSubnetView(target) {
-        console.info('Drop Subnet View');
-        console.info(target);
         let view_artefact = this.newSubnet();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         view_artefact.getArtefact().generateCIDR();
-        console.info('View Artefact');
-        console.info(view_artefact)
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newSubnet(subnet) {
@@ -1038,22 +956,17 @@ class OkitJsonView {
 
     // Virtual Cloud Network
     dropVirtualCloudNetworkView(target) {
-        console.info('Drop Virtual Cloud Network View');
-        console.info(target);
         let view_artefact = this.newVirtualCloudNetwork();
         view_artefact.getArtefact().compartment_id = target.id;
         view_artefact.getArtefact().generateCIDR();
-        console.info('View Artefact');
-        console.info(view_artefact)
         if (okitSettings.is_default_route_table) {
-            console.info('Creating Default Route Table');
             let route_table = this.newRouteTable(this.getOkitJson().newRouteTable({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
         }
         if (okitSettings.is_default_security_list) {
-            console.info('Creating Default Security List');
             let security_list = this.newSecurityList(this.getOkitJson().newSecurityList({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
             security_list.artefact.addDefaultSecurityListRules(view_artefact.artefact.cidr_block);
         }
+        view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
     newVirtualCloudNetwork(vcn) {
@@ -1102,8 +1015,6 @@ class OkitJsonView {
 
     // Fragment
     dropFragmentView(target) {
-        console.info('Drop Fragment View');
-        console.info(target);
         let view_artefact = this.newFragment(target);
         view_artefact.load();
     }
@@ -1120,7 +1031,7 @@ class OkitArtefactView {
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.collapsed = false;
-        this.recalculate_minimum_dimensions = true;
+        this._recalculate_dimensions = true;
         this.getJsonView = function() {return json_view};
         // Raise Artefact Elements to View Class
         if (this.artefact) {
@@ -1203,8 +1114,8 @@ class OkitArtefactView {
         };
     }
     // --- Dimensions
-    get recalculate_dimensions() {return this.recalculate_minimum_dimensions;}
-    set recalculate_dimensions(recalculate) {this.recalculate_minimum_dimensions = recalculate; this.parent ? this.parent.recalculate_dimensions = recalculate : recalculate = recalculate;}
+    get recalculate_dimensions() {return this._recalculate_dimensions;}
+    set recalculate_dimensions(recalculate) {this._recalculate_dimensions = true; this.parent ? this.parent.recalculate_dimensions = true : recalculate = false;}
     get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 1.5 : 2 : 1;}
     get height_multiplier() {return this.show_label ?  1.5 : 1;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
@@ -1256,8 +1167,6 @@ class OkitArtefactView {
     get svg_x() {
         if (this.parent) {
             const offset = this.parent.getChildOffset(this.getArtifactReference());
-            console.info(`>>>>>> svg_x Offset : ${offset}`);
-            console.info(offset);
             return offset.dx;
         } else {
             return 0;
@@ -1266,8 +1175,6 @@ class OkitArtefactView {
     get svg_y() {
         if (this.parent) {
             const offset = this.parent.getChildOffset(this.getArtifactReference());
-            console.info(`>>>>>> svg_y Offset : ${offset}`);
-            console.info(offset);
             return offset.dy;
         } else {
             return 0;
@@ -1567,8 +1474,6 @@ class OkitArtefactView {
 
     drawConnection(start_id, end_id) {
         if (!this.parent.is_collapsed) {
-            console.info(`Start Id : ${start_id}`);
-            console.info(`End Id   : ${end_id}`);
             const canvas_svg = d3.select(d3Id('canvas-svg'));
             const canvas_rect = d3.select(d3Id('canvas-rect'));
             const svgStartPoint = canvas_svg.node().createSVGPoint();
@@ -1577,10 +1482,6 @@ class OkitArtefactView {
             if (start_id && start_id !== '' && end_id && end_id !== '' && document.getElementById(start_id) && document.getElementById(end_id)) {
                 let start_bcr = document.getElementById(start_id).getBoundingClientRect();
                 let end_bcr = document.getElementById(end_id).getBoundingClientRect();
-                console.info(`Start BCR : ${start_bcr}`);
-                console.info(start_bcr);
-                console.info(`End BCR : ${end_bcr}`);
-                console.info(end_bcr);
                 let horizontal = false;
                 if (this.top_bottom_connectors_preferred && start_bcr.y > end_bcr.y) {
                     // Start Connector on the top edge
@@ -1617,10 +1518,6 @@ class OkitArtefactView {
                 }
                 let connector_start = svgStartPoint.matrixTransform(screenCTM.inverse());
                 let connector_end = svgEndPoint.matrixTransform(screenCTM.inverse());
-                console.info('Connector Start');
-                console.info(connector_start);
-                console.info('Connector End');
-                console.info(connector_end);
 
                 if (horizontal) {
                     this.drawHorizontalConnector(canvas_svg, this.generateConnectorId(end_id, start_id), connector_start, connector_end);
@@ -1633,17 +1530,12 @@ class OkitArtefactView {
     }
 
     drawVerticalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0},) {
-        console.log('Generating Vertical Connector');
-        console.info('Start Coordinates : ' + JSON.stringify(start));
-        console.info('End Coordinates   : ' + JSON.stringify(end));
         if (path_connector) {
             let radius = corner_radius;
             let dy = Math.round((end['y'] - start['y']) / 2);
             let dx = end['x'] - start['x'];
             let arc1 = '';
             let arc2 = '';
-            console.info('dx                : ' + dx);
-            console.info('dy                : ' + dy);
             if (dy > 0 && dx > 0) {
                 // First turn down and right with counter clockwise arc
                 arc1 = 'a5,5 0 0 0 5,5';
@@ -1717,21 +1609,15 @@ class OkitArtefactView {
                 .attr("marker-end", "url(#connector-end-circle)");
             //return polyline;
         }
-        console.log();
     }
 
     drawHorizontalConnector(parent_svg, id, start={x:0, y:0}, end={x:0, y:0}) {
-        console.log('Generating Horizontal Connector');
-        console.info('Start Coordinates : ' + JSON.stringify(start));
-        console.info('End Coordinates   : ' + JSON.stringify(end));
         if (path_connector) {
             let radius = corner_radius;
             let dy = end['y'] - start['y'];
             let dx = Math.round((end['x'] - start['x']) / 2);
             let arc1 = '';
             let arc2 = '';
-            console.info('dx                : ' + dx);
-            console.info('dy                : ' + dy);
             if (dy > 0 && dx > 0) {
                 // First turn right and down with clockwise arc
                 arc1 = 'a5,5 0 0 1 5,5';
@@ -1803,7 +1689,6 @@ class OkitArtefactView {
                 .attr("marker-start", "url(#connector-end-circle)")
                 .attr("marker-end", "url(#connector-end-circle)");
         }
-        console.log();
     }
 
     coordString(coord) {
@@ -1843,39 +1728,28 @@ class OkitArtefactView {
     ** Child Offset Functions
      */
     getChildOffset(child_type) {
-        console.log('Getting Offset for ' + child_type);
         let offset = {dx: 0, dy: 0};
         if (this.getTopEdgeArtifacts().includes(child_type)) {
-            console.info('Top Edge Artifact');
             offset = this.getTopEdgeChildOffset();
         } else if (this.getTopArtifacts().includes(child_type)) {
-            console.info('Top Artifact');
             offset = this.getTopChildOffset();
         } else if (this.getContainerArtifacts().includes(child_type)) {
-            console.info('Container Artifact');
             offset = this.getContainerChildOffset();
         } else if (this.getBottomArtifacts().includes(child_type)) {
-            console.info('Bottom Artifact');
             offset = this.getBottomChildOffset();
         } else if (this.getBottomEdgeArtifacts().includes(child_type)) {
-            console.info('Bottom Edge Artifact');
             offset = this.getBottomEdgeChildOffset();
         } else if (this.getLeftEdgeArtifacts().includes(child_type)) {
-            console.info('Left Edge Artifact');
             offset = this.getLeftEdgeChildOffset();
         } else if (this.getLeftArtifacts().includes(child_type)) {
-            console.info('Left Artifact');
             offset = this.getLeftChildOffset();
         } else if (this.getRightArtifacts().includes(child_type)) {
-            console.info('Right Artifact');
             offset = this.getRightChildOffset();
         } else if (this.getRightEdgeArtifacts().includes(child_type)) {
-            console.info('Right Edge Artifact');
             offset = this.getRightEdgeChildOffset();
         } else {
             console.warn(child_type + ' Not Found for ' + this.display_name);
         }
-        console.log();
         return offset
     }
 
@@ -2314,6 +2188,7 @@ class OkitArtefactView {
 class OkitContainerArtefactView extends OkitArtefactView {
     constructor(artefact = null, json_view) {
         super(artefact, json_view);
+        this._dimensions = {width: 0, height: 0};
     }
 
     // -- SVG Definitions
@@ -2322,8 +2197,8 @@ class OkitContainerArtefactView extends OkitArtefactView {
     get dimensions() {
         if (this.collapsed) {
             return this.collapsed_dimensions;
-        } else {
-            console.log(`Getting Dimensions of ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id})`);
+        } else if (this.recalculate_dimensions) {
+            console.info(`Getting Dimensions of ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id})`);
             let padding = this.getPadding();
             let dimensions = {width: 0, height: 0};
             let offset = {dx: 0, dy: 0};
@@ -2372,9 +2247,11 @@ class OkitContainerArtefactView extends OkitArtefactView {
             // Check size against minimum
             dimensions['width'] = Math.max(dimensions['width'], this.minimum_dimensions.width);
             dimensions['height'] = Math.max(dimensions['height'], this.minimum_dimensions.height);
-            console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-            console.log();
+            this._recalculate_dimensions = false;
+            this._dimensions = dimensions;
             return dimensions;
+        } else {
+            return this._dimensions;
         }
     }
     // ---- Icon
@@ -2423,7 +2300,6 @@ class OkitContainerArtefactView extends OkitArtefactView {
             this.getTopEdgeArtifacts(),    this.getTopArtifacts(),
             this.getBottomEdgeArtifacts(), this.getBottomArtifacts()
         );
-        console.info('Child Types : ' + child_types);
         return child_types;
     }
 

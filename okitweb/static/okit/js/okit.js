@@ -42,14 +42,12 @@ class OkitOCIConfig {
 
     load() {
         let me = this;
-        $.getJSON('config/sections', function(resp) {$.extend(true, me, resp);console.info('Sections Response ' + JSON.stringify(resp));});
-        console.info(this);
+        $.getJSON('config/sections', function(resp) {$.extend(true, me, resp);});
     }
 
     validate() {
         let me = this;
         $.getJSON('config/validate', function(resp) {
-            console.info('Validate Response ' + JSON.stringify(resp));
             me.results = resp.results;
             if (me.results.length > 0) {
                 $('#config_link').removeClass('hidden');
@@ -66,7 +64,7 @@ class OkitOCIData {
 
     load() {
         let me = this;
-        $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); console.info(me); me.query();});
+        $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); me.query();});
     }
 
     save() {
@@ -76,12 +74,10 @@ class OkitOCIData {
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(this.cloneForSave()),
-            success: function(resp) {
-                console.info('OKIT Dropdown Data Saved');
-            },
+            success: function(resp) {},
             error: function(xhr, status, error) {
-                console.warn('Status : '+ status)
-                console.warn('Error : '+ error)
+                console.warn('Status : '+ status);
+                console.warn('Error  : '+ error);
             }
         });
     }
@@ -96,7 +92,7 @@ class OkitOCIData {
 
     query() {
         let me = this;
-        $.getJSON('oci/dropdown', function(resp) {$.extend(true, me, resp); me.save(); console.info(me);});
+        $.getJSON('oci/dropdown', function(resp) {$.extend(true, me, resp); me.save();});
     }
 
     /*
@@ -145,14 +141,12 @@ class OkitOCIData {
                 }
             }
         }
-        console.info('>>>>>>> Instance OS : ' + oss);
         return [...new Set(oss)].sort();
     }
 
     getInstanceOSVersions(os='') {
         let versions = [];
         let os_images = this.images.filter(i => i.operating_system === os);
-        console.info(`${os} Versions ${os_images}`)
         for (let image of os_images) {
             versions.push(image.operating_system_version);
         }
@@ -162,9 +156,7 @@ class OkitOCIData {
     getInstanceImages(os='', version='') {
         let images = [];
         let os_images = this.images.filter(i => i.operating_system === os);
-        console.info(`${os} Images ${os_images}`)
         let version_images = os_images.filter(i => i.operating_system_version === version);
-        console.info(`${os} Images ${version_images}`)
         for (let image of version_images) {
             images.push(image.display_name);
         }
@@ -225,6 +217,8 @@ class OkitSettings {
         this.highlight_association = true;
         this.show_label = 'none';
         this.tooltip_type = 'simple';
+        this.name_prefix = 'okit-';
+        this.auto_save = false;
         this.load();
     }
 
@@ -244,7 +238,6 @@ class OkitSettings {
 
     save() {
         createCookie(this.getCookieName(), JSON.stringify(this));
-        console.info(this);
         redrawSVGCanvas();
     }
 
@@ -254,8 +247,6 @@ class OkitSettings {
 
     edit() {
         let me = this;
-        console.info('Settings:');
-        console.info(this);
         // Display Save As Dialog
         $(jqId('modal_dialog_title')).text('Preferences');
         $(jqId('modal_dialog_body')).empty();
@@ -293,6 +284,8 @@ class OkitSettings {
                 .attr('id', 'preferences_table')
                 .attr('class', 'table okit-table okit-modal-dialog-table');
             let tbody = table.append('div').attr('class', 'tbody');
+            // Auto Save
+            this.addAutoSave(tbody, autosave);
             // Display Grid
             this.addDisplayGrid(tbody, autosave);
             // Default Route Table
@@ -313,9 +306,37 @@ class OkitSettings {
             this.addDisplayLabel(tbody, autosave);
             // Tooltip Style
             this.addTooltipType(tbody, autosave);
+            // Name Prefix
+            this.addNamePrefix(tbody, autosave);
             // Config Profile
             //this.addConfigProfile(tbody, autosave);
         }
+    }
+
+    addAutoSave(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'auto_save')
+            .attr('name', 'auto_save')
+            .attr('type', 'checkbox')
+            .property('checked', this.auto_save)
+            .on('change', function () {
+                if (autosave) {
+                    self.auto_save = $('#auto_save').is(':checked');
+                    self.save();
+                }
+                if ($('#auto_save').is(':checked')) {
+                    if (okitAutoSave) {okitAutoSave.startAutoSave();}
+                } else {
+                    if (okitAutoSave) {okitAutoSave.stopAutoSave();}
+                }
+            });
+        td.append('label')
+            .attr('for', 'auto_save')
+            .text('Auto Save');
     }
 
     addDisplayGrid(tbody, autosave) {
@@ -622,6 +643,31 @@ class OkitSettings {
         $("input:radio[name='tooltip_type'][value=" + this.tooltip_type + "]").prop('checked', true);
     }
 
+    addNamePrefix(tbody, autosave) {
+        // Display Label
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('label')
+            .text('Name Prefix');
+        // -- Display Name
+        tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'name_prefix')
+            .attr('name', 'name_prefix')
+            .attr('type', 'text')
+            .attr('value', this.name_prefix)
+            .on('input', function () {
+                if (autosave) {
+                    self.name_prefix = $("input:text[name='name_prefix']").val();
+                    self.save();
+                }
+            });
+    }
+
     addConfigProfile(tbody, autosave) {
         // Config Profile
         let self = this;
@@ -645,4 +691,33 @@ class OkitSettings {
         $(jqId('profile')).val(this.profile);
     }
 
+}
+
+class OkitAutoSave {
+    key = "okitJson";
+    constructor() {
+        this.autoInterval = undefined;
+    }
+
+    startAutoSave(timeout = 30000) {
+        this.stopAutoSave();
+        this.autoInterval = setInterval(() => {
+            localStorage.setItem(this.key, JSON.stringify(okitJsonModel));
+        }, timeout);
+        localStorage.setItem(this.key, JSON.stringify(okitJsonModel));
+    }
+
+    stopAutoSave() {
+        this.autoInterval ? clearInterval(this.autoInterval) : this.autoInterval = undefined;
+        this.removeAutoSave();
+    }
+
+    getOkitJsonModel() {
+        const okitJson = localStorage.getItem(this.key);
+        return okitJson ? JSON.parse(okitJson) : undefined;
+    }
+
+    removeAutoSave() {
+        localStorage.removeItem(this.key);
+    }
 }
