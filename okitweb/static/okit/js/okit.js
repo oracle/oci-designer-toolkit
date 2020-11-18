@@ -695,15 +695,20 @@ class OkitSettings {
 
 class OkitAutoSave {
     key = "okitJson";
-    constructor() {
+    constructor(callback, interval = 60000) {
         this.autoInterval = undefined;
+        this.callback = callback;
+        this.interval = interval
     }
 
-    startAutoSave(timeout = 30000) {
+    startAutoSave() {
         this.stopAutoSave();
         this.autoInterval = setInterval(() => {
             localStorage.setItem(this.key, JSON.stringify(okitJsonModel));
-        }, timeout);
+            if (this.callback) {
+                this.callback();
+            }
+        }, this.interval);
         localStorage.setItem(this.key, JSON.stringify(okitJsonModel));
     }
 
