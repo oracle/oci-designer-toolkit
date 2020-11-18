@@ -28,7 +28,7 @@ $(document).ready(function() {
     /*
     ** Configure Auto Save
      */
-    okitAutoSave = new OkitAutoSave();
+    okitAutoSave = new OkitAutoSave(hideRecoverMenuItem);
     // Test is Auto Save exists
     recovered_model = okitAutoSave.getOkitJsonModel();
     if (recovered_model) {$(jqId('file_recover_menu_item_li')).removeClass('hidden');}

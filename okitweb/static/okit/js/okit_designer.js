@@ -83,6 +83,9 @@ function handleRecover(evt) {
         displayDesignerView();
         displayTreeView();
     }
+    hideRecoverMenuItem();
+}
+function hideRecoverMenuItem() {
     $(jqId('file_recover_menu_item_li')).addClass('hidden');
 }
 /*
@@ -93,6 +96,7 @@ function handleNew(evt) {
     resetDesigner();
     newDiagram();
     redrawSVGCanvas();
+    hideRecoverMenuItem();
 }
 function newDiagram() {
     console.log('Creating New Diagram');
@@ -178,6 +182,7 @@ function loaded(evt) {
     displayOkitJson();
     displayDesignerView();
     displayTreeView();
+    hideRecoverMenuItem();
 }
 function errorHandler(evt) {
     console.info('Error: ' + evt.target.error.name);
@@ -207,6 +212,7 @@ function saveJson(text, filename){
     let uri = 'data:text/plain;charset=utf-u,'+encodeURIComponent(text);
     triggerDownload(uri, filename);
     okitAutoSave.removeAutoSave();
+    hideRecoverMenuItem();
 }
 /*
 ** Save Model As Template
@@ -561,7 +567,7 @@ function selectQueryLastUsedCompartment() {
 }
 let queryCount = 0;
 function showQueryResults() {
-    console.log('Generating Query Results');
+    console.info('Generating Query Results');
     let regions = $(jqId('query_region_id')).val();
     let request = {};
     request.compartment_id = $(jqId('query_compartment_id')).val();
@@ -603,7 +609,7 @@ function showQueryResults() {
         console.info('Region Not Selected.');
     }
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
-    console.log();
+    hideRecoverMenuItem();
 }
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
