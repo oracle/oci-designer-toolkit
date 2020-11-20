@@ -32,6 +32,7 @@ RUN yum install -y \
  && yum install -y \
         python36 \
         python3-pip \
+        git \
 #        python36-pyyaml \
 #        python36-oci-sdk \
 #        rh-nginx114 \
