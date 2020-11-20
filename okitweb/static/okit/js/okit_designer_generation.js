@@ -417,4 +417,162 @@ function generateResourceManagerLocal(results) {
         validationFailedNotification();
     }
 }
+function handleExportToTerraformGit(e) {
+    $(jqId('modal_dialog_title')).text('Export Terraform');
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('id', 'load_from_git')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    let tbody = table.append('div').attr('class', 'tbody');
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_repo');
+    tr.append('div').attr('class', 'td').text('Repository:');
+    tr.append('div').attr('class', 'td').append('select')
+        .attr('id', 'git_repository')
+        .append('option')
+        .attr('value', 'select')
+        .text('Select');
+
+    let git_repository_filename_select = d3.select(d3Id('git_repository'));
+
+    for (let git_setting of okitOciConfig.settings) {
+        git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
+    }
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_filename');
+    tr.append('div').attr('class', 'td').text('Folder Name:');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'git_repository_filename')
+        .attr('type', 'text');
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_commitmsg');
+    tr.append('div').attr('class', 'td').text('Description:');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'git_repository_commitmsg')
+        .attr('type', 'text');
+
+    // Submit
+    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'export_terraform_option_id')
+        .attr('type', 'button')
+        .text('Submit');
+    save_button.on("click", handleExportToTerraformGitProceed);
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+
+function handleExportToTerraformGitProceed(e) {
+    okitJsonModel.git_repository = $(jqId('git_repository')).val();
+    okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
+    okitJsonModel.git_repository_commitmsg = $(jqId('git_repository_commitmsg')).val();
+
+    hideNavMenu();
+    okitJsonModel.validate(generateTerraformToRepo);
+}
+
+function generateTerraformToRepo(results) {
+    if (results.valid) {
+        let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
+        console.info(okitSettings);
+        requestJson.use_variables = okitSettings.is_variables;
+        $.ajax({
+            type: 'post',
+            url: 'generate/terraformtogit',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(requestJson),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+                alert(resp);
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
+function handleExportToAnsibleGit(e) {
+    $(jqId('modal_dialog_title')).text(' Export Ansible');
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('id', 'load_to_git')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    let tbody = table.append('div').attr('class', 'tbody');
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_repo');
+    tr.append('div').attr('class', 'td').text('Repository:');
+    tr.append('div').attr('class', 'td').append('select')
+        .attr('id', 'git_repository')
+        .append('option')
+        .attr('value', 'select')
+        .text('Select');
+
+    let git_repository_filename_select = d3.select(d3Id('git_repository'));
+
+    for (let git_setting of okitOciConfig.settings) {
+        git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
+    }
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_filename');
+    tr.append('div').attr('class', 'td').text('Folder Name:');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'git_repository_filename')
+        .attr('type', 'text');
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_commitmsg');
+    tr.append('div').attr('class', 'td').text('Description:');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'git_repository_commitmsg')
+        .attr('type', 'text');
+
+    // Submit
+    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'export_ansible_option_id')
+        .attr('type', 'button')
+        .text('Submit');
+    save_button.on("click", handleExportToAnsibleGitProceed);
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+
+function handleExportToAnsibleGitProceed(e) {
+    okitJsonModel.git_repository = $(jqId('git_repository')).val();
+    okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
+    okitJsonModel.git_repository_commitmsg = $(jqId('git_repository_commitmsg')).val();
+    hideNavMenu();
+    okitJsonModel.validate(generateAnsibleToRepo);
+}
+
+function generateAnsibleToRepo(results) {
+    if (results.valid) {
+        let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
+        console.info(okitSettings);
+        requestJson.use_variables = okitSettings.is_variables;
+        $.ajax({
+            type: 'post',
+            url: 'generate/ansibletogit',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(requestJson),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+                alert(resp);
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
 
