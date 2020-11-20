@@ -345,17 +345,19 @@ class OkitDesignerArtefactView extends OkitArtefactView {
         $(jqId(select_id)).empty();
         let multi_select = d3.select(d3Id(select_id));
         if (subnet_id && subnet_id !== '') {
-            let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
-            for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
-                if (networkSecurityGroup.vcn_id === vcn.id) {
-                    let div = multi_select.append('div');
-                    div.append('input')
-                        .attr('type', 'checkbox')
-                        .attr('id', safeId(networkSecurityGroup.id))
-                        .attr('value', networkSecurityGroup.id);
-                    div.append('label')
-                        .attr('for', safeId(networkSecurityGroup.id))
-                        .text(networkSecurityGroup.display_name);
+            if (this.getOkitJson().getSubnet(subnet_id) != undefined) {
+                let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet_id).vcn_id);
+                for (let networkSecurityGroup of this.getOkitJson().network_security_groups) {
+                    if (networkSecurityGroup.vcn_id === vcn.id) {
+                        let div = multi_select.append('div');
+                        div.append('input')
+                            .attr('type', 'checkbox')
+                            .attr('id', safeId(networkSecurityGroup.id))
+                            .attr('value', networkSecurityGroup.id);
+                        div.append('label')
+                            .attr('for', safeId(networkSecurityGroup.id))
+                            .text(networkSecurityGroup.display_name);
+                    }
                 }
             }
         }
