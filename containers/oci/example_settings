@@ -1,0 +1,2 @@
+[GIT_REPOSITORIES]
+git_repo = [{'label':'Label1','branch':'master','url':'git@giturl.git'},{'label':'Label2','branch':'branchname','url':'git@giturl.git'}]
