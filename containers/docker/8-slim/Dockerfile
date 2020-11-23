@@ -27,6 +27,7 @@ RUN microdnf install -y \
  && microdnf update -y \
 # Install additional packages
  && microdnf install -y \
+        git \
         python36 \
         python3-pip \
 #        python36-pyyaml \
