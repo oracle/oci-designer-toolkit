@@ -35,16 +35,6 @@ class CustomerPremiseEquipment extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    deleteChildren() {
-        // Remove IPSec references
-        for (let ipsec of this.getOkitJson().ipsec_connections) {
-            for (let i=0; i < ipsec.customer_premise_equipments.length; i++) {
-                if (ipsec.customer_premise_equipments[i] === this.id) {
-                    ipsec.customer_premise_equipments.splice(i, 1);
-                }
-            }
-        }
-    }
 
 
     getNamePrefix() {
