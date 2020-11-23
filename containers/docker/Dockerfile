@@ -30,6 +30,7 @@ RUN yum install -y \
  && yum update -y \
 # Install additional packages
  && yum install -y \
+        git \
         python36 \
         python3-pip \
 #        python36-pyyaml \
