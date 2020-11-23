@@ -1296,6 +1296,8 @@ class OkitArtefactView {
     get clone_function() {return `clone${this.getArtifactReference().split(' ').join('')}`}
     get move_function() {return `move${this.getArtifactReference().split(' ').join('')}`}
     get new_function() {return `new${this.getArtifactReference().split(' ').join('')}`}
+    get cloneable() {return true;}
+    get moveable() {return true;}
 
     getArtefact() {return this.artefact;}
 
@@ -1485,23 +1487,27 @@ class OkitArtefactView {
                     $(jqId("context-menu")).addClass("hidden");
                 });
             // Move
-            ul.append('li').append('a')
-                .attr('class', 'parent-item')
-                .attr('href', 'javascript:void(0)')
-                .text('Move')
-                .on('click', function() {
-                    self.json_view[self.move_function](self.id);
-                    $(jqId("context-menu")).addClass("hidden");
-                });
+            if (self.moveable) {
+                ul.append('li').append('a')
+                    .attr('class', 'parent-item')
+                    .attr('href', 'javascript:void(0)')
+                    .text('Move')
+                    .on('click', function () {
+                        self.json_view[self.move_function](self.id);
+                        $(jqId("context-menu")).addClass("hidden");
+                    });
+            }
             // Clone
-            ul.append('li').append('a')
-                .attr('class', 'parent-item')
-                .attr('href', 'javascript:void(0)')
-                .text('Clone')
-                .on('click', function() {
-                    self.json_view[self.clone_function](self.id);
-                    $(jqId("context-menu")).addClass("hidden");
-                });
+            if (self.cloneable) {
+                ul.append('li').append('a')
+                    .attr('class', 'parent-item')
+                    .attr('href', 'javascript:void(0)')
+                    .text('Clone')
+                    .on('click', function () {
+                        self.json_view[self.clone_function](self.id);
+                        $(jqId("context-menu")).addClass("hidden");
+                    });
+            }
             $(jqId("context-menu")).removeClass("hidden");
         });
         //svg.on("contextmenu", handleContextMenu);

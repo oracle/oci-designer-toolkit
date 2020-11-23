@@ -408,6 +408,13 @@ li a.parent-item:hover {
 ** Context Menu
  */
 
+.context-menu {
+    z-index:102;
+    position: absolute;
+    border: 1px rgba(37, 49, 65, 0.1);
+    padding: 2px;
+}
+
 ul.okit-context-menu-list {
     margin: 0;
     padding: 0;
