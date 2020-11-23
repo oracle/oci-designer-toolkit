@@ -38,16 +38,6 @@ class IPSecConnection extends OkitArtifact {
     /*
     ** Delete Processing
      */
-    deleteChildren() {
-        // Remove IPSec references
-        for (let ipsec of this.getOkitJson().ipsec_connections) {
-            for (let i=0; i < ipsec.ipsec_connections.length; i++) {
-                if (ipsec.ipsec_connections[i] === this.id) {
-                    ipsec.ipsec_connections.splice(i, 1);
-                }
-            }
-        }
-    }
 
 
     getNamePrefix() {
