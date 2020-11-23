@@ -90,6 +90,12 @@ class OkitHclJsonParser(object):
         if "create_vnic_details" in artefact:
             artefact["vnics"] = artefact["create_vnic_details"]
             del artefact["create_vnic_details"]
+        if "metadata" in artefact:
+            if isinstance(artefact["metadata"], list):
+                artefact["metadata"] = artefact["metadata"][0]
+        if "source_details" in artefact:
+            if isinstance(artefact["source_details"], list):
+                artefact["source_details"] = artefact["source_details"][0]
 
         # Default Security List
         if "manage_default_resource_id" in artefact:
@@ -156,7 +162,7 @@ class OkitHclJsonParser(object):
                                     if not self.processUnknown(resource_key, artefact_json):
                                         logger.warn("Unknown Resource {0!s:s}".format(resource_key))
                                         result_json["warnings"][resource_key] = "Unknown Resource {0!s:s}".format(resource_key)
-            self.postParse()
+            #self.postParse()
             result_json["okit_json"] = self.standardiseIds(self.okit_json)
             logger.info("Parsed Resources")
         return result_json
