@@ -140,22 +140,34 @@ class OkitHclJsonParser(object):
         result_json = {"okit_json": {}, "warnings": {}}
 
         if self.hcl_json is not None:
+            if isinstance(self.hcl_json["resource"], list):
+                resource_list = self.hcl_json["resource"]
+            else:
+                resource_list = [self.hcl_json["resource"]]
             # Loop through resources looking for simple matches
             logger.info("Processing Simple Mapped Resources")
-            for resource in self.hcl_json["resource"]:
+            for resource in resource_list:
                 for resource_key, resource_value in resource.items():
                     if resource_key in self.tf_map:
-                        for artefact in resource_value:
+                        if isinstance(resource_value, list):
+                            values_list = resource_value
+                        else:
+                            values_list = [resource_value]
+                        for artefact in values_list:
                             for artefact_key, artefact_value in artefact.items():
                                 for artefact_json in artefact_value:
                                     artefact_json["id"] = "{0!s:s}.{1!s:s}.id".format(resource_key, artefact_key)
                                     self.okit_json[self.tf_map[resource_key]].append(self.processOddities(artefact_json))
             # Loop through resources looking for complex matches
             logger.info("Processing Complex Unmapped Resources")
-            for resource in self.hcl_json["resource"]:
+            for resource in resource_list:
                 for resource_key, resource_value in resource.items():
                     if resource_key not in self.tf_map:
-                        for artefact in resource_value:
+                        if isinstance(resource_value, list):
+                            values_list = resource_value
+                        else:
+                            values_list = [resource_value]
+                        for artefact in values_list:
                             for artefact_key, artefact_value in artefact.items():
                                 for artefact_json in artefact_value:
                                     artefact_json["id"] = "{0!s:s}.{1!s:s}.id".format(resource_key, artefact_key)
