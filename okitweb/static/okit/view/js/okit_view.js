@@ -1461,13 +1461,20 @@ class OkitArtefactView {
         svg.on("contextmenu", function() {
             d3.event.preventDefault();
             d3.event.stopPropagation();
+            let clear_timer = undefined;
             const canvas_position = $(jqId("canvas-div")).offset();
-            const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX};
+            const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX - 5};
             $(jqId("context-menu")).empty();
             $(jqId("context-menu")).css(position);
             const contextmenu = d3.select(d3Id("context-menu"));
             const ul = contextmenu.append('ul')
-                .attr('class', 'okit-context-menu-list');
+                .attr('class', 'okit-context-menu-list')
+                .on('mouseenter', function() {
+                    if (clear_timer) {clearTimeout(clear_timer);}
+                })
+                .on('mouseleave', function() {
+                    clear_timer = setTimeout(function() {$(jqId("context-menu")).addClass("hidden");}, 1500);
+                });
             // Delete
             ul.append('li').append('a')
                 .attr('class', 'parent-item')
@@ -1495,29 +1502,6 @@ class OkitArtefactView {
                     self.json_view[self.clone_function](self.id);
                     $(jqId("context-menu")).addClass("hidden");
                 });
-            /*
-            contextmenu.append('button')
-                .attr('id', 'context-menu-delete')
-                .text('Delete')
-                .on('click', function() {
-                    self.json_view[self.delete_function](self.id);
-                    $(jqId("context-menu")).addClass("hidden");
-                });
-            contextmenu.append('button')
-                .attr('id', 'context-menu-move')
-                .text('Move')
-                .on('click', function() {
-                    self.json_view[self.move_function](self.id);
-                    $(jqId("context-menu")).addClass("hidden");
-                });
-            contextmenu.append('button')
-                .attr('id', 'context-menu-clone')
-                .text('Clone')
-                .on('click', function() {
-                    self.json_view[self.clone_function](self.id);
-                    $(jqId("context-menu")).addClass("hidden");
-                });
-            */
             $(jqId("context-menu")).removeClass("hidden");
         });
         //svg.on("contextmenu", handleContextMenu);
