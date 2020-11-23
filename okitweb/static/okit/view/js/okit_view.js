@@ -1466,6 +1466,36 @@ class OkitArtefactView {
             $(jqId("context-menu")).empty();
             $(jqId("context-menu")).css(position);
             const contextmenu = d3.select(d3Id("context-menu"));
+            const ul = contextmenu.append('ul')
+                .attr('class', 'okit-context-menu-list');
+            // Delete
+            ul.append('li').append('a')
+                .attr('class', 'parent-item')
+                .attr('href', 'javascript:void(0)')
+                .text('Delete')
+                .on('click', function() {
+                    self.json_view[self.delete_function](self.id);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+            // Move
+            ul.append('li').append('a')
+                .attr('class', 'parent-item')
+                .attr('href', 'javascript:void(0)')
+                .text('Move')
+                .on('click', function() {
+                    self.json_view[self.move_function](self.id);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+            // Clone
+            ul.append('li').append('a')
+                .attr('class', 'parent-item')
+                .attr('href', 'javascript:void(0)')
+                .text('Clone')
+                .on('click', function() {
+                    self.json_view[self.clone_function](self.id);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+            /*
             contextmenu.append('button')
                 .attr('id', 'context-menu-delete')
                 .text('Delete')
@@ -1487,6 +1517,7 @@ class OkitArtefactView {
                     self.json_view[self.clone_function](self.id);
                     $(jqId("context-menu")).addClass("hidden");
                 });
+            */
             $(jqId("context-menu")).removeClass("hidden");
         });
         //svg.on("contextmenu", handleContextMenu);
