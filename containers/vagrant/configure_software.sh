@@ -13,6 +13,7 @@ yum install -y \
 yum update -y
 # Install additional packages
 yum install -y \
+    git \
     python36 \
     python3-pip
 # Clean Yum
@@ -38,6 +39,7 @@ python3 -m pip install --upgrade pip==20.0.2
 # Install required python modules
 pip3 install --no-cache-dir \
       flask==1.1.1 \
+      gitpython==3.1.11 \
       gunicorn==20.0.4 \
       oci==2.22.0 \
       pandas==1.1.2 \
