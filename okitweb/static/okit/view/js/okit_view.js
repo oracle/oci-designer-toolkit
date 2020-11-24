@@ -1303,6 +1303,8 @@ class OkitArtefactView {
 
     getOkitJson() {return this.okit_json;}
 
+    clone() {}
+
     draw() {
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
             console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
