@@ -431,6 +431,13 @@ class OkitJsonView {
             this.instances.push(new InstanceView(new Instance(artefact, this.okitjson), this));
         }
     }
+    cloneInstance(instance) {
+        const clone = instance.artefact.clone();
+        clone.display_name += 'Clone';
+        clone.id = clone.okit_id;
+        this.okitjson.instances.push(clone);
+        this.update(this.okitjson);
+    }
 
     // InstancePool
     dropInstancePoolView(target) {
@@ -1303,8 +1310,6 @@ class OkitArtefactView {
 
     getOkitJson() {return this.okit_json;}
 
-    clone() {}
-
     draw() {
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
             console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
@@ -1506,7 +1511,7 @@ class OkitArtefactView {
                     .attr('href', 'javascript:void(0)')
                     .text('Clone')
                     .on('click', function () {
-                        self.json_view[self.clone_function](self.id);
+                        self.json_view[self.clone_function](self);
                         $(jqId("context-menu")).addClass("hidden");
                     });
             }

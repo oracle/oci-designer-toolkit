@@ -971,7 +971,7 @@ class OkitArtifact {
     constructor (okitjson) {
         this.getOkitJson = function() {return okitjson};
         // Add Id
-        this.id = 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();
+        this.id = this.okit_id;
         // All Artefacts will have compartment id, display name & description
         this.compartment_id = '';
         this.display_name = '';
@@ -981,6 +981,8 @@ class OkitArtifact {
         this.freeform_tags = {};
         this.defined_tags = {};
     }
+
+    get okit_id() {return 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();}
 
     /*
     ** Clone Functionality
