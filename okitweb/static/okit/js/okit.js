@@ -43,7 +43,6 @@ class OkitOCIConfig {
     load() {
         let me = this;
         $.getJSON('config/sections', function(resp) {$.extend(true, me, resp);});
-        $.getJSON('config/appsettings', function(resp) {$.extend(true, me, resp);});
     }
 
     validate() {
@@ -54,6 +53,17 @@ class OkitOCIConfig {
                 $('#config_link').removeClass('hidden');
             }
         });
+    }
+}
+
+class OkitGITConfig {
+    constructor() {
+        this.load();
+    }
+
+    load() {
+        let me = this;
+        $.getJSON('config/appsettings', function(resp) {$.extend(true, me, resp);});
     }
 }
 
