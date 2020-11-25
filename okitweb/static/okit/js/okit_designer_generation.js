@@ -436,7 +436,7 @@ function handleExportToTerraformGit(e) {
 
     let git_repository_filename_select = d3.select(d3Id('git_repository'));
 
-    for (let git_setting of okitOciConfig.settings) {
+    for (let git_setting of okitGitConfig.gitsections) {
         git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
     }
 
@@ -515,7 +515,7 @@ function handleExportToAnsibleGit(e) {
 
     let git_repository_filename_select = d3.select(d3Id('git_repository'));
 
-    for (let git_setting of okitOciConfig.settings) {
+    for (let git_setting of okitGitConfig.gitsections) {
         git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
     }
 
