@@ -76,9 +76,9 @@ def readConfigFileSettings(config_file='~/.oci/settings'):
     logger.debug('Setting File {0!s:s}'.format(abs_config_file))
     config = configparser.ConfigParser()
     config.read(abs_config_file)
-    repo_list = {}
-    if 'GIT_REPOSITORIES' in config:
-        repo_list = ast.literal_eval(config.get("GIT_REPOSITORIES", "git_repo"))
+    repo_list = []
+    for each_git_section in config.sections():
+        repo_list.append({'label':each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
     return repo_list
 
 def getConfigFileValue(section, key, config_file='~/.oci/config'):
@@ -272,7 +272,6 @@ def generate(language):
 
                 copyfrom = destination_dir+'/'+language
                 copyto = destination +'/' + git_file_name
-
                 if os.path.exists(copyto):
                     return "Name already exists"
                 else:
@@ -286,10 +285,8 @@ def generate(language):
                 repo.index.add(copyto)
                 repo.index.commit("commit changes from okit:" + git_commit_msg)
                 repo.remotes.origin.push(git_branch)
-
                 os.system("rm -rf " + destination)
                 shutil.rmtree(destination_dir)
-
                 return language.capitalize()+" files successfully uploaded to GIT Repository"
             shutil.rmtree(destination_dir)
             filename = os.path.split(zipname)
@@ -352,7 +349,7 @@ def configSections():
 @bp.route('config/appsettings', methods=(['GET']))
 def appSettings():
     if request.method == 'GET':
-        config_settings = {"settings": readConfigFileSettings()}
+        config_settings = {"gitsections": readConfigFileSettings()}
         logger.info('Config Settings {0!s:s}'.format(config_settings))
         return config_settings
     else:
