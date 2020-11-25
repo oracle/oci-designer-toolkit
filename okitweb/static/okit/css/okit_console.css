@@ -415,6 +415,14 @@ li a.parent-item:hover {
     padding: 2px;
 }
 
+.okit-context-menu-title {
+    width: 100%;
+    font: bold 14px Helvetica Neue,Helvetica,Arial,sans-serif;
+    align-content: center;
+    text-align: center;
+    border-bottom: #1d2733 2px solid;
+}
+
 ul.okit-context-menu-list {
     margin: 0;
     padding: 0;

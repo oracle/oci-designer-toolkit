@@ -1028,7 +1028,6 @@ class OkitJsonView {
     newFragment(target) {
         return new FragmentView(this.okitjson.newFragment(target), this);
     }
-
 }
 
 /*
@@ -1303,8 +1302,8 @@ class OkitArtefactView {
     get clone_function() {return `clone${this.getArtifactReference().split(' ').join('')}`}
     get move_function() {return `move${this.getArtifactReference().split(' ').join('')}`}
     get new_function() {return `new${this.getArtifactReference().split(' ').join('')}`}
-    get cloneable() {return true;}
-    get moveable() {return true;}
+    get cloneable() {return false;}
+    get moveable() {return false;}
 
     getArtefact() {return this.artefact;}
 
@@ -1466,58 +1465,67 @@ class OkitArtefactView {
     }
 
     addContextMenu(svg) {
-        const self = this;
-        svg.on("contextmenu", function() {
-            d3.event.preventDefault();
-            d3.event.stopPropagation();
-            let clear_timer = undefined;
-            const canvas_position = $(jqId("canvas-div")).offset();
-            const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX - 5};
-            $(jqId("context-menu")).empty();
-            $(jqId("context-menu")).css(position);
-            const contextmenu = d3.select(d3Id("context-menu"));
-            const ul = contextmenu.append('ul')
-                .attr('class', 'okit-context-menu-list')
-                .on('mouseenter', function() {
-                    if (clear_timer) {clearTimeout(clear_timer);}
-                })
-                .on('mouseleave', function() {
-                    clear_timer = setTimeout(function() {$(jqId("context-menu")).addClass("hidden");}, 1500);
-                });
-            // Delete
-            ul.append('li').append('a')
-                .attr('class', 'parent-item')
-                .attr('href', 'javascript:void(0)')
-                .text('Delete')
-                .on('click', function() {
-                    self.json_view[self.delete_function](self.id);
-                    $(jqId("context-menu")).addClass("hidden");
-                });
-            // Move
-            if (self.moveable) {
+        if (this.compartment_id) {
+            const self = this;
+            svg.on("contextmenu", function () {
+                d3.event.preventDefault();
+                d3.event.stopPropagation();
+                let clear_timer = undefined;
+                const canvas_position = $(jqId("canvas-div")).offset();
+                const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX - 5};
+                $(jqId("context-menu")).empty();
+                $(jqId("context-menu")).css(position);
+                const contextmenu = d3.select(d3Id("context-menu"));
+                contextmenu.append('label')
+                    .attr('class', 'okit-context-menu-title')
+                    .text(self.display_name)
+                const ul = contextmenu.append('ul')
+                    .attr('class', 'okit-context-menu-list')
+                    .on('mouseenter', function () {
+                        if (clear_timer) {
+                            clearTimeout(clear_timer);
+                        }
+                    })
+                    .on('mouseleave', function () {
+                        clear_timer = setTimeout(function () {
+                            $(jqId("context-menu")).addClass("hidden");
+                        }, 1500);
+                    });
+                // Delete
                 ul.append('li').append('a')
                     .attr('class', 'parent-item')
                     .attr('href', 'javascript:void(0)')
-                    .text('Move')
+                    .text('Delete')
                     .on('click', function () {
-                        self.json_view[self.move_function](self.id);
+                        self.json_view[self.delete_function](self.id);
                         $(jqId("context-menu")).addClass("hidden");
                     });
-            }
-            // Clone
-            if (self.cloneable) {
-                ul.append('li').append('a')
-                    .attr('class', 'parent-item')
-                    .attr('href', 'javascript:void(0)')
-                    .text('Clone')
-                    .on('click', function () {
-                        self.json_view[self.clone_function](self);
-                        $(jqId("context-menu")).addClass("hidden");
-                    });
-            }
-            $(jqId("context-menu")).removeClass("hidden");
-        });
-        //svg.on("contextmenu", handleContextMenu);
+                // Move
+                if (self.moveable) {
+                    ul.append('li').append('a')
+                        .attr('class', 'parent-item')
+                        .attr('href', 'javascript:void(0)')
+                        .text('Move')
+                        .on('click', function () {
+                            self.json_view[self.move_function](self.id);
+                            $(jqId("context-menu")).addClass("hidden");
+                        });
+                }
+                // Clone
+                if (self.cloneable) {
+                    ul.append('li').append('a')
+                        .attr('class', 'parent-item')
+                        .attr('href', 'javascript:void(0)')
+                        .text('Clone')
+                        .on('click', function () {
+                            self.json_view[self.clone_function](self);
+                            $(jqId("context-menu")).addClass("hidden");
+                        });
+                }
+                $(jqId("context-menu")).removeClass("hidden");
+            });
+            //svg.on("contextmenu", handleContextMenu);
+        }
     }
 
     addCustomAttributes(svg) {

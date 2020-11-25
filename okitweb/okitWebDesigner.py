@@ -136,10 +136,10 @@ def designer():
         logger.debug('dirnames : {0!s:s}'.format(dirnames))
         logger.debug('filenames : {0!s:s}'.format(filenames))
         if os.path.basename(dirpath) != 'palette':
-            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
-            svg_icon_groups[os.path.basename(dirpath)] = filenames
+            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames if f.endswith(".svg")])
+            svg_icon_groups[os.path.basename(dirpath)] = [f for f in filenames if f.endswith(".svg")]
         else:
-            svg_files.extend(filenames)
+            svg_files.extend([f for f in filenames if f.endswith(".svg")])
     logger.debug('Files Walk : {0!s:s}'.format(svg_files))
     logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
 
