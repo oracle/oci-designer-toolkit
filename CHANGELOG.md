@@ -7,6 +7,7 @@
 ### Features
 
 ### Bug Fixes
+1. Adding an instance and an autonomous database in the same compartment overlays them on the canvas Issue #187
 
 
 ## Version 0.14.1 
