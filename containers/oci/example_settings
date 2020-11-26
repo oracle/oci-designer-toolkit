@@ -1,2 +1,7 @@
-[GIT_REPOSITORIES]
-git_repo = [{'label':'Label1','branch':'master','url':'git@giturl.git'},{'label':'Label2','branch':'branchname','url':'git@giturl.git'}]
+[LABEL1]
+branch = master
+url = git@url1.git
+
+[LABEL2]
+branch = BRANCHNAME
+url = git@url2.git
