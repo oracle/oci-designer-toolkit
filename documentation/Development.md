@@ -1,55 +1,19 @@
-# OCI Designer Toolkit Development Guide
-The following worked example will take you through the required steps to add a new artifact to OKIT. This will be based 
-on adding Block Storage Volumes to OKIT. Adding an artifact to OKIT will require a number files to be created and a few 
-modified the following steps will document the procedure specifying where the files will need to be created and the names 
-to be used.
-
+# OCI Designer Toolkit Artefact (Resource) Development
+The following guide will take you through a step by step process for developing a new Palette Resource / Artefact for use 
+within OKIT. To implement the new Resource / Artefact a number of new Artefact specific files will need to created whilst 
+integration will require modification of core Javascript files.
 
 ## Table of Contents
 
-1. [Adding an Artifact](#adding-an-artifact)
-2. [Naming Convention](#naming-convention)
-3. [Palette SVG](#palette-svg)
-4. [Artifact Javascript](#artifact-javascript)
-    1. [Standard Definitions](#standard-definitions)
-    2. [Class Definition](#class-definition)
-    3. [Ready Function](#ready-function)
-5. [Properties HTML](#properties-html)
-6. [Python OCI Facade](#python-oci-facade)
-7. [Terraform Jinja2 Template](#terraform-jinja2-template)
-8. [Ansible Jinja2 Template](#ansible-jinja2-template)
-9. [OKIT Class](#okit-class)
-    1. [New Artifact](#newartifact)
-    2. [Get Artifact](#getartifact)
-    3. [Delete Artifact](#deleteartifact)
-10. [Flask Web Designer Python](#flask-web-designer-python)
-11. [Connection Facade](#connection-facade)
-12. [Python Generator](#python-generator)
-
-
-## Adding an Artifact
-The following files will need to be created and the directories specified are relative to the project root. You will notice 
-that the files have a specfic naming convention and this is important because it allows the wrapper code to work with the
-minimum of cross file editing / multi developer editing. As a result it greatly simplifies the addition of new artifacts 
-to the system. 
-
-- New Files
-    - Frontend
-        - **[Palette SVG](#palette-svg)**                             : [okitweb/static/okit/palette/storage/*Block_Storage_Volume*.svg](../okitweb/static/okit/palette/storage/Block_Storage_Volume.svg)
-        - **[Artifact Model Javascript](#artifact-javascript)**       : [okitweb/static/okit/model/js/artefacts/*block_storage_volume*.js](../okitweb/static/okit/model/js/artefacts/block_storage_volume.js)
-        - **[Properties HTML](#properties-html)**                     : [okitweb/templates/okit/propertysheets/*block_storage_volume*.html](../okitweb/templates/okit/propertysheets/block_storage_volume.html)
-    - Backend
-        - **[Python OCI Facade](#python-oci-facade)**                 : [visualiser/facades/oci*BlockStorageVolume*.py](../visualiser/facades/ociBlockStorageVolume.py)
-        - **[Terraform Jinja2 Template](#terraform-jinja2-template)** : [visualiser/templates/terraform/*block_storage_volume*.jinja2](../visualiser/templates/terraform/block_storage_volume.jinja2)
-        - **[Ansible Jinja2 Template](#ansible-jinja2-template)**     : [visualiser/templates/ansible/*block_storage_volume*.jinja2](../visualiser/templates/ansible/block_storage_volume.jinja2)
-- Updated Files
-    - Frontend
-        - **[OKIT Class](#okit-class)**                               : [okitweb/static/okit/js/*okit*.js](../okitweb/static/okit/js/okit.js)
-        - **[Flask Web Designer Python](#flask-web-designer-python)** : [okitweb/*okitWebDesigner*.py](../okitweb/okitWebDesigner.py)
-    - Backend
-        - **[Connection Facade](#connection-facade)**                 : [visualiser/facades/*ociConnection*.py](../visualiser/facades/ociConnection.py)
-        - **[Python OCI Query](#python-oci-query)**                   : [visualiser/common/*ociQuery*.py](../visualiser/common/ociQuery.py)
-        - **[Python Generator](#python-generator)**                   : [visualiser/generators/*ociGenerator*.py](../visualiser/generators/okitGenerator.py)
+1. [Naming Convention](#naming-convention)
+2. [Artefact (Resource) Files](#artefact-resource-files)
+3. [New Files](#new-files)
+    1. [Frontend Files](#frontend-files)
+    2. [Backend Files](#backend-files)
+4. [Updated Files](#updated-files)
+    1. [Frontend Files](#frontend-files)
+    2. [Backend Files](#backend-files)
+5. [Running Docker for Development](#running-docker-for-development)
 
 ## Naming Convention
 All files associated with an artifact will have file names based on the artifact. If we take the ***Block Storage Volume***
@@ -60,58 +24,154 @@ All files must be named as per artifact name with the spaces replaced by undersc
 to this is the palette SVG where title case should be used instead of lower case. The reason for this is that the palette
 file name will be manipulated (removing the underscore) and used to dynamically reference all Javascript function names.  
 
-## Palette SVG
-The palette svg defines the icon that will be displayed in the Drag & Drop palette. A number of existing SVG files can be
-downloaded from the confluence page OCI Icon Set draw.io Stencils.
+## Artefact (Resource) Files
+To add an Artefact to OKIT you will need to create number of files that provide the core functionality associated with the 
+Artefact. In addition to fully integrated the new Artefact into the BUI a number of the core JavaScript / Python scripts will
+need to be updated. The remainder of this document will describe the functionality / files that must be implemented. 
 
-One key requirement for this svg file is that all elements that draw the icon be contained within an "g" tag. The reason
-for this is that the common javascript svg display routine will look for this and extract it to use as the definition for
-the icon. Hence the Block Storage Volume would look like the following
+For the worked example we will create the ***Block Storage Volume*** Artefact (Resource) and thus describe how the files
+are generated and then subsequently modified.
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" x="0px"
-     y="0px"
-     viewBox="0 0 288 288" style="enable-background:new 0 0 288 288;" xml:space="preserve">
-<style type="text/css">
-	.icon-colour-01{fill:#F80000;}
-</style>
-    <g transform="translate(-140, -140) scale(2, 2)">
-		<path class="icon-colour-01"
-			  d="M172.6,88.4c-13.7-1.6-28-1.6-28.6-1.6c-0.6,0-14.8,0-28.6,1.6c-24,2.8-24.2,7.8-24.2,7.9v95.5c0,0,0.3,5,24.2,7.9c13.7,1.6,28,1.6,28.6,1.6c0.6,0,14.8,0,28.6-1.6c24-2.8,24.2-7.8,24.2-7.9V96.3C196.8,96.2,196.5,91.2,172.6,88.4z M137.2,180.7h-18.9v-18.9h18.9V180.7z M137.2,146.5h-18.9v-18.9h18.9V146.5z M168.1,180.7h-18.9v-18.9h18.9V180.7z M168.1,146.5h-18.9v-18.9h18.9V146.5z M192.8,104.1c-1.8,2.8-18.9,7.5-48.3,7.5c-29.4,0-46.5-4.7-48.3-7.5c0,0,0,0,0,0c1.7-2.8,18.8-7.6,48.3-7.6C174,96.5,191.1,101.2,192.8,104.1C192.8,104.1,192.8,104.1,192.8,104.1z"/>
-	</g>
-</svg>
+## New Files
+To facilitate and ease the initial development of new Artefacts OKIT provides a Skeleton Code generator that will create
+skeleton files for the new Artefacts. The developer can then simply updated these with the Artefact Specific functionality.
+
+### Frontend Files
+- [Artefact Model JavaScript](#artefact-model-javascript)
+- [Artefact View JavaScript](#artefact-view-javascript)
+- [Palette SVG](#palette-svg)
+- [Properties HTML](#properties-html)
+
+### Backend Files
+- [Artefact Python Facade](#artefact-python-facade)
+- [Terraform Jinja2 Template](#terraform-jinja2-template)
+- [Ansible Jinja2 Template](#ansible-jinja2-template)
+
+### Generating Skeletons
+```bash
+cd skeletons
+python3 okitCodeSkeletonGenerator.py --name "<New Artefact Name>"
+```
+#### Worked Example
+```bash
+python3 okitCodeSkeletonGenerator.py --name "Block Storage Volume"
+INFO: Writing File: ../okitweb/static/okit/model/js/artefacts/block_storage_volume.js
+INFO: Writing File: ../okitweb/static/okit/view/js/artefacts/block_storage_volume.js
+INFO: Writing File: ../okitweb/static/okit/palette/hidden/Block_Storage_Volume.svg
+INFO: Writing File: ../okitweb/templates/okit/propertysheets/block_storage_volume.html
+INFO: Writing File: ../okitweb/templates/okit/valueproposition/block_storage_volume.html
+INFO: Writing File: ../visualiser/facade/ociBlockStorageVolume.py
 ```
 
-Although the svg will display in the palette image without the "g" it will cause the designer to fail later if it is missing.
-
-## Artifact Javascript
-When creating an Artefact you will need to define two artefact specific files that provide the Model Definition and the associated Designer View
-functionality. The artifact javascript files are the key files for the BUI specifying all core code for the creation, drawing and querying 
-of the artifact. Each file has a standard set of variable definitions and function definitions which again are based on 
-the name of the artifact as follows. 
-
-All the example code in the following sections will be based on the **Block Storage Volume** Artefact.
-
-### Artefact Model
-The Model javascript will be located in [okitweb/static/okit/model/js/artefacts](../okitweb/static/okit/model/js/artefacts) 
-directory and contains the definition of the Artefact and all properties will be in a structured format. Before fixing your
-model check the structure return from an OCI SDK Query of the Artefact.
-
-#### Class Definition
-Each artifact is described by a JavaScript class inherited from the **OkitArtifact** Class and has a number of standard 
-methods associated with the class. for the majority of these you will not need to modify the code because the underlying
-super class will do all the work. 
-
-The following will list the methods that need modification.
-
-#### Constructor
+### Artefact Model JavaScript
+#### Generated Skeleton
+Following generation a model file will be created in the **okitweb/static/okit/model/js/artefacts** directory as shown below.
 ```javascript
+/*
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+console.info('Loaded Block Storage Volume Javascript');
+
+/*
+** Define Block Storage Volume Class
+*/
+class BlockStorageVolume extends OkitArtifact {
     /*
     ** Create
-     */
+    */
+    constructor (data={}, okitjson={}) {
+        super(okitjson);
+        // Configure default values
+        this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
+        this.compartment_id = data.parent_id;
+        /*
+        ** TODO: Add Resource / Artefact specific parameters and default
+        */
+        // Update with any passed data
+        this.merge(data);
+        this.convert();
+    }
+    /*
+    ** Clone Functionality
+    */
+    clone() {
+        return new BlockStorageVolume(JSON.clone(this), this.getOkitJson());
+    }
+    /*
+    ** Name Generation
+    */
+    getNamePrefix() {
+        return super.getNamePrefix() + 'bsv';
+    }
+    /*
+    ** Static Functionality
+    */
+    static getArtifactReference() {
+        return 'Block Storage Volume';
+    }
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newBlockStorageVolume = function(data) {
+    this.getBlockStorageVolumes().push(new BlockStorageVolume(data, this));
+    return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
+}
+OkitJson.prototype.getBlockStorageVolumes = function() {
+    if (!this.block_storage_volumes) {
+        this.block_storage_volumes = [];
+    }
+    return this.block_storage_volumes;
+}
+OkitJson.prototype.getBlockStorageVolume = function(id='') {
+    for (let artefact of this.getBlockStorageVolumes()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+return undefined;
+}
+OkitJson.prototype.deleteBlockStorageVolume = function(id) {
+    for (let i = 0; i < this.block_storage_volumes.length; i++) {
+        if (this.block_storage_volumes[i].id === id) {
+            this.block_storage_volumes[i].delete();
+            this.block_storage_volumes.splice(i, 1);
+            break;
+        }
+    }
+}
+```
+#### Skeleton Modification
+At this point the skeleton is incomplete and requires that Artefact specific elements and functions are added. For our 
+worked example we will need add and initialise the following fields:
+
+- availability_domain = '1';
+- size_in_gbs = 1024;
+- backup_policy = 'bronze';
+- vpus_per_gb = '10';
+
+In addition if the object was created from a query we know that the returned availability_domain will be the full name 
+and it will need to be converted to a single digit.
+
+Because the **Block Storage Volume** can be attached to an Instance we will need to provide additional functional to remove
+any reference to it on delete. This is done by adding the deleteChildren() function that will be call automatically on delete.
+
+Following the update the model JavaScript will be modified as below:
+```javascript
+/*
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+console.info('Loaded Block Storage Volume Javascript');
+
+/*
+** Define Block Storage Volume Class
+*/
+class BlockStorageVolume extends OkitArtifact {
+    /*
+    ** Create
+    */
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
@@ -130,19 +190,18 @@ The following will list the methods that need modification.
             this.availability_domain = this.region_availability_domain.slice(-1);
         }
     }
-```
-This function is used to create a new json element to the OKIT json structure. The elements within this json will match those 
-that are returned from querying OCI. All artifacts will be contained within a top level list with a name that matches that
-of the artifact (e.g. block_storage_volumes). Once that new json element has been added it will be drawn on the SVG canvas using an appropriate View class.
-
-#### Delete Children
-```javascript
+    /*
+    ** Clone Functionality
+    */
+    clone() {
+        return new BlockStorageVolume(JSON.clone(this), this.getOkitJson());
+    }
     /*
     ** Delete Processing
      */
     deleteChildren() {
         // Remove Instance references
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             for (let i=0; i < instance.block_storage_volume_ids.length; i++) {
                 if (instance.block_storage_volume_ids[i] === this.id) {
                     instance.block_storage_volume_ids.splice(i, 1);
@@ -150,113 +209,677 @@ of the artifact (e.g. block_storage_volumes). Once that new json element has bee
             }
         }
     }
-```
-Although the main **delete** method will not need modifying the **deleteChildren** will need modification to remove any 
-references within linked artifacts or actual children in the case of a container.
-
-### Artefact View
-The Model javascript will be located in [okitweb/static/okit/view/designer/js/artefacts](../okitweb/static/okit/view/designer/js/artefacts) 
-directory and contains the definition of the SVG representation for the Artefact.
-
-#### Artifact Dimensions
-The function is used to calculate the dimensions of the artifact and will be called by container function to determine 
-how much space to reserve for drawing this artifact. If you are building a container artifact (e.g. subnet) then this
-function will call the dimensions function for all contained artifacts to calculate it's dimensions.
-
-#### Draw
-```javascript
-    draw() {
-        console.group('Drawing ' + this.getArtifactReference() + ' : ' + this.id + ' [' + this.parent_id + ']');
-        console.info(`Hide Attached : ${okitSettings.hide_attached}.`)
-        console.info(`Is Attached   : ${this.attached}.`)
-        if (!okitSettings.hide_attached || !this.attached) {
-            console.info(`${this.display_name} is either not attached and we are displaying attached`);
-            let svg = super.draw();
+    /*
+    ** Name Generation
+    */
+    getNamePrefix() {
+        return super.getNamePrefix() + 'bsv';
+    }
+    /*
+    ** Static Functionality
+    */
+    static getArtifactReference() {
+        return 'Block Storage Volume';
+    }
+}
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newBlockStorageVolume = function(data) {
+    this.getBlockStorageVolumes().push(new BlockStorageVolume(data, this));
+    return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
+}
+OkitJson.prototype.getBlockStorageVolumes = function() {
+    if (!this.block_storage_volumes) {
+        this.block_storage_volumes = [];
+    }
+    return this.block_storage_volumes;
+}
+OkitJson.prototype.getBlockStorageVolume = function(id='') {
+    for (let artefact of this.getBlockStorageVolumes()) {
+        if (artefact.id === id) {
+            return artefact;
         }
-        console.groupEnd();
     }
-
-    // Return Artifact Specific Definition.
-    getSvgDefinition() {
-        let definition = this.newSVGDefinition(this, this.getArtifactReference());
-        let first_child = this.getParent().getChildOffset(this.getArtifactReference());
-        definition['svg']['x'] = first_child.dx;
-        definition['svg']['y'] = first_child.dy;
-        definition['svg']['width'] = this.dimensions['width'];
-        definition['svg']['height'] = this.dimensions['height'];
-        definition['rect']['stroke']['colour'] = stroke_colours.bark;
-        definition['rect']['stroke']['dash'] = 1;
-        return definition;
+return undefined;
+}
+OkitJson.prototype.deleteBlockStorageVolume = function(id) {
+    for (let i = 0; i < this.block_storage_volumes.length; i++) {
+        if (this.block_storage_volumes[i].id === id) {
+            this.block_storage_volumes[i].delete();
+            this.block_storage_volumes.splice(i, 1);
+            break;
+        }
     }
-``` 
-Draws the artifact on the SVG canvas as parted of the dropped component. All artifacts are contained within there own svg
-element because we can then drop, where appropriate, other artifacts on them and they become self contained. Once draw we
-will add a click event to display the properties associated with this artifact. In the majority of cases this method will
-not need modification.
+}
+```
 
-If the artifact can be connected to another then we will also add the standard drag & drop handlers (Mouse Handlers are 
-added as well because SVG does not support standard HTML drag & drop events). (See Load Balancer).
-
-#### Load Property Sheet
+### Artefact View JavaScript
+#### Generated Skeleton
+Following generation a view file will be created in the **okitweb/static/okit/view/js/artefacts** directory as shown below.
 ```javascript
+/*
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+console.info('Loaded Block Storage Volume View Javascript');
+
+/*
+** Define Block Storage Volume View Class
+*/
+class BlockStorageVolumeView extends OkitArtefactView {
+    constructor(artefact=null, json_view) {
+        super(artefact, json_view);
+    }
+    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
+    get parent_id() {return this.artefact.vcn_id;}
+    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    /*
+    ** SVG Processing
+    */
     /*
     ** Property Sheet Load function
-     */
+    */
     loadProperties() {
-        let okitJson = this.getOkitJson();
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(me);});
+        const self = this;
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(self.artefact);});
     }
+    /*
+    ** Load and display Value Proposition
+    */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/block_storage_volume.html");
+    }
+    /*
+    ** Static Functionality
+    */
+    static getArtifactReference() {
+        return BlockStorageVolume.getArtifactReference();
+    }
+    static getDropTargets() {
+        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
+}
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropBlockStorageVolumeView = function(target) {
+    let view_artefact = this.newBlockStorageVolume();
+    if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.artefact.compartment_id = target.id;
+    } else {
+        view_artefact.artefact.compartment_id = target.compartment_id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newBlockStorageVolume = function(obj) {
+    this.getBlockStorageVolumes().push(obj ? new BlockStorageVolumeView(obj, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
+    return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
+}
+OkitJsonView.prototype.getBlockStorageVolumes = function() {
+    if (!this.block_storage_volumes) {
+        this.block_storage_volumes = [];
+    }
+    return this.block_storage_volumes;
+}
+OkitJsonView.prototype.getBlockStorageVolume = function(id='') {
+    for (let artefact of this.getBlockStorageVolumes()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.deleteBlockStorageVolume = function(id='') {
+    this.okitjson.deleteBlockStorageVolume(id);
+    this.update();
+}
+OkitJsonView.prototype.loadBlockStorageVolumes = function(block_storage_volumes) {
+    for (const artefact of block_storage_volumes) {
+        this.getBlockStorageVolumes().push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
+    }
+}
+OkitJsonView.prototype.cloneBlockStorageVolume = function(obj) {
+    const clone = obj.artefact.clone();
+    clone.display_name += 'Clone';
+    clone.id = clone.okit_id;
+    this.okitjson.block_storage_volumes.push(clone);
+    this.update(this.okitjson);
+}
 ```
-When the user clicks on the drawn SVG artifact this load function will be called. It will load the artifact specific 
-properties sheet into the "properties" pane and then load each of the form fields with the data from the appropriate 
-json element. This method will only need modification if the properties sheet needs to select references of other artifacts. 
-For an example of this see the Subnet class which will load Route Table and security list information.
+#### Skeleton Modification
+At this point the generated file is incomplete and will require that a number of functions be modified to specify the valid
+drop location for the Artefact. in the case of **Block Storage Volume** this will be a Compartment. 
 
-### OkitJsonView
-To enable the Drag & Drop / Creation functionality you will need to modify the [okitweb/static/okit/view/js/okit_view.js](../okitweb/static/okit/view/js/okit_view.js) 
-adding 
+- get parent_id()
+- get parent()
+- static getDropTargets()
+
+In addition we will add a functionality required to highlight associated Artefacts (for Block Storage Volume this will be 
+Instance it is attached to) by creating the following functions:
+
+- addAssociationHighlighting()
+- removeAssociationHighlighting()
+
+Following the update the model JavaScript will be modified as below:
 ```javascript
-    // Block Storage
-    dropBlockStorageVolumeView(target) {
-        console.info('Drop Block Storage Volume View');
-        console.info(target);
-        let view_artefact = this.newBlockStorageVolume();
-        view_artefact.getArtefact().compartment_id = target.id;
-        console.info('View Artefact');
-        console.info(view_artefact)
-        return view_artefact;
+/*
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+console.info('Loaded Block Storage Volume View Javascript');
+
+/*
+** Define Block Storage Volume View Class
+*/
+class BlockStorageVolumeView extends OkitArtefactView {
+    constructor(artefact=null, json_view) {
+        super(artefact, json_view);
     }
-    newBlockStorageVolume(volume) {
-        this.block_storage_volumes.push(volume ? new BlockStorageVolumeView(volume, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
-        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
-    }
-    getBlockStorageVolumes() {
-        return this.block_storage_volumes;
-    }
-    getBlockStorageVolume(id='') {
-        for (let artefact of this.getBlockStorageVolumes()) {
-            if (artefact.id === id) {
-                return artefact;
+    get parent_id() {return this.artefact.compartment_id;}
+    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
+    /*
+    ** SVG Processing
+    */
+    // Add Specific Mouse Events
+    addAssociationHighlighting() {
+        for (let instance of this.getOkitJson().getInstances()) {
+            if (instance.block_storage_volume_ids.includes(this.id)) {
+                $(jqId(instance.id)).addClass('highlight-association');
             }
         }
-        return undefined;
+        $(jqId(this.artefact_id)).addClass('highlight-association');
     }
-    deleteBlockStorageVolume(id='') {
-        this.okitjson.deleteBlockStorageVolume(id);
-        this.update();
+    removeAssociationHighlighting() {
+        for (let instance of this.getOkitJson().getInstances()) {
+            if (instance.block_storage_volume_ids.includes(this.id)) {
+                $(jqId(instance.id)).removeClass('highlight-association');
+            }
+        }
+        $(jqId(this.artefact_id)).removeClass('highlight-association');
     }
-    loadBlockStorageVolumes(block_storage_volumes) {
-        for (const artefact of block_storage_volumes) {
-            this.block_storage_volumes.push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
+    /*
+    ** Property Sheet Load function
+    */
+    loadProperties() {
+        const self = this;
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/block_storage_volume.html", () => {loadPropertiesSheet(self.artefact);});
+    }
+    /*
+    ** Load and display Value Proposition
+    */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/block_storage_volume.html");
+    }
+    /*
+    ** Static Functionality
+    */
+    static getArtifactReference() {
+        return BlockStorageVolume.getArtifactReference();
+    }
+    static getDropTargets() {
+        return [Compartment.getArtifactReference()];
+    }
+}
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropBlockStorageVolumeView = function(target) {
+    let view_artefact = this.newBlockStorageVolume();
+    if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.artefact.compartment_id = target.id;
+    } else {
+        view_artefact.artefact.compartment_id = target.compartment_id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newBlockStorageVolume = function(obj) {
+    this.getBlockStorageVolumes().push(obj ? new BlockStorageVolumeView(obj, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
+    return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
+}
+OkitJsonView.prototype.getBlockStorageVolumes = function() {
+    if (!this.block_storage_volumes) {
+        this.block_storage_volumes = [];
+    }
+    return this.block_storage_volumes;
+}
+OkitJsonView.prototype.getBlockStorageVolume = function(id='') {
+    for (let artefact of this.getBlockStorageVolumes()) {
+        if (artefact.id === id) {
+            return artefact;
         }
     }
+    return undefined;
+}
+OkitJsonView.prototype.deleteBlockStorageVolume = function(id='') {
+    this.okitjson.deleteBlockStorageVolume(id);
+    this.update();
+}
+OkitJsonView.prototype.loadBlockStorageVolumes = function(block_storage_volumes) {
+    for (const artefact of block_storage_volumes) {
+        this.getBlockStorageVolumes().push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
+    }
+}
+OkitJsonView.prototype.cloneBlockStorageVolume = function(obj) {
+    const clone = obj.artefact.clone();
+    clone.display_name += 'Clone';
+    clone.id = clone.okit_id;
+    this.okitjson.block_storage_volumes.push(clone);
+    this.update(this.okitjson);
+}
 ```
 
-### OkitOCIQuery
-To enable query functionality the [okitweb/static/okit/query/oci/js/okit_query.js](../okitweb/static/okit/query/oci/js/okit_query.js) will
-need to be modified to provide a new function to query the Artefact and an appropriate call from it's parent should be added.
+### Palette SVG
+#### Generated Skeleton
+Following generation an empty SVG file will be created in the **okitweb/static/okit/palette/hidden** directory as shown below. 
+Because this is created in the hidden directory it will not be displayed in the Palette by default but once modified it 
+should be moved to the appropriate palette subdirectory.
+```svg
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Block_Storage_Volume" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+     y="0px" viewBox="0 0 161.9 162" enable-background="new 0 0 161.9 162" xml:space="preserve">
+<g>
+</g>
+</svg>
+```
+#### Skeleton Modification
+For OKIT view to compliant with Oracle display standards we should use one of the svg files defined in 
+[Oracle Graphics for Topologies and Diagrams](https://docs.cloud.oracle.com/en-us/iaas/Content/General/Reference/graphicsfordiagrams.htm).
+The SVG zip file should contain an SVG file that can be used and the skeleton can be modified to include the appropriate 
+path elements within the containing &lt;g&gt; tag.
+Following the update the model JavaScript will be modified as below:
+```svg
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Block_Storage_Volume" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+     y="0px" viewBox="0 0 161.9 162" enable-background="new 0 0 161.9 162" xml:space="preserve">
+    <g>
+        <path fill="#312D2A" d="M153.1,152.5H9.4V26.8h143.8V152.5z M18.4,143.5h125.8V35.8H18.4V143.5z M152.6,9.1H8.9v9h143.8V9.1z
+             M78,87.6H46.4V56H78V87.6z M53.4,80.6H71V63H53.4V80.6z M115.6,87.6H84V56h31.6V87.6z M91,80.6h17.6V63H91V80.6z M78.4,124.7H46.9
+            V93.2h31.6V124.7z M53.9,117.7h17.6v-17.6H53.9V117.7z M116,124.7H84.5V93.2H116V124.7z M91.5,117.7H109v-17.6H91.5V117.7z"/>
+    </g>
+</svg>
+```
 
+
+### Properties HTML
+#### Generated Skeleton
+Following generation a property sheet HTML file will be created in the **okitweb/templates/okit/propertysheets** directory as shown below.
+```jinja2
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+{% block title_block %}Block Storage Volume{% endblock %}
+{% block required_properties_table_rows_block %}{% endblock %}
+{% block optional_properties_table_rows_block %}{% endblock %}
+{% block optional_properties_block %}{% endblock %}
+```
+#### Skeleton Modification
+At this point the skeleton is incomplete and requires that Artefact specific html elements to be added. For our 
+worked example we will need add the following fields:
+
+- availability_domain
+- size_in_gbs
+- backup_policy
+- vpus_per_gb
+
+```jinja2
+<!--
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+{% block title_block %}Block Storage Volume{% endblock %}
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="okit-property-value">
+        <option value="1" selected="selected">Availability Domain 1</option>
+        <option value="2">Availability Domain 2</option>
+        <option value="3">Availability Domain 3</option>
+    </select></div></div>
+{% endblock %}
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Size (in GB)</div><div class='td'><input type="text" id="size_in_gbs" name="size_in_gbs" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Backup Policy</div><div class='td'><select id="backup_policy" class="okit-property-value">
+        <option value="bronze" selected="selected">Bronze</option>
+        <option value="silver">Silver</option>
+        <option value="gold">Gold</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Performance</div><div class='td'><select id="vpus_per_gb" class="okit-property-value">
+        <option value="10" selected="selected">Balanced</option>
+        <option value="20">Higher</option>
+        <option value="0">Lower</option>
+    </select></div></div>
+{% endblock %}
+{% block optional_properties_block %}{% endblock %}
+```
+
+### Artefact Python Facade
+#### Generated Skeleton
+Following generation a Python Facade file will be created in the **visualiser/facades** directory as shown below.
+```python
+#!/usr/bin/python
+
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+"""Provide Module Description
+"""
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+__author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
+__version__ = "1.0.0"
+__module__ = "ociBlockStorageVolume"
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+import oci
+
+from common.okitLogging import getLogger
+from facades.ociConnection import OCIBlockStorageVolumeConnection
+
+# Configure logging
+logger = getLogger()
+
+
+class OCIBlockStorageVolumes(OCIBlockStorageVolumeConnection):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
+        self.compartment_id = compartment_id
+        self.block_storage_volumes_json = []
+        super(OCIBlockStorageVolumes, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def list(self, compartment_id=None, filter=None):
+        if compartment_id is None:
+            compartment_id = self.compartment_id
+
+        # Add filter to only return AVAILABLE Compartments
+        if filter is None:
+            filter = {}
+
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = 'AVAILABLE'
+
+        block_storage_volumes = oci.pagination.list_call_get_all_results(self.client.list_block_storage_volumes, compartment_id=compartment_id).data
+
+        # Convert to Json object
+        block_storage_volumes_json = self.toJson(block_storage_volumes)
+        logger.debug(str(block_storage_volumes_json))
+
+        # Filter results
+        self.block_storage_volumes_json = self.filterJsonObjectList(block_storage_volumes_json, filter)
+        logger.debug(str(self.block_storage_volumes_json))
+
+        return self.block_storage_volumes_json
+```
+#### Skeleton Modification
+Although the generated file provides all the core functionality for a an OKIT OCI Python facade it is likely that it will 
+require some minor changes. The developer should reference [Oracle Cloud Infrastructure Python SDK ](https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/)
+and the specific [API](https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/landing.html) for the Artefact
+being created.
+
+In our worked example we will need to modify the name of the API list function from the generated **self.client.list_block_storage_volumes** 
+to the correct name **self.client.list_volumes** which will result in the following file.
+```python
+#!/usr/bin/python
+
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+"""Provide Module Description
+"""
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+__author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
+__version__ = "1.0.0"
+__module__ = "ociBlockStorageVolume"
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+import oci
+
+from common.okitLogging import getLogger
+from facades.ociConnection import OCIBlockStorageVolumeConnection
+
+# Configure logging
+logger = getLogger()
+
+
+class OCIBlockStorageVolumes(OCIBlockStorageVolumeConnection):
+    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
+        self.compartment_id = compartment_id
+        self.block_storage_volumes_json = []
+        super(OCIBlockStorageVolumes, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def list(self, compartment_id=None, filter=None):
+        if compartment_id is None:
+            compartment_id = self.compartment_id
+
+        # Add filter to only return AVAILABLE Compartments
+        if filter is None:
+            filter = {}
+
+        if 'lifecycle_state' not in filter:
+            filter['lifecycle_state'] = 'AVAILABLE'
+
+        block_storage_volumes = oci.pagination.list_call_get_all_results(self.client.list_volumes, compartment_id=compartment_id).data
+
+        # Convert to Json object
+        block_storage_volumes_json = self.toJson(block_storage_volumes)
+        logger.debug(str(block_storage_volumes_json))
+
+        # Filter results
+        self.block_storage_volumes_json = self.filterJsonObjectList(block_storage_volumes_json, filter)
+        logger.debug(str(self.block_storage_volumes_json))
+
+        return self.block_storage_volumes_json
+```
+### Terraform Jinja2 Template
+_Note:_ This file is currently not generated and will need to be created.
+
+The terraform jinja2 template essentially consists of all actions that would need to occur to create the artifact using
+terraform. It will consist of a number of data based statements to convert names to ids as well as the terraform data source.
+
+Finally the Ids (ocids) returned by the data source will be assigned to local variables in a specific format {{resource_name}}_id
+this will allow it to be referenced other artifacts. The {{resource_name}} will be generated from the display name into a 
+known format.
+```jinja2
+
+# ------ Get List Volume Backup Policies
+data "oci_core_volume_backup_policies" "{{ resource_name }}VolumeBackupPolicies" {
+}
+data "template_file" "{{ resource_name }}VolumeBackupPolicyIds" {
+    count    = length(data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies)
+    template = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[count.index]["id"]
+}
+data "template_file" "{{ resource_name }}VolumeBackupPolicyNames" {
+    count    = length(data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies)
+    template = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[count.index]["display_name"]
+}
+data "template_file" "{{ resource_name }}VolumeBackupPolicyIdx" {
+    count    = length(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered)
+    template = index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})
+}
+
+# ------ Create Block Storage Volume
+resource "oci_core_volume" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe | default(1) }} - 1]["name"]
+    # Optional
+    display_name   = {{ display_name | safe }}
+    size_in_gbs    = {{ size_in_gbs | safe }}
+    vpus_per_gb    = {{ vpus_per_gb | safe }}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id = oci_core_volume.{{ resource_name }}.id
+}
+
+# ------ Create Block Storage Backup Policy
+resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPolicy" {
+    asset_id  = local.{{ resource_name }}_id
+    policy_id = data.template_file.{{ resource_name }}VolumeBackupPolicyIds.*.rendered[index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})]
+}
+```
+### Ansible Jinja2 Template
+_Note:_ This file is currently not generated and will need to be created.
+
+The ansible jinja2 template consists of all the ansible modules / actions the need to occur to create the artifact using
+an ansible playbook. In consists of a number of ansible module statement (note the indentation) that are modified using
+jinja2. Because ansible uses jinja2 as its templating language we will see escape sequences for {{ and }} and examples of
+this can be found in the various, existing, ansible templates.
+```jinja2
+
+# ------ Get List Volume Backup Policies
+    - name: Get information of all available volume backup policies
+      oci_volume_backup_policy_facts:
+        region: "{{ region }}"
+      register: {{ resource_name }}VolumeBackupPolicyIds
+
+# ------ Create Block Storage Volume {{ output_name }}
+    - name: Create Block Storage Volume {{ output_name }}
+      oci_volume:
+        region: "{{ region }}"
+        state: "present"
+        # Required
+        compartment_id: "{{ compartment_id }}"
+        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | safe | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
+        # Optional
+        display_name: "{{ display_name | safe }}"
+        size_in_gbs: "{{ size_in_gbs | safe }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags | safe }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags | safe }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
+
+# ------ Create Block Storage Backup Policy For {{ output_name }}
+    - name: Create Volume Backup Policy Assignment {{ output_name }}
+      oci_volume_backup_policy_assignment:
+        region: "{{ region }}"
+        asset_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
+        policy_id: "{{ '{{' }} ({{ resource_name }}VolumeBackupPolicyIds.volume_backup_policies | selectattr('display_name', 'equalto', {{ backup_policy | safe | replace('{{', '') | replace('}}', '') }}) | map(attribute='id') | list)[0] {{ '}}' }}"
+      register: {{ resource_name }}BackupPolicy
+```
+
+## Updated Files
+Once the core files for the new Artefact (Resource) have been created the developer will need to integrate these into the
+existing functionality by editting a number of common script files. The required edits will be described in the following sections. 
+### Frontend Files
+- [OKIT View JavaScript](#okit-view-javascript)
+- [Designer View JavaScript](#designer-view-javascript)
+- [OKIT OCI Flask Python](#okit-oci-flask-python)
+- [OCI Query JavaScript](#oci-query-javascript)
+
+### Backend Files
+- [Connection Python](#connection-python)
+- [Generator Python](#generator-python)
+
+### OKIT View JavaScript
+The ** okitweb/static/okit/view/js/okit_view.js** will need to be modified to include the new Artefact (Resource) in the clear() and 
+load() function. For our worked example the modifications will be as follows.
+```javascript
+    clear() {
+        this.compartments = [];
+        this.autonomous_databases = [];
+        this.block_storage_volumes = [];
+        this.customer_premise_equipments = [];
+        this.database_systems = [];
+        this.dynamic_routing_gateways = [];
+        this.fast_connects = [];
+        this.file_storage_systems = [];
+        this.instances = [];
+        this.instance_pools = [];
+        this.internet_gateways = [];
+        this.ipsec_connections = [];
+        this.load_balancers = [];
+        this.local_peering_gateways = [];
+        this.mysql_database_systems = [];
+        this.nat_gateways = [];
+        this.network_security_groups = [];
+        this.object_storage_buckets = [];
+        this.oke_clusters = [];
+        this.remote_peering_connections = [];
+        this.route_tables = [];
+        this.security_lists = [];
+        this.service_gateways = [];
+        this.subnets = [];
+        this.virtual_cloud_networks = [];
+        this.virtual_network_interfaces = [];
+    }
+
+    load() {
+        this.clear();
+        for (let artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
+        for (let artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
+        for (let artefact of this.okitjson.block_storage_volumes) {this.newBlockStorageVolume(artefact);}
+        for (let artefact of this.okitjson.customer_premise_equipments) {this.newCustomerPremiseEquipment(artefact);}
+        for (let artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
+        for (let artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
+        for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
+        for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
+        for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
+        for (let artefact of this.okitjson.instance_pools) {this.newInstancePool(artefact);}
+        for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
+        for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
+        for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
+        for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
+        for (let artefact of this.okitjson.mysql_database_systems) {this.newMySQLDatabaseSystem(artefact);}
+        for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
+        for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
+        for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
+        for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
+        for (let artefact of this.okitjson.remote_peering_connections) {this.newRemotePeeringConnection(artefact);}
+        for (let artefact of this.okitjson.route_tables) {this.newRouteTable(artefact);}
+        for (let artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
+        for (let artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
+        for (let artefact of this.okitjson.subnets) {this.newSubnet(artefact);}
+        for (let artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
+    }
+```
+### Designer View JavaScript
+The ** okitweb/static/okit/view/designer/js/okit_view.js** will need to be modified to include the new Artefact (Resource) in the
+draw() function. This code must be placed within the function at an appropriate position after its parent and before its children.
+For our example we would add the following block after the Compartments have been created.
+```javascript
+        // Block Storage Volumes
+        for (let block_storage_volume of this.block_storage_volumes) {
+            block_storage_volume.draw();
+        }
+```
+### OKIT OCI Flask Python
+The Flask endpoint Python file **okitweb/okitOci.py** will need to be modified to allow for the querying of the new Artefact (Resource).
+This will require that a new condition be implemented within the **ociArtifacts(artifact)** endpoint function that calls the
+list method defined within the [Artefact Python Facade](#artefact-python-facade). For our worked example this will be as follows.
+```python
+    elif artifact == 'BlockStorageVolume':
+        logger.info('---- Processing Block Storage Volumes')
+        oci_block_storage_volumes = OCIBlockStorageVolumes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
+```
+### OCI Query JavaScript
+To facilitate querying of the new Artefact (Resource) we will need to modify the **okitweb/static/okit/query/oci/js/okit_query.js** file 
+to include a new query method and update the parents SubComponent query code. For our worked exmple this will mean modifying the
+queryCompartmentSubComponents(request).
+#### New Query Method 
 ```javascript
     queryBlockStorageVolumes(request) {
         console.info('------------- Block Storage Volume Query --------------------');
@@ -272,390 +895,119 @@ need to be modified to provide a new function to query the Artefact and an appro
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({block_storage_volumes: response_json});
-                //okitJsonView.loadBlockStorageVolumes(response_json);
-                for (let artefact of response_json) {
-                    console.info(artefact.display_name);
-                }
                 if (request.refresh) {okitJsonView.draw();}
-                me.region_query_count[request.region]-- && me.isComplete();
             },
             error: function(xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
     }
 ```
-Uses Ajax to call the flask url to initiate an asynchronous query of OCI to retrieve all artifacts and then redraw the 
-svg canvas. On completion it will set the query progress for this artifact as complete.
-
-## Properties HTML
-The properties html is a simple piece of html that displays the properties associated with the artifact and as a minimum
-all required properties must be displayed. The htmi 'id' and 'name' attributes of the input will match the property they
-edit.
-
-```html
-<!--
-** Copyright (c) 2020, Oracle and/or its affiliates.
-** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
--->
-{% extends "okit/propertysheets/base_property_sheet.html" %}
-
-{% block title_block %}Block Storage Volume{% endblock %}
-
-{% block required_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Name</div><div class='td'><input type="text" id="display_name" name="display_name" class="okit-property-value"></div></div>
-    <div class='tr'><div class='td'>Availability Domain</div><div class='td'><select id="availability_domain" class="okit-property-value">
-        <option value="1" selected="selected">AD 1</option>
-        <option value="2">AD 2</option>
-        <option value="3">AD 3</option>
-    </select></div></div>
-{% endblock %}
-
-{% block optional_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Size (in GB)</div><div class='td'><input type="text" id="size_in_gbs" name="size_in_gbs" class="okit-property-value"></div></div>
-    <div class='tr'><div class='td'>Backup Policy</div><div class='td'><select id="backup_policy" class="okit-property-value">
-        <option value="bronze" selected="selected">Bronze</option>
-        <option value="silver">Silver</option>
-        <option value="gold">Gold</option>
-    </select></div></div>
-{% endblock %}
-
-{% block optional_properties_block %}{% endblock %}
-```
-
-## Python OCI Facade
-The python oci facade provides, at a minimum, the functionality to list and filter artifact. All facades have the following
-basic processing and provide the key "list" method to retrieve the artifacts during a query.
-
-```python
-#!/usr/bin/python
-
-# Copyright (c) 2020, Oracle and/or its affiliates.
-# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
-
-"""Provide Module Description
-"""
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-__author__ = ["Andrew Hopkinson (Oracle Cloud Solutions A-Team)"]
-__version__ = "1.0.0"
-__module__ = "ociBlockStorageVolumes"
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-
-
-import datetime
-import getopt
-import json
-import locale
-import logging
-import operator
-import os
-import requests
-import sys
-
-
-import oci
-import re
-import sys
-
-from facades.ociConnection import OCIBlockStorageVolumeConnection
-from common.okitLogging import getLogger
-
-# Configure logging
-logger = getLogger()
-
-
-class OCIBlockStorageVolumes(OCIBlockStorageVolumeConnection):
-    def __init__(self, config=None, configfile=None, compartment_id=None, **kwargs):
-        self.compartment_id = compartment_id
-        self.block_storage_volumes_json = []
-        self.block_storage_volumes_obj = []
-        super(OCIBlockStorageVolumes, self).__init__(config=config, configfile=configfile)
-
-    def list(self, compartment_id=None, filter=None):
-        if compartment_id is None:
-            compartment_id = self.compartment_id
-
-        block_storage_volumes = oci.pagination.list_call_get_all_results(self.client.list_vcns, compartment_id=compartment_id).data
-        # Convert to Json object
-        block_storage_volumes_json = self.toJson(block_storage_volumes)
-        logger.debug(str(block_storage_volumes_json))
-
-        # Check if the results should be filtered
-        if filter is None:
-            self.block_storage_volumes_json = block_storage_volumes_json
-        else:
-            filtered = block_storage_volumes_json[:]
-            for key, val in filter.items():
-                filtered = [bs for bs in filtered if re.compile(val).search(bs[key])]
-            self.block_storage_volumes_json = filtered
-        logger.debug(str(self.block_storage_volumes_json))
-
-        return self.block_storage_volumes_json
-
-
-class OCIBlockStorageVolume(object):
-    def __init__(self, config=None, configfile=None, data=None, **kwargs):
-        self.config = config
-        self.configfile = configfile
-        self.data = data
-
-
-# Main processing function
-def main(argv):
-
-    return
-
-
-# Main function to kick off processing
-if __name__ == "__main__":
-
-```
-## Terraform Jinja2 Template
-The terraform jinja2 template essentially consists of all actions that would need to occur to create the artifact using
-terraform. It will consist of a number of data based statements to convert names to ids as well as the terraform data source.
-
-Finally the Ids (ocids) returned by the data source will be assigned to local variables in a specific format {{resource_name}}_id
-this will allow it to be referenced other artifacts. The {{resource_name}} will be generated from the display name into a 
-known format.
-```jinja2
-# -- Copyright: {{ copyright }}
-# ---- Author : {{ author }}
-# ------ Get List Volume Backup Policies
-data "oci_core_volume_backup_policies" "{{ resource_name }}VolumeBackupPolicies" {
-}
-data "template_file" "{{ resource_name }}VolumeBackupPolicyIds" {
-    count    = length(data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies)
-    template = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[count.index]["id"]
-}
-data "template_file" "{{ resource_name }}VolumeBackupPolicyNames" {
-    count    = length(data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies)
-    template = data.oci_core_volume_backup_policies.{{ resource_name }}VolumeBackupPolicies.volume_backup_policies[count.index]["display_name"]
-}
-data "template_file" "{{ resource_name }}VolumeBackupPolicyIdx" {
-    count    = length(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered)
-    template = index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy }})
-}
-
-# ------ Create Internet Gateway
-resource "oci_core_volume" "{{ resource_name }}" {
-    # Required
-    compartment_id = {{ compartment_ocid }}
-    availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | default(0) }}]["name"]
-    # Optional
-    display_name   = {{ display_name }}
-    size_in_gbs    = {{ size_in_gbs }}
-{% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags }}
-{% endif %}
-{% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags }}
-{% endif %}
-}
-
-locals {
-    {{ resource_name }}_id = oci_core_volume.{{ resource_name }}.id
-}
-
-# ------ Create Block Storage Backup Policy
-resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPolicy" {
-    asset_id  = local.{{ resource_name }}_id
-    policy_id = data.template_file.{{ resource_name }}VolumeBackupPolicyIds.*.rendered[index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy }})]
-}
-
-```
-## Ansible Jinja2 Template
-The ansible jinja2 template consists of all the ansible modules / actions the need to occur to create the artifact using
-an ansible playbook. In consists of a number of ansible module statement (note the indentation) that are modified using
-jinja2. Because ansible uses jinja2 as its templating language we will see escape sequences for {{ and }} and examples of
-this can be found in the various, existing, ansible templates.
-```jinja2
-
-# ------ Get List Volume Backup Policies
-    - name: Get information of all available volume backup policies
-      oci_volume_backup_policy_facts:
-      register: {{ resource_name }}VolumeBackupPolicyIds
-
-# ------ Create Block Storage Volume {{ output_name }}
-    - name: Create Block Storage Volume {{ output_name }}
-      oci_volume:
-        state: "present"
-        # Required
-        compartment_id: "{{ compartment_ocid }}"
-        availability_domain: "{{ '{{' }} (AvailabilityDomains.availability_domains | sort(attribute='name') | map(attribute='name') | list)[{{ availability_domain | replace('{{', '') | replace('}}', '') }} | default(1) | int - 1] {{ '}}' }}"
-        # Optional
-        display_name: "{{ display_name }}"
-        size_in_gbs: "{{ size_in_gbs }}"
-{% if defined_tags is defined %}
-        defined_tags: "{{ defined_tags }}"
-{% endif %}
-{% if freeform_tags is defined %}
-        freeform_tags: "{{ freeform_tags }}"
-{% endif %}
-      register: {{ resource_name }}
-
-    - set_fact:
-        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
-        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.volume.id {{ '}}' }}"
-
-# ------ Create Block Storage Backup Policy For {{ output_name }}
-    - name: Create Volume Backup Policy Assignment {{ output_name }}
-      oci_volume_backup_policy_assignment:
-        asset_id: "{{ '{{' }} {{ resource_name }}_id {{ '}}' }}"
-        policy_id: "{{ '{{' }} ({{ resource_name }}VolumeBackupPolicyIds.volume_backup_policies | selectattr('display_name', 'equalto', {{ backup_policy | replace('{{', '') | replace('}}', '') }}) | map(attribute='id') | list)[0] {{ '}}' }}"
-      register: {{ resource_name }}BackupPolicy
-
-``` 
-## OKIT Class
-The **OkitJson** Class definition with the **okit.js** file will need to be modified to include 3 Methods associated with
-the Creation, Getting and Deleting of the new Artifact. The correct locations with the file can be identified from the
-comments and the methods are defined in alphabetical order. The Following methods will be created.
-### newArtifact
-This method will be dynamically called when artifact is dropped on it's target.
+#### Update Parent SubComponents Method
 ```javascript
-    // Block Storage Volume
-    newBlockStorageVolume(data, parent=null) {
-        console.info('New Block Storage Volume');
-        this.block_storage_volumes.push(new BlockStorageVolume(data, this, parent));
-        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
-    }
-```
-### getArtifact
-Used to retrieve the information about a specific artifact. May be called from other artifact.
-```javascript
-    getBlockStorageVolume(id='') {
-        for (let artifact of this.block_storage_volumes) {
-            if (artifact.id === id) {
-                return artifact;
-            }
+    queryCompartmentSubComponents(request) {
+        if (request.sub_compartments) {
+            this.queryCompartments(request);
         }
-        return {};
+        this.queryVirtualCloudNetworks(request);
+        this.queryBlockStorageVolumes(request);
+        this.queryCustomerPremiseEquipments(request);
+        this.queryDynamicRoutingGateways(request);
+        this.queryAutonomousDatabases(request);
+        this.queryObjectStorageBuckets(request);
+        this.queryFastConnects(request);
+        this.queryInstances(request);
+        this.queryInstancePools(request);
+        this.queryIPSecConnections(request);
+        this.queryRemotePeeringConnections(request);
+        this.queryDatabaseSystems(request);
+        this.queryMySQLDatabaseSystems(request);
+        this.queryFileStorageSystems(request);
+        this.queryOkeClusters(request);
     }
 ```
-### deleteArtifact
-This method will be dynamically called when the "delete" is selected from the canvas.
-```javascript
-    // Block Storage Volume
-    deleteBlockStorageVolume(id) {
-        for (let i = 0; i < this.block_storage_volumes.length; i++) {
-            if (this.block_storage_volumes[i].id === id) {
-                this.block_storage_volumes[i].delete();
-                this.block_storage_volumes.splice(i, 1);
-                break;
-            }
-        }
-    }
-```
-
-## Flask Web Designer Python
-The main flask python contains all the end points defined for the blueprint and to facilitate querying the @bp.route('/oci/artifacts/<string:artifact>', methods=(['GET'])) 
-must be updated to add an additional "elif" clause to create the Artifact facade and execute the list function.
-
+### Connection Python
+The visualiser/facades/ociConnection python file will need to be modified to include the new Connection class used within 
+[Artefact Python Facade](#artefact-python-facade). This will need to define a connect method that uses the appropriate API
+client class.
 ```python
-@bp.route('/oci/artifacts/<string:artifact>', methods=(['GET']))
-def ociArtifacts(artifact):
-    logger.info('Artifact : {0:s}'.format(str(artifact)))
-    query_string = request.query_string
-    parsed_query_string = urllib.parse.unquote(query_string.decode())
-    query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
-    logJson(query_json)
-    logger.info(json.dumps(query_json, sort_keys=True, indent=2, separators=(',', ': ')))
-    response_json = {}
-    if ...........:
-
-    elif artifact == 'BlockStorageVolume':
-        logger.info('---- Processing Block Storage Volumes')
-        oci_block_storage_volumes = OCIBlockStorageVolumes(compartment_id=query_json['compartment_id'])
-        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
-    else:
-        return '404'
-
-    logger.debug(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))
-    return json.dumps(standardiseIds(response_json), sort_keys=True)
-```
-
-## Connection Facade
-The OCI python library should be checked to see if the artifact has a specific client, that does not already exist, and
-if so a new Connection class should be created.
-
-```python
-
 class OCIBlockStorageVolumeConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, **kwargs):
-        super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile)
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
 
-def connect(self):
-    if self.config is None:
-        if self.configfile is None:
-            self.config = oci.config.from_file()
-        else:
-            self.config = oci.config.from_file(self.configfile)
-    self.client = oci.core.BlockstorageClient(self.config)
-    return
+    def connect(self):
+        self.client = oci.core.BlockstorageClient(config=self.config, signer=self.signer)
+        return
+
 ```
-## Python OCI Query
-## Python Generator
-The ociGenerator python code will need to be edited to include a call to render the artifact template. Although the sequence 
-in which this occurs does not matter for terraform it does for other language such as ansible, python or bash. Therefore 
-the new call needs to be placed before any artifact that will link to / use the new artifact. To this end the calls to 
-render have been split into logical sections based on which artifacts they are contained within. In our example the Block
-Storage Volume must exist before an Instance can use it hence it occurs before the instance processing.
+### Generator Python
+The visualiser/generators/ociGenerator python code will need to be edited to include a Render method for the new Artefact (Resource)
+and the existing **generate()** method will need to be modified to call the new Render method.
 
+Although the sequence in which resource creation occurs does not matter for terraform it does for other language such as ansible, python or bash. 
+To allow for these language restrictions the new call needs to be placed before any artifact that will link to / use the new artifact. 
+To this end the calls to render have been split into logical sections based on which artifacts they are contained within. 
+In our example the Block Storage Volume must exist before an Instance can use it hence it occurs before the instance processing.
+#### Edit generate Method
+The **generate()** needs to be modified to loop through the list of new artefacts and call the new Render method.
 ```python
-    def generate(self):
-        # Validate input json
-        validateVisualiserJson(self.visualiser_json)
-        #logger.info('Input JSON : {0:s}'.format(str(self.visualiser_json)))
-        # Build the Id to Name Map
-        self.buildIdNameMap()
-        # Process Provider Connection information
-        logger.info("Processing Provider Information")
-        jinja2_template = self.jinja2_environment.get_template("provider.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-
-        # Process Regional Data
-        logger.info("Processing Region Information")
-        jinja2_template = self.jinja2_environment.get_template("region_data.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
-
-        # Process keys within the input json file
-        compartment = self.visualiser_json.get('compartment', self.visualiser_json)
-        # - Compartment Sub Components
-        # -- Virtual Cloud Networks
-        for virtual_cloud_network in self.visualiser_json.get('virtual_cloud_networks', []):
-            self.renderVirtualCloudNetwork(virtual_cloud_network)
         # -- Block Storage Volumes
         for block_storage_volume in self.visualiser_json.get('block_storage_volumes', []):
             self.renderBlockStorageVolume(block_storage_volume)
+```
+#### Create Render Method
+The render method will take the new artefact definition and generated / store the variables required for the jinja2 templates
+[Terraform Jinja2 Template](#terraform-jinja2-template) and [Ansible Jinja2 Template](#ansible-jinja2-template) before rednering the
+templates and storing the result in the **self.create_sequence** list.
+```python
+    def renderBlockStorageVolume(self, artefact):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(artefact['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = artefact['display_name']
+        # Process Block Storage Volume Data
+        logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[artefact['compartment_id']]))
+        # ---- Availability Domain
+        self.addJinja2Variable("availability_domain", artefact["availability_domain"], standardisedName)
+        # ---- Display Name
+        self.addJinja2Variable("display_name", artefact["display_name"], standardisedName)
+        # ---- Backup Policy
+        self.addJinja2Variable("backup_policy", artefact["backup_policy"], standardisedName)
+        # ---- Size In GBs
+        self.addJinja2Variable("size_in_gbs", artefact["size_in_gbs"], standardisedName)
+        # --- Optional
+        # ---- VPU
+        self.addJinja2Variable("vpus_per_gb", artefact["vpus_per_gb"], standardisedName)
+        # ---- Tags
+        self.renderTags(artefact)
 
-        # - Virtual Cloud Network Sub Components
-        # -- Internet Gateways
-        for internet_gateway in self.visualiser_json.get('internet_gateways', []):
-            self.renderInternetGateway(internet_gateway)
-        # -- NAT Gateways
-        # -- Dynamic Routing Gateways
-        # -- Security Lists
-        for security_list in self.visualiser_json.get('security_lists', []):
-            self.renderSecurityList(security_list)
-        # -- Route Tables
-        for route_table in self.visualiser_json.get('route_tables', []):
-            self.renderRouteTable(route_table)
-        # -- Subnet
-        for subnet in self.visualiser_json.get('subnets', []):
-            self.renderSubnet(subnet)
-
-        # - Subnet Sub components
-        # -- Instances
-        for instance in self.visualiser_json.get('instances', []):
-            self.renderInstance(instance)
-        # -- Loadbalancers
-        for loadbalancer in self.visualiser_json.get('load_balancers', []):
-            self.renderLoadbalancer(loadbalancer)
-
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("block_storage_volume.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
         return
 ```
 
+## Running Docker for Development
+When developing we do not want to keep building our docker image to access the new/modified code so for development and 
+testing we should mount the local directories during the run command and this can be achieved as follows.
+```bash
+docker run -it --rm -p 80:80 --name okit --hostname okit \
+    -v ${OCI_CONFIG_DIR}:/root/.oci \
+    -v ${OKIT_GITHUB}/okitweb:/okit/okitweb \
+    -v ${OKIT_GITHUB}/skeleton:/okit/skeleton \
+    -v ${OKIT_GITHUB}/visualiser:/okit/visualiser \
+    -v ${OKIT_WORKSPACE}/log:/okit/log \
+    -v ${OKIT_WORKSPACE}/dropdown.json:/okit/okitweb/static/okit/json/dropdown.json  okit'
+```
