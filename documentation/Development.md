@@ -49,7 +49,7 @@ skeleton files for the new Artefacts. The developer can then simply updated thes
 
 ### Generating Skeletons
 ```bash
-cd skeleton
+cd skeletons
 python3 okitCodeSkeletonGenerator.py --name "<New Artefact Name>"
 ```
 #### Worked Example
