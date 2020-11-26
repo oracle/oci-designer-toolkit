@@ -1121,7 +1121,7 @@ class OkitArtefactView {
     }
     // --- Dimensions
     get recalculate_dimensions() {return this._recalculate_dimensions;}
-    set recalculate_dimensions(recalculate) {this._recalculate_dimensions = true; this.parent ? this.parent.recalculate_dimensions = true : recalculate = false;}
+    set recalculate_dimensions(recalculate) {this._recalculate_dimensions = true;this.parent ? this.parent.recalculate_dimensions = true : recalculate = false;}
     get width_multiplier() {return this.show_label ? okitSettings.show_label === 'name' ? 1.5 : 2 : 1;}
     get height_multiplier() {return this.show_label ?  1.5 : 1;}
     get icon_dimensions() {return {width: this.icon_width, height: this.icon_height};}
@@ -2365,6 +2365,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
         const self = this;
         icon.on("click", function() {
             self.collapsed = !self.collapsed;
+            self.recalculate_dimensions = true;
             self.getJsonView().draw();
         });
     }
