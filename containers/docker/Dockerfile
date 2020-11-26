@@ -51,12 +51,13 @@ RUN yum install -y \
         requests==2.24.0 \
         xlsxwriter==1.3.6 \
 # Create Workspace
- && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \
+ && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates,skeletons} \
  && mkdir -p /okit/okitweb/static/okit/templates \
  && ln -s /okit/templates /okit/okitweb/static/okit/templates/user
 # Copy source code
 COPY okitweb /okit/okitweb
 COPY visualiser /okit/visualiser
+COPY skeletons /okit/skeletons
 COPY containers/oci/* /root/.oci/
 # Add entrypoint to automatically start webserver
 ENTRYPOINT ["gunicorn"]
