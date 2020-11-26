@@ -1,0 +1,48 @@
+class OkitJsonView {
+    // TODO: Copy the following functions to the okitweb/static/okit/view/js/okit_view.js:OkitJsonView class
+    // {{ artefact_name }}
+    drop{{ model_class_name }}View(target) {
+        let view_artefact = this.new{{ model_class_name }}();
+        if (target.type === Compartment.getArtifactReference()) {
+            view_artefact.getArtefact().compartment_id = target.id;
+        } else {
+            view_artefact.getArtefact().compartment_id = target.compartment_id;
+        }
+        view_artefact.recalculate_dimensions = true;
+        return view_artefact;
+    }
+    new{{ model_class_name }}(obj) {
+        this.get{{ model_class_name }}s().push(obj ? new {{ model_class_name }}View(obj, this) : new {{ model_class_name }}View(this.okitjson.new{{ model_class_name }}(), this));
+        return this.get{{ model_class_name }}s()[this.get{{ model_class_name }}s().length - 1];
+    }
+    get{{ model_class_name }}s() {
+        if (!this.{{ artefact_json_list }}) {
+            this.{{ artefact_json_list }} = [];
+        }
+        return this.{{ artefact_json_list }};
+    }
+    get{{ model_class_name }}(id='') {
+        for (let artefact of this.get{{ model_class_name }}s()) {
+            if (artefact.id === id) {
+                return artefact;
+            }
+        }
+        return undefined;
+    }
+    delete{{ model_class_name }}(id='') {
+        this.okitjson.delete{{ model_class_name }}(id);
+        this.update();
+    }
+    load{{ model_class_name }}s({{ artefact_json_list }}) {
+        for (const artefact of {{ artefact_json_list }}) {
+            this.get{{ model_class_name }}s().push(new {{ model_class_name }}View(new {{ model_class_name }}(artefact, this.okitjson), this));
+        }
+    }
+    clone{{ model_class_name }}(obj) {
+        const clone = obj.artefact.clone();
+        clone.display_name += 'Clone';
+        clone.id = clone.okit_id;
+        this.okitjson.{{ artefact_json_list }}.push(clone);
+        this.update(this.okitjson);
+    }
+}
