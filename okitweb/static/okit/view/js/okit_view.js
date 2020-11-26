@@ -2116,12 +2116,22 @@ class OkitArtefactView {
         if (this.hasLeftChildren()) {
             offset.dx += Math.round(positional_adjustments.padding.x + positional_adjustments.spacing.x);
         }
+        let dx_adjustment = 0;
+        if (this.hasTopChildren()) {
+            let dimensions = this.getTopChildrenMaxDimensions();
+            dx_adjustment = Math.max(dimensions.width, dx_adjustment);
+        }
         if (this.hasContainerChildren()) {
             let dimensions = this.getContainerChildrenMaxDimensions();
-            offset.dx += dimensions.width;
-            offset.dx += positional_adjustments.spacing.x;
-            offset.dx += positional_adjustments.padding.x;
+            dx_adjustment = Math.max(dimensions.width, dx_adjustment);
         }
+        if (this.hasBottomChildren()) {
+            let dimensions = this.getBottomChildrenMaxDimensions();
+            dx_adjustment = Math.max(dimensions.width, dx_adjustment);
+        }
+        offset.dx += dx_adjustment;
+        offset.dx += positional_adjustments.spacing.x;
+        offset.dx += positional_adjustments.padding.x;
         return offset;
     }
 
