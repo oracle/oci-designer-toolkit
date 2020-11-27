@@ -3556,6 +3556,7 @@
         "BM.HPC2.36",
         "BM.Standard2.52",
         "BM.GPU3.8",
+        "BM.DenseIO2.52",
         "BM.DenseIO2.52"
       ],
       "size_in_mbs": 47694,
@@ -3618,7 +3619,6 @@
         "VM.Standard2.8",
         "BM.Standard.E2.64",
         "BM.Standard.E3.128",
-        "BM.GPU4.8",
         "BM.Standard1.36",
         "BM.HighIO1.36",
         "BM.DenseIO1.36",
@@ -3628,6 +3628,7 @@
         "BM.HPC2.36",
         "BM.Standard2.52",
         "BM.GPU3.8",
+        "BM.DenseIO2.52",
         "BM.DenseIO2.52"
       ],
       "size_in_mbs": 47694,
@@ -3690,7 +3691,6 @@
         "VM.Standard2.8",
         "BM.Standard.E2.64",
         "BM.Standard.E3.128",
-        "BM.GPU4.8",
         "BM.Standard1.36",
         "BM.HighIO1.36",
         "BM.DenseIO1.36",
@@ -3700,6 +3700,7 @@
         "BM.HPC2.36",
         "BM.Standard2.52",
         "BM.GPU3.8",
+        "BM.DenseIO2.52",
         "BM.DenseIO2.52"
       ],
       "size_in_mbs": 47694,
@@ -3977,7 +3978,6 @@
         "VM.Standard2.8",
         "BM.Standard.E2.64",
         "BM.Standard.E3.128",
-        "BM.GPU4.8",
         "BM.Standard1.36",
         "BM.HighIO1.36",
         "BM.DenseIO1.36",
@@ -3987,6 +3987,7 @@
         "BM.HPC2.36",
         "BM.Standard2.52",
         "BM.GPU3.8",
+        "BM.DenseIO2.52",
         "BM.DenseIO2.52"
       ],
       "size_in_mbs": 47694,
@@ -4058,6 +4059,7 @@
         "BM.HPC2.36",
         "BM.Standard2.52",
         "BM.GPU3.8",
+        "BM.DenseIO2.52",
         "BM.DenseIO2.52"
       ],
       "size_in_mbs": 47694,
@@ -4129,6 +4131,7 @@
         "BM.HPC2.36",
         "BM.Standard2.52",
         "BM.GPU3.8",
+        "BM.DenseIO2.52",
         "BM.DenseIO2.52"
       ],
       "size_in_mbs": 47694,
@@ -4228,7 +4231,8 @@
       "operating_system": "Windows",
       "operating_system_version": "Server 2012 R2 Datacenter",
       "shapes": [
-        "BM.Standard.E2.64"
+        "BM.Standard.E2.64",
+        "BM.GPU4.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
@@ -4256,7 +4260,8 @@
       "operating_system": "Windows",
       "operating_system_version": "Server 2012 R2 Datacenter",
       "shapes": [
-        "BM.Standard.E2.64"
+        "BM.Standard.E2.64",
+        "BM.GPU4.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
@@ -4342,7 +4347,7 @@
       "operating_system_version": "Server 2012 R2 Datacenter",
       "shapes": [
         "BM.DenseIO2.52",
-        "BM.HPC2.36",
+        "BM.DenseIO2.52",
         "BM.Standard2.52",
         "BM.GPU3.8"
       ],
@@ -4374,8 +4379,8 @@
       "shapes": [
         "BM.GPU4.8",
         "BM.DenseIO2.52",
-        "BM.HPC2.36",
         "BM.Standard2.52",
+        "BM.GPU3.8",
         "BM.GPU3.8"
       ],
       "size_in_mbs": 262144,
@@ -4438,6 +4443,7 @@
         "BM.GPU2.2",
         "BM.HPC2.36",
         "BM.Standard2.52",
+        "BM.GPU3.8",
         "BM.GPU3.8"
       ],
       "size_in_mbs": 262144,
@@ -4500,7 +4506,8 @@
       "shapes": [
         "BM.Standard1.36",
         "BM.HighIO1.36",
-        "BM.DenseIO1.36"
+        "BM.DenseIO1.36",
+        "BM.GPU3.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Datacenter",
@@ -4531,7 +4538,7 @@
         "BM.Standard1.36",
         "BM.HighIO1.36",
         "BM.DenseIO1.36",
-        "VM.Standard.E2.8",
+        "BM.DenseIO1.36",
         "VM.Standard.E3.Flex"
       ],
       "size_in_mbs": 262144,
@@ -4757,7 +4764,8 @@
         "VM.Standard2.2",
         "VM.Standard2.24",
         "VM.Standard2.4",
-        "VM.Standard2.8"
+        "VM.Standard2.8",
+        "BM.GPU4.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
@@ -4833,7 +4841,12 @@
         "VM.Standard1.16",
         "VM.Standard1.2",
         "VM.Standard1.4",
-        "VM.Standard1.8"
+        "VM.Standard1.8",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
@@ -4868,7 +4881,12 @@
         "VM.Standard1.16",
         "VM.Standard1.2",
         "VM.Standard1.4",
-        "VM.Standard1.8"
+        "VM.Standard1.8",
+        "BM.GPU4.8",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2012 R2 Standard",
@@ -4904,6 +4922,11 @@
         "VM.Standard1.2",
         "VM.Standard1.4",
         "VM.Standard1.8",
+        "BM.GPU4.8",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8",
         "BM.GPU4.8"
       ],
       "size_in_mbs": 262144,
@@ -4932,7 +4955,19 @@
       "operating_system": "Windows",
       "operating_system_version": "Server 2016 Datacenter",
       "shapes": [
-        "BM.Standard.E2.64"
+        "BM.Standard.E2.64",
+        "VM.DenseIO2.24",
+        "VM.DenseIO2.8",
+        "VM.GPU2.1",
+        "VM.GPU3.1",
+        "VM.GPU3.2",
+        "VM.GPU3.4",
+        "VM.Standard2.1",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Datacenter",
@@ -4960,7 +4995,14 @@
       "operating_system": "Windows",
       "operating_system_version": "Server 2016 Datacenter",
       "shapes": [
-        "BM.Standard.E2.64"
+        "BM.Standard.E2.64",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Datacenter",
@@ -4988,7 +5030,14 @@
       "operating_system": "Windows",
       "operating_system_version": "Server 2016 Datacenter",
       "shapes": [
-        "BM.Standard.E2.64"
+        "BM.Standard.E2.64",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Datacenter",
@@ -5016,7 +5065,15 @@
       "operating_system": "Windows",
       "operating_system_version": "Server 2016 Datacenter",
       "shapes": [
-        "BM.DenseIO2.52"
+        "BM.DenseIO2.52",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8",
+        "BM.GPU4.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Datacenter",
@@ -5045,9 +5102,13 @@
       "operating_system_version": "Server 2016 Datacenter",
       "shapes": [
         "BM.DenseIO2.52",
-        "BM.HPC2.36",
-        "BM.Standard2.52",
-        "BM.GPU3.8"
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Datacenter",
@@ -5498,7 +5559,16 @@
         "VM.Standard1.16",
         "VM.Standard1.2",
         "VM.Standard1.4",
-        "VM.Standard1.8"
+        "VM.Standard1.8",
+        "VM.Standard.E2.2",
+        "VM.Standard.E2.4",
+        "VM.Standard.E2.8",
+        "VM.Standard2.1",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Standard",
@@ -5533,11 +5603,74 @@
         "VM.Standard1.16",
         "VM.Standard1.2",
         "VM.Standard1.4",
-        "VM.Standard1.8"
+        "VM.Standard1.8",
+        "VM.Standard.E2.2",
+        "VM.Standard.E2.4",
+        "VM.Standard.E2.8",
+        "VM.Standard2.1",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2016 Standard",
       "time_created": "2020-08-27T05:46:33.456000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Datacenter-Edition-BM-E3-2020.11.18-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaab7cfgaiopmr26xnjsedhugo7t5xoiwbq2kxpkz2vo4oqjs3ouxbq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Datacenter",
+      "shapes": [
+        "BM.Standard.E3.128",
+        "VM.DenseIO2.24",
+        "VM.DenseIO2.8",
+        "VM.GPU2.1",
+        "VM.GPU3.1",
+        "VM.GPU3.2",
+        "VM.GPU3.4",
+        "VM.Standard.E2.1",
+        "VM.Standard.E2.2",
+        "VM.Standard.E2.4",
+        "VM.Standard.E2.8",
+        "VM.Standard2.1",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8",
+        "VM.Standard2.1",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Datacenter",
+      "time_created": "2020-11-19T22:10:26.882000+00:00"
     },
     {
       "agent_features": null,
@@ -5599,23 +5732,23 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2019-Datacenter-Edition-BM-E3-2020.08.27-0",
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.11.18-0",
       "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaajonqlwvrwurvstg46dpipgsqbr4kdcwpgdl5fzp7xsl3ilzmswfq",
-      "launch_mode": "NATIVE",
+      "id": "ocid1.image.oc1.phx.aaaaaaaapzaztatcrkifgtughkzcpjh3rgjrttq5txtoimfn6eolafbssqaq",
+      "launch_mode": "PARAVIRTUALIZED",
       "launch_options": {
         "boot_volume_type": "PARAVIRTUALIZED",
         "firmware": "UEFI_64",
         "is_consistent_volume_naming_enabled": false,
         "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
+        "network_type": "PARAVIRTUALIZED",
         "remote_data_volume_type": "PARAVIRTUALIZED"
       },
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Windows",
-      "operating_system_version": "Server 2019 Datacenter",
+      "operating_system_version": "Server 2019 Standard",
       "shapes": [
-        "BM.Standard.E3.128",
+        "VM.DenseIO1.16",
         "VM.DenseIO1.4",
         "VM.DenseIO1.8",
         "VM.GPU2.1",
@@ -5642,6 +5775,374 @@
         "VM.Standard2.24",
         "VM.Standard2.4",
         "VM.Standard2.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-11-19T23:00:13.323000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.10.22-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaav7ka3mph2332cxxyn7h2wd6malruxdmu23wh7gyxj2e33ilfk62q",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [
+        "VM.DenseIO1.16",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.GPU2.1",
+        "VM.GPU3.1",
+        "VM.GPU3.2",
+        "VM.GPU3.4",
+        "VM.Standard.B1.1",
+        "VM.Standard.B1.16",
+        "VM.Standard.B1.2",
+        "VM.Standard.B1.4",
+        "VM.Standard.B1.8",
+        "VM.Standard.E2.1",
+        "VM.Standard.E2.2",
+        "VM.Standard.E2.4",
+        "VM.Standard.E2.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8",
+        "VM.Standard2.1",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-10-26T19:56:31.832000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.09.21-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaafn3mm6sojdrjva3wwuzgb3j7pzxhqyqhfwrz2thboibrtsp252ua",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [
+        "VM.DenseIO1.16",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.GPU2.1",
+        "VM.GPU3.1",
+        "VM.GPU3.2",
+        "VM.GPU3.4",
+        "VM.Standard.B1.1",
+        "VM.Standard.B1.16",
+        "VM.Standard.B1.2",
+        "VM.Standard.B1.4",
+        "VM.Standard.B1.8",
+        "VM.Standard.E2.1",
+        "VM.Standard.E2.2",
+        "VM.Standard.E2.4",
+        "VM.Standard.E2.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8",
+        "VM.Standard2.1",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-09-25T13:41:27.161000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.11.18-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaams673s56sfhgtha6vmgrdznhpkehymeibw274jam26yhtd27xpha",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [
+        "VM.Standard.E3.Flex",
+        "VM.Standard.B1.16",
+        "VM.Standard.B1.2",
+        "VM.Standard.B1.4",
+        "VM.Standard.B1.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-11-20T01:49:29.949000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.10.20-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaggmjueitxfk2fdfcomq2cu32db6664olcuf5lnsdglcf46w6puja",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [
+        "VM.Standard.E3.Flex",
+        "VM.Standard.B1.16",
+        "VM.Standard.B1.2",
+        "VM.Standard.B1.4",
+        "VM.Standard.B1.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-10-26T16:59:30.290000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.09.21-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaa4gjenruslmx7t3ilh6zcp424xcnj3mae72atk246nhvvizzhqbra",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [
+        "VM.Standard.E3.Flex",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-09-25T00:09:10.565000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-2020.09.21-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaan47bwnxu5ow3clmjjlpkwltwmlydsd22pzjscsphpgvtjbvjhrta",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2016 Standard",
+      "shapes": [
+        "VM.DenseIO1.16",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2016 Standard",
+      "time_created": "2020-09-24T23:21:29.587000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-2020.08.26-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaaqcpoop4jtnfeg6xh4zenwrnznyokp3bl5kimyuvjjn3p6xx4iwoa",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2016 Standard",
+      "shapes": [
+        "VM.DenseIO1.16",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2016 Standard",
+      "time_created": "2020-08-27T05:46:33.456000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2016-Standard-Edition-VM-2020.07.17-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaa5zmw4bsqelqnloagnhf7waqfdzhb2knh5dfor57srt2xapj7e4sq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2016 Standard",
+      "shapes": [
+        "VM.DenseIO1.16",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2016 Standard",
+      "time_created": "2020-07-22T21:47:14.316000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Datacenter-Edition-BM-E3-2020.09.22-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaabyvxlwdlwi4znkuioi7qrzst5v7ie7eoa5cbeekorbbmqikhkwzq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Datacenter",
+      "shapes": [
+        "BM.Standard.E3.128"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Datacenter",
+      "time_created": "2020-09-27T02:48:59.894000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
+      "display_name": "Windows-Server-2019-Datacenter-Edition-BM-E3-2020.08.27-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaajonqlwvrwurvstg46dpipgsqbr4kdcwpgdl5fzp7xsl3ilzmswfq",
+      "launch_mode": "NATIVE",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "VFIO",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Datacenter",
+      "shapes": [
+        "BM.Standard.E3.128"
       ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2019 Datacenter",
@@ -5815,6 +6316,60 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
+      "display_name": "Windows-Server-2019-Standard-Edition-VM-Gen2-2020.07.17-0",
+      "freeform_tags": {},
+      "id": "ocid1.image.oc1.phx.aaaaaaaafruz4sutfyotjvrqjhl72ogzbb5hphzra5us2454zgrtgdmrwe7a",
+      "launch_mode": "PARAVIRTUALIZED",
+      "launch_options": {
+        "boot_volume_type": "PARAVIRTUALIZED",
+        "firmware": "UEFI_64",
+        "is_consistent_volume_naming_enabled": false,
+        "is_pv_encryption_in_transit_enabled": true,
+        "network_type": "PARAVIRTUALIZED",
+        "remote_data_volume_type": "PARAVIRTUALIZED"
+      },
+      "lifecycle_state": "AVAILABLE",
+      "operating_system": "Windows",
+      "operating_system_version": "Server 2019 Standard",
+      "shapes": [
+        "VM.DenseIO1.16",
+        "VM.DenseIO1.4",
+        "VM.DenseIO1.8",
+        "VM.GPU2.1",
+        "VM.GPU3.1",
+        "VM.GPU3.2",
+        "VM.GPU3.4",
+        "VM.Standard.B1.1",
+        "VM.Standard.B1.16",
+        "VM.Standard.B1.2",
+        "VM.Standard.B1.4",
+        "VM.Standard.B1.8",
+        "VM.Standard.E2.1",
+        "VM.Standard.E2.2",
+        "VM.Standard.E2.4",
+        "VM.Standard.E2.8",
+        "VM.Standard1.1",
+        "VM.Standard1.16",
+        "VM.Standard1.2",
+        "VM.Standard1.4",
+        "VM.Standard1.8",
+        "VM.Standard2.1",
+        "VM.Standard2.16",
+        "VM.Standard2.2",
+        "VM.Standard2.24",
+        "VM.Standard2.4",
+        "VM.Standard2.8"
+      ],
+      "size_in_mbs": 262144,
+      "sort_key": "Windows Server 2019 Standard",
+      "time_created": "2020-07-23T16:39:29.362000+00:00"
+    },
+    {
+      "agent_features": null,
+      "base_image_id": null,
+      "compartment_id": null,
+      "create_image_allowed": true,
+      "defined_tags": {},
       "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.10.20-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaaggmjueitxfk2fdfcomq2cu32db6664olcuf5lnsdglcf46w6puja",
@@ -5899,32 +6454,6 @@
       "compartment_id": null,
       "create_image_allowed": true,
       "defined_tags": {},
-      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.08.28-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa4sbfynqzp65hr2ldkyv7espg3yw6yy2blwg4kmdnk3x6yxt4h2ea",
-      "launch_mode": "PARAVIRTUALIZED",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": false,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Windows",
-      "operating_system_version": "Server 2019 Standard",
-      "shapes": [],
-      "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2019 Standard",
-      "time_created": "2020-08-31T05:36:40.341000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
       "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.07.17-0",
       "freeform_tags": {},
       "id": "ocid1.image.oc1.phx.aaaaaaaave37qksnqh5koegipc3kat2xoiafuuyudwxripvbmuncwrd43bjq",
@@ -5940,62 +6469,12 @@
       "lifecycle_state": "AVAILABLE",
       "operating_system": "Windows",
       "operating_system_version": "Server 2019 Standard",
-      "shapes": [],
+      "shapes": [
+        "VM.Standard.E3.Flex"
+      ],
       "size_in_mbs": 262144,
       "sort_key": "Windows Server 2019 Standard",
       "time_created": "2020-07-23T06:21:58.083000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.06.10-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa7t2atiuif357ijbianc4z2jb2xcrydpqp3o4xty4nyxa5twuo62a",
-      "launch_mode": "PARAVIRTUALIZED",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": false,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Windows",
-      "operating_system_version": "Server 2019 Standard",
-      "shapes": [],
-      "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2019 Standard",
-      "time_created": "2020-06-11T23:54:19.666000+00:00"
-    },
-    {
-      "agent_features": null,
-      "base_image_id": null,
-      "compartment_id": null,
-      "create_image_allowed": true,
-      "defined_tags": {},
-      "display_name": "Windows-Server-2019-Standard-Edition-VM-E3-2020.05.18-0",
-      "freeform_tags": {},
-      "id": "ocid1.image.oc1.phx.aaaaaaaa4x7rvp3n7fcdczhh5qoctbvs5fr5fiu4xpdnbe4icbgwb636himq",
-      "launch_mode": "PARAVIRTUALIZED",
-      "launch_options": {
-        "boot_volume_type": "PARAVIRTUALIZED",
-        "firmware": "UEFI_64",
-        "is_consistent_volume_naming_enabled": false,
-        "is_pv_encryption_in_transit_enabled": true,
-        "network_type": "VFIO",
-        "remote_data_volume_type": "PARAVIRTUALIZED"
-      },
-      "lifecycle_state": "AVAILABLE",
-      "operating_system": "Windows",
-      "operating_system_version": "Server 2019 Standard",
-      "shapes": [],
-      "size_in_mbs": 262144,
-      "sort_key": "Windows Server 2019 Standard",
-      "time_created": "2020-05-26T21:50:51.365000+00:00"
     }
   ],
   "kubernetes_versions": [
@@ -6237,6 +6716,31 @@
   "mysql_shapes": [
     {
       "cpu_core_count": 1,
+      "memory_size_in_gbs": 16,
+      "name": "MySQL.VM.Standard.E3.1.16GB"
+    },
+    {
+      "cpu_core_count": 1,
+      "memory_size_in_gbs": 8,
+      "name": "MySQL.VM.Standard.E3.1.8GB"
+    },
+    {
+      "cpu_core_count": 2,
+      "memory_size_in_gbs": 32,
+      "name": "MySQL.VM.Standard.E3.2.32GB"
+    },
+    {
+      "cpu_core_count": 4,
+      "memory_size_in_gbs": 64,
+      "name": "MySQL.VM.Standard.E3.4.64GB"
+    },
+    {
+      "cpu_core_count": 8,
+      "memory_size_in_gbs": 128,
+      "name": "MySQL.VM.Standard.E3.8.128GB"
+    },
+    {
+      "cpu_core_count": 1,
       "memory_size_in_gbs": 8,
       "name": "VM.Standard.E2.1"
     },
@@ -6261,8 +6765,8 @@
       "version_family": "8.0",
       "versions": [
         {
-          "description": "8.0.21",
-          "version": "8.0.21"
+          "description": "8.0.22",
+          "version": "8.0.22"
         },
         {
           "description": "8.0.22",
@@ -6634,6 +7138,11 @@
       "description": "Resource Manager",
       "display_name": "resource-manager",
       "name": "resource-manager"
+    },
+    {
+      "description": "Oracle Roving Edge Infrastructure",
+      "display_name": "roving-edge",
+      "name": "roving-edge"
     },
     {
       "description": "Service Connector Hub",

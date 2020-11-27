@@ -2,6 +2,13 @@
 ** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
+{% macro properties_input(title, name, type='text') -%}
+    {% if type in ['text', 'password'] %}
+        <div class='tr'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value"></div></div>
+    {% else %}
+        <div class='tr'><div class='td'>{{ title }}</div><div class='td'>Unknown type="{{ type }}"</div></div>
+    {% endif %}
+{%- endmacro %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
