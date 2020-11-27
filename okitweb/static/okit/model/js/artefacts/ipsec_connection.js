@@ -31,7 +31,7 @@ class IPSecConnection extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new IPSecConnection(this, this.getOkitJson());
+        return new IPSecConnection(JSON.clone(this), this.getOkitJson());
     }
 
 

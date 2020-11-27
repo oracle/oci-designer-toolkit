@@ -29,7 +29,7 @@ class RemotePeeringConnection extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new RemotePeeringConnection(this, this.getOkitJson());
+        return new RemotePeeringConnection(JSON.clone(this), this.getOkitJson());
     }
 
 

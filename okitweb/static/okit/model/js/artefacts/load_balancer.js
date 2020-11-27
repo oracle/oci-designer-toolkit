@@ -45,7 +45,7 @@ class LoadBalancer extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new LoadBalancer(this, this.getOkitJson());
+        return new LoadBalancer(JSON.clone(this), this.getOkitJson());
     }
 
 

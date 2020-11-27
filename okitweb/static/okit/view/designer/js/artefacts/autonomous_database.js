@@ -12,6 +12,7 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
+    // -- Reference
     get parent_id() {
         let subnet = this.getJsonView().getSubnet(this.artefact.subnet_id);
         if (subnet && subnet.compartment_id === this.artefact.compartment_id) {
@@ -23,7 +24,6 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
         }
     }
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
-
 
     /*
     ** Clone Functionality
