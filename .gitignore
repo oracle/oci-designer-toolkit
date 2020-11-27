@@ -37,4 +37,7 @@ containers/oci/*
 !containers/oci/example_config
 !containers/cloud
 
+containers/ssh/*
+!containers/ssh/example_config
+
 !okitweb/static/model
