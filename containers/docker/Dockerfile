@@ -58,15 +58,8 @@ RUN yum install -y \
 COPY okitweb /okit/okitweb
 COPY visualiser /okit/visualiser
 COPY containers/oci/* /root/.oci/
-COPY containers/oci/id_rsa* /root/.ssh/
-RUN chmod 600 /root/.ssh/id_rsa
-
-# Create known_hosts
-RUN touch /root/.ssh/known_hosts
-
-# Add git providers to known_hosts
-RUN ssh-keyscan orahub.oci.oraclecorp.com >> /root/.ssh/known_hosts
-RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+COPY containers/ssh/* /root/.ssh/
+RUN chmod 600 /root/.ssh/*
 
 # Add entrypoint to automatically start webserver
 ENTRYPOINT ["gunicorn"]
