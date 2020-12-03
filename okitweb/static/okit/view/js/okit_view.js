@@ -163,10 +163,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteAutonomousDatabase(id='') {
-        this.okitjson.deleteAutonomousDatabase(id);
-        this.update();
-    }
     loadAutonomousDatabases(autonomous_databases) {
         for (const artefact of autonomous_databases) {
             this.autonomous_databases.push(new AutonomousDatabaseView(new AutonomousDatabase(artefact, this.okitjson), this));
@@ -266,10 +262,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteBlockStorageVolume(id='') {
-        this.okitjson.deleteBlockStorageVolume(id);
-        this.update();
-    }
     loadBlockStorageVolumes(block_storage_volumes) {
         for (const artefact of block_storage_volumes) {
             this.block_storage_volumes.push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
@@ -348,10 +340,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteCompartment(id='') {
-        this.okitjson.deleteCompartment(id);
-        this.update();
-    }
     loadCompartments(compartments) {
         for (const artefact of compartments) {
             this.compartments.push(new CompartmentView(new Compartment(artefact, this.okitjson), this));
@@ -389,10 +377,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteCustomerPremiseEquipment(id='') {
-        this.okitjson.deleteCustomerPremiseEquipment(id);
-        this.update();
     }
     loadCustomerPremiseEquipments(fast_connects) {
         for (const artefact of fast_connects) {
@@ -474,10 +458,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteDatabaseSystem(id='') {
-        this.okitjson.deleteDatabaseSystem(id);
-        this.update();
     }
     loadDatabaseSystems(database_systems) {
         for (const artefact of database_systems) {
@@ -562,10 +542,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteDynamicRoutingGateway(id='') {
-        this.okitjson.deleteDynamicRoutingGateway(id);
-        this.update();
-    }
     loadDynamicRoutingGateways(dynamic_routing_gateways) {
         for (const artefact of dynamic_routing_gateways) {
             this.dynamic_routing_gateways.push(new DynamicRoutingGatewayView(new DynamicRoutingGateway(artefact, this.okitjson), this));
@@ -635,10 +611,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteFastConnect(id='') {
-        this.okitjson.deleteFastConnect(id);
-        this.update();
-    }
     loadFastConnects(fast_connects) {
         for (const artefact of fast_connects) {
             this.fast_connects.push(new FastConnectView(new FastConnect(artefact, this.okitjson), this));
@@ -667,10 +639,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteFileStorageSystem(id='') {
-        this.okitjson.deleteFileStorageSystem(id);
-        this.update();
     }
     loadFileStorageSystems(file_storage_systems) {
         for (const artefact of file_storage_systems) {
@@ -758,10 +726,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteInstance(id='') {
-        this.okitjson.deleteInstance(id);
-        this.update();
     }
     loadInstances(instances) {
         for (const artefact of instances) {
@@ -867,10 +831,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteInstancePool(id='') {
-        this.okitjson.deleteInstancePool(id);
-        this.update();
-    }
     loadInstancePools(instance_pools) {
         for (const artefact of instance_pools) {
             this.instance_pools.push(new InstancePoolView(new InstancePool(artefact, this.okitjson), this));
@@ -910,10 +870,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteInternetGateway(id='') {
-        this.okitjson.deleteInternetGateway(id);
-        this.update();
     }
     loadInternetGateways(internet_gateways) {
         for (const artefact of internet_gateways) {
@@ -991,10 +947,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteIPSecConnection(id='') {
-        this.okitjson.deleteIPSecConnection(id);
-        this.update();
     }
     loadIPSecConnections(fast_connects) {
         for (const artefact of fast_connects) {
@@ -1077,10 +1029,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteLoadBalancer(id='') {
-        this.okitjson.deleteLoadBalancer(id);
-        this.update();
-    }
     loadLoadBalancers(load_balancers) {
         for (const artefact of load_balancers) {
             this.load_balancers.push(new LoadBalancerView(new LoadBalancer(artefact, this.okitjson), this));
@@ -1151,10 +1099,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteLocalPeeringGateway(id='') {
-        this.okitjson.deleteLocalPeeringGateway(id);
-        this.update();
-    }
     loadLocalPeeringGateways(local_peering_gateways) {
         for (const artefact of local_peering_gateways) {
             this.local_peering_gateways.push(new LocalPeeringGatewayView(new LocalPeeringGateway(artefact, this.okitjson), this));
@@ -1224,10 +1168,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteMySQLDatabaseSystem(id='') {
-        this.okitjson.deleteMySQLDatabaseSystem(id);
-        this.update();
     }
     loadMySQLDatabaseSystems(database_systems) {
         for (const artefact of database_systems) {
@@ -1323,10 +1263,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteNATGateway(id='') {
-        this.okitjson.deleteNATGateway(id);
-        this.update();
-    }
     loadNATGateways(nat_gateways) {
         for (const artefact of nat_gateways) {
             this.nat_gateways.push(new NATGatewayView(new NATGateway(artefact, this.okitjson), this));
@@ -1404,10 +1340,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteNetworkSecurityGroup(id='') {
-        this.okitjson.deleteNetworkSecurityGroup(id);
-        this.update();
     }
     loadNetworkSecurityGroups(network_security_groups) {
         for (const artefact of network_security_groups) {
@@ -1505,10 +1437,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteObjectStorageBucket(id='') {
-        this.okitjson.deleteObjectStorageBucket(id);
-        this.update();
-    }
     loadObjectStorageBuckets(object_storage_buckets) {
         for (const artefact of object_storage_buckets) {
             this.object_storage_buckets.push(new ObjectStorageBucketView(new ObjectStorageBucket(artefact, this.okitjson), this));
@@ -1589,10 +1517,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteOkeCluster(id='') {
-        this.okitjson.deleteOkeCluster(id);
-        this.update();
     }
     loadOkeClusters(oke_clusters) {
         for (const artefact of oke_clusters) {
@@ -1676,10 +1600,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteRemotePeeringConnection(id='') {
-        this.okitjson.deleteRemotePeeringConnection(id);
-        this.update();
-    }
     loadRemotePeeringConnections(fast_connects) {
         for (const artefact of fast_connects) {
             this.remote_peering_connections.push(new RemotePeeringConnectionView(new RemotePeeringConnection(artefact, this.okitjson), this));
@@ -1761,10 +1681,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteRouteTable(id='') {
-        this.okitjson.deleteRouteTable(id);
-        this.update();
-    }
     loadRouteTables(route_tables) {
         for (const artefact of route_tables) {
             this.route_tables.push(new RouteTableView(new RouteTable(artefact, this.okitjson), this));
@@ -1835,10 +1751,6 @@ class OkitJsonView {
             }
         }
         return undefined;
-    }
-    deleteSecurityList(id='') {
-        this.okitjson.deleteSecurityList(id);
-        this.update();
     }
     loadSecurityLists(security_lists) {
         for (const artefact of security_lists) {
@@ -1918,10 +1830,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteServiceGateway(id='') {
-        this.okitjson.deleteServiceGateway(id);
-        this.update();
-    }
     loadServiceGateways(service_gateways) {
         for (const artefact of service_gateways) {
             this.service_gateways.push(new ServiceGatewayView(new ServiceGateway(artefact, this.okitjson), this));
@@ -1999,10 +1907,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteSubnet(id='') {
-        this.okitjson.deleteSubnet(id);
-        this.update();
-    }
     loadSubnets(subnets) {
         for (const artefact of subnets) {
             this.subnets.push(new SubnetView(new Subnet(artefact, this.okitjson), this));
@@ -2056,10 +1960,6 @@ class OkitJsonView {
     getVcn(id='') {
         return this.getVirtualCloudNetwork(id);
     }
-    deleteVirtualCloudNetwork(id='') {
-        this.okitjson.deleteVirtualCloudNetwork(id);
-        this.update();
-    }
     loadVirtualCloudNetworks(virtual_cloud_networks) {
         for (const artefact of virtual_cloud_networks) {
             this.virtual_cloud_networks.push(new VirtualCloudNetworkView(new VirtualCloudNetwork(artefact, this.okitjson), this));
@@ -2092,7 +1992,6 @@ class OkitJsonView {
         }
         return undefined;
     }
-    deleteVirtualNetworkInterface(id='') {}
 
     // Fragment
     dropFragmentView(target) {
@@ -2613,7 +2512,6 @@ class OkitArtefactView {
                     .attr('href', 'javascript:void(0)')
                     .text('Delete')
                     .on('click', function () {
-                        //self.json_view[self.delete_function](self.id);
                         self.delete();
                         self.json_view.update(self.okit_json);
                         $(jqId("context-menu")).addClass("hidden");
@@ -2636,7 +2534,6 @@ class OkitArtefactView {
                         .attr('href', 'javascript:void(0)')
                         .text('Clone')
                         .on('click', function () {
-                            //self.json_view[self.clone_function](self);
                             self.clone();
                             self.json_view.update(self.okit_json);
                             $(jqId("context-menu")).addClass("hidden");
