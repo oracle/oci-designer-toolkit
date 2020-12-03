@@ -2300,9 +2300,20 @@ class OkitArtefactView {
 
     copy() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0;}
 
+    paste(drop_target) {
+        const clone = this.json_view.copied_artefact.artefact.clone();
+        clone.display_name += 'Copy';
+        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
+        this.paste_count += 1;
+        clone.id = clone.okit_id;
+        drop_target.updateCloneIds(clone);
+        this.json_model_list.push(clone);
+        return clone;
+    }
+
     clone() {
         const clone = this.artefact.clone();
-        clone.display_name += 'Clone';
+        clone.display_name += 'Copy';
         clone.id = clone.okit_id;
         this.json_model_list.push(clone);
         return clone;
@@ -2549,7 +2560,9 @@ class OkitArtefactView {
                     .attr('href', 'javascript:void(0)')
                     .text(`Paste ${self.json_view.copied_artefact.getArtifactReference()} ${self.json_view.copied_artefact.display_name}`)
                     .on('click', function () {
-                        self.json_view[self.json_view.copied_artefact.paste_function](self);
+                        //self.json_view[self.json_view.copied_artefact.paste_function](self);
+                        self.json_view.copied_artefact.paste(self);
+                        self.json_view.update(self.okit_json);
                         $(jqId("context-menu")).addClass("hidden");
                     });
                 $(jqId("context-menu")).removeClass("hidden");
@@ -3408,9 +3421,28 @@ class OkitContainerArtefactView extends OkitArtefactView {
     // ---- Okit View Functions
     get moveable() {return false;}
 
-    /*
-    ** SVG Functions
-     */
+    paste(drop_target) {
+        const clone = super.paste(drop_target);
+        this.cloneChildren(clone);
+        return clone;
+    }
+
+    updateCloneIds(clone) {
+        if (this.getArtifactReference() === Subnet.getArtifactReference()) {
+            clone.subnet_id = this.id;
+            clone.compartment_id = this.compartment_id;
+        } else if (this.getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
+            clone.vcn_id = this.id;
+            clone.compartment_id = this.compartment_id;
+        } else {
+            clone.compartment_id = this.id;
+        }
+        return clone;
+    }
+
+/*
+** SVG Functions
+ */
     drawIcon(svg) {
         const icon = super.drawIcon(svg);
         // Add Click Event to toggle collapsed
