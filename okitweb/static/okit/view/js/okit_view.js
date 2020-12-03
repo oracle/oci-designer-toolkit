@@ -2142,11 +2142,7 @@ class OkitArtefactView {
     // ---- Connectors
     get top_bottom_connectors_preferred() {return true;}
     // ---- Okit View Functions
-    get delete_function() {return `delete${this.getArtifactReference().split(' ').join('')}`}
-    get clone_function() {return `clone${this.getArtifactReference().split(' ').join('')}`}
-    get move_function() {return `move${this.getArtifactReference().split(' ').join('')}`}
     get new_function() {return `new${this.getArtifactReference().split(' ').join('')}`}
-    get paste_function() {return `paste${this.getArtifactReference().split(' ').join('')}`}
     get cloneable() {return true;}
     get moveable() {return true;}
     get pasteable() {return this.json_view.copied_artefact ? this.json_view.copied_artefact.getDropTargets().includes(this.getArtifactReference()) : false;}
@@ -2155,13 +2151,14 @@ class OkitArtefactView {
 
     static new(artefact, json_view) {return new this(artefact, json_view);}
 
-    cut() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.delete();}
+    // TODO: Fix for composite
+    cut() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.json_view.is_cut = true; this.delete();}
 
-    copy() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0;}
+    copy() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.json_view.is_cut = false;}
 
     paste(drop_target) {
         const clone = this.json_view.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
+        if (!this.json_view.is_cut) clone.display_name += 'Copy';
         if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
         this.paste_count += 1;
         clone.id = clone.okit_id;
@@ -2172,7 +2169,7 @@ class OkitArtefactView {
 
     clone() {
         const clone = this.artefact.clone();
-        clone.display_name += 'Copy';
+        if (!this.json_view.is_cut) clone.display_name += 'Copy';
         clone.id = clone.okit_id;
         this.json_model_list.push(clone);
         return clone;
@@ -2675,7 +2672,7 @@ class OkitArtefactView {
 
     deleteSvg() {
         // Remove SVG Element
-        if ($(jqId(this.id + "-svg")).length) {$(jqId(this.id + "-svg")).remove()}
+        if ($(jqId(this.svg_id)).length) {$(jqId(this.svg_id)).remove()}
     }
 
     /*
@@ -3284,12 +3281,6 @@ class OkitContainerArtefactView extends OkitArtefactView {
 
     paste(drop_target) {
         const clone = super.paste(drop_target);
-        this.cloneChildren(clone);
-        return clone;
-    }
-
-    clone() {
-        const clone = super.clone();
         this.cloneChildren(clone);
         return clone;
     }
