@@ -2121,7 +2121,7 @@ class OkitArtefactView {
                             get: function () {
                                 return this.artefact[key];
                             }
-                        })
+                        });
                     }
                 }
             );
@@ -2407,7 +2407,17 @@ class OkitArtefactView {
         return clone;
     }
 
-    cloneChildren(clone) {}
+    delete() {
+        for (let i = 0; i < this.json_model_list.length; i++) {
+            if (this.json_model_list[i].id === this.id) {
+                this.json_model_list[i].delete();
+                this.json_model_list.splice(i, 1);
+                break;
+            }
+        }
+        // Remove SVG Element
+        if ($(jqId(this.svg_id)).length) {$(jqId(this.svg_id)).remove()}
+    }
 
     draw() {
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
@@ -2603,7 +2613,9 @@ class OkitArtefactView {
                     .attr('href', 'javascript:void(0)')
                     .text('Delete')
                     .on('click', function () {
-                        self.json_view[self.delete_function](self.id);
+                        //self.json_view[self.delete_function](self.id);
+                        self.delete();
+                        self.json_view.update(self.okit_json);
                         $(jqId("context-menu")).addClass("hidden");
                     });
                 // Move
@@ -2898,7 +2910,7 @@ class OkitArtefactView {
         return coord_str;
     }
 
-    delete() {
+    deleteSvg() {
         // Remove SVG Element
         if ($(jqId(this.id + "-svg")).length) {$(jqId(this.id + "-svg")).remove()}
     }

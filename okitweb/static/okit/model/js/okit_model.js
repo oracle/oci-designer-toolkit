@@ -980,9 +980,17 @@ class OkitArtifact {
         // Add default for common Tag variables
         this.freeform_tags = {};
         this.defined_tags = {};
+        Object.defineProperty(this, 'okit_json', {
+            get: function () {
+                return okitjson;
+            }
+        });
     }
 
     get okit_id() {return 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();}
+    get resource_name() {return this.getArtifactReference();}
+    get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
+    get json_model_list() {return this.okit_json[this.list_name];}
 
     /*
     ** Clone Functionality
