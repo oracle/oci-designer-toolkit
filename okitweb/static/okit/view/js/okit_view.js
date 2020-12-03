@@ -2155,6 +2155,8 @@ class OkitArtefactView {
 
     static new(artefact, json_view) {return new this(artefact, json_view);}
 
+    cut() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.delete();}
+
     copy() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0;}
 
     paste(drop_target) {
@@ -2376,14 +2378,16 @@ class OkitArtefactView {
                         self.json_view.update(self.okit_json);
                         $(jqId("context-menu")).addClass("hidden");
                     });
-                // Move
+                // Cut
                 if (self.moveable) {
                     ul.append('li').append('a')
                         .attr('class', 'parent-item')
                         .attr('href', 'javascript:void(0)')
-                        .text('Move')
+                        .text('Cut')
                         .on('click', function () {
-                            self.json_view[self.move_function](self.id);
+                            //self.json_view[self.move_function](self.id);
+                            self.cut();
+                            self.json_view.update(self.okit_json);
                             $(jqId("context-menu")).addClass("hidden");
                         });
                 }
