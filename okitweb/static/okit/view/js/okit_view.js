@@ -2296,6 +2296,8 @@ class OkitArtefactView {
 
     getArtefact() {return this.artefact;}
 
+    static new(artefact, json_view) {return new this(artefact, json_view);}
+
     copy() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0;}
 
     clone() {
