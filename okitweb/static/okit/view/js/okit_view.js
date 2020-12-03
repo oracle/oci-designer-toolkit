@@ -172,13 +172,6 @@ class OkitJsonView {
             this.autonomous_databases.push(new AutonomousDatabaseView(new AutonomousDatabase(artefact, this.okitjson), this));
         }
     }
-    cloneAutonomousDatabase(autonomous_database) {
-        const clone = autonomous_database.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.autonomous_databases.push(clone);
-        this.update(this.okitjson);
-    }
     moveAutonomousDatabase(id) {
         // Build Dialog
         const self = this;
@@ -282,13 +275,6 @@ class OkitJsonView {
             this.block_storage_volumes.push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
         }
     }
-    cloneBlockStorageVolume(block_storage_volume) {
-        const clone = block_storage_volume.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.block_storage_volumes.push(clone);
-        this.update(this.okitjson);
-    }
     moveBlockStorageVolume(id) {
         // Build Dialog
         const self = this;
@@ -371,7 +357,6 @@ class OkitJsonView {
             this.compartments.push(new CompartmentView(new Compartment(artefact, this.okitjson), this));
         }
     }
-    cloneCompartment(compartment) {}
     loadCompartmentsSelect(select_id, empty_option=false) {
         $(jqId(select_id)).empty();
         const compartment_select = $(jqId(select_id));
@@ -413,13 +398,6 @@ class OkitJsonView {
         for (const artefact of fast_connects) {
             this.customer_premise_equipments.push(new CustomerPremiseEquipmentView(new CustomerPremiseEquipment(artefact, this.okitjson), this));
         }
-    }
-    cloneCustomerPremiseEquipment(customer_premise_equipment) {
-        const clone = customer_premise_equipment.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.customer_premise_equipments.push(clone);
-        this.update(this.okitjson);
     }
     moveCustomerPremiseEquipment(id) {
         // Build Dialog
@@ -505,13 +483,6 @@ class OkitJsonView {
         for (const artefact of database_systems) {
             this.database_systems.push(new DatabaseSystemView(new DatabaseSystem(artefact, this.okitjson), this));
         }
-    }
-    cloneDatabaseSystem(database_system) {
-        const clone = database_system.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.database_systems.push(clone);
-        this.update(this.okitjson);
     }
     moveDatabaseSystem(id) {
         // Build Dialog
@@ -599,13 +570,6 @@ class OkitJsonView {
         for (const artefact of dynamic_routing_gateways) {
             this.dynamic_routing_gateways.push(new DynamicRoutingGatewayView(new DynamicRoutingGateway(artefact, this.okitjson), this));
         }
-    }
-    cloneDynamicRoutingGateway(dynamic_routing_gateway) {
-        const clone = dynamic_routing_gateway.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.dynamic_routing_gateways.push(clone);
-        this.update(this.okitjson);
     }
     moveDynamicRoutingGateway(id) {
         // Build Dialog
@@ -713,13 +677,6 @@ class OkitJsonView {
             this.file_storage_systems.push(new FileStorageSystemView(new FileStorageSystem(artefact, this.okitjson), this));
         }
     }
-    cloneFileStorageSystem(file_storage_system) {
-        const clone = file_storage_system.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.file_storage_systems.push(clone);
-        this.update(this.okitjson);
-    }
     moveFileStorageSystem(id) {
         // Build Dialog
         const self = this;
@@ -810,13 +767,6 @@ class OkitJsonView {
         for (const artefact of instances) {
             this.instances.push(new InstanceView(new Instance(artefact, this.okitjson), this));
         }
-    }
-    cloneInstance(instance) {
-        const clone = instance.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.instances.push(clone);
-        this.update(this.okitjson);
     }
     moveInstance(id) {
         // Build Dialog
@@ -1051,13 +1001,6 @@ class OkitJsonView {
             this.ipsec_connections.push(new IPSecConnectionView(new IPSecConnection(artefact, this.okitjson), this));
         }
     }
-    cloneIPSecConnection(ipsec_connection) {
-        const clone = ipsec_connection.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.ipsec_connections.push(clone);
-        this.update(this.okitjson);
-    }
     moveIPSecConnection(id) {
         // Build Dialog
         const self = this;
@@ -1143,13 +1086,6 @@ class OkitJsonView {
             this.load_balancers.push(new LoadBalancerView(new LoadBalancer(artefact, this.okitjson), this));
         }
     }
-    cloneLoadBalancer(load_balancer) {
-        const clone = load_balancer.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.load_balancers.push(clone);
-        this.update(this.okitjson);
-    }
     moveLoadBalancer(id) {
         // Build Dialog
         const self = this;
@@ -1224,13 +1160,6 @@ class OkitJsonView {
             this.local_peering_gateways.push(new LocalPeeringGatewayView(new LocalPeeringGateway(artefact, this.okitjson), this));
         }
     }
-    cloneLocalPeeringGateway(local_peering_gateway) {
-        const clone = local_peering_gateway.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.local_peering_gateways.push(clone);
-        this.update(this.okitjson);
-    }
     moveLocalPeeringGateway(id) {
         // Build Dialog
         const self = this;
@@ -1304,13 +1233,6 @@ class OkitJsonView {
         for (const artefact of database_systems) {
             this.mysql_database_systems.push(new MySQLDatabaseSystemView(new MySQLDatabaseSystem(artefact, this.okitjson), this));
         }
-    }
-    cloneMySQLDatabaseSystem(mysql_database_system) {
-        const clone = mysql_database_system.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.mysql_database_systems.push(clone);
-        this.update(this.okitjson);
     }
     moveMySQLDatabaseSystem(id) {
         // Build Dialog
@@ -1492,13 +1414,6 @@ class OkitJsonView {
             this.network_security_groups.push(new NetworkSecurityGroupView(new NetworkSecurityGroup(artefact, this.okitjson), this));
         }
     }
-    cloneNetworkSecurityGroup(network_security_group) {
-        const clone = network_security_group.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.network_security_groups.push(clone);
-        this.update(this.okitjson);
-    }
     moveNetworkSecurityGroup(id) {
         // Build Dialog
         const self = this;
@@ -1599,13 +1514,6 @@ class OkitJsonView {
             this.object_storage_buckets.push(new ObjectStorageBucketView(new ObjectStorageBucket(artefact, this.okitjson), this));
         }
     }
-    cloneObjectStorageBucket(object_storage_bucket) {
-        const clone = object_storage_bucket.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.object_storage_buckets.push(clone);
-        this.update(this.okitjson);
-    }
     moveObjectStorageBucket(id) {
         // Build Dialog
         const self = this;
@@ -1690,13 +1598,6 @@ class OkitJsonView {
         for (const artefact of oke_clusters) {
             this.oke_clusters.push(new OkeClusterView(new OkeCluster(artefact, this.okitjson), this));
         }
-    }
-    cloneOkeCluster(oke_cluster) {
-        const clone = oke_cluster.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.oke_clusters.push(clone);
-        this.update(this.okitjson);
     }
     moveOkeCluster(id) {
         // Build Dialog
@@ -1784,13 +1685,6 @@ class OkitJsonView {
             this.remote_peering_connections.push(new RemotePeeringConnectionView(new RemotePeeringConnection(artefact, this.okitjson), this));
         }
     }
-    cloneRemotePeeringConnection(remote_peering_connection) {
-        const clone = remote_peering_connection.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.remote_peering_connections.push(clone);
-        this.update(this.okitjson);
-    }
     moveRemotePeeringConnection(id) {
         // Build Dialog
         const self = this;
@@ -1876,13 +1770,6 @@ class OkitJsonView {
             this.route_tables.push(new RouteTableView(new RouteTable(artefact, this.okitjson), this));
         }
     }
-    cloneRouteTable(route_table) {
-        const clone = route_table.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.route_tables.push(clone);
-        this.update(this.okitjson);
-    }
     moveRouteTable(id) {
         // Build Dialog
         const self = this;
@@ -1957,13 +1844,6 @@ class OkitJsonView {
         for (const artefact of security_lists) {
             this.security_lists.push(new SecurityListView(new SecurityList(artefact, this.okitjson), this));
         }
-    }
-    cloneSecurityList(security_list) {
-        const clone = security_list.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.security_lists.push(clone);
-        this.update(this.okitjson);
     }
     moveSecurityList(id) {
         // Build Dialog
@@ -2047,13 +1927,6 @@ class OkitJsonView {
             this.service_gateways.push(new ServiceGatewayView(new ServiceGateway(artefact, this.okitjson), this));
         }
     }
-    cloneServiceGateway(service_gateway) {
-        const clone = service_gateway.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        this.okitjson.service_gateways.push(clone);
-        this.update(this.okitjson);
-    }
     moveServiceGateway(id) {
         // Build Dialog
         const self = this;
@@ -2134,41 +2007,6 @@ class OkitJsonView {
         for (const artefact of subnets) {
             this.subnets.push(new SubnetView(new Subnet(artefact, this.okitjson), this));
         }
-    }
-    cloneSubnet(subnet, update=true) {
-        const clone = subnet.artefact.clone();
-        clone.display_name += 'Clone';
-        clone.id = clone.okit_id;
-        clone.generateCIDR();
-        this.okitjson.subnets.push(clone);
-        // Clone Children
-        const clone_view = this.getSubnet(clone.id);
-        for (let child of [...this.getInstances(), ...this.getLoadBalancers(), ...this.getFileStorageSystems(),
-                            ...this.getAutonomousDatabases(), ...this.getDatabaseSystems(), ...this.getMySQLDatabaseSystems()]) {
-            if (child.subnet_id === subnet.artefact.id) {
-                const child_clone = child.artefact.clone();
-                child_clone.subnet_id = clone.id;
-                this.okitjson[child_clone.artefactToElement(child_clone.getArtifactReference())].push(child_clone);
-            }
-        }
-        /*
-        for (let child of this.getInstances()) {
-            if (child.subnet_id === subnet.artefact.id) {
-                child.subnet_id = clone.id;
-            }
-        }
-        for (let child of this.getLoadBalancers()) {
-            if (child.subnet_id === subnet.artefact.id) {
-                child.subnet_id = clone.id;
-            }
-        }
-        for (let child of this.getFileStorageSystems()) {
-            if (child.subnet_id === subnet.artefact.id) {
-                child.subnet_id = clone.id;
-            }
-        }
-        */
-        if (update) this.update(this.okitjson);
     }
     pasteSubnet() {}
     loadSubnetsSelect(select_id, empty_option=false) {
@@ -2293,16 +2131,19 @@ class OkitArtefactView {
     }
 
     // -- Reference
+    get resource_name() {return this.getArtifactReference();}
     get json_view() {return this.getJsonView();}
     get okit_json() {return this.getJsonView().getOkitJson();}
-    get json_model_list() {return [];}
-    get json_view_list() {return [];}
+    get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
+    get json_model_list() {return this.okit_json[this.list_name];}
+    get json_view_list() {return this.json_view[this.list_name];}
     //get id() {return this.artefact ? this.artefact.id : '';}
     get artefact_id() {return this.artefact ? this.artefact.id : '';}
     get attached() {return false;}
     get compartment_id() {return this.artefact ? this.artefact.compartment_id : '';}
     get parent_id() {return null;}
     get parent() {return null;}
+    get children() {return [];}
     get display_name() {return this.artefact ? this.artefact.display_name : '';}
     get definition() {return this.artefact ? this.artefact.definition : '';}
     get is_collapsed() {return this.parent ? this.collapsed || this.parent.is_collapsed : this.collapsed;}
@@ -2558,6 +2399,16 @@ class OkitArtefactView {
 
     copy() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0;}
 
+    clone() {
+        const clone = this.artefact.clone();
+        clone.display_name += 'Clone';
+        clone.id = clone.okit_id;
+        this.json_model_list.push(clone);
+        return clone;
+    }
+
+    cloneChildren(clone) {}
+
     draw() {
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
             console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
@@ -2773,7 +2624,9 @@ class OkitArtefactView {
                         .attr('href', 'javascript:void(0)')
                         .text('Clone')
                         .on('click', function () {
-                            self.json_view[self.clone_function](self);
+                            //self.json_view[self.clone_function](self);
+                            self.clone();
+                            self.json_view.update(self.okit_json);
                             $(jqId("context-menu")).addClass("hidden");
                         });
                 }

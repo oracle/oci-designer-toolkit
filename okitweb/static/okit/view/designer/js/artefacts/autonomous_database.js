@@ -28,14 +28,6 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     set subnet_id(id) {this.artefact.subnet_id = id;}
 
     /*
-    ** Clone Functionality
-     */
-    clone() {
-        return new AutonomousDatabaseView(this.artefact, this.getJsonView());
-    }
-
-
-    /*
      ** SVG Processing
      */
     // Add Specific Mouse Events

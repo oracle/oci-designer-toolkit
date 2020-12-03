@@ -14,8 +14,26 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
 
     get parent_id() {return this.artefact.compartment_id;}
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
+    get children() {return [...this.json_view.getSubnets(), ...this.json_view.getInternetGateways(),
+        ...this.json_view.getNATGateways(), ...this.json_view.getRouteTables(), ...this.json_view.getSecurityLists(),
+        ...this.json_view.getNetworkSecurityGroups(), ...this.json_view.getServiceGateways(),
+        ...this.json_view.getDynamicRoutingGateways(), ...this.json_view.getLocalPeeringGateways(),
+        ...this.json_view.getOkeClusters()].filter(child => child.parent_id === this.artefact.id);}
     get info_text() {return this.artefact.cidr_block;}
     get summary_tooltip() {return `Name: ${this.display_name} \nCIDR: ${this.artefact.cidr_block} \nDNS: ${this.artefact.dns_label}`;}
+
+    clone() {
+        const clone = super.clone();
+        clone.generateCIDR();
+        this.cloneChildren(clone);
+        return clone;
+    }
+
+    cloneChildren(clone) {
+        for (let child of this.children) {
+            child.clone().vcn_id = clone.id;
+        }
+    }
 
     /*
      ** SVG Processing
