@@ -168,64 +168,6 @@ class OkitJsonView {
             this.autonomous_databases.push(new AutonomousDatabaseView(new AutonomousDatabase(artefact, this.okitjson), this));
         }
     }
-    moveAutonomousDatabase(id) {
-        // Build Dialog
-        const self = this;
-        let autonomous_database = this.getAutonomousDatabase(id);
-        $(jqId('modal_dialog_title')).text(`Move ${autonomous_database.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Compartment
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Compartment');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_autonomous_database_compartment_id');
-        // Load Compartments
-        this.loadCompartmentsSelect('move_autonomous_database_compartment_id');
-        $(jqId("move_autonomous_database_compartment_id")).val(autonomous_database.artefact.compartment_id);
-        // Primary Subnet
-        tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Subnet');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_autonomous_database_subnet_id');
-        // Load Subnets
-        this.loadSubnetsSelect('move_autonomous_database_subnet_id', true);
-        $(jqId("move_autonomous_database_subnet_id")).val(autonomous_database.artefact.subnet_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (autonomous_database.artefact.compartment_id !== $(jqId("move_autonomous_database_compartment_id")).val()) {
-                    self.getCompartment(autonomous_database.artefact.compartment_id).recalculate_dimensions = true;
-                    self.getCompartment($(jqId("move_autonomous_database_compartment_id")).val()).recalculate_dimensions = true;
-                    autonomous_database.artefact.compartment_id = $(jqId("move_autonomous_database_compartment_id")).val();
-                }
-                if (autonomous_database.artefact.subnet_id !== $(jqId("move_autonomous_database_subnet_id")).val()) {
-                    self.getSubnet(autonomous_database.artefact.subnet_id).recalculate_dimensions = true;
-                    self.getSubnet($(jqId("move_autonomous_database_subnet_id")).val()).recalculate_dimensions = true;
-                    autonomous_database.artefact.subnet_id = $(jqId("move_autonomous_database_subnet_id")).val();
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // Block Storage
     dropBlockStorageVolumeView(target) {
@@ -251,46 +193,6 @@ class OkitJsonView {
         for (const artefact of block_storage_volumes) {
             this.block_storage_volumes.push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
         }
-    }
-    moveBlockStorageVolume(id) {
-        // Build Dialog
-        const self = this;
-        let block_storage_volume = this.getBlockStorageVolume(id);
-        $(jqId('modal_dialog_title')).text(`Move ${block_storage_volume.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Compartment
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Compartment');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_block_storage_volume_compartment_id');
-        // Load Compartments
-        this.loadCompartmentsSelect('move_block_storage_volume_compartment_id');
-        $(jqId("move_block_storage_volume_compartment_id")).val(block_storage_volume.artefact.compartment_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (block_storage_volume.artefact.compartment_id !== $(jqId("move_block_storage_volume_compartment_id")).val()) {
-                    self.getCompartment(block_storage_volume.artefact.compartment_id).recalculate_dimensions = true;
-                    self.getCompartment($(jqId("move_block_storage_volume_compartment_id")).val()).recalculate_dimensions = true;
-                    block_storage_volume.artefact.compartment_id = $(jqId("move_block_storage_volume_compartment_id")).val();
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
 
     // Compartment
@@ -356,46 +258,6 @@ class OkitJsonView {
             this.customer_premise_equipments.push(new CustomerPremiseEquipmentView(new CustomerPremiseEquipment(artefact, this.okitjson), this));
         }
     }
-    moveCustomerPremiseEquipment(id) {
-        // Build Dialog
-        const self = this;
-        let customer_premise_equipment = this.getCustomerPremiseEquipment(id);
-        $(jqId('modal_dialog_title')).text(`Move ${customer_premise_equipment.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Compartment
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Compartment');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_customer_premise_equipment_compartment_id');
-        // Load Compartments
-        this.loadCompartmentsSelect('move_customer_premise_equipment_compartment_id');
-        $(jqId("move_customer_premise_equipment_compartment_id")).val(customer_premise_equipment.artefact.compartment_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (customer_premise_equipment.artefact.compartment_id !== $(jqId("move_customer_premise_equipment_compartment_id")).val()) {
-                    self.getCompartment(customer_premise_equipment.artefact.compartment_id).recalculate_dimensions = true;
-                    self.getCompartment($(jqId("move_customer_premise_equipment_compartment_id")).val()).recalculate_dimensions = true;
-                    customer_premise_equipment.artefact.compartment_id = $(jqId("move_customer_premise_equipment_compartment_id")).val();
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // Database System
     dropDatabaseSystemView(target) {
@@ -425,47 +287,6 @@ class OkitJsonView {
             this.database_systems.push(new DatabaseSystemView(new DatabaseSystem(artefact, this.okitjson), this));
         }
     }
-    moveDatabaseSystem(id) {
-        // Build Dialog
-        const self = this;
-        let database_system = this.getDatabaseSystem(id);
-        $(jqId('modal_dialog_title')).text(`Move ${database_system.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Subnet');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_database_system_subnet_id');
-        // Load Subnets
-        this.loadSubnetsSelect('move_database_system_subnet_id');
-        $(jqId("move_database_system_subnet_id")).val(database_system.artefact.subnet_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (database_system.artefact.subnet_id !== $(jqId("move_database_system_subnet_id")).val()) {
-                    self.getSubnet(database_system.artefact.subnet_id).recalculate_dimensions = true;
-                    self.getSubnet($(jqId("move_database_system_subnet_id")).val()).recalculate_dimensions = true;
-                    database_system.artefact.subnet_id = $(jqId("move_database_system_subnet_id")).val();
-                    database_system.artefact.compartment_id = self.getSubnet(database_system.artefact.subnet_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // Dynamic Routing Gateway
     dropDynamicRoutingGatewayView(target) {
@@ -494,47 +315,6 @@ class OkitJsonView {
         for (const artefact of dynamic_routing_gateways) {
             this.dynamic_routing_gateways.push(new DynamicRoutingGatewayView(new DynamicRoutingGateway(artefact, this.okitjson), this));
         }
-    }
-    moveDynamicRoutingGateway(id) {
-        // Build Dialog
-        const self = this;
-        const dynamic_routing_gateway = this.getDynamicRoutingGateway(id);
-        $(jqId('modal_dialog_title')).text(`Move ${dynamic_routing_gateway.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_dynamic_routing_gateway_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_dynamic_routing_gateway_vcn_id');
-        $(jqId("move_dynamic_routing_gateway_vcn_id")).val(dynamic_routing_gateway.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (dynamic_routing_gateway.artefact.vcn_id !== $(jqId("move_dynamic_routing_gateway_vcn_id")).val()) {
-                    self.getVirtualCloudNetwork(dynamic_routing_gateway.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork($(jqId("move_dynamic_routing_gateway_vcn_id")).val()).recalculate_dimensions = true;
-                    dynamic_routing_gateway.artefact.vcn_id = $(jqId("move_dynamic_routing_gateway_vcn_id")).val();
-                    dynamic_routing_gateway.artefact.compartment_id = self.getVirtualCloudNetwork(dynamic_routing_gateway.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
 
     // Fast Connect
@@ -593,47 +373,6 @@ class OkitJsonView {
             this.file_storage_systems.push(new FileStorageSystemView(new FileStorageSystem(artefact, this.okitjson), this));
         }
     }
-    moveFileStorageSystem(id) {
-        // Build Dialog
-        const self = this;
-        let file_storage_system = this.getFileStorageSystem(id);
-        $(jqId('modal_dialog_title')).text(`Move ${file_storage_system.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Subnet');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_file_storage_system_subnet_id');
-        // Load Subnets
-        this.loadSubnetsSelect('move_file_storage_system_subnet_id');
-        $(jqId("move_file_storage_system_subnet_id")).val(file_storage_system.artefact.primary_mount_target.subnet_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (file_storage_system.artefact.primary_mount_target.subnet_id !== $(jqId("move_file_storage_system_subnet_id")).val()) {
-                    self.getSubnet(file_storage_system.artefact.subnet_id).recalculate_dimensions = true;
-                    self.getSubnet($(jqId("move_file_storage_system_subnet_id")).val()).recalculate_dimensions = true;
-                    file_storage_system.artefact.primary_mount_target.subnet_id = $(jqId("move_file_storage_system_subnet_id")).val();
-                    file_storage_system.artefact.compartment_id = self.getSubnet(file_storage_system.artefact.subnet_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // Instance
     dropInstanceView(target) {
@@ -666,66 +405,6 @@ class OkitJsonView {
         for (const artefact of instances) {
             this.instances.push(new InstanceView(new Instance(artefact, this.okitjson), this));
         }
-    }
-    moveInstance(id) {
-        // Build Dialog
-        const self = this;
-        let instance = this.getInstance(id);
-        $(jqId('modal_dialog_title')).text(`Move ${instance.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Compartment
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Compartment');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_instance_compartment_id');
-        // Load Compartments
-        this.loadCompartmentsSelect('move_instance_compartment_id');
-        $(jqId("move_instance_compartment_id")).val(instance.artefact.compartment_id);
-        // Primary Subnet
-        tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Primary Subnet');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-                .attr('id', 'move_instance_subnet_id');
-        // Load Subnets
-        this.loadSubnetsSelect('move_instance_subnet_id', true);
-        $(jqId("move_instance_subnet_id")).val(instance.artefact.primary_vnic.subnet_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (instance.artefact.compartment_id !== $(jqId("move_instance_compartment_id")).val()) {
-                    self.getCompartment(instance.artefact.compartment_id).recalculate_dimensions = true;
-                    self.getCompartment($(jqId("move_instance_compartment_id")).val()).recalculate_dimensions = true;
-                    instance.artefact.compartment_id = $(jqId("move_instance_compartment_id")).val();
-                }
-                if (instance.artefact.primary_vnic.subnet_id !== $(jqId("move_instance_subnet_id")).val()) {
-                    self.getSubnet(instance.artefact.primary_vnic.subnet_id).recalculate_dimensions = true;
-                    if ($(jqId("move_instance_subnet_id")).val() !== '') {
-                        self.getSubnet($(jqId("move_instance_subnet_id")).val()).recalculate_dimensions = true;
-                    }
-                    instance.artefact.primary_vnic.subnet_id = $(jqId("move_instance_subnet_id")).val();
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
 
     // InstancePool
@@ -796,55 +475,6 @@ class OkitJsonView {
             this.internet_gateways.push(new InternetGatewayView(new InternetGateway(artefact, this.okitjson), this));
         }
     }
-    moveInternetGateway(id) {
-        // Build Dialog
-        const self = this;
-        let internet_gateway = this.getInternetGateway(id);
-        $(jqId('modal_dialog_title')).text(`Move ${internet_gateway.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_internet_gateway_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_internet_gateway_vcn_id');
-        $(jqId("move_internet_gateway_vcn_id")).val(internet_gateway.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                const destination_vcn_id = $(jqId("move_internet_gateway_vcn_id")).val();
-                if (internet_gateway.artefact.vcn_id !== destination_vcn_id) {
-                    // Check if Gateway Already exists
-                    for (let gateway of self.getInternetGateways()) {
-                        if (gateway.vcn_id === destination_vcn_id) {
-                            alert('The maximum limit of 1 Internet Gateway per Virtual Cloud Network has been exceeded for ' + self.getVirtualCloudNetwork(destination_vcn_id).display_name);
-                            return null;
-                        }
-                    }
-                    self.getVirtualCloudNetwork(internet_gateway.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork(destination_vcn_id).recalculate_dimensions = true;
-                    internet_gateway.artefact.vcn_id = destination_vcn_id;
-                    internet_gateway.artefact.compartment_id = self.getVirtualCloudNetwork(internet_gateway.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // IPSec Connection
     dropIPSecConnectionView(target) {
@@ -872,46 +502,6 @@ class OkitJsonView {
         for (const artefact of fast_connects) {
             this.ipsec_connections.push(new IPSecConnectionView(new IPSecConnection(artefact, this.okitjson), this));
         }
-    }
-    moveIPSecConnection(id) {
-        // Build Dialog
-        const self = this;
-        let ipsec_connection = this.getIPSecConnection(id);
-        $(jqId('modal_dialog_title')).text(`Move ${ipsec_connection.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Compartment
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Compartment');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_ipsec_connection_compartment_id');
-        // Load Compartments
-        this.loadCompartmentsSelect('move_ipsec_connection_compartment_id');
-        $(jqId("move_ipsec_connection_compartment_id")).val(ipsec_connection.artefact.compartment_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (ipsec_connection.artefact.compartment_id !== $(jqId("move_ipsec_connection_compartment_id")).val()) {
-                    self.getCompartment(ipsec_connection.artefact.compartment_id).recalculate_dimensions = true;
-                    self.getCompartment($(jqId("move_ipsec_connection_compartment_id")).val()).recalculate_dimensions = true;
-                    ipsec_connection.artefact.compartment_id = $(jqId("move_ipsec_connection_compartment_id")).val();
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
 
     // Load Balancer
@@ -942,47 +532,6 @@ class OkitJsonView {
             this.load_balancers.push(new LoadBalancerView(new LoadBalancer(artefact, this.okitjson), this));
         }
     }
-    moveLoadBalancer(id) {
-        // Build Dialog
-        const self = this;
-        let load_balancer = this.getLoadBalancer(id);
-        $(jqId('modal_dialog_title')).text(`Move ${load_balancer.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Subnet');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_load_balancer_subnet_id');
-        // Load Subnets
-        this.loadSubnetsSelect('move_load_balancer_subnet_id');
-        $(jqId("move_load_balancer_subnet_id")).val(load_balancer.artefact.subnet_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (load_balancer.artefact.subnet_id !== $(jqId("move_load_balancer_subnet_id")).val()) {
-                    self.getSubnet(load_balancer.artefact.subnet_id).recalculate_dimensions = true;
-                    self.getSubnet($(jqId("move_load_balancer_subnet_id")).val()).recalculate_dimensions = true;
-                    load_balancer.artefact.subnet_id = $(jqId("move_load_balancer_subnet_id")).val();
-                    load_balancer.artefact.compartment_id = self.getSubnet(load_balancer.artefact.subnet_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // Local Peering Gateway
     dropLocalPeeringGatewayView(target) {
@@ -1012,47 +561,6 @@ class OkitJsonView {
             this.local_peering_gateways.push(new LocalPeeringGatewayView(new LocalPeeringGateway(artefact, this.okitjson), this));
         }
     }
-    moveLocalPeeringGateway(id) {
-        // Build Dialog
-        const self = this;
-        let local_peering_gateway = this.getLocalPeeringGateway(id);
-        $(jqId('modal_dialog_title')).text(`Move ${local_peering_gateway.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_local_peering_gateway_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_local_peering_gateway_vcn_id');
-        $(jqId("move_local_peering_gateway_vcn_id")).val(local_peering_gateway.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (local_peering_gateway.artefact.vcn_id !== $(jqId("move_local_peering_gateway_vcn_id")).val()) {
-                    self.getVirtualCloudNetwork(local_peering_gateway.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork($(jqId("move_local_peering_gateway_vcn_id")).val()).recalculate_dimensions = true;
-                    local_peering_gateway.artefact.vcn_id = $(jqId("move_local_peering_gateway_vcn_id")).val();
-                    local_peering_gateway.artefact.compartment_id = self.getVirtualCloudNetwork(local_peering_gateway.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // MySQL Database System
     dropMySQLDatabaseSystemView(target) {
@@ -1081,47 +589,6 @@ class OkitJsonView {
         for (const artefact of database_systems) {
             this.mysql_database_systems.push(new MySQLDatabaseSystemView(new MySQLDatabaseSystem(artefact, this.okitjson), this));
         }
-    }
-    moveMySQLDatabaseSystem(id) {
-        // Build Dialog
-        const self = this;
-        let database_system = this.getMySQLDatabaseSystem(id);
-        $(jqId('modal_dialog_title')).text(`Move ${database_system.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Subnet');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_database_system_subnet_id');
-        // Load Subnets
-        this.loadSubnetsSelect('move_database_system_subnet_id');
-        $(jqId("move_database_system_subnet_id")).val(database_system.artefact.subnet_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (database_system.artefact.subnet_id !== $(jqId("move_database_system_subnet_id")).val()) {
-                    self.getSubnet(database_system.artefact.subnet_id).recalculate_dimensions = true;
-                    self.getSubnet($(jqId("move_database_system_subnet_id")).val()).recalculate_dimensions = true;
-                    database_system.artefact.subnet_id = $(jqId("move_database_system_subnet_id")).val();
-                    database_system.artefact.compartment_id = self.getSubnet(database_system.artefact.subnet_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
 
     // NAT Gateway
@@ -1163,55 +630,6 @@ class OkitJsonView {
             this.nat_gateways.push(new NATGatewayView(new NATGateway(artefact, this.okitjson), this));
         }
     }
-    moveNATGateway(id) {
-        // Build Dialog
-        const self = this;
-        let nat_gateway = this.getNATGateway(id);
-        $(jqId('modal_dialog_title')).text(`Move ${nat_gateway.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_nat_gateway_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_nat_gateway_vcn_id');
-        $(jqId("move_nat_gateway_vcn_id")).val(nat_gateway.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                const destination_vcn_id = $(jqId("move_nat_gateway_vcn_id")).val();
-                if (nat_gateway.artefact.vcn_id !== destination_vcn_id) {
-                    // Check if Gateway Already exists
-                    for (let gateway of self.getNATGateways()) {
-                        if (gateway.vcn_id === destination_vcn_id) {
-                            alert('The maximum limit of 1 NAT Gateway per Virtual Cloud Network has been exceeded for ' + self.getVirtualCloudNetwork(destination_vcn_id).display_name);
-                            return null;
-                        }
-                    }
-                    self.getVirtualCloudNetwork(nat_gateway.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork(destination_vcn_id).recalculate_dimensions = true;
-                    nat_gateway.artefact.vcn_id = destination_vcn_id;
-                    nat_gateway.artefact.compartment_id = self.getVirtualCloudNetwork(nat_gateway.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // Network Security Group
     dropNetworkSecurityGroupView(target) {
@@ -1240,48 +658,6 @@ class OkitJsonView {
         for (const artefact of network_security_groups) {
             this.network_security_groups.push(new NetworkSecurityGroupView(new NetworkSecurityGroup(artefact, this.okitjson), this));
         }
-    }
-    moveNetworkSecurityGroup(id) {
-        // Build Dialog
-        const self = this;
-        const nsg = this.getNetworkSecurityGroup(id);
-        $(jqId('modal_dialog_title')).text(`Move ${nsg.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_network_security_group_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_network_security_group_vcn_id');
-        $(jqId("move_network_security_group_vcn_id")).val(nsg.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                const destination_vcn_id = $(jqId("move_network_security_group_vcn_id")).val();
-                if (nsg.artefact.vcn_id !== destination_vcn_id) {
-                    self.getVirtualCloudNetwork(nsg.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork(destination_vcn_id).recalculate_dimensions = true;
-                    nsg.artefact.vcn_id = destination_vcn_id;
-                    nsg.artefact.compartment_id = self.getVirtualCloudNetwork(nsg.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
     loadNetworkSecurityGroupsSelect(select_id, empty_option=false) {
         $(jqId(select_id)).empty();
@@ -1337,46 +713,6 @@ class OkitJsonView {
             this.object_storage_buckets.push(new ObjectStorageBucketView(new ObjectStorageBucket(artefact, this.okitjson), this));
         }
     }
-    moveObjectStorageBucket(id) {
-        // Build Dialog
-        const self = this;
-        let object_storage_bucket = this.getObjectStorageBucket(id);
-        $(jqId('modal_dialog_title')).text(`Move ${object_storage_bucket.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Compartment
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Compartment');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_object_storage_bucket_compartment_id');
-        // Load Compartments
-        this.loadCompartmentsSelect('move_object_storage_bucket_compartment_id');
-        $(jqId("move_object_storage_bucket_compartment_id")).val(object_storage_bucket.artefact.compartment_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (object_storage_bucket.artefact.compartment_id !== $(jqId("move_object_storage_bucket_compartment_id")).val()) {
-                    self.getCompartment(object_storage_bucket.artefact.compartment_id).recalculate_dimensions = true;
-                    self.getCompartment($(jqId("move_object_storage_bucket_compartment_id")).val()).recalculate_dimensions = true;
-                    object_storage_bucket.artefact.compartment_id = $(jqId("move_object_storage_bucket_compartment_id")).val();
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // OkeCluster
     dropOkeClusterView(target) {
@@ -1406,47 +742,6 @@ class OkitJsonView {
             this.oke_clusters.push(new OkeClusterView(new OkeCluster(artefact, this.okitjson), this));
         }
     }
-    moveOkeCluster(id) {
-        // Build Dialog
-        const self = this;
-        const oke_cluster = this.getOkeCluster(id);
-        $(jqId('modal_dialog_title')).text(`Move ${oke_cluster.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_oke_cluster_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_oke_cluster_vcn_id');
-        $(jqId("move_oke_cluster_vcn_id")).val(oke_cluster.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (oke_cluster.artefact.vcn_id !== $(jqId("move_oke_cluster_vcn_id")).val()) {
-                    self.getVirtualCloudNetwork(oke_cluster.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork($(jqId("move_oke_cluster_vcn_id")).val()).recalculate_dimensions = true;
-                    oke_cluster.artefact.vcn_id = $(jqId("move_oke_cluster_vcn_id")).val();
-                    oke_cluster.artefact.compartment_id = self.getVirtualCloudNetwork(oke_cluster.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // RemotePeeringConnection
     dropRemotePeeringConnectionView(target) {
@@ -1474,46 +769,6 @@ class OkitJsonView {
         for (const artefact of fast_connects) {
             this.remote_peering_connections.push(new RemotePeeringConnectionView(new RemotePeeringConnection(artefact, this.okitjson), this));
         }
-    }
-    moveRemotePeeringConnection(id) {
-        // Build Dialog
-        const self = this;
-        let remote_peering_connection = this.getRemotePeeringConnection(id);
-        $(jqId('modal_dialog_title')).text(`Move ${remote_peering_connection.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Compartment
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Compartment');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_remote_peering_connection_compartment_id');
-        // Load Compartments
-        this.loadCompartmentsSelect('move_remote_peering_connection_compartment_id');
-        $(jqId("move_remote_peering_connection_compartment_id")).val(remote_peering_connection.artefact.compartment_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                if (remote_peering_connection.artefact.compartment_id !== $(jqId("move_remote_peering_connection_compartment_id")).val()) {
-                    self.getCompartment(remote_peering_connection.artefact.compartment_id).recalculate_dimensions = true;
-                    self.getCompartment($(jqId("move_remote_peering_connection_compartment_id")).val()).recalculate_dimensions = true;
-                    remote_peering_connection.artefact.compartment_id = $(jqId("move_remote_peering_connection_compartment_id")).val();
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
 
     // Route Table
@@ -1544,48 +799,6 @@ class OkitJsonView {
             this.route_tables.push(new RouteTableView(new RouteTable(artefact, this.okitjson), this));
         }
     }
-    moveRouteTable(id) {
-        // Build Dialog
-        const self = this;
-        const route_table = this.getRouteTable(id);
-        $(jqId('modal_dialog_title')).text(`Move ${route_table.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_route_table_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_route_table_vcn_id');
-        $(jqId("move_route_table_vcn_id")).val(route_table.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                const destination_vcn_id = $(jqId("move_route_table_vcn_id")).val();
-                if (route_table.artefact.vcn_id !== destination_vcn_id) {
-                    self.getVirtualCloudNetwork(route_table.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork(destination_vcn_id).recalculate_dimensions = true;
-                    route_table.artefact.vcn_id = destination_vcn_id;
-                    route_table.artefact.compartment_id = self.getVirtualCloudNetwork(route_table.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
 
     // Security List
     dropSecurityListView(target) {
@@ -1614,48 +827,6 @@ class OkitJsonView {
         for (const artefact of security_lists) {
             this.security_lists.push(new SecurityListView(new SecurityList(artefact, this.okitjson), this));
         }
-    }
-    moveSecurityList(id) {
-        // Build Dialog
-        const self = this;
-        const security_list = this.getSecurityList(id);
-        $(jqId('modal_dialog_title')).text(`Move ${security_list.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_security_list_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_security_list_vcn_id');
-        $(jqId("move_security_list_vcn_id")).val(security_list.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                const destination_vcn_id = $(jqId("move_security_list_vcn_id")).val();
-                if (security_list.artefact.vcn_id !== destination_vcn_id) {
-                    self.getVirtualCloudNetwork(security_list.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork(destination_vcn_id).recalculate_dimensions = true;
-                    security_list.artefact.vcn_id = destination_vcn_id;
-                    security_list.artefact.compartment_id = self.getVirtualCloudNetwork(security_list.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
 
     // Service Gateway
@@ -1692,55 +863,6 @@ class OkitJsonView {
         for (const artefact of service_gateways) {
             this.service_gateways.push(new ServiceGatewayView(new ServiceGateway(artefact, this.okitjson), this));
         }
-    }
-    moveServiceGateway(id) {
-        // Build Dialog
-        const self = this;
-        let service_gateway = this.getServiceGateway(id);
-        $(jqId('modal_dialog_title')).text(`Move ${service_gateway.display_name}`);
-        $(jqId('modal_dialog_body')).empty();
-        $(jqId('modal_dialog_footer')).empty();
-        const table = d3.select(d3Id('modal_dialog_body')).append('div')
-            .attr('class', 'table okit-table');
-        const tbody = table.append('div')
-            .attr('class', 'tbody');
-        // Subnet
-        let tr = tbody.append('div')
-            .attr('class', 'tr');
-        tr.append('div')
-            .attr('class', 'td')
-            .text('Virtual Cloud Network');
-        tr.append('div')
-            .attr('class', 'td')
-            .append('select')
-            .attr('id', 'move_service_gateway_vcn_id');
-        // Load Subnets
-        this.loadVirtualCloudNetworksSelect('move_service_gateway_vcn_id');
-        $(jqId("move_service_gateway_vcn_id")).val(service_gateway.artefact.vcn_id);
-        // Submit Button
-        const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-            .attr('id', 'submit_query_btn')
-            .attr('type', 'button')
-            .text('Move')
-            .on('click', function () {
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-                const destination_vcn_id = $(jqId("move_service_gateway_vcn_id")).val();
-                if (service_gateway.artefact.vcn_id !== destination_vcn_id) {
-                    // Check if Gateway Already exists
-                    for (let gateway of self.getServiceGateways()) {
-                        if (gateway.vcn_id === destination_vcn_id) {
-                            alert('The maximum limit of 1 Service Gateway per Virtual Cloud Network has been exceeded for ' + self.getVirtualCloudNetwork(destination_vcn_id).display_name);
-                            return null;
-                        }
-                    }
-                    self.getVirtualCloudNetwork(service_gateway.artefact.vcn_id).recalculate_dimensions = true;
-                    self.getVirtualCloudNetwork(destination_vcn_id).recalculate_dimensions = true;
-                    service_gateway.artefact.vcn_id = destination_vcn_id;
-                    service_gateway.artefact.compartment_id = self.getVirtualCloudNetwork(service_gateway.artefact.vcn_id).artefact.compartment_id;
-                }
-                self.update(this.okitjson);
-            });
-        $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
 
     // Subnet
