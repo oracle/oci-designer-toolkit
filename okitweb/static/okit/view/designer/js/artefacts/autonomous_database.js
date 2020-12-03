@@ -24,6 +24,8 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
         }
     }
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
+    // Direct Subnet Access
+    set subnet_id(id) {this.artefact.subnet_id = id;}
 
     /*
     ** Clone Functionality

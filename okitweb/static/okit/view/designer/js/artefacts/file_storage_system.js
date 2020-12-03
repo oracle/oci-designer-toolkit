@@ -14,6 +14,9 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.primary_mount_target.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
+    // Direct Subnet Access
+    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
+    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
 
     /*
      ** SVG Processing

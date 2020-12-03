@@ -411,8 +411,9 @@ li a.parent-item:hover {
 .context-menu {
     z-index:102;
     position: absolute;
-    border: 1px rgba(37, 49, 65, 0.1);
+    border: 1px rgba(37, 49, 65, 0.1) solid;
     padding: 2px;
+    opacity: 1;
 }
 
 .okit-context-menu-title {
@@ -421,12 +422,12 @@ li a.parent-item:hover {
     align-content: center;
     text-align: center;
     border-bottom: #1d2733 2px solid;
+    background-color: white;
 }
 
 ul.okit-context-menu-list {
     margin: 0;
     padding: 0;
-    width: 100px;
     min-height: 100%;
     background-color: #253141;
     direction: ltr;

@@ -28,8 +28,9 @@ class InstanceView extends OkitDesignerArtefactView {
     get icon_definition_id() {return this.shape.startsWith('BM.') ? 'BareMetalInstanceSvg' : super.icon_definition_id;}
     // ---- Text
     get summary_tooltip() {return `Name: ${this.display_name} \nAvailability Domain: ${this.artefact.availability_domain} \nShape: ${this.artefact.shape} \nOS: ${this.source_details.os} ${this.source_details.version}`;}
-    // Test Functions variables
+    // Direct Subnet Access
     get subnet_id() {return this.artefact.primary_vnic.subnet_id;}
+    set subnet_id(id) {this.artefact.primary_vnic.subnet_id = id;}
 
     /*
      ** SVG Processing

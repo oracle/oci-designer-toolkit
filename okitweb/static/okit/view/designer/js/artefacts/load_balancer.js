@@ -14,8 +14,9 @@ class LoadBalancerView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.subnet_ids[0];}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
-    // Test Functions variables
+    // Direct Subnet Access
     get subnet_id() {return this.artefact.subnet_ids[0];}
+    set subnet_id(id) {this.artefact.subnet_ids[0] = id;}
 
     /*
      ** SVG Processing

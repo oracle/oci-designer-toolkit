@@ -6572,6 +6572,19 @@
     {
       "compartment_id": null,
       "defined_tags": null,
+      "description": "Default configuration for the MySQL.VM.Standard.E3.16.512GB MySQL Shape",
+      "display_name": "MySQL.VM.Standard.E3.16.512GB.Built-in",
+      "freeform_tags": null,
+      "id": "ocid1.mysqlconfiguration.oc1..aaaaaaaafrdfzsjmjmtrgmrh3laotrsmp2fh5sdgowtnrywynkjhbafgbozq",
+      "lifecycle_state": "ACTIVE",
+      "shape_name": "MySQL.VM.Standard.E3.16.512GB",
+      "time_created": "2018-09-21T10:00:00+00:00",
+      "time_updated": null,
+      "type": "DEFAULT"
+    },
+    {
+      "compartment_id": null,
+      "defined_tags": null,
       "description": "Default configuration for the MySQL.VM.Standard.E3.2.32GB MySQL Shape",
       "display_name": "MySQL.VM.Standard.E3.2.32GB.Built-in",
       "freeform_tags": null,
@@ -6865,6 +6878,12 @@
       "id": "me-jeddah-1",
       "key": "JED",
       "name": "me-jeddah-1"
+    },
+    {
+      "display_name": "SA Santiago",
+      "id": "sa-santiago-1",
+      "key": "SCL",
+      "name": "sa-santiago-1"
     },
     {
       "display_name": "SA Saopaulo",

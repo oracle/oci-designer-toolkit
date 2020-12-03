@@ -41,7 +41,7 @@ class FileStorageSystem extends OkitArtifact {
         this.convert();
         // Expose subnet_id for the first Mount target at the top level
         delete this.subnet_id;
-        Object.defineProperty(this, 'subnet_id', { get: function() {return this.primary_mount_target.subnet_id;}, enumerable: false });
+        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
     }
 
 
