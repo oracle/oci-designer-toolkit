@@ -2480,25 +2480,15 @@ class OkitArtefactView {
         svg.on("contextmenu", function () {
             d3.event.preventDefault();
             d3.event.stopPropagation();
-            let clear_timer = undefined;
             const canvas_position = $(jqId("canvas-div")).offset();
             const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX - 5};
             $(jqId("context-menu")).empty();
             $(jqId("context-menu")).css(position);
             const contextmenu = d3.select(d3Id("context-menu"));
             contextmenu.on('mouseenter', function () {
-                    //if (clear_timer) {
-                    //    clearTimeout(clear_timer);
-                    //}
                     $(jqId("context-menu")).removeClass("hidden");
                 })
                 .on('mouseleave', function () {
-                    //if (clear_timer) {
-                    //    clearTimeout(clear_timer);
-                    //}
-                    //clear_timer = setTimeout(function () {
-                    //    $(jqId("context-menu")).addClass("hidden");
-                    //}, 1500);
                     $(jqId("context-menu")).addClass("hidden");
                 });
 
