@@ -41,12 +41,6 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     /*
     ** Clone Functionality
      */
-    clone() {
-        const clone = super.clone();
-        this.cloneChildren(clone);
-        return clone;
-    }
-
     cloneChildren(clone) {
         for (let child of this.children) {
             child.clone().compartment_id = clone.id;

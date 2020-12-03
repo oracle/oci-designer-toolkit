@@ -226,21 +226,6 @@ class OkitJsonView {
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
-    pasteAutonomousDatabase(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Subnet.getArtifactReference()) {
-            clone.subnet_id = drop_target.id;
-            clone.compartment_id = drop_target.compartment_id;
-        } else {
-            clone.compartment_id = drop_target.id;
-        }
-        this.okitjson.autonomous_databases.push(clone);
-        this.update(this.okitjson);
-    }
 
     // Block Storage
     dropBlockStorageVolumeView(target) {
@@ -306,18 +291,6 @@ class OkitJsonView {
                 self.update(this.okitjson);
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
-    pasteBlockStorageVolume(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Compartment.getArtifactReference()) {
-            clone.compartment_id = drop_target.id;
-        }
-        this.okitjson.block_storage_volumes.push(clone);
-        this.update(this.okitjson);
     }
 
     // Compartment
@@ -423,18 +396,6 @@ class OkitJsonView {
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
-    pasteCustomerPremiseEquipment(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Compartment.getArtifactReference()) {
-            clone.compartment_id = drop_target.id;
-        }
-        this.okitjson.customer_premise_equipments.push(clone);
-        this.update(this.okitjson);
-    }
 
     // Database System
     dropDatabaseSystemView(target) {
@@ -504,19 +465,6 @@ class OkitJsonView {
                 self.update(this.okitjson);
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
-    pasteDatabaseSystem(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Subnet.getArtifactReference()) {
-            clone.subnet_id = drop_target.id;
-            clone.compartment_id = drop_target.compartment_id;
-        }
-        this.okitjson.database_systems.push(clone);
-        this.update(this.okitjson);
     }
 
     // Dynamic Routing Gateway
@@ -686,19 +634,6 @@ class OkitJsonView {
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
-    pasteFileStorageSystem(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Subnet.getArtifactReference()) {
-            clone.subnet_id = drop_target.id;
-            clone.compartment_id = drop_target.compartment_id;
-        }
-        this.okitjson.file_storage_systems.push(clone);
-        this.update(this.okitjson);
-    }
 
     // Instance
     dropInstanceView(target) {
@@ -791,21 +726,6 @@ class OkitJsonView {
                 self.update(this.okitjson);
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
-    pasteInstance(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Subnet.getArtifactReference()) {
-            clone.subnet_id = drop_target.id;
-            clone.compartment_id = drop_target.compartment_id;
-        } else {
-            clone.compartment_id = drop_target.id;
-        }
-        this.okitjson.instances.push(clone);
-        this.update(this.okitjson);
     }
 
     // InstancePool
@@ -992,18 +912,6 @@ class OkitJsonView {
                 self.update(this.okitjson);
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
-    pasteIPSecConnection(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Compartment.getArtifactReference()) {
-            clone.compartment_id = drop_target.id;
-        }
-        this.okitjson.ipsec_connections.push(clone);
-        this.update(this.okitjson);
     }
 
     // Load Balancer
@@ -1214,19 +1122,6 @@ class OkitJsonView {
                 self.update(this.okitjson);
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
-    pasteMySQLDatabaseSystem(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Subnet.getArtifactReference()) {
-            clone.subnet_id = drop_target.id;
-            clone.compartment_id = drop_target.compartment_id;
-        }
-        this.okitjson.mysql_database_systems.push(clone);
-        this.update(this.okitjson);
     }
 
     // NAT Gateway
@@ -1482,18 +1377,6 @@ class OkitJsonView {
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
-    pasteObjectStorageBucket(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Compartment.getArtifactReference()) {
-            clone.compartment_id = drop_target.id;
-        }
-        this.okitjson.object_storage_buckets.push(clone);
-        this.update(this.okitjson);
-    }
 
     // OkeCluster
     dropOkeClusterView(target) {
@@ -1564,19 +1447,6 @@ class OkitJsonView {
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
     }
-    pasteOkeCluster(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
-            clone.vcn_id = drop_target.id;
-            clone.compartment_id = drop_target.compartment_id;
-            this.okitjson.oke_clusters.push(clone);
-        }
-        this.update(this.okitjson);
-    }
 
     // RemotePeeringConnection
     dropRemotePeeringConnectionView(target) {
@@ -1644,18 +1514,6 @@ class OkitJsonView {
                 self.update(this.okitjson);
             });
         $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-    }
-    pasteRemotePeeringConnection(drop_target) {
-        const clone = this.copied_artefact.artefact.clone();
-        clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        if (drop_target.getArtifactReference() === Compartment.getArtifactReference()) {
-            clone.compartment_id = drop_target.id;
-        }
-        this.okitjson.remote_peering_connections.push(clone);
-        this.update(this.okitjson);
     }
 
     // Route Table
@@ -1912,7 +1770,6 @@ class OkitJsonView {
             this.subnets.push(new SubnetView(new Subnet(artefact, this.okitjson), this));
         }
     }
-    pasteSubnet() {}
     loadSubnetsSelect(select_id, empty_option=false) {
         $(jqId(select_id)).empty();
         const subnet_select = $(jqId(select_id));
@@ -3423,6 +3280,12 @@ class OkitContainerArtefactView extends OkitArtefactView {
 
     paste(drop_target) {
         const clone = super.paste(drop_target);
+        this.cloneChildren(clone);
+        return clone;
+    }
+
+    clone() {
+        const clone = super.clone();
         this.cloneChildren(clone);
         return clone;
     }
