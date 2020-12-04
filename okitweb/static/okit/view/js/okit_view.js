@@ -20,9 +20,6 @@ class OkitJsonView {
         this.clear();
         // Load Model to View
         this.load();
-        // Set Copy variable
-        this.copied_artefact = null;
-        this.paste_count = 0;
     }
 
     get small_grid_size() {return 8;}
@@ -1279,22 +1276,6 @@ class OkitArtefactView {
 
     static new(artefact, json_view) {return new this(artefact, json_view);}
 
-    // TODO: Fix for composite
-    cutOrig() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.json_view.is_cut = true; this.deleteSvg();}
-
-    copyOrig() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.json_view.is_cut = false;}
-
-    pasteOrig(drop_target) {
-        const clone = this.json_view.copied_artefact.artefact.clone();
-        if (!this.json_view.is_cut) clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
-        clone.id = clone.okit_id;
-        drop_target.updateCloneIds(clone);
-        this.json_model_list.push(clone);
-        return clone;
-    }
-
     cut() {OkitArtefactView.cut_copy_paste.resource = this; OkitArtefactView.cut_copy_paste.paste_count = 0; this.json_view.is_cut = true; this.deleteSvg();}
 
     copy() {OkitArtefactView.cut_copy_paste.resource = this; OkitArtefactView.cut_copy_paste.paste_count = 0; this.json_view.is_cut = false;}
@@ -1304,34 +1285,6 @@ class OkitArtefactView {
         if (!OkitArtefactView.cut_copy_paste.is_cut) clone.display_name += 'Copy';
         if (OkitArtefactView.cut_copy_paste.paste_count > 0) {clone.display_name += `-${OkitArtefactView.cut_copy_paste.paste_count}`;}
         OkitArtefactView.cut_copy_paste.paste_count += 1;
-        clone.id = clone.okit_id;
-        drop_target.updateCloneIds(clone);
-        this.json_model_list.push(clone);
-        return clone;
-    }
-
-    cutNew(parent) {
-        const clone = this.artefact.clone();
-        parent ? parent.children ? parent.children.push(clone) : parent.children = [clone]: OkitArtefactView.cut_copy_paste.resource = clone;
-        for (let child of this.children) {
-            child.cut(clone);
-        }
-        this.delete();
-    }
-
-    copyNew(parent) {
-        const clone = this.artefact.clone();
-        parent ? parent.children ? parent.children.push(clone) : parent.children = [clone]: OkitArtefactView.cut_copy_paste.resource = clone;
-        for (let child of this.children) {
-            child.copy(clone);
-        }
-    }
-
-    pasteNew(drop_target) {
-        const clone = this.json_view.copied_artefact.artefact.clone();
-        if (!this.json_view.is_cut) clone.display_name += 'Copy';
-        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
-        this.paste_count += 1;
         clone.id = clone.okit_id;
         drop_target.updateCloneIds(clone);
         this.json_model_list.push(clone);
