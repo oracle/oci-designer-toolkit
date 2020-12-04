@@ -986,6 +986,8 @@ class OkitJsonView {
 ** Simple Artefact View Class for all artefacts that are not Containers
  */
 class OkitArtefactView {
+    static cut_copy_paste = {resource: undefined, paste_count: 0, is_cut: false};
+
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
         this.collapsed = false;
@@ -1267,18 +1269,65 @@ class OkitArtefactView {
     get new_function() {return `new${this.getArtifactReference().split(' ').join('')}`}
     get cloneable() {return true;}
     get moveable() {return true;}
-    get pasteable() {return this.json_view.copied_artefact ? this.json_view.copied_artefact.getDropTargets().includes(this.getArtifactReference()) : false;}
+    get pasteableOrig() {return this.json_view.copied_artefact ? this.json_view.copied_artefact.getDropTargets().includes(this.getArtifactReference()) : false;}
+    get pasteable() {return OkitArtefactView.cut_copy_paste.resource ? OkitArtefactView.cut_copy_paste.resource.getDropTargets().includes(this.getArtifactReference()) : false;}
+    get pasteableNew() {
+        return OkitArtefactView.cut_copy_paste.resource ? OkitArtefactView.cut_copy_paste.resource.getDropTargets().includes(this.getArtifactReference()) : false;
+    }
 
     getArtefact() {return this.artefact;}
 
     static new(artefact, json_view) {return new this(artefact, json_view);}
 
     // TODO: Fix for composite
-    cut() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.json_view.is_cut = true; this.delete();}
+    cutOrig() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.json_view.is_cut = true; this.deleteSvg();}
 
-    copy() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.json_view.is_cut = false;}
+    copyOrig() {this.json_view.copied_artefact = this; this.json_view.paste_count = 0; this.json_view.is_cut = false;}
+
+    pasteOrig(drop_target) {
+        const clone = this.json_view.copied_artefact.artefact.clone();
+        if (!this.json_view.is_cut) clone.display_name += 'Copy';
+        if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
+        this.paste_count += 1;
+        clone.id = clone.okit_id;
+        drop_target.updateCloneIds(clone);
+        this.json_model_list.push(clone);
+        return clone;
+    }
+
+    cut() {OkitArtefactView.cut_copy_paste.resource = this; OkitArtefactView.cut_copy_paste.paste_count = 0; this.json_view.is_cut = true; this.deleteSvg();}
+
+    copy() {OkitArtefactView.cut_copy_paste.resource = this; OkitArtefactView.cut_copy_paste.paste_count = 0; this.json_view.is_cut = false;}
 
     paste(drop_target) {
+        const clone = OkitArtefactView.cut_copy_paste.resource.artefact.clone();
+        if (!OkitArtefactView.cut_copy_paste.is_cut) clone.display_name += 'Copy';
+        if (OkitArtefactView.cut_copy_paste.paste_count > 0) {clone.display_name += `-${OkitArtefactView.cut_copy_paste.paste_count}`;}
+        OkitArtefactView.cut_copy_paste.paste_count += 1;
+        clone.id = clone.okit_id;
+        drop_target.updateCloneIds(clone);
+        this.json_model_list.push(clone);
+        return clone;
+    }
+
+    cutNew(parent) {
+        const clone = this.artefact.clone();
+        parent ? parent.children ? parent.children.push(clone) : parent.children = [clone]: OkitArtefactView.cut_copy_paste.resource = clone;
+        for (let child of this.children) {
+            child.cut(clone);
+        }
+        this.delete();
+    }
+
+    copyNew(parent) {
+        const clone = this.artefact.clone();
+        parent ? parent.children ? parent.children.push(clone) : parent.children = [clone]: OkitArtefactView.cut_copy_paste.resource = clone;
+        for (let child of this.children) {
+            child.copy(clone);
+        }
+    }
+
+    pasteNew(drop_target) {
         const clone = this.json_view.copied_artefact.artefact.clone();
         if (!this.json_view.is_cut) clone.display_name += 'Copy';
         if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
@@ -1504,9 +1553,9 @@ class OkitArtefactView {
                         .attr('href', 'javascript:void(0)')
                         .text('Cut')
                         .on('click', function () {
-                            //self.json_view[self.move_function](self.id);
+                            OkitArtefactView.cut_copy_paste = {paste_count: 0, is_cut: true};
                             self.cut();
-                            self.json_view.update(self.okit_json);
+                            //self.json_view.update(self.okit_json);
                             $(jqId("context-menu")).addClass("hidden");
                         });
                 }
@@ -1528,6 +1577,7 @@ class OkitArtefactView {
                     .attr('href', 'javascript:void(0)')
                     .text('Copy')
                     .on('click', function () {
+                        OkitArtefactView.cut_copy_paste = {paste_count: 0, is_cut: false};
                         self.copy();
                         $(jqId("context-menu")).addClass("hidden");
                     });
@@ -1538,10 +1588,10 @@ class OkitArtefactView {
                 ul.append('li').append('a')
                     .attr('class', 'parent-item')
                     .attr('href', 'javascript:void(0)')
-                    .text(`Paste ${self.json_view.copied_artefact.getArtifactReference()} ${self.json_view.copied_artefact.display_name}`)
+                    .text(`Paste ${OkitArtefactView.cut_copy_paste.resource.getArtifactReference()} ${OkitArtefactView.cut_copy_paste.resource.display_name}`)
                     .on('click', function () {
-                        //self.json_view[self.json_view.copied_artefact.paste_function](self);
-                        self.json_view.copied_artefact.paste(self);
+                        OkitArtefactView.cut_copy_paste.resource.paste(self);
+                        if (OkitArtefactView.cut_copy_paste.is_cut) OkitArtefactView.cut_copy_paste.resource.delete();
                         self.json_view.update(self.okit_json);
                         $(jqId("context-menu")).addClass("hidden");
                     });
@@ -2399,7 +2449,6 @@ class OkitContainerArtefactView extends OkitArtefactView {
     // ----- Label
     get show_label() {return this.collapsed ? super.show_label : false;}
     // ---- Okit View Functions
-    get moveable() {return false;}
 
     paste(drop_target) {
         const clone = super.paste(drop_target);
