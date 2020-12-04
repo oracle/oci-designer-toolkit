@@ -5,7 +5,7 @@
 ## Version 0.15.0 
 **Release Date**: 9th December 2020
 ### Features
-1. Clone functionality for simple Artefacts, i.e. not container Artefacts
+1. Cut / Copy / Paste / Clone functionality added.
 2. Updated Developer Guide on creating new Artefacts.
 3. Artefact Skeleton generator for developer kick start.
 
