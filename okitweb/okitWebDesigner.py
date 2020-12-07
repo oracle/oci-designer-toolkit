@@ -267,6 +267,9 @@ def generate(language):
                 git_commit_msg = request.json['git_repository_commitmsg']
                 destination = '/okit/okitweb/static/okit/templates/tmpgit'
 
+                if os.path.exists(destination):
+                    os.system("rm -rf " + destination)
+
                 repo = Repo.clone_from(git_url, destination, branch=git_branch, no_single_branch=True)
                 repo.remotes.origin.pull()
 
@@ -392,6 +395,9 @@ def loadfromgit():
             destination = '/okit/okitweb/static/okit/templates/git'
             git_url = request.json['git_repository']
             logger.debug('JSON     : {0:s}'.format(str(git_url)))
+
+            if os.path.exists(destination):
+                os.system("rm -rf " + destination)
 
             repo = Repo.clone_from(git_url, destination, branch='master')
             repo.remotes.origin.pull()
