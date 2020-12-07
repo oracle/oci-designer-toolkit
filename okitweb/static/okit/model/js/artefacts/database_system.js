@@ -63,7 +63,7 @@ class DatabaseSystem extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new DatabaseSystem(this, this.getOkitJson());
+        return new DatabaseSystem(JSON.clone(this), this.getOkitJson());
     }
 
 

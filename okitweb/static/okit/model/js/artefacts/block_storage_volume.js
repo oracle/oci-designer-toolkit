@@ -35,7 +35,7 @@ class BlockStorageVolume extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new BlockStorageVolume(this, this.getOkitJson());
+        return new BlockStorageVolume(JSON.clone(this), this.getOkitJson());
     }
 
 

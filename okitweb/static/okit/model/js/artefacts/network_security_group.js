@@ -28,7 +28,7 @@ class NetworkSecurityGroup extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new NetworkSecurityGroup(this, this.getOkitJson());
+        return new NetworkSecurityGroup(JSON.clone(this), this.getOkitJson());
     }
 
 

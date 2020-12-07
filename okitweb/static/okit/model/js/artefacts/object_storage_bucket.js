@@ -30,7 +30,7 @@ class ObjectStorageBucket extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new ObjectStorageBucket(this, this.getOkitJson());
+        return new ObjectStorageBucket(JSON.clone(this), this.getOkitJson());
     }
 
 

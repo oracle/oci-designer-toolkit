@@ -40,6 +40,7 @@ def processWorkflow(args):
         jinja2_variables["svg_id"] = svg_id
         jinja2_variables["model_class_name"] = model_class_name
         jinja2_variables["html_name"] = standardised_name
+        jinja2_variables["artefact_simple_name"] = standardised_name
         jinja2_variables["artefact_json_list"] = artefact_json_list
         jinja2_variables["name_prefix"] = name_prefix
         # -- Render Templates
@@ -91,7 +92,7 @@ def processWorkflow(args):
         jinja2_template = jinja2_environment.get_template("artefact_facade.py.jinja2")
         rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
-        filename = "../visualiser/facade/oci{0!s:s}.py".format(model_class_name)
+        filename = "../visualiser/facades/oci{0!s:s}.py".format(model_class_name)
         writeFile(filename, rendered)
     return
 
@@ -115,6 +116,9 @@ def readargs(opts, args):
             moduleargs['toolsdir'] = arg
 
     return moduleargs
+
+def usage():
+    print('python3 okitCodeSkeletonGenerator.py --name "<Resource Name>"')
 
 
 # Main processing function

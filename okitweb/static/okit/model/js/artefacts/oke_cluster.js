@@ -64,7 +64,7 @@ class OkeCluster extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new OkeCluster(this, this.getOkitJson());
+        return new OkeCluster(JSON.clone(this), this.getOkitJson());
     }
 
     getNamePrefix() {

@@ -140,10 +140,10 @@ def designer():
         logger.debug('dirnames : {0!s:s}'.format(dirnames))
         logger.debug('filenames : {0!s:s}'.format(filenames))
         if os.path.basename(dirpath) != 'palette':
-            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
-            svg_icon_groups[os.path.basename(dirpath)] = filenames
+            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames if f.endswith(".svg")])
+            svg_icon_groups[os.path.basename(dirpath)] = [f for f in filenames if f.endswith(".svg")]
         else:
-            svg_files.extend(filenames)
+            svg_files.extend([f for f in filenames if f.endswith(".svg")])
     logger.debug('Files Walk : {0!s:s}'.format(svg_files))
     logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
 
@@ -178,8 +178,8 @@ def designer():
         logger.debug('filenames : {0!s:s}'.format(filenames))
         relpath = os.path.relpath(dirpath, rootdir)
         logger.debug('Relative Path : {0!s:s}'.format(relpath))
-        template_files.extend([os.path.join(relpath, f) for f in filenames])
-        template_dirs[relpath] = filenames
+        template_files.extend([os.path.join(relpath, f) for f in filenames if f.endswith(".json")])
+        template_dirs[relpath] = [f for f in filenames if f.endswith(".json")]
     logger.debug('Files Walk : {0!s:s}'.format(template_files))
     logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
 

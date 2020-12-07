@@ -356,7 +356,7 @@ drop location for the Artefact. in the case of **Block Storage Volume** this wil
 
 - get parent_id()
 - get parent()
-- static getDropTargets()
+- static getDropTargets() - The new Resource getArtifactReference() will need to be added to the parent Resource position method (e.g. getLeftArtifacts() of Compartment for **Block Storage Volume**)
 
 In addition we will add a functionality required to highlight associated Artefacts (for Block Storage Volume this will be 
 Instance it is attached to) by creating the following functions:
@@ -1006,7 +1006,7 @@ testing we should mount the local directories during the run command and this ca
 docker run -it --rm -p 80:80 --name okit --hostname okit \
     -v ${OCI_CONFIG_DIR}:/root/.oci \
     -v ${OKIT_GITHUB}/okitweb:/okit/okitweb \
-    -v ${OKIT_GITHUB}/skeleton:/okit/skeleton \
+    -v ${OKIT_GITHUB}/skeletons:/okit/skeletons \
     -v ${OKIT_GITHUB}/visualiser:/okit/visualiser \
     -v ${OKIT_WORKSPACE}/log:/okit/log \
     -v ${OKIT_WORKSPACE}/dropdown.json:/okit/okitweb/static/okit/json/dropdown.json  okit'
