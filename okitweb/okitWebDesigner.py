@@ -178,8 +178,8 @@ def designer():
         logger.debug('filenames : {0!s:s}'.format(filenames))
         relpath = os.path.relpath(dirpath, rootdir)
         logger.debug('Relative Path : {0!s:s}'.format(relpath))
-        template_files.extend([os.path.join(relpath, f) for f in filenames])
-        template_dirs[relpath] = filenames
+        template_files.extend([os.path.join(relpath, f) for f in filenames if f.endswith(".json")])
+        template_dirs[relpath] = [f for f in filenames if f.endswith(".json")]
     logger.debug('Files Walk : {0!s:s}'.format(template_files))
     logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
 
