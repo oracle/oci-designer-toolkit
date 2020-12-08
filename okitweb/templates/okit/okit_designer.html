@@ -9,7 +9,7 @@
            onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
 {%- endmacro %}
 
-{% macro template_menu(categories) %}
+{% macro template_menu(categories) -%}
     {% for name, category in categories.items() %}
         {% if name == '.' %}
             {% if category['templates']|length > 0 %}
@@ -30,7 +30,7 @@
             </li>
         {% endif %}
     {% endfor %}
-{% endmacro %}
+{%- endmacro %}
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
@@ -148,20 +148,8 @@
                     </li>
                 {% endif %}
             {% endfor %}
+            <!--{{ template_menu(okit_template_categories) }}-->
         </ul>
-
-        <!--ul class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Template Menu"></div>
-                        <span>Templates</span>
-                    </span>
-                </div>
-            </li>
-            {{ template_menu(okit_template_categories) }}
-        </ul-->
-
         <!--ul class="okit-navigation-sub-list">
             <li>
                 <div>
