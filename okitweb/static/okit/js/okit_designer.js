@@ -1108,7 +1108,7 @@ function handleLoadFromGIT(evt) {
     let git_repository_filename_select = d3.select(d3Id('git_repository'));
 
     for (let git_setting of okitGitConfig.gitsections) {
-        git_repository_filename_select.append('option').attr('value', git_setting['url']).text(git_setting['label']);
+        git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
     }
 
     // Load Files - GitFilename
@@ -1127,41 +1127,45 @@ function handleLoadFromGIT(evt) {
         .attr('id', 'load_from_git_button')
         .attr('type', 'button')
         .text('Submit');
-    save_button.on("click", handleLoadFromGITExec);
+    save_button.on("click", handleLoaddesignFromGITExec);
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 
 function handleLoadFromGITExec(e) {
     okitJsonModel.git_repository = $(jqId('git_repository')).val();
     okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
-    if (okitJsonModel.git_repository_filename == 'Retrieving') {
-        $.ajax({
-            type: 'post',
-            url: 'loadfromgit',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(okitJsonModel),
-            success: function (resp) {
-                console.info('Response : ' + resp);
-                response = JSON.parse(resp)
-                $(jqId('git_repository_filename')).empty();
-                let git_repository_filename_select = d3.select(d3Id('git_repository_filename'));
-                for (file of response['fileslist']) {
-                    filename = file.split("/").splice(-1)
-                    filelabel = filename.toString().replace(/.json|.JSON/, '')
-                    git_repository_filename_select.append('option').attr('value', file).text(filelabel);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.info('Status : ' + status)
-                console.info('Error : ' + error)
-                // Hide modal dialog
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+    $.ajax({
+        type: 'post',
+        url: 'loadfromgit',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(okitJsonModel),
+        success: function (resp) {
+            console.info('Response : ' + resp);
+            response = JSON.parse(resp)
+            $(jqId('git_repository_filename')).empty();
+            let git_repository_filename_select = d3.select(d3Id('git_repository_filename'));
+            for (file of response['fileslist']) {
+                filename = file.split("/").splice(-1)
+                filelabel = filename.toString().replace(/.json|.JSON/, '')
+                git_repository_filename_select.append('option').attr('value', file).text(filelabel);
             }
-        });
-    } else {
+        },
+        error: function (xhr, status, error) {
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            // Hide modal dialog
+            $(jqId('modal_dialog_wrapper')).addClass('hidden');
+        }
+    });
+
+}
+
+function handleLoaddesignFromGITExec(e) {
+    okitJsonModel.git_repository = $(jqId('git_repository')).val();
+    okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
+    if (okitJsonModel.git_repository_filename != 'Retrieving' && okitJsonModel.git_repository_filename != "") {
         loadTemplate(okitJsonModel.git_repository_filename)
-        // Hide modal dialog
         $(jqId('modal_dialog_wrapper')).addClass('hidden');
     }
 }
