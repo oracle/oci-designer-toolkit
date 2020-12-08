@@ -393,18 +393,23 @@ def loadfromgit():
     if request.method == 'POST':
         try:
             destination = '/okit/okitweb/static/okit/templates/git'
-            git_url = request.json['git_repository']
+            get_selection_details = request.json['git_repository']
+            git_url, git_branch = get_selection_details.split('*')
             logger.debug('JSON     : {0:s}'.format(str(git_url)))
 
             if os.path.exists(destination):
                 os.system("rm -rf " + destination)
 
-            repo = Repo.clone_from(git_url, destination, branch='master')
+            repo = Repo.clone_from(git_url, destination, branch=git_branch, no_single_branch=True)
             repo.remotes.origin.pull()
+
             okitgitsource = '/okit/okitweb/static/okit/templates/okit_git/'
             files = glob.iglob(os.path.join(destination, "*.json"))
 
             if not os.path.exists(okitgitsource):
+                os.mkdir(okitgitsource)
+            else:
+                os.system("rm -rf " + okitgitsource)
                 os.mkdir(okitgitsource)
 
             for file in files:
