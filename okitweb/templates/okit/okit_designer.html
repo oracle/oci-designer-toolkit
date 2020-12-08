@@ -4,17 +4,28 @@
 -->
 {% extends "okit/okit_console.html" %}
 
-{% macro template_menu_item(categories) %}
-    {% for category in categories %}
-        {% if category['templates']|length > 0 %}
-            {% for okit_template in category['templates'] %}
-                <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
-                       onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
-            {% endfor %}
-        {% elif category['children']|length > 0 %}
+{% macro template_menu_item(okit_template) -%}
+    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
+           onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+{%- endmacro %}
+
+{% macro template_menu(categories) %}
+    {% for name, category in categories.items() %}
+        {% if name == '.' %}
+            {% if category['templates']|length > 0 %}
+                {% for okit_template in category['templates'] %}
+                    {{ template_menu_item(okit_template) }}
+                {% endfor %}
+            {% endif %}
+        {% else %}
             <li id="{{ category['name'] }}" class="sub-header-item dropdown"><span>{{ category['name'] }}</span>
                 <ul class="dropdown-content">
-                    {{ template_menu_item(category['children']) }}
+                    {% if category['children'].values()|length > 0 %}
+                        {{ template_menu(category['children']) }}
+                    {% endif %}
+                    {% for okit_template in category['templates'] %}
+                        {{ template_menu_item(okit_template) }}
+                    {% endfor %}
                 </ul>
             </li>
         {% endif %}
@@ -138,6 +149,19 @@
                 {% endif %}
             {% endfor %}
         </ul>
+
+        <!--ul class="okit-navigation-sub-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Template Menu"></div>
+                        <span>Templates</span>
+                    </span>
+                </div>
+            </li>
+            {{ template_menu(okit_template_categories) }}
+        </ul-->
+
         <!--ul class="okit-navigation-sub-list">
             <li>
                 <div>
