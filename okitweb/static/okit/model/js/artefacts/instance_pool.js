@@ -49,7 +49,7 @@ class InstancePool extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new InstancePool(this, this.getOkitJson());
+        return new InstancePool(JSON.clone(this), this.getOkitJson());
     }
 
     getNamePrefix() {

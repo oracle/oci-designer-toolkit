@@ -24,50 +24,13 @@ class InstanceView extends OkitDesignerArtefactView {
     get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // --- Dimensions
     // TODO: Decide if show attachments is required
-    get minimum_dimensions_orig() {
-        let minimum_dimensions = super.minimum_dimensions;
-        let attachments = false;
-        for (let id of this.block_storage_volume_ids) {
-            const dimensions = this.json_view.getBlockStorageVolume(id).dimensions();
-            minimum_dimensions.width += dimensions.width + positional_adjustments.padding.x;
-            attachments = true;
-        }
-        for (let vnic of this.getVnicAttachments()) {
-            const dimensions = this.json_view.getSubnet(vnic.subnet_id).collapsed_dimensions;
-            minimum_dimensions.width += dimensions.width + positional_adjustments.padding.x;
-            attachments = true;
-        }
-        if (attachments) {minimum_dimensions.height += this.icon_height;}
-        return minimum_dimensions;
-    }
-    get dimensions1() {
-        console.log('Getting Dimensions of ' + this.getArtifactReference() + ' : ' + this.id);
-        let dimensions = this.minimum_dimensions;
-        // Calculate Size based on Child Artifacts
-        // Process Bottom Edge Artifacts
-        let offset = this.getFirstBottomEdgeChildOffset();
-        let bottom_edge_dimensions = {width: offset.dx, height: offset.dy};
-        // Block Storage
-        bottom_edge_dimensions.width += Math.round(this.block_storage_volume_ids.length * positional_adjustments.padding.x);
-        bottom_edge_dimensions.width += Math.round(this.block_storage_volume_ids.length * positional_adjustments.spacing.x);
-        // Virtual Network Interface Cards
-        bottom_edge_dimensions.width += Math.round(this.vnics.length * positional_adjustments.padding.x);
-        bottom_edge_dimensions.width += Math.round(this.vnics.length * positional_adjustments.spacing.x);
-        dimensions.width  = Math.max(dimensions.width, bottom_edge_dimensions.width);
-        dimensions.height = Math.max(dimensions.height, bottom_edge_dimensions.height);
-        // Check size against minimum
-        dimensions.width  = Math.max(dimensions.width,  this.minimum_dimensions.width);
-        dimensions.height = Math.max(dimensions.height, this.minimum_dimensions.height);
-        console.info('Overall Dimensions       : ' + JSON.stringify(dimensions));
-        console.log();
-        return dimensions;
-    }
     // ---- Icon
     get icon_definition_id() {return this.shape.startsWith('BM.') ? 'BareMetalInstanceSvg' : super.icon_definition_id;}
     // ---- Text
     get summary_tooltip() {return `Name: ${this.display_name} \nAvailability Domain: ${this.artefact.availability_domain} \nShape: ${this.artefact.shape} \nOS: ${this.source_details.os} ${this.source_details.version}`;}
-    // Test Functions variables
+    // Direct Subnet Access
     get subnet_id() {return this.artefact.primary_vnic.subnet_id;}
+    set subnet_id(id) {this.artefact.primary_vnic.subnet_id = id;}
 
     /*
      ** SVG Processing

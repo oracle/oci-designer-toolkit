@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.14.1" \
+      "version"="0.15.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
@@ -42,11 +42,12 @@ RUN yum install -y \
 # Install required python modules
  && pip3 install --no-cache-dir \
         flask==1.1.1 \
+        gitpython==3.1.11 \
         gunicorn==20.0.4 \
         oci==2.22.0 \
         pandas==1.1.2 \
         python-magic==0.4.18 \
-        pyyaml==5.2 \
+        pyyaml==5.3.1 \
         requests==2.24.0 \
         xlsxwriter==1.3.6 \
 # Create Workspace

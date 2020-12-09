@@ -4,6 +4,34 @@
 -->
 {% extends "okit/okit_console.html" %}
 
+{% macro template_menu_item(okit_template) -%}
+    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
+           onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+{%- endmacro %}
+
+{% macro template_menu(categories) -%}
+    {% for name, category in categories.items() %}
+        {% if name == '.' %}
+            {% if category['templates']|length > 0 %}
+                {% for okit_template in category['templates'] %}
+                    {{ template_menu_item(okit_template) }}
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            <li id="{{ category['name'] }}" class="sub-header-item dropdown"><span>{{ category['name'] }}</span>
+                <ul class="dropdown-content">
+                    {% if category['children'].values()|length > 0 %}
+                        {{ template_menu(category['children']) }}
+                    {% endif %}
+                    {% for okit_template in category['templates'] %}
+                        {{ template_menu_item(okit_template) }}
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endif %}
+    {% endfor %}
+{%- endmacro %}
+
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
@@ -103,6 +131,7 @@
                     </span>
                 </div>
             </li>
+            <!--{{ template_menu(okit_template_categories) }}-->
             {% for template_group in okit_templates_groups %}
                 {% if template_group['name'] == '.' %}
                     {% for okit_template in template_group['templates'] %}
@@ -120,6 +149,7 @@
                     </li>
                 {% endif %}
             {% endfor %}
+            <!--li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li-->
         </ul>
         <!--ul class="okit-navigation-sub-list">
             <li>
@@ -169,13 +199,14 @@
                 <span>Resource Manager</span>
                 <ul class="dropdown-content">
                     <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
-                    <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerGitLab()">Git</a></li>
+                    <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Local Zip</a></li>
+                    <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerGit()">Git</a></li>
                 </ul>
             </li-->
             <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
             <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li>
             <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
-            <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerGitLab()">Resource Manager VCS</a></li>
+            <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Resource Manager VCS</a></li>
         </ul>
         <ul class="okit-navigation-sub-list">
             <li>

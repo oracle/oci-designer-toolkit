@@ -28,7 +28,7 @@ class CustomerPremiseEquipment extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new CustomerPremiseEquipment(this, this.getOkitJson());
+        return new CustomerPremiseEquipment(JSON.clone(this), this.getOkitJson());
     }
 
 

@@ -28,7 +28,7 @@ class RouteTable extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new RouteTable(this, this.getOkitJson());
+        return new RouteTable(JSON.clone(this), this.getOkitJson());
     }
 
 

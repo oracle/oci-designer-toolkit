@@ -18,6 +18,9 @@ import shutil
 import tempfile
 import time
 import urllib
+import glob
+import ast
+from git import Repo
 from flask import Blueprint
 from flask import render_template
 from flask import request
@@ -66,6 +69,17 @@ def readConfigFileSections(config_file='~/.oci/config'):
     else:
         config_sections = ['Instance Principal']
     return config_sections
+
+def readConfigFileSettings(config_file='~/.oci/settings'):
+    logger.debug('Setting File {0!s:s}'.format(config_file))
+    abs_config_file = os.path.expanduser(config_file)
+    logger.debug('Setting File {0!s:s}'.format(abs_config_file))
+    config = configparser.ConfigParser()
+    config.read(abs_config_file)
+    repo_list = []
+    for each_git_section in config.sections():
+        repo_list.append({'label':each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
+    return repo_list
 
 def getConfigFileValue(section, key, config_file='~/.oci/config'):
     value = ''
@@ -125,7 +139,11 @@ def designer():
     # Read Artifact Model Specific JavaScript Files
     artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
-    artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts')))
+    if os.path.exists(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')) and os.path.isdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')):
+        artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')))
+    else:
+        artefact_view_js_files = []
+    artefact_view_js_files.extend(sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts'))))
 
     # Get Palette Icon Groups / Icons
     svg_files = []
@@ -136,10 +154,10 @@ def designer():
         logger.debug('dirnames : {0!s:s}'.format(dirnames))
         logger.debug('filenames : {0!s:s}'.format(filenames))
         if os.path.basename(dirpath) != 'palette':
-            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
-            svg_icon_groups[os.path.basename(dirpath)] = filenames
+            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames if f.endswith(".svg")])
+            svg_icon_groups[os.path.basename(dirpath)] = [f for f in filenames if f.endswith(".svg")]
         else:
-            svg_files.extend(filenames)
+            svg_files.extend([f for f in filenames if f.endswith(".svg")])
     logger.debug('Files Walk : {0!s:s}'.format(svg_files))
     logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
 
@@ -174,14 +192,14 @@ def designer():
         logger.debug('filenames : {0!s:s}'.format(filenames))
         relpath = os.path.relpath(dirpath, rootdir)
         logger.debug('Relative Path : {0!s:s}'.format(relpath))
-        template_files.extend([os.path.join(relpath, f) for f in filenames])
-        template_dirs[relpath] = filenames
+        template_files.extend([os.path.join(relpath, f) for f in filenames if f.endswith(".json")])
+        template_dirs[relpath] = [f for f in filenames if f.endswith(".json")]
     logger.debug('Files Walk : {0!s:s}'.format(template_files))
     logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
 
     template_groups = []
     for key in sorted(template_dirs.keys()):
-        template_group = {'name': str(key).replace('_', ' ').title(), 'templates': []}
+        template_group = {'name': str(key).replace('_', ' ').title(), 'templates': [], 'directories': {}}
         for template_file in sorted(template_dirs[key]):
             try:
                 okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
@@ -194,11 +212,20 @@ def designer():
             except Exception as e:
                 logger.debug(e)
         template_groups.append(template_group)
-    logger.debug('Template Groups {0!s:s}'.format(template_groups))
+    logger.info('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
 
+    template_categories = {}
+    for key in sorted(template_dirs.keys()):
+        name = str(key.split('/')[0]).replace('_', ' ').title()
+        path = key
+        category = template_categories.get(name, {'path': path, 'name': '', 'templates': [], 'children': {}})
+        template_categories[name] = build_categories(path, key, category, sorted(template_dirs[key]))
+    logger.info('Categories {0!s:s}'.format(template_categories))
+    logJson(template_categories)
+
     config_sections = {"sections": readConfigFileSections()}
-    logger.info('Config Sections {0!s:s}'.format(config_sections))
+    logger.debug('Config Sections {0!s:s}'.format(config_sections))
 
     #Render The Template
     return render_template('okit/okit_designer.html',
@@ -206,7 +233,34 @@ def designer():
                            artefact_view_js_files=artefact_view_js_files,
                            palette_icon_groups=palette_icon_groups,
                            fragment_icons=fragment_icons,
-                           okit_templates_groups=template_groups)
+                           okit_templates_groups=template_groups,
+                           okit_template_categories=template_categories)
+
+
+def build_categories(path, key, category, templates):
+    category['name'] = str(key.split('/')[0]).replace('_', ' ').title()
+    if len(key.split('/')) > 1:
+        child_key = '/'.join(key.split('/')[1:])
+        child_category = category['children'].get(str(child_key.split('/')[0]).replace('_', ' ').title(), {'path': path, 'name': '', 'templates': [], 'children': {}})
+        build_categories(path, child_key, child_category, templates)
+        category['children'][str(child_key.split('/')[0]).replace('_', ' ').title()] = child_category
+    else:
+        category['templates'] = templates
+        category['templates'] = []
+        for template_file in sorted(templates):
+            try:
+                json_file = os.path.join(category['path'], template_file)
+                okit_template = {'json': json_file, 'id': json_file.replace('.', '_').replace('/', '_')}
+                filename = os.path.join(bp.static_folder, 'templates', okit_template['json'])
+                template_json = readJsonFile(filename)
+                logger.debug('Template Json : {0!s:s}'.format(template_json))
+                okit_template['title'] = template_json['title']
+                okit_template['description'] = template_json.get('description', template_json['title'])
+                category['templates'].append(okit_template)
+            except Exception as e:
+                logger.debug(e)
+    logger.info(category)
+    return category
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
@@ -227,6 +281,13 @@ def generate(language):
         use_vars = request.json.get("use_variables", True)
         try:
             destination_dir = tempfile.mkdtemp();
+            gitpush_flag = False
+            if language=='terraformtogit':
+                gitpush_flag = True
+                language = 'terraform'
+            if language=='ansibletogit':
+                gitpush_flag = True
+                language = 'ansible'
             if language == 'terraform':
                 generator = OCITerraformGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'ansible':
@@ -239,6 +300,37 @@ def generate(language):
             generator.writeFiles()
             zipname = generator.createZipArchive(os.path.join(destination_dir, language), "/tmp/okit-{0:s}".format(str(language)))
             logger.info('Zipfile : {0:s}'.format(str(zipname)))
+            if gitpush_flag:
+                get_selection_details = request.json['git_repository']
+                git_url, git_branch = get_selection_details.split('*')
+                git_file_name = request.json['git_repository_filename']
+                git_commit_msg = request.json['git_repository_commitmsg']
+                destination = '/okit/okitweb/static/okit/templates/tmpgit'
+
+                if os.path.exists(destination):
+                    os.system("rm -rf " + destination)
+
+                repo = Repo.clone_from(git_url, destination, branch=git_branch, no_single_branch=True)
+                repo.remotes.origin.pull()
+
+                copyfrom = destination_dir+'/'+language
+                copyto = destination +'/' + git_file_name
+                if os.path.exists(copyto):
+                    return "Name already exists"
+                else:
+                    os.makedirs(copyto)
+
+                for item in os.listdir(copyfrom):
+                    s = os.path.join(copyfrom, item)
+                    d = os.path.join(copyto, item)
+                    shutil.copy2(s, d)
+
+                repo.index.add(copyto)
+                repo.index.commit("commit changes from okit:" + git_commit_msg)
+                repo.remotes.origin.push(git_branch)
+                os.system("rm -rf " + destination)
+                shutil.rmtree(destination_dir)
+                return language.capitalize()+" files successfully uploaded to GIT Repository"
             shutil.rmtree(destination_dir)
             filename = os.path.split(zipname)
             logger.info('Split Zipfile : {0:s}'.format(str(filename)))
@@ -297,6 +389,14 @@ def configSections():
     else:
         return 'Unknown Method', 500
 
+@bp.route('config/appsettings', methods=(['GET']))
+def appSettings():
+    if request.method == 'GET':
+        config_settings = {"gitsections": readConfigFileSettings()}
+        logger.info('Config Settings {0!s:s}'.format(config_settings))
+        return config_settings
+    else:
+        return 'Unknown Method', 500
 
 @bp.route('config/region/<string:section>', methods=(['GET']))
 def configRegion(section):
@@ -326,4 +426,45 @@ def validateJson():
         return json.dumps(result, sort_keys=False, indent=2, separators=(',', ': '))
     else:
         return '404'
+
+@bp.route('loadfromgit', methods=(['POST']))
+def loadfromgit():
+    logger.debug('JSON     : {0:s}'.format(str(request.json)))
+    if request.method == 'POST':
+        try:
+            destination = '/okit/okitweb/static/okit/templates/git'
+            get_selection_details = request.json['git_repository']
+            git_url, git_branch = get_selection_details.split('*')
+            logger.debug('JSON     : {0:s}'.format(str(git_url)))
+
+            if os.path.exists(destination):
+                os.system("rm -rf " + destination)
+
+            repo = Repo.clone_from(git_url, destination, branch=git_branch, no_single_branch=True)
+            repo.remotes.origin.pull()
+
+            okitgitsource = '/okit/okitweb/static/okit/templates/okit_git/'
+            files = glob.iglob(os.path.join(destination, "*.json"))
+
+            if not os.path.exists(okitgitsource):
+                os.mkdir(okitgitsource)
+            else:
+                os.system("rm -rf " + okitgitsource)
+                os.mkdir(okitgitsource)
+
+            for file in files:
+                if os.path.isfile(file):
+                    shutil.copy2(file, okitgitsource)
+            os.system("rm -rf " + destination)
+
+            files = list(glob.iglob(os.path.join(okitgitsource, "*.json")))
+            files_list = [f.replace("okit/okitweb/", "") for f in files]
+            logger.debug('JSON     : {0:s}'.format(str(request.json)))
+            logger.debug('Files Walk : {0!s:s}'.format(files_list))
+            result = {"fileslist": files_list}
+            logger.info(result)
+            return json.dumps(result)
+        except Exception as e:
+            logger.exception(e)
+            return str(e), 500
 

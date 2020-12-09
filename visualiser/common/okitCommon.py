@@ -162,6 +162,15 @@ def writePythonFile(python_file, contents):
         f.write('{0:s}\n'.format(contents))
     return
 
+def writeFile(filename, contents):
+    logger.info('Writing File: {0:s}'.format(filename))
+    dirname = os.path.dirname(filename)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+    with closing(open(filename, 'w')) as f:
+        f.write('{0:s}\n'.format(contents))
+    return
+
 def standardiseIds(json_data={}, from_char='.', to_char='-'):
     return json_data
 

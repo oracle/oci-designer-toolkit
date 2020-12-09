@@ -14,6 +14,7 @@ class OkeClusterView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.vcn_id;}
     get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    // ---- Okit View Functions
 
     /*
     ** SVG Processing

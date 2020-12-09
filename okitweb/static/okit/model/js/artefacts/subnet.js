@@ -39,7 +39,7 @@ class Subnet extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new Subnet(this, this.getOkitJson());
+        return new Subnet(JSON.clone(this), this.getOkitJson());
     }
 
 

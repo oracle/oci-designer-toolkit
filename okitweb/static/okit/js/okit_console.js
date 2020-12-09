@@ -4,8 +4,8 @@
 */
 console.info('Loaded Console Javascript');
 
-const okitVersion = '0.14.1';
-const okitReleaseDate = '18th November 2020';
+const okitVersion = '0.15.0';
+const okitReleaseDate = '9th December 2020';
 // Validation
 const validate_error_colour = "#ff4d4d";
 const validate_warning_colour = "#ffd633";
@@ -20,7 +20,7 @@ function checkForUpdate() {
         const version = okitVersion.split('.');
         if ((Number(release[0]) > Number(version[0])) ||
             (Number(release[0]) === Number(version[0]) && Number(release[1]) > Number(version[1])) ||
-            (Number(release[0]) === Number(version[0]) && Number(release[1]) === Number(version[01]) && Number(release[2]) > Number(version[2]))
+            (Number(release[0]) === Number(version[0]) && Number(release[1]) === Number(version[1]) && Number(release[2]) > Number(version[2]))
         ) {
             console.info('OKIT Update Available');
             $(jqId('okit_update')).text(`Update: OKIT ${resp.release} Available for Download`);
@@ -32,6 +32,10 @@ function checkForUpdate() {
 function showConfigErrors() {
     let msg = okitOciConfig.results.join('\n');
     alert(msg);
+}
+
+function handleSlideOutMouseOver(elem) {
+    console.warn(`SlideOutMouseOver ${elem.id}`);
 }
 
 $(document).ready(function() {
@@ -53,17 +57,20 @@ $(document).ready(function() {
     $(jqId('okit_version')).text('Version: ' + okitVersion + '  (' + okitReleaseDate + ')');
 
     $('li.dropdown').on('mouseover', function() {
-        let menuX = $(this).position().left;
-        let menuY = $(this).position().top;
-        let scrollX = $('#navigation_menu').scrollLeft();
-        let scrollY = $('#navigation_menu').scrollTop();
-        let width = $(this).innerWidth();
-        let navX = $('#navigation_menu').offset().left;
-        let navY = $('#navigation_menu').offset().top;
-        let $slideout = $('> .dropdown-content', $(this));
+        const parentX = $(this).parent().position().left;
+        const parentY = $(this).parent().position().top;
+        const parentW = $(this).parent().innerWidth();
+        const menuX = $(this).position().left;
+        const menuY = $(this).position().top;
+        const width = $(this).innerWidth();
+        const scrollX = $('#navigation_menu').scrollLeft();
+        const scrollY = $('#navigation_menu').scrollTop();
+        const navX = $('#navigation_menu').offset().left;
+        const navY = $('#navigation_menu').offset().top;
+        const $slideout = $('> .dropdown-content', $(this));
         $slideout.css('position', 'absolute');
         $slideout.css('top', menuY + scrollY);
-        $slideout.css('left', menuX + width);
+        $slideout.css('left', parentX + menuX + width);
     });
 
     checkForUpdate();

@@ -90,6 +90,12 @@ class OkitHclJsonParser(object):
         if "create_vnic_details" in artefact:
             artefact["vnics"] = artefact["create_vnic_details"]
             del artefact["create_vnic_details"]
+        if "metadata" in artefact:
+            if isinstance(artefact["metadata"], list):
+                artefact["metadata"] = artefact["metadata"][0]
+        if "source_details" in artefact:
+            if isinstance(artefact["source_details"], list):
+                artefact["source_details"] = artefact["source_details"][0]
 
         # Default Security List
         if "manage_default_resource_id" in artefact:
@@ -134,29 +140,41 @@ class OkitHclJsonParser(object):
         result_json = {"okit_json": {}, "warnings": {}}
 
         if self.hcl_json is not None:
+            if isinstance(self.hcl_json["resource"], list):
+                resource_list = self.hcl_json["resource"]
+            else:
+                resource_list = [self.hcl_json["resource"]]
             # Loop through resources looking for simple matches
             logger.info("Processing Simple Mapped Resources")
-            for resource in self.hcl_json["resource"]:
+            for resource in resource_list:
                 for resource_key, resource_value in resource.items():
                     if resource_key in self.tf_map:
-                        for artefact in resource_value:
+                        if isinstance(resource_value, list):
+                            values_list = resource_value
+                        else:
+                            values_list = [resource_value]
+                        for artefact in values_list:
                             for artefact_key, artefact_value in artefact.items():
                                 for artefact_json in artefact_value:
                                     artefact_json["id"] = "{0!s:s}.{1!s:s}.id".format(resource_key, artefact_key)
                                     self.okit_json[self.tf_map[resource_key]].append(self.processOddities(artefact_json))
             # Loop through resources looking for complex matches
             logger.info("Processing Complex Unmapped Resources")
-            for resource in self.hcl_json["resource"]:
+            for resource in resource_list:
                 for resource_key, resource_value in resource.items():
                     if resource_key not in self.tf_map:
-                        for artefact in resource_value:
+                        if isinstance(resource_value, list):
+                            values_list = resource_value
+                        else:
+                            values_list = [resource_value]
+                        for artefact in values_list:
                             for artefact_key, artefact_value in artefact.items():
                                 for artefact_json in artefact_value:
                                     artefact_json["id"] = "{0!s:s}.{1!s:s}.id".format(resource_key, artefact_key)
                                     if not self.processUnknown(resource_key, artefact_json):
                                         logger.warn("Unknown Resource {0!s:s}".format(resource_key))
                                         result_json["warnings"][resource_key] = "Unknown Resource {0!s:s}".format(resource_key)
-            self.postParse()
+            #self.postParse()
             result_json["okit_json"] = self.standardiseIds(self.okit_json)
             logger.info("Parsed Resources")
         return result_json

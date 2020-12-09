@@ -37,7 +37,7 @@ class VirtualNetworkInterface extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new VirtualNetworkInterface(this, this.getOkitJson());
+        return new VirtualNetworkInterface(JSON.clone(this), this.getOkitJson());
     }
 
 

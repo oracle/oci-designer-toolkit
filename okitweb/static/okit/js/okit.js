@@ -56,6 +56,17 @@ class OkitOCIConfig {
     }
 }
 
+class OkitGITConfig {
+    constructor() {
+        this.load();
+    }
+
+    load() {
+        let me = this;
+        $.getJSON('config/appsettings', function(resp) {$.extend(true, me, resp);});
+    }
+}
+
 class OkitOCIData {
     constructor() {
         this.compartments = [];

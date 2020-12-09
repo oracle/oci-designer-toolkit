@@ -29,7 +29,7 @@ class SecurityList extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new SecurityList(this, this.getOkitJson());
+        return new SecurityList(JSON.clone(this), this.getOkitJson());
     }
 
 
