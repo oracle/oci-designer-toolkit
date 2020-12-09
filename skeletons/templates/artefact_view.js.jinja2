@@ -1,0 +1,166 @@
+/*
+** Copyright (c) 2020, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+*/
+console.info('Loaded {{ artefact_name }} View Javascript');
+
+/*
+** Define {{ artefact_name }} View Class
+*/
+{% if container_artefact is not defined %}
+class {{ model_class_name }}View extends OkitArtefactView {
+{% else %}
+class {{ model_class_name }}View extends OkitContainerArtefactView {
+{% endif %}
+    constructor(artefact=null, json_view) {
+        super(artefact, json_view);
+    }
+    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
+    get parent_id() {return this.artefact.vcn_id;}
+    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
+    // Direct Subnet Access
+    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
+    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
+    /*
+    ** SVG Processing
+    */
+    /*
+    ** Property Sheet Load function
+    */
+    loadProperties() {
+        const self = this;
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/{{ html_name }}.html", () => {loadPropertiesSheet(self.artefact);});
+    }
+    /*
+    ** Load and display Value Proposition
+    */
+    loadValueProposition() {
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/{{ html_name }}.html");
+    }
+    /*
+    ** Static Functionality
+    */
+    static getArtifactReference() {
+        return {{ model_class_name }}.getArtifactReference();
+    }
+    static getDropTargets() {
+        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
+        return [VirtualCloudNetwork.getArtifactReference()];
+    }
+}
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.drop{{ model_class_name }}View = function(target) {
+    let view_artefact = this.new{{ model_class_name }}();
+    if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.artefact.compartment_id = target.id;
+    } else {
+        view_artefact.artefact.compartment_id = target.compartment_id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.new{{ model_class_name }} = function(obj) {
+    this.get{{ model_class_name }}s().push(obj ? new {{ model_class_name }}View(obj, this) : new {{ model_class_name }}View(this.okitjson.new{{ model_class_name }}(), this));
+    return this.get{{ model_class_name }}s()[this.get{{ model_class_name }}s().length - 1];
+}
+OkitJsonView.prototype.get{{ model_class_name }}s = function() {
+    if (!this.{{ artefact_json_list }}) {
+        this.{{ artefact_json_list }} = [];
+    }
+    return this.{{ artefact_json_list }};
+}
+OkitJsonView.prototype.get{{ model_class_name }} = function(id='') {
+    for (let artefact of this.get{{ model_class_name }}s()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.load{{ model_class_name }}s = function({{ artefact_json_list }}) {
+    for (const artefact of {{ artefact_json_list }}) {
+        this.get{{ model_class_name }}s().push(new {{ model_class_name }}View(new {{ model_class_name }}(artefact, this.okitjson), this));
+    }
+}
+OkitJsonView.prototype.move{{ model_class_name }} = function(id) {
+    // Build Dialog
+    const self = this;
+    let {{ artefact_simple_name }} = this.get{{ model_class_name }}(id);
+    $(jqId('modal_dialog_title')).text('Move ' + {{ artefact_simple_name }}.display_name);
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    const table = d3.select(d3Id('modal_dialog_body')).append('div')
+        .attr('class', 'table okit-table');
+    const tbody = table.append('div')
+        .attr('class', 'tbody');
+    // Subnet
+    let tr = tbody.append('div')
+        .attr('class', 'tr');
+    tr.append('div')
+        .attr('class', 'td')
+        .text('Subnet');
+    tr.append('div')
+        .attr('class', 'td')
+        .append('select')
+        .attr('id', 'move_{{ artefact_simple_name }}_subnet_id');
+    // Load Subnets
+    this.loadSubnetsSelect('move_{{ artefact_simple_name }}_subnet_id');
+    $(jqId("move_{{ artefact_simple_name }}_subnet_id")).val({{ artefact_simple_name }}.artefact.subnet_id);
+    // Submit Button
+    const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'submit_query_btn')
+        .attr('type', 'button')
+        .text('Move')
+        .on('click', function () {
+            $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            if ({{ artefact_simple_name }}.artefact.subnet_id !== $(jqId("move_{{ artefact_simple_name }}_subnet_id")).val()) {
+                self.getSubnet({{ artefact_simple_name }}.artefact.subnet_id).recalculate_dimensions = true;
+                self.getSubnet($(jqId("move_{{ artefact_simple_name }}_subnet_id")).val()).recalculate_dimensions = true;
+                {{ artefact_simple_name }}.artefact.subnet_id = $(jqId("move_{{ artefact_simple_name }}_subnet_id")).val();
+                {{ artefact_simple_name }}.artefact.compartment_id = self.getSubnet({{ artefact_simple_name }}.artefact.subnet_id).artefact.compartment_id;
+            }
+            self.update(this.okitjson);
+        });
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+OkitJsonView.prototype.paste{{ model_class_name }}(drop_target) {
+    const clone = this.copied_artefact.artefact.clone();
+    clone.display_name += 'Copy';
+    if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
+    this.paste_count += 1;
+    clone.id = clone.okit_id;
+    if (drop_target.getArtifactReference() === Subnet.getArtifactReference()) {
+        clone.subnet_id = drop_target.id;
+        clone.compartment_id = drop_target.compartment_id;
+    }
+    this.okitjson.{{ artefact_json_list }}.push(clone);
+    this.update(this.okitjson);
+}
+OkitJsonView.prototype.load{{ model_class_name }}sSelect(select_id, empty_option=false) {
+    $(jqId(select_id)).empty();
+    const {{ artefact_simple_name }}_select = $(jqId(select_id));
+    if (empty_option) {
+        {{ artefact_simple_name }}_select.append($('<option>').attr('value', '').text(''));
+    }
+    for (let {{ artefact_simple_name }} of this.get{{ model_class_name }}s()) {
+        {{ artefact_simple_name }}_select.append($('<option>').attr('value', {{ artefact_simple_name }}.id).text({{ artefact_simple_name }}.display_name));
+    }
+}
+OkitJsonView.prototype.load{{ model_class_name }}sMultiSelect(select_id) {
+    $(jqId(select_id)).empty();
+    const multi_select = d3.select(d3Id(select_id));
+    for (let {{ artefact_simple_name }} of this.get{{ model_class_name }}s()) {
+        const div = multi_select.append('div');
+        div.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', safeId({{ artefact_simple_name }}.id))
+            .attr('value', {{ artefact_simple_name }}.id);
+        div.append('label')
+            .attr('for', safeId({{ artefact_simple_name }}.id))
+            .text({{ artefact_simple_name }}.display_name);
+    }
+}

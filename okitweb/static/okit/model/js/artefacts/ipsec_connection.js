@@ -31,23 +31,13 @@ class IPSecConnection extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new IPSecConnection(this, this.getOkitJson());
+        return new IPSecConnection(JSON.clone(this), this.getOkitJson());
     }
 
 
     /*
     ** Delete Processing
      */
-    deleteChildren() {
-        // Remove IPSec references
-        for (let ipsec of this.getOkitJson().ipsec_connections) {
-            for (let i=0; i < ipsec.ipsec_connections.length; i++) {
-                if (ipsec.ipsec_connections[i] === this.id) {
-                    ipsec.ipsec_connections.splice(i, 1);
-                }
-            }
-        }
-    }
 
 
     getNamePrefix() {

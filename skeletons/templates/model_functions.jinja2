@@ -1,0 +1,31 @@
+class OkitJson {
+    // TODO: Copy the following functions to the okitweb/static/okit/model/js/okit_model.js:OkitJson class
+    // {{ artefact_name }}
+    new{{ model_class_name }}(data) {
+        this.get{{ model_class_name }}s().push(new {{ model_class_name }}(data, this));
+        return this.get{{ model_class_name }}s()[this.get{{ model_class_name }}s().length - 1];
+    }
+    get{{ model_class_name }}s() {
+        if (!this.{{ artefact_json_list }}) {
+            this.{{ artefact_json_list }} = [];
+        }
+        return this.{{ artefact_json_list }};
+    }
+    get{{ model_class_name }}(id='') {
+        for (let artefact of this.get{{ model_class_name }}s()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+    }
+    delete{{ model_class_name }}(id) {
+        for (let i = 0; i < this.{{ artefact_json_list }}.length; i++) {
+            if (this.{{ artefact_json_list }}[i].id === id) {
+                this.{{ artefact_json_list }}[i].delete();
+                this.{{ artefact_json_list }}.splice(i, 1);
+                break;
+            }
+        }
+    }
+}

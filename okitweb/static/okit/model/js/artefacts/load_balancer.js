@@ -30,7 +30,7 @@ class LoadBalancer extends OkitArtifact {
         this.merge(data);
         this.convert();
         // Expose subnet_id for the first Mount target at the top level
-        Object.defineProperty(this, 'subnet_id', { get: function() {return this.subnet_ids[0];}, enumerable: false });
+        Object.defineProperty(this, 'subnet_id', {get: function() {return this.subnet_ids[0];}, set: function(subnet_id) {this.subnet_ids[0] = subnet_id;}, enumerable: false });
     }
 
     /*
@@ -45,7 +45,7 @@ class LoadBalancer extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new LoadBalancer(this, this.getOkitJson());
+        return new LoadBalancer(JSON.clone(this), this.getOkitJson());
     }
 
 

@@ -25,6 +25,8 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
     }
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
+    // Direct Subnet Access
+    set subnet_id(id) {this.artefact.subnet_id = id;}
 
     /*
      ** SVG Processing

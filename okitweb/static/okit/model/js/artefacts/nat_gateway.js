@@ -28,7 +28,7 @@ class NATGateway extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new NATGateway(this, this.getOkitJson());
+        return new NATGateway(JSON.clone(this), this.getOkitJson());
     }
 
 

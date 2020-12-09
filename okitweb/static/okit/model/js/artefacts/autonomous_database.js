@@ -37,7 +37,7 @@ class AutonomousDatabase extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new AutonomousDatabase(this, this.getOkitJson());
+        return new AutonomousDatabase(JSON.clone(this), this.getOkitJson());
     }
 
 

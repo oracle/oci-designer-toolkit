@@ -27,7 +27,7 @@ class DynamicRoutingGateway extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new DynamicRoutingGateway(this, this.getOkitJson());
+        return new DynamicRoutingGateway(JSON.clone(this), this.getOkitJson());
     }
 
 

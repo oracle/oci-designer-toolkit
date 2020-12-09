@@ -112,9 +112,7 @@ function dragDrop(evt) {
     let dropFunction = 'drop' + artefact.name;
     console.info('Drop Function : ' + dropFunction);
     let result = okitJsonView[dropFunction](target);
-    if (result) {
-        console.debug(JSON.stringify(result, null, 2));
-    }
+    if (result) {console.debug(JSON.stringify(result, null, 2));}
     okitJsonView.draw();
     // Clear Drag class
     this.classList.remove('over');  // this / e.target is previous target element.

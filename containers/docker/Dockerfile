@@ -30,6 +30,7 @@ RUN yum install -y \
  && yum update -y \
 # Install additional packages
  && yum install -y \
+        git \
         python36 \
         python3-pip \
         git \
@@ -51,12 +52,13 @@ RUN yum install -y \
         requests==2.24.0 \
         xlsxwriter==1.3.6 \
 # Create Workspace
- && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates} \
+ && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates,skeletons} \
  && mkdir -p /okit/okitweb/static/okit/templates \
  && ln -s /okit/templates /okit/okitweb/static/okit/templates/user
 # Copy source code
 COPY okitweb /okit/okitweb
 COPY visualiser /okit/visualiser
+COPY skeletons /okit/skeletons
 COPY containers/oci/* /root/.oci/
 COPY containers/ssh/* /root/.ssh/
 RUN chmod 600 /root/.ssh/*
