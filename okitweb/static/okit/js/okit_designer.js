@@ -9,6 +9,7 @@ console.info('Loaded Designer Javascript');
  */
 const ROOT_CANVAS_ID = 'canvas';
 const PROPERTIES_PANEL = 'properties_panel';
+const DESCRIPTION_PANEL = 'description_panel';
 const SETTINGS_PANEL = 'settings_panel';
 const JSON_MODEL_PANEL = 'json_model_panel';
 const JSON_VIEW_PANEL = 'json_view_panel';
