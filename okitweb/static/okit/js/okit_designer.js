@@ -1082,3 +1082,90 @@ function handleDownloadBoM(event) {
     document.getElementById("hdnJson").value = JSON.stringify(okitJsonModel);
     document.getElementById("hidden_form").submit();
 }
+function handleLoadFromGIT(evt) {
+    // Load from GIT
+    $(jqId('modal_dialog_title')).text('Load From GIT');
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('id', 'load_from_git')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    let tbody = table.append('div').attr('class', 'tbody');
+    // Git Repository
+    let tr = tbody.append('div').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text('Git Repository URL:');
+    tr.append('div').attr('class', 'td').append('select')
+        .attr('id', 'git_repository')
+        .on('change', () => {
+                console.info('selected git name ' + $(jqId('git_repository')).val());
+                handleLoadFromGITExec();
+            })
+        .append('option')
+        .attr('value', 'select')
+        .text('Select');
+
+    //$(jqId('git_repository')).empty();
+    let git_repository_filename_select = d3.select(d3Id('git_repository'));
+
+    for (let git_setting of okitGitConfig.gitsections) {
+        git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
+    }
+
+    // Load Files - GitFilename
+    tr = tbody.append('div') .attr('class', 'tr');
+    tr.append('div') .attr('class', 'td') .text('Select GIT File Name');
+    tr.append('div') .attr('class', 'td') .append('select')
+        .attr('id', 'git_repository_filename')
+        .append('option')
+        .attr('value', 'Retrieving')
+        .text('Retrieving..........');
+
+
+
+    // Save
+    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'load_from_git_button')
+        .attr('type', 'button')
+        .text('Submit');
+    save_button.on("click", handleLoaddesignFromGITExec);
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+
+function handleLoadFromGITExec(e) {
+    okitJsonModel.git_repository = $(jqId('git_repository')).val();
+    okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
+    $.ajax({
+        type: 'post',
+        url: 'loadfromgit',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(okitJsonModel),
+        success: function (resp) {
+            console.info('Response : ' + resp);
+            response = JSON.parse(resp)
+            $(jqId('git_repository_filename')).empty();
+            let git_repository_filename_select = d3.select(d3Id('git_repository_filename'));
+            for (file of response['fileslist']) {
+                filename = file.split("/").splice(-1)
+                filelabel = filename.toString().replace(/.json|.JSON/, '')
+                git_repository_filename_select.append('option').attr('value', file).text(filelabel);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.info('Status : ' + status)
+            console.info('Error : ' + error)
+            // Hide modal dialog
+            $(jqId('modal_dialog_wrapper')).addClass('hidden');
+        }
+    });
+
+}
+
+function handleLoaddesignFromGITExec(e) {
+    okitJsonModel.git_repository = $(jqId('git_repository')).val();
+    okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
+    if (okitJsonModel.git_repository_filename != 'Retrieving' && okitJsonModel.git_repository_filename != "") {
+        loadTemplate(okitJsonModel.git_repository_filename)
+        $(jqId('modal_dialog_wrapper')).addClass('hidden');
+    }
+}

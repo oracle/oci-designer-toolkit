@@ -18,6 +18,9 @@ import shutil
 import tempfile
 import time
 import urllib
+import glob
+import ast
+from git import Repo
 from flask import Blueprint
 from flask import render_template
 from flask import request
@@ -66,6 +69,17 @@ def readConfigFileSections(config_file='~/.oci/config'):
     else:
         config_sections = ['Instance Principal']
     return config_sections
+
+def readConfigFileSettings(config_file='~/.oci/settings'):
+    logger.debug('Setting File {0!s:s}'.format(config_file))
+    abs_config_file = os.path.expanduser(config_file)
+    logger.debug('Setting File {0!s:s}'.format(abs_config_file))
+    config = configparser.ConfigParser()
+    config.read(abs_config_file)
+    repo_list = []
+    for each_git_section in config.sections():
+        repo_list.append({'label':each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
+    return repo_list
 
 def getConfigFileValue(section, key, config_file='~/.oci/config'):
     value = ''
@@ -267,6 +281,13 @@ def generate(language):
         use_vars = request.json.get("use_variables", True)
         try:
             destination_dir = tempfile.mkdtemp();
+            gitpush_flag = False
+            if language=='terraformtogit':
+                gitpush_flag = True
+                language = 'terraform'
+            if language=='ansibletogit':
+                gitpush_flag = True
+                language = 'ansible'
             if language == 'terraform':
                 generator = OCITerraformGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'ansible':
@@ -279,6 +300,37 @@ def generate(language):
             generator.writeFiles()
             zipname = generator.createZipArchive(os.path.join(destination_dir, language), "/tmp/okit-{0:s}".format(str(language)))
             logger.info('Zipfile : {0:s}'.format(str(zipname)))
+            if gitpush_flag:
+                get_selection_details = request.json['git_repository']
+                git_url, git_branch = get_selection_details.split('*')
+                git_file_name = request.json['git_repository_filename']
+                git_commit_msg = request.json['git_repository_commitmsg']
+                destination = '/okit/okitweb/static/okit/templates/tmpgit'
+
+                if os.path.exists(destination):
+                    os.system("rm -rf " + destination)
+
+                repo = Repo.clone_from(git_url, destination, branch=git_branch, no_single_branch=True)
+                repo.remotes.origin.pull()
+
+                copyfrom = destination_dir+'/'+language
+                copyto = destination +'/' + git_file_name
+                if os.path.exists(copyto):
+                    return "Name already exists"
+                else:
+                    os.makedirs(copyto)
+
+                for item in os.listdir(copyfrom):
+                    s = os.path.join(copyfrom, item)
+                    d = os.path.join(copyto, item)
+                    shutil.copy2(s, d)
+
+                repo.index.add(copyto)
+                repo.index.commit("commit changes from okit:" + git_commit_msg)
+                repo.remotes.origin.push(git_branch)
+                os.system("rm -rf " + destination)
+                shutil.rmtree(destination_dir)
+                return language.capitalize()+" files successfully uploaded to GIT Repository"
             shutil.rmtree(destination_dir)
             filename = os.path.split(zipname)
             logger.info('Split Zipfile : {0:s}'.format(str(filename)))
@@ -337,6 +389,14 @@ def configSections():
     else:
         return 'Unknown Method', 500
 
+@bp.route('config/appsettings', methods=(['GET']))
+def appSettings():
+    if request.method == 'GET':
+        config_settings = {"gitsections": readConfigFileSettings()}
+        logger.info('Config Settings {0!s:s}'.format(config_settings))
+        return config_settings
+    else:
+        return 'Unknown Method', 500
 
 @bp.route('config/region/<string:section>', methods=(['GET']))
 def configRegion(section):
@@ -366,4 +426,45 @@ def validateJson():
         return json.dumps(result, sort_keys=False, indent=2, separators=(',', ': '))
     else:
         return '404'
+
+@bp.route('loadfromgit', methods=(['POST']))
+def loadfromgit():
+    logger.debug('JSON     : {0:s}'.format(str(request.json)))
+    if request.method == 'POST':
+        try:
+            destination = '/okit/okitweb/static/okit/templates/git'
+            get_selection_details = request.json['git_repository']
+            git_url, git_branch = get_selection_details.split('*')
+            logger.debug('JSON     : {0:s}'.format(str(git_url)))
+
+            if os.path.exists(destination):
+                os.system("rm -rf " + destination)
+
+            repo = Repo.clone_from(git_url, destination, branch=git_branch, no_single_branch=True)
+            repo.remotes.origin.pull()
+
+            okitgitsource = '/okit/okitweb/static/okit/templates/okit_git/'
+            files = glob.iglob(os.path.join(destination, "*.json"))
+
+            if not os.path.exists(okitgitsource):
+                os.mkdir(okitgitsource)
+            else:
+                os.system("rm -rf " + okitgitsource)
+                os.mkdir(okitgitsource)
+
+            for file in files:
+                if os.path.isfile(file):
+                    shutil.copy2(file, okitgitsource)
+            os.system("rm -rf " + destination)
+
+            files = list(glob.iglob(os.path.join(okitgitsource, "*.json")))
+            files_list = [f.replace("okit/okitweb/", "") for f in files]
+            logger.debug('JSON     : {0:s}'.format(str(request.json)))
+            logger.debug('Files Walk : {0!s:s}'.format(files_list))
+            result = {"fileslist": files_list}
+            logger.info(result)
+            return json.dumps(result)
+        except Exception as e:
+            logger.exception(e)
+            return str(e), 500
 

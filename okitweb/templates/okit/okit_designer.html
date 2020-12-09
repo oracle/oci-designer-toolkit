@@ -131,6 +131,7 @@
                     </span>
                 </div>
             </li>
+            <!--{{ template_menu(okit_template_categories) }}-->
             {% for template_group in okit_templates_groups %}
                 {% if template_group['name'] == '.' %}
                     {% for okit_template in template_group['templates'] %}
@@ -148,7 +149,7 @@
                     </li>
                 {% endif %}
             {% endfor %}
-            <!--{{ template_menu(okit_template_categories) }}-->
+            <li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li>
         </ul>
         <!--ul class="okit-navigation-sub-list">
             <li>

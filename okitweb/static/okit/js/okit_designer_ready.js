@@ -11,6 +11,7 @@ let okitJsonModel = new OkitJson();
 let okitOciConfig = new OkitOCIConfig();
 let okitOciData = new OkitOCIData();
 let okitSettings = new OkitSettings();
+let okitGitConfig = new OkitGITConfig();
 let okitAutoSave = undefined;
 /*
 ** Ready function initiated on page load.
@@ -22,6 +23,7 @@ $(document).ready(function() {
     okitOciConfig = new OkitOCIConfig();
     okitOciData = new OkitOCIData();
     okitSettings = new OkitSettings();
+    okitGitConfig = new OkitGITConfig();
     okitJsonModel = new OkitJson();
     okitJsonView = new OkitDesignerJsonView(okitJsonModel);
     console.info(okitJsonView);

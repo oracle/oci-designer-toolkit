@@ -33,6 +33,7 @@ RUN yum install -y \
         git \
         python36 \
         python3-pip \
+        git \
 #        python36-pyyaml \
 #        python36-oci-sdk \
 #        rh-nginx114 \
@@ -59,6 +60,9 @@ COPY okitweb /okit/okitweb
 COPY visualiser /okit/visualiser
 COPY skeletons /okit/skeletons
 COPY containers/oci/* /root/.oci/
+COPY containers/ssh/* /root/.ssh/
+RUN chmod 600 /root/.ssh/*
+
 # Add entrypoint to automatically start webserver
 ENTRYPOINT ["gunicorn"]
 CMD ["--workers=4", "--limit-request-line", "0", "--timeout", "120", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]

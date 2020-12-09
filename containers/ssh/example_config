@@ -1,0 +1,3 @@
+Host <Git Url>
+    StrictHostKeyChecking no
+    IdentityFile ~/.ssh/<Key File>
