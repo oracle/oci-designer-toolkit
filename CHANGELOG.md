@@ -1,7 +1,5 @@
 # Release Notes
 
-
-
 ## Version 0.15.0 
 **Release Date**: 9th December 2020
 ### Features
