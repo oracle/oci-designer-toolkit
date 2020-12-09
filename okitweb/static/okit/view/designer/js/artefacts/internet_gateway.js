@@ -14,6 +14,8 @@ class InternetGatewayView extends OkitDesignerArtefactView {
 
     get parent_id() {return this.artefact.vcn_id;}
     get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    // ---- Okit View Functions
+    get cloneable() {return false;}
 
     /*
      ** SVG Processing

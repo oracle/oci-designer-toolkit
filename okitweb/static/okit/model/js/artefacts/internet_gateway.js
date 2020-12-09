@@ -30,7 +30,7 @@ class InternetGateway extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new InternetGateway(this, this.getOkitJson());
+        return new InternetGateway(JSON.clone(this), this.getOkitJson());
     }
 
 

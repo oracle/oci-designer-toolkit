@@ -336,17 +336,16 @@ function exportToResourceManager() {
         data: JSON.stringify(request_json),
         success: function(resp) {
             console.info('Response : ' + resp);
-            unsetBusyIcon();
-            $(jqId('modal_dialog_wrapper')).addClass('hidden');
-            $(jqId('modal_dialog_progress')).addClass('hidden');
         },
         error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+            alert(`Export to Resource Manager Failed (${error})`);
+        },
+        complete: function () {
             unsetBusyIcon();
             $(jqId('modal_dialog_wrapper')).addClass('hidden');
             $(jqId('modal_dialog_progress')).addClass('hidden');
-            alert(`Export to Resource Manager Failed (${error})`);
         }
     });
 }

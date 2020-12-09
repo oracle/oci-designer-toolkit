@@ -140,10 +140,10 @@ def designer():
         logger.debug('dirnames : {0!s:s}'.format(dirnames))
         logger.debug('filenames : {0!s:s}'.format(filenames))
         if os.path.basename(dirpath) != 'palette':
-            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames])
-            svg_icon_groups[os.path.basename(dirpath)] = filenames
+            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames if f.endswith(".svg")])
+            svg_icon_groups[os.path.basename(dirpath)] = [f for f in filenames if f.endswith(".svg")]
         else:
-            svg_files.extend(filenames)
+            svg_files.extend([f for f in filenames if f.endswith(".svg")])
     logger.debug('Files Walk : {0!s:s}'.format(svg_files))
     logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
 
@@ -178,14 +178,14 @@ def designer():
         logger.debug('filenames : {0!s:s}'.format(filenames))
         relpath = os.path.relpath(dirpath, rootdir)
         logger.debug('Relative Path : {0!s:s}'.format(relpath))
-        template_files.extend([os.path.join(relpath, f) for f in filenames])
-        template_dirs[relpath] = filenames
+        template_files.extend([os.path.join(relpath, f) for f in filenames if f.endswith(".json")])
+        template_dirs[relpath] = [f for f in filenames if f.endswith(".json")]
     logger.debug('Files Walk : {0!s:s}'.format(template_files))
     logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
 
     template_groups = []
     for key in sorted(template_dirs.keys()):
-        template_group = {'name': str(key).replace('_', ' ').title(), 'templates': []}
+        template_group = {'name': str(key).replace('_', ' ').title(), 'templates': [], 'directories': {}}
         for template_file in sorted(template_dirs[key]):
             try:
                 okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
@@ -198,11 +198,20 @@ def designer():
             except Exception as e:
                 logger.debug(e)
         template_groups.append(template_group)
-    logger.debug('Template Groups {0!s:s}'.format(template_groups))
+    logger.info('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
 
+    template_categories = {}
+    for key in sorted(template_dirs.keys()):
+        name = str(key.split('/')[0]).replace('_', ' ').title()
+        path = key
+        category = template_categories.get(name, {'path': path, 'name': '', 'templates': [], 'children': {}})
+        template_categories[name] = build_categories(path, key, category, sorted(template_dirs[key]))
+    logger.info('Categories {0!s:s}'.format(template_categories))
+    logJson(template_categories)
+
     config_sections = {"sections": readConfigFileSections()}
-    logger.info('Config Sections {0!s:s}'.format(config_sections))
+    logger.debug('Config Sections {0!s:s}'.format(config_sections))
 
     #Render The Template
     return render_template('okit/okit_designer.html',
@@ -210,7 +219,34 @@ def designer():
                            artefact_view_js_files=artefact_view_js_files,
                            palette_icon_groups=palette_icon_groups,
                            fragment_icons=fragment_icons,
-                           okit_templates_groups=template_groups)
+                           okit_templates_groups=template_groups,
+                           okit_template_categories=template_categories)
+
+
+def build_categories(path, key, category, templates):
+    category['name'] = str(key.split('/')[0]).replace('_', ' ').title()
+    if len(key.split('/')) > 1:
+        child_key = '/'.join(key.split('/')[1:])
+        child_category = category['children'].get(str(child_key.split('/')[0]).replace('_', ' ').title(), {'path': path, 'name': '', 'templates': [], 'children': {}})
+        build_categories(path, child_key, child_category, templates)
+        category['children'][str(child_key.split('/')[0]).replace('_', ' ').title()] = child_category
+    else:
+        category['templates'] = templates
+        category['templates'] = []
+        for template_file in sorted(templates):
+            try:
+                json_file = os.path.join(category['path'], template_file)
+                okit_template = {'json': json_file, 'id': json_file.replace('.', '_').replace('/', '_')}
+                filename = os.path.join(bp.static_folder, 'templates', okit_template['json'])
+                template_json = readJsonFile(filename)
+                logger.debug('Template Json : {0!s:s}'.format(template_json))
+                okit_template['title'] = template_json['title']
+                okit_template['description'] = template_json.get('description', template_json['title'])
+                category['templates'].append(okit_template)
+            except Exception as e:
+                logger.debug(e)
+    logger.info(category)
+    return category
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))

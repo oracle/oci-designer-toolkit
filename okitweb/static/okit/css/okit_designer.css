@@ -312,29 +312,6 @@
 }
 
 /*
-** Context Menu
- */
-
-.context-menu {
-    z-index:102;
-    position: absolute;
-}
-
-.right-click-delete {
-    background-color: slategrey;
-    color: white;
-    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 5px;
-    display: block;
-    margin: 10px;
-}
-
-.context-menu li{ list-style: none; }
-
-
-/*
 ** SVG Highlighting
  */
 

@@ -52,6 +52,9 @@ class Instance extends OkitArtifact {
             this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
             this.vnics[0] = this.primary_vnic;
         }
+        // Expose subnet_id for the first Mount target at the top level
+        delete this.subnet_id;
+        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_vnic.subnet_id;}, set: function(id) {this.primary_vnic.subnet_id = id;}, enumerable: false });
     }
 
     /*
@@ -85,7 +88,7 @@ class Instance extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new Instance(this, this.getOkitJson());
+        return new Instance(JSON.clone(this), this.getOkitJson());
     }
 
     /*

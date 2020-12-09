@@ -16,6 +16,12 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
         return (this.artefact.compartment_id !== null && this.artefact.compartment_id !== this.artefact.id) ? this.artefact.compartment_id : 'canvas';
     }
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
+    get children() {return [...this.json_view.getCompartments(), ...this.json_view.getVirtualCloudNetworks(),
+        ...this.json_view.getBlockStorageVolumes(), ...this.json_view.getDynamicRoutingGateways(),
+        ...this.json_view.getAutonomousDatabases(), ...this.json_view.getCustomerPremiseEquipments(),
+        ...this.json_view.getObjectStorageBuckets(), ...this.json_view.getFastConnects(),
+        ...this.json_view.getIPSecConnections(), ...this.json_view.getRemotePeeringConnections(),
+        ...this.json_view.getInstances()].filter(child => child.parent_id === this.artefact.id);}
     get minimum_dimensions() {
         if (this.isTopLevel()) {
             return {width: $(`#${this.json_view.parent_id}`).width(), height: $(`#${this.json_view.parent_id}`).height()};
@@ -36,7 +42,15 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     ** Clone Functionality
      */
     clone() {
-        return new CompartmentView(this.artefact, this.getJsonView());
+        const clone = super.clone();
+        this.cloneChildren(clone);
+        return clone;
+    }
+
+    cloneChildren(clone) {
+        for (let child of this.children) {
+            child.clone().compartment_id = clone.id;
+        }
     }
 
     /*
