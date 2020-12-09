@@ -198,7 +198,7 @@ def designer():
             except Exception as e:
                 logger.debug(e)
         template_groups.append(template_group)
-    logger.debug('Template Groups {0!s:s}'.format(template_groups))
+    logger.info('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
 
     template_categories = {}
