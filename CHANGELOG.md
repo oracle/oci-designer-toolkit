@@ -12,6 +12,7 @@
 ### Bug Fixes
 1. Adding an instance and an autonomous database in the same compartment overlays them on the canvas Issue #187
 2. Resolve issue parsing TF Json.
+3. Undefined variable in ansible export Issue: #189
 
 
 ## Version 0.14.1 
