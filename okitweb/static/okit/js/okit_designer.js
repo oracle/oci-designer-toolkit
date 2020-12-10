@@ -198,6 +198,7 @@ function handleSave(evt) {
         filename = 'okit-' + getTimestamp() + '.json'
     }
     console.info('>> Saving Single Region File');
+    okitJsonModel.updated = getCurrentDateTime();
     saveJson(JSON.stringify(okitJsonModel, null, 2), filename);
 }
 function handleSaveRegional(evt) {
@@ -262,10 +263,11 @@ function handleSaveAs(evt) {
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleSaveAsTemplate(e) {
-    okitJsonModel.title = $(jqId('template_title')).val();
-    okitJsonModel.description = $(jqId('template_description')).val();
+    //okitJsonModel.title = $(jqId('template_title')).val();
+    //okitJsonModel.description = $(jqId('template_description')).val();
     //okitJsonModel.template_type = $(jqId('template_type')).val();
     okitJsonModel.template_type = 'User';
+    okitJsonModel.updated = getCurrentDateTime();
     $.ajax({
         type: 'post',
         url: 'saveas/template',
