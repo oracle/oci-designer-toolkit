@@ -44,6 +44,7 @@ RUN yum install -y \
  && pip3 install --no-cache-dir \
         flask==1.1.1 \
         gitpython==3.1.11 \
+        git-url-parse==1.2.2 \
         gunicorn==20.0.4 \
         oci==2.22.0 \
         pandas==1.1.2 \
@@ -52,9 +53,11 @@ RUN yum install -y \
         requests==2.24.0 \
         xlsxwriter==1.3.6 \
 # Create Workspace
- && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates,skeletons} \
+ && mkdir -p /okit/{config,git,log,visualiser,okitweb,workspace,templates,skeletons} \
  && mkdir -p /okit/okitweb/static/okit/templates \
- && ln -s /okit/templates /okit/okitweb/static/okit/templates/user
+ && ln -s /okit/templates/user /okit/okitweb/static/okit/templates/user \
+ && ln -s /okit/git /okit/okitweb/static/okit/templates/git \
+ && ln -s /okit/git /okit/okitweb/static/okit/git
 # Copy source code
 COPY okitweb /okit/okitweb
 COPY visualiser /okit/visualiser

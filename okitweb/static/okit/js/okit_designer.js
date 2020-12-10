@@ -219,6 +219,59 @@ function saveJson(text, filename){
 /*
 ** Save Model As Template
  */
+function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true) {
+    $(jqId('modal_dialog_title')).text(title);
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('id', 'load_from_git')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    let tbody = table.append('div').attr('class', 'tbody');
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_repo');
+    tr.append('div').attr('class', 'td').text('Repository:');
+    tr.append('div').attr('class', 'td').append('select')
+        .attr('id', 'git_repository')
+        .append('option')
+        .attr('value', 'select')
+        .text('Select');
+
+    let git_repository_filename_select = d3.select(d3Id('git_repository'));
+
+    for (let git_setting of okitGitConfig.gitsections) {
+        git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
+    }
+    if (show_dir) {
+        tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_directory');
+        tr.append('div').attr('class', 'td').text('Directory Name:');
+        tr.append('div').attr('class', 'td').append('input')
+            .attr('class', 'okit-input')
+            .attr('id', 'git_repository_directory')
+            .attr('type', 'text');
+    }
+    if (show_filename) {
+        tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_filename');
+        tr.append('div').attr('class', 'td').text('File Name:');
+        tr.append('div').attr('class', 'td').append('input')
+            .attr('class', 'okit-input')
+            .attr('id', 'git_repository_filename')
+            .attr('type', 'text');
+    }
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_commitmsg');
+    tr.append('div').attr('class', 'td').text('Commit Message:');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'git_repository_commitmsg')
+        .attr('type', 'text');
+
+    // Submit
+    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'export_terraform_option_id')
+        .attr('type', 'button')
+        .text('Submit');
+    save_button.on("click", callback);
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
 function handleSaveAs(evt) {
     // Display Save As Dialog
     $(jqId('modal_dialog_title')).text('Save As Template');
@@ -287,7 +340,34 @@ function handleSaveAsTemplate(e) {
         }
     });
 }
-function handleSaveToGit(e) {}
+function handleSaveToGit(e) {
+    displayGitSaveDialog('Save To Git', () =>
+    {
+        okitJsonModel.git_repository = $(jqId('git_repository')).val();
+        okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
+        okitJsonModel.git_repository_commitmsg = $(jqId('git_repository_commitmsg')).val();
+        okitJsonModel.template_type = 'Git';
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'saveas/git',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(okitJsonModel),
+            success: function (resp) {
+                console.info('Response : ' + resp);
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            },
+            error: function (xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });
+    }, false, true);
+}
 /*
 ** Redraw / Redisplay the existing Json
  */
@@ -1155,8 +1235,8 @@ function handleLoadFromGITExec(e) {
             }
         },
         error: function (xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
+            console.error('Status : ' + status)
+            console.error('Error : ' + error)
             // Hide modal dialog
             $(jqId('modal_dialog_wrapper')).addClass('hidden');
         }
