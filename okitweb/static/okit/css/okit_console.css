@@ -509,6 +509,14 @@ li a.parent-item:hover {
     border: none;
 }
 
+.okit-refresh-button {
+    float: right;
+    width: 16px;
+    height: 16px;
+    padding: 0px;
+    margin: 0px;
+}
+
 /*
 ** Style Tables
  */

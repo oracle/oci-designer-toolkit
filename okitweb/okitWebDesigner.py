@@ -176,10 +176,10 @@ def designer():
     fragment_files = os.listdir(os.path.join(bp.static_folder, 'fragments', 'svg'))
     fragment_icons = []
     for fragment_svg in sorted(fragment_files):
-        logger.info('Fragment : {0!s:s}'.format(fragment_svg))
-        logger.info('Fragment full : {0!s:s}'.format(os.path.join(bp.static_folder, 'fragments', 'svg', fragment_svg)))
+        logger.debug('Fragment : {0!s:s}'.format(fragment_svg))
+        logger.debug('Fragment full : {0!s:s}'.format(os.path.join(bp.static_folder, 'fragments', 'svg', fragment_svg)))
         fragment_icon = {'svg': fragment_svg, 'title': os.path.basename(fragment_svg).split('.')[0].replace('_', ' ').title()}
-        logger.info('Icon : {0!s:s}'.format(fragment_icon))
+        logger.debug('Icon : {0!s:s}'.format(fragment_icon))
         fragment_icons.append(fragment_icon)
 
     # Walk Template directory Structure
@@ -213,7 +213,7 @@ def designer():
             except Exception as e:
                 logger.debug(e)
         template_groups.append(template_group)
-    logger.info('Template Groups {0!s:s}'.format(template_groups))
+    logger.debug('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
 
     template_categories = {}
@@ -222,7 +222,7 @@ def designer():
         path = key
         category = template_categories.get(name, {'path': path, 'name': '', 'templates': [], 'children': {}})
         template_categories[name] = build_categories(path, key, category, sorted(template_dirs[key]))
-    logger.info('Categories {0!s:s}'.format(template_categories))
+    logger.debug('Categories {0!s:s}'.format(template_categories))
     logJson(template_categories)
 
     config_sections = {"sections": readConfigFileSections()}
@@ -260,7 +260,7 @@ def build_categories(path, key, category, templates):
                 category['templates'].append(okit_template)
             except Exception as e:
                 logger.debug(e)
-    logger.info(category)
+    logger.debug(category)
     return category
 
 

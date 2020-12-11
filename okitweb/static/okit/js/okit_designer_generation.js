@@ -191,7 +191,16 @@ function displayResourceManagerDialog() {
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
-        .text('Compartment');
+        .text('Compartment')
+        .append('img')
+            .attr('class', 'okit-refresh-button')
+            .attr('src', '/static/svg/refresh.svg')
+            .attr('alt', "Refresh")
+            .on('click', () => {
+                // Clear Existing Compartments
+                okitOciData.setCompartments([]);
+                loadCompartments();
+            });
     tr.append('div')
         .attr('class', 'td')
         .append('select')
