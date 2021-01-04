@@ -99,6 +99,21 @@ $(document).ready(function() {
         .text('Preferences');
 
     // Right Bar & Panels
+    // Description
+    d3.select(d3Id('console_right_bar')).append('label')
+        .attr('id', 'toggle_properties_button')
+        .attr('class', 'okit-pointer-cursor')
+        .on('click', function () {
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideRightPanelsOffScreen();
+            if (!open) {
+                $(jqId(DESCRIPTION_PANEL)).removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+                $(jqId('right_column_dragbar')).removeClass('hidden');
+            }
+            checkRightColumn();
+        })
+        .text('Description');
     // Properties
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_properties_button')

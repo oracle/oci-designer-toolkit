@@ -1,5 +1,14 @@
 # Release Notes
 
+## Version 0.16.0
+**Release Date**: 20th January 2021
+### Features
+1. Description now displayed as a right side panel allowing multi line entry (Enhancement Request #165)
+2. Remove dialog associated with Save As Template because the Title & Description are now part of the main screen.
+
+### Bug Fixes
+
+
 ## Version 0.15.0 
 **Release Date**: 9th December 2020
 ### Features

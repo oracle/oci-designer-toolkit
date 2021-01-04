@@ -230,6 +230,13 @@
 
 .okit-canvas-details > div {
     overflow: hidden;
+    width: 100%;
+}
+
+.json-description {
+    display: block;
+    height: 100%;
+    width: 100%;
 }
 
 /*

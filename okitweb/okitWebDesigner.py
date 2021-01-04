@@ -18,6 +18,7 @@ import shutil
 import tempfile
 import time
 import urllib
+import giturlparse
 import glob
 import ast
 from git import Repo
@@ -175,10 +176,10 @@ def designer():
     fragment_files = os.listdir(os.path.join(bp.static_folder, 'fragments', 'svg'))
     fragment_icons = []
     for fragment_svg in sorted(fragment_files):
-        logger.info('Fragment : {0!s:s}'.format(fragment_svg))
-        logger.info('Fragment full : {0!s:s}'.format(os.path.join(bp.static_folder, 'fragments', 'svg', fragment_svg)))
+        logger.debug('Fragment : {0!s:s}'.format(fragment_svg))
+        logger.debug('Fragment full : {0!s:s}'.format(os.path.join(bp.static_folder, 'fragments', 'svg', fragment_svg)))
         fragment_icon = {'svg': fragment_svg, 'title': os.path.basename(fragment_svg).split('.')[0].replace('_', ' ').title()}
-        logger.info('Icon : {0!s:s}'.format(fragment_icon))
+        logger.debug('Icon : {0!s:s}'.format(fragment_icon))
         fragment_icons.append(fragment_icon)
 
     # Walk Template directory Structure
@@ -212,7 +213,7 @@ def designer():
             except Exception as e:
                 logger.debug(e)
         template_groups.append(template_group)
-    logger.info('Template Groups {0!s:s}'.format(template_groups))
+    logger.debug('Template Groups {0!s:s}'.format(template_groups))
     logJson(template_groups)
 
     template_categories = {}
@@ -221,7 +222,7 @@ def designer():
         path = key
         category = template_categories.get(name, {'path': path, 'name': '', 'templates': [], 'children': {}})
         template_categories[name] = build_categories(path, key, category, sorted(template_dirs[key]))
-    logger.info('Categories {0!s:s}'.format(template_categories))
+    logger.debug('Categories {0!s:s}'.format(template_categories))
     logJson(template_categories)
 
     config_sections = {"sections": readConfigFileSections()}
@@ -259,7 +260,7 @@ def build_categories(path, key, category, templates):
                 category['templates'].append(okit_template)
             except Exception as e:
                 logger.debug(e)
-    logger.info(category)
+    logger.debug(category)
     return category
 
 
@@ -273,21 +274,31 @@ def valueproposition(sheet):
     return render_template('okit/valueproposition/{0:s}'.format(sheet))
 
 
-@bp.route('/generate/<string:language>', methods=(['GET', 'POST']))
-def generate(language):
+@bp.route('/generate/<string:language>/<string:destination>', methods=(['GET', 'POST']))
+def generate(language, destination):
     logger.info('Language : {0:s} - {1:s}'.format(str(language), str(request.method)))
+    logger.info('Destination : {0:s} - {1:s}'.format(str(destination), str(request.method)))
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
         use_vars = request.json.get("use_variables", True)
         try:
-            destination_dir = tempfile.mkdtemp();
-            gitpush_flag = False
-            if language=='terraformtogit':
-                gitpush_flag = True
-                language = 'terraform'
-            if language=='ansibletogit':
-                gitpush_flag = True
-                language = 'ansible'
+            if destination == 'git':
+                git_url, git_branch = request.json['git_repository'].split('*')
+                parsed_git_url = giturlparse.parse(git_url)
+                generate_git_dir = os.path.abspath(os.path.join(bp.static_folder, 'git'))
+                logger.info(generate_git_dir)
+                if not os.path.exists(generate_git_dir):
+                    os.makedirs(generate_git_dir, exist_ok=True)
+                git_repo_dir = os.path.abspath(os.path.join(generate_git_dir, parsed_git_url.name))
+                if os.path.exists(git_repo_dir):
+                    repo = Repo(git_repo_dir)
+                    repo.remotes.origin.pull()
+                else:
+                    repo = Repo.clone_from(git_url, git_repo_dir, branch=git_branch, no_single_branch=True)
+                    repo.remotes.origin.pull()
+                destination_dir = os.path.abspath(os.path.join(git_repo_dir, request.json['git_repository_filename']))
+            else:
+                destination_dir = tempfile.mkdtemp();
             if language == 'terraform':
                 generator = OCITerraformGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'ansible':
@@ -298,43 +309,19 @@ def generate(language):
                 generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json)
             generator.generate()
             generator.writeFiles()
-            zipname = generator.createZipArchive(os.path.join(destination_dir, language), "/tmp/okit-{0:s}".format(str(language)))
-            logger.info('Zipfile : {0:s}'.format(str(zipname)))
-            if gitpush_flag:
-                get_selection_details = request.json['git_repository']
-                git_url, git_branch = get_selection_details.split('*')
-                git_file_name = request.json['git_repository_filename']
+            if destination == 'git':
                 git_commit_msg = request.json['git_repository_commitmsg']
-                destination = '/okit/okitweb/static/okit/templates/tmpgit'
-
-                if os.path.exists(destination):
-                    os.system("rm -rf " + destination)
-
-                repo = Repo.clone_from(git_url, destination, branch=git_branch, no_single_branch=True)
-                repo.remotes.origin.pull()
-
-                copyfrom = destination_dir+'/'+language
-                copyto = destination +'/' + git_file_name
-                if os.path.exists(copyto):
-                    return "Name already exists"
-                else:
-                    os.makedirs(copyto)
-
-                for item in os.listdir(copyfrom):
-                    s = os.path.join(copyfrom, item)
-                    d = os.path.join(copyto, item)
-                    shutil.copy2(s, d)
-
-                repo.index.add(copyto)
+                repo.index.add(destination_dir)
                 repo.index.commit("commit changes from okit:" + git_commit_msg)
                 repo.remotes.origin.push(git_branch)
-                os.system("rm -rf " + destination)
-                shutil.rmtree(destination_dir)
                 return language.capitalize()+" files successfully uploaded to GIT Repository"
-            shutil.rmtree(destination_dir)
-            filename = os.path.split(zipname)
-            logger.info('Split Zipfile : {0:s}'.format(str(filename)))
-            return zipname
+            else:
+                zipname = generator.createZipArchive(os.path.join(destination_dir, language), "/tmp/okit-{0:s}".format(str(language)))
+                logger.info('Zipfile : {0:s}'.format(str(zipname)))
+                shutil.rmtree(destination_dir)
+                filename = os.path.split(zipname)
+                logger.info('Split Zipfile : {0:s}'.format(str(filename)))
+                return zipname
         except Exception as e:
             logger.exception(e)
             return str(e), 500
@@ -348,19 +335,45 @@ def saveas(savetype):
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
         try:
+            filename = '{0!s:s}.json'.format(request.json['title'].replace(' ', '_').lower())
             if savetype == 'template':
-                filename = '{0!s:s}.json'.format(request.json['title'].replace(' ', '_').lower())
                 template_type = request.json['template_type']
                 if len(template_type.strip()) == 0:
                     fullpath = os.path.abspath(os.path.join(bp.static_folder, 'templates', 'uncategorised', filename))
                 else:
                     typedir = os.path.abspath(os.path.join(bp.static_folder, 'templates', template_type.strip().replace(' ', '_').lower()))
                     if not os.path.exists(typedir):
-                        os.makedirs(typedir)
+                        os.makedirs(typedir, exist_ok=True)
                     fullpath = os.path.abspath(os.path.join(typedir, filename))
                 logger.info('Template File Name : {0!s:s}'.format(filename))
                 logger.info('>>>>>> Path to file {0!s:s}'.format(fullpath))
                 writeJsonFile(request.json, fullpath)
+                return filename
+            elif savetype == 'git':
+                git_url, git_branch = request.json['git_repository'].split('*')
+                git_commit_msg = request.json['git_repository_commitmsg']
+                if request.json['git_repository_filename'] != '':
+                    filename = '{0!s:s}.json'.format(request.json['git_repository_filename'].replace(' ', '_').lower())
+                parsed_git_url = giturlparse.parse(git_url)
+                template_git_dir = os.path.abspath(os.path.join(bp.static_folder, 'templates', 'git'))
+                if not os.path.exists(template_git_dir):
+                    os.makedirs(template_git_dir, exist_ok=True)
+                git_repo_dir = os.path.abspath(os.path.join(template_git_dir, parsed_git_url.name))
+                if os.path.exists(git_repo_dir):
+                    repo = Repo(git_repo_dir)
+                    repo.remotes.origin.pull()
+                else:
+                    repo = Repo.clone_from(git_url, git_repo_dir, branch=git_branch, no_single_branch=True)
+                    repo.remotes.origin.pull()
+                fullpath = os.path.abspath(os.path.join(git_repo_dir, filename))
+                # Remove git info
+                del request.json['git_repository']
+                del request.json['git_repository_filename']
+                del request.json['git_repository_commitmsg']
+                writeJsonFile(request.json, fullpath)
+                repo.index.add(fullpath)
+                repo.index.commit("commit changes from okit:" + git_commit_msg)
+                repo.remotes.origin.push(git_branch)
                 return filename
         except Exception as e:
             logger.exception(e)
@@ -432,32 +445,20 @@ def loadfromgit():
     logger.debug('JSON     : {0:s}'.format(str(request.json)))
     if request.method == 'POST':
         try:
-            destination = '/okit/okitweb/static/okit/templates/git'
-            get_selection_details = request.json['git_repository']
-            git_url, git_branch = get_selection_details.split('*')
-            logger.debug('JSON     : {0:s}'.format(str(git_url)))
-
-            if os.path.exists(destination):
-                os.system("rm -rf " + destination)
-
-            repo = Repo.clone_from(git_url, destination, branch=git_branch, no_single_branch=True)
-            repo.remotes.origin.pull()
-
-            okitgitsource = '/okit/okitweb/static/okit/templates/okit_git/'
-            files = glob.iglob(os.path.join(destination, "*.json"))
-
-            if not os.path.exists(okitgitsource):
-                os.mkdir(okitgitsource)
+            git_url, git_branch = request.json['git_repository'].split('*')
+            parsed_git_url = giturlparse.parse(git_url)
+            template_git_dir = os.path.abspath(os.path.join(bp.static_folder, 'templates', 'git'))
+            if not os.path.exists(template_git_dir):
+                os.makedirs(template_git_dir, exist_ok=True)
+            git_repo_dir = os.path.abspath(os.path.join(template_git_dir, parsed_git_url.name))
+            if os.path.exists(git_repo_dir):
+                repo = Repo(git_repo_dir)
+                repo.remotes.origin.pull()
             else:
-                os.system("rm -rf " + okitgitsource)
-                os.mkdir(okitgitsource)
-
-            for file in files:
-                if os.path.isfile(file):
-                    shutil.copy2(file, okitgitsource)
-            os.system("rm -rf " + destination)
-
-            files = list(glob.iglob(os.path.join(okitgitsource, "*.json")))
+                repo = Repo.clone_from(git_url, git_repo_dir, branch=git_branch, no_single_branch=True)
+                repo.remotes.origin.pull()
+            files = list(glob.iglob(os.path.join(git_repo_dir, "*.json")))
+            logger.info(files)
             files_list = [f.replace("okit/okitweb/", "") for f in files]
             logger.debug('JSON     : {0:s}'.format(str(request.json)))
             logger.debug('Files Walk : {0!s:s}'.format(files_list))

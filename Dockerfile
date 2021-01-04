@@ -43,6 +43,7 @@ RUN yum install -y \
  && pip3 install --no-cache-dir \
         flask==1.1.1 \
         gitpython==3.1.11 \
+        git-url-parse==1.2.2 \
         gunicorn==20.0.4 \
         oci==2.22.0 \
         pandas==1.1.2 \

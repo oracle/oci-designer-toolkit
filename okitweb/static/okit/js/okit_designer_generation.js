@@ -36,13 +36,13 @@ function generateTerraform(results) {
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
             type: 'post',
-            url: 'generate/terraform',
+            url: 'generate/terraform/local',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(requestJson),
             success: function(resp) {
                 console.info('Response : ' + resp);
-                saveZip('generate/terraform');
+                saveZip('generate/terraform/local');
             },
             error: function(xhr, status, error) {
                 console.info('Status : '+ status)
@@ -68,13 +68,13 @@ function generateAnsible(results) {
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
             type: 'post',
-            url: 'generate/ansible',
+            url: 'generate/ansible/local',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(requestJson),
             success: function(resp) {
                 console.info('REST Response : ' + resp);
-                saveZip('generate/ansible');
+                saveZip('generate/ansible/local');
             },
             error: function(xhr, status, error) {
                 console.info('Status : '+ status)
@@ -191,7 +191,16 @@ function displayResourceManagerDialog() {
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
-        .text('Compartment');
+        .text('Compartment')
+        .append('img')
+            .attr('class', 'okit-refresh-button')
+            .attr('src', '/static/svg/refresh.svg')
+            .attr('alt', "Refresh")
+            .on('click', () => {
+                // Clear Existing Compartments
+                okitOciData.setCompartments([]);
+                loadCompartments();
+            });
     tr.append('div')
         .attr('class', 'td')
         .append('select')
@@ -478,7 +487,7 @@ function generateTerraformToRepo(results) {
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
             type: 'post',
-            url: 'generate/terraformtogit',
+            url: 'generate/terraform/git',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(requestJson),
@@ -556,7 +565,7 @@ function generateAnsibleToRepo(results) {
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
             type: 'post',
-            url: 'generate/ansibletogit',
+            url: 'generate/ansible/git',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(requestJson),
