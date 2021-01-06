@@ -1,0 +1,37 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_subnet(resource) -%}
+#### {{ resource.display_name }}
+    {% if resource.definition is defined and resource.definition|length > 0 -%}
+        {{ resource.definition }}
+
+        {%- if resource.svg is defined -%}
+            {{ resource.svg | safe}}
+        {%- endif -%}
+    {%- endif -%}
+| Property | Value    |
+| -------- | -------- |
+{{ common.document_availability_domain(resource.availability_domain, resource.region_availability_domain) }}
+{{ common.compartment_name(compartments, resource.compartment_id) }}
+{{ common.vcn_name(virtual_cloud_networks, resource.vcn_id) }}
+{{ common.document_property("Private", resource.prohibit_public_ip_on_vnic) }}
+{{ common.document_property("DNS Label", resource.dns_label) }}
+{{ common.document_property("CIDR Block", resource.cidr_block) }}
+{{ common.route_table_name(route_tables, resource.route_table_id) }}
+    {% for security_list_id in resource.security_list_ids -%}
+        {{ common.security_list_name(security_lists, security_list_id) }}
+    {% endfor %}
+    {% if resource.is_ipv6enabled %}
+{{ common.document_property("IPv6 Enabled", resource.is_ipv6enabled) }}
+{{ common.document_property("IPv6 CIDR Block", resource.ipv6cidr_block) }}
+    {% endif %}
+
+    {% if resource.freeform_tags is defined -%}
+        {{ common.document_freeform_tags(resource.freeform_tags) }}
+    {%- endif %}
+    {% if resource.defined_tags is defined -%}
+        {{ common.document_defined_tags(resource.defined_tags) }}
+    {%- endif %}
+{%- endmacro %}
+{% for subnet in subnets -%}
+    {{ document_subnet(subnet) }}
+{%- endfor %}

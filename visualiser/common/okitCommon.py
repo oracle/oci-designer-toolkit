@@ -159,8 +159,18 @@ def writeAnsibleFile(ansible_file, contents):
 def writePythonFile(python_file, contents):
     logger.info('Writing Python File: {0:s}'.format(python_file))
     with closing(open(python_file, 'w')) as f:
-        f.write('{0:s}\n'.format(contents))
+        for resource in contents:
+            f.write('{0:s}\n'.format(resource))
     return
+
+
+def writeMarkdownFile(md_file, contents):
+    logger.info('Writing Markdown File: {0:s}'.format(md_file))
+    with closing(open(md_file, 'w')) as f:
+        for resource in contents:
+            f.write('{0!s:s}\n'.format(resource))
+    return
+
 
 def writeFile(filename, contents):
     logger.info('Writing File: {0:s}'.format(filename))
@@ -170,6 +180,7 @@ def writeFile(filename, contents):
     with closing(open(filename, 'w')) as f:
         f.write('{0:s}\n'.format(contents))
     return
+
 
 def standardiseIds(json_data={}, from_char='.', to_char='-'):
     return json_data

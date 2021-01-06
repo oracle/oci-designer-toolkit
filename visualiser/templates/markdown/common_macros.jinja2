@@ -1,0 +1,111 @@
+{% macro document_common_details(resource) -%}
+    #### {{ resource.display_name }}
+    {% if resource.definition is defined and resource.definition|length > 0 -%}
+        {{ resource.definition }}
+
+        {%- if resource.svg is defined -%}
+            {{ resource.svg | safe}}
+        {%- endif -%}
+    {%- endif -%}
+| Property | Value    |
+| -------- | -------- |
+    {% if resource.availability_domain is defined %}
+{{ document_availability_domain(resource.availability_domain, resource.region_availability_domain) }}
+    {% endif %}
+    {% if resource.compartment_id is defined %}
+{{ compartment_name(compartments, resource.compartment_id) }}
+    {% endif %}
+    {% if resource.vcn_id is defined %}
+{{ vcn_name(virtual_cloud_networks, resource.vcn_id) }}
+    {% endif %}
+{%- endmacro %}
+
+{% macro document_freeform_tags(tags) -%}
+    {% if tags|length > 0 %}
+
+##### Freeform Tags
+| Key      | Value    |
+| -------- | -------- |
+        {% for key, val in tags.items() -%}
+            {{ document_tag(key, val) }}
+        {%- endfor %}
+
+    {% endif %}
+{%- endmacro %}
+
+{% macro document_defined_tags(tags) -%}
+    {% if tags|length > 0 %}
+
+##### Defined Tags
+| Namespace | Key      | Value    |
+| --------- | -------- | -------- |
+        {% for namespace in tags -%}
+            {% for key, val in tags[namespace].items() -%}
+                {{ document_tag(key, val, namespace) }}
+            {% endfor %}
+        {% endfor %}
+
+    {% endif %}
+{%- endmacro %}
+
+{%- macro document_tag(key, value, namespace) -%}
+    {%- if namespace is defined -%}| {{ namespace }} {%- endif %}| {{ key }} | {{ value }} |
+{%- endmacro %}
+
+{%- macro document_property(name, value) -%}
+    {{ "| %-15s | %s |" | format(name, value) }}
+{%- endmacro -%}
+
+{%- macro document_property_link(name, value) -%}
+    {{ "| %-15s | [%s](#%s) |" | format(name, value, value) }}
+{%- endmacro -%}
+
+{%- macro document_availability_domain(name, regional_name) -%}
+    {%- if name == "0" -%}
+        {{ document_property("Availability Domain", "Regional") }}
+    {%- elif regional_name is defined -%}
+        {{ document_property("Availability Domain", regional_name) }}
+    {%- else -%}
+        {{ document_property("Availability Domain", name) }}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro compartment_name(compartments, id) -%}
+    {%- for compartment in compartments -%}
+        {%- if compartment.id == id -%}
+            {{ document_property_link("Compartment", compartment.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro vcn_name(virtual_cloud_networks, id) -%}
+    {%- for vcn in virtual_cloud_networks -%}
+        {%- if vcn.id == id -%}
+            {{ document_property_link("Virtual Cloud Network", vcn.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro subnet_name(subnets, id) -%}
+    {%- for subnet in subnets -%}
+        {%- if subnet.id == id -%}
+            {{ document_property_link("Subnet", subnet.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro route_table_name(route_tables, id) -%}
+    {%- for route_table in route_tables -%}
+        {%- if route_table.id == id -%}
+            {{ document_property_link("Route Table", route_table.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro security_list_name(security_lists, id) -%}
+    {%- for security_list in security_lists -%}
+        {%- if security_list.id == id -%}
+            {{ document_property_link("Security List", security_list.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}

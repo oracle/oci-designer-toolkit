@@ -584,3 +584,39 @@ function generateAnsibleToRepo(results) {
     }
 }
 
+function handleExportToMarkdownLocal(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateMarkdown);
+}
+function handleExportToMarkdownGit(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateMarkdown);
+}
+function generateMarkdown(results) {
+    if (results.valid) {
+        let requestJson = JSON.clone(okitJsonModel);
+        requestJson.use_variables = okitSettings.is_variables;
+        setExportDisplay();
+        const okitcanvas = document.getElementById("canvas-svg");
+        requestJson.svg = okitcanvas.outerHTML.replaceAll('\n', ' ');
+        okitJsonView.draw();
+        $.ajax({
+            type: 'post',
+            url: 'generate/markdown/local',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(requestJson),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                saveZip('generate/markdown/local');
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
+

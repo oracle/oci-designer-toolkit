@@ -39,6 +39,7 @@ from generators.okitAnsibleGenerator import OCIAnsibleGenerator
 from generators.okitTerraform11Generator import OCITerraform11Generator
 from generators.okitTerraformGenerator import OCITerraformGenerator
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
+from generators.okitMarkdownGenerator import OkitMarkdownGenerator
 
 # Configure logging
 logger = getLogger()
@@ -307,6 +308,8 @@ def generate(language, destination):
                 generator = OCITerraform11Generator(template_root, destination_dir, request.json)
             elif language == 'resource-manager':
                 generator = OCIResourceManagerGenerator(template_root, destination_dir, request.json)
+            elif language == 'markdown':
+                generator = OkitMarkdownGenerator(template_root, destination_dir, request.json)
             generator.generate()
             generator.writeFiles()
             if destination == 'git':

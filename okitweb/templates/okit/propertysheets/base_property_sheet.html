@@ -7,6 +7,8 @@
         <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value"></div></div>
     {% elif type == 'checkbox' %}
         <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'></div><div class='td'><label><input type="{{ type }}" id="{{ name }}" name="{{ name }}" value="false">{{ title }}</label></div></div>
+    {% elif type == 'textarea' %}
+        <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-resource-description" rows="2" wrap="on"></textarea></div></div>
     {% elif type == 'code' %}
         <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><code><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-source-code" rows="10" wrap="off"></textarea></code></div></div>
     {% elif type == 'select' %}
@@ -35,7 +37,7 @@
         <div class="tbody">
             {{ properties_input('Id', 'id', type='text', collapsed=True) }}
             {{ properties_input('Name', 'display_name', type='text') }}
-            {{ properties_input('Definition', 'definition', type='text') }}
+            {{ properties_input('Documentation', 'definition', type='textarea') }}
            {% block required_properties_table_rows_block %}{% endblock %}
         </div>
     </div>

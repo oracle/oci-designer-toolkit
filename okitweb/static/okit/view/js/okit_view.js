@@ -38,6 +38,7 @@ class OkitJsonView {
         };
     }
     get svg_highlight_colour() {return "#00cc00";}
+    get top_level_compartment() {let tlc = this.getCompartments().filter(compartment => compartment.isTopLevel())[0]; console.info(`TLC ${tlc}`); console.info(tlc); return tlc;}
 
     drop(source, target) {
         let newFunction = 'new' + source.name;
@@ -111,7 +112,7 @@ class OkitJsonView {
         this.draw();
     }
 
-    draw() {
+    draw(for_export=false) {
         console.warn('draw() function has not been implemented.');
     }
 

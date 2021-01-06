@@ -1,0 +1,15 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_service_gateway(resource) -%}
+    {{ common.document_common_details(resource) }}
+{{ common.document_property("Service Name", resource.service_name) }}
+
+    {% if resource.freeform_tags is defined -%}
+        {{ common.document_freeform_tags(resource.freeform_tags) }}
+    {%- endif %}
+    {% if resource.defined_tags is defined -%}
+        {{ common.document_defined_tags(resource.defined_tags) }}
+    {%- endif %}
+{%- endmacro %}
+{% for service_gateway in service_gateways -%}
+    {{ document_service_gateway(service_gateway) }}
+{%- endfor %}
