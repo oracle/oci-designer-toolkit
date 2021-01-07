@@ -18,6 +18,7 @@ import json
 from common.okitCommon import logJson
 from common.okitLogging import getLogger
 from parsers.okitHclJsonParser import OkitHclJsonParser
+from parsers.okitCCEJsonParser import OkitCceJsonParser
 
 # Configure logging
 logger = getLogger()
@@ -36,6 +37,22 @@ def parseHclJson():
         logJson(query_json)
         # Import HCL
         parser = OkitHclJsonParser()
+        response_json = parser.parse(query_json)
+        logJson(response_json)
+        return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
+    else:
+        return '404'
+
+@bp.route('ccejson', methods=(['GET']))
+def parseCceJson():
+    #logger.debug('JSON : {0:s}'.format(str(request.json)))
+    if request.method == 'GET':
+        query_string = request.query_string
+        parsed_query_string = urllib.parse.unquote(query_string.decode())
+        query_json = json.loads(parsed_query_string)
+        logJson(query_json)
+        # Import CCE
+        parser = OkitCceJsonParser()
         response_json = parser.parse(query_json)
         logJson(response_json)
         return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
