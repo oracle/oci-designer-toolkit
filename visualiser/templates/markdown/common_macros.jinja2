@@ -1,4 +1,4 @@
-{% macro document_common_details(resource) -%}
+{%- macro document_common_details(resource) -%}
     #### {{ resource.display_name }}
     {% if resource.definition is defined and resource.definition|length > 0 -%}
         {{ resource.definition }}
@@ -7,18 +7,15 @@
             {{ resource.svg | safe}}
         {%- endif -%}
     {%- endif -%}
+{%- endmacro -%}
+{%- macro document_common_properties(resource) -%}
 | Property | Value    |
 | -------- | -------- |
-    {% if resource.availability_domain is defined %}
-{{ document_availability_domain(resource.availability_domain, resource.region_availability_domain) }}
+    {% if resource.availability_domain is defined -%}
+        {{ document_availability_domain(resource.availability_domain, resource.region_availability_domain) }}
     {% endif %}
-    {% if resource.compartment_id is defined %}
 {{ compartment_name(compartments, resource.compartment_id) }}
-    {% endif %}
-    {% if resource.vcn_id is defined %}
-{{ vcn_name(virtual_cloud_networks, resource.vcn_id) }}
-    {% endif %}
-{%- endmacro %}
+{%- endmacro -%}
 
 {% macro document_freeform_tags(tags) -%}
     {% if tags|length > 0 %}
@@ -31,6 +28,30 @@
         {%- endfor %}
 
     {% endif %}
+{%- endmacro %}
+
+{% macro dummy() %}
+    {% if resource.availability_domain is defined -%}
+        {{ document_availability_domain(resource.availability_domain, resource.region_availability_domain) }}
+    {% endif %}
+    {% if resource.compartment_id is defined -%}
+        {{ compartment_name(compartments, resource.compartment_id) }}
+    {% endif %}
+    {% if resource.vcn_id is defined -%}
+        {{ vcn_name(virtual_cloud_networks, resource.vcn_id) }}
+    {% endif %}
+    {% if resource.subnet_id is defined -%}
+        {{ vcn_name(subnets, resource.subnet_id) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro document_tags(resource) -%}
+    {% if resource.freeform_tags is defined -%}
+        {{ document_freeform_tags(resource.freeform_tags) }}
+    {%- endif %}
+    {% if resource.defined_tags is defined -%}
+        {{ document_defined_tags(resource.defined_tags) }}
+    {%- endif %}
 {%- endmacro %}
 
 {% macro document_defined_tags(tags) -%}
@@ -109,3 +130,43 @@
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
+
+{% macro internet_gateway_name(id) -%}
+    {%- for internet_gateway in internet_gateways -%}
+        {%- if internet_gateway.id == id -%}
+            {{ internet_gateway.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+{% macro nat_gateway_name(id) -%}
+    {%- for nat_gateway in nat_gateways -%}
+        {%- if nat_gateway.id == id -%}
+            {{ nat_gateway.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+{% macro local_peering_gateway_name(id) -%}
+    {%- for local_peering_gateway in local_peering_gateways -%}
+        {%- if local_peering_gateway.id == id -%}
+            {{ local_peering_gateway.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+{% macro dynamic_routing_gateway_name(id) -%}
+    {%- for dynamic_routing_gateway in dynamic_routing_gateways -%}
+        {%- if dynamic_routing_gateway.id == id -%}
+            {{ dynamic_routing_gateway.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+{% macro service_gateway_name(id) -%}
+    {%- for service_gateway in service_gateways -%}
+        {%- if service_gateway.id == id -%}
+            {{ service_gateway.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
