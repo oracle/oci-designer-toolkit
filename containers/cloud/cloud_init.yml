@@ -12,7 +12,7 @@ runcmd:
   # Install Required Packages because the packages section may not complete before the runcmd
   - sudo bash -c "yum install -y git python-oci-cli oci-utils"
   # Install Required Python Modules
-  - sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gitpython==3.1.11 git-url-parse==1.2.2 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 pandas==1.1.2 python-magic==0.4.18 pyyaml==5.3.1 requests==2.24.0 xlsxwriter==1.3.6"
+  - sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gitpython==3.1.11 git-url-parse==1.2.2 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 openpyxl==3.0.5 pandas==1.1.2 python-magic==0.4.18 pyyaml==5.3.1 requests==2.24.0 xlsxwriter==1.3.6"
   # Clone OKIT
   - sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
   - sudo bash -c "mkdir /okit/{log,workspace}"

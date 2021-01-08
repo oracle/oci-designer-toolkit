@@ -15,10 +15,12 @@ import urllib
 from flask import Blueprint
 from flask import request
 import json
+from werkzeug.utils import secure_filename
 from common.okitCommon import logJson
 from common.okitLogging import getLogger
 from parsers.okitHclJsonParser import OkitHclJsonParser
 from parsers.okitCCEJsonParser import OkitCceJsonParser
+from parsers.OkitCd3ExcelParser import OkitCd3ExcelParser
 
 # Configure logging
 logger = getLogger()
@@ -55,6 +57,24 @@ def parseCceJson():
         parser = OkitCceJsonParser()
         response_json = parser.parse(query_json)
         logJson(response_json)
+        return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
+    else:
+        return '404'
+
+@bp.route('cd3xlsx', methods=(['POST']))
+def parseCd3Xlsx():
+    if request.method == 'POST':
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and file.filename != '':
+                filename = os.path.join('/okit/workspace', secure_filename(file.filename))
+                file.save(filename)
+                # Import CD3
+                parser = OkitCd3ExcelParser()
+                response_json = parser.parse(filename)
+                logJson(response_json)
+        else:
+            response_json = {}
         return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))
     else:
         return '404'
