@@ -67,7 +67,7 @@
 
 ## Databases
 
-{%- if autonomous_databases is defined and autonomous_databases|length > 0 -%}
+{% if autonomous_databases is defined and autonomous_databases|length > 0 -%}
     ### Autonomous Databases
     {% include "autonomous_database.jinja2" ignore missing with context %}
 {%- endif %}
@@ -77,9 +77,39 @@
     {% include "database_system.jinja2" ignore missing with context %}
 {%- endif %}
 
+{%- if mysql_database_systems is defined and mysql_database_systems|length > 0 -%}
+    ### Database Systems
+    {% include "mysql_database_system.jinja2" ignore missing with context %}
+{%- endif %}
+
 ## Infrastructure
 
+{% if instances is defined and instances|length > 0 -%}
+    ### Instances
+    {% include "instance.jinja2" ignore missing with context %}
+{%- endif %}
+
+{%- if load_balancers is defined and load_balancers|length > 0 -%}
+    ### Load Balancers
+    {% include "load_balancer.jinja2" ignore missing with context %}
+{%- endif %}
+
 ## Storage
+
+{% if block_storage_volumes is defined and block_storage_volumes|length > 0 -%}
+    ### Block Storage Volumes
+    {% include "block_storage_volume.jinja2" ignore missing with context %}
+{%- endif %}
+
+{%- if object_storage_buckets is defined and object_storage_buckets|length > 0 -%}
+    ### Object Storage Buckets
+    {% include "object_storage_bucket.jinja2" ignore missing with context %}
+{%- endif %}
+
+{%- if file_storage_systems is defined and file_storage_systems|length > 0 -%}
+    ### File Storage Systems
+    {% include "file_storage_system.jinja2" ignore missing with context %}
+{%- endif %}
 
 ## Costing
 
