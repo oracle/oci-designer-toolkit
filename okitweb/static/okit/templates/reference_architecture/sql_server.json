@@ -1,0 +1,945 @@
+{
+  "title": "SQL Server 2016 AlwaysON",
+  "description": "Reference Architecture for SQL Server AlwaysOn ",
+  "okit_version": "0.15.0",
+  "compartments": [
+    {
+      "id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "compartment_id": null,
+      "display_name": "SQLcomp001",
+      "name": "SQLcomp001",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "description": "SQLcomp001"
+    }
+  ],
+  "customer_premise_equipments": [],
+  "autonomous_databases": [],
+  "block_storage_volumes": [
+    {
+      "id": "okit.blockstoragevolume.fbe757a4-b7a2-4ad9-81c0-285cbd372359",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLATempdb",
+      "name": "SQLATempdb",
+      "definition": "TempDB volumes for SQLA",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "size_in_gbs": 1024,
+      "backup_policy": "bronze",
+      "vpus_per_gb": "20"
+    },
+    {
+      "id": "okit.blockstoragevolume.7c43a8d0-becb-4383-83b3-0b45f3de33ea",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLALogs",
+      "name": "SQLALogs",
+      "definition": "Logs for SQLA",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "size_in_gbs": "512",
+      "backup_policy": "bronze",
+      "vpus_per_gb": "20"
+    },
+    {
+      "id": "okit.blockstoragevolume.9191dd1c-f0e3-491c-943f-a033011df798",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLAdata1",
+      "name": "SQLAdata1",
+      "definition": "SQLA data vol1",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "size_in_gbs": "2048",
+      "backup_policy": "bronze",
+      "vpus_per_gb": "10"
+    },
+    {
+      "id": "okit.blockstoragevolume.34eb3906-ae5f-40c9-8d9e-4a1c98a40169",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLAdata2",
+      "name": "SQLAdata2",
+      "definition": "SQLA data vol 2",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "size_in_gbs": "2048",
+      "backup_policy": "bronze",
+      "vpus_per_gb": "10"
+    },
+    {
+      "id": "okit.blockstoragevolume.a7e2ceb4-6f34-42e6-91a1-5a5a5a97af81",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLAdata3",
+      "name": "SQLAdata3",
+      "definition": "SQLA data vol 3",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "size_in_gbs": "2048",
+      "backup_policy": "bronze",
+      "vpus_per_gb": "10"
+    },
+    {
+      "id": "okit.blockstoragevolume.7be2c6e2-b73c-4197-903e-b0f1e200fac1",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLABackupVol",
+      "name": "SQLABackupVol",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "size_in_gbs": "6144",
+      "backup_policy": "gold",
+      "vpus_per_gb": "20"
+    },
+    {
+      "id": "okit.blockstoragevolume.0d735820-71b4-41c2-832d-2ed4f9979928",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLBTempdb",
+      "name": "SQLBTempdb",
+      "definition": "TempDB for SQLB",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "2",
+      "size_in_gbs": 1024,
+      "backup_policy": "bronze",
+      "vpus_per_gb": "20"
+    },
+    {
+      "id": "okit.blockstoragevolume.37536f48-e452-495a-9126-9f91fd3783a8",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLBLogs",
+      "name": "SQLBLogs",
+      "definition": "Log vol for SQL B",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "2",
+      "size_in_gbs": 1024,
+      "backup_policy": "bronze",
+      "vpus_per_gb": "20"
+    },
+    {
+      "id": "okit.blockstoragevolume.02cd22ab-fcfc-44b7-8031-e0ee7c04e7bf",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLBdata1",
+      "name": "SQLBdata1",
+      "definition": "SQLB data vol 1",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "2",
+      "size_in_gbs": "2048",
+      "backup_policy": "bronze",
+      "vpus_per_gb": "10"
+    },
+    {
+      "id": "okit.blockstoragevolume.b13bfc5c-9310-4033-9ff7-5e5ed64fa57c",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLBdata2",
+      "name": "SQLBdata2",
+      "definition": "SQLB data vol 2",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "size_in_gbs": "2048",
+      "backup_policy": "bronze",
+      "vpus_per_gb": "10"
+    },
+    {
+      "id": "okit.blockstoragevolume.8de358ef-18ce-4b0d-9cb9-096fdc4c75be",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLBdata3",
+      "name": "SQLBdata3",
+      "definition": "SQLB data vol 3",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "2",
+      "size_in_gbs": "2048",
+      "backup_policy": "bronze",
+      "vpus_per_gb": "10"
+    },
+    {
+      "id": "okit.blockstoragevolume.b497181e-39a2-436c-8ee7-c0129648c601",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLBBackup",
+      "name": "SQLBBackup",
+      "definition": "Backup vol for SQLB",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "size_in_gbs": "6144",
+      "backup_policy": "gold",
+      "vpus_per_gb": "20"
+    },
+    {
+      "id": "okit.blockstoragevolume.8cf7ba56-b573-4539-a415-e72869bbb3e3",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLQuorum",
+      "name": "SQLQuorum",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "3",
+      "size_in_gbs": 1024,
+      "backup_policy": "bronze",
+      "vpus_per_gb": "10"
+    }
+  ],
+  "database_systems": [],
+  "dynamic_routing_gateways": [],
+  "fast_connects": [],
+  "file_storage_systems": [],
+  "instances": [
+    {
+      "id": "okit.instance.0733baef-740a-4a8a-9eb6-327b19225791",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "DBMGR",
+      "name": "DBMGR",
+      "definition": "Database Manager and Bastion Host",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "shape": "VM.Standard.E2.1",
+      "count": 1,
+      "fault_domain": "",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.b8dab2ce-f310-47f3-b772-a353a753c191",
+          "assign_public_ip": true,
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "hostname_label": "sqlin0010"
+        },
+        {
+          "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+          "assign_public_ip": true,
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "hostname_label": "dbmgr1"
+        }
+      ],
+      "source_details": {
+        "os": "Windows",
+        "version": "Server 2019 Standard",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#ps1_sysnative\n#\n# Created by John S Parker\n# Created on July 15, 2020\nTry {\nif (-not (Test-Path -LiteralPath C:\\OCIdata\\DBMGRInstall.txt -PathType Leaf)) {mkdir c:\\OCIdata}\nStart-Transcript -Path \"C:\\OCIdata\\DBMGRInstall.txt\";\n$Password=\"P@ssw0rd123!!\";\nnet user opc $Password /logonpasswordchg:no /active:yes;\n# Insure that Invoke-WebRequest is able to execute\n# by setting the correct security protocol version\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;\n# The PAR comes from the OBJECT store\n$Addvnic = \"https://objectstorage.us-ashburn-1.oraclecloud.com/p/z_soA52_uxCoVhy8PO9oO9rfG3vaoz_etkz9mYFC1yA/n/johnsparkertenancy/b/SQLSetup/o/addvnic.ps1\";\nInvoke-Webrequest -uri $Addvnic -OutFile C:\\OCIdata\\addvnic.ps1;\n$addjob = \"https://objectstorage.us-ashburn-1.oraclecloud.com/p/GJ9IfjunCtEuPI0_HyYCNnE5cC9EPjXMHCmyz3jN_8Y/n/johnsparkertenancy/b/SQLSetup/o/vnicjob.ps1\"\nInvoke-Webrequest -uri $addjob -OutFile C:\\OCIData\\vnicjob.ps1\n# Download the SQL Server Management Studio\n# Insure that Invoke-WebRequest is able to execute\n# by setting the correct security protocol version\nWrite-Host \"Getting SSMS binaries\"\nif (-not (Test-Path -LiteralPath C:\\SQLA\\SQLA.log -PathType Leaf)) {mkdir c:\\SQLA}\nInvoke-WebRequest -Uri https://aka.ms/ssmsfullsetup -OutFile c:\\SQLA\\ssms-setup-enu.exe\n# Create the Job that will update the secondary vnic\nStart-Process -Verb RunAs powershell.exe -Args \"C:\\OCIdata\\vnicjob.ps1\" -PassThru -WindowStyle Hidden;\n\n} Catch {\nWrite-Host $_\n} Finally {\nStop-Transcript\n}\n"
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.b8dab2ce-f310-47f3-b772-a353a753c191",
+        "assign_public_ip": true,
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "hostname_label": "sqlin0010"
+      }
+    },
+    {
+      "id": "okit.instance.6f0fe8d1-dcc6-4397-8acf-ce35f6a110a5",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLA",
+      "name": "SQLA",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "shape": "VM.Standard.E2.4",
+      "count": 1,
+      "fault_domain": "FAULT-DOMAIN-1",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+          "assign_public_ip": true,
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "hostname_label": "sqlin0020"
+        }
+      ],
+      "source_details": {
+        "os": "Windows",
+        "version": "Server 2019 Standard",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#ps1_sysnative\n#\n# Created by John S Parker\n# Created on July 15, 2020\nTry {\nif (-not (Test-Path -LiteralPath C:\\OCIdata\\SQLAInstall.txt -PathType Leaf)) {mkdir c:\\OCIdata}\nStart-Transcript -Path \"C:\\OCIdata\\SQLAInstall.txt\";\ncmd /C 'wmic UserAccount where Name=\"opc\" set PasswordExpires=False'\nWrite-host \"set opc account to never expire\"\n#adjust the execution policy\nStart-Process -Verb RunAs powershell.exe -Args \"Set-ExecutionPolicy Unrestricted -force\" -PassThru -WindowStyle Hidden\nget-ExecutionPolicy\n# enable the iSCSI service\nSet-Service -Name msiscsi -StartupType Automatic;\nStart-Service msiscsi;\n#\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;\n$SQLSERVERsetup =\"https://objectstorage.us-ashburn-1.oraclecloud.com/p/D7cZYlZjj4o4RXadubGzPbXeFjBGozkV25MB1C4GM7w/n/johnsparkertenancy/b/SQLSetup/o/SQLAsetup.ps1\";\nInvoke-Webrequest -uri $SQLSERVERsetup -OutFile C:\\OCIdata\\SQLAsetup.ps1;\nWrite-host \"Downloaded sqlasetup.ps1 script\"\n$jobscript =\"https://objectstorage.us-ashburn-1.oraclecloud.com/p/dtUa7iGFTwLRzOp67m8gN6QqY_qM-a54XVJ8OiPCcb0/n/johnsparkertenancy/b/SQLSetup/o/SQLAjob.ps1\"\nInvoke-Webrequest -uri $jobscript -OutFile C:\\OCIdata\\SQLAjob.ps1;\n\n#start-sleep -s 240;\nStart-Process -Verb RunAs powershell.exe -Args \"C:\\OCIdata\\SQLAjob.ps1\" -PassThru -WindowStyle Hidden;\n# Start-Process -Verb RunAs powershell.exe -Args \"C:\\OCIdata\\sqlsetup.ps1\" -PassThru -WindowStyle Hidden;\n\n#\n} Catch {\nWrite-Host $_\n} Finally {\nStop-Transcript\n}\n"
+      },
+      "block_storage_volume_ids": [
+        "okit.blockstoragevolume.fbe757a4-b7a2-4ad9-81c0-285cbd372359",
+        "okit.blockstoragevolume.7c43a8d0-becb-4383-83b3-0b45f3de33ea",
+        "okit.blockstoragevolume.9191dd1c-f0e3-491c-943f-a033011df798",
+        "okit.blockstoragevolume.34eb3906-ae5f-40c9-8d9e-4a1c98a40169",
+        "okit.blockstoragevolume.a7e2ceb4-6f34-42e6-91a1-5a5a5a97af81",
+        "okit.blockstoragevolume.7be2c6e2-b73c-4197-903e-b0f1e200fac1"
+      ],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+        "assign_public_ip": true,
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "hostname_label": "sqlin0020"
+      }
+    },
+    {
+      "id": "okit.instance.9f7cc408-6e62-4188-8926-a5145df2125f",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLB",
+      "name": "SQLB",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "shape": "VM.Standard.E2.4",
+      "count": 1,
+      "fault_domain": "FAULT-DOMAIN-2",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+          "assign_public_ip": true,
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "hostname_label": "sqlin0030"
+        }
+      ],
+      "source_details": {
+        "os": "Windows",
+        "version": "Server 2019 Standard",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#ps1_sysnative\n#\n# Created by John S Parker\n# Created on July 15, 2020\nTry {\nif (-not (Test-Path -LiteralPath C:\\OCIdata\\SQLBInstall.txt -PathType Leaf)) {mkdir c:\\OCIdata}\nStart-Transcript -Path \"C:\\OCIdata\\SQLBInstall.txt\";\n$Password=\"P@ssw0rd123!!\";\nnet user opc $Password /logonpasswordchg:no /active:yes /expires:never;\n# cmd /C 'wmic UserAccount where Name=\"opc\" set PasswordExpires=False'\nWrite-host \"set opc account to never expire\"\n#adjust the execution policy\nStart-Process -Verb RunAs powershell.exe -Args \"Set-ExecutionPolicy Unrestricted -force\" -PassThru -WindowStyle Hidden\nget-ExecutionPolicy\n# enable the iSCSI service\nSet-Service -Name msiscsi -StartupType Automatic;\nStart-Service msiscsi;\n#\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;\n$SQLSERVERsetup =\"https://objectstorage.us-ashburn-1.oraclecloud.com/p/6WEdSqhoSLYE67hKY5ODLlXBHT1EfuZ_2S9JD6RVwaw/n/johnsparkertenancy/b/SQLSetup/o/SQLBsetup.ps1\";\nInvoke-Webrequest -uri $SQLSERVERsetup -OutFile C:\\OCIdata\\SQLBsetup.ps1;\nWrite-host \"Downloaded SQLBsetup.ps1 script\"\n$jobscript =\"https://objectstorage.us-ashburn-1.oraclecloud.com/p/loov6uJSBKXkCbRWRTIU0G1xzMAdG256xaSZk_UrgTo/n/johnsparkertenancy/b/SQLSetup/o/SQLBjob.ps1\"\nInvoke-Webrequest -uri $jobscript -OutFile C:\\OCIdata\\SQLBjob.ps1;\n\nStart-Process -Verb RunAs powershell.exe -Args \"C:\\OCIdata\\SQLBjob.ps1\" -PassThru -WindowStyle Hidden;\n# Start-Process -Verb RunAs powershell.exe -Args \"C:\\OCIdata\\sqlsetup.ps1\" -PassThru -WindowStyle Hidden;\n\n#\n} Catch {\nWrite-Host $_\n} Finally {\nStop-Transcript\n}\n"
+      },
+      "block_storage_volume_ids": [
+        "okit.blockstoragevolume.0d735820-71b4-41c2-832d-2ed4f9979928",
+        "okit.blockstoragevolume.37536f48-e452-495a-9126-9f91fd3783a8",
+        "okit.blockstoragevolume.02cd22ab-fcfc-44b7-8031-e0ee7c04e7bf",
+        "okit.blockstoragevolume.b13bfc5c-9310-4033-9ff7-5e5ed64fa57c",
+        "okit.blockstoragevolume.8de358ef-18ce-4b0d-9cb9-096fdc4c75be",
+        "okit.blockstoragevolume.b497181e-39a2-436c-8ee7-c0129648c601"
+      ],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+        "assign_public_ip": true,
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "hostname_label": "sqlin0030"
+      }
+    },
+    {
+      "id": "okit.instance.b981c98e-4297-4ca2-9044-30c33769bcc2",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLWitnes",
+      "name": "SQLWitnes",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "shape": "VM.Standard.E2.1",
+      "count": 1,
+      "fault_domain": "FAULT-DOMAIN-3",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+          "assign_public_ip": true,
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "hostname_label": "sqlin0040"
+        }
+      ],
+      "source_details": {
+        "os": "Windows",
+        "version": "Server 2019 Standard",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": ""
+      },
+      "block_storage_volume_ids": [
+        "okit.blockstoragevolume.8cf7ba56-b573-4539-a415-e72869bbb3e3"
+      ],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+        "assign_public_ip": true,
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "hostname_label": "sqlin0040"
+      }
+    },
+    {
+      "id": "okit.instance.bce00e80-8f06-4052-9e33-d1e343434369",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLDC1",
+      "name": "SQLDC1",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
+      "shape": "VM.Standard.E2.1",
+      "count": 1,
+      "fault_domain": "FAULT-DOMAIN-3",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+          "assign_public_ip": true,
+          "nsg_ids": [],
+          "skip_source_dest_check": false,
+          "hostname_label": "sqlin0050"
+        }
+      ],
+      "source_details": {
+        "os": "Windows",
+        "version": "Server 2019 Standard",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": ""
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+        "assign_public_ip": true,
+        "nsg_ids": [],
+        "skip_source_dest_check": false,
+        "hostname_label": "sqlin0050"
+      }
+    }
+  ],
+  "instance_pools": [],
+  "internet_gateways": [
+    {
+      "id": "okit.internetgateway.c10a8776-04a3-4d1b-9a94-29aca13b3f83",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLig001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "enabled": true
+    }
+  ],
+  "ipsec_connections": [],
+  "load_balancers": [],
+  "local_peering_gateways": [],
+  "mysql_database_systems": [],
+  "nat_gateways": [
+    {
+      "id": "okit.natgateway.9962db9e-4eee-4109-a07c-af3ed5110f13",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLng001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "block_traffic": false
+    }
+  ],
+  "network_security_groups": [],
+  "object_storage_buckets": [
+    {
+      "id": "okit.objectstoragebucket.be1898d7-8ded-4512-b071-38e8ac6b7cd7",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLOBJ01",
+      "name": "SQLOBJ01",
+      "definition": "Object Storage for SQL Server Backups and Images",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "namespace": "Tenancy Name",
+      "storage_tier": "Standard",
+      "public_access_type": "NoPublicAccess"
+    }
+  ],
+  "oke_clusters": [],
+  "remote_peering_connections": [],
+  "route_tables": [
+    {
+      "id": "okit.routetable.ecf51782-fef9-45df-856d-b02078648c9a",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLrt001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "route_rules": [
+        {
+          "target_type": "internet_gateways",
+          "destination_type": "CIDR_BLOCK",
+          "destination": "0.0.0.0/0",
+          "network_entity_id": "okit.internetgateway.c10a8776-04a3-4d1b-9a94-29aca13b3f83",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "id": "okit.routetable.bcdd7b9d-d6bb-4cf5-af41-27496c0e8827",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLrt002",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "route_rules": [
+        {
+          "target_type": "nat_gateways",
+          "destination_type": "CIDR_BLOCK",
+          "destination": "0.0.0.0/0",
+          "network_entity_id": "okit.natgateway.9962db9e-4eee-4109-a07c-af3ed5110f13",
+          "description": ""
+        }
+      ]
+    }
+  ],
+  "security_lists": [
+    {
+      "id": "okit.securitylist.6c4317ae-fe5b-49ad-b4fb-2f0df6e5538e",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLsl001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "egress_security_rules": [
+        {
+          "protocol": "all",
+          "is_stateless": false,
+          "description": "",
+          "destination_type": "CIDR_BLOCK",
+          "destination": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        }
+      ],
+      "ingress_security_rules": [
+        {
+          "protocol": "6",
+          "is_stateless": false,
+          "description": "",
+          "source_type": "CIDR_BLOCK",
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "80",
+              "max": "80"
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        },
+        {
+          "protocol": "6",
+          "is_stateless": false,
+          "description": "",
+          "source_type": "CIDR_BLOCK",
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "3389",
+              "max": "3389"
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "okit.securitylist.a6381e4d-2fc5-49cb-bb84-3397834f6fb7",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLsl002",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "egress_security_rules": [
+        {
+          "protocol": "all",
+          "is_stateless": false,
+          "description": "",
+          "destination_type": "CIDR_BLOCK",
+          "destination": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        }
+      ],
+      "ingress_security_rules": [
+        {
+          "protocol": "6",
+          "is_stateless": false,
+          "description": "",
+          "source_type": "CIDR_BLOCK",
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "80",
+              "max": "80"
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        },
+        {
+          "protocol": "6",
+          "is_stateless": false,
+          "description": "",
+          "source_type": "CIDR_BLOCK",
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "111",
+              "max": "111"
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        },
+        {
+          "protocol": "6",
+          "is_stateless": false,
+          "description": "",
+          "source_type": "CIDR_BLOCK",
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "443",
+              "max": "443"
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        },
+        {
+          "protocol": "6",
+          "is_stateless": false,
+          "description": "",
+          "source_type": "CIDR_BLOCK",
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "2048",
+              "max": "2050"
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        },
+        {
+          "protocol": "6",
+          "is_stateless": false,
+          "description": "",
+          "source_type": "CIDR_BLOCK",
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "3389",
+              "max": "3389"
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        },
+        {
+          "protocol": "6",
+          "is_stateless": false,
+          "description": "",
+          "source_type": "CIDR_BLOCK",
+          "source": "0.0.0.0/0",
+          "tcp_options": {
+            "source_port_range": {
+              "min": "5986",
+              "max": "5986"
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "udp_options": {
+            "source_port_range": {
+              "min": "",
+              "max": ""
+            },
+            "destination_port_range": {
+              "min": "",
+              "max": ""
+            }
+          },
+          "icmp_options": {
+            "code": "",
+            "type": ""
+          }
+        }
+      ]
+    }
+  ],
+  "service_gateways": [],
+  "subnets": [
+    {
+      "id": "okit.subnet.b8dab2ce-f310-47f3-b772-a353a753c191",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLsn001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "cidr_block": "10.0.0.0/24",
+      "dns_label": "sn001",
+      "prohibit_public_ip_on_vnic": false,
+      "route_table_id": "okit.routetable.ecf51782-fef9-45df-856d-b02078648c9a",
+      "security_list_ids": [
+        "okit.securitylist.6c4317ae-fe5b-49ad-b4fb-2f0df6e5538e"
+      ],
+      "availability_domain": "0",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": ""
+    },
+    {
+      "id": "okit.subnet.ee66b24b-7adf-4f18-922e-37af8ca44e15",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLsn002",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "cidr_block": "10.0.1.0/24",
+      "dns_label": "sn002",
+      "prohibit_public_ip_on_vnic": true,
+      "route_table_id": "okit.routetable.bcdd7b9d-d6bb-4cf5-af41-27496c0e8827",
+      "security_list_ids": [
+        "okit.securitylist.a6381e4d-2fc5-49cb-bb84-3397834f6fb7"
+      ],
+      "availability_domain": "0",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": ""
+    }
+  ],
+  "virtual_cloud_networks": [
+    {
+      "id": "okit.virtualcloudnetwork.2a123f08-a85e-432b-95ab-37bb186d9279",
+      "compartment_id": "okit.compartment.ac269464-6d20-4fb4-8ad1-0622d4ba5c0f",
+      "display_name": "SQLvcn001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "cidr_block": "10.0.0.0/16",
+      "dns_label": "vcn001",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": ""
+    }
+  ]
+}
