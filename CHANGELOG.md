@@ -5,6 +5,7 @@
 ### Features
 1. Description now displayed as a right side panel allowing multi line entry (Enhancement Request #165)
 2. Remove dialog associated with Save As Template because the Title & Description are now part of the main screen.
+3. Add Preference to display the OCID for a Resource.
 
 ### Bug Fixes
 
