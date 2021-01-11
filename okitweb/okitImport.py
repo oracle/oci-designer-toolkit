@@ -19,7 +19,7 @@ from werkzeug.utils import secure_filename
 from common.okitCommon import logJson
 from common.okitLogging import getLogger
 from parsers.okitHclJsonParser import OkitHclJsonParser
-from parsers.okitCCEJsonParser import OkitCceJsonParser
+from parsers.okitCceJsonParser import OkitCceJsonParser
 from parsers.OkitCd3ExcelParser import OkitCd3ExcelParser
 
 # Configure logging
