@@ -230,6 +230,7 @@ class OkitSettings {
         this.tooltip_type = 'simple';
         this.name_prefix = 'okit-';
         this.auto_save = false;
+        this.show_ocids = false;
         this.load();
     }
 
@@ -313,6 +314,8 @@ class OkitSettings {
             this.addHideAttachedArtefacts(tbody, autosave);
             // Highlight Associations
             this.addHighlightAssociations(tbody, autosave);
+            // Display OCIDs
+            this.addShowOcids(tbody, autosave);
             // Display Label
             this.addDisplayLabel(tbody, autosave);
             // Tooltip Style
@@ -520,6 +523,27 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'highlight_association')
             .text('Highlight Associations');
+    }
+
+    addShowOcids(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'show_ocids')
+            .attr('name', 'show_ocids')
+            .attr('type', 'checkbox')
+            .property('checked', this.show_ocids)
+            .on('change', function () {
+                if (autosave) {
+                    self.show_ocids = $('#show_ocids').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'show_ocids')
+            .text('Display OCIDs');
     }
 
     addDisplayLabel(tbody, autosave) {
