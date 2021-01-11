@@ -68,6 +68,7 @@ def parseCd3Xlsx():
             file = request.files['file']
             if file and file.filename != '':
                 filename = os.path.join('/okit/workspace', secure_filename(file.filename))
+                logger.info("Saving Xlsx File {0!s:s}".format(filename))
                 file.save(filename)
                 # Import CD3
                 parser = OkitCd3ExcelParser()
