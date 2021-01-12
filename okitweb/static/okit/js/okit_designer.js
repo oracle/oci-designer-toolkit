@@ -827,7 +827,8 @@ function addRegionTab(region) {
             activeRegion = region;
             okitJsonModel = regionOkitJson[region];
             newDesignerView();
-            redrawSVGCanvas(region);
+            //redrawSVGCanvas(region);
+            redrawSVGCanvas();
         });
 }
 function addRegionTabProgress(region) {
