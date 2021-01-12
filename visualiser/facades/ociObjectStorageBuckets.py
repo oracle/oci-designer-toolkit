@@ -56,6 +56,7 @@ class OCIObjectStorageBuckets(OCIObjectStorageBucketConnection):
         object_storage_buckets_json = []
         for bucket_summary in self.object_storage_buckets_json:
             bucket = self.client.get_bucket(bucket_summary['namespace'], bucket_summary['name']).data
+            bucket['display_name'] = bucket['name']
             object_storage_buckets_json.append(self.toJson(bucket))
             object_storage_buckets_json[-1]['id'] = object_storage_buckets_json[-1].get('id', '{0!s:s}-{1!s:s}'.format(bucket_summary['namespace'], bucket_summary['name']))
         self.object_storage_buckets_json = object_storage_buckets_json
