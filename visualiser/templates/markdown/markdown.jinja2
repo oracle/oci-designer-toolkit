@@ -20,47 +20,47 @@
     {% include "virtual_cloud_network.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if subnets is defined and subnets|length > 0 -%}
+{% if subnets is defined and subnets|length > 0 -%}
     ### Subnets
     {% include "subnet.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if internet_gateways is defined and internet_gateways|length > 0 -%}
+{% if internet_gateways is defined and internet_gateways|length > 0 -%}
     ### Internet Gateways
     {% include "internet_gateway.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if nat_gateways is defined and nat_gateways|length > 0 -%}
+{% if nat_gateways is defined and nat_gateways|length > 0 -%}
     ### NAT Gateways
     {% include "nat_gateway.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if service_gateways is defined and service_gateways|length > 0 -%}
+{% if service_gateways is defined and service_gateways|length > 0 -%}
     ### Service Gateways
     {% include "service_gateway.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if local_peering_gateways is defined and local_peering_gateways|length > 0 -%}
+{% if local_peering_gateways is defined and local_peering_gateways|length > 0 -%}
     ### Local Peering Gateways
     {% include "local_peering_gateway.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if remote_peering_connections is defined and remote_peering_connections|length > 0 -%}
+{% if remote_peering_connections is defined and remote_peering_connections|length > 0 -%}
     ### Remote Peering Connections
     {% include "remote_peering_connection.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if route_tables is defined and route_tables|length > 0 -%}
+{% if route_tables is defined and route_tables|length > 0 -%}
     ### Route Tables
     {% include "route_table.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if security_lists is defined and security_lists|length > 0 -%}
+{% if security_lists is defined and security_lists|length > 0 -%}
     ### Security Lists
     {% include "security_list.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if network_security_groups is defined and network_security_groups|length > 0 -%}
+{% if network_security_groups is defined and network_security_groups|length > 0 -%}
     ### Network Security Groups
     {% include "network_security_group.jinja2" ignore missing with context %}
 {%- endif %}
@@ -72,13 +72,13 @@
     {% include "autonomous_database.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if database_systems is defined and database_systems|length > 0 -%}
+{% if database_systems is defined and database_systems|length > 0 -%}
     ### Database Systems
     {% include "database_system.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if mysql_database_systems is defined and mysql_database_systems|length > 0 -%}
-    ### Database Systems
+{% if mysql_database_systems is defined and mysql_database_systems|length > 0 -%}
+    ### MySQL Database Systems
     {% include "mysql_database_system.jinja2" ignore missing with context %}
 {%- endif %}
 
@@ -89,7 +89,7 @@
     {% include "instance.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if load_balancers is defined and load_balancers|length > 0 -%}
+{% if load_balancers is defined and load_balancers|length > 0 -%}
     ### Load Balancers
     {% include "load_balancer.jinja2" ignore missing with context %}
 {%- endif %}
@@ -101,16 +101,27 @@
     {% include "block_storage_volume.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if object_storage_buckets is defined and object_storage_buckets|length > 0 -%}
+{% if object_storage_buckets is defined and object_storage_buckets|length > 0 -%}
     ### Object Storage Buckets
     {% include "object_storage_bucket.jinja2" ignore missing with context %}
 {%- endif %}
 
-{%- if file_storage_systems is defined and file_storage_systems|length > 0 -%}
+{% if file_storage_systems is defined and file_storage_systems|length > 0 -%}
     ### File Storage Systems
     {% include "file_storage_system.jinja2" ignore missing with context %}
 {%- endif %}
 
-## Costing
+## External
+
+{% if customer_premise_equipments is defined and customer_premise_equipments|length > 0 -%}
+    ### Customer Premise Equipment
+    {% include "customer_premise_equipment.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if ipsec_connections is defined and ipsec_connections|length > 0 -%}
+    ### IPSec Connections
+    {% include "ipsec_connection.jinja2" ignore missing with context %}
+{%- endif %}
+
 
 

@@ -1,12 +1,14 @@
-{%- macro document_common_details(resource) -%}
-    #### {{ resource.display_name }}
+{%- macro document_common_details(resource) %}
+
+#### {{ resource.display_name }}
     {% if resource.definition is defined and resource.definition|length > 0 -%}
         {{ resource.definition }}
 
-        {%- if resource.svg is defined -%}
-            {{ resource.svg | safe}}
-        {%- endif -%}
-    {%- endif -%}
+    {% endif %}
+    {% if resource.svg is defined -%}
+        {{ resource.svg | safe}}
+
+    {% endif %}
 {%- endmacro -%}
 {%- macro document_common_properties(resource) -%}
 | Property | Value    |
@@ -77,56 +79,92 @@
     {{ "| %-15s | %s |" | format(name, value) }}
 {%- endmacro -%}
 
-{%- macro document_property_link(name, value) -%}
+{%- macro document_property_link1(name, value) -%}
     {{ "| %-15s | [%s](#%s) |" | format(name, value, value) }}
 {%- endmacro -%}
 
-{%- macro document_availability_domain(name, regional_name) -%}
+{%- macro document_property_link(name, value) -%}
+    {{ "| %-15s | %s |" | format(name, property_link(value)) }}
+{%- endmacro -%}
+
+{%- macro property_link(value) -%}
+    {{ "[%s](#%s)" | format(value, value) }}
+{%- endmacro -%}
+
+{%- macro document_availability_domain(name, regional_name, title="Availability Domain") -%}
     {%- if name == "0" -%}
-        {{ document_property("Availability Domain", "Regional") }}
+        {{ document_property(title, "Regional") }}
     {%- elif regional_name is defined -%}
-        {{ document_property("Availability Domain", regional_name) }}
+        {{ document_property(title, regional_name) }}
     {%- else -%}
-        {{ document_property("Availability Domain", name) }}
+        {{ document_property(title, name) }}
     {%- endif -%}
 {%- endmacro -%}
 
-{%- macro compartment_name(compartments, id) -%}
+{%- macro compartment_name(compartments, id, title="Compartment") -%}
     {%- for compartment in compartments -%}
         {%- if compartment.id == id -%}
-            {{ document_property_link("Compartment", compartment.display_name) }}
+            {{ document_property_link(title, compartment.display_name) }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
 
-{%- macro vcn_name(virtual_cloud_networks, id) -%}
+{%- macro vcn_name(virtual_cloud_networks, id, title="Virtual Cloud Network") -%}
     {%- for vcn in virtual_cloud_networks -%}
         {%- if vcn.id == id -%}
-            {{ document_property_link("Virtual Cloud Network", vcn.display_name) }}
+            {{ document_property_link(title, vcn.display_name) }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
 
-{%- macro subnet_name(subnets, id) -%}
+{%- macro subnet_property(id, title="Subnet") -%}
+    {{ document_property(title, subnet_link(subnets, id)) }}
+{%- endmacro -%}
+
+{%- macro subnet_link(subnets, id) -%}
     {%- for subnet in subnets -%}
         {%- if subnet.id == id -%}
-            {{ document_property_link("Subnet", subnet.display_name) }}
+            {{ property_link(subnet.display_name) }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
 
-{%- macro route_table_name(route_tables, id) -%}
+{%- macro route_table_name(route_tables, id, title="Route Table") -%}
     {%- for route_table in route_tables -%}
         {%- if route_table.id == id -%}
-            {{ document_property_link("Route Table", route_table.display_name) }}
+            {{ document_property_link(title, route_table.display_name) }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
 
-{%- macro security_list_name(security_lists, id) -%}
+{%- macro security_list_name(security_lists, id, title="Security List") -%}
     {%- for security_list in security_lists -%}
         {%- if security_list.id == id -%}
-            {{ document_property_link("Security List", security_list.display_name) }}
+            {{ document_property_link(title, security_list.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro nsg_name(network_security_groups, id, title="Network Security Group") -%}
+    {%- for nsg in network_security_groups -%}
+        {%- if nsg.id == id -%}
+            {{ document_property(title, nsg_link(network_security_groups, id)) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro nsg_link(network_security_groups, id) -%}
+    {%- for nsg in network_security_groups -%}
+        {%- if nsg.id == id -%}
+            {{ property_link(nsg.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro instance_name(instances, id, title="Instance") -%}
+    {%- for instance in instances -%}
+        {%- if instance.id == id -%}
+            {{ document_property_link(title, instance.display_name) }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
@@ -155,10 +193,34 @@
     {%- endfor -%}
 {%- endmacro %}
 
+{%- macro dynamic_routing_gateway_property(id, title="Dynamic Routing Gateway") -%}
+    {{ document_property(title, dynamic_routing_gateway_link(id)) }}
+{%- endmacro -%}
+
 {% macro dynamic_routing_gateway_name(id) -%}
     {%- for dynamic_routing_gateway in dynamic_routing_gateways -%}
         {%- if dynamic_routing_gateway.id == id -%}
             {{ dynamic_routing_gateway.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+{% macro dynamic_routing_gateway_link(id) -%}
+    {%- for dynamic_routing_gateway in dynamic_routing_gateways -%}
+        {%- if dynamic_routing_gateway.id == id -%}
+            {{ property_link(dynamic_routing_gateway.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+{%- macro customer_premise_equipment_property(id, title="Customer Premise Equipment") -%}
+    {{ document_property(title, customer_premise_equipment_link(id)) }}
+{%- endmacro -%}
+
+{% macro customer_premise_equipment_link(id) -%}
+    {%- for customer_premise_equipment in customer_premise_equipments -%}
+        {%- if customer_premise_equipment.id == id -%}
+            {{ property_link(customer_premise_equipment.display_name) }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}

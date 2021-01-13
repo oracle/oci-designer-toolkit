@@ -376,14 +376,10 @@ function handleRedraw(evt) {
     redrawSVGCanvas();
     return false;
 }
-function redrawSVGCanvas(region='') {
-    console.info('>>>>>>>>> Redrawing Canvas (Region : ' + region +')');
-    console.info('>>>>>>>>> Active Region            : ' + activeRegion);
-    console.info(okitJsonView);
-    if (region === '' || region === activeRegion) {
-        displayDesignerView();
-        displayOkitJson();
-    }
+function redrawSVGCanvas(recalculate=false) {
+    if (recalculate) {resetRecalculateFlag();}
+    displayDesignerView();
+    displayOkitJson();
 }
 /*
 ** Validate Model
@@ -827,7 +823,6 @@ function addRegionTab(region) {
             activeRegion = region;
             okitJsonModel = regionOkitJson[region];
             newDesignerView();
-            //redrawSVGCanvas(region);
             redrawSVGCanvas();
         });
 }
@@ -870,6 +865,12 @@ function displayOkitJson() {
 function displayDesignerView() {
     okitJsonView.draw();
     setTitleDescription();
+}
+function resetRecalculateFlag() {
+    for (let resource of [...okitJsonView.getCompartments(), ...okitJsonView.getVirtualCloudNetworks(),
+        ...okitJsonView.getSubnets()]) {
+        resource.recalculate_dimensions = true;
+    }
 }
 /*
 ** Slidebar handlers

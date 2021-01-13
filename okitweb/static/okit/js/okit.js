@@ -250,7 +250,7 @@ class OkitSettings {
 
     save() {
         createCookie(this.getCookieName(), JSON.stringify(this));
-        redrawSVGCanvas();
+        redrawSVGCanvas(true);
     }
 
     erase() {
@@ -655,7 +655,7 @@ class OkitSettings {
             });
         td.append('label')
             .attr('for', 'definition_tooltip')
-            .text('Definition');
+            .text('Documentation');
         // -- Resource Type
         tr = tbody.append('div').attr('class', 'tr');
         tr.append('div').attr('class', 'td').text('');

@@ -331,5 +331,5 @@ $(document).ready(function() {
     /*
     ** Add redraw on resize
      */
-    window.addEventListener('resize', () => { redrawSVGCanvas() });
+    window.addEventListener('resize', () => { redrawSVGCanvas(true) });
 });
