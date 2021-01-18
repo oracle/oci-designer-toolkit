@@ -2,7 +2,7 @@
 
 #### {{ resource.display_name }}
     {% if resource.definition is defined and resource.definition|length > 0 -%}
-        {{ resource.definition }}
+        {{ resource.definition | safe }}
 
     {% endif %}
     {% if resource.svg is defined -%}

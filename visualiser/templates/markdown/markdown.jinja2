@@ -1,6 +1,6 @@
 # {{ title }}
 
-{{ description }}
+{{ description | safe }}
 
 {% if svg is defined -%}
     {{ svg | safe }}
