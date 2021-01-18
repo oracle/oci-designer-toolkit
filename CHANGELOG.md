@@ -6,8 +6,11 @@
 1. Description now displayed as a right side panel allowing multi line entry (Enhancement Request #165)
 2. Remove dialog associated with Save As Template because the Title & Description are now part of the main screen.
 3. Add Preference to display the OCID for a Resource.
+4. Simple GIT integration for saving Template / Terraform / Ansible files.
+5. Export to Markdown to provide design documentation, description field (Enhancement Request #165) allows Markdown whilst each contains a Documentation field to provide resource specific information.
 
 ### Bug Fixes
+1. Object Storage Bucket not displaying queried name (Issue #206)
 
 
 ## Version 0.15.0 

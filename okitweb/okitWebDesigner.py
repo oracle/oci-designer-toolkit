@@ -72,7 +72,7 @@ def readConfigFileSections(config_file='~/.oci/config'):
         config_sections = ['Instance Principal']
     return config_sections
 
-def readConfigFileSettings(config_file='~/.oci/settings'):
+def readConfigFileSettings(config_file='~/.oci/git_repositories'):
     logger.debug('Setting File {0!s:s}'.format(config_file))
     abs_config_file = os.path.expanduser(config_file)
     logger.debug('Setting File {0!s:s}'.format(abs_config_file))
@@ -80,7 +80,7 @@ def readConfigFileSettings(config_file='~/.oci/settings'):
     config.read(abs_config_file)
     repo_list = []
     for each_git_section in config.sections():
-        repo_list.append({'label':each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
+        repo_list.append({'label': each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
     return repo_list
 
 def getConfigFileValue(section, key, config_file='~/.oci/config'):
