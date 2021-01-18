@@ -8,9 +8,9 @@
     {% for rule in rules -%}
         | {{ protocol_map[rule.protocol] }} | {{ rule.is_stateless }} |
         {%- if type == "Ingress" -%}{{ rule.source }}{%- else -%}{{ rule.destination }}{%- endif -%} |
-        {%- if rule.protocol == "1" -%}
+        {%- if rule.protocol == "1" and rule.icmp_options is defined -%}
             Type: {{ rule.icmp_options.type }} / Code: {{ rule.icmp_options.code }}
-        {%- elif rule.protocol == "6" -%}
+        {%- elif rule.protocol == "6" and rule.tcp_options is defined -%}
             {%- if rule.tcp_options.source_port_range is defined and rule.tcp_options.destination_port_range is defined -%}
                 {{ ports_display(rule.tcp_options.source_port_range, rule.tcp_options.destination_port_range) }}
             {%- elif rule.tcp_options.source_port_range is not defined and rule.tcp_options.destination_port_range is defined -%}
@@ -18,7 +18,7 @@
             {%- elif rule.tcp_options.source_port_range is defined and rule.tcp_options.destination_port_range is not defined -%}
                 {{ ports_display(rule.tcp_options.source_port_range, None) }}
             {%- endif -%}
-        {%- elif rule.protocol == "17" -%}
+        {%- elif rule.protocol == "17" and rule.udp_options is defined -%}
             {%- if rule.udp_options.source_port_range is defined and rule.udp_options.destination_port_range is defined -%}
                 {{ ports_display(rule.udp_options.source_port_range, rule.udp_options.destination_port_range) }}
             {%- elif rule.udp_options.source_port_range is not defined and rule.udp_options.destination_port_range is defined -%}
