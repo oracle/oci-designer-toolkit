@@ -16,7 +16,7 @@
 {{ common.document_property("Node Count", resource.node_count) }}
 {{ common.document_property("Licence Model", resource.license_model | replace("_", " ") | title) }}
     {% for nsg_id in resource.nsg_ids -%}
-        {{ common.nsg_name(network_security_groups, nsg_id) }}
+        {{ common.nsg_property(nsg_id) }}
     {% endfor %}
 {{ common.document_tags(resource) }}
 {%- endmacro %}

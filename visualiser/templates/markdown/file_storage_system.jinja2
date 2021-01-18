@@ -5,7 +5,7 @@
 | Subnet | Hostname | Network Security Groups | Max FS State Bytes | Max FS Stat Files |
 | ------ | -------- | ----------------------- | ------------------ | ----------------- |
     {% for target in targets -%}
-        | {{ common.subnet_link(subnets, target.subnet_id) }} | {{ target.hostname_label }} | {%- for id in target.nsg_ids -%}{{ common.nsg_link(network_security_groups, id) }}{%- endfor %} | {{ target.export_set.max_fs_stat_bytes }} | {{ target.export_set.max_fs_stat_files }} |
+        | {{ common.subnet_link(target.subnet_id) }} | {{ target.hostname_label }} | {%- for id in target.nsg_ids -%}{{ common.nsg_link(id) }}{%- endfor %} | {{ target.export_set.max_fs_stat_bytes }} | {{ target.export_set.max_fs_stat_files }} |
     {% endfor %}
 {%- endmacro %}
 {% macro document_exports(exports) -%}

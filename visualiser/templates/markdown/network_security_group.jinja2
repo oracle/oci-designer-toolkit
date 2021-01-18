@@ -31,7 +31,7 @@
 {% macro document_network_security_group(resource) -%}
 {{ common.document_common_details(resource) }}
 {{ common.document_common_properties(resource) }}
-{{ common.vcn_name(virtual_cloud_networks, resource.vcn_id) }}
+{{ common.vcn_property(resource.vcn_id) }}
 {{ document_rules(resource.security_rules) }}
 {{ common.document_tags(resource) }}
 {%- endmacro %}

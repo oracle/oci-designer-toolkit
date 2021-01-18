@@ -16,7 +16,7 @@
     {% if resource.availability_domain is defined -%}
         {{ document_availability_domain(resource.availability_domain, resource.region_availability_domain) }}
     {% endif %}
-{{ compartment_name(compartments, resource.compartment_id) }}
+{{ compartment_property(resource.compartment_id) }}
 {%- endmacro -%}
 
 {% macro document_freeform_tags(tags) -%}
@@ -37,10 +37,10 @@
         {{ document_availability_domain(resource.availability_domain, resource.region_availability_domain) }}
     {% endif %}
     {% if resource.compartment_id is defined -%}
-        {{ compartment_name(compartments, resource.compartment_id) }}
+        {{ compartment_property(resource.compartment_id) }}
     {% endif %}
     {% if resource.vcn_id is defined -%}
-        {{ vcn_name(virtual_cloud_networks, resource.vcn_id) }}
+        {{ vcn_property(resource.vcn_id) }}
     {% endif %}
     {% if resource.subnet_id is defined -%}
         {{ vcn_name(subnets, resource.subnet_id) }}
@@ -101,73 +101,78 @@
     {%- endif -%}
 {%- endmacro -%}
 
-{%- macro compartment_name(compartments, id, title="Compartment") -%}
+
+{%- macro compartment_property(id, title="Compartment") -%}
+    {{ document_property_link(title, compartment_link(id)) }}
+{%- endmacro -%}
+
+{%- macro compartment_link(id) -%}
+    {{ property_link(compartment_name(id)) }}
+{%- endmacro -%}
+
+{%- macro compartment_name(id) -%}
     {%- for compartment in compartments -%}
         {%- if compartment.id == id -%}
-            {{ document_property_link(title, compartment.display_name) }}
+            {{ compartment.display_name }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
 
-{%- macro vcn_name(virtual_cloud_networks, id, title="Virtual Cloud Network") -%}
-    {%- for vcn in virtual_cloud_networks -%}
-        {%- if vcn.id == id -%}
-            {{ document_property_link(title, vcn.display_name) }}
+
+{%- macro customer_premise_equipment_property(id, title="Customer Premise Equipment") -%}
+    {{ document_property(title, customer_premise_equipment_link(id)) }}
+{%- endmacro -%}
+
+{% macro customer_premise_equipment_link(id) -%}
+    {{ property_link(customer_premise_equipment_name(id)) }}
+{%- endmacro %}
+
+{% macro customer_premise_equipment_name(id) -%}
+    {%- for customer_premise_equipment in customer_premise_equipments -%}
+        {%- if customer_premise_equipment.id == id -%}
+            {{ customer_premise_equipment.display_name }}
         {%- endif -%}
     {%- endfor -%}
+{%- endmacro %}
+
+
+{%- macro dynamic_routing_gateway_property(id, title="Dynamic Routing Gateway") -%}
+    {{ document_property(title, dynamic_routing_gateway_link(id)) }}
 {%- endmacro -%}
 
-{%- macro subnet_property(id, title="Subnet") -%}
-    {{ document_property(title, subnet_link(subnets, id)) }}
-{%- endmacro -%}
+{% macro dynamic_routing_gateway_link(id) -%}
+    {{ property_link(dynamic_routing_gateway_name(id)) }}
+{%- endmacro %}
 
-{%- macro subnet_link(subnets, id) -%}
-    {%- for subnet in subnets -%}
-        {%- if subnet.id == id -%}
-            {{ property_link(subnet.display_name) }}
+{% macro dynamic_routing_gateway_name(id) -%}
+    {%- for dynamic_routing_gateway in dynamic_routing_gateways -%}
+        {%- if dynamic_routing_gateway.id == id -%}
+            {{ dynamic_routing_gateway.display_name }}
         {%- endif -%}
     {%- endfor -%}
+{%- endmacro %}
+
+
+{%- macro instance_property(id, title="Instance") -%}
+    {{ document_property_link(title, instance_link(id)) }}
 {%- endmacro -%}
 
-{%- macro route_table_name(route_tables, id, title="Route Table") -%}
-    {%- for route_table in route_tables -%}
-        {%- if route_table.id == id -%}
-            {{ document_property_link(title, route_table.display_name) }}
-        {%- endif -%}
-    {%- endfor -%}
+{%- macro instance_link(id) -%}
+    {{ property_link(instance_name(id)) }}
 {%- endmacro -%}
 
-{%- macro security_list_name(security_lists, id, title="Security List") -%}
-    {%- for security_list in security_lists -%}
-        {%- if security_list.id == id -%}
-            {{ document_property_link(title, security_list.display_name) }}
-        {%- endif -%}
-    {%- endfor -%}
-{%- endmacro -%}
-
-{%- macro nsg_name(network_security_groups, id, title="Network Security Group") -%}
-    {%- for nsg in network_security_groups -%}
-        {%- if nsg.id == id -%}
-            {{ document_property(title, nsg_link(network_security_groups, id)) }}
-        {%- endif -%}
-    {%- endfor -%}
-{%- endmacro -%}
-
-{%- macro nsg_link(network_security_groups, id) -%}
-    {%- for nsg in network_security_groups -%}
-        {%- if nsg.id == id -%}
-            {{ property_link(nsg.display_name) }}
-        {%- endif -%}
-    {%- endfor -%}
-{%- endmacro -%}
-
-{%- macro instance_name(instances, id, title="Instance") -%}
+{%- macro instance_name(id) -%}
     {%- for instance in instances -%}
         {%- if instance.id == id -%}
-            {{ document_property_link(title, instance.display_name) }}
+            {{ property_link(instance.display_name) }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
+
+
+{% macro internet_gateway_link(id) -%}
+    {{ property_link(internet_gateway_name(id)) }}
+{%- endmacro %}
 
 {% macro internet_gateway_name(id) -%}
     {%- for internet_gateway in internet_gateways -%}
@@ -177,12 +182,9 @@
     {%- endfor -%}
 {%- endmacro %}
 
-{% macro nat_gateway_name(id) -%}
-    {%- for nat_gateway in nat_gateways -%}
-        {%- if nat_gateway.id == id -%}
-            {{ nat_gateway.display_name }}
-        {%- endif -%}
-    {%- endfor -%}
+
+{% macro local_peering_gateway_link(id) -%}
+    {{ property_link(local_peering_gateway_name(id)) }}
 {%- endmacro %}
 
 {% macro local_peering_gateway_name(id) -%}
@@ -193,36 +195,73 @@
     {%- endfor -%}
 {%- endmacro %}
 
-{%- macro dynamic_routing_gateway_property(id, title="Dynamic Routing Gateway") -%}
-    {{ document_property(title, dynamic_routing_gateway_link(id)) }}
-{%- endmacro -%}
 
-{% macro dynamic_routing_gateway_name(id) -%}
-    {%- for dynamic_routing_gateway in dynamic_routing_gateways -%}
-        {%- if dynamic_routing_gateway.id == id -%}
-            {{ dynamic_routing_gateway.display_name }}
+{% macro nat_gateway_link(id) -%}
+    {{ property_link(nat_gateway_name(id)) }}
+{%- endmacro %}
+
+{% macro nat_gateway_name(id) -%}
+    {%- for nat_gateway in nat_gateways -%}
+        {%- if nat_gateway.id == id -%}
+            {{ nat_gateway.display_name }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}
 
-{% macro dynamic_routing_gateway_link(id) -%}
-    {%- for dynamic_routing_gateway in dynamic_routing_gateways -%}
-        {%- if dynamic_routing_gateway.id == id -%}
-            {{ property_link(dynamic_routing_gateway.display_name) }}
-        {%- endif -%}
-    {%- endfor -%}
-{%- endmacro %}
 
-{%- macro customer_premise_equipment_property(id, title="Customer Premise Equipment") -%}
-    {{ document_property(title, customer_premise_equipment_link(id)) }}
+{%- macro nsg_property(id, title="Network Security Group") -%}
+    {{ document_property(title, nsg_link(id)) }}
 {%- endmacro -%}
 
-{% macro customer_premise_equipment_link(id) -%}
-    {%- for customer_premise_equipment in customer_premise_equipments -%}
-        {%- if customer_premise_equipment.id == id -%}
-            {{ property_link(customer_premise_equipment.display_name) }}
+{%- macro nsg_link(id) -%}
+    {{ property_link(nsg_name(id)) }}
+{%- endmacro -%}
+
+{%- macro nsg_name(id) -%}
+    {%- for nsg in network_security_groups -%}
+        {%- if nsg.id == id -%}
+            {{ nsg.display_name }}
         {%- endif -%}
     {%- endfor -%}
+{%- endmacro -%}
+
+
+{%- macro route_table_property(id, title="Route Table") -%}
+    {{ document_property(title, route_table_link(id)) }}
+{%- endmacro -%}
+
+{%- macro route_table_link(id) -%}
+    {{ property_link(route_table_name(id)) }}
+{%- endmacro -%}
+
+{%- macro route_table_name(id) -%}
+    {%- for route_table in route_tables -%}
+        {%- if route_table.id == id -%}
+            {{ property_link(route_table.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+
+{%- macro security_list_property(id, title="Security List") -%}
+    {{ document_property(title, security_list_link(id)) }}
+{%- endmacro -%}
+
+{%- macro security_list_link(id) -%}
+    {{ property_link(security_list_name(id)) }}
+{%- endmacro -%}
+
+{%- macro security_list_name(id) -%}
+    {%- for security_list in security_lists -%}
+        {%- if security_list.id == id -%}
+            {{ security_list.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+
+{% macro service_gateway_link(id) -%}
+    {{ property_link(service_gateway_name(id)) }}
 {%- endmacro %}
 
 {% macro service_gateway_name(id) -%}
@@ -232,3 +271,37 @@
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}
+
+
+{%- macro subnet_property(id, title="Subnet") -%}
+    {{ document_property(title, subnet_link(id)) }}
+{%- endmacro -%}
+
+{%- macro subnet_link(id) -%}
+    {{ property_link(subnet_name(id)) }}
+{%- endmacro -%}
+
+{%- macro subnet_name(id) -%}
+    {%- for subnet in subnets -%}
+        {%- if subnet.id == id -%}
+            {{ property_link(subnet.display_name) }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+
+{%- macro vcn_property(id, title="Virtual Cloud Network") -%}
+    {{ document_property(title, vcn_link(id)) }}
+{%- endmacro -%}
+
+{%- macro vcn_link(id) -%}
+    {{ property_link(vcn_name(id)) }}
+{%- endmacro -%}
+
+{%- macro vcn_name(id) -%}
+    {%- for vcn in virtual_cloud_networks -%}
+        {%- if vcn.id == id -%}
+            {{ vcn.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
