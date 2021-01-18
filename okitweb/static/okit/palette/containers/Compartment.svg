@@ -2,14 +2,11 @@
 <!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Compartments" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
 	 y="0px" viewBox="0 0 161.9 162" enable-background="new 0 0 161.9 162" xml:space="preserve">
-<g>
-	<path fill="#312D2A" d="M81.8,44.7L71.3,22.3H9.1l0,117.1h144V44.7H81.8z M144,130.4h-126l0-99.1h47.5l10.5,22.4H144V130.4z"/>
-	<polygon fill="none" stroke="#312D2A" stroke-width="7" stroke-miterlimit="10" points="117.7,87.2 104.7,110.8 130.8,110.8 	"/>
-	
+	<g>
+		<path fill="#312D2A" d="M81.8,44.7L71.3,22.3H9.1l0,117.1h144V44.7H81.8z M144,130.4h-126l0-99.1h47.5l10.5,22.4H144V130.4z"/>
+		<polygon fill="none" stroke="#312D2A" stroke-width="7" stroke-miterlimit="10" points="117.7,87.2 104.7,110.8 130.8,110.8 	"/>
 		<ellipse transform="matrix(0.9732 -0.2298 0.2298 0.9732 -20.5486 21.5425)" fill="none" stroke="#312D2A" stroke-width="7" stroke-miterlimit="10" cx="82.2" cy="99" rx="12" ry="12"/>
-	<polygon fill="none" stroke="#312D2A" stroke-width="7" stroke-miterlimit="10" points="39.5,87.4 32.7,99.1 39.5,110.8 53,110.8 
-		59.8,99.1 53,87.4 	"/>
-	<polygon fill="#312D2A" points="40.1,68.8 49.1,68.8 49.1,59.5 58.8,59.5 58.8,50.5 49.1,50.5 49.1,41.2 40.1,41.2 40.1,50.5 
-		30.3,50.5 30.3,59.5 40.1,59.5 	"/>
-</g>
+		<polygon fill="none" stroke="#312D2A" stroke-width="7" stroke-miterlimit="10" points="39.5,87.4 32.7,99.1 39.5,110.8 53,110.8 59.8,99.1 53,87.4"/>
+		<polygon fill="#312D2A" points="40.1,68.8 49.1,68.8 49.1,59.5 58.8,59.5 58.8,50.5 49.1,50.5 49.1,41.2 40.1,41.2 40.1,50.5 30.3,50.5 30.3,59.5 40.1,59.5"/>
+	</g>
 </svg>

@@ -1,0 +1,14 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_local_peering_gateway(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.vcn_property(resource.vcn_id) }}
+{{ common.vcn_property(resource.peer_id, "Peered Virtual Cloud Network") }}
+    {%- if resource.route_table_id != "" -%}
+        {{ common.route_table_property(resource.route_table_id) }}
+    {% endif %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for local_peering_gateway in local_peering_gateways -%}
+    {{ document_local_peering_gateway(local_peering_gateway) }}
+{%- endfor %}

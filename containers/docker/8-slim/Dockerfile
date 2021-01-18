@@ -42,6 +42,7 @@ RUN microdnf install -y \
         git-url-parse==1.2.2 \
         gunicorn==20.0.4 \
         oci==2.22.0 \
+        openpyxl==3.0.5 \
         pandas==1.1.2 \
         python-magic==0.4.18 \
         pyyaml==5.3.1 \

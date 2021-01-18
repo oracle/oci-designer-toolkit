@@ -1,0 +1,24 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_load_balancer(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+    {% for subnet_id in resource.subnet_ids -%}
+        {{ common.subnet_property(subnet_id) }}
+    {% endfor %}
+{{ common.document_property("Shape", resource.shape) }}
+{{ common.document_property("Private", resource.is_private) }}
+{{ common.document_property("Protocol", resource.protocol) }}
+{{ common.document_property("Port", resource.port) }}
+{{ common.document_property("Health Check URL", resource.health_checker.url_path) }}
+{{ common.document_property("Policy", resource.backend_policy | replace("_", " ") | title) }}
+    {% for id in resource.instance_ids -%}
+        {{ common.instance_property(id, "Backend Instance") }}
+    {% endfor %}
+    {% for nsg_id in resource.nsg_ids -%}
+        {{ common.nsg_property(nsg_id) }}
+    {% endfor %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for load_balancer in load_balancers -%}
+    {{ document_load_balancer(load_balancer) }}
+{%- endfor %}

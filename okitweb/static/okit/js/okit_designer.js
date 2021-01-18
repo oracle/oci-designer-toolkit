@@ -376,14 +376,10 @@ function handleRedraw(evt) {
     redrawSVGCanvas();
     return false;
 }
-function redrawSVGCanvas(region='') {
-    console.info('>>>>>>>>> Redrawing Canvas (Region : ' + region +')');
-    console.info('>>>>>>>>> Active Region            : ' + activeRegion);
-    console.info(okitJsonView);
-    if (region === '' || region === activeRegion) {
-        displayDesignerView();
-        displayOkitJson();
-    }
+function redrawSVGCanvas(recalculate=false) {
+    if (recalculate) {resetRecalculateFlag();}
+    displayDesignerView();
+    displayOkitJson();
 }
 /*
 ** Validate Model
@@ -717,10 +713,22 @@ $(document).ajaxStop(function() {
 /*
 ** Export SVG
  */
+function setExportDisplay() {
+    const top_level_compartment = okitJsonView.top_level_compartment;
+    // Draw top level compartment with minimum rectangle size
+    top_level_compartment.export = true;
+    top_level_compartment.recalculate_dimensions = true;
+    okitJsonView.draw(true);
+    const dimensions = top_level_compartment.dimensions;
+    top_level_compartment.export = false;
+    top_level_compartment.recalculate_dimensions = true;
+    return dimensions;
+}
 function handleExportToSVG(evt) {
     hideNavMenu();
-    let okitcanvas = document.getElementById("canvas-svg");
-    let name = okitJsonModel.compartments[0]['name'];
+    setExportDisplay();
+    const okitcanvas = document.getElementById("canvas-svg");
+    const name = okitJsonModel.compartments[0]['name'];
     let filename = name + '.svg';
     if (okitSettings.is_timestamp_files) {
         filename = name + getTimestamp() + '.svg';
@@ -752,7 +760,8 @@ function handleExportToJPG(evt) {
     saveAsImage('jpeg');
 }
 function saveAsImage(type='jpeg') {
-    console.log("Saving As " + type);
+    console.info("Saving As " + type);
+    const dimensions = setExportDisplay();
     let svg = d3.select(d3Id("canvas-svg")).node();
     let serializer = new XMLSerializer();
     let svgStr = serializer.serializeToString(svg);
@@ -772,17 +781,19 @@ function saveAsImage(type='jpeg') {
         const image = new Image();
         canvas.width = img.clientWidth;
         canvas.height = img.clientHeight;
+        canvas.width = dimensions.width;
+        canvas.height = dimensions.height;
         image.crossOrigin = 'anonymous';
         image.onload = function () {
             context.drawImage(image,0,0);
             triggerDownload(canvas.toDataURL("image/" + type), filename + "." + type);
             document.body.removeChild(img);
+            redrawSVGCanvas();
         }
         image.src = img.src;
     }
 
     img.src = 'data:image/svg+xml;base64,' + window.btoa(svgStr);
-    console.log();
 }
 /*
 ** Resource Manager
@@ -812,7 +823,7 @@ function addRegionTab(region) {
             activeRegion = region;
             okitJsonModel = regionOkitJson[region];
             newDesignerView();
-            redrawSVGCanvas(region);
+            redrawSVGCanvas();
         });
 }
 function addRegionTabProgress(region) {
@@ -854,6 +865,12 @@ function displayOkitJson() {
 function displayDesignerView() {
     okitJsonView.draw();
     setTitleDescription();
+}
+function resetRecalculateFlag() {
+    for (let resource of [...okitJsonView.getCompartments(), ...okitJsonView.getVirtualCloudNetworks(),
+        ...okitJsonView.getSubnets()]) {
+        resource.recalculate_dimensions = true;
+    }
 }
 /*
 ** Slidebar handlers

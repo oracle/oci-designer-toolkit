@@ -584,3 +584,60 @@ function generateAnsibleToRepo(results) {
     }
 }
 
+function handleExportToMarkdownLocal(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateMarkdown);
+}
+function handleExportToMarkdownGit(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateMarkdown);
+}
+function generateMarkdown(results) {
+    if (results.valid) {
+        let requestJson = JSON.clone(okitJsonModel);
+        requestJson.use_variables = okitSettings.is_variables;
+        setExportDisplay();
+        const okitcanvas = document.getElementById("canvas-svg");
+        requestJson.svg = okitcanvas.outerHTML.replaceAll('\n', ' ');
+        // Add Style and Def to Compartment SVG
+        for (let compartment of requestJson.compartments) {
+            let svg_id = okitJsonView.getCompartment(compartment.id).svg_id;
+            let svg = d3.select(d3Id(svg_id));
+            okitJsonView.addDefinitions(svg);
+            compartment.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+        }
+        // Add Style and Def to VCN SVG
+        for (let vcn of requestJson.virtual_cloud_networks) {
+            let svg_id = okitJsonView.getVirtualCloudNetwork(vcn.id).svg_id;
+            let svg = d3.select(d3Id(svg_id));
+            okitJsonView.addDefinitions(svg);
+            vcn.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+        }
+        // Add Style and Def to Subnet SVG
+        for (let subnet of requestJson.subnets) {
+            let svg_id = okitJsonView.getSubnet(subnet.id).svg_id;
+            let svg = d3.select(d3Id(svg_id));
+            okitJsonView.addDefinitions(svg);
+            subnet.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+        }
+        okitJsonView.draw();
+        $.ajax({
+            type: 'post',
+            url: 'generate/markdown/local',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(requestJson),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                saveZip('generate/markdown/local');
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
+

@@ -1,0 +1,21 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_subnet(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.vcn_property(resource.vcn_id) }}
+{{ common.document_property("Private", resource.prohibit_public_ip_on_vnic) }}
+{{ common.document_property("DNS Label", resource.dns_label) }}
+{{ common.document_property("CIDR Block", resource.cidr_block) }}
+{{ common.route_table_property(resource.route_table_id) }}
+    {% for security_list_id in resource.security_list_ids -%}
+        {{ common.security_list_property(security_list_id) }}
+    {% endfor %}
+    {% if resource.is_ipv6enabled %}
+{{ common.document_property("IPv6 Enabled", resource.is_ipv6enabled) }}
+{{ common.document_property("IPv6 CIDR Block", resource.ipv6cidr_block) }}
+    {% endif %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for subnet in subnets -%}
+    {{ document_subnet(subnet) }}
+{%- endfor %}

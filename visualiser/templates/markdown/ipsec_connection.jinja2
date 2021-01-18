@@ -1,0 +1,13 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_ipsec_connection(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.dynamic_routing_gateway_property(resource.drg_id) }}
+{{ common.customer_premise_equipment_property(resource.cpe_id) }}
+{{ common.document_property("CPE Identifier", resource.ip_address) }}
+{{ common.document_property("CPE Identifier Type", resource.cpe_local_identifier_type) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for ipsec_connection in ipsec_connections -%}
+    {{ document_ipsec_connection(ipsec_connection) }}
+{%- endfor %}

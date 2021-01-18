@@ -32,6 +32,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # Add Upload location
+    app.config['UPLOADS_FOLDER'] = '/okit/uploads'
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():

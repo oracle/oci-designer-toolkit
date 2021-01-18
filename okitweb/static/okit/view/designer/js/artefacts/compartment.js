@@ -10,6 +10,7 @@ console.info('Loaded Designer Compartment View Javascript');
 class CompartmentView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
+        this.export = false;
     }
 
     get parent_id() {
@@ -35,7 +36,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
      */
 
     isTopLevel() {
-        return this.parent ? false : true;
+        return this.parent || this.export ? false : true;
     }
 
     /*

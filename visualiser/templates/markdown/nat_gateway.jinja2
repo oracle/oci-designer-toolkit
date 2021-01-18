@@ -1,0 +1,11 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_nat_gateway(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.vcn_property(resource.vcn_id) }}
+{{ common.document_property("Block Traffic", resource.block_traffic) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for nat_gateway in nat_gateways -%}
+    {{ document_nat_gateway(nat_gateway) }}
+{%- endfor %}

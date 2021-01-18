@@ -1,0 +1,28 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_rules(rules) -%}
+
+#### Rules
+| Target Type | Target | Destination | Description |
+| ----------- | ------ | ----------- | ----------- |
+    {% for rule in rules -%}
+        | {{ rule.target_type | replace("_", " ") | title | trim("s") }} |
+        {%- if rule.target_type == "internet_gateways" %} {{ common.internet_gateway_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "nat_gateways" %} {{ common.nat_gateway_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "local_peering_gateways" %} {{ common.local_peering_gateway_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "dynamic_routing_gateways" %} {{ common.dynamic_routing_gateway_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "service_gateways" %} {{ common.service_gateway_name(rule.network_entity_id) -}}
+        {%- else -%}
+        {%- endif -%}
+        | {{ rule.destination }} | {{ rule.description }} |
+    {% endfor %}
+{%- endmacro %}
+{% macro document_route_table(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.vcn_property(resource.vcn_id) }}
+{{ document_rules(resource.route_rules) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for route_table in route_tables -%}
+    {{ document_route_table(route_table) }}
+{%- endfor %}

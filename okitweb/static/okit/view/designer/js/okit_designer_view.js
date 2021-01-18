@@ -21,7 +21,7 @@ class OkitDesignerJsonView extends OkitJsonView {
 
     get display_grid() {return okitSettings.is_display_grid;}
 
-    draw() {
+    draw(for_export=false) {
         console.info('Drawing Designer Canvas');
         // Display Json
         this.displayOkitJson();
@@ -33,7 +33,7 @@ class OkitDesignerJsonView extends OkitJsonView {
             width = Math.max(width, dimensions.width);
             height = Math.max(height, dimensions.height);
         }
-        let canvas_svg = this.newCanvas(width, height);
+        let canvas_svg = this.newCanvas(width, height, for_export);
 
         // Draw Compartments
         for (let compartment of this.compartments) {
@@ -196,13 +196,15 @@ class OkitDesignerJsonView extends OkitJsonView {
 
     displayOkitJson() {}
 
-    newCanvas(width=400, height=300) {
+    newCanvas(width=400, height=300, for_export=false) {
         console.info('New Canvas');
         let canvas_div = d3.select(d3Id(this.parent_id));
         let parent_width  = $(jqId(this.parent_id)).width();
         let parent_height = $(jqId(this.parent_id)).height();
-        width  = Math.round(Math.max(width, parent_width));
-        height = Math.round(Math.max(height, parent_height));
+        if (!for_export) {
+            width = Math.round(Math.max(width, parent_width));
+            height = Math.round(Math.max(height, parent_height));
+        }
         // Round up to next grid size to display full grid.
         if (okitSettings.is_display_grid) {
             width += (grid_size - (width % grid_size) + 1);

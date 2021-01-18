@@ -1,0 +1,11 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_customer_premise_equipment(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Customer Router IP", resource.ip_address) }}
+{{ common.document_property("Shape", resource.cpe_device_shape_id) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for customer_premise_equipment in customer_premise_equipments -%}
+    {{ document_customer_premise_equipment(customer_premise_equipment) }}
+{%- endfor %}
