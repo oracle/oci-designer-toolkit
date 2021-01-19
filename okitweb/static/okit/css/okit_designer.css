@@ -278,6 +278,7 @@
 
 .okit-resource-description {
     resize: vertical;
+    white-space: normal;
 }
 
 .okit-source-code {

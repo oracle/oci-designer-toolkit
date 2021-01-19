@@ -575,6 +575,12 @@ li a.parent-item:hover {
     white-space: nowrap;
 }
 
+.okit-table .td > textarea.documentation {
+    width: 100%;
+    overflow: scroll;
+    white-space: normal;
+}
+
 .okit-table .td > label {
     display: inline-block;
 }
