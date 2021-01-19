@@ -138,6 +138,14 @@ def handle_exception(error):
 
 @bp.route('/designer', methods=(['GET']))
 def designer():
+    # Test if developer mode
+    developer_mode = (request.args.get('developer', default='false') == 'true')
+    if developer_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< Developer Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if experimental mode
+    experimental_mode = (request.args.get('experimental', default='false') == 'true')
+    if experimental_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< Experimental Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
     # Read Artifact Model Specific JavaScript Files
     artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
@@ -236,7 +244,8 @@ def designer():
                            palette_icon_groups=palette_icon_groups,
                            fragment_icons=fragment_icons,
                            okit_templates_groups=template_groups,
-                           okit_template_categories=template_categories)
+                           okit_template_categories=template_categories,
+                           developer_mode=developer_mode, experimental_mode=experimental_mode)
 
 
 def build_categories(path, key, category, templates):
