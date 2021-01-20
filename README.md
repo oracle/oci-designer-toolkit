@@ -28,8 +28,15 @@ OCI environments through a graphical web based interface.
 - [Introspect](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)
 
     OKIT will also allow the user to introspect existing OCI environments, through simple query functionality embedded within the
-    web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible. 
+    web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
 
+  
+## Blogs
+- [Introduction to OKIT the OCI Designer Toolkit](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit)
+- [The OCI Designer Toolkit Templates Feature](https://www.ateam-oracle.com/the-oci-designer-toolkit-templates-feature)
+- [The OCI Designer Toolkit Query Feature](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)
+- [OCI Designer Toolkit Resource Manager Integration](https://www.ateam-oracle.com/oci-designer-toolkit-resource-manager-integration)
+- [The OCI Designer Toolkit Documentation Generation](https://www.ateam-oracle.com/the-oci-designer-toolkit-documentation-generation)
 
 
 ## Installation
