@@ -184,19 +184,19 @@
                     <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleGit()">Git</a></li>
                 </ul>
             </li>
-            <li id="image_export" class="sub-header-item dropdown">
+            <!--li id="image_export" class="sub-header-item dropdown">
                 <span>Resource Manager</span>
                 <ul class="dropdown-content">
                     <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
                     <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Local Zip</a></li>
                     <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerGit()">Git</a></li>
                 </ul>
-            </li>
-            <li><a id="generate-markdown-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToMarkdownLocal()">Markdown</a></li>
+            </li-->
             <!--li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
-            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li>
+            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li-->
             <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
-            <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Resource Manager VCS</a></li-->
+            <!--li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Resource Manager VCS</a></li-->
+            <li><a id="generate-markdown-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToMarkdownLocal()">Markdown</a></li>
         </ul>
         <ul class="okit-navigation-sub-list">
             <li>
@@ -274,6 +274,7 @@
             <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
         </div>
         <div id="canvas-div" class="okit-svg-canvas"></div>
+        <div id="tabular-div" class="okit-svg-canvas hidden"></div>
     </div>
     <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>
