@@ -53,12 +53,14 @@ function displayGitExportDialog(type) {
     }
 
     tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_filename');
-    tr.append('div').attr('class', 'td').text('Folder Name');
+    tr.append('div').attr('class', 'td').text('Directory Name');
     tr.append('div').attr('class', 'td').append('input')
         .attr('class', 'okit-input')
+        .attr('style', 'text-transform: lowercase')
         .attr('id', 'git_repository_filename')
         .attr('type', 'text');
     $('#git_repository_filename').val(okitJsonModel.title.replaceAll(' ','_').toLowerCase());
+    $('#git_repository_filename').val(toFilename(okitJsonModel.title));
     tr = tbody.append('div').attr('class', 'tr');
     tr.append('div').attr('class', 'td').text(`${type.toLowerCase().replaceAll(' ', '')} sub-directory will be created.`);
 

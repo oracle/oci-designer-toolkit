@@ -365,7 +365,11 @@ def saveas(savetype):
                 git_url, git_branch = request.json['git_repository'].split('*')
                 git_commit_msg = request.json['git_repository_commitmsg']
                 if request.json['git_repository_filename'] != '':
-                    filename = '{0!s:s}.json'.format(request.json['git_repository_filename'].replace(' ', '_').lower())
+                    filename = request.json['git_repository_filename'].replace(' ', '_').lower()
+                    if not filename.endswith('.json'):
+                        filename = '{0!s:s}.json'.format(filename)
+                if request.json['git_repository_directory'] != '':
+                    filename = os.path.join(request.json['git_repository_directory'], filename)
                 parsed_git_url = giturlparse.parse(git_url)
                 template_git_dir = os.path.abspath(os.path.join(bp.static_folder, 'templates', 'git'))
                 if not os.path.exists(template_git_dir):
@@ -380,6 +384,7 @@ def saveas(savetype):
                 fullpath = os.path.abspath(os.path.join(git_repo_dir, filename))
                 # Remove git info
                 del request.json['git_repository']
+                del request.json['git_repository_directory']
                 del request.json['git_repository_filename']
                 del request.json['git_repository_commitmsg']
                 writeJsonFile(request.json, fullpath)

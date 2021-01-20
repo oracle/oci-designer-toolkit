@@ -246,17 +246,21 @@ function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true
         tr.append('div').attr('class', 'td').text('Directory Name:');
         tr.append('div').attr('class', 'td').append('input')
             .attr('class', 'okit-input')
+            .attr('style', 'text-transform: lowercase')
             .attr('id', 'git_repository_directory')
             .attr('type', 'text');
     }
+    $('#git_repository_directory').val(toFilename(okitJsonModel.title));
     if (show_filename) {
         tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_filename');
         tr.append('div').attr('class', 'td').text('File Name:');
         tr.append('div').attr('class', 'td').append('input')
             .attr('class', 'okit-input')
+            .attr('style', 'text-transform: lowercase')
             .attr('id', 'git_repository_filename')
             .attr('type', 'text');
     }
+    $('#git_repository_filename').val(`${toFilename(okitJsonModel.title)}.json`);
     tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_commitmsg');
     tr.append('div').attr('class', 'td').text('Commit Message:');
     tr.append('div').attr('class', 'td').append('input')
@@ -265,11 +269,21 @@ function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true
         .attr('type', 'text');
 
     // Submit
+    /*
     let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'export_terraform_option_id')
         .attr('type', 'button')
-        .text('Submit');
+        .text('Save');
     save_button.on("click", callback);
+
+     */
+
+    // Submit Button
+    let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'submit_query_btn')
+        .attr('type', 'button')
+        .text('Save')
+        .on('click', callback);
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleSaveAs(evt) {
@@ -343,30 +357,38 @@ function handleSaveAsTemplate(e) {
 function handleSaveToGit(e) {
     displayGitSaveDialog('Save To Git', () =>
     {
-        okitJsonModel.git_repository = $(jqId('git_repository')).val();
-        okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
-        okitJsonModel.git_repository_commitmsg = $(jqId('git_repository_commitmsg')).val();
-        okitJsonModel.template_type = 'Git';
-        okitJsonModel.updated = getCurrentDateTime();
+        let request_json = JSON.clone(okitJsonModel);
+        request_json.git_repository = $(jqId('git_repository')).val();
+        request_json.git_repository_directory = $(jqId('git_repository_directory')).val();
+        request_json.git_repository_filename = $(jqId('git_repository_filename')).val();
+        request_json.git_repository_commitmsg = $(jqId('git_repository_commitmsg')).val();
+        request_json.template_type = 'Git';
+        request_json.updated = getCurrentDateTime();
+        hideNavMenu();
+        setBusyIcon();
+        $(jqId('modal_dialog_progress')).removeClass('hidden');
+        $(jqId('submit_query_btn')).text('.........Processing');
+        $(jqId('submit_query_btn')).attr('disabled', 'disabled');
         $.ajax({
             type: 'post',
             url: 'saveas/git',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify(okitJsonModel),
+            data: JSON.stringify(request_json),
             success: function (resp) {
                 console.info('Response : ' + resp);
-                // Hide modal dialog
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
             },
             error: function (xhr, status, error) {
                 console.info('Status : ' + status)
                 console.info('Error : ' + error)
-                // Hide modal dialog
+            },
+            complete: function () {
+                unsetBusyIcon();
                 $(jqId('modal_dialog_wrapper')).addClass('hidden');
+                $(jqId('modal_dialog_progress')).addClass('hidden');
             }
         });
-    }, false, true);
+    }, true, true);
 }
 /*
 ** Redraw / Redisplay the existing Json
