@@ -1,0 +1,15 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_virtual_cloud_network(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("DNS Label", resource.dns_label) }}
+{{ common.document_property("CIDR Block", resource.cidr_block) }}
+    {% if resource.is_ipv6enabled %}
+{{ common.document_property("IPv6 Enabled", resource.is_ipv6enabled) }}
+{{ common.document_property("IPv6 CIDR Block", resource.ipv6cidr_block) }}
+    {% endif %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for virtual_cloud_network in virtual_cloud_networks -%}
+    {{ document_virtual_cloud_network(virtual_cloud_network) }}
+{%- endfor %}

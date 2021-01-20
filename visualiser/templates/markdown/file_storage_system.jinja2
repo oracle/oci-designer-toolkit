@@ -1,0 +1,29 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_targets(targets) -%}
+
+#### Mount Targets
+| Subnet | Hostname | Network Security Groups | Max FS State Bytes | Max FS Stat Files |
+| ------ | -------- | ----------------------- | ------------------ | ----------------- |
+    {% for target in targets -%}
+        | {{ common.subnet_link(target.subnet_id) }} | {{ target.hostname_label }} | {%- for id in target.nsg_ids -%}{{ common.nsg_link(id) }}{%- endfor %} | {{ target.export_set.max_fs_stat_bytes }} | {{ target.export_set.max_fs_stat_files }} |
+    {% endfor %}
+{%- endmacro %}
+{% macro document_exports(exports) -%}
+
+#### Exports
+| Path | Source | Access | GID | UID | Squash | Privileged Access |
+| ---- | ------ | ------ | --- | --- | ------ | ----------------- |
+    {% for export in exports -%}
+        | {{ export.path }} | {{ export.export_options.source }} | {{ export.export_options.access | replace("_", " ") | title }} | {{ export.export_options.anonymous_gid }} | {{ export.export_options.anonymous_uid }} | {{ export.export_options.identity_squash | title }} | {{ export.export_options.require_privileged_source_port }} |
+    {% endfor %}
+{%- endmacro %}
+{% macro document_file_storage_system(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ document_targets(resource.mount_targets) }}
+{{ document_exports(resource.exports) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for file_storage_system in file_storage_systems -%}
+    {{ document_file_storage_system(file_storage_system) }}
+{%- endfor %}

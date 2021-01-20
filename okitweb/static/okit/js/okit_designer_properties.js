@@ -199,6 +199,8 @@ function loadPropertiesSheet(json_element) {
     // Add Highlight functions
     $(jqId('property-editor')).mouseenter(function() {$(jqId($('#id').val())).addClass('highlight-properties');});
     $(jqId('property-editor')).mouseleave(function() {$(jqId($('#id').val())).removeClass('highlight-properties');});
+    // Display OCID if required
+    if (okitSettings && okitSettings.show_ocids) {$(jqId('id_row')).removeClass('collapsed');}
 }
 
 function addFreeformTag(json_element) {

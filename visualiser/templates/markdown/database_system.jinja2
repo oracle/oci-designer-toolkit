@@ -1,0 +1,25 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_database_system(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Hostname", resource.hostname) }}
+{{ common.document_property("Storage %", resource.data_storage_percentage) }}
+{{ common.document_property("Size (Gb)", resource.data_storage_size_in_gb) }}
+{{ common.document_property("Core Count", resource.cpu_core_count) }}
+{{ common.document_property("Edition", resource.database_edition | replace("_", " ") | title) }}
+{{ common.document_property("Version", resource.db_home.db_version) }}
+{{ common.document_property("Shape", resource.shape) }}
+{{ common.document_property("DB Name", resource.db_home.database.db_name) }}
+{{ common.document_property("Cluster Name", resource.cluster_name) }}
+{{ common.document_property("Workload", resource.db_home.database.db_workload) }}
+{{ common.document_property("Domain", resource.domain) }}
+{{ common.document_property("Node Count", resource.node_count) }}
+{{ common.document_property("Licence Model", resource.license_model | replace("_", " ") | title) }}
+    {% for nsg_id in resource.nsg_ids -%}
+        {{ common.nsg_property(nsg_id) }}
+    {% endfor %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for database_system in database_systems -%}
+    {{ document_database_system(database_system) }}
+{%- endfor %}

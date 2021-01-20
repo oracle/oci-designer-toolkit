@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.15.0" \
+      "version"="0.16.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
@@ -44,17 +44,21 @@ RUN yum install -y \
  && pip3 install --no-cache-dir \
         flask==1.1.1 \
         gitpython==3.1.11 \
+        git-url-parse==1.2.2 \
         gunicorn==20.0.4 \
         oci==2.22.0 \
+        openpyxl==3.0.5 \
         pandas==1.1.2 \
         python-magic==0.4.18 \
         pyyaml==5.3.1 \
         requests==2.24.0 \
         xlsxwriter==1.3.6 \
 # Create Workspace
- && mkdir -p /okit/{config,log,visualiser,okitweb,workspace,templates,skeletons} \
+ && mkdir -p /okit/{config,git,log,visualiser,okitweb,workspace,templates,skeletons} \
  && mkdir -p /okit/okitweb/static/okit/templates \
- && ln -s /okit/templates /okit/okitweb/static/okit/templates/user
+ && ln -s /okit/templates/user /okit/okitweb/static/okit/templates/user \
+ && ln -s /okit/git /okit/okitweb/static/okit/templates/git \
+ && ln -s /okit/git /okit/okitweb/static/okit/git
 # Copy source code
 COPY okitweb /okit/okitweb
 COPY visualiser /okit/visualiser

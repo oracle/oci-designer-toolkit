@@ -9,6 +9,7 @@ console.info('Loaded Designer Javascript');
  */
 const ROOT_CANVAS_ID = 'canvas';
 const PROPERTIES_PANEL = 'properties_panel';
+const DESCRIPTION_PANEL = 'description_panel';
 const SETTINGS_PANEL = 'settings_panel';
 const JSON_MODEL_PANEL = 'json_model_panel';
 const JSON_VIEW_PANEL = 'json_view_panel';
@@ -197,6 +198,7 @@ function handleSave(evt) {
         filename = 'okit-' + getTimestamp() + '.json'
     }
     console.info('>> Saving Single Region File');
+    okitJsonModel.updated = getCurrentDateTime();
     saveJson(JSON.stringify(okitJsonModel, null, 2), filename);
 }
 function handleSaveRegional(evt) {
@@ -217,6 +219,73 @@ function saveJson(text, filename){
 /*
 ** Save Model As Template
  */
+function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true) {
+    $(jqId('modal_dialog_title')).text(title);
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('id', 'load_from_git')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    let tbody = table.append('div').attr('class', 'tbody');
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_repo');
+    tr.append('div').attr('class', 'td').text('Repository:');
+    tr.append('div').attr('class', 'td').append('select')
+        .attr('id', 'git_repository')
+        .append('option')
+        .attr('value', 'select')
+        .text('Select');
+
+    let git_repository_filename_select = d3.select(d3Id('git_repository'));
+
+    for (let git_setting of okitGitConfig.gitsections) {
+        git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
+    }
+    if (show_dir) {
+        tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_directory');
+        tr.append('div').attr('class', 'td').text('Directory Name:');
+        tr.append('div').attr('class', 'td').append('input')
+            .attr('class', 'okit-input')
+            .attr('style', 'text-transform: lowercase')
+            .attr('id', 'git_repository_directory')
+            .attr('type', 'text');
+    }
+    $('#git_repository_directory').val(toFilename(okitJsonModel.title));
+    if (show_filename) {
+        tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_filename');
+        tr.append('div').attr('class', 'td').text('File Name:');
+        tr.append('div').attr('class', 'td').append('input')
+            .attr('class', 'okit-input')
+            .attr('style', 'text-transform: lowercase')
+            .attr('id', 'git_repository_filename')
+            .attr('type', 'text');
+    }
+    $('#git_repository_filename').val(`${toFilename(okitJsonModel.title)}.json`);
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_commitmsg');
+    tr.append('div').attr('class', 'td').text('Commit Message:');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'git_repository_commitmsg')
+        .attr('type', 'text');
+
+    // Submit
+    /*
+    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'export_terraform_option_id')
+        .attr('type', 'button')
+        .text('Save');
+    save_button.on("click", callback);
+
+     */
+
+    // Submit Button
+    let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'submit_query_btn')
+        .attr('type', 'button')
+        .text('Save')
+        .on('click', callback);
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
 function handleSaveAs(evt) {
     // Display Save As Dialog
     $(jqId('modal_dialog_title')).text('Save As Template');
@@ -261,10 +330,11 @@ function handleSaveAs(evt) {
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleSaveAsTemplate(e) {
-    okitJsonModel.title = $(jqId('template_title')).val();
-    okitJsonModel.description = $(jqId('template_description')).val();
+    //okitJsonModel.title = $(jqId('template_title')).val();
+    //okitJsonModel.description = $(jqId('template_description')).val();
     //okitJsonModel.template_type = $(jqId('template_type')).val();
     okitJsonModel.template_type = 'User';
+    okitJsonModel.updated = getCurrentDateTime();
     $.ajax({
         type: 'post',
         url: 'saveas/template',
@@ -284,7 +354,42 @@ function handleSaveAsTemplate(e) {
         }
     });
 }
-function handleSaveToGit(e) {}
+function handleSaveToGit(e) {
+    displayGitSaveDialog('Save To Git', () =>
+    {
+        let request_json = JSON.clone(okitJsonModel);
+        request_json.git_repository = $(jqId('git_repository')).val();
+        request_json.git_repository_directory = $(jqId('git_repository_directory')).val();
+        request_json.git_repository_filename = $(jqId('git_repository_filename')).val();
+        request_json.git_repository_commitmsg = $(jqId('git_repository_commitmsg')).val();
+        request_json.template_type = 'Git';
+        request_json.updated = getCurrentDateTime();
+        hideNavMenu();
+        setBusyIcon();
+        $(jqId('modal_dialog_progress')).removeClass('hidden');
+        $(jqId('submit_query_btn')).text('.........Processing');
+        $(jqId('submit_query_btn')).attr('disabled', 'disabled');
+        $.ajax({
+            type: 'post',
+            url: 'saveas/git',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request_json),
+            success: function (resp) {
+                console.info('Response : ' + resp);
+            },
+            error: function (xhr, status, error) {
+                console.info('Status : ' + status)
+                console.info('Error : ' + error)
+            },
+            complete: function () {
+                unsetBusyIcon();
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+                $(jqId('modal_dialog_progress')).addClass('hidden');
+            }
+        });
+    }, true, true);
+}
 /*
 ** Redraw / Redisplay the existing Json
  */
@@ -293,14 +398,10 @@ function handleRedraw(evt) {
     redrawSVGCanvas();
     return false;
 }
-function redrawSVGCanvas(region='') {
-    console.info('>>>>>>>>> Redrawing Canvas (Region : ' + region +')');
-    console.info('>>>>>>>>> Active Region            : ' + activeRegion);
-    console.info(okitJsonView);
-    if (region === '' || region === activeRegion) {
-        displayDesignerView();
-        displayOkitJson();
-    }
+function redrawSVGCanvas(recalculate=false) {
+    if (recalculate) {resetRecalculateFlag();}
+    displayDesignerView();
+    displayOkitJson();
 }
 /*
 ** Validate Model
@@ -398,7 +499,16 @@ function displayQueryDialog() {
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
-        .text('Compartment');
+        .text('Compartment')
+        .append('img')
+                .attr('class', 'okit-refresh-button')
+                .attr('src', '/static/svg/refresh.svg')
+                .attr('alt', "Refresh")
+                .on('click', () => {
+                    // Clear Existing Compartments
+                    okitOciData.setCompartments([]);
+                    loadCompartments();
+                });
     tr.append('div')
         .attr('class', 'td')
         .append('select')
@@ -625,10 +735,22 @@ $(document).ajaxStop(function() {
 /*
 ** Export SVG
  */
+function setExportDisplay() {
+    const top_level_compartment = okitJsonView.top_level_compartment;
+    // Draw top level compartment with minimum rectangle size
+    top_level_compartment.export = true;
+    top_level_compartment.recalculate_dimensions = true;
+    okitJsonView.draw(true);
+    const dimensions = top_level_compartment.dimensions;
+    top_level_compartment.export = false;
+    top_level_compartment.recalculate_dimensions = true;
+    return dimensions;
+}
 function handleExportToSVG(evt) {
     hideNavMenu();
-    let okitcanvas = document.getElementById("canvas-svg");
-    let name = okitJsonModel.compartments[0]['name'];
+    setExportDisplay();
+    const okitcanvas = document.getElementById("canvas-svg");
+    const name = okitJsonModel.compartments[0]['name'];
     let filename = name + '.svg';
     if (okitSettings.is_timestamp_files) {
         filename = name + getTimestamp() + '.svg';
@@ -660,7 +782,8 @@ function handleExportToJPG(evt) {
     saveAsImage('jpeg');
 }
 function saveAsImage(type='jpeg') {
-    console.log("Saving As " + type);
+    console.info("Saving As " + type);
+    const dimensions = setExportDisplay();
     let svg = d3.select(d3Id("canvas-svg")).node();
     let serializer = new XMLSerializer();
     let svgStr = serializer.serializeToString(svg);
@@ -680,17 +803,19 @@ function saveAsImage(type='jpeg') {
         const image = new Image();
         canvas.width = img.clientWidth;
         canvas.height = img.clientHeight;
+        canvas.width = dimensions.width;
+        canvas.height = dimensions.height;
         image.crossOrigin = 'anonymous';
         image.onload = function () {
             context.drawImage(image,0,0);
             triggerDownload(canvas.toDataURL("image/" + type), filename + "." + type);
             document.body.removeChild(img);
+            redrawSVGCanvas();
         }
         image.src = img.src;
     }
 
     img.src = 'data:image/svg+xml;base64,' + window.btoa(svgStr);
-    console.log();
 }
 /*
 ** Resource Manager
@@ -720,7 +845,7 @@ function addRegionTab(region) {
             activeRegion = region;
             okitJsonModel = regionOkitJson[region];
             newDesignerView();
-            redrawSVGCanvas(region);
+            redrawSVGCanvas();
         });
 }
 function addRegionTabProgress(region) {
@@ -762,6 +887,12 @@ function displayOkitJson() {
 function displayDesignerView() {
     okitJsonView.draw();
     setTitleDescription();
+}
+function resetRecalculateFlag() {
+    for (let resource of [...okitJsonView.getCompartments(), ...okitJsonView.getVirtualCloudNetworks(),
+        ...okitJsonView.getSubnets()]) {
+        resource.recalculate_dimensions = true;
+    }
 }
 /*
 ** Slidebar handlers
@@ -1152,8 +1283,8 @@ function handleLoadFromGITExec(e) {
             }
         },
         error: function (xhr, status, error) {
-            console.info('Status : ' + status)
-            console.info('Error : ' + error)
+            console.error('Status : ' + status)
+            console.error('Error : ' + error)
             // Hide modal dialog
             $(jqId('modal_dialog_wrapper')).addClass('hidden');
         }

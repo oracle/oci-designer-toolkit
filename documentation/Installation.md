@@ -73,6 +73,37 @@ Further information on the config file can be found on the OCI sdk page [SDK and
 
 
 
+## Git Connection
+
+### GIT Repositories File
+
+If Git integration is required you will need to create a __git_repositories__ file within the directory
+__&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
+
+```properties
+[OKIT Community]
+branch = master
+url = git@url1.git
+
+[Internal]
+branch = BRANCHNAME
+url = git@url2.git
+```
+
+This properties file contains a list of the Git repositories you want to access. It assumes that you are using public/private
+key access and the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
+defines the key/url mapping.
+
+
+
+
+
+
+
+
+
+
+
 ## Quick Start Runtime
 
 Docker is the recommended runtime container for OKIT and the project contains a top-level Dockerfile to facilitate direct
@@ -86,7 +117,7 @@ docker build --tag okit --force-rm https://github.com/oracle/oci-designer-toolki
 ### Run Container
 
 ```bash
-docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --name okit okit
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --name okit okit
 ```
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
@@ -138,6 +169,13 @@ If you do not have git installed locally the current release of OKIT can be retr
 #### Copy Config & Key Files
 Before building/rebuilding your chosen container you will need to copy the contents of [&lt;USER HOME DIR&gt;/.oci](#config-file) 
 to the __oci-designer-toolkit/containers/oci__ directory.
+
+#### Create Git Repository Properties File & Copy SSH Keys
+If you decide to use Git as a repository for your templates you will need to create the Git Repository properties file
+[__oci-designer-toolkit/containers/oci/git_repositories__](#git-repositories-file). Once this has been done the contents of
+__&lt;USER HOME DIR&gt;/.ssh__ will need to be copied to __oci-designer-toolkit/containers/ssh__
+
+
 
 #### Docker Compose
 The docker image is the recommended runtime server OKIT provides a simple Docker Compose script to build and start the container.
@@ -244,7 +282,7 @@ Once the Instance has been created the following commands will install OKIT and 
 # Install Required Packages because the packages section may not complete before the runcmd
 sudo bash -c "yum install -y git python-oci-cli oci-utils"
 # Install Required Python Modules
-sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gitpython==3.1.11 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 pandas==1.1.2 python-magic==0.4.18 pyyaml==5.3.1 requests==2.24.0 xlsxwriter==1.3.6"
+sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gitpython==3.1.11 git-url-parse==1.2.2 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 pandas==1.1.2 python-magic==0.4.18 pyyaml==5.3.1 requests==2.24.0 xlsxwriter==1.3.6"
 # Clone OKIT
 sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
 sudo bash -c "mkdir /okit/{log,workspace}"

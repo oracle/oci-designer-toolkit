@@ -1,0 +1,22 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_autonomous_database(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("DB Name", resource.db_name) }}
+{{ common.document_property("Size (Tb)", resource.data_storage_size_in_tbs) }}
+{{ common.document_property("Core Count", resource.cpu_core_count) }}
+{{ common.document_property("Workload", resource.db_workload) }}
+{{ common.document_property("Auto Scaling", resource.is_auto_scaling_enabled) }}
+{{ common.document_property("Free Tier", resource.is_free_tier) }}
+{{ common.document_property("Licence Model", resource.license_model | replace("_", " ") | title) }}
+    {% if resource.subnet_id != "" -%}
+        {{ common.subnet_property(resource.subnet_id) }}
+    {% endif %}
+    {% for nsg_id in resource.nsg_ids -%}
+        {{ common.nsg_property(nsg_id) }}
+    {% endfor %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for autonomous_database in autonomous_databases -%}
+    {{ document_autonomous_database(autonomous_database) }}
+{%- endfor %}

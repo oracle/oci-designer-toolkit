@@ -57,7 +57,6 @@ function standardiseId(id) {
 }
 
 function getTimestamp() {
-    console.log('Get TimeStamp');
     let dateTimeNow = new Date();
     let year   = '' + dateTimeNow.getFullYear();
     let month  = ('00' + dateTimeNow.getMonth()).slice(-2);
@@ -65,20 +64,16 @@ function getTimestamp() {
     let hour   = ('00' + dateTimeNow.getHours()).slice(-2);
     let minute = ('00' + dateTimeNow.getMinutes()).slice(-2);
     let second = ('00' + dateTimeNow.getSeconds()).slice(-2);
-    console.info('Year      : ' + year);
-    console.info('Month     : ' + month);
-    console.info('Day       : ' + day);
-    console.info('Hour      : ' + hour);
-    console.info('Minute    : ' + minute);
-    console.info('Second    : ' + second);
     let timestamp = year + month + day + '-' + hour + minute + second;
-    console.info('Timestamp : ' + timestamp);
-    console.log();
     return timestamp;
 }
 
 function titleCase(str) {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
+function toFilename(str) {
+    return str.replaceAll(' ','_').toLowerCase();
 }
 
 /*
@@ -160,4 +155,12 @@ function escapeRegExp(string) {
 
 function replaceAll(str, find, replace) {
     return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
+
+function getCurrentDateTime() {
+    const today = new Date();
+    const date = `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;
+    const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+    return `${date} ${time}`;
+
 }

@@ -1,0 +1,23 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_mysql_database_system(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+    {% if resource.subnet_id != "" -%}
+        {{ common.subnet_property(resource.subnet_id) }}
+    {% endif %}
+{{ common.document_property("Fault Domain", resource.fault_domain) }}
+{{ common.document_property("Hostname", resource.hostname_label) }}
+{{ common.document_property("Size (Gb)", resource.data_storage_size_in_gb) }}
+{{ common.document_property("Version", resource.mysql_version) }}
+{{ common.document_property("Shape", resource.shape_name) }}
+{{ common.document_property("Description", resource.description) }}
+{{ common.document_property("Port", resource.port) }}
+{{ common.document_property("Port X", resource.port_x) }}
+    {% for nsg_id in resource.nsg_ids -%}
+        {{ common.nsg_property(nsg_id) }}
+    {% endfor %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for mysql_database_system in mysql_database_systems -%}
+    {{ document_mysql_database_system(mysql_database_system) }}
+{%- endfor %}

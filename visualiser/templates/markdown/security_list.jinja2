@@ -1,0 +1,53 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_rules(type, rules) -%}
+    {% set protocol_map = {"all": "All", "1": "ICMP", "6": "TCP", "17": "UDP"} %}
+
+#### {{ type }} Rules
+| Protocol | Stateless | {%- if type == "Ingress" -%}Source{%- else -%}Destination{%- endif -%} | Details | Description |
+| -------- | --------- | ----------- | ----------- | ----------- |
+    {% for rule in rules -%}
+        | {{ protocol_map[rule.protocol] }} | {{ rule.is_stateless }} |
+        {%- if type == "Ingress" -%}{{ rule.source }}{%- else -%}{{ rule.destination }}{%- endif -%} |
+        {%- if rule.protocol == "1" and rule.icmp_options is defined -%}
+            Type: {{ rule.icmp_options.type }} / Code: {{ rule.icmp_options.code }}
+        {%- elif rule.protocol == "6" and rule.tcp_options is defined -%}
+            {%- if rule.tcp_options.source_port_range is defined and rule.tcp_options.destination_port_range is defined -%}
+                {{ ports_display(rule.tcp_options.source_port_range, rule.tcp_options.destination_port_range) }}
+            {%- elif rule.tcp_options.source_port_range is not defined and rule.tcp_options.destination_port_range is defined -%}
+                {{ ports_display(None, rule.tcp_options.destination_port_range) }}
+            {%- elif rule.tcp_options.source_port_range is defined and rule.tcp_options.destination_port_range is not defined -%}
+                {{ ports_display(rule.tcp_options.source_port_range, None) }}
+            {%- endif -%}
+        {%- elif rule.protocol == "17" and rule.udp_options is defined -%}
+            {%- if rule.udp_options.source_port_range is defined and rule.udp_options.destination_port_range is defined -%}
+                {{ ports_display(rule.udp_options.source_port_range, rule.udp_options.destination_port_range) }}
+            {%- elif rule.udp_options.source_port_range is not defined and rule.udp_options.destination_port_range is defined -%}
+                {{ ports_display(None, rule.udp_options.destination_port_range) }}
+            {%- elif rule.udp_options.source_port_range is defined and rule.udp_options.destination_port_range is not defined -%}
+                {{ ports_display(rule.udp_options.source_port_range, None) }}
+            {%- endif -%}
+        {%- else -%}
+        {%- endif -%}
+        | {{ rule.description }} |
+    {% endfor %}
+{%- endmacro %}
+{%- macro ports_display(source, destination) -%}
+    {%- if source is defined and (source.min != "" or source.max != "") -%}
+        Source {% if source.min == "" %}{{ source.max }}-{{ source.max }}{%- elif source.max == "" -%}{{ source.min }}-{{ source.min }}{%- else -%}{{ source.min }}-{{ source.max }}{%- endif -%}
+    {%- endif -%}
+    {% if (source.min != "" or source.max != "") and (destination.min != "" or destination.max != "") %} / {% endif %}
+    {%- if destination is defined and (destination.min != "" or destination.max != "") -%}
+        Destination {% if destination.min == "" %}{{ destination.max }}-{{ destination.max }}{%- elif destination.max == "" -%}{{ destination.min }}-{{ destination.min }}{%- else -%}{{ destination.min }}-{{ destination.max }}{%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+{% macro document_security_list(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.vcn_property(resource.vcn_id) }}
+{{ document_rules("Ingress", resource.ingress_security_rules) }}
+{{ document_rules("Egress", resource.egress_security_rules) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for security_list in security_lists -%}
+    {{ document_security_list(security_list) }}
+{%- endfor %}

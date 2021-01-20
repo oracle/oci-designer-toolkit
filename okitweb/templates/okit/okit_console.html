@@ -9,7 +9,8 @@
     <title>OKIT - OCI By Design</title>
     <script type="text/javascript" src="{{ url_for('static', filename='js/d3-5.15.0.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_mode.js') }}"></script>
+    <script type="text/javascript">const developer_mode = {{ developer_mode | lower }};</script>
+    <!--script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_mode.js') }}"></script-->
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_common.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_console.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/model/js/okit_model.js') }}"></script>

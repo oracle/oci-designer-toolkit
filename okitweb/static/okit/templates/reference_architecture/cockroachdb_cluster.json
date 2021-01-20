@@ -1,186 +1,303 @@
 {
-  "autonomous_databases": [],
-  "block_storage_volumes": [],
+  "title": "CockroachDB Cluster",
+  "description": "CockroachDB is a distributed SQL database built on a transactional and consistent key-value store.\n\n# [Architecture](https://docs.oracle.com/en/solutions/ha-cockroachdb-cluster/index.html#GUID-A3897570-DDBF-42DB-BA9B-5FABD979E6E0)\nThis reference architecture shows a typical three-node deployment of CockroachDB on Oracle Cloud Infrastructure Compute instances. A public load balancer is used to distribute the workloads across these three nodes.\n\n- __Regions__\nA region is a localized geographic area and is composed of one or more availability domains. Regions are independent of other regions and can be separated by vast distances (across countries or continents).\n\n- __Availability domains__\nAvailability domains are standalone, independent data centers within a region. The physical resources in each availability domain are isolated from the resources in the other availability domains, which provides fault tolerance. Availability domains don’t share infrastructure such as power or cooling, or the internal availability domain network. So, a failure at one availability domain is unlikely to affect the other availability domains in the region.\n\n- __Fault domains__\nA fault domain is a grouping of hardware and infrastructure within an availability domain. Each availability domain has three fault domains with independent power and hardware. When you place Compute instances across multiple fault domains, applications can tolerate physical server failure, system maintenance, and many common networking and power failures inside the availability domain.\n\n- __Virtual cloud network (VCN) and subnets__\nEvery Compute instance is deployed in a VCN that can be segmented into subnets.\n\nThis architecture uses one public subnet to host the public load balancer and the three Compute instances running CockroachDB.\n\n- __Load balancer__\nThe Oracle Cloud Infrastructure Load Balancing service provides automated traffic distribution from one entry point to multiple servers reachable from your VCN. This architecture has two listeners, one for TCP port 8080 and one for TCP port 26257. The load balancer also has two backend sets that correspond to these two listeners.\n\n- __Security lists__\nFor each subnet, you can create security rules that specify the source, destination, and type of traffic that must be allowed in and out of the subnet.\n\nThis architecture uses ingress rules for TCP ports 8080 and 26257 so that clients can access the HTTP and CockroachDB listener traffic.\n\n# Recommendations\nYour requirements might differ from the architecture described here. Use the following recommendations as a starting point.\n\n- __Compute shapes__\nThis architecture uses the Oracle Linux 7.6 OS image with the VM.Standard2.2 Compute shape. For your application, you can choose a different shape if you need more memory, cores, or network bandwidth.\n\n- __VCN__\n    - When you create the VCN, determine how many IP addresses your cloud resources in each subnet require. Using Classless Inter-Domain Routing (CIDR) notation, specify a subnet mask and a network address range large enough for the required IP addresses.\n\n    - Choose an address range that doesn't overlap with your on-premises network, in case you need to set up a connection between the VCN and your on-premises network later.\n\n    - After you create the VCN, you can't change the address range.\n\n    - When you design the subnets, consider functionality and security requirements. All compute instances within the same tier or role should go into the same subnet, which can be a security boundary.\n\n    - Use a regional subnet.\n\n- __Load Balancer__\nOracle Cloud Infrastructure has three load balancer shapes: 100 Mbps, 400 Mbps, and 8000 Mbps. This architecture uses the smallest shape (100 Mbps). If your application requires more bandwidth, use a larger shape.\n\n# Considerations\n- __Scalability__\nThe smallest number of nodes needed to achieve quorum is three, so this architecture deploys three nodes. You might need more nodes to meet your application’s performance or high availability requirements.\n\nYou can horizontally scale your database cluster by adding more Compute nodes and including them in the load balancer backend sets.\n\nYou can vertically scale your database cluster by changing the VM shape of each Compute node. Using a higher core count shape also increases the memory allocated to the Compute instance and network bandwidth.\n\n- __Availability__\nFault domains provide the best resilience within a single availability domain. In this architecture, instead of deploying the application in one availability domain, you can deploy Compute instances that perform the same tasks in regions that have multiple availability domains. This design removes a single point of failure by introducing redundancy. After the architecture is deployed, use the public IP address of the load balancer to connect to the CockroachDB using the built-in SQL client.\n\n- __Cost__\nSelect the virtual machine (VM) shape based on the cores, memory, and network bandwidth that you need for your database. You can start with a one-core shape, and if you need more performance, memory, or network bandwidth for the database node, you can change the VM shape later.\n\nThe following diagram illustrates this reference architecture.\n\n\n",
+  "created": "2021-1-19 11:54:50",
+  "updated": "2021-1-19 13:57:7",
+  "okit_version": "0.16.0",
   "compartments": [
     {
-      "compartment_id": "canvas",
-      "defined_tags": {},
-      "display_name": "cockroachdb-ref-arch",
-      "freeform_tags": {},
       "id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "compartment_id": "canvas",
+      "display_name": "cockroachdb-ref-arch",
       "name": "cockroachdb-ref-arch",
-      "parent_id": "canvas"
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "description": "okit-comp001"
     }
   ],
-  "containers": [],
-  "description": "Reference Architecture for highly available CockroachDB cluster",
+  "customer_premise_equipments": [],
+  "autonomous_databases": [],
+  "block_storage_volumes": [],
+  "database_systems": [],
   "dynamic_routing_gateways": [],
   "fast_connects": [],
   "file_storage_systems": [],
   "instances": [
     {
-      "authorized_keys": "",
-      "autonomous_database_ids": [],
-      "availability_domain": "1",
-      "block_storage_volume_ids": [],
-      "boot_volume_size_in_gbs": "50",
-      "cloud_init_yaml": "#cloud-config\npackages:\n  - nginx\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo firewall-offline-cmd --add-port=26257/tcp\n  - sudo firewall-offline-cmd --add-port=8080/tcp\n  - sudo systemctl restart firewalld\n# Download and install CockroachDB\n  - sudo wget -qO- https://binaries.cockroachdb.com/cockroach-v19.2.5.linux-amd64.tgz | tar  xvz\n  - sudo cp -i cockroach-v19.1.1.linux-amd64/cockroach /usr/local/bin\n  - cockroach start --insecure --advertise-addr=cockroachdb1 --join=cockroachdb1,cockroachdb2,cockroachdb3 --cache=.25 --max-sql-memory=.25 --background\n  - cockroach init --insecure --host=cockroachdb1\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"",
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "cockroachdb1",
-      "fault_domain": "FAULT-DOMAIN-1",
-      "freeform_tags": {},
-      "hostname_label": "cockroachdb1",
       "id": "okit.instance.09d61992-634d-4f93-9830-ee7d56cf0a74",
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "cockroachdb1",
       "name": "cockroachdb1",
-      "object_storage_bucket_ids": [],
-      "os": "Oracle Linux",
-      "parent_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
       "shape": "VM.Standard.E2.1",
-      "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
-      "subnet_ids": [],
+      "count": 1,
+      "fault_domain": "FAULT-DOMAIN-1",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+          "hostname_label": "cockroachdb1",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.9",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\npackages:\n  - nginx\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo firewall-offline-cmd --add-port=26257/tcp\n  - sudo firewall-offline-cmd --add-port=8080/tcp\n  - sudo systemctl restart firewalld\n# Download and install CockroachDB\n  - sudo wget -qO- https://binaries.cockroachdb.com/cockroach-v19.2.5.linux-amd64.tgz | tar  xvz\n  - sudo cp -i cockroach-v19.1.1.linux-amd64/cockroach /usr/local/bin\n  - cockroach start --insecure --advertise-addr=cockroachdb1 --join=cockroachdb1,cockroachdb2,cockroachdb3 --cache=.25 --max-sql-memory=.25 --background\n  - cockroach init --insecure --host=cockroachdb1\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\""
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
       "title": "Instance",
-      "version": "7.7"
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+        "hostname_label": "cockroachdb1",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      }
     },
     {
-      "authorized_keys": "",
-      "autonomous_database_ids": [],
-      "availability_domain": "1",
-      "block_storage_volume_ids": [],
-      "boot_volume_size_in_gbs": "50",
-      "cloud_init_yaml": "#cloud-config\npackages:\n  - nginx\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo firewall-offline-cmd --add-port=26257/tcp\n  - sudo firewall-offline-cmd --add-port=8080/tcp\n  - sudo systemctl restart firewalld\n# Download and install CockroachDB\n  - sudo wget -qO- https://binaries.cockroachdb.com/cockroach-v19.1.1.linux-amd64.tgz | tar  xvz\n  - sudo cp -i cockroach-v19.1.1.linux-amd64/cockroach /usr/local/bin\n  - cockroach start --insecure --advertise-addr=cockroachdb2 --join=cockroachdb1,cockroachdb2,cockroachdb3 --cache=.25 --max-sql-memory=.25 --background\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"",
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "cockroachdb2",
-      "fault_domain": "FAULT-DOMAIN-2",
-      "freeform_tags": {},
-      "hostname_label": "cockroachdb2",
       "id": "okit.instance.0cab33c7-65f5-48bb-a7c5-5ea01b561ea4",
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "cockroachdb2",
       "name": "cockroachdb2",
-      "object_storage_bucket_ids": [],
-      "os": "Oracle Linux",
-      "parent_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
       "shape": "VM.Standard.E2.1",
-      "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
-      "subnet_ids": [],
+      "count": 1,
+      "fault_domain": "FAULT-DOMAIN-2",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+          "hostname_label": "cockroachdb2",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.9",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\npackages:\n  - nginx\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo firewall-offline-cmd --add-port=26257/tcp\n  - sudo firewall-offline-cmd --add-port=8080/tcp\n  - sudo systemctl restart firewalld\n# Download and install CockroachDB\n  - sudo wget -qO- https://binaries.cockroachdb.com/cockroach-v19.1.1.linux-amd64.tgz | tar  xvz\n  - sudo cp -i cockroach-v19.1.1.linux-amd64/cockroach /usr/local/bin\n  - cockroach start --insecure --advertise-addr=cockroachdb2 --join=cockroachdb1,cockroachdb2,cockroachdb3 --cache=.25 --max-sql-memory=.25 --background\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\""
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
       "title": "Instance",
-      "version": "7.7"
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+        "hostname_label": "cockroachdb2",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      }
     },
     {
-      "authorized_keys": "",
-      "autonomous_database_ids": [],
-      "availability_domain": "1",
-      "block_storage_volume_ids": [],
-      "boot_volume_size_in_gbs": "50",
-      "cloud_init_yaml": "#cloud-config\npackages:\n  - nginx\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo firewall-offline-cmd --add-port=26257/tcp\n  - sudo firewall-offline-cmd --add-port=8080/tcp\n  - sudo systemctl restart firewalld\n# Download and install CockroachDB\n  - sudo wget -qO- https://binaries.cockroachdb.com/cockroach-v19.1.1.linux-amd64.tgz | tar  xvz\n  - sudo cp -i cockroach-v19.1.1.linux-amd64/cockroach /usr/local/bin\n  - cockroach start --insecure --advertise-addr=cockroachdb3 --join=cockroachdb1,cockroachdb2,cockroachdb3 --cache=.25 --max-sql-memory=.25 --background\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\"",
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "cockroachdb3",
-      "fault_domain": "FAULT-DOMAIN-3",
-      "freeform_tags": {},
-      "hostname_label": "cockroachdb3",
       "id": "okit.instance.a7f1ca69-1fc7-40a4-bf11-fff80d6ce913",
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "cockroachdb3",
       "name": "cockroachdb3",
-      "object_storage_bucket_ids": [],
-      "os": "Oracle Linux",
-      "parent_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
       "shape": "VM.Standard.E2.1",
-      "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
-      "subnet_ids": [],
+      "count": 1,
+      "fault_domain": "FAULT-DOMAIN-3",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+          "hostname_label": "cockroachdb3",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.9",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": "#cloud-config\npackages:\n  - nginx\n\nwrite_files:\n  # Add aliases to bash (Note: At time of writing the append flag does not appear to be working)\n  - path: /etc/.bashrc\n    append: true\n    content: |\n      alias lh='ls -lash'\n      alias lt='ls -last'\n      alias env='/usr/bin/env | sort'\n      alias whatsmyip='curl -X GET https://www.whatismyip.net | grep ipaddress'\n  # Create nginx index.html\n  - path: /usr/share/nginx/html/index1.html\n    permissions: '0644'\n    content: |\n      <html>\n      <head>\n      <title>OCI Loadbalancer backend {hostname}</title>\n      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n      <meta http-equiv=\"refresh\" content=\"10\" />\n      <style>\n      body {\n      background-image: url(\"bg.jpg\");\n      background-repeat: no-repeat;\n      background-size: contain;\n      background-position: center;\n      }\n      h1 {\n      text-align: center;\n      width: 100%;\n      }\n      </style>\n      </head>\n      <body>\n      <h1>OCI Regional Subnet Loadbalancer Backend {hostname}</h1>\n      </body>\n      </html>\n\nruncmd:\n  # Enable nginx\n  - sudo systemctl enable nginx.service\n  - sudo cp -v /usr/share/nginx/html/index1.html /usr/share/nginx/html/index.html\n  - sudo sed -i \"s/{hostname}/$(hostname)/g\" /usr/share/nginx/html/index.html\n  - sudo systemctl start nginx.service\n  # Set Firewall Rules\n  - sudo firewall-offline-cmd  --add-port=80/tcp\n  - sudo firewall-offline-cmd --add-port=26257/tcp\n  - sudo firewall-offline-cmd --add-port=8080/tcp\n  - sudo systemctl restart firewalld\n# Download and install CockroachDB\n  - sudo wget -qO- https://binaries.cockroachdb.com/cockroach-v19.1.1.linux-amd64.tgz | tar  xvz\n  - sudo cp -i cockroach-v19.1.1.linux-amd64/cockroach /usr/local/bin\n  - cockroach start --insecure --advertise-addr=cockroachdb3 --join=cockroachdb1,cockroachdb2,cockroachdb3 --cache=.25 --max-sql-memory=.25 --background\n  # Add additional environment information because append does not appear to work in write_file\n  - sudo bash -c \"echo 'source /etc/.bashrc' >> /etc/bashrc\"\n\nfinal_message: \"**** The system is finally up, after $UPTIME seconds ****\""
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
       "title": "Instance",
-      "version": "7.7"
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
+        "hostname_label": "cockroachdb3",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      }
     },
     {
-      "authorized_keys": "",
-      "autonomous_database_ids": [],
-      "availability_domain": "1",
-      "block_storage_volume_ids": [],
-      "boot_volume_size_in_gbs": "50",
-      "cloud_init_yaml": "",
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "bastion",
-      "fault_domain": "",
-      "freeform_tags": {},
-      "hostname_label": "bastion",
       "id": "okit.instance.f46d75d0-185d-487d-b42d-697a8226504c",
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "bastion",
       "name": "bastion",
-      "object_storage_bucket_ids": [],
-      "os": "Oracle Linux",
-      "parent_id": "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "availability_domain": "1",
       "shape": "VM.Standard.E2.1",
-      "subnet_id": "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0",
-      "subnet_ids": [],
+      "count": 1,
+      "fault_domain": "",
+      "agent_config": {
+        "is_monitoring_disabled": false,
+        "is_management_disabled": false
+      },
+      "vnics": [
+        {
+          "subnet_id": "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0",
+          "hostname_label": "bastion",
+          "assign_public_ip": true,
+          "skip_source_dest_check": false,
+          "nsg_ids": []
+        }
+      ],
+      "source_details": {
+        "os": "Oracle Linux",
+        "version": "7.9",
+        "boot_volume_size_in_gbs": "50",
+        "source_type": "image"
+      },
+      "metadata": {
+        "ssh_authorized_keys": "",
+        "user_data": ""
+      },
+      "block_storage_volume_ids": [],
+      "object_storage_bucket_ids": [],
+      "autonomous_database_ids": [],
+      "preserve_boot_volume": false,
+      "is_pv_encryption_in_transit_enabled": false,
       "title": "Instance",
-      "version": "7.7"
+      "primary_vnic": {
+        "subnet_id": "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0",
+        "hostname_label": "bastion",
+        "assign_public_ip": true,
+        "skip_source_dest_check": false,
+        "nsg_ids": []
+      }
     }
   ],
+  "instance_pools": [],
   "internet_gateways": [
     {
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "okit-ig001",
-      "enabled": true,
-      "freeform_tags": {},
       "id": "okit.internetgateway.a09a99ee-ac4b-49ed-978a-6a6c18dfd2fd",
-      "parent_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
-      "title": "Internet Gateway",
-      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924"
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "okit-ig001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
+      "enabled": true,
+      "title": "Internet Gateway"
     }
   ],
+  "ipsec_connections": [],
   "load_balancers": [
     {
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "cockroachdb-lb001",
-      "freeform_tags": {},
       "id": "okit.loadbalancer.2785fb86-0028-4ba3-8158-68ce55e6a204",
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "cockroachdb-lb001",
+      "name": "cockroachdb-lb001",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "subnet_ids": [
+        "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0"
+      ],
+      "is_private": false,
+      "shape": "100Mbps",
+      "protocol": "HTTP",
+      "port": "80",
       "instance_ids": [
         "okit.instance.09d61992-634d-4f93-9830-ee7d56cf0a74",
         "okit.instance.0cab33c7-65f5-48bb-a7c5-5ea01b561ea4",
         "okit.instance.a7f1ca69-1fc7-40a4-bf11-fff80d6ce913"
       ],
       "ip_mode": "",
-      "is_private": false,
-      "name": "cockroachdb-lb001",
       "network_security_group_ids": [],
+      "backend_policy": "ROUND_ROBIN",
+      "health_checker": {
+        "url_path": "/"
+      },
       "parent_id": "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0",
-      "port": "80",
-      "protocol": "HTTP",
-      "shape_name": "100Mbps",
-      "subnet_id": "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0",
-      "subnet_ids": [
-        "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0"
-      ],
       "title": "Load Balancer"
     }
   ],
   "local_peering_gateways": [],
+  "mysql_database_systems": [],
   "nat_gateways": [
     {
-      "block_traffic": false,
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "okit-ng001",
-      "freeform_tags": {},
       "id": "okit.natgateway.784af6f7-e4fa-4702-a409-c7f13ba0ccfa",
-      "parent_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
-      "title": "NAT Gateway",
-      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924"
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "okit-ng001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
+      "block_traffic": false,
+      "title": "NAT Gateway"
     }
   ],
   "network_security_groups": [],
   "object_storage_buckets": [],
-  "parent_id": "canvas-div",
-  "remote_peering_gateways": [],
+  "oke_clusters": [],
+  "remote_peering_connections": [],
   "route_tables": [
     {
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "okit-rt001",
-      "freeform_tags": {},
       "id": "okit.routetable.b0dec644-9c56-402e-adb9-c8149b890b61",
-      "parent_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "okit-rt001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
       "route_rules": [
         {
           "description": "Route to IG",
@@ -189,16 +306,17 @@
           "network_entity_id": "okit.internetgateway.a09a99ee-ac4b-49ed-978a-6a6c18dfd2fd",
           "target_type": "internet_gateways"
         }
-      ],
-      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924"
+      ]
     },
     {
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "okit-rt002",
-      "freeform_tags": {},
       "id": "okit.routetable.1cbfeeef-2905-45c9-9778-631e48396309",
-      "parent_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "okit-rt002",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
       "route_rules": [
         {
           "description": "",
@@ -208,15 +326,19 @@
           "target_type": "nat_gateways"
         }
       ],
-      "title": "Route Table",
-      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924"
+      "title": "Route Table"
     }
   ],
   "security_lists": [
     {
+      "id": "okit.securitylist.d0e6987b-59e8-4e61-be2f-36b346b37a31",
       "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
       "display_name": "okit-sl001",
+      "name": "",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
       "egress_security_rules": [
         {
           "description": "",
@@ -250,8 +372,6 @@
           }
         }
       ],
-      "freeform_tags": {},
-      "id": "okit.securitylist.d0e6987b-59e8-4e61-be2f-36b346b37a31",
       "ingress_security_rules": [
         {
           "description": "",
@@ -318,7 +438,6 @@
         {
           "description": "",
           "icmp_options": {
-            "code": null,
             "type": 3
           },
           "is_stateless": false,
@@ -408,14 +527,17 @@
             }
           }
         }
-      ],
-      "parent_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
-      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924"
+      ]
     },
     {
+      "id": "okit.securitylist.d6c25389-1c49-43de-bc87-aaf475656ec4",
       "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
       "display_name": "okit-sl002",
+      "name": "",
+      "definition": "Restrict Ingress access to the resources on the public subnet. Although all Egress is allowed.",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
       "egress_security_rules": [
         {
           "description": "",
@@ -449,8 +571,6 @@
           }
         }
       ],
-      "freeform_tags": {},
-      "id": "okit.securitylist.d6c25389-1c49-43de-bc87-aaf475656ec4",
       "ingress_security_rules": [
         {
           "description": "",
@@ -515,73 +635,68 @@
           }
         }
       ],
-      "parent_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
-      "title": "Security List",
-      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924"
+      "title": "Security List"
     }
   ],
   "service_gateways": [],
   "subnets": [
     {
-      "availability_domain": "0",
-      "cidr_block": "10.0.0.0/24",
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "cockroachdb-public-sn",
-      "dns_label": "sn001",
-      "freeform_tags": {},
       "id": "okit.subnet.e218ba2c-8723-4332-b870-4c1b2dae0cf0",
-      "ipv6cidr_block": "",
-      "is_ipv6enabled": false,
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "cockroachdb-public-sn",
       "name": "cockroachdb-public-sn",
-      "parent_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
+      "definition": "Public subnet restricted to the Loadbalancer and the Bastion Host. All access to the VMs running the cluster will be through either Loadbalancer or Bastion.",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
+      "cidr_block": "10.0.0.0/24",
+      "dns_label": "sn001",
       "prohibit_public_ip_on_vnic": false,
       "route_table_id": "okit.routetable.b0dec644-9c56-402e-adb9-c8149b890b61",
       "security_list_ids": [
         "okit.securitylist.d0e6987b-59e8-4e61-be2f-36b346b37a31"
       ],
-      "title": "Subnet",
-      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924"
+      "availability_domain": "0",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": "",
+      "title": "Subnet"
     },
     {
-      "availability_domain": "0",
-      "cidr_block": "10.0.1.0/24",
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "cockroachdb-private-sn",
-      "dns_label": "sn002",
-      "freeform_tags": {},
       "id": "okit.subnet.b5f2e59c-49e5-4afb-86f0-7386054f911d",
-      "ipv6cidr_block": "",
-      "is_ipv6enabled": false,
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "cockroachdb-private-sn",
       "name": "cockroachdb-private-sn",
-      "parent_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
+      "definition": "Private subnet used to protect VMs from direct, inbound, access. Only accessible from IPs on the public subnet.",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
+      "cidr_block": "10.0.1.0/24",
+      "dns_label": "sn002",
       "prohibit_public_ip_on_vnic": true,
       "route_table_id": "okit.routetable.1cbfeeef-2905-45c9-9778-631e48396309",
       "security_list_ids": [
         "okit.securitylist.d6c25389-1c49-43de-bc87-aaf475656ec4"
       ],
-      "title": "Subnet",
-      "vcn_id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924"
+      "availability_domain": "0",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": "",
+      "title": "Subnet"
     }
   ],
-  "template_type": "reference_architecture",
-  "title": "CockroachDB Cluster",
   "virtual_cloud_networks": [
     {
-      "cidr_block": "10.0.0.0/16",
-      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
-      "defined_tags": {},
-      "display_name": "cockroachdb-vcn001",
-      "dns_label": "vcn001",
-      "freeform_tags": {},
       "id": "okit.virtualcloudnetwork.4fcbf02a-e290-4460-a7df-ee48b9767924",
-      "ipv6cidr_block": "",
-      "is_ipv6enabled": false,
+      "compartment_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "display_name": "cockroachdb-vcn001",
       "name": "cockroachdb-vcn001",
-      "parent_id": "okit.compartment.31e0ffd2-2747-4508-b5ad-776b6f60f9c7",
+      "definition": "",
+      "freeform_tags": {},
+      "defined_tags": {},
+      "cidr_block": "10.0.0.0/16",
+      "dns_label": "vcn001",
+      "is_ipv6enabled": false,
+      "ipv6cidr_block": "",
       "title": "Virtual Cloud Network"
     }
-  ],
-  "web_application_firewalls": []
+  ]
 }

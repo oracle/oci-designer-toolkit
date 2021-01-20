@@ -86,17 +86,6 @@
 
 {% block navmenublock %}
     <ul id="navigation_menu_list" class="okit-navigation-list">
-        <!--ul class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="OKIT Menu"></div>
-                        <span>OKIT</span>
-                    </span>
-                </div>
-            </li>
-            <li><a id="okit_preferences" class="parent-item" href="javascript:void(0)" onclick="handlePreferences()">Preferences</a></li>
-        </ul-->
         <ul class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -114,8 +103,8 @@
                 <ul class="dropdown-content">
                     <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
                     <li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li>
-                    <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAs()">Save As Template</a></li>
-                    <!--li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save to Git</a></li-->
+                    <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTemplate()">Save As Template</a></li>
+                    <li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save To Git</a></li>
                 </ul>
             </li>
             <li><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOci()">Query</a></li>
@@ -149,7 +138,7 @@
                     </li>
                 {% endif %}
             {% endfor %}
-            <!--li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li-->
+            <li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li>
         </ul>
         <!--ul class="okit-navigation-sub-list">
             <li>
@@ -181,7 +170,7 @@
                     <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">jpeg</a></li>
                 </ul>
             </li>
-            <!--li id="image_export" class="sub-header-item dropdown">
+            <li id="image_export" class="sub-header-item dropdown">
                 <span>Terraform</span>
                 <ul class="dropdown-content">
                     <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Local Zip</a></li>
@@ -195,7 +184,7 @@
                     <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleGit()">Git</a></li>
                 </ul>
             </li>
-            <li id="image_export" class="sub-header-item dropdown">
+            <!--li id="image_export" class="sub-header-item dropdown">
                 <span>Resource Manager</span>
                 <ul class="dropdown-content">
                     <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
@@ -203,10 +192,11 @@
                     <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerGit()">Git</a></li>
                 </ul>
             </li-->
-            <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
-            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li>
+            <!--li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
+            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li-->
             <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
-            <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Resource Manager VCS</a></li>
+            <!--li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Resource Manager VCS</a></li-->
+            <li><a id="generate-markdown-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToMarkdownLocal()">Markdown</a></li>
         </ul>
         <ul class="okit-navigation-sub-list">
             <li>
@@ -218,6 +208,10 @@
                 </div>
             </li>
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
+            {% if experimental_mode %}
+            <li><a id="import-cce-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCCEJson()">Cost Estimator Json</a></li>
+            <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
+            {% endif %}
         </ul>
     </ul>
 {% endblock %}
@@ -275,15 +269,17 @@
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
         <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
-        <div id="canvas_details" class="okit-canvas-details tr">
-            <div class="td"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="50" onchange="updateJsonTitle()"/></div></div>
-            <div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div>
+        <div id="canvas_details" class="okit-canvas-details table">
+            <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
+            <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
         </div>
         <div id="canvas-div" class="okit-svg-canvas"></div>
+        <div id="tabular-div" class="okit-svg-canvas hidden"></div>
     </div>
     <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>
         <div id="properties_panel" class="okit-property-sheet hidden"></div>
+        <div id="description_panel" class="okit-property-sheet hidden"><textarea id="json_description" name="json_description" onchange="updateJsonDescription()" wrap="soft"></textarea></div>
         <div id="json_model_panel" class="okit-source-code hidden"></div>
         <div id="json_view_panel" class="okit-source-code hidden"></div>
         <div id="json_region_panel" class="okit-source-code hidden"></div>

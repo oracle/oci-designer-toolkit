@@ -1,0 +1,12 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_block_storage_volume(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Size (Gbs)", resource.size_in_gbs) }}
+{{ common.document_property("Backup Policy", resource.backup_policy | title) }}
+{{ common.document_property("VPUs/Gb", resource.vpus_per_gb) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for block_storage_volume in block_storage_volumes -%}
+    {{ document_block_storage_volume(block_storage_volume) }}
+{%- endfor %}

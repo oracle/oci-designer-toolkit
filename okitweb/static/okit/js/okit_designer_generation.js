@@ -14,35 +14,129 @@ function validationFailedNotification() {
 ** Generate Button handlers
  */
 
+/*
+** Common Export Functions
+ */
 function saveZip(url, filename="") {
     let a = document.createElement('a');
     a.setAttribute('href', url);
     a.setAttribute('download', filename);
     a.click();
 }
+function displayGitExportDialog(type) {
+    if (type === 'Terraform') {
+        $(jqId('modal_dialog_title')).text('Export Terraform To Git');
+    } else if (type === 'Ansible') {
+        $(jqId('modal_dialog_title')).text('Export Ansible To Git');
+    } else if (type === 'Resource Manager') {
+        $(jqId('modal_dialog_title')).text('Export Resource Manager To Git');
+    }
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('id', 'load_from_git')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    let tbody = table.append('div').attr('class', 'tbody');
 
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_repo');
+    tr.append('div').attr('class', 'td').text('Repository');
+    tr.append('div').attr('class', 'td').append('select')
+        .attr('id', 'git_repository')
+        .append('option')
+        .attr('value', 'select')
+        .text('Select');
+
+    let git_repository_filename_select = d3.select(d3Id('git_repository'));
+
+    for (let git_setting of okitGitConfig.gitsections) {
+        git_repository_filename_select.append('option').attr('value', git_setting['url']+'*'+git_setting['branch']).text(git_setting['label']);
+    }
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_filename');
+    tr.append('div').attr('class', 'td').text('Directory Name');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('style', 'text-transform: lowercase')
+        .attr('id', 'git_repository_filename')
+        .attr('type', 'text');
+    $('#git_repository_filename').val(okitJsonModel.title.replaceAll(' ','_').toLowerCase());
+    $('#git_repository_filename').val(toFilename(okitJsonModel.title));
+    tr = tbody.append('div').attr('class', 'tr');
+    tr.append('div').attr('class', 'td').text(`${type.toLowerCase().replaceAll(' ', '')} sub-directory will be created.`);
+
+    tr = tbody.append('div').attr('class', 'tr').attr('id', 'export_box_commitmsg');
+    tr.append('div').attr('class', 'td').text('Commit Message');
+    tr.append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'git_repository_commitmsg')
+        .attr('type', 'text');
+
+    // Submit Button
+    let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'submit_query_btn')
+        .attr('type', 'button')
+        .text('Export')
+        .on('click', function () {
+            exportToGit(type.toLowerCase().replaceAll(' ', ''));
+        });
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+function exportToGit(language) {
+    let request_json = JSON.clone(okitJsonModel);
+    request_json.git_repository = $(jqId('git_repository')).val();
+    request_json.git_repository_filename = $(jqId('git_repository_filename')).val();
+    request_json.git_repository_commitmsg = $(jqId('git_repository_commitmsg')).val();
+    request_json.use_variables = okitSettings.is_variables;
+    hideNavMenu();
+    setBusyIcon();
+    $(jqId('modal_dialog_progress')).removeClass('hidden');
+    $(jqId('submit_query_btn')).text('.........Processing');
+    $(jqId('submit_query_btn')).attr('disabled', 'disabled');
+    $.ajax({
+        type: 'post',
+        url: `generate/${language}/git`,
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(request_json),
+        success: function(resp) {
+            console.info('Response : ' + resp);
+        },
+        error: function(xhr, status, error) {
+            console.info('Status : '+ status)
+            console.info('Error : '+ error)
+        },
+        complete: function () {
+            unsetBusyIcon();
+            $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            $(jqId('modal_dialog_progress')).addClass('hidden');
+        }
+    });
+}
+/*
+** Terraform Handlers
+ */
 function handleExportToTerraformLocal(e) {
     hideNavMenu();
-    okitJsonModel.validate(generateTerraform);
+    okitJsonModel.validate(generateTerraformLocalZip);
 }
 function handleExportToTerraformGit(e) {
     hideNavMenu();
-    okitJsonModel.validate(generateTerraform);
+    okitJsonModel.validate(generateTerraformGitRepo);
 }
-function generateTerraform(results) {
+function generateTerraformLocalZip(results) {
     if (results.valid) {
         let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
         console.info(okitSettings);
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
             type: 'post',
-            url: 'generate/terraform',
+            url: 'generate/terraform/local',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(requestJson),
             success: function(resp) {
                 console.info('Response : ' + resp);
-                saveZip('generate/terraform');
+                saveZip('generate/terraform/local');
             },
             error: function(xhr, status, error) {
                 console.info('Status : '+ status)
@@ -53,39 +147,14 @@ function generateTerraform(results) {
         validationFailedNotification();
     }
 }
-
-function handleExportToAnsibleLocal(e) {
-    hideNavMenu();
-    okitJsonModel.validate(generateAnsible);
-}
-function handleExportToAnsibleGit(e) {
-    hideNavMenu();
-    okitJsonModel.validate(generateAnsible);
-}
-function generateAnsible(results) {
+function generateTerraformGitRepo(results){
     if (results.valid) {
-        let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
-        requestJson.use_variables = okitSettings.is_variables;
-        $.ajax({
-            type: 'post',
-            url: 'generate/ansible',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(requestJson),
-            success: function(resp) {
-                console.info('REST Response : ' + resp);
-                saveZip('generate/ansible');
-            },
-            error: function(xhr, status, error) {
-                console.info('Status : '+ status)
-                console.info('Error : '+ error)
-            }
-        });
+        // Display Dialog
+        displayGitExportDialog('Terraform')
     } else {
         validationFailedNotification();
     }
 }
-
 function handleGenerateTerraform11(e) {
     hideNavMenu();
     $.ajax({
@@ -104,7 +173,51 @@ function handleGenerateTerraform11(e) {
         }
     });
 }
-
+/*
+** Ansible Handlers
+ */
+function handleExportToAnsibleLocal(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateAnsibleLocalZip);
+}
+function handleExportToAnsibleGit(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateAnsibleGitRepo);
+}
+function generateAnsibleLocalZip(results) {
+    if (results.valid) {
+        let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
+        requestJson.use_variables = okitSettings.is_variables;
+        $.ajax({
+            type: 'post',
+            url: 'generate/ansible/local',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(requestJson),
+            success: function(resp) {
+                console.info('REST Response : ' + resp);
+                saveZip('generate/ansible/local');
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
+function generateAnsibleGitRepo(results){
+    if (results.valid) {
+        // Display Dialog
+        displayGitExportDialog('Ansible')
+    } else {
+        validationFailedNotification();
+    }
+}
+/*
+** Resource Manager Handlers
+ */
 function handleExportToResourceManager(e) {
     hideNavMenu();
     okitJsonModel.validate(generateResourceManager);
@@ -131,7 +244,6 @@ function generateResourceManager(results) {
         validationFailedNotification();
     }
 }
-
 function displayResourceManagerDialog() {
     $(jqId('modal_dialog_title')).text('Export To Resource Manager');
     $(jqId('modal_dialog_body')).empty();
@@ -191,7 +303,16 @@ function displayResourceManagerDialog() {
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
-        .text('Compartment');
+        .text('Compartment')
+        .append('img')
+            .attr('class', 'okit-refresh-button')
+            .attr('src', '/static/svg/refresh.svg')
+            .attr('alt', "Refresh")
+            .on('click', () => {
+                // Clear Existing Compartments
+                okitOciData.setCompartments([]);
+                loadCompartments();
+            });
     tr.append('div')
         .attr('class', 'td')
         .append('select')
@@ -383,7 +504,6 @@ function loadResourceManagerStacks() {
         }
     });
 }
-
 function handleExportToResourceManagerLocal(e) {
     hideNavMenu();
     okitJsonModel.validate(generateResourceManagerLocal);
@@ -416,7 +536,69 @@ function generateResourceManagerLocal(results) {
         validationFailedNotification();
     }
 }
-function handleExportToTerraformGit(e) {
+/*
+** Markdown Documentation Handlers
+ */
+function handleExportToMarkdownLocal(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateMarkdown);
+}
+function handleExportToMarkdownGit(e) {
+    hideNavMenu();
+    okitJsonModel.validate(generateMarkdown);
+}
+function generateMarkdown(results) {
+    if (results.valid) {
+        let requestJson = JSON.clone(okitJsonModel);
+        requestJson.use_variables = okitSettings.is_variables;
+        setExportDisplay();
+        const okitcanvas = document.getElementById("canvas-svg");
+        requestJson.svg = okitcanvas.outerHTML.replaceAll('\n', ' ');
+        // Add Style and Def to Compartment SVG
+        for (let compartment of requestJson.compartments) {
+            let svg_id = okitJsonView.getCompartment(compartment.id).svg_id;
+            let svg = d3.select(d3Id(svg_id));
+            okitJsonView.addDefinitions(svg);
+            compartment.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+        }
+        // Add Style and Def to VCN SVG
+        for (let vcn of requestJson.virtual_cloud_networks) {
+            let svg_id = okitJsonView.getVirtualCloudNetwork(vcn.id).svg_id;
+            let svg = d3.select(d3Id(svg_id));
+            okitJsonView.addDefinitions(svg);
+            vcn.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+        }
+        // Add Style and Def to Subnet SVG
+        for (let subnet of requestJson.subnets) {
+            let svg_id = okitJsonView.getSubnet(subnet.id).svg_id;
+            let svg = d3.select(d3Id(svg_id));
+            okitJsonView.addDefinitions(svg);
+            subnet.svg = document.getElementById(svg_id).outerHTML.replaceAll('\n', ' ');
+        }
+        okitJsonView.draw();
+        $.ajax({
+            type: 'post',
+            url: 'generate/markdown/local',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(requestJson),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                saveZip('generate/markdown/local');
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
+
+
+// TODO: Deprecated
+function handleExportToTerraformGit1(e) {
     $(jqId('modal_dialog_title')).text('Export Terraform');
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
@@ -461,7 +643,6 @@ function handleExportToTerraformGit(e) {
     save_button.on("click", handleExportToTerraformGitProceed);
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-
 function handleExportToTerraformGitProceed(e) {
     okitJsonModel.git_repository = $(jqId('git_repository')).val();
     okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
@@ -470,7 +651,6 @@ function handleExportToTerraformGitProceed(e) {
     hideNavMenu();
     okitJsonModel.validate(generateTerraformToRepo);
 }
-
 function generateTerraformToRepo(results) {
     if (results.valid) {
         let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
@@ -478,7 +658,7 @@ function generateTerraformToRepo(results) {
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
             type: 'post',
-            url: 'generate/terraformtogit',
+            url: 'generate/terraform/git',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(requestJson),
@@ -496,7 +676,8 @@ function generateTerraformToRepo(results) {
         validationFailedNotification();
     }
 }
-function handleExportToAnsibleGit(e) {
+
+function handleExportToAnsibleGit1(e) {
     $(jqId('modal_dialog_title')).text(' Export Ansible');
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
@@ -540,7 +721,6 @@ function handleExportToAnsibleGit(e) {
     save_button.on("click", handleExportToAnsibleGitProceed);
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-
 function handleExportToAnsibleGitProceed(e) {
     okitJsonModel.git_repository = $(jqId('git_repository')).val();
     okitJsonModel.git_repository_filename = $(jqId('git_repository_filename')).val();
@@ -548,7 +728,6 @@ function handleExportToAnsibleGitProceed(e) {
     hideNavMenu();
     okitJsonModel.validate(generateAnsibleToRepo);
 }
-
 function generateAnsibleToRepo(results) {
     if (results.valid) {
         let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
@@ -556,7 +735,7 @@ function generateAnsibleToRepo(results) {
         requestJson.use_variables = okitSettings.is_variables;
         $.ajax({
             type: 'post',
-            url: 'generate/ansibletogit',
+            url: 'generate/ansible/git',
             dataType: 'text',
             contentType: 'application/json',
             data: JSON.stringify(requestJson),

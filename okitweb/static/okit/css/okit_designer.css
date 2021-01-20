@@ -230,6 +230,13 @@
 
 .okit-canvas-details > div {
     overflow: hidden;
+    width: 100%;
+}
+
+.json-description {
+    display: block;
+    height: 100%;
+    width: 100%;
 }
 
 /*
@@ -267,6 +274,11 @@
     height: 100%;
     width: 100%;
     overflow: auto;
+}
+
+.okit-resource-description {
+    resize: vertical;
+    white-space: normal;
 }
 
 .okit-source-code {

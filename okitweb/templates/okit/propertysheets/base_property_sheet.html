@@ -2,19 +2,23 @@
 ** Copyright (c) 2020, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
-{% macro properties_input(title, name, type='text', collapsed=False) -%}
+{% macro properties_input(title, name, type='text', collapsed=False, readonly=False, row_id=undefined) -%}
     {% if type in ['text', 'password'] %}
-        <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value"></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %}></div></div>
     {% elif type == 'checkbox' %}
-        <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'></div><div class='td'><label><input type="{{ type }}" id="{{ name }}" name="{{ name }}" value="false">{{ title }}</label></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'></div><div class='td'><label><input type="{{ type }}" id="{{ name }}" name="{{ name }}" value="false">{{ title }}</label></div></div>
+    {% elif type == 'textarea' %}
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value" rows="2" wrap="soft"></textarea></div></div>
+    {% elif type == 'documentation' %}
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-resource-description documentation" rows="2" wrap="soft"></textarea></div></div>
     {% elif type == 'code' %}
-        <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><code><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-source-code" rows="10" wrap="off"></textarea></code></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><code><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-source-code" rows="10"></textarea></code></div></div>
     {% elif type == 'select' %}
-        <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><select id="{{ name }}" class="okit-property-value"></select></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><select id="{{ name }}" class="okit-property-value"></select></div></div>
     {% elif type == 'multiselect' %}
-        <div class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><div id="{{ name }}" class="okit-multiple-select"></div></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><div id="{{ name }}" class="okit-multiple-select"></div></div></div>
     {% else %}
-        <div class='tr'><div class='td'>{{ title }}</div><div class='td'>Unknown type="{{ type }}"</div></div>
+        <div id="{{ name }}_row" class='tr'><div class='td'>{{ title }}</div><div class='td'>Unknown type="{{ type }}"</div></div>
     {% endif %}
 {%- endmacro %}
 <!DOCTYPE html>
@@ -33,9 +37,9 @@
             <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
         </div>
         <div class="tbody">
-            {{ properties_input('Id', 'id', type='text', collapsed=True) }}
+            {{ properties_input('Id', 'id', type='text', collapsed=True, readonly=True) }}
             {{ properties_input('Name', 'display_name', type='text') }}
-            {{ properties_input('Definition', 'definition', type='text') }}
+            {{ properties_input('Documentation', 'definition', type='documentation') }}
            {% block required_properties_table_rows_block %}{% endblock %}
         </div>
     </div>

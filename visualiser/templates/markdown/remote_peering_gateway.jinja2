@@ -1,0 +1,13 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_remote_peering_gateway(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property() }}
+{{ common.dynamic_routing_gateway_property(resource.drg_id) }}
+{{ common.document_property("Peer Id", resource.peer_id) }}
+{{ common.document_property("Peer Region", resource.peer_region_name) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for remote_peering_gateway in remote_peering_gateways -%}
+    {{ document_remote_peering_gateway(remote_peering_gateway) }}
+{%- endfor %}

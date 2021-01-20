@@ -1,4 +1,4 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.15.0](CHANGELOG.md#version-0.15.0)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.16.0](CHANGELOG.md#version-0.16.0)
 
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
@@ -13,22 +13,30 @@ OCI environments through a graphical web based interface.
     - png
     - jpeg
 
-- [Generate](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit)
+- [Export](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit)
 
     Once completed the design can be enhanced to add key property information allowing the designed infrastructure to
-    be exported to a number of DevOps frameworks.
+    be exported to a number of DevOps frameworks or Markdown for documentation.
     
     - Ansible
     - Terraform
     - OCI Resource Manager
+    - Markdown
     
     This allows for rapid proto-typing and building.
 
 - [Introspect](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)
 
     OKIT will also allow the user to introspect existing OCI environments, through simple query functionality embedded within the
-    web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible. 
+    web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
 
+  
+## Blogs
+- [Introduction to OKIT the OCI Designer Toolkit](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit)
+- [The OCI Designer Toolkit Templates Feature](https://www.ateam-oracle.com/the-oci-designer-toolkit-templates-feature)
+- [The OCI Designer Toolkit Query Feature](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)
+- [OCI Designer Toolkit Resource Manager Integration](https://www.ateam-oracle.com/oci-designer-toolkit-resource-manager-integration)
+- [The OCI Designer Toolkit Documentation Generation](https://www.ateam-oracle.com/the-oci-designer-toolkit-documentation-generation)
 
 
 ## Installation
@@ -75,7 +83,7 @@ Upload the generated __oci_api_key_public.pem__ to OCI through the [console](htt
 openssl rsa -pubout -outform DER -in ~/.oci/oci_api_key.pem | openssl md5 -c
 ```
 
-##### Config File
+##### OCI Config File
 
 Create the OCI cli __config__ file in the directory __&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
 The __*key_file*__ is a fixed value because the contents of the __&lt;USER HOME DIR&gt;/.oci__ will be mounted to the
@@ -90,10 +98,30 @@ tenancy=ocid1.tenancy.oc1..aaaaaaaawpqblfem........
 region=us-phoenix-1
 ```
 
+##### GIT Settings File
+
+If Git integration is required you will need to create a __git_repositories__ file within the directory 
+__&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
+
+```properties
+[OKIT Community]
+branch = master
+url = git@url1.git
+
+[Internal]
+branch = BRANCHNAME
+url = git@url2.git
+```
+
+This properties file contains a list of the Git repositories you want to access. It assumes that you are using public/private
+key access and the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
+defines the key/url mapping.
+
+
 #### Run Container
 
 ```bash
-docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --name okit okit
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --name okit okit
 ```
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)

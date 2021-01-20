@@ -1,0 +1,11 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_internet_gateway(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.vcn_property(resource.vcn_id) }}
+{{ common.document_property("Enabled", resource.enabled) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for internet_gateway in internet_gateways -%}
+    {{ document_internet_gateway(internet_gateway) }}
+{%- endfor %}

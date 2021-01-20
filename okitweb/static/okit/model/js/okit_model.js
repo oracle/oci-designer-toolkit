@@ -13,7 +13,9 @@ class OkitJson {
      */
     constructor(okit_json_string = '') {
         this.title = "OKIT OCI Visualiser Json";
-        this.description = "";
+        this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
+        this.created = getCurrentDateTime();
+        this.updated = this.created;
         this.okit_version = okitVersion;
         this.compartments = [];
         this.customer_premise_equipments = [];
