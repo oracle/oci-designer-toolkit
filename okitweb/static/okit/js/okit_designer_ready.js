@@ -101,7 +101,7 @@ $(document).ready(function() {
     // Right Bar & Panels
     // Description
     d3.select(d3Id('console_right_bar')).append('label')
-        .attr('id', 'toggle_properties_button')
+        .attr('id', 'toggle_description_button')
         .attr('class', 'okit-pointer-cursor')
         .on('click', function () {
             let open = $(this).hasClass('okit-bar-panel-displayed');
