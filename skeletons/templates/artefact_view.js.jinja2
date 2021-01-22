@@ -127,7 +127,7 @@ OkitJsonView.prototype.move{{ model_class_name }} = function(id) {
         });
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-OkitJsonView.prototype.paste{{ model_class_name }}(drop_target) {
+OkitJsonView.prototype.paste{{ model_class_name }} = function(drop_target) {
     const clone = this.copied_artefact.artefact.clone();
     clone.display_name += 'Copy';
     if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
@@ -140,7 +140,7 @@ OkitJsonView.prototype.paste{{ model_class_name }}(drop_target) {
     this.okitjson.{{ artefact_json_list }}.push(clone);
     this.update(this.okitjson);
 }
-OkitJsonView.prototype.load{{ model_class_name }}sSelect(select_id, empty_option=false) {
+OkitJsonView.prototype.load{{ model_class_name }}sSelect = function(select_id, empty_option=false) {
     $(jqId(select_id)).empty();
     const {{ artefact_simple_name }}_select = $(jqId(select_id));
     if (empty_option) {
@@ -150,7 +150,7 @@ OkitJsonView.prototype.load{{ model_class_name }}sSelect(select_id, empty_option
         {{ artefact_simple_name }}_select.append($('<option>').attr('value', {{ artefact_simple_name }}.id).text({{ artefact_simple_name }}.display_name));
     }
 }
-OkitJsonView.prototype.load{{ model_class_name }}sMultiSelect(select_id) {
+OkitJsonView.prototype.load{{ model_class_name }}sMultiSelect = function(select_id) {
     $(jqId(select_id)).empty();
     const multi_select = d3.select(d3Id(select_id));
     for (let {{ artefact_simple_name }} of this.get{{ model_class_name }}s()) {
