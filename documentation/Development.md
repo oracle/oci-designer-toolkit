@@ -1009,5 +1009,5 @@ docker run -it --rm -p 80:80 --name okit --hostname okit \
     -v ${OKIT_GITHUB}/skeletons:/okit/skeletons \
     -v ${OKIT_GITHUB}/visualiser:/okit/visualiser \
     -v ${OKIT_WORKSPACE}/log:/okit/log \
-    -v ${OKIT_WORKSPACE}/dropdown.json:/okit/okitweb/static/okit/json/dropdown.json  okit'
+    okit
 ```
