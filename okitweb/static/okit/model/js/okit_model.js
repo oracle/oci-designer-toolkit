@@ -232,6 +232,13 @@ class OkitJson {
     ** Artifact Processing
      */
 
+    // Generic
+    getResource(type, id) {
+        const getFunction = `get${titleCase(type.split('_').join(' ')).split(' ').join('').slice(0, -1)}`;
+        console.info(`Get Function ${getFunction} - ${id}`);
+        return this[getFunction](id);
+    }
+
     // Autonomous Database
     newAutonomousDatabase(data) {
         console.info('New Autonomous Database');

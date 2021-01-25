@@ -158,6 +158,13 @@
     color: #aeaeae;
 }
 
+.okit-tab-contents {
+    display: block;
+    width: 100%;
+    border: #aeaeae 1px solid;
+    margin: 2px;
+}
+
 .okit-tab:hover {
     color: black !important;
 }
@@ -198,6 +205,14 @@
     width: 87%;
 }
 
+.okit-tabular-canvas {
+    display: block;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+}
 .okit-svg-canvas {
     display: block;
     padding: 0;
