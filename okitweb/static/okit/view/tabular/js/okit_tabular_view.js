@@ -242,15 +242,12 @@ class OkitTabularJsonView extends OkitJsonView {
                     } else {
                         const lookup = this.getResource(value.lookup, resource[value.property]);
                         if (lookup) {
-                            //tr.append('div').attr('class', 'td').text(lookup.display_name);
                             cell_data = lookup.display_name;
                         } else {
-                            //tr.append('div').attr('class', 'td').text('');
                             cell_data = '';
                         }
                     }
                 } else {
-                    //tr.append('div').attr('class', 'td').text(this.getValue(resource, value.property));
                     cell_data = this.getValue(resource, value.property);
                 }
                 tr.append('div').attr('class', 'td').text(cell_data);
@@ -262,13 +259,10 @@ class OkitTabularJsonView extends OkitJsonView {
         const sections = lookup.split('.');
         const obj = sections[0];
         const getFunction = sections[1];
-        //const getFunction = `get${titleCase(type.split('_').join(' ')).split(' ').join('').slice(0, -1)}`;
-        console.info(`Get Function : ${getFunction}`);
         return this[obj][getFunction](id);
     }
 
     getViewResource(type, id) {
-        //const getFunction = `get${titleCase(type.split('_').join(' ')).split(' ').join('').slice(0, -1)}`;
         const getFunction = `get${type.split(' ').join('')}`;
         return okitJsonView[getFunction](id);
     }
