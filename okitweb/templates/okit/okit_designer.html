@@ -142,7 +142,7 @@
             {% endfor %}
             <li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li>
         </ul>
-        <!--ul class="okit-navigation-sub-list">
+        <ul class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -151,9 +151,9 @@
                     </span>
                 </div>
             </li>
-            <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)">Network</a></li>
-            <li><a id="okit_view-security-menu-item" class="parent-item" href="javascript:void(0)">Security</a></li>
-        </ul-->
+            <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToCompartmentView()">Designer</a></li>
+            <li><a id="view-tabular-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToTabularView()">Tabular</a></li>
+        </ul>
         <ul class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -222,8 +222,8 @@
             </li>
             <li><a id="import-cce-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCCEJson()">Cost Estimator Json (Import)</a></li>
             <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel (Import)</a></li>
-            <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToCompartmentView()">Compartment Centric (View)</a></li>
-            <li><a id="view-tabular-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToTabularView()">Tabular (View)</a></li>
+            <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToNetworkView()">Network (View)</a></li>
+            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToSecurityView()">Security (View)</a></li>
         </ul>
         {% endif %}
     </ul>
@@ -288,6 +288,8 @@
         </div>
         <div id="canvas-div" class="okit-svg-canvas"></div>
         <div id="tabular-div" class="okit-tabular-canvas hidden"></div>
+        <div id="network-div" class="okit-tabular-canvas hidden"></div>
+        <div id="security-div" class="okit-tabular-canvas hidden"></div>
     </div>
     <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>

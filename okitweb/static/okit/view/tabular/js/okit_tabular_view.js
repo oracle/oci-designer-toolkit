@@ -5,71 +5,154 @@
 console.info('Loaded OKIT Designer View Javascript');
 
 class OkitTabularJsonView extends OkitJsonView {
-    static resource_property_map = {
-        common: {
-            'Compartment': {property: 'compartment_id', lookup: 'compartments'},
-            'Name': {property: 'display_name'}
-        },
-        compartments: {
-            'Description': {property: 'description'}
-        },
-        autonomous_databases: {
-            'Subnet': {property: 'subnet_id', lookup: 'subnets'},
-            'DB Name': {property: 'db_name'},
-            'Storage Size (Tbs)': {property: 'data_storage_size_in_tbs'},
-            'CPU Count': {property: 'cpu_core_count'},
-            'Workload': {property: 'db_workload'},
-            'Auto Scaling': {property: 'is_auto_scaling_enabled'},
-            'License Model': {property: 'license_model'},
-            'Security Groups': {property: 'nsg_ids', lookup: 'network_security_groups'},
-        },
-        block_storage_volumes: {
-            'Availability Domain': {property: 'availability_domain'},
-            'Size in Gbs': {property: 'size_in_gbs'},
-            'Backup Policy': {property: 'backup_policy'},
-            'VPUS/Gb': {property: 'vpus_per_gb'},
-        },
-        customer_premise_equipments: {
-            'IP Address': {property: 'ip_address'},
-            'Customer Device': {property: 'cpe_device_shape_id', lookup: okitOciData.getCpeDeviceShape},
-        },
-        database_systems: {},
-        dynamic_routing_gateways: {},
-        fast_connects: {},
-        file_storage_systems: {},
-        instances: {
-            'Subnet': {property: 'subnet_id', lookup: 'subnets'}
-        },
-        instance_pools: {},
-        internet_gateways: {},
-        ipsec_connections: {},
-        load_balancers: {},
-        local_peering_gateways: {},
-        mysql_database_systems: {},
-        nat_gateways: {},
-        network_security_groups: {},
-        object_storage_buckets: {},
-        oke_clusters: {},
-        remote_peering_connections: {},
-        route_tables: {},
-        security_lists: {},
-        service_gateways: {},
-        subnets: {
-            'VCN': {property: 'vcn_id', lookup: 'virtual_cloud_networks'}
-        },
-        virtual_cloud_networks: {
-            'CIDR Block': {property: 'cidr_block'},
-            'DNS Label': {property: 'cidr_block'}
-        }
-    };
 
-    constructor(okitjson=null, parent_id = 'tabular-div') {
+    constructor(okitjson=null, oci_data=null, parent_id = 'tabular-div') {
         super(okitjson);
+        this.oci_data = oci_data;
         this.parent_id = parent_id;
+        this.loadPropertyMap();
     }
+    get model() {return this.okitjson;}
+    get data() {return this.oci_data;}
 
     static newView(model, parent_id = 'tabular-div') {
         return new OkitTabularJsonView((model, parent_id))
+    }
+
+    loadPropertyMap() {
+        this.resource_property_map = {
+            common: {
+                'Name': {property: 'display_name'},
+                'Compartment': {property: 'compartment_id', lookup: 'model.getCompartment'}
+            },
+            compartments: {
+                'Description': {property: 'description'}
+            },
+            autonomous_databases: {
+                'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
+                'DB Name': {property: 'db_name'},
+                'Storage Size (Tbs)': {property: 'data_storage_size_in_tbs'},
+                'CPU Count': {property: 'cpu_core_count'},
+                'Workload': {property: 'db_workload'},
+                'Auto Scaling': {property: 'is_auto_scaling_enabled'},
+                'License Model': {property: 'license_model'},
+                'Security Groups': {property: 'nsg_ids', lookup: 'model.getNetworkSecurityGroup'},
+            },
+            block_storage_volumes: {
+                'Availability Domain': {property: 'availability_domain'},
+                'Size in Gbs': {property: 'size_in_gbs'},
+                'Backup Policy': {property: 'backup_policy'},
+                'VPUS/Gb': {property: 'vpus_per_gb'},
+            },
+            customer_premise_equipments: {
+                'IP Address': {property: 'ip_address'},
+                'Customer Device': {property: 'cpe_device_shape_id', lookup: 'data.getCpeDeviceShape'},
+            },
+            database_systems: {
+                'Availability Domain': {property: 'availability_domain'},
+                'Database Edition': {property: 'database_edition'},
+                'DB Name': {property: 'db_home.database.db_name'},
+                'Workload': {property: 'db_home.database.db_workload'},
+                'Version': {property: 'db_home.db_version'},
+                'Hostname': {property: 'hostname'},
+                'Cluster': {property: 'cluster_name'},
+                'Shape': {property: 'shape'},
+                'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
+                'License Model': {property: 'license_model'},
+                'Security Groups': {property: 'nsg_ids', lookup: 'model.getNetworkSecurityGroup'},
+            },
+            dynamic_routing_gateways: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+            },
+            fast_connects: {},
+            file_storage_systems: {
+                'Availability Domain': {property: 'availability_domain'},
+            },
+            instances: {
+                'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'}
+            },
+            instance_pools: {},
+            internet_gateways: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+                'Enable': {property: 'enabled'},
+            },
+            ipsec_connections: {
+                'Customer Premise Equipment': {property: 'cpe_id', lookup: 'model.getCustomerPremiseEquipment'},
+                'Dynamic Routing Gateway': {property: 'drg_id', lookup: 'model.getDynamicRoutingGateway'},
+            },
+            load_balancers: {
+                'Private': {property: 'is_private'},
+                'Shape': {property: 'shape'},
+                'Protocol': {property: 'protocol'},
+                'Port': {property: 'port'},
+                'Policy': {property: 'backend_policy'},
+                'Backends': {property: 'instance_ids', lookup: 'model.getInstance'},
+            },
+            local_peering_gateways: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+                'Route Table': {property: 'route_table_id', lookup: 'model.getRouteTable'},
+                'Peer': {property: 'peer_id', lookup: 'model.getLocalPeeringGateway'},
+            },
+            mysql_database_systems: {
+                'Availability Domain': {property: 'availability_domain'},
+                'Hostname': {property: 'hostname_label'},
+                'Version': {property: 'mysql_version'},
+                'Configuration': {property: 'configuration_id', lookup: 'data.getMySQLConfiguration'},
+                'Shape': {property: 'shape_name'},
+                'Port': {property: 'port'},
+                'Port X': {property: 'port_x'},
+                'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
+                'Description': {property: 'description'},
+            },
+            nat_gateways: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+                'Block Traffic': {property: 'block_traffic'},
+            },
+            network_security_groups: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+            },
+            object_storage_buckets: {
+                'Namespace': {property: 'namespace'},
+                'Storage Tier': {property: 'storage_tier'},
+                'Public Access': {property: 'public_access_type'},
+            },
+            oke_clusters: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+                'Dashboard': {property: 'options.add_ons.is_kubernetes_dashboard_enabled'},
+                'Tiller': {property: 'options.add_ons.is_tiller_enabled'},
+                'Security': {property: 'options.admission_controller_options.is_pod_security_policy_enabled'},
+                'Pod CIDR': {property: 'options.kubernetes_network_config.pods_cidr'},
+                'Service CIDR': {property: 'options.kubernetes_network_config.services_cidr'},
+            },
+            remote_peering_connections: {
+                'Dynamic Routing Gateway': {property: 'drg_id', lookup: 'model.getDynamicRoutingGateway'},
+                'Peer': {property: 'peer_id', lookup: 'model.getRemotePeeringConnection'},
+                'Peer Region': {property: 'peer_region_name'},
+            },
+            route_tables: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+            },
+            security_lists: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+            },
+            service_gateways: {
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+                'Route Table': {property: 'route_table_id', lookup: 'model.getRouteTable'},
+            },
+            subnets: {
+                'Availability Domain': {property: 'availability_domain'},
+                'Virtual Cloud Network': {property: 'vcn_id', lookup: 'model.getVirtualCloudNetwork'},
+                'CIDR Block': {property: 'cidr_block'},
+                'DNS Label': {property: 'dns_label'},
+                'Private': {property: 'prohibit_public_ip_on_vnic'},
+                'Route Table': {property: 'route_table_id', lookup: 'model.getRouteTable'},
+                'Security Lists': {property: 'security_list_ids', lookup: 'model.getSecurityList'},
+            },
+            virtual_cloud_networks: {
+                'CIDR Block': {property: 'cidr_block'},
+                'DNS Label': {property: 'dns_label'},
+            }
+        };
     }
 
     draw(for_export=false) {
@@ -90,7 +173,6 @@ class OkitTabularJsonView extends OkitJsonView {
             .attr('id', 'tabular_view_tab_contents')
         // Loop through Model elements and create and create a tab for each
         Object.entries(this.okitjson).forEach(([key, value]) => {
-            console.log(key + ' - ' + value) // key - value
             if (Array.isArray(value)) {
                 this.addTab(tabbar, key)
             }
@@ -122,7 +204,7 @@ class OkitTabularJsonView extends OkitJsonView {
 
     loadTabContent(resource_type) {
         // Merge Property Maps
-        const property_map = {...OkitTabularJsonView.resource_property_map['common'], ...OkitTabularJsonView.resource_property_map[resource_type]}
+        const property_map = {...this.resource_property_map['common'], ...this.resource_property_map[resource_type]}
         const contents_div = d3.select(d3Id('tabular_view_tab_contents'));
         // Empty existing Canvas
         contents_div.selectAll('*').remove();
@@ -144,29 +226,63 @@ class OkitTabularJsonView extends OkitJsonView {
     }
 
     addTableBody(table, property_map, resource_type) {
+        const self = this;
         // Table Body
         const tbody = table.append('div').attr('class', 'tbody okit-tbody-alternating-colours');
         for (let resource of this.okitjson[resource_type]) {
-            const tr = tbody.append('div').attr('class', 'tr');
+            // Designer View Object
+            const view_resource = this.getViewResource(resource.getArtifactReference(), resource.id);
+            const tr = tbody.append('div').attr('class', 'tr').on('click', function() {view_resource.loadSlidePanels()});
             Object.entries(property_map).forEach(([key, value]) => {
+                let cell_data = '';
                 if (value.lookup) {
-                    const lookup = this.okitjson.getResource(value.lookup, resource[value.property]);
-                    if (lookup) {
-                        tr.append('div').attr('class', 'td').text(lookup.display_name);
+                    if (Array.isArray(resource[value.property])) {
+                        const array_data = resource[value.property].map(id => self.getResource(value.lookup, id).display_name);
+                        cell_data = array_data.join(', ');
                     } else {
-                        tr.append('div').attr('class', 'td').text('');
+                        const lookup = this.getResource(value.lookup, resource[value.property]);
+                        if (lookup) {
+                            //tr.append('div').attr('class', 'td').text(lookup.display_name);
+                            cell_data = lookup.display_name;
+                        } else {
+                            //tr.append('div').attr('class', 'td').text('');
+                            cell_data = '';
+                        }
                     }
                 } else {
-                    tr.append('div').attr('class', 'td').text(resource[value.property]);
+                    //tr.append('div').attr('class', 'td').text(this.getValue(resource, value.property));
+                    cell_data = this.getValue(resource, value.property);
                 }
+                tr.append('div').attr('class', 'td').text(cell_data);
             });
         }
     }
 
+    getResource(lookup, id) {
+        const sections = lookup.split('.');
+        const obj = sections[0];
+        const getFunction = sections[1];
+        //const getFunction = `get${titleCase(type.split('_').join(' ')).split(' ').join('').slice(0, -1)}`;
+        console.info(`Get Function : ${getFunction}`);
+        return this[obj][getFunction](id);
+    }
+
+    getViewResource(type, id) {
+        //const getFunction = `get${titleCase(type.split('_').join(' ')).split(' ').join('').slice(0, -1)}`;
+        const getFunction = `get${type.split(' ').join('')}`;
+        return okitJsonView[getFunction](id);
+    }
+
+    getValue(resource, key) {
+        const keys = key.split('.');
+        if (keys.length > 1) {
+            return this.getValue(resource[keys[0]], keys.slice(1).join('.'));
+        } else {
+            return resource[key];
+        }
+    }
+
+
 }
 
 let okitTabularView = null;
-
-$(document).ready(function() {
-    okitTabularView = new OkitTabularJsonView();
-});

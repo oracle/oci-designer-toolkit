@@ -7,12 +7,13 @@ console.info('Loaded Designer Ready Javascript');
 /*
 ** Define variables for Artefact classes
  */
-let okitJsonModel = new OkitJson();
+//let okitJsonModel = new OkitJson();
 let okitOciConfig = new OkitOCIConfig();
 let okitOciData = new OkitOCIData();
 let okitSettings = new OkitSettings();
 let okitGitConfig = new OkitGITConfig();
 let okitAutoSave = undefined;
+//let okitTabularView = new OkitTabularJsonView();
 /*
 ** Ready function initiated on page load.
  */
@@ -26,6 +27,7 @@ $(document).ready(function() {
     okitGitConfig = new OkitGITConfig();
     okitJsonModel = new OkitJson();
     okitJsonView = new OkitDesignerJsonView(okitJsonModel);
+    okitTabularView = new OkitTabularJsonView(okitJsonModel);
     console.info(okitJsonView);
     /*
     ** Configure Auto Save

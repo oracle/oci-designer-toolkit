@@ -161,8 +161,11 @@
 .okit-tab-contents {
     display: block;
     width: 100%;
-    border: #aeaeae 1px solid;
     margin: 2px;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    scrollbar-width: none; /* Firefox */
 }
 
 .okit-tab:hover {

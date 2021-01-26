@@ -197,6 +197,13 @@ class OkitOCIData {
             return this.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
         }
     }
+    getMySQLConfiguration(id) {
+        for (let shape of this.getMySQLConfigurations()) {
+            if (shape.id === id) {
+                return shape;
+            }
+        }
+    }
 
     getMySQLShapes() {
         return this.mysql_shapes;

@@ -7,6 +7,8 @@ console.info('Loaded View Layout Javascript');
 function hideAllViewDivs() {
     $("#canvas-div").addClass('hidden');
     $("#tabular-div").addClass('hidden');
+    $("#network-div").addClass('hidden');
+    $("#security-div").addClass('hidden');
 }
 
 function handleSwitchToCompartmentView(e) {
@@ -17,6 +19,16 @@ function handleSwitchToCompartmentView(e) {
 function handleSwitchToTabularView(e) {
     hideAllViewDivs();
     $("#tabular-div").removeClass('hidden');
-    okitTabularView = new OkitTabularJsonView(okitJsonModel);
+    okitTabularView = new OkitTabularJsonView(okitJsonModel, okitOciData);
     okitTabularView.draw();
+}
+
+function handleSwitchToNetworkView(e) {
+    hideAllViewDivs();
+    $("#network-div").removeClass('hidden');
+}
+
+function handleSwitchToSecurityView(e) {
+    hideAllViewDivs();
+    $("#security-div").removeClass('hidden');
 }
