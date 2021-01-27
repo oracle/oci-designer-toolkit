@@ -42,3 +42,5 @@ containers/ssh/*
 
 !okitweb/static/model
 /docker-compose.yml
+/containers/runtime/
+/node/
