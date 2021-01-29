@@ -158,6 +158,16 @@
     color: #aeaeae;
 }
 
+.okit-tab-contents {
+    display: block;
+    width: 100%;
+    margin: 2px;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    scrollbar-width: none; /* Firefox */
+}
+
 .okit-tab:hover {
     color: black !important;
 }
@@ -198,6 +208,14 @@
     width: 87%;
 }
 
+.okit-tabular-canvas {
+    display: block;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+}
 .okit-svg-canvas {
     display: block;
     padding: 0;

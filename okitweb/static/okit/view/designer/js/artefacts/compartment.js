@@ -75,7 +75,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     getContainerArtifacts() {
-        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference()];
+        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference(), Subnet.getArtifactReference()];
     }
 
     getLeftArtifacts() {

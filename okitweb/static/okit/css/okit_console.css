@@ -607,6 +607,13 @@ li a.parent-item:hover {
     text-align: center;
 }
 
+.okit-tbody-alternating-colours > .tr:nth-child(odd) {
+}
+
+.okit-tbody-alternating-colours > .tr:nth-child(even) {
+    background-color: lightsteelblue;
+}
+
 .okit-properties-table {
 }
 

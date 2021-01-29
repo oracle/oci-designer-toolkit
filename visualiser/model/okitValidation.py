@@ -332,6 +332,17 @@ class OCIJsonValidator(object):
             vcn_cidr_map[vcn['id']] = vcn['cidr_block']
         for artefact in sorted(self.okit_json.get('subnets', []), key=lambda k: k['vcn_id']):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+            # Check Connected to a VCN
+            if artefact['vcn_id'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Subnet',
+                    'artefact': artefact['display_name'],
+                    'message': 'Subnet is not part of a VCN.',
+                    'element': 'vcn_id'
+                }
+                self.results['errors'].append(error)
             # Check that CIDR exists
             if artefact['cidr_block'] == '':
                 self.valid = False

@@ -12,8 +12,17 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         super(artefact, json_view);
     }
 
-    get parent_id() {return this.artefact.vcn_id;}
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    get parent_id_orig() {return this.artefact.vcn_id;}
+    get parent_orig() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    get parent_id() {
+        const vcn = this.getJsonView().getVirtualCloudNetwork(this.artefact.vcn_id);
+        if (vcn && vcn.compartment_id === this.artefact.compartment_id) {
+            return this.artefact.vcn_id;
+        } else {
+            return this.compartment_id;
+        }
+    }
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id) ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     get children() {return [...this.json_view.getInstances(), ...this.json_view.getLoadBalancers(),
         ...this.json_view.getFileStorageSystems(), ...this.json_view.getAutonomousDatabases(),
         ...this.json_view.getDatabaseSystems(), ...this.json_view.getMySQLDatabaseSystems()].filter(child => child.parent_id === this.artefact.id);}
@@ -71,6 +80,10 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/subnet.html", () => {
             // Load Referenced Ids
+            // Virtual Cloud Network
+            this.loadVirtualCloudNetworkSelect('vcn_id');
+            $(jqId('vcn_id')).on('change', () => {if ($(jqId('vcn_id')).val() != '') me.artefact.generateCIDR();});
+            // Route Table
             let route_table_select = $(jqId('route_table_id'));
             route_table_select.append($('<option>').attr('value', '').text(''));
             for (let route_table of me.artefact.getOkitJson().route_tables) {
@@ -147,7 +160,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     static getDropTargets() {
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [VirtualCloudNetwork.getArtifactReference(), Compartment.getArtifactReference()];
     }
 
 }

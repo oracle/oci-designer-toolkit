@@ -18,8 +18,6 @@ class InternetGateway extends OkitArtifact {
         this.compartment_id = data.compartment_id;
         this.vcn_id = data.parent_id;
         this.enabled = true;
-        this.freeform_tags = {};
-        this.defined_tags = {};
         // Update with any passed data
         this.merge(data);
         this.convert();

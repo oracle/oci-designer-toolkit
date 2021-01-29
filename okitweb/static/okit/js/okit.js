@@ -113,6 +113,14 @@ class OkitOCIData {
     getCpeDeviceShapes() {
         return this.cpe_device_shapes;
     }
+    getCpeDeviceShape(id) {
+        for (let shape of this.getCpeDeviceShapes()) {
+            if (shape.id === id) {
+                shape.display_name = `${shape.cpe_device_info.vendor} ${shape.cpe_device_info.platform_software_version}`;
+                return shape;
+            }
+        }
+    }
 
     getDBSystemShapes(family='') {
         if (family === '') {
@@ -187,6 +195,13 @@ class OkitOCIData {
             return this.mysql_configurations;
         } else {
             return this.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
+        }
+    }
+    getMySQLConfiguration(id) {
+        for (let shape of this.getMySQLConfigurations()) {
+            if (shape.id === id) {
+                return shape;
+            }
         }
     }
 
