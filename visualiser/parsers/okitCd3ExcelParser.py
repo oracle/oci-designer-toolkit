@@ -38,6 +38,7 @@ class OkitCd3ExcelParser(OkitParser):
     INTERNET_GATEWAY = "internet_gateways"
     LOCAL_PEERING_GATEWAY = "local_peering_gateways"
     NAT_GATEWAY = "nat_gateways"
+    SERVICE_GATEWAY = "service_gateways"
 
     def __init__(self, cd3_excel=None):
         self.cd3_excel = cd3_excel
@@ -62,6 +63,7 @@ class OkitCd3ExcelParser(OkitParser):
             self.parseVirtualCloudNetworks(wb[self.VCN_SHEET])
             self.parseRouteTables(wb[self.ROUTE_TABLE_SHEET])
             self.parseSubnets(wb[self.SUBNET_SHEET])
+            self.parseInstances(wb[self.INSTANCE_SHEET])
             #logger.info(jsonToFormattedString(self.okit_json))
             result_json["okit_json"] = self.okit_json
             wb.close()
@@ -72,6 +74,41 @@ class OkitCd3ExcelParser(OkitParser):
         return
 
     def parseInstances(self, sheet):
+        row = 3
+        while not self.endRow(sheet, row):
+            # Destination cidr
+            col = "E"
+            resource = {
+                "compartment_id": self.getCompartmentId(sheet["B{0:d}".format(row)].value),
+                "availability_domain": sheet["C{0:d}".format(row)].value[-1],
+                "id": self.generateId("instance"),
+                "display_name": sheet["D{0:d}".format(row)].value,
+                "fault_domain": sheet["E{0:d}".format(row)].value,
+                "shape": sheet["J{0:d}".format(row)].value,
+                "vnics": [],
+                "source_details": {}
+            }
+            # VNICs
+            ## Subnet
+            col = "F"
+            vnic = {
+                "subnet_id": self.getSubnetId(sheet["{0:s}{1:d}".format(col, row)].value),
+                "hostname_labal": resource["display_name"].lower()
+            }
+            ## Public IP
+            col = "G"
+            #vnic["assign_public_ip"] = (sheet["{0:s}{1:d}".format(col, row)].value.lower() == 'true')
+            vnic["assign_public_ip"] = sheet["{0:s}{1:d}".format(col, row)].value
+            ## NSGs
+            resource["vnics"].append(vnic)
+            # Source details
+            col = "I"
+            source_details = sheet["{0:s}{1:d}".format(col, row)].value.split("::")
+            resource["source_details"]["source_type"] = source_details[0]
+            resource["source_details"]["os"] = source_details[-1]
+            # Add the Instance
+            self.okit_json["instances"].append(resource)
+            row += 1
         return
 
     def parseInternetGateways(self, sheet):
@@ -97,21 +134,27 @@ class OkitCd3ExcelParser(OkitParser):
             # Destination cidr
             col = "E"
             if sheet["{0:s}{1:d}".format(col, row)].value is not None and sheet["{0:s}{1:d}".format(col, row)].value.strip() != "":
-                rule["destination"] = "{0!s:s}s".format(str(sheet["{0:s}{1:d}".format(col, row)].value))
+                rule["destination"] = "{0!s:s}".format(str(sheet["{0:s}{1:d}".format(col, row)].value))
             # Destination Name
             col = "F"
             if sheet["{0:s}{1:d}".format(col, row)].value is not None :
-                destination = "{0!s:s}s".format(str(sheet["{0:s}{1:d}".format(col, row)].value)).strip()
+                destination = "{0!s:s}".format(str(sheet["{0:s}{1:d}".format(col, row)].value)).strip()
             else:
                 destination = ""
             # Target Type
             col = "G"
             if sheet["{0:s}{1:d}".format(col, row)].value is not None and sheet["{0:s}{1:d}".format(col, row)].value.strip() != "":
-                rule["target_type"] = "{0!s:s}s".format(str(sheet["{0:s}{1:d}".format(col, row)].value).replace(" ", "_"))
+                rule["target_type"] = "{0!s:s}s".format(str(sheet["{0:s}{1:d}".format(col, row)].value).replace(" ", "_")).lower()
                 if rule["target_type"] == self.INTERNET_GATEWAY:
                     rule["network_entity_id"] = self.getInternetGatewayId(vcn_id)
                 elif rule["target_type"] == self.NAT_GATEWAY:
                     rule["network_entity_id"] = self.getNatGatewayId(vcn_id)
+                elif rule["target_type"] == self.SERVICE_GATEWAY:
+                    rule["network_entity_id"] = self.getServiceGatewayId(vcn_id)
+                elif rule["target_type"] == self.LOCAL_PEERING_GATEWAY:
+                    rule["network_entity_id"] = self.getLocalPeeringGatewayId(destination)
+                elif rule["target_type"] == self.DYNAMIC_ROUTING_GATEWAY:
+                    rule["network_entity_id"] = self.getDynamicRoutingGatewayId(destination)
             resource["route_rules"].append(rule)
             # Increment row
             row += 1
@@ -119,7 +162,6 @@ class OkitCd3ExcelParser(OkitParser):
 
     def parseSubnets(self, sheet):
         row = 3
-        #while sheet["A{0:d}".format(row)].value != self.END:
         while not self.endRow(sheet, row):
             subnet = {
                 "compartment_id": self.getCompartmentId(sheet["B{0:d}".format(row)].value),
@@ -132,8 +174,7 @@ class OkitCd3ExcelParser(OkitParser):
             }
             # DNS Label
             col = "Q"
-            if sheet["{0:s}{1:d}".format(col, row)].value is not None and sheet[
-                "{0:s}{1:d}".format(col, row)].value.strip() != "":
+            if sheet["{0:s}{1:d}".format(col, row)].value is not None and sheet["{0:s}{1:d}".format(col, row)].value.strip() != "":
                 subnet["dns_label"] = sheet["{0:s}{1:d}".format(col, row)].value
             # Add the Subnet
             self.okit_json["subnets"].append(subnet)
@@ -254,7 +295,7 @@ class OkitCd3ExcelParser(OkitParser):
                     if lpg["vcn_id"] == vcn_id and lpg["peer_id"] == '':
                         lpg["peer_id"] = gw["id"]
                         gw["peer_id"] = lpg["id"]
-                        logger.info(' Assigned {0:s}'.format(lpg["display_name"]))
+                        logger.info('Assigned {0:s}'.format(lpg["display_name"]))
                         break;
 
             self.okit_json["local_peering_gateways"].append(gw)
@@ -293,8 +334,14 @@ class OkitCd3ExcelParser(OkitParser):
             self.okit_json["compartments"].append(compartment)
         return [x["id"] for x in self.okit_json["compartments"] if x["display_name"] == name][0]
 
+    def getDynamicRoutingGatewayId(self, name):
+        return [x["id"] for x in self.okit_json["dynamic_routing_gateways"] if x["display_name"] == name][0]
+
     def getInternetGatewayId(self, vcn_id):
         return [x["id"] for x in self.okit_json["internet_gateways"] if x["vcn_id"] == vcn_id][0]
+
+    def getLocalPeeringGatewayId(self, name):
+        return [x["id"] for x in self.okit_json["local_peering_gateways"] if x["display_name"] == name][0]
 
     def getNatGatewayId(self, vcn_id):
         return [x["id"] for x in self.okit_json["nat_gateways"] if x["vcn_id"] == vcn_id][0]
@@ -302,6 +349,12 @@ class OkitCd3ExcelParser(OkitParser):
     def getRouteTable(self, name, vcn_id):
         resource = [x for x in self.okit_json["route_tables"] if x["display_name"] == name and x["vcn_id"] == vcn_id]
         return resource[0] if len(resource) > 0 else None
+
+    def getServiceGatewayId(self, vcn_id):
+        return [x["id"] for x in self.okit_json["service_gateways"] if x["vcn_id"] == vcn_id][0]
+
+    def getSubnetId(self, name):
+        return [x["id"] for x in self.okit_json["subnets"] if x["display_name"] == name][0]
 
     def getVcnId(self, name):
         return [x["id"] for x in self.okit_json["virtual_cloud_networks"] if x["display_name"] == name][0]
