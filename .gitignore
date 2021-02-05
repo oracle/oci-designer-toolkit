@@ -44,3 +44,5 @@ containers/ssh/*
 /docker-compose.yml
 /containers/runtime/
 /node/
+/node/node_modules
+/node/package-lock.json
