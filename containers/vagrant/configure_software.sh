@@ -38,7 +38,7 @@ python3 -m pip install --upgrade pip==20.0.2
 
 # Install required python modules
 pip3 install --no-cache-dir \
-        authlib=0.15.3 \
+        authlib==0.15.3 \
         flask==1.1.1 \
         gitpython==3.1.11 \
         git-url-parse==1.2.2 \
