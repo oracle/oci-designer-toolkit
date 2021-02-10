@@ -4,7 +4,9 @@
 ## Version 0.17.0
 **Release Date**: 10th February 2021
 ### Features
-1. Description now displayed as a right side panel allowing multi line entry (Enhancement Request #165)
+1. Simple Tabular view added to display the required properties for resources in a table format (OKIT-124).
+2. Allow Subnets to be place in compartments that do not contain the associated Virtual Cloud Network (OKIT-128).
+3. Update Copyright
 
 ### Bug Fixes
 1. Compartment name is now displayed correctly for queried compartment.
