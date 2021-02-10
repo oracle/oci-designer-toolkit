@@ -977,7 +977,7 @@ class OkitArtifact {
         // All Artefacts will have compartment id, display name & description
         this.compartment_id = '';
         this.display_name = '';
-        this.name = '';
+        //this.name = '';
         this.definition = '';
         // Add default for common Tag variables
         this.freeform_tags = {};
@@ -985,6 +985,14 @@ class OkitArtifact {
         Object.defineProperty(this, 'okit_json', {
             get: function () {
                 return okitjson;
+            }
+        });
+        Object.defineProperty(this, 'name', {
+            get: function () {
+                return this.display_name;
+            },
+            set: function (name) {
+                return this.display_name = name;
             }
         });
     }
