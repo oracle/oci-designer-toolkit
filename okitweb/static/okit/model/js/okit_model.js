@@ -977,7 +977,6 @@ class OkitArtifact {
         // All Artefacts will have compartment id, display name & description
         this.compartment_id = '';
         this.display_name = '';
-        //this.name = '';
         this.definition = '';
         // Add default for common Tag variables
         this.freeform_tags = {};
