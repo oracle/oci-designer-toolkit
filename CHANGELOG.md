@@ -1,5 +1,15 @@
 # Release Notes
 
+
+## Version 0.17.0
+**Release Date**: 10th February 2021
+### Features
+1. Description now displayed as a right side panel allowing multi line entry (Enhancement Request #165)
+
+### Bug Fixes
+1. Compartment name is now displayed correctly for queried compartment.
+
+
 ## Version 0.16.0
 **Release Date**: 20th January 2021
 ### Features
