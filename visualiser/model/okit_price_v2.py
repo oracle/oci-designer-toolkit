@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, Oracle and/or its affiliates.
+# Copyright (c) 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -14,6 +14,7 @@ import sys
 import datetime
 import os
 from model import bom
+
 
 import numpy as np
 import pandas as pd
@@ -225,7 +226,7 @@ def price_calculator(okitjson, all_resources):
                     PAYG, Monthly_Flex = calculator.OCPU_per_hr(
                         dbaas_license_price, OCPU)
                     # Non-RAC VM - 456GB storage will be added
-                    dbaas_storage += dbaas['data_storage_size_in_gb'] + 456
+                    dbaas_storage = int(dbaas['data_storage_size_in_gb']) + 456
 
                     # parsing to bom format
                     bom.update_bom(df, base_dbaas_sku, OCPU, ocpu_per_month)

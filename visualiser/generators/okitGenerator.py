@@ -1,5 +1,5 @@
 
-# Copyright (c) 2020, Oracle and/or its affiliates.
+# Copyright (c) 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -7,7 +7,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = "Andrew Hopkinson (Oracle Cloud Solutions A-Team)"
-__copyright__ = "Copyright (c) 2020, Oracle and/or its affiliates."
+__copyright__ = "Copyright (c) 2021, Oracle and/or its affiliates."
 __version__ = "1.0.0"
 __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -317,30 +317,31 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderCompartment(self, compartment):
+    def renderCompartment(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
+        display_name = resource.get("display_name", resource.get("name", "Unknown"))
         # Read Data
-        standardisedName = self.standardiseResourceName(compartment['name'])
+        standardisedName = self.standardiseResourceName(display_name)
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = compartment['name']
+        self.jinja2_variables['output_name'] = display_name
         # Process Virtual Cloud Networks Data
         logger.info('Processing Compartment Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
         # ---- Root Compartment
-        self.jinja2_variables["root_compartment"] = compartment["root_compartment"]
+        self.jinja2_variables["root_compartment"] = resource["root_compartment"]
         # ---- Parent Compartment Id
-        if not compartment["root_compartment"]:
-            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[compartment['compartment_id']]))
+        if not resource["root_compartment"]:
+            self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
         # ---- Display Name
-        self.addJinja2Variable("display_name", compartment["name"], standardisedName)
+        self.addJinja2Variable("display_name", display_name, standardisedName)
         # ---- Description
-        self.addJinja2Variable("description", compartment.get("description", compartment["name"]), standardisedName)
+        self.addJinja2Variable("description", resource.get("description", display_name), standardisedName)
         # --- Optional
         # ---- Tags
-        self.renderTags(compartment)
+        self.renderTags(resource)
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("compartment.jinja2")
@@ -1087,33 +1088,34 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderObjectStorageBucket(self, object_storage_bucket):
+    def renderObjectStorageBucket(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
+        display_name = resource.get("display_name", resource.get("name", "Unknown"))
         # Read Data
-        standardisedName = self.standardiseResourceName(object_storage_bucket['display_name'])
+        standardisedName = self.standardiseResourceName(display_name)
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = object_storage_bucket['display_name']
+        self.jinja2_variables['output_name'] = display_name
         # Process Object Storage Bucket Data
         logger.info('Processing Object Storage Bucket Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
         # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[object_storage_bucket['compartment_id']]))
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
         # ---- Display Name
-        self.addJinja2Variable("display_name", object_storage_bucket["display_name"], standardisedName)
+        self.addJinja2Variable("display_name", display_name, standardisedName)
         # ---- Namespace
-        self.addJinja2Variable("namespace", object_storage_bucket["namespace"], standardisedName)
+        self.addJinja2Variable("namespace", resource["namespace"], standardisedName)
         # ---- Name
-        self.addJinja2Variable("name", object_storage_bucket["name"], standardisedName)
+        self.addJinja2Variable("name", display_name, standardisedName)
         # ---- Storage Tier
-        self.addJinja2Variable("storage_tier", object_storage_bucket["storage_tier"], standardisedName)
+        self.addJinja2Variable("storage_tier", resource["storage_tier"], standardisedName)
         # ---- Public Access Type
-        self.addJinja2Variable("public_access_type", object_storage_bucket["public_access_type"], standardisedName)
+        self.addJinja2Variable("public_access_type", resource["public_access_type"], standardisedName)
         # --- Optional
         # ---- Tags
-        self.renderTags(object_storage_bucket)
+        self.renderTags(resource)
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("object_storage_bucket.jinja2")

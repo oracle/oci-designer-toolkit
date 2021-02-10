@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates.
+** Copyright (c) 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT Model Javascript');
@@ -977,7 +977,6 @@ class OkitArtifact {
         // All Artefacts will have compartment id, display name & description
         this.compartment_id = '';
         this.display_name = '';
-        this.name = '';
         this.definition = '';
         // Add default for common Tag variables
         this.freeform_tags = {};
@@ -985,6 +984,14 @@ class OkitArtifact {
         Object.defineProperty(this, 'okit_json', {
             get: function () {
                 return okitjson;
+            }
+        });
+        Object.defineProperty(this, 'name', {
+            get: function () {
+                return this.display_name;
+            },
+            set: function (name) {
+                return this.display_name = name;
             }
         });
     }
@@ -1138,3 +1145,4 @@ class OkitRegions {
     }
 }
 
+let okitJsonModel

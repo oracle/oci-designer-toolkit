@@ -1,11 +1,11 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates.
+** Copyright (c) 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Console Javascript');
 
-const okitVersion = '0.16.0';
-const okitReleaseDate = '20th January 2021';
+const okitVersion = '0.17.0';
+const okitReleaseDate = '10th February 2021';
 // Validation
 const validate_error_colour = "#ff4d4d";
 const validate_warning_colour = "#ffd633";

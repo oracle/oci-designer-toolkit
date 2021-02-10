@@ -1,5 +1,5 @@
 <!--
-** Copyright (c) 2020, Oracle and/or its affiliates.
+** Copyright (c) 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
@@ -7,7 +7,7 @@
 {% block title_block %}Subnet{% endblock %}
 
 {% block required_properties_table_rows_block %}
-    <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="vcn_id" class="okit-property-value okit-property-label"></label></div></div>
+    {{ properties_input('Virtual Cloud Network', 'vcn_id', type='select') }}
     <div class='tr'><div class='td'>CIDR</div><div class='td'><input type="text" id="cidr_block" name="cidr_block" class="okit-property-value"></div></div>
 {% endblock %}
 

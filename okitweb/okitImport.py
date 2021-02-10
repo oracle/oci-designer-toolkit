@@ -20,7 +20,7 @@ from common.okitCommon import logJson
 from common.okitLogging import getLogger
 from parsers.okitHclJsonParser import OkitHclJsonParser
 from parsers.okitCceJsonParser import OkitCceJsonParser
-from parsers.OkitCd3ExcelParser import OkitCd3ExcelParser
+from parsers.okitCd3ExcelParser import OkitCd3ExcelParser
 
 # Configure logging
 logger = getLogger()

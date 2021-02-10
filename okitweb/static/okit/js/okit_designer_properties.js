@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates.
+** Copyright (c) 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Properties Javascript');
@@ -89,13 +89,13 @@ function loadPropertiesSheet(json_element) {
                     $(jqId(key)).find("input:checkbox").each(function() {
                         if ($(this).prop('checked')) {json_element[key].push($(this).val());}
                     });
-                    redrawSVGCanvas();
+                    redrawSVGCanvas(true);
                 });
                 if (val.includes($(this).val())) {$(this).prop("checked", true);}
             });
         } else if ($(jqId(key)).is("select")) {                        // Select
             console.info(key + ' is select with value ' + val);
-            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val() ? $(jqId(key)).val() : ''; $(jqId(key)).removeClass('okit-warning'); redrawSVGCanvas();});
+            $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val() ? $(jqId(key)).val() : ''; $(jqId(key)).removeClass('okit-warning'); redrawSVGCanvas(true);});
             $(jqId(key)).val(val);
             if (!$(jqId(key)).val() && !Array.isArray(val) && String(val).trim() !== '') {
                 console.warn(`Value ${val} not in select list ${key}`);

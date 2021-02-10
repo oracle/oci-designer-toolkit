@@ -41,3 +41,8 @@ containers/ssh/*
 !containers/ssh/example_config
 
 !okitweb/static/model
+/docker-compose.yml
+/containers/runtime/
+/node/
+/node/node_modules
+/node/package-lock.json

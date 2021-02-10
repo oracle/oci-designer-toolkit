@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2020, Oracle and/or its affiliates.
+** Copyright (c) 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT View Javascript');
@@ -866,9 +866,13 @@ class OkitJsonView {
     // Subnet
     dropSubnetView(target) {
         let view_artefact = this.newSubnet();
-        view_artefact.getArtefact().vcn_id = target.id;
-        view_artefact.getArtefact().compartment_id = target.compartment_id;
-        view_artefact.getArtefact().generateCIDR();
+        if (target.type === VirtualCloudNetwork.getArtifactReference()) {
+            view_artefact.getArtefact().vcn_id = target.id;
+            view_artefact.getArtefact().compartment_id = target.compartment_id;
+            view_artefact.getArtefact().generateCIDR();
+        } else if (target.type === Compartment.getArtifactReference()) {
+            view_artefact.getArtefact().compartment_id = target.id;
+        }
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
@@ -2302,6 +2306,16 @@ class OkitArtefactView {
         drg_select.append($('<option>').attr('value', '').text(''));
         for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
             drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+        }
+    }
+
+    loadVirtualCloudNetworkSelect(id) {
+        // Build Virtual Cloud Network
+        let select = $(jqId(id));
+        $(select).empty();
+        select.append($('<option>').attr('value', '').text(''));
+        for (const resource of this.getOkitJson().getVirtualCloudNetworks()) {
+            select.append($('<option>').attr('value', resource.id).text(resource.display_name));
         }
     }
 }
