@@ -548,7 +548,7 @@ function handleExportToMarkdownGit(e) {
     okitJsonModel.validate(generateMarkdown);
 }
 function generateMarkdown(results) {
-    if (results.valid) {
+    if (results.valid || !okitSettings.validate_markdown) {
         let requestJson = JSON.clone(okitJsonModel);
         requestJson.use_variables = okitSettings.is_variables;
         setExportDisplay();

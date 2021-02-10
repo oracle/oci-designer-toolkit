@@ -33,6 +33,7 @@ let right_drag_bar_start_x = 0;
 let ociRegions = [];
 
 function resetDesigner() {
+    handleSwitchToCompartmentView();
     newModel();
     newDesignerView();
     regionOkitJson = {};

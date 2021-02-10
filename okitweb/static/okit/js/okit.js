@@ -246,6 +246,7 @@ class OkitSettings {
         this.name_prefix = 'okit-';
         this.auto_save = false;
         this.show_ocids = false;
+        this.validate_markdown = true;
         this.load();
     }
 
@@ -331,6 +332,8 @@ class OkitSettings {
             this.addHighlightAssociations(tbody, autosave);
             // Display OCIDs
             this.addShowOcids(tbody, autosave);
+            // Validate Before Markdowns
+            this.addValidateMarkdown(tbody, autosave);
             // Display Label
             this.addDisplayLabel(tbody, autosave);
             // Tooltip Style
@@ -559,6 +562,27 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'show_ocids')
             .text('Display OCIDs');
+    }
+
+    addValidateMarkdown(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'validate_markdown')
+            .attr('name', 'validate_markdown')
+            .attr('type', 'checkbox')
+            .property('checked', this.validate_markdown)
+            .on('change', function () {
+                if (autosave) {
+                    self.validate_markdown = $('#validate_markdown').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'validate_markdown')
+            .text('Validate Before Markdown');
     }
 
     addDisplayLabel(tbody, autosave) {
