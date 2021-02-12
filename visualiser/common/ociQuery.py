@@ -12,6 +12,9 @@ __version__ = "1.0.0"
 __module__ = "ociQuery"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import oci
+
+from discovery import OciResourceDiscoveryClient
 
 from common.okitCommon import logJson
 from common.okitCommon import standardiseIds
@@ -29,7 +32,23 @@ def standardiseJson(json_data={}, **kwargs):
     return json_data
 
 
-def executeQuery(request_json={}, ** kwargs):
+def executeQuery(config_profile, regions, compartments, **kwargs):
+
+    supported_resource_types = [ "Instance", "Vcn", "Subnet" ]
+
+    response_json = {}
+    logger.info('Request : {0!s:s}'.format(str(config_profile)))
+    logger.info('Request : {0!s:s}'.format(str(regions)))
+    logger.info('Request : {0!s:s}'.format(str(compartments)))
+    config = oci.config.from_file("~/.oci/config", profile_name=config_profile) # TODO use var for path
+    discovery_client = OciResourceDiscoveryClient(config, regions=regions, include_resource_types=supported_resource_types, compartments=compartments)
+    response = discovery_client.get_all_resources()
+    compartments = discovery_client.all_compartments
+    logger.info('Response JSON : {0:s}'.format(str(len(response))))
+    return response
+    
+
+def oldExecuteQuery(request_json={}, ** kwargs):
     response_json = {}
     logger.info('Request JSON : {0:s}'.format(str(request_json)))
     compartment_id = request_json['compartment_id']

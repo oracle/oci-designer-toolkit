@@ -26,9 +26,31 @@ class OkitOCIQuery {
                     this.active_region = region;
                 }
                 regionOkitJson[region] = new OkitJson();
-                this.queryRootCompartment(region_request);
+                // this.queryRootCompartment(region_request);
+                this.queryAllResources(region_request);
             }
         }
+    }
+
+    queryAllResources(request) {
+        console.info('------------- All Resources Query --------------------');
+        let me = this;
+        this.region_query_count[request.region] = 1;
+        $.ajax({
+            type: 'get',
+            url: 'oci/query',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                console.log(resp)
+            },
+            error: function(xhr, status, error) {
+            },
+            complete: function () {
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
     }
 
     isComplete() {
