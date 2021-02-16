@@ -724,6 +724,12 @@ class OciResourceDiscoveryClient(object):
         resource_requests = dict()
         for region in resources:
             regional_resource_requests = set()
+
+            if self.include_resource_types == None or "Image" in self.include_resource_types:
+                # always add search for Image in the root compartment to ensure we get the default images that are
+                # not inlcuded in the search results
+                regional_resource_requests.add(("Image", self.config["tenancy"], None))
+
             for resource in resources[region]:
                 # handle list resource query varient cases
                 if resource.resource_type in ["BootVolume", "FileSystem", "Instance", "MountTarget"]:
