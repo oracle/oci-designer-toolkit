@@ -31,6 +31,7 @@ def standardiseJson(json_data={}, **kwargs):
     logJson(json_data)
     return json_data
 
+# TODO: Delete File replace by class
 
 def executeQuery(config_profile, regions, compartments, **kwargs):
 

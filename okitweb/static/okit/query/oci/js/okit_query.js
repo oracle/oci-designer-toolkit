@@ -15,6 +15,7 @@ class OkitOCIQuery {
     query(request = null, complete_callback, region_complete_callback) {
         this.complete_callback = complete_callback;
         this.region_complete_callback = region_complete_callback;
+        console.warn(request);
         if (request) {
             for (const [i, region] of this.regions.entries()) {
                 console.info(`${i} - Processing Selected Region : ${region}`);
