@@ -126,10 +126,50 @@ docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/t
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
 
+## OpenID Connect Configuration for IDCS
+
+To use OpenID Connect with IDCS two configurations are required.
+
+### Setup of IDCS
+Ask your administrator to update the primary (default) IDCS instance of your tenancy. This instance is often labled as OracleIdentityCloudService in the OCI Console login screen drop down.
+
+In the steps we use <server_base_url>. The format is protocol://fully.qualified.host.name.
+
+Configuration steps:
+1. Log into IDCS admin console (https://idcs-aabbccddee6677889900ddhhaa.identity.oraclecloud.com/ui/v1/adminconsole)
+1. From the hamburger menu on the upper left, select Applications.
+1. Click 'Add'
+1. In the 'Add Application' window select 'Confidential Application'
+  1. In 'App Details' enter
+    1. A unique 'Name'
+    1. For 'Custom Logout URL' enter <server_base_url>/okit/postlogout
+    1. Click 'Next'
+1. In the Client step select 'Configure this application as a client now'
+  1. In the Authorization section:
+    1. Select the 'Grant Types': Client Credentials, JWT Assertion, Refresh Token, and Authorization Code
+    1. Set the 'Redirect URL' to <server_base_url>/okit/postlogin.
+    1. Set the 'Logout URL' to <server_base_url>/okit/logout.
+    1. Set the 'Post Logout URL' to <server_base_url>/okit/postlogout.
+1. Click 'Next' until the 'Finish' button can be selected.
+1. Click 'Finish'
+1. An 'Application Added' window shows the values for Client ID and Client Secret. Copy both values for later use. Click on 'Close' to close the window.
+1. Click 'Activate' to enable the configuration.
+
+### OKIT Configuration File
+
+OKIT has one configuration file that must be updated. It requires these values:
+* home_region - Get this value from your Oracle Cloud Infrastructure admin
+* tenant_name - Get this value from your Oracle Cloud Infrastructure admin
+* client_id - Get this value from the IDCS Confidential Application configuration (see above)
+* client_secret - Get this value from the IDCS Confidential Application configuration (see above)
+* idcs_instance_id - The IDCS instance id is part of the IDCS URL, e.g., the URL is https://idcs-aabbccddee6677889900ddhhaa.identity.oraclecloud.com and the value is aabbccddee6677889900ddhhaa
+* server_base_url - The OKIT fully qualified server base URL. The value you used during the IDCS configuration. The format is protocol://fully.qualified.host.name.
+
+The OKIT configuration file is located in the directory 'instance'.
+* config.py - Replace the values for <idcs_instance_id>, <client_id>, <client_secrect>, and <server_base_url> with the respective values.
 
 ## Usage / Examples
 The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](documentation/Usage.md)
-
 
 ## Changes
 
