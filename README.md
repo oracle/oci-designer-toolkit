@@ -44,10 +44,9 @@ Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Insta
 
 _Note:_
 ```diff
-- OKIT is designed to be installed as a local single user container and it is recommended that you 
-- do NOT install OKIT on an OCI Instance. Installing on an OCI Instance will leave you OCI Tenancy 
-- open to anyone who can find the IP address. If you do decide to install on an OCI Instance the 
-- OCI Designer Toolkit Installation Guide will give some recommendations for securing your Instance.
+OKIT is designed to be installed as a local single user container and it is recommended that you do NOT install OKIT on an OCI Instance.
+Installing on an OCI Instance will leave you OCI Tenancy open to anyone who can find the IP address. 
+If you do decide to install on an OCI Instance the OCI Designer Toolkit Installation Guide will give some recommendations for securing your Instance.
 ```
 
 ### Runtime Quick Start
