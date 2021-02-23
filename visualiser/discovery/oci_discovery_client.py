@@ -706,8 +706,9 @@ class OciResourceDiscoveryClient(object):
 
             logger.warn(f"Retrying {len(failed_requests)} failed requests")
             retry_results = self.get_resources(retry_tasks)
-            print(retry_results)
-            # TODO need to merge retry results
+            for region in retry_results:
+                for resource_type in region:
+                    results[region][resource_type].extend(retry_results[region][resource_type])
         
         return results
 
