@@ -624,6 +624,14 @@ class OCIGenerator(object):
                 self.addJinja2Variable("display_name", '{0!s:s}-{1!s:s}'.format(instance["display_name"], i + 1), standardisedName)
             # ---- Shape
             self.addJinja2Variable("shape", instance["shape"], standardisedName)
+            # ----- Flex Shapes
+            if instance["shape_config"]["ocpus"] != 0:
+                logger.info("flex")
+                shape_config = {
+                    "ocpus": instance["shape_config"]["ocpus"],
+                    "memory_in_gbs": instance["shape_config"]["memory_in_gbs"]
+                }
+                self.jinja2_variables["shape_config"] = shape_config
             # ---- Source Details
             # ----- Source Type
             self.addJinja2Variable("source_type", instance["source_details"]["source_type"], standardisedName)

@@ -107,6 +107,13 @@ class InstanceView extends OkitDesignerArtefactView {
             }
             // Load Shapes
             this.loadShapes();
+            const shape = okitOciData.getInstanceShape(this.shape);
+            if (shape) {
+                if (shape.memory_options && shape.ocpu_options) {
+                    $('#ocpus_row').removeClass('collapsed');
+                    $('#memory_in_gbs_row').removeClass('collapsed');
+                }
+            }
             // Build Network Security Groups
             this.loadNetworkSecurityGroups('nsg_ids', this.primary_vnic.subnet_id);
             // Secondary Vnics
@@ -131,7 +138,7 @@ class InstanceView extends OkitDesignerArtefactView {
             shape_text = `${shape.shape}`;
             shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
         }
-        shape_select.on('change', () => {self.loadOSs($("#shape").val());});
+        shape_select.on('change', () => {self.loadOSs($("#shape").val());self.loadOCPUs($("#shape").val());});
     }
 
     loadOSs(shape) {
@@ -163,6 +170,45 @@ class InstanceView extends OkitDesignerArtefactView {
             this.source_details.version = $("#version option:first").val();
         }
         $("#version").val(this.source_details.version);
+    }
+
+    loadOCPUs(shape_name) {
+        const self = this;
+        const shape = okitOciData.getInstanceShape(shape_name);
+        $('#ocpus_row').addClass('collapsed');
+        $('#memory_in_gbs_row').addClass('collapsed');
+        if (shape) {
+            if (shape.memory_options && shape.ocpu_options) {
+                if (this.shape_config.memory_in_gbs == 0) this.shape_config.memory_in_gbs = shape.memory_in_gbs;
+                if (this.shape_config.ocpus == 0) this.shape_config.ocpus = shape.ocpus;
+                const ocpus = document.getElementById('ocpus');
+                ocpus.setAttribute('min', shape.ocpu_options.min);
+                ocpus.setAttribute('max', shape.ocpu_options.max);
+                ocpus.setAttribute('value', this.shape_config.ocpus);
+                ocpus.value = this.shape_config.ocpus;
+                ocpus.addEventListener("input", () => {self.loadMemoryInGbp(shape_name)});
+                ocpus.dispatchEvent(new Event('input'));
+                $('#ocpus_row').removeClass('collapsed');
+                $('#memory_in_gbs_row').removeClass('collapsed');
+            } else {
+                this.shape_config.memory_in_gbs = 0;
+                this.shape_config.ocpus = 0;
+            }
+        }
+    }
+
+    loadMemoryInGbp(shape_name) {
+        const self = this;
+        const shape = okitOciData.getInstanceShape(shape_name);
+        const memory_in_gbs = document.getElementById('memory_in_gbs');
+        const min = Math.max(shape.memory_options.min_in_g_bs, (shape.memory_options.min_per_ocpu_in_gbs * this.shape_config.ocpus));
+        const max = Math.min(shape.memory_options.max_in_g_bs, (shape.memory_options.max_per_ocpu_in_gbs * this.shape_config.ocpus));
+        this.shape_config.memory_in_gbs = Math.max(this.shape_config.memory_in_gbs, min);
+        memory_in_gbs.setAttribute('min', min);
+        memory_in_gbs.setAttribute('max', max);
+        //memory_in_gbs.dispatchEvent(new Event('input'));
+        memory_in_gbs.setAttribute('value', this.shape_config.memory_in_gbs);
+        memory_in_gbs.value = this.shape_config.memory_in_gbs;
     }
 
     loadSecondaryVnics() {

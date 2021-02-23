@@ -2,9 +2,11 @@
 ** Copyright (c) 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
-{% macro properties_input(title, name, type='text', collapsed=False, readonly=False, row_id=undefined) -%}
+{% macro properties_input(title, name, type='text', collapsed=False, readonly=False, data={}) -%}
     {% if type in ['text', 'password'] %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %}></div></div>
+    {% elif type == 'number' %}
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} {% if data.min is defined %} min="{{ data.min }}" {% endif %} {% if data.max is defined %} max="{{ data.max }}" {% endif %}></div></div>
     {% elif type == 'checkbox' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'></div><div class='td'><label><input type="{{ type }}" id="{{ name }}" name="{{ name }}" value="false">{{ title }}</label></div></div>
     {% elif type == 'textarea' %}
