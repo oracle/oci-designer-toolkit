@@ -112,6 +112,9 @@ class InstanceView extends OkitDesignerArtefactView {
                 if (shape.memory_options && shape.ocpu_options) {
                     $('#ocpus_row').removeClass('collapsed');
                     $('#memory_in_gbs_row').removeClass('collapsed');
+                } else {
+                    this.shape_config.ocpus = 0;
+                    this.shape_config.memory_in_gbs = 0;
                 }
             }
             // Build Network Security Groups

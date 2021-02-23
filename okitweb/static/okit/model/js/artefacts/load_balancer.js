@@ -18,7 +18,7 @@ class LoadBalancer extends OkitArtifact {
         this.compartment_id = '';
         this.subnet_ids = [];
         this.is_private = false;
-        this.shape = '100Mbps';
+        this.shape = 'flexible';
         this.protocol = 'HTTP';
         this.port = '80';
         this.instance_ids = [];
@@ -26,6 +26,11 @@ class LoadBalancer extends OkitArtifact {
         this.network_security_group_ids = [];
         this.backend_policy = 'ROUND_ROBIN';
         this.health_checker = {url_path: '/'}
+        this.shape_details = {
+            minimum_bandwidth_in_mbps: 10,
+            maximum_bandwidth_in_mbps: 10
+        }
+
         // Update with any passed data
         this.merge(data);
         this.convert();

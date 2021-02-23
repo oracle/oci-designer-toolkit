@@ -8,11 +8,9 @@
 
 {% block required_properties_table_rows_block %}
     <div class='tr'><div class='td'>Subnet</div><div class='td'><label id="subnet_id" class="okit-property-value okit-property-label"></label></div></div>
-    <div class='tr'><div class='td'>Bandwidth</div><div class='td'><select id="shape" class="okit-property-value">
-        <option value="100Mbps" selected="selected">Small 100Mbps</option>
-        <option value="400Mbps">Medium 400Mbps</option>
-        <option value="8000Mbps">Large 8000Mbps</option>
-    </select></div></div>
+    <div class='tr'><div class='td'>Bandwidth</div><div class='td'><select id="shape" class="okit-property-value"></select></div></div>
+    {{ properties_input('Min Bandwidth (Mbps)', 'minimum_bandwidth_in_mbps', type='number', collapsed=True, data={"min": 10, "max": 8000}) }}
+    {{ properties_input('Max Bandwidth (Mbps)', 'maximum_bandwidth_in_mbps', type='number', collapsed=True, data={"min": 10, "max": 8000}) }}
 {% endblock %}
 
 {% block optional_properties_table_rows_block %}
