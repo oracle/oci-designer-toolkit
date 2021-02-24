@@ -3,11 +3,12 @@
 from .application_migration import ExtendedSourceApplicationSummary
 from .autoscaling import ExtendedAutoScalingPolicySummary
 from .core import ExtendedSecurityRule, ExtendedNetworkSecurityGroupVnic
-from .object_storage import ExtendedBucketSummary, ExtendedPreauthenticatedRequestSummary
+from .file_storage import ExtendedExportSummary
+from .object_storage import ExtendedPreauthenticatedRequestSummary
 
 __all__ = [
   "ExtendedAutoScalingPolicySummary",
-  "ExtendedBucketSummary",
+  "ExtendedExportSummary",
   "ExtendedNetworkSecurityGroupVnic",
   "ExtendedPreauthenticatedRequestSummary",
   "ExtendedSecurityRule",
