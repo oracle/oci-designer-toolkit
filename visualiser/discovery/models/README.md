@@ -16,5 +16,5 @@ resources
 * **`ExtendedNetworkSecurityGroupVnic`** - adds the associated
   `network_security_group_id` to `oci.core.models.NetworkSecurityGroupVnic`
 
-* **`ExtendedBucketSummary`** - adds the buckets `compartment_id` to
-  `oci.object_storage.models.BucketSummary`
+* **`ExtendedExportSummary`** - adds the export `compartment_id` to
+  `oci.object_storage.models.ExportSummary`
