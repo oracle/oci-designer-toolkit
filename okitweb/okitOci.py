@@ -14,6 +14,7 @@ __module__ = "okitOci"
 import json
 import oci
 import os
+import re
 import shutil
 import tempfile
 import time
@@ -70,6 +71,7 @@ from facades.ociSubnet import OCISubnets
 from facades.ociTenancy import OCITenancies
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
+from query.ociQuery import OCIQuery
 
 # Configure logging
 logger = getLogger()
@@ -220,11 +222,27 @@ def ociQuery():
         logJson(query_json)
         logger.debug('======================================================================================')
         config_profile = query_json.get('config_profile', 'DEFAULT')
+        regions = query_json.get('region', None)
+        compartments = query_json.get('compartment_id', None)
+        #compartments = None # TODO need to pass list of compartment ocids
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
-        response_json = {}
+        query = OCIQuery()
+        response = query.executeQuery(config_profile=config_profile, regions=[regions] if regions else None, compartments=[compartments] if compartments else None)
         config = {'region': query_json['region']}
+        #response_json = response_to_json(response)
+        logJson(response)
+        return response
     else:
         return '404'
+
+
+def response_to_json(data):
+    # # simple hack to convert to json
+    # return str(results).replace("'",'"')
+    # more robust hack to convert to json
+    json_str = re.sub("'([0-9a-zA-Z-\.]*)':", '"\g<1>":', str(data))
+    json_str = re.sub("'([0-9a-zA-Z-_\.]*)': '([0-9a-zA-Z-_\.]*)'", '"\g<1>": "\g<2>"', json_str)
+    return json.dumps(json.loads(json_str), indent=2)
 
 
 @bp.route('/artefacts/<string:artifact>', methods=(['GET']))
