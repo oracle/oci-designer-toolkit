@@ -1,6 +1,17 @@
 # Release Notes
 
 
+## Version 0.18.0
+**Release Date**: 10th February 2021
+### Features
+1. Add OCPU & Memory option when selecting Flex Instance (OKIT-133).
+2. Change default shape for Instances to Flex.
+3. Add Min/Max Bandwidth for flexible Loadbalancer shape.
+4. Default Loadbalancer to flexible
+
+### Bug Fixes
+
+
 ## Version 0.17.0
 **Release Date**: 10th February 2021
 ### Features
