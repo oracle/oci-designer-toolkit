@@ -45,7 +45,7 @@ class OCIQuery(OCIConnection):
         "DrgAttachment",
         "Export",
         #"ExportSet",
-        #"FileSystem",
+        "FileSystem",
         "Image",
         "Instance",
         "InstancePool",
