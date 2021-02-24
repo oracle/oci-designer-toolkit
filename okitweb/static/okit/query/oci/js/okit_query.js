@@ -27,8 +27,8 @@ class OkitOCIQuery {
                     this.active_region = region;
                 }
                 regionOkitJson[region] = new OkitJson();
-                // this.queryRootCompartment(region_request);
-                this.queryAllResources(region_request);
+                this.queryRootCompartment(region_request);
+                //this.queryAllResources(region_request);
             }
         }
     }
