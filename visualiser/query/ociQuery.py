@@ -20,6 +20,7 @@ from discovery import OciResourceDiscoveryClient
 
 from common.okitCommon import logJson
 from common.okitCommon import standardiseIds
+from common.okitCommon import jsonToFormattedString
 from common.okitLogging import getLogger
 from common.okitCommon import userDataDecode
 from facades.ociConnection import OCIConnection
@@ -36,11 +37,15 @@ class OCIQuery(OCIConnection):
         "BackendSet",
         "BootVolume",
         "BootVolumeAttachment",
+        "Bucket",
         #"Cluster",
         "Cpe",
         "Database",
         "Drg",
         "DrgAttachment",
+        "Export",
+        #"ExportSet",
+        #"FileSystem",
         "Image",
         "Instance",
         "InstancePool",
@@ -49,6 +54,8 @@ class OCIQuery(OCIConnection):
         "IpSecConnectionTunnel",
         "LoadBalancer",
         "LocalPeeringGateway",
+        "MountTarget",
+        #"MySqlDbSystem",
         "NatGateway",
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
@@ -67,13 +74,29 @@ class OCIQuery(OCIConnection):
     ]
     DISCOVER_OKIT_MAP = {
         "AutonomousDatabase": "autonomous_databases",
+        "BootVolume": "block_storage_volumes",
+        "Bucket": "object_storage_buckets",
+        "Cluster": "oke_clusters",
+        "Cpe": "customer_premise_equipments",
+        "Database": "database_systems",
+        "Drg": "dynamic_routing_gateways",
+        "FileSystem": "file_storage_systems",
         "Instance": "instances",
+        "InstancePool": "instance_pools",
         "InternetGateway": "internet_gateways",
+        "IPSecConnection": "ipsec_connections",
         "LoadBalancer": "load_balancers",
+        "LocalPeeringGateway": "local_peering_gateways",
+        "MySqlDbSystem": "mysql_database_systems",
+        "NatGateway": "nat_gateways",
+        "NetworkSecurityGroup": "network_security_groups",
+        "RemotePeeringConnection": "remote_peering_connections",
         "RouteTable": "route_tables",
         "SecurityList": "security_lists",
+        "ServiceGateway": "service_gateways",
         "Subnet": "subnets",
-        "Vcn": "virtual_cloud_networks"
+        "Vcn": "virtual_cloud_networks",
+        "Volume": "block_storage_volumes"
     }
 
     def __init__(self, config=None, configfile=None, profile=None):
@@ -89,9 +112,9 @@ class OCIQuery(OCIConnection):
         config = oci.config.from_file("~/.oci/config", profile_name=config_profile) # TODO use var for path
         discovery_client = OciResourceDiscoveryClient(config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments)
         response = discovery_client.get_all_resources()
-        logger.info(f"Response : {response}")
+        logger.debug(f"Response : {response}")
         all_compartments = discovery_client.all_compartments
-        logger.info('Response JSON : {0!s:s}'.format(json.dumps(self.response_to_json(response), indent=2)))
+        logger.debug('Response JSON : {0!s:s}'.format(json.dumps(self.response_to_json(response), indent=2)))
 
         response_json = self.convert(self.response_to_json(response), compartments, self.response_to_json(all_compartments))
 
@@ -125,8 +148,21 @@ class OCIQuery(OCIConnection):
                         resource_list = self.instances(resource_list, resources)
                     elif resource_type == "LoadBalancer":
                         resource_list = self.loadbalancers(resource_list, resources)
+                    elif resource_type == "FileSystem":
+                        resource_list = self.file_storage_systems(resource_list, resources)
                     response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
         return response_json
+
+    def file_storage_systems(self, file_storage_systems, resources):
+        for fs in file_storage_systems:
+            fs["exports"] = [e for e in resources.get("Export", []) if e["file_system_id"] == fs["id"]]
+            export_set_ids = [e["export_set_id"] for e in fs["exports"]]
+            export_sets = [e for e in resources["ExportSet"] if e["id"] in export_set_ids]
+            fs["mount_targets"] = [m for m in resources["MountTarget"] if m["export_set_id"] in export_set_ids]
+            for mt in fs["mount_targets"]:
+                mt["export_set"] = dict([e for e in export_sets if e["id"] == mt["export_set_id"]])
+        logger.info(jsonToFormattedString(file_storage_systems))
+        return file_storage_systems
 
     def instances(self, instances, resources):
         # Exclude OKE Instances
