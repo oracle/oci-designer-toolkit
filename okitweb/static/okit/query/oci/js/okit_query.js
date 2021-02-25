@@ -15,6 +15,7 @@ class OkitOCIQuery {
     query(request = null, complete_callback, region_complete_callback) {
         this.complete_callback = complete_callback;
         this.region_complete_callback = region_complete_callback;
+        console.warn(request);
         if (request) {
             for (const [i, region] of this.regions.entries()) {
                 console.info(`${i} - Processing Selected Region : ${region}`);
@@ -27,8 +28,47 @@ class OkitOCIQuery {
                 }
                 regionOkitJson[region] = new OkitJson();
                 this.queryRootCompartment(region_request);
+                //this.queryAllResources(region_request);
             }
         }
+    }
+
+    queryAllResources(request) {
+        console.info('------------- All Resources Query --------------------');
+        let me = this;
+        this.region_query_count[request.region] = 1;
+        $.ajax({
+            type: 'get',
+            url: 'oci/query',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                console.log(resp)
+                const response_json = JSON.parse(resp);
+                const title = request.sub_compartments ? `Queried Compartment ${response_json.name} and Sub-Compartments` : `Queried Compartment ${response_json.name}`;
+                const description = `${title} in Region ${request.region}`;
+                regionOkitJson[request.region].load(response_json)
+                regionOkitJson[request.region].title = title;
+                regionOkitJson[request.region].description = description;
+            },
+            error: function(xhr, status, error) {
+                console.error('Status : ' + status);
+                console.error('Error  : ' + error);
+                const empty_compartment = {compartment_id: null, display_name: request.compartment_name, name: request.compartment_name};
+                regionOkitJson[request.region].load({compartments: [empty_compartment]})
+                regionOkitJson[request.region].title = 'Query Failed';
+                regionOkitJson[request.region].description = error;
+                if (error === 'UNAUTHORIZED') {
+                    const response = JSON.parse(xhr.responseText);
+                    console.error(response);
+                    regionOkitJson[request.region].description = `${response.error.code}: ${response.error.message}`;
+                }
+            },
+            complete: function () {
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
     }
 
     isComplete() {
