@@ -524,6 +524,7 @@ function displayQueryDialog() {
                 .text('Retrieving..........');
     // Sub-Compartment
     tr = tbody.append('div')
+        .attr('id', 'sub_compartments_row')
         .attr('class', 'tr');
     tr.append('div').attr('class', 'td').text('');
     let td = tr.append('div').attr('class', 'td');
@@ -542,6 +543,9 @@ function displayQueryDialog() {
         .on('click', function () {
             showQueryResults();
         });
+    if (okitSettings.fast_discovery) {
+        document.getElementById('sub_compartments_row').classList.add('collapsed');
+    }
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleQueryOci(e) {
@@ -695,7 +699,7 @@ function showQueryResults() {
     newRegionsModel();
     if (regions.length > 0) {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
-        okitOCIQuery = new OkitOCIQuery(regions);
+        okitOCIQuery = new OkitOCIQuery(regions, okitSettings.fast_discovery);
         // Add Tabs
         $(jqId('region_progress')).empty();
         for (const [i, region] of regions.entries()) {
@@ -722,6 +726,7 @@ function showQueryResults() {
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     hideRecoverMenuItem();
 }
+/*
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
     //$(jqId('modal_loading_wrapper')).addClass('hidden');
@@ -730,6 +735,7 @@ $(document).ajaxStop(function() {
     //displayTreeView();
     okitOCIQuery ? console.info(okitOCIQuery) : console.info('okitOCIQuery not defined');
 });
+ */
 /*
 ** Export the Model as various formats
  */

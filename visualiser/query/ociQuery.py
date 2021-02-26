@@ -74,7 +74,7 @@ class OCIQuery(OCIConnection):
     ]
     DISCOVER_OKIT_MAP = {
         "AutonomousDatabase": "autonomous_databases",
-        "BootVolume": "block_storage_volumes",
+        #"BootVolume": "block_storage_volumes",
         "Bucket": "object_storage_buckets",
         "Cluster": "oke_clusters",
         "Cpe": "customer_premise_equipments",
@@ -109,8 +109,8 @@ class OCIQuery(OCIConnection):
         logger.info('Request : {0!s:s}'.format(str(config_profile)))
         logger.info('Request : {0!s:s}'.format(str(regions)))
         logger.info('Request : {0!s:s}'.format(str(compartments)))
-        config = oci.config.from_file("~/.oci/config", profile_name=config_profile) # TODO use var for path
-        discovery_client = OciResourceDiscoveryClient(config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments)
+        #config = oci.config.from_file("~/.oci/config", profile_name=config_profile) # TODO use var for path
+        discovery_client = OciResourceDiscoveryClient(self.config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments)
         response = discovery_client.get_all_resources()
         logger.debug(f"Response : {response}")
         all_compartments = discovery_client.all_compartments
