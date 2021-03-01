@@ -873,9 +873,9 @@ class OciResourceDiscoveryClient(object):
             # only fetch resource type if explictly included
             resource_types = resource_types.intersection(set(self.include_resource_types)) if self.include_resource_types else []
 
-            for compartment in self.compartments if self.compartments else self.all_compartments:
+            for compartment_id in self.compartments if self.compartments else [compartment.id for compartment in self.all_compartments]:
                 for resource_type in resource_types:
-                    brute_force_requests.add((resource_type, compartment.compartment_id, None))
+                    brute_force_requests.add((resource_type, compartment_id, None))
 
             # TODO temp fix for region missing 
             if region.region_name not in resource_requests:
