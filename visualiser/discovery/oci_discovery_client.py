@@ -330,7 +330,7 @@ class OciResourceDiscoveryClient(object):
         conditions = ""
         if compartments:
             conditions = "where compartmentId == '" +  "' || compartmentId == '".join(compartments) + "'"
-            
+
         query=f"""
             query 
                 {",".join(resource_types)} resources 
@@ -344,7 +344,7 @@ class OciResourceDiscoveryClient(object):
             query=query,
             matching_context_type=oci.resource_search.models.SearchDetails.MATCHING_CONTEXT_TYPE_NONE,
         )
-        logger.info("requesting resources for " + region_name)
+        logger.info(f"requesting {resource_types} resources for {region_name}")
         results = oci.pagination.list_call_get_all_results(search.search_resources, search_details).data
         return results
 
