@@ -57,6 +57,13 @@ def getFileLogLevel():
         return logging.DEBUG
 
 
+info_log_max_bytes = int(os.getenv("INFO_LOG_MAX_BYTES", 10485760))
+info_log_max_files = int(os.getenv("INFO_LOG_MAX_FILES", 10))
+debug_log_max_bytes = int(os.getenv("DEBUG_LOG_MAX_BYTES", 10485760))
+debug_log_max_files = int(os.getenv("DEBUG_LOG_MAX_FILES", 20))
+
+
+
 def getLogger():
     global logger
     if logger is None:
@@ -68,12 +75,12 @@ def getLogger():
         cloghandler.setFormatter(logging.Formatter(getConsoleFormat()))
         logger.addHandler(cloghandler)
         # File log handler
-        floghandler = logging.handlers.RotatingFileHandler(getLogFilename(), maxBytes=10485760, backupCount=10)
+        floghandler = logging.handlers.RotatingFileHandler(getLogFilename(), maxBytes=info_log_max_bytes, backupCount=info_log_max_files)
         floghandler.setLevel(getFileLogLevel())
         floghandler.setFormatter(logging.Formatter(getFileFormat()))
         logger.addHandler(floghandler)
         # File debug log handler
-        dfloghandler = logging.handlers.RotatingFileHandler(getDebugLogFilename(), maxBytes=10485760, backupCount=10)
+        dfloghandler = logging.handlers.RotatingFileHandler(getDebugLogFilename(), maxBytes=debug_log_max_bytes, backupCount=debug_log_max_files)
         dfloghandler.setLevel(logging.DEBUG)
         dfloghandler.setFormatter(logging.Formatter(getFileFormat()))
         logger.addHandler(dfloghandler)

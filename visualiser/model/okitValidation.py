@@ -31,12 +31,14 @@ class OCIJsonValidator(object):
         self.validateAutonomousDatabases()
         self.validateBlockStorageVolumes()
         self.validateCompartments()
+        self.validateCustomerPremiseEquipments()
         self.validateDatabaseSystems()
         self.validateDynamicRoutingGateways()
         self.validateFastConnects()
         self.validateFileStorageSystems()
         self.validateInstances()
         self.validateInternetGateways()
+        self.validateIPSecConnections()
         self.validateLoadBalancers()
         self.validateLocalPeeringGateways()
         self.validateNATGateways()
@@ -144,6 +146,21 @@ class OCIJsonValidator(object):
                 }
                 self.results['errors'].append(error)
 
+    # Customer Premise Equipment
+    def validateCustomerPremiseEquipments(self):
+        for artefact in self.okit_json.get('customer_premise_equipments', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+            if artefact['ip_address'] is None or artefact['ip_address'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Customer Premise Equipment',
+                    'artefact': artefact['display_name'],
+                    'message': 'IP Address must be specified.',
+                    'element': 'ip_address'
+                }
+                self.results['errors'].append(error)
+
     # Database Systems
     def validateDatabaseSystems(self):
         for artefact in self.okit_json.get('database_systems', []):
@@ -223,11 +240,25 @@ class OCIJsonValidator(object):
                     }
                     self.results['errors'].append(error)
 
-
     # Internet Gateways
     def validateInternetGateways(self):
         for artefact in self.okit_json.get('internet_gateways', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # IPSec Connection
+    def validateIPSecConnections(self):
+        for artefact in self.okit_json.get('ipsec_connections', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+            if artefact['static_routes'] is None or artefact['static_routes'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'IPSec Connection',
+                    'artefact': artefact['display_name'],
+                    'message': 'Static Routes must be specified.',
+                    'element': 'static_routes'
+                }
+                self.results['errors'].append(error)
 
     # Load Balancers
     def validateLoadBalancers(self):

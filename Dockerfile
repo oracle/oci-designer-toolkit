@@ -46,7 +46,7 @@ RUN yum install -y \
         gitpython==3.1.11 \
         git-url-parse==1.2.2 \
         gunicorn==20.0.4 \
-        oci==2.22.0 \
+        oci \
         openpyxl==3.0.5 \
         pandas==1.1.2 \
         python-magic==0.4.18 \

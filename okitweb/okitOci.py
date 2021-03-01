@@ -24,7 +24,6 @@ from flask import request
 from flask import jsonify
 
 import json
-from common.ociQuery import executeQuery
 from common.okitCommon import logJson
 from common.okitCommon import readJsonFile
 from common.okitCommon import standardiseIds
@@ -72,6 +71,7 @@ from facades.ociSubnet import OCISubnets
 from facades.ociTenancy import OCITenancies
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
+from query.ociQuery import OCIQuery
 
 # Configure logging
 logger = getLogger()
@@ -224,11 +224,14 @@ def ociQuery():
         config_profile = query_json.get('config_profile', 'DEFAULT')
         regions = query_json.get('region', None)
         compartments = query_json.get('compartment_id', None)
-        compartments = None # TODO need to pass list of compartment ocids
+        #compartments = None # TODO need to pass list of compartment ocids
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
-        response = executeQuery(config_profile=config_profile, regions=[regions] if regions else None, compartments=[compartments] if compartments else None)
+        query = OCIQuery(None, None, config_profile)
+        response = query.executeQuery(config_profile=config_profile, regions=[regions] if regions else None, compartments=[compartments] if compartments else None)
         config = {'region': query_json['region']}
-        return response_to_json(response)
+        #response_json = response_to_json(response)
+        logJson(response)
+        return response
     else:
         return '404'
 
