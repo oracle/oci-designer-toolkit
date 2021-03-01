@@ -17,10 +17,11 @@ class OkitJson {
         this.created = getCurrentDateTime();
         this.updated = this.created;
         this.okit_version = okitVersion;
-        this.compartments = [];
-        this.customer_premise_equipments = [];
+
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
+        this.compartments = [];
+        this.customer_premise_equipments = [];
         this.database_systems = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];

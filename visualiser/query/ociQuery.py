@@ -38,14 +38,14 @@ class OCIQuery(OCIConnection):
         "BootVolume",
         "BootVolumeAttachment",
         "Bucket",
-        #"Cluster",
+        "Cluster",
         "Cpe",
         "Database",
         "Drg",
         "DrgAttachment",
         "Export",
-        #"ExportSet",
-        #"FileSystem",
+        "ExportSet",
+        "FileSystem",
         "Image",
         "Instance",
         "InstancePool",
@@ -55,11 +55,11 @@ class OCIQuery(OCIConnection):
         "LoadBalancer",
         "LocalPeeringGateway",
         "MountTarget",
-        #"MySqlDbSystem",
+        "MySqlDbSystem",
         "NatGateway",
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
-        #"NodePool",
+        "NodePool",
         "PrivateIp",
         "PublicIp",
         "RemotePeeringConnection",
@@ -74,7 +74,7 @@ class OCIQuery(OCIConnection):
     ]
     DISCOVER_OKIT_MAP = {
         "AutonomousDatabase": "autonomous_databases",
-        "BootVolume": "block_storage_volumes",
+        #"BootVolume": "block_storage_volumes",
         "Bucket": "object_storage_buckets",
         "Cluster": "oke_clusters",
         "Cpe": "customer_premise_equipments",
@@ -109,8 +109,8 @@ class OCIQuery(OCIConnection):
         logger.info('Request : {0!s:s}'.format(str(config_profile)))
         logger.info('Request : {0!s:s}'.format(str(regions)))
         logger.info('Request : {0!s:s}'.format(str(compartments)))
-        config = oci.config.from_file("~/.oci/config", profile_name=config_profile) # TODO use var for path
-        discovery_client = OciResourceDiscoveryClient(config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments)
+        logger.info('Request : {0!s:s}'.format(str(self.config)))
+        discovery_client = OciResourceDiscoveryClient(self.config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments)
         response = discovery_client.get_all_resources()
         logger.debug(f"Response : {response}")
         all_compartments = discovery_client.all_compartments
@@ -144,14 +144,35 @@ class OCIQuery(OCIConnection):
             for resource_type, resource_list in resources.items():
                 logger.info("Processing Resource : {0!s:s}".format(resource_type))
                 if resource_type in map_keys:
-                    if resource_type == "Instance":
+                    if resource_type == "Drg":
+                        resource_list = self.dynamic_routing_gateways(resource_list, resources)
+                    elif resource_type == "FileSystem":
+                        resource_list = self.file_storage_systems(resource_list, resources)
+                    elif resource_type == "Instance":
                         resource_list = self.instances(resource_list, resources)
                     elif resource_type == "LoadBalancer":
                         resource_list = self.loadbalancers(resource_list, resources)
-                    elif resource_type == "FileSystem":
-                        resource_list = self.file_storage_systems(resource_list, resources)
+                    elif resource_type == "MySqlDbSystem":
+                        resource_list = self.mysql_database_systems(resource_list, resources)
+                    elif resource_type == "NetworkSecurityGroup":
+                        resource_list = self.network_security_group(resource_list, resources)
+                    elif resource_type == "Bucket":
+                        resource_list = self.object_storage_buckets(resource_list, resources)
+                    elif resource_type == "Cluster":
+                        resource_list = self.oke_clusters(resource_list, resources)
+                    elif resource_type == "RouteTable":
+                        resource_list = self.route_tables(resource_list, resources)
+                    elif resource_type == "ServiceGateway":
+                        resource_list = self.service_gateways(resource_list, resources)
                     response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
         return response_json
+
+    def dynamic_routing_gateways(self, drgs, resources):
+        for drg in drgs:
+            attachments = [a for a in resources["DrgAttachment"] if a["drg_id"] == drg["id"]]
+            drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""
+            drg["route_table_id"] = attachments[0]["route_table_id"] if len(attachments) else ""
+        return drgs
 
     def file_storage_systems(self, file_storage_systems, resources):
         for fs in file_storage_systems:
@@ -196,6 +217,56 @@ class OCIQuery(OCIConnection):
                     ip_addresses = [ip for ip in resources["PrivateIp"] if ip["ip_address"] == backend["ip_address"]]
                     lb["instance_ids"].extend([va["instance_id"] for va in resources["VnicAttachment"] if va['vnic_id'] == ip_addresses[0]['vnic_id']] if len(ip_addresses) else [])
         return loadbalancers
+
+    def mysql_database_systems(self, database_systems, resources):
+        for db_system in database_systems:
+            # Trim version to just the number
+            db_system["mysql_version"] = db_system["mysql_version"].split('-')[0]
+        return database_systems
+
+    def network_security_group(self, nsgs, resources):
+        for nsg in nsgs:
+            nsg["security_rules"] = [r for r in resources["NetworkSecurityGroupSecurityRule"] if r["network_security_group_id"] == nsg["id"]]
+        return nsgs
+
+    def object_storage_buckets(self, buckets, resources):
+        for bucket in buckets:
+            bucket["display_name"] = bucket["name"]
+        return buckets
+
+    def oke_clusters(self, clusters, resources):
+        for cluster in clusters:
+            cluster["pools"] = [p for p in resources["NodePool"] if p["cluster_id"] == cluster["id"]]
+        return clusters
+
+    def route_tables(self, route_tables, resources):
+        rule_type_map = {'internetgateway': 'internet_gateways',
+                         'natgateway':'nat_gateways',
+                         'localpeeringgateway': 'local_peering_gateways',
+                         'dynamicroutinggateway': 'dynamic_routing_gateways',
+                         'drg': 'dynamic_routing_gateways',
+                         'privateip':'private_ips',
+                         'servicegateway': 'service_gateways'}
+        for route_table in route_tables:
+            for rule in route_table.get('route_rules', []):
+                if len(rule['network_entity_id']) > 0:
+                    rule['target_type'] = rule_type_map[rule['network_entity_id'].split('.')[1]]
+                else:
+                    rule['target_type'] = ''
+
+        return route_tables
+
+    def service_gateways(self, gateways, resources):
+        for gateway in gateways:
+            if gateway["route_rule_id"] == None:
+                gateway["route_rule_id"] = ""
+                for service in gateway['services']:
+                    service_elements = service['service_name'].split()
+                    del service_elements[1]
+                    gateway['service_name'] = " ".join(service_elements)
+                    # At the moment we only have 2 optiona All or OCI Object Storage hence we just need the first 3 characters
+                    gateway['service_name'] = service_elements[0]
+        return gateways
 
     def ip_to_instance(self, ip, resources):
         return

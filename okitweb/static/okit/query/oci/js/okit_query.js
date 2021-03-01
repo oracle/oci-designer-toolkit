@@ -5,11 +5,12 @@
 console.info('Loaded OKIT OCI Query Javascript');
 
 class OkitOCIQuery {
-    constructor(regions = []) {
+    constructor(regions = [], fast_discovery=true) {
         this.regions = regions;
         this.region_query_count = {};
         this.complete_callback = undefined;
         this.active_region = '';
+        this.fast_discovery = fast_discovery;
     }
 
     query(request = null, complete_callback, region_complete_callback) {
@@ -27,8 +28,7 @@ class OkitOCIQuery {
                     this.active_region = region;
                 }
                 regionOkitJson[region] = new OkitJson();
-                this.queryRootCompartment(region_request);
-                //this.queryAllResources(region_request);
+                this.fast_discovery ? this.queryAllResources(region_request) : this.queryRootCompartment(region_request);
             }
         }
     }

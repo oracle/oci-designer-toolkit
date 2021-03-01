@@ -251,6 +251,7 @@ class OkitSettings {
         this.auto_save = false;
         this.show_ocids = false;
         this.validate_markdown = true;
+        this.fast_discovery = true;
         this.load();
     }
 
@@ -338,6 +339,8 @@ class OkitSettings {
             this.addShowOcids(tbody, autosave);
             // Validate Before Markdowns
             this.addValidateMarkdown(tbody, autosave);
+            // Fast Discovery
+            this.addFastDiscovery(tbody, autosave);
             // Display Label
             this.addDisplayLabel(tbody, autosave);
             // Tooltip Style
@@ -587,6 +590,27 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'validate_markdown')
             .text('Validate Before Markdown');
+    }
+
+    addFastDiscovery(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'fast_discovery')
+            .attr('name', 'fast_discovery')
+            .attr('type', 'checkbox')
+            .property('checked', this.fast_discovery)
+            .on('change', function () {
+                if (autosave) {
+                    self.fast_discovery = $('#fast_discovery').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'fast_discovery')
+            .text('Fast Discovery');
     }
 
     addDisplayLabel(tbody, autosave) {

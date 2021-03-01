@@ -11,7 +11,7 @@ import sys
 from common.okitLogging import getLogger
 from concurrent.futures import ThreadPoolExecutor
 
-from .models import ExtendedAutoScalingPolicySummary, ExtendedBucketSummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule, ExtendedSourceApplicationSummary
+from .models import ExtendedAutoScalingPolicySummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule, ExtendedSourceApplicationSummary, ExtendedExportSummary
 
 DEFAULT_MAX_WORKERS = 32
 DEFAULT_TIMEOUT = 120
@@ -516,9 +516,9 @@ class OciResourceDiscoveryClient(object):
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
                     elif method_name == "list_exports":
-                        export_set_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, export_set_id=export_set_id)
-                        futures_list.update({(region, resource_type, compartment_id, export_set_id):future})
+                        file_system_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, file_system_id=file_system_id)
+                        futures_list.update({(region, resource_type, compartment_id, file_system_id):future})
                     elif method_name == "list_functions":
                         application_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, application_id=application_id)
@@ -633,9 +633,13 @@ class OciResourceDiscoveryClient(object):
                         # map Source Applications into extended verison a unique id
                         new_result = [ExtendedSourceApplicationSummary(f"{future[3]}/{application.type}/{application.name}", application) for application in result]
                         result = new_result
-                    if resource_type == "AutoScalingPolicy":
+                    elif resource_type == "AutoScalingPolicy":
                         # map Auto Scaling Policy into extended verison parent id
                         new_result =  [ExtendedAutoScalingPolicySummary(future[3],policy) for policy in result]
+                        result = new_result
+                    elif resource_type == "Export":
+                        # map Export into extended verison with compartment id
+                        new_result =  [ExtendedExportSummary(future[2],export) for export in result]
                         result = new_result
                     elif resource_type == "NetworkSecurityGroupSecurityRule":
                         # map Security Rules into extended verison with parent id
@@ -779,7 +783,8 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "Drg" and (self.include_resource_types == None or "DrgAttachment" in self.include_resource_types):
                     # get Drg Attachments for Drgs
                     regional_resource_requests.add(("DrgAttachment", resource.compartment_id, None))
-                elif resource.resource_type == "ExportSet" and (self.include_resource_types == None or "Export" in self.include_resource_types):
+                elif resource.resource_type == "FileSystem" and (self.include_resource_types == None or "Export" in self.include_resource_types):
+                    # get Exports for FileSystem
                     regional_resource_requests.add(("Export", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "Group" and (self.include_resource_types == None or "UserGroupMembership" in self.include_resource_types):
                     # get Users for Groups
@@ -820,6 +825,9 @@ class OciResourceDiscoveryClient(object):
                     #     regional_resource_requests.add(("RuleSet", resource.compartment_id, resource.identifier))
                     # if self.include_resource_types == None or "SSLCipherSuite" in self.include_resource_types:
                     #     regional_resource_requests.add(("SSLCipherSuite", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "MountTarget" and (self.include_resource_types == None or "ExportSet" in self.include_resource_types):
+                    # get ExportSets in the same compartment and AD as the MountTarget
+                    regional_resource_requests.add(("ExportSet", resource.compartment_id, resource.availability_domain))
                 elif resource.resource_type == "NetworkSecurityGroup" and (self.include_resource_types == None or "NetworkSecurityGroupSecurityRule" in self.include_resource_types):
                     # get security rules for network secuity group 
                     regional_resource_requests.add(("NetworkSecurityGroupSecurityRule", resource.compartment_id, resource.identifier))
@@ -849,7 +857,6 @@ class OciResourceDiscoveryClient(object):
                 "DataSafeOnPremConnector", # Data Safe
                 "Resolver", "SteeringPolicy", "TSIGKey", "View", "Zone", # DNS
                 "EmailSuppression", # Email
-                "ExportSet", # File Service
                 "LogGroup", "LogSavedSearch", # Loging
                 "ManagementDashboard", # TODO test
                 "MySqlDbSystem", "MySQLChannel", "MySQLBackup", # MySQL
@@ -866,11 +873,9 @@ class OciResourceDiscoveryClient(object):
             # only fetch resource type if explictly included
             resource_types = resource_types.intersection(set(self.include_resource_types)) if self.include_resource_types else []
 
-            logger.info(f"Compartments: {self.compartments}")
-            for compartment in self.compartments if self.compartments else self.all_compartments:
+            for compartment_id in self.compartments if self.compartments else [compartment.id for compartment in self.all_compartments]:
                 for resource_type in resource_types:
-                    brute_force_requests.add((resource_type, compartment.compartment_id, None))
-                    #brute_force_requests.add((resource_type, compartment.compartment_id if isinstance(compartment, dict) else compartment, None))
+                    brute_force_requests.add((resource_type, compartment_id, None))
 
             # TODO temp fix for region missing 
             if region.region_name not in resource_requests:
