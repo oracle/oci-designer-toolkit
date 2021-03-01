@@ -281,6 +281,7 @@
 
 .okit-property-sheet .okit-property-value {
     font-weight: normal;
+    width: 100%;
 }
 
 .okit-property-sheet .okit-property-label {

@@ -12,8 +12,9 @@
         <option value="2">Availability Domain 2</option>
         <option value="3">Availability Domain 3</option>
     </select></div></div>
-    <div class='tr'><div class='td'>Shape</div><div class='td'><select id="shape" class="okit-property-value">
-    </select></div></div>
+    <div class='tr'><div class='td'>Shape</div><div class='td'><select id="shape" class="okit-property-value"></select></div></div>
+    {{ properties_input('OCPUs', 'ocpus', type='number', collapsed=True, data={"min": 1, "max": 16}) }}
+    {{ properties_input('Memory (Gbs)', 'memory_in_gbs', type='number', collapsed=True, data={"min": 1, "max": 64}) }}
     <div class='tr'><div class='td'>Count</div><div class='td'><input type="number" id="count" name="count" class="okit-property-value" min="1"></div></div>
 {% endblock %}
 

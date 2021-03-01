@@ -52,6 +52,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
     ** Property Sheet Load function
      */
     loadProperties() {
+        const self = this;
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/load_balancer.html", () => {
@@ -71,9 +72,46 @@ class LoadBalancerView extends OkitDesignerArtefactView {
             this.loadNetworkSecurityGroups('network_security_group_ids', this.subnet_ids[0]);
             // Build Loadbalancer Shapes
             this.loadLoadBalancerShapes('shape');
+            if (this.shape === 'flexible') {
+                document.getElementById('minimum_bandwidth_in_mbps_row').classList.remove('collapsed');
+                document.getElementById('maximum_bandwidth_in_mbps_row').classList.remove('collapsed');
+            } else {
+                this.shape_details.minimum_bandwidth_in_mbps = 0;
+                this.shape_details.maximum_bandwidth_in_mbps = 0;
+            }
+            document.getElementById('shape').addEventListener("change", (event) => {self.showHideBandwidth(event.target.value)});
+            document.getElementById('minimum_bandwidth_in_mbps').addEventListener("input", () => {self.setMinMaxBandwidth()});
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });
+    }
+
+    showHideBandwidth(shape) {
+        const min_bandwidth = document.getElementById('minimum_bandwidth_in_mbps');
+        const max_bandwidth = document.getElementById('maximum_bandwidth_in_mbps');
+        if (shape === 'flexible') {
+            document.getElementById('minimum_bandwidth_in_mbps_row').classList.remove('collapsed');
+            document.getElementById('maximum_bandwidth_in_mbps_row').classList.remove('collapsed');
+            this.shape_details.minimum_bandwidth_in_mbps = 10;
+            this.shape_details.maximum_bandwidth_in_mbps = 10;
+        } else {
+            document.getElementById('minimum_bandwidth_in_mbps_row').classList.add('collapsed');
+            document.getElementById('maximum_bandwidth_in_mbps_row').classList.add('collapsed');
+            this.shape_details.minimum_bandwidth_in_mbps = 0;
+            this.shape_details.maximum_bandwidth_in_mbps = 0;
+        }
+        //min_bandwidth.setAttribute('value', this.shape_details.minimum_bandwidth_in_mbps);
+        min_bandwidth.value = this.shape_details.minimum_bandwidth_in_mbps;
+        //max_bandwidth.setAttribute('value', this.shape_details.maximum_bandwidth_in_mbps);
+        max_bandwidth.value = this.shape_details.maximum_bandwidth_in_mbps;
+    }
+
+    setMinMaxBandwidth() {
+        const max_bandwidth = document.getElementById('minimum_bandwidth_in_mbps');
+        const min = this.shape_details.minimum_bandwidth_in_mbps;
+        max_bandwidth.setAttribute('min', min);
+        this.shape_details.maximum_bandwidth_in_mbps = Math.max(this.shape_details.minimum_bandwidth_in_mbps, this.shape_details.maximum_bandwidth_in_mbps);
+        max_bandwidth.value = this.shape_details.maximum_bandwidth_in_mbps;
     }
 
     /*

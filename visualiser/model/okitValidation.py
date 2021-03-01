@@ -296,6 +296,17 @@ class OCIJsonValidator(object):
                     'element': 'route_rules'
                 }
                 self.results['warnings'].append(warning)
+            else:
+                for rule in artefact['route_rules']:
+                    if rule['network_entity_id'] == '':
+                        error = {
+                            'id': artefact['id'],
+                            'type': 'Route Table',
+                            'artefact': artefact['display_name'],
+                            'message': f'Network Entity has not be specified for {" ".join(rule["target_type"].split("_")).title()} rule.',
+                            'element': 'route_rules'
+                        }
+                self.results['errors'].append(error)
 
     # Security Lists
     def validateSecurityLists(self):

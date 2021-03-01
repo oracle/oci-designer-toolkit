@@ -369,7 +369,7 @@ class OkitDesignerArtefactView extends OkitArtefactView {
         $(jqId(select_id)).empty();
         const lb_select = $(jqId(select_id));
         for (let shape of okitOciData.getLoadBalaancerShapes()) {
-            lb_select.append($('<option>').attr('value', shape.name).text(shape.name));
+            lb_select.append($('<option>').attr('value', shape.name).text(titleCase(shape.name)));
         }
     }
 }

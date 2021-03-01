@@ -18,6 +18,13 @@ resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
 {% if network_security_group_ids is defined %}
     network_security_group_ids   = {{ network_security_group_ids }}
 {% endif %}
+{% if shape_details is defined %}
+    shape_details {
+        #Required
+        maximum_bandwidth_in_mbps = {{ shape_details.maximum_bandwidth_in_mbps | safe }}
+        minimum_bandwidth_in_mbps = {{ shape_details.minimum_bandwidth_in_mbps | safe }}
+    }
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}
 {% endif %}
