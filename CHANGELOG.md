@@ -9,8 +9,11 @@
 3. Add Min/Max Bandwidth for flexible Loadbalancer shape.
 4. Default Loadbalancer to flexible.
 5. Test for empty Network Entity Id on Route Rule.
+6. Fast Discovery. Use the OCI query api functionality instead of list based interface for retrieving OCI Resources when executing Query. The classic query is still available if the default fast discovery is turned off within the preferences.
 
 ### Bug Fixes
+1. Add IP Validation to CPE.
+2. Add static route validation to IPSec Connection
 
 
 ## Version 0.17.0
