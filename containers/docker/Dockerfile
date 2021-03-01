@@ -31,6 +31,7 @@ RUN yum install -y \
 # Install additional packages
  && yum install -y \
         git \
+        openssl \
         python36 \
         python3-pip \
 #        python36-pyyaml \
@@ -54,8 +55,9 @@ RUN yum install -y \
         requests==2.24.0 \
         xlsxwriter==1.3.6 \
 # Create Workspace
- && mkdir -p /okit/{config,git,log,visualiser,okitweb,workspace,templates,skeletons} \
+ && mkdir -p /okit/{config,git,log,ssl,visualiser,okitweb,workspace,templates,skeletons} \
  && mkdir -p /okit/okitweb/static/okit/templates \
+ && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" \
  && ln -s /okit/templates/user /okit/okitweb/static/okit/templates/user \
  && ln -s /okit/git /okit/okitweb/static/okit/templates/git \
  && ln -s /okit/git /okit/okitweb/static/okit/git
@@ -70,3 +72,4 @@ RUN chmod 600 /root/.ssh/*
 # Add entrypoint to automatically start webserver
 ENTRYPOINT ["gunicorn"]
 CMD ["--workers=4", "--limit-request-line", "0", "--timeout", "120", "--bind=0.0.0.0:80", "okitweb.wsgi:app"]
+#CMD ["--workers=4", "--limit-request-line", "0", "--timeout", "120", "--certfile=/okit/ssl/okit.crt", "--keyfile=/okit/ssl/okit.key", "--bind=0.0.0.0:443", "okitweb.wsgi:app"]

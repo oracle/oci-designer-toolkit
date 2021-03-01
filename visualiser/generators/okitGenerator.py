@@ -624,6 +624,13 @@ class OCIGenerator(object):
                 self.addJinja2Variable("display_name", '{0!s:s}-{1!s:s}'.format(instance["display_name"], i + 1), standardisedName)
             # ---- Shape
             self.addJinja2Variable("shape", instance["shape"], standardisedName)
+            # ----- Flex Shapes
+            if instance["shape_config"]["ocpus"] != 0:
+                shape_config = {
+                    "ocpus": instance["shape_config"]["ocpus"],
+                    "memory_in_gbs": instance["shape_config"]["memory_in_gbs"]
+                }
+                self.jinja2_variables["shape_config"] = shape_config
             # ---- Source Details
             # ----- Source Type
             self.addJinja2Variable("source_type", instance["source_details"]["source_type"], standardisedName)
@@ -820,6 +827,13 @@ class OCIGenerator(object):
         self.addJinja2Variable("display_name", loadbalancer["display_name"], standardisedName)
         # ---- Shape
         self.addJinja2Variable("shape", loadbalancer["shape"], standardisedName)
+        # ----- Flex Shapes
+        if loadbalancer["shape_details"]["minimum_bandwidth_in_mbps"] != 0:
+            shape_details = {
+                "minimum_bandwidth_in_mbps": loadbalancer["shape_details"]["minimum_bandwidth_in_mbps"],
+                "maximum_bandwidth_in_mbps": loadbalancer["shape_details"]["maximum_bandwidth_in_mbps"]
+            }
+            self.jinja2_variables["shape_details"] = shape_details
         # ---- Private
         self.addJinja2Variable("is_private", loadbalancer["is_private"], standardisedName)
         # ---- Subnets

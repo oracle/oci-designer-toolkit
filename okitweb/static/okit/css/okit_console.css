@@ -272,6 +272,7 @@ textarea {
     direction: rtl;
     transition: all 0.25s;
     transform: translateX(-100%);
+    scrollbar-width: none;
 }
 
 .okit-navigation-menu-show {

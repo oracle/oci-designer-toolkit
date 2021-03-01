@@ -147,6 +147,10 @@ class OkitOCIData {
         }
     }
 
+    getInstanceShape(shape) {
+        return this.getInstanceShapes().find(s => s.shape === shape);
+    }
+
     getInstanceOS(shape='') {
         let oss = [];
         if (shape === '') {
