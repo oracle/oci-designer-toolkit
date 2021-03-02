@@ -1039,6 +1039,36 @@ function displayValidationResults(results) {
         });
     }
     $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
+    // Process Information
+    tbody = d3.select(d3Id('validation_info_tbody'));
+    $(jqId('validation_info_tbody')).empty();
+    for (let warning of results.results.info) {
+        tr = tbody.append('div')
+            .attr('class', 'tr');
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.type);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.artefact);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.message);
+        // Highlight
+        let fill = d3.select(d3Id(warning.id)).attr('fill');
+        tr.on('mouseover', () => {
+            d3.select(d3Id(warning.id)).attr('fill', validate_warning_colour);
+        });
+        tr.on('mouseout', () => {
+            d3.select(d3Id(warning.id)).attr('fill', fill);
+        });
+        tr.on('click', () => {
+            warning_properties.push(warning.element);
+            d3.select(d3Id(warning.id + '-svg')).on("click")();
+            $('#toggle_properties_button').click();
+        });
+    }
+    $(jqId('validation_info_summary')).text(`Information (${results.results.info.length})`)
 }
 /*
 ** Model Pricing

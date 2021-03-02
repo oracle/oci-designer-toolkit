@@ -1022,10 +1022,7 @@ class OkitArtifact {
      */
     merge(update) {
         if (update.name) {
-            console.warn(`update.name ${update.name}`);
-            console.warn(`update.display_name ${update.display_name}`);
             if (!update.display_name || update.display_name === '') update.display_name = update.name;
-            console.warn('Removing update.name');
             delete update.name;
         }
         $.extend(true, this, this.clean(update));
