@@ -91,8 +91,8 @@ class SecurityList extends OkitArtifact {
                         "min": 22
                     },
                     "source_port_range": {
-                        "max": null,
-                        "min": null
+                        "max": "",
+                        "min": ""
                     }
                 },
                 "udp_options": null,

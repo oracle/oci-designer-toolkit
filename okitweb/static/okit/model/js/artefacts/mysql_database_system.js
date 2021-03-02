@@ -21,11 +21,11 @@ class MySQLDatabaseSystem extends OkitArtifact {
         this.shape_name = '';
         this.configuration_id = '';
         this.subnet_id = '';
-        this.admin_username = '';
+        this.admin_username = 'admin';
         this.admin_password = '';
         this.description ='';
         this.mysql_version = '';
-        this.v = '';
+        this.port = '';
         this.port_x = '';
         this.data_storage_size_in_gb = 256;
         this.fault_domain = '';
