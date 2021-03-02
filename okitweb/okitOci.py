@@ -226,8 +226,9 @@ def ociQuery():
         compartments = query_json.get('compartment_id', None)
         #compartments = None # TODO need to pass list of compartment ocids
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
-        query = OCIQuery(None, None, config_profile)
-        response = query.executeQuery(config_profile=config_profile, regions=[regions] if regions else None, compartments=[compartments] if compartments else None)
+        config = {'region': query_json['region']}
+        query = OCIQuery(config=config, profile=config_profile)
+        response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None)
         config = {'region': query_json['region']}
         #response_json = response_to_json(response)
         logJson(response)
