@@ -1021,20 +1021,11 @@ class OkitArtifact {
     ** Merge Functionality
      */
     merge(update) {
-        console.warn(`1. this.display_name : ${this.display_name}`);
-        console.warn(`2. update.display_name : ${update.display_name}`);
-        console.warn(`2. update.name : ${update.name}`);
         if (update.name !== undefined) {
-            console.warn(`3. update.name : ${update.name}`);
-            console.warn(`4. update.display_name : ${update.display_name}`);
             if (!update.display_name || update.display_name === '') update.display_name = update.name;
             delete update.name;
-            console.warn(`5. update.display_name : ${update.display_name}`);
         }
-        const clean = this.clean(update);
-        console.warn(`6. clean.display_name : ${clean.display_name}`);
-        $.extend(true, this, clean);
-        console.warn(`7. this.display_name : ${this.display_name}`);
+        $.extend(true, this, this.clean(update));
         //$.extend(true, this, update);
     }
 

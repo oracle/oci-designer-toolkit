@@ -434,11 +434,14 @@ class OCIGenerator(object):
             self.removeJinja2Variable("cpu_core_count")
         # ---- Fault Domains
         if len(database_system["fault_domains"]) > 0:
+            logger.info("Fault Domains")
+            logger.info(database_system["fault_domains"])
             if isinstance(database_system["fault_domains"], list):
                 fault_domains = database_system["fault_domains"]
             else:
                 fault_domains = [database_system["fault_domains"]]
             self.addJinja2Variable("fault_domains", fault_domains, standardisedName)
+            self.jinja2_variables["fault_domains"] = fault_domains
         else:
             self.removeJinja2Variable("fault_domains")
         # ---- Cluster Name
