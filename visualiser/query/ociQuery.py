@@ -98,6 +98,18 @@ class OCIQuery(OCIConnection):
         "Vcn": "virtual_cloud_networks",
         "Volume": "block_storage_volumes"
     }
+    VALID_LIFECYCLE_STATES = [
+        "RUNNING",
+        "STARTING",
+        "STOPPING",
+        "STOPPED",
+        "AVAILABLE",
+        "ACTIVE",
+        "PROVISIONING",
+        "UPDATING",
+        "CREATING",
+        "INACTIVE"
+    ]
 
     def __init__(self, config=None, configfile=None, profile=None):
         super(OCIQuery, self).__init__(config=config, configfile=configfile, profile=profile)
@@ -105,17 +117,24 @@ class OCIQuery(OCIConnection):
     def connect(self):
         pass
 
-    def executeQuery(self, regions, compartments, **kwargs):
+    def executeQuery(self, regions, compartments, include_sub_compartments=False, **kwargs):
         logger.info('Request : {0!s:s}'.format(str(regions)))
         logger.info('Request : {0!s:s}'.format(str(compartments)))
         logger.info('Request : {0!s:s}'.format(str(self.config)))
-        discovery_client = OciResourceDiscoveryClient(self.config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments)
-        response = discovery_client.get_all_resources()
+        logger.info('Request : {0!s:s}'.format(str(include_sub_compartments)))
+        discovery_client = OciResourceDiscoveryClient(self.config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
+        # Get Supported Resources
+        response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug(f"Response : {response}")
-        all_compartments = discovery_client.all_compartments
-        logger.debug('Response JSON : {0!s:s}'.format(json.dumps(self.response_to_json(response), indent=2)))
-
-        response_json = self.convert(self.response_to_json(response), compartments, self.response_to_json(all_compartments))
+        logger.debug('Response JSON : {0!s:s}'.format(json.dumps(response, indent=2)))
+        # Get All Compartment
+        all_compartments = self.response_to_json(discovery_client.all_compartments)
+        # Filter Compartments to those specifically queried
+        queried_compartments = [c for c in all_compartments if c["id"] in compartments]
+        if include_sub_compartments:
+            for id in compartments:
+                queried_compartments.extend([c for c in all_compartments if c["id"] in discovery_client.get_subcompartment_ids(id)])
+        response_json = self.convert(response, queried_compartments)
 
         return response_json
 
@@ -128,9 +147,9 @@ class OCIQuery(OCIConnection):
         #return json.dumps(json.loads(json_str), indent=2)
         return json.loads(json_str)
 
-    def convert(self, discovery_data, compartments, all_compartments):
+    def convert(self, discovery_data, compartments):
         response_json = {
-            "compartments": [c for c in all_compartments if c["id"] in compartments]
+            "compartments": compartments
         }
         compartment_ids = [c["id"] for c in response_json["compartments"]]
         # Set top level compartment parent to None
@@ -163,7 +182,9 @@ class OCIQuery(OCIConnection):
                         resource_list = self.route_tables(resource_list, resources)
                     elif resource_type == "ServiceGateway":
                         resource_list = self.service_gateways(resource_list, resources)
-                    response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
+                    # Check Life Cycle State
+                    response_json[self.DISCOVER_OKIT_MAP[resource_type]] = [r for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
+                    #response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
         return response_json
 
     def dynamic_routing_gateways(self, drgs, resources):

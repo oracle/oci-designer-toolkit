@@ -228,7 +228,7 @@ def ociQuery():
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
         config = {'region': query_json['region']}
         query = OCIQuery(config=config, profile=config_profile)
-        response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None)
+        response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=query_json['sub_compartments'])
         config = {'region': query_json['region']}
         #response_json = response_to_json(response)
         logJson(response)

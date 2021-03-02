@@ -543,9 +543,9 @@ function displayQueryDialog() {
         .on('click', function () {
             showQueryResults();
         });
-    if (okitSettings.fast_discovery) {
-        document.getElementById('sub_compartments_row').classList.add('collapsed');
-    }
+    //if (okitSettings.fast_discovery) {
+    //    document.getElementById('sub_compartments_row').classList.add('collapsed');
+    //}
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleQueryOci(e) {
