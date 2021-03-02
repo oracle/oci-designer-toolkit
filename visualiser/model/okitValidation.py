@@ -41,6 +41,7 @@ class OCIJsonValidator(object):
         self.validateIPSecConnections()
         self.validateLoadBalancers()
         self.validateLocalPeeringGateways()
+        self.validateMySqlDatabaseSystems()
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
@@ -299,6 +300,33 @@ class OCIJsonValidator(object):
                 }
                 self.results['warnings'].append(warning)
 
+    # MySql Database Systems
+    def validateMySqlDatabaseSystems(self):
+        for artefact in self.okit_json.get('mysql_database_systems', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+            # Check Admin Username
+            if artefact['admin_username'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'MySQL Database System',
+                    'artefact': artefact['display_name'],
+                    'message': 'Admin Username is required.',
+                    'element': 'admin_username'
+                }
+                self.results['errors'].append(error)
+            # Check Hostname
+            if artefact['admin_password'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'MySQL Database System',
+                    'artefact': artefact['display_name'],
+                    'message': 'Admin Password must be specified.',
+                    'element': 'admin_password'
+                }
+                self.results['errors'].append(error)
+
     # NAT Gateways
     def validateNATGateways(self):
         for artefact in self.okit_json.get('nat_gateways', []):
@@ -337,7 +365,7 @@ class OCIJsonValidator(object):
                             'message': f'Network Entity has not be specified for {" ".join(rule["target_type"].split("_")).title()} rule.',
                             'element': 'route_rules'
                         }
-                self.results['errors'].append(error)
+                        self.results['errors'].append(error)
 
     # Security Lists
     def validateSecurityLists(self):
