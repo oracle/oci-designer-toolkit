@@ -13,7 +13,8 @@
 
 ### Bug Fixes
 1. Add IP Validation to CPE.
-2. Add static route validation to IPSec Connection
+2. Add static route validation to IPSec Connection.
+3. Correct accidental element change on MySqlDatabaseSystem self.v -> self.port.
 
 
 ## Version 0.17.0
