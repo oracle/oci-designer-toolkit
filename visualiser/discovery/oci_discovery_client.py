@@ -292,7 +292,7 @@ class OciResourceDiscoveryClient(object):
         # return the "list_*" methods for a class
         return {method for method in dir(klass) if method.startswith('list_')}
 
-    def __init__(self, config, regions=None, compartments=None, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
+    def __init__(self, config, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
         self.config = config
         self.timeout = timeout
         self.max_workers = max_workers
@@ -307,7 +307,11 @@ class OciResourceDiscoveryClient(object):
 
         # get all compartments
         self.all_compartments = self.get_compartments()
-        self.compartments = compartments
+        self.compartments = set(compartments) if compartments else None
+        self.include_sub_compartments = include_sub_compartments
+        if include_sub_compartments:
+            for compartment_id in compartments:
+                self.compartments.update(self.get_subcompartment_ids(compartment_id))
 
         # object storage namespace
         object_storage = oci.object_storage.ObjectStorageClient(self.config)
@@ -347,6 +351,15 @@ class OciResourceDiscoveryClient(object):
     def get_compartments(self):
         identity = oci.identity.IdentityClient(self.config)
         return oci.pagination.list_call_get_all_results(identity.list_compartments, self.config["tenancy"], compartment_id_in_subtree=True).data
+
+    def get_subcompartment_ids(self, compartment_id):
+        all_subcompartment_ids = set()
+        subcompartment_ids = [compartment.id for compartment in self.all_compartments if compartment.compartment_id == compartment_id and compartment.lifecycle_state == "ACTIVE"]
+        for subcompartment_id in subcompartment_ids:
+            # add each subcompartment and all its children
+            all_subcompartment_ids.add(subcompartment_id)
+            all_subcompartment_ids.update(self.get_subcompartment_ids(subcompartment_id))
+        return all_subcompartment_ids
 
     def get_availability_domains(self, regions):
         tasks = dict()
@@ -711,7 +724,7 @@ class OciResourceDiscoveryClient(object):
             logger.warn(f"Retrying {len(failed_requests)} failed requests")
             retry_results = self.get_resources(retry_tasks)
             for region in retry_results:
-                for resource_type in region:
+                for resource_type in retry_results[region]:
                     results[region][resource_type].extend(retry_results[region][resource_type])
         
         return results
