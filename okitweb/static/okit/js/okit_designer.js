@@ -442,6 +442,10 @@ function loadTemplate(template_url) {
  */
 function displayQueryDialog() {
     $(jqId('modal_dialog_title')).text('Query OCI');
+    if (okitSettings.fast_discovery) {
+        $(jqId('modal_dialog_title')).text('OCI Introspection (Fast Discovery)');
+    //    document.getElementById('sub_compartments_row').classList.add('collapsed');
+    }
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
     let query_form = d3.select(d3Id('modal_dialog_body')).append('div').append('form')
@@ -543,9 +547,6 @@ function displayQueryDialog() {
         .on('click', function () {
             showQueryResults();
         });
-    //if (okitSettings.fast_discovery) {
-    //    document.getElementById('sub_compartments_row').classList.add('collapsed');
-    //}
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleQueryOci(e) {
