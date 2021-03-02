@@ -307,7 +307,7 @@ class OciResourceDiscoveryClient(object):
 
         # get all compartments
         self.all_compartments = self.get_compartments()
-        self.compartments = set(compartments)
+        self.compartments = set(compartments) if compartments else None
         self.include_sub_compartments = include_sub_compartments
         if include_sub_compartments:
             for compartment_id in compartments:
