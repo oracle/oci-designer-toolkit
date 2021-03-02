@@ -10,11 +10,14 @@
 4. Default Loadbalancer to flexible.
 5. Test for empty Network Entity Id on Route Rule.
 6. Fast Discovery. Use the OCI query api functionality instead of list based interface for retrieving OCI Resources when executing Query. The classic query is still available if the default fast discovery is turned off within the preferences.
+7. Add validation to LPG to check if the connected route table has valid rules.
+8. Implement "Information" messages on validation.
 
 ### Bug Fixes
 1. Add IP Validation to CPE.
 2. Add static route validation to IPSec Connection.
 3. Correct accidental element change on MySqlDatabaseSystem self.v -> self.port.
+4. Terraform DB System template was not building Fault Domain list correctly.
 
 
 ## Version 0.17.0

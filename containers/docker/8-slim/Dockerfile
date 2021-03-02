@@ -5,7 +5,7 @@
 FROM oraclelinux:8-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.17.0" \
+      "version"="0.18.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2021, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
