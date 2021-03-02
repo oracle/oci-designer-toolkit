@@ -987,16 +987,10 @@ class OkitArtifact {
                 return okitjson;
             }
         });
-        Object.defineProperty(this, 'name', {
-            get: function () {
-                return this.display_name;
-            },
-            set: function (name) {
-                return this.display_name = name;
-            }
-        });
     }
 
+    get name() {return this.display_name;}
+    set name(name) {this.display_name = name;}
     get okit_id() {return 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();}
     get resource_name() {return this.getArtifactReference();}
     get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
@@ -1021,8 +1015,11 @@ class OkitArtifact {
     ** Merge Functionality
      */
     merge(update) {
+        if (update.name !== undefined) {
+            if (update.display_name === undefined || update.display_name === '') update.display_name = update.name;
+            delete update.name;
+        }
         $.extend(true, this, this.clean(update));
-        //$.extend(true, this, update);
     }
 
     /*

@@ -22,7 +22,7 @@ logger = getLogger()
 class OCIJsonValidator(object):
     def __init__(self, okit_json={}):
         self.okit_json = okit_json
-        self.results = {'errors': [], 'warnings': []}
+        self.results = {'errors': [], 'warnings': [], 'info': []}
         self.valid = True
 
     def validate(self):
@@ -291,14 +291,27 @@ class OCIJsonValidator(object):
                 self.results['warnings'].append(warning)
             # Check Route Table Id
             if artefact['route_table_id'] == '':
-                warning = {
+                info = {
                     'id': artefact['id'],
                     'type': 'Local Peering Gateway',
                     'artefact': artefact['display_name'],
                     'message': 'Route Table not specified.',
                     'element': 'route_table_id'
                 }
-                self.results['warnings'].append(warning)
+                self.results['info'].append(info)
+            else:
+                for route_table in self.okit_json.get('route_tables', []):
+                    if route_table['id'] == artefact['route_table_id']:
+                        for rule in route_table['route_rules']:
+                            if rule['target_type'] not in ['dynamic_routing_gateways', 'private_ips']:
+                                error = {
+                                    'id': artefact['id'],
+                                    'type': 'Local Peering Gateway',
+                                    'artefact': artefact['display_name'],
+                                    'message': 'A route table that is associated with an LPG can have only rules that target a DRG or a private IP.',
+                                    'element': 'route_table_id'
+                                }
+                                self.results['errors'].append(error)
 
     # MySql Database Systems
     def validateMySqlDatabaseSystems(self):

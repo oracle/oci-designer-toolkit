@@ -434,11 +434,14 @@ class OCIGenerator(object):
             self.removeJinja2Variable("cpu_core_count")
         # ---- Fault Domains
         if len(database_system["fault_domains"]) > 0:
+            logger.info("Fault Domains")
+            logger.info(database_system["fault_domains"])
             if isinstance(database_system["fault_domains"], list):
                 fault_domains = database_system["fault_domains"]
             else:
                 fault_domains = [database_system["fault_domains"]]
             self.addJinja2Variable("fault_domains", fault_domains, standardisedName)
+            self.jinja2_variables["fault_domains"] = fault_domains
         else:
             self.removeJinja2Variable("fault_domains")
         # ---- Cluster Name
@@ -625,7 +628,7 @@ class OCIGenerator(object):
             # ---- Shape
             self.addJinja2Variable("shape", instance["shape"], standardisedName)
             # ----- Flex Shapes
-            if instance.get("shape_config", {}).get("ocpus", 0) != 0:
+            if instance.get("shape_config", {}).get("ocpus", 0) != 0 and instance["shape"].endswith(".Flex"):
                 shape_config = {
                     "ocpus": instance["shape_config"]["ocpus"],
                     "memory_in_gbs": instance["shape_config"]["memory_in_gbs"]
@@ -828,7 +831,7 @@ class OCIGenerator(object):
         # ---- Shape
         self.addJinja2Variable("shape", loadbalancer["shape"], standardisedName)
         # ----- Flex Shapes
-        if loadbalancer.get("shape_details", {}).get("minimum_bandwidth_in_mbps", 0) != 0:
+        if loadbalancer.get("shape_details", {}).get("minimum_bandwidth_in_mbps", 0) != 0 and loadbalancer["shape"] == 'flexible':
             shape_details = {
                 "minimum_bandwidth_in_mbps": loadbalancer["shape_details"]["minimum_bandwidth_in_mbps"],
                 "maximum_bandwidth_in_mbps": loadbalancer["shape_details"]["maximum_bandwidth_in_mbps"]
