@@ -105,8 +105,7 @@ class OCIQuery(OCIConnection):
     def connect(self):
         pass
 
-    def executeQuery(self, config_profile, regions, compartments, **kwargs):
-        logger.info('Request : {0!s:s}'.format(str(config_profile)))
+    def executeQuery(self, regions, compartments, **kwargs):
         logger.info('Request : {0!s:s}'.format(str(regions)))
         logger.info('Request : {0!s:s}'.format(str(compartments)))
         logger.info('Request : {0!s:s}'.format(str(self.config)))
