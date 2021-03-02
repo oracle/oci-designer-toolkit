@@ -987,16 +987,6 @@ class OkitArtifact {
                 return okitjson;
             }
         });
-        /*
-        Object.defineProperty(this, 'name', {
-            get: function () {
-                return this.display_name;
-            },
-            set: function (name) {
-                this.display_name = name;
-            }
-        });
-         */
     }
 
     get name() {return this.display_name;}
