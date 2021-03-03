@@ -70,7 +70,8 @@ class OCIQuery(OCIConnection):
         "Vcn",
         "Volume",
         "VolumeAttachment",
-        "VnicAttachment"
+        "VnicAttachment",
+        "Vnic"
     ]
     DISCOVER_OKIT_MAP = {
         "AutonomousDatabase": "autonomous_databases",
@@ -221,7 +222,10 @@ class OCIQuery(OCIConnection):
             # Add Attached Block Storage Volumes
             instance['block_storage_volume_ids'] = [va['volume_id'] for va in resources["VolumeAttachment"] if va['instance_id'] == instance['id']] if "VolumeAttachment" in resources else []
             # Add Vnic Attachments
-            instance['vnics'] = [va for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]
+            #instance['vnics'] = [va for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]
+            attachments_vnic_ids = [va["vnic_id"] for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]
+            instance['vnics'] = [vnic for vnic in resources["Vnic"] if vnic["id"] in attachments_vnic_ids]
+            #instance['vnics'] = [vnic for vnic in resources["Vnic"] if vnic["id"] in [va["vnic_id"] for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]]
             # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
             boot_volume_attachments = [va for va in resources["BootVolumeAttachment"] if va['instance_id'] == instance['id']]
             boot_volumes = [va for va in resources["BootVolume"] if va['id'] == boot_volume_attachments[0]['boot_volume_id']] if len(boot_volume_attachments) else []
