@@ -299,6 +299,9 @@ class OciResourceDiscoveryClient(object):
         self.include_resource_types = set(include_resource_types) if include_resource_types else None
         self.exclude_resource_types = set(exclude_resource_types) if exclude_resource_types else None
 
+        # get tenancy
+        self.tenancy = self.get_tenancy()
+
         # get regions
         self.regions, self.home_region = self.get_regions(regions)
 
@@ -369,6 +372,11 @@ class OciResourceDiscoveryClient(object):
         for region in results:
             results[region] = [ad.name for ad in results[region]["AvailabilityDomain"]]
         return results
+
+    def get_tenancy(self):
+        identity = oci.identity.IdentityClient(self.config)
+        tenancy = identity.get_tenancy(self.config["tenancy"]).data
+        return tenancy
 
     def get_regions(self, region_filter=None):
         identity = oci.identity.IdentityClient(self.config)
