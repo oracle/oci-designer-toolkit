@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -22,7 +22,7 @@ logger = getLogger()
 class OCIJsonValidator(object):
     def __init__(self, okit_json={}):
         self.okit_json = okit_json
-        self.results = {'errors': [], 'warnings': []}
+        self.results = {'errors': [], 'warnings': [], 'info': []}
         self.valid = True
 
     def validate(self):
@@ -41,6 +41,7 @@ class OCIJsonValidator(object):
         self.validateIPSecConnections()
         self.validateLoadBalancers()
         self.validateLocalPeeringGateways()
+        self.validateMySqlDatabaseSystems()
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
@@ -290,14 +291,54 @@ class OCIJsonValidator(object):
                 self.results['warnings'].append(warning)
             # Check Route Table Id
             if artefact['route_table_id'] == '':
-                warning = {
+                info = {
                     'id': artefact['id'],
                     'type': 'Local Peering Gateway',
                     'artefact': artefact['display_name'],
                     'message': 'Route Table not specified.',
                     'element': 'route_table_id'
                 }
-                self.results['warnings'].append(warning)
+                self.results['info'].append(info)
+            else:
+                for route_table in self.okit_json.get('route_tables', []):
+                    if route_table['id'] == artefact['route_table_id']:
+                        for rule in route_table['route_rules']:
+                            if rule['target_type'] not in ['dynamic_routing_gateways', 'private_ips']:
+                                error = {
+                                    'id': artefact['id'],
+                                    'type': 'Local Peering Gateway',
+                                    'artefact': artefact['display_name'],
+                                    'message': 'A route table that is associated with an LPG can have only rules that target a DRG or a private IP.',
+                                    'element': 'route_table_id'
+                                }
+                                self.results['errors'].append(error)
+
+    # MySql Database Systems
+    def validateMySqlDatabaseSystems(self):
+        for artefact in self.okit_json.get('mysql_database_systems', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+            # Check Admin Username
+            if artefact['admin_username'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'MySQL Database System',
+                    'artefact': artefact['display_name'],
+                    'message': 'Admin Username is required.',
+                    'element': 'admin_username'
+                }
+                self.results['errors'].append(error)
+            # Check Hostname
+            if artefact['admin_password'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'MySQL Database System',
+                    'artefact': artefact['display_name'],
+                    'message': 'Admin Password must be specified.',
+                    'element': 'admin_password'
+                }
+                self.results['errors'].append(error)
 
     # NAT Gateways
     def validateNATGateways(self):
@@ -327,6 +368,17 @@ class OCIJsonValidator(object):
                     'element': 'route_rules'
                 }
                 self.results['warnings'].append(warning)
+            else:
+                for rule in artefact['route_rules']:
+                    if rule['network_entity_id'] == '':
+                        error = {
+                            'id': artefact['id'],
+                            'type': 'Route Table',
+                            'artefact': artefact['display_name'],
+                            'message': f'Network Entity has not be specified for {" ".join(rule["target_type"].split("_")).title()} rule.',
+                            'element': 'route_rules'
+                        }
+                        self.results['errors'].append(error)
 
     # Security Lists
     def validateSecurityLists(self):

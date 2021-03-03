@@ -104,7 +104,8 @@ resource "oci_database_db_system" "{{ resource_name }}" {
     domain                  = {{ domain | safe }}
 {% endif %}
 {% if fault_domains is defined %}
-    fault_domains           = {{ fault_domains | safe }}
+    #fault_domains           = {{ fault_domains | safe }}
+    fault_domains           = [{% for fault_domain in fault_domains %}"{{ fault_domain | safe }}"{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 {% if license_model is defined %}
     license_model           = {{ license_model | safe }}

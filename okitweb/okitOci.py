@@ -1,5 +1,5 @@
 
-# Copyright (c) 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -226,8 +226,9 @@ def ociQuery():
         compartments = query_json.get('compartment_id', None)
         #compartments = None # TODO need to pass list of compartment ocids
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
-        query = OCIQuery(None, None, config_profile)
-        response = query.executeQuery(config_profile=config_profile, regions=[regions] if regions else None, compartments=[compartments] if compartments else None)
+        config = {'region': query_json['region']}
+        query = OCIQuery(config=config, profile=config_profile)
+        response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=query_json['sub_compartments'])
         config = {'region': query_json['region']}
         #response_json = response_to_json(response)
         logJson(response)

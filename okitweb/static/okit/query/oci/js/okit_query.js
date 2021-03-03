@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT OCI Query Javascript');
@@ -16,7 +16,6 @@ class OkitOCIQuery {
     query(request = null, complete_callback, region_complete_callback) {
         this.complete_callback = complete_callback;
         this.region_complete_callback = region_complete_callback;
-        console.warn(request);
         if (request) {
             for (const [i, region] of this.regions.entries()) {
                 console.info(`${i} - Processing Selected Region : ${region}`);
@@ -35,6 +34,7 @@ class OkitOCIQuery {
 
     queryAllResources(request) {
         console.info('------------- All Resources Query --------------------');
+        console.warn(request);
         let me = this;
         this.region_query_count[request.region] = 1;
         $.ajax({
@@ -46,7 +46,7 @@ class OkitOCIQuery {
             success: function(resp) {
                 console.log(resp)
                 const response_json = JSON.parse(resp);
-                const title = request.sub_compartments ? `Queried Compartment ${response_json.name} and Sub-Compartments` : `Queried Compartment ${response_json.name}`;
+                const title = request.sub_compartments ? `Queried Compartment ${request.compartment_name} and Sub-Compartments` : `Queried Compartment ${request.compartment_name}`;
                 const description = `${title} in Region ${request.region}`;
                 regionOkitJson[request.region].load(response_json)
                 regionOkitJson[request.region].title = title;
