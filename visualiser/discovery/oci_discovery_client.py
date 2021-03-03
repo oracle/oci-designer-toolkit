@@ -936,7 +936,11 @@ class OciResourceDiscoveryClient(object):
                 regional_resource_requests.add(("Vnic", vnic_attachment.compartment_id, vnic_attachment.vnic_id))
             extra_resource_requests.update({region:regional_resource_requests})
         
-        resources_by_region.update(self.get_resources(extra_resource_requests))
+        extra_resources_by_region = self.get_resources(extra_resource_requests)
+
+        # merge the responses
+        for region in extra_resources_by_region:
+            resources_by_region[region].update(extra_resources_by_region[region])
 
         return resources_by_region
 
