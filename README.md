@@ -32,9 +32,9 @@ OCI environments through a graphical web based interface.
   
   _Note:_
 ```diff
-+ The 0.18.0 release introduces a new implementation of the Introspection/Query feature that improves 
-+ performance on large queries. The use can return to the classic query functionality by unchecking 
-+ Fast Discovery in the preferences.
++ The 0.18.0 release introduces a new implementation of the Introspection/Query feature  
++ that improves performance on large queries. The use can return to the classic query 
++ functionality by unchecking Fast Discovery in the preferences.
 ```
 
   
