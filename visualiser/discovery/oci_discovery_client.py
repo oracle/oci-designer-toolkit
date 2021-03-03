@@ -21,8 +21,16 @@ logger = getLogger()
 
 class OciResourceDiscoveryClient(object):
 
+    # map suppoted resources types to the OCI SDK client type and its "get" 
+    # methods. Creates a map of:
+    #     { resource_name -> (Client, list_method) }
+    get_resource_client_methods = {
+        # oci.core.VirtualNetworkClient
+        "Vnic": (oci.core.VirtualNetworkClient, "get_vnic"), # special case as there is no list_vnics method
+    }
+
     # map suppoted resources types to the OCI SDK client type and its "list"
-    # method. Create a map of:
+    # method. Creates a map of:
     #     { resource_name -> (Client, list_method) }
     list_resource_client_methods = {
         # oci.analytics.AnalyticsClient
@@ -489,7 +497,15 @@ class OciResourceDiscoveryClient(object):
             for item in regional_resources_compartments[region]:
                 resource_type = item[0]
                 compartment_id = item[1]
-                if resource_type in self.list_resource_client_methods:
+
+                if resource_type in self.get_resource_client_methods:
+                    klass, method_name = self.get_resource_client_methods[resource_type]
+                    if method_name == "get_vnic":
+                        vnic_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, vnic_id=vnic_id)
+                        futures_list.update({(region, resource_type, compartment_id, vnic_id):future})
+
+                elif resource_type in self.list_resource_client_methods:
                     klass, method_name = self.list_resource_client_methods[resource_type]
                     # the majority of the list methods only need the compartment
                     # id, methods that have additional required attributes are 
@@ -684,9 +700,12 @@ class OciResourceDiscoveryClient(object):
                         "LogSavedSearch",
                         "NoSQLTable",
                         "RoverCluster", "RoverNode",
+                        "ServiceConnector",
                     ]:
                         # handle responses with collecion of items
                         result = result.items
+                    elif resource_type == "Vnic":
+                        result = [result]
 
                     results[region][resource_type].extend(result)
 
@@ -906,4 +925,19 @@ class OciResourceDiscoveryClient(object):
             resource_requests[region.region_name].update(brute_force_requests)
 
         resources_by_region = self.get_resources(resource_requests)
+
+        # get additional resource details
+        # this currently needs all regions to complete the first query before starting the next set of requests
+        # TODO opportunity to future optimization
+        extra_resource_requests = dict()
+        for region in resources_by_region:
+            regional_resource_requests = set()
+            for vnic_attachment in resources_by_region[region]["VnicAttachment"] if (self.include_resource_types == None or "Vnic" in self.include_resource_types) and "VnicAttachment" in resources_by_region[region] else []:
+                regional_resource_requests.add(("Vnic", vnic_attachment.compartment_id, vnic_attachment.vnic_id))
+            extra_resource_requests.update({region:regional_resource_requests})
+        
+        resources_by_region.update(self.get_resources(extra_resource_requests))
+
         return resources_by_region
+
+        
