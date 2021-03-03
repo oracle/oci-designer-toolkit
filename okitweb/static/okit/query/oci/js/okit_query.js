@@ -34,7 +34,6 @@ class OkitOCIQuery {
 
     queryAllResources(request) {
         console.info('------------- All Resources Query --------------------');
-        console.warn(request);
         let me = this;
         this.region_query_count[request.region] = 1;
         $.ajax({
