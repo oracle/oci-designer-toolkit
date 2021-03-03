@@ -278,8 +278,8 @@ class OCIQuery(OCIConnection):
 
     def service_gateways(self, gateways, resources):
         for gateway in gateways:
-            if gateway["route_rule_id"] == None:
-                gateway["route_rule_id"] = ""
+            if gateway["route_table_id"] is None:
+                gateway["route_table_id"] = ""
                 for service in gateway['services']:
                     service_elements = service['service_name'].split()
                     del service_elements[1]
