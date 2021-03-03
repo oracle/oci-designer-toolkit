@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Database System Javascript');
@@ -21,11 +21,11 @@ class MySQLDatabaseSystem extends OkitArtifact {
         this.shape_name = '';
         this.configuration_id = '';
         this.subnet_id = '';
-        this.admin_username = '';
+        this.admin_username = 'admin';
         this.admin_password = '';
         this.description ='';
         this.mysql_version = '';
-        this.v = '';
+        this.port = '';
         this.port_x = '';
         this.data_storage_size_in_gb = 256;
         this.fault_domain = '';

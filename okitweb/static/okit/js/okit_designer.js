@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded Designer Javascript');
@@ -442,6 +442,10 @@ function loadTemplate(template_url) {
  */
 function displayQueryDialog() {
     $(jqId('modal_dialog_title')).text('Query OCI');
+    if (okitSettings.fast_discovery) {
+        $(jqId('modal_dialog_title')).text('OCI Introspection (Fast Discovery)');
+    //    document.getElementById('sub_compartments_row').classList.add('collapsed');
+    }
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
     let query_form = d3.select(d3Id('modal_dialog_body')).append('div').append('form')
@@ -524,6 +528,7 @@ function displayQueryDialog() {
                 .text('Retrieving..........');
     // Sub-Compartment
     tr = tbody.append('div')
+        .attr('id', 'sub_compartments_row')
         .attr('class', 'tr');
     tr.append('div').attr('class', 'td').text('');
     let td = tr.append('div').attr('class', 'td');
@@ -695,7 +700,7 @@ function showQueryResults() {
     newRegionsModel();
     if (regions.length > 0) {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
-        okitOCIQuery = new OkitOCIQuery(regions);
+        okitOCIQuery = new OkitOCIQuery(regions, okitSettings.fast_discovery);
         // Add Tabs
         $(jqId('region_progress')).empty();
         for (const [i, region] of regions.entries()) {
@@ -722,6 +727,7 @@ function showQueryResults() {
     $(jqId('modal_dialog_wrapper')).addClass('hidden');
     hideRecoverMenuItem();
 }
+/*
 $(document).ajaxStop(function() {
     console.info('All Ajax Functions Stopped');
     //$(jqId('modal_loading_wrapper')).addClass('hidden');
@@ -730,6 +736,7 @@ $(document).ajaxStop(function() {
     //displayTreeView();
     okitOCIQuery ? console.info(okitOCIQuery) : console.info('okitOCIQuery not defined');
 });
+ */
 /*
 ** Export the Model as various formats
  */
@@ -1033,6 +1040,36 @@ function displayValidationResults(results) {
         });
     }
     $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
+    // Process Information
+    tbody = d3.select(d3Id('validation_info_tbody'));
+    $(jqId('validation_info_tbody')).empty();
+    for (let warning of results.results.info) {
+        tr = tbody.append('div')
+            .attr('class', 'tr');
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.type);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.artefact);
+        tr.append('div')
+            .attr('class', 'td')
+            .text(warning.message);
+        // Highlight
+        let fill = d3.select(d3Id(warning.id)).attr('fill');
+        tr.on('mouseover', () => {
+            d3.select(d3Id(warning.id)).attr('fill', validate_warning_colour);
+        });
+        tr.on('mouseout', () => {
+            d3.select(d3Id(warning.id)).attr('fill', fill);
+        });
+        tr.on('click', () => {
+            warning_properties.push(warning.element);
+            d3.select(d3Id(warning.id + '-svg')).on("click")();
+            $('#toggle_properties_button').click();
+        });
+    }
+    $(jqId('validation_info_summary')).text(`Information (${results.results.info.length})`)
 }
 /*
 ** Model Pricing

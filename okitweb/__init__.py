@@ -1,5 +1,5 @@
 
-# Copyright (c) 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -15,6 +15,7 @@ import os
 
 from flask import Flask
 from flask import send_from_directory
+from flask import redirect
 
 def create_app(test_config=None):
     # Create and Configure OKIT Web Designer App
@@ -35,10 +36,10 @@ def create_app(test_config=None):
     # Add Upload location
     app.config['UPLOADS_FOLDER'] = '/okit/uploads'
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    # Redirect / to designer page
+    @app.route('/')
+    def base():
+        return redirect("/okit/designer")
 
     @app.route('/favicon.ico')
     def favicon():

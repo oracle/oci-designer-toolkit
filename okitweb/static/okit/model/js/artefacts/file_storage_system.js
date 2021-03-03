@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded File Storage System Javascript');
@@ -51,8 +51,8 @@ class FileStorageSystem extends OkitArtifact {
     convert() {
         super.convert();
         // Export Element
-        if (this.exports === undefined) {this.export = [];}
-        if (this.exports[0].export_options === undefined) {this.exports[0].export_options = {};}
+        if (this.exports === undefined) {this.exports = [];}
+        if (this.exports.length && this.exports[0].export_options === undefined) {this.exports[0].export_options = {};}
         if (this.path !== undefined) {this.exports[0].path = this.path; delete this.path;}
         if (this.source !== undefined) {this.exports[0].export_options.source = this.source; delete this.source;}
         if (this.access !== undefined) {this.exports[0].export_options.access = this.access; delete this.access;}
