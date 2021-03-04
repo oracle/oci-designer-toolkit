@@ -893,6 +893,7 @@ function displayOkitJson() {
 ** Draw Canvas
  */
 function displayDesignerView() {
+    okitJsonView = new OkitDesignerJsonView(okitJsonModel);
     okitJsonView.draw();
     setTitleDescription();
 }
