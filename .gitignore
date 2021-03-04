@@ -23,12 +23,8 @@ output/
 log/
 
 .scannerwork
-#/.scannerwork/
-#sonar-project.properties
 
 .vagrant
-
-config/
 
 containers/.oci
 **/*.pem
