@@ -234,6 +234,7 @@ class OkitTabularJsonView extends OkitJsonView {
             // Designer View Object
             const view_resource = this.getViewResource(resource.getArtifactReference(), resource.id);
             const tr = tbody.append('div').attr('class', 'tr').on('click', function() {view_resource.loadSlidePanels()});
+            self.addContextMenu(tr, resource_type, view_resource);
             if (first) {first = false; view_resource.loadSlidePanels();}
             Object.entries(property_map).forEach(([key, value]) => {
                 let cell_data = '';
@@ -255,6 +256,72 @@ class OkitTabularJsonView extends OkitJsonView {
                 tr.append('div').attr('class', 'td').text(cell_data);
             });
         }
+    }
+
+    addContextMenu(tr, resource_type, resource) {
+        const self = this;
+        tr.on("contextmenu", function () {
+            d3.event.preventDefault();
+            d3.event.stopPropagation();
+            const canvas_position = $(jqId("canvas-div")).offset();
+            const position = {top: d3.event.pageY - canvas_position.top, left: d3.event.pageX - 5};
+            $(jqId("context-menu")).empty();
+            $(jqId("context-menu")).css(position);
+            const contextmenu = d3.select(d3Id("context-menu"));
+            contextmenu.on('mouseenter', function () {
+                $(jqId("context-menu")).removeClass("hidden");
+            })
+                .on('mouseleave', function () {
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+
+            contextmenu.append('label')
+                .attr('class', 'okit-context-menu-title')
+                .text(resource.display_name)
+            const ul = contextmenu.append('ul')
+                .attr('class', 'okit-context-menu-list');
+            // Move Up
+            ul.append('li').append('a')
+                .attr('class', 'parent-item')
+                .attr('href', 'javascript:void(0)')
+                .text('Move Up')
+                .on('click', function () {
+                    self.move(resource_type, resource, -1);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+            // Move Down
+            ul.append('li').append('a')
+                .attr('class', 'parent-item')
+                .attr('href', 'javascript:void(0)')
+                .text('Move Down')
+                .on('click', function () {
+                    self.move(resource_type, resource, 1);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+            // Delete
+            ul.append('li').append('a')
+                .attr('class', 'parent-item')
+                .attr('href', 'javascript:void(0)')
+                .text('Delete')
+                .on('click', function () {
+                    resource.delete();
+                    self.loadTabContent(resource_type);
+                    $(jqId("context-menu")).addClass("hidden");
+                });
+            // Show
+            $(jqId("context-menu")).removeClass("hidden");
+        });
+    }
+
+    move(resource_type, resource, direction) {
+        const resource_list = this.okitjson[resource_type];
+        const idx = resource_list.findIndex(r => r.id === resource.id);
+        if ((idx > 0 && direction === -1) || (idx < resource_list.length -1 && direction === 1)) {
+            const res = resource_list[idx];
+            resource_list[idx] = resource_list[idx + direction];
+            resource_list[idx + direction] = res;
+        }
+        this.loadTabContent(resource_type);
     }
 
     getResource(lookup, id) {
