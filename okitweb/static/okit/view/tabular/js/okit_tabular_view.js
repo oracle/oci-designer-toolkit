@@ -295,7 +295,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 .attr('href', 'javascript:void(0)')
                 .text('Move Down')
                 .on('click', function () {
-                    self.move(resource_type, resource, -1);
+                    self.move(resource_type, resource, 1);
                     $(jqId("context-menu")).addClass("hidden");
                 });
             // Delete
