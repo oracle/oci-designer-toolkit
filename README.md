@@ -124,6 +124,19 @@ This properties file contains a list of the Git repositories you want to access.
 key access and the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
 defines the key/url mapping.
 
+```properties
+TCPKeepAlive yes
+
+Host *
+	ServerAliveInterval 240
+	ServerAliveCountMax 2
+	TCPKeepAlive yes
+	AddKeysToAgent yes
+
+Host github.com
+	IdentityFile ~/.ssh/id_rsa_github
+```
+
 
 #### Run Container
 

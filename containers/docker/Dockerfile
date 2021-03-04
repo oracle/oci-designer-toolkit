@@ -58,7 +58,7 @@ RUN yum install -y \
  && mkdir -p /okit/{config,git,log,ssl,visualiser,okitweb,workspace,templates,skeletons} \
  && mkdir -p /okit/okitweb/static/okit/templates \
  && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" \
- && ln -s /okit/templates/user /okit/okitweb/static/okit/templates/user \
+ && ln -s /okit/templates /okit/okitweb/static/okit/templates/user \
  && ln -s /okit/git /okit/okitweb/static/okit/templates/git \
  && ln -s /okit/git /okit/okitweb/static/okit/git
 # Copy source code
