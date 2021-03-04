@@ -111,7 +111,11 @@ If Git integration is required you will need to create a __git_repositories__ fi
 __&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
 
 ```properties
-[OKIT Community]
+[OKIT Community Templates]
+branch=main
+url=git@github.com:username/okit-community-templates.git
+  
+[Example Repo]
 branch = master
 url = git@url1.git
 
@@ -121,18 +125,10 @@ url = git@url2.git
 ```
 
 This properties file contains a list of the Git repositories you want to access. It assumes that you are using public/private
-key access and the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
-defines the key/url mapping.
+key access, the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
+defines the key/url mapping, similar to the following.
 
 ```properties
-TCPKeepAlive yes
-
-Host *
-	ServerAliveInterval 240
-	ServerAliveCountMax 2
-	TCPKeepAlive yes
-	AddKeysToAgent yes
-
 Host github.com
 	IdentityFile ~/.ssh/id_rsa_github
 ```
