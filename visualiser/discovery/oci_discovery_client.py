@@ -753,7 +753,10 @@ class OciResourceDiscoveryClient(object):
             retry_results = self.get_resources(retry_tasks)
             for region in retry_results:
                 for resource_type in retry_results[region]:
-                    results[region][resource_type].extend(retry_results[region][resource_type])
+                    if resource_type in results[region]:
+                        results[region][resource_type].extend(retry_results[region][resource_type])
+                    else:
+                        results[region][resource_type] = retry_results[region][resource_type]
         
         return results
 
