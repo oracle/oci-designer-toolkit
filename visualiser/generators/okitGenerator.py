@@ -1,5 +1,5 @@
 
-# Copyright (c) 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -7,7 +7,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 __author__ = "Andrew Hopkinson (Oracle Cloud Solutions A-Team)"
-__copyright__ = "Copyright (c) 2021, Oracle and/or its affiliates."
+__copyright__ = "Copyright (c) 2020, 2021, Oracle and/or its affiliates."
 __version__ = "1.0.0"
 __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -434,11 +434,14 @@ class OCIGenerator(object):
             self.removeJinja2Variable("cpu_core_count")
         # ---- Fault Domains
         if len(database_system["fault_domains"]) > 0:
+            logger.info("Fault Domains")
+            logger.info(database_system["fault_domains"])
             if isinstance(database_system["fault_domains"], list):
                 fault_domains = database_system["fault_domains"]
             else:
                 fault_domains = [database_system["fault_domains"]]
             self.addJinja2Variable("fault_domains", fault_domains, standardisedName)
+            self.jinja2_variables["fault_domains"] = fault_domains
         else:
             self.removeJinja2Variable("fault_domains")
         # ---- Cluster Name
@@ -624,6 +627,13 @@ class OCIGenerator(object):
                 self.addJinja2Variable("display_name", '{0!s:s}-{1!s:s}'.format(instance["display_name"], i + 1), standardisedName)
             # ---- Shape
             self.addJinja2Variable("shape", instance["shape"], standardisedName)
+            # ----- Flex Shapes
+            if instance.get("shape_config", {}).get("ocpus", 0) != 0 and instance["shape"].endswith(".Flex"):
+                shape_config = {
+                    "ocpus": instance["shape_config"]["ocpus"],
+                    "memory_in_gbs": instance["shape_config"]["memory_in_gbs"]
+                }
+                self.jinja2_variables["shape_config"] = shape_config
             # ---- Source Details
             # ----- Source Type
             self.addJinja2Variable("source_type", instance["source_details"]["source_type"], standardisedName)
@@ -820,6 +830,13 @@ class OCIGenerator(object):
         self.addJinja2Variable("display_name", loadbalancer["display_name"], standardisedName)
         # ---- Shape
         self.addJinja2Variable("shape", loadbalancer["shape"], standardisedName)
+        # ----- Flex Shapes
+        if loadbalancer.get("shape_details", {}).get("minimum_bandwidth_in_mbps", 0) != 0 and loadbalancer["shape"] == 'flexible':
+            shape_details = {
+                "minimum_bandwidth_in_mbps": loadbalancer["shape_details"]["minimum_bandwidth_in_mbps"],
+                "maximum_bandwidth_in_mbps": loadbalancer["shape_details"]["maximum_bandwidth_in_mbps"]
+            }
+            self.jinja2_variables["shape_details"] = shape_details
         # ---- Private
         self.addJinja2Variable("is_private", loadbalancer["is_private"], standardisedName)
         # ---- Subnets

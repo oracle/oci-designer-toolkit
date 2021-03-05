@@ -1,4 +1,4 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.17.0](CHANGELOG.md#version-0.17.0)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.18.0](CHANGELOG.md#version-0.18.0)
 
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
@@ -29,6 +29,13 @@ OCI environments through a graphical web based interface.
 
     OKIT will also allow the user to introspect existing OCI environments, through simple query functionality embedded within the
     web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
+  
+  _Note:_
+```diff
++ The 0.18.0 release introduces a new implementation of the Introspection/Query feature  
++ that improves performance on large queries. The use can return to the classic query 
++ functionality by unchecking Fast Discovery in the preferences.
+```
 
   
 ## Blogs
@@ -104,7 +111,11 @@ If Git integration is required you will need to create a __git_repositories__ fi
 __&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
 
 ```properties
-[OKIT Community]
+[OKIT Community Templates]
+branch=main
+url=git@github.com:username/okit-community-templates.git
+  
+[Example Repo]
 branch = master
 url = git@url1.git
 
@@ -114,8 +125,13 @@ url = git@url2.git
 ```
 
 This properties file contains a list of the Git repositories you want to access. It assumes that you are using public/private
-key access and the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
-defines the key/url mapping.
+key access, the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
+defines the key/url mapping, similar to the following.
+
+```properties
+Host github.com
+	IdentityFile ~/.ssh/id_rsa_github
+```
 
 
 #### Run Container

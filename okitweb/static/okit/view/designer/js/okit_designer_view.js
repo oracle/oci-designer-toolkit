@@ -1,5 +1,5 @@
 /*
-** Copyright (c) 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT Designer View Javascript');
@@ -369,7 +369,7 @@ class OkitDesignerArtefactView extends OkitArtefactView {
         $(jqId(select_id)).empty();
         const lb_select = $(jqId(select_id));
         for (let shape of okitOciData.getLoadBalaancerShapes()) {
-            lb_select.append($('<option>').attr('value', shape.name).text(shape.name));
+            lb_select.append($('<option>').attr('value', shape.name).text(titleCase(shape.name)));
         }
     }
 }

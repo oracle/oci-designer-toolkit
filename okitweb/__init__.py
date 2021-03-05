@@ -1,5 +1,5 @@
 
-# Copyright (c) 2021, Oracle and/or its affiliates.
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 """Provide Module Description
@@ -19,6 +19,7 @@ from flask import send_from_directory
 from flask import Response, session, redirect, url_for, render_template
 from authlib.integrations.flask_client import OAuth
 import base64, secrets, socket, urllib
+
 
 def create_app(test_config=None):
     # Create and Configure OKIT Web Designer App
@@ -48,10 +49,12 @@ def create_app(test_config=None):
     if 'OKIT_SERVER_BASE' not in app.config:
         app.config['OKIT_SERVER_BASE'] = 'http://' + socket.getfqdn()
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+
+    # Redirect / to designer page
+    @app.route('/')
+    def base():
+        return redirect("/okit/designer")
+
 
     @app.route('/favicon.ico')
     def favicon():

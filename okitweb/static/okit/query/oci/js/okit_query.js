@@ -1,15 +1,16 @@
 /*
-** Copyright (c) 2021, Oracle and/or its affiliates.
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
 console.info('Loaded OKIT OCI Query Javascript');
 
 class OkitOCIQuery {
-    constructor(regions = []) {
+    constructor(regions = [], fast_discovery=true) {
         this.regions = regions;
         this.region_query_count = {};
         this.complete_callback = undefined;
         this.active_region = '';
+        this.fast_discovery = fast_discovery;
     }
 
     query(request = null, complete_callback, region_complete_callback) {
@@ -26,9 +27,47 @@ class OkitOCIQuery {
                     this.active_region = region;
                 }
                 regionOkitJson[region] = new OkitJson();
-                this.queryRootCompartment(region_request);
+                this.fast_discovery ? this.queryAllResources(region_request) : this.queryRootCompartment(region_request);
             }
         }
+    }
+
+    queryAllResources(request) {
+        console.info('------------- All Resources Query --------------------');
+        let me = this;
+        this.region_query_count[request.region] = 1;
+        $.ajax({
+            type: 'get',
+            url: 'oci/query',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                console.log(resp)
+                const response_json = JSON.parse(resp);
+                const title = request.sub_compartments ? `Queried Compartment ${request.compartment_name} and Sub-Compartments` : `Queried Compartment ${request.compartment_name}`;
+                const description = `${title} in Region ${request.region}`;
+                regionOkitJson[request.region].load(response_json)
+                regionOkitJson[request.region].title = title;
+                regionOkitJson[request.region].description = description;
+            },
+            error: function(xhr, status, error) {
+                console.error('Status : ' + status);
+                console.error('Error  : ' + error);
+                const empty_compartment = {compartment_id: null, display_name: request.compartment_name, name: request.compartment_name};
+                regionOkitJson[request.region].load({compartments: [empty_compartment]})
+                regionOkitJson[request.region].title = 'Query Failed';
+                regionOkitJson[request.region].description = error;
+                if (error === 'UNAUTHORIZED') {
+                    const response = JSON.parse(xhr.responseText);
+                    console.error(response);
+                    regionOkitJson[request.region].description = `${response.error.code}: ${response.error.message}`;
+                }
+            },
+            complete: function () {
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
     }
 
     isComplete() {
