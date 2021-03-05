@@ -54,6 +54,7 @@ RUN yum install -y \
         pyyaml==5.3.1 \
         requests==2.24.0 \
         xlsxwriter==1.3.6 \
+	Authlib==0.15.3 \
 # Create Workspace
  && mkdir -p /okit/{config,git,log,ssl,visualiser,okitweb,workspace,templates,skeletons} \
  && mkdir -p /okit/okitweb/static/okit/templates \
@@ -64,6 +65,7 @@ RUN yum install -y \
 # Copy source code
 COPY config /okit/config
 COPY okitweb /okit/okitweb
+COPY instance /okit/instance
 COPY visualiser /okit/visualiser
 COPY skeletons /okit/skeletons
 COPY containers/oci/* /root/.oci/

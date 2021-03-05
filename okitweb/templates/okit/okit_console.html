@@ -47,7 +47,12 @@
             </div>
             <div class="okit-console-header-right">
                 <a id="config_link" class="hidden" href="#" onclick="showConfigErrors(); return false;"><img id="config_icon" class="config-icon" src="{{ url_for('static', filename='svg/config_error.svg') }}" title="OCI Config Error" alt="OCI Config Error"></a>
-                <a id="oci_link" href="https://console.us-phoenix-1.oraclecloud.com" target="_blank" rel="noopener noreferrer"><img id="cloud-icon" src="{{ url_for('static', filename='svg/cloud.svg') }}" title="OCI Console" alt="OCI Console"></a>
+		<!-- HERE -->
+		{% if session['username'] %}
+		<label style="color: white; text-decoration: none;">{{ session['username'] }}</label>&nbsp;&nbsp;<a href="{{ session['logout'] }}" style="color: white; text-decoration: none;">Logout</a>&nbsp;&nbsp;<a id="oci_link" href="https://console.{{ session['home_region'] }}.oraclecloud.com/?tenant={{ session['tenant'] }}&provider=OracleIdentityCloudService" target="_blank" rel="noopener noreferrer"><img id="cloud-icon" src="{{ url_for('static', filename='svg/cloud.svg') }}" title="OCI Console" alt="OCI Console"></a>
+		{% else %}
+		<a href="/okit/login" style="color: white; text-decoration: none;">Login</a>
+		{% endif %}
             </div>
         </div>
         <div class="main okit-console-main">

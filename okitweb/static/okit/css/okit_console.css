@@ -170,6 +170,7 @@ textarea {
     min-height: 50px;
     max-height: 50px;
     height: 50px;
+    width: 100%;
 
     border-bottom: #555555 1px solid;
     background-color: #1d2733;
@@ -177,10 +178,9 @@ textarea {
 }
 
 .okit-console-header-right {
-    display: block;
-    width: 80px;
+    margin: auto;
+    width: 20%;
     text-align: right;
-    align-items: end;
 }
 
 .okit-console-header-right > a {
