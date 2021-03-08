@@ -16,13 +16,15 @@ runcmd:
   - sudo bash -c "python3 -m pip install -U setuptools"
   - sudo bash -c "pip3 install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
   # Clone OKIT
-  - sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
-  - sudo bash -c "mkdir /okit/{log,workspace}"
+  - sudo bash -c "git clone -b toxophilist/auth --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
+  - sudo bash -c "mkdir /okit/{log,ssl,workspace}"
   # Add additional environment information because append does not appear to work in write_file
   - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
   - sudo bash -c "echo 'export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit' >> /etc/bashrc"
   - sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
   - sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g "compartmentID" --value-only`' >> /etc/bashrc"
+  # Generate ssl Self Sign Key
+  - sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
   # Copy GUnicorn Service File
   - sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.service > /etc/systemd/system/gunicorn.service'
   # Enable Gunicorn Service
