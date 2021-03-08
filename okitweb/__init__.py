@@ -83,7 +83,7 @@ def create_authenticated_app(test_config=None):
     app.secret_key = '8980ffsd675747jjjh'
     idcs_metadata_url = app.config['IDCS_API_BASE_URL'] + '/.well-known/openid-configuration'
     oauth = OAuth(app)
-    idcs = oauth.register(name='idcs',server_metadata_url=idcs_metadata_url,client_kwargs={'scope':'openid email profile'})
+    idcs = oauth.register(name='idcs', server_metadata_url=idcs_metadata_url, client_kwargs={'scope':'openid email profile'})
     if 'OKIT_SERVER_BASE' not in app.config:
         app.config['OKIT_SERVER_BASE'] = 'http://' + socket.getfqdn()
 
