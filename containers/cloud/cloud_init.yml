@@ -30,5 +30,8 @@ runcmd:
   # Enable Gunicorn Service
   - sudo systemctl enable gunicorn.service
   - sudo systemctl start gunicorn.service
+  # Open HTTPS Port on firewall
+  - sudo firewall-offline-cmd  --add-port=443/tcp
+  - sudo systemctl restart firewalld
 
 final_message: "**** The system is finally up, after $UPTIME seconds ****"
