@@ -17,7 +17,7 @@ Environment="OCI_CLI_AUTH=instance_principal"
 Environment="OKIT_VM_COMPARTMENT={COMPARTMENT_OCID}"
 RuntimeDirectory=gunicorn
 WorkingDirectory=/okit/workspace
-ExecStart=/usr/local/bin/gunicorn --workers=4 --limit-request-line 0 --timeout 120 --bind=0.0.0.0:80 okitweb.wsgi:app
+ExecStart=/usr/local/bin/gunicorn okitweb.wsgi_auth:app --config /okit/config/gunicorn_https.py
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed
 TimeoutStopSec=5

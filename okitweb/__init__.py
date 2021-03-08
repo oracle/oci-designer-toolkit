@@ -21,7 +21,7 @@ from authlib.integrations.flask_client import OAuth
 import base64, secrets, socket, urllib
 
 
-def create_app(test_config=None):
+def create_local_app(test_config=None):
     # Create and Configure OKIT Web Designer App
     app = Flask(__name__, instance_relative_config=True)
 
@@ -40,7 +40,45 @@ def create_app(test_config=None):
     # Add Upload location
     app.config['UPLOADS_FOLDER'] = '/okit/uploads'
 
-    # HERE
+    # Redirect / to designer page
+    @app.route('/')
+    def base():
+        return redirect("/okit/designer")
+
+    @app.route('/favicon.ico')
+    def favicon():
+        return send_from_directory(os.path.join(app.root_path, 'static'),
+                                   'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    from . import okitWebDesigner
+    app.register_blueprint(okitWebDesigner.bp)
+    from . import okitPricing
+    app.register_blueprint(okitPricing.bp)
+    from . import okitOci
+    app.register_blueprint(okitOci.bp)
+    from . import okitImport
+    app.register_blueprint(okitImport.bp)
+
+    return app
+
+def create_authenticated_app(test_config=None):
+    # Create and Configure OKIT Web Designer App
+    app = Flask(__name__, instance_relative_config=True)
+
+    # Load Config
+    if test_config is None:
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        app.config.from_mapping(test_config)
+
+    # Ensure if instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+
+    # Add Upload location
+    app.config['UPLOADS_FOLDER'] = '/okit/uploads'
+
     # The secret key must be static to be the same for all gunicorn workers
     app.secret_key = '8980ffsd675747jjjh'
     idcs_metadata_url = app.config['IDCS_API_BASE_URL'] + '/.well-known/openid-configuration'
@@ -49,19 +87,12 @@ def create_app(test_config=None):
     if 'OKIT_SERVER_BASE' not in app.config:
         app.config['OKIT_SERVER_BASE'] = 'http://' + socket.getfqdn()
 
-
-    # Redirect / to designer page
-    @app.route('/')
-    def base():
-        return redirect("/okit/designer")
-
-
     @app.route('/favicon.ico')
     def favicon():
         return send_from_directory(os.path.join(app.root_path, 'static'),
                                    'favicon.ico', mimetype='image/vnd.microsoft.icon')
     from . import okitWebDesigner
-    # HERE
+
     # Login Step 1 - Redirect to IDCS
     @okitWebDesigner.bp.route('/login', methods=(['GET', 'POST']))
     def login():
