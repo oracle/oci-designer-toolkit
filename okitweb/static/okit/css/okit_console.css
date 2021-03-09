@@ -185,11 +185,18 @@ textarea {
     margin: auto;
     width: 20%;
     text-align: left;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
 }
 
 .okit-console-header-centre {
     margin: auto;
     text-align: center;
+    vertical-align: middle;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
 }
 
 .okit-console-header-right {
@@ -198,11 +205,13 @@ textarea {
     width: 20%;
     text-align: right;
     vertical-align: middle;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
 }
 
 .okit-console-header-right > a {
     text-decoration: none;
-    display: table-cell;
     color: white;
     text-align: right;
     float: right;
