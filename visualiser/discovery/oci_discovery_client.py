@@ -301,8 +301,9 @@ class OciResourceDiscoveryClient(object):
         # return the "list_*" methods for a class
         return {method for method in dir(klass) if method.startswith('list_')}
 
-    def __init__(self, config, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
+    def __init__(self, config, signer, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
         self.config = config
+        self.signer = signer
         self.timeout = timeout
         self.max_workers = max_workers
         self.include_resource_types = set(include_resource_types) if include_resource_types else None
@@ -361,7 +362,7 @@ class OciResourceDiscoveryClient(object):
         return results
 
     def get_compartments(self):
-        identity = oci.identity.IdentityClient(self.config)
+        identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         return oci.pagination.list_call_get_all_results(identity.list_compartments, self.config["tenancy"], compartment_id_in_subtree=True).data
 
     def get_subcompartment_ids(self, compartment_id):
@@ -383,12 +384,12 @@ class OciResourceDiscoveryClient(object):
         return results
 
     def get_tenancy(self):
-        identity = oci.identity.IdentityClient(self.config)
+        identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         tenancy = identity.get_tenancy(self.config["tenancy"]).data
         return tenancy
 
     def get_regions(self, region_filter=None):
-        identity = oci.identity.IdentityClient(self.config)
+        identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         all_regions = identity.list_region_subscriptions(self.config["tenancy"]).data
         active_regions = [region for region in all_regions if region.status == "READY" and (region_filter == None or region.region_name in region_filter)]
         home_region = [region for region in all_regions if region.is_home_region]
