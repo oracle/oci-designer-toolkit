@@ -135,6 +135,10 @@ def create_authenticated_app(test_config=None):
     # Logout Step 3 - Local redirect to home page
     @okitWebDesigner.bp.route('/postlogout', methods=(['GET', 'POST']))
     def postlogout():
+        session.pop('username', None)
+        session.pop('logout', None)
+        session.pop('tenant', None)
+        session.pop('home_region', None)
         return redirect(url_for('okit.designer'), code=302)
 
     app.register_blueprint(okitWebDesigner.bp)
