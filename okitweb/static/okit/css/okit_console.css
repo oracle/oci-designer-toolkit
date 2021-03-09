@@ -213,6 +213,8 @@ textarea {
 .okit-console-header-right > a {
     font-size: small;
     vertical-align: middle;
+    min-height: 50px;
+    max-height: 50px;
     height: 50px;
     text-decoration: none;
     color: white;

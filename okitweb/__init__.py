@@ -20,6 +20,9 @@ from flask import Response, session, redirect, url_for, render_template
 from authlib.integrations.flask_client import OAuth
 import base64, secrets, socket, urllib
 
+from common.okitLogging import getLogger
+# Configure logging
+logger = getLogger()
 
 def create_local_app(test_config=None):
     # Create and Configure OKIT Web Designer App
@@ -109,6 +112,7 @@ def create_authenticated_app(test_config=None):
         session['username'] = userinfo['user_displayname']
         session['home_region'] = app.config['OCI_HOME_REGION']
         session['tenant'] = app.config['OCI_TENANT']
+        logger.info(f"App Config {app.config}")
         end_session_endpoint = idcs.server_metadata['end_session_endpoint']
         logout_redirect_url = {
             'post_logout_redirect_url' : app.config['OKIT_SERVER_BASE'] + url_for('okit.postlogout'),
