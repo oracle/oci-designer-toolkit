@@ -162,6 +162,10 @@ textarea {
     width: 100%;
 }
 
+.okit-header {
+    width: 100%;
+}
+
 .okit-console-header {
     padding-left: 0;
     padding-right: 2em;
@@ -177,8 +181,20 @@ textarea {
     align-items: center;
 }
 
+.okit-console-header-left {
+    margin: auto;
+    width: 20%;
+    text-align: left;
+}
+
+.okit-console-header-centre {
+    margin: auto;
+    text-align: center;
+}
+
 .okit-console-header-right {
     margin: auto;
+    padding-right: 20px;
     width: 20%;
     text-align: right;
 }
