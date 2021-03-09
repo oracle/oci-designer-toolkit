@@ -202,6 +202,13 @@ textarea {
 
 .okit-console-header-right > a {
     text-decoration: none;
+    display: table-cell;
+    color: white;
+    text-align: right;
+    float: right;
+}
+
+.okit-console-header-right > label {
     color: white;
 }
 
