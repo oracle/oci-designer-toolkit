@@ -327,7 +327,7 @@ class OciResourceDiscoveryClient(object):
                 self.compartments.update(self.get_subcompartment_ids(compartment_id))
 
         # object storage namespace
-        object_storage = oci.object_storage.ObjectStorageClient(self.config)
+        object_storage = oci.object_storage.ObjectStorageClient(config=self.config, signer=self.signer)
         self.object_storage_namespace = object_storage.get_namespace().data
 
 
