@@ -40,6 +40,9 @@ def create_local_app(test_config=None):
     # Add Upload location
     app.config['UPLOADS_FOLDER'] = '/okit/uploads'
 
+    # Set local
+    app.config['LOCAL'] = True
+
     # Redirect / to designer page
     @app.route('/')
     def base():
