@@ -477,7 +477,7 @@ class OciResourceDiscoveryClient(object):
             region_config = self.config.copy()
             region_config["region"] = region
             if klass == oci.key_management.KmsManagementClient:
-                client = klass(region_config, f"https://iaas.{region}.oraclecloud.com")
+                client = klass(config=region_config, service_endpoint=f"https://iaas.{region}.oraclecloud.com", signer=self.signer)
             else:
                 client = klass(config=region_config, signer=self.signer)
             client.base_client.timeout = (self.timeout, self.timeout)  # set connect timeout, read timeout
