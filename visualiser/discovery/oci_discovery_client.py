@@ -351,7 +351,7 @@ class OciResourceDiscoveryClient(object):
         """
         logger.debug(query)
 
-        search = oci.resource_search.ResourceSearchClient(region_config)
+        search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
         search_details = oci.resource_search.models.StructuredSearchDetails(
             type="Structured",
             query=query,
@@ -398,7 +398,7 @@ class OciResourceDiscoveryClient(object):
     def list_seachable_resource_types_for_region(self, region):
         region_config = self.config.copy()
         region_config["region"] = region
-        search = oci.resource_search.ResourceSearchClient(region_config)
+        search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
         all_searchable_resource_types = [resource_type.name for resource_type in oci.pagination.list_call_get_all_results(search.list_resource_types).data]
         return all_searchable_resource_types
 
@@ -466,10 +466,10 @@ class OciResourceDiscoveryClient(object):
 
         return results
 
-    # generic list resouces methods
+    # generic list resources methods
     # - `klass` the API Client Class for the resource type
-    # - `method_name` - resource specific the "list" resources menthod name
-    # - `region` - th eregion name to override in the config file
+    # - `method_name` - resource specific the "list" resources method name
+    # - `region` - the region name to override in the config file
     # - `compartment_id` - the compartment ocid to list resource in
     # - `**kwargs` - any extra ags to pass to the list method  
     def list_resources(self, klass, method_name, region, back_off=0.1, **kwargs):
@@ -479,7 +479,7 @@ class OciResourceDiscoveryClient(object):
             if klass == oci.key_management.KmsManagementClient:
                 client = klass(region_config, f"https://iaas.{region}.oraclecloud.com")
             else:
-                client = klass(region_config)
+                client = klass(config=region_config, signer=self.signer)
             client.base_client.timeout = (self.timeout, self.timeout)  # set connect timeout, read timeout
             result = getattr(client, method_name)(**kwargs)
             return(result.data)
