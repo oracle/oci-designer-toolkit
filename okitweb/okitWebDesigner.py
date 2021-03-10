@@ -141,6 +141,8 @@ def handle_exception(error):
 @bp.route('/designer', methods=(['GET']))
 def designer():
     local = current_app.config.get('LOCAL', False)
+    logger.info(f'>>>>>>>>>> Local : {local}')
+    logger.info(f">>>>>>>>>> username : {session.get('username', None)}")
     if not local and session.get('username', None) is not None:
         logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
         return login()
