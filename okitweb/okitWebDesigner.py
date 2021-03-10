@@ -141,8 +141,9 @@ def handle_exception(error):
 @bp.route('/designer', methods=(['GET']))
 def designer():
     local = current_app.config.get('LOCAL', False)
-    if not local and session['username']:
+    if not local and session.get('username', None) is not None:
         logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
+        return login()
     # Test if developer mode
     developer_mode = (request.args.get('developer', default='false') == 'true')
     if developer_mode:
