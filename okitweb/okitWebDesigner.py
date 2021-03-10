@@ -26,6 +26,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import request
 from flask import send_from_directory
+from flask import session
 from flask import jsonify
 from flask import current_app
 
@@ -140,6 +141,8 @@ def handle_exception(error):
 @bp.route('/designer', methods=(['GET']))
 def designer():
     local = current_app.config.get('LOCAL', False)
+    if not local and session['username']:
+        logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
     # Test if developer mode
     developer_mode = (request.args.get('developer', default='false') == 'true')
     if developer_mode:
