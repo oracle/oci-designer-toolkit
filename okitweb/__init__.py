@@ -149,7 +149,6 @@ def create_authenticated_app(test_config=None):
     from . import okitImport
     app.register_blueprint(okitImport.bp)
 
-    # HERE
     @app.route('/')
     def index():
         return login()

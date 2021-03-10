@@ -23,12 +23,14 @@ import glob
 import ast
 from git import Repo
 from flask import Blueprint
+from flask import current_app
+from flask import jsonify
+from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
 from flask import session
-from flask import jsonify
-from flask import current_app
+from flask import url_for
 
 import json
 from common.okitCommon import logJson
@@ -145,7 +147,7 @@ def designer():
     logger.info(f">>>>>>>>>> username : {session.get('username', None)}")
     if not local and session.get('username', None) is None:
         logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
-        return login()
+        return redirect(url_for('okit.login'), code=302)
     # Test if developer mode
     developer_mode = (request.args.get('developer', default='false') == 'true')
     if developer_mode:
