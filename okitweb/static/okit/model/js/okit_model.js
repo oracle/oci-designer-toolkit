@@ -952,7 +952,7 @@ class OkitJson {
             contentType: 'application/json',
             data: JSON.stringify(this),
             success: function(resp) {
-                console.info('Estimator Response : ' + resp);
+                //console.info('Estimator Response : ' + resp);
                 if (callback && callback !== null) callback(JSON.parse(resp));
             },
             error: function(xhr, status, error) {
