@@ -178,6 +178,17 @@ class OCIJsonValidator(object):
                 }
                 self.results['errors'].append(error)
             # Check Hostname
+            if artefact['database_edition'] == 'ENTERPRISE_EDITION_EXTREME_PERFORMANCE' and artefact['db_system_options']['storage_management'] == 'LVM':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Database System',
+                    'artefact': artefact['display_name'],
+                    'message': 'Can not configure RAC database with LVM.',
+                    'element': 'database_edition'
+                }
+                self.results['errors'].append(error)
+            # Check RAC / LVM
             if artefact['hostname'] == '':
                 self.valid = False
                 error = {
