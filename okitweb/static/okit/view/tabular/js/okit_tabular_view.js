@@ -43,6 +43,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Size in Gbs': {property: 'size_in_gbs'},
                 'Backup Policy': {property: 'backup_policy'},
                 'VPUS/Gb': {property: 'vpus_per_gb'},
+                'Attached Instances': {property: 'id', lookup: 'model.getInstanceByBlockVolumeId'},
             },
             customer_premise_equipments: {
                 'IP Address': {property: 'ip_address'},
@@ -69,7 +70,8 @@ class OkitTabularJsonView extends OkitJsonView {
                 'Availability Domain': {property: 'availability_domain'},
             },
             instances: {
-                'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'}
+                'Subnet': {property: 'subnet_id', lookup: 'model.getSubnet'},
+                'Block Volumes': {property: 'block_storage_volume_ids', lookup: 'model.getBlockStorageVolume'},
             },
             instance_pools: {},
             internet_gateways: {
@@ -244,7 +246,9 @@ class OkitTabularJsonView extends OkitJsonView {
                         cell_data = array_data.join(', ');
                     } else {
                         const lookup = this.getResource(value.lookup, resource[value.property]);
-                        if (lookup) {
+                        if (lookup && Array.isArray(lookup)) {
+                            cell_data = lookup.map(l => l.display_name).join(', ');
+                        } else if (lookup) {
                             cell_data = lookup.display_name;
                         } else {
                             cell_data = '';
