@@ -123,7 +123,9 @@ class OCIQuery(OCIConnection):
         logger.info('Request : {0!s:s}'.format(str(compartments)))
         logger.info('Request : {0!s:s}'.format(str(self.config)))
         logger.info('Request : {0!s:s}'.format(str(include_sub_compartments)))
-        discovery_client = OciResourceDiscoveryClient(self.config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
+        if self.instance_principal:
+            self.config['tenancy'] = self.getTenancy()
+        discovery_client = OciResourceDiscoveryClient(self.config, self.signer, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
         response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug(f"Response : {response}")

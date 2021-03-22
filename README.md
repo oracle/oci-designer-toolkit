@@ -49,13 +49,8 @@ OCI environments through a graphical web based interface.
 ## Installation
 Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
 
-_Note:_
-```diff
-- OKIT is designed to be installed as a local single user container and it is recommended that you 
-- do NOT install OKIT on an OCI Instance. Installing on an OCI Instance will leave you OCI Tenancy 
-- open to anyone who can find the IP address. If you do decide to install on an OCI Instance the 
-- OCI Designer Toolkit Installation Guide will give some recommendations for securing your Instance.
-```
+_Note:_ [For instructions on installing OKIT on an OCI Instance follow the instructions within the Installation guide.](documentation/Installation.md#install-on-oci-instance)
+
 
 ### Runtime Quick Start
 [Docker](https://www.docker.com/products/docker-desktop) is the recommended runtime container for OKIT. The project contains a top-level Dockerfile to facilitate direct
@@ -142,10 +137,8 @@ docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/t
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
 
-
 ## Usage / Examples
 The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](documentation/Usage.md)
-
 
 ## Changes
 
