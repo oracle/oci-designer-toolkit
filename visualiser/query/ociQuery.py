@@ -192,7 +192,7 @@ class OCIQuery(OCIConnection):
 
     def dynamic_routing_gateways(self, drgs, resources):
         for drg in drgs:
-            attachments = [a for a in resources["DrgAttachment"] if a["drg_id"] == drg["id"]]
+            attachments = [a for a in resources["DrgAttachment"] if a["drg_id"] == drg["id"]] if "DrgAttachment" in resources else []
             drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""
             drg["route_table_id"] = attachments[0]["route_table_id"] if len(attachments) else ""
         return drgs
