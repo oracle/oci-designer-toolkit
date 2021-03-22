@@ -123,7 +123,9 @@ class OCIQuery(OCIConnection):
         logger.info('Request : {0!s:s}'.format(str(compartments)))
         logger.info('Request : {0!s:s}'.format(str(self.config)))
         logger.info('Request : {0!s:s}'.format(str(include_sub_compartments)))
-        discovery_client = OciResourceDiscoveryClient(self.config, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
+        if self.instance_principal:
+            self.config['tenancy'] = self.getTenancy()
+        discovery_client = OciResourceDiscoveryClient(self.config, self.signer, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
         response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug(f"Response : {response}")
@@ -202,7 +204,8 @@ class OCIQuery(OCIConnection):
             export_sets = [e for e in resources["ExportSet"] if e["id"] in export_set_ids]
             fs["mount_targets"] = [m for m in resources["MountTarget"] if m["export_set_id"] in export_set_ids]
             for mt in fs["mount_targets"]:
-                mt["export_set"] = dict([e for e in export_sets if e["id"] == mt["export_set_id"]])
+                ess = [e for e in export_sets if e["id"] == mt["export_set_id"]]
+                mt["export_set"] = ess[0] if len(ess) else {}
         logger.info(jsonToFormattedString(file_storage_systems))
         return file_storage_systems
 

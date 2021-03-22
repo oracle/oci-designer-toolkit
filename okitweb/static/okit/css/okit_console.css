@@ -162,6 +162,15 @@ textarea {
     width: 100%;
 }
 
+.okit-header {
+    width: 100%;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
+    padding: 0;
+    margin: 0;
+}
+
 .okit-console-header {
     padding-left: 0;
     padding-right: 2em;
@@ -170,20 +179,54 @@ textarea {
     min-height: 50px;
     max-height: 50px;
     height: 50px;
+    width: 100%;
 
     border-bottom: #555555 1px solid;
     background-color: #1d2733;
     align-items: center;
 }
 
+.okit-console-header-left {
+    margin: auto;
+    width: 20%;
+    text-align: left;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
+}
+
+.okit-console-header-centre {
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
+}
+
 .okit-console-header-right {
-    display: block;
-    width: 80px;
+    margin: auto;
+    padding-right: 20px;
+    width: 20%;
     text-align: right;
-    align-items: end;
+    vertical-align: middle;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
 }
 
 .okit-console-header-right > a {
+    font-size: small;
+    vertical-align: middle;
+    min-height: 50px;
+    max-height: 50px;
+    height: 50px;
+    text-decoration: none;
+    color: white;
+}
+
+.okit-console-header-right > label {
+    color: white;
 }
 
 .config-icon {

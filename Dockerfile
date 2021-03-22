@@ -43,22 +43,23 @@ RUN yum install -y \
 # Install required python modules
  && pip3 install --no-cache-dir \
         authlib==0.15.3 \
-        flask==1.1.1 \
-        gitpython==3.1.11 \
+        flask==1.1.2 \
+        gitpython==3.1.14 \
         git-url-parse==1.2.2 \
         gunicorn==20.0.4 \
         oci \
-        openpyxl==3.0.5 \
+        openpyxl==3.0.7 \
         pandas==1.1.2 \
-        python-magic==0.4.18 \
-        pyyaml==5.3.1 \
-        requests==2.24.0 \
-        xlsxwriter==1.3.6 \
+        python-magic==0.4.22 \
+        pyyaml==5.4.1 \
+        requests==2.25.1 \
+        xlsxwriter==1.3.7 \
 # Create Workspace
  && mkdir -p /github \
  && git clone https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
- && mkdir -p /okit/{log,workspace,ssl} \
+ && mkdir -p /okit/{config,log,workspace,ssl} \
  && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" \
+ && ln -sv /github/oci-designer-toolkit/config /okit/config \
  && ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb \
  && ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser \
  && mkdir -p /okit/okitweb/static/okit/templates \

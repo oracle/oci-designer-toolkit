@@ -10,20 +10,28 @@ write_files:
 
 runcmd:
   # Install Required Packages because the packages section may not complete before the runcmd
-  - sudo bash -c "yum install -y git python-oci-cli oci-utils"
+  - sudo bash -c "yum install -y git openssl python-oci-cli oci-utils"
   # Install Required Python Modules
-  - sudo bash -c "pip3 install --no-cache-dir authlib==0.15.3 flask==1.1.1 gitpython==3.1.11 git-url-parse==1.2.2 gunicorn==20.0.4 oci oci-cli openpyxl==3.0.5 pandas==1.1.2 python-magic==0.4.18 pyyaml==5.3.1 requests==2.24.0 xlsxwriter==1.3.6"
+  - sudo bash -c "python3 -m pip install -U pip"
+  - sudo bash -c "python3 -m pip install -U setuptools"
+  - sudo bash -c "pip3 install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
   # Clone OKIT
-  - sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
-  - sudo bash -c "mkdir /okit/{log,workspace}"
+  - sudo bash -c "git clone -b toxophilist/auth --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
+  - sudo bash -c "mkdir /okit/{log,ssl,workspace}"
   # Add additional environment information because append does not appear to work in write_file
   - sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
+  - sudo bash -c "echo 'export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit' >> /etc/bashrc"
   - sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
   - sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g "compartmentID" --value-only`' >> /etc/bashrc"
+  # Generate ssl Self Sign Key
+  - sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
   # Copy GUnicorn Service File
   - sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.service > /etc/systemd/system/gunicorn.service'
   # Enable Gunicorn Service
   - sudo systemctl enable gunicorn.service
   - sudo systemctl start gunicorn.service
+  # Open Firewall
+  - sudo firewall-offline-cmd  --add-port=443/tcp
+  - sudo systemctl restart firewalld
 
 final_message: "**** The system is finally up, after $UPTIME seconds ****"
