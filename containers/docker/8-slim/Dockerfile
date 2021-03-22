@@ -38,17 +38,17 @@ RUN microdnf install -y \
 # Install required python modules
  && pip3 install --no-cache-dir \
         authlib==0.15.3 \
-        flask==1.1.1 \
-        gitpython==3.1.11 \
+        flask==1.1.2 \
+        gitpython==3.1.14 \
         git-url-parse==1.2.2 \
         gunicorn==20.0.4 \
         oci \
-        openpyxl==3.0.5 \
+        openpyxl==3.0.7 \
         pandas==1.1.2 \
-        python-magic==0.4.18 \
-        pyyaml==5.3.1 \
-        requests==2.24.0 \
-        xlsxwriter==1.3.6 \
+        python-magic==0.4.22 \
+        pyyaml==5.4.1 \
+        requests==2.25.1 \
+        xlsxwriter==1.3.7 \
 # Create Workspace
  && mkdir -p /okit/{config,git,log,ssl,visualiser,okitweb,workspace,templates,skeletons} \
  && mkdir -p /okit/okitweb/static/okit/templates \
