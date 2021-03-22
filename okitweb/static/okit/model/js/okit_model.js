@@ -471,6 +471,9 @@ class OkitJson {
             }
         }
     }
+    getInstanceByBlockVolumeId(id) {
+        return this.getInstances().filter(i => i.block_storage_volume_ids.includes(id));
+    }
 
     // InstancePool
     newInstancePool(data) {
