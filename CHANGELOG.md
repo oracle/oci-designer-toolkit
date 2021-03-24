@@ -11,6 +11,7 @@
 1. Description of SecList rules in OKIT is not transferred to the actual deployment in the Resource Mgr (Issue #272).
 2. Cost estimation shows "Updated" and "OKIT version" as first 2 lines (Issue #270).
 3. Validation issue: should not be able to choose Logical Volume Management when provisioning a RAC db in DBCS (Issue #271).
+4. Add validation for IPSec DRG / CPE & Remote Peering DRG
 
 
 ## Version 0.18.0
