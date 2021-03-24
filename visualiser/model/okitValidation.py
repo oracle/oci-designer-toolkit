@@ -45,6 +45,7 @@ class OCIJsonValidator(object):
         self.validateNATGateways()
         self.validateNetworkSecurityGroups()
         self.validateObjectStorageBuckets()
+        self.validateRemotePeeringConnections()
         self.validateRouteTables()
         self.validateSecurityLists()
         self.validateServiceGateways()
@@ -178,6 +179,17 @@ class OCIJsonValidator(object):
                 }
                 self.results['errors'].append(error)
             # Check Hostname
+            if artefact['database_edition'] == 'ENTERPRISE_EDITION_EXTREME_PERFORMANCE' and artefact['db_system_options']['storage_management'] == 'LVM':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Database System',
+                    'artefact': artefact['display_name'],
+                    'message': 'Can not configure RAC database with LVM.',
+                    'element': 'database_edition'
+                }
+                self.results['errors'].append(error)
+            # Check RAC / LVM
             if artefact['hostname'] == '':
                 self.valid = False
                 error = {
@@ -258,6 +270,26 @@ class OCIJsonValidator(object):
                     'artefact': artefact['display_name'],
                     'message': 'Static Routes must be specified.',
                     'element': 'static_routes'
+                }
+                self.results['errors'].append(error)
+            if artefact['drg_id'] is None or artefact['drg_id'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'IPSec Connection',
+                    'artefact': artefact['display_name'],
+                    'message': 'DRG must be specified.',
+                    'element': 'drg_id'
+                }
+                self.results['errors'].append(error)
+            if artefact['cpe_id'] is None or artefact['cpe_id'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'IPSec Connection',
+                    'artefact': artefact['display_name'],
+                    'message': 'Customer Premise must be specified.',
+                    'element': 'cpe_id'
                 }
                 self.results['errors'].append(error)
 
@@ -354,6 +386,21 @@ class OCIJsonValidator(object):
     def validateObjectStorageBuckets(self):
         for artefact in self.okit_json.get('object_storage_buckets', []):
             logger.info('Validating {!s}'.format(artefact['display_name']))
+
+    # Remote Peering Connection
+    def validateRemotePeeringConnections(self):
+        for artefact in self.okit_json.get('remote_peering_connections', []):
+            logger.info('Validating {!s}'.format(artefact['display_name']))
+            if artefact['drg_id'] is None or artefact['drg_id'] == '':
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Remote Peering Connection',
+                    'artefact': artefact['display_name'],
+                    'message': 'DRG must be specified.',
+                    'element': 'drg_id'
+                }
+                self.results['errors'].append(error)
 
     # Route Tables
     def validateRouteTables(self):

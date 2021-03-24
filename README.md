@@ -1,4 +1,4 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.18.0](CHANGELOG.md#version-0.18.0)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.19.0](CHANGELOG.md#version-0.19.0)
 
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
@@ -49,13 +49,8 @@ OCI environments through a graphical web based interface.
 ## Installation
 Detailed OKIT Installation steps can be found in the [OCI Designer Toolkit Installation Guide](documentation/Installation.md).
 
-_Note:_
-```diff
-- OKIT is designed to be installed as a local single user container and it is recommended that you 
-- do NOT install OKIT on an OCI Instance. Installing on an OCI Instance will leave you OCI Tenancy 
-- open to anyone who can find the IP address. If you do decide to install on an OCI Instance the 
-- OCI Designer Toolkit Installation Guide will give some recommendations for securing your Instance.
-```
+_Note:_ [For instructions on installing OKIT on an OCI Instance follow the instructions within the Installation guide.](documentation/Installation.md#install-on-oci-instance)
+
 
 ### Runtime Quick Start
 [Docker](https://www.docker.com/products/docker-desktop) is the recommended runtime container for OKIT. The project contains a top-level Dockerfile to facilitate direct
@@ -111,7 +106,11 @@ If Git integration is required you will need to create a __git_repositories__ fi
 __&lt;USER HOME DIR&gt;/.oci__ with contents similar to that below.
 
 ```properties
-[OKIT Community]
+[OKIT Community Templates]
+branch=main
+url=git@github.com:username/okit-community-templates.git
+  
+[Example Repo]
 branch = master
 url = git@url1.git
 
@@ -121,8 +120,13 @@ url = git@url2.git
 ```
 
 This properties file contains a list of the Git repositories you want to access. It assumes that you are using public/private
-key access and the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
-defines the key/url mapping.
+key access, the key files exist within your __&lt;USER HOME DIR&gt;/.ssh__ directory and the __&lt;USER HOME DIR&gt;/.ssh/config__
+defines the key/url mapping, similar to the following.
+
+```properties
+Host github.com
+	IdentityFile ~/.ssh/id_rsa_github
+```
 
 
 #### Run Container
@@ -133,10 +137,8 @@ docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/t
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
 
-
 ## Usage / Examples
 The OKIT User / Usage Guide and worked examples can be found in the [OCI Designer Toolkit Usage Guide](documentation/Usage.md)
-
 
 ## Changes
 

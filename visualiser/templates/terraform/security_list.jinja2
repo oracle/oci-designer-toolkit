@@ -20,6 +20,9 @@ resource "oci_core_security_list" "{{ resource_name }}" {
     {% if rule.destination_type is defined %}
         destination_type  = {{ rule.destination_type | safe }}
     {% endif %}
+    {% if rule.description is defined %}
+        description  = {{ rule.description | safe }}
+    {% endif %}
     {% if rule.tcp_options is defined %}
         tcp_options {
         {% if rule.tcp_options.destination_port_range is defined %}
@@ -66,6 +69,9 @@ resource "oci_core_security_list" "{{ resource_name }}" {
         # Optional
     {% if rule.source_type is defined %}
         source_type  = {{ rule.source_type | safe }}
+    {% endif %}
+    {% if rule.description is defined %}
+        description  = {{ rule.description | safe }}
     {% endif %}
     {% if rule.tcp_options is defined %}
         tcp_options {

@@ -12,9 +12,9 @@ __version__ = "1.0.0"
 __module__ = "wsgi"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-from okitweb import create_local_app
+from okitweb import create_authenticated_app
 
-app = create_local_app()
+app = create_authenticated_app()
 
 # Main function to kick off processing
 if __name__ == "__main__":

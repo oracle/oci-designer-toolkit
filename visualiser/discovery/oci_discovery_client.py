@@ -301,8 +301,9 @@ class OciResourceDiscoveryClient(object):
         # return the "list_*" methods for a class
         return {method for method in dir(klass) if method.startswith('list_')}
 
-    def __init__(self, config, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
+    def __init__(self, config, signer, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
         self.config = config
+        self.signer = signer
         self.timeout = timeout
         self.max_workers = max_workers
         self.include_resource_types = set(include_resource_types) if include_resource_types else None
@@ -326,7 +327,7 @@ class OciResourceDiscoveryClient(object):
                 self.compartments.update(self.get_subcompartment_ids(compartment_id))
 
         # object storage namespace
-        object_storage = oci.object_storage.ObjectStorageClient(self.config)
+        object_storage = oci.object_storage.ObjectStorageClient(config=self.config, signer=self.signer)
         self.object_storage_namespace = object_storage.get_namespace().data
 
 
@@ -350,7 +351,7 @@ class OciResourceDiscoveryClient(object):
         """
         logger.debug(query)
 
-        search = oci.resource_search.ResourceSearchClient(region_config)
+        search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
         search_details = oci.resource_search.models.StructuredSearchDetails(
             type="Structured",
             query=query,
@@ -361,7 +362,7 @@ class OciResourceDiscoveryClient(object):
         return results
 
     def get_compartments(self):
-        identity = oci.identity.IdentityClient(self.config)
+        identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         return oci.pagination.list_call_get_all_results(identity.list_compartments, self.config["tenancy"], compartment_id_in_subtree=True).data
 
     def get_subcompartment_ids(self, compartment_id):
@@ -383,12 +384,12 @@ class OciResourceDiscoveryClient(object):
         return results
 
     def get_tenancy(self):
-        identity = oci.identity.IdentityClient(self.config)
+        identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         tenancy = identity.get_tenancy(self.config["tenancy"]).data
         return tenancy
 
     def get_regions(self, region_filter=None):
-        identity = oci.identity.IdentityClient(self.config)
+        identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         all_regions = identity.list_region_subscriptions(self.config["tenancy"]).data
         active_regions = [region for region in all_regions if region.status == "READY" and (region_filter == None or region.region_name in region_filter)]
         home_region = [region for region in all_regions if region.is_home_region]
@@ -397,7 +398,7 @@ class OciResourceDiscoveryClient(object):
     def list_seachable_resource_types_for_region(self, region):
         region_config = self.config.copy()
         region_config["region"] = region
-        search = oci.resource_search.ResourceSearchClient(region_config)
+        search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
         all_searchable_resource_types = [resource_type.name for resource_type in oci.pagination.list_call_get_all_results(search.list_resource_types).data]
         return all_searchable_resource_types
 
@@ -465,10 +466,10 @@ class OciResourceDiscoveryClient(object):
 
         return results
 
-    # generic list resouces methods
+    # generic list resources methods
     # - `klass` the API Client Class for the resource type
-    # - `method_name` - resource specific the "list" resources menthod name
-    # - `region` - th eregion name to override in the config file
+    # - `method_name` - resource specific the "list" resources method name
+    # - `region` - the region name to override in the config file
     # - `compartment_id` - the compartment ocid to list resource in
     # - `**kwargs` - any extra ags to pass to the list method  
     def list_resources(self, klass, method_name, region, back_off=0.1, **kwargs):
@@ -476,9 +477,9 @@ class OciResourceDiscoveryClient(object):
             region_config = self.config.copy()
             region_config["region"] = region
             if klass == oci.key_management.KmsManagementClient:
-                client = klass(region_config, f"https://iaas.{region}.oraclecloud.com")
+                client = klass(config=region_config, service_endpoint=f"https://iaas.{region}.oraclecloud.com", signer=self.signer)
             else:
-                client = klass(region_config)
+                client = klass(config=region_config, signer=self.signer)
             client.base_client.timeout = (self.timeout, self.timeout)  # set connect timeout, read timeout
             result = getattr(client, method_name)(**kwargs)
             return(result.data)
@@ -753,7 +754,10 @@ class OciResourceDiscoveryClient(object):
             retry_results = self.get_resources(retry_tasks)
             for region in retry_results:
                 for resource_type in retry_results[region]:
-                    results[region][resource_type].extend(retry_results[region][resource_type])
+                    if resource_type in results[region]:
+                        results[region][resource_type].extend(retry_results[region][resource_type])
+                    else:
+                        results[region][resource_type] = retry_results[region][resource_type]
         
         return results
 

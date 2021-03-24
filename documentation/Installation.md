@@ -19,8 +19,10 @@ python modules are installed and in addition provide a simple flask server that 
         2. [Docker](#docker)
         3. [Vagrant](#vagrant)
 4. [Install on OCI Instance](#install-on-oci-instance)
-    1. [Policies](#policies)
-    2. [SSH Tunnel](#ssh-tunnel)
+    1. [OpenID Connect Configuration for IDCS](#openid-connect-configuration-for-idcs)
+    2. [Dynamic Group](#dynamic-group)
+    3. [Policies](#policies)
+    4. [SSH Tunnel](#ssh-tunnel)
 
 
 
@@ -274,29 +276,82 @@ To install OKIT and run it within an OCI instance you will need to configure [In
 functionality within your Tenancy to allow the OKIT Instance to access OCI API and Query the Tenancy / Access Resource Manager.
 
 When creating the Instance it is recommended the Instance is within its own Virtual Cloud Network / Subnet. The Subnet should 
-be secured with a Security List that __only__ allows TCP/22 port access to the Instance to allow the configuration of a [SSH Tunnel](#ssh-tunnel)
-to restrict access to the Instance to authorised users. 
+be secured with a Security List that __only__ allows TCP/22 and TCP/443 port access to the Instance to allow the configuration of a [SSH Tunnel](#ssh-tunnel)
+to restrict access to the Instance to authorised users or https authenticated using the OCI console login. 
 
 Once the Instance has been created the following commands will install OKIT and create the service to run the WebServer.
 ```bash
 # Install Required Packages because the packages section may not complete before the runcmd
-sudo bash -c "yum install -y git python-oci-cli oci-utils"
+sudo bash -c "yum install -y git openssl python-oci-cli oci-utils"
 # Install Required Python Modules
-sudo bash -c "pip3 install --no-cache-dir flask==1.1.1 gitpython==3.1.11 git-url-parse==1.2.2 gunicorn==20.0.4 oci==2.22.0 oci-cli==2.14.1 pandas==1.1.2 python-magic==0.4.18 pyyaml==5.3.1 requests==2.24.0 xlsxwriter==1.3.6"
+sudo bash -c "python3 -m pip install -U pip"
+sudo bash -c "python3 -m pip install -U setuptools"
+sudo bash -c "pip3 install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
-sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
-sudo bash -c "mkdir /okit/{log,workspace}"
+sudo bash -c "git clone -b toxophilist/auth --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
+sudo bash -c "mkdir /okit/{log,ssl,workspace}"
 # Add additional environment information because append does not appear to work in write_file
+sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
+sudo bash -c "echo 'export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit' >> /etc/bashrc"
 sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
 sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g "compartmentID" --value-only`' >> /etc/bashrc"
+# Generate ssl Self Sign Key
+sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
 # Copy GUnicorn Service File
 sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.service > /etc/systemd/system/gunicorn.service'
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
 sudo systemctl start gunicorn.service
+# Open Firewall
+sudo firewall-offline-cmd  --add-port=443/tcp
+sudo systemctl restart firewalld
 ```
 
 The __okit-ws.json__ file in the containers/cloud sub-directory can be used to create vcn/subnet/instance.
+
+### OpenID Connect Configuration for IDCS
+
+To use OpenID Connect with IDCS two configurations are required.
+
+#### Setup of IDCS
+Ask your administrator to update the primary (default) IDCS instance of your tenancy. This instance is often labled as OracleIdentityCloudService in the OCI Console login screen drop down.
+
+In the steps we use <server_base_url>. The format is protocol://fully.qualified.host.name.
+
+Configuration steps:
+1. Select Identity -> Federation from the OCI Console Hamburger Menu. ![Identity Federation](images/Identity_Federation.png?raw=true "Identity Federation")
+1. From the Cloud Provider Select the "Oracle Identity Cloud Service Console" url. ![Cloud Provider](images/Identity_Cloud_Provider.png?raw=true "Cloud Provider")
+1. Log into IDCS admin console (e.g. https://idcs-aabbccddee6677889900ddhhaa.identity.oraclecloud.com/ui/v1/adminconsole)
+1. From the hamburger menu on the upper left, select Applications.
+1. Click 'Add' ![Identity Application](images/Identity_Application.png?raw=true "Identity Application")
+1. In the 'Add Application' window select 'Confidential Application'![Confidential Application](images/Identity_Confidential_App.png?raw=true "Confidential Application")
+    1. In 'App Details' enter
+        1. A unique 'Name'
+        1. For 'Custom Logout URL' enter <server_base_url>/okit/postlogout
+        1. Click 'Next'
+1. In the Client step select 'Configure this application as a client now'
+    1. In the Authorization section:
+        1. Select the 'Grant Types': Client Credentials, JWT Assertion, Refresh Token, and Authorization Code
+        1. Set the 'Redirect URL' to <server_base_url>/okit/postlogin.
+        1. Set the 'Logout URL' to <server_base_url>/okit/logout.
+        1. Set the 'Post Logout URL' to <server_base_url>/okit/postlogout.
+1. Click 'Next' until the 'Finish' button can be selected.
+1. Click 'Finish'
+1. An 'Application Added' window shows the values for Client ID and Client Secret. Copy both values for later use. Click on 'Close' to close the window.
+1. Click 'Activate' to enable the configuration.
+
+#### OKIT Configuration File
+
+OKIT has one configuration file that must be updated. It requires these values:
+* home_region - Get this value from your Oracle Cloud Infrastructure admin
+* tenant_name - Get this value from your Oracle Cloud Infrastructure admin
+* client_id - Get this value from the IDCS Confidential Application configuration (see above)
+* client_secret - Get this value from the IDCS Confidential Application configuration (see above)
+* idcs_instance_id - The IDCS instance id is part of the IDCS URL, e.g., the URL is https://idcs-aabbccddee6677889900ddhhaa.identity.oraclecloud.com and the value is aabbccddee6677889900ddhhaa
+* server_base_url - The OKIT fully qualified server base URL. The value you used during the IDCS configuration. The format is protocol://fully.qualified.host.name.
+
+The OKIT configuration file is located in the directory 'instance'.
+* config.py - Replace the values for <idcs_instance_id>, <client_id>, <client_secrect>, and <server_base_url> with the respective values.
 
 ### Dynamic Group
 A Tenancy level Dynamic Group will need to be created to enable Instance Principal access for the instance.

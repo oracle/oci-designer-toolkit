@@ -1074,8 +1074,9 @@ function displayValidationResults(results) {
 /*
 ** Model Pricing
  */
-function displayPricingResults(results) {
+function displayPricingResults(pricing) {
     console.info('Displaying Pricing Results');
+    const results = pricing.filter(result => result.RESOURCENAME !== 'updated' && result.RESOURCENAME !== 'okit_version')
     $(jqId(COST_ESTIMATE_PANEL)).empty();
     let summary = results.pop();
 

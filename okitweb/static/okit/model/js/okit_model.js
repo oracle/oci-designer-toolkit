@@ -471,6 +471,9 @@ class OkitJson {
             }
         }
     }
+    getInstanceByBlockVolumeId(id) {
+        return this.getInstances().filter(i => i.block_storage_volume_ids.includes(id));
+    }
 
     // InstancePool
     newInstancePool(data) {
@@ -952,7 +955,7 @@ class OkitJson {
             contentType: 'application/json',
             data: JSON.stringify(this),
             success: function(resp) {
-                console.info('Estimator Response : ' + resp);
+                //console.info('Estimator Response : ' + resp);
                 if (callback && callback !== null) callback(JSON.parse(resp));
             },
             error: function(xhr, status, error) {

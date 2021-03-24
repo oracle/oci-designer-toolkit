@@ -23,10 +23,14 @@ import glob
 import ast
 from git import Repo
 from flask import Blueprint
+from flask import current_app
+from flask import jsonify
+from flask import redirect
 from flask import render_template
 from flask import request
 from flask import send_from_directory
-from flask import jsonify
+from flask import session
+from flask import url_for
 
 import json
 from common.okitCommon import logJson
@@ -138,6 +142,10 @@ def handle_exception(error):
 
 @bp.route('/designer', methods=(['GET']))
 def designer():
+    local = current_app.config.get('LOCAL', False)
+    if not local and session.get('username', None) is None:
+        logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
+        return redirect(url_for('okit.login'), code=302)
     # Test if developer mode
     developer_mode = (request.args.get('developer', default='false') == 'true')
     if developer_mode:
@@ -245,6 +253,7 @@ def designer():
                            fragment_icons=fragment_icons,
                            okit_templates_groups=template_groups,
                            okit_template_categories=template_categories,
+                           local_okit=local,
                            developer_mode=developer_mode, experimental_mode=experimental_mode)
 
 

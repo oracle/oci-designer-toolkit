@@ -109,7 +109,9 @@
                     <li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save To Git</a></li>
                 </ul>
             </li>
+            {% if local_okit or session['username'] %}
             <li><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOci()">Query</a></li>
+            {% endif %}
             <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li>
             <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
         </ul>
@@ -185,6 +187,7 @@
                     <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleGit()">Git</a></li>
                 </ul>
             </li>
+            {% if local_okit or session['username'] %}
             <!--li id="image_export" class="sub-header-item dropdown">
                 <span>Resource Manager</span>
                 <ul class="dropdown-content">
@@ -193,9 +196,10 @@
                     <li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerGit()">Git</a></li>
                 </ul>
             </li-->
+            <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
+            {% endif %}
             <!--li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
             <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li-->
-            <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
             <!--li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Resource Manager VCS</a></li-->
             <li><a id="generate-markdown-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToMarkdownLocal()">Markdown</a></li>
         </ul>
