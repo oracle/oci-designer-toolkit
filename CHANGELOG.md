@@ -3,6 +3,11 @@
 
 ## Version 0.19.0
 **Release Date**: 24th March 2021
+### Bug Fixes
+1. Fix Config directory Mount Issue when building from GitHub
+
+## Version 0.19.0
+**Release Date**: 24th March 2021
 ### Features
 1. Add OCI console Authentication when running OKIT server within an OCI instance. This still requires Instance Principal but secures the OKIT designer pages.
 2. Enhancement request: Show block volume attachments to instances in the tabular view (Issue #265)
