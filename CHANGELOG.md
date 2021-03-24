@@ -1,6 +1,11 @@
 # Release Notes
 
 
+## Version 0.19.1
+**Release Date**: 24th March 2021
+### Bug Fixes
+1. Fix Config directory Mount Issue when building from GitHub
+
 ## Version 0.19.0
 **Release Date**: 24th March 2021
 ### Features

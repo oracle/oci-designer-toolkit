@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.19.0" \
+      "version"="0.19.1" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2021, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
@@ -57,7 +57,7 @@ RUN yum install -y \
 # Create Workspace
  && mkdir -p /github \
  && git clone https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
- && mkdir -p /okit/{config,log,workspace,ssl} \
+ && mkdir -p /okit/{log,workspace,ssl} \
  && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" \
  && ln -sv /github/oci-designer-toolkit/config /okit/config \
  && ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb \
