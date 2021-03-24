@@ -6,6 +6,7 @@
 ### Features
 1. Add OCI console Authentication when running OKIT server within an OCI instance. This still requires Instance Principal but secures the OKIT designer pages.
 2. Enhancement request: Show block volume attachments to instances in the tabular view (Issue #265)
+3. Add Freeform Tag "OKITStack" to OKIT Generated Resource Manager Stacks
 
 ### Bug Fixes
 1. Description of SecList rules in OKIT is not transferred to the actual deployment in the Resource Mgr (Issue #272).

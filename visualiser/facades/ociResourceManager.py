@@ -55,7 +55,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
     def createStack(self, stack):
         logger.debug('<<<<<<<<<<<<< Stack Detail >>>>>>>>>>>>>: {0!s:s}'.format(str(stack)))
         zip_source = oci.resource_manager.models.CreateZipUploadConfigSourceDetails(zip_file_base64_encoded=self.base64EncodeZip(stack))
-        stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x')
+        stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x', freeform_tags={"OKITStack": "Created By OKIT"})
         response = self.client.create_stack(stack_details)
         logger.info('Create Stack Response : {0!s:s}'.format(str(response.data)))
         return self.toJson(response.data)
