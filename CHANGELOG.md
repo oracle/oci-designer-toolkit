@@ -2,6 +2,12 @@
 
 
 ## Version 0.19.1
+**Release Date**: 26th March 2021
+### Bug Fixes
+1. Fix error caused when Node Pool is missing from the fast discovery.
+
+
+## Version 0.19.1
 **Release Date**: 24th March 2021
 ### Bug Fixes
 1. Fix Config directory Mount Issue when building from GitHub
