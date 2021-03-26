@@ -1,16 +1,29 @@
 # Release Notes
 
 
+## Version 0.19.2
+**Release Date**: 26th March 2021
+### Bug Fixes
+1. Fix error caused when Node Pool is missing from the fast discovery.
+
+
+## Version 0.19.1
+**Release Date**: 24th March 2021
+### Bug Fixes
+1. Fix Config directory Mount Issue when building from GitHub
+
 ## Version 0.19.0
 **Release Date**: 24th March 2021
 ### Features
 1. Add OCI console Authentication when running OKIT server within an OCI instance. This still requires Instance Principal but secures the OKIT designer pages.
 2. Enhancement request: Show block volume attachments to instances in the tabular view (Issue #265)
+3. Add Freeform Tag "OKITStack" to OKIT Generated Resource Manager Stacks
 
 ### Bug Fixes
 1. Description of SecList rules in OKIT is not transferred to the actual deployment in the Resource Mgr (Issue #272).
 2. Cost estimation shows "Updated" and "OKIT version" as first 2 lines (Issue #270).
 3. Validation issue: should not be able to choose Logical Volume Management when provisioning a RAC db in DBCS (Issue #271).
+4. Add validation for IPSec DRG / CPE & Remote Peering DRG
 
 
 ## Version 0.18.0
