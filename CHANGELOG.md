@@ -1,7 +1,7 @@
 # Release Notes
 
 
-## Version 0.19.1
+## Version 0.19.2
 **Release Date**: 26th March 2021
 ### Bug Fixes
 1. Fix error caused when Node Pool is missing from the fast discovery.
