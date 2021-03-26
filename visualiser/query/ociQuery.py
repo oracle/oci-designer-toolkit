@@ -263,7 +263,7 @@ class OCIQuery(OCIConnection):
 
     def oke_clusters(self, clusters, resources):
         for cluster in clusters:
-            cluster["pools"] = [p for p in resources["NodePool"] if p["cluster_id"] == cluster["id"]]
+            cluster["pools"] = [p for p in resources.get("NodePool", []) if p["cluster_id"] == cluster["id"]]
         return clusters
 
     def route_tables(self, route_tables, resources):
