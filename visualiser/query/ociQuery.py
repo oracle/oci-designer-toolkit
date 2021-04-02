@@ -227,7 +227,7 @@ class OCIQuery(OCIConnection):
             # Add Vnic Attachments
             #instance['vnics'] = [va for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]
             attachments_vnic_ids = [va["vnic_id"] for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]
-            instance['vnics'] = [vnic for vnic in resources["Vnic"] if vnic["id"] in attachments_vnic_ids]
+            instance['vnics'] = [vnic for vnic in resources.get("Vnic", []) if vnic["id"] in attachments_vnic_ids]
             #instance['vnics'] = [vnic for vnic in resources["Vnic"] if vnic["id"] in [va["vnic_id"] for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]]
             # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
             boot_volume_attachments = [va for va in resources["BootVolumeAttachment"] if va['instance_id'] == instance['id']]
