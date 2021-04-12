@@ -1,0 +1,26 @@
+{
+    "name": "okit-node",
+    "version": "0.20.0",
+    "description": "OKIT Node ES6 Modules",
+    "author": {
+        "name": "Andrew Hopkinson",
+        "email": "andrew.hopkinson@oracle.com",
+        "url": "https://github.com/oracle/oci-designer-toolkit"
+    },
+    "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+    "homepage": "https://github.com/oracle/oci-designer-toolkit",
+    "license": "UPL",
+    "keywords": [
+        "oci",
+        "oracle cloud",
+        "okit"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/oracle/oci-designer-toolkit"
+    },
+    "private": true,
+    "type": "module",
+    "dependencies": {
+    }
+}
