@@ -192,7 +192,7 @@ class OCIQuery(OCIConnection):
 
     def dynamic_routing_gateways(self, drgs, resources):
         for drg in drgs:
-            attachments = [a for a in resources["DrgAttachment"] if a["drg_id"] == drg["id"]] if "DrgAttachment" in resources else []
+            attachments = [a for a in resources.get("DrgAttachment", []) if a["drg_id"] == drg["id"]]
             drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""
             drg["route_table_id"] = attachments[0]["route_table_id"] if len(attachments) else ""
         return drgs
@@ -201,8 +201,8 @@ class OCIQuery(OCIConnection):
         for fs in file_storage_systems:
             fs["exports"] = [e for e in resources.get("Export", []) if e["file_system_id"] == fs["id"]]
             export_set_ids = [e["export_set_id"] for e in fs["exports"]]
-            export_sets = [e for e in resources["ExportSet"] if e["id"] in export_set_ids]
-            fs["mount_targets"] = [m for m in resources["MountTarget"] if m["export_set_id"] in export_set_ids]
+            export_sets = [e for e in resources.get("ExportSet", []) if e["id"] in export_set_ids]
+            fs["mount_targets"] = [m for m in resources.get("MountTarget", []) if m["export_set_id"] in export_set_ids]
             for mt in fs["mount_targets"]:
                 ess = [e for e in export_sets if e["id"] == mt["export_set_id"]]
                 mt["export_set"] = ess[0] if len(ess) else {}
@@ -216,22 +216,20 @@ class OCIQuery(OCIConnection):
             instance["source_details"]["os"] = ''
             instance["source_details"]["version"] = ''
             if ("source_details" in instance and "image_id" in instance["source_details"]):
-                images = [i for i in resources["Image"] if i["id"] == instance["source_details"]["image_id"]]
+                images = [i for i in resources.get("Image", []) if i["id"] == instance["source_details"]["image_id"]]
                 if len(images):
                     instance["source_details"]["os"] = images[0]["operating_system"]
                     instance["source_details"]["version"] = images[0]["operating_system_version"]
             if "metadata" in instance and "user_data" in instance["metadata"]:
                 instance["metadata"]["user_data"] = userDataDecode(instance["metadata"]["user_data"])
             # Add Attached Block Storage Volumes
-            instance['block_storage_volume_ids'] = [va['volume_id'] for va in resources["VolumeAttachment"] if va['instance_id'] == instance['id']] if "VolumeAttachment" in resources else []
+            instance['block_storage_volume_ids'] = [va['volume_id'] for va in resources.get("VolumeAttachment", []) if va['instance_id'] == instance['id']]
             # Add Vnic Attachments
-            #instance['vnics'] = [va for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]
-            attachments_vnic_ids = [va["vnic_id"] for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]
-            instance['vnics'] = [vnic for vnic in resources["Vnic"] if vnic["id"] in attachments_vnic_ids]
-            #instance['vnics'] = [vnic for vnic in resources["Vnic"] if vnic["id"] in [va["vnic_id"] for va in resources["VnicAttachment"] if va['instance_id'] == instance['id']]]
+            attachments_vnic_ids = [va["vnic_id"] for va in resources.get("VnicAttachment", []) if va['instance_id'] == instance['id']]
+            instance['vnics'] = [vnic for vnic in resources.get("Vnic", []) if vnic["id"] in attachments_vnic_ids]
             # Get Volume Attachments as a single call and loop through them to see if they are associated with the instance.
-            boot_volume_attachments = [va for va in resources["BootVolumeAttachment"] if va['instance_id'] == instance['id']]
-            boot_volumes = [va for va in resources["BootVolume"] if va['id'] == boot_volume_attachments[0]['boot_volume_id']] if len(boot_volume_attachments) else []
+            boot_volume_attachments = [va for va in resources.get("BootVolumeAttachment", []) if va['instance_id'] == instance['id']]
+            boot_volumes = [va for va in resources.get("BootVolume", []) if va['id'] == boot_volume_attachments[0]['boot_volume_id']] if len(boot_volume_attachments) else []
             instance['boot_volume_size_in_gbs'] = boot_volumes[0]['size_in_gbs'] if len(boot_volumes) else 0
             instance['is_pv_encryption_in_transit_enabled'] = boot_volume_attachments[0]['is_pv_encryption_in_transit_enabled'] if len(boot_volume_attachments) else False
         return instances
@@ -241,8 +239,8 @@ class OCIQuery(OCIConnection):
             lb["instance_ids"] = []
             for backend_set, backends in lb["backend_sets"].items():
                 for backend in backends["backends"]:
-                    ip_addresses = [ip for ip in resources["PrivateIp"] if ip["ip_address"] == backend["ip_address"]]
-                    lb["instance_ids"].extend([va["instance_id"] for va in resources["VnicAttachment"] if va['vnic_id'] == ip_addresses[0]['vnic_id']] if len(ip_addresses) else [])
+                    ip_addresses = [ip for ip in resources.get("PrivateIp", []) if ip["ip_address"] == backend["ip_address"]]
+                    lb["instance_ids"].extend([va["instance_id"] for va in resources.get("VnicAttachment", []) if va['vnic_id'] == ip_addresses[0]['vnic_id']] if len(ip_addresses) else [])
         return loadbalancers
 
     def mysql_database_systems(self, database_systems, resources):
@@ -253,7 +251,7 @@ class OCIQuery(OCIConnection):
 
     def network_security_group(self, nsgs, resources):
         for nsg in nsgs:
-            nsg["security_rules"] = [r for r in resources["NetworkSecurityGroupSecurityRule"] if r["network_security_group_id"] == nsg["id"]]
+            nsg["security_rules"] = [r for r in resources.get("NetworkSecurityGroupSecurityRule", []) if r["network_security_group_id"] == nsg["id"]]
         return nsgs
 
     def object_storage_buckets(self, buckets, resources):
