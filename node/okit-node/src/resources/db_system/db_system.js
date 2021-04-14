@@ -13,7 +13,7 @@
 
 import { OkitResource } from '../okit_resource.js'
 
-class Database extends OkitResource {
+class DbSystem extends OkitResource {
     static get def() {return `
 	<g>
         <path fill="#312D2A" d="M151.6,99.9V62.1h-37.8v14.2h-13.8V62.1H85.5V47.6H100V9.8H62.2v37.8h14.2v14.6H62.3v14.2H47.2V62.1H9.4
@@ -28,5 +28,5 @@ class Database extends OkitResource {
     get parent_id() {return this.view.all_resources.find(resource => resource.id === this.subnet_id && resource.compartment_id === this.compartment_id) ? this.subnet_id : this.compartment_id}
 }
 
-export default Database
-export { Database }
+export default DbSystem
+export { DbSystem }

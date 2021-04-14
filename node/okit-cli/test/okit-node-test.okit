@@ -1,10 +1,10 @@
 {
-  "okit_version": "0.19.2",
+  "okit_version": "0.20.0",
   "okit_schema_version": "0.1.0",
   "title": "OKIT OCI Visualiser Json",
   "description": "# Description\n__Created 2021-3-30 17:31:31__\n\n--------------------------------------\n\n",
-  "created": "2021-4-8 11:8:30",
-  "updated": "2021-4-12 16:40:37",
+  "created": "2021-4-14 16:54:29",
+  "updated": "2021-4-14 16:54:43",
   "region": {
     "cross_region": {
       "resources": {
@@ -73,6 +73,48 @@
             "defined_tags": {},
             "ip_address": "",
             "cpe_device_shape_id": ""
+          }
+        ],
+        "db_system": [
+          {
+            "id": "okit.databasesystem.f7e6dbfe-ec61-4a14-bb73-8e8dce281410",
+            "compartment_id": "okit.compartment.35e6b6bc-e551-4561-abbf-e204f0d01b01",
+            "display_name": "okit-ds001",
+            "definition": "",
+            "freeform_tags": {},
+            "defined_tags": {},
+            "availability_domain": 1,
+            "database_edition": "STANDARD_EDITION",
+            "db_home": {
+              "database": {
+                "admin_password": "ivAI_kh4q9PLkXQ6qKrhdQ-n48rpoo",
+                "db_name": "ds001",
+                "db_workload": "OLTP"
+              },
+              "db_version": "12.2.0.1"
+            },
+            "hostname": "okit-ds001",
+            "shape": "",
+            "ssh_public_keys": "",
+            "subnet_id": "okit.subnet.e7693b43-0526-4836-8faf-9de91fc5a0c1",
+            "backup_network_nsg_ids": [],
+            "backup_subnet_id": "",
+            "cluster_name": "",
+            "cpu_core_count": 0,
+            "data_storage_percentage": 80,
+            "data_storage_size_in_gb": 256,
+            "db_system_options": {
+              "storage_management": "ASM"
+            },
+            "disk_redundancy": "",
+            "domain": "",
+            "fault_domains": [],
+            "license_model": "LICENSE_INCLUDED",
+            "node_count": 1,
+            "nsg_ids": [],
+            "source": "NONE",
+            "sparse_diskgroup": false,
+            "time_zone": "+00:00"
           }
         ],
         "drg": [
@@ -321,6 +363,29 @@
             "vcn_id": "okit.virtualcloudnetwork.0ea39a17-a5cb-483f-ad7e-96d17bee718a",
             "route_table_id": "",
             "peer_id": "okit.localpeeringgateway.44bab5bf-e07c-4de1-b6f8-eecb56dbf4dd"
+          }
+        ],
+        "mysql_db_system": [
+          {
+            "id": "okit.mysqldatabasesystem.a3232805-d077-41e8-b200-83d05708e4f2",
+            "compartment_id": "okit.compartment.35e6b6bc-e551-4561-abbf-e204f0d01b01",
+            "display_name": "okit-mysql001",
+            "definition": "",
+            "freeform_tags": {},
+            "defined_tags": {},
+            "availability_domain": 1,
+            "hostname_label": "okit-mysql001",
+            "shape_name": "",
+            "configuration_id": "",
+            "subnet_id": "okit.subnet.e7693b43-0526-4836-8faf-9de91fc5a0c1",
+            "admin_username": "admin",
+            "admin_password": "",
+            "description": "okit-mysql001",
+            "mysql_version": "",
+            "port": "",
+            "port_x": "",
+            "data_storage_size_in_gb": 256,
+            "fault_domain": ""
           }
         ],
         "nat_gateway": [

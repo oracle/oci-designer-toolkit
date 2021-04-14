@@ -38,7 +38,7 @@ class OkitView {
         'cluster',
         'file_system',
         'instance', 
-        'database',
+        'db_system',
         'mysql_db_system',
         'autonomous_database',
         'instance_pool',
