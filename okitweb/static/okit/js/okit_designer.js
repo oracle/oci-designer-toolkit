@@ -542,7 +542,7 @@ function displayQueryDialog() {
     // Fast Discovery
     tr = tbody.append('div')
         .attr('id', 'fast_discovery_row')
-        .attr('class', 'tr');
+        .attr('class', 'tr collapsed');
     tr.append('div').attr('class', 'td').text('');
     td = tr.append('div').attr('class', 'td');
     td.append('input')
@@ -552,6 +552,7 @@ function displayQueryDialog() {
     td.append('label')
         .attr('for', 'fast_discovery')
         .text('Fast Discovery (Experimental)');
+    if (developer_mode) $(jqId('fast_discovery_row')).removeClass('collapsed');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
