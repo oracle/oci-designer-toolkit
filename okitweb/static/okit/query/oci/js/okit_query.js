@@ -5,7 +5,7 @@
 console.info('Loaded OKIT OCI Query Javascript');
 
 class OkitOCIQuery {
-    constructor(regions = [], fast_discovery=true) {
+    constructor(regions = [], fast_discovery=false) {
         this.regions = regions;
         this.region_query_count = {};
         this.complete_callback = undefined;

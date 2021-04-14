@@ -539,6 +539,20 @@ function displayQueryDialog() {
     td.append('label')
         .attr('for', 'include_sub_compartments')
         .text('Include Sub Compartments');
+    // Fast Discovery
+    tr = tbody.append('div')
+        .attr('id', 'fast_discovery_row')
+        .attr('class', 'tr collapsed');
+    tr.append('div').attr('class', 'td').text('');
+    td = tr.append('div').attr('class', 'td');
+    td.append('input')
+        .attr('id', 'fast_discovery')
+        .attr('name', 'fast_discovery')
+        .attr('type', 'checkbox');
+    td.append('label')
+        .attr('for', 'fast_discovery')
+        .text('Fast Discovery (Experimental)');
+    if (developer_mode) $(jqId('fast_discovery_row')).removeClass('collapsed');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
@@ -690,6 +704,7 @@ function showQueryResults() {
     request.compartment_name = $(`${jqId('query_compartment_id')} option:selected`).text();
     request.config_profile = $(jqId('config_profile')).val();
     request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
+    request.fast_discovery = $(jqId('fast_discovery')).is(':checked');
     request.region = '';
     clearRegionTabBar();
     showRegionTabBar();
@@ -700,7 +715,8 @@ function showQueryResults() {
     newRegionsModel();
     if (regions.length > 0) {
         $(jqId('modal_loading_wrapper')).removeClass('hidden');
-        okitOCIQuery = new OkitOCIQuery(regions, okitSettings.fast_discovery);
+        // okitOCIQuery = new OkitOCIQuery(regions, okitSettings.fast_discovery);
+        okitOCIQuery = new OkitOCIQuery(regions, request.fast_discovery);
         // Add Tabs
         $(jqId('region_progress')).empty();
         for (const [i, region] of regions.entries()) {
