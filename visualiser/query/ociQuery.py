@@ -40,7 +40,7 @@ class OCIQuery(OCIConnection):
         "Bucket",
         "Cluster",
         "Cpe",
-        "Database",
+        "DbSystem",
         "Drg",
         "DrgAttachment",
         "Export",
@@ -79,7 +79,7 @@ class OCIQuery(OCIConnection):
         "Bucket": "object_storage_buckets",
         "Cluster": "oke_clusters",
         "Cpe": "customer_premise_equipments",
-        "Database": "database_systems",
+        "DbSystem": "database_systems",
         "Drg": "dynamic_routing_gateways",
         "FileSystem": "file_storage_systems",
         "Instance": "instances",
@@ -216,7 +216,10 @@ class OCIQuery(OCIConnection):
             instance["source_details"]["os"] = ''
             instance["source_details"]["version"] = ''
             if ("source_details" in instance and "image_id" in instance["source_details"]):
+                logger.debug(f'Image Id : {instance["source_details"]["image_id"]}')
                 images = [i for i in resources.get("Image", []) if i["id"] == instance["source_details"]["image_id"]]
+                for i in resources.get("Image", []):
+                    logger.debug(f'Image Id - {i["id"]} - {i["id"] == instance["source_details"]["image_id"]}')
                 if len(images):
                     instance["source_details"]["os"] = images[0]["operating_system"]
                     instance["source_details"]["version"] = images[0]["operating_system_version"]
