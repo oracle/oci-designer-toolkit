@@ -219,7 +219,7 @@ class OCIQuery(OCIConnection):
                 logger.debug(f'Image Id : {instance["source_details"]["image_id"]}')
                 images = [i for i in resources.get("Image", []) if i["id"] == instance["source_details"]["image_id"]]
                 for i in resources.get("Image", []):
-                    logger.debug0(f'Image Id - {i["id"]} - {i["id"] == instance["source_details"]["image_id"]}')
+                    logger.debug(f'Image Id - {i["id"]} - {i["id"] == instance["source_details"]["image_id"]}')
                 if len(images):
                     instance["source_details"]["os"] = images[0]["operating_system"]
                     instance["source_details"]["version"] = images[0]["operating_system_version"]
