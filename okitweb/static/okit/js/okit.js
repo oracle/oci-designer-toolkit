@@ -340,7 +340,7 @@ class OkitSettings {
             // Validate Before Markdowns
             this.addValidateMarkdown(tbody, autosave);
             // Fast Discovery
-            this.addFastDiscovery(tbody, autosave);
+            // this.addFastDiscovery(tbody, autosave);
             // Display Label
             this.addDisplayLabel(tbody, autosave);
             // Tooltip Style
