@@ -1,6 +1,16 @@
 # Release Notes
 
 
+## Version 0.20.0
+**Release Date**: 14th April 2021
+### Features
+1. Add Command line svg generation based on the "**.okit**" file format. The [okit-cli](documentation/okit-cli.md) will allow the user to convert an OKIT "**.json**" file to the upcomming "**.okit**" file and subsequently generated an .svg file.
+2. Change default Query to normal query rather than fast discovery and allow user to select "Fast Discovery" from the Query dialog when in developer mode.
+
+### Bug Fixes
+1. Add code to check that the required elements are returned from a Fast Discovery query before attempting to use them.
+
+
 ## Version 0.19.2
 **Release Date**: 26th March 2021
 ### Bug Fixes
