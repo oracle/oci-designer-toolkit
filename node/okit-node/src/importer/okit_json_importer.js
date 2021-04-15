@@ -7,10 +7,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import { OkitData } from '../data/okit.js'
 
 class OkitJsonImporter {

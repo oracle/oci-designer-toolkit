@@ -7,10 +7,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 export { OkitResource } from './okit_resource.js'
 export { AutonomousDatabase } from './autonomous_database/autonomous_database.js'
 export { Bucket } from './bucket/bucket.js'

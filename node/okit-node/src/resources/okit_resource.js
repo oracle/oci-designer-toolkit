@@ -8,10 +8,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 class OkitResource {
     static get svg() {return `
     <?xml version="1.0" encoding="utf-8"?>

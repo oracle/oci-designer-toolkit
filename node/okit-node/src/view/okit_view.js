@@ -8,10 +8,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import { OkitResource } from '../resources/okit_resource.js'
 import { OkitData } from '../data/okit.js'
 import * as okit_resources from '../resources/resources.js'

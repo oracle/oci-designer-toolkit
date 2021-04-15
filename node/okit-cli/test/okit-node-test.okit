@@ -5,6 +5,7 @@
   "description": "# Description\n__Created 2021-3-30 17:31:31__\n\n--------------------------------------\n\n",
   "created": "2021-4-14 16:54:29",
   "updated": "2021-4-14 16:54:43",
+  "tags": {},
   "region": {
     "cross_region": {
       "resources": {
@@ -47,6 +48,7 @@
           }
         ]
       },
+      "vars": {},
       "coords": {},
       "connectors": {},
       "svg": {}
@@ -649,6 +651,7 @@
           }
         ]
       },
+      "vars": {},
       "coords": {},
       "connectors": {},
       "svg": {}

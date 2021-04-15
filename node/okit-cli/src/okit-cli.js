@@ -7,10 +7,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import fs from 'fs'
 import { JSDOM } from 'jsdom';
 import { OkitData } from 'okit-node/src/data/okit.js'
