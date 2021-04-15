@@ -8,6 +8,44 @@
 */
 
 class OkitResourceProperties {
+    static common = {
+        id: {
+            required: true,
+            editable: false,
+            type: 'string',
+            label: 'Ocid'
+        },
+        compartment_id: {
+            required: true,
+            editable: true,
+            type: 'reference',
+            label: 'Compartment'
+        },
+        display_name: {
+            required: true,
+            editable: true,
+            type: 'string',
+            label: 'Display Name'
+        },
+        resource_name: {
+            required: true,
+            editable: true,
+            type: 'string',
+            label: 'Resource Name'
+        },
+        documentation: {
+            required: true,
+            editable: true,
+            type: 'textarea',
+            label: 'Documentation'
+        },
+        read_only: {
+            required: true,
+            editable: true,
+            type: 'boolean',
+            label: 'Read Only'
+        },
+    }
     static model = {}
     handler = {
         get: function(obj, prop) {
@@ -34,9 +72,48 @@ class OkitResourceProperties {
             if (this.hierarchy.slice(-1)[0] !== prop) this.hierarchy.push(prop)
         }
     }    
-    constructor(json={}, document=undefined) {
+    constructor(json={}, document=undefined, panel_id=undefined) {
         this.document = document
         this.resource = new Proxy(json, this.handler)
+        this.panel_id = panel_id
+        this.properties_div = undefined
+    }
+
+    build(type='simple') {
+        const properties_panel = document.getElementById(this.panel_id)
+        // Clear
+        if (properties_panel.lastChild) properties_panel.removeChild(properties_panel.lastChild)
+        // Get / build panel
+        if (!this.properties_div) {
+            this.properties_div = this.document.createElement('div')
+            this.properties_div.setAttribute('class', 'okit-properties-div')
+            // Build Simple Panel
+            this.buildSimplePanel(this.properties_div)
+            // Build Terraform Panel
+            // this.buildTerraformPanel(this.properties_div)
+            // Build Ansible Panel
+            // this.buildAnsiblePanel(this.properties_div)
+        }
+        properties_panel.appendChild(this.properties_div)
+        // Add Simple Panel
+    }
+
+    buildAnsiblePanel(panel) {}
+
+    buildTerraformPanel(panel) {}
+
+    buildSimplePanel(panel) {
+        // Add Title
+        // Build Table for Common Properties
+        const table = this.document.createElement('div')
+        table.setAttribute('class', 'table')
+        panel.appendChild(table)
+        const thead = this.document.createElement('div')
+        thead.setAttribute('class', 'thead')
+        table.appendChild(thead)
+        const tbody = this.document.createElement('div')
+        tbody.setAttribute('class', 'tbody')
+        table.appendChild(tbody)
     }
 }
 

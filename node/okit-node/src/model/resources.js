@@ -7,13 +7,13 @@
 ** Author: Andrew Hopkinson
 */
 
-export { OkitResourceProperties } from './okit_resource_properties.js'
+export { OkitResourceModel } from './okit_resource_model.js'
 // export { AutonomousDatabase } from './autonomous_database/autonomous_database.js'
 // export { Bucket } from './bucket/bucket.js'
 // export { Cluster } from './cluster/cluster.js'
 // export { Compartment } from './compartment/compartment.js'
 // export { Cpe } from './cpe/cpe.js'
-// export { Database } from './database/database.js'
+// export { DbSystem } from './db_system/db_system.js'
 // export { Drg } from './drg/drg.js'
 // export { FileSystem } from './file_system/file_system.js'
 // export { Instance } from './instance/instance.js'
@@ -32,5 +32,5 @@ export { OkitResourceProperties } from './okit_resource_properties.js'
 // export { SecurityList } from './security_list/security_list.js'
 // export { ServiceGateway } from './service_gateway/service_gateway.js'
 // export { Subnet } from './subnet/subnet.js'
-// export { Vcn } from './vcn/vcn.js'
+export { Vcn } from './vcn/vcn.js'
 // export { Volume } from './volume/volume.js'

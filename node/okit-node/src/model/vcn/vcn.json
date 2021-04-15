@@ -1,0 +1,50 @@
+{
+    "resources": {
+        "terraform": "oci_core_vcn",
+        "ansible": "oci_network_vcn"
+    },
+    "properties": {
+        "id": {
+            "required": true,
+            "editable": false,
+            "type": "string",
+            "label": "Ocid"
+        },
+        "compartment_id": {
+            "required": true,
+            "editable": true,
+            "type": "reference",
+            "label": "Compartment"
+        },
+        "display_name": {
+            "required": true,
+            "editable": true,
+            "type": "string",
+            "label": "Display Name"
+        },
+        "dns_label": {
+            "required": false,
+            "editable": true,
+            "type": "string",
+            "label": "Dns Label"
+        },
+        "cidr_blocks": {
+            "required": false,
+            "editable": true,
+            "type": "string-list",
+            "label": "IPv4 CIDR Blocks"
+        },
+        "is_ipv6enabled": {
+            "required": false,
+            "editable": true,
+            "type": "boolean",
+            "label": "IPv6"
+        },
+        "ipv6cidr_block": {
+            "required": false,
+            "editable": true,
+            "type": "string",
+            "label": "CIDR Block"
+        }
+    }
+}
