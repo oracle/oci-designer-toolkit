@@ -1277,6 +1277,9 @@ class OkitArtefactView {
         return OkitArtefactView.cut_copy_paste.resource ? OkitArtefactView.cut_copy_paste.resource.getDropTargets().includes(this.getArtifactReference()) : false;
     }
 
+    getFunction(resource_name) {return `get${resource_name.split(' ').join('')}`}
+    getArrayFunction(resource_name) {return `get${resource_name.split(' ').join('')}s`}
+
     getArtefact() {return this.artefact;}
 
     static new(artefact, json_view) {return new this(artefact, json_view);}
@@ -1959,7 +1962,8 @@ class OkitArtefactView {
     getContainerChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getContainerArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            // for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);

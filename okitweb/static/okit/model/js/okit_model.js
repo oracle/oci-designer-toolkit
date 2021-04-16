@@ -88,6 +88,12 @@ class OkitJson {
                 let obj = this.newObjectStorageBucket(artefact);
             }
         }
+        // Exadata Infrastructures
+        if (okit_json.hasOwnProperty('exadata_infrastructures')) {
+            for (let artefact of okit_json['exadata_infrastructures']) {
+                let obj = this.newExadataInfrastructure(artefact);
+            }
+        }
         // Virtual Cloud Networks
         // Turn Off Default Security List / Route Table Processing
         let okitSettingsClone = JSON.clone(okitSettings);

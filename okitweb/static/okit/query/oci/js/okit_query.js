@@ -219,6 +219,7 @@ class OkitOCIQuery {
         this.queryBlockStorageVolumes(request);
         this.queryCustomerPremiseEquipments(request);
         this.queryDynamicRoutingGateways(request);
+        this.queryExadataInfrastructures(request);
         this.queryAutonomousDatabases(request);
         this.queryObjectStorageBuckets(request);
         this.queryFastConnects(request);
@@ -308,6 +309,41 @@ class OkitOCIQuery {
                 me.region_query_count[request.region]-- && me.isComplete();
             }
         });
+    }
+
+    queryExadataInfrastructures(request) {
+        console.info('------------- Exadata Infrastructure Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let self = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/ExadataInfrastructure',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({exadata_infrastructures: response_json});
+                for (let artefact of response_json) {
+                    let sub_query_request = JSON.clone(request);
+                    sub_query_request.exadata_infrastructure_id = artefact.id;
+                    self.queryExadataInfrastructureSubComponents(sub_query_request);
+                }
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
+                self.region_query_count[request.region]-- && self.isComplete();
+            }
+        });
+    }
+    queryExadataInfrastructureSubComponents(request) {
+        this.queryVmClusters(request);
+        this.queryVmClusterNetworks(request);
     }
 
     queryFastConnects(request) {
@@ -836,6 +872,65 @@ class OkitOCIQuery {
         this.queryRouteTables(request);
         this.querySecurityLists(request);
         this.querySubnets(request);
+    }
+
+    queryVmClusterNetworks(request) {
+        console.info('------------- Vm Cluster Network Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let self = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/VmClusterNetwork',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({vm_cluster_networks: response_json});
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
+                self.region_query_count[request.region]-- && self.isComplete();
+            }
+        });
+    }
+
+    queryVmClusters(request) {
+        console.info('------------- Vm Cluster Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let self = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/VmCluster',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({vm_clusters: response_json});
+                for (let artefact of response_json) {
+                    let sub_query_request = JSON.clone(request);
+                    sub_query_request.vm_cluster_id = artefact.id;
+                    self.queryVmClusterSubComponents(sub_query_request);
+                }
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
+                self.region_query_count[request.region]-- && self.isComplete();
+            }
+        });
+    }
+    queryVmClusterSubComponents(request) {
     }
 
 }
