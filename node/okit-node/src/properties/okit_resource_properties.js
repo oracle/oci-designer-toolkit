@@ -24,7 +24,7 @@ class OkitResourceProperties {
         display_name: {
             required: true,
             editable: true,
-            type: 'string',
+            type: 'datalist',
             label: 'Display Name'
         },
         resource_name: {
@@ -77,6 +77,7 @@ class OkitResourceProperties {
         this.resource = new Proxy(json, this.handler)
         this.panel_id = panel_id
         this.properties_div = undefined
+        this.build()
     }
 
     build(type='simple') {
