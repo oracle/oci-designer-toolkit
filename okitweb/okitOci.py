@@ -373,7 +373,8 @@ def ociArtifacts(artifact):
         response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
     elif artifact == 'VmCluster':
         logger.info('---- Processing VM Clusters')
-        oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], exadata_infrastructure_id=query_json['exadata_infrastructure_id'])
+        # oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], exadata_infrastructure_id=query_json['exadata_infrastructure_id'])
+        oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_vm_clusters.list(filter=query_json.get('vm_cluster_filter', None))
     elif artifact == 'VmClusterNetwork':
         logger.info('---- Processing VM Cluster Networks')

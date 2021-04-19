@@ -17,6 +17,16 @@ class VmClusterView extends OkitContainerDesignerArtefactView {
     /*
     ** SVG Processing
     */
+    drawAttachments() {
+        let attachment_count = 0;
+        // Draw Route Table
+        if (this.artefact.vm_cluster_network_id !== '') {
+            let attachment = new VmClusterNetworkView(this.getJsonView().getOkitJson().getVmClusterNetwork(this.vm_cluster_network_id), this.getJsonView());
+            attachment.attached_id = this.id;
+            attachment.draw();
+            attachment_count += 1;
+        }
+    }
     /*
     ** Property Sheet Load function
     */

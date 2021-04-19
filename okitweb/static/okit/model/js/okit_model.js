@@ -232,6 +232,21 @@ class OkitJson {
                 let obj = this.newLoadBalancer(artefact);
             }
         }
+
+        // Exadata Infrastructure Sub Components
+        // VM Clusters
+        if (okit_json.hasOwnProperty('vm_clusters')) {
+            for (let artefact of okit_json['vm_clusters']) {
+                let obj = this.newVmCluster(artefact);
+            }
+        }
+        // VM Cluster Networks
+        if (okit_json.hasOwnProperty('vm_cluster_networks')) {
+            for (let artefact of okit_json['vm_cluster_networks']) {
+                let obj = this.newVmClusterNetwork(artefact);
+            }
+        }
+        
         console.log();
     }
 

@@ -72,6 +72,9 @@ class OkitJsonView {
         this.subnets = [];
         this.virtual_cloud_networks = [];
         this.virtual_network_interfaces = [];
+        this.exadata_infrastructures = [];
+        this.vm_clusters = [];
+        this.vm_cluster_networks = [];
     }
 
     load() {
@@ -82,6 +85,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.customer_premise_equipments) {this.newCustomerPremiseEquipment(artefact);}
         for (let artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
         for (let artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
+        for (let artefact of this.okitjson.getExadataInfrastructures()) {this.newExadataInfrastructure(artefact);}
         for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
         for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
         for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
@@ -101,6 +105,8 @@ class OkitJsonView {
         for (let artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
         for (let artefact of this.okitjson.subnets) {this.newSubnet(artefact);}
         for (let artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
+        for (let artefact of this.okitjson.getVmClusters()) {this.newVmCluster(artefact);}
+        for (let artefact of this.okitjson.getVmClusterNetworks()) {this.newVmClusterNetwork(artefact);}
     }
 
     update(model) {

@@ -219,6 +219,7 @@ class OkitOCIQuery {
         this.queryBlockStorageVolumes(request);
         this.queryCustomerPremiseEquipments(request);
         this.queryDynamicRoutingGateways(request);
+        this.queryVmClusters(request);
         this.queryExadataInfrastructures(request);
         this.queryAutonomousDatabases(request);
         this.queryObjectStorageBuckets(request);
@@ -342,7 +343,7 @@ class OkitOCIQuery {
         });
     }
     queryExadataInfrastructureSubComponents(request) {
-        this.queryVmClusters(request);
+        // this.queryVmClusters(request);
         this.queryVmClusterNetworks(request);
     }
 
