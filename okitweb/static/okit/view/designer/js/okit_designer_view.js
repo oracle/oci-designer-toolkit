@@ -47,7 +47,6 @@ class OkitDesignerJsonView extends OkitJsonView {
         }
         // Exadata Infrastructures
         for (let exadata_infrastructure of this.getExadataInfrastructures()) {
-            console.warn('Drawing Exadata Infrastructure', exadata_infrastructure.display_name)
             exadata_infrastructure.draw();
         }
         // Block Storage Volumes
