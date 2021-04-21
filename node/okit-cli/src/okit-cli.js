@@ -49,6 +49,8 @@ if (command.toLocaleLowerCase() === 'generate') {
         // console.info(input_data)
         const okitJsonImporter = new OkitJsonImporter(input_data)
         const okitData = okitJsonImporter.convert()
+        const okitView = new OkitView(okitData, document, 'okit-canvas-div', undefined, false, 'none', false, true)
+        okitView.draw()
         fs.writeFileSync(output_filename, okitData.toString())
 
         console.info('')
