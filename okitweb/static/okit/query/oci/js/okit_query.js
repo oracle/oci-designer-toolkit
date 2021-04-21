@@ -218,6 +218,7 @@ class OkitOCIQuery {
         this.queryVirtualCloudNetworks(request);
         this.queryBlockStorageVolumes(request);
         this.queryCustomerPremiseEquipments(request);
+        // this.queryDbNodes(request);
         this.queryDynamicRoutingGateways(request);
         this.queryVmClusters(request);
         this.queryExadataInfrastructures(request);
@@ -260,8 +261,34 @@ class OkitOCIQuery {
         });
     }
 
+    queryDatabases(request) {
+        console.info('------------- Database Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/Database',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({databases: response_json});
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
+    }
+
     queryDatabaseSystems(request) {
-        console.info('------------- Autonomous Database Query --------------------');
+        console.info('------------- Database Systems Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
         this.region_query_count[request.region]++;
@@ -274,6 +301,67 @@ class OkitOCIQuery {
             success: function(resp) {
                 let response_json = JSON.parse(resp);
                 regionOkitJson[request.region].load({database_systems: response_json});
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
+                me.region_query_count[request.region]-- && me.isComplete();
+            }
+        });
+    }
+
+    queryDbHomes(request) {
+        console.info('------------- Db Homes Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let self = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/DbHome',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({db_homes: response_json});
+                for (let artefact of response_json) {
+                    let sub_query_request = JSON.clone(request);
+                    sub_query_request.db_home_id = artefact.id;
+                    self.queryDbHomeSubComponents(sub_query_request);
+                }
+                if (request.refresh) {okitJsonView.draw();}
+            },
+            error: function(xhr, status, error) {
+                console.warn('Status : ' + status);
+                console.warn('Error  : ' + error);
+            },
+            complete: function () {
+                self.region_query_count[request.region]-- && self.isComplete();
+            }
+        });
+    }
+    queryDbHomeSubComponents(request) {
+        // this.queryDbNodes(request);
+        this.queryDatabases(request);
+    }
+
+    queryDbNodes(request) {
+        console.info('------------- Db Nodes Query --------------------');
+        console.info('------------- Compartment : ' + request.compartment_id);
+        let me = this;
+        this.region_query_count[request.region]++;
+        $.ajax({
+            type: 'get',
+            url: 'oci/artefacts/DbNode',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            success: function(resp) {
+                let response_json = JSON.parse(resp);
+                regionOkitJson[request.region].load({db_nodes: response_json});
                 if (request.refresh) {okitJsonView.draw();}
             },
             error: function(xhr, status, error) {
@@ -932,6 +1020,8 @@ class OkitOCIQuery {
         });
     }
     queryVmClusterSubComponents(request) {
+        this.queryDbNodes(request);
+        this.queryDbHomes(request);
     }
 
 }

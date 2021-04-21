@@ -15,6 +15,7 @@ class ExadataInfrastructureView extends OkitContainerDesignerArtefactView {
     get parent_id() {return this.artefact.compartment_id;}
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     get children() {return [...this.json_view.getVmClusters(), ...this.json_view.getVmClusterNetwroks()].filter(child => child.parent_id === this.artefact.id);}
+    get info_text() {return this.artefact.shape;}
     /*
     ** SVG Processing
     */

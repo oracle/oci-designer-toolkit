@@ -36,9 +36,12 @@ from facades.ociCompartment import OCICompartments
 from facades.ociContainer import OCIContainers
 from facades.ociCpeDeviceShapes import OCICpeDeviceShapes
 from facades.ociCustomerPremiseEquipment import OCICustomerPremiseEquipments
+from facades.ociDatabase import OCIDatabases
 from facades.ociDatabaseSystem import OCIDatabaseSystems
 from facades.ociDatabaseSystemShape import OCIDatabaseSystemShapes
 from facades.ociDatabaseVersion import OCIDatabaseVersions
+from facades.ociDbHome import OCIDbHomes
+from facades.ociDbNode import OCIDbNodes
 from facades.ociDynamicRoutingGateway import OCIDynamicRoutingGateways
 from facades.ociExadataInfrastructure import OCIExadataInfrastructures
 from facades.ociFastConnect import OCIFastConnects
@@ -282,10 +285,22 @@ def ociArtifacts(artifact):
         logger.info('---- Processing Customer Premise Equipment')
         oci_cpes = OCICustomerPremiseEquipments(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_cpes.list(filter=query_json.get('cpe_filter', None))
+    elif artifact == 'Database':
+        logger.info('---- Processing Databases')
+        oci_databases = OCIDatabases(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], db_home_id=query_json.get('db_home_id', None))
+        response_json = oci_databases.list(filter=query_json.get('database_system_filter', None))
     elif artifact == 'DatabaseSystem':
         logger.info('---- Processing Database Systems')
         oci_database_systems = OCIDatabaseSystems(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_database_systems.list(filter=query_json.get('database_system_filter', None))
+    elif artifact == 'DbHome':
+        logger.info('---- Processing Db Home')
+        oci_db_nodes = OCIDbHomes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vm_cluster_id=query_json.get('vm_cluster_id', None))
+        response_json = oci_db_nodes.list(filter=query_json.get('db_node_filter', None))
+    elif artifact == 'DbNode':
+        logger.info('---- Processing Db Node')
+        oci_db_homes = OCIDbNodes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], vm_cluster_id=query_json.get('vm_cluster_id', None))
+        response_json = oci_db_homes.list(filter=query_json.get('db_home_filter', None))
     elif artifact == 'DynamicRoutingGateway':
         logger.info('---- Processing Dynamic Routing Gateways')
         oci_dynamic_routing_gateways = OCIDynamicRoutingGateways(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
@@ -373,8 +388,8 @@ def ociArtifacts(artifact):
         response_json = oci_virtual_cloud_networks.list(filter=query_json.get('virtual_cloud_network_filter', None))
     elif artifact == 'VmCluster':
         logger.info('---- Processing VM Clusters')
-        # oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], exadata_infrastructure_id=query_json['exadata_infrastructure_id'])
-        oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
+        oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'], exadata_infrastructure_id=query_json.get('exadata_infrastructure_id', None))
+        # oci_vm_clusters = OCIVmClusters(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
         response_json = oci_vm_clusters.list(filter=query_json.get('vm_cluster_filter', None))
     elif artifact == 'VmClusterNetwork':
         logger.info('---- Processing VM Cluster Networks')

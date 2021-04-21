@@ -246,7 +246,27 @@ class OkitJson {
                 let obj = this.newVmClusterNetwork(artefact);
             }
         }
-        
+
+        // VM Cluster Sub Components
+        // DB Homes
+        if (okit_json.hasOwnProperty('db_homes')) {
+            for (let artefact of okit_json['db_homes']) {
+                let obj = this.newDbHome(artefact);
+            }
+        }
+        // DB Nodes
+        if (okit_json.hasOwnProperty('db_nodes')) {
+            for (let artefact of okit_json['db_nodes']) {
+                let obj = this.newDbNode(artefact);
+            }
+        }
+        // Database
+        if (okit_json.hasOwnProperty('databases')) {
+            for (let artefact of okit_json['databases']) {
+                let obj = this.newDatabase(artefact);
+            }
+        }
+
         console.log();
     }
 
@@ -556,6 +576,8 @@ class OkitJson {
         this.ipsec_connections.push(new IPSecConnection(data, this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
     }
+    getIpsecConnections() {return this.ipsec_connections;}
+    getIpsecConnection(id='') {return this.getIPSecConnection(id)}
     getIPSecConnections() {return this.ipsec_connections;}
     getIPSecConnection(id='') {
         for (let artefact of this.getIPSecConnections()) {
@@ -635,9 +657,9 @@ class OkitJson {
         this.mysql_database_systems.push(new MySQLDatabaseSystem(data, this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
     }
-    getMySQLDatabaseSystems() {
-        return this.mysql_database_systems;
-    }
+    getMysqlDatabaseSystems() {return this.mysql_database_systems;}
+    getMysqlDatabaseSystem(id='') {return this.getMySQLDatabaseSystem(id)}
+    getMySQLDatabaseSystems() {return this.mysql_database_systems;}
     getMySQLDatabaseSystem(id='') {
         for (let artefact of this.getMySQLDatabaseSystems()) {
             if (artefact.id === id) {
@@ -662,9 +684,9 @@ class OkitJson {
         this.nat_gateways.push(new NATGateway(data, this));
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
-    getNATGateways() {
-        return this.nat_gateways;
-    }
+    getNatGateways() {return this.nat_gateways;}
+    getNatGateway(id='') {return this.getNATGateway(id)}
+    getNATGateways() {return this.nat_gateways;}
     getNATGateway(id='') {
         for (let artefact of this.getNATGateways()) {
             if (artefact.id === id) {

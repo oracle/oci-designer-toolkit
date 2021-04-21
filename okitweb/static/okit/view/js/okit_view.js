@@ -50,7 +50,10 @@ class OkitJsonView {
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
         this.customer_premise_equipments = [];
+        this.databases = [];
         this.database_systems = [];
+        this.db_homes = [];
+        this.db_nodes = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
         this.file_storage_systems = [];
@@ -76,8 +79,25 @@ class OkitJsonView {
         this.vm_clusters = [];
         this.vm_cluster_networks = [];
     }
+    clear2() {
+        for (const [key, value] of Object.entries(this)) {
+            if (Array.isArray(value)) this[key] = [];
+        }
+    }
 
     load() {
+        this.clear();
+        for (const [key, value] of Object.entries(this.getOkitJson())) {
+            if (Array.isArray(value)) {
+                const func_name = titleCase(key.split('_').join(' ')).split(' ').join('');
+                const get_function = `get${func_name}`;
+                const new_function = `new${func_name.slice(0, -1)}`;
+                for (const resource of this.getOkitJson()[get_function]()) {this[new_function](resource);}
+            }
+        }
+    }
+
+    load1() {
         this.clear();
         for (let artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
         for (let artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
@@ -1928,7 +1948,7 @@ class OkitArtefactView {
     getTopChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getTopArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);

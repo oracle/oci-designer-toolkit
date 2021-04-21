@@ -156,6 +156,17 @@ class OkitDesignerJsonView extends OkitJsonView {
             vm_cluster_network.draw();
         }
 
+        // VM Cluster Subcomponents
+        for (let db_node of this.getDbNodes()) {
+            db_node.draw();
+        }
+        for (let db_home of this.getDbHomes()) {
+            db_home.draw();
+        }
+        for (let database of this.getDatabases()) {
+            database.draw();
+        }
+
         // Resize Main Canvas if required
         $(jqId("canvas-svg")).children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
             canvas_svg.attr('width', Math.max(Number(canvas_svg.attr('width')), Number(this.getAttribute('width'))));

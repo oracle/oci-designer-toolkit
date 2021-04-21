@@ -37,8 +37,8 @@ class OCIVmClusterNetworks(OCIDatabaseConnection):
         if filter is None:
             filter = {}
 
-        if 'lifecycle_state' not in filter:
-            filter['lifecycle_state'] =  ["CREATING", "REQUIRES_VALIDATION", "VALIDATING", "VALIDATED", "VALIDATION_FAILED", "UPDATING", "ALLOCATED", "FAILED"]
+        # if 'lifecycle_state' not in filter:
+        #     filter['lifecycle_state'] =  ["CREATING", "REQUIRES_VALIDATION", "VALIDATING", "VALIDATED", "VALIDATION_FAILED", "UPDATING", "ALLOCATED", "FAILED"]
 
         vm_cluster_networks = oci.pagination.list_call_get_all_results(self.client.list_vm_cluster_networks, compartment_id=compartment_id, exadata_infrastructure_id=self.exadata_infrastructure_id).data
 

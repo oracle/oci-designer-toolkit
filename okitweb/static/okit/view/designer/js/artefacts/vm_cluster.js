@@ -14,6 +14,7 @@ class VmClusterView extends OkitContainerDesignerArtefactView {
     }
     get parent_id() {return this.artefact.exadata_infrastructure_id;}
     get parent() {return this.getJsonView().getExadataInfrastructure(this.parent_id);}
+    get info_text() {return `${this.artefact.cpus_enabled} cpus / ${this.artefact.data_storage_size_in_tbs} Tbs`;}
     /*
     ** SVG Processing
     */
@@ -54,8 +55,14 @@ class VmClusterView extends OkitContainerDesignerArtefactView {
     /*
     ** Child Artifact Functions
      */
+    getTopArtifacts() {
+        return [DbNode.getArtifactReference()];
+    }
     getTopEdgeArtifacts() {
         return [VmClusterNetwork.getArtifactReference()];
+    }
+    getContainerArtifacts() {
+        return [DbHome.getArtifactReference()];
     }
     /*
     ** Static Functionality
