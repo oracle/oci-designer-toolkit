@@ -16,6 +16,7 @@ __module__ = "ociVmClusterNetwork"
 import oci
 
 from common.okitLogging import getLogger
+from common.okitCommon import logJson
 from facades.ociConnection import OCIDatabaseConnection
 
 # Configure logging
@@ -45,9 +46,21 @@ class OCIVmClusterNetworks(OCIDatabaseConnection):
         # Convert to Json object
         vm_cluster_networks_json = self.toJson(vm_cluster_networks)
         logger.debug(str(vm_cluster_networks_json))
+        # Retrieve Full data
+        for vm_cluster_network in vm_cluster_networks_json:
+            vm_cluster_network.update(self.get(vm_cluster_network["id"]))
 
         # Filter results
         self.vm_cluster_networks_json = self.filterJsonObjectList(vm_cluster_networks_json, filter)
         logger.debug(str(self.vm_cluster_networks_json))
 
         return self.vm_cluster_networks_json
+
+    def get(self, id=None):
+        vm_cluster_network = self.client.get_vm_cluster_network(exadata_infrastructure_id=self.exadata_infrastructure_id, vm_cluster_network_id=id).data
+        logger.debug('============================== Vm Cluster Network Raw ==============================')
+        logger.debug(str(vm_cluster_network))
+        # Convert to Json object
+        vm_cluster_network_json = self.toJson(vm_cluster_network)
+        logJson(vm_cluster_network_json)
+        return vm_cluster_network_json
