@@ -288,7 +288,7 @@ sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
 sudo bash -c "pip3 install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
-sudo bash -c "git clone -b toxophilist/auth --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
+sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
 sudo bash -c "mkdir /okit/{log,ssl,workspace}"
 # Add additional environment information because append does not appear to work in write_file
 sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
