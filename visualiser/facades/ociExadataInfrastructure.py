@@ -54,8 +54,8 @@ class OCIExadataInfrastructures(OCIDatabaseConnection):
 
         # Filter results
         self.exadata_infrastructures_json = self.filterJsonObjectList(exadata_infrastructures_json, filter)
-        logger.info('============================== ExadataInfrastructures ==============================')
-        logger.info(str(self.exadata_infrastructures_json))
+        logger.debug('============================== ExadataInfrastructures ==============================')
+        logger.debug(str(self.exadata_infrastructures_json))
 
         return self.exadata_infrastructures_json
 

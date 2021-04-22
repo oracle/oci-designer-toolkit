@@ -28,46 +28,46 @@ from facades.ociVolumeAttachment import OCIVolumeAttachments
 # Configure logging
 logger = getLogger()
 
-class OCIInstanceVnics(OCIVirtualNetworkConnection):
-    def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, instance_id=None):
-        self.compartment_id = compartment_id
-        self.instance_id = instance_id
-        self.vnics_json = []
-        self.vnics_obj = []
-        super(OCIInstanceVnics, self).__init__(config=config, configfile=configfile, profile=profile)
+# class OCIInstanceVnics(OCIVirtualNetworkConnection):
+#     def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, instance_id=None):
+#         self.compartment_id = compartment_id
+#         self.instance_id = instance_id
+#         self.vnics_json = []
+#         self.vnics_obj = []
+#         super(OCIInstanceVnics, self).__init__(config=config, configfile=configfile, profile=profile)
 
-    def list(self, compartment_id=None, instance_id=None):
-        computeclient=OCIComputeConnection()
-        if compartment_id is None:
-            compartment_id = self.compartment_id
-        if instance_id is None:
-            instance_id = self.instance_id
+#     def list(self, compartment_id=None, instance_id=None):
+#         computeclient=OCIComputeConnection()
+#         if compartment_id is None:
+#             compartment_id = self.compartment_id
+#         if instance_id is None:
+#             instance_id = self.instance_id
 
-        vnic_attachments = oci.pagination.list_call_get_all_results(computeclient.client.list_vnic_attachments, compartment_id=compartment_id, instance_id=instance_id).data        
-        vnics = []
-        for attachment in vnic_attachments:
-            try:
-                vnic = self.client.get_vnic(attachment.vnic_id).data
-                vnics.append(vnic)
-            except Exception as e:
-                logger.exception('Failed to get Vnic Attachment')
-                logger.exception(e)
-        vnics_json = self.toJson(vnics)
-        logger.debug(str(vnics_json))
+#         vnic_attachments = oci.pagination.list_call_get_all_results(computeclient.client.list_vnic_attachments, compartment_id=compartment_id, instance_id=instance_id).data        
+#         vnics = []
+#         for attachment in vnic_attachments:
+#             try:
+#                 vnic = self.client.get_vnic(attachment.vnic_id).data
+#                 vnics.append(vnic)
+#             except Exception as e:
+#                 logger.exception('Failed to get Vnic Attachment')
+#                 logger.exception(e)
+#         vnics_json = self.toJson(vnics)
+#         logger.debug(str(vnics_json))
   
-        self.vnics_json=vnics_json
-        logger.debug(str(self.vnics_json))
+#         self.vnics_json=vnics_json
+#         logger.debug(str(self.vnics_json))
 
-        for vnic in self.vnics_json:
-            self.vnics_obj.append(OCIInstanceVnic(self.config, self.configfile, self.profile, vnic))
+#         for vnic in self.vnics_json:
+#             self.vnics_obj.append(OCIInstanceVnic(self.config, self.configfile, self.profile, vnic))
 
-        return self.vnics_json
+#         return self.vnics_json
 
-class OCIInstanceVnic(object):
-    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
-        self.config = config
-        self.configfile = configfile
-        self.data = data
+# class OCIInstanceVnic(object):
+#     def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
+#         self.config = config
+#         self.configfile = configfile
+#         self.data = data
 
 class OCIInstances(OCIComputeConnection):
     def __init__(self, config=None, configfile=None, profile=None, compartment_id=None, **kwargs):
@@ -103,10 +103,10 @@ class OCIInstances(OCIComputeConnection):
         vnic_attachments = OCIVnicAttachments(config=self.config, configfile=self.configfile, profile=self.profile, compartment_id=compartment_id).list()
 
         # Filter out OKE Created Instances
-        logger.info('Filtering out OKE Instances from list ({0!s:s}).'.format(len(self.instances_json)))
+        logger.debug('Filtering out OKE Instances from list ({0!s:s}).'.format(len(self.instances_json)))
         if exclude_oke:
             self.instances_json = [i for i in self.instances_json if 'oke-cluster-id' not in i['metadata']]
-        logger.info('Filtered OKE Instances from list ({0!s:s}).'.format(len(self.instances_json)))
+        logger.debug('Filtered OKE Instances from list ({0!s:s}).'.format(len(self.instances_json)))
 
         for instance in self.instances_json:
             # Get OS Details
@@ -134,25 +134,25 @@ class OCIInstances(OCIComputeConnection):
             instance['boot_volume_size_in_gbs'] = boot_volume_attachments[0]['boot_volume']['size_in_gbs']
             instance['is_pv_encryption_in_transit_enabled'] = boot_volume_attachments[0]['is_pv_encryption_in_transit_enabled']
             # Build object list
-            self.instances_obj.append(OCIInstance(self.config, self.configfile, self.profile, instance))
+            # self.instances_obj.append(OCIInstance(self.config, self.configfile, self.profile, instance))
 
         logJson(self.instances_json)
-        #logger.info(str(self.instances_json))
+        #logger.debug(str(self.instances_json))
         return self.instances_json
 
-class OCIInstance(object):
-    def __init__(self, config=None, configfile=None, profile=None, data=None):
-        self.config = config
-        self.configfile = configfile
-        self.profile = profile
-        self.data = data
+# class OCIInstance(object):
+#     def __init__(self, config=None, configfile=None, profile=None, data=None):
+#         self.config = config
+#         self.configfile = configfile
+#         self.profile = profile
+#         self.data = data
 
-    def getInstanceVnicClients(self):
-        return OCIInstanceVnics(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
+#     def getInstanceVnicClients(self):
+#         return OCIInstanceVnics(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
-    def getVolumeAttachments(self):
-        return OCIVolumeAttachments(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
+#     def getVolumeAttachments(self):
+#         return OCIVolumeAttachments(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 
-    def getVnicAttachments(self):
-        return OCIVnicAttachments(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
+#     def getVnicAttachments(self):
+#         return OCIVnicAttachments(self.config, self.configfile, self.profile, self.data['compartment_id'], self.data['id'])
 

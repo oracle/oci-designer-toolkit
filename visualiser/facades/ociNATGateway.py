@@ -41,8 +41,8 @@ class OCINATGateways(OCIVirtualNetworkConnection):
         if 'lifecycle_state' not in filter:
             filter['lifecycle_state'] = 'AVAILABLE'
 
-        logger.info('Compartment Id : {0!s:s}'.format(compartment_id))
-        logger.info('VCN Id         : {0!s:s}'.format(self.vcn_id))
+        logger.debug('Compartment Id : {0!s:s}'.format(compartment_id))
+        logger.debug('VCN Id         : {0!s:s}'.format(self.vcn_id))
 
         if self.vcn_id is not None:
             nat_gateways = oci.pagination.list_call_get_all_results(self.client.list_nat_gateways, compartment_id=compartment_id, vcn_id=self.vcn_id).data

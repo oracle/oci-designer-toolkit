@@ -42,7 +42,7 @@ class OCIDbNodes(OCIDatabaseConnection):
 
         db_nodes = oci.pagination.list_call_get_all_results(self.client.list_db_nodes, compartment_id=compartment_id).data if self.vm_cluster_id is None else oci.pagination.list_call_get_all_results(self.client.list_db_nodes, compartment_id=compartment_id, vm_cluster_id=self.vm_cluster_id).data
         # db_nodes = oci.pagination.list_call_get_all_results(self.client.list_db_nodes, compartment_id=compartment_id).data
-        # logger.info(f'DB Nodes : {db_nodes}')
+        # logger.debug(f'DB Nodes : {db_nodes}')
 
         # Convert to Json object
         db_nodes_json = self.toJson(db_nodes)

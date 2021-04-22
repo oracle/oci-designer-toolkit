@@ -37,7 +37,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
             compartment_id = self.compartment_id
 
         resource_managers = oci.pagination.list_call_get_all_results(self.client.list_stacks, compartment_id=compartment_id).data
-        logger.info('Stack Count : {0:02d}'.format(len(resource_managers)))
+        logger.debug('Stack Count : {0:02d}'.format(len(resource_managers)))
         # Convert to Json object
         resource_managers_json = self.toJson(resource_managers)
         logJson(resource_managers_json)
@@ -57,7 +57,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         zip_source = oci.resource_manager.models.CreateZipUploadConfigSourceDetails(zip_file_base64_encoded=self.base64EncodeZip(stack))
         stack_details = oci.resource_manager.models.CreateStackDetails(compartment_id=stack['compartment_id'], display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x', freeform_tags={"OKITStack": "Created By OKIT"})
         response = self.client.create_stack(stack_details)
-        logger.info('Create Stack Response : {0!s:s}'.format(str(response.data)))
+        logger.debug('Create Stack Response : {0!s:s}'.format(str(response.data)))
         return self.toJson(response.data)
 
     def createJob(self, stack, operation='PLAN'):
@@ -78,7 +78,7 @@ class OCIResourceManagers(OCIResourceManagerConnection):
         zip_source = oci.resource_manager.models.UpdateZipUploadConfigSourceDetails(zip_file_base64_encoded=self.base64EncodeZip(stack))
         stack_details = oci.resource_manager.models.UpdateStackDetails(display_name=stack['display_name'], config_source=zip_source, variables=stack['variables'], terraform_version='0.12.x')
         response = self.client.update_stack(stack_id=stack['id'], update_stack_details=stack_details)
-        logger.info('Update Stack Response : {0!s:s}'.format(str(response.data)))
+        logger.debug('Update Stack Response : {0!s:s}'.format(str(response.data)))
         return self.toJson(response.data)
 
     def base64EncodeZip(self, stack):
@@ -92,7 +92,7 @@ class OCIResourceManager(OCIResourceManagerConnection):
         self.config = config
         self.configfile = configfile
         self.data = data
-        logger.info(str(data))
+        logger.debug(str(data))
         super(OCIResourceManager, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def listJobs(self):

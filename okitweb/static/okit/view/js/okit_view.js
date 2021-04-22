@@ -92,6 +92,7 @@ class OkitJsonView {
                 const func_name = titleCase(key.split('_').join(' ')).split(' ').join('');
                 const get_function = `get${func_name}`;
                 const new_function = `new${func_name.slice(0, -1)}`;
+                // console.warn('Functions:', get_function, new_function);
                 for (const resource of this.getOkitJson()[get_function]()) {this[new_function](resource);}
             }
         }
@@ -507,6 +508,7 @@ class OkitJsonView {
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
+    newIpsecConnection(connect) {return this.newIPSecConnection(connect)}
     newIPSecConnection(connect) {
         this.ipsec_connections.push(connect ? new IPSecConnectionView(connect, this) : new IPSecConnectionView(this.okitjson.newIPSecConnection(), this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
@@ -594,6 +596,7 @@ class OkitJsonView {
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
+    newMysqlDatabaseSystem(database) {return this.newMySQLDatabaseSystem(database)}
     newMySQLDatabaseSystem(database) {
         this.mysql_database_systems.push(database ? new MySQLDatabaseSystemView(database, this) : new MySQLDatabaseSystemView(this.okitjson.newMySQLDatabaseSystem(), this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
@@ -630,6 +633,7 @@ class OkitJsonView {
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
+    newNatGateway(gateway) {return this.newNATGateway(gateway)}
     newNATGateway(gateway) {
         let ng = gateway ? new NATGatewayView(gateway, this) : new NATGatewayView(this.okitjson.newNATGateway(), this);
         if (ng.artefact === null) {
