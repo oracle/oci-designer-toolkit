@@ -23,8 +23,9 @@
     "main": "src/okit-cli.js",
     "scripts": {
         "start": "node .",
-        "import-test": "node src/okit-cli.js import okit-json test/okit-node-test.json test/okit-node-test.okit",
-        "generate-test": "node src/okit-cli.js generate svg test/okit-node-test.okit test/okit-node-test.svg"
+        "test-import-json-test": "node src/okit-cli.js import okit-json test/okit-node-test.json test/okit-node-test.okit",
+        "test-generate-svg-test": "node src/okit-cli.js generate svg test/okit-node-test.okit test/okit-node-test.svg",
+        "test-generate-okit-model": "node src/okit-cli.js generate okit-model-js test/tf-schema.json test/model"
     },
     "private": true,
     "type": "module",

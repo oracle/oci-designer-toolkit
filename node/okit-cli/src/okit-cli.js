@@ -12,6 +12,7 @@ import { JSDOM } from 'jsdom';
 import { OkitData } from 'okit-node/src/data/okit.js'
 import { OkitView } from 'okit-node/src/view/okit_view.js'
 import { OkitJsonImporter } from 'okit-node/src/importer/okit_json_importer.js'
+import { OkitModelGenerator } from 'okit-node/src/generator/okit_model_generator.js'
 // Create Simple HTML Page with OKIT Canvas div
 const dom = new JSDOM(`<!DOCTYPE html><body><div id="okit-canvas-div"></div></body>`);
 const window = dom.window
@@ -40,6 +41,21 @@ if (command.toLocaleLowerCase() === 'generate') {
 
         console.info('')
         console.info(`SVG Output Written to : ${output_filename}`)
+    } else if (subcommand.toLocaleLowerCase() === 'okit-model-js') {
+        // Source Schema file will be first in the list after command
+        const input_filename = args[2]
+        const input_data = fs.readFileSync(input_filename, 'utf-8')
+        // Generated root directory will be second in the list after command
+        const output_dir = args[3]
+        const schema = JSON.parse(input_data)
+        Object.entries(schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).forEach(([key,value]) => {
+            if (OkitModelGenerator.resource_map.hasOwnProperty(key)) {
+                const generator = new OkitModelGenerator(key, value.block.attributes)
+                console.info(generator.generate())
+            }
+        })
+    } else if (subcommand.toLocaleLowerCase() === 'okit-properties-js') {
+
     }
 } else if (command.toLocaleLowerCase() === 'import') {
     if (subcommand.toLocaleLowerCase() === 'okit-json') {
