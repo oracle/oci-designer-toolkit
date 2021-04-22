@@ -4,6 +4,9 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 {% block title_block %}Db Home{% endblock %}
-{% block required_properties_table_rows_block %}{% endblock %}
+{% block required_properties_table_rows_block %}
+    {{ properties_input('DB Version', 'db_version', type='text') }}
+    {{ properties_input('DB Home', 'db_home_location', type='text') }}
+{% endblock %}
 {% block optional_properties_table_rows_block %}{% endblock %}
 {% block optional_properties_block %}{% endblock %}

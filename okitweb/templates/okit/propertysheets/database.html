@@ -4,6 +4,10 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 {% block title_block %}Database{% endblock %}
-{% block required_properties_table_rows_block %}{% endblock %}
+{% block required_properties_table_rows_block %}
+    {{ properties_input('DB Name', 'db_name', type='text') }}
+    {{ properties_input('DB Unique Name', 'db_unique_name', type='text') }}
+    {{ properties_input('Workload', 'db_workload', type='text') }}
+{% endblock %}
 {% block optional_properties_table_rows_block %}{% endblock %}
 {% block optional_properties_block %}{% endblock %}

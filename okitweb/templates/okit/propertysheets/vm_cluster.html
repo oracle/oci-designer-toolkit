@@ -4,6 +4,13 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 {% block title_block %}Vm Cluster{% endblock %}
-{% block required_properties_table_rows_block %}{% endblock %}
+{% block required_properties_table_rows_block %}
+    {{ properties_input('Shape', 'shape', type='text') }}
+    {{ properties_input('License', 'license_model', type='text') }}
+    {{ properties_input('CPUs Enabled', 'cpus_enabled', type='text') }}
+    {{ properties_input('Data Storage Tbs', 'data_storage_size_in_tbs', type='text') }}
+    {{ properties_input('Node Storage Gbs', 'db_node_storage_size_in_gbs', type='text') }}
+    {{ properties_input('Memory Gbs', 'memory_in_gbs', type='text') }}
+{% endblock %}
 {% block optional_properties_table_rows_block %}{% endblock %}
 {% block optional_properties_block %}{% endblock %}

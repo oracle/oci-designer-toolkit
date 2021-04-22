@@ -4,6 +4,18 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 {% block title_block %}Exadata Infrastructure{% endblock %}
-{% block required_properties_table_rows_block %}{% endblock %}
+{% block required_properties_table_rows_block %}
+    {{ properties_input('Shape', 'shape', type='text') }}
+    {{ properties_input('Admin CIDR', 'admin_network_cidr', type='text') }}
+    {{ properties_input('CP Server 1 CIDR', 'cloud_control_plane_server1', type='text') }}
+    {{ properties_input('CP Server 2 CIDR', 'cloud_control_plane_server2', type='text') }}
+    {{ properties_input('Max CPUs', 'max_cpu_count', type='text') }}
+    {{ properties_input('CPUs Enabled', 'cpus_enabled', type='text') }}
+    {{ properties_input('Max Data Storage Tbs', 'max_data_storage_in_t_bs', type='text') }}
+    {{ properties_input('Data Storage Tbs', 'data_storage_size_in_tbs', type='text') }}
+    {{ properties_input('Max Node Storage Gbs', 'max_db_node_storage_in_g_bs', type='text') }}
+    {{ properties_input('Node Storage Gbs', 'db_node_storage_size_in_gbs', type='text') }}
+    {{ properties_input('Max Memory Gbs', 'max_memory_in_gbs', type='text') }}
+{% endblock %}
 {% block optional_properties_table_rows_block %}{% endblock %}
 {% block optional_properties_block %}{% endblock %}
