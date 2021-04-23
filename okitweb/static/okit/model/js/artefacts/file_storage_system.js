@@ -26,22 +26,48 @@ class FileStorageSystem extends OkitArtifact {
             this.region_availability_domain = this.availability_domain;
             this.availability_domain = this.region_availability_domain.slice(-1);
         }
-        if (this.exports.length > 0) {
-            this.primary_export = this.exports[0];
-        } else if (this.subnet_id) {
-            this.primary_export = {path: '/mnt', export_options: {source: this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'], access: 'READ_ONLY', anonymous_gid: '', anonymous_uid: '', identity_squash: 'NONE', require_privileged_source_port: true}};
-            this.exports[0] = this.primary_export;
+        // if (this.exports.length > 0) {
+        //     this.primary_export = this.exports[0];
+        // } else if (this.subnet_id) {
+        //     this.primary_export = {path: '/mnt', export_options: {source: this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'], access: 'READ_ONLY', anonymous_gid: '', anonymous_uid: '', identity_squash: 'NONE', require_privileged_source_port: true}};
+        //     this.exports[0] = this.primary_export;
+        // }
+        // if (this.mount_targets.length > 0) {
+        //     this.primary_mount_target = this.mount_targets[0];
+        // } else if (this.subnet_id) {
+        //     this.primary_mount_target = {subnet_id: this.subnet_id, hostname_label: this.display_name.toLowerCase(), nsg_ids: [], export_set: {max_fs_stat_bytes: '', max_fs_stat_files: ''}};
+        //     this.mount_targets[0] = this.primary_mount_target;
+        // }
+        if (this.exports.length === 0) {
+            this.exports.push({
+                                path: '/mnt', 
+                                export_options: {
+                                    source: this.subnet_id ? this.getOkitJson().getSubnet(this.subnet_id)['cidr_block'] : '', 
+                                    access: 'READ_ONLY', 
+                                    anonymous_gid: '', 
+                                    anonymous_uid: '', 
+                                    identity_squash: 'NONE', 
+                                    require_privileged_source_port: true
+                                }
+                            })
         }
-        if (this.mount_targets.length > 0) {
-            this.primary_mount_target = this.mount_targets[0];
-        } else if (this.subnet_id) {
-            this.primary_mount_target = {subnet_id: this.subnet_id, hostname_label: this.display_name.toLowerCase(), nsg_ids: [], export_set: {max_fs_stat_bytes: '', max_fs_stat_files: ''}};
-            this.mount_targets[0] = this.primary_mount_target;
+        if (this.mount_targets.length === 0) {
+            this.mount_targets.push({
+                subnet_id: this.subnet_id ? this.subnet_id : '', 
+                hostname_label: this.display_name.toLowerCase(), 
+                nsg_ids: [], 
+                export_set: {
+                    max_fs_stat_bytes: '', 
+                    max_fs_stat_files: ''
+                }
+            })
         }
         this.convert();
         // Expose subnet_id for the first Mount target at the top level
         delete this.subnet_id;
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id}, enumerable: false });
+        Object.defineProperty(this, 'primary_export', {get: function() {return this.exports[0];}, set: function(fsexport) {this.exports[0] = fsexport}, enumerable: false });
+        Object.defineProperty(this, 'primary_mount_target', {get: function() {return this.mount_targets[0];}, set: function(mnt_target) {this.mount_targets[0] = mnt_target}, enumerable: false });
     }
 
 

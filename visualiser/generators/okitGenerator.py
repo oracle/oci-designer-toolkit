@@ -556,35 +556,36 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", file_storage_system["display_name"], standardisedName)
         # ---- Network OCID
-        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['primary_mount_target']['subnet_id']]))
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[file_storage_system['mount_targets'][0]['subnet_id']]))
         # ---- Source (CIDR)
-        self.addJinja2Variable("source", file_storage_system["primary_export"]["export_options"]["source"], standardisedName)
+        self.addJinja2Variable("source", file_storage_system['exports'][0]["export_options"]["source"], standardisedName)
         # ---- Hostname
-        self.addJinja2Variable("hostname_label", file_storage_system['primary_mount_target']["hostname_label"], standardisedName)
+        if file_storage_system['mount_targets'][0].get("hostname_label", "") != "":
+            self.addJinja2Variable("hostname_label", file_storage_system['mount_targets'][0]["hostname_label"], standardisedName)
         # ---- (Mount) Path
-        self.addJinja2Variable("path", file_storage_system["primary_export"]["path"], standardisedName)
+        self.addJinja2Variable("path", file_storage_system['exports'][0]["path"], standardisedName)
         # ---- Require Privileged Source Port
-        self.addJinja2Variable("require_privileged_source_port", file_storage_system["primary_export"]["export_options"]["require_privileged_source_port"], standardisedName)
+        self.addJinja2Variable("require_privileged_source_port", file_storage_system['exports'][0]["export_options"]["require_privileged_source_port"], standardisedName)
         # ---- Access
-        self.addJinja2Variable("access", file_storage_system["primary_export"]["export_options"]["access"], standardisedName)
+        self.addJinja2Variable("access", file_storage_system['exports'][0]["export_options"]["access"], standardisedName)
         # --- Optional
         # ----- Network Security Groups
-        if len(file_storage_system['primary_mount_target']["nsg_ids"]):
-            self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in file_storage_system['primary_mount_target']["nsg_ids"]]
+        if len(file_storage_system['mount_targets'][0]["nsg_ids"]):
+            self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in file_storage_system['mount_targets'][0]["nsg_ids"]]
         # ----- Max FS Stat Bytes
-        if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_bytes"].strip() != '':
-            self.addJinja2Variable("max_fs_stat_bytes", file_storage_system["primary_export"]["export_set"]["max_fs_stat_bytes"], standardisedName)
+        if str(file_storage_system['mount_targets'][0]['export_set']["max_fs_stat_bytes"]).strip() != '':
+            self.addJinja2Variable("max_fs_stat_bytes", file_storage_system['mount_targets'][0]["export_set"]["max_fs_stat_bytes"], standardisedName)
         # ----- Max FS Stat Files
-        if file_storage_system['primary_mount_target']['export_set']["max_fs_stat_files"].strip() != '':
-            self.addJinja2Variable("max_fs_stat_files", file_storage_system["primary_export"]["export_set"]["max_fs_stat_files"], standardisedName)
+        if str(file_storage_system['mount_targets'][0]['export_set']["max_fs_stat_files"]).strip() != '':
+            self.addJinja2Variable("max_fs_stat_files", file_storage_system['mount_targets'][0]["export_set"]["max_fs_stat_files"], standardisedName)
         # ----- Identity Squash
-        if file_storage_system["primary_export"]["export_options"]["identity_squash"] != 'NONE':
+        if file_storage_system['exports'][0]["export_options"]["identity_squash"] != 'NONE':
             # ----- Identity Squash
-            self.addJinja2Variable("identity_squash", file_storage_system["primary_export"]["export_options"]["identity_squash"], standardisedName)
+            self.addJinja2Variable("identity_squash", file_storage_system['exports'][0]["export_options"]["identity_squash"], standardisedName)
             # ----- Identity Squash GID
-            self.addJinja2Variable("anonymous_gid", file_storage_system["primary_export"]["export_options"]["anonymous_gid"], standardisedName)
+            self.addJinja2Variable("anonymous_gid", file_storage_system['exports'][0]["export_options"]["anonymous_gid"], standardisedName)
             # ----- Identity Squash UID
-            self.addJinja2Variable("anonymous_uid", file_storage_system["primary_export"]["export_options"]["anonymous_uid"], standardisedName)
+            self.addJinja2Variable("anonymous_uid", file_storage_system['exports'][0]["export_options"]["anonymous_uid"], standardisedName)
         # ---- Tags
         self.renderTags(file_storage_system)
 
