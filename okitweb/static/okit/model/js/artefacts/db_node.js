@@ -16,6 +16,7 @@ class DbNode extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.db_nodes.length + 1);
         this.compartment_id = data.parent_id;
+        this.read_only = true;
         /*
         ** TODO: Add Resource / Artefact specific parameters and default
         */
