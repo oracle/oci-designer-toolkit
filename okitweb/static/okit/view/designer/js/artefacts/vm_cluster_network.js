@@ -32,8 +32,142 @@ class VmClusterNetworkView extends OkitDesignerArtefactView {
     */
     loadProperties() {
         const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/vm_cluster_network.html", () => {loadPropertiesSheet(self.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/vm_cluster_network.html", () => {
+            loadPropertiesSheet(self.artefact);
+            self.loadClientNetworks();
+            self.loadBackupNetworks();
+        });
     }
+    loadClientNetworks() {
+        const tbody = d3.select('#client_networks_table_body');
+        const node_tbody = d3.select('#client_nodes_table_body');
+        this.loadNetworkDetails(tbody, this.vm_networks.filter(n => n.network_type === 'CLIENT')[0])
+        this.loadClientNodes(node_tbody, this.vm_networks.filter(n => n.network_type === 'CLIENT')[0].nodes)
+    }
+    loadBackupNetworks() {
+        const tbody = d3.select('#backup_networks_table_body');
+        const node_tbody = d3.select('#backup_nodes_table_body');
+        this.loadNetworkDetails(tbody, this.vm_networks.filter(n => n.network_type === 'BACKUP')[0])
+        this.loadBackupNodes(node_tbody, this.vm_networks.filter(n => n.network_type === 'CLIENT')[0].nodes)
+    }
+    loadNetworkDetails(tbody, network) {
+        // Domain Name
+        let tr = tbody.append('div').attr('class', 'tr');
+        let td = tr.append('div').attr('class', 'td')
+            .text('Domain Name');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('type', 'text')
+            .attr('class', 'property-value')
+            .attr('name', `${network.network_type}_domain_name`)
+            .attr('id', `${network.network_type}_domain_name`)
+            .attr('value', network.domain_name)
+            .on('change', () => {network.domain_name = this.value});
+        // Netmask
+        tr = tbody.append('div').attr('class', 'tr');
+        td = tr.append('div').attr('class', 'td')
+            .text('Netmask');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('type', 'text')
+            .attr('class', 'property-value')
+            .attr('name', `${network.network_type}_netmask`)
+            .attr('id', `${network.network_type}_netmask`)
+            .attr('value', network.netmask)
+            .on('change', () => {network.netmask = this.value});
+        // Gateway
+        tr = tbody.append('div').attr('class', 'tr');
+        td = tr.append('div').attr('class', 'td')
+            .text('Gateway');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('type', 'text')
+            .attr('class', 'property-value')
+            .attr('name', `${network.network_type}_gateway`)
+            .attr('id', `${network.network_type}_gateway`)
+            .attr('value', network.gateway)
+            .on('change', () => {network.gateway = this.value});
+        // Vlan
+        tr = tbody.append('div').attr('class', 'tr');
+        td = tr.append('div').attr('class', 'td')
+            .text('Vlan');
+        td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('type', 'text')
+            .attr('class', 'property-value')
+            .attr('name', `${network.network_type}_vlan_id`)
+            .attr('id', `${network.network_type}_vlan_id`)
+            .attr('value', network.vlan_id)
+            .on('change', () => {network.vlan_id = this.value});
+    }
+    loadClientNodes(tbody, nodes) {
+        let tr = undefined
+        let td = undefined
+        nodes.forEach((node, idx) => {
+            tr = tbody.append('div').attr('class', 'tr');
+            // Hostname
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('type', 'text')
+                .attr('class', 'property-value')
+                .attr('name', `hostname_${idx}`)
+                .attr('id', `hostname_${idx}`)
+                .attr('value', node.hostname)
+                .on('change', () => {node.hostname = this.value});
+            // Ip
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('type', 'text')
+                .attr('class', 'property-value')
+                .attr('name', `ip_${idx}`)
+                .attr('id', `ip_${idx}`)
+                .attr('value', node.ip)
+                .on('change', () => {node.ip = this.value});
+            // Vip Hostname
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('type', 'text')
+                .attr('class', 'property-value')
+                .attr('name', `vip_hostname_${idx}`)
+                .attr('id', `vip_hostname_${idx}`)
+                .attr('value', node.vip_hostname)
+                .on('change', () => {node.vip_hostname = this.value});
+            // Vip
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('type', 'text')
+                .attr('class', 'property-value')
+                .attr('name', `vip_${idx}`)
+                .attr('id', `vip_${idx}`)
+                .attr('value', node.vip)
+                .on('change', () => {node.vip = this.value});
+        });
+     }
+    loadBackupNodes(tbody, nodes) {
+        let tr = undefined
+        let td = undefined
+        nodes.forEach((node, idx) => {
+            tr = tbody.append('div').attr('class', 'tr');
+            // Hostname
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('type', 'text')
+                .attr('class', 'property-value')
+                .attr('name', `hostname_${idx}`)
+                .attr('id', `hostname_${idx}`)
+                .attr('value', node.hostname)
+                .on('change', () => {node.hostname = this.value});
+            // Ip
+            td = tr.append('div').attr('class', 'td');
+            td.append('input')
+                .attr('type', 'text')
+                .attr('class', 'property-value')
+                .attr('name', `ip_${idx}`)
+                .attr('id', `ip_${idx}`)
+                .attr('value', node.ip)
+                .on('change', () => {node.ip = this.value});
+        });
+     }
     /*
     ** Load and display Value Proposition
     */
