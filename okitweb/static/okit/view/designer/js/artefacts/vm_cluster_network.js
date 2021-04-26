@@ -13,7 +13,7 @@ class VmClusterNetworkView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
     get attached() {
-        if (!this.attached_id) {
+        if (!this.attached_id && this.getOkitJson().vm_clusters) {
             for (let vm_cluster of this.getOkitJson().vm_clusters) {
                 if (vm_cluster.vm_cluster_network_id === this.id) {
                     return true;
