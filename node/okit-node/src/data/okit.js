@@ -26,17 +26,12 @@ class OkitData {
             region: {
                 cross_region: {
                     resources: {},
-                    vars: {},
-                    coords: {},
-                    connectors: {},
-                    svg: {}
+                    vars: {}
                 },
                 undefined: {
                     resources: {},
                     vars: {},
-                    coords: {},
-                    connectors: {},
-                    svg: {}
+                    views: {}
                 }
             }
         }  

@@ -48,10 +48,7 @@
           }
         ]
       },
-      "vars": {},
-      "coords": {},
-      "connectors": {},
-      "svg": {}
+      "vars": {}
     },
     "undefined": {
       "resources": {
@@ -652,307 +649,311 @@
         ]
       },
       "vars": {},
-      "coords": {},
-      "connectors": {},
-      "svg": {}
+      "views": {
+        "OkitCompartmentContainerView": {
+          "coords": {
+            "okit.compartment.35e6b6bc-e551-4561-abbf-e204f0d01b01": {
+              "id": "okit.compartment.35e6b6bc-e551-4561-abbf-e204f0d01b01-svg",
+              "x": 0,
+              "y": 0,
+              "width": 935,
+              "height": 1785,
+              "viewbox": "0 0 935 1785"
+            },
+            "okit.compartment.05a95516-a010-4536-a878-ab545ad70e1e": {
+              "id": "okit.compartment.05a95516-a010-4536-a878-ab545ad70e1e-svg",
+              "x": 60,
+              "y": 60,
+              "width": 750,
+              "height": 730,
+              "viewbox": "0 0 750 730"
+            },
+            "okit.compartment.dbb571e3-47f9-46ae-b28d-411248d2fa78": {
+              "id": "okit.compartment.dbb571e3-47f9-46ae-b28d-411248d2fa78-svg",
+              "x": 60,
+              "y": 60,
+              "width": 630,
+              "height": 590,
+              "viewbox": "0 0 630 590"
+            },
+            "okit.compartment.c2919e87-f20d-46c4-bfc5-d8c480791f69": {
+              "id": "okit.compartment.c2919e87-f20d-46c4-bfc5-d8c480791f69-svg",
+              "x": 60,
+              "y": 60,
+              "width": 510,
+              "height": 450,
+              "viewbox": "0 0 510 450"
+            },
+            "okit.virtualcloudnetwork.30f9924b-88f1-4a81-870c-0651933ae341": {
+              "id": "okit.virtualcloudnetwork.30f9924b-88f1-4a81-870c-0651933ae341-svg",
+              "x": 60,
+              "y": 810,
+              "width": 705,
+              "height": 375,
+              "viewbox": "0 0 705 375"
+            },
+            "okit.virtualcloudnetwork.0ea39a17-a5cb-483f-ad7e-96d17bee718a": {
+              "id": "okit.virtualcloudnetwork.0ea39a17-a5cb-483f-ad7e-96d17bee718a-svg",
+              "x": 60,
+              "y": 1205,
+              "width": 390,
+              "height": 500,
+              "viewbox": "0 0 390 500"
+            },
+            "okit.virtualcloudnetwork.85295733-d858-4121-95e1-bf6eaaa6270f": {
+              "id": "okit.virtualcloudnetwork.85295733-d858-4121-95e1-bf6eaaa6270f-svg",
+              "x": 60,
+              "y": 60,
+              "width": 390,
+              "height": 310,
+              "viewbox": "0 0 390 310"
+            },
+            "okit.customerpremiseequipment.27ec3e00-efbe-42b1-85d6-64d061dbdea2": {
+              "id": "okit.customerpremiseequipment.27ec3e00-efbe-42b1-85d6-64d061dbdea2-svg",
+              "x": 890,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.customerpremiseequipment.eec53193-604f-4633-b5df-5bfbdcaff7b7": {
+              "id": "okit.customerpremiseequipment.eec53193-604f-4633-b5df-5bfbdcaff7b7-svg",
+              "x": 890,
+              "y": 125,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.ipsecconnection.e1777a1d-06d8-43d3-8382-45c9eb81596a": {
+              "id": "okit.ipsecconnection.e1777a1d-06d8-43d3-8382-45c9eb81596a-svg",
+              "x": 830,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.remotepeeringconnection.27be5ba5-41b5-41c5-94d3-f5125d902084": {
+              "id": "okit.remotepeeringconnection.27be5ba5-41b5-41c5-94d3-f5125d902084-svg",
+              "x": 830,
+              "y": 125,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.internetgateway.8949c7ef-96f1-49db-a7dc-549dafcf1fa2": {
+              "id": "okit.internetgateway.8949c7ef-96f1-49db-a7dc-549dafcf1fa2-svg",
+              "x": 120,
+              "y": 0,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.natgateway.808217ad-6233-47b1-b0ba-c4bc3fff5e00": {
+              "id": "okit.natgateway.808217ad-6233-47b1-b0ba-c4bc3fff5e00-svg",
+              "x": 185,
+              "y": 0,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.natgateway.cfe47d82-d3c0-4d74-92c9-d3f557e5c715": {
+              "id": "okit.natgateway.cfe47d82-d3c0-4d74-92c9-d3f557e5c715-svg",
+              "x": 120,
+              "y": 0,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.servicegateway.e38809e9-db14-4e6a-adac-f838161cfadd": {
+              "id": "okit.servicegateway.e38809e9-db14-4e6a-adac-f838161cfadd-svg",
+              "x": 660,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.dynamicroutinggateway.595f6b5d-eef3-4443-b4ec-6ea840dc96d6": {
+              "id": "okit.dynamicroutinggateway.595f6b5d-eef3-4443-b4ec-6ea840dc96d6-svg",
+              "x": 660,
+              "y": 125,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.localpeeringgateway.44bab5bf-e07c-4de1-b6f8-eecb56dbf4dd": {
+              "id": "okit.localpeeringgateway.44bab5bf-e07c-4de1-b6f8-eecb56dbf4dd-svg",
+              "x": 660,
+              "y": 190,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.localpeeringgateway.140b7c30-37d8-442b-b24e-3666a8d0c7c3": {
+              "id": "okit.localpeeringgateway.140b7c30-37d8-442b-b24e-3666a8d0c7c3-svg",
+              "x": 345,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.routetable.6afed01e-5e48-47dd-a843-97ab329ae13a": {
+              "id": "okit.routetable.6afed01e-5e48-47dd-a843-97ab329ae13a-svg",
+              "x": 60,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.securitylist.c89c532e-2f9c-49f3-832b-4c74ef31e8e7": {
+              "id": "okit.securitylist.c89c532e-2f9c-49f3-832b-4c74ef31e8e7-svg",
+              "x": 125,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.securitylist.ddf60de3-9113-4ee6-b841-04b35b7d0e72": {
+              "id": "okit.securitylist.ddf60de3-9113-4ee6-b841-04b35b7d0e72-svg",
+              "x": 190,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.securitylist.8a2e54f9-2ccc-4f7f-ad16-792623e8dbc9": {
+              "id": "okit.securitylist.8a2e54f9-2ccc-4f7f-ad16-792623e8dbc9-svg",
+              "x": 255,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.securitylist.6dc47f20-5248-46dd-9597-9dcdb1a34def": {
+              "id": "okit.securitylist.6dc47f20-5248-46dd-9597-9dcdb1a34def-svg",
+              "x": 320,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.networksecuritygroup.a6a56674-c155-47df-bb35-3e9bb6ec9e60": {
+              "id": "okit.networksecuritygroup.a6a56674-c155-47df-bb35-3e9bb6ec9e60-svg",
+              "x": 385,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.networksecuritygroup.e664bc34-7457-482e-83ff-bbce7960251f": {
+              "id": "okit.networksecuritygroup.e664bc34-7457-482e-83ff-bbce7960251f-svg",
+              "x": 450,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.networksecuritygroup.c7d86c96-f42f-4a52-9a02-29b49c4c14ee": {
+              "id": "okit.networksecuritygroup.c7d86c96-f42f-4a52-9a02-29b49c4c14ee-svg",
+              "x": 515,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.networksecuritygroup.1acaa8d2-4900-47ff-9f69-b8eacee6792a": {
+              "id": "okit.networksecuritygroup.1acaa8d2-4900-47ff-9f69-b8eacee6792a-svg",
+              "x": 580,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.subnet.42713871-0e5c-48c3-8bc4-5e782d6c02f3": {
+              "id": "okit.subnet.42713871-0e5c-48c3-8bc4-5e782d6c02f3-svg",
+              "x": 60,
+              "y": 60,
+              "width": 270,
+              "height": 170,
+              "viewbox": "0 0 270 170"
+            },
+            "okit.subnet.3c0ff004-c669-4471-abc5-7c87f0a16450": {
+              "id": "okit.subnet.3c0ff004-c669-4471-abc5-7c87f0a16450-svg",
+              "x": 60,
+              "y": 125,
+              "width": 270,
+              "height": 170,
+              "viewbox": "0 0 270 170"
+            },
+            "okit.subnet.e7693b43-0526-4836-8faf-9de91fc5a0c1": {
+              "id": "okit.subnet.e7693b43-0526-4836-8faf-9de91fc5a0c1-svg",
+              "x": 60,
+              "y": 250,
+              "width": 270,
+              "height": 170,
+              "viewbox": "0 0 270 170"
+            },
+            "okit.subnet.b4f242b6-716f-4b13-9575-d1c92a1119fb": {
+              "id": "okit.subnet.b4f242b6-716f-4b13-9575-d1c92a1119fb-svg",
+              "x": 60,
+              "y": 60,
+              "width": 270,
+              "height": 170,
+              "viewbox": "0 0 270 170"
+            },
+            "okit.instance.296d4fce-21db-4722-b04e-c579cceb286c": {
+              "id": "okit.instance.296d4fce-21db-4722-b04e-c579cceb286c-svg",
+              "x": 60,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.instance.50a4fc96-99d8-4f9b-a6e6-9323f2c5ad47": {
+              "id": "okit.instance.50a4fc96-99d8-4f9b-a6e6-9323f2c5ad47-svg",
+              "x": 125,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.instance.f87abf0d-b066-4b5d-b252-bb47ce4bea66": {
+              "id": "okit.instance.f87abf0d-b066-4b5d-b252-bb47ce4bea66-svg",
+              "x": 60,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.databasesystem.f7e6dbfe-ec61-4a14-bb73-8e8dce281410": {
+              "id": "okit.databasesystem.f7e6dbfe-ec61-4a14-bb73-8e8dce281410-svg",
+              "x": 60,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.mysqldatabasesystem.a3232805-d077-41e8-b200-83d05708e4f2": {
+              "id": "okit.mysqldatabasesystem.a3232805-d077-41e8-b200-83d05708e4f2-svg",
+              "x": 125,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            },
+            "okit.loadbalancer.222bce68-5f9e-4939-a6a0-7885fdd3e276": {
+              "id": "okit.loadbalancer.222bce68-5f9e-4939-a6a0-7885fdd3e276-svg",
+              "x": 60,
+              "y": 60,
+              "width": 45,
+              "height": 45,
+              "viewbox": "0 0 45 45"
+            }
+          },
+          "connectors": {},
+          "svg": {}
+        }
+      }
     }
   },
-  "coords": {
-    "okit.compartment.35e6b6bc-e551-4561-abbf-e204f0d01b01": {
-      "id": "okit.compartment.35e6b6bc-e551-4561-abbf-e204f0d01b01-svg",
-      "x": 0,
-      "y": 0,
-      "width": 935,
-      "height": 1785,
-      "viewbox": "0 0 935 1785"
-    },
-    "okit.compartment.05a95516-a010-4536-a878-ab545ad70e1e": {
-      "id": "okit.compartment.05a95516-a010-4536-a878-ab545ad70e1e-svg",
-      "x": 60,
-      "y": 60,
-      "width": 750,
-      "height": 730,
-      "viewbox": "0 0 750 730"
-    },
-    "okit.compartment.dbb571e3-47f9-46ae-b28d-411248d2fa78": {
-      "id": "okit.compartment.dbb571e3-47f9-46ae-b28d-411248d2fa78-svg",
-      "x": 60,
-      "y": 60,
-      "width": 630,
-      "height": 590,
-      "viewbox": "0 0 630 590"
-    },
-    "okit.compartment.c2919e87-f20d-46c4-bfc5-d8c480791f69": {
-      "id": "okit.compartment.c2919e87-f20d-46c4-bfc5-d8c480791f69-svg",
-      "x": 60,
-      "y": 60,
-      "width": 510,
-      "height": 450,
-      "viewbox": "0 0 510 450"
-    },
-    "okit.virtualcloudnetwork.30f9924b-88f1-4a81-870c-0651933ae341": {
-      "id": "okit.virtualcloudnetwork.30f9924b-88f1-4a81-870c-0651933ae341-svg",
-      "x": 60,
-      "y": 810,
-      "width": 705,
-      "height": 375,
-      "viewbox": "0 0 705 375"
-    },
-    "okit.virtualcloudnetwork.0ea39a17-a5cb-483f-ad7e-96d17bee718a": {
-      "id": "okit.virtualcloudnetwork.0ea39a17-a5cb-483f-ad7e-96d17bee718a-svg",
-      "x": 60,
-      "y": 1205,
-      "width": 390,
-      "height": 500,
-      "viewbox": "0 0 390 500"
-    },
-    "okit.virtualcloudnetwork.85295733-d858-4121-95e1-bf6eaaa6270f": {
-      "id": "okit.virtualcloudnetwork.85295733-d858-4121-95e1-bf6eaaa6270f-svg",
-      "x": 60,
-      "y": 60,
-      "width": 390,
-      "height": 310,
-      "viewbox": "0 0 390 310"
-    },
-    "okit.customerpremiseequipment.27ec3e00-efbe-42b1-85d6-64d061dbdea2": {
-      "id": "okit.customerpremiseequipment.27ec3e00-efbe-42b1-85d6-64d061dbdea2-svg",
-      "x": 890,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.customerpremiseequipment.eec53193-604f-4633-b5df-5bfbdcaff7b7": {
-      "id": "okit.customerpremiseequipment.eec53193-604f-4633-b5df-5bfbdcaff7b7-svg",
-      "x": 890,
-      "y": 125,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.ipsecconnection.e1777a1d-06d8-43d3-8382-45c9eb81596a": {
-      "id": "okit.ipsecconnection.e1777a1d-06d8-43d3-8382-45c9eb81596a-svg",
-      "x": 830,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.remotepeeringconnection.27be5ba5-41b5-41c5-94d3-f5125d902084": {
-      "id": "okit.remotepeeringconnection.27be5ba5-41b5-41c5-94d3-f5125d902084-svg",
-      "x": 830,
-      "y": 125,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.internetgateway.8949c7ef-96f1-49db-a7dc-549dafcf1fa2": {
-      "id": "okit.internetgateway.8949c7ef-96f1-49db-a7dc-549dafcf1fa2-svg",
-      "x": 120,
-      "y": 0,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.natgateway.808217ad-6233-47b1-b0ba-c4bc3fff5e00": {
-      "id": "okit.natgateway.808217ad-6233-47b1-b0ba-c4bc3fff5e00-svg",
-      "x": 185,
-      "y": 0,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.natgateway.cfe47d82-d3c0-4d74-92c9-d3f557e5c715": {
-      "id": "okit.natgateway.cfe47d82-d3c0-4d74-92c9-d3f557e5c715-svg",
-      "x": 120,
-      "y": 0,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.servicegateway.e38809e9-db14-4e6a-adac-f838161cfadd": {
-      "id": "okit.servicegateway.e38809e9-db14-4e6a-adac-f838161cfadd-svg",
-      "x": 660,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.dynamicroutinggateway.595f6b5d-eef3-4443-b4ec-6ea840dc96d6": {
-      "id": "okit.dynamicroutinggateway.595f6b5d-eef3-4443-b4ec-6ea840dc96d6-svg",
-      "x": 660,
-      "y": 125,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.localpeeringgateway.44bab5bf-e07c-4de1-b6f8-eecb56dbf4dd": {
-      "id": "okit.localpeeringgateway.44bab5bf-e07c-4de1-b6f8-eecb56dbf4dd-svg",
-      "x": 660,
-      "y": 190,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.localpeeringgateway.140b7c30-37d8-442b-b24e-3666a8d0c7c3": {
-      "id": "okit.localpeeringgateway.140b7c30-37d8-442b-b24e-3666a8d0c7c3-svg",
-      "x": 345,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.routetable.6afed01e-5e48-47dd-a843-97ab329ae13a": {
-      "id": "okit.routetable.6afed01e-5e48-47dd-a843-97ab329ae13a-svg",
-      "x": 60,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.securitylist.c89c532e-2f9c-49f3-832b-4c74ef31e8e7": {
-      "id": "okit.securitylist.c89c532e-2f9c-49f3-832b-4c74ef31e8e7-svg",
-      "x": 125,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.securitylist.ddf60de3-9113-4ee6-b841-04b35b7d0e72": {
-      "id": "okit.securitylist.ddf60de3-9113-4ee6-b841-04b35b7d0e72-svg",
-      "x": 190,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.securitylist.8a2e54f9-2ccc-4f7f-ad16-792623e8dbc9": {
-      "id": "okit.securitylist.8a2e54f9-2ccc-4f7f-ad16-792623e8dbc9-svg",
-      "x": 255,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.securitylist.6dc47f20-5248-46dd-9597-9dcdb1a34def": {
-      "id": "okit.securitylist.6dc47f20-5248-46dd-9597-9dcdb1a34def-svg",
-      "x": 320,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.networksecuritygroup.a6a56674-c155-47df-bb35-3e9bb6ec9e60": {
-      "id": "okit.networksecuritygroup.a6a56674-c155-47df-bb35-3e9bb6ec9e60-svg",
-      "x": 385,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.networksecuritygroup.e664bc34-7457-482e-83ff-bbce7960251f": {
-      "id": "okit.networksecuritygroup.e664bc34-7457-482e-83ff-bbce7960251f-svg",
-      "x": 450,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.networksecuritygroup.c7d86c96-f42f-4a52-9a02-29b49c4c14ee": {
-      "id": "okit.networksecuritygroup.c7d86c96-f42f-4a52-9a02-29b49c4c14ee-svg",
-      "x": 515,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.networksecuritygroup.1acaa8d2-4900-47ff-9f69-b8eacee6792a": {
-      "id": "okit.networksecuritygroup.1acaa8d2-4900-47ff-9f69-b8eacee6792a-svg",
-      "x": 580,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.subnet.42713871-0e5c-48c3-8bc4-5e782d6c02f3": {
-      "id": "okit.subnet.42713871-0e5c-48c3-8bc4-5e782d6c02f3-svg",
-      "x": 60,
-      "y": 60,
-      "width": 270,
-      "height": 170,
-      "viewbox": "0 0 270 170"
-    },
-    "okit.subnet.3c0ff004-c669-4471-abc5-7c87f0a16450": {
-      "id": "okit.subnet.3c0ff004-c669-4471-abc5-7c87f0a16450-svg",
-      "x": 60,
-      "y": 125,
-      "width": 270,
-      "height": 170,
-      "viewbox": "0 0 270 170"
-    },
-    "okit.subnet.e7693b43-0526-4836-8faf-9de91fc5a0c1": {
-      "id": "okit.subnet.e7693b43-0526-4836-8faf-9de91fc5a0c1-svg",
-      "x": 60,
-      "y": 250,
-      "width": 270,
-      "height": 170,
-      "viewbox": "0 0 270 170"
-    },
-    "okit.subnet.b4f242b6-716f-4b13-9575-d1c92a1119fb": {
-      "id": "okit.subnet.b4f242b6-716f-4b13-9575-d1c92a1119fb-svg",
-      "x": 60,
-      "y": 60,
-      "width": 270,
-      "height": 170,
-      "viewbox": "0 0 270 170"
-    },
-    "okit.instance.296d4fce-21db-4722-b04e-c579cceb286c": {
-      "id": "okit.instance.296d4fce-21db-4722-b04e-c579cceb286c-svg",
-      "x": 60,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.instance.50a4fc96-99d8-4f9b-a6e6-9323f2c5ad47": {
-      "id": "okit.instance.50a4fc96-99d8-4f9b-a6e6-9323f2c5ad47-svg",
-      "x": 125,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.instance.f87abf0d-b066-4b5d-b252-bb47ce4bea66": {
-      "id": "okit.instance.f87abf0d-b066-4b5d-b252-bb47ce4bea66-svg",
-      "x": 60,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.databasesystem.f7e6dbfe-ec61-4a14-bb73-8e8dce281410": {
-      "id": "okit.databasesystem.f7e6dbfe-ec61-4a14-bb73-8e8dce281410-svg",
-      "x": 60,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.mysqldatabasesystem.a3232805-d077-41e8-b200-83d05708e4f2": {
-      "id": "okit.mysqldatabasesystem.a3232805-d077-41e8-b200-83d05708e4f2-svg",
-      "x": 125,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    },
-    "okit.loadbalancer.222bce68-5f9e-4939-a6a0-7885fdd3e276": {
-      "id": "okit.loadbalancer.222bce68-5f9e-4939-a6a0-7885fdd3e276-svg",
-      "x": 60,
-      "y": 60,
-      "width": 45,
-      "height": 45,
-      "viewbox": "0 0 45 45"
-    }
-  }
+  "coords": {}
 }

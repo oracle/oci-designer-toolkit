@@ -54,9 +54,18 @@ class OkitView {
         this.load(this.okit_data)
     }
 
-    get coords() {return this.okit_data.okit.coords}
+    get class_name() {return this.constructor.name}
+    get json () {return this.okit_data.okit} 
+    get coords() {
+        return this.json.region[this.region].views[this.class_name] ? this.json.region[this.region].views[this.class_name].coords : this.newCoords().coords}
+    // get coords() {return this.okit_data.okit.coords}
     get svg() {return this.okit_data.okit.svg}
     get canvas_rect_id() {return `${this.canvas_svg_id}-rect`}
+
+    newCoords() {
+        this.json.region[this.region].views[this.class_name] = {coords: {}, connectors: {},svg: {}}
+        return this.json.region[this.region].views[this.class_name]
+    }
 
     clear() {
         this.views = {}
@@ -221,6 +230,8 @@ class OkitView {
         rect.setAttribute('fill', 'url(#grid)')
         svg.appendChild(rect)
     }
+
+    autoLayout() {console.warn(`Auto Layout has not been defined for ${this.constructor.name}`)}
 
     draw(okit_data=null) {
         if (okit_data) this.load(okit_data)
