@@ -9,8 +9,8 @@
 
 import { OkitCodeGenerator } from './okit_code_generator.js'
 
-class OkitModelGenerator extends OkitCodeGenerator {
-    static generateModelResources(resources) {
+class OkitPropertiesGenerator extends OkitCodeGenerator {
+    static generatePropertiesResources(resources) {
         const model = `
 /*
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
@@ -21,8 +21,8 @@ class OkitModelGenerator extends OkitCodeGenerator {
 ** Author: Andrew Hopkinson
 */
 
-export { OkitResourceModel } from './okit_resource_model.js'
-${resources.map((r) => 'export { ' + OkitModelGenerator.titleCase(OkitModelGenerator.resource_map[r].split('_').join(' ')).split(' ').join('') + " } from './" + OkitModelGenerator.resource_map[r] + '/' + OkitModelGenerator.resource_map[r] + ".js'").join('\n')}
+export { OkitResourceProperties } from './okit_resource_properties.js'
+${resources.map((r) => 'export { ' + OkitPropertiesGenerator.titleCase(OkitPropertiesGenerator.resource_map[r].split('_').join(' ')).split(' ').join('') + " } from './" + OkitPropertiesGenerator.resource_map[r] + '/' + OkitPropertiesGenerator.resource_map[r] + ".js'").join('\n')}
 `
         return model
     }
@@ -39,13 +39,11 @@ ${resources.map((r) => 'export { ' + OkitModelGenerator.titleCase(OkitModelGener
 ** Author: Andrew Hopkinson
 */
 
-import { OkitResourceModel } from '../okit_resource_model.js'
+import { OkitResourceProperties } from '../okit_resource_properties.js'
 
-class ${class_name} extends OkitResourceModel {
-    static model = {}
-    constructor() {
-        super()
-        ${Object.keys(this.schema).filter((key) => !this.ignore_elements.includes(key)).map((key) => key + ' = undefined').join('\n        ')}
+class ${class_name} extends OkitResourceProperties {
+    static model = {
+        ${this.generateModel(this.schema).join('\n        ')}
     }
 }
 
@@ -53,6 +51,17 @@ export default ${class_name}
 export { ${class_name} }
 `
         return model
+    }
+
+    generateModel(obj) {
+        return Object.entries(obj).filter(([k, v]) => !this.ignore_elements.includes(k)).map(([k, v]) => 
+            `${k}: {
+                required: ${v.required ? v.required : false},
+                editable: true,
+                type: 'datalist',
+                label: '${OkitPropertiesGenerator.titleCase(k.split('_').join(' '))}'
+            },`
+        )
     }
 
     generateConstructor(obj) {
@@ -64,6 +73,6 @@ export { ${class_name} }
     }
 }
 
-export default OkitModelGenerator
-export { OkitModelGenerator }
+export default OkitPropertiesGenerator
+export { OkitPropertiesGenerator }
 

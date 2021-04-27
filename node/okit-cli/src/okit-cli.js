@@ -14,6 +14,7 @@ import { OkitData } from 'okit-node/src/data/okit.js'
 import { OkitCompartmentContainerView } from 'okit-node/src/view/views.js'
 import { OkitJsonImporter } from 'okit-node/src/importer/okit_json_importer.js'
 import { OkitModelGenerator } from 'okit-node/src/code_generation/okit_model_generator.js'
+import { OkitPropertiesGenerator } from 'okit-node/src/code_generation/okit_properties_generator.js'
 // Create Simple HTML Page with OKIT Canvas div
 const dom = new JSDOM(`<!DOCTYPE html><body><div id="okit-canvas-div"></div></body>`)
 const window = dom.window
@@ -70,7 +71,32 @@ if (command.toLocaleLowerCase() === 'generate') {
             fs.writeFileSync(resource_model_file_name, resource_model_file)
         }
     } else if (subcommand.toLocaleLowerCase() === 'okit-properties-js') {
-
+        // Source Schema file will be first in the list after command
+        const input_filename = args[2]
+        const input_data = fs.readFileSync(input_filename, 'utf-8')
+        // Generated root directory will be second in the list after command
+        const output_dir = args[3]
+        const schema = JSON.parse(input_data)
+        let resources = []
+        Object.entries(schema.provider_schemas["registry.terraform.io/hashicorp/oci"].resource_schemas).forEach(([key,value]) => {
+            if (OkitPropertiesGenerator.resource_map.hasOwnProperty(key)) {
+                const generator = new OkitPropertiesGenerator(key, value.block.attributes)
+                const properties_file = generator.generate()
+                const properties_file_dir = path.join(output_dir, OkitPropertiesGenerator.resource_map[key])
+                const properties_file_name = path.join(properties_file_dir, `${OkitPropertiesGenerator.resource_map[key]}.js`)
+                // console.info(properties_file_dir)
+                // console.info(properties_file_name)
+                // console.info(properties_file)
+                if (!fs.existsSync(properties_file_dir)) fs.mkdirSync(properties_file_dir, {recursive: true})
+                fs.writeFileSync(properties_file_name, properties_file)
+                resources.push(key)
+            }
+        })
+        if (resources.length > 0) {
+            const resource_properties_file_name = path.join(output_dir, 'resources.js')
+            const resource_properties_file = OkitPropertiesGenerator.generatePropertiesResources(resources)
+            fs.writeFileSync(resource_properties_file_name, resource_properties_file)
+        }
     }
 } else if (command.toLocaleLowerCase() === 'import') {
     if (subcommand.toLocaleLowerCase() === 'okit-json') {

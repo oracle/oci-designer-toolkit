@@ -47,6 +47,15 @@ class OkitResourceProperties {
         },
     }
     static model = {}
+    get all_properties() {return {...this.constructor.common, ...this.constructor.model}}
+    get required_properties() {return Object.entries(this.all_properties).reduce((r, [k, v]) => {
+        if (v.required) r[k] = v
+        return r
+    }, {})}
+    get optional_properties() {return Object.entries(this.all_properties).reduce((r, [k, v]) => {
+        if (!v.required) r[k] = v
+        return r
+    }, {})}
     handler = {
         get: function(obj, prop) {
             if (typeof obj[prop] === 'object') {
@@ -118,4 +127,5 @@ class OkitResourceProperties {
     }
 }
 
+export default OkitResourceProperties
 export { OkitResourceProperties }
