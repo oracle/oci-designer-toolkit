@@ -12,6 +12,7 @@ class OkitResourceModel {
     constructor() {
         this.compartment_id = undefined
         this.id = undefined
+        this.display_name = undefined
         this.documentation = undefined
         this.freeform_tags = undefined
         this.defined_tags = undefined
@@ -20,4 +21,5 @@ class OkitResourceModel {
     }
 }
 
+export default OkitResourceModel
 export { OkitResourceModel }
