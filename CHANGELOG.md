@@ -10,6 +10,7 @@
 1. GitHub Issue #304 : documentation/Installation.md contains reference to dev branches.
 2. GitHub Issue #269 : Internal Server Error.
 3. Instance primary vnic hostname_label access key error.
+4. Update Fast Discovery to retrieve detailed MySqlDatabase information.
 
 
 ## Version 0.20.0
