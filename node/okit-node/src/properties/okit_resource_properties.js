@@ -125,6 +125,44 @@ class OkitResourceProperties {
         tbody.setAttribute('class', 'tbody')
         table.appendChild(tbody)
     }
+
+    addSimplePropertiesRow(tbody, key, property, hierarchy=[]) {
+        const hierarchy_id = this.hierarchyId(hierarchy, key)
+        const self = this
+        // Create Row
+        const tr = this.document.createElement('div')
+        tr.setAttribute('class', 'tr')
+        tbody.appendChild(tr)
+        // Create Label
+        let td = this.document.createElement('div')
+        td.setAttribute('class', 'td')
+        tr.appendChild(td)
+        const label = this.document.createElement('label')
+        label.text(property.label)
+        td.appendChild(label)
+        // Create Input
+        td = this.document.createElement('div')
+        td.setAttribute('class', 'td')
+        tr.appendChild(td)
+        if (property.type === 'datalist') {
+            const datalist = this.document.createElement('datalist')
+            datalist.setAttribute('id', `datalist-${hierarchy_id}`)
+            const input = this.document.createElement('input')
+            input.setAttribute('id', `${hierarchy_id}`)
+            input.setAttribute('list', `datalist-${hierarchy_id}`)
+            input.setAttribute('placeholder', `Enter ${key.split('_').join(' ')}`)
+            input.addEventListener('input', (e) => {
+                let selectedOption = datalist.options.namedItem(this.value)
+                if (selectedOption) self.resource.key = selectedOption.getAttribute('data-id')
+                else self.resource.key = input.value
+            })
+            this.populateDatalist(datalist, key)
+        }
+    }
+
+    hierarchyId(hierarchy, id) {return [...hierarchy, id].join('-')}
+
+    populateDatalist(datalist, key) {}
 }
 
 export default OkitResourceProperties

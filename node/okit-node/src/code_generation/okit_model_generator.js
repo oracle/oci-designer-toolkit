@@ -29,15 +29,9 @@ ${resources.map((r) => 'export { ' + OkitModelGenerator.titleCase(OkitModelGener
 
     generate() {
         const class_name = this.generateClassName()
-        let model = `
-/*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
-** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
-*/
-
-/*
-** Author: Andrew Hopkinson
-*/
+        let model = `${this.copyright}
+${this.author}
+${this.auto_generated_warning}
 
 import { OkitResourceModel } from '../okit_resource_model.js'
 

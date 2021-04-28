@@ -25,10 +25,10 @@
         "start": "node .",
         "test-import-json": "node src/okit-cli.js import okit-json test/okit-node-test.json test/okit-node-test.okit",
         "test-generate-svg": "node src/okit-cli.js generate svg test/okit-node-test.okit test/okit-node-test.svg",
-        "test-generate-okit-model": "node src/okit-cli.js generate okit-model-js schema/tf-schema.json test/model",
-        "test-generate-okit-properties": "node src/okit-cli.js generate okit-properties-js schema/tf-schema.json test/properties",
-        "generate-okit-model": "node src/okit-cli.js generate okit-model-js schema/tf-schema.json ../okit-node/src/model",
-        "generate-okit-properties": "node src/okit-cli.js generate okit-properties-js schema/tf-schema.json ../okit-node/src/properties"
+        "test-generate-okit-model": "node src/okit-cli.js generate okit-model-js ../okit-node/src/code_generation/schema/tf-schema.json test/model",
+        "test-generate-okit-properties": "node src/okit-cli.js generate okit-properties-js ../okit-node/src/code_generation/schema/tf-schema.json test/properties",
+        "generate-okit-model": "node src/okit-cli.js generate okit-model-js ../okit-node/src/code_generation/schema/tf-schema.json ../okit-node/src/model",
+        "generate-okit-properties": "node src/okit-cli.js generate okit-properties-js ../okit-node/src/code_generation/schema/tf-schema.json ../okit-node/src/properties"
     },
     "private": true,
     "type": "module",
