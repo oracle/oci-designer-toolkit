@@ -1,5 +1,5 @@
 {
-    "name": "okit-cli",
+    "name": "okit-codegen",
     "version": "0.20.0",
     "description": "OKIT Node ES6 Modules",
     "author": {
@@ -14,17 +14,19 @@
         "oci",
         "oracle cloud",
         "okit",
-        "okit-cli"
+        "okit-codegen"
     ],
     "repository": {
         "type": "git",
         "url": "https://github.com/oracle/oci-designer-toolkit"
     },
-    "main": "src/okit-cli.js",
+    "main": "src/okit-codegen.js",
     "scripts": {
         "start": "node .",
-        "test-import-json": "node src/okit-cli.js import okit-json test/okit-node-test.json test/okit-node-test.okit",
-        "test-generate-svg": "node src/okit-cli.js generate svg test/okit-node-test.okit test/okit-node-test.svg"
+        "test-generate-okit-model": "node src/okit-codegen.js generate okit-model-js ./src/code_generation/schema/tf-schema.json test/model",
+        "test-generate-okit-properties": "node src/okit-codegen.js generate okit-properties-js ./src/code_generation/schema/tf-schema.json test/properties",
+        "generate-okit-model": "node src/okit-codegen.js generate okit-model-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/model",
+        "generate-okit-properties": "node src/okit-codegen.js generate okit-properties-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/properties"
     },
     "private": true,
     "type": "module",
