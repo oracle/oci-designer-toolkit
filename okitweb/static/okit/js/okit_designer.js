@@ -442,10 +442,10 @@ function loadTemplate(template_url) {
  */
 function displayQueryDialog() {
     $(jqId('modal_dialog_title')).text('Query OCI');
-    if (okitSettings.fast_discovery) {
-        $(jqId('modal_dialog_title')).text('OCI Introspection (Fast Discovery)');
-    //    document.getElementById('sub_compartments_row').classList.add('collapsed');
-    }
+    // if (okitSettings.fast_discovery) {
+    //     $(jqId('modal_dialog_title')).text('OCI Introspection (Fast Discovery)');
+    // //    document.getElementById('sub_compartments_row').classList.add('collapsed');
+    // }
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
     let query_form = d3.select(d3Id('modal_dialog_body')).append('div').append('form')
@@ -551,8 +551,9 @@ function displayQueryDialog() {
         .attr('type', 'checkbox');
     td.append('label')
         .attr('for', 'fast_discovery')
-        .text('Fast Discovery (Experimental)');
-    if (developer_mode) $(jqId('fast_discovery_row')).removeClass('collapsed');
+        .text('Fast Discovery');
+    // if (developer_mode) $(jqId('fast_discovery_row')).removeClass('collapsed');
+    $(jqId('fast_discovery_row')).removeClass('collapsed');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
