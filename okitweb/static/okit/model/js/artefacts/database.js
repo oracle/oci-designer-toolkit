@@ -26,6 +26,7 @@ class Database extends OkitArtifact {
         // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
         // Expose subnet_id at the top level
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+        if (this.db_name) this.display_name = this.db_name
     }
     /*
     ** Clone Functionality

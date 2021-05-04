@@ -140,17 +140,17 @@
 {%- endif %}
 
 {% if db_homes is defined and db_homes|length > 0 -%}
-    ### Vm Cluster Networks
+    ### DB Homes
     {% include "db_home.jinja2" ignore missing with context %}
 {%- endif %}
 
 {% if db_nodes is defined and db_nodes|length > 0 -%}
-    ### Vm Cluster Networks
+    ### DB Nodes
     {% include "db_node.jinja2" ignore missing with context %}
 {%- endif %}
 
 {% if databases is defined and databases|length > 0 -%}
-    ### Vm Cluster Networks
+    ### Databases
     {% include "database.jinja2" ignore missing with context %}
 {%- endif %}
 
