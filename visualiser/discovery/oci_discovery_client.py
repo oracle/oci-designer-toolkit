@@ -1,18 +1,13 @@
 # Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-import argparse
-import copy
-import json
 import oci
-import os
-import pickle 
-import re
-import sys
+import time
+
 from common.okitLogging import getLogger
 from concurrent.futures import ThreadPoolExecutor
 
-from .models import ExtendedAutoScalingPolicySummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule, ExtendedSourceApplicationSummary, ExtendedExportSummary
+from .models import ExtendedAutoScalingPolicySummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule, ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 
 DEFAULT_MAX_WORKERS = 32
 DEFAULT_TIMEOUT = 120
@@ -25,6 +20,14 @@ class OciResourceDiscoveryClient(object):
     # methods. Creates a map of:
     #     { resource_name -> (Client, list_method) }
     get_resource_client_methods = {
+        # oci.core.BlockstorageClient
+        "VolumeBackupPolicyAssignment": (oci.core.BlockstorageClient, "get_volume_backup_policy_asset_assignment"),
+        # oci.core.ComputeClient
+        "Image": (oci.core.ComputeClient, "get_image"),  # used to get details of removed (hidden) images that the not returned from list_images
+        # oci.mysql.DbSystemClient
+        "MySQLDbSystemDetails": (oci.mysql.DbSystemClient, "get_db_system"), # used to get full details of the result and list_db_systems does not include all attributes
+        # oci.mysql.MysqlaasClient
+        "MySQLConfiguration": (oci.mysql.MysqlaasClient, "get_configuration"), # used to get details of the Default configurations
         # oci.core.VirtualNetworkClient
         "Vnic": (oci.core.VirtualNetworkClient, "get_vnic"), # special case as there is no list_vnics method
     }
@@ -51,13 +54,16 @@ class OciResourceDiscoveryClient(object):
         "AutoScalingPolicy": (oci.autoscaling.AutoScalingClient, "list_auto_scaling_policies"),
         # oci.bds.BdsClient
         "BigDataService": (oci.bds.BdsClient, "list_bds_instances"), # TODO not tested
+        "BigDataAutoScalingConfiguration": (oci.bds.BdsClient, "list_auto_scaling_configurations"),
         # oci.blockchain.BlockchainPlatformClient
         "BlockchainPlatform": (oci.blockchain.BlockchainPlatformClient, "list_blockchain_platforms"),  # TODO not tested
         "BlockchainOsn": (oci.blockchain.BlockchainPlatformClient, "list_osns"), # TODO by blockchain_platform - check resource name
         "BlockchainPeer": (oci.blockchain.BlockchainPlatformClient, "list_peers"), # TODO by blockchain_platform - check resource name
         # oci.core.BlockstorageClient
+        "BlockVolumeReplica": (oci.core.BlockstorageClient, "list_block_volume_replicas"), # TODO need to query replicas is destination region
         "BootVolume": (oci.core.BlockstorageClient, "list_boot_volumes"),
         "BootVolumeBackup": (oci.core.BlockstorageClient, "list_boot_volume_backups"),
+        "BootVolumeReplica": (oci.core.BlockstorageClient, "list_boot_volume_replicas"), # TODO need to query replicas is destination region
         "Volume": (oci.core.BlockstorageClient, "list_volumes"),
         "VolumeBackup": (oci.core.BlockstorageClient, "list_volume_backups"),
         "VolumeBackupPolicy": (oci.core.BlockstorageClient, "list_volume_backup_policies"),
@@ -130,27 +136,31 @@ class OciResourceDiscoveryClient(object):
         "AutonomousContainerDatabase": (oci.database.DatabaseClient, "list_autonomous_container_databases"),
         "AutonomousContainerDatabaseDataguardAssociation": (oci.database.DatabaseClient, "list_autonomous_container_database_dataguard_associations"),
         "AutonomousDatabase": (oci.database.DatabaseClient, "list_autonomous_databases"),
-        # - "AutonomousDatabase": (oci.database.DatabaseClient, "list_autonomous_database_clones),
+        # - "AutonomousDatabase": (oci.database.DatabaseClient, "list_autonomous_database_clones), # TODO
         "AutonomousDatabaseBackup": (oci.database.DatabaseClient, "list_autonomous_database_backups"),
         "AutonomousDatabaseDataguardAssociation": (oci.database.DatabaseClient, "list_autonomous_database_dataguard_associations"),
         "AutonomousExadataInfrastructure": (oci.database.DatabaseClient, "list_autonomous_vm_clusters"),
-        "AutonomousVmCluster": (oci.database.DatabaseClient, "list_autonomous_exadata_infrastructures"), # Cloud@Customer only
+        "AutonomousVmCluster": (oci.database.DatabaseClient, "list_autonomous_exadata_infrastructures"), # Exadata Cloud@Customer only
+        "Backup": (oci.database.DatabaseClient, "list_backups"),
         "BackupDestination": (oci.database.DatabaseClient, "list_backup_destination"),
         "CloudExadataInfrastructure": (oci.database.DatabaseClient, "list_cloud_exadata_infrastructures"),
         "CloudVmCluster": (oci.database.DatabaseClient, "list_cloud_vm_clusters"),
         "Database": (oci.database.DatabaseClient, "list_databases"),
+        "DatabaseConsoleConnection": (oci.database.DatabaseClient, "list_console_connections"),
         "DataGuardAssociation": (oci.database.DatabaseClient, "list_data_guard_associations"),
         "DbHome": (oci.database.DatabaseClient, "list_db_homes"),
         "DbNode": (oci.database.DatabaseClient, "list_db_nodes"),
         "DbSystem": (oci.database.DatabaseClient, "list_db_systems"),
         "DedicatedVmHost": (oci.core.ComputeClient, "list_dedicated_vm_hosts"),
         "DedicatedVmHostInstance": (oci.core.ComputeClient, "list_dedicated_vm_host_instances"),
-        "ExadataInfrastructure": (oci.database.DatabaseClient, "list_exadata_infrastructures"), # Cloud@Customer only
+        "ExadataInfrastructure": (oci.database.DatabaseClient, "list_exadata_infrastructures"), # Exadata Cloud@Customer only
         "KeyStore": (oci.database.DatabaseClient, "list_key_stores"),
+        "VMCluster": (oci.database.DatabaseClient, "list_vm_clusters"), # Exadata Cloud@Customer only
         # oci.dns.DnsClient
         "Resolver": (oci.dns.DnsClient, "list_resolvers"), 
         "ResolverEndpoint": (oci.dns.DnsClient, "list_resolver_endpoints"), # TODO by resolver
         "SteeringPolicy": (oci.dns.DnsClient, "list_steering_policies"), 
+        "SteeringPolicyAttachment": (oci.dns.DnsClient, "list_steering_policy_attachments"),
         "TSIGKey": (oci.dns.DnsClient, "list_tsig_keys"), 
         "View": (oci.dns.DnsClient, "list_views"),
         "Zone": (oci.dns.DnsClient, "list_zones"),
@@ -224,9 +234,12 @@ class OciResourceDiscoveryClient(object):
         # oci.mysql.DbBackupsClient
         "MySQLBackup": (oci.mysql.DbBackupsClient, "list_backups"), 
         # oci.mysql.DbSystemClient
-        "MySqlDbSystem": (oci.mysql.DbSystemClient, "list_db_systems"), 
+        "MySQLDbSystem": (oci.mysql.DbSystemClient, "list_db_systems"), # note: use get_db_system to get additional resource details
+        # oci.mysql.MysqlaasClient
+        "MySQLConfiguration": (oci.mysql.MysqlaasClient, "list_configurations"),
         # oci.nosql.NosqlClient
         "NoSQLTable": (oci.nosql.NosqlClient, "list_tables"),
+        "NoSQLIndex": (oci.nosql.NosqlClient, "list_indexes"),
         # oci.object_storage.ObjectStorageClient
         "Bucket": (oci.object_storage.ObjectStorageClient, "list_buckets"),
         "PreauthenticatedRequest": (oci.object_storage.ObjectStorageClient, "list_preauthenticated_requests"),
@@ -301,9 +314,20 @@ class OciResourceDiscoveryClient(object):
         # return the "list_*" methods for a class
         return {method for method in dir(klass) if method.startswith('list_')}
 
-    def __init__(self, config, signer, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
+    def __init__(self, config, signer=None, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
         self.config = config
-        self.signer = signer
+        if signer:
+            logger.debug("Using provided OCI API signer")
+            self.signer = signer
+        else:
+            logger.debug("Creating OCI API signer for config")
+            self.signer = oci.Signer(
+                tenancy=self.config["tenancy"],
+                user=self.config["user"],
+                fingerprint=self.config["fingerprint"],
+                private_key_file_location=self.config.get("key_file"),
+                pass_phrase=oci.config.get_config_value_or_default(self.config, "pass_phrase")
+            )
         self.timeout = timeout
         self.max_workers = max_workers
         self.include_resource_types = set(include_resource_types) if include_resource_types else None
@@ -357,7 +381,7 @@ class OciResourceDiscoveryClient(object):
             query=query,
             matching_context_type=oci.resource_search.models.SearchDetails.MATCHING_CONTEXT_TYPE_NONE,
         )
-        logger.info(f"requesting {resource_types} resources for {region_name}")
+        logger.info("requesting resources for " + region_name)
         results = oci.pagination.list_call_get_all_results(search.search_resources, search_details).data
         return results
 
@@ -488,7 +512,7 @@ class OciResourceDiscoveryClient(object):
                 # exponential back off and retry
                 logger.warn(f"Too Many Requests for {method_name}, retry in {back_off} seconds")
                 time.sleep(back_off)
-                return self.list_resources(klass, method_name, region, back_off=back_off*2, **kwargs)
+                return self.list_resources(klass, method_name, region, back_off=back_off*2, **kwargs)            
 
     def submit_list_resource_worker_requests(self, executor, regional_resources_compartments):
 
@@ -499,14 +523,34 @@ class OciResourceDiscoveryClient(object):
                 resource_type = item[0]
                 compartment_id = item[1]
 
-                if resource_type in self.get_resource_client_methods:
+                if resource_type not in self.get_resource_client_methods and resource_type not in self.list_resource_client_methods:
+                    logger.warn(f"unsupported resource type {resource_type}")
+                    continue                    
+
+                if resource_type in self.get_resource_client_methods and item[2]:
                     klass, method_name = self.get_resource_client_methods[resource_type]
-                    if method_name == "get_vnic":
+                    if method_name == "get_configuration": # MySQLConfiguration
+                        configuration_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, configuration_id=configuration_id)
+                        futures_list.update({(region, resource_type, None, configuration_id):future})
+                    elif method_name == "get_db_system": # MySQLDbSystemDetails
+                        db_system_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
+                        futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif method_name == "get_image" and compartment_id == None:
+                        image_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, image_id=image_id)
+                        futures_list.update({(region, resource_type, None, image_id):future})
+                    elif method_name == "get_vnic":
                         vnic_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, vnic_id=vnic_id)
                         futures_list.update({(region, resource_type, compartment_id, vnic_id):future})
+                    elif method_name == "get_volume_backup_policy_asset_assignment":
+                        asset_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, asset_id=asset_id)
+                        futures_list.update({(region, resource_type, compartment_id, asset_id):future})
 
-                elif resource_type in self.list_resource_client_methods:
+                if resource_type in self.list_resource_client_methods:
                     klass, method_name = self.list_resource_client_methods[resource_type]
                     # the majority of the list methods only need the compartment
                     # id, methods that have additional required attributes are 
@@ -526,6 +570,10 @@ class OciResourceDiscoveryClient(object):
                         autonomous_database_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, autonomous_database_id=autonomous_database_id)
                         futures_list.update({(region, resource_type, compartment_id, autonomous_database_id):future})
+                    elif method_name == "list_auto_scaling_configurations" and resource_type == "BigDataAutoScalingConfiguration":
+                        bds_instance_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, bds_instance_id=bds_instance_id)
+                        futures_list.update({(region, resource_type, compartment_id, bds_instance_id):future})                    
                     elif method_name == "list_auto_scaling_policies":
                         auto_scaling_configuration_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, auto_scaling_configuration_id=auto_scaling_configuration_id)
@@ -538,14 +586,27 @@ class OciResourceDiscoveryClient(object):
                         load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                    elif method_name == "list_backups" and resource_type == "Backup": # Database Backup
+                        database_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, database_id=database_id)
+                        futures_list.update({(region, resource_type, compartment_id, database_id):future})
+                    elif method_name == "list_backups" and resource_type == "MySQLBackup":
+                        db_system_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
+                        futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
                     elif method_name == "list_buckets":
                         namespace_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, namespace_name=namespace_name)
                         futures_list.update({(region, resource_type, compartment_id, namespace_name):future})
-                    elif resource_type == "Certificate" and method_name == "list_certificates":
+                    elif method_name == "list_certificates" and resource_type == "Certificate":
                         load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                    elif method_name == "list_configurations":
+                        if compartment_id:
+                            # only fetch Custom configurations in compartments - ignores the default configuration that have no compartment
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, type=["CUSTOM"])
+                            futures_list.update({(region, resource_type, compartment_id, None):future})
                     elif method_name == "list_dedicated_vm_host_instances":
                         dedicated_vm_host_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, dedicated_vm_host_id=dedicated_vm_host_id)
@@ -554,6 +615,10 @@ class OciResourceDiscoveryClient(object):
                         db_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif method_name == "list_vm_clusters":
+                        exadata_infrastructure_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, exadata_infrastructure_id=exadata_infrastructure_id)
+                        futures_list.update({(region, resource_type, compartment_id, exadata_infrastructure_id):future})
                     elif method_name == "list_exports":
                         file_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, file_system_id=file_system_id)
@@ -578,10 +643,18 @@ class OciResourceDiscoveryClient(object):
                         identity_provider_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, identity_provider_id=identity_provider_id)
                         futures_list.update({(region, resource_type, compartment_id, identity_provider_id):future})
+                    elif method_name == "list_indexes":
+                        table_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, table_name_or_id=table_id)
+                        futures_list.update({(region, resource_type, compartment_id, table_id):future})
                     elif method_name == "list_ip_sec_connection_tunnels":
                         ipsec_connection_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, ipsc_id=ipsec_connection_id)
                         futures_list.update({(region, resource_type, compartment_id, ipsec_connection_id):future})
+                    elif method_name == "list_ipv6s":
+                        subnet_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, subnet_id=subnet_id)
+                        futures_list.update({(region, resource_type, compartment_id, subnet_id):future})
                     elif method_name == "list_listener_rules":
                         load_balancer_id, listener_name = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, load_balancer_id=load_balancer_id, listener_name=listener_name)
@@ -630,11 +703,24 @@ class OciResourceDiscoveryClient(object):
                         load_balancer_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, load_balancer_id=load_balancer_id)
                         futures_list.update({(region, resource_type, compartment_id, load_balancer_id):future})
+                    elif method_name == "list_steering_policy_attachments":
+                        steering_policy_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, steering_policy_id=steering_policy_id)
+                        futures_list.update({(region, resource_type, compartment_id, steering_policy_id):future})
                     elif method_name == "list_user_group_memberships":
                         group_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, group_id=group_id)
                         futures_list.update({(region, resource_type, compartment_id, group_id):future})
-                    elif method_name in ["list_instances", "list_boot_volumes", "list_boot_volume_attachments", "list_file_systems", "list_mount_targets", "list_export_sets"]:
+                    elif method_name in [
+                        "list_block_volume_replicas",
+                        "list_boot_volumes", 
+                        "list_boot_volume_attachments",
+                        "list_boot_volume_replicas",
+                        "list_export_sets",
+                        "list_file_systems",
+                        "list_instances",
+                        "list_mount_targets",
+                    ]:
                         # need to provide the availability domain when listing instances,
                         # boot volumes, file systems, ... 
                         availability_domain = item[2]
@@ -644,9 +730,7 @@ class OciResourceDiscoveryClient(object):
                         # all other resources
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
                         futures_list.update({(region, resource_type, compartment_id, None):future})
-                else:
-                    logger.warn(f"unsupported resource type {resource_type}")
-
+        
         logger.info(f"submitted {len(futures_list)} list resources requests")
         return futures_list
 
@@ -680,6 +764,10 @@ class OciResourceDiscoveryClient(object):
                         # map Export into extended verison with compartment id
                         new_result =  [ExtendedExportSummary(future[2],export) for export in result]
                         result = new_result
+                    elif resource_type == "MySQLBackup":
+                        # map MySQL Backup into extended version with compartment id
+                        new_result = [ExtendedMySQLBackupSummary(future[2],backup) for backup in result]
+                        result = new_result
                     elif resource_type == "NetworkSecurityGroupSecurityRule":
                         # map Security Rules into extended verison with parent id
                         new_result = [ExtendedSecurityRule(future[3],rule) for rule in result]
@@ -694,17 +782,21 @@ class OciResourceDiscoveryClient(object):
                         new_result = [ExtendedPreauthenticatedRequestSummary(compartment_id, bucket_name, preauth) for preauth in result]
                         result = new_result
                     elif resource_type in [
-                        "ApiDeployment", "ApiGateway",
+                        "ApiDeployment", "ApiGateway", "ApiGatewayApi", "ApiGatewayCertificate",
                         "CloudGuardDetectorRecipe", "CloudGuardManagedList", "CloudGuardResponderRecipe", "CloudGuardTarget", 
                         "DatabaseInsight",
                         "DataFlowPrivateEndpoint", 
                         "LogSavedSearch",
-                        "NoSQLTable",
+                        "NoSQLTable", "NoSQLIndex",
                         "RoverCluster", "RoverNode",
-                        "ServiceConnector",
+                        "ServiceConnector", "ServiceConnectorCollection",
                     ]:
                         # handle responses with collecion of items
                         result = result.items
+                    elif resource_type in ["Image", "MySQLConfiguration", "MySQLDbSystemDetails"]:
+                        # if the response is from a get request, wrap it in a list
+                        if type(result) is not list:
+                            result = [result]
                     elif resource_type == "Vnic":
                         result = [result]
 
@@ -819,6 +911,9 @@ class OciResourceDiscoveryClient(object):
                     # get DB Nodes for DB Systems
                     if self.include_resource_types == None or "DbNode" in self.include_resource_types:
                         regional_resource_requests.add(("DbNode", resource.compartment_id, resource.identifier))
+                    # get Backups for DB Systems
+                    if self.include_resource_types == None or "Backup" in self.include_resource_types:
+                        regional_resource_requests.add(("Backup", resource.compartment_id, resource.identifier))
                     # get Key Stores
                     if self.include_resource_types == None or "KeyStore" in self.include_resource_types:
                         regional_resource_requests.add(("KeyStore", resource.compartment_id, None))
@@ -828,6 +923,9 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "Drg" and (self.include_resource_types == None or "DrgAttachment" in self.include_resource_types):
                     # get Drg Attachments for Drgs
                     regional_resource_requests.add(("DrgAttachment", resource.compartment_id, None))
+                elif resource.resource_type == "ExadataInfrastructure" and (self.include_resource_types == None or "VMCluster" in self.include_resource_types):
+                    # get VM Clusters for Exadata Infrastructure
+                    regional_resource_requests.add(("VMCluster", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "FileSystem" and (self.include_resource_types == None or "Export" in self.include_resource_types):
                     # get Exports for FileSystem
                     regional_resource_requests.add(("Export", resource.compartment_id, resource.identifier))
@@ -879,12 +977,25 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "NetworkSecurityGroup" and (self.include_resource_types == None or "NetworkSecurityGroupVnic" in self.include_resource_types):
                     # get vnics for network secuity group 
                     regional_resource_requests.add(("NetworkSecurityGroupVnic", resource.compartment_id, resource.identifier))
-                elif resource.resource_type == "Subnet" and (self.include_resource_types == None or "PrivateIp" in self.include_resource_types):
-                    # get private IPs for each Subnet
-                    regional_resource_requests.add(("PrivateIp", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "NoSQLTable" and (self.include_resource_types == None or "NoSQLIndex" in self.include_resource_types):
+                    # get Indexes for NoSQL Table
+                    regional_resource_requests.add(("NoSQLIndex", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "SteeringPolicy" and (self.include_resource_types == None or "SteeringPolicyAttachment" in self.include_resource_types):
+                    # get Steering Policy Attachments for Steering Policy
+                    regional_resource_requests.add(("SteeringPolicyAttachment", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "Subnet":
+                    if (self.include_resource_types == None or "PrivateIp" in self.include_resource_types):
+                        # get private IPs for each Subnet
+                        regional_resource_requests.add(("PrivateIp", resource.compartment_id, resource.identifier))
+                    if (self.include_resource_types == None or "PrivateIp" in self.include_resource_types):
+                        # get IPv6 addresses for each subnet
+                        regional_resource_requests.add(("Ipv6", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "Vcn" and (self.include_resource_types == None or "DrgAttachment" in self.include_resource_types):
                     # get Drg Attachments for Vcns
                     regional_resource_requests.add(("DrgAttachment", resource.compartment_id, None))
+                elif resource.resource_type == "VolumeGroup" and (self.include_resource_types == None or "VolumeBackupPolicyAssignment" in self.include_resource_types):
+                    # get VolumeBackupPolicyAssignment for VolumeGroup
+                    regional_resource_requests.add(("VolumeBackupPolicyAssignment", resource.compartment_id, resource.identifier))
 
             resource_requests.update({region:regional_resource_requests})
 
@@ -904,7 +1015,7 @@ class OciResourceDiscoveryClient(object):
                 "EmailSuppression", # Email
                 "LogGroup", "LogSavedSearch", # Loging
                 "ManagementDashboard", # TODO test
-                "MySqlDbSystem", "MySQLChannel", "MySQLBackup", # MySQL
+                "MySQLDbSystem", "MySQLChannel", "MySQLConfiguration", # MySQL
                 "DatabaseInsight", "SQLPlan", "SQLSearch", "SQLText", # OperationalInsight
                 "RoverCluster", "RoverEntitlement", "RoverNode", # Roving Edge
                 "StreamPool", # Streams
@@ -936,15 +1047,57 @@ class OciResourceDiscoveryClient(object):
         extra_resource_requests = dict()
         for region in resources_by_region:
             regional_resource_requests = set()
+            # get Vnic from Vnic Attachments
             for vnic_attachment in resources_by_region[region]["VnicAttachment"] if (self.include_resource_types == None or "Vnic" in self.include_resource_types) and "VnicAttachment" in resources_by_region[region] else []:
                 regional_resource_requests.add(("Vnic", vnic_attachment.compartment_id, vnic_attachment.vnic_id))
+            # find references to images that are not in the image results and do an explict get
+            for instance in resources_by_region[region]["Instance"] if (self.include_resource_types == None or "Image" in self.include_resource_types) and "Instance" in resources_by_region[region] and "Image" in resources_by_region[region] else []:
+                image_ids = [image.id for image in resources_by_region[region]["Image"]]
+                if instance.source_details.source_type == "image" and instance.source_details.image_id not in image_ids:
+                    regional_resource_requests.add(("Image", None, instance.source_details.image_id))
+            # find references to images that are not in the image results and do an explict get
+            for boot_volume_backup in resources_by_region[region]["BootVolumeBackup"] if (self.include_resource_types == None or "Image" in self.include_resource_types) and "BootVolumeBackup" in resources_by_region[region] and "Image" in resources_by_region[region] else []:
+                image_ids = [image.id for image in resources_by_region[region]["Image"]]
+                if boot_volume_backup.image_id not in image_ids:
+                    regional_resource_requests.add(("Image", None, boot_volume_backup.image_id))
+            # get extra details for MySQLDbSystems
+            if "MySQLDbSystem" in resources_by_region[region]:
+                for mysql_db_system in resources_by_region[region]["MySQLDbSystem"]:
+                    regional_resource_requests.add(("MySQLDbSystemDetails", mysql_db_system.compartment_id, mysql_db_system.id))
+                    if (self.include_resource_types == None or "MySQLBackup" in self.include_resource_types):
+                        regional_resource_requests.add(("MySQLBackup", mysql_db_system.compartment_id, mysql_db_system.id))
+
             extra_resource_requests.update({region:regional_resource_requests})
-        
+
         extra_resources_by_region = self.get_resources(extra_resource_requests)
 
         # merge the responses
         for region in extra_resources_by_region:
             resources_by_region[region].update(extra_resources_by_region[region])
+
+        # and again... repeat for one more round of queries:
+        final_resource_requests = dict()
+        for region in resources_by_region:
+            extra_resources_by_region = set()
+            # get extra details for MySQLDbSystems Details
+            if "MySQLDbSystemDetails" in resources_by_region[region]:
+                for mysql_db_system in resources_by_region[region]["MySQLDbSystemDetails"] if (self.include_resource_types == None or "MySQLConfiguration" in self.include_resource_types) else []:
+                    extra_resources_by_region.add(("MySQLConfiguration", mysql_db_system.compartment_id, mysql_db_system.configuration_id))
+
+            final_resource_requests.update({region:extra_resources_by_region})
+
+        final_resources_by_region = self.get_resources(final_resource_requests)
+
+        # merge the responses
+        for region in final_resources_by_region:
+            resources_by_region[region].update(final_resources_by_region[region])
+
+        # replace MySQLDbSystems with MySQLDbSystemDetails
+        if "MySQLDbSystemDetails" in resources_by_region[region]:
+            mysql_db_systems = resources_by_region[region]["MySQLDbSystemDetails"]
+            del resources_by_region[region]["MySQLDbSystem"]
+            del resources_by_region[region]["MySQLDbSystemDetails"]
+            resources_by_region[region]["MySQLDbSystem"] = mysql_db_systems
 
         return resources_by_region
 

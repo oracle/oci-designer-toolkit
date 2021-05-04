@@ -1,0 +1,14 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_vm_cluster(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Shape", resource.shape) }}
+{{ common.document_property("Cpus Enabled", resource.cpus_enabled) }}
+{{ common.document_property("Data Storage Tbs", resource.data_storage_size_in_tbs) }}
+{{ common.document_property("Node Storage Gbs", resource.db_node_storage_size_in_gbs) }}
+{{ common.document_property("Memory Gbs", resource.memory_size_in_gbs) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for vm_cluster in vm_clusters -%}
+    {{ document_vm_cluster(vm_cluster) }}
+{%- endfor %}

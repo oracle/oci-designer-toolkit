@@ -1,0 +1,11 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_db_home(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Version", resource.db_version) }}
+{{ common.document_property("Location", resource.db_home_location) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for db_home in db_homes -%}
+    {{ document_db_home(db_home) }}
+{%- endfor %}

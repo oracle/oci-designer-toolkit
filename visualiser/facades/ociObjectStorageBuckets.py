@@ -27,7 +27,6 @@ class OCIObjectStorageBuckets(OCIObjectStorageBucketConnection):
     def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.object_storage_buckets_json = []
-        self.object_storage_buckets_obj = []
         super(OCIObjectStorageBuckets, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, compartment_id=None, filter=None):
@@ -42,28 +41,34 @@ class OCIObjectStorageBuckets(OCIObjectStorageBucketConnection):
         if filter is None:
             filter = {}
 
-        object_storage_buckets_summary = oci.pagination.list_call_get_all_results(self.client.list_buckets, namespace_name=namespace, compartment_id=compartment_id).data
+        object_storage_buckets = oci.pagination.list_call_get_all_results(self.client.list_buckets, namespace_name=namespace, compartment_id=compartment_id).data
 
         # Convert to Json object
-        object_storage_buckets_summary_json = self.toJson(object_storage_buckets_summary)
-        logger.debug(str(object_storage_buckets_summary_json))
-
-        # Filter results
-        self.object_storage_buckets_json = self.filterJsonObjectList(object_storage_buckets_summary_json, filter)
-        logger.debug(str(self.object_storage_buckets_json))
+        object_storage_buckets_json = self.toJson(object_storage_buckets)
+        logger.debug(str(object_storage_buckets_json))
 
         # Convert Bucket Summary to Details
-        object_storage_buckets_json = []
-        for bucket_summary in self.object_storage_buckets_json:
-            bucket = self.client.get_bucket(bucket_summary['namespace'], bucket_summary['name']).data
-            bucket['display_name'] = bucket['name']
-            object_storage_buckets_json.append(self.toJson(bucket))
-            object_storage_buckets_json[-1]['id'] = object_storage_buckets_json[-1].get('id', '{0!s:s}-{1!s:s}'.format(bucket_summary['namespace'], bucket_summary['name']))
-        self.object_storage_buckets_json = object_storage_buckets_json
+        for bucket in object_storage_buckets_json:
+            bucket.update(self.get(bucket["namespace"], bucket["name"]))
+            bucket['display_name'] = bucket.get('display_name', bucket['name'])
+            bucket['id'] = bucket.get('id', '{0!s:s}-{1!s:s}'.format(bucket['namespace'], bucket['name']))
+        logger.debug(str(object_storage_buckets_json))
+
+        # Filter results
+        self.object_storage_buckets_json = self.filterJsonObjectList(object_storage_buckets_json, filter)
         logger.debug(str(self.object_storage_buckets_json))
         logJson(self.object_storage_buckets_json)
 
         return self.object_storage_buckets_json
+
+    def get(self, namespace=None, name=None):
+        bucket = self.client.get_bucket(namespace, name).data
+        logger.debug('============================== Object Storage Bucket Raw ==============================')
+        logger.debug(str(bucket))
+        # Convert to Json object
+        bucket_json = self.toJson(bucket)
+        logJson(bucket_json)
+        return bucket_json
 
 
 class OCIObjectStorageBucket(object):

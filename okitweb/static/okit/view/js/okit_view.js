@@ -50,7 +50,10 @@ class OkitJsonView {
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
         this.customer_premise_equipments = [];
+        this.databases = [];
         this.database_systems = [];
+        this.db_homes = [];
+        this.db_nodes = [];
         this.dynamic_routing_gateways = [];
         this.fast_connects = [];
         this.file_storage_systems = [];
@@ -72,9 +75,30 @@ class OkitJsonView {
         this.subnets = [];
         this.virtual_cloud_networks = [];
         this.virtual_network_interfaces = [];
+        this.exadata_infrastructures = [];
+        this.vm_clusters = [];
+        this.vm_cluster_networks = [];
+    }
+    clear2() {
+        for (const [key, value] of Object.entries(this)) {
+            if (Array.isArray(value)) this[key] = [];
+        }
     }
 
     load() {
+        this.clear();
+        for (const [key, value] of Object.entries(this.getOkitJson())) {
+            if (Array.isArray(value)) {
+                const func_name = titleCase(key.split('_').join(' ')).split(' ').join('');
+                const get_function = `get${func_name}`;
+                const new_function = `new${func_name.slice(0, -1)}`;
+                // console.warn('Functions:', get_function, new_function);
+                for (const resource of this.getOkitJson()[get_function]()) {this[new_function](resource);}
+            }
+        }
+    }
+
+    load1() {
         this.clear();
         for (let artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
         for (let artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
@@ -82,6 +106,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.customer_premise_equipments) {this.newCustomerPremiseEquipment(artefact);}
         for (let artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
         for (let artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
+        for (let artefact of this.okitjson.getExadataInfrastructures()) {this.newExadataInfrastructure(artefact);}
         for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
         for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
         for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
@@ -101,6 +126,8 @@ class OkitJsonView {
         for (let artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
         for (let artefact of this.okitjson.subnets) {this.newSubnet(artefact);}
         for (let artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
+        for (let artefact of this.okitjson.getVmClusters()) {this.newVmCluster(artefact);}
+        for (let artefact of this.okitjson.getVmClusterNetworks()) {this.newVmClusterNetwork(artefact);}
     }
 
     update(model) {
@@ -481,6 +508,7 @@ class OkitJsonView {
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
+    newIpsecConnection(connect) {return this.newIPSecConnection(connect)}
     newIPSecConnection(connect) {
         this.ipsec_connections.push(connect ? new IPSecConnectionView(connect, this) : new IPSecConnectionView(this.okitjson.newIPSecConnection(), this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
@@ -568,6 +596,7 @@ class OkitJsonView {
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
+    newMysqlDatabaseSystem(database) {return this.newMySQLDatabaseSystem(database)}
     newMySQLDatabaseSystem(database) {
         this.mysql_database_systems.push(database ? new MySQLDatabaseSystemView(database, this) : new MySQLDatabaseSystemView(this.okitjson.newMySQLDatabaseSystem(), this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
@@ -604,6 +633,7 @@ class OkitJsonView {
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
+    newNatGateway(gateway) {return this.newNATGateway(gateway)}
     newNATGateway(gateway) {
         let ng = gateway ? new NATGatewayView(gateway, this) : new NATGatewayView(this.okitjson.newNATGateway(), this);
         if (ng.artefact === null) {
@@ -1277,6 +1307,9 @@ class OkitArtefactView {
         return OkitArtefactView.cut_copy_paste.resource ? OkitArtefactView.cut_copy_paste.resource.getDropTargets().includes(this.getArtifactReference()) : false;
     }
 
+    getFunction(resource_name) {return `get${resource_name.split(' ').join('')}`}
+    getArrayFunction(resource_name) {return `get${resource_name.split(' ').join('')}s`}
+
     getArtefact() {return this.artefact;}
 
     static new(artefact, json_view) {return new this(artefact, json_view);}
@@ -1327,6 +1360,7 @@ class OkitArtefactView {
             this.drawText(svg, this.svg_label_text);
             this.drawTitle(svg);
             this.drawIcon(svg);
+            if (this.read_only) this.drawIconOverlay(svg)
             // Add standard / common click event
             this.addClickEvent(svg);
             // Add standard / common mouse over event
@@ -1387,6 +1421,18 @@ class OkitArtefactView {
             .append("use")
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
+        return icon;
+    }
+
+    drawIconOverlay(svg) {
+        // console.warn('Drawing Overlay for', this.display_name);
+        const overlay_icon_definition_id = "ReadOnlySvg"
+        const overlay_transform = "scale(0.5, 0.5), translate(1, 1)"
+        const icon = svg.append('g')
+            .attr("style", "pointer-events: bounding-box;")
+            .append("use")
+            .attr("xlink:href",`#${overlay_icon_definition_id}`)
+            .attr("transform", overlay_transform);
         return icon;
     }
 
@@ -1919,7 +1965,7 @@ class OkitArtefactView {
     getTopChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getTopArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
@@ -1959,7 +2005,8 @@ class OkitArtefactView {
     getContainerChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getContainerArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            // for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
