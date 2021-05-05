@@ -36,7 +36,6 @@ ${this.auto_generated_warning}
 import { OkitResourceModel } from '../okit_resource_model.js'
 
 class ${class_name} extends OkitResourceModel {
-    static model = {}
     constructor() {
         super()
         ${Object.keys(this.schema).filter((key) => !this.ignore_elements.includes(key)).map((key) => key + ' = undefined').join('\n        ')}
@@ -49,13 +48,13 @@ export { ${class_name} }
         return model
     }
 
-    generateConstructor(obj) {
-        return Object.entries(obj).map(([key,value]) => key +  Array.isArray(value) ?  ' = []' : value instanceof Object ? ` = ${this.generateConstructor(value).join(', ')}` : "''")
-    }
+    // generateConstructor(obj) {
+    //     return Object.entries(obj).map(([key,value]) => key +  Array.isArray(value) ?  ' = []' : value instanceof Object ? ` = ${this.generateConstructor(value).join(', ')}` : "''")
+    // }
 
-    getAttributes() {
+    // getAttributes() {
 
-    }
+    // }
 }
 
 export default OkitModelGenerator

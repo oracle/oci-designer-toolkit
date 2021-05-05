@@ -9,8 +9,8 @@
 
 import { OkitCodeGenerator } from './okit_code_generator.js'
 
-class OkitPropertiesGenerator extends OkitCodeGenerator {
-    static generatePropertiesResources(resources) {
+class OkitTerraformGenerator extends OkitCodeGenerator {
+    static generateTerraformResources(resources) {
         const model = `
 /*
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
@@ -21,8 +21,8 @@ class OkitPropertiesGenerator extends OkitCodeGenerator {
 ** Author: Andrew Hopkinson
 */
 
-export { OkitResourceProperties } from './okit_resource_properties.js'
-${resources.map((r) => 'export { ' + OkitPropertiesGenerator.titleCase(OkitPropertiesGenerator.resource_map[r].split('_').join(' ')).split(' ').join('') + " } from './" + OkitPropertiesGenerator.resource_map[r] + '/' + OkitPropertiesGenerator.resource_map[r] + ".js'").join('\n')}
+export { OkitResourceTerraform } from './okit_resource_terraform.js'
+${resources.map((r) => 'export { ' + OkitTerraformGenerator.titleCase(OkitTerraformGenerator.resource_map[r].split('_').join(' ')).split(' ').join('') + " } from './" + OkitTerraformGenerator.resource_map[r] + '/' + OkitTerraformGenerator.resource_map[r] + ".js'").join('\n')}
 `
         return model
     }
@@ -33,7 +33,7 @@ ${resources.map((r) => 'export { ' + OkitPropertiesGenerator.titleCase(OkitPrope
 ${this.author}
 ${this.auto_generated_warning}
 
-import { OkitResourceProperties } from '../okit_resource_properties.js'
+import { OkitResourceTerraform } from '../okit_resource_terraform.js'
 
 class ${class_name} extends OkitResourceProperties {
     static model = {
@@ -67,6 +67,6 @@ export { ${class_name} }
     // }
 }
 
-export default OkitPropertiesGenerator
-export { OkitPropertiesGenerator }
+export default OkitTerraformGenerator
+export { OkitTerraformGenerator }
 

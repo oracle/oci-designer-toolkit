@@ -110,6 +110,21 @@ class OkitCodeGenerator {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
 
+    generateModel(obj) {
+        return Object.entries(obj).filter(([k, v]) => !this.ignore_elements.includes(k)).map(([k, v]) => 
+            `${k}: {
+                required: ${v.required ? v.required : false},
+                editable: true,
+                type: 'datalist',
+                label: '${OkitPropertiesGenerator.titleCase(k.split('_').join(' '))}'
+            },`
+        )
+    }
+
+    generateConstructor(obj) {
+        return Object.entries(obj).map(([key,value]) => key +  Array.isArray(value) ?  ' = []' : value instanceof Object ? ` = ${this.generateConstructor(value).join(', ')}` : "''")
+    }
+
     getAttributes() {
 
     }

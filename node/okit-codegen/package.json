@@ -25,6 +25,7 @@
         "start": "node .",
         "test-generate-okit-model": "node src/okit-codegen.js generate okit-model-js ./src/code_generation/schema/tf-schema.json test/model",
         "test-generate-okit-properties": "node src/okit-codegen.js generate okit-properties-js ./src/code_generation/schema/tf-schema.json test/properties",
+        "test-generate-okit-terraform": "node src/okit-codegen.js generate okit-terraform-js ./src/code_generation/schema/tf-schema.json test/terraform",
         "generate-okit-model": "node src/okit-codegen.js generate okit-model-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/model",
         "generate-okit-properties": "node src/okit-codegen.js generate okit-properties-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/properties"
     },
