@@ -123,5 +123,38 @@
     {% include "ipsec_connection.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if exadata_infrastructures is defined and exadata_infrastructures|length > 0 -%}
+    ## ExaCC
+
+### Exadata Infrstructures
+    {% include "exadata_infrastructure.jinja2" ignore missing with context %}
+
+{% if vm_clusters is defined and vm_clusters|length > 0 -%}
+    ### Vm Clusters
+    {% include "vm_cluster.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if vm_cluster_networks is defined and vm_cluster_networks|length > 0 -%}
+    ### Vm Cluster Networks
+    {% include "vm_cluster_network.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if db_homes is defined and db_homes|length > 0 -%}
+    ### DB Homes
+    {% include "db_home.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if db_nodes is defined and db_nodes|length > 0 -%}
+    ### DB Nodes
+    {% include "db_node.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if databases is defined and databases|length > 0 -%}
+    ### Databases
+    {% include "database.jinja2" ignore missing with context %}
+{%- endif %}
+
+{%- endif %}
+
 
 

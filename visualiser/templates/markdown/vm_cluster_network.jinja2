@@ -1,0 +1,30 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_networks(networks) -%}
+
+{% for network in networks -%}
+#### {{ network.network_type }} Network
+| Property | Value    |
+| -------- | -------- |
+{{ common.document_property("Domain Name", network.domain_name) }}
+{{ common.document_property("Gateway", network.gateway) }}
+{{ common.document_property("Netmask", network.netmask) }}
+{{ common.document_property("VLAN", network.vlan_id) }}
+
+| Hostname | Ip Address | VIP Hostname | VIP         |
+| -------- | ---------- | ------------ | ----------- |
+    {% for node in network.nodes -%}
+        | {{ node.hostname }} | {{ node.ip }} | {%- if node.vip_hostname is defined %}{{ node.vip_hostname }}{%- endif -%} | {%- if node.vip is defined %}{{ node.vip }}{%- endif -%} |
+    {% endfor %}
+{% endfor %}
+{%- endmacro %}
+{% macro document_vm_cluster_network(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Dns Server", resource.dns_server) }}
+{{ common.document_property("Ntp Server", resource.ntp_server) }}
+{{ document_networks(resource.vm_networks) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for vm_cluster_network in vm_cluster_networks -%}
+    {{ document_vm_cluster_network(vm_cluster_network) }}
+{%- endfor %}

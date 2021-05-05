@@ -206,7 +206,6 @@ class OCIQuery(OCIConnection):
             for mt in fs["mount_targets"]:
                 ess = [e for e in export_sets if e["id"] == mt["export_set_id"]]
                 mt["export_set"] = ess[0] if len(ess) else {}
-        logger.info(jsonToFormattedString(file_storage_systems))
         return file_storage_systems
 
     def instances(self, instances, resources):

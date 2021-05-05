@@ -102,11 +102,11 @@ class OCIConnection(object):
     def filterJsonObjectList(self, json_list=[], filter={}):
         if filter is not None and json_list is not None:
             for key, val in filter.items():
-                logger.info('{0!s:s} = {1!s:s}'.format(key, val))
+                logger.debug('{0!s:s} = {1!s:s}'.format(key, val))
                 # Check if filter is a list of strings and join as or
                 if isinstance(val, list):
                     val = '|'.join(val)
-                    logger.info('{0!s:s} = {1!s:s}'.format(key, val))
+                    logger.debug('{0!s:s} = {1!s:s}'.format(key, val))
                 json_list = [bs for bs in json_list if re.compile(val).search(bs[key])]
         return json_list
 

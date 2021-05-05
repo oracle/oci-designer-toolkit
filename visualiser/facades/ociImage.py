@@ -32,9 +32,9 @@ class OCIImages(OCIComputeConnection):
 
     def get(self, image_id):
         image = self.client.get_image(image_id).data
-        logger.info('Images : ' + str(image))
+        logger.debug('Images : ' + str(image))
         image_json = self.toJson(image)
-        logger.info(str(image_json))
+        logger.debug(str(image_json))
         return image_json
 
     def list(self, compartment_id=None, filter=None):

@@ -288,7 +288,7 @@ sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
 sudo bash -c "pip3 install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
-sudo bash -c "git clone -b toxophilist/auth --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
+sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
 sudo bash -c "mkdir /okit/{log,ssl,workspace}"
 # Add additional environment information because append does not appear to work in write_file
 sudo bash -c "echo 'source /etc/.bashrc' >> /etc/bashrc"
@@ -306,8 +306,6 @@ sudo systemctl start gunicorn.service
 sudo firewall-offline-cmd  --add-port=443/tcp
 sudo systemctl restart firewalld
 ```
-
-The __okit-ws.json__ file in the containers/cloud sub-directory can be used to create vcn/subnet/instance.
 
 ### OpenID Connect Configuration for IDCS
 
@@ -332,9 +330,9 @@ Configuration steps:
 1. In the Client step select 'Configure this application as a client now'
     1. In the Authorization section:
         1. Select the 'Grant Types': Client Credentials, JWT Assertion, Refresh Token, and Authorization Code
-        1. Set the 'Redirect URL' to <server_base_url>/okit/postlogin.
-        1. Set the 'Logout URL' to <server_base_url>/okit/logout.
-        1. Set the 'Post Logout URL' to <server_base_url>/okit/postlogout.
+        1. Set the 'Redirect URL' to <server_base_url>/okit/postlogin
+        1. Set the 'Logout URL' to <server_base_url>/okit/logout
+        1. Set the 'Post Logout URL' to <server_base_url>/okit/postlogout
 1. Click 'Next' until the 'Finish' button can be selected.
 1. Click 'Finish'
 1. An 'Application Added' window shows the values for Client ID and Client Secret. Copy both values for later use. Click on 'Close' to close the window.

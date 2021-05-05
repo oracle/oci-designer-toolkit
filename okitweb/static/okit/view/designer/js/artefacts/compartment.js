@@ -18,6 +18,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     get children() {return [...this.json_view.getCompartments(), ...this.json_view.getVirtualCloudNetworks(),
+        // ...this.json_view.getSubnets(), ...this.json_view.getExadataInfrastructures(),
         ...this.json_view.getBlockStorageVolumes(), ...this.json_view.getDynamicRoutingGateways(),
         ...this.json_view.getAutonomousDatabases(), ...this.json_view.getCustomerPremiseEquipments(),
         ...this.json_view.getObjectStorageBuckets(), ...this.json_view.getFastConnects(),
@@ -75,7 +76,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     getContainerArtifacts() {
-        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference(), Subnet.getArtifactReference()];
+        return [Compartment.getArtifactReference(), VirtualCloudNetwork.getArtifactReference(), Subnet.getArtifactReference(), ExadataInfrastructure.getArtifactReference()];
     }
 
     getLeftArtifacts() {
