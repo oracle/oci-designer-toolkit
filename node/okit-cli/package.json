@@ -23,8 +23,8 @@
     "main": "src/okit-cli.js",
     "scripts": {
         "start": "node .",
-        "import-test": "node src/okit-cli.js import okit-json test/okit-node-test.json test/okit-node-test.okit",
-        "generate-test": "node src/okit-cli.js generate svg test/okit-node-test.okit test/okit-node-test.svg"
+        "test-import-json": "node src/okit-cli.js import okit-json test/okit-node-test.json test/okit-node-test.okit",
+        "test-generate-svg": "node src/okit-cli.js generate svg test/okit-node-test.okit test/okit-node-test.svg"
     },
     "private": true,
     "type": "module",

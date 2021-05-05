@@ -7,10 +7,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import { OkitData } from '../data/okit.js'
 
 class OkitJsonImporter {
@@ -35,7 +31,7 @@ class OkitJsonImporter {
         block_storage_volumes: 'volume',
         compartments: 'compartment',
         customer_premise_equipments: 'cpe',
-        database_systems: 'database',
+        database_systems: 'db_system',
         dynamic_routing_gateways: 'drg',
         fast_connects: 'fast_connects',
         file_storage_systems: 'file_system',

@@ -8,10 +8,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 class OkitResource {
     static get svg() {return `
     <?xml version="1.0" encoding="utf-8"?>
@@ -382,11 +378,12 @@ class OkitResource {
     }
     // --- svg
     get svg_id() {return `${this.json.id}-svg`}
-    get svg_x() {return this.parent ? this.parent.getChildOffest(this).dx : 0}
-    get svg_y() {return this.parent ? this.parent.getChildOffest(this).dy : 0}
-    get svg_width() {return this.collapsed ? this.collapsed_dimensions.width : this.dimensions.width}
-    get svg_height() {return this.collapsed ? this.collapsed_dimensions.height : this.dimensions.height}
+    get svg_x() {return this.view.coords[this.json.id] ? this.view.coords[this.json.id].x : this.parent ? this.parent.getChildOffest(this).dx : 0}
+    get svg_y() {return this.view.coords[this.json.id] ? this.view.coords[this.json.id].y : this.parent ? this.parent.getChildOffest(this).dy : 0}
+    get svg_width() {return this.view.coords[this.json.id] ? this.view.coords[this.json.id].width : this.collapsed ? this.collapsed_dimensions.width : this.dimensions.width}
+    get svg_height() {return this.view.coords[this.json.id] ? this.view.coords[this.json.id].height : this.collapsed ? this.collapsed_dimensions.height : this.dimensions.height}
     get svg_definition() {
+        // console.info('Coords:', this.view.coords[this.json.id])
         return this.view.coords[this.json.id] ? this.view.coords[this.json.id] : {
             id: this.svg_id,
             x: this.svg_x,

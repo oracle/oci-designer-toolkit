@@ -7,10 +7,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import { OkitContainerResource } from '../okit_resource.js'
 import * as resources from '../resources.js'
 
@@ -26,7 +22,7 @@ class Subnet extends OkitContainerResource {
     // -- Child Positioning
     top_edge_children = [resources.RouteTable.name, resources.SecurityList.name]
     top_children = [resources.LoadBalancer.name]
-    bottom_children = [resources.Instance.name, resources.InstancePool.name, resources.Database.name, resources.AutonomousDatabase.name, resources.MysqlDbSystem.name]
+    bottom_children = [resources.Instance.name, resources.InstancePool.name, resources.DbSystem.name, resources.AutonomousDatabase.name, resources.MysqlDbSystem.name]
     left_children = [resources.FileSystem.name]
      
     // Function Getters

@@ -8,10 +8,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import { readFileSync } from 'fs'
 
 class OkitData {
@@ -26,18 +22,16 @@ class OkitData {
             description: '',
             created: `${date} ${time}`,
             updated: '',
+            tags: {},
             region: {
                 cross_region: {
                     resources: {},
-                    coords: {},
-                    connectors: {},
-                    svg: {}
+                    vars: {}
                 },
                 undefined: {
                     resources: {},
-                    coords: {},
-                    connectors: {},
-                    svg: {}
+                    vars: {},
+                    views: {}
                 }
             }
         }  

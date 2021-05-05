@@ -241,6 +241,15 @@ class OCIResourceManagerConnection(OCIConnection):
         return
 
 
+class OCIResourceSearchConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIResourceSearchConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.resource_search.ResourceSearchClient(config=self.config, signer=self.signer)
+        return
+
+
 class OCIVirtualNetworkConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
         super(OCIVirtualNetworkConnection, self).__init__(config=config, configfile=configfile, profile=profile)
