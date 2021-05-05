@@ -38,7 +38,7 @@ class OCINodePools(OCIContainerConnection):
             cluster_id = self.cluster_id
 
         if self.compartment_id is not None:
-            logger.info('Pools for Cluster {0!s:s}'.format(self.cluster_id))
+            logger.debug('Pools for Cluster {0!s:s}'.format(self.cluster_id))
             node_pools = oci.pagination.list_call_get_all_results(self.client.list_node_pools, compartment_id=compartment_id, cluster_id=cluster_id).data
             # Convert to Json object
             node_pools_json = self.toJson(node_pools)
@@ -65,7 +65,7 @@ class OCINodePools(OCIContainerConnection):
                 self.node_pools_obj.append(OCINodePool(self.config, self.configfile, self.profile, node_pool))
         else:
             logger.warn('Compartment Id has not been specified.')
-        logger.info(str(self.node_pools_json))
+        logger.debug(str(self.node_pools_json))
         return self.node_pools_json
 
 

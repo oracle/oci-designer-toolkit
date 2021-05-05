@@ -45,7 +45,7 @@ class OCIAvailabilityDomains(OCIIdentityConnection):
 
         # Filter results
         self.availability_domains_json = self.filterJsonObjectList(availability_domains_json, filter)
-        logger.info(str(self.availability_domains_json))
+        logger.debug(str(self.availability_domains_json))
 
         return self.availability_domains_json
 

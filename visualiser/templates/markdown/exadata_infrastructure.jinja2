@@ -1,0 +1,21 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_exadata_infrastructure(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Admin Networ Cidr", resource.admin_network_cidr) }}
+{{ common.document_property("Control Plane Server 1", resource.cloud_control_plane_server1) }}
+{{ common.document_property("Control Plane Server 2", resource.cloud_control_plane_server2) }}
+{{ common.document_property("Corporate Proxy", resource.corporate_proxy) }}
+{{ common.document_property("Shape", resource.shape) }}
+{{ common.document_property("Cpus Enabled", resource.cpus_enabled) }}
+{{ common.document_property("Data Storage Tbs", resource.data_storage_size_in_tbs) }}
+{{ common.document_property("Node Storage Gbs", resource.db_node_storage_size_in_gbs) }}
+{{ common.document_property("Dns Server", resource.dns_server) }}
+{{ common.document_property("Ntp Server", resource.ntp_server) }}
+{{ common.document_property("Gateway", resource.gateway) }}
+{{ common.document_property("Netmask", resource.netmask) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for exadata_infrastructure in exadata_infrastructures -%}
+    {{ document_exadata_infrastructure(exadata_infrastructure) }}
+{%- endfor %}

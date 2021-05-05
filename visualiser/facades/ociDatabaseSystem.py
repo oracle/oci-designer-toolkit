@@ -55,8 +55,8 @@ class OCIDatabaseSystems(OCIDatabaseConnection):
 
         # Filter results
         self.database_systems_json = self.filterJsonObjectList(database_systems_json, filter)
-        logger.info('============================== DatabaseSystems ==============================')
-        logger.info(str(self.database_systems_json))
+        logger.debug('============================== DatabaseSystems ==============================')
+        logger.debug(str(self.database_systems_json))
 
         return self.database_systems_json
 

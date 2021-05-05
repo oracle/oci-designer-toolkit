@@ -1,0 +1,12 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_database(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.document_property("Name", resource.db_name) }}
+{{ common.document_property("Unique Name", resource.db_unique_name) }}
+{{ common.document_property("Workload", resource.db_workload) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for database in databases -%}
+    {{ document_database(database) }}
+{%- endfor %}

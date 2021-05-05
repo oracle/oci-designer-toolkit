@@ -17,7 +17,7 @@ import oci
 
 from common.okitLogging import getLogger
 from facades.ociConnection import OCIIdentityConnection
-from facades.ociInstance import OCIInstanceVnics
+# from facades.ociInstance import OCIInstanceVnics
 from facades.ociInstance import OCIInstances
 from facades.ociLoadBalancer import OCILoadBalancers
 from facades.ociVirtualCloudNetwork import OCIVirtualCloudNetworks
@@ -39,7 +39,7 @@ class OCICompartments(OCIIdentityConnection):
     def get(self, compartment_id):
         compartment = self.client.get_compartment(compartment_id=compartment_id).data
         self.compartments_json = [self.toJson(compartment)]
-        self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
+        # self.compartments_obj = [OCICompartment(self.config, self.configfile, self.compartments_json[0])]
         return self.compartments_json[0]
 
     def list(self, compartment_id=None, filter={}, recursive=False):
@@ -74,7 +74,7 @@ class OCICompartments(OCIIdentityConnection):
         self.compartments_obj = []
         for compartment in self.compartments_json:
             compartment['display_name'] = self.getCanonicalName(compartment['id'])
-            self.compartments_obj.append(OCICompartment(self.config, self.configfile, self.profile, compartment))
+            # self.compartments_obj.append(OCICompartment(self.config, self.configfile, self.profile, compartment))
         return self.compartments_json
 
     def listTenancy(self, filter={}):
@@ -93,22 +93,22 @@ class OCICompartments(OCIIdentityConnection):
         return '{0!s:s}/{1!s:s}'.format(parentsname, self.names[compartment_id])
 
 
-class OCICompartment(object):
-    def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
-        self.config = config
-        self.configfile = configfile
-        self.profile = profile
-        self.data = data
+# class OCICompartment(object):
+#     def __init__(self, config=None, configfile=None, profile=None, data=None, **kwargs):
+#         self.config = config
+#         self.configfile = configfile
+#         self.profile = profile
+#         self.data = data
 
-    def getVirtualCloudNetworkClients(self):
-        return OCIVirtualCloudNetworks(self.config, self.configfile, self.data['id'])
+#     def getVirtualCloudNetworkClients(self):
+#         return OCIVirtualCloudNetworks(self.config, self.configfile, self.data['id'])
 
-    def getInstanceClients(self):
-        return OCIInstances(self.config, self.configfile, self.data['id'])
+#     def getInstanceClients(self):
+#         return OCIInstances(self.config, self.configfile, self.data['id'])
 
-    def getInstanceVnicClients(self):
-        return OCIInstanceVnics(self.config, self.configfile, self.data['id'])
+#     def getInstanceVnicClients(self):
+#         return OCIInstanceVnics(self.config, self.configfile, self.data['id'])
 
-    def getLoadBalancerClients(self):
-        return OCILoadBalancers(self.config, self.configfile, self.data['id'])
+#     def getLoadBalancerClients(self):
+#         return OCILoadBalancers(self.config, self.configfile, self.data['id'])
 
