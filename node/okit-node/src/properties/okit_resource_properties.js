@@ -47,6 +47,15 @@ class OkitResourceProperties {
         },
     }
     static model = {}
+
+    constructor(json={}, document=undefined, panel_id=undefined) {
+        this.document = document
+        this.resource = new Proxy(json, this.handler)
+        this.panel_id = panel_id
+        this.properties_div = undefined
+        this.build()
+    }
+
     get all_properties() {return {...this.constructor.common, ...this.constructor.model}}
     get required_properties() {return Object.entries(this.all_properties).reduce((r, [k, v]) => {
         if (v.required) r[k] = v
@@ -81,13 +90,6 @@ class OkitResourceProperties {
             if (this.hierarchy.slice(-1)[0] !== prop) this.hierarchy.push(prop)
         }
     }    
-    constructor(json={}, document=undefined, panel_id=undefined) {
-        this.document = document
-        this.resource = new Proxy(json, this.handler)
-        this.panel_id = panel_id
-        this.properties_div = undefined
-        this.build()
-    }
 
     build(type='simple') {
         const properties_panel = document.getElementById(this.panel_id)

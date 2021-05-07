@@ -10,7 +10,9 @@
 import { OkitCodeGenerator } from './okit_code_generator.js'
 
 class OkitPropertiesGenerator extends OkitCodeGenerator {
-    static generatePropertiesResources(resources) {
+    root_class = 'OkitResourceProperties'
+    root_class_js = 'okit_resource_properties.js'
+   static generatePropertiesResources1(resources) {
         const model = `
 /*
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
@@ -27,7 +29,7 @@ ${resources.map((r) => 'export { ' + OkitPropertiesGenerator.titleCase(OkitPrope
         return model
     }
 
-    generate() {
+    generate1() {
         const class_name = this.generateClassName()
         let model = `${this.copyright}
 ${this.author}
@@ -46,25 +48,6 @@ export { ${class_name} }
 `
         return model
     }
-
-    // generateModel(obj) {
-    //     return Object.entries(obj).filter(([k, v]) => !this.ignore_elements.includes(k)).map(([k, v]) => 
-    //         `${k}: {
-    //             required: ${v.required ? v.required : false},
-    //             editable: true,
-    //             type: 'datalist',
-    //             label: '${OkitPropertiesGenerator.titleCase(k.split('_').join(' '))}'
-    //         },`
-    //     )
-    // }
-
-    // generateConstructor(obj) {
-    //     return Object.entries(obj).map(([key,value]) => key +  Array.isArray(value) ?  ' = []' : value instanceof Object ? ` = ${this.generateConstructor(value).join(', ')}` : "''")
-    // }
-
-    // getAttributes() {
-
-    // }
 }
 
 export default OkitPropertiesGenerator

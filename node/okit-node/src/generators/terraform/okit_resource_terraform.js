@@ -29,6 +29,11 @@ class OkitResourceTerraform {
         },
     }
     static model = {}
+
+    constructor(resource) {
+        this.resource = resource
+    }
+
     get all_properties() {return {...this.constructor.common, ...this.constructor.model}}
     get required_properties() {return Object.entries(this.all_properties).reduce((r, [k, v]) => {
         if (v.required) r[k] = v
@@ -38,11 +43,40 @@ class OkitResourceTerraform {
         if (!v.required) r[k] = v
         return r
     }, {})}
-    constructor(resource) {
-        this.resource = resource
+    get resource_name() {return this.generateResourceName(this.resource.resource_name)}
+
+    generateResourceName(str) {
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()}).split(' ').join('')
     }
 
-    toResource() {return ''}
+    varValOrRef(key, val) {
+        if (this.ids) {}
+    }
+
+    buildRequired() {
+
+    }
+
+    buildOptional() {
+
+    }
+
+    buildTags() {
+
+    }
+
+    toResource() {
+        return `
+resource "${this.tf_resource_name}" "${this.resource_name}" {
+    # Required
+    ${this.buildRequired()}
+    # Optional
+    ${this.buildOptional()}
+    # Tags
+    ${this.buildTags()}
+}
+        `
+    }
 
     toData() {return ''}
 

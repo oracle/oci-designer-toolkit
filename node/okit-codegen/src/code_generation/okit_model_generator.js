@@ -10,7 +10,30 @@
 import { OkitCodeGenerator } from './okit_code_generator.js'
 
 class OkitModelGenerator extends OkitCodeGenerator {
-    static generateModelResources(resources) {
+    root_class = 'OkitResourceModel'
+    root_class_js = 'okit_resource_model.js'
+    generateResourceClass(resource, schema) {
+        const class_name = this.generateSuperClassName(resource)
+        const contents = `${this.copyright}
+${this.author}
+${this.auto_generated_warning}
+
+import { ${this.root_class} } from '../${this.root_class_js}'
+
+class ${class_name} extends ${this.root_class} {
+    constructor() {
+        super()
+        ${Object.keys(schema).filter((key) => !this.ignore_elements.includes(key)).map((key) => key + ' = undefined').join('\n        ')}
+    }
+}
+
+export default ${class_name}
+export { ${class_name} }
+`
+        return contents
+    }
+
+    static generateModelResources1(resources) {
         const model = `
 /*
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
@@ -27,7 +50,7 @@ ${resources.map((r) => 'export { ' + OkitModelGenerator.titleCase(OkitModelGener
         return model
     }
 
-    generate() {
+    generate1() {
         const class_name = this.generateClassName()
         let model = `${this.copyright}
 ${this.author}
@@ -47,14 +70,6 @@ export { ${class_name} }
 `
         return model
     }
-
-    // generateConstructor(obj) {
-    //     return Object.entries(obj).map(([key,value]) => key +  Array.isArray(value) ?  ' = []' : value instanceof Object ? ` = ${this.generateConstructor(value).join(', ')}` : "''")
-    // }
-
-    // getAttributes() {
-
-    // }
 }
 
 export default OkitModelGenerator
