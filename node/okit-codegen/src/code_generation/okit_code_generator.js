@@ -15,7 +15,7 @@ class OkitCodeGenerator {
         // oci_core_cpe: 'cpe',
         // oci_core_dhcp_options: 'dhcp_options',
         // oci_core_drg: 'drg',
-        // oci_core_instance: 'instance',
+        oci_core_instance: 'instance',
         // oci_core_instance_pool: 'instance_pool',
         // oci_core_internet_gateway: 'internet_gateway',
         // oci_core_ipsec: 'ipsec',
@@ -23,11 +23,11 @@ class OkitCodeGenerator {
         // oci_core_nat_gateway: 'nat_gateway',
         // oci_core_network_security_group: 'network_security_group',
         // oci_core_remote_peering_connection: 'remote_peering_connection',
-        // oci_core_route_table: 'route_table',
+        oci_core_route_table: 'route_table',
         oci_core_security_list: 'security_list',
         // oci_core_service_gateway: 'service_gateway',
-        // oci_core_subnet: 'subnet',
-        // oci_core_vcn: 'vcn',
+        oci_core_subnet: 'subnet',
+        oci_core_vcn: 'vcn',
         // oci_core_volume: 'volume',
         // oci_core_volume_group: 'volume_group',
 
@@ -36,7 +36,7 @@ class OkitCodeGenerator {
 
         // oci_file_storage_file_system: 'file_system',
 
-        // oci_identity_compartment: 'compartment',
+        oci_identity_compartment: 'compartment',
 
         // oci_load_balancer_load_balancer: 'load_balancer',
         // oci_load_balancer_backend: 'backend',
@@ -58,7 +58,8 @@ class OkitCodeGenerator {
         'inactive_state', 
         'is_accessible',
         'state', 
-        'time_created'
+        'time_created',
+        'system_tags'
     ]
 
     constructor(resource, definition) {
@@ -108,8 +109,6 @@ class OkitCodeGenerator {
 
     createSchema(definition) {
         return this.getAttributes(definition.block)
-        // this.schema = this.getAttributes(definition.block)
-        // console.info(this.generateClassName(), 'Schema:', JSON.stringify(this.schema, null, 2))
     }
 
     generate(resource, definition) {
@@ -179,12 +178,11 @@ export { ${class_name} }
 
     generateClassName(resource) {return this.titleCase(this.resource_map[resource].split('_').join(' ')).split(' ').join('')}
 
-    generateSuperClassName(resource) {return `${this.generateClassName(resource)}Super`}
+    generateSuperClassName(resource) {return `${this.generateClassName(resource)}Resource`}
 
-    generateSuperClassFilename(resource) {return `${this.resource_map[resource]}_generated.js`}
+    generateSuperClassFilename(resource) {return `${this.resource_map[resource]}_resource.js`}
 
     titleCase(str) {
-        // return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()})
         return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
     }
 
@@ -199,26 +197,32 @@ export { ${class_name} }
         )
     }
 
-    generateConstructor(obj) {
-        return Object.entries(obj).map(([key,value]) => key +  Array.isArray(value) ?  ' = []' : value instanceof Object ? ` = ${this.generateConstructor(value).join(', ')}` : "''")
-    }
-
-    getAttributes(block) {
+    getAttributes(block, hierarchy=[]) {
         const ignore_block_tyoes = ['timeouts']
         // Simple attributes
         let attributes = Object.entries(block.attributes).filter(([k, v]) => !this.ignore_elements.includes(k)).reduce((r, [k, v]) => {
             r[k] = {
-                required: v.required ? v.required : false,
-                editable: true,
-                type: v.type,
-                label: this.titleCase(k.split('_').join(' '))
+                definition: {
+                    required: v.required ? v.required : false,
+                    editable: true,
+                    type: Array.isArray(v.type) ? v.type[0] : v.type,
+                    label: k.endsWith('_id') || k.endsWith('_id') ? this.titleCase(k.split('_').slice(0, -1).join(' ')) : this.titleCase(k.split('_').join(' ')),
+                    id: [...hierarchy, k].join('.')
+                }
             }
             return r
         }, {})
         // Block / Object Attributes
         if (block.block_types) {
             attributes = Object.entries(block.block_types).filter(([k, v]) => !ignore_block_tyoes.includes(k)).reduce((r, [k, v]) => {
-                r[k] = this.getAttributes(v.block)
+                r[k] = this.getAttributes(v.block, [...hierarchy, k])
+                r[k].definition = {
+                    required: v.required ? v.required : false,
+                    editable: true,
+                    type: v.nesting_mode === 'list' && v.max_items === 1 ? 'object' : v.nesting_mode,
+                    label: this.titleCase(k.split('_').join(' ')),
+                    id: [...hierarchy, k].join('.')
+                }
                 return r
             }, attributes)
         }

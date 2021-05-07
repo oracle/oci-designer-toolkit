@@ -23,53 +23,25 @@ import { ${this.root_class} } from '../${this.root_class_js}'
 class ${class_name} extends ${this.root_class} {
     constructor() {
         super()
-        ${Object.keys(schema).filter((key) => !this.ignore_elements.includes(key)).map((key) => key + ' = undefined').join('\n        ')}
+${this.generateConstructor(schema).join('\n')}
     }
 }
 
 export default ${class_name}
 export { ${class_name} }
 `
+// ${Object.keys(schema).filter((key) => !this.ignore_elements.includes(key)).map((key) => key + ' = undefined').join('\n        ')}
         return contents
     }
 
-    static generateModelResources1(resources) {
-        const model = `
-/*
-** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
-** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
-*/
-
-/*
-** Author: Andrew Hopkinson
-*/
-
-export { OkitResourceModel } from './okit_resource_model.js'
-${resources.map((r) => 'export { ' + OkitModelGenerator.titleCase(OkitModelGenerator.resource_map[r].split('_').join(' ')).split(' ').join('') + " } from './" + OkitModelGenerator.resource_map[r] + '/' + OkitModelGenerator.resource_map[r] + ".js'").join('\n')}
-`
-        return model
+    generateConstructor(obj, depth=1, assign=' = ') {
+        return Object.entries(obj).filter(([k, v]) => ![...this.common_elements, 'definition'].includes(k)).map(([k, v]) => `${this.indent(depth)}${k}${assign}${v.definition.type === 'string' ? "''" : v.definition.type === 'object' ? '{\n' + this.generateConstructor(v, depth+1, ': ').join(',\n') + '\n' + this.indent(depth) + '}' : v.definition.type === 'bool' ? 'false' : v.definition.type === 'number' ? 0 : v.definition.type === 'map' ? '{}' : v.definition.type === 'set' ? '[]' : v.definition.type === 'list' ? '[]' : undefined}`)
     }
 
-    generate1() {
-        const class_name = this.generateClassName()
-        let model = `${this.copyright}
-${this.author}
-${this.auto_generated_warning}
-
-import { OkitResourceModel } from '../okit_resource_model.js'
-
-class ${class_name} extends OkitResourceModel {
-    constructor() {
-        super()
-        ${Object.keys(this.schema).filter((key) => !this.ignore_elements.includes(key)).map((key) => key + ' = undefined').join('\n        ')}
+    indent(depth) {
+        return depth > 0 ? `        ${Array((depth-1)*2).fill(' ').join('')}` : '        '
     }
-}
 
-export default ${class_name}
-export { ${class_name} }
-`
-        return model
-    }
 }
 
 export default OkitModelGenerator
