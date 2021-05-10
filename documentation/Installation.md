@@ -307,8 +307,6 @@ sudo firewall-offline-cmd  --add-port=443/tcp
 sudo systemctl restart firewalld
 ```
 
-The __okit-ws.json__ file in the containers/cloud sub-directory can be used to create vcn/subnet/instance.
-
 ### OpenID Connect Configuration for IDCS
 
 To use OpenID Connect with IDCS two configurations are required.
@@ -332,9 +330,9 @@ Configuration steps:
 1. In the Client step select 'Configure this application as a client now'
     1. In the Authorization section:
         1. Select the 'Grant Types': Client Credentials, JWT Assertion, Refresh Token, and Authorization Code
-        1. Set the 'Redirect URL' to <server_base_url>/okit/postlogin.
-        1. Set the 'Logout URL' to <server_base_url>/okit/logout.
-        1. Set the 'Post Logout URL' to <server_base_url>/okit/postlogout.
+        1. Set the 'Redirect URL' to <server_base_url>/okit/postlogin
+        1. Set the 'Logout URL' to <server_base_url>/okit/logout
+        1. Set the 'Post Logout URL' to <server_base_url>/okit/postlogout
 1. Click 'Next' until the 'Finish' button can be selected.
 1. Click 'Finish'
 1. An 'Application Added' window shows the values for Client ID and Client Secret. Copy both values for later use. Click on 'Close' to close the window.
