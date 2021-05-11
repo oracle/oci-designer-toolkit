@@ -71,6 +71,13 @@ class SubnetView extends OkitContainerDesignerArtefactView {
             attachment.draw();
             attachment_count += 1;
         }
+        // Draw Dhcp Options
+        if (this.artefact.dhcp_options_id !== '') {
+            let attachment = new DhcpOptionView(this.getJsonView().getOkitJson().getDhcpOption(this.dhcp_options_id), this.getJsonView());
+            attachment.attached_id = this.id;
+            attachment.draw();
+            attachment_count += 1;
+        }
     }
 
     /*
@@ -91,6 +98,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
                     route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
                 }
             }
+            // Security Lists
             let security_lists_select = d3.select(d3Id('security_list_ids'));
             for (let security_list of me.artefact.getOkitJson().security_lists) {
                 if (me.vcn_id === security_list.vcn_id) {
@@ -104,6 +112,8 @@ class SubnetView extends OkitContainerDesignerArtefactView {
                         .text(security_list.display_name);
                 }
             }
+            // Dhcp Options
+            this.json_view.loadDhcpOptionsSelect('dhcp_options_id', true)
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });
@@ -130,6 +140,10 @@ class SubnetView extends OkitContainerDesignerArtefactView {
             const dimensions = this.json_view.getSecurityList(security_list_id).dimensions;
             top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
         }
+        if (this.artefact.dhcp_options_id !== '') {
+            const dimensions = this.json_view.getDhcpOption(this.artefact.dhcp_options_id).dimensions;
+            top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
+        }
         return top_edge_dimensions;
     }
 
@@ -137,7 +151,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     ** Child Artifact Functions
      */
     getTopEdgeArtifacts() {
-        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference()];
+        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference(), DhcpOption.getArtifactReference()];
     }
 
     getTopArtifacts() {
@@ -145,7 +159,8 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     getBottomArtifacts() {
-        return [Instance.getArtifactReference(), InstancePool.getArtifactReference(), DatabaseSystem.getArtifactReference(), AutonomousDatabase.getArtifactReference(), MySQLDatabaseSystem.getArtifactReference()];
+        return [Instance.getArtifactReference(), InstancePool.getArtifactReference(), DatabaseSystem.getArtifactReference(), 
+            AutonomousDatabase.getArtifactReference(), MySQLDatabaseSystem.getArtifactReference(), AnalyticsInstance.getArtifactReference()];
     }
 
     getLeftArtifacts() {
