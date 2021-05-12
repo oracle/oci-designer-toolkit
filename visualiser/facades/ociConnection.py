@@ -44,7 +44,7 @@ class OCIConnection(object):
         try:
             # Get Signer from Instance Principal
             self.signer = oci.auth.signers.InstancePrincipalsSecurityTokenSigner()
-            self.config = {}
+            self.config = {"region": self.config["region"]}
             self.instance_principal = True
         except Exception:
             logger.warn('Instance Principal is not available')
