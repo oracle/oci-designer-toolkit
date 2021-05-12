@@ -62,6 +62,33 @@ class OkitJson {
         if (okit_json.description) {
             this.description = okit_json.description;
         }
+        // Turn Off Default Security List / Route Table Processing
+        const okitSettingsClone = JSON.clone(okitSettings);
+        okitSettings.is_default_route_table   = false;
+        okitSettings.is_default_security_list = false;
+        // Load
+        for (const [key, value] of Object.entries(okit_json)) {
+            if (Array.isArray(value)) {
+                const func_name = titleCase(key.split('_').join(' ')).split(' ').join('');
+                const get_function = `get${func_name}`;
+                const new_function = `new${func_name.slice(0, -1)}`;
+                // console.warn('Functions:', get_function, new_function);
+                for (const resource of okit_json[key]) {this[new_function](resource);}
+            }
+        }
+        // Reset Default Security List / Route Table Processing
+        okitSettings.is_default_route_table   = okitSettingsClone.is_default_route_table;
+        okitSettings.is_default_security_list = okitSettingsClone.is_default_security_list;
+    }
+    load1(okit_json) {
+        console.log('Load OKIT Json');
+        // Title & Description
+        if (okit_json.title) {
+            this.title = okit_json.title;
+        }
+        if (okit_json.description) {
+            this.description = okit_json.description;
+        }
         // Compartments
         if (okit_json.hasOwnProperty('compartments')) {
             for (let artefact of okit_json['compartments']) {
@@ -571,6 +598,7 @@ class OkitJson {
     }
 
     // IPSec Connection
+    newIpsecConnection(data) {return this.newIPSecConnection(data)}
     newIPSecConnection(data) {
         console.info('New IPSec Connection');
         this.ipsec_connections.push(new IPSecConnection(data, this));
@@ -652,6 +680,7 @@ class OkitJson {
     }
 
     // MySQL Database System
+    newMysqlDatabaseSystem(data) {return this.newMySQLDatabaseSystem(data)}
     newMySQLDatabaseSystem(data) {
         console.info('New MySQL Database System');
         this.mysql_database_systems.push(new MySQLDatabaseSystem(data, this));
@@ -679,6 +708,7 @@ class OkitJson {
     }
 
     // NAT Gateway
+    newNatGateway(data) {return this.newNATGateway(data)}
     newNATGateway(data) {
         console.info('New NAT Gateway');
         this.nat_gateways.push(new NATGateway(data, this));

@@ -802,9 +802,6 @@ class OkitJsonView {
     // Route Table
     dropRouteTableView(target) {
         let view_artefact = this.newRouteTable();
-        // view_artefact.getArtefact().vcn_id = target.id;
-        // view_artefact.getArtefact().compartment_id = target.compartment_id;
-        // view_artefact.recalculate_dimensions = true;
         if (target.type === VirtualCloudNetwork.getArtifactReference()) {
             view_artefact.getArtefact().vcn_id = target.id;
             view_artefact.getArtefact().compartment_id = target.compartment_id;
@@ -843,9 +840,6 @@ class OkitJsonView {
     // Security List
     dropSecurityListView(target) {
         let view_artefact = this.newSecurityList();
-        // view_artefact.getArtefact().vcn_id = target.id;
-        // view_artefact.getArtefact().compartment_id = target.compartment_id;
-        // view_artefact.recalculate_dimensions = true;
         if (target.type === VirtualCloudNetwork.getArtifactReference()) {
             view_artefact.getArtefact().vcn_id = target.id;
             view_artefact.getArtefact().compartment_id = target.compartment_id;

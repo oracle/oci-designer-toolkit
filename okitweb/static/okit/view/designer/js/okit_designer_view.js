@@ -103,6 +103,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let security_list of this.security_lists) {
             security_list.draw();
         }
+        // Dhcp Options
+        if (this.dhcp_options) {for (let dhcp_option of this.dhcp_options) {dhcp_option.draw();}}
         // Network Security Groups
         for (let network_security_group of this.network_security_groups) {
             network_security_group.draw();
@@ -129,6 +131,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let instance of this.instances) {
             instance.draw();
         }
+        // Analytics Instances
+        if (this.analytics_instances) {for (let instance of this.analytics_instances) {instance.draw();}}
+        // Integration Instances
+        if(this.integration_instances) {for (let instance of this.integration_instances) {instance.draw();}}
         // Instance Pools
         for (let instance_pool of this.instance_pools) {
             instance_pool.draw();

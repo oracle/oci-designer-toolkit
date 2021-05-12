@@ -182,6 +182,11 @@ class OCIGenerator(object):
         # -- Service Gateways
         for service_gateway in self.visualiser_json.get('service_gateways', []):
             self.renderServiceGateway(service_gateway)
+        # -- Dhcp Options
+        index = 1
+        for resource in self.visualiser_json.get('dhcp_options', []):
+            self.renderDhcpOption(resource, index)
+            index += 1
         # -- Subnet
         for subnet in self.visualiser_json.get('subnets', []):
             self.renderSubnet(subnet)
@@ -552,6 +557,62 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("db_node.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderDhcpOption(self, resource, index=0):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = resource['display_name']
+        # Process Route Table Data
+        logger.info('Processing Dhcp Options Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Required
+        # ---- If this is the first Dhcp Options the update the Default Dhcp Options
+        if index == 1 and False: # Is it valid to replace the default DHCP Options
+            self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
+                self.standardiseResourceName(self.id_name_map[resource['vcn_id']]), 'default_dhcp_options_id')
+        else:
+            self.removeJinja2Variable("manage_default_resource_id")
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- Virtual Cloud Network OCID
+        self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['vcn_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # ---- Route Rules
+        option_cnt = 1
+        jinja2_dhcp_options = []
+        for dhcp_option in resource.get('options', []):
+            jinja2_dhcp_option = {}
+            # ------ Type
+            logger.info(f'DHCP Option: {dhcp_option}')
+            jinja2_dhcp_option["type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_type'.format(option_cnt), dhcp_option["type"], standardisedName)
+            # ------ Server Type
+            if dhcp_option["server_type"] != '':
+                jinja2_dhcp_option["server_type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_server_type'.format(option_cnt), dhcp_option["server_type"], standardisedName)
+            # ------ Custom DNS Servers
+            if dhcp_option["custom_dns_servers"] != '':
+                jinja2_dhcp_option["custom_dns_servers"] = self.generateJinja2Variable('dhcp_option_{0:02d}_custom_dns_servers'.format(option_cnt), dhcp_option["custom_dns_servers"], standardisedName)
+            # ------ Domain Names
+            if dhcp_option["search_domain_names"] != '':
+                jinja2_dhcp_option["search_domain_names"] = self.generateJinja2Variable('dhcp_option_{0:02d}_search_domain_names'.format(option_cnt), dhcp_option["search_domain_names"], standardisedName)
+            # Add to Dhpc Option used for Jinja template
+            jinja2_dhcp_options.append(jinja2_dhcp_option)
+            # Increment option number
+            option_cnt += 1
+        self.jinja2_variables["options"] = jinja2_dhcp_options
+        # --- Optional
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("dhcp_option.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
@@ -1652,8 +1713,8 @@ class OCIGenerator(object):
         else:
             self.jinja2_variables.pop("security_list_ids", None)
         # ---- DHCP Options
-        if 'dhcp_options' in subnet:
-            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['dhcp_options']))
+        if 'dhcp_options_id' in subnet and len(subnet['dhcp_options_id']):
+            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['dhcp_options_id']))
         else:
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # --- Optional
