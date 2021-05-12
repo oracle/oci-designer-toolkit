@@ -15,7 +15,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     get parent_id() {return this.artefact.compartment_id;}
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     get children() {return [...this.json_view.getSubnets(), ...this.json_view.getInternetGateways(),
-        ...this.json_view.getNATGateways(), ...this.json_view.getRouteTables(), ...this.json_view.getSecurityLists(),
+        ...this.json_view.getNATGateways(), ...this.json_view.getRouteTables(), ...this.json_view.getSecurityLists(), ...this.json_view.getDhcpOptions(),
         ...this.json_view.getNetworkSecurityGroups(), ...this.json_view.getServiceGateways(),
         ...this.json_view.getDynamicRoutingGateways(), ...this.json_view.getLocalPeeringGateways(),
         ...this.json_view.getOkeClusters()].filter(child => child.parent_id === this.artefact.id);}
@@ -72,7 +72,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     }
 
     getTopArtifacts() {
-        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference(), NetworkSecurityGroup.getArtifactReference()];
+        return [RouteTable.getArtifactReference(), SecurityList.getArtifactReference(), NetworkSecurityGroup.getArtifactReference(), DhcpOption.getArtifactReference()];
     }
 
     getContainerArtifacts() {
