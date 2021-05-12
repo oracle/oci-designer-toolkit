@@ -611,10 +611,11 @@ function loadCompartments() {
                 $(jqId('query_compartment_id')).empty();
                 let compartment_select = d3.select(d3Id('query_compartment_id'));
                 for (let compartment of jsonBody) {
-                    //console.info(compartment['display_name']);
+                    console.info(compartment['display_name']);
+                    console.info(compartment['canonical_name']);
                     compartment_select.append('option')
                         .attr('value', compartment['id'])
-                        .text(compartment['display_name']);
+                        .text(compartment['canonical_name']);
                     if (okitSettings.home_region_key === '') {
                         okitSettings.home_region_key = compartment.home_region_key;
                     }
