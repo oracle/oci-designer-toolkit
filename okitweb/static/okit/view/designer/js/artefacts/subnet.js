@@ -140,7 +140,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
             const dimensions = this.json_view.getSecurityList(security_list_id).dimensions;
             top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
         }
-        if (this.artefact.dhcp_options_id !== '') {
+        if (this.artefact.dhcp_options_id !== '' && this.json_view.getDhcpOption) {
             const dimensions = this.json_view.getDhcpOption(this.artefact.dhcp_options_id).dimensions;
             top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
         }

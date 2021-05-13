@@ -593,7 +593,7 @@ function loadCompartments() {
         for (let compartment of okitOciData.getCompartments()) {
             compartment_select.append('option')
                 .attr('value', compartment['id'])
-                .text(compartment['display_name']);
+                .text(compartment['canonical_name']);
         }
         selectQueryLastUsedCompartment();
      } else {
