@@ -15,6 +15,7 @@ Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
 Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
 Environment="OCI_CLI_AUTH=instance_principal"
 Environment="OKIT_VM_COMPARTMENT={COMPARTMENT_OCID}"
+Environment="OKIT_VM_REGION={REGION_IDENTIFIER}"
 RuntimeDirectory=gunicorn
 WorkingDirectory=/okit/workspace
 ExecStart=/usr/local/bin/gunicorn okitweb.wsgi_auth:app --config /okit/config/gunicorn_https.py

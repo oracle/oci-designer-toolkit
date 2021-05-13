@@ -16,13 +16,13 @@ __module__ = "ociDhcpOption"
 import oci
 
 from common.okitLogging import getLogger
-from facades.ociConnection import OCIDhcpOptionConnection
+from facades.ociConnection import OCIVirtualNetworkConnection
 
 # Configure logging
 logger = getLogger()
 
 
-class OCIDhcpOptions(OCIDhcpOptionConnection):
+class OCIDhcpOptions(OCIVirtualNetworkConnection):
     def __init__(self, config=None, configfile=None, profile=None, compartment_id=None):
         self.compartment_id = compartment_id
         self.dhcp_options_json = []

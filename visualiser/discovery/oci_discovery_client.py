@@ -156,6 +156,7 @@ class OciResourceDiscoveryClient(object):
         "ExadataInfrastructure": (oci.database.DatabaseClient, "list_exadata_infrastructures"), # Exadata Cloud@Customer only
         "KeyStore": (oci.database.DatabaseClient, "list_key_stores"),
         "VMCluster": (oci.database.DatabaseClient, "list_vm_clusters"), # Exadata Cloud@Customer only
+        "VMClusterNetwork": (oci.database.DatabaseClient, "list_vm_cluster_networks"), # Exadata Cloud@Customer only
         # oci.dns.DnsClient
         "Resolver": (oci.dns.DnsClient, "list_resolvers"), 
         "ResolverEndpoint": (oci.dns.DnsClient, "list_resolver_endpoints"), # TODO by resolver
@@ -926,6 +927,7 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "ExadataInfrastructure" and (self.include_resource_types == None or "VMCluster" in self.include_resource_types):
                     # get VM Clusters for Exadata Infrastructure
                     regional_resource_requests.add(("VMCluster", resource.compartment_id, resource.identifier))
+                    regional_resource_requests.add(("VMClusterNetwork", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "FileSystem" and (self.include_resource_types == None or "Export" in self.include_resource_types):
                     # get Exports for FileSystem
                     regional_resource_requests.add(("Export", resource.compartment_id, resource.identifier))
