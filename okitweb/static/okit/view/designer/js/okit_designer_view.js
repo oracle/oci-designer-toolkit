@@ -15,8 +15,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         this.palette_svg = palette_svg;
     }
 
-    static newView(model, parent_id, palette = []) {
-        return new OkitDesignerJsonView((model, parent_id, palette))
+    static newView(model, oci_data=null, resource_icons=[], parent_id = 'canvas-div') {
+        return new OkitDesignerJsonView((model, parent_id, resource_icons))
     }
 
     get display_grid() {return okitSettings.is_display_grid;}
@@ -410,6 +410,8 @@ class OkitContainerDesignerArtefactView extends OkitContainerArtefactView {
         super(artefact, json_view);
     }
 }
+
+okitViewClasses.push(OkitDesignerJsonView);
 
 $(document).ready(function() {
     okitJsonView = new OkitDesignerJsonView();

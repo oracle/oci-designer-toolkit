@@ -34,9 +34,11 @@
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_views.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/okit_designer_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tabular/js/okit_tabular_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/relationship/js/okit_relationship_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
@@ -66,6 +68,7 @@
                 });
             {% endfor %}
         {% endfor %}
+        const resource_icons_svg = palette_svg;
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
@@ -156,9 +159,9 @@
             <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToCompartmentView()">Designer</a></li>
             <li><a id="view-tabular-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToTabularView()">Tabular</a></li>
             {% if experimental_mode %}
-            <li><a id="view-relationship-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToRelationshipView()">Security (View)</a></li>
-            <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToNetworkView()">Network (View)</a></li>
-            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToSecurityView()">Security (View)</a></li>
+            <li><a id="view-relationship-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToRelationshipView()">Relationship (Experimental)</a></li>
+            <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToNetworkView()">Network (Experimental)</a></li>
+            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToSecurityView()">Security (Experimental)</a></li>
             {% endif %}
         </ul>
         <ul class="okit-navigation-sub-list">

@@ -5,7 +5,7 @@
 console.info('Loaded OKIT View Javascript');
 
 class OkitJsonView {
-    constructor(okitjson=null) {
+    constructor(okitjson=null, oci_data=null, resource_icons=null, parent_id=null) {
         // Specify / Assign Model
         if (okitjson === null || okitjson === undefined) {
             this.okitjson = new OkitJson();
@@ -16,6 +16,9 @@ class OkitJsonView {
         } else {
             this.okitjson = new OkitJson();
         }
+        if (oci_data !== null) this.oci_data = oci_data;
+        if (parent_id !== null) this.parent_id = parent_id;
+        if (resource_icons !== null) this.resource_icons = resource_icons;
         // Define View Lists
         this.clear();
         // Load Model to View
@@ -1031,6 +1034,10 @@ class OkitJsonView {
         return new FragmentView(this.okitjson.newFragment(target), this);
     }
 }
+
+// Define Arrays to contain View Classes and Objects
+let okitViewClasses = [];
+let okitViews = [];
 
 /*
 ** Simple Artefact View Class for all artefacts that are not Containers

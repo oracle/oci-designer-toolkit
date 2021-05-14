@@ -6,8 +6,8 @@ console.info('Loaded OKIT Designer View Javascript');
 
 class OkitTabularJsonView extends OkitJsonView {
 
-    constructor(okitjson=null, oci_data=null, parent_id = 'tabular-div') {
-        super(okitjson);
+    constructor(okitjson=null, oci_data=null, resource_icons=[], parent_id = 'tabular-div') {
+        super(okitjson, oci_data, parent_id, resource_icons);
         this.oci_data = oci_data;
         this.parent_id = parent_id;
         this.loadPropertyMap();
@@ -15,8 +15,8 @@ class OkitTabularJsonView extends OkitJsonView {
     get model() {return this.okitjson;}
     get data() {return this.oci_data;}
 
-    static newView(model, parent_id = 'tabular-div') {
-        return new OkitTabularJsonView((model, parent_id))
+    static newView(model, oci_data=null, resource_icons=[], parent_id = 'tabular-div') {
+        return new OkitTabularJsonView((model, oci_data, parent_id, resource_icons))
     }
 
     loadPropertyMap() {
@@ -351,5 +351,7 @@ class OkitTabularJsonView extends OkitJsonView {
 
 
 }
+
+okitViewClasses.push(OkitTabularJsonView);
 
 let okitTabularView = null;

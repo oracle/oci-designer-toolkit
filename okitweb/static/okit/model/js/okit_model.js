@@ -298,6 +298,21 @@ class OkitJson {
     }
 
     /*
+    ** Clear Model 
+    */
+   clear() {
+        // Clear
+        this.title = "OKIT OCI Visualiser Json";
+        this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
+        this.created = getCurrentDateTime();
+        this.updated = this.created;
+        this.okit_version = okitVersion;
+        for (const [key, value] of Object.entries(this)) {
+            if (Array.isArray(value)) {this[key] = []}
+        }
+   }
+
+    /*
     ** Artifact Processing
      */
 

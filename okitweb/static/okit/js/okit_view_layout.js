@@ -34,3 +34,10 @@ function handleSwitchToSecurityView(e) {
     hideAllViewDivs();
     $("#security-div").removeClass('hidden');
 }
+
+function handleSwitchToRelationshipView(e) {
+    hideAllViewDivs();
+    $("#relationship-div").removeClass('hidden');
+    okitRelationshipView = new OkitRelationshipJsonView(okitJsonModel, okitOciData);
+    okitRelationshipView.draw();
+}
