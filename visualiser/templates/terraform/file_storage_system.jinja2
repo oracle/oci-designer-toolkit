@@ -36,7 +36,9 @@ resource "oci_file_storage_mount_target" "{{ resource_name }}MountTarget" {
 {% if freeform_tags is defined %}
     freeform_tags  = {{ freeform_tags | safe }}
 {% endif %}
+{% if hostname_label is defined %}
     hostname_label = {{ hostname_label | safe }}
+{% endif %}
 {% if ip_address is defined %}
     ip_address     = {{ ip_address }}
 {%  endif %}

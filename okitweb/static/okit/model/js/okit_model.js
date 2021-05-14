@@ -62,6 +62,33 @@ class OkitJson {
         if (okit_json.description) {
             this.description = okit_json.description;
         }
+        // Turn Off Default Security List / Route Table Processing
+        const okitSettingsClone = JSON.clone(okitSettings);
+        okitSettings.is_default_route_table   = false;
+        okitSettings.is_default_security_list = false;
+        // Load
+        for (const [key, value] of Object.entries(okit_json)) {
+            if (Array.isArray(value)) {
+                const func_name = titleCase(key.split('_').join(' ')).split(' ').join('');
+                const get_function = `get${func_name}`;
+                const new_function = `new${func_name.slice(0, -1)}`;
+                // console.warn('Functions:', get_function, new_function);
+                for (const resource of okit_json[key]) {this[new_function](resource);}
+            }
+        }
+        // Reset Default Security List / Route Table Processing
+        okitSettings.is_default_route_table   = okitSettingsClone.is_default_route_table;
+        okitSettings.is_default_security_list = okitSettingsClone.is_default_security_list;
+    }
+    load1(okit_json) {
+        console.log('Load OKIT Json');
+        // Title & Description
+        if (okit_json.title) {
+            this.title = okit_json.title;
+        }
+        if (okit_json.description) {
+            this.description = okit_json.description;
+        }
         // Compartments
         if (okit_json.hasOwnProperty('compartments')) {
             for (let artefact of okit_json['compartments']) {
@@ -86,6 +113,12 @@ class OkitJson {
         if (okit_json.hasOwnProperty('object_storage_buckets')) {
             for (let artefact of okit_json['object_storage_buckets']) {
                 let obj = this.newObjectStorageBucket(artefact);
+            }
+        }
+        // Exadata Infrastructures
+        if (okit_json.hasOwnProperty('exadata_infrastructures')) {
+            for (let artefact of okit_json['exadata_infrastructures']) {
+                let obj = this.newExadataInfrastructure(artefact);
             }
         }
         // Virtual Cloud Networks
@@ -226,6 +259,41 @@ class OkitJson {
                 let obj = this.newLoadBalancer(artefact);
             }
         }
+
+        // Exadata Infrastructure Sub Components
+        // VM Clusters
+        if (okit_json.hasOwnProperty('vm_clusters')) {
+            for (let artefact of okit_json['vm_clusters']) {
+                let obj = this.newVmCluster(artefact);
+            }
+        }
+        // VM Cluster Networks
+        if (okit_json.hasOwnProperty('vm_cluster_networks')) {
+            for (let artefact of okit_json['vm_cluster_networks']) {
+                let obj = this.newVmClusterNetwork(artefact);
+            }
+        }
+
+        // VM Cluster Sub Components
+        // DB Homes
+        if (okit_json.hasOwnProperty('db_homes')) {
+            for (let artefact of okit_json['db_homes']) {
+                let obj = this.newDbHome(artefact);
+            }
+        }
+        // DB Nodes
+        if (okit_json.hasOwnProperty('db_nodes')) {
+            for (let artefact of okit_json['db_nodes']) {
+                let obj = this.newDbNode(artefact);
+            }
+        }
+        // Database
+        if (okit_json.hasOwnProperty('databases')) {
+            for (let artefact of okit_json['databases']) {
+                let obj = this.newDatabase(artefact);
+            }
+        }
+
         console.log();
     }
 
@@ -530,11 +598,14 @@ class OkitJson {
     }
 
     // IPSec Connection
+    newIpsecConnection(data) {return this.newIPSecConnection(data)}
     newIPSecConnection(data) {
         console.info('New IPSec Connection');
         this.ipsec_connections.push(new IPSecConnection(data, this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
     }
+    getIpsecConnections() {return this.ipsec_connections;}
+    getIpsecConnection(id='') {return this.getIPSecConnection(id)}
     getIPSecConnections() {return this.ipsec_connections;}
     getIPSecConnection(id='') {
         for (let artefact of this.getIPSecConnections()) {
@@ -609,14 +680,15 @@ class OkitJson {
     }
 
     // MySQL Database System
+    newMysqlDatabaseSystem(data) {return this.newMySQLDatabaseSystem(data)}
     newMySQLDatabaseSystem(data) {
         console.info('New MySQL Database System');
         this.mysql_database_systems.push(new MySQLDatabaseSystem(data, this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
     }
-    getMySQLDatabaseSystems() {
-        return this.mysql_database_systems;
-    }
+    getMysqlDatabaseSystems() {return this.mysql_database_systems;}
+    getMysqlDatabaseSystem(id='') {return this.getMySQLDatabaseSystem(id)}
+    getMySQLDatabaseSystems() {return this.mysql_database_systems;}
     getMySQLDatabaseSystem(id='') {
         for (let artefact of this.getMySQLDatabaseSystems()) {
             if (artefact.id === id) {
@@ -636,14 +708,15 @@ class OkitJson {
     }
 
     // NAT Gateway
+    newNatGateway(data) {return this.newNATGateway(data)}
     newNATGateway(data) {
         console.info('New NAT Gateway');
         this.nat_gateways.push(new NATGateway(data, this));
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
-    getNATGateways() {
-        return this.nat_gateways;
-    }
+    getNatGateways() {return this.nat_gateways;}
+    getNatGateway(id='') {return this.getNATGateway(id)}
+    getNATGateways() {return this.nat_gateways;}
     getNATGateway(id='') {
         for (let artefact of this.getNATGateways()) {
             if (artefact.id === id) {

@@ -1,6 +1,18 @@
 # Release Notes
 
 
+## Version 0.21.0
+**Release Date**: 5th May 2021
+### Features
+1. Ability to query / Display ExaCC configuration, this is a query only feature allowing for display and generation of documentation.
+
+### Bug Fixes
+1. GitHub Issue #304 : documentation/Installation.md contains reference to dev branches.
+2. GitHub Issue #269 : Internal Server Error.
+3. Instance primary vnic hostname_label access key error.
+4. Update Fast Discovery to retrieve detailed MySqlDatabase information.
+
+
 ## Version 0.20.0
 **Release Date**: 14th April 2021
 ### Features

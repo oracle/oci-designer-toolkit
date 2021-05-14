@@ -13,6 +13,7 @@ class {{ model_class_name }}View extends OkitArtefactView {
 class {{ model_class_name }}View extends OkitContainerArtefactView {
 {% endif %}
     constructor(artefact=null, json_view) {
+        if (!json_view.{{ artefact_json_list }}) json_view.{{ artefact_json_list }} = [];
         super(artefact, json_view);
     }
     // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway

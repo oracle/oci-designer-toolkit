@@ -56,8 +56,8 @@ class OCIMySQLDatabaseSystems(OCIMySQLDatabaseConnection):
 
         # Filter results
         self.mysql_database_systems_json = self.filterJsonObjectList(mysql_database_systems_json, filter)
-        logger.info('============================== MySQLDatabaseSystems ==============================')
-        logger.info(str(self.mysql_database_systems_json))
+        logger.debug('============================== MySQLDatabaseSystems ==============================')
+        logger.debug(str(self.mysql_database_systems_json))
 
         return self.mysql_database_systems_json
 

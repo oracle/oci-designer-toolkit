@@ -45,6 +45,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let virtual_cloud_network of this.virtual_cloud_networks) {
             virtual_cloud_network.draw();
         }
+        // Exadata Infrastructures
+        for (let exadata_infrastructure of this.getExadataInfrastructures()) {
+            exadata_infrastructure.draw();
+        }
         // Block Storage Volumes
         for (let block_storage_volume of this.block_storage_volumes) {
             block_storage_volume.draw();
@@ -99,6 +103,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let security_list of this.security_lists) {
             security_list.draw();
         }
+        // Dhcp Options
+        if (this.dhcp_options) {for (let dhcp_option of this.dhcp_options) {dhcp_option.draw();}}
         // Network Security Groups
         for (let network_security_group of this.network_security_groups) {
             network_security_group.draw();
@@ -125,6 +131,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let instance of this.instances) {
             instance.draw();
         }
+        // Analytics Instances
+        if (this.analytics_instances) {for (let instance of this.analytics_instances) {instance.draw();}}
+        // Integration Instances
+        if(this.integration_instances) {for (let instance of this.integration_instances) {instance.draw();}}
         // Instance Pools
         for (let instance_pool of this.instance_pools) {
             instance_pool.draw();
@@ -140,6 +150,27 @@ class OkitDesignerJsonView extends OkitJsonView {
         // MySQL Database System
         for (let mysql_database_system of this.mysql_database_systems) {
             mysql_database_system.draw();
+        }
+
+        // Exadata Infrastructure Subcomponents
+        // VM Cluster
+        for (let vm_cluster of this.getVmClusters()) {
+            vm_cluster.draw();
+        }
+        // VM Cluster Network
+        for (let vm_cluster_network of this.getVmClusterNetworks()) {
+            vm_cluster_network.draw();
+        }
+
+        // VM Cluster Subcomponents
+        for (let db_node of this.getDbNodes()) {
+            db_node.draw();
+        }
+        for (let db_home of this.getDbHomes()) {
+            db_home.draw();
+        }
+        for (let database of this.getDatabases()) {
+            database.draw();
         }
 
         // Resize Main Canvas if required

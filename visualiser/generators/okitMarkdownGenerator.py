@@ -38,7 +38,7 @@ class OkitMarkdownGenerator(OCIGenerator):
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("markdown.jinja2")
         self.create_sequence.append(jinja2_template.render(self.model_json))
-        logger.info(self.create_sequence[-1])
+        # logger.info(self.create_sequence[-1])
         return
 
     def writeFiles(self):
