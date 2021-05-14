@@ -637,17 +637,6 @@ class OciResourceDiscoveryClient(object):
                         db_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
-<<<<<<< HEAD
-                    elif method_name == "list_vm_clusters":
-                        exadata_infrastructure_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, exadata_infrastructure_id=exadata_infrastructure_id)
-                        futures_list.update({(region, resource_type, compartment_id, exadata_infrastructure_id):future})
-                    elif method_name == "list_vm_cluster_networks":
-                        exadata_infrastructure_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, exadata_infrastructure_id=exadata_infrastructure_id)
-                        futures_list.update({(region, resource_type, compartment_id, exadata_infrastructure_id):future})
-=======
->>>>>>> 01bc7464bfd11f2c7837b193ef68e7c76bc6889f
                     elif method_name == "list_exports":
                         file_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, file_system_id=file_system_id)
