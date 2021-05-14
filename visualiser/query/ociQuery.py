@@ -73,8 +73,8 @@ class OCIQuery(OCIConnection):
         "ServiceGateway",
         "Subnet",
         "Vcn",
-        "VMCluster",
-        "VMClusterNetwork",
+        "VmCluster",
+        "VmClusterNetwork",
         "Volume",
         "VolumeAttachment",
         "VnicAttachment",
@@ -109,8 +109,8 @@ class OCIQuery(OCIConnection):
         "ServiceGateway": "service_gateways",
         "Subnet": "subnets",
         "Vcn": "virtual_cloud_networks",
-        "VMCluster": "vm_clusters",
-        "VMClusterNetwork": "vm_cluster_networks",
+        "VmCluster": "vm_clusters",
+        "VmClusterNetwork": "vm_cluster_networks",
         "Volume": "block_storage_volumes"
     }
     VALID_LIFECYCLE_STATES = [
