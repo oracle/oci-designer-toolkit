@@ -54,7 +54,6 @@ class OkitRelationshipJsonView extends OkitJsonView {
                         for (let resource of value) {
                             Object.entries(resource).forEach(([k, v]) => {
                                 if (k.endsWith('_id') && ids.indexOf(v) >= 0) {
-                                    console.warn('Link:', ids.indexOf(resource.id), ids.indexOf(v))
                                     links.push({
                                         source: Number(ids.indexOf(resource.id)),
                                         target: Number(ids.indexOf(v))
