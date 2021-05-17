@@ -43,6 +43,8 @@ class OkitJsonView {
     get svg_highlight_colour() {return "#00cc00";}
     get top_level_compartment() {let tlc = this.getCompartments().filter(compartment => compartment.isTopLevel())[0]; console.info(`TLC ${tlc}`); console.info(tlc); return tlc;}
 
+    getSafeId(id) {return safeId(id)}
+
     drop(source, target) {
         let newFunction = 'new' + source.name;
         let getFunction = 'get' + target.type.split(' ').join('');

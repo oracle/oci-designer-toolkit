@@ -216,6 +216,32 @@
     width: 100%;
     overflow: scroll;
 }
+
+.okit-tabular-canvas {
+    background: #000;
+    display: block;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+}
+
+.okit-tabular-canvas line.links {
+    stroke: #aaa;
+}
+
+.okit-tabular-canvas rect {
+    fill: #99b6d3;
+    stroke-width: 1.5px;
+}
+
+.okit-tabular-canvas text {
+    font-family: sans-serif;
+    font-size: 20px;
+    fill: white;
+}
+
 .okit-svg-canvas {
     display: block;
     padding: 0;

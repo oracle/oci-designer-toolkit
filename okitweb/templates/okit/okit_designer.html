@@ -45,10 +45,12 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_view_layout.js') }}"></script>
     <script type="text/javascript">
         let palette_svg = {}
+        let resource_icon_files = {}
         let xmlSerialiser = new XMLSerializer();
         {% for palette_icon_group in palette_icon_groups %}
             {% for palette_icon in palette_icon_group['icons'] %}
                 palette_svg["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
+                resource_icon_files["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
                 $.ajax({
                     type: 'get',
                     url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
@@ -69,6 +71,10 @@
             {% endfor %}
         {% endfor %}
         const resource_icons_svg = palette_svg;
+        const resource_icons = {
+            svg: palette_svg,
+            files: resource_icon_files
+        }
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
