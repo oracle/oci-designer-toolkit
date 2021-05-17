@@ -46,14 +46,14 @@ class OkitRelationshipJsonView extends OkitJsonView {
             nodes.forEach((n, i) => n.id = i)
             // const ids = nodes.map((n) => n.id);
             // ids = nodes.map((n) => n.ocid);
-            console.warn('Ids:', ids);
+            // console.warn('Ids:', ids);
             // Loop through Model elements and create link entries but only to ids in nodes
             Object.entries(this.okitjson).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
                     if (value.length > 0) {
                         for (let resource of value) {
                             Object.entries(resource).forEach(([k, v]) => {
-                                if (k.endsWith('_id') && ids.indexOf(v) > 0) {
+                                if (k.endsWith('_id') && ids.indexOf(v) >= 0) {
                                     console.warn('Link:', ids.indexOf(resource.id), ids.indexOf(v))
                                     links.push({
                                         source: Number(ids.indexOf(resource.id)),
@@ -80,132 +80,10 @@ class OkitRelationshipJsonView extends OkitJsonView {
         this.newCanvas()
     }
 
-    newCanvas2(width=800, height=800, for_export=false) {
-        let data = this.relationships;
-        console.warn('Data:', data);
-        console.warn('Data:', JSON.stringify(data, null, 2));
-        const self = this;
-        let canvas_div = d3.select(d3Id(this.parent_id));
-        // Empty existing Canvas
-        canvas_div.selectAll('*').remove();
-        let svg = canvas_div.append("svg")
-            .attr("id", 'relationship-svg')
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", width)
-            .attr("height", height)
-            .call(d3.zoom().on("zoom", function () {d3.select("#relationship-svg g").attr("transform", d3.event.transform)}))
-                .append("g")
-                    // .attr('transform', function(d) {return 'translate(' + [width / 2, height / 2] + ')'});
-        // Add Simulation
-        let simulation = d3.forceSimulation(data.nodes)
-            .force('change', d3.forcesManyBody())
-            .force('center', d3.forceCenter(width / 2, height / 2))
-            .on('tick', () => {
-                let u = d3.select('#relationship-svg')
-                    .selectAll('circle')
-                    .data(data.nodes)
-                
-                u.enter()
-                    .append('circle')
-                    .attr('r', 5)
-                    .merge(u)
-                    .attr('cx', function(d) {return d.x})
-                    .attr('cy', function(d) {return d.y})
-                
-                u.exit().remove()            
-            });
-    }
-
-    newCanvas1(width=2000, height=2000, for_export=false) {
-        let data = this.relationships;
-        console.warn('Data:', JSON.stringify(data, null, 2));
-        const self = this;
-        let canvas_div = d3.select(d3Id(this.parent_id));
-        // Empty existing Canvas
-        canvas_div.selectAll('*').remove();
-        // Add Base SVG
-        let svg = canvas_div.append("svg")
-            .attr("id", 'relationship-svg')
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", width)
-            .attr("height", height)
-            .call(d3.zoom().on("zoom", function () {d3.select("#relationship-svg g").attr("transform", d3.event.transform)}))
-                .append("g")
-                    .attr('transform', function(d) {return 'translate(' + [width / 2, height / 2] + ')'});
-        // Initialize the links
-        this.link = svg.selectAll("line")
-            .data(data.links)
-            .enter()
-            .append("line")
-                .attr("class", "links");
-
-        // Initialize the nodes
-        this.node = svg.append("g")
-            .attr("class", "nodes")
-            .selectAll("g")
-            .data(data.nodes)
-            .enter()
-            .append("g")
-            .call(d3.drag()
-                .on("start", (d) => {
-                    if (!d3.event.active) self.simulation.alphaTarget(0.3).restart();
-                    d.fx = d.x;
-                    d.fy = d.y;            
-                })
-                .on("drag", (d) => {
-                    d.fx = d3.event.x;
-                    d.fy = d3.event.y;
-                })
-                .on("end", (d) => {
-                    if (!d3.event.active) self.simulation.alphaTarget(0);
-                    d.fx = null;
-                    d.fy = null;            
-                })
-                );
-
-        this.nodes = this.node.append("rect")
-            .attr("width", function(d) { return 1.5 * self.getRadius(d.type); })
-            .attr("height", function(d) { return 1.5 * self.getRadius(d.type); })
-            .attr('x', function(d) { return -0.75 * self.getRadius(d.type); })
-            .attr('y', function(d) { return -0.75 * self.getRadius(d.type); })
-            .attr("class", "nodes")
-            .on("click", function(d) { alert(d.type); })
-
-        this.lables = this.node.append("text")
-            .text(function(d) {return d.name;})
-            .attr('x', "0" )
-            .attr('y', function(d) { return self.getRadius(d.type) + 12; })
-            .attr('dominant-baseline', "middle")
-            .attr('text-anchor', "middle");
-
-        this.images = this.node.append("image")
-            .attr("xlink:href", function(d) { return self.resource_icons.files[d.type]; })
-            .attr("width", function(d) { return 1.4 * self.getRadius(d.type); })
-            .attr("height", function(d) { return 1.4 * self.getRadius(d.type); })
-            .attr('x', function(d) { return -0.7 * self.getRadius(d.type); })
-            .attr('y', function(d) { return -0.7 * self.getRadius(d.type); });
-
-        // use for to organise the graph
-        this.simulation = d3.forceSimulation(data.nodes)
-                .force("link", d3.forceLink().id(function(d) { return d.id; }).links(data.links))
-                .force("charge", d3.forceManyBody().strength(-400 * self.getRadius(""))) 
-                .force("center", d3.forceCenter(width / 2, height / 2))
-                // .on("tick", self.ticked(link, node));
-                .on("tick", () => {
-                    self.link.attr("x1", function(d) { return d.source.x; })
-                        .attr("y1", function(d) { return d.source.y; })
-                        .attr("x2", function(d) { return d.target.x; })
-                        .attr("y2", function(d) { return d.target.y; });
-                    self.node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
-                });
-    }
-
     newCanvas(width=800, height=800, for_export=false) {
         relationship_data = this.relationships;
-        console.warn('Data:', relationship_data);
-        console.warn('Data:', JSON.stringify(relationship_data, null, 2));
+        // console.warn('Data:', relationship_data);
+        // console.warn('Data:', JSON.stringify(relationship_data, null, 2));
         const self = this;
         let canvas_div = d3.select(d3Id(this.parent_id));
         // Empty existing Canvas
@@ -297,7 +175,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
     }
 
     getRadius(type) {
-        if (type === "server") {
+        if (type === "Compartment") {
             return 60;
         } else {
             return 30;
