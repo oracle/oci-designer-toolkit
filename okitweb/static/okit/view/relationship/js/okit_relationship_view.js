@@ -86,6 +86,12 @@ class OkitRelationshipJsonView extends OkitJsonView {
         // console.warn('Data:', JSON.stringify(relationship_data, null, 2));
         const self = this;
         let canvas_div = d3.select(d3Id(this.parent_id));
+        let parent_width  = $(jqId(this.parent_id)).width();
+        let parent_height = $(jqId(this.parent_id)).height();
+        if (!for_export) {
+            width = Math.round(Math.max(width, parent_width));
+            height = Math.round(Math.max(height, parent_height));
+        }
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
         relationship_svg = canvas_div.append("svg")
@@ -141,7 +147,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
         // use for to organise the graph
         relationship_simulation = d3.forceSimulation(relationship_data.nodes)
                             .force("link", d3.forceLink().id(function(d) { return d.id; }).links(relationship_data.links))
-                            .force("charge", d3.forceManyBody().strength(-100 * self.getRadius("")))
+                            .force("charge", d3.forceManyBody().strength(-150 * self.getRadius("")))
                             .force("center", d3.forceCenter(width / 2, height / 2))
                             .on("tick", self.ticked);
     }
@@ -176,7 +182,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
 
     getRadius(type) {
         if (type === "Compartment") {
-            return 60;
+            return 40;
         } else {
             return 30;
         }
