@@ -7,7 +7,7 @@ import time
 from common.okitLogging import getLogger
 from concurrent.futures import ThreadPoolExecutor
 
-from .models import ExtendedAutoScalingPolicySummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule, ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
+from .models import ExtendedAutoScalingPolicySummary, ExtendedDbNodeSummary, ExtendedNetworkSecurityGroupVnic, ExtendedPreauthenticatedRequestSummary, ExtendedSecurityRule, ExtendedSourceApplicationSummary, ExtendedExportSummary, ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 
 DEFAULT_MAX_WORKERS = 32
 DEFAULT_TIMEOUT = 120
@@ -633,10 +633,28 @@ class OciResourceDiscoveryClient(object):
                         dedicated_vm_host_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, dedicated_vm_host_id=dedicated_vm_host_id)
                         futures_list.update({(region, resource_type, compartment_id, dedicated_vm_host_id):future})
+                    elif method_name == "list_databases":
+                        db_home_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_home_id=db_home_id)
+                        futures_list.update({(region, resource_type, compartment_id, db_home_id):future})
+                    elif method_name == "list_db_homes":
+                        db_system_id = item[2][1]
+                        vm_cluster_id = item[2][1]
+                        if item[2][0] == "DbSystem":
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
+                            futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                        elif item[2][0] == "VmCluster":
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, vm_cluster_id=vm_cluster_id)
+                            futures_list.update({(region, resource_type, compartment_id, vm_cluster_id):future})
                     elif method_name == "list_db_nodes":
-                        db_system_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
-                        futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                        db_system_id = item[2][1]
+                        vm_cluster_id = item[2][1]
+                        if item[2][0] == "DbSystem":
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
+                            futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                        elif item[2][0] == "VmCluster":
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, vm_cluster_id=vm_cluster_id)
+                            futures_list.update({(region, resource_type, compartment_id, vm_cluster_id):future})
                     elif method_name == "list_exports":
                         file_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, file_system_id=file_system_id)
@@ -790,6 +808,11 @@ class OciResourceDiscoveryClient(object):
                         # map Auto Scaling Policy into extended verison parent id
                         new_result =  [ExtendedAutoScalingPolicySummary(future[3],policy) for policy in result]
                         result = new_result
+                    elif resource_type == "DbNode":
+                        # map DbNode into extended verison with compartment id
+                        if future[3].startswith("ocid1.vmcluster"):
+                            new_result =  [ExtendedDbNodeSummary(future[3],dbnode) for dbnode in result]
+                            result = new_result
                     elif resource_type == "Export":
                         # map Export into extended verison with compartment id
                         new_result =  [ExtendedExportSummary(future[2],export) for export in result]
@@ -947,7 +970,9 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "DbSystem":
                     # get DB Nodes for DB Systems
                     if self.include_resource_types == None or "DbNode" in self.include_resource_types:
-                        regional_resource_requests.add(("DbNode", resource.compartment_id, resource.identifier))
+                        regional_resource_requests.add(("DbNode", resource.compartment_id, ("DbSystem", resource.identifier)))
+                    if self.include_resource_types == None or "DbHome" in self.include_resource_types:
+                        regional_resource_requests.add(("DbHome", resource.compartment_id, ("DbSystem", resource.identifier)))
                     # get Backups for DB Systems
                     if self.include_resource_types == None or "Backup" in self.include_resource_types:
                         regional_resource_requests.add(("Backup", resource.compartment_id, resource.identifier))
@@ -960,6 +985,12 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "Drg" and (self.include_resource_types == None or "DrgAttachment" in self.include_resource_types):
                     # get Drg Attachments for Drgs
                     regional_resource_requests.add(("DrgAttachment", resource.compartment_id, None))
+                elif resource.resource_type == "VmCluster":
+                    # get DB Nodes for DB Systems
+                    if self.include_resource_types == None or "DbNode" in self.include_resource_types:
+                        regional_resource_requests.add(("DbNode", resource.compartment_id, ("VmCluster", resource.identifier)))
+                    if self.include_resource_types == None or "DbHome" in self.include_resource_types:
+                        regional_resource_requests.add(("DbHome", resource.compartment_id, ("VmCluster", resource.identifier)))
                 elif resource.resource_type == "ExadataInfrastructure":
                     if self.include_resource_types == None or "VmCluster" in self.include_resource_types:
                         # get VM Clusters for Exadata Infrastructure
@@ -1135,6 +1166,9 @@ class OciResourceDiscoveryClient(object):
             if "MySQLDbSystemDetails" in resources_by_region[region]:
                 for mysql_db_system in resources_by_region[region]["MySQLDbSystemDetails"] if (self.include_resource_types == None or "MySQLConfiguration" in self.include_resource_types) else []:
                     extra_resources_by_region.add(("MySQLConfiguration", mysql_db_system.compartment_id, mysql_db_system.configuration_id))
+            if "DbHome" in resources_by_region[region]:
+                for db_home in resources_by_region[region]["DbHome"] if (self.include_resource_types == None or "DbHome" in self.include_resource_types) else []:
+                    extra_resources_by_region.add(("Database", db_home.compartment_id, db_home.id))
 
             final_resource_requests.update({region:extra_resources_by_region})
 
