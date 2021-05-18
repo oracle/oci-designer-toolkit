@@ -897,6 +897,16 @@ function regionCheckboxName(region) {
 }
 
 /*
+** Properties Tabbar
+*/
+function handlePropertiesTabClick(id) {
+    $('#properties_tab_bar > button').removeClass("okit-tab-active");
+    $(jqId(id)).addClass("okit-tab-active");
+    $('#resource_properties > div.okit-tab-contents').addClass("hidden");
+    $(jqId(id.replace('_tab', '_contents'))).removeClass("hidden");
+}
+
+/*
 ** OKIT Canvas Functions
  */
 /*
