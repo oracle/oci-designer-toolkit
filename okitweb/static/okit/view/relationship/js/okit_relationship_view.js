@@ -32,7 +32,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
                     if (value.length > 0) {
                         for (let resource of value) {
                             nodes.push({
-                                // id: resource.id,
+                                id: this.getSafeId(resource.id),
                                 ocid: resource.id,
                                 name: resource.display_name,
                                 type: resource.getArtifactReference()
@@ -43,10 +43,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
                 }
             })
             // Assign id to index
-            nodes.forEach((n, i) => n.id = i)
-            // const ids = nodes.map((n) => n.id);
-            // ids = nodes.map((n) => n.ocid);
-            // console.warn('Ids:', ids);
+            // nodes.forEach((n, i) => n.id = i)
             // Loop through Model elements and create link entries but only to ids in nodes
             Object.entries(this.okitjson).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
@@ -54,10 +51,9 @@ class OkitRelationshipJsonView extends OkitJsonView {
                         for (let resource of value) {
                             Object.entries(resource).forEach(([k, v]) => {
                                 if (k.endsWith('_id') && ids.indexOf(v) >= 0) {
-                                    links.push({
-                                        source: Number(ids.indexOf(resource.id)),
-                                        target: Number(ids.indexOf(v))
-                                    });
+                                    links.push({source: this.getSafeId(resource.id), target: this.getSafeId(v)});
+                                } else if (k.endsWith('_ids')) {
+                                    v.forEach((id) => {if (ids.indexOf(id) >= 0) links.push({source: this.getSafeId(resource.id),target: this.getSafeId(id)})});
                                 }
                             });
                         }
