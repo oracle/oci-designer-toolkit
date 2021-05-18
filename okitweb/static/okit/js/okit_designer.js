@@ -491,6 +491,7 @@ function displayQueryDialog() {
         .append('select')
             .attr('id', 'query_region_id')
             .attr('multiple', 'multiple')
+            .attr('size', 10)
             .on('change', () => {
                 console.info('Region Select ' + $(jqId('query_region_id')).val());
                 okitSettings.last_used_region = $(jqId('query_region_id')).val();
