@@ -20,6 +20,7 @@ class OkitJsonView {
         if (parent_id !== null) this.parent_id = parent_id;
         if (resource_icons !== null) this.resource_icons = resource_icons;
         // Define View Lists
+        this.init();
         this.clear();
         // Load Model to View
         this.load();
@@ -50,7 +51,7 @@ class OkitJsonView {
         let getFunction = 'get' + target.type.split(' ').join('');
     }
 
-    clear() {
+    init() {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
@@ -84,7 +85,7 @@ class OkitJsonView {
         this.vm_clusters = [];
         this.vm_cluster_networks = [];
     }
-    clear2() {
+    clear() {
         for (const [key, value] of Object.entries(this)) {
             if (Array.isArray(value)) this[key] = [];
         }
@@ -1075,7 +1076,9 @@ class OkitArtefactView {
     get okit_json() {return this.getJsonView().getOkitJson();}
     get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
+    set json_model_list(list) {this.okit_json[this.list_name] = list;}
     get json_view_list() {return this.json_view[this.list_name];}
+    set json_view_list(list) {this.json_view[this.list_name] = list;}
     //get id() {return this.artefact ? this.artefact.id : '';}
     get artefact_id() {return this.artefact ? this.artefact.id : '';}
     get attached() {return false;}
@@ -1365,15 +1368,22 @@ class OkitArtefactView {
     }
 
     delete() {
-        for (let i = 0; i < this.json_model_list.length; i++) {
-            if (this.json_model_list[i].id === this.id) {
-                this.json_model_list[i].delete();
-                this.json_model_list.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.json_model_list.length; i++) {
+        //     if (this.json_model_list[i].id === this.id) {
+        //         this.json_model_list[i].delete();
+        //         this.json_model_list.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
+        this.json_view_list = this.json_view_list.filter((e) => e.id != this.id)
         // Remove SVG Element
-        if ($(jqId(this.svg_id)).length) {$(jqId(this.svg_id)).remove()}
+        console.warn('Deleting:', this.resource_name, this.json_model_list)
+        console.warn('SVG Id:', this.svg_id, $(jqId(this.svg_id)))
+        if ($(jqId(this.svg_id)).length) {
+            console.warn('Deleting SVG:', this.svg_id)
+            $(jqId(this.svg_id)).remove()
+        }
     }
 
     draw() {
