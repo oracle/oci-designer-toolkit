@@ -459,7 +459,7 @@ class OCIJsonValidator(object):
     def validateSubnets(self):
         vcn_cidr_map = {}
         for vcn in self.okit_json.get('virtual_cloud_networks', []):
-            vcn_cidr_map[vcn['id']] = vcn['cidr_block']
+            vcn_cidr_map[vcn['id']] = vcn['cidr_blocks']
         for artefact in sorted(self.okit_json.get('subnets', []), key=lambda k: k['vcn_id']):
             logger.info('Validating {!s}'.format(artefact['display_name']))
             # Check Connected to a VCN
@@ -537,36 +537,38 @@ class OCIJsonValidator(object):
         for artefact in sorted(self.okit_json.get('virtual_cloud_networks', []), key=lambda k: k['compartment_id']):
             logger.info('Validating {!s}'.format(artefact['display_name']))
             # Check that CIDR exists
-            if artefact['cidr_block'] == '':
+            if len(artefact['cidr_blocks']) == 0:
                 self.valid = False
                 error = {
                     'id': artefact['id'],
                     'type': 'Virtual Cloud Network',
                     'artefact': artefact['display_name'],
                     'message': 'Virtual Cloud Network does not have a CIDR.',
-                    'element': 'cidr_block'
+                    'element': 'cidr_blocks'
                 }
                 self.results['errors'].append(error)
             else:
                 # Check for CIDR Overlap
                 for other in [s for s in self.okit_json.get('virtual_cloud_networks', []) if s['compartment_id'] == artefact['compartment_id'] and s['id'] != artefact['id']]:
-                    if other['cidr_block'] != '' and self.overlaps(artefact['cidr_block'], other['cidr_block']):
-                        self.valid = False
-                        error = {
-                            'id': artefact['id'],
-                            'type': 'Virtual Cloud Network',
-                            'artefact': artefact['display_name'],
-                            'message': 'VCN CIDR {!s} overlaps VCN {!s} CIDR {!s}.'.format(artefact['cidr_block'],
-                                                                                                 other['display_name'],
-                                                                                                 other['cidr_block']),
-                            'element': 'cidr_block'
-                        }
-                        self.results['errors'].append(error)
+                    if len(other['cidr_blocks']) > 0:
+                        for cidr_block in artefact['cidr_blocks']:
+                            for other_cidr_block in other['cidr_blocks']:
+                                if self.overlaps(cidr_block, other_cidr_block):
+                                    self.valid = False
+                                    error = {
+                                        'id': artefact['id'],
+                                        'type': 'Virtual Cloud Network',
+                                        'artefact': artefact['display_name'],
+                                        'message': 'VCN CIDR {!s} overlaps VCN {!s} CIDR {!s}.'.format(cidr_block, other['display_name'], other_cidr_block),
+                                        'element': 'cidr_blocks'
+                                    }
+                                    self.results['errors'].append(error)
 
     # Network Methods
-    def subnet_of(self, supernet, subnet):
+    def subnet_of(self, supernets, subnet):
         try:
-            return ipaddress.ip_network(subnet) in ipaddress.ip_network(supernet).subnets(new_prefix=int(subnet.split('/')[-1]))
+            return any([ipaddress.ip_network(subnet) in ipaddress.ip_network(supernet).subnets(new_prefix=int(subnet.split('/')[-1])) for supernet in supernets])
+            # return ipaddress.ip_network(subnet) in ipaddress.ip_network(supernet).subnets(new_prefix=int(subnet.split('/')[-1]))
         except ValueError:
             return False
 

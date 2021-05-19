@@ -20,7 +20,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
         ...this.json_view.getDynamicRoutingGateways(), ...this.json_view.getLocalPeeringGateways(),
         ...this.json_view.getOkeClusters()].filter(child => child.parent_id === this.artefact.id);}
     get info_text() {return this.artefact.cidr_block;}
-    get summary_tooltip() {return `Name: ${this.display_name} \nCIDR: ${this.artefact.cidr_block} \nDNS: ${this.artefact.dns_label}`;}
+    get summary_tooltip() {return `Name: ${this.display_name} \nCIDR: ${this.artefact.cidr_blocks} \nDNS: ${this.artefact.dns_label}`;}
 
     clone() {
         const clone = super.clone();

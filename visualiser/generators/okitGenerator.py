@@ -1757,8 +1757,10 @@ class OCIGenerator(object):
         # --- Required
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[virtual_cloud_network['compartment_id']]))
-        # ---- CIDR Block
-        self.addJinja2Variable("cidr_block", virtual_cloud_network["cidr_block"], standardisedName)
+        # ---- CIDR Blocks
+        # self.addJinja2Variable("cidr_blocks", virtual_cloud_network.get("cidr_blocks", [virtual_cloud_network.get("cidr_block", '')]), standardisedName)
+        self.jinja2_variables["cidr_blocks"] = virtual_cloud_network.get("cidr_blocks", [virtual_cloud_network.get("cidr_block", '')])
+        # self.addJinja2Variable("cidr_blocks", ",".join(virtual_cloud_network.get("cidr_blocks", [virtual_cloud_network.get("cidr_block", '')])), standardisedName)
         # ---- Display Name
         self.addJinja2Variable("display_name", virtual_cloud_network["display_name"], standardisedName)
         # ---- DNS Label
