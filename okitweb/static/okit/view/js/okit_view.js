@@ -1368,22 +1368,10 @@ class OkitArtefactView {
     }
 
     delete() {
-        // for (let i = 0; i < this.json_model_list.length; i++) {
-        //     if (this.json_model_list[i].id === this.id) {
-        //         this.json_model_list[i].delete();
-        //         this.json_model_list.splice(i, 1);
-        //         break;
-        //     }
-        // }
         this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
         this.json_view_list = this.json_view_list.filter((e) => e.id != this.id)
         // Remove SVG Element
-        console.warn('Deleting:', this.resource_name, this.json_model_list)
-        console.warn('SVG Id:', this.svg_id, $(jqId(this.svg_id)))
-        if ($(jqId(this.svg_id)).length) {
-            console.warn('Deleting SVG:', this.svg_id)
-            $(jqId(this.svg_id)).remove()
-        }
+        if ($(jqId(this.svg_id)).length) {$(jqId(this.svg_id)).remove()}
     }
 
     draw() {
