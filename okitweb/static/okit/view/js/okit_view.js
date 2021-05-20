@@ -1078,7 +1078,7 @@ class OkitArtefactView {
     get okit_json() {return this.getJsonView().getOkitJson();}
     get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
-    set json_model_list(list) {this.okit_json[this.list_name] = list;}
+    // set json_model_list(list) {this.okit_json[this.list_name] = list;}
     get json_view_list() {return this.json_view[this.list_name];}
     set json_view_list(list) {this.json_view[this.list_name] = list;}
     //get id() {return this.artefact ? this.artefact.id : '';}
@@ -1370,7 +1370,8 @@ class OkitArtefactView {
     }
 
     delete() {
-        this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
+        // this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
+        this.artefact.delete();
         this.json_view_list = this.json_view_list.filter((e) => e.id != this.id)
         // Remove SVG Element
         if ($(jqId(this.svg_id)).length) {$(jqId(this.svg_id)).remove()}

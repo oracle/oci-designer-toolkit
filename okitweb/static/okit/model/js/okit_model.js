@@ -1096,6 +1096,7 @@ class OkitArtifact {
     get resource_name() {return this.getArtifactReference();}
     get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
+    set json_model_list(list) {this.okit_json[this.list_name] = list;}
 
     /*
     ** Clone Functionality
@@ -1147,10 +1148,10 @@ class OkitArtifact {
     ** Delete Processing
      */
     delete() {
-        console.log('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
+        console.warn('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
+        this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
         // Delete Child Artifacts
         this.deleteChildren();
-        console.log();
     }
 
     deleteChildren() {
