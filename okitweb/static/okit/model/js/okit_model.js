@@ -66,6 +66,8 @@ class OkitJson {
         const okitSettingsClone = JSON.clone(okitSettings);
         okitSettings.is_default_route_table   = false;
         okitSettings.is_default_security_list = false;
+        okitSettings.is_default_dhcp_options = false;
+        okitSettings.is_vcn_defaults = false;
         // Load
         for (const [key, value] of Object.entries(okit_json)) {
             if (Array.isArray(value)) {
@@ -79,6 +81,14 @@ class OkitJson {
         // Reset Default Security List / Route Table Processing
         okitSettings.is_default_route_table   = okitSettingsClone.is_default_route_table;
         okitSettings.is_default_security_list = okitSettingsClone.is_default_security_list;
+        okitSettings.is_default_dhcp_options = okitSettingsClone.is_default_dhcp_options;
+        okitSettings.is_vcn_defaults = okitSettingsClone.is_vcn_defaults;
+        // Check for VCN Defaults
+        this.getVirtualCloudNetworks().forEach((vcn) => {
+            if (vcn.default_route_table_id && this.getRouteTable(vcn.default_route_table_id)) this.getRouteTable(vcn.default_route_table_id).default = true;
+            if (vcn.default_security_list_id && this.getSecurityList(vcn.default_security_list_id)) this.getSecurityList(vcn.default_security_list_id).default = true;
+            if (vcn.default_dhcp_options_id && this.getDhcpOption(vcn.default_dhcp_options_id)) this.getDhcpOption(vcn.default_dhcp_options_id).default = true;
+        });
     }
     load1(okit_json) {
         console.log('Load OKIT Json');
