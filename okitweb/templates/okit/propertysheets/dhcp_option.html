@@ -6,7 +6,8 @@
 {% block title_block %}Dhcp Option{% endblock %}
 {% block required_properties_table_rows_block %}
     <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="vcn_id" class="okit-property-value okit-property-label"></label></div></div>
-{% endblock %}
+    {{ properties_input('VCN Default', 'default', type='checkbox') }}
+    {% endblock %}
 {% block additional_properties_block %}
 <details class="route-rules" open="open">
     <summary>Options</summary>

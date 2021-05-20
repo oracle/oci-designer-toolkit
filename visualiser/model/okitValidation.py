@@ -32,6 +32,7 @@ class OCIJsonValidator(object):
         self.validateBlockStorageVolumes()
         self.validateCompartments()
         self.validateCustomerPremiseEquipments()
+        self.validateDhcpOptions()
         self.validateDatabaseSystems()
         self.validateDynamicRoutingGateways()
         self.validateFastConnects()
@@ -200,6 +201,21 @@ class OCIJsonValidator(object):
                     'element': 'hostname'
                 }
                 self.results['errors'].append(error)
+
+    # Dhcp Options
+    def validateDhcpOptions(self):
+        for resource in self.okit_json.get('dhcp_options', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            defaults = [resource.get('default', False) and r.get('default', False) and r['id'] != resource['id'] and r['vcn_id'] == resource['vcn_id'] for r in self.okit_json.get('dhcp_options', [])]
+            if any(defaults):
+                error = {
+                    'id': resource['id'],
+                    'type': 'Dhcp Option',
+                    'artefact': resource['display_name'],
+                    'message': f'Multiple Dhcp Options specified as default {" ".join([r["display_name"] for r in self.okit_json.get("dhcp_options", []) if r.get("default", False) and r["id"] != resource["id"] and r["vcn_id"] != resource["vcn_id"]])}.',
+                    'element': 'default'
+                }
+                self.results['errors'].append(error)              
 
     # Dynamic Routing Gateway
     def validateDynamicRoutingGateways(self):
@@ -404,51 +420,71 @@ class OCIJsonValidator(object):
 
     # Route Tables
     def validateRouteTables(self):
-        for artefact in self.okit_json.get('route_tables', []):
-            logger.info('Validating {!s}'.format(artefact['display_name']))
-            if len(artefact['route_rules']) == 0:
+        for resource in self.okit_json.get('route_tables', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            if len(resource['route_rules']) == 0:
                 warning = {
-                    'id': artefact['id'],
+                    'id': resource['id'],
                     'type': 'Route Table',
-                    'artefact': artefact['display_name'],
+                    'artefact': resource['display_name'],
                     'message': 'No Rules have been specified.',
                     'element': 'route_rules'
                 }
                 self.results['warnings'].append(warning)
             else:
-                for rule in artefact['route_rules']:
+                for rule in resource['route_rules']:
                     if rule['network_entity_id'] == '':
                         error = {
-                            'id': artefact['id'],
+                            'id': resource['id'],
                             'type': 'Route Table',
-                            'artefact': artefact['display_name'],
+                            'artefact': resource['display_name'],
                             'message': f'Network Entity has not be specified for {" ".join(rule["target_type"].split("_")).title()} rule.',
                             'element': 'route_rules'
                         }
                         self.results['errors'].append(error)
+            defaults = [resource.get('default', False) and r.get('default', False) and r['id'] != resource['id'] and r['vcn_id'] == resource['vcn_id'] for r in self.okit_json.get('route_tables', [])]
+            if any(defaults):
+                error = {
+                    'id': resource['id'],
+                    'type': 'Route Table',
+                    'artefact': resource['display_name'],
+                    'message': f'Multiple Route Tables specified as default {" ".join([r["display_name"] for r in self.okit_json.get("route_tables", []) if r.get("default", False) and r["id"] != resource["id"] and r["vcn_id"] != resource["vcn_id"]])}.',
+                    'element': 'default'
+                }
+                self.results['errors'].append(error)              
 
     # Security Lists
     def validateSecurityLists(self):
-        for artefact in self.okit_json.get('security_lists', []):
-            logger.info('Validating {!s}'.format(artefact['display_name']))
-            if len(artefact['egress_security_rules']) == 0:
+        for resource in self.okit_json.get('security_lists', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            if len(resource['egress_security_rules']) == 0:
                 warning = {
-                    'id': artefact['id'],
+                    'id': resource['id'],
                     'type': 'Security List',
-                    'artefact': artefact['display_name'],
+                    'artefact': resource['display_name'],
                     'message': 'No Egress Rules have been specified.',
                     'element': 'egress_security_rules'
                 }
                 self.results['warnings'].append(warning)
-            if len(artefact['ingress_security_rules']) == 0:
+            if len(resource['ingress_security_rules']) == 0:
                 warning = {
-                    'id': artefact['id'],
+                    'id': resource['id'],
                     'type': 'Security List',
-                    'artefact': artefact['display_name'],
+                    'artefact': resource['display_name'],
                     'message': 'No Ingress Rules have been specified.',
                     'element': 'ingress_security_rules'
                 }
                 self.results['warnings'].append(warning)
+            defaults = [resource.get('default', False) and r.get('default', False) and r['id'] != resource['id'] and r['vcn_id'] == resource['vcn_id'] for r in self.okit_json.get('security_lists', [])]
+            if any(defaults):
+                error = {
+                    'id': resource['id'],
+                    'type': 'Security List',
+                    'artefact': resource['display_name'],
+                    'message': f'Multiple Security Lists specified as default {" ".join([r["display_name"] for r in self.okit_json.get("security_lists", []) if r.get("default", False) and r["id"] != resource["id"] and r["vcn_id"] != resource["vcn_id"]])}.',
+                    'element': 'default'
+                }
+                self.results['errors'].append(error)              
 
     # Service Gateways
     def validateServiceGateways(self):

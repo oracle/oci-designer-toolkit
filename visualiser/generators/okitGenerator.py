@@ -170,23 +170,17 @@ class OCIGenerator(object):
         for network_security_group in self.visualiser_json.get('network_security_groups', []):
             self.renderNetworkSecurityGroup(network_security_group)
         # -- Security Lists
-        index = 1
         for security_list in self.visualiser_json.get('security_lists', []):
-            self.renderSecurityList(security_list, index)
-            index += 1
+            self.renderSecurityList(security_list)
         # -- Route Tables
-        index = 1
         for route_table in self.visualiser_json.get('route_tables', []):
-            self.renderRouteTable(route_table, index)
-            index += 1
+            self.renderRouteTable(route_table)
         # -- Service Gateways
         for service_gateway in self.visualiser_json.get('service_gateways', []):
             self.renderServiceGateway(service_gateway)
         # -- Dhcp Options
-        index = 1
         for resource in self.visualiser_json.get('dhcp_options', []):
-            self.renderDhcpOption(resource, index)
-            index += 1
+            self.renderDhcpOption(resource)
         # -- Subnet
         for subnet in self.visualiser_json.get('subnets', []):
             self.renderSubnet(subnet)
@@ -561,7 +555,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderDhcpOption(self, resource, index=0):
+    def renderDhcpOption(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
@@ -573,8 +567,8 @@ class OCIGenerator(object):
         logger.info('Processing Dhcp Options Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
-        # ---- If this is the first Dhcp Options the update the Default Dhcp Options
-        if index == 1 and False: # Is it valid to replace the default DHCP Options
+        # ---- Check if Default Dhcp Options
+        if resource.get("default", False): # Is it valid to replace the default DHCP Options
             self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
                 self.standardiseResourceName(self.id_name_map[resource['vcn_id']]), 'default_dhcp_options_id')
         else:
@@ -1450,7 +1444,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderRouteTable(self, route_table, index=0):
+    def renderRouteTable(self, route_table):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
@@ -1462,8 +1456,8 @@ class OCIGenerator(object):
         logger.info('Processing Route Table Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
-        # ---- If this is the first Route Table the update the Default Route Table
-        if index == 1:
+        # ---- Check if Default Route Table
+        if route_table.get("default", False):
             self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
                 self.standardiseResourceName(self.id_name_map[route_table['vcn_id']]), 'default_route_table_id')
         else:
@@ -1503,7 +1497,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderSecurityList(self, security_list, index=0):
+    def renderSecurityList(self, security_list):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
@@ -1515,8 +1509,8 @@ class OCIGenerator(object):
         logger.info('Processing Security List Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
-        # ---- If this is the first Security List the update the Default Security List
-        if index == 1:
+        # ---- Check if Default Security List
+        if security_list.get("default", False):
             self.jinja2_variables["manage_default_resource_id"] = self.formatJinja2IdReference(
                 self.standardiseResourceName(self.id_name_map[security_list['vcn_id']]), 'default_security_list_id')
         else:

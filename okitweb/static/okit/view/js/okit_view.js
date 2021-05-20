@@ -967,12 +967,14 @@ class OkitJsonView {
         let view_artefact = this.newVirtualCloudNetwork();
         view_artefact.getArtefact().compartment_id = target.id;
         view_artefact.getArtefact().generateCIDR();
-        if (okitSettings.is_default_route_table) {
-            let route_table = this.newRouteTable(this.getOkitJson().newRouteTable({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
-        }
-        if (okitSettings.is_default_security_list) {
-            let security_list = this.newSecurityList(this.getOkitJson().newSecurityList({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
+        if (okitSettings.is_vcn_defaults) {
+            // Default Route Table
+            let route_table = this.newRouteTable(this.getOkitJson().newRouteTable({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
+            // Default Security List
+            let security_list = this.newSecurityList(this.getOkitJson().newSecurityList({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
             security_list.artefact.addDefaultSecurityListRules(view_artefact.artefact.cidr_block);
+            // Defaul Dhcp Options
+            let dhcp_options = this.newDhcpOption(this.getOkitJson().newDhcpOption({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
         }
         view_artefact.recalculate_dimensions = true;
         return view_artefact;

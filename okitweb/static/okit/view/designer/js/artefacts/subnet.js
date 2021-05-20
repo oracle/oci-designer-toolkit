@@ -132,18 +132,21 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     getTopEdgeChildrenMaxDimensions() {
         let top_edge_dimensions = {width: 0, height: this.icon_height};
         if (this.artefact.route_table_id !== '') {
-            const dimensions = this.json_view.getRouteTable(this.artefact.route_table_id).dimensions;
+            const resource = this.json_view.getRouteTable(this.artefact.route_table_id);
+            const dimensions = resource ? resource.dimensions : {width: positional_adjustments.spacing.x * -1};
             top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
         }
         // Security Lists
         for (let security_list_id of this.artefact.security_list_ids) {
-            const dimensions = this.json_view.getSecurityList(security_list_id).dimensions;
+            const resource = this.json_view.getSecurityList(security_list_id)
+            const dimensions = resource ? resource.dimensions : {width: positional_adjustments.spacing.x * -1};
             top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
         }
         if (this.artefact.dhcp_options_id !== '' && this.json_view.getDhcpOption) {
-            const dimensions = this.json_view.getDhcpOption(this.artefact.dhcp_options_id) ? this.json_view.getDhcpOption(this.artefact.dhcp_options_id).dimensions : {width: positional_adjustments.spacing.x * -1};
+            const resource = this.json_view.getDhcpOption(this.artefact.dhcp_options_id)
+            const dimensions = resource ? resource.dimensions : {width: positional_adjustments.spacing.x * -1};
             top_edge_dimensions.width += (dimensions.width + positional_adjustments.spacing.x);
-        }
+   }
         return top_edge_dimensions;
     }
 

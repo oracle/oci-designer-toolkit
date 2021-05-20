@@ -23,7 +23,8 @@ class DhcpOption extends OkitArtifact {
             custom_dns_servers: '',
             search_domain_names: ''
         }]
-            // Update with any passed data
+        this.default = false;
+        // Update with any passed data
         this.merge(data);
         this.convert();
     }
@@ -32,6 +33,17 @@ class DhcpOption extends OkitArtifact {
     */
     clone() {
         return new DhcpOption(JSON.clone(this), this.getOkitJson());
+    }
+    /*
+    ** Delete Processing
+     */
+    deleteChildren() {
+        // Remove Subnet references
+        for (let subnet of this.getOkitJson().subnets) {
+            if (subnet.dhcp_options_id === this.id) {
+                subnet.dhcp_options_id = '';
+            }
+        }
     }
     /*
     ** Name Generation

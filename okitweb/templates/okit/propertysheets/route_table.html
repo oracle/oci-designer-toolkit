@@ -8,6 +8,7 @@
 
 {% block required_properties_table_rows_block %}
     <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="vcn_id" class="okit-property-value okit-property-label"></label></div></div>
+    {{ properties_input('VCN Default', 'default', type='checkbox') }}
 {% endblock %}
 
 {% block optional_properties_table_block %}{% endblock %}
