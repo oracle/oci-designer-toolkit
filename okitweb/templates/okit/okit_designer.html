@@ -58,8 +58,27 @@
                     success: function(xml) {
                         console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
                         let g = $(xml).find("g");
+                        let svg = $(xml).find("svg");
+                        let style = $(xml).find("style");
+                        // console.warn('Style', style)
                         g[0].removeAttribute('transform');
                         palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
+                        // palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(svg[0]);
+                        // console.warn('Pallet String:', palette_svg["{{ palette_icon['title'] }}"])
+                        if (style.length > 0) {
+                            // console.warn(style[0])
+                            // console.warn(style[0].sheet.cssRules)
+                            for (let rule of style[0].sheet.cssRules) {
+                                // console.warn('Selector', rule.selectorText)
+                                // console.warn('Style', rule.style.cssText)
+                                const fromStr = `class="${rule.selectorText.substring(1)}"`
+                                const toStr = `style="${rule.style.cssText}"`
+                                // console.warn('From', fromStr, 'To', toStr)
+                                palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                            }
+                            // console.warn(style[0].textContent)
+                        }
+                        // console.warn('Pallet String:', palette_svg["{{ palette_icon['title'] }}"])
                     },
                     error: function(xhr, status, error) {
                         console.groupCollapsed("{{ 'Error Loading ' + palette_icon['svg'] }}");
@@ -258,7 +277,7 @@
                               onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();">Icons & Text</label>
             </div>
             {% for palette_icon_group in palette_icon_groups %}
-                {% if palette_icon_group['name'] != 'Hidden' %}
+                {% if palette_icon_group['name'] != 'Hidden' and palette_icon_group['name'] != 'Svg'%}
                     <details  id="{{ palette_icon_group['name'] }}" class="okit-palette-icon-group" open>
                         <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label></summary>
                         <div class="okit-palette-icon-group-icons okit-icons-only">

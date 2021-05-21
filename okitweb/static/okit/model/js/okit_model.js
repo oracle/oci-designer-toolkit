@@ -1148,7 +1148,7 @@ class OkitArtifact {
     ** Delete Processing
      */
     delete() {
-        console.warn('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
+        console.info('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
         this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
         // Delete Child Artifacts
         this.deleteChildren();

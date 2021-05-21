@@ -281,7 +281,8 @@ class OkitDesignerJsonView extends OkitJsonView {
             defs.append('g')
                 .attr("id", defid)
                 //.attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
-                .attr("transform", "translate(-1, -1) scale(0.29, 0.29)")
+                // .attr("transform", "translate(-1, -1) scale(0.29, 0.29)")
+                .attr("transform", "translate(4.5, 4.5) scale(0.8, 0.8)")
                 .html(this.palette_svg[key]);
         }
         // Add Connector Markers

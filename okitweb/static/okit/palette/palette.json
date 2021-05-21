@@ -1,0 +1,128 @@
+{
+    "Containers": {
+        "icon": "",
+        "resources": {
+            "Compartment": {
+                "svg": "Compartments.svg",
+                "title": "Compartments"
+            },
+            "OKE Cluster": {
+                "svg": "ContainerEngineForKubernetes.svg",
+                "title": "OKE Cluster"
+            }
+        }
+    },
+    "Compute": {
+        "icon": "",
+        "resources": {
+            "Instance": {
+                "svg": "VirtualMachine.svg",
+                "title": "Instance"
+            }
+        }
+    },
+    "Database": {
+        "icon": "",
+        "resources": {
+            "Autonomous Database": {
+                "svg": "AutonomousDatabaseCloudServiceADCS.svg",
+                "title": "Autonomous Database"
+            },
+            "Database System": {
+                "svg": "DatabaseSystemDBS.svg",
+                "title": "Database System"
+            },
+            "MySQL Database System": {
+                "svg": "MySQLDatabaseServiceMDS.svg",
+                "title": "MySQL Database System"
+            }
+        }
+    },
+    "Networking": {
+        "icon": "",
+        "resources": {
+            "Virtual Cloud Network": {
+                "svg": "VirtualCloudNetworkVCN.svg",
+                "title": "Virtual Cloud Network"
+            },
+            "Route Table": {
+                "svg": "RouteTable.svg",
+                "title": "Route Table"
+            },
+            "Subnet": {
+                "svg": "Backbone.svg",
+                "title": "Subnet"
+            },
+            "Security List": {
+                "svg": "SecurityList.svg",
+                "title": "Security List"
+            },
+            "Dhcp Option": {
+                "svg": "DhcpOptions.svg",
+                "title": "DHCP Option"
+            },
+            "Network Security Group": {
+                "svg": "NetworkSecurityGroup.svg",
+                "title": "Network Security Group"
+            },
+            "Customer Premise Equipment": {
+                "svg": "CustomerPremises.svg",
+                "title": "Customer Premise Equipment"
+            },
+            "IPSec Connection": {
+                "svg": "VirtualPrivateNetworkVPN.svg",
+                "title": "IPSec Connection"
+            },
+            "Remote Peering Connection": {
+                "svg": "RemotePeeringGatewayRPG.svg",
+                "title": "Remote Peering Connection"
+            },
+            "Load Balancer": {
+                "svg": "LoadBalancerLB.svg",
+                "title": "Load Balancer"
+            }
+        }
+    },
+    "Gateways": {
+        "icon": "",
+        "resources": {
+            "Internet Gateway": {
+                "svg": "InternetGateway.svg",
+                "title": "Internet Gateway"
+            },
+            "NAT Gateway": {
+                "svg": "NATGateway.svg",
+                "title": "NAT Gateway"
+            },
+            "Local Peering Gateway": {
+                "svg": "LocalPeeringGatewayLPG.svg",
+                "title": "Local Peering Gateway"
+            },
+            "Dynamic Routing Gateway": {
+                "svg": "DynamicRoutingGatewayDRG.svg",
+                "title": "Dynamic Routing Gateway"
+            },
+            "Service Gateway": {
+                "svg": "StorageGateway.svg",
+                "title": "Service Gateway"
+            }
+        }
+    },
+    "Storage": {
+        "icon": "",
+        "resources": {
+            "Block Storage Volume": {
+                "svg": "BlockStorage.svg",
+                "title": "Block Storage Volume"
+            },
+            "Object Storage Bucket": {
+                "svg": "ObjectStorage.svg",
+                "title": "Object Storage Bucket"
+            },
+            "File Storage System": {
+                "svg": "FileStorage.svg",
+                "title": "File Storage System"
+            }
+        }
+   }
+}
