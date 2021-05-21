@@ -1388,7 +1388,7 @@ class OkitArtefactView {
             this.drawText(svg, this.svg_label_text);
             this.drawTitle(svg);
             this.drawIcon(svg);
-            if (this.read_only) this.drawIconOverlay(svg)
+            // if (this.read_only) this.drawIconOverlay(svg)
             // Add standard / common click event
             this.addClickEvent(svg);
             // Add standard / common mouse over event
