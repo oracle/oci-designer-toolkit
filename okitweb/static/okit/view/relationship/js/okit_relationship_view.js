@@ -142,7 +142,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
         // use for to organise the graph
         relationship_simulation = d3.forceSimulation(relationship_data.nodes)
                             .force("link", d3.forceLink().id(function(d) { return d.id; }).links(relationship_data.links))
-                            .force("charge", d3.forceManyBody().strength(-150 * self.getRadius("")))
+                            .force("charge", d3.forceManyBody().strength(-100 * self.getRadius("")))
                             .force("center", d3.forceCenter(width / 2, height / 2))
                             .on("tick", self.ticked);
     }

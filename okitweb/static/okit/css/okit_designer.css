@@ -220,7 +220,7 @@
 
 .okit-relationship-canvas {
     display: block;
-    background: #000;
+    background: #fff;
     padding: 0;
     margin: 0;
     height: 100%;
@@ -229,18 +229,19 @@
 }
 
 .okit-relationship-canvas line.links {
-    stroke: #aaa;
+    stroke: #2C5967;
 }
 
 .okit-relationship-canvas rect {
-    fill: #99b6d3;
+    /* fill: #99b6d3; */
+    fill: none;
     stroke-width: 1.5px;
 }
 
 .okit-relationship-canvas text {
     font-family: sans-serif;
     font-size: 20px;
-    fill: white;
+    fill: #000;
 }
 
 .okit-svg-canvas {
