@@ -8,6 +8,6 @@
   "private": true,
   "dependencies": {
     "d3": "5.15",
-    "jquery": "3.4.1"
+    "jquery": "3.6.0"
   }
 }

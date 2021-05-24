@@ -26,12 +26,13 @@ logger = getLogger()
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000;
 
-    def __init__(self, config=None, configfile=None, profile=None):
+    def __init__(self, config=None, configfile=None, profile=None, region=None):
         self.tenancy_ocid = ''
         self.config = config
         self.configfile = configfile
         self.client = None
         self.profile = profile
+        self.region = region
         # Create Instance Security Signer
         if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
             self.signerFromInstancePrincipal()
@@ -42,9 +43,15 @@ class OCIConnection(object):
 
     def signerFromInstancePrincipal(self):
         try:
-            # Get Signer from Instance Principal
+            # Get region
+            if self.region is None:
+                if self.config is not None:
+                    self.region = self.config.get('region', os.getenv('OCI_VM_REGION', 'uk-london-1'))
+                else:
+                    self.region = os.getenv('OCI_VM_REGION', 'uk-london-1')
+           # Get Signer from Instance Principal
             self.signer = oci.auth.signers.InstancePrincipalsSecurityTokenSigner()
-            self.config = {}
+            self.config = {"region": self.region}
             self.instance_principal = True
         except Exception:
             logger.warn('Instance Principal is not available')

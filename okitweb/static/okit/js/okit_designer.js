@@ -491,6 +491,7 @@ function displayQueryDialog() {
         .append('select')
             .attr('id', 'query_region_id')
             .attr('multiple', 'multiple')
+            .attr('size', 10)
             .on('change', () => {
                 console.info('Region Select ' + $(jqId('query_region_id')).val());
                 okitSettings.last_used_region = $(jqId('query_region_id')).val();
@@ -593,7 +594,7 @@ function loadCompartments() {
         for (let compartment of okitOciData.getCompartments()) {
             compartment_select.append('option')
                 .attr('value', compartment['id'])
-                .text(compartment['display_name']);
+                .text(compartment['canonical_name']);
         }
         selectQueryLastUsedCompartment();
      } else {
@@ -611,10 +612,11 @@ function loadCompartments() {
                 $(jqId('query_compartment_id')).empty();
                 let compartment_select = d3.select(d3Id('query_compartment_id'));
                 for (let compartment of jsonBody) {
-                    //console.info(compartment['display_name']);
+                    console.info(compartment['display_name']);
+                    console.info(compartment['canonical_name']);
                     compartment_select.append('option')
                         .attr('value', compartment['id'])
-                        .text(compartment['display_name']);
+                        .text(compartment['canonical_name']);
                     if (okitSettings.home_region_key === '') {
                         okitSettings.home_region_key = compartment.home_region_key;
                     }
@@ -893,6 +895,16 @@ function addRegionProgressCheckbox(region) {
 }
 function regionCheckboxName(region) {
     return region + '_checkbox';
+}
+
+/*
+** Properties Tabbar
+*/
+function handlePropertiesTabClick(id) {
+    $('#properties_tab_bar > button').removeClass("okit-tab-active");
+    $(jqId(id)).addClass("okit-tab-active");
+    $('#resource_properties > div.okit-tab-contents').addClass("hidden");
+    $(jqId(id.replace('_tab', '_contents'))).removeClass("hidden");
 }
 
 /*

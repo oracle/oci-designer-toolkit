@@ -30,63 +30,72 @@
     <title>Base Property Sheet</title>
 </head>
 <body>
-<div id="property-editor" class="property-editor">
+<div id="property-editor" class="okit-property-editor">
     <div class="property-editor-title">
         <h3>{% block title_block %}{% endblock %}</h3>
     </div>
-    <div id="required_properties" class="table okit-table okit-properties-table">
-        <div class="thead">
-            <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
+    <div id="resource_properties" class="okit-resource-properties-panel">
+        <div id="properties_tab_bar" class="okit-tab-bar">
+            <button id="all_properties_tab" class="okit-tab okit-tab-active" onclick="handlePropertiesTabClick(this.id)">Properties</button>
+            <button id="resource_notes_tab" class="okit-tab" onclick="handlePropertiesTabClick(this.id)">Notes</button>
         </div>
-        <div class="tbody">
-            {{ properties_input('Id', 'id', type='text', collapsed=True, readonly=True) }}
-            {{ properties_input('Name', 'display_name', type='text') }}
-            {{ properties_input('Documentation', 'definition', type='documentation') }}
-           {% block required_properties_table_rows_block %}{% endblock %}
+        <div id="all_properties_contents" class="okit-tab-contents">
+            <div id="required_properties" class="table okit-table okit-properties-table">
+                <div class="thead">
+                    <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
+                </div>
+                <div class="tbody">
+                    {{ properties_input('Id', 'id', type='text', collapsed=True, readonly=True) }}
+                    {{ properties_input('Name', 'display_name', type='text') }}
+                {% block required_properties_table_rows_block %}{% endblock %}
+                </div>
+            </div>
+            {% block additional_properties_block %}{% endblock %}
+            <details id="optional_properties" class="optional-properties" ontoggle="{$('#optional_properties_summary').text(this.open ? 'Hide Advanced Options' : 'Show Advanced Options');}">
+                <summary><a>
+                    <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+                    <span id="optional_properties_summary">Show Advanced Options</span></a>
+                </summary>
+                {% block optional_properties_table_block %}
+                <div id="optional_properties_div" class="table okit-table okit-properties-table">
+                    <div class="thead">
+                        <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
+                    </div>
+                    <div class="tbody">
+                        {% block optional_properties_table_rows_block %}{% endblock %}
+                    </div>
+                </div>
+                {% endblock optional_properties_table_block %}
+                {% block optional_properties_block %}{% endblock %}
+                <details open="open">
+                    <summary><a>
+                        <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+                        <span>Freeform Tags</span></a>
+                    </summary>
+                    <div id="fftags" class="table okit-table okit-properties-table okit-dynamic-table">
+                        <div class="thead">
+                            <div class="tr"><div class="th">Key</div><div class="th">Value</div><div class="th"><button id="add_freeform_tag" class="okit-add-button" type="button">+</button></div></div>
+                        </div>
+                        <div class="tbody" id="freeform_tags"></div>
+                    </div>
+                </details>
+                <details open="open">
+                    <summary><a>
+                        <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+                        <span>Defined Tags</span></a>
+                    </summary>
+                    <div id="dftags" class="table okit-table okit-properties-table okit-dynamic-table">
+                        <div class="thead">
+                            <div class="tr"><div class="th">Namespace</div><div class="th">Key</div><div class="th">Value</div><div class="th"><button id="add_defined_tag" class="okit-add-button" type="button">+</button></div></div>
+                        </div>
+                        <div class="tbody" id="defined_tags"></div>
+                    </div>
+                </details>
+            </details>
         </div>
+        <div id="resource_notes_contents" class="okit-tab-contents hidden"><textarea id="definition" class="documentation" name="definition" wrap="soft"></textarea></div>
     </div>
-    {% block additional_properties_block %}{% endblock %}
-    <details id="optional_properties" class="optional-properties" ontoggle="{$('#optional_properties_summary').text(this.open ? 'Hide Advanced Options' : 'Show Advanced Options');}">
-        <summary><a>
-            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
-            <span id="optional_properties_summary">Show Advanced Options</span></a>
-        </summary>
-        {% block optional_properties_table_block %}
-        <div id="optional_properties_div" class="table okit-table okit-properties-table">
-            <div class="thead">
-                <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
-            </div>
-            <div class="tbody">
-                {% block optional_properties_table_rows_block %}{% endblock %}
-            </div>
-        </div>
-        {% endblock optional_properties_table_block %}
-        {% block optional_properties_block %}{% endblock %}
-        <details open="open">
-            <summary><a>
-                <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
-                <span>Freeform Tags</span></a>
-            </summary>
-            <div id="fftags" class="table okit-table okit-properties-table okit-dynamic-table">
-                <div class="thead">
-                    <div class="tr"><div class="th">Key</div><div class="th">Value</div><div class="th"><button id="add_freeform_tag" class="okit-add-button" type="button">+</button></div></div>
-                </div>
-                <div class="tbody" id="freeform_tags"></div>
-            </div>
-        </details>
-        <details open="open">
-            <summary><a>
-                <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
-                <span>Defined Tags</span></a>
-            </summary>
-            <div id="dftags" class="table okit-table okit-properties-table okit-dynamic-table">
-                <div class="thead">
-                    <div class="tr"><div class="th">Namespace</div><div class="th">Key</div><div class="th">Value</div><div class="th"><button id="add_defined_tag" class="okit-add-button" type="button">+</button></div></div>
-                </div>
-                <div class="tbody" id="defined_tags"></div>
-            </div>
-        </details>
-    </details>
+</div>
 </div>
 </body>
 </html>
