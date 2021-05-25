@@ -1765,7 +1765,8 @@ class OCIGenerator(object):
             # ----- Enabled
             self.addJinja2Variable("is_ipv6enabled", virtual_cloud_network["is_ipv6enabled"], standardisedName)
             # ----- Block
-            self.addJinja2Variable("ipv6cidr_block", virtual_cloud_network["ipv6cidr_block"], standardisedName)
+            # self.addJinja2Variable("ipv6cidr_block", virtual_cloud_network["ipv6cidr_block"], standardisedName)
+            self.jinja2_variables["ipv6cidr_blocks"] = virtual_cloud_network.get("ipv6cidr_blocks", [virtual_cloud_network.get("ipv6cidr_block", '')])
         else:
             self.jinja2_variables.pop("is_ipv6enabled", None)
             self.jinja2_variables.pop("ipv6cidr_block", None)

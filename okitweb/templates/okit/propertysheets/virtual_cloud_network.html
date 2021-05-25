@@ -13,7 +13,7 @@
 {% block optional_properties_table_rows_block %}
     <div class='tr'><div class='td'>DNS Label</div><div class='td'><input type="text" id="dns_label" name="dns_label" class="okit-property-value"></div></div>
     <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_ipv6enabled" name="is_ipv6enabled" value="false"><label>IPV6 Enabled</label></div></div>
-    <div class='tr'><div class='td'>IPv6 CIDR</div><div class='td'><input type="text" id="ipv6cidr_block" name="ipv6cidr_block" class="okit-property-value" pattern="^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7}$" title="IPv6 CIDR block" onblur="this.reportValidity();"></div></div>
+    <div class='tr'><div class='td'>IPv6 CIDR(s)</div><div class='td'><input type="text" id="ipv6cidr_blocks" name="ipv6cidr_blocks" class="okit-property-value" pattern="^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+" title="Comma separated IPv6 CIDR blocks" onblur="this.reportValidity();"></div></div>
 {% endblock %}
 
 {% block optional_properties_block %}{% endblock %}
