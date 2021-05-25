@@ -45,7 +45,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {
             loadPropertiesSheet(me.artefact);
-            $(jqId('cidr_block')).on('change', function() {
+            $(jqId('cidr_blocks')).on('change', function() {
                 console.info('CIDR Block Changed ' + $(jqId('cidr_block')).val());
                 for (let subnet of me.artefact.getOkitJson().subnets) {
                     if (subnet.vcn_id === me.id) {
