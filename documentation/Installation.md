@@ -143,13 +143,13 @@ Repository.
 The command shows how this can be cloned to the local machine.
 
 ```bash
-git clone --depth 1 git@github.com:oracle/oci-designer-toolkit.git
+git clone -c core.autocrlf=input git@github.com:oracle/oci-designer-toolkit.git
 ```
 
 or 
 
 ```bash
-git clone --depth 1 https://github.com/oracle/oci-designer-toolkit.git
+git clone -c core.autocrlf=input https://github.com/oracle/oci-designer-toolkit.git
 ```
 
 #### Update

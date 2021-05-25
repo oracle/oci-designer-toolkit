@@ -20,7 +20,7 @@ class VirtualCloudNetwork extends OkitArtifact {
         this.cidr_blocks = [''];
         this.dns_label = this.display_name.toLowerCase().slice(-6);
         this.is_ipv6enabled = false;
-        this.ipv6cidr_block = '';
+        this.ipv6cidr_blocks = [''];
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -37,6 +37,11 @@ class VirtualCloudNetwork extends OkitArtifact {
             if (this.cidr_blocks === undefined || this.cidr_blocks.length === 0 || (this.cidr_blocks.length === 1 && this.cidr_blocks[0] === '')) this.cidr_blocks = [this.cidr_block];
             else if (this.cidr_blocks.indexOf(this.cidr_block) < 0) this.cidr_blocks.push(this.cidr_block);
             delete this.cidr_block;
+        }
+        if (this.ipv6cidr_block !== undefined && this.ipv6cidr_block !== '') {
+            if (this.ipv6cidr_blocks === undefined || this.ipv6cidr_blocks.length === 0 || (this.ipv6cidr_blocks.length === 1 && this.ipv6cidr_blocks[0] === '')) this.ipv6cidr_blocks = [this.ipv6cidr_block];
+            else if (this.ipv6cidr_blocks.indexOf(this.ipv6cidr_block) < 0) this.ipv6cidr_blocks.push(this.ipv6cidr_block);
+            delete this.ipv6cidr_block;
         }
     }
 

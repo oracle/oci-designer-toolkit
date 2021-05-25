@@ -63,6 +63,7 @@ Before building / running OKIT you will need to install [Docker / Docker Desktop
 ```bash
 docker build --tag okit --force-rm https://github.com/oracle/oci-designer-toolkit.git
 ```
+_Note:_ [If you are running on Windows and see issues please follow the docker clone/build from source instructions.](documentation/Installation.md#build-from-source)
 
 #### Create / Generate Connection Information
 If you already have the OCI sdk/cli installed on you machine you can use the previously generated pem key and config file

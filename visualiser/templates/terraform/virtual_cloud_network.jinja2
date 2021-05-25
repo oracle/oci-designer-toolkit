@@ -16,8 +16,8 @@ resource "oci_core_vcn" "{{ resource_name }}" {
 {% if is_ipv6enabled is defined %}
     is_ipv6enabled  = {{ is_ipv6enabled | safe }}
 {% endif %}
-{% if ipv6cidr_block is defined %}
-    ipv6cidr_block  = {{ ipv6cidr_block | safe }}
+{% if ipv6cidr_blocks is defined %}
+    ipv6cidr_blocks = [{% for ipv6cidr_block in ipv6cidr_blocks %}"{{ ipv6cidr_block }}"{% if not loop.last %},{% endif %}{% endfor %}]
 {% endif %}
 }
 
