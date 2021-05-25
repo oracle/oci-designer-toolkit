@@ -113,7 +113,7 @@ building, of the runtime environment, from the docker command line.
 
 ### Build Docker Container
 ```bash
-docker build --tag okit --force-rm https://github.com/oracle/oci-designer-toolkit.git
+docker build --tag okit --no-cache --force-rm https://github.com/oracle/oci-designer-toolkit.git
 ```
 
 ### Run Container
@@ -220,7 +220,7 @@ docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
 ```bash
 cd oci-designer-toolkit
 docker rmi okit
-docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
+docker build --tag okit --no-cache --file ./containers/docker/Dockerfile --force-rm .
 ```
 
 ##### Start Docker Container

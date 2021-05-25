@@ -61,7 +61,7 @@ Before building / running OKIT you will need to install [Docker / Docker Desktop
 
 #### Build Docker Container
 ```bash
-docker build --tag okit --force-rm https://github.com/oracle/oci-designer-toolkit.git
+docker build --tag okit --no-cache --force-rm https://github.com/oracle/oci-designer-toolkit.git
 ```
 _Note:_ [If you are running on Windows and see issues please follow the docker clone/build from source instructions.](documentation/Installation.md#build-from-source)
 
