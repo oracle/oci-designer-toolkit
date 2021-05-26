@@ -1,6 +1,11 @@
 # Release Notes
 
 
+## Version 0.22.1
+**Release Date**: 26th May 2021
+### Bug Fixes
+1. Resolve display issue with new icon when running FireFox
+
 ## Version 0.22.0
 **Release Date**: 26th May 2021
 ### Features
