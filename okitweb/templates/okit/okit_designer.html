@@ -64,10 +64,19 @@
                         palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
                         // palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(svg[0]);
                         if (style.length > 0) {
-                            for (let rule of style[0].sheet.cssRules) {
-                                const fromStr = `class="${rule.selectorText.substring(1)}"`
-                                const toStr = `style="${rule.style.cssText}"`
-                                palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                            if (style[0].sheet) {
+                                for (let rule of style[0].sheet.cssRules) {
+                                    const fromStr = `class="${rule.selectorText.substring(1)}"`
+                                    const toStr = `style="${rule.style.cssText}"`
+                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                }
+                            } else {
+                                for (let rule of style[0].textContent.split('\n\t').filter((r) => r !== '')) {
+                                    const fromStr = `class="${rule.substring(1, rule.indexOf('{')).trim()}"`
+                                    const cssText = rule.substring(rule.indexOf('{') + 1, rule.indexOf('}')).trim()
+                                    const toStr = `style="${cssText}"`
+                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                }
                             }
                         }
                     },
