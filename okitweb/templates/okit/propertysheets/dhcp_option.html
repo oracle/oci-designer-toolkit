@@ -1,0 +1,23 @@
+<!--
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+{% block title_block %}Dhcp Option{% endblock %}
+{% block required_properties_table_rows_block %}
+    <div class='tr'><div class='td'>Virtual Cloud Network</div><div class='td'><label id="vcn_id" class="okit-property-value okit-property-label"></label></div></div>
+    {{ properties_input('VCN Default', 'default', type='checkbox') }}
+    {% endblock %}
+{% block additional_properties_block %}
+<details class="route-rules" open="open">
+    <summary>Options</summary>
+    <div id="options_table" class="table okit-table okit-properties-table okit-dynamic-table">
+        <div class="thead">
+            <div class="tr"><div class="th"></div><div class="th"><button type="button" id="add_option" class="okit-add-button">+</button></div></div>
+        </div>
+        <div class="tbody" id="options_table_body"></div>
+    </div>
+</details>
+{% endblock %}
+{% block optional_properties_table_rows_block %}{% endblock %}
+{% block optional_properties_block %}{% endblock %}

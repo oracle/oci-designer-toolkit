@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Db_Home" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-     y="0px" viewBox="0 0 161.9 162" enable-background="new 0 0 161.9 162" xml:space="preserve">
+<!-- Generator: Adobe Illustrator 24.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 42 42" style="enable-background:new 0 0 42 42;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#312D2A;}
+</style>
 <g>
-<path fill="#312D2A" d="M71.6,113.8h19.2h9h28.4V76.4h-14.1V48H85.5h-8.8H48.1v28.4h-14v37.4h28.2H71.6z M90.8,104.8H71.6V85.4h5.1
-	h8.8h5.3V104.8z M119.2,85.4v19.4H99.8V85.4h14.3H119.2z M85.7,57h19.4v19.4h-5.3h-9h-5.1V57z M57.1,57h19.4v19.4h-5h-9.2h-5.3V57z
-	 M43.2,104.8V85.4h5h14.3v19.4H43.2z M9,9.2v143.6h143.8V9.2H9z M143.8,143.9H18V18.2h125.8V143.9z"/>
+	<g>
+		<g>
+			<path class="st0" d="M29.66,41.5v-4.49h-9.72V26.92h-4.86v-4.67h-2.74v4.67H7.67v2.74h4.67V41.5H0.5V29.66h4.67v-2.74H0.5V15.08
+				h11.84v4.67h2.74v-4.67h4.86v-2.74h-4.86V0.5h11.84v11.84h-4.49v2.74h4.49v4.67h2.74v-4.67H41.5v11.84h-4.67v2.74h4.67V41.5
+				H29.66z M29.66,34.52v-4.86h4.67v-2.74h-4.67v-4.67h-2.74v4.67h-4.49v7.6H29.66z"/>
+			<path class="st0" d="M26.42,1v10.84h-4.49v3.74h4.49v4.67h3.74v-4.67H41v10.84h-4.67v3.74H41V41H30.16v-4.49h-9.72V26.42h-4.86
+				v-4.67h-3.74v4.67H7.17v3.74h4.67V41H1V30.16h4.67v-3.74H1V15.58h10.84v4.67h3.74v-4.67h4.86v-3.74h-4.86V1H26.42 M21.93,35.02
+				h8.22v-4.86h4.67v-3.74h-4.67v-4.67h-3.74v4.67h-4.49V35.02 M27.42,0h-1H15.58h-1v1v10.84v1h1h3.86v1.74h-3.86h-1v1v3.67h-1.74
+				v-3.67v-1h-1H1H0v1v10.84v1h1h3.67v1.74H1H0v1V41v1h1h10.84h1v-1V30.16v-1h-1H8.17v-1.74h3.67h1v-1v-3.67h1.74v3.67v1h1h3.86
+				v9.09v1h1h8.72V41v1h1H41h1v-1V30.16v-1h-1h-3.67v-1.74H41h1v-1V15.58v-1h-1H30.16h-1v1v3.67h-1.74v-3.67v-1h-1h-3.49v-1.74h3.49
+				h1v-1V1V0L27.42,0z M27.42,22.75h1.74v3.67v1h1h3.67v1.74h-3.67h-1v1v3.86h-6.22v-6.6h3.49h1v-1V22.75L27.42,22.75z"/>
+		</g>
+		<path class="st1" d="M41,26.42V15.58H30.16v4.67h-3.74v-4.67h-4.49v-3.74h4.49V1H15.58v10.84h4.86v3.74h-4.86v4.67h-3.74v-4.67H1
+			v10.84h4.67v3.74H1V41h10.84V30.16H7.17v-3.74h4.67v-4.67h3.74v4.67h4.86v10.09h9.72V41H41V30.16h-4.67v-3.74H41z M17.07,2.5h7.85
+			v7.85h-7.85V2.5z M10.35,39.5H2.5v-7.85h7.85V39.5z M10.35,24.93H2.5v-7.85h7.85V24.93z M31.65,17.07h7.85v7.85h-7.85V17.07z
+			 M17.07,17.07h7.85v7.85h-7.85V17.07z M39.5,39.5h-7.85v-7.85h7.85V39.5z M34.83,30.16h-4.67v4.86h-8.22v-8.6h4.49v-4.67h3.74
+			v4.67h4.67V30.16z"/>
+	</g>
 </g>
 </svg>

@@ -73,7 +73,8 @@ class OCICompartments(OCIIdentityConnection):
         # Build List of Compartment Objects that have methods for getting VCN / Security Lists / Route Tables etc
         self.compartments_obj = []
         for compartment in self.compartments_json:
-            compartment['display_name'] = self.getCanonicalName(compartment['id'])
+            compartment['canonical_name'] = self.getCanonicalName(compartment['id'])
+            compartment['display_name'] = compartment['name']
             # self.compartments_obj.append(OCICompartment(self.config, self.configfile, self.profile, compartment))
         return self.compartments_json
 

@@ -6,8 +6,8 @@ console.info('Loaded OKIT Designer View Javascript');
 
 class OkitTabularJsonView extends OkitJsonView {
 
-    constructor(okitjson=null, oci_data=null, parent_id = 'tabular-div') {
-        super(okitjson);
+    constructor(okitjson=null, oci_data=null, resource_icons=[], parent_id = 'tabular-div') {
+        super(okitjson, oci_data, resource_icons, parent_id);
         this.oci_data = oci_data;
         this.parent_id = parent_id;
         this.loadPropertyMap();
@@ -15,8 +15,8 @@ class OkitTabularJsonView extends OkitJsonView {
     get model() {return this.okitjson;}
     get data() {return this.oci_data;}
 
-    static newView(model, parent_id = 'tabular-div') {
-        return new OkitTabularJsonView((model, parent_id))
+    static newView(model, oci_data=null, resource_icons=[], parent_id = 'tabular-div') {
+        return new OkitTabularJsonView((model, oci_data, parent_id, resource_icons))
     }
 
     loadPropertyMap() {
@@ -222,6 +222,7 @@ class OkitTabularJsonView extends OkitJsonView {
         // Table Header
         const thead = table.append('div').attr('class', 'thead');
         const tr = thead.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'th').text(this.okitjson[resource_type].length);
         Object.entries(property_map).forEach(([key, value]) => {
             tr.append('div').attr('class', 'th').text(key);
         });
@@ -232,12 +233,15 @@ class OkitTabularJsonView extends OkitJsonView {
         // Table Body
         const tbody = table.append('div').attr('class', 'tbody okit-tbody-alternating-colours');
         let first = true;
+        let cnt = 1;
         for (let resource of this.okitjson[resource_type]) {
             // Designer View Object
             const view_resource = this.getViewResource(resource.getArtifactReference(), resource.id);
             const tr = tbody.append('div').attr('class', 'tr').on('click', function() {view_resource.loadSlidePanels()});
             self.addContextMenu(tr, resource_type, view_resource);
             if (first) {first = false; view_resource.loadSlidePanels();}
+            tr.append('div').attr('class', 'td').text(cnt);
+            cnt += 1;
             Object.entries(property_map).forEach(([key, value]) => {
                 let cell_data = '';
                 if (value.lookup) {
@@ -351,5 +355,7 @@ class OkitTabularJsonView extends OkitJsonView {
 
 
 }
+
+okitViewClasses.push(OkitTabularJsonView);
 
 let okitTabularView = null;

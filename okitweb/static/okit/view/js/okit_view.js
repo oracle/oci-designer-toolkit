@@ -5,7 +5,7 @@
 console.info('Loaded OKIT View Javascript');
 
 class OkitJsonView {
-    constructor(okitjson=null) {
+    constructor(okitjson=null, oci_data=null, resource_icons=null, parent_id=null) {
         // Specify / Assign Model
         if (okitjson === null || okitjson === undefined) {
             this.okitjson = new OkitJson();
@@ -16,7 +16,11 @@ class OkitJsonView {
         } else {
             this.okitjson = new OkitJson();
         }
+        if (oci_data !== null) this.oci_data = oci_data;
+        if (parent_id !== null) this.parent_id = parent_id;
+        if (resource_icons !== null) this.resource_icons = resource_icons;
         // Define View Lists
+        this.init();
         this.clear();
         // Load Model to View
         this.load();
@@ -40,12 +44,14 @@ class OkitJsonView {
     get svg_highlight_colour() {return "#00cc00";}
     get top_level_compartment() {let tlc = this.getCompartments().filter(compartment => compartment.isTopLevel())[0]; console.info(`TLC ${tlc}`); console.info(tlc); return tlc;}
 
+    getSafeId(id) {return safeId(id)}
+
     drop(source, target) {
         let newFunction = 'new' + source.name;
         let getFunction = 'get' + target.type.split(' ').join('');
     }
 
-    clear() {
+    init() {
         this.compartments = [];
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
@@ -79,7 +85,7 @@ class OkitJsonView {
         this.vm_clusters = [];
         this.vm_cluster_networks = [];
     }
-    clear2() {
+    clear() {
         for (const [key, value] of Object.entries(this)) {
             if (Array.isArray(value)) this[key] = [];
         }
@@ -802,8 +808,17 @@ class OkitJsonView {
     // Route Table
     dropRouteTableView(target) {
         let view_artefact = this.newRouteTable();
-        view_artefact.getArtefact().vcn_id = target.id;
-        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        if (target.type === VirtualCloudNetwork.getArtifactReference()) {
+            view_artefact.getArtefact().vcn_id = target.id;
+            view_artefact.getArtefact().compartment_id = target.compartment_id;
+        } else if (target.type === Subnet.getArtifactReference()) {
+            const subnet = this.getOkitJson().getSubnet(target.id)
+            view_artefact.getArtefact().vcn_id = subnet.vcn_id;
+            view_artefact.getArtefact().compartment_id = target.id;
+            subnet.route_table_id = view_artefact.id;
+        } else if (target.type === Compartment.getArtifactReference()) {
+            view_artefact.getArtefact().compartment_id = target.id;
+        }
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
@@ -831,8 +846,17 @@ class OkitJsonView {
     // Security List
     dropSecurityListView(target) {
         let view_artefact = this.newSecurityList();
-        view_artefact.getArtefact().vcn_id = target.id;
-        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        if (target.type === VirtualCloudNetwork.getArtifactReference()) {
+            view_artefact.getArtefact().vcn_id = target.id;
+            view_artefact.getArtefact().compartment_id = target.compartment_id;
+        } else if (target.type === Subnet.getArtifactReference()) {
+            const subnet = this.getOkitJson().getSubnet(target.id)
+            view_artefact.getArtefact().vcn_id = subnet.vcn_id;
+            view_artefact.getArtefact().compartment_id = target.id;
+            subnet.security_list_ids.push(view_artefact.id);
+        } else if (target.type === Compartment.getArtifactReference()) {
+            view_artefact.getArtefact().compartment_id = target.id;
+        }
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
@@ -943,12 +967,14 @@ class OkitJsonView {
         let view_artefact = this.newVirtualCloudNetwork();
         view_artefact.getArtefact().compartment_id = target.id;
         view_artefact.getArtefact().generateCIDR();
-        if (okitSettings.is_default_route_table) {
-            let route_table = this.newRouteTable(this.getOkitJson().newRouteTable({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
-        }
-        if (okitSettings.is_default_security_list) {
-            let security_list = this.newSecurityList(this.getOkitJson().newSecurityList({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id}));
+        if (okitSettings.is_vcn_defaults) {
+            // Default Route Table
+            let route_table = this.newRouteTable(this.getOkitJson().newRouteTable({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
+            // Default Security List
+            let security_list = this.newSecurityList(this.getOkitJson().newSecurityList({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
             security_list.artefact.addDefaultSecurityListRules(view_artefact.artefact.cidr_block);
+            // Defaul Dhcp Options
+            let dhcp_options = this.newDhcpOption(this.getOkitJson().newDhcpOption({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
         }
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
@@ -1014,6 +1040,10 @@ class OkitJsonView {
     }
 }
 
+// Define Arrays to contain View Classes and Objects
+let okitViewClasses = [];
+let okitViews = [];
+
 /*
 ** Simple Artefact View Class for all artefacts that are not Containers
  */
@@ -1048,7 +1078,9 @@ class OkitArtefactView {
     get okit_json() {return this.getJsonView().getOkitJson();}
     get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
+    // set json_model_list(list) {this.okit_json[this.list_name] = list;}
     get json_view_list() {return this.json_view[this.list_name];}
+    set json_view_list(list) {this.json_view[this.list_name] = list;}
     //get id() {return this.artefact ? this.artefact.id : '';}
     get artefact_id() {return this.artefact ? this.artefact.id : '';}
     get attached() {return false;}
@@ -1338,13 +1370,9 @@ class OkitArtefactView {
     }
 
     delete() {
-        for (let i = 0; i < this.json_model_list.length; i++) {
-            if (this.json_model_list[i].id === this.id) {
-                this.json_model_list[i].delete();
-                this.json_model_list.splice(i, 1);
-                break;
-            }
-        }
+        // this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
+        this.artefact.delete();
+        this.json_view_list = this.json_view_list.filter((e) => e.id != this.id)
         // Remove SVG Element
         if ($(jqId(this.svg_id)).length) {$(jqId(this.svg_id)).remove()}
     }
@@ -1360,7 +1388,7 @@ class OkitArtefactView {
             this.drawText(svg, this.svg_label_text);
             this.drawTitle(svg);
             this.drawIcon(svg);
-            if (this.read_only) this.drawIconOverlay(svg)
+            // if (this.read_only) this.drawIconOverlay(svg)
             // Add standard / common click event
             this.addClickEvent(svg);
             // Add standard / common mouse over event
@@ -1413,6 +1441,18 @@ class OkitArtefactView {
             .attr("stroke-opacity",   definition.stroke_opacity)
             .attr("stroke-dasharray", definition.stroke_dasharray);
         return rect;
+    }
+
+    drawIcon1(svg) {
+        const icon = svg.append('svg')
+            .attr("width",     icon_width)
+            .attr("height",    icon_height)
+            .append('g')
+                .attr("style", "pointer-events: bounding-box;")
+                .append("use")
+                .attr("xlink:href",`#${this.icon_definition_id}`)
+                .attr("transform", this.icon_transform);
+        return icon;
     }
 
     drawIcon(svg) {

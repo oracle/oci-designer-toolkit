@@ -19,6 +19,7 @@ class SecurityList extends OkitArtifact {
         this.vcn_id = data.parent_id;
         this.egress_security_rules = [];
         this.ingress_security_rules = [];
+        this.default = false;
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -39,11 +40,12 @@ class SecurityList extends OkitArtifact {
     deleteChildren() {
         // Remove Subnet references
         for (let subnet of this.getOkitJson().subnets) {
-            for (let i=0; i < subnet.security_list_ids.length; i++) {
-                if (subnet.security_list_ids[i] === this.id) {
-                    subnet.security_list_ids.splice(i, 1);
-                }
-            }
+            subnet.security_list_ids = subnet.security_list_ids.filter((id) => id !== this.id);
+            // for (let i=0; i < subnet.security_list_ids.length; i++) {
+            //     if (subnet.security_list_ids[i] === this.id) {
+            //         subnet.security_list_ids.splice(i, 1);
+            //     }
+            // }
         }
     }
 

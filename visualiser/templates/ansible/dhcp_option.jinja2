@@ -1,0 +1,37 @@
+
+# ------ Create Dhcp Options
+    - name: Create Dhcp Options {{ output_name }}
+      oci_network_dhcp_options:
+        region: "{{ region }}"
+        state: "present"
+        # Required
+{% if manage_default_resource_id is defined %}
+        dhcp_id: "{{ manage_default_resource_id }}"
+{% else %}
+        compartment_id: "{{ compartment_id }}"
+        vcn_id: "{{ vcn_id }}"
+{% endif %}
+        options:
+{% for rule in route_rules %}
+            - destination_type: "{{ rule.destination_type | safe }}"
+    {% if rule.use_cidr_block %}
+              destination: "{{ rule.destination | safe }}"
+    {% else %}
+              destination: "{{ '{{' }} (RegionServices.services | selectattr('service_name', 'match', '{{ rule.destination }}') | map(attribute='cidr_block')) {{ '}}' }}"
+    {% endif %}
+              network_entity_id: "{{ rule.network_entity_id }}"
+              description: "{{ rule.description | safe }}"
+{% endfor %}
+        # Optional
+        display_name: "{{ display_name | safe }}"
+{% if defined_tags is defined %}
+        defined_tags: "{{ defined_tags | safe }}"
+{% endif %}
+{% if freeform_tags is defined %}
+        freeform_tags: "{{ freeform_tags | safe }}"
+{% endif %}
+      register: {{ resource_name }}
+
+    - set_fact:
+        {{ resource_name }}_ocid: "{{ '{{' }} {{ resource_name }}.route_table.id {{ '}}' }}"
+        {{ resource_name }}_id: "{{ '{{' }} {{ resource_name }}.route_table.id {{ '}}' }}"

@@ -29,6 +29,12 @@ $(document).ready(function() {
     okitJsonView = new OkitDesignerJsonView(okitJsonModel);
     okitTabularView = new OkitTabularJsonView(okitJsonModel);
     console.info(okitJsonView);
+    okitViews = [];
+    for (let view_class of okitViewClasses) {
+        console.warn('View Class:', view_class);
+        okitViews.push(view_class.newView(okitJsonModel, okitOciData, resource_icons_svg))
+    }
+    for (let view of okitViews) {console.warn('Okit View:', view)}
     /*
     ** Configure Auto Save
      */

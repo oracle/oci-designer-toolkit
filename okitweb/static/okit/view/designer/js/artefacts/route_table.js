@@ -276,7 +276,7 @@ class RouteTableView extends OkitDesignerArtefactView {
     }
 
     static getDropTargets() {
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [VirtualCloudNetwork.getArtifactReference(), Subnet.getArtifactReference()];
     }
 
 }

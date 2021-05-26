@@ -9,6 +9,7 @@ function hideAllViewDivs() {
     $("#tabular-div").addClass('hidden');
     $("#network-div").addClass('hidden');
     $("#security-div").addClass('hidden');
+    $("#relationship-div").addClass('hidden');
 }
 
 function handleSwitchToCompartmentView(e) {
@@ -33,4 +34,11 @@ function handleSwitchToNetworkView(e) {
 function handleSwitchToSecurityView(e) {
     hideAllViewDivs();
     $("#security-div").removeClass('hidden');
+}
+
+function handleSwitchToRelationshipView(e) {
+    hideAllViewDivs();
+    $("#relationship-div").removeClass('hidden');
+    okitRelationshipView = new OkitRelationshipJsonView(okitJsonModel, okitOciData, resource_icons);
+    okitRelationshipView.draw();
 }

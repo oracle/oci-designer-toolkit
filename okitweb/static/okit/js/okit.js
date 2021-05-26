@@ -234,6 +234,8 @@ class OkitSettings {
     constructor() {
         this.is_default_security_list = false;
         this.is_default_route_table = false;
+        this.is_default_dhcp_options = false;
+        this.is_vcn_defaults = true;
         this.is_timestamp_files = false;
         this.profile = 'DEFAULT';
         this.is_always_free = false;
@@ -322,9 +324,13 @@ class OkitSettings {
             // Display Grid
             this.addDisplayGrid(tbody, autosave);
             // Default Route Table
-            this.addDefaultRouteTable(tbody, autosave)
-            // Default Security List
-            this.addDefaultSecurityList(tbody, autosave);
+            // this.addDefaultRouteTable(tbody, autosave)
+            // // Default Security List
+            // this.addDefaultSecurityList(tbody, autosave);
+            // // Default Dhcp Options
+            // this.addDefaultDhcpOptions(tbody, autosave);
+            // Default VCN RT / SL DO
+            this.addVcnDefaults(tbody, autosave);
             // Timestamp File
             this.addTimestamp(tbody, autosave);
             // Auto Expand Optional
@@ -439,6 +445,48 @@ class OkitSettings {
         td.append('label')
             .attr('for', 'is_default_security_list')
             .text('Default Security List');
+    }
+
+    addDefaultDhcpOptions(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_default_dhcp_options')
+            .attr('name', 'is_default_dhcp_options')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_default_dhcp_options)
+            .on('change', function () {
+                if (autosave) {
+                    self.is_default_dhcp_options = $('#is_default_dhcp_options').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'is_default_dhcp_options')
+            .text('Default Dhcp Options');
+    }
+
+    addVcnDefaults(tbody, autosave) {
+        let self = this;
+        let tr = tbody.append('div').attr('class', 'tr');
+        tr.append('div').attr('class', 'td').text('');
+        let td = tr.append('div').attr('class', 'td');
+        td.append('input')
+            .attr('id', 'is_vcn_defaults')
+            .attr('name', 'is_vcn_defaults')
+            .attr('type', 'checkbox')
+            .property('checked', this.is_vcn_defaults)
+            .on('change', function () {
+                if (autosave) {
+                    self.is_vcn_defaults = $('#is_vcn_defaults').is(':checked');
+                    self.save();
+                }
+            });
+        td.append('label')
+            .attr('for', 'is_vcn_defaults')
+            .text('Default Vcn RT/SL/DO');
     }
 
     addTimestamp(tbody, autosave) {
