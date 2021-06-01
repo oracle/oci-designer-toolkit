@@ -10,6 +10,7 @@ function hideAllViewDivs() {
     $("#network-div").addClass('hidden');
     $("#security-div").addClass('hidden');
     $("#relationship-div").addClass('hidden');
+    $("#json-text-div").addClass('hidden');
 }
 
 function handleSwitchToCompartmentView(e) {
@@ -41,4 +42,11 @@ function handleSwitchToRelationshipView(e) {
     $("#relationship-div").removeClass('hidden');
     okitRelationshipView = new OkitRelationshipJsonView(okitJsonModel, okitOciData, resource_icons);
     okitRelationshipView.draw();
+}
+
+function handleSwitchToTextJsonView(e) {
+    hideAllViewDivs();
+    $("#json-text-div").removeClass('hidden');
+    okitTextJsonView = new OkitTextJsonView(okitJsonModel, okitOciData, resource_icons);
+    okitTextJsonView.draw();
 }
