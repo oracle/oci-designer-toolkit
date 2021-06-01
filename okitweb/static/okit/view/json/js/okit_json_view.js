@@ -40,16 +40,21 @@ class OkitTextJsonView extends OkitJsonView {
         let element = document.createElement('li')
         element.setAttribute('class', 'object')
         element.onclick = (event) => {
-            const ul = element.getElementsByTagName('ul')[0]
-            console.warn('Clicked', ul)
-            element.classList.toggle('element-collapsed')
             event.stopPropagation()
+            if(event.target !== event.currentTarget) return false
+            const ul = element.getElementsByTagName('ul')[0]
+            element.classList.toggle('element-collapsed')
             return false
         }
         parent.appendChild(element)
-        // if (key && key !== '') {
-            element.appendChild(this.buildKey(key))
-        // }
+        let key_label = this.buildKey(key)
+        key_label.onclick = (event) => {
+            event.stopPropagation()
+            const ul = element.getElementsByTagName('ul')[0]
+            element.classList.toggle('element-collapsed')
+            return false
+        }
+        element.appendChild(key_label)
         if (Object.keys(obj).length === 0) {
             element.setAttribute('class', 'object empty')
         } else {
@@ -67,62 +72,25 @@ class OkitTextJsonView extends OkitJsonView {
         }
     }
 
-    addObjectAttribute1(parent, obj, key='') {
-        let object_li = document.createElement('li')
-        let element = document.createElement('div')
-        element.setAttribute('class', 'object collapsible')
-        element.onclick = (event) => {
-            const ul = object_li.getElementsByTagName('ul')[0]
-            console.warn('Clicked', ul)
-            object_li.classList.toggle('element-collapsed')
-            // ul.classList.toggle('element-collapsed')
-            event.stopPropagation()
-            return false
-        }
-        object_li.appendChild(element)
-        parent.appendChild(object_li)
-        if (key && key !== '') {
-            element.appendChild(this.buildKey(key))
-        }
-        if (Object.keys(obj).length === 0) {
-            let braces = document.createElement('span')
-            braces.setAttribute('class', 'brace')
-            braces.appendChild(document.createTextNode('{}'))
-            element.appendChild(braces)
-        } else {
-            object_li.setAttribute('id', obj.id)
-            let open_brace = document.createElement('span')
-            open_brace.setAttribute('class', 'brace')
-            open_brace.appendChild(document.createTextNode('{'))
-            element.appendChild(open_brace)
-            // Process key/val
-            let object_ul = document.createElement('ul')
-            object_li.appendChild(object_ul)
-            Object.entries(obj).forEach(([k, v]) => {
-                if (v instanceof Function) console.info('Ignoring Function', k)
-                else if (Array.isArray(v)) this.addArrayAttribute(object_ul, v, k)
-                else if (v instanceof Object) this.addObjectAttribute(object_ul, v, k)
-                else this.addSimpleAttribute(object_ul, v, k)
-            })
-            // Add Closing Brace
-            this.addCloseBrace(parent, '}')
-        }
-    }
-
     addArrayAttribute(parent, arr, key='') {
         let element = document.createElement('li')
         element.setAttribute('class', 'array')
         element.onclick = (event) => {
-            const ul = element.getElementsByTagName('ul')[0]
-            console.warn('Clicked', ul)
-            element.classList.toggle('element-collapsed')
             event.stopPropagation()
+            if(event.target !== event.currentTarget) return false
+            const ul = element.getElementsByTagName('ul')[0]
+            element.classList.toggle('element-collapsed')
             return false
         }
         parent.appendChild(element)
-        if (key && key !== '') {
-            element.appendChild(this.buildKey(key))
+        let key_label = this.buildKey(key)
+        key_label.onclick = (event) => {
+            event.stopPropagation()
+            const ul = element.getElementsByTagName('ul')[0]
+            element.classList.toggle('element-collapsed')
+            return false
         }
+        element.appendChild(key_label)
         if (arr.length === 0) {
             element.setAttribute('class', 'array empty')
         } else {
@@ -138,38 +106,7 @@ class OkitTextJsonView extends OkitJsonView {
         }
     }
 
-    addArrayAttribute1(parent, arr, key='') {
-        let element = document.createElement('li')
-        element.setAttribute('class', 'array collapsible')
-        parent.appendChild(element)
-        if (key && key !== '') {
-            element.appendChild(this.buildKey(key))
-        }
-        if (arr.length === 0) {
-            let braces = document.createElement('span')
-            braces.setAttribute('class', 'brace')
-            braces.appendChild(document.createTextNode('[]'))
-            element.appendChild(braces)
-        } else {
-            let open_brace = document.createElement('span')
-            open_brace.setAttribute('class', 'brace')
-            open_brace.appendChild(document.createTextNode('['))
-            element.appendChild(open_brace)
-            // Process key/val
-            let object_ul = document.createElement('ul')
-            element.appendChild(object_ul)
-            arr.forEach((v) => {
-                if (Array.isArray(v)) this.addArrayAttribute(object_ul, v)
-                else if (v instanceof Object) this.addObjectAttribute(object_ul, v)
-                else this.addSimpleAttribute(object_ul, v)
-            })
-            // Add Closing Brace
-            this.addCloseBrace(parent, ']')
-        }
-    }
-
     addSimpleAttribute(parent, val, key='') {
-        console.warn('Simple type:', typeof val, key)
         let element = document.createElement('li')
         element.setAttribute('class', 'simple')
         parent.appendChild(element)

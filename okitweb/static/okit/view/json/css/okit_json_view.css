@@ -22,13 +22,27 @@
     margin: 0;
 }
 
-.okit-text-json-canvas ul:not(:last-child) {
+.okit-text-json-canvas li:not(:last-child)::after {
     content: ",";
+    color: black;
+    display: inline-block;
 }
 
 .okit-text-json-canvas li {
     padding-left: 1em;
     margin-top: 2px;
+}
+
+.okit-text-json-canvas1 .collapsible::before {
+    content: "ᐁ";
+    color: #2C5967;
+    display: inline-block;
+}
+
+.okit-text-json-canvas1 .collapsible.element-collapsed::before {
+    content: "ᐅ";
+    color: #2C5967;
+    display: inline-block;
 }
 
 .okit-text-json-canvas .object.collapsible:not(.element-collapsed)>label::after {
@@ -43,8 +57,20 @@
     display: inline-block;
 }
 
+.okit-text-json-canvas .object.collapsible:not(:last-child)::after {
+    content: "},";
+    color: black;
+    display: inline-block;
+}
+
 .okit-text-json-canvas .object.collapsible::after {
     content: "}";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .object.collapsible.element-collapsed:not(:last-child)::after {
+    content: "{...},";
     color: black;
     display: inline-block;
 }
@@ -67,8 +93,20 @@
     display: inline-block;
 }
 
+.okit-text-json-canvas .array.collapsible:not(:last-child)::after {
+    content: "],";
+    color: black;
+    display: inline-block;
+}
+
 .okit-text-json-canvas .array.collapsible::after {
     content: "]";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .array.collapsible.element-collapsed:not(:last-child)::after {
+    content: "[...],";
     color: black;
     display: inline-block;
 }
@@ -125,35 +163,5 @@
 
 .okit-text-json-canvas label.object {
     color: blue;
-}
-
-
-
-
-
-
-.okit-text-json-canvas1 .collapsible::before {
-    content: "-";
-    color: #336600;
-    display: inline-block;
-}
-
-.okit-text-json-canvas1 .object.collapsible:not(.element-collapsed)>label.key-displayed::after {
-    content: "{";
-    color: red;
-    display: inline-block;
-    padding-left: 10px;
-}
-
-.okit-text-json-canvas1 ul::before {
-    content: "{";
-    color: red;
-    display: inline-block;
-}
-
-.okit-text-json-canvas1 ul::after {
-    content: "}";
-    color: red;
-    display: inline-block;
 }
 
