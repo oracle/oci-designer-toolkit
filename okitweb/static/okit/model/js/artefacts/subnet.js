@@ -25,6 +25,7 @@ class Subnet extends OkitArtifact {
         this.availability_domain = '0';
         this.is_ipv6enabled = false;
         this.ipv6cidr_block = '';
+        this.dhcp_options_id = '';
         // Update with any passed data
         this.merge(data);
         this.convert();

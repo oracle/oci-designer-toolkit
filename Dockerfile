@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.21.0" \
+      "version"="0.22.1" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2021, Oracle and/or its affiliates."
 SHELL ["/bin/bash", "-c"]
@@ -21,8 +21,8 @@ ENV PYTHONIOENCODING=utf8 \
 EXPOSE 80
 EXPOSE 443
 # Copy source code
-COPY containers/oci/* /root/.oci/
-COPY containers/docker/run-server.sh /root/bin/
+# COPY containers/oci/* /root/.oci/
+# COPY containers/docker/run-server.sh /root/bin/
 # Install new yum repos
 RUN yum install -y \
     oracle-softwarecollection-release-el7 \
@@ -56,12 +56,14 @@ RUN yum install -y \
         xlsxwriter==1.3.7 \
 # Create Workspace
  && mkdir -p /github \
- && git clone https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
+ && git clone -c core.autocrlf=input https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
  && mkdir -p /okit/{log,workspace,ssl} \
+ && mkdir -p /root/bin \
  && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" \
  && ln -sv /github/oci-designer-toolkit/config /okit/config \
  && ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb \
  && ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser \
+ && ln -sv /github/oci-designer-toolkit/containers/docker/run-server.sh /root/bin/run-server.sh \
  && mkdir -p /okit/okitweb/static/okit/templates \
  && ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
  && chmod a+x /root/bin/run-server.sh

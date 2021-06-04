@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Backbone" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 161.9 162" enable-background="new 0 0 161.9 162" xml:space="preserve">
+<!-- Generator: Adobe Illustrator 24.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 42 42" style="enable-background:new 0 0 42 42;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:none;}
+	.st2{fill:#BB501C;}
+</style>
+<g>
 	<g>
-<path fill="#312D2A" d="M132.8,85.1v-9H85.5V65.5h10.8V34.8H65.6v30.7h10.9v10.6H28v9h22.5v11.4H39.2v30.7h30.7V96.5H59.6V85.1h41.9
-	v11.4H90.6v30.7h30.7V96.5h-10.8V85.1H132.8z M74.6,43.8h12.7v12.7H74.6V43.8z M60.9,118.2H48.2v-12.7h12.7V118.2z M112.3,118.2
-	H99.6v-12.7h12.7V118.2z"/>
+		<g>
+			<polygon class="st0" points="26.33,41.5 26.33,26.33 32.38,26.33 32.38,22.33 9.42,22.33 9.42,26.33 15.67,26.33 15.67,41.5 
+				0.5,41.5 0.5,26.33 6.75,26.33 6.75,22.33 0.5,22.33 0.5,19.67 19.67,19.67 19.67,15.67 13.31,15.67 13.31,0.5 28.48,0.5 
+				28.48,15.67 22.33,15.67 22.33,19.67 41.5,19.67 41.5,22.33 35.04,22.33 35.04,26.33 41.5,26.33 41.5,41.5 			"/>
+			<path class="st0" d="M27.98,1v14.17h-6.15v5H41v1.67h-6.46v5H41V41H26.83V26.83h6.04v-5H8.92v5h6.25V41H1V26.83h6.25v-5H1v-1.67
+				h19.17v-5h-6.35V1H27.98 M28.98,0h-1H13.81h-1v1v14.17v1h1h5.35v3H1H0v1v1.67v1h1h5.25v3H1H0v1V41v1h1h14.17h1v-1V26.83v-1h-1
+				H9.92v-3h21.96v3h-5.04h-1v1V41v1h1H41h1v-1V26.83v-1h-1h-5.46v-3H41h1v-1v-1.67v-1h-1H22.83v-3h5.15h1v-1V1V0L28.98,0z"/>
+		</g>
+		<g>
+			<rect x="15.48" y="2.67" style="fill:none;" width="10.83" height="10.83"/>
+			<rect x="2.67" y="28.5" style="fill:none;" width="10.83" height="10.83"/>
+			<rect x="28.5" y="28.5" style="fill:none;" width="10.83" height="10.83"/>
+			<path style="fill:#BB501C;" d="M41,21.83v-1.67H21.83v-5h6.15V1H13.81v14.17h6.35v5H1v1.67h6.25v5H1V41h14.17V26.83H8.92v-5h23.96v5h-6.04
+				V41H41V26.83h-6.46v-5H41z M13.5,28.5v10.83H2.67V28.5H13.5z M15.48,13.5V2.67h10.83V13.5H15.48z M39.33,28.5v10.83H28.5V28.5
+				H39.33z"/>
+		</g>
 	</g>
+</g>
 </svg>

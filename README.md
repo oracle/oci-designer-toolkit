@@ -1,4 +1,4 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.21.0](CHANGELOG.md#version-0.21.0)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.22.1](CHANGELOG.md#version-0.22.1)
 
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
@@ -61,8 +61,9 @@ Before building / running OKIT you will need to install [Docker / Docker Desktop
 
 #### Build Docker Container
 ```bash
-docker build --tag okit --force-rm https://github.com/oracle/oci-designer-toolkit.git
+docker build --tag okit --no-cache --force-rm https://github.com/oracle/oci-designer-toolkit.git
 ```
+_Note:_ [If you are running on Windows and see issues please follow the docker clone/build from source instructions.](documentation/Installation.md#build-from-source)
 
 #### Create / Generate Connection Information
 If you already have the OCI sdk/cli installed on you machine you can use the previously generated pem key and config file

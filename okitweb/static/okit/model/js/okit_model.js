@@ -62,6 +62,43 @@ class OkitJson {
         if (okit_json.description) {
             this.description = okit_json.description;
         }
+        // Turn Off Default Security List / Route Table Processing
+        const okitSettingsClone = JSON.clone(okitSettings);
+        okitSettings.is_default_route_table   = false;
+        okitSettings.is_default_security_list = false;
+        okitSettings.is_default_dhcp_options = false;
+        okitSettings.is_vcn_defaults = false;
+        // Load
+        for (const [key, value] of Object.entries(okit_json)) {
+            if (Array.isArray(value)) {
+                const func_name = titleCase(key.split('_').join(' ')).split(' ').join('');
+                const get_function = `get${func_name}`;
+                const new_function = `new${func_name.slice(0, -1)}`;
+                // console.warn('Functions:', get_function, new_function);
+                for (const resource of okit_json[key]) {this[new_function](resource);}
+            }
+        }
+        // Reset Default Security List / Route Table Processing
+        okitSettings.is_default_route_table   = okitSettingsClone.is_default_route_table;
+        okitSettings.is_default_security_list = okitSettingsClone.is_default_security_list;
+        okitSettings.is_default_dhcp_options = okitSettingsClone.is_default_dhcp_options;
+        okitSettings.is_vcn_defaults = okitSettingsClone.is_vcn_defaults;
+        // Check for VCN Defaults
+        this.getVirtualCloudNetworks().forEach((vcn) => {
+            if (vcn.default_route_table_id && this.getRouteTable(vcn.default_route_table_id)) this.getRouteTable(vcn.default_route_table_id).default = true;
+            if (vcn.default_security_list_id && this.getSecurityList(vcn.default_security_list_id)) this.getSecurityList(vcn.default_security_list_id).default = true;
+            if (vcn.default_dhcp_options_id && this.getDhcpOption(vcn.default_dhcp_options_id)) this.getDhcpOption(vcn.default_dhcp_options_id).default = true;
+        });
+    }
+    load1(okit_json) {
+        console.log('Load OKIT Json');
+        // Title & Description
+        if (okit_json.title) {
+            this.title = okit_json.title;
+        }
+        if (okit_json.description) {
+            this.description = okit_json.description;
+        }
         // Compartments
         if (okit_json.hasOwnProperty('compartments')) {
             for (let artefact of okit_json['compartments']) {
@@ -269,6 +306,21 @@ class OkitJson {
 
         console.log();
     }
+
+    /*
+    ** Clear Model 
+    */
+   clear() {
+        // Clear
+        this.title = "OKIT OCI Visualiser Json";
+        this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
+        this.created = getCurrentDateTime();
+        this.updated = this.created;
+        this.okit_version = okitVersion;
+        for (const [key, value] of Object.entries(this)) {
+            if (Array.isArray(value)) {this[key] = []}
+        }
+   }
 
     /*
     ** Artifact Processing
@@ -571,6 +623,7 @@ class OkitJson {
     }
 
     // IPSec Connection
+    newIpsecConnection(data) {return this.newIPSecConnection(data)}
     newIPSecConnection(data) {
         console.info('New IPSec Connection');
         this.ipsec_connections.push(new IPSecConnection(data, this));
@@ -652,6 +705,7 @@ class OkitJson {
     }
 
     // MySQL Database System
+    newMysqlDatabaseSystem(data) {return this.newMySQLDatabaseSystem(data)}
     newMySQLDatabaseSystem(data) {
         console.info('New MySQL Database System');
         this.mysql_database_systems.push(new MySQLDatabaseSystem(data, this));
@@ -679,6 +733,7 @@ class OkitJson {
     }
 
     // NAT Gateway
+    newNatGateway(data) {return this.newNATGateway(data)}
     newNATGateway(data) {
         console.info('New NAT Gateway');
         this.nat_gateways.push(new NATGateway(data, this));
@@ -1041,6 +1096,7 @@ class OkitArtifact {
     get resource_name() {return this.getArtifactReference();}
     get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
+    set json_model_list(list) {this.okit_json[this.list_name] = list;}
 
     /*
     ** Clone Functionality
@@ -1092,10 +1148,10 @@ class OkitArtifact {
     ** Delete Processing
      */
     delete() {
-        console.log('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
+        console.info('Delete (Default) ' + this.getArtifactReference() + ' : ' + this.id);
+        this.json_model_list = this.json_model_list.filter((e) => e.id != this.id)
         // Delete Child Artifacts
         this.deleteChildren();
-        console.log();
     }
 
     deleteChildren() {

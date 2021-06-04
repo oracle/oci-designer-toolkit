@@ -62,8 +62,19 @@ function loadPropertiesSheet(json_element) {
         } else if ($(jqId(key)).is("input:text")) {                     // Text
             console.info(key + ' is input:text.');
             $(jqId(key)).val(val);
+            // $(jqId(key)).on('blur', () => {
+            //     $(jqId(key))[0].reportValidity();
+            // });
             $(jqId(key)).on('input', () => {
-                json_element[key] = $(jqId(key)).val();
+                const pattern = $(jqId(key)).attr('pattern');
+                const input_val = $(jqId(key)).val()
+                if (pattern) {
+                    const regex = new RegExp(pattern)
+                    console.info(key, 'Matches', pattern, regex.test(input_val))
+                    if (!regex.test(input_val)) return false
+                }
+                if (Array.isArray(val)) json_element[key] = $(jqId(key)).val().split(',');
+                else json_element[key] = $(jqId(key)).val();
                 if (key === 'display_name' || key === 'name') {
                     json_element['display_name'] = json_element[key];
                     json_element['name'] = json_element[key];

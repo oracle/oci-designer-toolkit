@@ -1,6 +1,6 @@
 {
   "name": "okitweb",
-  "version": "0.21.0",
+  "version": "0.22.1",
   "description": "OKIT Web application",
   "scripts": {},
   "author": "Oracle",
@@ -8,6 +8,6 @@
   "private": true,
   "dependencies": {
     "d3": "5.15",
-    "jquery": "3.4.1"
+    "jquery": "3.6.0"
   }
 }

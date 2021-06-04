@@ -15,8 +15,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         this.palette_svg = palette_svg;
     }
 
-    static newView(model, parent_id, palette = []) {
-        return new OkitDesignerJsonView((model, parent_id, palette))
+    static newView(model, oci_data=null, resource_icons=[], parent_id = 'canvas-div') {
+        return new OkitDesignerJsonView((model, parent_id, resource_icons))
     }
 
     get display_grid() {return okitSettings.is_display_grid;}
@@ -103,6 +103,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let security_list of this.security_lists) {
             security_list.draw();
         }
+        // Dhcp Options
+        if (this.dhcp_options) {for (let dhcp_option of this.dhcp_options) {dhcp_option.draw();}}
         // Network Security Groups
         for (let network_security_group of this.network_security_groups) {
             network_security_group.draw();
@@ -129,6 +131,10 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let instance of this.instances) {
             instance.draw();
         }
+        // Analytics Instances
+        if (this.analytics_instances) {for (let instance of this.analytics_instances) {instance.draw();}}
+        // Integration Instances
+        if(this.integration_instances) {for (let instance of this.integration_instances) {instance.draw();}}
         // Instance Pools
         for (let instance_pool of this.instance_pools) {
             instance_pool.draw();
@@ -275,7 +281,8 @@ class OkitDesignerJsonView extends OkitJsonView {
             defs.append('g')
                 .attr("id", defid)
                 //.attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
-                .attr("transform", "translate(-1, -1) scale(0.29, 0.29)")
+                // .attr("transform", "translate(-1, -1) scale(0.29, 0.29)")
+                .attr("transform", "translate(4.5, 4.5) scale(0.8, 0.8)")
                 .html(this.palette_svg[key]);
         }
         // Add Connector Markers
@@ -404,6 +411,8 @@ class OkitContainerDesignerArtefactView extends OkitContainerArtefactView {
         super(artefact, json_view);
     }
 }
+
+okitViewClasses.push(OkitDesignerJsonView);
 
 $(document).ready(function() {
     okitJsonView = new OkitDesignerJsonView();

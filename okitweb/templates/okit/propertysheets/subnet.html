@@ -8,7 +8,7 @@
 
 {% block required_properties_table_rows_block %}
     {{ properties_input('Virtual Cloud Network', 'vcn_id', type='select') }}
-    <div class='tr'><div class='td'>CIDR</div><div class='td'><input type="text" id="cidr_block" name="cidr_block" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>CIDR</div><div class='td'><input type="text" id="cidr_block" name="cidr_block" class="okit-property-value" pattern="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$" title="CIDR block" onblur="this.reportValidity();"></div></div>
 {% endblock %}
 
 {% block optional_properties_table_rows_block %}
@@ -22,8 +22,9 @@
     <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="prohibit_public_ip_on_vnic" name="prohibit_public_ip_on_vnic" value="false">Private</label></div></div>
     <div class='tr'><div class='td'>Route Table</div><div class='td'><select id="route_table_id" class="okit-property-value"></select></div></div>
     <div class='tr'><div class='td'>Security List</div><div class='td'><div id="security_list_ids" class="okit-multiple-select"></div></div></div>
+    <div class='tr'><div class='td'>Dhcp Options</div><div class='td'><select id="dhcp_options_id" class="okit-property-value"></select></div></div>
     <div class='tr'><div class='td'></div><div class='td'><input type="checkbox" id="is_ipv6enabled" name="is_ipv6enabled" value="false"><label>IPV6 Enabled</label></div></div>
-    <div class='tr'><div class='td'>IPv6 CIDR</div><div class='td'><input type="text" id="ipv6cidr_block" name="ipv6cidr_block" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>IPv6 CIDR</div><div class='td'><input type="text" id="ipv6cidr_block" name="ipv6cidr_block" class="okit-property-value" pattern="^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7}$" title="IPv6 CIDR block" onblur="this.reportValidity();"></div></div>
 {% endblock %}
 
 {% block optional_properties_block %}{% endblock %}

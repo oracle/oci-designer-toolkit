@@ -34,19 +34,23 @@
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_views.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/okit_designer_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tabular/js/okit_tabular_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/relationship/js/okit_relationship_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_view_layout.js') }}"></script>
     <script type="text/javascript">
         let palette_svg = {}
+        let resource_icon_files = {}
         let xmlSerialiser = new XMLSerializer();
         {% for palette_icon_group in palette_icon_groups %}
             {% for palette_icon in palette_icon_group['icons'] %}
                 palette_svg["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
+                resource_icon_files["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
                 $.ajax({
                     type: 'get',
                     url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
@@ -54,8 +58,27 @@
                     success: function(xml) {
                         console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
                         let g = $(xml).find("g");
+                        let svg = $(xml).find("svg");
+                        let style = $(xml).find("style");
                         g[0].removeAttribute('transform');
                         palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
+                        // palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(svg[0]);
+                        if (style.length > 0) {
+                            if (style[0].sheet) {
+                                for (let rule of style[0].sheet.cssRules) {
+                                    const fromStr = `class="${rule.selectorText.substring(1)}"`
+                                    const toStr = `style="${rule.style.cssText}"`
+                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                }
+                            } else {
+                                for (let rule of style[0].textContent.split('\n\t').filter((r) => r !== '')) {
+                                    const fromStr = `class="${rule.substring(1, rule.indexOf('{')).trim()}"`
+                                    const cssText = rule.substring(rule.indexOf('{') + 1, rule.indexOf('}')).trim()
+                                    const toStr = `style="${cssText}"`
+                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                }
+                            }
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.groupCollapsed("{{ 'Error Loading ' + palette_icon['svg'] }}");
@@ -66,6 +89,11 @@
                 });
             {% endfor %}
         {% endfor %}
+        const resource_icons_svg = palette_svg;
+        const resource_icons = {
+            svg: palette_svg,
+            files: resource_icon_files
+        }
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_svg.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_drag_drop.js') }}"></script>
@@ -155,6 +183,11 @@
             </li>
             <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToCompartmentView()">Designer</a></li>
             <li><a id="view-tabular-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToTabularView()">Tabular</a></li>
+            <li><a id="view-relationship-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToRelationshipView()">Relationship</a></li>
+            {% if experimental_mode %}
+            <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToNetworkView()">Network (Experimental)</a></li>
+            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToSecurityView()">Security (Experimental)</a></li>
+            {% endif %}
         </ul>
         <ul class="okit-navigation-sub-list">
             <li>
@@ -244,7 +277,7 @@
                               onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();">Icons & Text</label>
             </div>
             {% for palette_icon_group in palette_icon_groups %}
-                {% if palette_icon_group['name'] != 'Hidden' %}
+                {% if palette_icon_group['name'] != 'Hidden' and palette_icon_group['name'] != 'Svg'%}
                     <details  id="{{ palette_icon_group['name'] }}" class="okit-palette-icon-group" open>
                         <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label></summary>
                         <div class="okit-palette-icon-group-icons okit-icons-only">
@@ -294,6 +327,7 @@
         <div id="tabular-div" class="okit-tabular-canvas hidden"></div>
         <div id="network-div" class="okit-tabular-canvas hidden"></div>
         <div id="security-div" class="okit-tabular-canvas hidden"></div>
+        <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
     </div>
     <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>

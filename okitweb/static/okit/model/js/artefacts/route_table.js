@@ -18,6 +18,7 @@ class RouteTable extends OkitArtifact {
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         this.route_rules = [];
+        this.default = false;
         // Update with any passed data
         this.merge(data);
         this.convert();

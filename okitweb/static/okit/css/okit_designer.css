@@ -210,12 +210,40 @@
 
 .okit-tabular-canvas {
     display: block;
+    background: #fff;
     padding: 0;
     margin: 0;
     height: 100%;
     width: 100%;
     overflow: scroll;
 }
+
+.okit-relationship-canvas {
+    display: block;
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+}
+
+.okit-relationship-canvas line.links {
+    stroke: #2C5967;
+}
+
+.okit-relationship-canvas rect {
+    /* fill: #99b6d3; */
+    fill: none;
+    stroke-width: 1.5px;
+}
+
+.okit-relationship-canvas text {
+    font-family: sans-serif;
+    font-size: 20px;
+    fill: #000;
+}
+
 .okit-svg-canvas {
     display: block;
     padding: 0;
@@ -270,6 +298,27 @@
     min-width: 250px;
     border-left: #aeaeae 1px solid;
     transition: all 0.25s;
+}
+
+.okit-property-editor {
+}
+
+.okit-resource-properties-panel {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.okit-resource-properties-panel .okit-tab-contents {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.okit-resource-properties-panel .okit-tab-contents textarea {
+    height: calc(100vh - 200px);
 }
 
 .okit-property-sheet {

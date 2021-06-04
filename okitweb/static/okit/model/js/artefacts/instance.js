@@ -97,12 +97,13 @@ class Instance extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Load Balancer references
-        for (let load_balancer of this.getOkitJson().load_balancers) {
-            for (let i = 0; i < load_balancer.instance_ids.length; i++) {
-                if (load_balancer.instance_ids[i] === this.id) {
-                    load_balancer.instance_ids.splice(i, 1);
-                }
-            }
+        for (let load_balancer of this.getOkitJson().getLoadBalancers()) {
+            load_balancer.instance_ids = load_balancer.instance_ids.filter((id) => id != this.id)
+            // for (let i = 0; i < load_balancer.instance_ids.length; i++) {
+            //     if (load_balancer.instance_ids[i] === this.id) {
+            //         load_balancer.instance_ids.splice(i, 1);
+            //     }
+            // }
         }
     }
 

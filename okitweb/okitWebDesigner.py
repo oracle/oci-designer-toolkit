@@ -33,6 +33,7 @@ from flask import session
 from flask import url_for
 
 import json
+from common.okitCommon import jsonToFormattedString
 from common.okitCommon import logJson
 from common.okitCommon import readJsonFile
 from common.okitCommon import standardiseIds
@@ -244,6 +245,7 @@ def designer():
 
     config_sections = {"sections": readConfigFileSections()}
     logger.debug('Config Sections {0!s:s}'.format(config_sections))
+    logger.debug(jsonToFormattedString(palette_icon_groups))
 
     #Render The Template
     return render_template('okit/okit_designer.html',
