@@ -276,7 +276,7 @@ class OCIJsonValidator(object):
                     'type': 'Instance',
                     'artefact': artefact['display_name'],
                     'message': f'Boot Volume Size must between 50GB and 32,768GB',
-                    'element': 'ssh_authorized_keys'
+                    'element': 'boot_volume_size_in_gbs'
                 }
                 self.results['errors'].append(error)
 
