@@ -79,12 +79,6 @@ resource "oci_core_network_security_group_security_rule" "{{ resource_name }}_Ru
         {% endif %}
         }
     {% endif %}
-{% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags | safe }}
-{% endif %}
-{% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags | safe }}
-{% endif %}
 }
 
 locals {
