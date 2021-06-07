@@ -1,10 +1,24 @@
 # Release Notes
 
 
+## Version 0.23.0
+**Release Date**: 16th June 2021
+### Features
+1. Json View to allow user to see model.
+
+### Bug Fixes
+1. GitHub Issue #316 : OKIT attempts to add defined_tags to oci_core_network_security_group_security_rule
+2. Remove spurious variables.
+3. Fix invalid local dchp variable name when not using default.
+4. Resolve space in output variable name.
+
+
 ## Version 0.22.1
 **Release Date**: 26th May 2021
 ### Bug Fixes
 1. Resolve display issue with new icon when running FireFox
+
+
 
 ## Version 0.22.0
 **Release Date**: 26th May 2021
