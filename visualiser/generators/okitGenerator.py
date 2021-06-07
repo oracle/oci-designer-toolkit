@@ -845,7 +845,7 @@ class OCIGenerator(object):
             #    self.removeJinja2Variable("nsg_ids")
             # ---- Metadata
             # ----- Authorised Public SSH Keys
-            self.addJinja2Variable("ssh_authorized_keys", instance["metadata"]["ssh_authorized_keys"], standardisedName)
+            self.addJinja2Variable("ssh_authorized_keys", instance["metadata"]["ssh_authorized_keys"].replace('\n',''), standardisedName)
             # ----- Cloud Init YAML
             self.addJinja2Variable("user_data", instance["metadata"]["user_data"].replace('\n', '\\n').replace('"', '\\"'), standardisedName)
             # ---- Volume Attachments
