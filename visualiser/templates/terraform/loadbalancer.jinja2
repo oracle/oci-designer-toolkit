@@ -39,11 +39,11 @@ locals {
     {{ resource_name }}_url           = format("http://%s", oci_load_balancer_load_balancer.{{ resource_name }}.ip_address_details[0]["ip_address"])
 }
 
-output "{{ output_name }}IPAddress" {
+output "{{ resource_name }}IPAddress" {
     value = local.{{ resource_name }}_ip_address
 }
 
-output "{{ output_name }}URL" {
+output "{{ resource_name }}URL" {
     value = format("http://%s", local.{{ resource_name }}_ip_address)
 }
 

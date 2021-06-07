@@ -92,11 +92,11 @@ locals {
     {{ resource_name }}_private_ip    = oci_core_instance.{{ resource_name }}.private_ip
 }
 
-output "{{ output_name }}PublicIP" {
+output "{{ resource_name }}PublicIP" {
     value = local.{{ resource_name }}_public_ip
 }
 
-output "{{ output_name }}PrivateIP" {
+output "{{ resource_name }}PrivateIP" {
     value = local.{{ resource_name }}_private_ip
 }
 
