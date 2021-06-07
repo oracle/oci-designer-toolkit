@@ -591,11 +591,11 @@ class OCIGenerator(object):
             if dhcp_option["server_type"] != '':
                 jinja2_dhcp_option["server_type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_server_type'.format(option_cnt), dhcp_option["server_type"], standardisedName)
             # ------ Custom DNS Servers
-            if dhcp_option["custom_dns_servers"] != '':
-                jinja2_dhcp_option["custom_dns_servers"] = self.generateJinja2Variable('dhcp_option_{0:02d}_custom_dns_servers'.format(option_cnt), dhcp_option["custom_dns_servers"], standardisedName)
+            if len(dhcp_option["custom_dns_servers"]) > 0:
+                jinja2_dhcp_option["custom_dns_servers"] = self.generateJinja2Variable('dhcp_option_{0:02d}_custom_dns_servers'.format(option_cnt), '","'.join(dhcp_option["custom_dns_servers"]), standardisedName)
             # ------ Domain Names
-            if dhcp_option["search_domain_names"] != '':
-                jinja2_dhcp_option["search_domain_names"] = self.generateJinja2Variable('dhcp_option_{0:02d}_search_domain_names'.format(option_cnt), dhcp_option["search_domain_names"], standardisedName)
+            if len(dhcp_option["search_domain_names"]) > 0:
+                jinja2_dhcp_option["search_domain_names"] = self.generateJinja2Variable('dhcp_option_{0:02d}_search_domain_names'.format(option_cnt), '","'.join(dhcp_option["search_domain_names"]), standardisedName)
             # Add to Dhpc Option used for Jinja template
             jinja2_dhcp_options.append(jinja2_dhcp_option)
             # Increment option number
@@ -853,8 +853,8 @@ class OCIGenerator(object):
             jinja2_volume_attachments = []
             for block_storage_volume_id in instance.get('block_storage_volume_ids', []):
                 # ------ Block Storage Volume
-                variableName = '{0:s}_volume_attachment_{1:02d}_block_storage_volume_id'.format(standardisedName, attachment_number)
-                self.run_variables[variableName] = block_storage_volume_id
+                # variableName = '{0:s}_volume_attachment_{1:02d}_block_storage_volume_id'.format(standardisedName, attachment_number)
+                # self.run_variables[variableName] = block_storage_volume_id
                 jinja2_volume_attachment = {
                     "attachment_type": '"iscsi"',
                     "block_storage_volume_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume_id]))
@@ -1227,11 +1227,12 @@ class OCIGenerator(object):
         jinja2_security_rules = []
         for rule in network_security_group.get('security_rules', []):
             # ------ Protocol
-            variableName = '{0:s}_security_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["protocol"]
-            jinja2_security_rule = {
-                "protocol": self.formatJinja2Variable(variableName)
-            }
+            # variableName = '{0:s}_security_rule_{1:02d}_protocol'.format(standardisedName, rule_number)
+            # self.run_variables[variableName] = rule["protocol"]
+            jinja2_security_rule = {}
+            #     "protocol": self.formatJinja2Variable(variableName)
+            # }
+            jinja2_security_rule["protocol"] = self.generateJinja2Variable('security_rule_{0:02d}_protocol'.format(rule_number), rule["protocol"], standardisedName)
             # ------ TCP Options (Protocol 6)
             if rule["protocol"] == '6' and 'tcp_options' in rule and rule["tcp_options"] is not None:
                 tcp_options = self.renderSecurityListRuleOptions(rule, 'tcp_options', standardisedName, rule_number, 'security')
@@ -1245,31 +1246,37 @@ class OCIGenerator(object):
                 icmp_options = self.renderSecurityListRuleOptions(rule, 'icmp_options', standardisedName, rule_number, 'security')
                 jinja2_security_rule["icmp_options"] = icmp_options
             # ------ Direction
-            variableName = '{0:s}_security_rule_{1:02d}_direction'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule["direction"]
-            jinja2_security_rule["direction"] = self.formatJinja2Variable(variableName)
+            # variableName = '{0:s}_security_rule_{1:02d}_direction'.format(standardisedName, rule_number)
+            # self.run_variables[variableName] = rule["direction"]
+            # jinja2_security_rule["direction"] = self.formatJinja2Variable(variableName)
+            jinja2_security_rule["direction"] = self.generateJinja2Variable('security_rule_{0:02d}_direction'.format(rule_number), rule["direction"], standardisedName)
             if rule["direction"] == 'INGRESS':
                 # ------ Source
-                variableName = '{0:s}_security_rule_{1:02d}_source'.format(standardisedName, rule_number)
-                self.run_variables[variableName] = rule["source"]
-                jinja2_security_rule["source"] = self.formatJinja2Variable(variableName)
+                # variableName = '{0:s}_security_rule_{1:02d}_source'.format(standardisedName, rule_number)
+                # self.run_variables[variableName] = rule["source"]
+                # jinja2_security_rule["source"] = self.formatJinja2Variable(variableName)
+                jinja2_security_rule["source"] = self.generateJinja2Variable('security_rule_{0:02d}_source'.format(rule_number), rule["source"], standardisedName)
                 # ------ Source Type
-                variableName = '{0:s}_security_rule_{1:02d}_source_type'.format(standardisedName, rule_number)
-                self.run_variables[variableName] = rule["source_type"]
-                jinja2_security_rule["source_type"] = self.formatJinja2Variable(variableName)
+                # variableName = '{0:s}_security_rule_{1:02d}_source_type'.format(standardisedName, rule_number)
+                # self.run_variables[variableName] = rule["source_type"]
+                # jinja2_security_rule["source_type"] = self.formatJinja2Variable(variableName)
+                jinja2_security_rule["source_type"] = self.generateJinja2Variable('security_rule_{0:02d}_source_type'.format(rule_number), rule["source_type"], standardisedName)
             else:
                 # ------ Destination
-                variableName = '{0:s}_security_rule_{1:02d}_destination'.format(standardisedName, rule_number)
-                self.run_variables[variableName] = rule["destination"]
-                jinja2_security_rule["destination"] = self.formatJinja2Variable(variableName)
+                # variableName = '{0:s}_security_rule_{1:02d}_destination'.format(standardisedName, rule_number)
+                # self.run_variables[variableName] = rule["destination"]
+                # jinja2_security_rule["destination"] = self.formatJinja2Variable(variableName)
+                jinja2_security_rule["destination"] = self.generateJinja2Variable('security_rule_{0:02d}_destination'.format(rule_number), rule["destination"], standardisedName)
                 # ------ Destination Type
-                variableName = '{0:s}_security_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
-                self.run_variables[variableName] = rule["destination_type"]
-                jinja2_security_rule["destination_type"] = self.formatJinja2Variable(variableName)
+                # variableName = '{0:s}_security_rule_{1:02d}_destination_type'.format(standardisedName, rule_number)
+                # self.run_variables[variableName] = rule["destination_type"]
+                # jinja2_security_rule["destination_type"] = self.formatJinja2Variable(variableName)
+                jinja2_security_rule["destination_type"] = self.generateJinja2Variable('security_rule_{0:02d}_destination_type'.format(rule_number), rule["destination_type"], standardisedName)
             # ------ Description
-            variableName = '{0:s}_security_rule_{1:02d}_description'.format(standardisedName, rule_number)
-            self.run_variables[variableName] = rule.get("description", "Egress Rule {0:02d}".format(rule_number))
-            jinja2_security_rule["description"] = self.formatJinja2Variable(variableName)
+            # variableName = '{0:s}_security_rule_{1:02d}_description'.format(standardisedName, rule_number)
+            # self.run_variables[variableName] = rule.get("description", "Egress Rule {0:02d}".format(rule_number))
+            # jinja2_security_rule["description"] = self.formatJinja2Variable(variableName)
+            jinja2_security_rule["description"] = self.generateJinja2Variable('security_rule_{0:02d}_description'.format(rule_number), rule["description"], standardisedName)
             # Add to Egress Rules used for Jinja template
             jinja2_security_rules.append(jinja2_security_rule)
             # Increment rule number
@@ -1708,7 +1715,7 @@ class OCIGenerator(object):
             self.jinja2_variables.pop("security_list_ids", None)
         # ---- DHCP Options
         if 'dhcp_options_id' in subnet and len(subnet['dhcp_options_id']):
-            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(subnet['dhcp_options_id']))
+            self.jinja2_variables["dhcp_options_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet['dhcp_options_id']]))
         else:
             self.jinja2_variables["dhcp_options_id"] = self.formatJinja2DhcpReference(self.standardiseResourceName(self.id_name_map[subnet['vcn_id']]))
         # --- Optional
