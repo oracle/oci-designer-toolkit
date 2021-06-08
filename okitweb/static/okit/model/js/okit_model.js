@@ -1088,6 +1088,8 @@ class OkitArtifact {
                 return okitjson;
             }
         });
+        // Read Only flag to indicate that we should not create this Resource
+        this.read_only = false;
     }
 
     get name() {return this.display_name;}
