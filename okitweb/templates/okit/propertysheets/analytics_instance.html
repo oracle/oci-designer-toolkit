@@ -4,6 +4,27 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 {% block title_block %}Analytics Instance{% endblock %}
-{% block required_properties_table_rows_block %}{% endblock %}
-{% block optional_properties_table_rows_block %}{% endblock %}
+{% block required_properties_table_rows_block %}
+    {{ properties_input('Capacity Type', 'capacity_type', type='select', data={"options": ["OLPU_COUNT", "USER_COUNT"]}) }}
+    {{ properties_input('Capacity Value', 'capacity_value', type='number') }}
+    {{ properties_input('Feature Set', 'feature_set', type='select', data={"options": ["SELF_SERVICE_ANALYTICS", "ENTERPRISE_ANALYTICS"]}) }}
+    {{ properties_input('IDCS Access Token', 'idcs_access_token', type='text') }}
+    {{ properties_input('License', 'license_type', type='select', data={"options": ["LICENSE_INCLUDED", "BRING_YOUR_OWN_LICENSE"]}) }}
+{% endblock %}
+{% block optional_properties_table_rows_block %}
+    {{ properties_input('Description', 'description', type='text') }}
+    {{ properties_input('Notification Email', 'email_notification', type='email') }}
+    {{ properties_input('Network Endpoint Type', 'network_endpoint_type', type='select', data={"options": ["", "PUBLIC", "PRIVATE"]}) }}
+    {{ properties_input('Vcn', 'vcn_id', type='select', collapsed=True) }}
+    {{ properties_input('Subnet', 'subnet_id', type='select', collapsed=True) }}
+    {{ properties_input('Whitelist Ips', 'whitelisted_ips', type='text', collapsed=True) }}
+    <div id='whitelisted_vcns_row' class='tr collapsed'><div class='td'>Whitelist Vcn</div><div class='td'>
+        <div id="whitelisted_vcns_table" class="table okit-table okit-properties-table okit-dynamic-table">
+            <div class="thead">
+                <div class="tr"><div class="th"></div><div class="th"><button type="button" id="add_whitelisted_vcns" class="okit-add-button">+</button></div></div>
+            </div>
+            <div class="tbody" id="whitelisted_vcns_body"></div>
+        </div>
+    </div></div>
+{% endblock %}
 {% block optional_properties_block %}{% endblock %}
