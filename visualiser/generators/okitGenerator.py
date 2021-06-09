@@ -632,6 +632,11 @@ class OCIGenerator(object):
         # Process Route Table Data
         logger.info('Processing Dhcp Options Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['id']]))
         # --- Required
         # ---- Check if Default Dhcp Options
         if resource.get("default", False): # Is it valid to replace the default DHCP Options

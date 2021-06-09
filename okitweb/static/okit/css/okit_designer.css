@@ -423,6 +423,14 @@ rect.highlight-properties {
     stroke-opacity: 1;
 }
 
+.read-only > use > path {
+    fill: red !important;
+}
+
+.read-only1 > use path {
+    fill: #312D2A !important;
+}
+
 /*
 ** Cost Estimate and Value Proposition
  */
