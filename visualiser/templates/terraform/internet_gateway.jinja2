@@ -1,4 +1,16 @@
 
+{% if read_only %}
+# ------ Read Internet Gateway
+data "oci_core_internet_gateways" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid }}
+    {{ resource_name }}_ocid = {{ ocid }}
+}
+{% else %}
 # ------ Create Internet Gateway
 resource "oci_core_internet_gateway" "{{ resource_name }}" {
     # Required
@@ -18,3 +30,4 @@ resource "oci_core_internet_gateway" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_core_internet_gateway.{{ resource_name }}.id
 }
+{% endif %}

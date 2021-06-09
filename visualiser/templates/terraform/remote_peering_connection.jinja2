@@ -1,4 +1,16 @@
 
+{% if read_only %}
+# ------ Read Remote Peering Connection
+data "oci_core_remote_peering_connections" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid }}
+    {{ resource_name }}_ocid = {{ ocid }}
+}
+{% else %}
 # ------ Create Remote Peering Connection
 resource "oci_core_remote_peering_connection" "{{ resource_name }}" {
     # Required
@@ -23,3 +35,4 @@ resource "oci_core_remote_peering_connection" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_core_remote_peering_connection.{{ resource_name }}.id
 }
+{% endif %}

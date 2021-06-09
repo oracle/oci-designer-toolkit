@@ -1,3 +1,16 @@
+
+{% if read_only %}
+# ------ Read OKE Cluster
+data "oci_containerengine_clusters" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid }}
+    {{ resource_name }}_ocid = {{ ocid }}
+}
+{% else %}
 # ------ Create OKE Cluster
 resource "oci_containerengine_cluster" "{{ resource_name }}" {
     #Required
@@ -104,4 +117,4 @@ resource "oci_containerengine_node_pool" "{{ resource_name }}NodePool{{ loop.ind
 {% endif %}
 }
 {% endfor %}
-
+{% endif %}

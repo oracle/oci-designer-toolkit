@@ -1,4 +1,17 @@
 
+{% if read_only %}
+# ------ Read Instance Pool
+data "oci_core_instance" "{{ resource_name }}" {
+    # Required
+    instance_id = {{ ocid }}
+}
+
+locals {
+    {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
+    {{ resource_name }}_public_ip     = oci_core_instance.{{ resource_name }}.public_ip
+    {{ resource_name }}_private_ip    = oci_core_instance.{{ resource_name }}.private_ip
+}
+{% else %}
 # ------ Get List Images
 data "oci_core_images" "{{ resource_name }}Images" {
     compartment_id           = {{ compartment_ocid }}
@@ -143,4 +156,4 @@ resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.in
     display_name = {{ vnic.display_name | safe }}
 }
 {% endfor %}
-
+{% endif %}

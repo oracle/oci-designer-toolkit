@@ -1,4 +1,11 @@
 
+{% if read_only %}
+# ------ Read Cross Connect Group
+data "oci_core_cross_connect_group" "{{ resource_name }}" {
+    # Required
+    cross_connect_group_id = {{ ocid }}
+}
+{% else %}
 # ------ Create Cross Connect
 resource "oci_core_cross_connect_group" "{{ resource_name }}" {
     #Required
@@ -18,6 +25,7 @@ resource "oci_core_cross_connect_group" "{{ resource_name }}" {
     freeform_tags              = {{ freeform_tags | safe }}
 {% endif %}
 }
+{% endif %}
 
 locals {
     {{ resource_name }}_id = oci_core_cross_connect_group.{{ resource_name }}.id
