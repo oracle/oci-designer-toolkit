@@ -3,6 +3,11 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  */
 
+div.tree-view {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
 rect.okit-explorer-view-highlight {
     fill: #336600;
 }
