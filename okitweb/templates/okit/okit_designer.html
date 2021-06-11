@@ -57,7 +57,7 @@
                     url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
                     dataType: 'xml',
                     success: function(xml) {
-                        console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
+                        // console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
                         let g = $(xml).find("g");
                         let svg = $(xml).find("svg");
                         let style = $(xml).find("style");

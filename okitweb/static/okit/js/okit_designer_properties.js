@@ -47,24 +47,21 @@ let warning_properties = [];
 function loadPropertiesSheet(json_element) {
     console.log('Loading Properties');
     $.each(json_element, function(key, val) {
-        console.info('Key : ' + key + ' = ' + val);
+        // console.info('Key : ' + key + ' = ' + val);
         if (val == null) {
-            console.info('Ignoring NULL Property ' + key);
+            // console.info('Ignoring NULL Property ' + key);
             return true;
         } else if (Array.isArray(val) && val.some((e) => {return (typeof e === 'object')})) {
-            console.info('Ignoring Object Array Property ' + key);
+            // console.info('Ignoring Object Array Property ' + key);
         } else if (typeof val === 'object' && !Array.isArray(val)) {
-            console.info('Processing Object Property ' + key);
+            // console.info('Processing Object Property ' + key);
             loadPropertiesSheet(val);
         } else if (typeof val === 'function') {
-            console.info('Ignoring Function Property ' + key);
+            // console.info('Ignoring Function Property ' + key);
             return true;
         } else if ($(jqId(key)).is("input:text")) {                     // Text
-            console.info(key + ' is input:text.');
+            // console.info(key + ' is input:text.');
             $(jqId(key)).val(val);
-            // $(jqId(key)).on('blur', () => {
-            //     $(jqId(key))[0].reportValidity();
-            // });
             $(jqId(key)).on('input', () => {
                 const pattern = $(jqId(key)).attr('pattern');
                 const input_val = $(jqId(key)).val()
@@ -83,17 +80,17 @@ function loadPropertiesSheet(json_element) {
                 }
             });
         } else if ($(jqId(key)).is('input[type="number"]')) {                     // Number
-            console.info(key + ' is input:number.');
+            // console.info(key + ' is input:number.');
             $(jqId(key)).val(val);
             $(jqId(key)).on('input', () => {
                 json_element[key] = $(jqId(key)).val();
             });
         } else if ($(jqId(key)).is("input:checkbox")) {                // CheckBox
-            console.info(key + ' is input:checkbox.');
+            // console.info(key + ' is input:checkbox.');
             $(jqId(key)).on('input', () => {json_element[key] = $(jqId(key)).is(':checked'); redrawSVGCanvas();});
             $(jqId(key)).attr('checked', val);
         } else if ($(jqId(key)).is('div[class="okit-multiple-select"]')) { // Multiple Select
-            console.info(key + ' is multiple select with value ' + val);
+            // console.info(key + ' is multiple select with value ' + val);
             $(jqId(key)).find("input:checkbox").each(function() {
                 $(this).on('input', () => {
                     json_element[key] = [];
@@ -105,7 +102,7 @@ function loadPropertiesSheet(json_element) {
                 if (val.includes($(this).val())) {$(this).prop("checked", true);}
             });
         } else if ($(jqId(key)).is("select")) {                        // Select
-            console.info(key + ' is select with value ' + val);
+            // console.info(key + ' is select with value ' + val);
             $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val() ? $(jqId(key)).val() : ''; $(jqId(key)).removeClass('okit-warning'); redrawSVGCanvas(true);});
             $(jqId(key)).val(val);
             if (!$(jqId(key)).val() && !Array.isArray(val) && String(val).trim() !== '') {
@@ -122,17 +119,17 @@ function loadPropertiesSheet(json_element) {
             if (key.endsWith('_id')) {
                 // Get Artifact Associated With Id
                 let artefact_type = key.substr(0, (key.length - 3));
-                console.info('Label : Artifact Type ' + titleCase(artefact_type) + ' - ' + key);
+                // console.info('Label : Artifact Type ' + titleCase(artefact_type) + ' - ' + key);
                 $(jqId(key)).html(okitJsonView['get' + titleCase(artefact_type)](val).display_name);
             } else {
                 $(jqId(key)).html(val);
             }
         } else if ($(jqId(key)).is("textarea")) {                     // Text Area
-            console.info(key + ' is textarea.');
+            // console.info(key + ' is textarea.');
             $(jqId(key)).val(val);
             $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val();});
         } else if ($(jqId(key)).is("div")) {
-            console.info(key + ' is div.');
+            // console.info(key + ' is div.');
             loadPropertiesSheet(val);
         } else {
             console.info(`Ignoring Property ${key} No Corresponding HTML Element Found.`);
