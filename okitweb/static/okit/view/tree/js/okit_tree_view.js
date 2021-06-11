@@ -120,7 +120,7 @@ class OkitJsonTreeView extends OkitJsonView {
         const root_ul = tree_div.append('ul')
             .attr('id', 'design_root_ul')
             .attr('class', '')
-        this.getOkitJson().getCompartments().filter((comp) => comp.compartment_id === undefined || comp.compartment_id === 'canvas').forEach((comp, idx) => {
+        this.getOkitJson().getCompartments().filter((comp) => comp.compartment_id === undefined || comp.compartment_id === null || comp.compartment_id === 'canvas').forEach((comp, idx) => {
             const ul = this.addCollapsibleTreeElement(root_ul, `${idx}_${comp.id}_root`, 'compartment-tree-view', comp.display_name, this.design_prefix);
             this.addDesignTreeChildren(ul, comp.id, comp.id, this.design_prefix)
         })
@@ -171,7 +171,7 @@ class OkitJsonTreeView extends OkitJsonView {
         const root_ul = tree_div.append('ul')
             .attr('id', 'compartment_root_ul')
             .attr('class', '')
-        this.getOkitJson().getCompartments().filter((comp) => comp.compartment_id === undefined || comp.compartment_id === 'canvas').forEach((comp, idx) => {
+        this.getOkitJson().getCompartments().filter((comp) => comp.compartment_id === undefined || comp.compartment_id === null || comp.compartment_id === 'canvas').forEach((comp, idx) => {
             const ul = this.addCollapsibleTreeElement(root_ul, `${idx}_${comp.id}_root`, 'compartment-tree-view', comp.display_name, this.compartment_prefix);
             this.addCompartmentTreeChildren(ul, comp.id, this.compartment_prefix)
         })

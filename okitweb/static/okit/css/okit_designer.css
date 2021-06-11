@@ -161,7 +161,6 @@
 .okit-tab-contents {
     display: block;
     width: 100%;
-    margin: 2px;
     overflow-x: auto;
     white-space: nowrap;
     flex-wrap: nowrap;
