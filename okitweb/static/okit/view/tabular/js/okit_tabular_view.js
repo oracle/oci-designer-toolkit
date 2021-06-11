@@ -174,11 +174,12 @@ class OkitTabularJsonView extends OkitJsonView {
             .attr('class', 'okit-tab-contents')
             .attr('id', 'tabular_view_tab_contents')
         // Loop through Model elements and create and create a tab for each
-        Object.entries(this.okitjson).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                if (value.length) this.addTab(tabbar, key);
-            }
-        })
+        // Object.entries(this.okitjson).forEach(([key, value]) => {
+        //     if (Array.isArray(value)) {
+        //         if (value.length) this.addTab(tabbar, key);
+        //     }
+        // })
+        Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([key, value]) => {if (value.length) this.addTab(tabbar, key);})
     }
 
     addTab(tabbar, resource_type) {
@@ -237,7 +238,7 @@ class OkitTabularJsonView extends OkitJsonView {
         for (let resource of this.okitjson[resource_type]) {
             // Designer View Object
             const view_resource = this.getViewResource(resource.getArtifactReference(), resource.id);
-            const tr = tbody.append('div').attr('class', 'tr').on('click', function() {view_resource.loadSlidePanels()});
+            const tr = tbody.append('div').attr('class', 'tr okit-tr-first-column-count').on('click', function() {view_resource.loadSlidePanels()});
             self.addContextMenu(tr, resource_type, view_resource);
             if (first) {first = false; view_resource.loadSlidePanels();}
             tr.append('div').attr('class', 'td').text(cnt);

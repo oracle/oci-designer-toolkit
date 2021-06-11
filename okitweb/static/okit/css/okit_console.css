@@ -679,6 +679,11 @@ li a.parent-item:hover {
     background-color: lightsteelblue;
 }
 
+.okit-tr-first-column-count > .td:first-child {
+    width: 4em;
+    text-align: center;
+}
+
 .okit-properties-table {
 }
 

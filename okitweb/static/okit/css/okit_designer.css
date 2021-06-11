@@ -210,7 +210,7 @@
 .okit-tabular-canvas {
     display: block;
     background: #fff;
-    padding: 0;
+    padding: 1px;
     margin: 0;
     height: 100%;
     width: 100%;
