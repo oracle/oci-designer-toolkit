@@ -34,7 +34,6 @@ class AnalyticsInstanceView extends OkitArtefactView {
     loadProperties() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/analytics_instance.html", () => {
-            loadPropertiesSheet(self.artefact);
             // Add Subnet & Vcn Lists
             this.loadVirtualCloudNetworkSelect('vcn_id');
             this.loadSubnetSelect('subnet_id');
@@ -45,6 +44,8 @@ class AnalyticsInstanceView extends OkitArtefactView {
             self.loadWhitelistedVcns();
             // Add Handler to Add Button
             $(jqId('add_whitelisted_vcns')).on('click', () => {self.addWhitelistedVcn();});
+            // load Properties
+            loadPropertiesSheet(self.artefact);
         });
     }
     changeNetworkEndpoint() {

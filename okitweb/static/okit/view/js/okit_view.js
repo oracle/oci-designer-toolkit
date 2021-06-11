@@ -1525,9 +1525,7 @@ class OkitArtefactView {
 
     addClickEvent(svg) {
         const self = this;
-        console.warn('OkitView addClickEvent', self)
         svg.on("click", function() {
-            console.warn('OkitView addClickEvent click', self)
             self.loadSlidePanels();
             d3.event.stopPropagation();
             $(jqId("context-menu")).addClass("hidden");
