@@ -212,13 +212,15 @@ textarea {
     color: #ffffff;
 }
 
-.okit-console-header-left-options > select {
+.okit-console-header-left > select {
     word-wrap: break-word;
     overflow-wrap: break-word;
     font: normal 12px Helvetica Neue,Helvetica,Arial,sans-serif;
+    background-color: #1d2733;
+    color: #ffffff;
 }
 
-.okit-console-header-left-options > select:focus {
+.okit-console-header-left > select:focus {
     outline: none;
 }
 
