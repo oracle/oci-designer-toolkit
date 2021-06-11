@@ -179,7 +179,7 @@ class DhcpOptionView extends OkitArtefactView {
             .attr("class", "property-value")
             .attr("id", "custom_dns_servers" + option_idx)
             .attr("name", "custom_dns_servers")
-            .attr("value", option['custom_dns_servers'].join(','))
+            .attr("value", option.custom_dns_servers ? option['custom_dns_servers'].join(',') : '')
             .on("change", function() {
                 option['custom_dns_servers'] = this.value.replaceAll(' ', '').split(',');
                 displayOkitJson();
