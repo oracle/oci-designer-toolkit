@@ -186,22 +186,46 @@ textarea {
     align-items: center;
 }
 
-.okit-console-header-left {
-    margin: auto;
-    width: 20%;
-    text-align: left;
+.okit-console-header > div.td {
     min-height: 50px;
     max-height: 50px;
     height: 50px;
+}
+
+.okit-console-header-left-nav-button {
+    margin: auto;
+    width: 50px;
+    text-align: left;
+}
+
+.okit-console-header-left {
+    margin: auto;
+    width: 15%;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.okit-console-header-left > label {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font: normal 12px Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #ffffff;
+}
+
+.okit-console-header-left-options > select {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font: normal 12px Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+.okit-console-header-left-options > select:focus {
+    outline: none;
 }
 
 .okit-console-header-centre {
     margin: auto;
     text-align: center;
     vertical-align: middle;
-    min-height: 50px;
-    max-height: 50px;
-    height: 50px;
 }
 
 .okit-console-header-right {
@@ -210,9 +234,6 @@ textarea {
     width: 20%;
     text-align: right;
     vertical-align: middle;
-    min-height: 50px;
-    max-height: 50px;
-    height: 50px;
 }
 
 .okit-console-header-right > a {

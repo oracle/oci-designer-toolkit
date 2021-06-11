@@ -4,6 +4,15 @@
 */
 console.info('Loaded View Layout Javascript');
 
+function handleViewSelect(e) {
+    const selected = $("#console_header_view_select").val();
+    if (selected === 'designer') handleSwitchToCompartmentView(e)
+    else if (selected === 'tabular') handleSwitchToTabularView(e)
+    else if (selected === 'relationship') handleSwitchToRelationshipView(e)
+    else if (selected === 'json') handleSwitchToTextJsonView(e)
+    else console.warn('Unknown View', selected)
+}
+
 function hideAllViewDivs() {
     $("#canvas-div").addClass('hidden');
     $("#tabular-div").addClass('hidden');
