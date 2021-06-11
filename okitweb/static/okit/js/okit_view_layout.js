@@ -4,6 +4,15 @@
 */
 console.info('Loaded View Layout Javascript');
 
+function handleViewSelect(e) {
+    const selected = $("#console_header_view_select").val();
+    if (selected === 'designer') handleSwitchToCompartmentView(e)
+    else if (selected === 'tabular') handleSwitchToTabularView(e)
+    else if (selected === 'relationship') handleSwitchToRelationshipView(e)
+    else if (selected === 'json') handleSwitchToTextJsonView(e)
+    else console.warn('Unknown View', selected)
+}
+
 function hideAllViewDivs() {
     $("#canvas-div").addClass('hidden');
     $("#tabular-div").addClass('hidden');
@@ -18,11 +27,15 @@ function handleSwitchToCompartmentView(e) {
     okitJsonView.update();
     hideAllViewDivs();
     $("#canvas-div").removeClass('hidden');
+    $("#console_left_bar").removeClass('okit-slide-hide-left')
+    $("#designer_left_column").removeClass('okit-slide-hide-left')
 }
 
 function handleSwitchToTabularView(e) {
     hideAllViewDivs();
     $("#tabular-div").removeClass('hidden');
+    $("#console_left_bar").addClass('okit-slide-hide-left')
+    $("#designer_left_column").addClass('okit-slide-hide-left')
     okitTabularView = new OkitTabularJsonView(okitJsonModel, okitOciData);
     okitTabularView.draw();
 }
@@ -30,16 +43,22 @@ function handleSwitchToTabularView(e) {
 function handleSwitchToNetworkView(e) {
     hideAllViewDivs();
     $("#network-div").removeClass('hidden');
+    $("#console_left_bar").addClass('okit-slide-hide-left')
+    $("#designer_left_column").addClass('okit-slide-hide-left')
 }
 
 function handleSwitchToSecurityView(e) {
     hideAllViewDivs();
     $("#security-div").removeClass('hidden');
+    $("#console_left_bar").addClass('okit-slide-hide-left')
+    $("#designer_left_column").addClass('okit-slide-hide-left')
 }
 
 function handleSwitchToRelationshipView(e) {
     hideAllViewDivs();
     $("#relationship-div").removeClass('hidden');
+    $("#console_left_bar").addClass('okit-slide-hide-left')
+    $("#designer_left_column").addClass('okit-slide-hide-left')
     okitRelationshipView = new OkitRelationshipJsonView(okitJsonModel, okitOciData, resource_icons);
     okitRelationshipView.draw();
 }
@@ -47,6 +66,8 @@ function handleSwitchToRelationshipView(e) {
 function handleSwitchToTextJsonView(e) {
     hideAllViewDivs();
     $("#json-text-div").removeClass('hidden');
+    $("#console_left_bar").addClass('okit-slide-hide-left')
+    $("#designer_left_column").addClass('okit-slide-hide-left')
     okitTextJsonView = new OkitTextJsonView(okitJsonModel, okitOciData, resource_icons);
     okitTextJsonView.draw();
 }

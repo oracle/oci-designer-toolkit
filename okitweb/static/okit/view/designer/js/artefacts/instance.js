@@ -14,7 +14,7 @@ class InstanceView extends OkitDesignerArtefactView {
 
     // -- Reference
     get parent_id() {
-        let primary_subnet = this.getJsonView().getSubnet(this.artefact.primary_vnic.subnet_id);
+        let primary_subnet = this.getJsonView().getSubnet(this.primary_vnic.subnet_id);
         if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
             return this.primary_vnic.subnet_id;
         } else {
@@ -31,6 +31,7 @@ class InstanceView extends OkitDesignerArtefactView {
     // Direct Subnet Access
     get subnet_id() {return this.artefact.primary_vnic.subnet_id;}
     set subnet_id(id) {this.artefact.primary_vnic.subnet_id = id;}
+    get primary_vnic() {return this.artefact.primary_vnic}
 
     /*
      ** SVG Processing

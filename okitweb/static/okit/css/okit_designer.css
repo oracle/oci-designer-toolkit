@@ -161,7 +161,6 @@
 .okit-tab-contents {
     display: block;
     width: 100%;
-    margin: 2px;
     overflow-x: auto;
     white-space: nowrap;
     flex-wrap: nowrap;
@@ -211,7 +210,7 @@
 .okit-tabular-canvas {
     display: block;
     background: #fff;
-    padding: 0;
+    padding: 1px;
     margin: 0;
     height: 100%;
     width: 100%;
@@ -421,6 +420,14 @@ rect.highlight-properties {
     stroke: red;
     stroke-width: 2;
     stroke-opacity: 1;
+}
+
+.read-only > use > path {
+    fill: red !important;
+}
+
+.read-only1 > use path {
+    fill: #312D2A !important;
 }
 
 /*

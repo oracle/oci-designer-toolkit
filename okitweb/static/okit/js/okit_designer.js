@@ -33,6 +33,7 @@ let right_drag_bar_start_x = 0;
 let ociRegions = [];
 
 function resetDesigner() {
+    $("#console_header_view_select").val('designer');
     handleSwitchToCompartmentView();
     newModel();
     newDesignerView();
@@ -567,6 +568,8 @@ function displayQueryDialog() {
 }
 function handleQueryOci(e) {
     hideNavMenu();
+    $("#console_header_view_select").val('designer');
+    handleSwitchToCompartmentView();
     // Display Dialog
     displayQueryDialog();
     // Set Query Config Profile

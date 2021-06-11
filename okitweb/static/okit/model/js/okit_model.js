@@ -50,6 +50,13 @@ class OkitJson {
         }
     }
 
+    getResourceLists() {
+        return Object.entries(this).reduce((r, [k, v]) => {
+                if (Array.isArray(v)) r[k] = v
+                return r
+            }, {})
+    }
+
     /*
     ** Load Simple Json Structure and build Object Based JSON
      */
@@ -1088,6 +1095,8 @@ class OkitArtifact {
                 return okitjson;
             }
         });
+        // Read Only flag to indicate that we should not create this Resource
+        this.read_only = false;
     }
 
     get name() {return this.display_name;}

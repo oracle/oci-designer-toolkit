@@ -20,8 +20,8 @@ class DhcpOption extends OkitArtifact {
         this.options = [{
             type: "DomainNameServer",
             server_type: "CustomDnsServer",
-            custom_dns_servers: '',
-            search_domain_names: ''
+            custom_dns_servers: [],
+            search_domain_names: []
         }]
         this.default = false;
         // Update with any passed data

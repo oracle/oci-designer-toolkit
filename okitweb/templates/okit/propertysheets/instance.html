@@ -64,7 +64,8 @@
     <div class='tr'><div class='td'>Version</div><div class='td'><select id="version" class="okit-property-value">
         <option value="7.7" selected="selected">7.7</option>
     </select></div></div>
-    <div class='tr'><div class='td'>Boot Volume Size (in GB)</div><div class='td'><input type="text" id="boot_volume_size_in_gbs" name="boot_volume_size_in_gbs" class="okit-property-value"></div></div>
+    <!--div class='tr'><div class='td'>Boot Volume Size (in GB)</div><div class='td'><input type="text" id="boot_volume_size_in_gbs" name="boot_volume_size_in_gbs" class="okit-property-value"></div></div-->
+    {{ properties_input('Boot Volume Size (in GB)', 'boot_volume_size_in_gbs', type='number', collapsed=False, data={"min": 50, "max": 32768}) }}
     <div class='tr'><div class='td'>Authorised Keys</div><div class='td'><input type="text" id="ssh_authorized_keys" name="ssh_authorized_keys" class="okit-property-value"></div></div>
     <div class='tr'><div class='td'>Block Storage Volumes</div><div class='td'><div id="block_storage_volume_ids" class="okit-multiple-select"></div></div></div>
     <div class='tr'><div class='td'>Cloud Init YAML</div><div class='td'><code><textarea id="user_data" name="user_data" class="okit-property-value okit-source-code" rows="10" wrap="off"></textarea></code></div></div>

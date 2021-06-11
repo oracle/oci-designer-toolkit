@@ -1458,7 +1458,8 @@ class OkitArtefactView {
     drawIcon(svg) {
         const icon = svg.append('g')
             .attr("style", "pointer-events: bounding-box;")
-            .append("use")
+            .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
+        .append("use")
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
         return icon;
@@ -2393,6 +2394,16 @@ class OkitArtefactView {
         drg_select.append($('<option>').attr('value', '').text(''));
         for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
             drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+        }
+    }
+
+    loadSubnetSelect(id, vcn_id=undefined) {
+        // Build Subnet Select
+        let select = $(jqId(id));
+        $(select).empty();
+        select.append($('<option>').attr('value', '').text(''));
+        for (const resource of this.getOkitJson().getSubnets().filter((s) => vcn_id === undefined || s.vcn_id === vcn_id)) {
+            select.append($('<option>').attr('value', resource.id).text(resource.display_name));
         }
     }
 

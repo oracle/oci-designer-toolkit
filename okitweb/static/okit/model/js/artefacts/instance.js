@@ -44,18 +44,20 @@ class Instance extends OkitArtifact {
             this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
         }
         if (this.vnics.length > 0) {
-            this.primary_vnic = this.vnics[0];
+            // this.primary_vnic = this.vnics[0];
             for (let vnic of this.vnics) {
                 vnic.region_availability_domain = vnic.availability_domain;
                 vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.region_availability_domain);
             }
         } else {
-            this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
-            this.vnics[0] = this.primary_vnic;
+            this.vnics[0] = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
+            // this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
+            // this.vnics[0] = this.primary_vnic;
         }
         // Expose subnet_id for the first Mount target at the top level
         delete this.subnet_id;
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_vnic.subnet_id;}, set: function(id) {this.primary_vnic.subnet_id = id;}, enumerable: false });
+        Object.defineProperty(this, 'primary_vnic', {get: function() {return this.vnics[0];}, set: function(vnic) {this.vnics[0] = vnic;}, enumerable: true });
+        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_vnic.subnet_id;}, set: function(id) {this.primary_vnic.subnet_id = id;}, enumerable: true });
     }
 
     /*

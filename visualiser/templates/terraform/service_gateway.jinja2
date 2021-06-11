@@ -1,4 +1,16 @@
 
+{% if read_only %}
+# ------ Read Service Gateway
+data "oci_core_service_gateways" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid }}
+    {{ resource_name }}_ocid = {{ ocid }}
+}
+{% else %}
 # ------ Get List Service OCIDs
 locals {
     {{ resource_name }}ServiceId = lookup([for x in data.oci_core_services.RegionServices.services: x if substr(x.name, 0, 3) == {{ service_name | safe }}][0], "id")
@@ -28,3 +40,4 @@ resource "oci_core_service_gateway" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_core_service_gateway.{{ resource_name }}.id
 }
+{% endif %}

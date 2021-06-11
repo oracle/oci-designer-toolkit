@@ -52,7 +52,7 @@
 }
 
 .okit-text-json-canvas .object.empty>label::after {
-    content: "{}";
+    content: "{ }";
     color: black;
     display: inline-block;
 }
@@ -88,7 +88,7 @@
 }
 
 .okit-text-json-canvas .array.empty>label::after {
-    content: "[]";
+    content: "[ ]";
     color: black;
     display: inline-block;
 }
