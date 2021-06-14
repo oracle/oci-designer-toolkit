@@ -3,7 +3,7 @@
 # ------ Read Virtual Cloud Network
 data "oci_core_vcn" "{{ resource_name }}" {
     # Required
-    vcn_id = {{ ocid }}
+    vcn_id = {{ ocid | safe }}
 }
 {% else %}
 # ------ Create Virtual Cloud Network

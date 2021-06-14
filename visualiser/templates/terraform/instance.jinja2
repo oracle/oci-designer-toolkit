@@ -1,6 +1,6 @@
 
 {% if read_only %}
-# ------ Read Instance Pool
+# ------ Read Instance
 data "oci_core_instance" "{{ resource_name }}" {
     # Required
     instance_id = {{ ocid }}

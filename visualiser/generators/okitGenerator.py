@@ -1915,7 +1915,8 @@ class OCIGenerator(object):
         # ---- Read Only
         self.jinja2_variables['read_only'] = resource.get('read_only', False)
         # ---- Id
-        self.jinja2_variables["ocid"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['id']]))
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # self.jinja2_variables["ocid"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['id']]))
         # --- Required
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))

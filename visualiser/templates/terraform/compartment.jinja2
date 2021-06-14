@@ -1,4 +1,10 @@
 
+{% if root_compartment is sameas true %}
+# ------ Root Compartment
+locals {
+    {{ resource_name }}_id              = {{ compartment_ocid }}
+}
+{% else %}
 {% if read_only %}
 # ------ Read Compartment
 data "oci_identity_compartment" "{{ resource_name }}" {
@@ -7,12 +13,6 @@ data "oci_identity_compartment" "{{ resource_name }}" {
 }
 {% else %}
 # ------ Create Compartment - Root {{ root_compartment }}
-{% if root_compartment is sameas true %}
-# ------ Root Compartment
-locals {
-    {{ resource_name }}_id              = {{ compartment_ocid }}
-}
-{% else %}
 # ------ Create Compartment
 resource "oci_identity_compartment" "{{ resource_name }}" {
     provider       = oci.home_region
