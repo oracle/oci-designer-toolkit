@@ -4,11 +4,15 @@
 data "oci_load_balancer_load_balancers" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
 }
 
 locals {
-    {{ resource_name }}_id = {{ ocid }}
-    {{ resource_name }}_ocid = {{ ocid }}
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
 }
 {% else %}
 # ------ Create Loadbalancer

@@ -3,7 +3,7 @@
 # ------ Read Analytics Instance
 data "oci_analytics_analytics_instance" "{{ resource_name }}" {
     # Required
-    analytics_instance_id = {{ ocid }}
+    analytics_instance_id = {{ ocid | safe }}
 }
 {% else %}
 # ------ Create Analytics Instance

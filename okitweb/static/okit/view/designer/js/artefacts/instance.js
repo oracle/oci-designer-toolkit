@@ -103,7 +103,7 @@ class InstanceView extends OkitDesignerArtefactView {
             for (let subnet of this.getOkitJson().subnets) {
                 let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
                 let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
-                let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+                let display_name = `${compartment ? compartment.display_name : ''}/${vcn ? vcn.display_name : ''}/${subnet.display_name}`;
                 subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
             }
             // Load Shapes

@@ -1,18 +1,22 @@
 
-{% if read_only %}
-# ------ Read Compartment
-data "oci_identity_compartment" "{{ resource_name }}" {
-    # Required
-    compartment_id = {{ ocid }}
-}
-{% else %}
-# ------ Create Compartment - Root {{ root_compartment }}
 {% if root_compartment is sameas true %}
 # ------ Root Compartment
 locals {
     {{ resource_name }}_id              = {{ compartment_ocid }}
 }
 {% else %}
+{% if read_only %}
+# ------ Read Compartment
+data "oci_identity_compartment" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id = data.oci_identity_compartment.{{ resource_name }}.id
+}
+{% else %}
+# ------ Create Compartment - Root {{ root_compartment }}
 # ------ Create Compartment
 resource "oci_identity_compartment" "{{ resource_name }}" {
     provider       = oci.home_region

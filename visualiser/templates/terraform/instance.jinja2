@@ -1,15 +1,15 @@
 
 {% if read_only %}
-# ------ Read Instance Pool
+# ------ Read Instance
 data "oci_core_instance" "{{ resource_name }}" {
     # Required
-    instance_id = {{ ocid }}
+    instance_id = {{ ocid | safe }}
 }
 
 locals {
-    {{ resource_name }}_id            = oci_core_instance.{{ resource_name }}.id
-    {{ resource_name }}_public_ip     = oci_core_instance.{{ resource_name }}.public_ip
-    {{ resource_name }}_private_ip    = oci_core_instance.{{ resource_name }}.private_ip
+    {{ resource_name }}_id            = data.oci_core_instance.{{ resource_name }}.id
+    {{ resource_name }}_public_ip     = data.oci_core_instance.{{ resource_name }}.public_ip
+    {{ resource_name }}_private_ip    = data.oci_core_instance.{{ resource_name }}.private_ip
 }
 {% else %}
 # ------ Get List Images
@@ -42,7 +42,7 @@ resource "oci_core_instance" "{{ resource_name }}" {
         subnet_id        = {{ subnet_id }}
         # Optional
         assign_public_ip = {{ assign_public_ip | safe }}
-        display_name     = {{ display_name_vnic | safe }}
+        display_name     = {{ display_name | safe }}
         hostname_label   = {{ hostname_label | safe }}
 {% if nsg_ids is defined %}
         nsg_ids          = [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]

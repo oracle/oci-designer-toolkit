@@ -3,6 +3,10 @@
 data "oci_objectstorage_namespace" "{{ resource_name }}Namespace" {
     #Optional
     compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
 }
 
 {% if read_only %}
