@@ -3,7 +3,7 @@
 # ------ Read Autonomous Database
 data "oci_database_autonomous_database" "{{ resource_name }}" {
     # Required
-    autonomous_database_id = {{ ocid }}
+    autonomous_database_id = {{ ocid | safe }}
 }
 {% else %}
 # ------ Create Autonomous Database

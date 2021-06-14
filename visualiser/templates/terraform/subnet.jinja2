@@ -3,7 +3,12 @@
 # ------ Read Subnet
 data "oci_core_subnet" "{{ resource_name }}" {
     # Required
-    subnet_id = {{ ocid }}
+    subnet_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id              = data.oci_core_subnet.{{ resource_name }}.id
+    {{ resource_name }}_domain_name     = data.oci_core_subnet.{{ resource_name }}.subnet_domain_name
 }
 {% else %}
 # ------ Create Subnet
@@ -48,9 +53,9 @@ resource "oci_core_subnet" "{{ resource_name }}" {
     ipv6cidr_block  = {{ ipv6cidr_block | safe }}
 {% endif %}
 }
-{% endif %}
 
 locals {
     {{ resource_name }}_id              = oci_core_subnet.{{ resource_name }}.id
     {{ resource_name }}_domain_name     = oci_core_subnet.{{ resource_name }}.subnet_domain_name
 }
+{% endif %}

@@ -3,7 +3,7 @@
 # ------ Read Cross Connect Group
 data "oci_core_cross_connect" "{{ resource_name }}" {
     # Required
-    cross_connect_id = {{ ocid }}
+    cross_connect_id = {{ ocid | safe }}
 }
 {% else %}
 # ------ Create Cross Connect
