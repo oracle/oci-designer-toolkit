@@ -45,7 +45,17 @@ let error_properties = [];
 let warning_properties = [];
 
 function loadPropertiesSheet(json_element) {
-    console.log('Loading Properties');
+    console.info('Loading Properties - Read Only:', json_element.read_only);
+    loadPropertiesSheetInputs(json_element, []);
+    if (json_element.read_only) setPropertiesReadOnly();
+}
+
+function setPropertiesReadOnly() {
+    $(`#${PROPERTIES_PANEL}`).find('input, textarea, select, button, checkbox').not('.documentation').attr('readonly', 'readonly');
+    $(`#${PROPERTIES_PANEL}`).find('input, textarea, select, button, checkbox').not('.okit-tab, .documentation').attr('disabled', 'disabled');
+}
+
+function loadPropertiesSheetInputs(json_element, hierarchy=[]) {
     $.each(json_element, function(key, val) {
         // console.info('Key : ' + key + ' = ' + val);
         if (val == null) {
@@ -55,7 +65,7 @@ function loadPropertiesSheet(json_element) {
             // console.info('Ignoring Object Array Property ' + key);
         } else if (typeof val === 'object' && !Array.isArray(val)) {
             // console.info('Processing Object Property ' + key);
-            loadPropertiesSheet(val);
+            loadPropertiesSheetInputs(val);
         } else if (typeof val === 'function') {
             // console.info('Ignoring Function Property ' + key);
             return true;
@@ -130,7 +140,7 @@ function loadPropertiesSheet(json_element) {
             $(jqId(key)).on('change', () => {json_element[key] = $(jqId(key)).val();});
         } else if ($(jqId(key)).is("div")) {
             // console.info(key + ' is div.');
-            loadPropertiesSheet(val);
+            loadPropertiesSheetInputs(val);
         } else {
             console.info(`Ignoring Property ${key} No Corresponding HTML Element Found.`);
             return true;
@@ -151,7 +161,7 @@ function loadPropertiesSheet(json_element) {
                 .text('X');
             button.on('click', function() {
                 delete json_element.freeform_tags[key];
-                loadPropertiesSheet(json_element);
+                loadPropertiesSheetInputs(json_element);
                 d3.event.stopPropagation();
             });
         }
@@ -177,7 +187,7 @@ function loadPropertiesSheet(json_element) {
                 button.on('click', function () {
                     delete json_element.defined_tags[namespace][key];
                     if (Object.keys(json_element.defined_tags[namespace]).length === 0) {delete json_element.defined_tags[namespace];}
-                    loadPropertiesSheet(json_element);
+                    loadPropertiesSheetInputs(json_element);
                     d3.event.stopPropagation();
                 });
             }
@@ -247,7 +257,7 @@ function addFreeformTag(json_element) {
             json_element.freeform_tags[key] = value;
         }
         $(jqId('modal_dialog_wrapper')).addClass('hidden');
-        loadPropertiesSheet(json_element);
+        loadPropertiesSheetInputs(json_element);
         displayOkitJson();
         d3.event.stopPropagation();
     });
@@ -308,7 +318,7 @@ function addDefinedTag(json_element) {
             json_element.defined_tags[namespace][key] = value;
         }
         $(jqId('modal_dialog_wrapper')).addClass('hidden');
-        loadPropertiesSheet(json_element);
+        loadPropertiesSheetInputs(json_element);
         displayOkitJson();
         d3.event.stopPropagation();
     });
