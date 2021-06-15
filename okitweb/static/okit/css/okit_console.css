@@ -198,30 +198,42 @@ textarea {
     text-align: left;
 }
 
-.okit-console-header-left {
+.okit-console-header-oracle-logo {
     margin: auto;
-    width: 15%;
+    width: 200px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.okit-console-header-dropdown {
+    margin: auto;
+    width: 50px;
     vertical-align: middle;
     text-align: left;
 }
 
-.okit-console-header-left > label {
+.okit-console-header-dropdown > label {
     word-wrap: break-word;
     overflow-wrap: break-word;
     font: normal 12px Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #ffffff;
 }
 
-.okit-console-header-left > select {
+.okit-console-header-dropdown > select {
     word-wrap: break-word;
     overflow-wrap: break-word;
-    font: normal 12px Helvetica Neue,Helvetica,Arial,sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font: normal 14px Helvetica Neue,Helvetica,Arial,sans-serif;
     background-color: #1d2733;
     color: #ffffff;
+    height: 50px;
+    border: none;
 }
 
 .okit-console-header-left > select:focus {
     outline: none;
+    border: none;
 }
 
 .okit-console-header-centre {
