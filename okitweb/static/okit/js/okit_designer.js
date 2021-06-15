@@ -107,6 +107,10 @@ function newDiagram() {
     newDesignerView();
     okitJsonView.newCanvas();
     okitJsonView.newCompartment();
+    // Set Top Compartment as deployment compartment
+    const resource = okitJsonModel.getCompartments()[0]
+    resource.read_only = true;
+    resource.display_name = 'Deployment Compartment';
     console.info(okitJsonView);
     console.log();
 }
