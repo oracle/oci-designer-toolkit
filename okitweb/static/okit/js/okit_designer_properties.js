@@ -44,8 +44,8 @@ function setDescendantProp(obj, desc, value) {
 let error_properties = [];
 let warning_properties = [];
 
-function loadPropertiesSheet(json_element) {
-    console.log('Loading Properties');
+function loadPropertiesSheet(json_element, hierarchy=[]) {
+    console.info('Loading Properties - Read Only:', json_element.read_only);
     $.each(json_element, function(key, val) {
         // console.info('Key : ' + key + ' = ' + val);
         if (val == null) {

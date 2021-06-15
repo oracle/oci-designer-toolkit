@@ -233,6 +233,7 @@ textarea {
 
 .okit-console-header-left > select:focus {
     outline: none;
+    border: none;
 }
 
 .okit-console-header-centre {
