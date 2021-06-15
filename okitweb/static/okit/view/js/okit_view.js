@@ -1380,7 +1380,7 @@ class OkitArtefactView {
     }
 
     draw() {
-        console.warn('Drawing', this)
+        // console.warn('Drawing', this)
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
             console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
             const svg = this.drawSvg();
@@ -1413,7 +1413,7 @@ class OkitArtefactView {
 
     drawSvg() {
         const parent_svg = d3.select(d3Id(this.parent_svg_id));
-        console.warn('Parent SVG Id', this.parent_svg_id)
+        // console.warn('Parent SVG Id', this.parent_svg_id)
         // Get attributes as local constant before create to stop NaN because append adds element before adding attributes.
         const definition = this.svg_definition;
         const svg = parent_svg.append("svg")
