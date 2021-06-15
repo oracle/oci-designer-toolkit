@@ -205,21 +205,21 @@ textarea {
     vertical-align: middle;
 }
 
-.okit-console-header-left {
+.okit-console-header-dropdown {
     margin: auto;
     width: 50px;
     vertical-align: middle;
     text-align: left;
 }
 
-.okit-console-header-left > label {
+.okit-console-header-dropdown > label {
     word-wrap: break-word;
     overflow-wrap: break-word;
     font: normal 12px Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #ffffff;
 }
 
-.okit-console-header-left > select {
+.okit-console-header-dropdown > select {
     word-wrap: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
