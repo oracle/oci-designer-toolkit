@@ -10,6 +10,7 @@
 4. Queried components are marked as Read Only and will generate Terraform Data commands rather than Resource statements.
 5. Sort Tabular View Tabs alphabetically.
 6. View select list added to the header.
+7. Mark top level Compartment on New Diagram as Deployment compartment.
 
 ### Bug Fixes
 1. GitHub Issue #316 : OKIT attempts to add defined_tags to oci_core_network_security_group_security_rule
