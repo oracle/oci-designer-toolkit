@@ -198,9 +198,16 @@ textarea {
     text-align: left;
 }
 
+.okit-console-header-oracle-logo {
+    margin: auto;
+    width: 200px;
+    text-align: left;
+    vertical-align: middle;
+}
+
 .okit-console-header-left {
     margin: auto;
-    width: 15%;
+    width: 50px;
     vertical-align: middle;
     text-align: left;
 }
@@ -215,9 +222,13 @@ textarea {
 .okit-console-header-left > select {
     word-wrap: break-word;
     overflow-wrap: break-word;
-    font: normal 12px Helvetica Neue,Helvetica,Arial,sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font: normal 14px Helvetica Neue,Helvetica,Arial,sans-serif;
     background-color: #1d2733;
     color: #ffffff;
+    height: 50px;
+    border: none;
 }
 
 .okit-console-header-left > select:focus {
