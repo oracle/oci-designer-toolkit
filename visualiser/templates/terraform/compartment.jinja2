@@ -9,7 +9,7 @@ locals {
 # ------ Read Compartment
 data "oci_identity_compartment" "{{ resource_name }}" {
     # Required
-    compartment_id = {{ ocid | safe }}
+    id = {{ ocid | safe }}
 }
 
 locals {
