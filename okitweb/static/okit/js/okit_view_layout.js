@@ -4,6 +4,18 @@
 */
 console.info('Loaded View Layout Javascript');
 
+function hideSideBars() {
+    $("#console_left_bar").addClass('okit-slide-hide-left')
+    $("#designer_left_column").addClass('okit-slide-hide-left')
+    $("#designer_right_column").addClass('okit-slide-hide-right')
+    $("#console_right_bar").children().removeClass('okit-bar-panel-displayed')
+}
+
+function showSideBars() {
+    $("#console_left_bar").removeClass('okit-slide-hide-left')
+    $("#designer_left_column").removeClass('okit-slide-hide-left')
+}
+
 function handleViewSelect(e) {
     const selected = $("#console_header_view_select").val();
     if (selected === 'designer') handleSwitchToCompartmentView(e)
@@ -27,15 +39,13 @@ function handleSwitchToCompartmentView(e) {
     okitJsonView.update();
     hideAllViewDivs();
     $("#canvas-div").removeClass('hidden');
-    $("#console_left_bar").removeClass('okit-slide-hide-left')
-    $("#designer_left_column").removeClass('okit-slide-hide-left')
+    showSideBars();
 }
 
 function handleSwitchToTabularView(e) {
     hideAllViewDivs();
     $("#tabular-div").removeClass('hidden');
-    $("#console_left_bar").addClass('okit-slide-hide-left')
-    $("#designer_left_column").addClass('okit-slide-hide-left')
+    hideSideBars();
     okitTabularView = new OkitTabularJsonView(okitJsonModel, okitOciData);
     okitTabularView.draw();
 }
@@ -43,22 +53,19 @@ function handleSwitchToTabularView(e) {
 function handleSwitchToNetworkView(e) {
     hideAllViewDivs();
     $("#network-div").removeClass('hidden');
-    $("#console_left_bar").addClass('okit-slide-hide-left')
-    $("#designer_left_column").addClass('okit-slide-hide-left')
+    hideSideBars();
 }
 
 function handleSwitchToSecurityView(e) {
     hideAllViewDivs();
     $("#security-div").removeClass('hidden');
-    $("#console_left_bar").addClass('okit-slide-hide-left')
-    $("#designer_left_column").addClass('okit-slide-hide-left')
+    hideSideBars();
 }
 
 function handleSwitchToRelationshipView(e) {
     hideAllViewDivs();
     $("#relationship-div").removeClass('hidden');
-    $("#console_left_bar").addClass('okit-slide-hide-left')
-    $("#designer_left_column").addClass('okit-slide-hide-left')
+    hideSideBars();
     okitRelationshipView = new OkitRelationshipJsonView(okitJsonModel, okitOciData, resource_icons);
     okitRelationshipView.draw();
 }
@@ -66,8 +73,7 @@ function handleSwitchToRelationshipView(e) {
 function handleSwitchToTextJsonView(e) {
     hideAllViewDivs();
     $("#json-text-div").removeClass('hidden');
-    $("#console_left_bar").addClass('okit-slide-hide-left')
-    $("#designer_left_column").addClass('okit-slide-hide-left')
+    hideSideBars();
     okitTextJsonView = new OkitTextJsonView(okitJsonModel, okitOciData, resource_icons);
     okitTextJsonView.draw();
 }
