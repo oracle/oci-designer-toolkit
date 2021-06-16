@@ -1,4 +1,15 @@
 
+{% if read_only %}
+# ------ Read Instance Pool
+data "oci_core_instance_pool" "{{ resource_name }}" {
+    # Required
+    instance_pool_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id            = data.oci_core_instance.{{ resource_name }}.id
+}
+{% else %}
 # ------ Create Instance Pool
 # ------- Instance Configuration
 resource "oci_core_instance_configuration" "{{ resource_name }}Config" {
@@ -149,3 +160,4 @@ resource "oci_autoscaling_auto_scaling_configuration" "{{ resource_name }}AutoSc
     freeform_tags              = {{ freeform_tags | safe }}
 {% endif %}
 }
+{% endif %}

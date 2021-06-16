@@ -33,9 +33,136 @@ class AnalyticsInstanceView extends OkitArtefactView {
     */
     loadProperties() {
         const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/analytics_instance.html", () => {loadPropertiesSheet(self.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/analytics_instance.html", () => {
+            // Add Subnet & Vcn Lists
+            this.loadVirtualCloudNetworkSelect('vcn_id');
+            this.loadSubnetSelect('subnet_id');
+            // Add Handler for Network Endpoint
+            $(jqId('network_endpoint_type')).on('change', () => {self.changeNetworkEndpoint();});
+            self.collapseExpandNetworkEndPointInputs();
+            // Whitelisted Vcns
+            self.loadWhitelistedVcns();
+            // Add Handler to Add Button
+            $(jqId('add_whitelisted_vcns')).on('click', () => {self.addWhitelistedVcn();});
+            // load Properties
+            loadPropertiesSheet(self.artefact);
+        });
     }
-    /*
+    changeNetworkEndpoint() {
+        const vcn_id = $(jqId('vcn_id'));
+        const subnet_id = $(jqId('subnet_id'));
+        const whitelisted_ips = $(jqId('whitelisted_ips'));
+        // Display Rows
+        this.collapseExpandNetworkEndPointInputs();
+        // Reset based on type
+        this.resetNetworkEndPointInputs();
+        // Assign values
+        subnet_id.val(this.network_endpoint_details.subnet_id);
+        vcn_id.val(this.network_endpoint_details.vcn_id);               
+        whitelisted_ips.val(this.network_endpoint_details.whitelisted_ips);
+        this.loadWhitelistedVcns();
+    }
+    collapseExpandNetworkEndPointInputs() {
+        const vcn_id_row = $(jqId('vcn_id_row'));
+        const subnet_id_row = $(jqId('subnet_id_row'));
+        const whitelisted_ips_row = $(jqId('whitelisted_ips_row'));
+        const whitelisted_vcns_row = $(jqId('whitelisted_vcns_row'));
+        // Collapse All
+        subnet_id_row.addClass('collapsed');
+        vcn_id_row.addClass('collapsed');
+        whitelisted_ips_row.addClass('collapsed');
+        whitelisted_vcns_row.addClass('collapsed');
+        if (this.network_endpoint_details.network_endpoint_type === 'PUBLIC') {
+            whitelisted_ips_row.removeClass('collapsed');
+            whitelisted_vcns_row.removeClass('collapsed');
+        } else if (this.network_endpoint_details.network_endpoint_type === 'PRIVATE') {
+            subnet_id_row.removeClass('collapsed');
+            vcn_id_row.removeClass('collapsed');   
+        }
+    }
+    resetNetworkEndPointInputs() {
+        console.warn('AnalyticsInstanceView Reseting Endpoint [', this.network_endpoint_details.network_endpoint_type, ']')
+        if (this.network_endpoint_details.network_endpoint_type === 'PUBLIC') {
+            // Reset Values
+            this.network_endpoint_details.subnet_id = '';
+            this.network_endpoint_details.vcn_id = '';
+        } else if (this.network_endpoint_details.network_endpoint_type === 'PRIVATE') {
+            // Reset Values
+            this.network_endpoint_details.whitelisted_ips = '';
+            this.network_endpoint_details.whitelisted_vcns = [];
+        } else {
+            // Reset Values
+            this.network_endpoint_details.subnet_id = '';
+            this.network_endpoint_details.vcn_id = '';
+            this.network_endpoint_details.whitelisted_ips = '';
+            this.network_endpoint_details.whitelisted_vcns = [];
+        }
+    }
+    loadWhitelistedVcns() {
+        // Empty Existing Vcns
+        $(jqId('whitelisted_vcns_body')).empty();
+        // Route Vcns
+        let idx = 1;
+        for (let vcn of this.network_endpoint_details.whitelisted_vcns) {
+            this.addWhitelistedVcnHtml(vcn, idx);
+            idx += 1;
+        }
+    }
+    addWhitelistedVcn() {
+        let new_vcn = {
+            id: "",
+            whitelisted_ips: ""
+        };
+        this.network_endpoint_details.whitelisted_vcns.push(new_vcn);
+        this.loadWhitelistedVcns();
+        displayOkitJson();
+    }
+    deleteWhitelistedVcn(idx) {
+        this.network_endpoint_details.whitelisted_vcns.splice(idx, 1);
+        this.loadWhitelistedVcns();
+        displayOkitJson();
+    }
+    addWhitelistedVcnHtml(vcn, idx=1) {
+        const self = this;
+        const tbody = d3.select('#whitelisted_vcns_body');
+        const row = tbody.append('div').attr('class', 'tr');
+        const table = row.append('div').attr('class', 'td')
+            .attr('id', `vcn_${idx}`)
+            .append('div').attr('class', 'table okit-table okit-properties-table')
+                .attr("id", `vcn_table_${idx}`);
+        row.append('div').attr('class', 'td')
+            .append('button')
+                .attr("type", "button")
+                .attr("class", "okit-delete-button")
+                .text("X")
+                .on('click', function() {
+                    me.deleteWhitelistedVcn(idx - 1);
+                    me.loadWhitelistedVcns();
+                    displayOkitJson();
+                });
+        // Vcn
+        let tr = table.append('div').attr('class', 'tr')
+        tr.append('div').attr('class', 'td').text("Vcn");
+        tr.append('div').attr('class', 'td')
+            .append('select')
+                .attr('class', 'property-value')
+                .attr('id', `vcn_id${idx}`)
+                .on('change', () => {vcn.id = this.options[this.selectedIndex].value});
+        this.loadVirtualCloudNetworkSelect(`vcn_id${idx}`)
+        $(`#vcn_id${idx}`).val(vcn.id);
+        // Ips
+        tr = table.append('div').attr('class', 'tr')
+        tr.append('div').attr('class', 'td').text("Ips");
+        tr.append('div').attr('class', 'td')
+            .append('input')
+                .attr('type', 'text')
+                .attr('class', 'property-value')
+                .attr('id', `whitelisted_ips${idx}`)
+                .attr('name', `whitelisted_ips${idx}`)
+                .attr('value', vcn.whitelisted_ips)
+                .on('change', () => {vcn.whitelisted_ips = this.value});
+    }
+   /*
     ** Load and display Value Proposition
     */
     loadValueProposition() {
@@ -57,8 +184,12 @@ class AnalyticsInstanceView extends OkitArtefactView {
 OkitJsonView.prototype.dropAnalyticsInstanceView = function(target) {
     let view_artefact = this.newAnalyticsInstance();
     if (target.type === Subnet.getArtifactReference()) {
-        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().network_endpoint_details.subnet_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
+        // Add vcn_id
+        view_artefact.getArtefact().network_endpoint_details.vcn_id = this.getSubnet(target.id).vcn_id;
+        // Set Private because we have dropped on Subnet
+        view_artefact.getArtefact().network_endpoint_details.network_endpoint_type = 'PRIVATE';
     } else if (target.type === Compartment.getArtifactReference()) {
         view_artefact.getArtefact().compartment_id = target.id;
     }

@@ -35,6 +35,9 @@ class OkitDesignerJsonView extends OkitJsonView {
         }
         let canvas_svg = this.newCanvas(width, height, for_export);
 
+        // Draw top Level Canvas
+        // this.canvas.draw();
+
         // Draw Compartments
         for (let compartment of this.compartments) {
             compartment.draw();

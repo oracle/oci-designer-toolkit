@@ -1,4 +1,19 @@
 
+{% if read_only %}
+# ------ Read Customer Premise Equipment
+data "oci_core_cpes" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+}
+{% else %}
 # ------ Create Customer Premise Equipment
 resource "oci_core_cpe" "{{ resource_name }}" {
     # Required
@@ -20,3 +35,4 @@ resource "oci_core_cpe" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_core_cpe.{{ resource_name }}.id
 }
+{% endif %}

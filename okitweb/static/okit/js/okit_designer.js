@@ -33,6 +33,7 @@ let right_drag_bar_start_x = 0;
 let ociRegions = [];
 
 function resetDesigner() {
+    $("#console_header_view_select").val('designer');
     handleSwitchToCompartmentView();
     newModel();
     newDesignerView();
@@ -106,6 +107,12 @@ function newDiagram() {
     newDesignerView();
     okitJsonView.newCanvas();
     okitJsonView.newCompartment();
+    // Set Top Compartment as deployment compartment
+    const resource = okitJsonModel.getCompartments()[0]
+    resource.read_only = true;
+    resource.display_name = 'Deployment Compartment';
+    resource.description = 'Represents the deployment location for the resources specified within the design.'
+    resource.definition = 'Logical Compartment that represents the deployment location for the resources specified within the design. This compartment will not be created during the build process.'
     console.info(okitJsonView);
     console.log();
 }
@@ -567,6 +574,8 @@ function displayQueryDialog() {
 }
 function handleQueryOci(e) {
     hideNavMenu();
+    $("#console_header_view_select").val('designer');
+    handleSwitchToCompartmentView();
     // Display Dialog
     displayQueryDialog();
     // Set Query Config Profile

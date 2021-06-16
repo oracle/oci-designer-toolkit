@@ -1,4 +1,20 @@
 
+{% if read_only %}
+# ------ Read Virtual Cloud Network
+data "oci_core_vcn" "{{ resource_name }}" {
+    # Required
+    vcn_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id                       = data.oci_core_vcn.{{ resource_name }}.id
+    {{ resource_name }}_dhcp_options_id          = data.oci_core_vcn.{{ resource_name }}.default_dhcp_options_id
+    {{ resource_name }}_domain_name              = data.oci_core_vcn.{{ resource_name }}.vcn_domain_name
+    {{ resource_name }}_default_dhcp_options_id  = data.oci_core_vcn.{{ resource_name }}.default_dhcp_options_id
+    {{ resource_name }}_default_security_list_id = data.oci_core_vcn.{{ resource_name }}.default_security_list_id
+    {{ resource_name }}_default_route_table_id   = data.oci_core_vcn.{{ resource_name }}.default_route_table_id
+}
+{% else %}
 # ------ Create Virtual Cloud Network
 resource "oci_core_vcn" "{{ resource_name }}" {
     # Required
@@ -29,4 +45,4 @@ locals {
     {{ resource_name }}_default_security_list_id = oci_core_vcn.{{ resource_name }}.default_security_list_id
     {{ resource_name }}_default_route_table_id   = oci_core_vcn.{{ resource_name }}.default_route_table_id
 }
-
+{% endif %}

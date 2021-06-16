@@ -16,42 +16,6 @@ class AnalyticsInstance extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.analytics_instances.length + 1);
         this.compartment_id = '';
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-resource "oci_analytics_analytics_instance" "test_analytics_instance" {
-    #Required
-    capacity {
-        #Required
-        capacity_type = var.analytics_instance_capacity_capacity_type
-        capacity_value = var.analytics_instance_capacity_capacity_value
-    }
-    compartment_id = var.compartment_id
-    feature_set = var.analytics_instance_feature_set
-    idcs_access_token = var.analytics_instance_idcs_access_token
-    license_type = var.analytics_instance_license_type
-    name = var.analytics_instance_name
-
-    #Optional
-    defined_tags = {"Operations.CostCenter"= "42"}
-    description = var.analytics_instance_description
-    email_notification = var.analytics_instance_email_notification
-    freeform_tags = {"Department"= "Finance"}
-    network_endpoint_details {
-        #Required
-        network_endpoint_type = var.analytics_instance_network_endpoint_details_network_endpoint_type
-
-        #Optional
-        subnet_id = oci_core_subnet.test_subnet.id
-        vcn_id = oci_core_vcn.test_vcn.id
-        whitelisted_ips = var.analytics_instance_network_endpoint_details_whitelisted_ips
-        whitelisted_vcns {
-
-            #Optional
-            id = var.analytics_instance_network_endpoint_details_whitelisted_vcns_id
-            whitelisted_ips = var.analytics_instance_network_endpoint_details_whitelisted_vcns_whitelisted_ips
-        }
-    }
-}        */
         this.feature_set = '';
         this.idcs_access_token = '';
         this.license_type = '';
@@ -61,14 +25,20 @@ resource "oci_analytics_analytics_instance" "test_analytics_instance" {
         }
         this.description = '';
         this.network_endpoint_details = {
-            subnet_id: ''
+            network_endpoint_type: '',
+            subnet_id: '',
+            vcn_id: '',
+            whitelisted_ips: '',
+            whitelisted_vcns: []
         }
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
         // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.network_endpoint_details.subnet_id;}, set: function(id) {this.network_endpoint_details.subnet_id = id;}, enumerable: false });
+        delete this.subnet_id;
+        delete this.vcn_id;
+        Object.defineProperty(this, 'subnet_id', {get: function() {return this.network_endpoint_details.subnet_id;}, set: function(id) {this.network_endpoint_details.subnet_id = id;}, enumerable: true });
+        Object.defineProperty(this, 'vcn_id', {get: function() {return this.network_endpoint_details.vcn_id;}, set: function(id) {this.network_endpoint_details.vcn_id = id;}, enumerable: true });
     }
     /*
     ** Clone Functionality

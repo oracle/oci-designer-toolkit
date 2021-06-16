@@ -3,20 +3,26 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
 {% macro properties_input(title, name, type='text', collapsed=False, readonly=False, data={}) -%}
-    {% if type in ['text', 'password'] %}
-        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %}></div></div>
+    {% if type in ['text', 'password', 'email'] %}
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} onblur="this.reportValidity();"></div></div>
     {% elif type == 'number' %}
-        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} {% if data.min is defined %} min="{{ data.min }}" {% endif %} {% if data.max is defined %} max="{{ data.max }}" {% endif %}></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} {% if data.min is defined %} min="{{ data.min }}" {% endif %} {% if data.max is defined %} max="{{ data.max }}" {% endif %} onblur="this.reportValidity();"></div></div>
+    {% elif type == 'ipv4' %}
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} pattern="^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+" title="IPv4 CIDR block" onblur="this.reportValidity();"></div></div>
+    {% elif type == 'ipv4-list' %}
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} pattern="^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+" title="Comma separated IPv4 CIDR blocks" onblur="this.reportValidity();"></div></div>
     {% elif type == 'checkbox' %}
-        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'></div><div class='td'><label><input type="{{ type }}" id="{{ name }}" name="{{ name }}" value="false">{{ title }}</label></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'></div><div class='td'><label><input type="{{ type }}" id="{{ name }}" name="{{ name }}" value="false" {% if readonly %} readonly  onclick="return false"{% endif %}>{{ title }}</label></div></div>
     {% elif type == 'textarea' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value" rows="2" wrap="soft"></textarea></div></div>
     {% elif type == 'documentation' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-resource-description documentation" rows="2" wrap="soft"></textarea></div></div>
     {% elif type == 'code' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><code><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-source-code" rows="10"></textarea></code></div></div>
-    {% elif type == 'select' %}
+    {% elif type == 'select1' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><select id="{{ name }}" class="okit-property-value"></select></div></div>
+    {% elif type == 'select' %}
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><select id="{{ name }}" class="okit-property-value">{% if data.options is defined %}{% for opt in data.options %}<option value="{{ opt }}">{{ opt|replace("_"," ")|title }}</option>{% endfor %}{% endif %}</select></div></div>
     {% elif type == 'multiselect' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><div id="{{ name }}" class="okit-multiple-select"></div></div></div>
     {% else %}
@@ -46,6 +52,7 @@
                 </div>
                 <div class="tbody">
                     {{ properties_input('Id', 'id', type='text', collapsed=True, readonly=True) }}
+                    {{ properties_input('Read Only', 'read_only', type='checkbox', readonly=True) }}
                     {{ properties_input('Name', 'display_name', type='text') }}
                 {% block required_properties_table_rows_block %}{% endblock %}
                 </div>

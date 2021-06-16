@@ -268,6 +268,17 @@ class OCIJsonValidator(object):
                         'element': 'subnet_id'
                     }
                     self.results['errors'].append(error)
+            # Check Boot volume size
+            if int(artefact['source_details']['boot_volume_size_in_gbs']) < 50 or int(artefact['source_details']['boot_volume_size_in_gbs']) > 32768:
+                self.valid = False
+                error = {
+                    'id': artefact['id'],
+                    'type': 'Instance',
+                    'artefact': artefact['display_name'],
+                    'message': f'Boot Volume Size must between 50GB and 32,768GB',
+                    'element': 'boot_volume_size_in_gbs'
+                }
+                self.results['errors'].append(error)
 
     # Internet Gateways
     def validateInternetGateways(self):

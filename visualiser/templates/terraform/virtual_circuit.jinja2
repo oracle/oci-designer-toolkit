@@ -1,4 +1,15 @@
 
+{% if read_only %}
+# ------ Read Virtual Circuit
+data "oci_core_virtual_circuit" "{{ resource_name }}" {
+    # Required
+    virtual_circuit_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id = data.oci_core_virtual_circuit.{{ resource_name }}.id
+}
+{% else %}
 # ------ Create Virtual Circuit
 resource "oci_core_virtual_circuit" "{{ resource_name }}" {
     #Required
@@ -72,3 +83,4 @@ resource "oci_core_virtual_circuit" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_core_virtual_circuit.{{ resource_name }}.id
 }
+{% endif %}

@@ -1,4 +1,20 @@
 
+{% if read_only %}
+# ------ Read Route Table
+data "oci_core_route_tables" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %}
 # ------ Create Route Table
 {% if manage_default_resource_id is defined %}
 # ------- Update VCN Default Route Table
@@ -41,4 +57,5 @@ locals {
 locals {
     {{ resource_name }}_id = oci_core_route_table.{{ resource_name }}.id
 }
+{% endif %}
 {% endif %}

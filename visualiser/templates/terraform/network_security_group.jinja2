@@ -1,4 +1,20 @@
 
+{% if read_only %}
+# ------ Read Network Security Group
+data "oci_core_network_security_groups" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %}
 # ------ Create Network Security Group
 resource "oci_core_network_security_group" "{{ resource_name }}" {
     # Required
@@ -79,15 +95,10 @@ resource "oci_core_network_security_group_security_rule" "{{ resource_name }}_Ru
         {% endif %}
         }
     {% endif %}
-{% if defined_tags is defined %}
-    defined_tags   = {{ defined_tags | safe }}
-{% endif %}
-{% if freeform_tags is defined %}
-    freeform_tags  = {{ freeform_tags | safe }}
-{% endif %}
 }
 
 locals {
     {{ resource_name }}_Rule{{ loop.index }}_id = oci_core_network_security_group_security_rule.{{ resource_name }}_Rule{{ loop.index }}.id
 }
 {% endfor %}
+{% endif %}

@@ -54,8 +54,8 @@ class DhcpOptionView extends OkitArtefactView {
         let new_option = {
             type: "DomainNameServer",
             server_type: "CustomDnsServer",
-            custom_dns_servers: '',
-            search_domain_names: ''
+            custom_dns_servers: [],
+            search_domain_names: []
         };
         this.options.push(new_option);
         this.loadOptions();
@@ -179,9 +179,9 @@ class DhcpOptionView extends OkitArtefactView {
             .attr("class", "property-value")
             .attr("id", "custom_dns_servers" + option_idx)
             .attr("name", "custom_dns_servers")
-            .attr("value", option['custom_dns_servers'])
+            .attr("value", option.custom_dns_servers ? option['custom_dns_servers'].join(',') : '')
             .on("change", function() {
-                option['custom_dns_servers'] = this.value;
+                option['custom_dns_servers'] = this.value.replaceAll(' ', '').split(',');
                 displayOkitJson();
             });
 
@@ -195,9 +195,9 @@ class DhcpOptionView extends OkitArtefactView {
             .attr("class", "property-value")
             .attr("id", "search_domain_names" + option_idx)
             .attr("name", "search_domain_names")
-            .attr("value", option['search_domain_names'])
+            .attr("value", option['search_domain_names'].join(','))
             .on("change", function() {
-                option['search_domain_names'] = this.value;
+                option['search_domain_names'] = this.value.replaceAll(' ', '').split(',');
                 displayOkitJson();
             });
         // Check Display

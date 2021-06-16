@@ -1,4 +1,17 @@
 
+{% if read_only %}
+# ------ Read Instance
+data "oci_core_instance" "{{ resource_name }}" {
+    # Required
+    instance_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id            = data.oci_core_instance.{{ resource_name }}.id
+    {{ resource_name }}_public_ip     = data.oci_core_instance.{{ resource_name }}.public_ip
+    {{ resource_name }}_private_ip    = data.oci_core_instance.{{ resource_name }}.private_ip
+}
+{% else %}
 # ------ Get List Images
 data "oci_core_images" "{{ resource_name }}Images" {
     compartment_id           = {{ compartment_ocid }}
@@ -29,7 +42,7 @@ resource "oci_core_instance" "{{ resource_name }}" {
         subnet_id        = {{ subnet_id }}
         # Optional
         assign_public_ip = {{ assign_public_ip | safe }}
-        display_name     = {{ display_name_vnic | safe }}
+        display_name     = {{ display_name | safe }}
         hostname_label   = {{ hostname_label | safe }}
 {% if nsg_ids is defined %}
         nsg_ids          = [{% for nsg_id in nsg_ids %}{{ nsg_id }}{% if not loop.last %},{% endif %}{% endfor %}]
@@ -92,11 +105,11 @@ locals {
     {{ resource_name }}_private_ip    = oci_core_instance.{{ resource_name }}.private_ip
 }
 
-output "{{ output_name }}PublicIP" {
+output "{{ resource_name }}PublicIP" {
     value = local.{{ resource_name }}_public_ip
 }
 
-output "{{ output_name }}PrivateIP" {
+output "{{ resource_name }}PrivateIP" {
     value = local.{{ resource_name }}_private_ip
 }
 
@@ -143,4 +156,4 @@ resource "oci_core_vnic_attachment" "{{ resource_name }}VnicAttachment{{ loop.in
     display_name = {{ vnic.display_name | safe }}
 }
 {% endfor %}
-
+{% endif %}

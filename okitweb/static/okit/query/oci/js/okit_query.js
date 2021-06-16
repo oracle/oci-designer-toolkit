@@ -84,8 +84,19 @@ class OkitOCIQuery {
                     return;
                 }
             }
+            this.setReadOnly();
             this.complete_callback(this.active_region);
         }
+    }
+
+    setReadOnly() {
+        Object.entries(regionOkitJson).forEach(([r, j]) => {
+            Object.entries(j).forEach(([k, v]) => {
+                if (Array.isArray(v)) {
+                    v.forEach((r) => r.read_only = true);
+                }
+            });
+        });
     }
 
     queryAutonomousDatabases(request) {

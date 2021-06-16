@@ -1,4 +1,19 @@
 
+{% if read_only %}
+# ------ Read DRG
+data "oci_core_drgs" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+}
+{% else %}
 # ------ Create DRG
 resource "oci_core_drg" "{{ resource_name }}" {
     # Required
@@ -25,4 +40,5 @@ resource "oci_core_drg_attachment" "{{ resource_name }}DRGAttachment" {
     vcn_id        = {{ vcn_id }}
     display_name   = {{ display_name | safe }}
 }
+{% endif %}
 {% endif %}

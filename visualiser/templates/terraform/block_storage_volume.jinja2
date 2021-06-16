@@ -15,6 +15,17 @@ data "template_file" "{{ resource_name }}VolumeBackupPolicyIdx" {
     template = index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})
 }
 
+{% if read_only %}
+# ------ Read Block Storage Volume
+data "oci_core_volume" "{{ resource_name }}" {
+    # Required
+    volume_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id = data.oci_core_volume.{{ resource_name }}.id
+}
+{% else %}
 # ------ Create Block Storage Volume
 resource "oci_core_volume" "{{ resource_name }}" {
     # Required
@@ -41,3 +52,4 @@ resource "oci_core_volume_backup_policy_assignment" "{{ resource_name }}BackupPo
     asset_id  = local.{{ resource_name }}_id
     policy_id = data.template_file.{{ resource_name }}VolumeBackupPolicyIds.*.rendered[index(data.template_file.{{ resource_name }}VolumeBackupPolicyNames.*.rendered, {{ backup_policy | safe }})]
 }
+{% endif %}

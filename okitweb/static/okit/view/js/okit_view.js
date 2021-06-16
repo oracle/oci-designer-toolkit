@@ -19,6 +19,8 @@ class OkitJsonView {
         if (oci_data !== null) this.oci_data = oci_data;
         if (parent_id !== null) this.parent_id = parent_id;
         if (resource_icons !== null) this.resource_icons = resource_icons;
+        // Define Canvas Root SVG
+        // this.canvas = new CanvasView(new Canvas(okitjson), this);
         // Define View Lists
         this.init();
         this.clear();
@@ -1378,6 +1380,7 @@ class OkitArtefactView {
     }
 
     draw() {
+        // console.warn('Drawing', this)
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
             console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
             const svg = this.drawSvg();
@@ -1410,6 +1413,7 @@ class OkitArtefactView {
 
     drawSvg() {
         const parent_svg = d3.select(d3Id(this.parent_svg_id));
+        // console.warn('Parent SVG Id', this.parent_svg_id)
         // Get attributes as local constant before create to stop NaN because append adds element before adding attributes.
         const definition = this.svg_definition;
         const svg = parent_svg.append("svg")
@@ -1458,7 +1462,8 @@ class OkitArtefactView {
     drawIcon(svg) {
         const icon = svg.append('g')
             .attr("style", "pointer-events: bounding-box;")
-            .append("use")
+            .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
+        .append("use")
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
         return icon;
@@ -2087,11 +2092,15 @@ class OkitArtefactView {
     getBottomChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getBottomArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
-                if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
-                    let dimension = artefact.dimensions;
-                    max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
-                    max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+            const resources = this.json_view[this.artefact.artefactToElement(group)];
+            console.warn(this.getArtifactReference(), 'Group', group, resources)
+            if (resources) {
+                for(let artefact of resources) {
+                    if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
+                        let dimension = artefact.dimensions;
+                        max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
+                        max_dimensions.width += Math.round(dimension.width + positional_adjustments.spacing.x);
+                    }
                 }
             }
         }
@@ -2396,6 +2405,16 @@ class OkitArtefactView {
         }
     }
 
+    loadSubnetSelect(id, vcn_id=undefined) {
+        // Build Subnet Select
+        let select = $(jqId(id));
+        $(select).empty();
+        select.append($('<option>').attr('value', '').text(''));
+        for (const resource of this.getOkitJson().getSubnets().filter((s) => vcn_id === undefined || s.vcn_id === vcn_id)) {
+            select.append($('<option>').attr('value', resource.id).text(resource.display_name));
+        }
+    }
+
     loadVirtualCloudNetworkSelect(id) {
         // Build Virtual Cloud Network
         let select = $(jqId(id));
@@ -2620,5 +2639,49 @@ class OkitContainerArtefactView extends OkitArtefactView {
     }
 
 }
+
+/*
+** Define Root Canvas View Artifact Class
+ */
+class Canvas extends OkitArtifact {
+    constructor(okitjson) {
+        super(okitjson)
+    }
+    get okit_id() {return 'pseudo-compartment'}
+    /*
+    ** Static Functionality
+     */
+    static getArtifactReference() {return 'Pseudo Compartment'}
+}
+
+/*
+** Define Root Canvas View Artifact Class
+ */
+class CanvasView extends OkitContainerArtefactView {
+    constructor(artefact=null, json_view) {
+        super(artefact, json_view);
+        this.export = false;
+
+    }
+
+    get parent_id() {return 'canvas'}
+    get parent() {return undefined}
+    get children() {return this.json_view.getCompartments().filter(child => child.parent_id === undefined || child.parent_id === null || child.parent_id === '' || child.parent_id === 'canvas' || child.parent_id === child.id)}
+    get minimum_dimensions() {return {width: $(`#${this.json_view.parent_id}`).width(), height: $(`#${this.json_view.parent_id}`).height()}}
+
+    /*
+    ** Child Type Functions
+     */
+    getContainerArtifacts() {
+        return [Compartment.getArtifactReference()];
+    }
+    /*
+    ** Static Functionality
+     */
+    static getArtifactReference() {return Canvas.getArtifactReference()}
+
+}
+
+
 
 let okitJsonView = null;

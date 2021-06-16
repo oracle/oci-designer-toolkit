@@ -1,0 +1,167 @@
+/*
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+ .okit-text-json-canvas {
+    display: block;
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: smaller;
+}
+
+.okit-text-json-canvas ul {
+    list-style: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.okit-text-json-canvas li:not(:last-child)::after {
+    content: ",";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas li {
+    padding-left: 1em;
+    margin-top: 2px;
+}
+
+.okit-text-json-canvas1 .collapsible::before {
+    content: "ᐁ";
+    color: #2C5967;
+    display: inline-block;
+}
+
+.okit-text-json-canvas1 .collapsible.element-collapsed::before {
+    content: "ᐅ";
+    color: #2C5967;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .object.collapsible:not(.element-collapsed)>label::after {
+    content: "{";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .object.empty>label::after {
+    content: "{ }";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .object.collapsible:not(:last-child)::after {
+    content: "},";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .object.collapsible::after {
+    content: "}";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .object.collapsible.element-collapsed:not(:last-child)::after {
+    content: "{...},";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .object.collapsible.element-collapsed::after {
+    content: "{...}";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .array.collapsible:not(.element-collapsed)>label::after {
+    content: "[";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .array.empty>label::after {
+    content: "[ ]";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .array.collapsible:not(:last-child)::after {
+    content: "],";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .array.collapsible::after {
+    content: "]";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .array.collapsible.element-collapsed:not(:last-child)::after {
+    content: "[...],";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .array.collapsible.element-collapsed::after {
+    content: "[...]";
+    color: black;
+    display: inline-block;
+}
+
+.okit-text-json-canvas .element-collapsed>ul {
+    visibility: hidden;
+    display: none;
+}
+
+.okit-text-json-canvas input {
+    border: #aeaeae 1px;
+}
+
+.okit-text-json-canvas label.key {
+    padding-right: 10px;
+}
+
+.okit-text-json-canvas label span.key {
+    color: #2C5967;
+}
+
+.okit-text-json-canvas label span.colon {
+    color: black;
+    font-weight: bolder;
+    padding-left: 2px;
+    padding-right: 10px;
+}
+
+.okit-text-json-canvas label.number {
+    color: green;
+}
+
+.okit-text-json-canvas label.string {
+    color: #BB501C;
+}
+
+.okit-text-json-canvas label.string::before {
+    content: "\"";
+}
+
+.okit-text-json-canvas label.string::after {
+    content: "\"";
+}
+
+.okit-text-json-canvas label.boolean {
+    color: blueviolet;
+}
+
+.okit-text-json-canvas label.object {
+    color: blue;
+}
+

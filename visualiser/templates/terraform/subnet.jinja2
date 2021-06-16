@@ -1,4 +1,16 @@
 
+{% if read_only %}
+# ------ Read Subnet
+data "oci_core_subnet" "{{ resource_name }}" {
+    # Required
+    subnet_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id              = data.oci_core_subnet.{{ resource_name }}.id
+    {{ resource_name }}_domain_name     = data.oci_core_subnet.{{ resource_name }}.subnet_domain_name
+}
+{% else %}
 # ------ Create Subnet
 # ---- Create Public Subnet
 resource "oci_core_subnet" "{{ resource_name }}" {
@@ -46,3 +58,4 @@ locals {
     {{ resource_name }}_id              = oci_core_subnet.{{ resource_name }}.id
     {{ resource_name }}_domain_name     = oci_core_subnet.{{ resource_name }}.subnet_domain_name
 }
+{% endif %}

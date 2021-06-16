@@ -1,10 +1,30 @@
 # Release Notes
 
 
+## Version 0.23.0
+**Release Date**: 16th June 2021
+### Features
+1. Json View to allow user to see model.
+2. Updated Explorer View Side Panel.
+3. Analytics Instance Resource.
+4. Queried components are marked as Read Only and will generate Terraform Data commands rather than Resource statements.
+5. Sort Tabular View Tabs alphabetically.
+6. View select list added to the header.
+7. Mark top level Compartment on New Diagram as "Deployment Compartment" for new designs to indicate that it will not be created but just represents the root compartment where the resources will be created.
+
+### Bug Fixes
+1. GitHub Issue #316 : OKIT attempts to add defined_tags to oci_core_network_security_group_security_rule
+2. Remove spurious variables.
+3. Fix invalid local dchp variable name when not using default.
+4. Resolve space in output variable name.
+
+
 ## Version 0.22.1
 **Release Date**: 26th May 2021
 ### Bug Fixes
 1. Resolve display issue with new icon when running FireFox
+
+
 
 ## Version 0.22.0
 **Release Date**: 26th May 2021

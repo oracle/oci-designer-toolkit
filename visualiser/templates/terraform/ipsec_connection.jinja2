@@ -1,5 +1,21 @@
 
-# ------ Create Customer Premise Equipment
+{% if read_only %}
+# ------ Read IpSec Connection
+data "oci_core_ipsec_connections" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %}
+# ------ Create IpSec Connection
 resource "oci_core_ipsec" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_id }}
@@ -25,3 +41,4 @@ resource "oci_core_ipsec" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_core_ipsec.{{ resource_name }}.id
 }
+{% endif %}

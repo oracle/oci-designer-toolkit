@@ -1,4 +1,15 @@
 
+{% if read_only %}
+# ------ Read NAT Gateway
+data "oci_core_nat_gateway" "{{ resource_name }}" {
+    # Required
+    nat_gateway_id = {{ ocid | safe }}
+}
+
+locals {
+    {{ resource_name }}_id = data.oci_core_nat_gateway.{{ resource_name }}.id
+}
+{% else %}
 # ------ Create NAT Gateway
 resource "oci_core_nat_gateway" "{{ resource_name }}" {
     # Required
@@ -20,3 +31,4 @@ resource "oci_core_nat_gateway" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_core_nat_gateway.{{ resource_name }}.id
 }
+{% endif %}

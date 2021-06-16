@@ -15,6 +15,12 @@ import datetime
 import os
 from model import bom
 
+from common.okitCommon import jsonToFormattedString
+from common.okitLogging import getLogger
+# Configure logging
+logger = getLogger()
+
+
 
 import numpy as np
 import pandas as pd
@@ -60,6 +66,9 @@ def load_json(filename):
 
     # Call pricing calculator
     OKIT_RESULTS = price_calculator(filename, all_resources)
+    logger.debug(jsonToFormattedString(OKIT_RESULTS[0]))
+    logger.debug("BoM")
+    logger.debug(OKIT_RESULTS[1])
 
     return OKIT_RESULTS[0]
 

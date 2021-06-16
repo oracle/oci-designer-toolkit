@@ -1,4 +1,20 @@
 
+{% if read_only %}
+# ------ Read Loadbalancer
+data "oci_load_balancer_load_balancers" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %}
 # ------ Create Loadbalancer
 resource "oci_load_balancer_load_balancer" "{{ resource_name }}" {
     # Required
@@ -39,11 +55,11 @@ locals {
     {{ resource_name }}_url           = format("http://%s", oci_load_balancer_load_balancer.{{ resource_name }}.ip_address_details[0]["ip_address"])
 }
 
-output "{{ output_name }}IPAddress" {
+output "{{ resource_name }}IPAddress" {
     value = local.{{ resource_name }}_ip_address
 }
 
-output "{{ output_name }}URL" {
+output "{{ resource_name }}URL" {
     value = format("http://%s", local.{{ resource_name }}_ip_address)
 }
 
@@ -139,3 +155,4 @@ resource "oci_load_balancer_listener" "{{ resource_name }}Listener" {
 locals {
     {{ resource_name }}Listener_id            = oci_load_balancer_listener.{{ resource_name }}Listener.id
 }
+{% endif %}

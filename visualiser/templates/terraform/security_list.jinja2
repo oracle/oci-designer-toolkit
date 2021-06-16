@@ -1,4 +1,20 @@
 
+{% if read_only %}
+# ------ Read Security List
+data "oci_core_security_lists" "{{ resource_name }}" {
+    # Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+    {{ resource_name }}_ocid = {{ ocid | safe }}
+}
+{% else %}
 # ------ Create Security List
 {% if manage_default_resource_id is defined %}
 # ------- Update VCN Default Security List
@@ -129,4 +145,5 @@ locals {
 locals {
     {{ resource_name }}_id = oci_core_security_list.{{ resource_name }}.id
 }
+{% endif %}
 {% endif %}

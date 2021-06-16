@@ -3,8 +3,20 @@
 data "oci_objectstorage_namespace" "{{ resource_name }}Namespace" {
     #Optional
     compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
 }
 
+{% if read_only %}
+# ------ Read Object Storage Bucket
+data "oci_objectstorage_bucket" "{{ resource_name }}" {
+    # Required
+    name           = {{ name | safe }}
+    namespace      = data.oci_objectstorage_namespace.{{ resource_name }}Namespace.namespace
+}
+{% else %}
 # ------ Create Object Storage Bucket
 resource "oci_objectstorage_bucket" "{{ resource_name }}" {
     #Required
@@ -25,3 +37,4 @@ resource "oci_objectstorage_bucket" "{{ resource_name }}" {
     #metadata = {{ metadata | safe }}
     #object_events_enabled = {{ object_events_enabled | safe }}
 }
+{% endif %}
