@@ -66,7 +66,7 @@ class OCIImages(OCIComputeConnection):
         logJson(deduplicated)
         #images_json = deduplicated
         # Add Shape Compatibility
-        # TODO: Upgade oci sdk
+        # TODO: Upgrade oci sdk
         shape_capabilities = OCIImageShapeCompatibility()
         for image in images_json:
             image['shapes'] = [s['shape'] for s in shape_capabilities.list(image['id'])]

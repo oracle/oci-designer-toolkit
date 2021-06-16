@@ -307,7 +307,7 @@ class OCIQuery(OCIConnection):
                     service_elements = service['service_name'].split()
                     del service_elements[1]
                     gateway['service_name'] = " ".join(service_elements)
-                    # At the moment we only have 2 optiona All or OCI Object Storage hence we just need the first 3 characters
+                    # At the moment we only have 2 options - All or OCI Object Storage hence we just need the first 3 characters
                     gateway['service_name'] = service_elements[0]
         return gateways
 

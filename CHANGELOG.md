@@ -61,7 +61,7 @@
 ## Version 0.20.0
 **Release Date**: 14th April 2021
 ### Features
-1. Add Command line svg generation based on the "**.okit**" file format. The [okit-cli](documentation/okit-cli.md) will allow the user to convert an OKIT "**.json**" file to the upcomming "**.okit**" file and subsequently generated an .svg file.
+1. Add Command line svg generation based on the "**.okit**" file format. The [okit-cli](documentation/okit-cli.md) will allow the user to convert an OKIT "**.json**" file to the upcoming "**.okit**" file and subsequently generated an .svg file.
 2. Change default Query to normal query rather than fast discovery and allow user to select "Fast Discovery" from the Query dialog when in developer mode.
 
 ### Bug Fixes
@@ -239,7 +239,7 @@
 **Release Date**: 26th August 2020
 ### Features
 1. Modify the Hamburger menu to replace the mouseover events for menu display to mouse click events.
-2. Add OKE Cluster functionality. Corrently works in a similar way to the advanced console create (OKIT-13).
+2. Add OKE Cluster functionality. Currently works in a similar way to the advanced console create (OKIT-13).
 3. Add count field to instance to allow generation of X duplicate version of an instance. Save time and space creating duplicates.
 4. Add ability to specify Subnet for Autonomous Database (Issue: #76 & Issue: #81).
 5. Add OKE example fragment.
@@ -349,7 +349,7 @@
 ## Version 0.5.1 
 **Release Date**: 18th May 2020
 ### Features
-1. Consolidate vangrant and docker files below container directory.
+1. Consolidate Vagrant and docker files below container directory.
 2. Remove requirement to run bash scripts to build docker container
 3. Document pure docker commands.
 

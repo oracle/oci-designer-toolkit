@@ -8,7 +8,7 @@
 import requests
 
 ########################################################################
-# Calcuate based on METRICDISPLAYNAME
+# Calculate based on METRICDISPLAYNAME
 ########################################################################
 ociprice_url = "https://guk9elytviiyjhz-devadw.adb.uk-london-1.oraclecloudapps.com/ords/ociprice/okit/ociprice/"
 
@@ -64,7 +64,7 @@ def BM_Exa_OCPU_per_hr(license_model,database_edition, dbaas_license_price, dbaa
     sku = ''
 
     #Up to 50 additional OCPU's (purchased separately). Note: Additional OCPUs must be purchased in increments of 2 OCPUs.
-    #Dense IO shape of DBaas uses Hosted_Environment_Per_Hour. 1 Dense IO SKU inlcudes 2 ocpu price.
+    #Dense IO shape of DBaas uses Hosted_Environment_Per_Hour. 1 Dense IO SKU includes 2 ocpu price.
 
     if dbaas_shape == "bm":
         # PAYG for 2 ocpu
@@ -73,7 +73,7 @@ def BM_Exa_OCPU_per_hr(license_model,database_edition, dbaas_license_price, dbaa
         Monthly_Flex_OCPU = round(dbaas_license_price[1] * ocpu_per_month,2)
         #print("BM.DenseIO Hosted Environment Price: {} , {}".format(PAYG_OCPU, Monthly_Flex_OCPU))
         if license_model == "LICENSE_INCLUDED":
-            # Additional Capcacity (in increment of 2 OCPUs, max upto 50 OCPUS)
+            # Additional Capacity (in increment of 2 OCPUs, max upto 50 OCPUS)
             if database_edition == "standard_edition":
                 additional_dense_ocpu_price = get_oci_price_ords("B88331")
                 sku = "B88331"
@@ -91,9 +91,9 @@ def BM_Exa_OCPU_per_hr(license_model,database_edition, dbaas_license_price, dbaa
             additional_dense_ocpu_price = get_oci_price_ords("B88846")
             sku = "B88846"
         #print("BM.DenseIO additional ocpu Price: {} , {}".format(round(additional_dense_ocpu_price[0] * additional_ocpu * ocpu_per_month, 2), round(additional_dense_ocpu_price[1] * additional_ocpu * ocpu_per_month, 2)))
-        # PAYG for additonal ocpu
+        # PAYG for additional ocpu
         PAYG_OCPU += round(additional_dense_ocpu_price[0] * additional_ocpu * ocpu_per_month, 2)
-        # Monthly Flex for additonal ocpu
+        # Monthly Flex for additional ocpu
         Monthly_Flex_OCPU += round(additional_dense_ocpu_price[1] * additional_ocpu * ocpu_per_month, 2)
 
     elif dbaas_shape == "ex":
@@ -111,9 +111,9 @@ def BM_Exa_OCPU_per_hr(license_model,database_edition, dbaas_license_price, dbaa
             additional_exacs_ocpu_price = get_oci_price_ords("B88847")
             sku = "B88847"
         #print("ExaCS additional ocpu Price: {} , {}".format(round(additional_exacs_ocpu_price[0] * additional_ocpu * ocpu_per_month, 2), round(additional_exacs_ocpu_price[1] * additional_ocpu * ocpu_per_month, 2)))
-        # PAYG for additonal ocpu
+        # PAYG for additional ocpu
         PAYG_OCPU += round(additional_exacs_ocpu_price[0] * additional_ocpu * ocpu_per_month, 2)
-        # Monthly Flex for additonal ocpu
+        # Monthly Flex for additional ocpu
         Monthly_Flex_OCPU += round(additional_exacs_ocpu_price[1] * additional_ocpu * ocpu_per_month, 2)
 
     return PAYG_OCPU, Monthly_Flex_OCPU, sku , additional_ocpu

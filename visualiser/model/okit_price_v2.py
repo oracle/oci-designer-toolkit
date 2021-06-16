@@ -389,7 +389,7 @@ def price_calculator(okitjson, all_resources):
     # FastConnect price calculator
     #############################################
     if okitjson['fast_connects']:
-        # Currentl OKIT does not have an option to select provisioned FC bandwidth
+        # Currently OKIT does not have an option to select provisioned FC bandwidth
         bandwidth = "1Gbps"
         PAYG_FC_price = 0
         Monthly_Flex_FC_price = 0
@@ -461,12 +461,12 @@ def price_calculator(okitjson, all_resources):
     # Object Storage Service price calculator
     #############################################
     if okitjson['object_storage_buckets']:
-        # default 1TB, 100K request,  fist 50K resuests will be free
+        # default 1TB, 100K request, first 50K requests will be free
         object_storage_gb = 1000
         requests = 1000000
         # get requests of object storage
         object_request_price = calculator.get_oci_price_ords('B91627')
-        # fist 50K resuests will be free
+        # first 50K requests will be free
         requests -= 50000
         PAYG_Request, Monthly_Flex_Request = calculator.Request_per_month(
             object_request_price, requests)
@@ -497,7 +497,7 @@ def price_calculator(okitjson, all_resources):
 
 
     #############################################
-    # Oracke Kubernetes Engine price calculator
+    # Oracle Kubernetes Engine price calculator
     #############################################
     if okitjson['oke_clusters']:
         PAYG_Compute_OCPU = 0
