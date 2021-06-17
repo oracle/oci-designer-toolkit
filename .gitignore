@@ -42,3 +42,6 @@ containers/ssh/*
 
 **/node_modules
 **/package-lock.json
+
+okitweb/static/okit/json/dropdown_data/*
+okitweb/static/okit/templates/user/*
