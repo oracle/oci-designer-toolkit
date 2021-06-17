@@ -1023,14 +1023,14 @@ class OciResourceDiscoveryClient(object):
                 # not inlcuded in the search results
                 regional_resource_requests.add(("Image", self.config["tenancy"], None))
 
-            if "MySQLConfiguration" in self.include_resource_types:
+            if self.include_resource_types and "MySQLConfiguration" in self.include_resource_types:
                 # add search for MySQLConfiguration in tenancy to get the default configurations that are
                 # not included in the per compartment results.
                 regional_resource_requests.add(("MySQLConfiguration", self.config["tenancy"], "DEFAULT"))
 
             # get static/read-only resources 
             for ro_resource_type in OciResourceDiscoveryClient.static_resource_client_methods:
-                if ro_resource_type in self.include_resource_types and ro_resource_type not in ["VirtualCircuitBandwidthShape"]:
+                if self.include_resource_types and ro_resource_type in self.include_resource_types and ro_resource_type not in ["VirtualCircuitBandwidthShape"]:
                     # always add search for these resources in the root compartment
                     regional_resource_requests.add((ro_resource_type, self.config["tenancy"], None))
                 
@@ -1241,7 +1241,7 @@ class OciResourceDiscoveryClient(object):
             for vnic_attachment in resources_by_region[region]["VnicAttachment"] if (self.include_resource_types == None or "Vnic" in self.include_resource_types) and "VnicAttachment" in resources_by_region[region] else []:
                 regional_resource_requests.add(("Vnic", vnic_attachment.compartment_id, vnic_attachment.vnic_id))
             # get FastConnect circuit shapes
-            for fastconnect_provider in resources_by_region[region]["FastConnectProviderService"] if (self.include_resource_types == None or "VirtualCircuitBandwidthShape" in self.include_resource_types) else []:
+            for fastconnect_provider in resources_by_region[region]["FastConnectProviderService"] if (self.include_resource_types == None or "VirtualCircuitBandwidthShape" in self.include_resource_types) and "FastConnectProviderService" in resources_by_region[region] else []:
                 regional_resource_requests.add(("VirtualCircuitBandwidthShape", None, fastconnect_provider.id))
             # find references to images that are not in the image results and do an explict get
             for instance in resources_by_region[region]["Instance"] if (self.include_resource_types == None or "Image" in self.include_resource_types) and "Instance" in resources_by_region[region] and "Image" in resources_by_region[region] else []:
