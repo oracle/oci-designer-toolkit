@@ -57,28 +57,6 @@ function handleDropdownMenuMouseOver(e) {
     $slideout.css('left', parentX + menuX + width);
 }
 
-function addMenuDropdownMouseOver(root='li.dropdown') {
-    $(`${root}`).on('mouseover', handleDropdownMenuMouseOver);
-}
-function addMenuDropdownMouseOver1(root='li.dropdown') {
-    $(`${root}`).on('mouseover', function() {
-        const parentX = $(this).parent().position().left;
-        const parentY = $(this).parent().position().top;
-        const parentW = $(this).parent().innerWidth();
-        const menuX = $(this).position().left;
-        const menuY = $(this).position().top;
-        const width = $(this).innerWidth();
-        const scrollX = $('#navigation_menu').scrollLeft();
-        const scrollY = $('#navigation_menu').scrollTop();
-        const navX = $('#navigation_menu').offset().left;
-        const navY = $('#navigation_menu').offset().top;
-        const $slideout = $('> .dropdown-content', $(this));
-        $slideout.css('position', 'absolute');
-        $slideout.css('top', menuY + scrollY);
-        $slideout.css('left', parentX + menuX + width);
-    });
-}
-
 $(document).ready(function() {
     /*
     ** Add handler functionality
@@ -96,8 +74,6 @@ $(document).ready(function() {
     });
 
     $(jqId('okit_version')).text('Version: ' + okitVersion + '  (' + okitReleaseDate + ')');
-
-    // addMenuDropdownMouseOver();
 
     checkForUpdate();
 
