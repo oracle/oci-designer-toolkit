@@ -38,7 +38,29 @@ function handleSlideOutMouseOver(elem) {
     console.warn(`SlideOutMouseOver ${elem.id}`);
 }
 
+function handleDropdownMenuMouseOver(e) {
+    e = e || window.event
+    const self = e.currentTarget ? e.currentTarget : e.target;
+    const parentX = $(self).parent().position().left;
+    const parentY = $(self).parent().position().top;
+    const parentW = $(self).parent().innerWidth();
+    const menuX = $(self).position().left;
+    const menuY = $(self).position().top;
+    const width = $(self).innerWidth();
+    const scrollX = $('#navigation_menu').scrollLeft();
+    const scrollY = $('#navigation_menu').scrollTop();
+    const navX = $('#navigation_menu').offset().left;
+    const navY = $('#navigation_menu').offset().top;
+    const $slideout = $('> .dropdown-content', $(self));
+    $slideout.css('position', 'absolute');
+    $slideout.css('top', menuY + scrollY);
+    $slideout.css('left', parentX + menuX + width);
+}
+
 function addMenuDropdownMouseOver(root='li.dropdown') {
+    $(`${root}`).on('mouseover', handleDropdownMenuMouseOver);
+}
+function addMenuDropdownMouseOver1(root='li.dropdown') {
     $(`${root}`).on('mouseover', function() {
         const parentX = $(this).parent().position().left;
         const parentY = $(this).parent().position().top;
@@ -75,7 +97,7 @@ $(document).ready(function() {
 
     $(jqId('okit_version')).text('Version: ' + okitVersion + '  (' + okitReleaseDate + ')');
 
-    addMenuDropdownMouseOver();
+    // addMenuDropdownMouseOver();
 
     checkForUpdate();
 

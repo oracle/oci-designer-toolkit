@@ -1,5 +1,5 @@
 {%- macro add_template_menu_group(template_group) -%}
-    <li id="{{ template_group['id'] }}" class="sub-header-item dropdown"><span>{{ template_group['name'] }}</span>
+    <li id="{{ template_group['id'] }}" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()"><span>{{ template_group['name'] }}</span>
         <ul class="dropdown-content">
             {% for template in template_group['templates'] %}
                 {{ add_template_menu_item(template) }}
