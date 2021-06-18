@@ -4,33 +4,7 @@
 -->
 {% extends "okit/okit_console.html" %}
 
-{% macro template_menu_item(okit_template) -%}
-    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
-           onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
-{%- endmacro %}
-
-{% macro template_menu(categories) -%}
-    {% for name, category in categories.items() %}
-        {% if name == '.' %}
-            {% if category['templates']|length > 0 %}
-                {% for okit_template in category['templates'] %}
-                    {{ template_menu_item(okit_template) }}
-                {% endfor %}
-            {% endif %}
-        {% else %}
-            <li id="{{ category['name'] }}" class="sub-header-item dropdown"><span>{{ category['name'] }}</span>
-                <ul class="dropdown-content">
-                    {% if category['children'].values()|length > 0 %}
-                        {{ template_menu(category['children']) }}
-                    {% endif %}
-                    {% for okit_template in category['templates'] %}
-                        {{ template_menu_item(okit_template) }}
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endif %}
-    {% endfor %}
-{%- endmacro %}
+{% import "okit/menu_macros.jinja2" as menu with context %}
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
@@ -145,7 +119,7 @@
             <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li>
             <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
         </ul>
-        <ul class="okit-navigation-sub-list">
+        <ul id="templates_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -154,44 +128,18 @@
                     </span>
                 </div>
             </li>
-            <!--{{ template_menu(okit_template_categories) }}-->
+            <!--{{ menu.template_menu_empty(okit_template_categories) }}-->
             {% for template_group in okit_templates_groups %}
                 {% if template_group['name'] == '.' %}
                     {% for okit_template in template_group['templates'] %}
-                        <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
-                               onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+                        {{ menu.add_template_menu_item(okit_template) }}
                     {% endfor %}
-                {% elif template_group['templates']|length > 0 %}
-                    <li id="{{ template_group['name'] }}" class="sub-header-item dropdown"><span>{{ template_group['name'] }}</span>
-                        <ul class="dropdown-content">
-                            {% for okit_template in template_group['templates'] %}
-                                <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
-                                       onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
+                {% elif template_group['templates'] %}
+                    {{ menu.add_template_menu_group(template_group) }}
                 {% endif %}
             {% endfor %}
             <li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li>
         </ul>
-        <!--ul class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="View Menu"></div>
-                        <span>View</span>
-                    </span>
-                </div>
-            </li>
-            <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToCompartmentView()">Designer</a></li>
-            <li><a id="view-tabular-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToTabularView()">Tabular</a></li>
-            <li><a id="view-relationship-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToRelationshipView()">Relationship</a></li>
-            <li><a id="view-json-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToTextJsonView()">Json</a></li>
-            {% if experimental_mode %}
-            <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToNetworkView()">Network (Experimental)</a></li>
-            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToSecurityView()">Security (Experimental)</a></li>
-            {% endif %}
-        </ul-->
         <ul class="okit-navigation-sub-list">
             <li>
                 <div>

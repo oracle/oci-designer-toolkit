@@ -351,14 +351,38 @@ function handleSaveAsTemplate(e) {
         data: JSON.stringify(okitJsonModel),
         success: function(resp) {
             console.info('Response : ' + resp);
-            // Hide modal dialog
-            $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            reloadTemplateMenu('user');
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
             console.info('Error : '+ error)
+        },
+        complete: function() {
             // Hide modal dialog
             $(jqId('modal_dialog_wrapper')).addClass('hidden');
+        }
+    });
+}
+function reloadTemplateMenu(section) {
+    const id = `${section}_template_menu_group`;
+    $.ajax({
+        type: 'get',
+        url: `templates/${section}`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_menu = doc.getElementById(id);
+            const current_menu = document.getElementById(id);
+            const template_menu = document.getElementById('templates_menu')
+            // Check if menu section already exists
+            current_menu !== null ? current_menu.replaceWith(new_menu) : template_menu.appendChild(new_menu);
+            addMenuDropdownMouseOver(`#${id}`);   
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
         }
     });
 }
