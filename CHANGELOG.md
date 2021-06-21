@@ -1,6 +1,12 @@
 # Release Notes
 
 
+## Version 0.23.1
+**Release Date**: 21st June 2021
+### Bug Fixes
+1. Fix issue with Terraform generation of Loadbalacers where the subnet ids were not being added to the resource.
+
+
 ## Version 0.23.0
 **Release Date**: 16th June 2021
 ### Features
@@ -15,7 +21,7 @@
 ### Bug Fixes
 1. GitHub Issue #316 : OKIT attempts to add defined_tags to oci_core_network_security_group_security_rule
 2. Remove spurious variables.
-3. Fix invalid local dchp variable name when not using default.
+3. Fix invalid local DHCP variable name when not using default.
 4. Resolve space in output variable name.
 
 

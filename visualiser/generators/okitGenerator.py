@@ -57,7 +57,7 @@ class OCIGenerator(object):
         # -- Add Standard Author / Copyright variables
         self.jinja2_variables["author"] = __author__
         self.jinja2_variables["copyright"] = __copyright__
-        self.jinja2_variables["okit_version"] = "0.23.0"
+        self.jinja2_variables["okit_version"] = "0.23.1"
 
     def get(self, artifact_type, id):
         artifact = {};
@@ -1123,7 +1123,7 @@ class OCIGenerator(object):
         jinja2_subnet_ids = []
         for subnet_id in resource.get('subnet_ids', []):
             jinja2_subnet_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[subnet_id])))
-        self.jinja2_variables["resource_subnet_ids"] = jinja2_subnet_ids
+        self.jinja2_variables["loadbalancer_subnet_ids"] = jinja2_subnet_ids
         # ---- Backend Instances
         jinja2_backend_instances_resource_names = []
         for backend_instance_id in resource.get('instance_ids', []):
