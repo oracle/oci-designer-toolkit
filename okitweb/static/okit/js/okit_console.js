@@ -38,6 +38,56 @@ function handleSlideOutMouseOver(elem) {
     console.warn(`SlideOutMouseOver ${elem.id}`);
 }
 
+function handleDropdownMenuMouseOver(event) {
+    event = event || window.event;
+    event.stopPropagation();
+    const self = event.currentTarget ? event.currentTarget : event.target;
+    const parentX = $(self).parent().position().left;
+    const parentY = $(self).parent().position().top;
+    const parentW = $(self).parent().innerWidth();
+    const menuX = $(self).position().left;
+    const menuY = $(self).position().top;
+    const width = $(self).innerWidth();
+    const scrollX = $('#navigation_menu').scrollLeft();
+    const scrollY = $('#navigation_menu').scrollTop();
+    const navX = $('#navigation_menu').offset().left;
+    const navY = $('#navigation_menu').offset().top;
+    const $slideout = $('> .dropdown-content', $(self));
+    console.info('=================================', self.id)
+    console.info('Parent', parentX, parentY, parentW)
+    console.info('Menu', menuX, menuY, width)
+    console.info('Scroll', scrollX, scrollY)
+    console.info('Nav', navX, navY)
+    $slideout.css('position', 'absolute');
+    $slideout.css('top', menuY + scrollY);
+    $slideout.css('left', parentX + menuX + width);
+}
+
+function handleDropdownMenuMouseOverOld(event) {
+    event = event || window.event;
+    event.stopPropagation();
+    const self = event.currentTarget ? event.currentTarget : event.target;
+    const parentX = $(self).parent().position().left;
+    const parentY = $(self).parent().position().top;
+    const parentW = $(self).parent().innerWidth();
+    const menuX = $(self).position().left;
+    const menuY = $(self).position().top;
+    const width = $(self).innerWidth();
+    const scrollX = $('#navigation_menu').scrollLeft();
+    const scrollY = $('#navigation_menu').scrollTop();
+    const navX = $('#navigation_menu').offset().left;
+    const navY = $('#navigation_menu').offset().top;
+    const $slideout = $('> .dropdown-content', $(self));
+    console.info('=================================', self.id)
+    console.info('Parent', parentX, parentY, parentW)
+    console.info('Menu', menuX, menuY, width)
+    console.info('Scroll', scrollX, scrollY)
+    console.info('Nav', navX, navY)
+    $slideout.css('position', 'absolute');
+    $slideout.css('top', menuY + scrollY);
+    $slideout.css('left', parentX + menuX + width);
+}
+
 $(document).ready(function() {
     /*
     ** Add handler functionality
@@ -55,23 +105,6 @@ $(document).ready(function() {
     });
 
     $(jqId('okit_version')).text('Version: ' + okitVersion + '  (' + okitReleaseDate + ')');
-
-    $('li.dropdown').on('mouseover', function() {
-        const parentX = $(this).parent().position().left;
-        const parentY = $(this).parent().position().top;
-        const parentW = $(this).parent().innerWidth();
-        const menuX = $(this).position().left;
-        const menuY = $(this).position().top;
-        const width = $(this).innerWidth();
-        const scrollX = $('#navigation_menu').scrollLeft();
-        const scrollY = $('#navigation_menu').scrollTop();
-        const navX = $('#navigation_menu').offset().left;
-        const navY = $('#navigation_menu').offset().top;
-        const $slideout = $('> .dropdown-content', $(this));
-        $slideout.css('position', 'absolute');
-        $slideout.css('top', menuY + scrollY);
-        $slideout.css('left', parentX + menuX + width);
-    });
 
     checkForUpdate();
 

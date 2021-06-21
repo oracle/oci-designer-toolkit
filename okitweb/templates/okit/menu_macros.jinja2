@@ -1,0 +1,48 @@
+{%- macro add_template_menu_group(template_group) -%}
+    <li id="{{ template_group['id'] }}" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()"><span>{{ template_group['name'] }}</span>
+        <ul class="dropdown-content">
+            {% for template in template_group['templates'] %}
+                {{ add_template_menu_item(template) }}
+            {% endfor %}
+            {% for group in template_group['directories'] %}
+                {{ add_template_menu_group(group) }}
+            {% endfor %}
+        </ul>
+    </li>
+{%- endmacro %}
+
+{%- macro add_template_menu_item(okit_template) -%}
+    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['title'] }}" class="parent-item" href="javascript:void(0)" onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+{%- endmacro %}
+
+{%- macro build_template_menu(okit_templates_groups) -%}
+    {% for template_group in okit_templates_groups %}
+        {{ add_template_menu_group(template_group) }}
+    {% endfor %}
+{%- endmacro %}
+
+{%- macro template_menu(categories) -%}
+    {% for name, category in categories.items() %}
+        {% if name == '.' -%}
+            {% if category['templates']|length > 0 %}
+                {% for okit_template in category['templates'] %}
+                    {{ add_template_menu_group(okit_template) }}
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            <li id="{{ category['name'] }}" class="sub-header-item dropdown"><span>{{ category['name'] }}</span>
+                <ul class="dropdown-content">
+                    {% if category['children'].values()|length > 0 %}
+                        {{ template_menu(category['children']) }}
+                    {% endif %}
+                    {% for okit_template in category['templates'] %}
+                        {{ add_template_menu_group(okit_template) }}
+                    {% endfor %}
+                </ul>
+            </li>
+        {%- endif %}
+    {% endfor %}
+{%- endmacro -%}
+
+{%- macro template_menu_empty(categories) -%}
+{%- endmacro -%}

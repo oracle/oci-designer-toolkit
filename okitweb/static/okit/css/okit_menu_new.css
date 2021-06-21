@@ -1,0 +1,124 @@
+/*
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+/*
+** Navigation Menu
+ */
+
+ .okit-navigation-menu-button {
+    height: 100%;
+    margin-left: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: none;
+    background-color: #1d2733;
+}
+
+.okit-navigation-menu-button:hover {
+    outline: 0;
+    background-color: #253141;
+}
+
+.okit-navigation-menu-button-icon {
+    margin-right: 0;
+    padding: 8px 0;
+}
+
+.okit-navigation-menu {
+    overflow-y: auto;
+    overflow-x: visible;
+    position: absolute;
+    z-index: 101;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(37, 49, 65, 0.1);
+    direction: rtl;
+    transition: all 0.25s;
+    transform: translateX(-100%);
+    scrollbar-width: none;
+}
+
+.okit-navigation-menu-show {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+ul.okit-navigation-list {
+    float: left;
+    list-style: none;
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    min-height: 100%;
+    background-color: #253141;
+    direction: ltr;
+}
+
+ul.okit-navigation-list li {
+    list-style-type: none;
+}
+
+ul.okit-navigation-list li:first-child .header-item {
+    margin-top: 18px;
+}
+
+
+
+ul.okit-navigation-list li.header-item:first-child {
+    margin-top: 18px;
+}
+
+li.header-item > div {
+    display: inline-block;
+    margin-left: 0;
+    padding-left: 0;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-position-x: 0.75em;
+    background-size: 1em 1em;
+    white-space: nowrap;
+}
+
+li.header-item > div > label {
+    color: #fff;
+    opacity: .6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    margin-left: 3em;
+    text-wrap: none;
+    white-space: nowrap;
+}
+
+li.menu-item > div > label {
+    color: #fff;
+    border-left: 3px solid transparent;
+    box-sizing: border-box;
+    margin: 0;
+    min-height: 36px;
+    padding: 8px 13px;
+    text-decoration: none;
+}
+
+li.menu-item > div > label:hover {
+    background: #364150;
+    border-color: #39c5a6;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+li.slideout-item1 {
+    width: 200px;
+    border: 1px solid red;
+}
+
+li.slideout-item1 span::after {
+    content: ">";
+    color: #336600;
+    display: inline-block;
+}
+
+
