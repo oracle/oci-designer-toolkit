@@ -7,10 +7,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import { OkitResource } from '../okit_resource.js'
 
 class SecurityList extends OkitResource {

@@ -7,17 +7,14 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import fs from 'fs'
-import { JSDOM } from 'jsdom';
+import path from 'path'
+import { JSDOM } from 'jsdom'
 import { OkitData } from 'okit-node/src/data/okit.js'
-import { OkitView } from 'okit-node/src/view/okit_view.js'
+import { OkitCompartmentContainerView } from 'okit-node/src/view/views.js'
 import { OkitJsonImporter } from 'okit-node/src/importer/okit_json_importer.js'
 // Create Simple HTML Page with OKIT Canvas div
-const dom = new JSDOM(`<!DOCTYPE html><body><div id="okit-canvas-div"></div></body>`);
+const dom = new JSDOM(`<!DOCTYPE html><body><div id="okit-canvas-div"></div></body>`)
 const window = dom.window
 const document = dom.window.document
 
@@ -36,7 +33,7 @@ if (command.toLocaleLowerCase() === 'generate') {
         // Generated SVG file will be second in the list after command
         const output_filename = args[3]
         const okitData = new OkitData(input_data)
-        const okitView = new OkitView(okitData, document, 'okit-canvas-div', undefined, false, 'none', false, true)
+        const okitView = new OkitCompartmentContainerView(okitData, document, 'okit-canvas-div', undefined, false, 'none', false, true)
         okitView.draw()
         // Generated SVG file will be second in the list
         const svg_string = document.getElementById("okit-canvas-div").innerHTML
@@ -53,6 +50,8 @@ if (command.toLocaleLowerCase() === 'generate') {
         // console.info(input_data)
         const okitJsonImporter = new OkitJsonImporter(input_data)
         const okitData = okitJsonImporter.convert()
+        const okitView = new OkitCompartmentContainerView(okitData, document, 'okit-canvas-div', undefined, false, 'none', false, true)
+        okitView.draw()
         fs.writeFileSync(output_filename, okitData.toString())
 
         console.info('')

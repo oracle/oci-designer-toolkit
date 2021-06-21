@@ -7,10 +7,6 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 import { OkitContainerResource } from '../okit_resource.js'
 
 class Region extends OkitContainerResource {

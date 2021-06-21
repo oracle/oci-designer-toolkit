@@ -1,0 +1,43 @@
+{
+    "name": "okit-codegen",
+    "version": "0.20.0",
+    "description": "OKIT Node ES6 Modules",
+    "author": {
+        "name": "Andrew Hopkinson",
+        "email": "andrew.hopkinson@oracle.com",
+        "url": "https://github.com/oracle/oci-designer-toolkit"
+    },
+    "bugs": "https://github.com/oracle/oci-designer-toolkit/issues",
+    "homepage": "https://github.com/oracle/oci-designer-toolkit",
+    "license": "UPL",
+    "keywords": [
+        "oci",
+        "oracle cloud",
+        "okit",
+        "okit-codegen"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/oracle/oci-designer-toolkit"
+    },
+    "main": "src/okit-codegen.js",
+    "scripts": {
+        "start": "node .",
+        "test-generate-okit-model": "node src/okit-codegen.js generate okit-model-js ./src/code_generation/schema/tf-schema.json test/model",
+        "test-generate-okit-properties": "node src/okit-codegen.js generate okit-properties-js ./src/code_generation/schema/tf-schema.json test/properties",
+        "test-generate-okit-ansible": "node src/okit-codegen.js generate okit-ansible-js ./src/code_generation/schema/tf-schema.json test/ansible",
+        "test-generate-okit-terraform": "node src/okit-codegen.js generate okit-terraform-js ./src/code_generation/schema/tf-schema.json test/terraform",
+        "test-generate-okit-markdown": "node src/okit-codegen.js generate okit-markdown-js ./src/code_generation/schema/tf-schema.json test/markdown",
+        "generate-okit-model": "node src/okit-codegen.js generate okit-model-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/model",
+        "generate-okit-properties": "node src/okit-codegen.js generate okit-properties-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/properties",
+        "generate-okit-ansible": "node src/okit-codegen.js generate okit-ansible-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/generators/ansible",
+        "generate-okit-terraform": "node src/okit-codegen.js generate okit-terraform-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/generators/terraform",
+        "generate-okit-markdown": "node src/okit-codegen.js generate okit-markdown-js ./src/code_generation/schema/tf-schema.json ../okit-node/src/generators/markdown"
+    },
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "jsdom": "^16.5.1",
+        "okit-node": "file:../okit-node"
+    }
+}
