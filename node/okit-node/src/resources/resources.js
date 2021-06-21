@@ -7,17 +7,13 @@
 ** Author: Andrew Hopkinson
 */
 
-/*
-** Author: Andrew Hopkinson
-*/
-
 export { OkitResource } from './okit_resource.js'
 export { AutonomousDatabase } from './autonomous_database/autonomous_database.js'
 export { Bucket } from './bucket/bucket.js'
 export { Cluster } from './cluster/cluster.js'
 export { Compartment } from './compartment/compartment.js'
 export { Cpe } from './cpe/cpe.js'
-export { Database } from './database/database.js'
+export { DbSystem } from './db_system/db_system.js'
 export { Drg } from './drg/drg.js'
 export { FileSystem } from './file_system/file_system.js'
 export { Instance } from './instance/instance.js'
