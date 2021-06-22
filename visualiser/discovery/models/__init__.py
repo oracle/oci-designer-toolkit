@@ -7,6 +7,7 @@ from .file_storage import ExtendedExportSummary
 from .object_storage import ExtendedPreauthenticatedRequestSummary
 from .mysql import ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 from .database import ExtendedDbNodeSummary
+from .virtual_network import ExtendedVirtualCircuitBandwidthShape
 
 __all__ = [
   "ExtendedAutoScalingPolicySummary",
@@ -18,4 +19,5 @@ __all__ = [
   "ExtendedPreauthenticatedRequestSummary",
   "ExtendedSecurityRule",
   "ExtendedSourceApplicationSummary",
+  "ExtendedVirtualCircuitBandwidthShape",
 ]
