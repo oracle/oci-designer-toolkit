@@ -218,6 +218,120 @@ def designer():
 
     template_groups = []
     for key in sorted(template_dirs.keys()):
+        template_group = {'id': '{0!s:s}_template_menu_group'.format(str(key)), 'name': str(key).replace('_', ' ').title(), 'templates': [], 'directories': {}}
+        for template_file in sorted(template_dirs[key]):
+            try:
+                okit_template = {'json': os.path.join(key, template_file), 'id': template_file.replace('.', '_')}
+                filename = os.path.join(bp.static_folder, 'templates', key, template_file)
+                template_json = readJsonFile(filename)
+                logger.debug('Template Json : {0!s:s}'.format(template_json))
+                okit_template['title'] = template_json['title']
+                okit_template['description'] = template_json.get('description', template_json['title'])
+                template_group['templates'].append(okit_template)
+            except Exception as e:
+                logger.debug(e)
+        template_groups.append(template_group)
+    logger.debug(f'Template Groups : {jsonToFormattedString(template_groups)}')
+
+    template_categories = {}
+    for key in sorted(template_dirs.keys()):
+        name = str(key.split('/')[0]).replace('_', ' ').title()
+        path = key
+        category = template_categories.get(name, {'path': path, 'name': '', 'templates': [], 'children': {}})
+        template_categories[name] = build_categories(path, key, category, sorted(template_dirs[key]))
+    logger.debug(f'Categories : {jsonToFormattedString(template_categories)}')
+
+    config_sections = {"sections": readConfigFileSections()}
+
+    #Render The Template
+    return render_template('okit/okit_designer.html',
+                           artefact_model_js_files=artefact_model_js_files,
+                           artefact_view_js_files=artefact_view_js_files,
+                           palette_icon_groups=palette_icon_groups,
+                           fragment_icons=fragment_icons,
+                           okit_templates_groups=template_groups,
+                           okit_template_categories=template_categories,
+                           local_okit=local,
+                           developer_mode=developer_mode, experimental_mode=experimental_mode)
+
+
+@bp.route('/console', methods=(['GET']))
+def console():
+    local = current_app.config.get('LOCAL', False)
+    if not local and session.get('username', None) is None:
+        logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
+        return redirect(url_for('okit.login'), code=302)
+    # Test if developer mode
+    developer_mode = (request.args.get('developer', default='false') == 'true')
+    if developer_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< Developer Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if experimental mode
+    experimental_mode = (request.args.get('experimental', default='false') == 'true')
+    if experimental_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< Experimental Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Read Artifact Model Specific JavaScript Files
+    artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
+    # Read Artifact View Specific JavaScript Files
+    if os.path.exists(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')) and os.path.isdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')):
+        artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')))
+    else:
+        artefact_view_js_files = []
+    artefact_view_js_files.extend(sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts'))))
+
+    # Get Palette Icon Groups / Icons
+    svg_files = []
+    svg_icon_groups = {}
+    # Read Files
+    for (dirpath, dirnames, filenames) in os.walk(os.path.join(bp.static_folder, 'palette')):
+        logger.debug('dirpath : {0!s:s}'.format(dirpath))
+        logger.debug('dirnames : {0!s:s}'.format(dirnames))
+        logger.debug('filenames : {0!s:s}'.format(filenames))
+        if os.path.basename(dirpath) != 'palette':
+            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames if f.endswith(".svg")])
+            svg_icon_groups[os.path.basename(dirpath)] = [f for f in filenames if f.endswith(".svg")]
+        else:
+            svg_files.extend([f for f in filenames if f.endswith(".svg")])
+    logger.debug('Files Walk : {0!s:s}'.format(svg_files))
+    logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
+
+    palette_icon_groups = []
+    for key in sorted(svg_icon_groups.keys()):
+        palette_icon_group = {'name': str(key).title(), 'icons': []}
+        for palette_svg in sorted(svg_icon_groups[key]):
+            palette_icon = {'svg': os.path.join(key, palette_svg), 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
+            palette_icon_group['icons'].append(palette_icon)
+        palette_icon_groups.append(palette_icon_group)
+    logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
+    logJson(palette_icon_groups)
+
+    # Read Fragment Files
+    fragment_files = os.listdir(os.path.join(bp.static_folder, 'fragments', 'svg'))
+    fragment_icons = []
+    for fragment_svg in sorted(fragment_files):
+        logger.debug('Fragment : {0!s:s}'.format(fragment_svg))
+        logger.debug('Fragment full : {0!s:s}'.format(os.path.join(bp.static_folder, 'fragments', 'svg', fragment_svg)))
+        fragment_icon = {'svg': fragment_svg, 'title': os.path.basename(fragment_svg).split('.')[0].replace('_', ' ').title()}
+        logger.debug('Icon : {0!s:s}'.format(fragment_icon))
+        fragment_icons.append(fragment_icon)
+
+    # Walk Template directory Structure
+    template_files = []
+    template_dirs = {}
+    logger.debug('Walking the template directories')
+    rootdir = os.path.join(bp.static_folder, 'templates')
+    for (dirpath, dirnames, filenames) in os.walk(rootdir, followlinks=True):
+        logger.debug('dirpath : {0!s:s}'.format(dirpath))
+        logger.debug('dirnames : {0!s:s}'.format(dirnames))
+        logger.debug('filenames : {0!s:s}'.format(filenames))
+        relpath = os.path.relpath(dirpath, rootdir)
+        logger.debug('Relative Path : {0!s:s}'.format(relpath))
+        template_files.extend([os.path.join(relpath, f) for f in filenames if f.endswith(".json")])
+        template_dirs[relpath] = [f for f in filenames if f.endswith(".json")]
+    logger.debug('Files Walk : {0!s:s}'.format(template_files))
+    logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
+
+    template_groups = []
+    for key in sorted(template_dirs.keys()):
         template_group = {'name': str(key).replace('_', ' ').title(), 'templates': [], 'directories': {}}
         for template_file in sorted(template_dirs[key]):
             try:
@@ -248,7 +362,7 @@ def designer():
     logger.debug(jsonToFormattedString(palette_icon_groups))
 
     #Render The Template
-    return render_template('okit/okit_designer.html',
+    return render_template('okit/console.html',
                            artefact_model_js_files=artefact_model_js_files,
                            artefact_view_js_files=artefact_view_js_files,
                            palette_icon_groups=palette_icon_groups,
@@ -283,6 +397,55 @@ def build_categories(path, key, category, templates):
                 logger.debug(e)
     logger.debug(category)
     return category
+
+
+@bp.route('/templates/<string:root>', methods=(['GET']))
+def templates(root):
+    # Walk Template directory Structure
+    template_files = []
+    template_dirs = {}
+    logger.info(f'Walking the template directories {root}')
+    rootdir = os.path.join(bp.static_folder, 'templates', root)
+    logger.info(f'Root Dir : {rootdir}')
+    for (dirpath, dirnames, filenames) in os.walk(rootdir, followlinks=True):
+        logger.info('dirpath : {0!s:s}'.format(dirpath))
+        logger.info('dirnames : {0!s:s}'.format(dirnames))
+        logger.info('filenames : {0!s:s}'.format(filenames))
+        relpath = os.path.relpath(dirpath, rootdir)
+        logger.info('Relative Path : {0!s:s}'.format(relpath))
+        template_files.extend([os.path.join(relpath, f) for f in filenames if f.endswith(".json")])
+        template_dirs[relpath] = [f for f in filenames if f.endswith(".json")]
+    logger.debug('Files Walk : {0!s:s}'.format(template_files))
+    logger.debug('Template Dirs {0!s:s}'.format(template_dirs))
+
+    template_groups = []
+    for key in sorted(template_dirs.keys()):
+        name = root if key == '.' else key
+        template_group = {'id': '{0!s:s}_template_menu_group'.format(str(name)), 'name': str(name).replace('_', ' ').title(), 'templates': [], 'directories': {}}
+        for template_file in sorted(template_dirs[key]):
+            try:
+                okit_template = {'json': os.path.join(name, template_file), 'id': template_file.replace('.', '_')}
+                filename = os.path.join(bp.static_folder, 'templates', name, template_file)
+                template_json = readJsonFile(filename)
+                logger.debug('Template Json : {0!s:s}'.format(template_json))
+                okit_template['title'] = template_json['title']
+                okit_template['description'] = template_json.get('description', template_json['title'])
+                template_group['templates'].append(okit_template)
+            except Exception as e:
+                logger.debug(e)
+        template_groups.append(template_group)
+    logger.debug(f'Template Groups : {jsonToFormattedString(template_groups)}')
+
+    template_categories = {}
+    # for key in sorted(template_dirs.keys()):
+    #     name = str(key.split('/')[0]).replace('_', ' ').title()
+    #     path = key
+    #     category = template_categories.get(name, {'path': path, 'name': '', 'templates': [], 'children': {}})
+    #     template_categories[name] = build_categories(path, key, category, sorted(template_dirs[key]))
+    logger.debug(f'Categories : {jsonToFormattedString(template_categories)}')
+
+    #Render The Template
+    return render_template('okit/templates_menu.html', templates=template_groups, okit_templates_groups=template_groups, okit_template_categories=template_categories)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
