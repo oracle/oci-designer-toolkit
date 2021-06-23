@@ -149,6 +149,7 @@
             {% endif %}
             <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li>
             <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
+            <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li>
         </ul>
         <ul id="templates_menu" class="okit-navigation-sub-list">
             <li>
@@ -297,6 +298,8 @@
         </div>
         <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
         <div id="explorer_panel" class="okit-explorer-view hidden"></div>
+        <div id="git_panel" class="okit-explorer-view hidden"></div>
+        <div id="templates_panel" class="okit-explorer-view hidden"></div>
     </div>
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
