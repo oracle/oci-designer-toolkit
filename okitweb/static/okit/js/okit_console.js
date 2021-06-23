@@ -53,11 +53,11 @@ function handleDropdownMenuMouseOver(event) {
     const navX = $('#navigation_menu').offset().left;
     const navY = $('#navigation_menu').offset().top;
     const $slideout = $('> .dropdown-content', $(self));
-    console.info('=================================', self.id)
-    console.info('Parent', parentX, parentY, parentW)
-    console.info('Menu', menuX, menuY, width)
-    console.info('Scroll', scrollX, scrollY)
-    console.info('Nav', navX, navY)
+    // console.info('=================================', self.id)
+    // console.info('Parent', parentX, parentY, parentW)
+    // console.info('Menu', menuX, menuY, width)
+    // console.info('Scroll', scrollX, scrollY)
+    // console.info('Nav', navX, navY)
     $slideout.css('position', 'absolute');
     $slideout.css('top', menuY + scrollY);
     $slideout.css('left', parentX + menuX + width);
