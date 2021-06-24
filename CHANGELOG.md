@@ -1,6 +1,18 @@
 # Release Notes
 
 
+## Version 0.24.0
+**Release Date**: 7th July 2021
+### Features
+1. User Template menu dynamically updated when design saved as a template.
+2. Enable Read/Write menu item added to allow the user to switch a queried design to a writeable / deployable design.
+3. Update favicon.
+4. Add Double Click to resource Icon to Open/Close Properties.
+
+### Bug Fixes
+1. Correctly generate DHCP Options for VCN Default generated resource.
+
+
 ## Version 0.23.1
 **Release Date**: 21st June 2021
 ### Bug Fixes
