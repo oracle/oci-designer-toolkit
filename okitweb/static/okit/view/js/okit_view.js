@@ -977,6 +977,7 @@ class OkitJsonView {
             security_list.artefact.addDefaultSecurityListRules(view_artefact.artefact.cidr_block);
             // Defaul Dhcp Options
             let dhcp_options = this.newDhcpOption(this.getOkitJson().newDhcpOption({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
+            dhcp_options.artefact.addDefaultOptions(view_artefact.display_name);
         }
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
@@ -1530,9 +1531,21 @@ class OkitArtefactView {
     addClickEvent(svg) {
         const self = this;
         svg.on("click", function() {
-            self.loadSlidePanels();
+            d3.event.preventDefault();
             d3.event.stopPropagation();
+            self.loadSlidePanels();
             $(jqId("context-menu")).addClass("hidden");
+        });
+        svg.on("dblclick", () => {
+            d3.event.preventDefault();
+            d3.event.stopPropagation();
+            // self.loadSlidePanels();
+            // $(jqId("context-menu")).addClass("hidden");
+            // const open = $('#toggle_properties_button').hasClass('okit-bar-panel-displayed');
+            // if (!open) $('#toggle_properties_button').trigger('click');
+            $(this).trigger('click');
+            $('#toggle_properties_button').trigger('click');
+            window.getSelection().removeAllRanges();
         });
     }
 
