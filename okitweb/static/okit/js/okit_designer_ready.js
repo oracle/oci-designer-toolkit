@@ -161,6 +161,8 @@ $(document).ready(function() {
         .attr('id', 'toggle_properties_button')
         .attr('class', 'okit-pointer-cursor')
         .on('click', function () {
+            d3.event.preventDefault();
+            d3.event.stopPropagation();
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
             if (!open) {
