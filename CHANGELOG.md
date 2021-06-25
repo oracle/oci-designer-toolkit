@@ -11,12 +11,13 @@
 
 ### Bug Fixes
 1. Correctly generate DHCP Options for VCN Default generated resource.
+2. Resolve issue with Private Endpoint Label not being specified for ADB.
 
 
 ## Version 0.23.1
 **Release Date**: 21st June 2021
 ### Bug Fixes
-1. Fix issue with Terraform generation of Loadbalacers where the subnet ids were not being added to the resource.
+1. Fix issue with Terraform generation of Loadbalancers where the subnet ids were not being added to the resource.
 
 
 ## Version 0.23.0
