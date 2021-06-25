@@ -342,6 +342,8 @@ class OCIGenerator(object):
             self.jinja2_variables["nsg_ids"] = jinja2_network_security_group_ids
         else:
             self.jinja2_variables.pop("nsg_ids", None)
+        # ---- Private Endpoint Label
+        self.addJinja2Variable("private_endpoint_label", resource["private_endpoint_label"], standardisedName)
 
         # ---- Tags
         self.renderTags(resource)
