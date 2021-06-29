@@ -7,11 +7,13 @@ from .file_storage import ExtendedExportSummary
 from .object_storage import ExtendedPreauthenticatedRequestSummary
 from .mysql import ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 from .database import ExtendedDbNodeSummary
-from .virtual_network import ExtendedVirtualCircuitBandwidthShape
+from .virtual_network import ExtendedDrgRouteDistributionStatement, ExtendedDrgRouteRule, ExtendedVirtualCircuitBandwidthShape
 
 __all__ = [
   "ExtendedAutoScalingPolicySummary",
   "ExtendedDbNodeSummary",
+  "ExtendedDrgRouteDistributionStatement",
+  "ExtendedDrgRouteRule",
   "ExtendedExportSummary",
   "ExtendedMySQLBackup",
   "ExtendedMySQLBackupSummary",

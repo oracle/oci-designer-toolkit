@@ -108,6 +108,8 @@ class OciResourceDiscoveryClient(object):
         "Drg": (oci.core.VirtualNetworkClient, "list_drgs"),
         "DrgAttachment": (oci.core.VirtualNetworkClient, "list_drg_attachments"),
         "DrgRouteDistribution": (oci.core.VirtualNetworkClient, "list_drg_route_distributions"),
+        "DrgRouteDistributionStatement": (oci.core.VirtualNetworkClient, "list_drg_route_distribution_statements"),
+        "DrgRouteRule": (oci.core.VirtualNetworkClient, "list_drg_route_rules"),
         "DrgRouteTable": (oci.core.VirtualNetworkClient, "list_drg_route_tables"),
         "InternetGateway": (oci.core.VirtualNetworkClient, "list_internet_gateways"),
         "IPSecConnection": (oci.core.VirtualNetworkClient, "list_ip_sec_connections"),
@@ -140,6 +142,7 @@ class OciResourceDiscoveryClient(object):
         # oci.data_safe.DataSafeClient
         "DataSafeOnPremConnector": (oci.data_safe.DataSafeClient, "list_on_prem_connectors"), 
         "DataSafePrivateEndpoint": (oci.data_safe.DataSafeClient, "list_data_safe_private_endpoints"),
+        "DataSafeTargetDatabase": (oci.data_safe.DataSafeClient, "list_target_databases"),
         # oci.data_science.DataScienceClient
         "DataScienceModel": (oci.data_science.DataScienceClient, "list_models"),
         "DataScienceModelDeployment": (oci.data_science.DataScienceClient, "list_model_deployments"),
@@ -172,6 +175,7 @@ class OciResourceDiscoveryClient(object):
         "ExternalNonContainerDatabase": (oci.database.DatabaseClient, "list_external_non_container_databases"),
         "ExternalPluggableDatabase": (oci.database.DatabaseClient, "list_external_pluggable_databases"),
         "KeyStore": (oci.database.DatabaseClient, "list_key_stores"),
+        "PluggableDatabase": (oci.database.DatabaseClient, "list_pluggable_databases"),
         "VmCluster": (oci.database.DatabaseClient, "list_vm_clusters"), # Exadata Cloud@Customer only
         "VmClusterNetwork": (oci.database.DatabaseClient, "list_vm_cluster_networks"), # Exadata Cloud@Customer only
         # oci.dns.DnsClient
@@ -234,6 +238,7 @@ class OciResourceDiscoveryClient(object):
         "ListenerRule": (oci.load_balancer.LoadBalancerClient, "list_listener_rules"), # NOT USED - listener rules are returned in the parent Load Balancer response
         "LoadBalancer": (oci.load_balancer.LoadBalancerClient, "list_load_balancers"),
         "PathRouteSet": (oci.load_balancer.LoadBalancerClient, "list_path_route_sets"),  # NOT USED - path route sets are returned in the parent Load Balancer response
+        "RoutingPolicy": (oci.load_balancer.LoadBalancerClient, "list_routing_policies"),  # NOT USED - routing policies are returned in the parent Load Balancer response
         "RuleSet": (oci.load_balancer.LoadBalancerClient, "list_rule_sets"),  # NOT USED - rule sets are returned in the parent Load Balancer response
         "SSLCipherSuite": (oci.load_balancer.LoadBalancerClient, "list_ssl_cipher_suites"),  # NOT USED - ssl cipher suites are returned in the parent Load Balancer response
         # oci.logging.LoggingManagementClient
@@ -737,6 +742,14 @@ class OciResourceDiscoveryClient(object):
                         drg_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, drg_id=drg_id)
                         futures_list.update({(region, resource_type, compartment_id, drg_id):future})
+                    elif method_name == "list_drg_route_distribution_statements":
+                        drg_route_distribution_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, drg_route_distribution_id=drg_route_distribution_id)
+                        futures_list.update({(region, resource_type, compartment_id, drg_route_distribution_id):future})
+                    elif method_name == "list_drg_route_rules":
+                        drg_route_table_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, drg_route_table_id=drg_route_table_id)
+                        futures_list.update({(region, resource_type, compartment_id, drg_route_table_id):future})
                     elif method_name == "list_drg_route_tables":
                         drg_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, drg_id=drg_id)
@@ -900,6 +913,14 @@ class OciResourceDiscoveryClient(object):
                         if future[3].startswith("ocid1.vmcluster"):
                             new_result =  [ExtendedDbNodeSummary(future[3],dbnode) for dbnode in result]
                             result = new_result
+                    elif resource_type == "DrgRouteDistributionStatement":
+                        # map DrgRouteDistributionStatement to ExtendedDrgRouteDistributionStatement
+                        new_result =  [ExtendedDrgRouteDistributionStatement(future[2],future[3],statement) for statement in result]
+                        result = new_result
+                    elif resource_type == "DrgRouteRule":
+                        # map DrgRouteRule to ExtendedDrgRouteRule
+                        new_result =  [ExtendedDrgRouteRule(future[2],future[3],rule) for rule in result]
+                        result = new_result
                     elif resource_type == "Export":
                         # map Export into extended verison with compartment id
                         new_result =  [ExtendedExportSummary(future[2],export) for export in result]
@@ -1095,9 +1116,19 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "DedicatedVmHost" and (self.include_resource_types == None or "DedicatedVmHostInstance" in self.include_resource_types):
                     # get VM Instances for Dedicated Hosts
                     regional_resource_requests.add(("DedicatedVmHostInstance", resource.compartment_id, resource.identifier))
-                elif resource.resource_type == "Drg" and (self.include_resource_types == None or "DrgAttachment" in self.include_resource_types):
-                    # get Drg Attachments for Drgs
-                    regional_resource_requests.add(("DrgAttachment", resource.compartment_id, None))
+                elif resource.resource_type == "Drg":
+                    if self.include_resource_types == None or "DrgRouteTable" in self.include_resource_types:
+                        # get Drg Route Table for Drg
+                        regional_resource_requests.add(("DrgRouteTable", resource.compartment_id, resource.identifier))
+                    if self.include_resource_types == None or "DrgRouteDistribution" in self.include_resource_types:
+                        # get Drg Route Distribution for Drg
+                        regional_resource_requests.add(("DrgRouteDistribution", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "DrgRouteDistribution" and (self.include_resource_types == None or "DrgRouteDistributionStatement" in self.include_resource_types):
+                    # get Drg Route Distribution Statement for Drg Route Distributions
+                    regional_resource_requests.add(("DrgRouteDistributionStatement", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "DrgRouteTable" and (self.include_resource_types == None or "DrgRouteRule" in self.include_resource_types):
+                    # get Drg Route Rules for Drg Route Table
+                    regional_resource_requests.add(("DrgRouteRule", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "VmCluster":
                     # get DB Nodes for DB Systems
                     if self.include_resource_types == None or "DbNode" in self.include_resource_types:
@@ -1179,9 +1210,6 @@ class OciResourceDiscoveryClient(object):
                     if (self.include_resource_types == None or "PrivateIp" in self.include_resource_types):
                         # get IPv6 addresses for each subnet
                         regional_resource_requests.add(("Ipv6", resource.compartment_id, resource.identifier))
-                elif resource.resource_type == "Vcn" and (self.include_resource_types == None or "DrgAttachment" in self.include_resource_types):
-                    # get Drg Attachments for Vcns
-                    regional_resource_requests.add(("DrgAttachment", resource.compartment_id, None))
                 elif resource.resource_type == "VirtualCircuit" and (self.include_resource_types == None or "CrossConnectMapping" in self.include_resource_types):
                     # get Cross Connect Mappings for VirtualCircuit
                     regional_resource_requests.add(("CrossConnectMapping", resource.compartment_id, resource.identifier))
