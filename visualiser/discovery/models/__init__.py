@@ -4,6 +4,7 @@ from .application_migration import ExtendedSourceApplicationSummary
 from .autoscaling import ExtendedAutoScalingPolicySummary
 from .core import ExtendedSecurityRule, ExtendedNetworkSecurityGroupVnic
 from .file_storage import ExtendedExportSummary
+from .identity import ExtendedTagSummary
 from .object_storage import ExtendedPreauthenticatedRequestSummary
 from .mysql import ExtendedMySQLBackup, ExtendedMySQLBackupSummary
 from .database import ExtendedDbNodeSummary
@@ -21,5 +22,6 @@ __all__ = [
   "ExtendedPreauthenticatedRequestSummary",
   "ExtendedSecurityRule",
   "ExtendedSourceApplicationSummary",
+  "ExtendedTagSummary",
   "ExtendedVirtualCircuitBandwidthShape",
 ]
