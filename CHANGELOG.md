@@ -8,15 +8,20 @@
 2. Enable Read/Write menu item added to allow the user to switch a queried design to a writeable / deployable design.
 3. Update favicon.
 4. Add Double Click to resource Icon to Open/Close Properties.
+5. Add Config Select to main toolbar to allow selection of the connection where the dropdown data will be selected from. In addition accessible Regions for the Connection profile will be selected.
+6. Add Region select to main toolbar.
+7. Cache Dropdown data & Region data per connection profile within the browsers local storage to improve performance.
+8. Add clear Dropdown Data cache to force refresh of cached data.
 
 ### Bug Fixes
 1. Correctly generate DHCP Options for VCN Default generated resource.
+2. Resolve issue with Private Endpoint Label not being specified for ADB.
 
 
 ## Version 0.23.1
 **Release Date**: 21st June 2021
 ### Bug Fixes
-1. Fix issue with Terraform generation of Loadbalacers where the subnet ids were not being added to the resource.
+1. Fix issue with Terraform generation of Loadbalancers where the subnet ids were not being added to the resource.
 
 
 ## Version 0.23.0

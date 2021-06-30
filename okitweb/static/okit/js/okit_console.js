@@ -127,6 +127,7 @@ function loadHeaderRegionsDropDown() {
     }
     console.info('Region:', okitSettings.region)
     console_header_region_select.val(okitSettings.region)
+    setOCILink()
 }
 
 function handleRegionChanged(event) {
@@ -134,6 +135,7 @@ function handleRegionChanged(event) {
     event.stopPropagation()
     okitSettings.region = $('#console_header_region_select').val()
     okitSettings.save()
+    setOCILink()
 }
 
 $(document).ready(function() {
