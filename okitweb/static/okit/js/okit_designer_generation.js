@@ -270,6 +270,7 @@ function displayResourceManagerDialog() {
             console.info('Profile Select '+$(jqId('config_profile')).val());
             okitSettings.profile = $(jqId('config_profile')).val();
             okitSettings.save();
+            loadHeaderConfigDropDown()
             // Clear Existing Compartments
             okitOciData.setCompartments([]);
             loadCompartments();

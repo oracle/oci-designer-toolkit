@@ -1227,7 +1227,7 @@ class OkitArtifact {
 /*
 ** Model Representation of OCI Regions
  */
-class OkitRegions {
+class OkitRegionsJson {
     /*
     ** Create
      */

@@ -571,14 +571,29 @@ def saveas(savetype):
             return str(e), 500
 
 
-@bp.route('/dropdown/data', methods=(['GET', 'POST']))
-def dropdownData():
-    dropdown_file = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown.json'))
+@bp.route('/dropdown/data/<string:profile>', methods=(['GET', 'POST']))
+def dropdownData(profile):
+    dropdown_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown'))
+    shipped_dropdown_file = os.path.abspath(os.path.join(dropdown_dir, 'dropdown.json'))
+    # shipped_dropdown_file = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown', 'dropdown.json'))
+    profile_dropdown_dir = os.path.abspath(os.path.join(dropdown_dir, 'profiles'))
+    profile_dropdown_file = os.path.abspath(os.path.join(profile_dropdown_dir, f'{profile}.json'))
+    # Check if profile specific dropdown file exists if not use the default
     if request.method == 'GET':
-        dropdown_json = readJsonFile(dropdown_file)
+        if os.path.exists(profile_dropdown_file):
+            dropdown_file = profile_dropdown_file
+            logger.info(f'Loading Dropdown file {dropdown_file}')
+            dropdown_json = readJsonFile(dropdown_file)
+        else:
+            dropdown_file = shipped_dropdown_file
+            logger.info(f'Loading Dropdown file {dropdown_file}')
+            dropdown_json = readJsonFile(dropdown_file)
+            dropdown_json["shipped"] = True
+            dropdown_json["default"] = True
         return dropdown_json
     elif request.method == 'POST':
-        writeJsonFile(request.json, dropdown_file)
+        logger.info(f'Saving Dropdown file {profile_dropdown_file}')
+        writeJsonFile(request.json, profile_dropdown_file)
         return request.json
     else:
         return 'Unknown Method', 500
