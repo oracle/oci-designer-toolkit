@@ -123,7 +123,7 @@ function newModel() {
     okitJsonModel = new OkitJson();
 }
 function newRegionsModel() {
-    regionOkitJson = new OkitRegions();
+    regionOkitJson = new OkitRegionsJson();
 }
 function setTitleDescription() {
     okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
@@ -511,6 +511,7 @@ function displayQueryDialog() {
                 console.info('Profile Select ' + $(jqId('config_profile')).val());
                 okitSettings.profile = $(jqId('config_profile')).val();
                 okitSettings.save();
+                loadHeaderConfigDropDown()
                 // Clear Existing Compartments
                 okitOciData.setCompartments([]);
                 loadCompartments();
@@ -535,7 +536,7 @@ function displayQueryDialog() {
             .attr('size', 10)
             .on('change', () => {
                 console.info('Region Select ' + $(jqId('query_region_id')).val());
-                okitSettings.last_used_region = $(jqId('query_region_id')).val();
+                okitSettings.query_regions = $(jqId('query_region_id')).val();
                 okitSettings.save();
             })
             .append('option')
@@ -590,6 +591,7 @@ function displayQueryDialog() {
     td.append('input')
         .attr('id', 'fast_discovery')
         .attr('name', 'fast_discovery')
+        .attr('checked', 'checked')
         .attr('type', 'checkbox');
     td.append('label')
         .attr('for', 'fast_discovery')
@@ -655,8 +657,8 @@ function loadCompartments() {
                 $(jqId('query_compartment_id')).empty();
                 let compartment_select = d3.select(d3Id('query_compartment_id'));
                 for (let compartment of jsonBody) {
-                    console.info(compartment['display_name']);
-                    console.info(compartment['canonical_name']);
+                    // console.info(compartment['display_name']);
+                    // console.info(compartment['canonical_name']);
                     compartment_select.append('option')
                         .attr('value', compartment['id'])
                         .text(compartment['canonical_name']);
@@ -665,6 +667,7 @@ function loadCompartments() {
                     }
                 }
                 selectQueryLastUsedCompartment();
+                loadRegions();
             },
             error: function (xhr, status, error) {
                 console.info('Status : ' + status)
@@ -678,7 +681,7 @@ function loadRegions() {
     let select = $(jqId('query_region_id'));
     $(select).empty();
     let region_select = d3.select(d3Id('query_region_id'));
-    for(let region of okitOciData.getRegions() ){
+    for(let region of okitRegions.getRegions() ){
         region_select.append('option')
             .attr('value', region['name'])
             .text(region['display_name']);
@@ -686,18 +689,19 @@ function loadRegions() {
     selectQueryLastUsedRegion();
 }
 // TODO: Delete
-function loadRegions1() {
+function loadRegionsOld() {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
     select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+    const profile = $(jqId('config_profile')).val()
     // Get Regions
     $.ajax({
         type: 'get',
-        url: 'oci/region',
+        url: `oci/regions/${profile}`,
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
+        data: JSON.stringify({config_profile: profile}),
         success: function(resp) {
             //console.info('Response : ' + resp);
             let jsonBody = JSON.parse(resp)
@@ -721,7 +725,7 @@ function loadRegions1() {
 }
 function selectQueryHomeRegion() {
     if (okitSettings.home_region_key !== '') {
-        for (let region of ociRegions) {
+        for (let region of ociRegions.getRegions()) {
             if (okitSettings.home_region_key === region.key) {
                 $(jqId('query_region_id')).val(region.name);
                 break;
@@ -1410,4 +1414,13 @@ function handleLoaddesignFromGITExec(e) {
         loadTemplate(okitJsonModel.git_repository_filename)
         $(jqId('modal_dialog_wrapper')).addClass('hidden');
     }
+}
+
+function handleRefreshDropdownData(event) {
+    event = event || window.event;
+    event.stopPropagation()
+    okitRegions.clearLocalStorage()
+    okitOciData.clearLocalStorage()
+    okitRegions.load(okitSettings.profile)
+    okitOciData.load(okitSettings.profile)
 }

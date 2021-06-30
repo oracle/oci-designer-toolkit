@@ -100,6 +100,14 @@ textarea {
 ** OKIT Common
  */
 
+.hamburger {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxkZWZzPjxwYXRoIGQ9Ik0yMS41IDZoLTE5YS41LjUgMCAwMTAtMWgxOWEuNS41IDAgMDEwIDF6bTAgMTNoLTE5YS41LjUgMCAwMTAtMWgxOWEuNS41IDAgMDEwIDF6bTAtNi41aC0xOWEuNS41IDAgMDEwLTFoMTlhLjUuNSAwIDAxMCAxeiIgaWQ9InByZWZpeF9fYSIvPjwvZGVmcz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxtYXNrIGlkPSJwcmVmaXhfX2IiIGZpbGw9IiNmZmYiPjx1c2UgeGxpbms6aHJlZj0iI3ByZWZpeF9fYSIvPjwvbWFzaz48dXNlIGZpbGw9IiMwMDAiIGZpbGwtcnVsZT0ibm9uemVybyIgeGxpbms6aHJlZj0iI3ByZWZpeF9fYSIvPjxnIG1hc2s9InVybCgjcHJlZml4X19iKSIgZmlsbD0iI0ZGRiIgZmlsbC1ydWxlPSJub256ZXJvIj48cGF0aCBkPSJNMCAwaDI0djI0SDB6Ii8+PC9nPjwvZz48L3N2Zz4=");
+}
+
+.config_error {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjEuOSAxNjIiPjxnIGZpbGw9InJlZCI+PHBhdGggZD0iTTYwLjMgMzguNmMwLTcuNS02LjEtMTMuNy0xMy43LTEzLjdTMzMgMzEuMSAzMyAzOC42czYuMSAxMy43IDEzLjcgMTMuNyAxMy42LTYuMiAxMy42LTEzLjd6bS0yMC4zIDBhNi43IDYuNyAwIDExMTMuNCAwIDYuNyA2LjcgMCAwMS0xMy40IDB6TTY3LjggNzUuOHYtMS42YzAtMTAuNy04LjctMTkuMy0xOS4zLTE5LjNoLTMuNmMtMTAuNyAwLTE5LjMgOC43LTE5LjMgMTkuM3YxLjZoN3YtMS42YzAtNi44IDUuNS0xMi4zIDEyLjMtMTIuM2gzLjZjNi44IDAgMTIuMyA1LjUgMTIuMyAxMi4zdjEuNmg3eiIvPjxwYXRoIGQ9Ik0xOC4yIDgyLjRWMTguM2g5Ny4xdjQ1bDUuMi0yLjIgMy44IDEuNlY5LjNIOS4ydjgyLjFIODN2LTl6Ii8+PHBhdGggZD0iTTkzLjYgNzAuM2wzLjEtMy4xLTQuNy00LjcgNS00LjktMy4xLTMuMS00LjkgNS00LjctNC43LTMuMSAzIDQuNyA0LjctNSA1IDMuMSAzLjEgNS01ek04NC4yIDM1LjNsLTMuMyAyLjggNi44IDguMSAxMi41LTEzLjgtMy4yLTIuOS05LjIgMTAuMXpNMTUzIDExMS41di0zMGwtMzIuOC0xNC4xLTMyLjggMTQuMS4xIDMxLjguMS40YzQuOCAyNy43IDI5LjkgMzcuOSAzMC45IDM4LjRsMS45LjggMS44LS45YzMwLjgtMTUuOCAzMC44LTM5LjUgMzAuOC00MC41em0tOSAuMWMwIC43LS4zIDE2LTE5LjQgMjguNlYxMDNoLTl2MzcuM2MtNi42LTQuMy0xNi4zLTEzLTE5LTI3LjdsLS4xLTI1LjEgMTkuMS04LjJWOTVoOVY3OS4xbDE5LjQgOC4zdjI0LjJ6Ii8+PC9nPjwvc3ZnPg==");
+}
+
 .hidden {
     visibility: hidden;
     display: none;
@@ -194,8 +202,21 @@ textarea {
 
 .okit-console-header-left-nav-button {
     margin: auto;
+    height: 50px;
     width: 50px;
     text-align: left;
+}
+
+.okit-navigation-menu-button {
+    margin: 0;
+    padding: 0;
+}
+
+.okit-navigation-menu-button-icon {
+    height: 50px;
+    width: 50px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .okit-console-header-oracle-logo {
@@ -228,10 +249,12 @@ textarea {
     background-color: #1d2733;
     color: #ffffff;
     height: 50px;
+    min-width: 10em;
+    max-width: 10em;
     border: none;
 }
 
-.okit-console-header-left > select:focus {
+.okit-console-header-dropdown > select:focus {
     outline: none;
     border: none;
 }
@@ -260,8 +283,30 @@ textarea {
     color: white;
 }
 
+.okit-console-header > div > a {
+    font-size: small;
+    vertical-align: middle;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    color: white;
+}
+
 .okit-console-header-right > label {
     color: white;
+}
+
+.okit-console-header-icon {
+    height: 50px;
+    width: 50px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.okit-icon-link {
+    display: block;
+    text-indent: -9999px;
 }
 
 .config-icon {

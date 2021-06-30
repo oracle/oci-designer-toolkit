@@ -8,11 +8,12 @@ console.info('Loaded Designer Ready Javascript');
 ** Define variables for Artefact classes
  */
 //let okitJsonModel = new OkitJson();
-let okitOciConfig = new OkitOCIConfig();
-let okitOciData = new OkitOCIData();
-let okitSettings = new OkitSettings();
-let okitGitConfig = new OkitGITConfig();
+let okitOciConfig = undefined;
+let okitOciData = undefined;
+let okitSettings = undefined;
+let okitGitConfig = undefined;
 let okitAutoSave = undefined;
+let okitRegions = undefined;
 //let okitTabularView = new OkitTabularJsonView();
 /*
 ** Ready function initiated on page load.
@@ -21,9 +22,10 @@ $(document).ready(function() {
     /*
     ** Initialise OKIT Variables
      */
-    okitOciConfig = new OkitOCIConfig();
-    okitOciData = new OkitOCIData();
     okitSettings = new OkitSettings();
+    okitOciConfig = new OkitOCIConfig(loadHeaderConfigDropDown);
+    okitRegions = new OkitRegions(loadHeaderRegionsDropDown);
+    okitOciData = new OkitOCIData(okitSettings.profile);
     okitGitConfig = new OkitGITConfig();
     okitJsonModel = new OkitJson();
     okitJsonView = new OkitDesignerJsonView(okitJsonModel);
@@ -376,4 +378,5 @@ $(document).ready(function() {
     ** Add redraw on resize
      */
     window.addEventListener('resize', () => { redrawSVGCanvas(true) });
+
 });

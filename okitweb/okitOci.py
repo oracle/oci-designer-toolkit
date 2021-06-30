@@ -25,6 +25,7 @@ from flask import jsonify
 
 import json
 from common.okitCommon import logJson
+from common.okitCommon import jsonToFormattedString
 from common.okitCommon import readJsonFile
 from common.okitCommon import standardiseIds
 from common.okitCommon import writeJsonFile
@@ -78,6 +79,8 @@ from facades.ociVmCluster import OCIVmClusters
 from facades.ociVmClusterNetwork import OCIVmClusterNetworks
 from generators.okitResourceManagerGenerator import OCIResourceManagerGenerator
 from query.ociQuery import OCIQuery
+from query.ociRegionQuery import OCIRegionQuery
+from query.ociDropdownQuery import OCIDropdownQuery
 
 # Configure logging
 logger = getLogger()
@@ -216,6 +219,15 @@ def ociRegion():
     regions = oci_regions.list()
     logger.debug(">>>>>>>>> Regions: {0!s:s}".format(regions))
     return json.dumps(regions, sort_keys=False, indent=2, separators=(',', ': '))
+
+
+@bp.route('/regions/<string:profile>', methods=(['GET']))
+def ociRegions(profile):
+    oci_region_query = OCIRegionQuery(profile=profile)
+    regions = oci_region_query.executeQuery()
+    response = jsonToFormattedString(regions)
+    logger.debug(">>>>>>>>> Regions: {0!s:s}".format(response))
+    return response
 
 
 @bp.route('/query', methods=(['GET']))
@@ -403,8 +415,18 @@ def ociArtifacts(artifact):
     return json.dumps(standardiseIds(response_json), sort_keys=True)
 
 
-@bp.route('/dropdown', methods=(['GET']))
-def dropdownQuery():
+@bp.route('/dropdown/<string:profile>', methods=(['GET']))
+def dropdownQuery(profile):
+    if request.method == 'GET':
+        dropdown_query = OCIDropdownQuery(profile=profile)
+        dropdown_json = dropdown_query.executeQuery()
+        return dropdown_json
+    else:
+        return 'Unknown Method', 500
+
+
+@bp.route('/dropdown1', methods=(['GET']))
+def dropdown1Query():
     if request.method == 'GET':
         dropdown_json = {}
         # Regions
