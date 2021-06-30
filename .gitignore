@@ -51,3 +51,4 @@ okitweb/static/okit/templates/user/*
 **/test/model
 **/test/properties
 
+okitweb/static/okit/json/dropdown/profiles/*

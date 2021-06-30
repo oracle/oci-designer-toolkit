@@ -88,6 +88,54 @@ function handleDropdownMenuMouseOverOld(event) {
     $slideout.css('left', parentX + menuX + width);
 }
 
+function loadHeaderConfigDropDown() {
+    /*
+    ** Populate Dropdown
+    */
+    const console_header_config_select = $('#console_header_config_select')
+    console_header_config_select.empty()
+    okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).text(section))})
+    console_header_config_select.val(okitSettings.profile)
+    const console_header_region_select = $('#console_header_region_select')
+    console_header_region_select.empty()
+    console_header_region_select.append($('<option>').attr('value', '').text('Retrieving....'))
+    okitRegions.load(okitSettings.profile)
+}
+
+function handleConfigChanged(event) {
+    event = event || window.event;
+    event.stopPropagation()
+    okitSettings.profile = $('#console_header_config_select').val()
+    okitSettings.save()
+    const console_header_region_select = $('#console_header_region_select')
+    console_header_region_select.empty()
+    console_header_region_select.append($('<option>').attr('value', '').text('Retrieving....'))
+    okitRegions.load(okitSettings.profile)
+    okitOciData.load(okitSettings.profile)
+}
+
+function loadHeaderRegionsDropDown() {
+    /*
+    ** Populate Dropdown
+    */
+    const console_header_region_select = $('#console_header_region_select')
+    console_header_region_select.empty()
+    okitRegions.regions.forEach((region) => {console_header_region_select.append($('<option>').attr('value', region.id).text(region.display_name))})
+    if (!okitRegions.isRegionAvailable(okitSettings.region)) {
+        okitSettings.region = okitRegions.getHomeRegion().id
+        okitSettings.save()
+    }
+    console.info('Region:', okitSettings.region)
+    console_header_region_select.val(okitSettings.region)
+}
+
+function handleRegionChanged(event) {
+    event = event || window.event;
+    event.stopPropagation()
+    okitSettings.region = $('#console_header_region_select').val()
+    okitSettings.save()
+}
+
 $(document).ready(function() {
     /*
     ** Add handler functionality
