@@ -239,7 +239,7 @@ function generateResourceManager(results) {
         // Load Compartment Select
         loadCompartments();
         // Load Region Select
-        loadRegions();
+        loadRegions(selectRMLastUsedRegion);
     } else {
         validationFailedNotification();
     }
@@ -274,7 +274,7 @@ function displayResourceManagerDialog() {
             // Clear Existing Compartments
             okitOciData.setCompartments([]);
             loadCompartments();
-            loadRegions();
+            loadRegions(selectRMLastUsedRegion);
         });
     for (let section of okitOciConfig.sections) {
         profile_select.append('option')
@@ -293,7 +293,7 @@ function displayResourceManagerDialog() {
             .attr('id', 'query_region_id')
             .on('change', () => {
                 loadResourceManagerStacks();
-                okitSettings.last_used_region = $(jqId('query_region_id')).val();
+                okitSettings.resource_manager_region = $(jqId('query_region_id')).val();
                 okitSettings.save();
             })
             .append('option')
