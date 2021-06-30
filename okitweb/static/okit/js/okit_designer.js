@@ -48,6 +48,9 @@ function resetDesigner() {
 ** Set OCI Link
  */
 function setOCILink() {
+    if (okitSettings.region && okitSettings.region != '') $(jqId('oci_link')).attr('href', `https://console.${okitSettings.region}.oraclecloud.com`)
+}
+function setOCILinkOld() {
     $.ajax({
         type: 'get',
         url: `config/region/${okitSettings.profile}`,
@@ -515,7 +518,7 @@ function displayQueryDialog() {
                 // Clear Existing Compartments
                 okitOciData.setCompartments([]);
                 loadCompartments();
-                loadRegions();
+                loadRegions(selectQueryLastUsedRegion);
             });
     for (let section of okitOciConfig.sections) {
         profile_select.append('option')
@@ -628,7 +631,7 @@ function handleQueryOci(e) {
     // Load Compartment Select
     loadCompartments();
     // Load Region Select
-    loadRegions();
+    loadRegions(selectQueryLastUsedRegion);
 }
 function loadCompartments() {
     // Clear Select
@@ -667,7 +670,7 @@ function loadCompartments() {
                     }
                 }
                 selectQueryLastUsedCompartment();
-                loadRegions();
+                loadRegions(selectQueryLastUsedRegion);
             },
             error: function (xhr, status, error) {
                 console.info('Status : ' + status)
@@ -676,7 +679,7 @@ function loadCompartments() {
         });
     }
 }
-function loadRegions() {
+function loadRegions(callback) {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
@@ -686,7 +689,8 @@ function loadRegions() {
             .attr('value', region['name'])
             .text(region['display_name']);
     }
-    selectQueryLastUsedRegion();
+    callback()
+    // selectQueryLastUsedRegion();
 }
 // TODO: Delete
 function loadRegionsOld() {
@@ -734,8 +738,20 @@ function selectQueryHomeRegion() {
     }
 }
 function selectQueryLastUsedRegion() {
-    if (okitSettings.last_used_region !== '') {
-       $(jqId('query_region_id')).val(okitSettings.last_used_region);
+    if (okitSettings.query_regions && okitSettings.query_regions !== '') {
+        $(jqId('query_region_id')).val(okitSettings.query_regions);
+        $(jqId('query_region_id')).change();
+    } else {
+        $(jqId('query_region_id')).val(okitRegions.getHomeRegion().id);
+        $(jqId('query_region_id')).change();
+    }
+}
+function selectRMLastUsedRegion() {
+    if (okitSettings.resource_manager_region && okitSettings.resource_manager_region !== '') {
+        $(jqId('query_region_id')).val(okitSettings.resource_manager_region);
+        $(jqId('query_region_id')).change();
+    } else {
+        $(jqId('query_region_id')).val(okitRegions.getHomeRegion().id);
         $(jqId('query_region_id')).change();
     }
 }
