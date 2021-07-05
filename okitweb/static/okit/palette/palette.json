@@ -1,128 +1,166 @@
 {
-    "Containers": {
-        "icon": "",
-        "resources": {
-            "Compartment": {
-                "svg": "Compartments.svg",
-                "title": "Compartments"
-            },
-            "OKE Cluster": {
-                "svg": "ContainerEngineForKubernetes.svg",
-                "title": "OKE Cluster"
-            }
+    "targets": ["oci", "pca"],
+    "groups": [
+        {
+            "title": "Containers",
+            "svg": "containers.svg",
+            "resources": [
+                {
+                    "title": "Compartments",
+                    "targets": ["oci", "pca"],
+                    "svg": "Compartments.svg"
+                },
+                {
+                    "title": "OKE Cluster",
+                    "targets": ["oci"],
+                    "svg": "ContainerEngineForKubernetes.svg"
+                }
+            ]
+        },
+        {
+            "title": "Compute",
+            "svg": "compute.svg",
+            "resources": [
+                {
+                    "title": "Instance",
+                    "targets": ["oci", "pca"],
+                    "svg": "VirtualMachine.svg"
+                },
+                {
+                    "title": "Analytics Instance",
+                    "targets": ["oci", "pca"],
+                    "svg": "AnalyticsCloudService.svg"
+                }
+            ]
+        },
+        {
+            "title": "Database",
+            "svg": "database.svg",
+            "resources": [
+                {
+                    "title": "Autonomous Database",
+                    "targets": ["oci"],
+                    "svg": "AutonomousDatabaseCloudServiceADCS.svg"
+                },
+                {
+                    "title": "Database System",
+                    "targets": ["oci"],
+                    "svg": "DatabaseSystemDBS.svg"
+                },
+                {
+                    "title": "MySQL Database System",
+                    "targets": ["oci"],
+                    "svg": "MySQLDatabaseServiceMDS.svg"
+                }
+            ]
+        },
+        {
+            "title": "Networking",
+            "svg": "networking.svg",
+            "resources": [
+                {
+                    "title": "Load Balancer",
+                    "targets": ["oci"],
+                    "svg": "LoadBalancerLB.svg"
+                },
+                {
+                    "title": "Virtual Cloud Network",
+                    "targets": ["oci", "pca"],
+                    "svg": "VirtualCloudNetworkVCN.svg"
+                },
+                {
+                    "title": "Subnet",
+                    "targets": ["oci", "pca"],
+                    "svg": "Backbone.svg"
+                },
+                {
+                    "title": "Route Table",
+                    "targets": ["oci", "pca"],
+                    "svg": "RouteTable.svg"
+                },
+                {
+                    "title": "Security List",
+                    "targets": ["oci", "pca"],
+                    "svg": "SecurityList.svg"
+                },
+                {
+                    "title": "Network Security Group",
+                    "targets": ["oci", "pca"],
+                    "svg": "NetworkSecurityGroup.svg"
+                },
+                {
+                    "title": "DHCP Option",
+                    "targets": ["oci", "pca"],
+                    "svg": "DhcpOptions.svg"
+                },
+                {
+                    "title": "IPSec Connection",
+                    "targets": ["oci"],
+                    "svg": "VirtualPrivateNetworkVPN.svg"
+                },
+                {
+                    "title": "Remote Peering Connection",
+                    "targets": ["oci"],
+                    "svg": "RemotePeeringGatewayRPG.svg"
+                },
+                {
+                    "title": "Customer Premise Equipment",
+                    "targets": ["oci"],
+                    "svg": "CustomerPremises.svg"
+                }
+            ]
+        },
+        {
+            "title": "Gateways",
+            "svg": "gateways.svg",
+            "resources": [
+                {
+                    "title": "Internet Gateway",
+                    "targets": ["oci", "pca"],
+                    "svg": "InternetGateway.svg"
+                },
+                {
+                    "title": "NAT Gateway",
+                    "targets": ["oci", "pca"],
+                    "svg": "NATGateway.svg"
+                },
+                {
+                    "title": "Local Peering Gateway",
+                    "targets": ["oci", "pca"],
+                    "svg": "LocalPeeringGatewayLPG.svg"
+                },
+                {
+                    "title": "Dynamic Routing Gateway",
+                    "targets": ["oci", "pca"],
+                    "svg": "DynamicRoutingGatewayDRG.svg"
+                },
+                {
+                    "title": "Service Gateway",
+                    "targets": ["oci", "pca"],
+                    "svg": "ServiceGateway.svg"
+                }
+            ]
+        },
+        {
+            "title": "Storage",
+            "svg": "storage.svg",
+            "resources": [
+                {
+                    "title": "Block Storage Volume",
+                    "targets": ["oci", "pca"],
+                    "svg": "BlockStorage.svg"
+                },
+                {
+                    "title": "Object Storage Bucket",
+                    "targets": ["oci", "pca"],
+                    "svg": "ObjectStorage.svg"
+                },
+                {
+                    "title": "File Storage System",
+                    "targets": ["oci", "pca"],
+                    "svg": "FileStorage.svg"
+                }
+            ]
         }
-    },
-    "Compute": {
-        "icon": "",
-        "resources": {
-            "Instance": {
-                "svg": "VirtualMachine.svg",
-                "title": "Instance"
-            }
-        }
-    },
-    "Database": {
-        "icon": "",
-        "resources": {
-            "Autonomous Database": {
-                "svg": "AutonomousDatabaseCloudServiceADCS.svg",
-                "title": "Autonomous Database"
-            },
-            "Database System": {
-                "svg": "DatabaseSystemDBS.svg",
-                "title": "Database System"
-            },
-            "MySQL Database System": {
-                "svg": "MySQLDatabaseServiceMDS.svg",
-                "title": "MySQL Database System"
-            }
-        }
-    },
-    "Networking": {
-        "icon": "",
-        "resources": {
-            "Virtual Cloud Network": {
-                "svg": "VirtualCloudNetworkVCN.svg",
-                "title": "Virtual Cloud Network"
-            },
-            "Route Table": {
-                "svg": "RouteTable.svg",
-                "title": "Route Table"
-            },
-            "Subnet": {
-                "svg": "Backbone.svg",
-                "title": "Subnet"
-            },
-            "Security List": {
-                "svg": "SecurityList.svg",
-                "title": "Security List"
-            },
-            "Dhcp Option": {
-                "svg": "DhcpOptions.svg",
-                "title": "DHCP Option"
-            },
-            "Network Security Group": {
-                "svg": "NetworkSecurityGroup.svg",
-                "title": "Network Security Group"
-            },
-            "Customer Premise Equipment": {
-                "svg": "CustomerPremises.svg",
-                "title": "Customer Premise Equipment"
-            },
-            "IPSec Connection": {
-                "svg": "VirtualPrivateNetworkVPN.svg",
-                "title": "IPSec Connection"
-            },
-            "Remote Peering Connection": {
-                "svg": "RemotePeeringGatewayRPG.svg",
-                "title": "Remote Peering Connection"
-            },
-            "Load Balancer": {
-                "svg": "LoadBalancerLB.svg",
-                "title": "Load Balancer"
-            }
-        }
-    },
-    "Gateways": {
-        "icon": "",
-        "resources": {
-            "Internet Gateway": {
-                "svg": "InternetGateway.svg",
-                "title": "Internet Gateway"
-            },
-            "NAT Gateway": {
-                "svg": "NATGateway.svg",
-                "title": "NAT Gateway"
-            },
-            "Local Peering Gateway": {
-                "svg": "LocalPeeringGatewayLPG.svg",
-                "title": "Local Peering Gateway"
-            },
-            "Dynamic Routing Gateway": {
-                "svg": "DynamicRoutingGatewayDRG.svg",
-                "title": "Dynamic Routing Gateway"
-            },
-            "Service Gateway": {
-                "svg": "StorageGateway.svg",
-                "title": "Service Gateway"
-            }
-        }
-    },
-    "Storage": {
-        "icon": "",
-        "resources": {
-            "Block Storage Volume": {
-                "svg": "BlockStorage.svg",
-                "title": "Block Storage Volume"
-            },
-            "Object Storage Bucket": {
-                "svg": "ObjectStorage.svg",
-                "title": "Object Storage Bucket"
-            },
-            "File Storage System": {
-                "svg": "FileStorage.svg",
-                "title": "File Storage System"
-            }
-        }
-   }
+    ]
 }
