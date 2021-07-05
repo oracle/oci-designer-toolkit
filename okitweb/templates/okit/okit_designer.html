@@ -5,6 +5,7 @@
 {% extends "okit/okit_console.html" %}
 
 {% import "okit/menu_macros.jinja2" as menu with context %}
+{% import "okit/palette_macros.jinja2" as palette with context %}
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
@@ -263,7 +264,8 @@
 
 {% block mainblock %}
     <div id="designer_left_column" class="okit-designer-left-column">
-        <div id="icons_palette" class="okit-icons-palette">
+        {{ palette.add_palette(palette_json) }}
+        <!--div id="icons_palette" class="okit-icons-palette">
             <div id="icon_text_toggle" class="okit-icons-toggle">
                 <label><input type="radio" name="icon_toggle" checked="checked"
                               onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');okitSettings.icons_only=true;okitSettings.save();">Icons</label>
@@ -306,7 +308,7 @@
                     {% endfor %}
                 </div>
             </details>
-        </div>
+        </div-->
         <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
         <div id="explorer_panel" class="okit-explorer-view hidden"></div>
         <div id="git_panel" class="okit-explorer-view hidden"></div>
