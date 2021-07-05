@@ -266,32 +266,6 @@
     <div id="designer_left_column" class="okit-designer-left-column">
         {{ palette.add_palette(palette_json) }}
         <!--div id="icons_palette" class="okit-icons-palette">
-            <div id="icon_text_toggle" class="okit-icons-toggle">
-                <label><input type="radio" name="icon_toggle" checked="checked"
-                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');okitSettings.icons_only=true;okitSettings.save();">Icons</label>
-                <label><input type="radio" id="icons_and_text" name="icon_toggle"
-                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();">Icons & Text</label>
-            </div>
-            {% for palette_icon_group in palette_icon_groups %}
-                {% if palette_icon_group['name'] != 'Hidden' and palette_icon_group['name'] != 'Svg'%}
-                    <details  id="{{ palette_icon_group['name'] }}" class="okit-palette-icon-group" open>
-                        <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label></summary>
-                        <div class="okit-palette-icon-group-icons okit-icons-only">
-                            {% for palette_icon in palette_icon_group['icons'] %}
-                                <div>
-                                    <img class="okit-palette-icon"
-                                     src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}"
-                                     title="{{ palette_icon['title'] }}"
-                                     draggable="true"
-                                     alt="{{ palette_icon['title'] }}"
-                                     ondragstart="dragStart(event, {{ palette_icon['title'] | replace(' ', '') }}View)">
-                                    <label>{{ palette_icon['title'] }}</label>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </details>
-                {% endif %}
-            {% endfor %}
             <details  id="fragments" class="okit-palette-icon-group" open>
                 <summary class="okit-palette-icon-group-header"><img id="okit-fragment-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
                 <div class="okit-palette-icon-group-icons okit-icons-only">

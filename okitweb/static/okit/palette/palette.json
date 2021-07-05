@@ -59,14 +59,14 @@
             "svg": "networking.svg",
             "resources": [
                 {
+                    "title": "Load Balancer",
+                    "targets": ["oci"],
+                    "svg": "LoadBalancerLB.svg"
+                },
+                {
                     "title": "Virtual Cloud Network",
                     "targets": ["oci", "pca"],
                     "svg": "VirtualCloudNetworkVCN.svg"
-                },
-                {
-                    "title": "Route Table",
-                    "targets": ["oci", "pca"],
-                    "svg": "RouteTable.svg"
                 },
                 {
                     "title": "Subnet",
@@ -74,14 +74,14 @@
                     "svg": "Backbone.svg"
                 },
                 {
+                    "title": "Route Table",
+                    "targets": ["oci", "pca"],
+                    "svg": "RouteTable.svg"
+                },
+                {
                     "title": "Security List",
                     "targets": ["oci", "pca"],
                     "svg": "SecurityList.svg"
-                },
-                {
-                    "title": "DHCP Option",
-                    "targets": ["oci", "pca"],
-                    "svg": "DhcpOptions.svg"
                 },
                 {
                     "title": "Network Security Group",
@@ -89,9 +89,9 @@
                     "svg": "NetworkSecurityGroup.svg"
                 },
                 {
-                    "title": "Customer Premise Equipment",
-                    "targets": ["oci"],
-                    "svg": "CustomerPremises.svg"
+                    "title": "DHCP Option",
+                    "targets": ["oci", "pca"],
+                    "svg": "DhcpOptions.svg"
                 },
                 {
                     "title": "IPSec Connection",
@@ -104,9 +104,9 @@
                     "svg": "RemotePeeringGatewayRPG.svg"
                 },
                 {
-                    "title": "Load Balancer",
+                    "title": "Customer Premise Equipment",
                     "targets": ["oci"],
-                    "svg": "LoadBalancerLB.svg"
+                    "svg": "CustomerPremises.svg"
                 }
             ]
         },
@@ -137,7 +137,7 @@
                 {
                     "title": "Service Gateway",
                     "targets": ["oci", "pca"],
-                    "svg": "StorageGateway.svg"
+                    "svg": "ServiceGateway.svg"
                 }
             ]
         },
