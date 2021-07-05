@@ -25,6 +25,7 @@ function checkForUpdate() {
             console.info('OKIT Update Available');
             $(jqId('okit_update')).text(`Update: OKIT ${resp.release} Available for Download`);
             $(jqId('okit_update')).attr(`href`, `https://github.com/oracle/oci-designer-toolkit/tree/${resp.tag}`);
+            $(jqId('okit_update')).attr(`href`, `https://github.com/oracle/oci-designer-toolkit`);
         }
     });
 }

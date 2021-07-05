@@ -16,6 +16,7 @@
 ### Bug Fixes
 1. Correctly generate DHCP Options for VCN Default generated resource.
 2. Resolve issue with Private Endpoint Label not being specified for ADB.
+3. Fix FLASK_APP definition for Vagrant flask.service.
 
 
 ## Version 0.23.1

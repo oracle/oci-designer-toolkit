@@ -1,0 +1,44 @@
+{%- macro add_palette(palette) -%}
+    <div id="icons_palette" class="okit-icons-palette">
+        <div id="icon_target_toggle" class="okit-target-toggle">
+        <label>Target</label>
+        {% for target in palette.targets %}
+            <label><input id="{{ target }}_palette" type="radio" name="target_toggle" {%- if loop.index == 1 -%}checked="checked"{%- endif -%}
+                            onclick="$('.okit-palette-icon-div').addClass('hidden');$('.{{ target }}').removeClass('hidden');okitSettings.target='{{ target }}';okitSettings.save();">{{ target | upper }}</label>
+        {% endfor %}
+        </div>
+        <div id="icon_text_toggle" class="okit-icons-toggle">
+            <label><input type="radio" name="icon_toggle" checked="checked"
+                            onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');okitSettings.icons_only=true;okitSettings.save();">Icons</label>
+            <label><input type="radio" id="icons_and_text" name="icon_toggle"
+                            onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();">Icons & Text</label>
+        </div>
+        {% for group in palette.groups %}
+            {{ add_palette_group(group) }}
+        {% endfor %}
+    </div>
+{%- endmacro -%}
+
+{%- macro add_palette_group(group) -%}
+    <details  id="{{ group['title'] }}" class="okit-palette-icon-group" open>
+        <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + group['svg']) | lower }}" alt="{{ group['title'] }}"><label>{{ group['title'] }}</label></summary>
+        <div class="okit-palette-icon-group-icons okit-icons-only">
+            {% for resource in group['resources'] %}
+                {{ add_palette_resource(resource) }}
+            {% endfor %}
+        </div>
+    </details>
+{%- endmacro -%}
+
+{%- macro add_palette_resource(resource) -%}
+    <div class="okit-palette-icon-div {{ resource['targets'] | join(' ') }}">
+        <img class="okit-palette-icon"
+            src="{{ url_for('static', filename='okit/palette/svg/' + resource['svg']) }}"
+            title="{{ resource['title'] }}"
+            draggable="true"
+            alt="{{ resource['title'] }}"
+            ondragstart="dragStart(event, {{ resource['title'] | replace(' ', '') }}View)">
+        <label>{{ resource['title'] }}</label>
+    </div>
+{%- endmacro -%}
+

@@ -164,6 +164,9 @@ def designer():
         artefact_view_js_files = []
     artefact_view_js_files.extend(sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts'))))
 
+    # Read Pallete Json
+    palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
+
     # Get Palette Icon Groups / Icons
     svg_files = []
     svg_icon_groups = {}
@@ -247,6 +250,7 @@ def designer():
     return render_template('okit/okit_designer.html',
                            artefact_model_js_files=artefact_model_js_files,
                            artefact_view_js_files=artefact_view_js_files,
+                           palette_json=palette_json,
                            palette_icon_groups=palette_icon_groups,
                            fragment_icons=fragment_icons,
                            okit_templates_groups=template_groups,

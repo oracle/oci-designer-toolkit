@@ -6,6 +6,10 @@
 """
 
 import requests
+from common.okitCommon import jsonToFormattedString
+from common.okitLogging import getLogger
+# Configure logging
+logger = getLogger()
 
 ########################################################################
 # Calcuate based on METRICDISPLAYNAME
@@ -17,6 +21,8 @@ def get_oci_price_ords(sku):
     resource_price = ociprice_url + "/" + sku
     res = requests.get(resource_price)
     prices = res.json()
+    pay_as_you_go = 0
+    monthly_commit = 0
     for price in prices['items']:
         pay_as_you_go = float(price.get("pay_as_you_go"))
         monthly_commit = float(price.get("monthly_commit"))

@@ -21,9 +21,25 @@
     transform: translateX(-150px);
 }
 
+.okit-target-toggle {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+    border-bottom: black 2px solid;
+    padding-left: 5px;
+    font-weight: bold;
+
+}
+
+.okit-target-toggle > label {
+    font-size: 8pt;
+}
+
 .okit-icons-toggle {
     display: block;
     margin: auto;
+
 }
 
 .okit-icons-toggle > label {
