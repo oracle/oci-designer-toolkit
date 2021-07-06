@@ -366,6 +366,10 @@ $(document).ready(function() {
         $(jqId("icons_and_text")).prop('checked', 'checked');
         $(jqId("icons_and_text")).click();
     }
+    if (okitSettings.target) {
+        $(jqId(`${okitSettings.target}_palette`)).prop('checked', 'checked');
+        $(jqId(`${okitSettings.target}_palette`)).click();
+    }
 
 
     /*
