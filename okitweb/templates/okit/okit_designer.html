@@ -241,6 +241,9 @@
                 </div>
             </li>
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
+            {% if cd3_mode %}
+            <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
+            {% endif %}
         </ul>
         {% if experimental_mode %}
         <ul class="okit-navigation-sub-list">
@@ -253,7 +256,6 @@
                 </div>
             </li>
             <li><a id="import-cce-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCCEJson()">Cost Estimator Json (Import)</a></li>
-            <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel (Import)</a></li>
             <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToNetworkView()">Network (View)</a></li>
             <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToSecurityView()">Security (View)</a></li>
         </ul>
