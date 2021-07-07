@@ -528,7 +528,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.auto_save = $('#auto_save').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
                 if ($('#auto_save').is(':checked')) {
                     if (okitAutoSave) {okitAutoSave.startAutoSave();}
