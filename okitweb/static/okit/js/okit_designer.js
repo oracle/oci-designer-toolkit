@@ -48,6 +48,9 @@ function resetDesigner() {
 ** Set OCI Link
  */
 function setOCILink() {
+    if (okitSettings.region && okitSettings.region != '') $(jqId('oci_link')).attr('href', `https://console.${okitSettings.region}.oraclecloud.com`)
+}
+function setOCILinkOld() {
     $.ajax({
         type: 'get',
         url: `config/region/${okitSettings.profile}`,
@@ -123,7 +126,7 @@ function newModel() {
     okitJsonModel = new OkitJson();
 }
 function newRegionsModel() {
-    regionOkitJson = new OkitRegions();
+    regionOkitJson = new OkitRegionsJson();
 }
 function setTitleDescription() {
     okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
@@ -134,6 +137,16 @@ function updateJsonTitle() {
 }
 function updateJsonDescription() {
     okitJsonModel.description = $('#json_description').val();
+}
+
+/*
+** Handle Clone (Switch off Read Only)
+*/
+function handleEnableCreate(event) {
+    if (okitJsonModel) {
+        Object.values(okitJsonModel).filter((v) => Array.isArray(v)).forEach((v) => v.forEach((r) => r.read_only = false));
+        okitJsonModel.title = `${okitJsonModel.title} - Read/Write Copy`;
+    }
 }
 
 /*
@@ -351,14 +364,38 @@ function handleSaveAsTemplate(e) {
         data: JSON.stringify(okitJsonModel),
         success: function(resp) {
             console.info('Response : ' + resp);
-            // Hide modal dialog
-            $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            reloadTemplateMenu('user');
         },
         error: function(xhr, status, error) {
             console.info('Status : '+ status)
             console.info('Error : '+ error)
+        },
+        complete: function() {
             // Hide modal dialog
             $(jqId('modal_dialog_wrapper')).addClass('hidden');
+        }
+    });
+}
+function reloadTemplateMenu(section) {
+    const id = `${section}_template_menu_group`;
+    $.ajax({
+        type: 'get',
+        url: `templates/${section}`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_menu = doc.getElementById(id);
+            const current_menu = document.getElementById(id);
+            const template_menu = document.getElementById('templates_menu')
+            // Check if menu section already exists
+            current_menu !== null ? current_menu.replaceWith(new_menu) : template_menu.appendChild(new_menu);
+            addMenuDropdownMouseOver(`#${id}`);   
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
         }
     });
 }
@@ -477,10 +514,11 @@ function displayQueryDialog() {
                 console.info('Profile Select ' + $(jqId('config_profile')).val());
                 okitSettings.profile = $(jqId('config_profile')).val();
                 okitSettings.save();
+                loadHeaderConfigDropDown()
                 // Clear Existing Compartments
                 okitOciData.setCompartments([]);
                 loadCompartments();
-                loadRegions();
+                loadRegions(selectQueryLastUsedRegion);
             });
     for (let section of okitOciConfig.sections) {
         profile_select.append('option')
@@ -501,7 +539,7 @@ function displayQueryDialog() {
             .attr('size', 10)
             .on('change', () => {
                 console.info('Region Select ' + $(jqId('query_region_id')).val());
-                okitSettings.last_used_region = $(jqId('query_region_id')).val();
+                okitSettings.query_regions = $(jqId('query_region_id')).val();
                 okitSettings.save();
             })
             .append('option')
@@ -556,6 +594,7 @@ function displayQueryDialog() {
     td.append('input')
         .attr('id', 'fast_discovery')
         .attr('name', 'fast_discovery')
+        .attr('checked', 'checked')
         .attr('type', 'checkbox');
     td.append('label')
         .attr('for', 'fast_discovery')
@@ -592,7 +631,7 @@ function handleQueryOci(e) {
     // Load Compartment Select
     loadCompartments();
     // Load Region Select
-    loadRegions();
+    loadRegions(selectQueryLastUsedRegion);
 }
 function loadCompartments() {
     // Clear Select
@@ -621,8 +660,8 @@ function loadCompartments() {
                 $(jqId('query_compartment_id')).empty();
                 let compartment_select = d3.select(d3Id('query_compartment_id'));
                 for (let compartment of jsonBody) {
-                    console.info(compartment['display_name']);
-                    console.info(compartment['canonical_name']);
+                    // console.info(compartment['display_name']);
+                    // console.info(compartment['canonical_name']);
                     compartment_select.append('option')
                         .attr('value', compartment['id'])
                         .text(compartment['canonical_name']);
@@ -631,6 +670,7 @@ function loadCompartments() {
                     }
                 }
                 selectQueryLastUsedCompartment();
+                loadRegions(selectQueryLastUsedRegion);
             },
             error: function (xhr, status, error) {
                 console.info('Status : ' + status)
@@ -639,31 +679,33 @@ function loadCompartments() {
         });
     }
 }
-function loadRegions() {
+function loadRegions(callback) {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
     let region_select = d3.select(d3Id('query_region_id'));
-    for(let region of okitOciData.getRegions() ){
+    for(let region of okitRegions.getRegions() ){
         region_select.append('option')
             .attr('value', region['name'])
             .text(region['display_name']);
     }
-    selectQueryLastUsedRegion();
+    callback()
+    // selectQueryLastUsedRegion();
 }
 // TODO: Delete
-function loadRegions1() {
+function loadRegionsOld() {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
     select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+    const profile = $(jqId('config_profile')).val()
     // Get Regions
     $.ajax({
         type: 'get',
-        url: 'oci/region',
+        url: `oci/regions/${profile}`,
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
+        data: JSON.stringify({config_profile: profile}),
         success: function(resp) {
             //console.info('Response : ' + resp);
             let jsonBody = JSON.parse(resp)
@@ -687,7 +729,7 @@ function loadRegions1() {
 }
 function selectQueryHomeRegion() {
     if (okitSettings.home_region_key !== '') {
-        for (let region of ociRegions) {
+        for (let region of ociRegions.getRegions()) {
             if (okitSettings.home_region_key === region.key) {
                 $(jqId('query_region_id')).val(region.name);
                 break;
@@ -696,8 +738,20 @@ function selectQueryHomeRegion() {
     }
 }
 function selectQueryLastUsedRegion() {
-    if (okitSettings.last_used_region !== '') {
-       $(jqId('query_region_id')).val(okitSettings.last_used_region);
+    if (okitSettings.query_regions && okitSettings.query_regions !== '') {
+        $(jqId('query_region_id')).val(okitSettings.query_regions);
+        $(jqId('query_region_id')).change();
+    } else {
+        $(jqId('query_region_id')).val(okitRegions.getHomeRegion().id);
+        $(jqId('query_region_id')).change();
+    }
+}
+function selectRMLastUsedRegion() {
+    if (okitSettings.resource_manager_region && okitSettings.resource_manager_region !== '') {
+        $(jqId('query_region_id')).val(okitSettings.resource_manager_region);
+        $(jqId('query_region_id')).change();
+    } else {
+        $(jqId('query_region_id')).val(okitRegions.getHomeRegion().id);
         $(jqId('query_region_id')).change();
     }
 }
@@ -1376,4 +1430,13 @@ function handleLoaddesignFromGITExec(e) {
         loadTemplate(okitJsonModel.git_repository_filename)
         $(jqId('modal_dialog_wrapper')).addClass('hidden');
     }
+}
+
+function handleRefreshDropdownData(event) {
+    event = event || window.event;
+    event.stopPropagation()
+    okitRegions.clearLocalStorage()
+    okitOciData.clearLocalStorage()
+    okitRegions.load(okitSettings.profile)
+    okitOciData.load(okitSettings.profile)
 }

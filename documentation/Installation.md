@@ -242,15 +242,21 @@ docker run -d --rm -p 443:443 -p 80:80 \
 - [Copy Config & Key Files](#copy-config--key-files)
 
 ##### Vagrant Build
+###### MacOS / Linux
 ```bash
-cd oci-designer-toolkit/containers/vagrant/
+cd oci-designer-toolkit/containers/vagrant
 vagrant up; vagrant reload; vagrant ssh
+```
+###### Windows
+```bash
+cd oci-designer-toolkit\containers\vagrant
+vagrant up & vagrant reload & vagrant ssh
 ```
 **NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
 is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
 
 ##### Vagrant
-```bash
+```bat
 cd oci-designer-toolkit/containers/vagrant
 vagrant halt
 vagrant destroy -f

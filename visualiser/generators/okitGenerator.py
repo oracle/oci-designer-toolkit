@@ -57,7 +57,7 @@ class OCIGenerator(object):
         # -- Add Standard Author / Copyright variables
         self.jinja2_variables["author"] = __author__
         self.jinja2_variables["copyright"] = __copyright__
-        self.jinja2_variables["okit_version"] = "0.23.1"
+        self.jinja2_variables["okit_version"] = "0.24.0"
 
     def get(self, artifact_type, id):
         artifact = {};
@@ -342,6 +342,8 @@ class OCIGenerator(object):
             self.jinja2_variables["nsg_ids"] = jinja2_network_security_group_ids
         else:
             self.jinja2_variables.pop("nsg_ids", None)
+        # ---- Private Endpoint Label
+        self.addJinja2Variable("private_endpoint_label", resource["private_endpoint_label"], standardisedName)
 
         # ---- Tags
         self.renderTags(resource)

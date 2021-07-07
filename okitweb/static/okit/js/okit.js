@@ -34,15 +34,20 @@ let selectedArtefact = null;
 ** Define OKIT Artifact Classes
  */
 class OkitOCIConfig {
-    constructor() {
+    constructor(loaded_callback) {
         this.results = [];
+        this.loaded_callback = loaded_callback;
         this.validate();
         this.load();
     }
 
     load() {
         let me = this;
-        $.getJSON('config/sections', function(resp) {$.extend(true, me, resp);});
+        $.getJSON('config/sections', function(resp) {
+            $.extend(true, me, resp);
+            if (me.loaded_callback) me.loaded_callback();
+            console.info(me)
+        });
     }
 
     validate() {
@@ -68,23 +73,71 @@ class OkitGITConfig {
 }
 
 class OkitOCIData {
-    constructor() {
+    key = "OkitDropdownCache";
+    constructor(profile) {
         this.compartments = [];
-        this.load();
+        this.dropdown_data = {}
+        this.load(profile);
     }
 
-    load() {
-        let me = this;
-        $.getJSON('dropdown/data', function(resp) {$.extend(true, me, resp); me.query();});
+    clearLocalStorage() {localStorage.removeItem(this.key)}
+
+    storeLocal(profile) {
+        console.info(`Storing Local Dropdown data for ${profile}`);
+        const local_data = localStorage.getItem(this.key)
+        let cache = {}
+        if (local_data) cache = JSON.parse(local_data)
+        if (profile) cache[profile] = this.dropdown_data
+        localStorage.setItem(this.key, JSON.stringify(cache))
     }
 
-    save() {
+    loadLocal(profile) {
+        const local_data = localStorage.getItem(this.key)
+        console.info(`Loading Local Dropdown data for ${profile}`);
+        let cache = {}
+        if (local_data) cache = JSON.parse(local_data)
+        if (profile && cache[profile]) {
+            console.info(`Found Local Dropdown Data for ${profile}`);
+            this.dropdown_data = cache[profile]
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    load(profile) {
+        console.info('Loading Dropdown data for', profile);
+        this.compartments = [];
+        const self = this;
+        if (!this.loadLocal(profile)) {
+            const start = new Date().getTime()
+            $.getJSON(`dropdown/data/${String(profile)}`, (resp) => {
+                const end = new Date().getTime()
+                console.info('Load Dropdown Data took', end - start, 'ms')
+                // $.extend(true, self, resp);
+                self.dropdown_data = resp;
+                self.storeLocal(profile);
+                if (resp.shipped && profile !== undefined) {
+                    self.refresh(profile);
+                }
+            });
+        }
+    }
+
+    refresh(profile) {
+        console.info('Refreshing Dropdown data for', profile);
+        this.query(profile, false)
+    }
+
+    save(profile) {
+        console.info('Saving Dropdown data for', profile);
+        this.storeLocal(profile);
         $.ajax({
             type: 'post',
-            url: 'dropdown/data',
+            url: `dropdown/data/${String(profile)}`,
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify(this.cloneForSave()),
+            data: JSON.stringify(this.dropdown_data),
             success: function(resp) {},
             error: function(xhr, status, error) {
                 console.warn('Status : '+ status);
@@ -93,17 +146,24 @@ class OkitOCIData {
         });
     }
 
-    cloneForSave() {
+    cloneForSave(profile) {
         let clone = JSON.clone(this);
-        if (developer_mode) {
-            clone.compartments = [];
-        }
+        clone.compartments = [];
         return clone;
     }
 
-    query() {
-        let me = this;
-        $.getJSON('oci/dropdown', function(resp) {$.extend(true, me, resp); me.save();});
+    query(profile, save=false) {
+        console.info('Querying Dropdown data for', profile);
+        const self = this;
+        const start = new Date().getTime()
+        $.getJSON(`oci/dropdown/${profile}`, (resp) => {
+            // $.extend(true, self, resp);
+            self.dropdown_data = resp;
+            const end = new Date().getTime()
+            console.info('Queried Dropdown Data for', profile, 'took', end - start, 'ms')
+            if (save) this.save(profile)
+            else this.storeLocal(profile)
+            });
     }
 
     /*
@@ -111,7 +171,7 @@ class OkitOCIData {
      */
 
     getCpeDeviceShapes() {
-        return this.cpe_device_shapes;
+        return this.dropdown_data.cpe_device_shapes;
     }
     getCpeDeviceShape(id) {
         for (let shape of this.getCpeDeviceShapes()) {
@@ -124,31 +184,31 @@ class OkitOCIData {
 
     getDBSystemShapes(family='') {
         if (family === '') {
-            return this.db_system_shapes;
+            return this.dropdown_data.db_system_shapes;
         } else {
-            return this.db_system_shapes.filter(function(dss) {return dss.shape_family === family;});
+            return this.dropdown_data.db_system_shapes.filter(function(dss) {return dss.shape_family === family;});
         }
     }
 
     getDBSystemShape(shape) {
         console.log('Get DB Shape ' + shape);
-        return this.db_system_shapes.filter(function(dss) {return dss.shape === shape;})[0];
+        return this.dropdown_data.db_system_shapes.filter(function(dss) {return dss.shape === shape;})[0];
     }
 
     getDBVersions() {
-        return this.db_versions;
+        return this.dropdown_data.db_versions;
     }
 
     getInstanceShapes(type='') {
         if (type === '') {
-            return this.shapes;
+            return this.dropdown_data.shapes;
         } else {
-            return this.shapes.filter(function(s) {return s.shape.startsWith(type);});
+            return this.dropdown_data.shapes.filter(function(s) {return s.shape.startsWith(type);});
         }
     }
 
     getInstanceShape(shape) {
-        return this.getInstanceShapes().find(s => s.shape === shape);
+        return this.dropdown_data.getInstanceShapes().find(s => s.shape === shape);
     }
 
     getInstanceOS(shape='') {
@@ -187,18 +247,18 @@ class OkitOCIData {
     }
 
     getKubernetesVersions() {
-        return this.kubernetes_versions;
+        return this.dropdown_data.kubernetes_versions;
     }
 
     getLoadBalaancerShapes() {
-        return this.loadbalancer_shapes;
+        return this.dropdown_data.loadbalancer_shapes;
     }
 
     getMySQLConfigurations(shape_name='') {
         if (shape_name === '') {
-            return this.mysql_configurations;
+            return this.dropdown_data.mysql_configurations;
         } else {
-            return this.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
+            return this.dropdown_data.mysql_configurations.filter(function(dss) {return dss.shape_name === shape_name;});
         }
     }
     getMySQLConfiguration(id) {
@@ -210,15 +270,15 @@ class OkitOCIData {
     }
 
     getMySQLShapes() {
-        return this.mysql_shapes;
+        return this.dropdown_data.mysql_shapes;
     }
 
     getMySQLVersions(family='') {
-        return this.mysql_versions[0].versions;
+        return this.dropdown_data.mysql_versions[0].versions;
     }
 
     getRegions() {
-        return this.regions;
+        return this.dropdown_data.regions;
     }
 
     getCompartments() {
@@ -230,6 +290,97 @@ class OkitOCIData {
     }
 }
 
+class OkitRegions {
+    key = "OkitRegionCache"
+    constructor(loaded_callback) {
+        this.regions = []
+        this.loaded_callback = loaded_callback;
+        this.cache = {}
+        this.selected_profile = undefined
+    }
+
+    clearLocalStorage() {localStorage.removeItem(this.key)}
+
+    setLocalStorage(profile, regions) {
+        const local_data = localStorage.getItem(this.key)
+        let cache = {}
+        if (local_data) cache = JSON.parse(local_data)
+        if (profile) cache[profile] = regions.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
+        localStorage.setItem(this.key, JSON.stringify(cache))
+    }
+
+    getLocalStorage(profile) {
+        const local_data = localStorage.getItem(this.key)
+        let regions = undefined
+        if (local_data) {
+            const cache = JSON.parse(local_data)
+            regions = cache[profile]
+        }
+        return regions
+    }
+
+    storeLocal(profile) {
+        console.info(`Storing Local Region data for ${profile}`);
+        this.setLocalStorage(profile, this.regions)
+    }
+
+    storeLocal1(profile) {
+        console.info(`Storing Local Region data for ${profile}`);
+        const local_data = localStorage.getItem(this.key)
+        let cache = {}
+        if (local_data) cache = JSON.parse(local_data)
+        if (profile) cache[profile] = this.regions
+        localStorage.setItem(this.key, JSON.stringify(cache))
+    }
+
+    loadLocal1(profile) {
+        const local_data = localStorage.getItem(this.key)
+        console.info(`Loading Local Region data for ${profile}`);
+        let cache = {}
+        if (local_data) cache = JSON.parse(local_data)
+        if (profile && cache[profile]) {
+            console.info(`Found Local Region Data for ${profile}`);
+            this.regions = cache[profile]
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    loadLocal(profile) {
+        console.info(`Loading Local Region data for ${profile}`);
+        const regions = this.getLocalStorage(profile)
+        if (regions) {
+            console.info(`Found Local Region Data for ${profile}`);
+            this.regions = regions
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    load(profile) {
+        console.info('Loading Region data for', profile);
+        const self = this
+        if (!this.loadLocal(profile)) {
+            const start = new Date().getTime()
+            $.getJSON(`oci/regions/${profile}`, (resp) => {
+                const end = new Date().getTime()
+                console.info('Load Regions took', end - start, 'ms')
+                self.regions = resp
+                self.storeLocal(profile);
+                if (self.loaded_callback) self.loaded_callback();
+            });
+        } else if (self.loaded_callback) self.loaded_callback();
+    }
+
+    getRegions() {return this.regions}
+
+    getHomeRegion() {return this.regions.filter((r) => r.is_home_region)[0]}
+
+    isRegionAvailable(region_id) {return this.regions.map((r) => r.id).includes(region_id)}
+}
+
 class OkitSettings {
     constructor() {
         this.is_default_security_list = false;
@@ -238,6 +389,7 @@ class OkitSettings {
         this.is_vcn_defaults = true;
         this.is_timestamp_files = false;
         this.profile = 'DEFAULT';
+        this.region = ''
         this.is_always_free = false;
         this.is_optional_expanded = true;
         this.is_display_grid = false;
@@ -273,6 +425,11 @@ class OkitSettings {
 
     save() {
         createCookie(this.getCookieName(), JSON.stringify(this));
+        // redrawSVGCanvas(true);
+    }
+
+    saveAndRedraw() {
+        this.save()
         redrawSVGCanvas(true);
     }
 
@@ -371,7 +528,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.auto_save = $('#auto_save').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
                 if ($('#auto_save').is(':checked')) {
                     if (okitAutoSave) {okitAutoSave.startAutoSave();}
@@ -397,7 +554,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_display_grid = $('#is_display_grid').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -418,7 +575,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_default_route_table = $('#is_default_route_table').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -439,7 +596,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_default_security_list = $('#is_default_security_list').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -460,7 +617,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_default_dhcp_options = $('#is_default_dhcp_options').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -481,7 +638,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_vcn_defaults = $('#is_vcn_defaults').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -502,7 +659,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_timestamp_files = $('#is_timestamp_files').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -524,7 +681,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_variables = $('#is_variables').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -546,7 +703,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_optional_expanded = $('#is_optional_expanded').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -568,7 +725,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.hide_attached = $('#hide_attached').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -590,7 +747,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.highlight_association = $('#highlight_association').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -611,7 +768,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.show_ocids = $('#show_ocids').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -632,7 +789,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.validate_markdown = $('#validate_markdown').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -653,7 +810,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.fast_discovery = $('#fast_discovery').is(':checked');
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -681,7 +838,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.show_label = $("input:radio[name='show_label']:checked").val();
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -699,7 +856,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.show_label = $("input:radio[name='show_label']:checked").val();
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -717,7 +874,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.show_label = $("input:radio[name='show_label']:checked").val();
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -747,7 +904,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -765,7 +922,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -783,7 +940,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         td.append('label')
@@ -813,7 +970,7 @@ class OkitSettings {
             .on('input', function () {
                 if (autosave) {
                     self.name_prefix = $("input:text[name='name_prefix']").val();
-                    self.save();
+                    saveAndRedraw();
                 }
             });
     }
@@ -830,7 +987,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.profile = $(this).val();
-                    self.save();
+                    saveAndRedraw();
                 }
             });
         for (let section of okitOciConfig.sections) {

@@ -27,6 +27,7 @@ class AutonomousDatabase extends OkitArtifact {
         this.subnet_id = '';
         this.whitelisted_ips = [];
         this.nsg_ids = [];
+        this.private_endpoint_label = this.display_name;
         // Update with any passed data
         this.merge(data);
         this.convert();

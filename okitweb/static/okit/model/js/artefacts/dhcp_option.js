@@ -19,7 +19,7 @@ class DhcpOption extends OkitArtifact {
         this.vcn_id = '';
         this.options = [{
             type: "DomainNameServer",
-            server_type: "CustomDnsServer",
+            server_type: "VcnLocalPlusInternet",
             custom_dns_servers: [],
             search_domain_names: []
         }]
@@ -57,6 +57,16 @@ class DhcpOption extends OkitArtifact {
     static getArtifactReference() {
         return 'Dhcp Option';
     }
+    /*
+    ** Artifact Specific Functions
+    */
+   addDefaultOptions(vcn_name) {
+        const search_domain = {
+            type: "SearchDomain",
+            search_domain_names: [`${vcn_name.split('-').join('')}.oraclevcn.com`]
+        }
+        this.options.push(search_domain)
+   }
 }
 /*
 ** Dynamically Add Model Functions

@@ -8,11 +8,12 @@ console.info('Loaded Designer Ready Javascript');
 ** Define variables for Artefact classes
  */
 //let okitJsonModel = new OkitJson();
-let okitOciConfig = new OkitOCIConfig();
-let okitOciData = new OkitOCIData();
-let okitSettings = new OkitSettings();
-let okitGitConfig = new OkitGITConfig();
+let okitOciConfig = undefined;
+let okitOciData = undefined;
+let okitSettings = undefined;
+let okitGitConfig = undefined;
 let okitAutoSave = undefined;
+let okitRegions = undefined;
 //let okitTabularView = new OkitTabularJsonView();
 /*
 ** Ready function initiated on page load.
@@ -21,9 +22,10 @@ $(document).ready(function() {
     /*
     ** Initialise OKIT Variables
      */
-    okitOciConfig = new OkitOCIConfig();
-    okitOciData = new OkitOCIData();
     okitSettings = new OkitSettings();
+    okitOciConfig = new OkitOCIConfig(loadHeaderConfigDropDown);
+    okitRegions = new OkitRegions(loadHeaderRegionsDropDown);
+    okitOciData = new OkitOCIData(okitSettings.profile);
     okitGitConfig = new OkitGITConfig();
     okitJsonModel = new OkitJson();
     okitJsonView = new OkitDesignerJsonView(okitJsonModel);
@@ -88,6 +90,40 @@ $(document).ready(function() {
             checkLeftColumn();
         })
         .text('Explorer');
+    if (developer_mode) {
+        // Templates
+        d3.select(d3Id('console_left_bar')).append('label')
+            .attr('id', 'toggle_templates_button')
+            .attr('class', 'okit-pointer-cursor')
+            .on('click', function () {
+                let open = $(this).hasClass('okit-bar-panel-displayed');
+                slideLeftPanelsOffScreen();
+                if (!open) {
+                    $('#templates_panel').removeClass('hidden');
+                    $(this).addClass('okit-bar-panel-displayed');
+                } else {
+                    $('#templates_panel').empty();
+                }
+                checkLeftColumn();
+            })
+            .text('Templates');
+        // Git
+        d3.select(d3Id('console_left_bar')).append('label')
+            .attr('id', 'toggle_git_button')
+            .attr('class', 'okit-pointer-cursor')
+            .on('click', function () {
+                let open = $(this).hasClass('okit-bar-panel-displayed');
+                slideLeftPanelsOffScreen();
+                if (!open) {
+                    $('#git_panel').removeClass('hidden');
+                    $(this).addClass('okit-bar-panel-displayed');
+                } else {
+                    $('#git_panel').empty();
+                }
+                checkLeftColumn();
+            })
+            .text('Git Repositories');
+    }
     // Preferences
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_preferences_button')
@@ -127,6 +163,8 @@ $(document).ready(function() {
         .attr('id', 'toggle_properties_button')
         .attr('class', 'okit-pointer-cursor')
         .on('click', function () {
+            d3.event.preventDefault();
+            d3.event.stopPropagation();
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideRightPanelsOffScreen();
             if (!open) {
@@ -328,6 +366,10 @@ $(document).ready(function() {
         $(jqId("icons_and_text")).prop('checked', 'checked');
         $(jqId("icons_and_text")).click();
     }
+    if (okitSettings.target) {
+        $(jqId(`${okitSettings.target}_palette`)).prop('checked', 'checked');
+        $(jqId(`${okitSettings.target}_palette`)).click();
+    }
 
 
     /*
@@ -340,4 +382,5 @@ $(document).ready(function() {
     ** Add redraw on resize
      */
     window.addEventListener('resize', () => { redrawSVGCanvas(true) });
+
 });
