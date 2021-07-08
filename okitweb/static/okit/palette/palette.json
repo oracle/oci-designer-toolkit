@@ -6,7 +6,7 @@
             "svg": "containers.svg",
             "resources": [
                 {
-                    "title": "Compartments",
+                    "title": "Compartment",
                     "targets": ["oci", "pca"],
                     "svg": "Compartments.svg"
                 },
