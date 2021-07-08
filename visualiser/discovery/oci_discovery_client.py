@@ -331,6 +331,7 @@ class OciResourceDiscoveryClient(object):
         # oci.container_engine.ContainerEngineClient
         "ClusterOptions": (oci.container_engine.ContainerEngineClient, "get_cluster_options"), # use cluster_option_id="all"
         # oci.core.ComputeClient
+        "ImageShapeCompatibility": (oci.core.ComputeClient, "list_image_shape_compatibility_entries"),
         "Shape": (oci.core.ComputeClient, "list_shapes"),
         # oci.core.VirtualNetworkClient
         "CpeDeviceShape": (oci.core.VirtualNetworkClient, "list_cpe_device_shapes"),   
@@ -652,6 +653,11 @@ class OciResourceDiscoveryClient(object):
                         provider_service_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, provider_service_id=provider_service_id)
                         futures_list.update({(region, resource_type, None, provider_service_id):future})
+                    elif method_name == "list_image_shape_compatibility_entries":
+                        image_id = item[2]
+                        if image_id:
+                            future = executor.submit(self.list_resources, klass, method_name, region, image_id=image_id)
+                            futures_list.update({(region, resource_type, None, image_id):future})
                     else:
                         # all others static types
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
@@ -1193,6 +1199,8 @@ class OciResourceDiscoveryClient(object):
                     if self.include_resource_types == None or "IdpGroupMapping" in self.include_resource_types:
                         # get Identity Provider Group Mappings for Identity Provider
                         regional_resource_requests.add(("IdpGroupMapping", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "Image" and (self.include_resource_types == None or "ImageShapeCompatibility" in self.include_resource_types):
+                    regional_resource_requests.add(("ImageShapeCompatibility", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "Instance":
                     # get Volume Attachments and Vnic Attachments for Instances
                     if self.include_resource_types == None or "BootVolumeAttachment" in self.include_resource_types:
