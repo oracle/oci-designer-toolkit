@@ -38,6 +38,8 @@ class OCIDropdownQuery(OCIConnection):
         "DbVersion", 
         "CpeDeviceShape", 
         "FastConnectProviderService", 
+        "Image",
+        "ImageShapeCompatibility",
         "MySQLShape", 
         "MySQLVersion", 
         "MySQLConfiguration", 
@@ -51,6 +53,7 @@ class OCIDropdownQuery(OCIConnection):
         "DbVersion": "db_versions", 
         "CpeDeviceShape": "cpe_device_shapes", 
         "FastConnectProviderService": "fast_connect_provider_services", 
+        "Image": "images",
         "MySQLShape": "mysql_shapes", 
         "MySQLVersion": "mysql_versions", 
         "MySQLConfiguration": "mysql_configurations", 
@@ -95,5 +98,35 @@ class OCIDropdownQuery(OCIConnection):
                 logger.info("Processing Resource : {0!s:s}".format(resource_type))
                 # logger.info(jsonToFormattedString(resource_list))
                 if resource_type in map_keys:
+                    logger.info(f'Resource Type : {resource_type}')
+                    if resource_type == "Image":
+                        resource_list = self.images(resource_list, resources)
+                    elif resource_type == "Shape":
+                        resource_list = self.shapes(resource_list, resources)                       
                     response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
         return response_json
+
+    def images(self, images, resources):
+        # logger.info(f'Processing Images - Shape Compatibility: {resources.get("ImageShapeCompatibility", [])}')
+        shapes = [s["shape"] for s in resources.get("ImageShapeCompatibility", [])]
+        ids = [s["image_id"] for s in resources.get("ImageShapeCompatibility", [])]
+        # logger.info(f'Processing Images - Compatibility Ids: {ids}')
+        # logger.info(f'Processing Images - Shape: {shapes}')
+        # logger.info(f'Processing Images - Shape: {sorted(shapes)}')
+        for image in images:
+            # logger.info(f'Image Id: {image["id"]} in/out {image["id"] in ids}')
+            image["shapes"] = [s["shape"] for s in resources.get("ImageShapeCompatibility", []) if s["image_id"] == image["id"]]
+        return images
+    
+    def shapes(self, shapes, resources):
+        seen = []
+        deduplicated = []
+        for shape in shapes:
+            if shape['shape'] not in seen:
+                shape['sort_key'] = shape['shape']
+                if 'ocpus' in shape:
+                    split_shape = shape['shape'].split('.')
+                    shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])
+                deduplicated.append(shape)
+                seen.append(shape['shape'])
+        return sorted(deduplicated, key=lambda k: k['sort_key'])
