@@ -1,6 +1,18 @@
 # Release Notes
 
 
+## Version 0.24.2
+**Release Date**: 9th July 2021
+### Bug Fixes
+1. Resolve issue with missing Instance shapes due to fail compatibility query.
+
+
+## Version 0.24.1
+**Release Date**: 8th July 2021
+### Bug Fixes
+1. Resolve issue stopping Compartments being dragged from the palette and dropped on the canvas
+
+
 ## Version 0.24.0
 **Release Date**: 7th July 2021
 ### Features
@@ -12,10 +24,13 @@
 6. Add Region select to main toolbar.
 7. Cache Dropdown data & Region data per connection profile within the browsers local storage to improve performance.
 8. Add clear Dropdown Data cache to force refresh of cached data.
+9. Add Target selector to restrict palette based on chosen deployment target. This is early work preparing for the PCA release / Terraform cli.
+10. Add cd3=true URL parameter to enable import of CD3 spreadsheet.
 
 ### Bug Fixes
 1. Correctly generate DHCP Options for VCN Default generated resource.
 2. Resolve issue with Private Endpoint Label not being specified for ADB.
+3. Fix FLASK_APP definition for Vagrant flask.service.
 
 
 ## Version 0.23.1

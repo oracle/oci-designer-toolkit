@@ -1433,6 +1433,7 @@ function handleLoaddesignFromGITExec(e) {
 }
 
 function handleRefreshDropdownData(event) {
+    hideNavMenu();
     event = event || window.event;
     event.stopPropagation()
     okitRegions.clearLocalStorage()

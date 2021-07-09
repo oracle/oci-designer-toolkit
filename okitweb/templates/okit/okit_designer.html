@@ -124,17 +124,6 @@
 
 {% block navmenublock %}
     <ul id="navigation_menu_list" class="okit-navigation-list">
-        <ul id="okit_menu" class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Import Menu"></div>
-                        <span>OKIT</span>
-                    </span>
-                </div>
-            </li>
-            <li><a id="import-refresh-static-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRefreshDropdownData()">Refresh Dropdown Data</a></li>
-        </ul>
         <ul id="canvas_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -244,6 +233,17 @@
             {% if cd3_mode %}
             <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
             {% endif %}
+        </ul>
+        <ul id="okit_menu" class="okit-navigation-sub-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Admin Menu"></div>
+                        <span>Admin</span>
+                    </span>
+                </div>
+            </li>
+            <li><a id="import-refresh-static-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRefreshDropdownData()">Refresh Cache</a></li>
         </ul>
         {% if experimental_mode %}
         <ul class="okit-navigation-sub-list">
