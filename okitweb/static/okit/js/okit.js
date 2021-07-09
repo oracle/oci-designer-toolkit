@@ -157,8 +157,10 @@ class OkitOCIData {
         const self = this;
         const start = new Date().getTime()
         $.getJSON(`oci/dropdown/${profile}`, (resp) => {
-            // $.extend(true, self, resp);
-            self.dropdown_data = resp;
+            // Merge with base dropdown overwriting where appropriate with new data
+            self.dropdown_data = {...self.dropdown_data, ...resp};
+            delete self.dropdown_data.default
+            delete self.dropdown_data.shipped
             const end = new Date().getTime()
             console.info('Queried Dropdown Data for', profile, 'took', end - start, 'ms')
             if (save) this.save(profile)
@@ -208,17 +210,17 @@ class OkitOCIData {
     }
 
     getInstanceShape(shape) {
-        return this.dropdown_data.getInstanceShapes().find(s => s.shape === shape);
+        return this.getInstanceShapes().find(s => s.shape === shape);
     }
 
     getInstanceOS(shape='') {
         let oss = [];
         if (shape === '') {
-            for (let image of this.images) {
+            for (let image of this.dropdown_data.images) {
                 oss.push(image.operating_system);
             }
         } else {
-            for (let image of this.images) {
+            for (let image of this.dropdown_data.images) {
                 if (image.shapes.includes(shape)) {
                     oss.push(image.operating_system);
                 }
@@ -229,7 +231,7 @@ class OkitOCIData {
 
     getInstanceOSVersions(os='') {
         let versions = [];
-        let os_images = this.images.filter(i => i.operating_system === os);
+        let os_images = this.dropdown_data.images.filter(i => i.operating_system === os);
         for (let image of os_images) {
             versions.push(image.operating_system_version);
         }
@@ -238,7 +240,7 @@ class OkitOCIData {
 
     getInstanceImages(os='', version='') {
         let images = [];
-        let os_images = this.images.filter(i => i.operating_system === os);
+        let os_images = this.dropdown_data.images.filter(i => i.operating_system === os);
         let version_images = os_images.filter(i => i.operating_system_version === version);
         for (let image of version_images) {
             images.push(image.display_name);
@@ -250,7 +252,7 @@ class OkitOCIData {
         return this.dropdown_data.kubernetes_versions;
     }
 
-    getLoadBalaancerShapes() {
+    getLoadBalancerShapes() {
         return this.dropdown_data.loadbalancer_shapes;
     }
 
@@ -528,7 +530,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.auto_save = $('#auto_save').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
                 if ($('#auto_save').is(':checked')) {
                     if (okitAutoSave) {okitAutoSave.startAutoSave();}

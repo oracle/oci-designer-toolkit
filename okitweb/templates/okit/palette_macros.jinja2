@@ -37,7 +37,7 @@
             title="{{ resource['title'] }}"
             draggable="true"
             alt="{{ resource['title'] }}"
-            ondragstart="dragStart(event, {{ resource['title'] | replace(' ', '') }}View)">
+            ondragstart="dragStart(event, {{ resource['title'] | title | replace(' ', '') }}View)">
         <label>{{ resource['title'] }}</label>
     </div>
 {%- endmacro -%}
