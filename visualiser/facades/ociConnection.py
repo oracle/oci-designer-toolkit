@@ -25,7 +25,7 @@ logger = getLogger()
 
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000
-    OKIT_VERSION = 'v0.24.1'
+    OKIT_VERSION = 'v0.24.2'
 
     def __init__(self, config=None, configfile=None, profile=None, region=None):
         self.tenancy_ocid = ''
@@ -248,6 +248,15 @@ class OCIResourceManagerConnection(OCIConnection):
 
     def connect(self):
         self.client = oci.resource_manager.ResourceManagerClient(config=self.config, signer=self.signer)
+        return
+
+
+class OCIResourceSearchConnection(OCIConnection):
+    def __init__(self, config=None, configfile=None, profile=None):
+        super(OCIResourceSearchConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+
+    def connect(self):
+        self.client = oci.resource_search.ResourceSearchClient(config=self.config, signer=self.signer)
         return
 
 

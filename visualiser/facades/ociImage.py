@@ -69,7 +69,12 @@ class OCIImages(OCIComputeConnection):
         # TODO: Upgade oci sdk
         shape_capabilities = OCIImageShapeCompatibility()
         for image in images_json:
-            image['shapes'] = [s['shape'] for s in shape_capabilities.list(image['id'])]
+            image['shapes'] = []
+        try:
+            for image in images_json:
+                image['shapes'] = [s['shape'] for s in shape_capabilities.list(image['id'])]
+        except oci.exceptions.ServiceError as e:
+            logger.exception(e)
 
         # Filter results
         self.images_json = self.filterJsonObjectList(images_json, filter)
@@ -85,7 +90,6 @@ class OCIImageShapeCompatibility(OCIComputeConnection):
         super(OCIImageShapeCompatibility, self).__init__(config=config, configfile=configfile, profile=profile)
 
     def list(self, image_id=None, filter=None):
-
         # Add filter
         if filter is None:
             filter = {}
@@ -96,17 +100,6 @@ class OCIImageShapeCompatibility(OCIComputeConnection):
         # Convert to Json object
         compatibilities_json = self.toJson(compatibilities)
         logJson(compatibilities_json)
-        # De-Duplicate
-        #seen = []
-        #deduplicated = []
-        #for compatibility in compatibilities_json:
-        #    compatibility['sort_key'] = "{0:s} {1:s}".format(compatibility['operating_system'], compatibility['operating_system_version'])
-        #    if compatibility['sort_key'] not in seen:
-        #        deduplicated.append(compatibility)
-        #        seen.append(compatibility['sort_key'])
-        #logger.debug('============================== Compatibilities De-Duplicate ==============================')
-        #logJson(deduplicated)
-        #compatibilitys_json = deduplicated
 
         # Filter results
         self.compatibilities_json = self.filterJsonObjectList(compatibilities_json, filter)

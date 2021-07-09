@@ -1,6 +1,12 @@
 # Release Notes
 
 
+## Version 0.24.2
+**Release Date**: 9th July 2021
+### Bug Fixes
+1. Resolve issue with missing Instance shapes due to fail compatibility query.
+
+
 ## Version 0.24.1
 **Release Date**: 8th July 2021
 ### Bug Fixes
