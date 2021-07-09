@@ -67,6 +67,7 @@ from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
 from facades.ociRegion import OCIRegions
 from facades.ociRemotePeeringConnection import OCIRemotePeeringConnections
 from facades.ociResourceManager import OCIResourceManagers
+from facades.ociResourceTypes import OCIResourceTypes
 from facades.ociRouteTable import OCIRouteTables
 from facades.ociSecurityList import OCISecurityLists
 from facades.ociServiceGateway import OCIServiceGateways
@@ -415,6 +416,16 @@ def ociArtifacts(artifact):
     return json.dumps(standardiseIds(response_json), sort_keys=True)
 
 
+@bp.route('/resourcetypes/<string:profile>', methods=(['GET']))
+def resourceTypes(profile):
+    if request.method == 'GET':
+        resource_types = OCIResourceTypes(profile=profile)
+        resource_types_json = resource_types.list()
+        return jsonToFormattedString(resource_types_json)
+    else:
+        return 'Unknown Method', 500
+
+
 @bp.route('/dropdown/<string:profile>', methods=(['GET']))
 def dropdownQuery(profile):
     if request.method == 'GET':
@@ -425,8 +436,55 @@ def dropdownQuery(profile):
         return 'Unknown Method', 500
 
 
-@bp.route('/dropdown1', methods=(['GET']))
-def dropdown1Query():
+@bp.route('/dropdownold/<string:profile>', methods=(['GET']))
+def dropdownOldQuery(profile):
+    if request.method == 'GET':
+        dropdown_json = {}
+        # Regions
+        # oci_regions = OCIRegions(profile=profile)
+        # dropdown_json["regions"] = sorted(oci_regions.list(), key=lambda k: k['name'])
+        # Services
+        oci_services = OCIServices(profile=profile)
+        dropdown_json["services"] = sorted(oci_services.list(), key=lambda k: k['name'])
+        # Instance Shapes
+        oci_shapes = OCIShapes(profile=profile)
+        dropdown_json["shapes"] = sorted(oci_shapes.list(), key=lambda k: k['sort_key'])
+        # Instance Images
+        oci_images = OCIImages(profile=profile)
+        dropdown_json["images"] = sorted(oci_images.list(), key=lambda k: k['sort_key'])
+        # Database System Shapes
+        db_system_shapes = OCIDatabaseSystemShapes(profile=profile)
+        dropdown_json["db_system_shapes"] = sorted(db_system_shapes.list(), key=lambda k: k['shape'])
+        # Database Versions
+        db_versions = OCIDatabaseVersions(profile=profile)
+        dropdown_json["db_versions"] = sorted(db_versions.list(), key=lambda k: k['version'])
+        # CPE Device Shapes
+        cpe_device_shapes = OCICpeDeviceShapes(profile=profile)
+        dropdown_json["cpe_device_shapes"] = sorted(cpe_device_shapes.list(), key=lambda k: k['cpe_device_info']['vendor'])
+        # Fast Connect Provider Services
+        # fast_connect_provider_services = OCIFastConnectProviderServices(profile=profile)
+        # dropdown_json["fast_connect_provider_services"] = sorted(fast_connect_provider_services.list(), key=lambda k: k['provider_name'])
+        # MySQL Shapes
+        mysql_shapes = OCIMySQLShapes(profile=profile)
+        dropdown_json["mysql_shapes"] = sorted(mysql_shapes.list(), key=lambda k: k['name'])
+        # Database Versions
+        mysql_versions = OCIMySQLVersions(profile=profile)
+        dropdown_json["mysql_versions"] = sorted(mysql_versions.list(), key=lambda k: k['version_family'])
+        # MySQL Configurations
+        mysql_configurations = OCIMySQLConfigurations(profile=profile)
+        dropdown_json["mysql_configurations"] = sorted(mysql_configurations.list(), key=lambda k: k['display_name'])
+        # Instance Shapes
+        oci_loadbalancer_shapes = OCILoadBalancerShapes(profile=profile)
+        dropdown_json["loadbalancer_shapes"] = sorted(oci_loadbalancer_shapes.list(), key=lambda k: k['name'])
+        # Kubernetes Versions
+        k8_versions = OCIKubernetesVersions(profile=profile)
+        dropdown_json["kubernetes_versions"] = sorted(k8_versions.list(), key=lambda k: k['version'], reverse=True)
+        return dropdown_json
+    else:
+        return 'Unknown Method', 500
+
+@bp.route('/dropdown2', methods=(['GET']))
+def dropdown2Query():
     if request.method == 'GET':
         dropdown_json = {}
         # Regions

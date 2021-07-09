@@ -1,6 +1,18 @@
 # Release Notes
 
 
+## Version 0.24.2
+**Release Date**: 9th July 2021
+### Bug Fixes
+1. Resolve issue with missing Instance shapes due to fail compatibility query.
+
+
+## Version 0.24.1
+**Release Date**: 8th July 2021
+### Bug Fixes
+1. Resolve issue stopping Compartments being dragged from the palette and dropped on the canvas
+
+
 ## Version 0.24.0
 **Release Date**: 7th July 2021
 ### Features

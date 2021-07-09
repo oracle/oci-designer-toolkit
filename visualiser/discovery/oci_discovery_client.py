@@ -150,7 +150,7 @@ class OciResourceDiscoveryClient(object):
         # oci.data_science.DataScienceClient
         "DataScienceModel": (oci.data_science.DataScienceClient, "list_models"),
         "DataScienceModelDeployment": (oci.data_science.DataScienceClient, "list_model_deployments"),
-        "DataScienceNotebookSession": (oci.data_science.DataScienceClient, "list_nodebook_sessions"),
+        "DataScienceNotebookSession": (oci.data_science.DataScienceClient, "list_notebook_sessions"),
         "DataScienceProject": (oci.data_science.DataScienceClient, "list_projects"),
         # oci.database.DatabaseClient
         "AutonomousContainerDatabase": (oci.database.DatabaseClient, "list_autonomous_container_databases"),
@@ -331,6 +331,7 @@ class OciResourceDiscoveryClient(object):
         # oci.container_engine.ContainerEngineClient
         "ClusterOptions": (oci.container_engine.ContainerEngineClient, "get_cluster_options"), # use cluster_option_id="all"
         # oci.core.ComputeClient
+        "ImageShapeCompatibility": (oci.core.ComputeClient, "list_image_shape_compatibility_entries"),
         "Shape": (oci.core.ComputeClient, "list_shapes"),
         # oci.core.VirtualNetworkClient
         "CpeDeviceShape": (oci.core.VirtualNetworkClient, "list_cpe_device_shapes"),   
@@ -615,9 +616,10 @@ class OciResourceDiscoveryClient(object):
                         future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
                     elif method_name == "get_image" and compartment_id == None:
-                        image_id = item[2]
-                        future = executor.submit(self.list_resources, klass, method_name, region, image_id=image_id)
-                        futures_list.update({(region, resource_type, None, image_id):future})
+                        if compartment_id == None and item[2]:
+                            image_id = item[2]
+                            future = executor.submit(self.list_resources, klass, method_name, region, image_id=image_id)
+                            futures_list.update({(region, resource_type, None, image_id):future})
                     elif method_name == "get_managed_instance":
                         managed_instance_id=item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, managed_instance_id=managed_instance_id)
@@ -652,6 +654,11 @@ class OciResourceDiscoveryClient(object):
                         provider_service_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, provider_service_id=provider_service_id)
                         futures_list.update({(region, resource_type, None, provider_service_id):future})
+                    elif method_name == "list_image_shape_compatibility_entries":
+                        image_id = item[2]
+                        if image_id:
+                            future = executor.submit(self.list_resources, klass, method_name, region, image_id=image_id)
+                            futures_list.update({(region, resource_type, None, image_id):future})
                     else:
                         # all others static types
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
@@ -793,6 +800,11 @@ class OciResourceDiscoveryClient(object):
                         identity_provider_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, identity_provider_id=identity_provider_id)
                         futures_list.update({(region, resource_type, compartment_id, identity_provider_id):future})
+                    elif method_name == "list_images":
+                        if compartment_id:
+                            # only if compartment is set, otherwise its handled above as a get request
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
+                            futures_list.update({(region, resource_type, compartment_id, None):future})
                     elif method_name == "list_indexes":
                         table_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, table_name_or_id=table_id)
@@ -1067,8 +1079,8 @@ class OciResourceDiscoveryClient(object):
         for region in resources:
             regional_resource_requests = set()
 
-            if self.include_resource_types == None or "Image" in self.include_resource_types:
-                # always add search for Image in the root compartment to ensure we get the default images that are
+            if self.include_resource_types != None and "Image" in self.include_resource_types:
+                # If requested, search for Image in the root compartment to ensure we get the default images that are
                 # not inlcuded in the search results
                 regional_resource_requests.add(("Image", self.config["tenancy"], None))
 
@@ -1335,33 +1347,50 @@ class OciResourceDiscoveryClient(object):
             if "DataFlowRun" in resources_by_region[region]:
                 for resource in resources_by_region[region]["DataFlowRun"]:
                     regional_resource_requests.add(("DataFlowRunDetails", resource.compartment_id, resource.id))
+
             extra_resource_requests.update({region:regional_resource_requests})
 
-        extra_resources_by_region = self.get_resources(extra_resource_requests)
+        second_pass_resources_by_region = self.get_resources(extra_resource_requests)
 
         # merge the responses
-        for region in extra_resources_by_region:
-            resources_by_region[region].update(extra_resources_by_region[region])
+        for region in second_pass_resources_by_region:
+            for resource_type in second_pass_resources_by_region[region]:
+                if resource_type in resources_by_region[region]:
+                    # merge
+                    resources_by_region[region][resource_type].extend(second_pass_resources_by_region[region][resource_type])
+                else:
+                    # add
+                    resources_by_region[region][resource_type] = second_pass_resources_by_region[region][resource_type]
 
         # and again... repeat for one more round of queries:
         final_resource_requests = dict()
         for region in resources_by_region:
-            extra_resources_by_region = set()
+            third_pass_resources_by_region = set()
             # get extra details for MySQLDbSystems Details
             if "MySQLDbSystemDetails" in resources_by_region[region]:
                 for mysql_db_system in resources_by_region[region]["MySQLDbSystemDetails"] if (self.include_resource_types == None or "MySQLConfiguration" in self.include_resource_types) else []:
-                    extra_resources_by_region.add(("MySQLConfiguration", mysql_db_system.compartment_id, mysql_db_system.configuration_id))
+                    third_pass_resources_by_region.add(("MySQLConfiguration", mysql_db_system.compartment_id, mysql_db_system.configuration_id))
             if "DbHome" in resources_by_region[region]:
-                for db_home in resources_by_region[region]["DbHome"] if (self.include_resource_types == None or "DbHome" in self.include_resource_types) else []:
-                    extra_resources_by_region.add(("Database", db_home.compartment_id, db_home.id))
+                for db_home in resources_by_region[region]["DbHome"] if (self.include_resource_types == None or "Database" in self.include_resource_types) else []:
+                    third_pass_resources_by_region.add(("Database", db_home.compartment_id, db_home.id))
+            # if requested, get ImageShapeCompatibility for Images 
+            if "Image" in resources_by_region[region] and (self.include_resource_types != None and "ImageShapeCompatibility" in self.include_resource_types):
+                for image in resources_by_region[region]["Image"]:
+                    third_pass_resources_by_region.add(("ImageShapeCompatibility", None, image.id))
 
-            final_resource_requests.update({region:extra_resources_by_region})
+            final_resource_requests.update({region:third_pass_resources_by_region})
 
         final_resources_by_region = self.get_resources(final_resource_requests)
 
         # merge the responses
         for region in final_resources_by_region:
-            resources_by_region[region].update(final_resources_by_region[region])
+            for resource_type in final_resources_by_region[region]:
+                if resource_type in resources_by_region[region]:
+                    # merge
+                    resources_by_region[region][resource_type].extend(final_resources_by_region[region][resource_type])
+                else:
+                    # add
+                    resources_by_region[region][resource_type] = final_resources_by_region[region][resource_type]
 
         if len(resources_by_region) == 0:
             logger.warn("Resource discovery results are empty")  
