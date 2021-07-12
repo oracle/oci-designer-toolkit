@@ -74,6 +74,7 @@ class OkitGITConfig {
 
 class OkitOCIData {
     key = "OkitDropdownCache";
+    day_milliseconds = 86400000;
     constructor(profile) {
         this.compartments = [];
         this.dropdown_data = {}
@@ -97,6 +98,7 @@ class OkitOCIData {
         let cache = {}
         if (local_data) cache = JSON.parse(local_data)
         if (profile && cache[profile]) {
+            // Add test for stale cache  && cache[profile].cache_date && ((Date.now() - cache[profile].cache_date) / this.day_milliseconds) <= 7
             console.info(`Found Local Dropdown Data for ${profile}`);
             this.dropdown_data = cache[profile]
             return true;
@@ -161,6 +163,7 @@ class OkitOCIData {
             self.dropdown_data = {...self.dropdown_data, ...resp};
             delete self.dropdown_data.default
             delete self.dropdown_data.shipped
+            self.dropdown_data.cache_date = Date.now()
             const end = new Date().getTime()
             console.info('Queried Dropdown Data for', profile, 'took', end - start, 'ms')
             if (save) this.save(profile)
