@@ -559,7 +559,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_display_grid = $('#is_display_grid').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -580,7 +580,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_default_route_table = $('#is_default_route_table').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -601,7 +601,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_default_security_list = $('#is_default_security_list').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -622,7 +622,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_default_dhcp_options = $('#is_default_dhcp_options').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -643,7 +643,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_vcn_defaults = $('#is_vcn_defaults').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -664,7 +664,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_timestamp_files = $('#is_timestamp_files').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -686,7 +686,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_variables = $('#is_variables').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -708,7 +708,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.is_optional_expanded = $('#is_optional_expanded').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -730,7 +730,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.hide_attached = $('#hide_attached').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -752,7 +752,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.highlight_association = $('#highlight_association').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -773,7 +773,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.show_ocids = $('#show_ocids').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -794,7 +794,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.validate_markdown = $('#validate_markdown').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -815,7 +815,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.fast_discovery = $('#fast_discovery').is(':checked');
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -843,7 +843,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.show_label = $("input:radio[name='show_label']:checked").val();
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -861,7 +861,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.show_label = $("input:radio[name='show_label']:checked").val();
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -879,7 +879,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.show_label = $("input:radio[name='show_label']:checked").val();
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -909,7 +909,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -927,7 +927,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -945,7 +945,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.tooltip_type = $("input:radio[name='tooltip_type']:checked").val();
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         td.append('label')
@@ -975,7 +975,7 @@ class OkitSettings {
             .on('input', function () {
                 if (autosave) {
                     self.name_prefix = $("input:text[name='name_prefix']").val();
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
     }
@@ -992,7 +992,7 @@ class OkitSettings {
             .on('change', function () {
                 if (autosave) {
                     self.profile = $(this).val();
-                    saveAndRedraw();
+                    self.saveAndRedraw();
                 }
             });
         for (let section of okitOciConfig.sections) {
