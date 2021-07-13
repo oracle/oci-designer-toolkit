@@ -1391,7 +1391,7 @@ class OkitArtefactView {
             this.drawText(svg, this.svg_info_text);
             this.drawText(svg, this.svg_label_text);
             this.drawTitle(svg);
-            this.drawIcon(svg);
+            const icon = this.drawIcon(svg);
             // if (this.read_only) this.drawIconOverlay(svg)
             // Add standard / common click event
             this.addClickEvent(svg);
@@ -1400,7 +1400,7 @@ class OkitArtefactView {
             // Add Mouse Over / Exist Events
             this.addMouseEvents(svg);
             // Add Drag Handling Events
-            this.addDragEvents(svg);
+            this.addDragEvents(icon);
             // Add Context Menu (Right-Click)
             this.addContextMenu(svg);
             // Add Custom Data Attributes
@@ -1417,6 +1417,8 @@ class OkitArtefactView {
         // console.warn('Parent SVG Id', this.parent_svg_id)
         // Get attributes as local constant before create to stop NaN because append adds element before adding attributes.
         const definition = this.svg_definition;
+        // const g = parent_svg.append("g")
+        //     .attr("transform", `translate(${definition.x}, ${definition.y})`)
         const svg = parent_svg.append("svg")
             .attr("id",        definition.id)
             .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
@@ -1568,11 +1570,12 @@ class OkitArtefactView {
     removeAssociationHighlighting() {}
 
     addDragEvents(svg) {
-        svg.on("dragenter",  dragEnter)
-            .on("dragover",  dragOver)
-            .on("dragleave", dragLeave)
-            .on("drop",      dragDrop)
-            .on("dragend",   dragEnd);
+        const self = this
+        svg.call(d3.drag()
+            .on("start", () => console.warn(`'Drag Start Event' ${self.display_name}`))
+            .on("drag", () => console.warn(`'Drag Event' ${self.display_name}`))
+            .on("end", () => console.warn(`'Drag End Event' ${self.display_name}`))
+            )
     }
 
     addContextMenu(svg) {
@@ -2568,6 +2571,7 @@ class OkitContainerArtefactView extends OkitArtefactView {
             self.recalculate_dimensions = true;
             self.getJsonView().draw();
         });
+        return icon
     }
 
     getPadding() {
