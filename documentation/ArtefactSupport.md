@@ -1,7 +1,7 @@
 # Artifact Support
 
 ## Artifact Support Matrix
-All Released Arifacts support the **Required** parameters allowing there creation through Terraform / Ansible and query 
+All Released Artifacts support the **Required** parameters allowing there creation through Terraform / Ansible and query 
 using the oci python API.
  
 Where functionality is missing it will be associated with **Optional** parameters.

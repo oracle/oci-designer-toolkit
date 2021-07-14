@@ -16,7 +16,7 @@ logger = getLogger()
 
 class OciResourceDiscoveryClient(object):
 
-    # map suppoted resources types to the OCI SDK client type and its "get" 
+    # map supported resources types to the OCI SDK client type and its "get"
     # methods. Creates a map of:
     #     { resource_name -> (Client, list_method) }
     get_resource_client_methods = {
