@@ -24,7 +24,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
         ...this.json_view.getBlockStorageVolumes(), ...this.json_view.getDynamicRoutingGateways(),
         ...this.json_view.getAutonomousDatabases(), ...this.json_view.getCustomerPremiseEquipments(),
         ...this.json_view.getObjectStorageBuckets(), ...this.json_view.getFastConnects(),
-        ...this.json_view.getIPSecConnections(), ...this.json_view.getRemotePeeringConnections(),
+        ...this.json_view.getIpsecConnections(), ...this.json_view.getRemotePeeringConnections(),
         ...this.json_view.getInstances()].filter(child => child.parent_id === this.artefact.id);}
     get minimum_dimensions() {
         if (this.isTopLevel()) {
@@ -88,7 +88,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     getRightArtifacts() {
         return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
             ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference(),
-            IPSecConnection.getArtifactReference(), RemotePeeringConnection.getArtifactReference()];
+            IpsecConnection.getArtifactReference(), RemotePeeringConnection.getArtifactReference()];
     }
 
     getRightEdgeArtifacts() {

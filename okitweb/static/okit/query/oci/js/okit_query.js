@@ -238,7 +238,7 @@ class OkitOCIQuery {
         this.queryFastConnects(request);
         this.queryInstances(request);
         this.queryInstancePools(request);
-        this.queryIPSecConnections(request);
+        this.queryIpsecConnections(request);
         this.queryRemotePeeringConnections(request);
         this.queryDatabaseSystems(request);
         this.queryMysqlDatabaseSystems(request);
@@ -579,7 +579,7 @@ class OkitOCIQuery {
         });
     }
 
-    queryIPSecConnections(request) {
+    queryIpsecConnections(request) {
         console.info('------------- Autonomous IPSec Connection Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;

@@ -172,7 +172,7 @@ class OkitJson {
         // IPSec Connections
         if (okit_json.hasOwnProperty('ipsec_connections')) {
             for (let artefact of okit_json['ipsec_connections']) {
-                let obj = this.newIPSecConnection(artefact);
+                let obj = this.newIpsecConnection(artefact);
             }
         }
         // RemotePeering Connections
@@ -630,24 +630,21 @@ class OkitJson {
     }
 
     // IPSec Connection
-    newIpsecConnection(data) {return this.newIPSecConnection(data)}
-    newIPSecConnection(data) {
+    newIpsecConnection(data) {
         console.info('New IPSec Connection');
-        this.ipsec_connections.push(new IPSecConnection(data, this));
+        this.ipsec_connections.push(new IpsecConnection(data, this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
     }
     getIpsecConnections() {return this.ipsec_connections;}
-    getIpsecConnection(id='') {return this.getIPSecConnection(id)}
-    getIPSecConnections() {return this.ipsec_connections;}
-    getIPSecConnection(id='') {
-        for (let artefact of this.getIPSecConnections()) {
+    getIpsecConnection(id='') {
+        for (let artefact of this.getIpsecConnections()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteIPSecConnection(id) {
+    deleteIpsecConnection(id) {
         for (let i = 0; i < this.ipsec_connections.length; i++) {
             if (this.ipsec_connections[i].id === id) {
                 this.ipsec_connections[i].delete();

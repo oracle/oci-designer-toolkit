@@ -120,7 +120,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
         for (let artefact of this.okitjson.instance_pools) {this.newInstancePool(artefact);}
         for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
-        for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
+        for (let artefact of this.okitjson.ipsec_connections) {this.newIpsecConnection(artefact);}
         for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
         for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
         for (let artefact of this.okitjson.mysql_database_systems) {this.newMysqlDatabaseSystem(artefact);}
@@ -510,31 +510,30 @@ class OkitJsonView {
     }
 
     // IPSec Connection
-    dropIPSecConnectionView(target) {
-        let view_artefact = this.newIPSecConnection();
+    dropIpsecConnectionView(target) {
+        let view_artefact = this.newIpsecConnection();
         view_artefact.getArtefact().compartment_id = target.id;
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
-    newIpsecConnection(connect) {return this.newIPSecConnection(connect)}
-    newIPSecConnection(connect) {
-        this.ipsec_connections.push(connect ? new IPSecConnectionView(connect, this) : new IPSecConnectionView(this.okitjson.newIPSecConnection(), this));
+    newIpsecConnection(connect) {
+        this.ipsec_connections.push(connect ? new IpsecConnectionView(connect, this) : new IpsecConnectionView(this.okitjson.newIpsecConnection(), this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
     }
-    getIPSecConnections() {
+    getIpsecConnections() {
         return this.ipsec_connections;
     }
-    getIPSecConnection(id='') {
-        for (let artefact of this.getIPSecConnections()) {
+    getIpsecConnection(id='') {
+        for (let artefact of this.getIpsecConnections()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    loadIPSecConnections(fast_connects) {
+    loadIpsecConnections(fast_connects) {
         for (const artefact of fast_connects) {
-            this.ipsec_connections.push(new IPSecConnectionView(new IPSecConnection(artefact, this.okitjson), this));
+            this.ipsec_connections.push(new IpsecConnectionView(new IpsecConnection(artefact, this.okitjson), this));
         }
     }
 
