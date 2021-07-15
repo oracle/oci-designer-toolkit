@@ -1,6 +1,20 @@
 # Release Notes
 
 
+## Version 0.24.4
+**Release Date**: 15th July 2021
+### Bug Fixes
+1. Resolve issue with dropping NAT Gateways on canvas
+2. Resolve issue with Dropping MySQL Database Systems on canvas
+3. Resolve issue with dropping IPSec Connection on canvas
+
+
+## Version 0.24.3
+**Release Date**: 13th July 2021
+### Bug Fixes
+1. Resolve issue causing preference modification not to be saved.
+
+
 ## Version 0.24.2
 **Release Date**: 9th July 2021
 ### Bug Fixes

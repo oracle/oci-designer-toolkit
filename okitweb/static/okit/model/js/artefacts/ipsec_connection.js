@@ -2,12 +2,12 @@
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded IPSecConnection Javascript');
+console.info('Loaded IpsecConnection Javascript');
 
 /*
 ** Define Block Storage Volume Class
  */
-class IPSecConnection extends OkitArtifact {
+class IpsecConnection extends OkitArtifact {
     /*
     ** Create
      */
@@ -31,7 +31,7 @@ class IPSecConnection extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new IPSecConnection(JSON.clone(this), this.getOkitJson());
+        return new IpsecConnection(JSON.clone(this), this.getOkitJson());
     }
 
 

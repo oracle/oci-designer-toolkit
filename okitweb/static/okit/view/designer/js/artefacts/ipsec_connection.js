@@ -2,12 +2,12 @@
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Designer IPSecConnection View Javascript');
+console.info('Loaded Designer IpsecConnection View Javascript');
 
 /*
-** Define IPSecConnection View Artifact Class
+** Define IpsecConnection View Artifact Class
  */
-class IPSecConnectionView extends OkitDesignerArtefactView {
+class IpsecConnectionView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
     }
@@ -65,7 +65,7 @@ class IPSecConnectionView extends OkitDesignerArtefactView {
     ** Static Functionality
      */
     static getArtifactReference() {
-        return IPSecConnection.getArtifactReference();
+        return IpsecConnection.getArtifactReference();
     }
 
     static getDropTargets() {

@@ -1400,6 +1400,16 @@ class OciResourceDiscoveryClient(object):
             self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
 
+        # remove duplicate shapes
+        # For multi-AD regions the list_shapes method returns shapes per AD, but does not distinguish which shape
+        # applies to which AD so there are multiple identical shape definitions in the response.
+        # Reduce the shape list to a unique set of shapes for the region.
+        for region in resources_by_region:
+            unique_shapes = dict()
+            for shape in resources_by_region[region]["Shape"]:
+                unique_shapes[shape.shape] = shape
+            resources_by_region[region]["Shape"] = list(unique_shapes.values())
+
         return resources_by_region
 
     @staticmethod
