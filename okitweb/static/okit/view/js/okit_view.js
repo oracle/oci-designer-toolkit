@@ -124,7 +124,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
         for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
         for (let artefact of this.okitjson.mysql_database_systems) {this.newMySQLDatabaseSystem(artefact);}
-        for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
+        for (let artefact of this.okitjson.nat_gateways) {this.newNatGateway(artefact);}
         for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
         for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
         for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
@@ -627,7 +627,7 @@ class OkitJsonView {
     }
 
     // NAT Gateway
-    dropNATGatewayView(target) {
+    dropNatGatewayView(target) {
         // Check if Gateway Already exists
         for (let gateway of this.nat_gateways) {
             if (gateway.vcn_id === target.id) {
@@ -635,35 +635,34 @@ class OkitJsonView {
                 return null;
             }
         }
-        let view_artefact = this.newNATGateway();
+        let view_artefact = this.newNatGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
-    newNatGateway(gateway) {return this.newNATGateway(gateway)}
-    newNATGateway(gateway) {
-        let ng = gateway ? new NATGatewayView(gateway, this) : new NATGatewayView(this.okitjson.newNATGateway(), this);
+    newNatGateway(gateway) {
+        let ng = gateway ? new NatGatewayView(gateway, this) : new NatGatewayView(this.okitjson.newNatGateway(), this);
         if (ng.artefact === null) {
             return null;
         }
         this.nat_gateways.push(ng);
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
-    getNATGateways() {
+    getNatGateways() {
         return this.nat_gateways;
     }
-    getNATGateway(id='') {
-        for (let artefact of this.getNATGateways()) {
+    getNatGateway(id='') {
+        for (let artefact of this.getNatGateways()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    loadNATGateways(nat_gateways) {
+    loadNatGateways(nat_gateways) {
         for (const artefact of nat_gateways) {
-            this.nat_gateways.push(new NATGatewayView(new NATGateway(artefact, this.okitjson), this));
+            this.nat_gateways.push(new NatGatewayView(new NatGateway(artefact, this.okitjson), this));
         }
     }
 

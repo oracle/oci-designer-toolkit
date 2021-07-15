@@ -192,7 +192,7 @@ class OkitJson {
         // NAT Gateway
         if (okit_json.hasOwnProperty('nat_gateways')) {
             for (let artefact of okit_json['nat_gateways']) {
-                let obj = this.newNATGateway(artefact);
+                let obj = this.newNatGateway(artefact);
             }
         }
         // Route Tables
@@ -740,24 +740,21 @@ class OkitJson {
     }
 
     // NAT Gateway
-    newNatGateway(data) {return this.newNATGateway(data)}
-    newNATGateway(data) {
+    newNatGateway(data) {
         console.info('New NAT Gateway');
-        this.nat_gateways.push(new NATGateway(data, this));
+        this.nat_gateways.push(new NatGateway(data, this));
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
     getNatGateways() {return this.nat_gateways;}
-    getNatGateway(id='') {return this.getNATGateway(id)}
-    getNATGateways() {return this.nat_gateways;}
-    getNATGateway(id='') {
-        for (let artefact of this.getNATGateways()) {
+    getNatGateway(id='') {
+        for (let artefact of this.getNatGateways()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteNATGateway(id) {
+    deleteNatGateway(id) {
         for (let i = 0; i < this.nat_gateways.length; i++) {
             if (this.nat_gateways[i].id === id) {
                 this.nat_gateways[i].delete();

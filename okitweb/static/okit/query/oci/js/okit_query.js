@@ -685,7 +685,7 @@ class OkitOCIQuery {
         });
     }
 
-    queryNATGateways(request) {
+    queryNatGateways(request) {
         console.info('------------- NAT Gateway Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
@@ -965,7 +965,7 @@ class OkitOCIQuery {
     }
     queryVirtualCLoudNetworkSubComponents(request) {
         this.queryInternetGateways(request);
-        this.queryNATGateways(request);
+        this.queryNatGateways(request);
         this.queryNetworkSecurityGroups(request);
         this.queryServiceGateways(request);
         this.queryLocalPeeringGateways(request);

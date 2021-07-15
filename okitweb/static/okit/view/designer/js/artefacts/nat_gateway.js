@@ -2,12 +2,12 @@
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Designer NATGateway View Javascript');
+console.info('Loaded Designer NatGateway View Javascript');
 
 /*
-** Define NATGateway View Artifact Class
+** Define NatGateway View Artifact Class
  */
-class NATGatewayView extends OkitDesignerArtefactView {
+class NatGatewayView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
     }
@@ -41,7 +41,7 @@ class NATGatewayView extends OkitDesignerArtefactView {
     ** Static Functionality
      */
     static getArtifactReference() {
-        return NATGateway.getArtifactReference();
+        return NatGateway.getArtifactReference();
     }
 
     static getDropTargets() {
