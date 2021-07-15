@@ -254,7 +254,7 @@ class OkitJson {
         // MySQL Database Systems
         if (okit_json.hasOwnProperty('mysql_database_systems')) {
             for (let artefact of okit_json['mysql_database_systems']) {
-                let obj = this.newMySQLDatabaseSystem(artefact);
+                let obj = this.newMysqlDatabaseSystem(artefact);
             }
         }
         // Instances
@@ -712,24 +712,21 @@ class OkitJson {
     }
 
     // MySQL Database System
-    newMysqlDatabaseSystem(data) {return this.newMySQLDatabaseSystem(data)}
-    newMySQLDatabaseSystem(data) {
+    newMysqlDatabaseSystem(data) {
         console.info('New MySQL Database System');
-        this.mysql_database_systems.push(new MySQLDatabaseSystem(data, this));
+        this.mysql_database_systems.push(new MysqlDatabaseSystem(data, this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
     }
     getMysqlDatabaseSystems() {return this.mysql_database_systems;}
-    getMysqlDatabaseSystem(id='') {return this.getMySQLDatabaseSystem(id)}
-    getMySQLDatabaseSystems() {return this.mysql_database_systems;}
-    getMySQLDatabaseSystem(id='') {
-        for (let artefact of this.getMySQLDatabaseSystems()) {
+    getMysqlDatabaseSystem(id='') {
+        for (let artefact of this.getMysqlDatabaseSystems()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteMySQLDatabaseSystem(id) {
+    deleteMysqlDatabaseSystem(id) {
         for (let i = 0; i < this.mysql_database_systems.length; i++) {
             if (this.mysql_database_systems[i].id === id) {
                 this.mysql_database_systems[i].delete();

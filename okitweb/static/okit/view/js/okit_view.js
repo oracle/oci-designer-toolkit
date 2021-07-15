@@ -123,7 +123,7 @@ class OkitJsonView {
         for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
         for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
         for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
-        for (let artefact of this.okitjson.mysql_database_systems) {this.newMySQLDatabaseSystem(artefact);}
+        for (let artefact of this.okitjson.mysql_database_systems) {this.newMysqlDatabaseSystem(artefact);}
         for (let artefact of this.okitjson.nat_gateways) {this.newNatGateway(artefact);}
         for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
         for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
@@ -597,32 +597,31 @@ class OkitJsonView {
     }
 
     // MySQL Database System
-    dropMySQLDatabaseSystemView(target) {
-        let view_artefact = this.newMySQLDatabaseSystem();
+    dropMysqlDatabaseSystemView(target) {
+        let view_artefact = this.newMysqlDatabaseSystem();
         view_artefact.getArtefact().subnet_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
-    newMysqlDatabaseSystem(database) {return this.newMySQLDatabaseSystem(database)}
-    newMySQLDatabaseSystem(database) {
-        this.mysql_database_systems.push(database ? new MySQLDatabaseSystemView(database, this) : new MySQLDatabaseSystemView(this.okitjson.newMySQLDatabaseSystem(), this));
+    newMysqlDatabaseSystem(database) {
+        this.mysql_database_systems.push(database ? new MysqlDatabaseSystemView(database, this) : new MysqlDatabaseSystemView(this.okitjson.newMysqlDatabaseSystem(), this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
     }
-    getMySQLDatabaseSystems() {
+    getMysqlDatabaseSystems() {
         return this.mysql_database_systems;
     }
-    getMySQLDatabaseSystem(id='') {
-        for (let artefact of this.getMySQLDatabaseSystems()) {
+    getMysqlDatabaseSystem(id='') {
+        for (let artefact of this.getMysqlDatabaseSystems()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    loadMySQLDatabaseSystems(database_systems) {
+    loadMysqlDatabaseSystems(database_systems) {
         for (const artefact of database_systems) {
-            this.mysql_database_systems.push(new MySQLDatabaseSystemView(new MySQLDatabaseSystem(artefact, this.okitjson), this));
+            this.mysql_database_systems.push(new MysqlDatabaseSystemView(new MysqlDatabaseSystem(artefact, this.okitjson), this));
         }
     }
 

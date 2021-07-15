@@ -241,7 +241,7 @@ class OkitOCIQuery {
         this.queryIPSecConnections(request);
         this.queryRemotePeeringConnections(request);
         this.queryDatabaseSystems(request);
-        this.queryMySQLDatabaseSystems(request);
+        this.queryMysqlDatabaseSystems(request);
         this.queryFileStorageSystems(request);
         this.queryOkeClusters(request);
     }
@@ -659,7 +659,7 @@ class OkitOCIQuery {
         });
     }
 
-    queryMySQLDatabaseSystems(request) {
+    queryMysqlDatabaseSystems(request) {
         console.info('------------- Autonomous Database Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
