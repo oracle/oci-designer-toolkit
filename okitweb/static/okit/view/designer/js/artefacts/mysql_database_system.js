@@ -2,12 +2,12 @@
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Designer MySQLDatabaseSystem View Javascript');
+console.info('Loaded Designer MysqlDatabaseSystem View Javascript');
 
 /*
-** Define MySQLDatabaseSystem View Artifact Class
+** Define MysqlDatabaseSystem View Artifact Class
  */
-class MySQLDatabaseSystemView extends OkitDesignerArtefactView {
+class MysqlDatabaseSystemView extends OkitDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
     }
@@ -69,7 +69,7 @@ class MySQLDatabaseSystemView extends OkitDesignerArtefactView {
     ** Static Functionality
      */
     static getArtifactReference() {
-        return MySQLDatabaseSystem.getArtifactReference();
+        return MysqlDatabaseSystem.getArtifactReference();
     }
 
     static getDropTargets() {

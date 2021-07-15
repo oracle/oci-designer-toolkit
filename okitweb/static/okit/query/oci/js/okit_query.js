@@ -238,10 +238,10 @@ class OkitOCIQuery {
         this.queryFastConnects(request);
         this.queryInstances(request);
         this.queryInstancePools(request);
-        this.queryIPSecConnections(request);
+        this.queryIpsecConnections(request);
         this.queryRemotePeeringConnections(request);
         this.queryDatabaseSystems(request);
-        this.queryMySQLDatabaseSystems(request);
+        this.queryMysqlDatabaseSystems(request);
         this.queryFileStorageSystems(request);
         this.queryOkeClusters(request);
     }
@@ -579,7 +579,7 @@ class OkitOCIQuery {
         });
     }
 
-    queryIPSecConnections(request) {
+    queryIpsecConnections(request) {
         console.info('------------- Autonomous IPSec Connection Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
@@ -659,7 +659,7 @@ class OkitOCIQuery {
         });
     }
 
-    queryMySQLDatabaseSystems(request) {
+    queryMysqlDatabaseSystems(request) {
         console.info('------------- Autonomous Database Query --------------------');
         console.info('------------- Compartment : ' + request.compartment_id);
         let me = this;
@@ -685,7 +685,7 @@ class OkitOCIQuery {
         });
     }
 
-    queryNATGateways(request) {
+    queryNatGateways(request) {
         console.info('------------- NAT Gateway Query --------------------');
         console.info('------------- Compartment           : ' + request.compartment_id);
         console.info('------------- Virtual Cloud Network : ' + request.vcn_id);
@@ -965,7 +965,7 @@ class OkitOCIQuery {
     }
     queryVirtualCLoudNetworkSubComponents(request) {
         this.queryInternetGateways(request);
-        this.queryNATGateways(request);
+        this.queryNatGateways(request);
         this.queryNetworkSecurityGroups(request);
         this.queryServiceGateways(request);
         this.queryLocalPeeringGateways(request);

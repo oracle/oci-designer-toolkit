@@ -172,7 +172,7 @@ class OkitJson {
         // IPSec Connections
         if (okit_json.hasOwnProperty('ipsec_connections')) {
             for (let artefact of okit_json['ipsec_connections']) {
-                let obj = this.newIPSecConnection(artefact);
+                let obj = this.newIpsecConnection(artefact);
             }
         }
         // RemotePeering Connections
@@ -192,7 +192,7 @@ class OkitJson {
         // NAT Gateway
         if (okit_json.hasOwnProperty('nat_gateways')) {
             for (let artefact of okit_json['nat_gateways']) {
-                let obj = this.newNATGateway(artefact);
+                let obj = this.newNatGateway(artefact);
             }
         }
         // Route Tables
@@ -254,7 +254,7 @@ class OkitJson {
         // MySQL Database Systems
         if (okit_json.hasOwnProperty('mysql_database_systems')) {
             for (let artefact of okit_json['mysql_database_systems']) {
-                let obj = this.newMySQLDatabaseSystem(artefact);
+                let obj = this.newMysqlDatabaseSystem(artefact);
             }
         }
         // Instances
@@ -630,24 +630,21 @@ class OkitJson {
     }
 
     // IPSec Connection
-    newIpsecConnection(data) {return this.newIPSecConnection(data)}
-    newIPSecConnection(data) {
+    newIpsecConnection(data) {
         console.info('New IPSec Connection');
-        this.ipsec_connections.push(new IPSecConnection(data, this));
+        this.ipsec_connections.push(new IpsecConnection(data, this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
     }
     getIpsecConnections() {return this.ipsec_connections;}
-    getIpsecConnection(id='') {return this.getIPSecConnection(id)}
-    getIPSecConnections() {return this.ipsec_connections;}
-    getIPSecConnection(id='') {
-        for (let artefact of this.getIPSecConnections()) {
+    getIpsecConnection(id='') {
+        for (let artefact of this.getIpsecConnections()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteIPSecConnection(id) {
+    deleteIpsecConnection(id) {
         for (let i = 0; i < this.ipsec_connections.length; i++) {
             if (this.ipsec_connections[i].id === id) {
                 this.ipsec_connections[i].delete();
@@ -712,24 +709,21 @@ class OkitJson {
     }
 
     // MySQL Database System
-    newMysqlDatabaseSystem(data) {return this.newMySQLDatabaseSystem(data)}
-    newMySQLDatabaseSystem(data) {
+    newMysqlDatabaseSystem(data) {
         console.info('New MySQL Database System');
-        this.mysql_database_systems.push(new MySQLDatabaseSystem(data, this));
+        this.mysql_database_systems.push(new MysqlDatabaseSystem(data, this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
     }
     getMysqlDatabaseSystems() {return this.mysql_database_systems;}
-    getMysqlDatabaseSystem(id='') {return this.getMySQLDatabaseSystem(id)}
-    getMySQLDatabaseSystems() {return this.mysql_database_systems;}
-    getMySQLDatabaseSystem(id='') {
-        for (let artefact of this.getMySQLDatabaseSystems()) {
+    getMysqlDatabaseSystem(id='') {
+        for (let artefact of this.getMysqlDatabaseSystems()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteMySQLDatabaseSystem(id) {
+    deleteMysqlDatabaseSystem(id) {
         for (let i = 0; i < this.mysql_database_systems.length; i++) {
             if (this.mysql_database_systems[i].id === id) {
                 this.mysql_database_systems[i].delete();
@@ -740,24 +734,21 @@ class OkitJson {
     }
 
     // NAT Gateway
-    newNatGateway(data) {return this.newNATGateway(data)}
-    newNATGateway(data) {
+    newNatGateway(data) {
         console.info('New NAT Gateway');
-        this.nat_gateways.push(new NATGateway(data, this));
+        this.nat_gateways.push(new NatGateway(data, this));
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
     getNatGateways() {return this.nat_gateways;}
-    getNatGateway(id='') {return this.getNATGateway(id)}
-    getNATGateways() {return this.nat_gateways;}
-    getNATGateway(id='') {
-        for (let artefact of this.getNATGateways()) {
+    getNatGateway(id='') {
+        for (let artefact of this.getNatGateways()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteNATGateway(id) {
+    deleteNatGateway(id) {
         for (let i = 0; i < this.nat_gateways.length; i++) {
             if (this.nat_gateways[i].id === id) {
                 this.nat_gateways[i].delete();
