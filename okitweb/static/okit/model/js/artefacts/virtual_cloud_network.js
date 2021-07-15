@@ -159,7 +159,7 @@ class VirtualCloudNetwork extends OkitArtifact {
         // Internet Gateways
         gateways.push(...this.getInternetGateways());
         // NAT Gateways
-        gateways.push(...this.getNATGateways());
+        gateways.push(...this.getNatGateways());
         // Local Peering Gateways
         gateways.push(...this.getLocalPeeringGateways());
         // Service Gateways
@@ -180,7 +180,7 @@ class VirtualCloudNetwork extends OkitArtifact {
         return gateways;
     }
 
-    getNATGateways() {
+    getNatGateways() {
         let gateways = [];
         // NAT Gateways
         for (let gateway of this.getOkitJson().nat_gateways) {

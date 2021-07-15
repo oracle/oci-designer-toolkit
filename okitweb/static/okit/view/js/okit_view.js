@@ -120,11 +120,11 @@ class OkitJsonView {
         for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
         for (let artefact of this.okitjson.instance_pools) {this.newInstancePool(artefact);}
         for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
-        for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
+        for (let artefact of this.okitjson.ipsec_connections) {this.newIpsecConnection(artefact);}
         for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
         for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
-        for (let artefact of this.okitjson.mysql_database_systems) {this.newMySQLDatabaseSystem(artefact);}
-        for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
+        for (let artefact of this.okitjson.mysql_database_systems) {this.newMysqlDatabaseSystem(artefact);}
+        for (let artefact of this.okitjson.nat_gateways) {this.newNatGateway(artefact);}
         for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
         for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
         for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
@@ -510,31 +510,30 @@ class OkitJsonView {
     }
 
     // IPSec Connection
-    dropIPSecConnectionView(target) {
-        let view_artefact = this.newIPSecConnection();
+    dropIpsecConnectionView(target) {
+        let view_artefact = this.newIpsecConnection();
         view_artefact.getArtefact().compartment_id = target.id;
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
-    newIpsecConnection(connect) {return this.newIPSecConnection(connect)}
-    newIPSecConnection(connect) {
-        this.ipsec_connections.push(connect ? new IPSecConnectionView(connect, this) : new IPSecConnectionView(this.okitjson.newIPSecConnection(), this));
+    newIpsecConnection(connect) {
+        this.ipsec_connections.push(connect ? new IpsecConnectionView(connect, this) : new IpsecConnectionView(this.okitjson.newIpsecConnection(), this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
     }
-    getIPSecConnections() {
+    getIpsecConnections() {
         return this.ipsec_connections;
     }
-    getIPSecConnection(id='') {
-        for (let artefact of this.getIPSecConnections()) {
+    getIpsecConnection(id='') {
+        for (let artefact of this.getIpsecConnections()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    loadIPSecConnections(fast_connects) {
+    loadIpsecConnections(fast_connects) {
         for (const artefact of fast_connects) {
-            this.ipsec_connections.push(new IPSecConnectionView(new IPSecConnection(artefact, this.okitjson), this));
+            this.ipsec_connections.push(new IpsecConnectionView(new IpsecConnection(artefact, this.okitjson), this));
         }
     }
 
@@ -597,37 +596,36 @@ class OkitJsonView {
     }
 
     // MySQL Database System
-    dropMySQLDatabaseSystemView(target) {
-        let view_artefact = this.newMySQLDatabaseSystem();
+    dropMysqlDatabaseSystemView(target) {
+        let view_artefact = this.newMysqlDatabaseSystem();
         view_artefact.getArtefact().subnet_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
-    newMysqlDatabaseSystem(database) {return this.newMySQLDatabaseSystem(database)}
-    newMySQLDatabaseSystem(database) {
-        this.mysql_database_systems.push(database ? new MySQLDatabaseSystemView(database, this) : new MySQLDatabaseSystemView(this.okitjson.newMySQLDatabaseSystem(), this));
+    newMysqlDatabaseSystem(database) {
+        this.mysql_database_systems.push(database ? new MysqlDatabaseSystemView(database, this) : new MysqlDatabaseSystemView(this.okitjson.newMysqlDatabaseSystem(), this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
     }
-    getMySQLDatabaseSystems() {
+    getMysqlDatabaseSystems() {
         return this.mysql_database_systems;
     }
-    getMySQLDatabaseSystem(id='') {
-        for (let artefact of this.getMySQLDatabaseSystems()) {
+    getMysqlDatabaseSystem(id='') {
+        for (let artefact of this.getMysqlDatabaseSystems()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    loadMySQLDatabaseSystems(database_systems) {
+    loadMysqlDatabaseSystems(database_systems) {
         for (const artefact of database_systems) {
-            this.mysql_database_systems.push(new MySQLDatabaseSystemView(new MySQLDatabaseSystem(artefact, this.okitjson), this));
+            this.mysql_database_systems.push(new MysqlDatabaseSystemView(new MysqlDatabaseSystem(artefact, this.okitjson), this));
         }
     }
 
     // NAT Gateway
-    dropNATGatewayView(target) {
+    dropNatGatewayView(target) {
         // Check if Gateway Already exists
         for (let gateway of this.nat_gateways) {
             if (gateway.vcn_id === target.id) {
@@ -635,35 +633,34 @@ class OkitJsonView {
                 return null;
             }
         }
-        let view_artefact = this.newNATGateway();
+        let view_artefact = this.newNatGateway();
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
-    newNatGateway(gateway) {return this.newNATGateway(gateway)}
-    newNATGateway(gateway) {
-        let ng = gateway ? new NATGatewayView(gateway, this) : new NATGatewayView(this.okitjson.newNATGateway(), this);
+    newNatGateway(gateway) {
+        let ng = gateway ? new NatGatewayView(gateway, this) : new NatGatewayView(this.okitjson.newNatGateway(), this);
         if (ng.artefact === null) {
             return null;
         }
         this.nat_gateways.push(ng);
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
-    getNATGateways() {
+    getNatGateways() {
         return this.nat_gateways;
     }
-    getNATGateway(id='') {
-        for (let artefact of this.getNATGateways()) {
+    getNatGateway(id='') {
+        for (let artefact of this.getNatGateways()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    loadNATGateways(nat_gateways) {
+    loadNatGateways(nat_gateways) {
         for (const artefact of nat_gateways) {
-            this.nat_gateways.push(new NATGatewayView(new NATGateway(artefact, this.okitjson), this));
+            this.nat_gateways.push(new NatGatewayView(new NatGateway(artefact, this.okitjson), this));
         }
     }
 
