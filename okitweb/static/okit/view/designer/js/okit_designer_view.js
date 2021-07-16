@@ -252,33 +252,9 @@ class OkitDesignerJsonView extends OkitJsonView {
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        // .on("wheel", () => {
-        //     const event = window.event
-        //     event.stopPropagation();
-        //     event.preventDefault();
-        //     let scale = 1
-        //     event.preventDefault();
-        //     if (event.deltaY < 0) {
-        //       // Zoom in
-        //       scale *= 1.02;
-        //     }
-        //     else {
-        //       // Zoom out
-        //       scale /= 1.02;
-        //     }
-        //     // Restrict scale
-        //     const transform_group = d3.select(d3Id("canvas-svg-group"));
-        //     let transform = transform_group.attr("transform");
-        //     const matrix = transform.replace('matrix(','').replace(')', '').split(' ');
-        //     for (let i = 0; i < 4; i++) {
-        //         matrix[i] *= scale;
-        //     }
-        //     transform = `matrix(${matrix.join(' ')})`;
-        //     transform_group.attr("transform", transform);
-        // });
-        const transform_group = canvas_root_svg.append('g')
-            .attr("id", "canvas-svg-group")
-            .attr("transform", "matrix(1 0 0 1 0 0)");
+        .call(d3.zoom().on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)}));
+        const transform_group = canvas_root_svg.append('g');
+
         // Wrapper SVG Element to define ViewBox etc
         // let canvas_svg = canvas_div.append("svg")
         let canvas_svg = transform_group.append("svg")

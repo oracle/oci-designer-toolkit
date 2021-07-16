@@ -1397,7 +1397,8 @@ class OkitArtefactView {
             // Add Mouse Over / Exist Events
             this.addMouseEvents(svg);
             // Add Drag Handling Events
-            this.addDragEvents(icon);
+            this.addDragEvents(svg);
+            this.addIconDragEvents(icon);
             // Add Context Menu (Right-Click)
             this.addContextMenu(svg);
             // Add Custom Data Attributes
@@ -1567,6 +1568,14 @@ class OkitArtefactView {
     removeAssociationHighlighting() {}
 
     addDragEvents(svg) {
+        svg.on("dragenter",  dragEnter)
+            .on("dragover",  dragOver)
+            .on("dragleave", dragLeave)
+            .on("drop",      dragDrop)
+            .on("dragend",   dragEnd);
+    }
+
+    addIconDragEvents(svg) {
         const self = this
         svg.call(d3.drag()
             .on("start", () => console.warn(`'Drag Start Event' ${self.display_name}`))
