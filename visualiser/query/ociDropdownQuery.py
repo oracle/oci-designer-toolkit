@@ -68,11 +68,12 @@ class OCIDropdownQuery(OCIConnection):
         pass
 
     def executeQuery(self, regions=None, **kwargs):
-        logger.info('Querying Dropdowns')
+        logger.info(f'Querying Dropdowns - Region: {regions}')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         if regions is None:
             regions = [self.config['region']]
+            logger.info(f'No Region Specified using - Region: {regions}')
         discovery_client = OciResourceDiscoveryClient(self.config, self.signer, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']])
         # Get Supported Resources
         response = self.response_to_json(discovery_client.get_all_resources())
@@ -121,6 +122,7 @@ class OCIDropdownQuery(OCIConnection):
     def shapes(self, shapes, resources):
         seen = []
         deduplicated = []
+        logger.info(sorted([s["shape"] for s in shapes]))
         for shape in shapes:
             if shape['shape'] not in seen:
                 shape['sort_key'] = shape['shape']
@@ -129,4 +131,5 @@ class OCIDropdownQuery(OCIConnection):
                     shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])
                 deduplicated.append(shape)
                 seen.append(shape['shape'])
+        logger.info(sorted([s["shape"] for s in deduplicated]))
         return sorted(deduplicated, key=lambda k: k['sort_key'])
