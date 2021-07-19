@@ -1,6 +1,12 @@
 # Release Notes
 
 
+## Version 0.24.5
+**Release Date**: 19th July 2021
+### Bug Fixes
+1. Resolve issue where Shapes may be missing from query which caused query to fail silently.
+
+
 ## Version 0.24.4
 **Release Date**: 15th July 2021
 ### Bug Fixes
