@@ -183,13 +183,13 @@ class OciResourceDiscoveryClient(object):
         "VmCluster": (oci.database.DatabaseClient, "list_vm_clusters"), # Exadata Cloud@Customer only
         "VmClusterNetwork": (oci.database.DatabaseClient, "list_vm_cluster_networks"), # Exadata Cloud@Customer only
         # oci.dns.DnsClient
-        "Resolver": (oci.dns.DnsClient, "list_resolvers"), 
-        "ResolverEndpoint": (oci.dns.DnsClient, "list_resolver_endpoints"), # TODO by resolver
-        "SteeringPolicy": (oci.dns.DnsClient, "list_steering_policies"), 
-        "SteeringPolicyAttachment": (oci.dns.DnsClient, "list_steering_policy_attachments"),
-        "TSIGKey": (oci.dns.DnsClient, "list_tsig_keys"), 
-        "View": (oci.dns.DnsClient, "list_views"),
-        "Zone": (oci.dns.DnsClient, "list_zones"),
+        "DnsResolver": (oci.dns.DnsClient, "list_resolvers"), 
+        "DnsResolverEndpoint": (oci.dns.DnsClient, "list_resolver_endpoints"),
+        "DnsPolicy": (oci.dns.DnsClient, "list_steering_policies"), 
+        "DnsPolicyAttachment": (oci.dns.DnsClient, "list_steering_policy_attachments"),
+        "TSIGKey": (oci.dns.DnsClient, "list_tsig_keys"),
+        "DnsView": (oci.dns.DnsClient, "list_views"),
+        "CustomerDnsZone": (oci.dns.DnsClient, "list_zones"),
         # oci.dts.ApplianceExportJobClient
         "DataTransferApplianceExportJob": (oci.dts.ApplianceExportJobClient, "list_appliance_export_jobs"),
         # oci.dts.TransferDeviceClient
@@ -841,6 +841,10 @@ class OciResourceDiscoveryClient(object):
                         subnet_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, subnet_id=subnet_id)
                         futures_list.update({(region, resource_type, compartment_id, subnet_id):future})
+                    elif method_name == "list_resolver_endpoints":
+                        resolver_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, resolver_id=resolver_id)
+                        futures_list.update({(region, resource_type, compartment_id, resolver_id):future})
                     elif method_name == "list_public_ips":
                         # handle the varient cases to list regional and AD specific public ips
                         availability_domain = item[2]
@@ -1175,6 +1179,9 @@ class OciResourceDiscoveryClient(object):
                 elif resource.resource_type == "DrgRouteTable" and (self.include_resource_types == None or "DrgRouteRule" in self.include_resource_types):
                     # get Drg Route Rules for Drg Route Table
                     regional_resource_requests.add(("DrgRouteRule", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "DnsResolver":
+                    # get DnsResolverEndpoint for DnsResolver
+                    regional_resource_requests.add(("DnsResolverEndpoint", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "VmCluster":
                     # get DB Nodes for DB Systems
                     if self.include_resource_types == None or "DbNode" in self.include_resource_types:
@@ -1287,7 +1294,6 @@ class OciResourceDiscoveryClient(object):
                 "Cluster", "NodePool", # OKE
                 "DataFlowPrivateEndpoint", # Data Flow 
                 "DataSafeOnPremConnector", # Data Safe
-                "Resolver", "SteeringPolicy", "TSIGKey", "View", "Zone", # DNS
                 "EmailSuppression", # Email
                 "LogGroup", "LogSavedSearch", # Loging
                 "ManagementDashboard", "ManagementSavedSearch", # Dashboard
@@ -1405,10 +1411,12 @@ class OciResourceDiscoveryClient(object):
         # applies to which AD so there are multiple identical shape definitions in the response.
         # Reduce the shape list to a unique set of shapes for the region.
         for region in resources_by_region:
-            unique_shapes = dict()
-            for shape in resources_by_region[region]["Shape"]:
-                unique_shapes[shape.shape] = shape
-            resources_by_region[region]["Shape"] = list(unique_shapes.values())
+            if "Shape" in resources_by_region[region]:
+                unique_shapes = dict()
+                for shape in resources_by_region[region]["Shape"]:
+                    unique_shapes[shape.shape] = shape
+                resources_by_region[region]["Shape"] = list(unique_shapes.values())
+
 
         return resources_by_region
 
