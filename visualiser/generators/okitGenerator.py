@@ -57,7 +57,7 @@ class OCIGenerator(object):
         # -- Add Standard Author / Copyright variables
         self.jinja2_variables["author"] = __author__
         self.jinja2_variables["copyright"] = __copyright__
-        self.jinja2_variables["okit_version"] = "0.24.4"
+        self.jinja2_variables["okit_version"] = "0.24.5"
 
     def get(self, artifact_type, id):
         artifact = {};
