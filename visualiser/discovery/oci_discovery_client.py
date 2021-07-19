@@ -1417,6 +1417,7 @@ class OciResourceDiscoveryClient(object):
                     unique_shapes[shape.shape] = shape
                 resources_by_region[region]["Shape"] = list(unique_shapes.values())
 
+
         return resources_by_region
 
     @staticmethod
