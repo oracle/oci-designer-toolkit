@@ -1,6 +1,6 @@
 {%- macro add_palette(palette) -%}
     <div id="icons_palette" class="okit-icons-palette">
-        <div id="icon_target_toggle" class="okit-target-toggle">
+        <div id="icon_target_toggle" class="okit-target-toggle {%- if not pca_mode %} hidden{% endif -%}">
         <label>Target</label>
         {% for target in palette.targets %}
             <label><input id="{{ target }}_palette" type="radio" name="target_toggle" {%- if loop.index == 1 -%}checked="checked"{%- endif -%}
