@@ -575,7 +575,10 @@ class OciResourceDiscoveryClient(object):
             else:
                 client = klass(config=region_config, signer=self.signer)
             client.base_client.timeout = (self.timeout, self.timeout)  # set connect timeout, read timeout
-            result = getattr(client, method_name)(**kwargs)
+            if method_name.startswith("list_"):
+                result = oci.pagination.list_call_get_all_results(getattr(client, method_name), **kwargs)
+            else:
+                result = getattr(client, method_name)(**kwargs)
             return(result.data)
         except oci.exceptions.ServiceError as e:
             if e.code == "TooManyRequests" and back_off < 5:
@@ -989,20 +992,6 @@ class OciResourceDiscoveryClient(object):
                         fastconnect_provider_id = future[3]
                         new_result = [ExtendedVirtualCircuitBandwidthShape(fastconnect_provider_id, shape) for shape in result]
                         result = new_result
-                    elif resource_type in [
-                        "ApiDeployment", "ApiGateway", "ApiGatewayApi", "ApiGatewayCertificate",
-                        "CloudGuardDetectorRecipe", "CloudGuardManagedList", "CloudGuardResponderRecipe", "CloudGuardTarget", 
-                        "DatabaseInsight",
-                        "DataFlowPrivateEndpoint", 
-                        "LogSavedSearch",
-                        "ManagementDashboard", "ManagementSavedSearch",
-                        "NoSQLTable", "NoSQLIndex",
-                        "OrmConfigSourceProvider",
-                        "RoverCluster", "RoverNode",
-                        "ServiceConnector",
-                    ]:
-                        # handle responses with collecion of items
-                        result = result.items
                     elif resource_type in [
                         "ClusterOptions",
                         "DataFlowApplicationDetails", "DataFlowRunDetails",
