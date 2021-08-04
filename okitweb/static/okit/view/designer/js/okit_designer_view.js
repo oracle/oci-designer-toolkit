@@ -252,7 +252,7 @@ class OkitDesignerJsonView extends OkitJsonView {
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        .call(d3.zoom().on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)}));
+        .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)}));
         const transform_group = canvas_root_svg.append('g');
 
         // Wrapper SVG Element to define ViewBox etc

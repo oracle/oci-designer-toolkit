@@ -159,6 +159,10 @@ def designer():
     cd3_mode = (request.args.get('cd3', default='false') == 'true')
     if cd3_mode:
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< CD3 Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if PCA mode
+    pca_mode = (request.args.get('pca', default='false') == 'true')
+    if pca_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< PCA Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
     # Read Artifact Model Specific JavaScript Files
     artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
@@ -260,7 +264,7 @@ def designer():
                            okit_templates_groups=template_groups,
                            okit_template_categories=template_categories,
                            local_okit=local,
-                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode)
+                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, pca_mode=pca_mode)
 
 
 @bp.route('/console', methods=(['GET']))
