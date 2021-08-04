@@ -57,7 +57,7 @@ RUN yum install -y \
 # Create Workspace
  && mkdir -p /github \
  && git clone -c core.autocrlf=input https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
- && mkdir -p /okit/{log,workspace,ssl} \
+ && mkdir -p /okit/{git,local,log,templates/user,workspace,ssl} \
  && mkdir -p /root/bin \
  && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" \
  && ln -sv /github/oci-designer-toolkit/config /okit/config \
@@ -65,7 +65,7 @@ RUN yum install -y \
  && ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser \
  && ln -sv /github/oci-designer-toolkit/containers/docker/run-server.sh /root/bin/run-server.sh \
  && mkdir -p /okit/okitweb/static/okit/templates \
- && ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
+ #&& ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
  && chmod a+x /root/bin/run-server.sh
 # Add entrypoint to automatically start webserver
 CMD ["run-server.sh"]
