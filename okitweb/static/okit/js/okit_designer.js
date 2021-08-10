@@ -298,50 +298,6 @@ function displaySaveAsTemplateDialog(title, callback) {
         .on('click', callback);
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-// TODO: Delete
-function handleSaveAs(evt) {
-    // Display Save As Dialog
-    $(jqId('modal_dialog_title')).text('Save As Template');
-    $(jqId('modal_dialog_body')).empty();
-    $(jqId('modal_dialog_footer')).empty();
-    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
-        .attr('id', 'save_as_template_table')
-        .attr('class', 'table okit-table okit-modal-dialog-table');
-    let tbody = table.append('div').attr('class', 'tbody');
-    // Title
-    let tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Title');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_title')
-        .attr('name', 'template_title')
-        .attr('type', 'text');
-    // Description
-    tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Description');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_description')
-        .attr('name', 'template_description')
-        .attr('type', 'text');
-    // Type
-    /* TODO: Reinstate when sub template types are implemented
-    tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Type');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_type')
-        .attr('name', 'template_type')
-        .attr('type', 'text');
-    */
-    // Save
-    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-        .attr('id', 'save_as_button')
-        .attr('type', 'button')
-        .text('Save');
-    save_button.on("click", handleSaveAsTemplate);
-    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-}
 function handleSaveAsTemplate(e) {
     displaySaveAsTemplateDialog('Save as Template', () => {
         okitJsonModel.updated = getCurrentDateTime();
@@ -365,56 +321,6 @@ function handleSaveAsTemplate(e) {
             }
         });    
     })
-}
-// TODO: Delete
-function handleSaveAsTemplates(e) {
-    //okitJsonModel.title = $(jqId('template_title')).val();
-    //okitJsonModel.description = $(jqId('template_description')).val();
-    //okitJsonModel.template_type = $(jqId('template_type')).val();
-    okitJsonModel.template_type = 'User';
-    okitJsonModel.updated = getCurrentDateTime();
-    $.ajax({
-        type: 'post',
-        url: 'saveas/template',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(okitJsonModel),
-        success: function(resp) {
-            console.info('Response : ' + resp);
-            reloadTemplateMenu('user');
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
-        },
-        complete: function() {
-            // Hide modal dialog
-            $(jqId('modal_dialog_wrapper')).addClass('hidden');
-        }
-    });
-}
-function reloadTemplateMenu(section) {
-    const id = `${section}_template_menu_group`;
-    $.ajax({
-        type: 'get',
-        url: `templates/${section}`,
-        dataType: 'text', // Response Type
-        contentType: 'application/json', // Sent Message Type
-        success: function(resp) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(resp, "text/html");
-            const new_menu = doc.getElementById(id);
-            const current_menu = document.getElementById(id);
-            const template_menu = document.getElementById('templates_menu')
-            // Check if menu section already exists
-            current_menu !== null ? current_menu.replaceWith(new_menu) : template_menu.appendChild(new_menu);
-            // addMenuDropdownMouseOver(`#${id}`);   
-        },
-        error: function(xhr, status, error) {
-            console.error('Status : '+ status)
-            console.error('Error : '+ error)
-        }
-    });
 }
 const loadTemplatePanel = () => {
     const id = 'templates_panel'
