@@ -389,7 +389,7 @@ def console():
                            local_okit=local,
                            developer_mode=developer_mode, experimental_mode=experimental_mode)
 
-# TODO: Deprecated Delete
+# TODO: Delete
 def dictToList(object):
     objectlist = []
     for o in object.values():
@@ -398,7 +398,7 @@ def dictToList(object):
             objectlist.append(o)
     return objectlist
 
-# TODO: Deprecated Delete
+# TODO: Delete
 def build_categories(path, key, category, templates):
     category['name'] = str(key.split('/')[0]).replace('_', ' ').title()
     if len(key.split('/')) > 1:
@@ -425,9 +425,9 @@ def build_categories(path, key, category, templates):
     logger.debug(category)
     return category
 
-# TODO: Deprecated Delete
-@bp.route('/templates/<string:root>', methods=(['GET']))
-def templates(root):
+# TODO: Delete
+@bp.route('/templates1/<string:root>', methods=(['GET']))
+def templates1(root):
     # Walk Template directory Structure
     template_files = []
     template_dirs = {}
@@ -475,6 +475,7 @@ def templates(root):
     return render_template('okit/templates_menu.html', templates=template_groups, okit_templates_groups=template_groups, okit_template_categories=template_categories)
 
 
+# Template Processing
 @bp.route('/panel/templates', methods=(['GET']))
 def templates_panel():
     # ref_arch_root = os.path.join(bp.static_folder, 'templates', 'reference_architecture')
@@ -495,7 +496,7 @@ def templates_panel():
 
 def dir_to_json(rootdir, reltodir=None, dkey='dirs', fkey='files'):
     hierarchy = {
-        'name': os.path.split(rootdir)[1],
+        'name': os.path.basename(rootdir),
         'path': rootdir
     }
     hierarchy[dkey] = []
@@ -540,6 +541,15 @@ def get_template_entry(root, path, json_file):
     return okit_template
 
 
+@bp.route('/templates/load/<string:category>', methods=(['GET']))
+def templates(category):
+    if request.method == 'GET':
+        templates_root = os.path.join(current_app.instance_path, 'templates', category)
+        templates = dir_to_json(templates_root, templates_root)
+        logger.debug(f'Templates : {jsonToFormattedString(templates)}')
+        return templates
+
+
 @bp.route('/template/load', methods=(['GET']))
 def template_load():
     if request.method == 'GET':
@@ -548,6 +558,24 @@ def template_load():
         query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
         template_file = query_json['template_file']
         return send_from_directory(current_app.instance_path, template_file, mimetype='application/json', as_attachment=False)
+
+
+@bp.route('/template/save', methods=(['POST']))
+def template_save():
+    if request.method == 'POST':
+        template_filename = request.json["template_file"]
+        okit_json = request.json["okit_json"]
+        template_dir = os.path.dirname(template_filename)
+        full_dir = os.path.join(current_app.instance_path, 'templates', 'user', template_dir)
+        full_filename = os.path.join(full_dir, os.path.basename(template_filename))
+        logger.info(f'Template Directory : {template_dir}')
+        logger.info(f'Template File : {template_filename}')
+        logger.info(f'Full Directory : {full_dir}')
+        logger.info(f'Full Filename : {full_filename}')
+        if not os.path.exists(full_dir):
+            os.makedirs(full_dir, exist_ok=True)
+        writeJsonFile(okit_json, full_filename)
+        return template_filename
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
