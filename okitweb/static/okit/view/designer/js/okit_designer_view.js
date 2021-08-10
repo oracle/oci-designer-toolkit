@@ -246,41 +246,25 @@ class OkitDesignerJsonView extends OkitJsonView {
         }
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
+        // Zoom & Pan SVG
+        const canvas_root_svg = canvas_div.append("svg")
+        .attr("id", 'canvas_root_svg')
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)}));
+        const transform_group = canvas_root_svg.append('g');
+
         // Wrapper SVG Element to define ViewBox etc
-        let canvas_svg = canvas_div.append("svg")
+        // let canvas_svg = canvas_div.append("svg")
+        let canvas_svg = transform_group.append("svg")
             .attr("id", 'canvas-svg')
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", width)
             .attr("height", height)
             .attr("viewBox", "0 0 " + width + " " + height)
-            .attr("preserveAspectRatio", "xMinYMin meet")
-            // .on("wheel", () => {
-            //     const event = window.event
-            //     let scale = 1
-            //     event.preventDefault();
-            //     if (event.deltaY < 0) {
-            //       // Zoom in
-            //       scale *= event.deltaY * -2;
-            //     }
-            //     else {
-            //       // Zoom out
-            //       scale /= event.deltaY * 2;
-            //     }
-            //     // Restrict scale
-            //     scale = Math.min(Math.max(.125, scale), 4);
-            //     console.info('Scale:', scale, event.deltaY)
-            //     const transform_group = d3.select(d3Id("canvas-svg-group"));
-            //     let transform = transform_group.attr("transform");
-            //     console.info('Matrix', transform);
-            //     const matrix = transform.replace('matrix(','').replace(')', '').split(' ');
-            //     for (let i = 0; i < 4; i++) {
-            //         matrix[i] *= scale;
-            //     }
-            //     transform = `matrix(${matrix.join(' ')})`;
-            //     transform_group.attr("transform", transform);
-            //     console.info('Transformed Matrix', transform);
-            // });
+            .attr("preserveAspectRatio", "xMinYMin meet");
 
         this.clearCanvas();
 
@@ -292,9 +276,6 @@ class OkitDesignerJsonView extends OkitJsonView {
         canvas_svg.selectAll('*').remove();
         this.styleCanvas(canvas_svg);
         this.addDefinitions(canvas_svg);
-        const transform_group = canvas_svg.append('g')
-            .attr("id", "canvas-svg-group")
-            .attr("transform", "matrix(1 0 0 1 0 0)");
         canvas_svg.append('rect')
             .attr("id", "canvas-rect")
             .attr("width", "100%")
@@ -312,8 +293,6 @@ class OkitDesignerJsonView extends OkitJsonView {
             let defid = key.replace(/ /g, '') + 'Svg';
             defs.append('g')
                 .attr("id", defid)
-                //.attr("transform", "translate(-20, -20) scale(0.3, 0.3)")
-                // .attr("transform", "translate(-1, -1) scale(0.29, 0.29)")
                 .attr("transform", "translate(4.5, 4.5) scale(0.8, 0.8)")
                 .html(this.palette_svg[key]);
         }
