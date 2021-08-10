@@ -5,6 +5,7 @@
 {% extends "okit/okit_console.html" %}
 
 {% import "okit/menu_macros.jinja2" as menu with context %}
+{% import "okit/panel_macros.jinja2" as panel with context %}
 {% import "okit/palette_macros.jinja2" as palette with context %}
 
 {% block headscripts %}
@@ -87,6 +88,7 @@
 
 {% block headcss %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_designer.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_panels.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
 {% endblock %}
@@ -152,7 +154,7 @@
             <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
             <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li>
         </ul>
-        <ul id="templates_menu" class="okit-navigation-sub-list">
+        <!--ul id="templates_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -161,7 +163,6 @@
                     </span>
                 </div>
             </li>
-            <!--{{ menu.template_menu_empty(okit_template_categories) }}-->
             {% for template_group in okit_templates_groups %}
                 {% if template_group['name'] == '.' %}
                     {% for okit_template in template_group['templates'] %}
@@ -172,7 +173,7 @@
                 {% endif %}
             {% endfor %}
             <li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li>
-        </ul>
+        </ul-->
         <ul id="export_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -288,7 +289,8 @@
         <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
         <div id="explorer_panel" class="okit-explorer-view hidden"></div>
         <div id="git_panel" class="okit-explorer-view hidden"></div>
-        <div id="templates_panel" class="okit-explorer-view hidden"></div>
+        <div id="local_panel" class="okit-explorer-view hidden"></div>
+        <div id="templates_panel" class="okit-template-panel hidden"></div>
     </div>
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">

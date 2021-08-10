@@ -391,7 +391,30 @@ function reloadTemplateMenu(section) {
             const template_menu = document.getElementById('templates_menu')
             // Check if menu section already exists
             current_menu !== null ? current_menu.replaceWith(new_menu) : template_menu.appendChild(new_menu);
-            addMenuDropdownMouseOver(`#${id}`);   
+            // addMenuDropdownMouseOver(`#${id}`);   
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+}
+const loadTemplatePanel = () => {
+    const id = 'templates_panel'
+    $.ajax({
+        type: 'get',
+        url: `panel/templates`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_panel = doc.getElementById(id);
+            const current_panel = document.getElementById(id);
+            const template_panel = document.getElementById('designer_left_column')
+            // Check if menu section already exists
+            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
+            // addMenuDropdownMouseOver(`#${id}`);   
         },
         error: function(xhr, status, error) {
             console.error('Status : '+ status)
@@ -465,9 +488,10 @@ function loadTemplate(template_url) {
     resetDesigner();
     $.ajax({
         type: 'get',
-        url: template_url,
-        dataType: 'text',
-        contentType: 'application/json',
+        url: 'template/load',
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        data: JSON.stringify({template_file: template_url}),
         success: function(resp) {
             okitJsonModel = new OkitJson(resp);
             newDesignerView();
@@ -481,6 +505,27 @@ function loadTemplate(template_url) {
         }
     });
 }
+// function loadTemplate(template_url) {
+//     hideNavMenu();
+//     resetDesigner();
+//     $.ajax({
+//         type: 'get',
+//         url: template_url,
+//         dataType: 'text',
+//         contentType: 'application/json',
+//         success: function(resp) {
+//             okitJsonModel = new OkitJson(resp);
+//             newDesignerView();
+//             displayOkitJson();
+//             displayDesignerView();
+//             displayTreeView();
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Status : '+ status);
+//             console.error('Error  : '+ error);
+//         }
+//     });
+// }
 /*
 ** Query OCI
  */
