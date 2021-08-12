@@ -1,6 +1,16 @@
 # Release Notes
 
 
+## Version 0.25.0
+**Release Date**: 18th August 2021
+### Features
+1. Templates Moved from main menu to sidebar and now opened on a Double Click.
+2. Pan and Zoom added to SVG display returning to 1:1 during redraw.
+
+### Bug Fixes
+1. Fix query pagination issues where not all resources were being retrieved.
+
+
 ## Version 0.24.5
 **Release Date**: 19th July 2021
 ### Bug Fixes

@@ -26,7 +26,7 @@ logger = getLogger()
 
 def create_local_app(test_config=None):
     # Create and Configure OKIT Web Designer App
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, instance_path='/okit/instance')
 
     # Load Config
     if test_config is None:
@@ -68,7 +68,7 @@ def create_local_app(test_config=None):
 
 def create_authenticated_app(test_config=None):
     # Create and Configure OKIT Web Designer App
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, instance_path='/okit/instance')
 
     # Load Config
     if test_config is None:

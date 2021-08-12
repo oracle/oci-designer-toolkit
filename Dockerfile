@@ -57,7 +57,7 @@ RUN yum install -y \
 # Create Workspace
  && mkdir -p /github \
  && git clone -c core.autocrlf=input https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
- && mkdir -p /okit/{git,local,log,templates/user,workspace,ssl} \
+ && mkdir -p /okit/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl} \
  && mkdir -p /root/bin \
  && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" \
  && ln -sv /github/oci-designer-toolkit/config /okit/config \
