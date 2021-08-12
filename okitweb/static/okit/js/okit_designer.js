@@ -240,6 +240,147 @@ function saveJson(text, filename){
 /*
 ** Save Model As Template
  */
+function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user') {
+    $(jqId('modal_dialog_title')).text(title);
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    // Add Save Options
+    const table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    const tbody = table.append('div').attr('class', 'tbody');
+    // Template Directory
+    const templates_select = tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('select')
+        .attr('id', 'user_template_select')
+        .attr('size', '10')
+        .on('click', () => {
+            let name = $('#user_template_select').val().replace(root_dir, '')
+            if (!name.endsWith('.json')) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}.json`
+            $('#template_file_name').val(name)
+        })
+    // templates_select.append('option')
+    //     .attr('style', 'font-weight: bolder')
+    //     .attr('value', '.')
+    //     .text('user')
+    $.ajax({
+        type: 'get',
+        url: `templates/load`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        data: JSON.stringify({root_dir: root_dir}),
+        success: function(resp) {
+            hierarchy = JSON.parse(resp)
+            console.info(hierarchy)
+            const add_dir = (select, depth, dir) => {
+                dir.files.forEach(file => select.append('option').attr('style', `padding-left: ${depth * 1}em`).attr('value', `${dir.path}/${file.json}`).text(file.json))
+                dir.dirs.forEach((d) => {
+                    select.append('option').attr('style', `padding-left: ${depth * 1}em; font-weight: bolder`).attr('value', `${d.path}`).text(d.name)
+                    add_dir(select, (depth + 1), d)
+                })
+            }
+            add_dir(templates_select, 1, hierarchy)
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+    // Template name
+    tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').text('Name');
+    tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'template_file_name')
+        .attr('name', 'template_file_name')
+        .attr('type', 'text');
+    // Submit Button
+    const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'submit_btn')
+        .attr('type', 'button')
+        .text('Save')
+        .on('click', callback);
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+function handleSaveAsTemplate(e) {
+    const root_dir = 'templates/user'
+    displaySaveAsTemplateDialog('Save as Template', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'template/save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel}),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                loadTemplatePanel();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            },
+            complete: function() {
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });    
+    }, root_dir)
+}
+const loadTemplatePanel = () => {
+    const id = 'templates_panel'
+    $.ajax({
+        type: 'get',
+        url: `panel/templates`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_panel = doc.getElementById(id);
+            const current_panel = document.getElementById(id);
+            const template_panel = document.getElementById('designer_left_column')
+            // Check if menu section already exists
+            const hidden = $(`#${id}`).hasClass('hidden')
+            $(`#${id}`).addClass('hidden')
+            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
+            if (!hidden) $(`#${id}`).removeClass('hidden')
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+}
+/*
+** Save Model to Git
+ */
+const loadGitPanel = () => {
+    const id = 'git_panel'
+    $.ajax({
+        type: 'get',
+        url: `panel/git`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_panel = doc.getElementById(id);
+            const current_panel = document.getElementById(id);
+            const template_panel = document.getElementById('designer_left_column')
+            // Check if menu section already exists
+            const hidden = $(`#${id}`).hasClass('hidden')
+            $(`#${id}`).addClass('hidden')
+            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
+            if (!hidden) $(`#${id}`).removeClass('hidden')
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+}
+
+/*
+** Save Model As Template
+ */
 function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true) {
     $(jqId('modal_dialog_title')).text(title);
     $(jqId('modal_dialog_body')).empty();
@@ -307,122 +448,33 @@ function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true
         .on('click', callback);
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-function handleSaveAs(evt) {
-    // Display Save As Dialog
-    $(jqId('modal_dialog_title')).text('Save As Template');
-    $(jqId('modal_dialog_body')).empty();
-    $(jqId('modal_dialog_footer')).empty();
-    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
-        .attr('id', 'save_as_template_table')
-        .attr('class', 'table okit-table okit-modal-dialog-table');
-    let tbody = table.append('div').attr('class', 'tbody');
-    // Title
-    let tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Title');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_title')
-        .attr('name', 'template_title')
-        .attr('type', 'text');
-    // Description
-    tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Description');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_description')
-        .attr('name', 'template_description')
-        .attr('type', 'text');
-    // Type
-    /* TODO: Reinstate when sub template types are implemented
-    tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Type');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_type')
-        .attr('name', 'template_type')
-        .attr('type', 'text');
-    */
-    // Save
-    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-        .attr('id', 'save_as_button')
-        .attr('type', 'button')
-        .text('Save');
-    save_button.on("click", handleSaveAsTemplate);
-    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-}
-function handleSaveAsTemplate(e) {
-    //okitJsonModel.title = $(jqId('template_title')).val();
-    //okitJsonModel.description = $(jqId('template_description')).val();
-    //okitJsonModel.template_type = $(jqId('template_type')).val();
-    okitJsonModel.template_type = 'User';
-    okitJsonModel.updated = getCurrentDateTime();
-    $.ajax({
-        type: 'post',
-        url: 'saveas/template',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(okitJsonModel),
-        success: function(resp) {
-            console.info('Response : ' + resp);
-            reloadTemplateMenu('user');
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
-        },
-        complete: function() {
-            // Hide modal dialog
-            $(jqId('modal_dialog_wrapper')).addClass('hidden');
-        }
-    });
-}
-function reloadTemplateMenu(section) {
-    const id = `${section}_template_menu_group`;
-    $.ajax({
-        type: 'get',
-        url: `templates/${section}`,
-        dataType: 'text', // Response Type
-        contentType: 'application/json', // Sent Message Type
-        success: function(resp) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(resp, "text/html");
-            const new_menu = doc.getElementById(id);
-            const current_menu = document.getElementById(id);
-            const template_menu = document.getElementById('templates_menu')
-            // Check if menu section already exists
-            current_menu !== null ? current_menu.replaceWith(new_menu) : template_menu.appendChild(new_menu);
-            // addMenuDropdownMouseOver(`#${id}`);   
-        },
-        error: function(xhr, status, error) {
-            console.error('Status : '+ status)
-            console.error('Error : '+ error)
-        }
-    });
-}
-const loadTemplatePanel = () => {
-    const id = 'templates_panel'
-    $.ajax({
-        type: 'get',
-        url: `panel/templates`,
-        dataType: 'text', // Response Type
-        contentType: 'application/json', // Sent Message Type
-        success: function(resp) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(resp, "text/html");
-            const new_panel = doc.getElementById(id);
-            const current_panel = document.getElementById(id);
-            const template_panel = document.getElementById('designer_left_column')
-            // Check if menu section already exists
-            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
-            // addMenuDropdownMouseOver(`#${id}`);   
-        },
-        error: function(xhr, status, error) {
-            console.error('Status : '+ status)
-            console.error('Error : '+ error)
-        }
-    });
-}
 function handleSaveToGit(e) {
+    const root_dir = 'git'
+    displaySaveAsTemplateDialog('Save to Git', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'template/save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel, git: true}),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                loadGitPanel();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            },
+            complete: function() {
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });    
+    }, root_dir)
+}
+// TODO: Delete
+function handleSaveToGit1(e) {
     displayGitSaveDialog('Save To Git', () =>
     {
         let request_json = JSON.clone(okitJsonModel);

@@ -18,8 +18,12 @@
 .okit-template-panel ul {
     list-style: none;
     display: block;
-    padding: 0;
+    padding-left: 0.2em;
     margin: 0;
+}
+
+.okit-template-panel li > ul {
+    padding-left: 0.5em;
 }
 
 .okit-template-panel li {
@@ -37,6 +41,31 @@
     background-size: 1.25em 1.25em;
     white-space: nowrap;
 }
+
+.okit-template-panel li label {
+    clear: both;
+    text-wrap: none;
+    white-space: nowrap;
+}
+
+.okit-template-panel input[type=checkbox] {display: none; visibility: hidden;}
+
+.okit-template-panel li > label::before {
+    content: '\25BF';
+    color: #336600;
+    display: inline-block;
+    text-align: left;
+    padding-right: 0.5em;
+}
+
+.okit-template-panel li > input:checked ~ label::before {
+    content: '\25B9';
+}
+
+.okit-template-group ul {display: none}
+
+.okit-template-group input:checked ~  ul {display: block}
+
 .okit-template-panel li a.okit-template-item {
     text-decoration: none;
     font-weight: normal;
@@ -52,4 +81,12 @@
 
 .okit-template-panel li.okit-template-group {
     font-weight: bolder;
+}
+
+.okit-template-category-summary {
+    text-overflow: ellipsis;
+}
+
+.okit-template-category-summary > label {
+    padding-left: 5px;
 }
