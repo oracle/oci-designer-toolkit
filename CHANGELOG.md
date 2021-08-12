@@ -6,6 +6,7 @@
 ### Features
 1. Templates Moved from main menu to sidebar and now opened on a Double Click.
 2. Pan and Zoom added to SVG display returning to 1:1 during redraw.
+3. Display Git Directories as a side panel and allow for double click open.
 
 ### Bug Fixes
 1. Fix query pagination issues where not all resources were being retrieved.
