@@ -78,7 +78,7 @@ def readConfigFileSections(config_file='~/.oci/config'):
         config_sections = ['Instance Principal']
     return config_sections
 
-def readConfigFileSettings(config_file='~/.oci/git_repositories'):
+def readGitConfigFile(config_file='~/.oci/git_repositories'):
     logger.debug('Setting File {0!s:s}'.format(config_file))
     abs_config_file = os.path.expanduser(config_file)
     logger.debug('Setting File {0!s:s}'.format(abs_config_file))
@@ -87,6 +87,7 @@ def readConfigFileSettings(config_file='~/.oci/git_repositories'):
     repo_list = []
     for each_git_section in config.sections():
         repo_list.append({'label': each_git_section, 'branch': config[each_git_section]['branch'], 'url': config[each_git_section]['url']})
+    logger.info(repo_list)
     return repo_list
 
 def getConfigFileValue(section, key, config_file='~/.oci/config'):
@@ -223,14 +224,16 @@ def designer():
 def templates_panel():
     # ref_arch_root = os.path.join(bp.static_folder, 'templates', 'reference_architecture')
     ref_arch_root = os.path.join(current_app.instance_path, 'templates', 'reference_architecture')
-    ref_arch_templates = dir_to_json(ref_arch_root, ref_arch_root, 'children', 'templates')
+    ref_arch_templates = dir_to_json(ref_arch_root, current_app.instance_path, 'children', 'templates')
+    # ref_arch_templates = dir_to_json(ref_arch_root, ref_arch_root, 'children', 'templates')
     ref_arch_category = {'name': 'Reference Architectures', 'path': 'reference_architecture', 'children': [], 'templates': []}
-    ref_arch_category = hierarchy_category(ref_arch_category, ref_arch_templates, ref_arch_root)
+    ref_arch_category = hierarchy_category(ref_arch_category, ref_arch_templates, current_app.instance_path)
     # user_root = os.path.join('okit', 'templates', 'user')
     user_root = os.path.join(current_app.instance_path, 'templates', 'user')
-    user_templates = dir_to_json(user_root, user_root, 'children', 'templates')
+    user_templates = dir_to_json(user_root, current_app.instance_path, 'children', 'templates')
+    # user_templates = dir_to_json(user_root, user_root, 'children', 'templates')
     user_category = {'name': 'User', 'path': 'user', 'children': [], 'templates': []}
-    user_category = hierarchy_category(user_category, user_templates, user_root)
+    user_category = hierarchy_category(user_category, user_templates, current_app.instance_path)
     template_categories = [ref_arch_category, user_category]
     logger.debug(f'Template Categories : {jsonToFormattedString(template_categories)}')
 
@@ -238,7 +241,11 @@ def templates_panel():
     return render_template('okit/templates_panel.html', template_categories=template_categories)
 
 def dir_to_json(rootdir, reltodir=None, dkey='dirs', fkey='files'):
+    logger.info(f'Root Path: {rootdir}')
+    logger.info(f'Relative to Path: {reltodir}')
+    logger.info(f'Relative Path: {os.path.relpath(rootdir, reltodir)}')
     hierarchy = {
+        'id': os.path.relpath(rootdir, reltodir).replace('/','_'),
         'name': os.path.basename(rootdir),
         'path': rootdir
     }
@@ -251,11 +258,12 @@ def dir_to_json(rootdir, reltodir=None, dkey='dirs', fkey='files'):
         for entry in it:
             if not entry.name.startswith('.'):
                 if entry.name.endswith('.json') and entry.is_file():
-                    hierarchy[fkey].append(entry.name)
+                    # hierarchy[fkey].append(entry.name)
+                    hierarchy[fkey].append({'id': entry.name.replace('.','_'), 'name': entry.name, 'json': entry.name, 'path': hierarchy['path']})
                 elif entry.is_dir():
                     hierarchy[dkey].append(dir_to_json(os.path.join(rootdir, entry.name), reltodir, dkey, fkey))
 
-    # logger.info(f'Directory Hierarchy : {jsonToFormattedString(hierarchy)}')
+    logger.debug(f'Directory Hierarchy : {jsonToFormattedString(hierarchy)}')
     return hierarchy
 
 def hierarchy_category(category, hierarchy, root=''):
@@ -264,9 +272,9 @@ def hierarchy_category(category, hierarchy, root=''):
     logger.debug(f'Root : {root}')
     for template in hierarchy['templates']:
         path = hierarchy['path'] if hierarchy['path'] != '.' else ''
-        category['templates'].append(get_template_entry(root, path, template))
+        category['templates'].append(get_template_entry(root, path, template['json']))
     for child in hierarchy['children']:
-        category['children'].append(hierarchy_category({"name": os.path.basename(child["path"]).replace("_", " ").title(), "path": child["path"], "children": [], "templates": []}, child, root))
+        category['children'].append(hierarchy_category({"name": os.path.basename(child["path"]).replace("_", " ").title(), "path": child["path"], "id": child["id"], "children": [], "templates": []}, child, root))
     return category
 
 def get_template_entry(root, path, json_file):
@@ -276,7 +284,7 @@ def get_template_entry(root, path, json_file):
         filename = os.path.join(root, okit_template['path'], okit_template['json'])
         template_json = readJsonFile(filename)
         logger.debug('Template Json : {0!s:s}'.format(template_json))
-        okit_template['title'] = template_json['title']
+        okit_template['name'] = template_json['title']
         okit_template['description'] = template_json.get('description', template_json['title'])
         okit_template['description'] = template_json['title']
     except Exception as e:
@@ -284,11 +292,14 @@ def get_template_entry(root, path, json_file):
     return okit_template
 
 
-@bp.route('/templates/load/<string:category>', methods=(['GET']))
-def templates(category):
+@bp.route('/templates/load', methods=(['GET']))
+def templates():
     if request.method == 'GET':
-        templates_root = os.path.join(current_app.instance_path, 'templates', category)
-        templates = dir_to_json(templates_root, templates_root)
+        query_string = request.query_string
+        parsed_query_string = urllib.parse.unquote(query_string.decode())
+        query_json = json.loads(parsed_query_string)
+        templates_root = os.path.join(current_app.instance_path, query_json['root_dir'].strip('/'))
+        templates = dir_to_json(templates_root, current_app.instance_path)
         logger.debug(f'Templates : {jsonToFormattedString(templates)}')
         return templates
 
@@ -298,7 +309,7 @@ def template_load():
     if request.method == 'GET':
         query_string = request.query_string
         parsed_query_string = urllib.parse.unquote(query_string.decode())
-        query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+        query_json = json.loads(parsed_query_string)
         template_file = query_json['template_file']
         return send_from_directory(current_app.instance_path, template_file, mimetype='application/json', as_attachment=False)
 
@@ -306,19 +317,70 @@ def template_load():
 @bp.route('/template/save', methods=(['POST']))
 def template_save():
     if request.method == 'POST':
-        template_filename = request.json["template_file"]
+        instance_path = current_app.instance_path
+        root_dir = request.json["root_dir"].strip('/')
+        template_filename = request.json["template_file"].strip('/')
         okit_json = request.json["okit_json"]
+        git = request.json.get('git', False)
+        git_commit_msg = request.json.get('git_commit_msg', '')
+        logger.info(f'Save Template : {root_dir}')
+
         template_dir = os.path.dirname(template_filename)
-        full_dir = os.path.join(current_app.instance_path, 'templates', 'user', template_dir)
+        full_dir = os.path.join(instance_path, root_dir, template_dir)
         full_filename = os.path.join(full_dir, os.path.basename(template_filename))
-        logger.info(f'Template Directory : {template_dir}')
-        logger.info(f'Template File : {template_filename}')
-        logger.info(f'Full Directory : {full_dir}')
-        logger.info(f'Full Filename : {full_filename}')
+        full_filename = os.path.join(instance_path, root_dir, template_filename)
         if not os.path.exists(full_dir):
             os.makedirs(full_dir, exist_ok=True)
         writeJsonFile(okit_json, full_filename)
+        if git:
+            top_dir = os.path.normpath(os.path.dirname(template_filename)).split(os.sep)
+            git_repo_dir = os.path.join(instance_path, root_dir, top_dir[0], top_dir[1])
+            # while top_dir != '':
+            #     git_repo_dir = os.path.join(instance_path, root_dir, top_dir)
+            #     logger.info(f'Top Dir : {top_dir}')
+            #     top_dir = os.path.dirname(top_dir)
+            logger.info(f'Git Root Dir : {git_repo_dir}')
+            repo = Repo(git_repo_dir)
+            repo.index.add(full_filename)
+            repo.index.commit("commit changes from okit:" + git_commit_msg)
+            repo.remotes.origin.pull()
+            repo.remotes.origin.push()
         return template_filename
+
+
+# Git Processing
+@bp.route('/panel/git', methods=(['GET']))
+def git_panel():
+    if request.method == 'GET':
+        repositories = readGitConfigFile()
+        git_resources = {}
+        for repo in repositories:
+            logger.debug(f'Repo: {jsonToFormattedString(repo)}')
+            label = repo['label']
+            branch = repo['branch']
+            url = repo['url']
+            parsed_url = giturlparse.parse(url)
+            logger.debug(f'Parsed Url: {parsed_url}')
+            git_resource_dir = os.path.join(current_app.instance_path, 'git', parsed_url.resource)
+            git_repo_dir = os.path.join(git_resource_dir, parsed_url.name)
+            try:
+                if os.path.exists(git_repo_dir):
+                    repo = Repo(git_repo_dir)
+                    repo.remotes.origin.pull()
+                else:
+                    repo = Repo.clone_from(url, git_repo_dir, branch=branch, no_single_branch=True)
+                    repo.remotes.origin.pull()
+            except Exception as e:
+                logger.exception(e)
+            git_resources[parsed_url.resource] = git_resource_dir
+        git_repositories = []
+        for git_resource, git_resource_dir in git_resources.items():
+            repo_templates = dir_to_json(git_resource_dir, current_app.instance_path, 'children', 'templates')
+            repository = {'name': git_resource, 'path': git_resource_dir, 'children': [], 'templates': []}
+            git_repositories.append(repo_templates)
+        #Render The Template
+        logger.debug(f'Repository: {jsonToFormattedString(git_repositories)}')
+        return render_template('okit/git_repositories_panel.html', git_repositories=git_repositories)
 
 
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
@@ -484,7 +546,7 @@ def configSections():
 @bp.route('config/appsettings', methods=(['GET']))
 def appSettings():
     if request.method == 'GET':
-        config_settings = {"gitsections": readConfigFileSettings()}
+        config_settings = {"gitsections": readGitConfigFile()}
         logger.info('Config Settings {0!s:s}'.format(config_settings))
         return config_settings
     else:
@@ -519,6 +581,7 @@ def validateJson():
     else:
         return '404'
 
+# TODO: Delete
 @bp.route('loadfromgit', methods=(['POST']))
 def loadfromgit():
     logger.debug('JSON     : {0:s}'.format(str(request.json)))

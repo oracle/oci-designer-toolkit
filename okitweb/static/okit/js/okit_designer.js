@@ -240,7 +240,7 @@ function saveJson(text, filename){
 /*
 ** Save Model As Template
  */
-function displaySaveAsTemplateDialog(title, callback) {
+function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user') {
     $(jqId('modal_dialog_title')).text(title);
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
@@ -253,24 +253,25 @@ function displaySaveAsTemplateDialog(title, callback) {
         .attr('id', 'user_template_select')
         .attr('size', '10')
         .on('click', () => {
-            let name = $('#user_template_select').val()
+            let name = $('#user_template_select').val().replace(root_dir, '')
             if (!name.endsWith('.json')) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}.json`
             $('#template_file_name').val(name)
         })
-    templates_select.append('option')
-        .attr('style', 'font-weight: bolder')
-        .attr('value', '.')
-        .text('user')
+    // templates_select.append('option')
+    //     .attr('style', 'font-weight: bolder')
+    //     .attr('value', '.')
+    //     .text('user')
     $.ajax({
         type: 'get',
-        url: `templates/load/user`,
+        url: `templates/load`,
         dataType: 'text', // Response Type
         contentType: 'application/json', // Sent Message Type
+        data: JSON.stringify({root_dir: root_dir}),
         success: function(resp) {
             hierarchy = JSON.parse(resp)
             console.info(hierarchy)
             const add_dir = (select, depth, dir) => {
-                dir.files.forEach(file => select.append('option').attr('style', `padding-left: ${depth * 1}em`).attr('value', `${dir.path}/${file}`).text(file))
+                dir.files.forEach(file => select.append('option').attr('style', `padding-left: ${depth * 1}em`).attr('value', `${dir.path}/${file.json}`).text(file.json))
                 dir.dirs.forEach((d) => {
                     select.append('option').attr('style', `padding-left: ${depth * 1}em; font-weight: bolder`).attr('value', `${d.path}`).text(d.name)
                     add_dir(select, (depth + 1), d)
@@ -299,6 +300,7 @@ function displaySaveAsTemplateDialog(title, callback) {
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleSaveAsTemplate(e) {
+    const root_dir = 'templates/user'
     displaySaveAsTemplateDialog('Save as Template', () => {
         okitJsonModel.updated = getCurrentDateTime();
         $.ajax({
@@ -306,7 +308,7 @@ function handleSaveAsTemplate(e) {
             url: 'template/save',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify({template_file: $('#template_file_name').val(), okit_json: okitJsonModel}),
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel}),
             success: function(resp) {
                 console.info('Response : ' + resp);
                 loadTemplatePanel();
@@ -320,7 +322,7 @@ function handleSaveAsTemplate(e) {
                 $(jqId('modal_dialog_wrapper')).addClass('hidden');
             }
         });    
-    })
+    }, root_dir)
 }
 const loadTemplatePanel = () => {
     const id = 'templates_panel'
@@ -340,7 +342,6 @@ const loadTemplatePanel = () => {
             $(`#${id}`).addClass('hidden')
             current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
             if (!hidden) $(`#${id}`).removeClass('hidden')
-            // addMenuDropdownMouseOver(`#${id}`);   
         },
         error: function(xhr, status, error) {
             console.error('Status : '+ status)
@@ -348,6 +349,35 @@ const loadTemplatePanel = () => {
         }
     });
 }
+/*
+** Save Model to Git
+ */
+const loadGitPanel = () => {
+    const id = 'git_panel'
+    $.ajax({
+        type: 'get',
+        url: `panel/git`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_panel = doc.getElementById(id);
+            const current_panel = document.getElementById(id);
+            const template_panel = document.getElementById('designer_left_column')
+            // Check if menu section already exists
+            const hidden = $(`#${id}`).hasClass('hidden')
+            $(`#${id}`).addClass('hidden')
+            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
+            if (!hidden) $(`#${id}`).removeClass('hidden')
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+}
+
 /*
 ** Save Model As Template
  */
@@ -419,6 +449,32 @@ function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleSaveToGit(e) {
+    const root_dir = 'git'
+    displaySaveAsTemplateDialog('Save to Git', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'template/save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel, git: true}),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                loadGitPanel();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            },
+            complete: function() {
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });    
+    }, root_dir)
+}
+// TODO: Delete
+function handleSaveToGit1(e) {
     displayGitSaveDialog('Save To Git', () =>
     {
         let request_json = JSON.clone(okitJsonModel);

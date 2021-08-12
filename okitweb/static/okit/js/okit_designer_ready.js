@@ -106,23 +106,23 @@ $(document).ready(function() {
             checkLeftColumn();
         })
         .text('Templates');
+    // Git
+    d3.select(d3Id('console_left_bar')).append('label')
+        .attr('id', 'toggle_git_button')
+        .attr('class', 'okit-pointer-cursor')
+        .on('click', function () {
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideLeftPanelsOffScreen();
+            if (!open) {
+                $('#git_panel').removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+            } else {
+                $('#git_panel').empty();
+            }
+            checkLeftColumn();
+        })
+        .text('Git Repositories');
     if (developer_mode) {
-        // Git
-        d3.select(d3Id('console_left_bar')).append('label')
-            .attr('id', 'toggle_git_button')
-            .attr('class', 'okit-pointer-cursor')
-            .on('click', function () {
-                let open = $(this).hasClass('okit-bar-panel-displayed');
-                slideLeftPanelsOffScreen();
-                if (!open) {
-                    $('#git_panel').removeClass('hidden');
-                    $(this).addClass('okit-bar-panel-displayed');
-                } else {
-                    $('#git_panel').empty();
-                }
-                checkLeftColumn();
-            })
-            .text('Git Repositories');
         // Container
         d3.select(d3Id('console_left_bar')).append('label')
             .attr('id', 'toggle_local_button')
@@ -404,5 +404,6 @@ $(document).ready(function() {
     */
 
     loadTemplatePanel()
+    loadGitPanel()
 
 });
