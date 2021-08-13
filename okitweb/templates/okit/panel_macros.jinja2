@@ -1,3 +1,11 @@
+{%- macro add_local_side_panel(categories) -%}
+    <div id="local_panel" class="okit-template-panel hidden">
+        {% for category in categories %}
+            {{ add_template_panel_category(category) }}
+        {% endfor %}
+    </div>
+{%- endmacro -%}
+
 {%- macro add_git_side_panel(categories) -%}
     <div id="git_panel" class="okit-template-panel hidden">
         {% for category in categories %}
@@ -55,7 +63,7 @@
 {%- endmacro %}
 
 {%- macro add_template_panel_item(okit_template) -%}
-    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['title'] }}" class="okit-template-item" href="javascript:void(0)" ondblclick="loadTemplate('{{ okit_template['path'] + '/' + okit_template['json'] }}')">{{ okit_template['name'] }}</a></li>
+    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['title'] }}" class="okit-template-item" href="javascript:void(0)" oncontextmenu="importTemplate('{{ okit_template['path'] + '/' + okit_template['json'] }}', event); return false" ondblclick="loadTemplate('{{ okit_template['path'] + '/' + okit_template['json'] }}')">{{ okit_template['name'] }}</a></li>
 {%- endmacro %}
 
 {%- macro build_template_panel(okit_templates_groups) -%}

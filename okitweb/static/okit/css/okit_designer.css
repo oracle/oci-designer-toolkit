@@ -96,6 +96,11 @@
 
 .okit-palette-icon-group-icons {}
 
+.okit-icons-only {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
 .okit-icons-only > div {
     display: initial;
 }

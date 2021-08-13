@@ -15,6 +15,11 @@
     width: 180px;
 }
 
+.okit-template-panel > details > summary {
+    text-transform: uppercase;
+    border-bottom: 1px solid black;
+}
+
 .okit-template-panel ul {
     list-style: none;
     display: block;
@@ -51,7 +56,7 @@
 .okit-template-panel input[type=checkbox] {display: none; visibility: hidden;}
 
 .okit-template-panel li > label::before {
-    content: '\25BF';
+    content: '\25B9';
     color: #336600;
     display: inline-block;
     text-align: left;
@@ -59,12 +64,12 @@
 }
 
 .okit-template-panel li > input:checked ~ label::before {
-    content: '\25B9';
+    content: '\25BF';
 }
 
 .okit-template-group ul {display: none}
 
-.okit-template-group input:checked ~  ul {display: block}
+.okit-template-group input:checked ~ ul {display: block}
 
 .okit-template-panel li a.okit-template-item {
     text-decoration: none;
