@@ -284,13 +284,29 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user')
             console.error('Error : '+ error)
         }
     });
+    // Template directory
+    // tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').text('Directory');
+    // tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('input')
+    //     .attr('class', 'okit-input')
+    //     .attr('id', 'template_dir_name')
+    //     .attr('name', 'template_dir_name')
+    //     .attr('readonly', 'readonly')
+    //     .attr('type', 'text');
     // Template name
     tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').text('Name');
     tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('input')
         .attr('class', 'okit-input')
         .attr('id', 'template_file_name')
         .attr('name', 'template_file_name')
-        .attr('type', 'text');
+        .attr('type', 'text')
+        .on('keydown', (e) => {
+            if (d3.event.keyCode == 220) {
+                d3.event.preventDefault()
+            } else if (d3.event.keyCode == 32) {
+                d3.event.preventDefault()
+            }
+        })
+        .on('blur', () => {$('#template_file_name').val($('#template_file_name').val().replace(' ', '_').replace('\\', '/'))});
     // Submit Button
     const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_btn')
@@ -352,6 +368,31 @@ const loadTemplatePanel = () => {
 /*
 ** Save Model to Git
  */
+function handleSaveToGit(e) {
+    const root_dir = 'git'
+    displaySaveAsTemplateDialog('Save to Git', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'template/save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel, git: true}),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                loadGitPanel();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            },
+            complete: function() {
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });    
+    }, root_dir)
+}
 const loadGitPanel = () => {
     const id = 'git_panel'
     $.ajax({
@@ -377,10 +418,63 @@ const loadGitPanel = () => {
         }
     });
 }
-
+/*
+** Save Model to Container
+ */
+function handleSaveToContainer(e) {
+    const root_dir = 'local'
+    displaySaveAsTemplateDialog('Save to Container', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'template/save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel}),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                loadGitPanel();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            },
+            complete: function() {
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });    
+    }, root_dir)
+}
+const loadFilesystemPanel = () => {
+    const id = 'local_panel'
+    $.ajax({
+        type: 'get',
+        url: `panel/local`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_panel = doc.getElementById(id);
+            const current_panel = document.getElementById(id);
+            const template_panel = document.getElementById('designer_left_column')
+            // Check if menu section already exists
+            const hidden = $(`#${id}`).hasClass('hidden')
+            $(`#${id}`).addClass('hidden')
+            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
+            if (!hidden) $(`#${id}`).removeClass('hidden')
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+}
 /*
 ** Save Model As Template
  */
+// TODO: Delete
 function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true) {
     $(jqId('modal_dialog_title')).text(title);
     $(jqId('modal_dialog_body')).empty();
@@ -447,31 +541,6 @@ function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true
         .text('Save')
         .on('click', callback);
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-}
-function handleSaveToGit(e) {
-    const root_dir = 'git'
-    displaySaveAsTemplateDialog('Save to Git', () => {
-        okitJsonModel.updated = getCurrentDateTime();
-        $.ajax({
-            type: 'post',
-            url: 'template/save',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel, git: true}),
-            success: function(resp) {
-                console.info('Response : ' + resp);
-                loadGitPanel();
-            },
-            error: function(xhr, status, error) {
-                console.info('Status : '+ status)
-                console.info('Error : '+ error)
-            },
-            complete: function() {
-                // Hide modal dialog
-                $(jqId('modal_dialog_wrapper')).addClass('hidden');
-            }
-        });    
-    }, root_dir)
 }
 // TODO: Delete
 function handleSaveToGit1(e) {
@@ -557,6 +626,58 @@ function loadTemplate(template_url) {
         }
     });
 }
+/*
+** Import Model From Template
+ */
+function importTemplate(template_url, event) {
+    console.info('Import Template Event', event)
+    console.info('<<<<<< NEED TO RESOLVE TOP LEVEL SVG REPRESENTATION >>>>>>')
+    return
+    // event = event | window.event
+    event.preventDefault()
+    event.stopPropagation()
+    const right_coll_offset = $('#designer_right_column').offset()
+    const position = {top: event.pageY - right_coll_offset.top - 10, left: event.pageX - 10};
+    console.info('Context Position', position, right_coll_offset)
+    $(jqId("context-menu")).empty();
+    $(jqId("context-menu")).css(position);
+    const contextmenu = d3.select(d3Id("context-menu"));
+    contextmenu.on('mouseenter', function () {
+            $(jqId("context-menu")).removeClass("hidden");
+        })
+        .on('mouseleave', function () {
+            $(jqId("context-menu")).addClass("hidden");
+        });
+    const ul = contextmenu.append('ul').attr('class', 'okit-context-menu-list');
+    ul.append('li').append('a')
+                    .attr('class', 'parent-item')
+                    .attr('href', 'javascript:void(0)')
+                    .text('Import')
+                    .on('click', () => {
+                        $.ajax({
+                            type: 'get',
+                            url: 'template/load',
+                            dataType: 'text', // Response Type
+                            contentType: 'application/json', // Sent Message Type
+                            data: JSON.stringify({template_file: template_url}),
+                            success: function(resp) {
+                                okitJsonModel.load(JSON.parse(resp))
+                                okitJsonView.load()
+                                displayOkitJson();
+                                displayDesignerView();
+                                displayTreeView();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Status : '+ status);
+                                console.error('Error  : '+ error);
+                            }
+                        });
+                        $(jqId("context-menu")).addClass("hidden");
+                    });
+    $(jqId("context-menu")).removeClass("hidden");
+
+}
+// TODO: Delete
 // function loadTemplate(template_url) {
 //     hideNavMenu();
 //     resetDesigner();
