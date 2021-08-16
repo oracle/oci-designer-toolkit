@@ -165,6 +165,10 @@ def designer():
     pca_mode = (request.args.get('pca', default='false') == 'true')
     if pca_mode:
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< PCA Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if A2C mode
+    a2c_mode = (request.args.get('a2c', default='false') == 'true')
+    if a2c_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< A2C Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
     # Read Artifact Model Specific JavaScript Files
     artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
@@ -216,7 +220,7 @@ def designer():
                         #    okit_templates_groups=template_groups,
                         #    okit_template_categories=template_categories,
                            local_okit=local,
-                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, pca_mode=pca_mode)
+                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, a2c_mode=a2c_mode, pca_mode=pca_mode)
 
 
 # Template Processing
@@ -241,9 +245,9 @@ def templates_panel():
     return render_template('okit/templates_panel.html', template_categories=template_categories)
 
 def dir_to_json(rootdir, reltodir=None, dkey='dirs', fkey='files'):
-    logger.info(f'Root Path: {rootdir}')
-    logger.info(f'Relative to Path: {reltodir}')
-    logger.info(f'Relative Path: {os.path.relpath(rootdir, reltodir)}')
+    # logger.info(f'Root Path: {rootdir}')
+    # logger.info(f'Relative to Path: {reltodir}')
+    # logger.info(f'Relative Path: {os.path.relpath(rootdir, reltodir)}')
     hierarchy = {
         'id': os.path.relpath(rootdir, reltodir).replace('/','_'),
         'name': os.path.basename(rootdir),
@@ -383,6 +387,17 @@ def git_panel():
         return render_template('okit/git_repositories_panel.html', git_repositories=git_repositories)
 
 
+# Local Filesystem Processing
+@bp.route('/panel/local', methods=(['GET']))
+def local_panel():
+    if request.method == 'GET':
+        local_filesystem_dir = os.path.join(current_app.instance_path, 'local')
+        local_filesystem = [dir_to_json(local_filesystem_dir, current_app.instance_path, 'children', 'templates')]
+        #Render The Template
+        logger.debug(f'Local Filesystem: {jsonToFormattedString(local_filesystem)}')
+        return render_template('okit/local_panel.html', local_filesystem=local_filesystem)
+
+
 @bp.route('/propertysheets/<string:sheet>', methods=(['GET']))
 def propertysheets(sheet):
     return render_template('okit/propertysheets/{0:s}'.format(sheet))
@@ -450,6 +465,7 @@ def generate(language, destination):
         return send_from_directory('/tmp', "okit-{0:s}.zip".format(str(language)), mimetype='application/zip', as_attachment=True)
 
 
+# TODO: Delete
 @bp.route('/saveas/<string:savetype>', methods=(['POST']))
 def saveas(savetype):
     logger.info('Save Type : {0:s} - {1:s}'.format(str(savetype), str(request.method)))

@@ -122,7 +122,7 @@ $(document).ready(function() {
             checkLeftColumn();
         })
         .text('Git Repositories');
-    if (developer_mode) {
+    if (a2c_mode) {
         // Container
         d3.select(d3Id('console_left_bar')).append('label')
             .attr('id', 'toggle_local_button')
@@ -405,5 +405,6 @@ $(document).ready(function() {
 
     loadTemplatePanel()
     loadGitPanel()
+    loadFilesystemPanel()
 
 });
