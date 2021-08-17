@@ -10,6 +10,7 @@
 
 ### Bug Fixes
 1. Fix query pagination issues where not all resources were being retrieved.
+2. Remove uses of Terraform Data Resource oci_identity_tenancy
 
 
 ## Version 0.24.5
