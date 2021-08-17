@@ -53,6 +53,9 @@ function handleDropdownMenuMouseOver(event) {
     const scrollY = $('#navigation_menu').scrollTop();
     const navX = $('#navigation_menu').offset().left;
     const navY = $('#navigation_menu').offset().top;
+    const element = document.getElementById('navigation_menu')
+    const scrollBarWidth = element.offsetWidth - element.clientWidth;
+    console.info('Scroll Bar Width', scrollBarWidth)
     const $slideout = $('> .dropdown-content', $(self));
     // console.info('=================================', self.id)
     // console.info('Parent', parentX, parentY, parentW)
@@ -61,7 +64,7 @@ function handleDropdownMenuMouseOver(event) {
     // console.info('Nav', navX, navY)
     $slideout.css('position', 'absolute');
     $slideout.css('top', menuY + scrollY);
-    $slideout.css('left', parentX + menuX + width);
+    $slideout.css('left', parentX + menuX + width - scrollBarWidth - 5);
 }
 
 function handleDropdownMenuMouseOverOld(event) {
