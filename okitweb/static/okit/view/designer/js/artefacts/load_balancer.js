@@ -25,7 +25,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         if (this.backend_sets) {
             for (let [key, value] of Object.entries(this.backend_sets)) {
                 for (let backend of value.backends) {
-                    for (let instance of this.getOkitJson().getInstances()) {
+                    for (let instance of this.getOkitJson().getAllInstanceTypes()) {
                         if (instance.primary_vnic.private_ip === backend.ip_address) {
                             if (!this.instance_ids.includes(instance.id)) {
                                 this.instance_ids.push(instance.id);
@@ -58,7 +58,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/load_balancer.html", () => {
             // Load Referenced Ids
             let instances_select = d3.select(d3Id('instance_ids'));
-            for (let instance of me.artefact.getOkitJson().instances) {
+            for (let instance of self.getOkitJson().getAllInstanceTypes()) {
                 let div = instances_select.append('div');
                 div.append('input')
                     .attr('type', 'checkbox')

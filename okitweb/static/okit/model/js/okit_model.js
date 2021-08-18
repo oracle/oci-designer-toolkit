@@ -545,6 +545,11 @@ class OkitJson {
         }
     }
 
+    // All Instance Resources
+    getAllInstanceTypes() {
+        return [...this.getInstances(), ...this.getAnalyticsInstances()]
+    }
+
     // Instance
     newInstance(data) {
         console.info('New Instance');

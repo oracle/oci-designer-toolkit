@@ -93,7 +93,7 @@ class OkitRelationshipJsonView extends OkitJsonView {
             .attr("id", 'relationship-svg')
             .attr("width", '100%')
             .attr("height", "100%")
-            .call(d3.zoom().on("zoom", function () {d3.select("#relationship-svg g").attr("transform", d3.event.transform)}))
+            .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", function () {d3.select("#relationship-svg g").attr("transform", d3.event.transform)}))
             .append("g")
             // .attr('transform', function(d) {return 'translate(' + [width / 2, height / 2] + ')'});
 

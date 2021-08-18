@@ -90,39 +90,55 @@ $(document).ready(function() {
             checkLeftColumn();
         })
         .text('Explorer');
-    if (developer_mode) {
-        // Templates
+    // Templates
+    d3.select(d3Id('console_left_bar')).append('label')
+        .attr('id', 'toggle_templates_button')
+        .attr('class', 'okit-pointer-cursor')
+        .on('click', function () {
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideLeftPanelsOffScreen();
+            if (!open) {
+                $('#templates_panel').removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+            } else {
+                // $('#templates_panel').empty();
+            }
+            checkLeftColumn();
+        })
+        .text('Templates');
+    // Git
+    d3.select(d3Id('console_left_bar')).append('label')
+        .attr('id', 'toggle_git_button')
+        .attr('class', 'okit-pointer-cursor')
+        .on('click', function () {
+            let open = $(this).hasClass('okit-bar-panel-displayed');
+            slideLeftPanelsOffScreen();
+            if (!open) {
+                $('#git_panel').removeClass('hidden');
+                $(this).addClass('okit-bar-panel-displayed');
+            } else {
+                $('#git_panel').empty();
+            }
+            checkLeftColumn();
+        })
+        .text('Git Repositories');
+    if (a2c_mode) {
+        // Container
         d3.select(d3Id('console_left_bar')).append('label')
-            .attr('id', 'toggle_templates_button')
+            .attr('id', 'toggle_local_button')
             .attr('class', 'okit-pointer-cursor')
             .on('click', function () {
                 let open = $(this).hasClass('okit-bar-panel-displayed');
                 slideLeftPanelsOffScreen();
                 if (!open) {
-                    $('#templates_panel').removeClass('hidden');
+                    $('#local_panel').removeClass('hidden');
                     $(this).addClass('okit-bar-panel-displayed');
                 } else {
-                    $('#templates_panel').empty();
+                    $('#local_panel').empty();
                 }
                 checkLeftColumn();
             })
-            .text('Templates');
-        // Git
-        d3.select(d3Id('console_left_bar')).append('label')
-            .attr('id', 'toggle_git_button')
-            .attr('class', 'okit-pointer-cursor')
-            .on('click', function () {
-                let open = $(this).hasClass('okit-bar-panel-displayed');
-                slideLeftPanelsOffScreen();
-                if (!open) {
-                    $('#git_panel').removeClass('hidden');
-                    $(this).addClass('okit-bar-panel-displayed');
-                } else {
-                    $('#git_panel').empty();
-                }
-                checkLeftColumn();
-            })
-            .text('Git Repositories');
+            .text('Filesystem');
     }
     // Preferences
     d3.select(d3Id('console_left_bar')).append('label')
@@ -381,6 +397,14 @@ $(document).ready(function() {
     /*
     ** Add redraw on resize
      */
-    window.addEventListener('resize', () => { redrawSVGCanvas(true) });
+    // window.addEventListener('resize', () => { redrawSVGCanvas(true) });
+
+    /*
+    ** Load Side Panels in Background
+    */
+
+    loadTemplatePanel()
+    loadGitPanel()
+    loadFilesystemPanel()
 
 });
