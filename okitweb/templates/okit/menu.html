@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .compute {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IHgxPSI5NS42OTIlIiB5MT0iNC4zMDglIiB4Mj0iMCUiIHkyPSIxMDAlIiBpZD0icHJlZml4X19hIj48c3RvcCBzdG9wLWNvbG9yPSIjNTNBMEZEIiBvZmZzZXQ9IjAlIi8+PHN0b3Agc3RvcC1jb2xvcj0iI0I0RUM1MSIgb2Zmc2V0PSIxMDAlIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZD0iTTMxLjMzMyAxMC42NjdhLjY2Ny42NjcgMCAwMDAtMS4zMzRoLTJWNi42NjdoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtLjY2NmMwLTEuMTAzLS44OTctMi0yLTJoLS42NjZ2LTJhLjY2Ny42NjcgMCAwMC0xLjMzNCAwdjJoLTIuNjY2di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYyaC0yLjY2NnYtMmEuNjY3LjY2NyAwIDAwLTEuMzM0IDB2MmgtMi42NjZ2LTJhLjY2Ny42NjcgMCAwMC0xLjMzNCAwdjJoLTIuNjY2di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYySDYuNjY3di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYyaC0uNjY2Yy0xLjEwMyAwLTIgLjg5Ny0yIDJ2LjY2NmgtMmEuNjY3LjY2NyAwIDAwMCAxLjMzNGgydjIuNjY2aC0yYS42NjcuNjY3IDAgMDAwIDEuMzM0aDJ2Mi42NjZoLTJhLjY2Ny42NjcgMCAwMDAgMS4zMzRoMnYyLjY2NmgtMmEuNjY3LjY2NyAwIDAwMCAxLjMzNGgydjIuNjY2aC0yYS42NjcuNjY3IDAgMDAwIDEuMzM0aDJ2Mi42NjZoLTJhLjY2Ny42NjcgMCAwMDAgMS4zMzRoMnYuNjY2YzAgMS4xMDMuODk3IDIgMiAyaC42NjZ2MmEuNjY3LjY2NyAwIDAwMS4zMzQgMHYtMmgyLjY2NnYyYS42NjcuNjY3IDAgMDAxLjMzNCAwdi0yaDIuNjY2djJhLjY2Ny42NjcgMCAwMDEuMzM0IDB2LTJoMi42NjZ2MmEuNjY3LjY2NyAwIDAwMS4zMzQgMHYtMmgyLjY2NnYyYS42NjcuNjY3IDAgMDAxLjMzNCAwdi0yaDIuNjY2djJhLjY2Ny42NjcgMCAwMDEuMzM0IDB2LTJoLjY2NmMxLjEwMyAwIDItLjg5NyAyLTJ2LS42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMnpNMjggMjcuMzMzYzAgLjM2OC0uMy42NjctLjY2Ny42NjdINC42NjdBLjY2OC42NjggMCAwMTQgMjcuMzMzVjQuNjY3QzQgNC4yOTkgNC4zIDQgNC42NjcgNGgyMi42NjZjLjM2NyAwIC42NjcuMjk5LjY2Ny42Njd2MjIuNjY2ek05LjMzMyA4YTEuMzM0IDEuMzM0IDAgMTAtMi42NjcuMDAxQTEuMzM0IDEuMzM0IDAgMDA5LjMzMyA4em0xMS4zMzQgMi42NjdoLTkuMzM0YS42NjcuNjY3IDAgMDAtLjY2Ni42NjZ2OS4zMzRjMCAuMzY4LjI5OC42NjYuNjY2LjY2Nmg5LjMzNGEuNjY3LjY2NyAwIDAwLjY2Ni0uNjY2di05LjMzNGEuNjY3LjY2NyAwIDAwLS42NjYtLjY2NnpNMjAgMjBoLTh2LThoOHY4eiIgZmlsbD0idXJsKCNwcmVmaXhfX2EpIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48L3N2Zz4=");
+        }
+        .import {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IHgxPSI5NS42OTIlIiB5MT0iNC4zMDglIiB4Mj0iMCUiIHkyPSIxMDAlIiBpZD0icHJlZml4X19hIj48c3RvcCBzdG9wLWNvbG9yPSIjNTNBMEZEIiBvZmZzZXQ9IjAlIi8+PHN0b3Agc3RvcC1jb2xvcj0iI0I0RUM1MSIgb2Zmc2V0PSIxMDAlIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZD0iTTMxLjMzMyAxMC42NjdhLjY2Ny42NjcgMCAwMDAtMS4zMzRoLTJWNi42NjdoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtLjY2NmMwLTEuMTAzLS44OTctMi0yLTJoLS42NjZ2LTJhLjY2Ny42NjcgMCAwMC0xLjMzNCAwdjJoLTIuNjY2di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYyaC0yLjY2NnYtMmEuNjY3LjY2NyAwIDAwLTEuMzM0IDB2MmgtMi42NjZ2LTJhLjY2Ny42NjcgMCAwMC0xLjMzNCAwdjJoLTIuNjY2di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYySDYuNjY3di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYyaC0uNjY2Yy0xLjEwMyAwLTIgLjg5Ny0yIDJ2LjY2NmgtMmEuNjY3LjY2NyAwIDAwMCAxLjMzNGgydjIuNjY2aC0yYS42NjcuNjY3IDAgMDAwIDEuMzM0aDJ2Mi42NjZoLTJhLjY2Ny42NjcgMCAwMDAgMS4zMzRoMnYyLjY2NmgtMmEuNjY3LjY2NyAwIDAwMCAxLjMzNGgydjIuNjY2aC0yYS42NjcuNjY3IDAgMDAwIDEuMzM0aDJ2Mi42NjZoLTJhLjY2Ny42NjcgMCAwMDAgMS4zMzRoMnYuNjY2YzAgMS4xMDMuODk3IDIgMiAyaC42NjZ2MmEuNjY3LjY2NyAwIDAwMS4zMzQgMHYtMmgyLjY2NnYyYS42NjcuNjY3IDAgMDAxLjMzNCAwdi0yaDIuNjY2djJhLjY2Ny42NjcgMCAwMDEuMzM0IDB2LTJoMi42NjZ2MmEuNjY3LjY2NyAwIDAwMS4zMzQgMHYtMmgyLjY2NnYyYS42NjcuNjY3IDAgMDAxLjMzNCAwdi0yaDIuNjY2djJhLjY2Ny42NjcgMCAwMDEuMzM0IDB2LTJoLjY2NmMxLjEwMyAwIDItLjg5NyAyLTJ2LS42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMnpNMjggMjcuMzMzYzAgLjM2OC0uMy42NjctLjY2Ny42NjdINC42NjdBLjY2OC42NjggMCAwMTQgMjcuMzMzVjQuNjY3QzQgNC4yOTkgNC4zIDQgNC42NjcgNGgyMi42NjZjLjM2NyAwIC42NjcuMjk5LjY2Ny42Njd2MjIuNjY2ek05LjMzMyA4YTEuMzM0IDEuMzM0IDAgMTAtMi42NjcuMDAxQTEuMzM0IDEuMzM0IDAgMDA5LjMzMyA4em0xMS4zMzQgMi42NjdoLTkuMzM0YS42NjcuNjY3IDAgMDAtLjY2Ni42NjZ2OS4zMzRjMCAuMzY4LjI5OC42NjYuNjY2LjY2Nmg5LjMzNGEuNjY3LjY2NyAwIDAwLjY2Ni0uNjY2di05LjMzNGEuNjY3LjY2NyAwIDAwLS42NjYtLjY2NnpNMjAgMjBoLTh2LThoOHY4eiIgZmlsbD0idXJsKCNwcmVmaXhfX2EpIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48L3N2Zz4=");
+        }
+        .export {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IHgxPSI5NS42OTIlIiB5MT0iNC4zMDglIiB4Mj0iMCUiIHkyPSIxMDAlIiBpZD0icHJlZml4X19hIj48c3RvcCBzdG9wLWNvbG9yPSIjNTNBMEZEIiBvZmZzZXQ9IjAlIi8+PHN0b3Agc3RvcC1jb2xvcj0iI0I0RUM1MSIgb2Zmc2V0PSIxMDAlIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZD0iTTMxLjMzMyAxMC42NjdhLjY2Ny42NjcgMCAwMDAtMS4zMzRoLTJWNi42NjdoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtLjY2NmMwLTEuMTAzLS44OTctMi0yLTJoLS42NjZ2LTJhLjY2Ny42NjcgMCAwMC0xLjMzNCAwdjJoLTIuNjY2di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYyaC0yLjY2NnYtMmEuNjY3LjY2NyAwIDAwLTEuMzM0IDB2MmgtMi42NjZ2LTJhLjY2Ny42NjcgMCAwMC0xLjMzNCAwdjJoLTIuNjY2di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYySDYuNjY3di0yYS42NjcuNjY3IDAgMDAtMS4zMzQgMHYyaC0uNjY2Yy0xLjEwMyAwLTIgLjg5Ny0yIDJ2LjY2NmgtMmEuNjY3LjY2NyAwIDAwMCAxLjMzNGgydjIuNjY2aC0yYS42NjcuNjY3IDAgMDAwIDEuMzM0aDJ2Mi42NjZoLTJhLjY2Ny42NjcgMCAwMDAgMS4zMzRoMnYyLjY2NmgtMmEuNjY3LjY2NyAwIDAwMCAxLjMzNGgydjIuNjY2aC0yYS42NjcuNjY3IDAgMDAwIDEuMzM0aDJ2Mi42NjZoLTJhLjY2Ny42NjcgMCAwMDAgMS4zMzRoMnYuNjY2YzAgMS4xMDMuODk3IDIgMiAyaC42NjZ2MmEuNjY3LjY2NyAwIDAwMS4zMzQgMHYtMmgyLjY2NnYyYS42NjcuNjY3IDAgMDAxLjMzNCAwdi0yaDIuNjY2djJhLjY2Ny42NjcgMCAwMDEuMzM0IDB2LTJoMi42NjZ2MmEuNjY3LjY2NyAwIDAwMS4zMzQgMHYtMmgyLjY2NnYyYS42NjcuNjY3IDAgMDAxLjMzNCAwdi0yaDIuNjY2djJhLjY2Ny42NjcgMCAwMDEuMzM0IDB2LTJoLjY2NmMxLjEwMyAwIDItLjg5NyAyLTJ2LS42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMmEuNjY3LjY2NyAwIDAwMC0xLjMzNGgtMnYtMi42NjZoMnpNMjggMjcuMzMzYzAgLjM2OC0uMy42NjctLjY2Ny42NjdINC42NjdBLjY2OC42NjggMCAwMTQgMjcuMzMzVjQuNjY3QzQgNC4yOTkgNC4zIDQgNC42NjcgNGgyMi42NjZjLjM2NyAwIC42NjcuMjk5LjY2Ny42Njd2MjIuNjY2ek05LjMzMyA4YTEuMzM0IDEuMzM0IDAgMTAtMi42NjcuMDAxQTEuMzM0IDEuMzM0IDAgMDA5LjMzMyA4em0xMS4zMzQgMi42NjdoLTkuMzM0YS42NjcuNjY3IDAgMDAtLjY2Ni42NjZ2OS4zMzRjMCAuMzY4LjI5OC42NjYuNjY2LjY2Nmg5LjMzNGEuNjY3LjY2NyAwIDAwLjY2Ni0uNjY2di05LjMzNGEuNjY3LjY2NyAwIDAwLS42NjYtLjY2NnpNMjAgMjBoLTh2LThoOHY4eiIgZmlsbD0idXJsKCNwcmVmaXhfX2EpIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48L3N2Zz4=");
+        }
+        .okit-navigation-list {
+            list-style: none;
+            display: block;
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            background-color: #253141;
+            font-size: smaller;
+            direction: ltr;
+        }
+        .okit-navigation-list input[type=checkbox] {display: none; visibility: hidden;}
+        .okit-navigation-list li {
+            list-style-type: none;
+        }
+        .okit-navigation-list li > a {
+            text-decoration: none;
+            color: #fff;
+        }
+        .okit-navigation-list label {
+            color: #fff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .okit-navigation-list li > label::before {
+            content: '\25B9';
+            color: #336600;
+            display: inline-block;
+            text-align: left;
+            padding-right: 0.5em;
+        }
+        .okit-navigation-list li > input:checked ~ label::before {
+            content: '\25BF';
+        }
+        .menu-section > ul ul {display: none}
+        .menu-section > ul input:checked ~ ul {display: block}
+        li.menu-section > div {
+            display: inline-block;
+            margin-left: 0;
+            padding-left: 0;
+            background-repeat: no-repeat;
+            background-position: left;
+            background-position-x: 0.75em;
+            background-size: 1em 1em;
+            white-space: nowrap;
+        }
+        li.menu-section > div > label {
+            opacity: .6;
+            margin-left: 3em;
+            text-wrap: none;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <ul id="navigation_menu_list" class="okit-navigation-list">
+            <li class="menu-section"><div class="compute"><label>Canvas</label></div>
+                <ul id="canvas_menu" class="">
+                    <li class="menu-item"><a href="javascript:void(0)"onclick="handleNew()">New</label></li>
+                    <li class=""><a href="javascript:void(0)"onclick="handleLoad()">Load</a></li>
+                    <li class="" id="save_menu"><input type="checkbox" id="save_menu_cd" checked="checked"/><label for="save_menu_cd">Save</label>
+                        <ul class="">
+                            <li class=""><a href="javascript:void(0)"onclick="handleSave()">Save</a></li>
+                            <li class=""><a href="javascript:void(0)"onclick="handleSaveAsTemplate()">Save as Template</a></li>
+                        </ul>
+                    </li>
+                    {% if local_okit or session['username'] %}
+                    <li class=""><a href="javascript:void(0)"onclick="handleQueryOci()">Query</a></li>
+                    {% endif %}
+                    <li class=""><a href="javascript:void(0)"onclick="handleRedraw()">Redraw</a></li>
+                    <li class=""><a href="javascript:void(0)"onclick="handleValidate()">Validate</a></li>
+                </ul>
+            </li>
+            <li class="menu-section"><div class="export"><label>Export</label></div>
+                <ul id="export_menu" class="">
+                    <li class="" id="export_image_menu"><input type="checkbox" id="export_image_menu_cd" checked="checked"/><label for="export_image_menu_cd">Image</label>
+                        <ul class="">
+                            <li class=""><a href="javascript:void(0)"onclick="handleExportToSVG()">svg</a></li>
+                            <li class=""><a href="javascript:void(0)"onclick="handleExportToPNG()">png</a></li>
+                            <li class=""><a href="javascript:void(0)"onclick="handleExportToJPG()">jpeg</a></li>
+                        </ul>
+                    </li>
+                    <li class=""><a href="javascript:void(0)"onclick="handleSave()">Json</a></li>
+                    <li class=""><a href="javascript:void(0)"onclick="handleExportToTerraformLocal()">Terraform</a></li>
+                    <li class=""><a href="javascript:void(0)"onclick="handleExportToAnsibleLocal()">Ansible</a></li>
+                    <li class=""><a href="javascript:void(0)"onclick="handleExportToResourceManager()">Resource Manager</a></li>
+                    <li class=""><a href="javascript:void(0)"onclick="handleExportToMarkdownLocal()">Markdown</a></li>
+                </ul>
+            </li>
+            <li class="menu-section"><div class="import"><label>Import</label></div>
+                <ul id="import_menu" class="">
+                    <li class=""><a href="javascript:void(0)"onclick="handleLoad()">OKIT Json</a></li>
+                    <li class=""><a href="javascript:void(0)"onclick="handleImportFromHCLJson()">Terraform Json</a></li>
+                </ul>
+            </li>
+        </ul>
+        </div>
+</body>
+</html>

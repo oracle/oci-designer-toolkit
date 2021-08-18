@@ -93,37 +93,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
 {% endblock %}
 
-{% block navmenublocknew %}
-    <ul id="navigation_menu_list" class="okit-navigation-list">
-        <li class="header-item">
-            <div class="compute"><label>Canvas</label></div>
-            <ul id="canvas_menu" class="okit-sub-menu">
-                <li class="menu-item"><div><label onclick="handleNew()">New</label></div></li>
-                <li class="menu-item"><div><label onclick="handleLoad()">Load</label></div></li>
-                <li class="slideout-item" id="save_menu" onmouseover="handleDropdownMenuMouseOver()">
-                    <div><label>Save</label></div>
-                    <ul class="slideout-menu">
-                        <li class="menu-item"><div><label onclick="handleSave()">Save</label></div></li>
-                        <li class="menu-item"><div><label onclick="handleSaveAsTemplate()">Save as Template</label></div></li>
-                        <li class="slideout-item" id="terraform_export" onmouseover="handleDropdownMenuMouseOver()">
-                            <div><label>Terraform</label></div>
-                            <ul class="slideout-menu">
-                                <li class="menu-item"><div><label onclick="handleExportToTerraformLocal()">Local Zip</label></div></li>
-                                <li class="menu-item"><div><label onclick="handleExportToTerraformGit()">Git Repo</label></div></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                {% if local_okit or session['username'] %}
-                <li class="menu-item"><div><label onclick="handleQueryOci()">Query</label></div></li>
-                {% endif %}
-                <li class="menu-item"><div><label onclick="handleRedraw()">Redraw</label></div></li>
-                <li class="menu-item"><div><label onclick="handleValidate()">Validate</label></div></li>
-            </ul>
-        </li>
-    </ul>
-{% endblock %}
-
 {% block navmenublock %}
     <ul id="navigation_menu_list" class="okit-navigation-list">
         <ul id="canvas_menu" class="okit-navigation-sub-list">
@@ -277,7 +246,6 @@
         {% endif %}
     </ul>
 {% endblock %}
-
 
 {% block mainblock %}
     <div id="designer_left_column" class="okit-designer-left-column">

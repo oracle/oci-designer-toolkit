@@ -397,7 +397,7 @@ $(document).ready(function() {
     /*
     ** Add redraw on resize
      */
-    window.addEventListener('resize', () => { redrawSVGCanvas(true) });
+    // window.addEventListener('resize', () => { redrawSVGCanvas(true) });
 
     /*
     ** Load Side Panels in Background
