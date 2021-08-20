@@ -1,4 +1,4 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.25.0](CHANGELOG.md#version-0.25.0)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.25.1](CHANGELOG.md#version-0.25.1)
 
 ```diff
 + The 0.25.0 release has now moved the templates from the menu to a new side panel and the can be opened by double clicking 
@@ -143,12 +143,12 @@ Host github.com
 
 ##### Simple
 ```bash
-docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --name okit okit
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --name okit okit
 ```
 
 ##### Mount User Templates and Git Directories
 ```bash
-docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/user --volume <PATH TO GIT DIR>:/okit/instance/git --volume <PATH TO LOCAL DIR>:/okit/instance/local --name okit okit
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/user --volume <PATH TO GIT DIR>:/okit/instance/git --volume <PATH TO LOCAL DIR>:/okit/instance/local --name okit okit
 ```
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
