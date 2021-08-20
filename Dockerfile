@@ -64,7 +64,8 @@ RUN yum install -y \
  && ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb \
  && ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser \
  && ln -sv /github/oci-designer-toolkit/containers/docker/run-server.sh /root/bin/run-server.sh \
- && mkdir -p /okit/okitweb/static/okit/templates \
+ && ln -sv /github/oci-designer-toolkit/okitweb/okit/templates/reference_architecture /okit/instance/templates/reference_architecture \
+ #&& mkdir -p /okit/okitweb/static/okit/templates \
  #&& ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
  && chmod a+x /root/bin/run-server.sh
 # Add entrypoint to automatically start webserver
