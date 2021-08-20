@@ -1,6 +1,12 @@
 # Release Notes
 
 
+## Version 0.25.1
+**Release Date**: 20th August 2021
+### Bug Fixes
+1. Add missing symbolic link to to level Dockerfile to resolve the failure to display Templates in the designer.
+
+
 ## Version 0.25.0
 **Release Date**: 18th August 2021
 ### Features
