@@ -1,6 +1,16 @@
 # Release Notes
 
 
+## Version 0.26.0
+**Release Date**: 8th September 2021
+### Features
+1. 
+
+### Bug Fixes
+1. GitHub Issue #440 : Cannot generate terraform when NSG have Rules.
+2. Fix issue where DB System were always created in the root deployment compartment not specified sub-compartment.
+
+
 ## Version 0.25.1
 **Release Date**: 20th August 2021
 ### Bug Fixes
