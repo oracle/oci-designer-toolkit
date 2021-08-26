@@ -1399,7 +1399,7 @@ class OCIGenerator(object):
             # variableName = '{0:s}_security_rule_{1:02d}_description'.format(standardisedName, rule_number)
             # self.run_variables[variableName] = rule.get("description", "Egress Rule {0:02d}".format(rule_number))
             # jinja2_security_rule["description"] = self.formatJinja2Variable(variableName)
-            jinja2_security_rule["description"] = self.generateJinja2Variable('security_rule_{0:02d}_description'.format(rule_number), rule["description"], standardisedName)
+            jinja2_security_rule["description"] = self.generateJinja2Variable('security_rule_{0:02d}_description'.format(rule_number), rule.get("description", ""), standardisedName)
             # Add to Egress Rules used for Jinja template
             jinja2_security_rules.append(jinja2_security_rule)
             # Increment rule number
