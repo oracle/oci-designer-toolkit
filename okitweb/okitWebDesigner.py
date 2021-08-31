@@ -169,6 +169,10 @@ def designer():
     a2c_mode = (request.args.get('a2c', default='false') == 'true')
     if a2c_mode:
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< A2C Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if Ansible mode
+    ansible_mode = (request.args.get('ansible', default='false') == 'true')
+    if ansible_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<< Ansible Mode >>>>>>>>>>>>>>>>>>>>>>>>")
     # Read Artifact Model Specific JavaScript Files
     artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
@@ -220,7 +224,7 @@ def designer():
                         #    okit_templates_groups=template_groups,
                         #    okit_template_categories=template_categories,
                            local_okit=local,
-                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, a2c_mode=a2c_mode, pca_mode=pca_mode)
+                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, a2c_mode=a2c_mode, pca_mode=pca_mode, ansible_mode=ansible_mode)
 
 
 # Template Processing
