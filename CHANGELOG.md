@@ -4,7 +4,7 @@
 ## Version 0.26.0
 **Release Date**: 8th September 2021
 ### Features
-1. 
+1. Temporarily deprecate Ansible export by making it command line flag driven (ansible=true)
 
 ### Bug Fixes
 1. GitHub Issue #440 : Cannot generate terraform when NSG have Rules.
