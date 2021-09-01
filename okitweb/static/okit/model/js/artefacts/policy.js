@@ -14,7 +14,7 @@ class Policy extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.policies.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.policys.length + 1);
         this.compartment_id = data.parent_id;
         /*
         ** TODO: Add Resource / Artefact specific parameters and default
@@ -36,7 +36,7 @@ class Policy extends OkitArtifact {
     ** Name Generation
     */
     getNamePrefix() {
-        return super.getNamePrefix() + 'pol';
+        return super.getNamePrefix() + 'p';
     }
     /*
     ** Static Functionality
@@ -49,17 +49,17 @@ class Policy extends OkitArtifact {
 ** Dynamically Add Model Functions
 */
 OkitJson.prototype.newPolicy = function(data) {
-    this.getPolicies().push(new Policy(data, this));
-    return this.getPolicies()[this.getPolicies().length - 1];
+    this.getPolicys().push(new Policy(data, this));
+    return this.getPolicys()[this.getPolicys().length - 1];
 }
-OkitJson.prototype.getPolicies = function() {
-    if (!this.policies) {
-        this.policies = [];
+OkitJson.prototype.getPolicys = function() {
+    if (!this.policys) {
+        this.policys = [];
     }
-    return this.policies;
+    return this.policys;
 }
 OkitJson.prototype.getPolicy = function(id='') {
-    for (let artefact of this.getPolicies()) {
+    for (let artefact of this.getPolicys()) {
         if (artefact.id === id) {
             return artefact;
         }
@@ -67,10 +67,10 @@ OkitJson.prototype.getPolicy = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deletePolicy = function(id) {
-    for (let i = 0; i < this.policies.length; i++) {
-        if (this.policies[i].id === id) {
-            this.policies[i].delete();
-            this.policies.splice(i, 1);
+    for (let i = 0; i < this.policys.length; i++) {
+        if (this.policys[i].id === id) {
+            this.policys[i].delete();
+            this.policys.splice(i, 1);
             break;
         }
     }

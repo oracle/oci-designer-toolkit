@@ -1342,8 +1342,9 @@ class OkitArtefactView {
         return OkitArtefactView.cut_copy_paste.resource ? OkitArtefactView.cut_copy_paste.resource.getDropTargets().includes(this.getArtifactReference()) : false;
     }
 
-    getFunction(resource_name) {return `get${resource_name.split(' ').join('')}`}
-    getArrayFunction(resource_name) {return `get${resource_name.split(' ').join('')}s`}
+    getFunction(resource_name) {return `get${titleCase(resource_name).split(' ').join('')}`}
+    getArrayFunction(resource_name) {return `${this.getFunction(resource_name)}s`}
+    // getArrayFunction(resource_name) {return `get${resource_name.split(' ').join('')}s`}
 
     getArtefact() {return this.artefact;}
 
@@ -1982,7 +1983,7 @@ class OkitArtefactView {
         let children = false;
         let key = this.getParentKey();
         for (let group of this.getTopEdgeArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact[key] === this.id) {
                     children = true;
                     break;
@@ -1995,7 +1996,7 @@ class OkitArtefactView {
     getTopEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getTopEdgeArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
@@ -2022,7 +2023,7 @@ class OkitArtefactView {
     hasTopChildren() {
         let children = false;
         for (let group of this.getTopArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     children = true;
                     break;
@@ -2062,7 +2063,7 @@ class OkitArtefactView {
     hasContainerChildren() {
         let children = false;
         for (let group of this.getContainerArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     children = true;
                     break;
@@ -2075,7 +2076,7 @@ class OkitArtefactView {
     getContainerChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getContainerArtifacts()) {
-            // for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            // for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
             for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id && (!artefact.attached || !okitSettings.hide_attached)) {
                     let dimension = artefact.dimensions;
@@ -2104,7 +2105,7 @@ class OkitArtefactView {
     hasBottomChildren() {
         let children = false;
         for (let group of this.getBottomArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     children = true;
                     break;
@@ -2153,7 +2154,7 @@ class OkitArtefactView {
     hasBottomEdgeChildren() {
         let children = false;
         for (let group of this.getBottomEdgeArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     children = true;
                     break;
@@ -2166,7 +2167,7 @@ class OkitArtefactView {
     getBottomEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getBottomEdgeArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height = Math.max(max_dimensions.height, dimension.height);
@@ -2198,8 +2199,8 @@ class OkitArtefactView {
     hasLeftChildren() {
         let children = false;
         for (let group of this.getLeftArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
-                if (artefact.parent_id === this.id) {
+                for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
+                    if (artefact.parent_id === this.id) {
                     children = true;
                     break;
                 }
@@ -2211,7 +2212,7 @@ class OkitArtefactView {
     getLeftChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getLeftArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
@@ -2238,7 +2239,7 @@ class OkitArtefactView {
     hasRightChildren() {
         let children = false;
         for (let group of this.getRightArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     children = true;
                     break;
@@ -2251,7 +2252,8 @@ class OkitArtefactView {
     getRightChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            console.info('Group:', group, this.getArrayFunction(group))
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);
@@ -2294,7 +2296,7 @@ class OkitArtefactView {
     hasRightEdgeChildren() {
         let children = false;
         for (let group of this.getRightEdgeArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     children = true;
                     break;
@@ -2307,7 +2309,7 @@ class OkitArtefactView {
     getRightEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightEdgeArtifacts()) {
-            for(let artefact of this.json_view[this.artefact.artefactToElement(group)]) {
+            for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
                     max_dimensions.height += Math.round(dimension.height + positional_adjustments.spacing.y);

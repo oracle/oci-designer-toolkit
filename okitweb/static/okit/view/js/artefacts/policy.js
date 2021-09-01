@@ -9,12 +9,17 @@ console.info('Loaded Policy View Javascript');
 */
 class PolicyView extends OkitArtefactView {
     constructor(artefact=null, json_view) {
-        if (!json_view.policies) json_view.policies = [];
+        if (!json_view.policys) json_view.policys = [];
         super(artefact, json_view);
     }
-    get parent_id() {return this.artefact.compartment_id;}
-    get parent() {return this.getJsonView().getCompartment(this.parent_id);}
-
+    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
+    get parent_id() {return this.artefact.vcn_id;}
+    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
+    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
+    // Direct Subnet Access
+    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
+    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
     /*
     ** SVG Processing
     */
@@ -38,7 +43,8 @@ class PolicyView extends OkitArtefactView {
         return Policy.getArtifactReference();
     }
     static getDropTargets() {
-        return [Compartment.getArtifactReference()];
+        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
+        return [VirtualCloudNetwork.getArtifactReference()];
     }
 }
 /*
@@ -55,33 +61,27 @@ OkitJsonView.prototype.dropPolicyView = function(target) {
     return view_artefact;
 }
 OkitJsonView.prototype.newPolicy = function(obj) {
-    this.getPolicies().push(obj ? new PolicyView(obj, this) : new PolicyView(this.okitjson.newPolicy(), this));
-    return this.getPolicies()[this.getPolicies().length - 1];
-}
-OkitJsonView.prototype.getPolicies = function() {
-    if (!this.policies) {
-        this.policies = [];
-    }
-    return this.policies;
+    this.getPolicys().push(obj ? new PolicyView(obj, this) : new PolicyView(this.okitjson.newPolicy(), this));
+    return this.getPolicys()[this.getPolicys().length - 1];
 }
 OkitJsonView.prototype.getPolicys = function() {
-    return this.getPolicies();
+    if (!this.policys) {
+        this.policys = [];
+    }
+    return this.policys;
 }
 OkitJsonView.prototype.getPolicy = function(id='') {
-    for (let artefact of this.getPolicies()) {
+    for (let artefact of this.getPolicys()) {
         if (artefact.id === id) {
             return artefact;
         }
     }
     return undefined;
 }
-OkitJsonView.prototype.loadPolicies = function(policies) {
-    for (const artefact of policies) {
-        this.getPolicies().push(new PolicyView(new Policy(artefact, this.okitjson), this));
+OkitJsonView.prototype.loadPolicys = function(policys) {
+    for (const artefact of policys) {
+        this.getPolicys().push(new PolicyView(new Policy(artefact, this.okitjson), this));
     }
-}
-OkitJsonView.prototype.loadPolicys = function(policies) {
-    return this.loadPolicies(policies);
 }
 OkitJsonView.prototype.movePolicy = function(id) {
     // Build Dialog
@@ -134,23 +134,23 @@ OkitJsonView.prototype.pastePolicy = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.policies.push(clone);
+    this.okitjson.policys.push(clone);
     this.update(this.okitjson);
 }
-OkitJsonView.prototype.loadPoliciesSelect = function(select_id, empty_option=false) {
+OkitJsonView.prototype.loadPolicysSelect = function(select_id, empty_option=false) {
     $(jqId(select_id)).empty();
     const policy_select = $(jqId(select_id));
     if (empty_option) {
         policy_select.append($('<option>').attr('value', '').text(''));
     }
-    for (let policy of this.getPolicies()) {
+    for (let policy of this.getPolicys()) {
         policy_select.append($('<option>').attr('value', policy.id).text(policy.display_name));
     }
 }
-OkitJsonView.prototype.loadPoliciesMultiSelect = function(select_id) {
+OkitJsonView.prototype.loadPolicysMultiSelect = function(select_id) {
     $(jqId(select_id)).empty();
     const multi_select = d3.select(d3Id(select_id));
-    for (let policy of this.getPolicies()) {
+    for (let policy of this.getPolicys()) {
         const div = multi_select.append('div');
         div.append('input')
             .attr('type', 'checkbox')
