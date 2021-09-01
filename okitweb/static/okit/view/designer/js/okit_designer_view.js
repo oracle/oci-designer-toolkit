@@ -290,7 +290,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Add Palette Icons
         let defs = canvas_svg.append('defs');
         for (let key in this.palette_svg) {
-            let defid = key.replace(/ /g, '') + 'Svg';
+            let defid =  OkitJsonView.toSvgIconDef(key);
+            // let defid = key.replace(/ /g, '').toLowerCase() + 'Svg';
             defs.append('g')
                 .attr("id", defid)
                 .attr("transform", "translate(4.5, 4.5) scale(0.8, 0.8)")

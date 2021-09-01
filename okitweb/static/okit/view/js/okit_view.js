@@ -28,6 +28,8 @@ class OkitJsonView {
         this.load();
     }
 
+    static toSvgIconDef(title) {return title.replace(/ /g, '').toLowerCase() + 'Svg';}
+
     get small_grid_size() {return 8;}
     get grid_size() {return this.small_grid_size * 10;}
     get stroke_colours() {
@@ -1245,7 +1247,8 @@ class OkitArtefactView {
     get rect_stroke_dasharray() {return `${this.rect_stroke_dash}, ${this.rect_stroke_space}`;}
     get rect_stroke_opacity() {return 0;}
     // ---- Icon
-    get icon_definition_id() {return this.getArtifactReference().replace(/ /g, '') + 'Svg';}
+    get icon_definition_id() {return OkitJsonView.toSvgIconDef(this.getArtifactReference());}
+    // get icon_definition_id() {return this.getArtifactReference().replace(/ /g, '') + 'Svg';}
     get icon_height() {return 45;}
     get icon_width() {return 45;}
     get icon_x_tranlation() {return 0;}
