@@ -167,6 +167,16 @@
             "svg": "identity.svg",
             "resources": [
                 {
+                    "title": "Group",
+                    "targets": ["oci", "pca"],
+                    "svg": "UserGroup.svg"
+                },
+                {
+                    "title": "User",
+                    "targets": ["oci", "pca"],
+                    "svg": "User.svg"
+                },
+                {
                     "title": "Policy",
                     "targets": ["oci", "pca"],
                     "svg": "Policies.svg"

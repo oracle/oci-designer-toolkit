@@ -1344,7 +1344,6 @@ class OkitArtefactView {
 
     getFunction(resource_name) {return `get${titleCase(resource_name).split(' ').join('')}`}
     getArrayFunction(resource_name) {return `${this.getFunction(resource_name)}s`}
-    // getArrayFunction(resource_name) {return `get${resource_name.split(' ').join('')}s`}
 
     getArtefact() {return this.artefact;}
 

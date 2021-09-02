@@ -76,6 +76,18 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let remote_peering_connection of this.remote_peering_connections) {
             remote_peering_connection.draw();
         }
+        // Policies
+        for (let resource of this.getPolicys()) {
+            resource.draw();
+        }
+        // Groups
+        for (let resource of this.getGroups()) {
+            resource.draw();
+        }
+        // Users
+        for (let resource of this.getUsers()) {
+            resource.draw();
+        }
 
         // Draw Virtual Cloud Network Sub Components
         // Internet Gateways

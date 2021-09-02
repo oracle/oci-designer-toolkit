@@ -2,14 +2,14 @@
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded Policy View Javascript');
+console.info('Loaded User View Javascript');
 
 /*
-** Define Policy View Class
+** Define User View Class
 */
-class PolicyView extends OkitArtefactView {
+class UserView extends OkitArtefactView {
     constructor(artefact=null, json_view) {
-        if (!json_view.policys) json_view.policys = [];
+        if (!json_view.users) json_view.users = [];
         super(artefact, json_view);
     }
     get parent_id() {return this.artefact.compartment_id;}
@@ -22,19 +22,19 @@ class PolicyView extends OkitArtefactView {
     */
     loadProperties() {
         const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/policy.html", () => {loadPropertiesSheet(self.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/user.html", () => {loadPropertiesSheet(self.artefact);});
     }
     /*
     ** Load and display Value Proposition
     */
     loadValueProposition() {
-        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/policy.html");
+        $(jqId(VALUE_PROPOSITION_PANEL)).load("valueproposition/user.html");
     }
     /*
     ** Static Functionality
     */
     static getArtifactReference() {
-        return Policy.getArtifactReference();
+        return User.getArtifactReference();
     }
     static getDropTargets() {
         return [Compartment.getArtifactReference()];
@@ -43,8 +43,8 @@ class PolicyView extends OkitArtefactView {
 /*
 ** Dynamically Add View Functions
 */
-OkitJsonView.prototype.dropPolicyView = function(target) {
-    let view_artefact = this.newPolicy();
+OkitJsonView.prototype.dropUserView = function(target) {
+    let view_artefact = this.newUser();
     if (target.type === Compartment.getArtifactReference()) {
         view_artefact.artefact.compartment_id = target.id;
     } else {
@@ -53,34 +53,34 @@ OkitJsonView.prototype.dropPolicyView = function(target) {
     view_artefact.recalculate_dimensions = true;
     return view_artefact;
 }
-OkitJsonView.prototype.newPolicy = function(obj) {
-    this.getPolicys().push(obj ? new PolicyView(obj, this) : new PolicyView(this.okitjson.newPolicy(), this));
-    return this.getPolicys()[this.getPolicys().length - 1];
+OkitJsonView.prototype.newUser = function(obj) {
+    this.getUsers().push(obj ? new UserView(obj, this) : new UserView(this.okitjson.newUser(), this));
+    return this.getUsers()[this.getUsers().length - 1];
 }
-OkitJsonView.prototype.getPolicys = function() {
-    if (!this.policys) {
-        this.policys = [];
+OkitJsonView.prototype.getUsers = function() {
+    if (!this.users) {
+        this.users = [];
     }
-    return this.policys;
+    return this.users;
 }
-OkitJsonView.prototype.getPolicy = function(id='') {
-    for (let artefact of this.getPolicys()) {
+OkitJsonView.prototype.getUser = function(id='') {
+    for (let artefact of this.getUsers()) {
         if (artefact.id === id) {
             return artefact;
         }
     }
     return undefined;
 }
-OkitJsonView.prototype.loadPolicys = function(policys) {
-    for (const artefact of policys) {
-        this.getPolicys().push(new PolicyView(new Policy(artefact, this.okitjson), this));
+OkitJsonView.prototype.loadUsers = function(users) {
+    for (const artefact of users) {
+        this.getUsers().push(new UserView(new User(artefact, this.okitjson), this));
     }
 }
-OkitJsonView.prototype.movePolicy = function(id) {
+OkitJsonView.prototype.moveUser = function(id) {
     // Build Dialog
     const self = this;
-    let policy = this.getPolicy(id);
-    $(jqId('modal_dialog_title')).text('Move ' + policy.display_name);
+    let user = this.getUser(id);
+    $(jqId('modal_dialog_title')).text('Move ' + user.display_name);
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
     const table = d3.select(d3Id('modal_dialog_body')).append('div')
@@ -96,10 +96,10 @@ OkitJsonView.prototype.movePolicy = function(id) {
     tr.append('div')
         .attr('class', 'td')
         .append('select')
-        .attr('id', 'move_policy_subnet_id');
+        .attr('id', 'move_user_subnet_id');
     // Load Subnets
-    this.loadSubnetsSelect('move_policy_subnet_id');
-    $(jqId("move_policy_subnet_id")).val(policy.artefact.subnet_id);
+    this.loadSubnetsSelect('move_user_subnet_id');
+    $(jqId("move_user_subnet_id")).val(user.artefact.subnet_id);
     // Submit Button
     const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
@@ -107,17 +107,17 @@ OkitJsonView.prototype.movePolicy = function(id) {
         .text('Move')
         .on('click', function () {
             $(jqId('modal_dialog_wrapper')).addClass('hidden');
-            if (policy.artefact.subnet_id !== $(jqId("move_policy_subnet_id")).val()) {
-                self.getSubnet(policy.artefact.subnet_id).recalculate_dimensions = true;
-                self.getSubnet($(jqId("move_policy_subnet_id")).val()).recalculate_dimensions = true;
-                policy.artefact.subnet_id = $(jqId("move_policy_subnet_id")).val();
-                policy.artefact.compartment_id = self.getSubnet(policy.artefact.subnet_id).artefact.compartment_id;
+            if (user.artefact.subnet_id !== $(jqId("move_user_subnet_id")).val()) {
+                self.getSubnet(user.artefact.subnet_id).recalculate_dimensions = true;
+                self.getSubnet($(jqId("move_user_subnet_id")).val()).recalculate_dimensions = true;
+                user.artefact.subnet_id = $(jqId("move_user_subnet_id")).val();
+                user.artefact.compartment_id = self.getSubnet(user.artefact.subnet_id).artefact.compartment_id;
             }
             self.update(this.okitjson);
         });
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-OkitJsonView.prototype.pastePolicy = function(drop_target) {
+OkitJsonView.prototype.pasteUser = function(drop_target) {
     const clone = this.copied_artefact.artefact.clone();
     clone.display_name += 'Copy';
     if (this.paste_count) {clone.display_name += `-${this.paste_count}`;}
@@ -127,30 +127,30 @@ OkitJsonView.prototype.pastePolicy = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.policys.push(clone);
+    this.okitjson.users.push(clone);
     this.update(this.okitjson);
 }
-OkitJsonView.prototype.loadPolicysSelect = function(select_id, empty_option=false) {
+OkitJsonView.prototype.loadUsersSelect = function(select_id, empty_option=false) {
     $(jqId(select_id)).empty();
-    const policy_select = $(jqId(select_id));
+    const user_select = $(jqId(select_id));
     if (empty_option) {
-        policy_select.append($('<option>').attr('value', '').text(''));
+        user_select.append($('<option>').attr('value', '').text(''));
     }
-    for (let policy of this.getPolicys()) {
-        policy_select.append($('<option>').attr('value', policy.id).text(policy.display_name));
+    for (let user of this.getUsers()) {
+        user_select.append($('<option>').attr('value', user.id).text(user.display_name));
     }
 }
-OkitJsonView.prototype.loadPolicysMultiSelect = function(select_id) {
+OkitJsonView.prototype.loadUsersMultiSelect = function(select_id) {
     $(jqId(select_id)).empty();
     const multi_select = d3.select(d3Id(select_id));
-    for (let policy of this.getPolicys()) {
+    for (let user of this.getUsers()) {
         const div = multi_select.append('div');
         div.append('input')
             .attr('type', 'checkbox')
-            .attr('id', safeId(policy.id))
-            .attr('value', policy.id);
+            .attr('id', safeId(user.id))
+            .attr('value', user.id);
         div.append('label')
-            .attr('for', safeId(policy.id))
-            .text(policy.display_name);
+            .attr('for', safeId(user.id))
+            .text(user.display_name);
     }
 }

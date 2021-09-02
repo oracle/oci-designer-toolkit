@@ -4,6 +4,11 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 {% block title_block %}Policy{% endblock %}
-{% block required_properties_table_rows_block %}{% endblock %}
-{% block optional_properties_table_rows_block %}{% endblock %}
+{% block required_properties_table_rows_block %}
+    {{ properties_input('Description', 'description', type='text') }}
+    {{ properties_input('Statements', 'statements', type='table') }}
+{% endblock %}
+{% block optional_properties_table_rows_block %}
+    {{ properties_input('Version Date', 'version_date', type='date') }}
+{% endblock %}
 {% block optional_properties_block %}{% endblock %}

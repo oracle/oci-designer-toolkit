@@ -419,7 +419,11 @@ files will need to modified to reflect this new location.
 ```bash
 export OKIT_DIR='/okit'
 # Install Required Packages 
-sudo bash -c "yum install -y git openssl python-oci-cli oci-utils"
+sudo bash -c "yum install -y git"
+sudo bash -c "yum install -y openssl"
+sudo bash -c "yum install -y oci-utils"
+# This is not required for OL8
+sudo bash -c "yum install -y python-oci-cli"
 # Install Required Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
@@ -439,12 +443,12 @@ sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT
 #####                        If HTTPS / 443 Is required                                                      #####
 ##### Copy GUnicorn Service File (HTTPS)                                                                     #####
 ##################################################################################################################
-sudo bash -c 'cp -v ${OKIT_DIR}/containers/services/gunicorn.https.service > /etc/systemd/system/gunicorn.service'
+sudo bash -c 'cp -v ${OKIT_DIR}/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service'
 ##################################################################################################################
 #####                        If HTTP / 80 Is required                                                        #####
 ##### Copy GUnicorn Service File (HTTP)                                                                      #####
 ##################################################################################################################
-sudo bash -c 'cp -v ${OKIT_DIR}/containers/services/gunicorn.http.service > /etc/systemd/system/gunicorn.service'
+sudo bash -c 'cp -v ${OKIT_DIR}/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service'
 
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
