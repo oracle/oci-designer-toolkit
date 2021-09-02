@@ -82,7 +82,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     getLeftArtifacts() {
-        return [BlockStorageVolume.getArtifactReference()];
+        return [BlockStorageVolume.getArtifactReference(), Policy.getArtifactReference(), Group.getArtifactReference(), User.getArtifactReference(), DynamicGroup.getArtifactReference()];
     }
 
     getRightArtifacts() {

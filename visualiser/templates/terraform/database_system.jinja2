@@ -18,7 +18,7 @@ locals {
 resource "oci_database_db_system" "{{ resource_name }}" {
     #Required
     availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
-    compartment_id      = {{ compartment_ocid }}
+    compartment_id      = {{ compartment_id }}
     database_edition    = {{ database_edition | safe }}
     db_home {
         #Required

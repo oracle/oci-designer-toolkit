@@ -2,7 +2,8 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 [Unit]
-Description=Flask daemon
+Description=gunicorn daemon
+#Requires=gunicorn.socket
 After=network.target
 
 [Service]
@@ -13,17 +14,14 @@ Group=root
 Environment="OKIT_DIR=/okit"
 Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
 Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
-Environment="FLASK_APP=okitweb"
-Environment="FLASK_DEBUG=development"
-RuntimeDirectory=flask
+RuntimeDirectory=gunicorn
 WorkingDirectory=/okit/workspace
-ExecStart=/usr/bin/python3 -m flask run --host=0.0.0.0 --port=8080 --no-debugger
+ExecStart=/usr/local/bin/gunicorn okitweb.wsgi:app --config /okit/config/gunicorn_http.py
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed
 TimeoutStopSec=5
 TimeoutStartSec=300
 PrivateTmp=true
-Restart=always
 
 [Install]
 WantedBy=multi-user.target

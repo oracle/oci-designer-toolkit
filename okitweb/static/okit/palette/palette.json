@@ -1,5 +1,5 @@
 {
-    "targets": ["oci", "pca"],
+    "targets": ["oci", "free tier", "pca"],
     "groups": [
         {
             "title": "Containers",
@@ -23,7 +23,7 @@
             "resources": [
                 {
                     "title": "Instance",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "VirtualMachine.svg"
                 },
                 {
@@ -65,22 +65,22 @@
                 },
                 {
                     "title": "Virtual Cloud Network",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "VirtualCloudNetworkVCN.svg"
                 },
                 {
                     "title": "Subnet",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "Backbone.svg"
                 },
                 {
                     "title": "Route Table",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "RouteTable.svg"
                 },
                 {
                     "title": "Security List",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "SecurityList.svg"
                 },
                 {
@@ -90,12 +90,12 @@
                 },
                 {
                     "title": "DHCP Option",
-                    "targets": ["oci", "pca"],
-                    "svg": "DhcpOptions.svg"
+                    "targets": ["oci", "free tier", "pca"],
+                    "svg": "DHCPOptions.svg"
                 },
                 {
                     "title": "IPSec Connection",
-                    "targets": ["oci"],
+                    "targets": ["oci", "free tier"],
                     "svg": "VirtualPrivateNetworkVPN.svg"
                 },
                 {
@@ -105,7 +105,7 @@
                 },
                 {
                     "title": "Customer Premise Equipment",
-                    "targets": ["oci"],
+                    "targets": ["oci", "free tier"],
                     "svg": "CustomerPremises.svg"
                 }
             ]
@@ -116,12 +116,12 @@
             "resources": [
                 {
                     "title": "Internet Gateway",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "InternetGateway.svg"
                 },
                 {
                     "title": "NAT Gateway",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "NATGateway.svg"
                 },
                 {
@@ -131,7 +131,7 @@
                 },
                 {
                     "title": "Dynamic Routing Gateway",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "DynamicRoutingGatewayDRG.svg"
                 },
                 {
@@ -147,7 +147,7 @@
             "resources": [
                 {
                     "title": "Block Storage Volume",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci", "free tier", "pca"],
                     "svg": "BlockStorage.svg"
                 },
                 {
@@ -161,6 +161,27 @@
                     "svg": "FileStorage.svg"
                 }
             ]
+        },
+        {
+            "title": "Identity",
+            "svg": "identity.svg",
+            "resources": [
+                {
+                    "title": "Group",
+                    "targets": ["oci", "pca"],
+                    "svg": "UserGroup.svg"
+                },
+                {
+                    "title": "User",
+                    "targets": ["oci", "pca"],
+                    "svg": "User.svg"
+                },
+                {
+                    "title": "Policy",
+                    "targets": ["oci", "pca"],
+                    "svg": "Policies.svg"
+                }
+            ]
         }
-    ]
+   ]
 }

@@ -1,4 +1,16 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.24.5](CHANGELOG.md#version-0.24.5)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.25.1](CHANGELOG.md#version-0.25.1)
+
+```diff
++ The 0.25.0 release has now moved the templates from the menu to a new side panel and the can be opened by double clicking 
++ the file. This new format allows for user templates with sub directories. The corresponding Save As functionality also 
++ allows the user to create sub directories by specifying the full path.
+
+- The GIT functionality has also been moved to a side panel and on opening the designer page OKIT will attempt to clone/pull
+- from the git repositories specified in the ~/.oci/git_repositories file. If the pull fails then an empty details section
+- will be displayed.
+
++ The User templates and Git directories can be mounted from the local environment as shown in the updated run instructions.
+```
 
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
@@ -129,8 +141,14 @@ Host github.com
 
 #### Run Container
 
+##### Simple
 ```bash
-docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --name okit okit
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --name okit okit
+```
+
+##### Mount User Templates and Git Directories
+```bash
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/user --volume <PATH TO GIT DIR>:/okit/instance/git --volume <PATH TO LOCAL DIR>:/okit/instance/local --name okit okit
 ```
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)

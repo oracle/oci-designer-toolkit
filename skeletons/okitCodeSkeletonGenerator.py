@@ -70,8 +70,8 @@ def processWorkflow(args):
         #filename = "../okitweb/static/okit/view/js/Additional_View_Functions_For_{0!s:s}.js".format(svg_id)
         #writeFile(filename, rendered)
         # ---- SVG
-        jinja2_template = jinja2_environment.get_template("artefact.svg.jinja2")
-        rendered = jinja2_template.render(jinja2_variables)
+        # jinja2_template = jinja2_environment.get_template("artefact.svg.jinja2")
+        # rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
         filename = "../okitweb/static/okit/palette/hidden/{0!s:s}.svg".format(svg_id)
         writeFile(filename, rendered)

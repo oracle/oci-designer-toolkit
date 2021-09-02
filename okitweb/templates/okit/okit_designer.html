@@ -24,35 +24,40 @@
         let palette_svg = {}
         let resource_icon_files = {}
         let xmlSerialiser = new XMLSerializer();
-        {% for palette_icon_group in palette_icon_groups %}
-            {% for palette_icon in palette_icon_group['icons'] %}
-                palette_svg["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
-                resource_icon_files["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
+        let icon_title = '';
+        {% for palette_icon_group in palette_json.groups %}
+            {% for palette_icon in palette_icon_group['resources'] %}
+                icon_title = "{{ palette_icon['title']|title }}"
+                icon_title = "{{ palette_icon['title'] }}"
+                palette_svg[icon_title] = "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}";
+                resource_icon_files[icon_title] = "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}";
                 $.ajax({
                     type: 'get',
-                    url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
+                    url: "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}",
                     dataType: 'xml',
                     success: function(xml) {
-                        // console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
+                        // const icon_title = "{{ palette_icon['title']|title }}"
+                        const icon_title = "{{ palette_icon['title'] }}"
+                        // console.info("{{ 'Loaded ' + palette_icon['svg'] }}", icon_title);
                         let g = $(xml).find("g");
                         let svg = $(xml).find("svg");
                         let style = $(xml).find("style");
                         g[0].removeAttribute('transform');
-                        palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
-                        // palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(svg[0]);
+                        palette_svg[icon_title] = xmlSerialiser.serializeToString(g[0]);
+                        // palette_svg[icon_title] = xmlSerialiser.serializeToString(svg[0]);
                         if (style.length > 0) {
                             if (style[0].sheet) {
                                 for (let rule of style[0].sheet.cssRules) {
                                     const fromStr = `class="${rule.selectorText.substring(1)}"`
                                     const toStr = `style="${rule.style.cssText}"`
-                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                    palette_svg[icon_title] = palette_svg[icon_title].replaceAll(fromStr, toStr)
                                 }
                             } else {
                                 for (let rule of style[0].textContent.split('\n\t').filter((r) => r !== '')) {
                                     const fromStr = `class="${rule.substring(1, rule.indexOf('{')).trim()}"`
                                     const cssText = rule.substring(rule.indexOf('{') + 1, rule.indexOf('}')).trim()
                                     const toStr = `style="${cssText}"`
-                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                    palette_svg[icon_title] = palette_svg[icon_title].replaceAll(fromStr, toStr)
                                 }
                             }
                         }
@@ -93,37 +98,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
 {% endblock %}
 
-{% block navmenublocknew %}
-    <ul id="navigation_menu_list" class="okit-navigation-list">
-        <li class="header-item">
-            <div class="compute"><label>Canvas</label></div>
-            <ul id="canvas_menu" class="okit-sub-menu">
-                <li class="menu-item"><div><label onclick="handleNew()">New</label></div></li>
-                <li class="menu-item"><div><label onclick="handleLoad()">Load</label></div></li>
-                <li class="slideout-item" id="save_menu" onmouseover="handleDropdownMenuMouseOver()">
-                    <div><label>Save</label></div>
-                    <ul class="slideout-menu">
-                        <li class="menu-item"><div><label onclick="handleSave()">Save</label></div></li>
-                        <li class="menu-item"><div><label onclick="handleSaveAsTemplate()">Save as Template</label></div></li>
-                        <li class="slideout-item" id="terraform_export" onmouseover="handleDropdownMenuMouseOver()">
-                            <div><label>Terraform</label></div>
-                            <ul class="slideout-menu">
-                                <li class="menu-item"><div><label onclick="handleExportToTerraformLocal()">Local Zip</label></div></li>
-                                <li class="menu-item"><div><label onclick="handleExportToTerraformGit()">Git Repo</label></div></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                {% if local_okit or session['username'] %}
-                <li class="menu-item"><div><label onclick="handleQueryOci()">Query</label></div></li>
-                {% endif %}
-                <li class="menu-item"><div><label onclick="handleRedraw()">Redraw</label></div></li>
-                <li class="menu-item"><div><label onclick="handleValidate()">Validate</label></div></li>
-            </ul>
-        </li>
-    </ul>
-{% endblock %}
-
 {% block navmenublock %}
     <ul id="navigation_menu_list" class="okit-navigation-list">
         <ul id="canvas_menu" class="okit-navigation-sub-list">
@@ -137,12 +111,18 @@
             </li>
             <li id="file_recover_menu_item_li" class="hidden"><a id="file-recover-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRecover()">Recover</a></li>
             <li><a id="file-new-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
+            {%- if not a2c_mode -%}
             <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
+            {%- endif -%}
             <li id="save_menu" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Save</span>
                 <ul class="dropdown-content">
+                    {%- if a2c_mode -%}
+                    <li><a id="file-save-to-container-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveToContainer()">Save</a></li>
+                    {%- else -%}
                     <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
-                    <li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li>
+                    {%- endif -%}
+                    <!--li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li-->
                     <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTemplate()">Save As Template</a></li>
                     <li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save To Git</a></li>
                 </ul>
@@ -191,20 +171,27 @@
                     <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">jpeg</a></li>
                 </ul>
             </li>
-            <li id="terraform_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
+            {%- if a2c_mode -%}
+            <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Json</a></li>
+            {%- endif -%}
+            <!--li id="terraform_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Terraform</span>
                 <ul class="dropdown-content">
                     <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Local Zip</a></li>
                     <li><a id="generate-terraform-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformGit()">Git</a></li>
                 </ul>
-            </li>
-            <li id="ansible_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
+            </li-->
+            <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
+            {%- if ansible_mode -%}
+            <!--li id="ansible_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Ansible</span>
                 <ul class="dropdown-content">
                     <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Local Zip</a></li>
                     <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleGit()">Git</a></li>
                 </ul>
-            </li>
+            </li-->
+            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li>
+            {%- endif -%}
             {% if local_okit or session['username'] %}
             <!--li id="image_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Resource Manager</span>
@@ -230,6 +217,9 @@
                     </span>
                 </div>
             </li>
+            {%- if a2c_mode -%}
+            <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">OKIT Json</a></li>
+            {%- endif -%}
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
             {% if cd3_mode %}
             <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
@@ -264,28 +254,9 @@
     </ul>
 {% endblock %}
 
-
 {% block mainblock %}
     <div id="designer_left_column" class="okit-designer-left-column">
         {{ palette.add_palette(palette_json) }}
-        <!--div id="icons_palette" class="okit-icons-palette">
-            <details  id="fragments" class="okit-palette-icon-group" open>
-                <summary class="okit-palette-icon-group-header"><img id="okit-fragment-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
-                <div class="okit-palette-icon-group-icons okit-icons-only">
-                    {% for fragment_icon in fragment_icons %}
-                        <div>
-                            <img class="okit-fragment-icon"
-                             src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}"
-                             title="{{ fragment_icon['title'] }}"
-                             draggable="true"
-                             alt="{{ fragment_icon['title'] }}"
-                             ondragstart="dragFragmentStart(event, FragmentView, '{{ fragment_icon['title'] }}')">
-                            <label>{{ fragment_icon['title'] }}</label>
-                        </div>
-                    {% endfor %}
-                </div>
-            </details>
-        </div-->
         <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
         <div id="explorer_panel" class="okit-explorer-view hidden"></div>
         <div id="git_panel" class="okit-explorer-view hidden"></div>

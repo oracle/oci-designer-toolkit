@@ -76,6 +76,18 @@ class OkitDesignerJsonView extends OkitJsonView {
         for (let remote_peering_connection of this.remote_peering_connections) {
             remote_peering_connection.draw();
         }
+        // Policies
+        for (let resource of this.getPolicys()) {
+            resource.draw();
+        }
+        // Groups
+        for (let resource of this.getGroups()) {
+            resource.draw();
+        }
+        // Users
+        for (let resource of this.getUsers()) {
+            resource.draw();
+        }
 
         // Draw Virtual Cloud Network Sub Components
         // Internet Gateways
@@ -290,7 +302,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Add Palette Icons
         let defs = canvas_svg.append('defs');
         for (let key in this.palette_svg) {
-            let defid = key.replace(/ /g, '') + 'Svg';
+            let defid =  OkitJsonView.toSvgIconDef(key);
+            // let defid = key.replace(/ /g, '').toLowerCase() + 'Svg';
             defs.append('g')
                 .attr("id", defid)
                 .attr("transform", "translate(4.5, 4.5) scale(0.8, 0.8)")
