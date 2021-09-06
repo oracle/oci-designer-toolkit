@@ -22,7 +22,64 @@ class PolicyView extends OkitArtefactView {
     */
     loadProperties() {
         const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/policy.html", () => {loadPropertiesSheet(self.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/policy.html", () => {
+            loadPropertiesSheet(self.artefact);
+            // Statements
+            self.loadStatements();
+            // Add Handler to Add Button
+            $(jqId('add_statements')).on('click', () => {self.addStatement();});
+        });
+    }
+    loadStatements() {
+        // Empty Existing Statements
+        $(jqId('statements_body')).empty();
+        // Loads
+        let cnt = 1;
+        for (let statement of this.statements) {
+            this.addStatementHtml(statement, cnt);
+            cnt += 1;
+        }        
+    }
+    addStatement() {
+        this.statements.push('');
+        this.loadStatements();
+    }
+    deleteStatement(cnt) {
+        this.statements.splice(cnt, 1);
+        this.loadStatements();
+    }
+    updateStatement(cnt, statement) {
+        this.statements[cnt] = statement;
+        this.loadStatements();
+    }
+    addStatementHtml(statement, cnt) {
+        const self = this;
+        const tbody = d3.select('#statements_body');
+        const tr = tbody.append('div').attr('class', 'tr');
+        // Add Statement
+        tr.append('div').attr('class', 'td').append('input')
+            .attr("type", "text")
+            .attr("class", "property-value")
+            .attr("id", "statement" + cnt)
+            .attr("name", "statement")
+            .attr("placeholder", "Allow group <group_name> to <verb> <resource-type> in compartment <compartment_name>:<compartment_name>")
+            .attr("value", statement)
+            .on("change", function() {
+                console.info('Changing Statement', this.value);
+                self.updateStatement(cnt - 1, this.value);
+                // statement = this.value;
+                // displayOkitJson();
+            });
+        // Add Delete Button
+        tr.append('div').attr('class', 'td').append('button')
+            .attr("type", "button")
+            .attr("class", "okit-delete-button")
+            .text("X")
+            .on('click', function() {
+                self.deleteStatement(cnt - 1);
+                self.loadStatements();
+                // displayOkitJson();
+            });
     }
     /*
     ** Load and display Value Proposition

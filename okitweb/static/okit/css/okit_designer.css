@@ -39,11 +39,34 @@
 .okit-icons-toggle {
     display: block;
     margin: auto;
+    padding-left: 5px;
+    height: 30px;
+}
 
+.okit-icons-toggle > input[type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;  
+}
+
+.okit-icons-toggle > input[type=radio] + label {
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.okit-icons-toggle > input[type=radio]:checked + label {
+    outline: 1px solid #1d2733;
 }
 
 .okit-icons-toggle > label {
     font-size: 8pt;
+    min-height: 25px;
+    background-repeat: no-repeat;
+    background-position-x: 2px;
+    background-size: contain;
+    padding: 2px 2px 2px 25px;
+    margin: 5px;
 }
 
 .okit-icons-palette {
@@ -155,8 +178,14 @@
     transition: all 0.25s;
 }
 
+.okit-center-panels {
+    width: 100%;
+    height: 100%;
+}
+
 .okit-tab-bar {
     display: block;
+    padding-top: 3px;
     width: 100%;
     max-height: 30px;
     border-bottom: #aeaeae 1px solid;

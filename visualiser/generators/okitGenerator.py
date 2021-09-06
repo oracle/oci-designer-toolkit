@@ -149,6 +149,9 @@ class OCIGenerator(object):
         # -- Customer Premise Equipments
         for customer_premise_equipment in self.visualiser_json.get('customer_premise_equipments', []):
             self.renderCustomerPremiseEquipment(customer_premise_equipment)
+        # -- Policies
+        for policy in self.visualiser_json.get('policys', []):
+            self.renderPolicy(policy)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
@@ -1542,6 +1545,49 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("oke_cluster.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderPolicy(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(resource['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = resource['display_name']
+        # Process Subnet Data
+        logger.info('Processing Subnet Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # ---- Description
+        self.addJinja2Variable("description", resource.get("description", resource["display_name"]), standardisedName)
+        # ---- Policy Statements
+        if len(resource['statements']):
+            self.jinja2_variables["statements"] = resource['statements']
+        else:
+            self.jinja2_variables.pop("statements", None)
+        # --- Optional
+        # ---- Availability Domain
+        if resource.get("version_date", '') != '':
+            self.addJinja2Variable("version_date", resource["version_date"], standardisedName)
+        else:
+            self.jinja2_variables.pop("version_date", None)
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("policy.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

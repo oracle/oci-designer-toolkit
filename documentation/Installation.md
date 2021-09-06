@@ -427,7 +427,7 @@ sudo bash -c "yum install -y python-oci-cli"
 # Install Required Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
-sudo bash -c "pip3 install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
+sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
 sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git ${OKIT_DIR}"
 sudo bash -c "mkdir -p ${OKIT_DIR}/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
@@ -443,12 +443,12 @@ sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT
 #####                        If HTTPS / 443 Is required                                                      #####
 ##### Copy GUnicorn Service File (HTTPS)                                                                     #####
 ##################################################################################################################
-sudo bash -c 'cp -v ${OKIT_DIR}/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service'
+sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service"
 ##################################################################################################################
 #####                        If HTTP / 80 Is required                                                        #####
 ##### Copy GUnicorn Service File (HTTP)                                                                      #####
 ##################################################################################################################
-sudo bash -c 'cp -v ${OKIT_DIR}/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service'
+sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service"
 
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
