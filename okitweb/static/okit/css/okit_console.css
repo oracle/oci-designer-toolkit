@@ -759,6 +759,12 @@ li a.parent-item:hover {
     color: white;
 }
 
+.okit-console-left-bar label.okit-console-left-bar-icon {
+    background-repeat: no-repeat;
+    background-position: top;
+    padding-top: 25px;
+}
+
 .okit-console-right-bar {
     writing-mode: vertical-rl;
     text-orientation: mixed;

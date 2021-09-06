@@ -817,8 +817,8 @@ function displayQueryDialog() {
     td.append('label')
         .attr('for', 'fast_discovery')
         .text('Fast Discovery');
-    // if (developer_mode) $(jqId('fast_discovery_row')).removeClass('collapsed');
-    $(jqId('fast_discovery_row')).removeClass('collapsed');
+    if (developer_mode) $(jqId('fast_discovery_row')).removeClass('collapsed');
+    // $(jqId('fast_discovery_row')).removeClass('collapsed');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')

@@ -265,17 +265,22 @@
     </div>
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
-        <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
-        <div id="canvas_details" class="okit-canvas-details table">
-            <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
-            <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
+        <div id="center-header">
+            <div id="canvas_details" class="okit-canvas-details table">
+                <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
+                <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
+            </div>
         </div>
-        <div id="canvas-div" class="okit-svg-canvas"></div>
-        <div id="tabular-div" class="okit-tabular-canvas hidden"></div>
-        <div id="network-div" class="okit-network-canvas hidden"></div>
-        <div id="security-div" class="okit-security-canvas hidden"></div>
-        <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
-        <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
+        <div id="center-panels" class="okit-center-panels">
+            <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
+            <div id="canvas-div" class="okit-svg-canvas"></div>
+            <div id="tabular-div" class="okit-tabular-canvas hidden"></div>
+            <div id="network-div" class="okit-network-canvas hidden"></div>
+            <div id="security-div" class="okit-security-canvas hidden"></div>
+            <div id="identity-div" class="okit-identity-canvas hidden"></div>
+            <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
+            <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
+        </div>
     </div>
     <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>

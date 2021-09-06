@@ -4,7 +4,7 @@
 -->
 {% macro properties_input(title, name, type='text', collapsed=False, readonly=False, data={}) -%}
     {% if type in ['text', 'password', 'email', 'date'] %}
-        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} onblur="this.reportValidity();"></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} {% if data.placeholder is defined %} placeholder="{{ data.placeholder }}" {% endif %} onblur="this.reportValidity();"></div></div>
     {% elif type == 'number' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><input type="{{ type }}" id="{{ name }}" name="{{ name }}" class="okit-property-value" {% if readonly %} readonly{% endif %} {% if data.min is defined %} min="{{ data.min }}" {% endif %} {% if data.max is defined %} max="{{ data.max }}" {% endif %} onblur="this.reportValidity();"></div></div>
     {% elif type == 'ipv4' %}
