@@ -5,6 +5,7 @@
 **Release Date**: 8th September 2021
 ### Features
 1. Temporarily deprecate Ansible export by making it command line flag driven (ansible=true)
+2. Add Policy Resource to Palette and allow the user to drag them onto the canvas. It assumes that the user understands the policy statement syntax. All policies will be created within the users home region.
 
 ### Bug Fixes
 1. GitHub Issue #440 : Cannot generate terraform when NSG have Rules.
