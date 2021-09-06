@@ -169,6 +169,10 @@ def designer():
     a2c_mode = (request.args.get('a2c', default='false') == 'true')
     if a2c_mode:
         logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< A2C Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if Ansible mode
+    ansible_mode = (request.args.get('ansible', default='false') == 'true')
+    if ansible_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<< Ansible Mode >>>>>>>>>>>>>>>>>>>>>>>>")
     # Read Artifact Model Specific JavaScript Files
     artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
     # Read Artifact View Specific JavaScript Files
@@ -181,31 +185,31 @@ def designer():
     # Read Pallete Json
     palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
 
-    # Get Palette Icon Groups / Icons
-    svg_files = []
-    svg_icon_groups = {}
-    # Read Files
-    for (dirpath, dirnames, filenames) in os.walk(os.path.join(bp.static_folder, 'palette')):
-        logger.debug('dirpath : {0!s:s}'.format(dirpath))
-        logger.debug('dirnames : {0!s:s}'.format(dirnames))
-        logger.debug('filenames : {0!s:s}'.format(filenames))
-        if os.path.basename(dirpath) != 'palette':
-            svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames if f.endswith(".svg")])
-            svg_icon_groups[os.path.basename(dirpath)] = [f for f in filenames if f.endswith(".svg")]
-        else:
-            svg_files.extend([f for f in filenames if f.endswith(".svg")])
-    logger.debug('Files Walk : {0!s:s}'.format(svg_files))
-    logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
+    # # Get Palette Icon Groups / Icons
+    # svg_files = []
+    # svg_icon_groups = {}
+    # # Read Files
+    # for (dirpath, dirnames, filenames) in os.walk(os.path.join(bp.static_folder, 'palette')):
+    #     logger.debug('dirpath : {0!s:s}'.format(dirpath))
+    #     logger.debug('dirnames : {0!s:s}'.format(dirnames))
+    #     logger.debug('filenames : {0!s:s}'.format(filenames))
+    #     if os.path.basename(dirpath) != 'palette':
+    #         svg_files.extend([os.path.join(os.path.basename(dirpath), f) for f in filenames if f.endswith(".svg")])
+    #         svg_icon_groups[os.path.basename(dirpath)] = [f for f in filenames if f.endswith(".svg")]
+    #     else:
+    #         svg_files.extend([f for f in filenames if f.endswith(".svg")])
+    # logger.debug('Files Walk : {0!s:s}'.format(svg_files))
+    # logger.debug('SVG Icon Groups {0!s:s}'.format(svg_icon_groups))
 
-    palette_icon_groups = []
-    for key in sorted(svg_icon_groups.keys()):
-        palette_icon_group = {'name': str(key).title(), 'icons': []}
-        for palette_svg in sorted(svg_icon_groups[key]):
-            palette_icon = {'svg': os.path.join(key, palette_svg), 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
-            palette_icon_group['icons'].append(palette_icon)
-        palette_icon_groups.append(palette_icon_group)
-    logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
-    logJson(palette_icon_groups)
+    # palette_icon_groups = []
+    # for key in sorted(svg_icon_groups.keys()):
+    #     palette_icon_group = {'name': str(key).title(), 'icons': []}
+    #     for palette_svg in sorted(svg_icon_groups[key]):
+    #         palette_icon = {'svg': os.path.join(key, palette_svg), 'title': os.path.basename(palette_svg).split('.')[0].replace('_', ' ')}
+    #         palette_icon_group['icons'].append(palette_icon)
+    #     palette_icon_groups.append(palette_icon_group)
+    # logger.debug('Palette Icon Groups : {0!s:s}'.format(palette_icon_groups))
+    # logJson(palette_icon_groups)
 
 
     config_sections = {"sections": readConfigFileSections()}
@@ -215,12 +219,12 @@ def designer():
                            artefact_model_js_files=artefact_model_js_files,
                            artefact_view_js_files=artefact_view_js_files,
                            palette_json=palette_json,
-                           palette_icon_groups=palette_icon_groups,
+                        #    palette_icon_groups=palette_icon_groups,
                         #    fragment_icons=fragment_icons,
                         #    okit_templates_groups=template_groups,
                         #    okit_template_categories=template_categories,
                            local_okit=local,
-                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, a2c_mode=a2c_mode, pca_mode=pca_mode)
+                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, a2c_mode=a2c_mode, pca_mode=pca_mode, ansible_mode=ansible_mode)
 
 
 # Template Processing

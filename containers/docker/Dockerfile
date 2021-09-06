@@ -41,7 +41,7 @@ RUN yum install -y \
 # Upgrade pip
  && python3 -m pip install --upgrade pip \
 # Install required python modules
- && pip3 install --no-cache-dir \
+ && python3 -m pip install --no-cache-dir \
         authlib==0.15.3 \
         flask==1.1.2 \
         gitpython==3.1.14 \

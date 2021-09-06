@@ -56,7 +56,7 @@ $(document).ready(function() {
     // Palette
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_palette_button')
-        .attr('class', 'okit-bar-panel-displayed okit-pointer-cursor')
+        .attr('class', 'okit-bar-panel-displayed okit-pointer-cursor palette okit-console-left-bar-icon')
         .on('click', function () {
             /*
             $(jqId('designer_left_column')).toggleClass('okit-slide-hide-left');
@@ -75,7 +75,7 @@ $(document).ready(function() {
     // Compartment Explorer
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_explorer_button')
-        .attr('class', 'okit-pointer-cursor')
+        .attr('class', 'okit-pointer-cursor explorer okit-console-left-bar-icon')
         .on('click', function () {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideLeftPanelsOffScreen();

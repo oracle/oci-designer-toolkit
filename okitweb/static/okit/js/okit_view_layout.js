@@ -26,12 +26,13 @@ function handleViewSelect(e) {
 }
 
 function hideAllViewDivs() {
-    $("#canvas-div").addClass('hidden');
-    $("#tabular-div").addClass('hidden');
-    $("#network-div").addClass('hidden');
-    $("#security-div").addClass('hidden');
-    $("#relationship-div").addClass('hidden');
-    $("#json-text-div").addClass('hidden');
+    // $("#canvas-div").addClass('hidden');
+    // $("#tabular-div").addClass('hidden');
+    // $("#network-div").addClass('hidden');
+    // $("#security-div").addClass('hidden');
+    // $("#relationship-div").addClass('hidden');
+    // $("#json-text-div").addClass('hidden');
+    $("#center-panels > div").each((i, e) => $(e).addClass('hidden'))
 }
 
 function handleSwitchToCompartmentView(e) {
