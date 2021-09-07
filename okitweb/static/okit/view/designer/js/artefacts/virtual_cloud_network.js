@@ -14,7 +14,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
 
     get parent_id() {return this.artefact.compartment_id;}
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
-    get children() {return [...this.json_view.getSubnets(), ...this.json_view.getInternetGateways(),
+    get children1() {return [...this.json_view.getSubnets(), ...this.json_view.getInternetGateways(),
         ...this.json_view.getNatGateways(), ...this.json_view.getRouteTables(), ...this.json_view.getSecurityLists(), ...this.json_view.getDhcpOptions(),
         ...this.json_view.getNetworkSecurityGroups(), ...this.json_view.getServiceGateways(),
         ...this.json_view.getDynamicRoutingGateways(), ...this.json_view.getLocalPeeringGateways(),
@@ -30,7 +30,9 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     }
 
     cloneChildren(clone) {
+        console.info('Cloning VCN Children:', this.children)
         for (let child of this.children) {
+            child.clone().compartment_id = clone.compartment_id;
             child.clone().vcn_id = clone.id;
         }
     }

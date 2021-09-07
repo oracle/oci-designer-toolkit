@@ -2461,6 +2461,8 @@ class OkitContainerArtefactView extends OkitArtefactView {
         this._dimensions = {width: 0, height: 0};
     }
 
+    get children() {return Object.values(this.getJsonView()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
+
     // -- SVG Definitions
     // --- Dimensions
     get minimum_dimensions() {return {width: 300, height: 150};}
