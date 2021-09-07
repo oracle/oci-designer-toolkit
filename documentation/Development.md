@@ -1,4 +1,4 @@
-# OCI Designer Toolkit Artefact (Resource) Development
+# OCI Designer Toolkit Resource (Artefact) Development
 The following guide will take you through a step by step process for developing a new Palette Resource / Artefact for use 
 within OKIT. To implement the new Resource / Artefact a number of new Artefact specific files will need to created whilst 
 integration will require modification of core Javascript files.
@@ -6,7 +6,7 @@ integration will require modification of core Javascript files.
 ## Table of Contents
 
 1. [Naming Convention](#naming-convention)
-2. [Artefact (Resource) Files](#artefact-resource-files)
+2. [Resource (Artefact) Files](#artefact-resource-files)
 3. [New Files](#new-files)
     1. [Frontend Files](#frontend-files)
     2. [Backend Files](#backend-files)
@@ -24,12 +24,12 @@ All files must be named as per artifact name with the spaces replaced by undersc
 to this is the palette SVG where title case should be used instead of lower case. The reason for this is that the palette
 file name will be manipulated (removing the underscore) and used to dynamically reference all Javascript function names.  
 
-## Artefact (Resource) Files
+## Resource (Artefact) Files
 To add an Artefact to OKIT you will need to create number of files that provide the core functionality associated with the 
 Artefact. In addition to fully integrated the new Artefact into the BUI a number of the core JavaScript / Python scripts will
 need to be updated. The remainder of this document will describe the functionality / files that must be implemented. 
 
-For the worked example we will create the ***Block Storage Volume*** Artefact (Resource) and thus describe how the files
+For the worked example we will create the ***Block Storage Volume*** Resource (Artefact) and thus describe how the files
 are generated and then subsequently modified.
 
 ## New Files
@@ -781,108 +781,22 @@ this can be found in the various, existing, ansible templates.
 ```
 
 ## Updated Files
-Once the core files for the new Artefact (Resource) have been created the developer will need to integrate these into the
+Once the core files for the new Resource (Artefact) have been created the developer will need to integrate these into the
 existing functionality by editing a number of common script files. The required edits will be described in the following sections. 
 ### Frontend Files
-- [Designer View JavaScript](#designer-view-javascript)
-- [OKIT OCI Flask Python](#okit-oci-flask-python)
-- [OCI Query JavaScript](#oci-query-javascript)
 
 ### Backend Files
-- [Connection Python](#connection-python)
+- [OCI Query Python](#oci-query-python)
 - [Generator Python](#generator-python)
 
-### Designer View JavaScript
-The ** okitweb/static/okit/view/designer/js/okit_view.js** will need to be modified to include the new Artefact (Resource) in the
-draw() function. This code must be placed within the function at an appropriate position after its parent and before its children.
-For our example we would add the following block after the Compartments have been created.
-```javascript
-        // Block Storage Volumes
-        for (let block_storage_volume of this.block_storage_volumes) {
-            block_storage_volume.draw();
-        }
-```
-### OKIT OCI Flask Python
-The Flask endpoint Python file **okitweb/okitOci.py** will need to be modified to allow for the querying of the new Artefact (Resource).
-This will require that a new condition be implemented within the **ociArtifacts(artifact)** endpoint function that calls the
-list method defined within the [Artefact Python Facade](#artefact-python-facade). For our worked example this will be as follows.
-```python
-    elif artifact == 'BlockStorageVolume':
-        logger.info('---- Processing Block Storage Volumes')
-        oci_block_storage_volumes = OCIBlockStorageVolumes(config=config, profile=config_profile, compartment_id=query_json['compartment_id'])
-        response_json = oci_block_storage_volumes.list(filter=query_json.get('block_storage_volume_filter', None))
-```
-### OCI Query JavaScript
-To facilitate querying of the new Artefact (Resource) we will need to modify the **okitweb/static/okit/query/oci/js/okit_query.js** file 
-to include a new query method and update the parents SubComponent query code. For our worked exmple this will mean modifying the
-queryCompartmentSubComponents(request).
-#### New Query Method 
-```javascript
-    queryBlockStorageVolumes(request) {
-        console.info('------------- Block Storage Volume Query --------------------');
-        console.info('------------- Compartment : ' + request.compartment_id);
-        let me = this;
-        this.region_query_count[request.region]++;
-        $.ajax({
-            type: 'get',
-            url: 'oci/artefacts/BlockStorageVolume',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: JSON.stringify(request),
-            success: function(resp) {
-                let response_json = JSON.parse(resp);
-                regionOkitJson[request.region].load({block_storage_volumes: response_json});
-                if (request.refresh) {okitJsonView.draw();}
-            },
-            error: function(xhr, status, error) {
-                console.warn('Status : ' + status);
-                console.warn('Error  : ' + error);
-            },
-            complete: function () {
-                me.region_query_count[request.region]-- && me.isComplete();
-            }
-        });
-    }
-```
-#### Update Parent SubComponents Method
-```javascript
-    queryCompartmentSubComponents(request) {
-        if (request.sub_compartments) {
-            this.queryCompartments(request);
-        }
-        this.queryVirtualCloudNetworks(request);
-        this.queryBlockStorageVolumes(request);
-        this.queryCustomerPremiseEquipments(request);
-        this.queryDynamicRoutingGateways(request);
-        this.queryAutonomousDatabases(request);
-        this.queryObjectStorageBuckets(request);
-        this.queryFastConnects(request);
-        this.queryInstances(request);
-        this.queryInstancePools(request);
-        this.queryIPSecConnections(request);
-        this.queryRemotePeeringConnections(request);
-        this.queryDatabaseSystems(request);
-        this.queryMySQLDatabaseSystems(request);
-        this.queryFileStorageSystems(request);
-        this.queryOkeClusters(request);
-    }
-```
-### Connection Python
-The visualiser/facades/ociConnection python file will need to be modified to include the new Connection class used within 
-[Artefact Python Facade](#artefact-python-facade). This will need to define a connect method that uses the appropriate API
-client class.
-```python
-class OCIBlockStorageVolumeConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+### OCI Query Python
+To facilitate querying of the new Resource (Artefact) we will need to modify the **visualiser/query/ociQuery.py** file 
+to include the new Resource in the **SUPPORTED_RESOURCES** list and the **DISCOVERY_OKIT_MAP** object. The correct name 
+to be entered into the **SUPPORTED_RESOURCES** can be identified by looking at the **visualiser/discovery/oci_discovery_client.py** 
+whilst the entry in the **DISCOVERY_OKIT_MAP** will be used to map the name to the OKIT model list.
 
-    def connect(self):
-        self.client = oci.core.BlockstorageClient(config=self.config, signer=self.signer)
-        return
-
-```
 ### Generator Python
-The visualiser/generators/ociGenerator python code will need to be edited to include a Render method for the new Artefact (Resource)
+The **visualiser/generators/ociGenerator.py** python code will need to be edited to include a Render method for the new Resource (Artefact)
 and the existing **generate()** method will need to be modified to call the new Render method.
 
 Although the sequence in which resource creation occurs does not matter for terraform it does for other language such as ansible, python or bash. 
