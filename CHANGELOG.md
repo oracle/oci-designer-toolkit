@@ -10,6 +10,7 @@
 ### Bug Fixes
 1. GitHub Issue #440 : Cannot generate terraform when NSG have Rules.
 2. Fix issue where DB System were always created in the root deployment compartment not specified sub-compartment.
+3. GitHub Issue #447 : Unable to create Object Storage Bucket with OKIT
 
 
 ## Version 0.25.1
