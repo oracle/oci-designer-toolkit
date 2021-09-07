@@ -23,7 +23,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         }
     }
     get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id) ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
-    get children() {return [...this.json_view.getInstances(), ...this.json_view.getLoadBalancers(),
+    get children1() {return [...this.json_view.getInstances(), ...this.json_view.getLoadBalancers(),
         ...this.json_view.getFileStorageSystems(), ...this.json_view.getAutonomousDatabases(),
         ...this.json_view.getDatabaseSystems(), ...this.json_view.getMysqlDatabaseSystems()].filter(child => child.parent_id === this.artefact.id);}
     get type_text() {return this.prohibit_public_ip_on_vnic ? `Private ${this.getArtifactReference()}` : `Public ${this.getArtifactReference()}`;}
@@ -38,7 +38,9 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     cloneChildren(clone) {
+        console.info('Cloning Subnet Children:', this.children)
         for (let child of this.children) {
+            child.clone().compartment_id = clone.compartment_id;
             child.clone().subnet_id = clone.id;
         }
     }
