@@ -172,13 +172,16 @@ def writeMarkdownFile(md_file, contents):
     return
 
 
-def writeFile(filename, contents):
+def writeFile(filename, contents, overwrite=False):
     logger.info('Writing File: {0:s}'.format(filename))
-    dirname = os.path.dirname(filename)
-    if not os.path.exists(dirname):
-        os.makedirs(dirname)
-    with closing(open(filename, 'w')) as f:
-        f.write('{0:s}\n'.format(contents))
+    if overwrite or not os.path.exists(filename):
+        dirname = os.path.dirname(filename)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+        with closing(open(filename, 'w')) as f:
+            f.write('{0:s}\n'.format(contents))
+    else:
+        logger.info('File Already Exists: {0:s}'.format(filename))
     return
 
 

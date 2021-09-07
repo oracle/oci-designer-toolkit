@@ -56,8 +56,8 @@ python3 okitCodeSkeletonGenerator.py --name "<New Artefact Name>"
 ```bash
 python3 okitCodeSkeletonGenerator.py --name "Block Storage Volume"
 INFO: Writing File: ../okitweb/static/okit/model/js/artefacts/block_storage_volume.js
-INFO: Writing File: ../okitweb/static/okit/view/js/artefacts/block_storage_volume.js
-INFO: Writing File: ../okitweb/static/okit/palette/hidden/Block_Storage_Volume.svg
+INFO: Writing File: ../okitweb/static/okit/view/designer/js/artefacts/block_storage_volume.js
+INFO: Writing File: ../okitweb/static/okit/palette/svg/Block_Storage_Volume.svg
 INFO: Writing File: ../okitweb/templates/okit/propertysheets/block_storage_volume.html
 INFO: Writing File: ../okitweb/templates/okit/valueproposition/block_storage_volume.html
 INFO: Writing File: ../visualiser/facade/ociBlockStorageVolume.py
@@ -256,7 +256,7 @@ OkitJson.prototype.deleteBlockStorageVolume = function(id) {
 
 ### Artefact View JavaScript
 #### Generated Skeleton
-Following generation a view file will be created in the **okitweb/static/okit/view/js/artefacts** directory as shown below.
+Following generation a view file will be created in the **okitweb/static/okit/view/designer/js/artefacts** directory as shown below.
 ```javascript
 /*
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
@@ -475,7 +475,7 @@ OkitJsonView.prototype.cloneBlockStorageVolume = function(obj) {
 
 ### Palette SVG
 #### Generated Skeleton
-Following generation an empty SVG file will be created in the **okitweb/static/okit/palette/hidden** directory as shown below. 
+Following generation an empty SVG file will be created in the **okitweb/static/okit/palette/svg** directory as shown below. 
 Because this is created in the hidden directory it will not be displayed in the Palette by default but once modified it 
 should be moved to the appropriate palette subdirectory.
 ```svg
@@ -782,9 +782,8 @@ this can be found in the various, existing, ansible templates.
 
 ## Updated Files
 Once the core files for the new Artefact (Resource) have been created the developer will need to integrate these into the
-existing functionality by editting a number of common script files. The required edits will be described in the following sections. 
+existing functionality by editing a number of common script files. The required edits will be described in the following sections. 
 ### Frontend Files
-- [OKIT View JavaScript](#okit-view-javascript)
 - [Designer View JavaScript](#designer-view-javascript)
 - [OKIT OCI Flask Python](#okit-oci-flask-python)
 - [OCI Query JavaScript](#oci-query-javascript)
@@ -793,68 +792,6 @@ existing functionality by editting a number of common script files. The required
 - [Connection Python](#connection-python)
 - [Generator Python](#generator-python)
 
-### OKIT View JavaScript
-The ** okitweb/static/okit/view/js/okit_view.js** will need to be modified to include the new Artefact (Resource) in the clear() and 
-load() function. For our worked example the modifications will be as follows.
-```javascript
-    clear() {
-        this.compartments = [];
-        this.autonomous_databases = [];
-        this.block_storage_volumes = [];
-        this.customer_premise_equipments = [];
-        this.database_systems = [];
-        this.dynamic_routing_gateways = [];
-        this.fast_connects = [];
-        this.file_storage_systems = [];
-        this.instances = [];
-        this.instance_pools = [];
-        this.internet_gateways = [];
-        this.ipsec_connections = [];
-        this.load_balancers = [];
-        this.local_peering_gateways = [];
-        this.mysql_database_systems = [];
-        this.nat_gateways = [];
-        this.network_security_groups = [];
-        this.object_storage_buckets = [];
-        this.oke_clusters = [];
-        this.remote_peering_connections = [];
-        this.route_tables = [];
-        this.security_lists = [];
-        this.service_gateways = [];
-        this.subnets = [];
-        this.virtual_cloud_networks = [];
-        this.virtual_network_interfaces = [];
-    }
-
-    load() {
-        this.clear();
-        for (let artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
-        for (let artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
-        for (let artefact of this.okitjson.block_storage_volumes) {this.newBlockStorageVolume(artefact);}
-        for (let artefact of this.okitjson.customer_premise_equipments) {this.newCustomerPremiseEquipment(artefact);}
-        for (let artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
-        for (let artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
-        for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
-        for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
-        for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
-        for (let artefact of this.okitjson.instance_pools) {this.newInstancePool(artefact);}
-        for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
-        for (let artefact of this.okitjson.ipsec_connections) {this.newIPSecConnection(artefact);}
-        for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
-        for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
-        for (let artefact of this.okitjson.mysql_database_systems) {this.newMySQLDatabaseSystem(artefact);}
-        for (let artefact of this.okitjson.nat_gateways) {this.newNATGateway(artefact);}
-        for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
-        for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
-        for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
-        for (let artefact of this.okitjson.remote_peering_connections) {this.newRemotePeeringConnection(artefact);}
-        for (let artefact of this.okitjson.route_tables) {this.newRouteTable(artefact);}
-        for (let artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
-        for (let artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
-        for (let artefact of this.okitjson.subnets) {this.newSubnet(artefact);}
-        for (let artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
-    }
-```
 ### Designer View JavaScript
 The ** okitweb/static/okit/view/designer/js/okit_view.js** will need to be modified to include the new Artefact (Resource) in the
 draw() function. This code must be placed within the function at an appropriate position after its parent and before its children.
