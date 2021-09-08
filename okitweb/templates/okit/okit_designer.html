@@ -24,35 +24,40 @@
         let palette_svg = {}
         let resource_icon_files = {}
         let xmlSerialiser = new XMLSerializer();
-        {% for palette_icon_group in palette_icon_groups %}
-            {% for palette_icon in palette_icon_group['icons'] %}
-                palette_svg["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
-                resource_icon_files["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
+        let icon_title = '';
+        {% for palette_icon_group in palette_json.groups %}
+            {% for palette_icon in palette_icon_group['resources'] %}
+                icon_title = "{{ palette_icon['title']|title }}"
+                icon_title = "{{ palette_icon['title'] }}"
+                palette_svg[icon_title] = "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}";
+                resource_icon_files[icon_title] = "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}";
                 $.ajax({
                     type: 'get',
-                    url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
+                    url: "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}",
                     dataType: 'xml',
                     success: function(xml) {
-                        // console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
+                        // const icon_title = "{{ palette_icon['title']|title }}"
+                        const icon_title = "{{ palette_icon['title'] }}"
+                        // console.info("{{ 'Loaded ' + palette_icon['svg'] }}", icon_title);
                         let g = $(xml).find("g");
                         let svg = $(xml).find("svg");
                         let style = $(xml).find("style");
                         g[0].removeAttribute('transform');
-                        palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
-                        // palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(svg[0]);
+                        palette_svg[icon_title] = xmlSerialiser.serializeToString(g[0]);
+                        // palette_svg[icon_title] = xmlSerialiser.serializeToString(svg[0]);
                         if (style.length > 0) {
                             if (style[0].sheet) {
                                 for (let rule of style[0].sheet.cssRules) {
                                     const fromStr = `class="${rule.selectorText.substring(1)}"`
                                     const toStr = `style="${rule.style.cssText}"`
-                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                    palette_svg[icon_title] = palette_svg[icon_title].replaceAll(fromStr, toStr)
                                 }
                             } else {
                                 for (let rule of style[0].textContent.split('\n\t').filter((r) => r !== '')) {
                                     const fromStr = `class="${rule.substring(1, rule.indexOf('{')).trim()}"`
                                     const cssText = rule.substring(rule.indexOf('{') + 1, rule.indexOf('}')).trim()
                                     const toStr = `style="${cssText}"`
-                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                    palette_svg[icon_title] = palette_svg[icon_title].replaceAll(fromStr, toStr)
                                 }
                             }
                         }
@@ -177,6 +182,7 @@
                 </ul>
             </li-->
             <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
+            {%- if ansible_mode -%}
             <!--li id="ansible_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Ansible</span>
                 <ul class="dropdown-content">
@@ -185,6 +191,7 @@
                 </ul>
             </li-->
             <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li>
+            {%- endif -%}
             {% if local_okit or session['username'] %}
             <!--li id="image_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Resource Manager</span>
@@ -250,24 +257,6 @@
 {% block mainblock %}
     <div id="designer_left_column" class="okit-designer-left-column">
         {{ palette.add_palette(palette_json) }}
-        <!--div id="icons_palette" class="okit-icons-palette">
-            <details  id="fragments" class="okit-palette-icon-group" open>
-                <summary class="okit-palette-icon-group-header"><img id="okit-fragment-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
-                <div class="okit-palette-icon-group-icons okit-icons-only">
-                    {% for fragment_icon in fragment_icons %}
-                        <div>
-                            <img class="okit-fragment-icon"
-                             src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}"
-                             title="{{ fragment_icon['title'] }}"
-                             draggable="true"
-                             alt="{{ fragment_icon['title'] }}"
-                             ondragstart="dragFragmentStart(event, FragmentView, '{{ fragment_icon['title'] }}')">
-                            <label>{{ fragment_icon['title'] }}</label>
-                        </div>
-                    {% endfor %}
-                </div>
-            </details>
-        </div-->
         <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
         <div id="explorer_panel" class="okit-explorer-view hidden"></div>
         <div id="git_panel" class="okit-explorer-view hidden"></div>
@@ -276,17 +265,22 @@
     </div>
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
-        <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
-        <div id="canvas_details" class="okit-canvas-details table">
-            <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
-            <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
+        <div id="center-header">
+            <div id="canvas_details" class="okit-canvas-details table">
+                <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
+                <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
+            </div>
         </div>
-        <div id="canvas-div" class="okit-svg-canvas"></div>
-        <div id="tabular-div" class="okit-tabular-canvas hidden"></div>
-        <div id="network-div" class="okit-network-canvas hidden"></div>
-        <div id="security-div" class="okit-security-canvas hidden"></div>
-        <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
-        <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
+        <div id="center-panels" class="okit-center-panels">
+            <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
+            <div id="canvas-div" class="okit-svg-canvas"></div>
+            <div id="tabular-div" class="okit-tabular-canvas hidden"></div>
+            <div id="network-div" class="okit-network-canvas hidden"></div>
+            <div id="security-div" class="okit-security-canvas hidden"></div>
+            <div id="identity-div" class="okit-identity-canvas hidden"></div>
+            <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
+            <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
+        </div>
     </div>
     <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>

@@ -1,4 +1,4 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.25.1](CHANGELOG.md#version-0.25.1)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.26.0](CHANGELOG.md#version-0.26.0)
 
 ```diff
 + The 0.25.0 release has now moved the templates from the menu to a new side panel and the can be opened by double clicking 

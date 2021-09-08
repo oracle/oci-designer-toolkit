@@ -7,11 +7,17 @@
                             onclick="$('.okit-palette-icon-div').addClass('hidden');$('.{{ target }}').removeClass('hidden');okitSettings.target='{{ target }}';okitSettings.save();">{{ target | upper }}</label>
         {% endfor %}
         </div>
-        <div id="icon_text_toggle" class="okit-icons-toggle">
+        <!--div id="icon_text_toggle" class="okit-icons-toggle">
             <label><input type="radio" name="icon_toggle" checked="checked"
                             onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');okitSettings.icons_only=true;okitSettings.save();">Icons</label>
             <label><input type="radio" id="icons_and_text" name="icon_toggle"
                             onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();">Icons & Text</label>
+        </div-->
+        <div id="icon_text_toggle" class="okit-icons-toggle">
+            <input type="radio" id="icons_only" name="icon_toggle" checked="checked"
+                            onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');okitSettings.icons_only=true;okitSettings.save();"><label for="icons_only" class="palette-icons">Icons</label>
+            <input type="radio" id="icons_and_text" name="icon_toggle"
+                            onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();"><label for="icons_and_text" class="palette-list">Icons & Text</label>
         </div>
         {% for group in palette.groups %}
             {{ add_palette_group(group) }}

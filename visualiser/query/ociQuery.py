@@ -53,7 +53,7 @@ class OCIQuery(OCIConnection):
         "FileSystem",
         "Image",
         "Instance",
-        "InstancePool",
+        # "InstancePool",
         "InternetGateway",
         "IPSecConnection",
         "IpSecConnectionTunnel",
@@ -65,6 +65,7 @@ class OCIQuery(OCIConnection):
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
         "NodePool",
+        "Policy",
         "PrivateIp",
         "PublicIp",
         "RemotePeeringConnection",
@@ -80,7 +81,7 @@ class OCIQuery(OCIConnection):
         "VnicAttachment",
         "Vnic"
     ]
-    DISCOVER_OKIT_MAP = {
+    DISCOVERY_OKIT_MAP = {
         "AutonomousDatabase": "autonomous_databases",
         #"BootVolume": "block_storage_volumes",
         "Bucket": "object_storage_buckets",
@@ -103,6 +104,7 @@ class OCIQuery(OCIConnection):
         "MySqlDbSystem": "mysql_database_systems",
         "NatGateway": "nat_gateways",
         "NetworkSecurityGroup": "network_security_groups",
+        "Policy": "policys", # Yes we know it's spelt incorrectly but the okitCodeSkeletonGenerator.py is simple
         "RemotePeeringConnection": "remote_peering_connections",
         "RouteTable": "route_tables",
         "SecurityList": "security_lists",
@@ -174,7 +176,7 @@ class OCIQuery(OCIConnection):
         for compartment in response_json["compartments"]:
             if compartment["compartment_id"] not in compartment_ids:
                 compartment["compartment_id"] = None
-        map_keys = self.DISCOVER_OKIT_MAP.keys()
+        map_keys = self.DISCOVERY_OKIT_MAP.keys()
         for region, resources in discovery_data.items():
             logger.info("Processing Region : {0!s:s} {1!s:s}".format(region, resources.keys()))
             for resource_type, resource_list in resources.items():
@@ -202,8 +204,8 @@ class OCIQuery(OCIConnection):
                     elif resource_type == "ServiceGateway":
                         resource_list = self.service_gateways(resource_list, resources)
                     # Check Life Cycle State
-                    response_json[self.DISCOVER_OKIT_MAP[resource_type]] = [r for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
-                    #response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
+                    response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = [r for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
+                    #response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = resource_list
         return response_json
 
     def dynamic_routing_gateways(self, drgs, resources):

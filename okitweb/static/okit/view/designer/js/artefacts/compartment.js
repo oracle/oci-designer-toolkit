@@ -19,7 +19,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     // get parent() {return this.getJsonView().getCompartment(this.parent_id) ? this.getJsonView().getCompartment(this.parent_id) : this.getJsonView().canvas;}
-    get children() {return [...this.json_view.getCompartments(), ...this.json_view.getVirtualCloudNetworks(),
+    get children1() {return [...this.json_view.getCompartments(), ...this.json_view.getVirtualCloudNetworks(),
         // ...this.json_view.getSubnets(), ...this.json_view.getExadataInfrastructures(),
         ...this.json_view.getBlockStorageVolumes(), ...this.json_view.getDynamicRoutingGateways(),
         ...this.json_view.getAutonomousDatabases(), ...this.json_view.getCustomerPremiseEquipments(),
@@ -52,6 +52,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     cloneChildren(clone) {
+        console.info('Cloning Compartment Children:', this.children)
         for (let child of this.children) {
             child.clone().compartment_id = clone.id;
         }
@@ -82,7 +83,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     getLeftArtifacts() {
-        return [BlockStorageVolume.getArtifactReference()];
+        return [BlockStorageVolume.getArtifactReference(), Policy.getArtifactReference(), Group.getArtifactReference(), User.getArtifactReference(), DynamicGroup.getArtifactReference()];
     }
 
     getRightArtifacts() {

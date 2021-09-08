@@ -21,7 +21,57 @@ class OkitDesignerJsonView extends OkitJsonView {
 
     get display_grid() {return okitSettings.is_display_grid;}
 
+    drawContainer(container) {
+        // const resources = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []);
+        // console.info('Resources: ', resources)
+        // console.info('Container Resources: ', resources.filter((r) => r instanceof OkitContainerArtefactView))
+        // console.info('Simple Resources: ', resources.filter((r) => !(r instanceof OkitContainerArtefactView)))
+        container.draw();
+        const children = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === container.id);
+        console.info('Children: ', children)
+        console.info('Container Children: ', children.filter((r) => r instanceof OkitContainerArtefactView))
+        console.info('Simple Children: ', children.filter((r) => !(r instanceof OkitContainerArtefactView)))
+        children.filter((r) => r instanceof OkitContainerArtefactView).forEach((e) => this.drawContainer(e))
+        children.filter((r) => !(r instanceof OkitContainerArtefactView)).forEach((e) => e.draw())
+    }
+
     draw(for_export=false) {
+        console.info('Drawing Designer Canvas');
+        // Display Json
+        this.displayOkitJson();
+        // New canvas
+        let width = 0;
+        let height = 0;
+        for (let compartment of this.compartments) {
+            let dimensions = compartment.dimensions;
+            width = Math.max(width, dimensions.width);
+            height = Math.max(height, dimensions.height);
+        }
+        let canvas_svg = this.newCanvas(width, height, for_export);
+
+        // Get Canvas Root Containers
+        Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r instanceof OkitContainerArtefactView && (r.parent_id === null || r.parent_id === '' || r.parent_id === 'canvas')).forEach((e) => this.drawContainer(e))
+
+        // Resize Main Canvas if required
+        $(jqId("canvas-svg")).children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
+            canvas_svg.attr('width', Math.max(Number(canvas_svg.attr('width')), Number(this.getAttribute('width'))));
+            canvas_svg.attr('height', Math.max(Number(canvas_svg.attr('height')), Number(this.getAttribute('height'))));
+            canvas_svg.attr('viewBox', '0 0 ' + canvas_svg.attr('width') + ' ' + canvas_svg.attr('height'));
+        });
+        if (selectedArtefact) {
+            $(jqId(selectedArtefact)).toggleClass('highlight');
+        }
+
+        // Draw Connection
+        this.drawConnections();
+    }
+
+    drawConnections() {
+        Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => !(r instanceof OkitContainerArtefactView)).forEach((e) => e.drawConnections())
+    }
+
+    // TODO: Delete
+    drawOrigDeprecated(for_export=false) {
         console.info('Drawing Designer Canvas');
         // Display Json
         this.displayOkitJson();
@@ -37,6 +87,10 @@ class OkitDesignerJsonView extends OkitJsonView {
 
         // Draw top Level Canvas
         // this.canvas.draw();
+        const resource_lists = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])
+        console.info('Resources: ', resource_lists)
+        console.info('Container Resources: ', resource_lists.filter((r) => r instanceof OkitContainerArtefactView))
+        console.info('Simple Resources: ', resource_lists.filter((r) => !(r instanceof OkitContainerArtefactView)))
 
         // Draw Compartments
         for (let compartment of this.compartments) {
@@ -75,6 +129,18 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Remote Peering Connections
         for (let remote_peering_connection of this.remote_peering_connections) {
             remote_peering_connection.draw();
+        }
+        // Policies
+        for (let resource of this.getPolicys()) {
+            resource.draw();
+        }
+        // Groups
+        for (let resource of this.getGroups()) {
+            resource.draw();
+        }
+        // Users
+        for (let resource of this.getUsers()) {
+            resource.draw();
         }
 
         // Draw Virtual Cloud Network Sub Components
@@ -190,7 +256,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         this.drawConnections();
     }
 
-    drawConnections() {
+    // TODO: Delete
+    drawConnectionsOrigDeprecated() {
         // IPSec Connections
         for (let ipsec_connection of this.ipsec_connections) {
             ipsec_connection.drawConnections();
@@ -290,7 +357,8 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Add Palette Icons
         let defs = canvas_svg.append('defs');
         for (let key in this.palette_svg) {
-            let defid = key.replace(/ /g, '') + 'Svg';
+            let defid =  OkitJsonView.toSvgIconDef(key);
+            // let defid = key.replace(/ /g, '').toLowerCase() + 'Svg';
             defs.append('g')
                 .attr("id", defid)
                 .attr("transform", "translate(4.5, 4.5) scale(0.8, 0.8)")
