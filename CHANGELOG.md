@@ -1,6 +1,18 @@
 # Release Notes
 
 
+## Version 0.26.0
+**Release Date**: 8th September 2021
+### Features
+1. Temporarily deprecate Ansible export by making it command line flag driven (ansible=true)
+2. Add Policy Resource to Palette and allow the user to drag them onto the canvas. It assumes that the user understands the policy statement syntax. All policies will be created within the users home region.
+
+### Bug Fixes
+1. GitHub Issue #440 : Cannot generate terraform when NSG have Rules.
+2. Fix issue where DB System were always created in the root deployment compartment not specified sub-compartment.
+3. GitHub Issue #447 : Unable to create Object Storage Bucket with OKIT
+
+
 ## Version 0.25.1
 **Release Date**: 20th August 2021
 ### Bug Fixes
