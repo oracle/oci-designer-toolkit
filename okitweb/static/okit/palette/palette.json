@@ -91,7 +91,7 @@
                 {
                     "title": "DHCP Option",
                     "targets": ["oci", "free tier", "pca"],
-                    "svg": "DHCPOptions.svg"
+                    "svg": "DhcpOptions.svg"
                 },
                 {
                     "title": "IPSec Connection",
