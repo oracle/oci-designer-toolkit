@@ -92,21 +92,22 @@ $(document).ready(function() {
         });
     if (a2c_mode) {
         // Container
-        d3.select(d3Id('console_left_bar')).append('label')
+        d3.select(d3Id('console_left_bar')).append('div')
             .attr('id', 'toggle_local_button')
-            .attr('class', 'okit-pointer-cursor')
+            .attr('class', 'okit-pointer-cursor folders okit-toolbar-button')
+            .attr('title', 'Container Files')
             .on('click', function () {
-                let open = $(this).hasClass('okit-bar-panel-displayed');
-                slideLeftPanelsOffScreen();
-                if (!open) {
-                    $('#local_panel').removeClass('hidden');
-                    $(this).addClass('okit-bar-panel-displayed');
-                } else {
-                    $('#local_panel').empty();
-                }
-                checkLeftColumn();
-            })
-            .text('Filesystem');
+                slideLeftPanel('local_panel')
+                // let open = $(this).hasClass('okit-bar-panel-displayed');
+                // slideLeftPanelsOffScreen();
+                // if (!open) {
+                //     $('#local_panel').removeClass('hidden');
+                //     $(this).addClass('okit-bar-panel-displayed');
+                // } else {
+                //     $('#local_panel').empty();
+                // }
+                // checkLeftColumn();
+            });
     }
 
     console.info('Added Designer Handlers');

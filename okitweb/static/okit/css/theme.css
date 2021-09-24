@@ -52,7 +52,7 @@
 }
 
 .explorer {
-    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIgMTJ2NWg1TTEgMXY3aDhWM0g1TDQgMUgxem0xMCAxMXY3aDh2LTVoLTRsLTEtMmgtM3oiIHN0cm9rZT0iIzE2MTUxMyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiLz48L3N2Zz4=");
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE3IDE5SDV2LTdtMC01djVtMCAwaDVNMyAzaDR2NEgzVjN6bTcgN2g0djRoLTR2LTR6bTcgN2g0djRoLTR2LTR6IiBzdHJva2U9IiMxNjE1MTMiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==");
 }
 
 .properties {
@@ -97,6 +97,10 @@
 
 .documentation {
     background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTggMTJoMjBNOCAyMGgyME04IDI4aDEwTTIgMmgzMnYzNkgyVjJ6IiBzdHJva2U9IiMxNjE1MTMiIHN0cm9rZS13aWR0aD0iNCIvPjwvc3ZnPg==");
+}
+
+.folders {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE2IDExdjEwSDNWOGgzbDIgM2g4em0wIDB2Nmg1VjZoLTdsLTItM0g5djhoN3oiIHN0cm9rZT0iIzE2MTUxMyIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+");
 }
 
 /*
