@@ -687,33 +687,33 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderDynamicRoutingGateway(self, dynamic_routing_gateway):
+    def renderDynamicRoutingGateway(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(dynamic_routing_gateway['display_name'])
+        standardisedName = self.standardiseResourceName(resource['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = dynamic_routing_gateway['display_name']
+        self.jinja2_variables['output_name'] = resource['display_name']
         # Process Dynamic Routing Gateway Data
         logger.info('Processing Dynamic Routing Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Read / Create
         # ---- Read Only
-        self.jinja2_variables['read_only'] = dynamic_routing_gateway.get('read_only', False)
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
         # --- Required
         # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['compartment_id']]))
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
         # ---- Virtual Cloud Network OCID
-        if dynamic_routing_gateway.get('vcn_id', '') != '':
-            self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
+        if resource.get('vcn_id', '') != '':
+            self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['vcn_id']]))
         else:
             self.removeJinja2Variable('vcn_id')
         # ---- Display Name
-        self.addJinja2Variable("display_name", dynamic_routing_gateway["display_name"], standardisedName)
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
         # --- Optional
         # ---- Tags
-        self.renderTags(dynamic_routing_gateway)
+        self.renderTags(resource)
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("dynamic_routing_gateway.jinja2")
