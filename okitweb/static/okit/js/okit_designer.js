@@ -593,12 +593,76 @@ function redrawSVGCanvas(recalculate=false) {
     displayOkitJson();
 }
 /*
+** Toolbar Handlers
+ */
+const slideLeftPanel = (id) => {
+    console.warn('Id:', id)
+    console.warn('All:', $(`div.okit-left-side-panel`))
+    console.warn('All:', $(`div.okit-left-side-panel`).length)
+    console.warn('Not Id:', $(`div.okit-left-side-panel:not(#${id})`))
+    console.warn('Not Id:', $(`div.okit-left-side-panel:not(#${id})`).length)
+    $(`.okit-left-side-panel:not(#${id})`).addClass('hidden')
+    $(`#${id}`).toggleClass('hidden')
+    console.warn('Hidden', $(`div.okit-left-side-panel.hidden`))
+    console.warn('Hidden', $(`div.okit-left-side-panel.hidden`).length)
+    $(`.okit-left-side-panel:not(.hidden)`).length === 0 ? $('#designer_left_column').addClass('okit-slide-hide-left') : $('#designer_left_column').removeClass('okit-slide-hide-left')
+}
+const slideRightPanel = (id) => {
+    $(`.okit-right-side-panel:not(#${id})`).addClass('okit-slide-hide-right')
+    $(`#${id}`).toggleClass('okit-slide-hide-right')
+}
+/* 
+** Settings
+ */
+function handleSettings(evt) {
+    // $('#settings_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('settings_panel')
+    okitSettings.buildPanel('settings_panel', true);
+    return false;
+}
+/*
 ** Validate Model
  */
 function handleValidate(evt) {
-    hideNavMenu();
-    $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
-    $('#toggle_validation_button').click();
+    // $('#validation_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('validation_panel')
+    okitJsonModel.validate(displayValidationResults);
+    // hideNavMenu();
+    // $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_validation_button').click();
+    return false;
+}
+/*
+** Estimate Cost
+ */
+function handleEstimateCost(evt) {
+    // $('#cost_estimate_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('cost_estimate_panel')
+    $(jqId(COST_ESTIMATE_PANEL)).empty();
+    $(jqId(COST_ESTIMATE_PANEL)).text('Estimating...');
+    okitJsonModel.estimateCost(displayPricingResults);
+    // hideNavMenu();
+    // $('#toggle_cost_estimate_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_cost_estimate_button').click();
+    return false;
+}
+/*
+** Display Properties
+ */
+function handleOpenProperties(evt) {
+    // $('#properties_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('properties_panel')
+    // hideNavMenu();
+    // $('#toggle_properties_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_properties_button').click();
+    return false;
+}
+/* 
+** Documentation
+ */
+function handleDocumentation(evt) {
+    // $('#documentation_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('documentation_panel')
     return false;
 }
 /*

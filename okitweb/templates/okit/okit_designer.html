@@ -254,14 +254,43 @@
     </ul>
 {% endblock %}
 
+{% block toolbarblock %}
+    <div id="okit_toolbar_left" class="okit-toolbar-left">
+        <div>
+            <select id="toolbar_view_select" class="okit-toolbar-select" onchange="handleViewSelect()">
+                <option id="designer_view_option"  value="designer"selected="selected">Designer</option>
+                <option id="tabular_view_option" value="tabular">Tabular</option>
+                <option id="relationship_view_option" value="relationship">Relationship</option>
+                <option id="json_view_option" value="json">Json</option>
+            </select>
+        </div>
+    </div>
+    <div id="okit_toolbar_centre" class="okit-toolbar-centre">
+        <div>
+            <div id="zoom_out_toolbar_button" class="zoom-out okit-toolbar-button" title="Zoom Out"></div>
+            <div id="zoom_in_toolbar_button" class="zoom-in okit-toolbar-button" title="Zoom In"></div>
+        </div>
+    </div>
+    <div id="okit_toolbar_right" class="okit-toolbar-right">
+        <div>
+            <div id="settings_toolbar_button" class="settings okit-toolbar-button" title="Settings" onclick="handleSettings()"></div>
+            <div id="validate_toolbar_button" class="validate okit-toolbar-button" title="Validate" onclick="handleValidate()"></div>
+            <div id="properties_toolbar_button" class="properties okit-toolbar-button" title="Resource Properties" onclick="handleOpenProperties()"></div>
+            <div id="cost_toolbar_button" class="cost-estimate okit-toolbar-button" title="Cost Estimate" onclick="handleEstimateCost()"></div>
+            <div id="documentation_toolbar_button" class="documentation okit-toolbar-button" title="Documentation" onclick="handleDocumentation()"></div>
+            <div id="threedots_toolbar_button" class="threedotmenu okit-toolbar-button"></div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block mainblock %}
     <div id="designer_left_column" class="okit-designer-left-column">
         {{ palette.add_palette(palette_json) }}
-        <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
-        <div id="explorer_panel" class="okit-explorer-view hidden"></div>
-        <div id="git_panel" class="okit-explorer-view hidden"></div>
-        <div id="local_panel" class="okit-explorer-view hidden"></div>
-        <div id="templates_panel" class="okit-template-panel hidden"></div>
+        <div id="explorer_panel"  class="okit-left-side-panel okit-explorer-panel okit-explorer-view hidden"></div>
+        <div id="git_panel"       class="okit-left-side-panel okit-git-panel hidden"></div>
+        <div id="local_panel"     class="okit-left-side-panel okit-local-panel hidden"></div>
+        <div id="templates_panel" class="okit-left-side-panel okit-template-panel hidden"></div>
+        <!--div id="preferences_panel" class="okit-preferences-sheet hidden"></div-->
     </div>
     <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
@@ -281,8 +310,8 @@
             <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
             <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
         </div>
-    </div>
-    <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
+    </div>   
+    <!--div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
         <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>
         <div id="properties_panel" class="okit-property-sheet hidden"></div>
         <div id="description_panel" class="okit-property-sheet hidden"><textarea id="json_description" name="json_description" onchange="updateJsonDescription()" wrap="soft"></textarea></div>
@@ -333,10 +362,58 @@
         </div>
         <div id="value_proposition_panel" class="okit-value-proposition hidden"></div>
         <div id="cost_estimate_panel" class="okit-cost-estimate hidden"></div>
-        <!--div id="settings_panel" class="okit-settings-sheet hidden"></div-->
-    </div>
+    </div-->
     <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json" onclick="this.value = null"></div>
     <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
+{% endblock %}
+
+{% block bodyendblock %}
+<div id="properties_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
+<div id="documentation_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="json_description" name="json_description" onchange="updateJsonDescription()" wrap="soft"></textarea></div>
+<div id="validation_panel" class="okit-right-side-panel okit-slide-hide-right">
+    <div id="validation_header_div"><label id="validation_status"></label></div>
+    <details open>
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span id="validation_errors_summary">Errors</span></a>
+        </summary>
+        <div class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
+            </div>
+            <div id="validation_errors_tbody" class="tbody">
+            </div>
+        </div>
+    </details>
+    <details open>
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span id="validation_warnings_summary">Warnings</span></a>
+        </summary>
+        <div class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
+            </div>
+            <div id="validation_warnings_tbody" class="tbody">
+            </div>
+        </div>
+    </details>
+    <details open>
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span id="validation_info_summary">Information</span></a>
+        </summary>
+        <div class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
+            </div>
+            <div id="validation_info_tbody" class="tbody">
+            </div>
+        </div>
+    </details>
+</div>
+<div id="cost_estimate_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
+<div id="settings_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
 {% endblock %}
 
 {% block footerblock %}

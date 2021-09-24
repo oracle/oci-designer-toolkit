@@ -53,16 +53,11 @@ $(document).ready(function() {
     console.info('Adding Designer Handlers');
 
     // Left Bar & Panels
-    // Palette
+/*     // Palette
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_palette_button')
         .attr('class', 'okit-bar-panel-displayed okit-pointer-cursor palette okit-console-left-bar-icon')
         .on('click', function () {
-            /*
-            $(jqId('designer_left_column')).toggleClass('okit-slide-hide-left');
-            $(this).toggleClass('okit-bar-panel-displayed');
-            setTimeout(redrawSVGCanvas, 260);
-            */
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideLeftPanelsOffScreen();
             if (!open) {
@@ -93,7 +88,7 @@ $(document).ready(function() {
     // Templates
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_templates_button')
-        .attr('class', 'okit-pointer-cursor')
+        .attr('class', 'okit-pointer-cursor templates okit-console-left-bar-icon')
         .on('click', function () {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideLeftPanelsOffScreen();
@@ -109,7 +104,7 @@ $(document).ready(function() {
     // Git
     d3.select(d3Id('console_left_bar')).append('label')
         .attr('id', 'toggle_git_button')
-        .attr('class', 'okit-pointer-cursor')
+        .attr('class', 'okit-pointer-cursor git okit-console-left-bar-icon')
         .on('click', function () {
             let open = $(this).hasClass('okit-bar-panel-displayed');
             slideLeftPanelsOffScreen();
@@ -140,25 +135,83 @@ $(document).ready(function() {
             })
             .text('Filesystem');
     }
-    // Preferences
-    d3.select(d3Id('console_left_bar')).append('label')
-        .attr('id', 'toggle_preferences_button')
-        .attr('class', 'okit-pointer-cursor')
+ */    
+    /*
+    ** Simple Icon Left Bar
+    */ 
+    // Palette
+    d3.select(d3Id('console_left_bar')).append('div')
+    .attr('id', 'toggle_palette_button')
+    .attr('class', 'okit-pointer-cursor palette okit-toolbar-button')
+    .attr('title', 'Palette')
+    .on('click', function () {
+        slideLeftPanel('icons_palette')
+    });
+    // Compartment Explorer
+    d3.select(d3Id('console_left_bar')).append('div')
+        .attr('id', 'toggle_explorer_button')
+        .attr('class', 'okit-pointer-cursor explorer okit-toolbar-button')
+        .attr('title', 'Model Explorer')
         .on('click', function () {
-            let open = $(this).hasClass('okit-bar-panel-displayed');
-            slideLeftPanelsOffScreen();
-            if (!open) {
-                $('#preferences_panel').removeClass('hidden');
-                $(this).addClass('okit-bar-panel-displayed');
-                okitSettings.buildPanel('preferences_panel', true);
-            } else {
-                $('#preferences_panel').empty();
-            }
-            checkLeftColumn();
-        })
-        .text('Preferences');
+            let okit_tree = new OkitJsonTreeView(okitJsonModel, 'explorer_panel');
+            okit_tree.draw();
+            slideLeftPanel('explorer_panel')
+        });
+    // Templates
+    d3.select(d3Id('console_left_bar')).append('div')
+        .attr('id', 'toggle_templates_button')
+        .attr('class', 'okit-pointer-cursor templates okit-toolbar-button')
+        .attr('title', 'Templates')
+        .on('click', function () {
+            slideLeftPanel('templates_panel')
+        });
+    // Git
+    d3.select(d3Id('console_left_bar')).append('div')
+        .attr('id', 'toggle_git_button')
+        .attr('class', 'okit-pointer-cursor git okit-toolbar-button')
+        .attr('title', 'Git Version control')
+        .on('click', function () {
+            slideLeftPanel('git_panel')
+        });
+    if (a2c_mode) {
+        // Container
+        d3.select(d3Id('console_left_bar')).append('label')
+            .attr('id', 'toggle_local_button')
+            .attr('class', 'okit-pointer-cursor')
+            .on('click', function () {
+                let open = $(this).hasClass('okit-bar-panel-displayed');
+                slideLeftPanelsOffScreen();
+                if (!open) {
+                    $('#local_panel').removeClass('hidden');
+                    $(this).addClass('okit-bar-panel-displayed');
+                } else {
+                    $('#local_panel').empty();
+                }
+                checkLeftColumn();
+            })
+            .text('Filesystem');
+    }
+
+    // // Preferences
+    // d3.select(d3Id('console_left_bar')).append('label')
+    //     .attr('id', 'toggle_preferences_button')
+    //     .attr('class', 'okit-pointer-cursor')
+    //     .on('click', function () {
+    //         let open = $(this).hasClass('okit-bar-panel-displayed');
+    //         slideLeftPanelsOffScreen();
+    //         if (!open) {
+    //             $('#preferences_panel').removeClass('hidden');
+    //             $(this).addClass('okit-bar-panel-displayed');
+    //             okitSettings.buildPanel('preferences_panel', true);
+    //         } else {
+    //             $('#preferences_panel').empty();
+    //         }
+    //         checkLeftColumn();
+    //     })
+    //     .text('Preferences');
 
     // Right Bar & Panels
+    /*
     // Description
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_description_button')
@@ -174,6 +227,8 @@ $(document).ready(function() {
             checkRightColumn();
         })
         .text('Description');
+    */
+    /*
     // Properties
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_properties_button')
@@ -191,6 +246,8 @@ $(document).ready(function() {
             checkRightColumn();
         })
         .text('Properties');
+    */
+    /*
     // Validation
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_validation_button')
@@ -208,6 +265,7 @@ $(document).ready(function() {
             checkRightColumn();
         })
         .text('Validate');
+    */
 
     // TODO: Uncomment when Value Proposition files have been created
     // Value Proposition
@@ -229,6 +287,7 @@ $(document).ready(function() {
         .text('Value Proposition');
      */
 
+    /*
     // Cost Estimate
     d3.select(d3Id('console_right_bar')).append('label')
         .attr('id', 'toggle_cost_estimate_button')
@@ -248,7 +307,9 @@ $(document).ready(function() {
             checkRightColumn();
         })
         .text('Cost Estimate');
+    */
 
+    /*
     if (developer_mode) {
         // OKIT Model Json
         d3.select(d3Id('console_right_bar')).append('label')
@@ -305,7 +366,7 @@ $(document).ready(function() {
             })
             .text('Regions Model');
     }
-
+    */
     console.info('Added Designer Handlers');
 
     /*

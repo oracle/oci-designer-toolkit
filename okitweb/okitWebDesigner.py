@@ -143,6 +143,57 @@ def handle_exception(error):
 # Define Endpoints
 #
 
+@bp.route('/okit', methods=(['GET']))
+def okit():
+    local = current_app.config.get('LOCAL', False)
+    if not local and session.get('username', None) is None:
+        logger.info('<<<<<<<<<<<<<<<<<<<<<<<<< Redirect to Login >>>>>>>>>>>>>>>>>>>>>>>>>')
+        return redirect(url_for('okit.login'), code=302)
+    # Test if developer mode
+    developer_mode = (request.args.get('developer', default='false') == 'true')
+    if developer_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< Developer Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if experimental mode
+    experimental_mode = (request.args.get('experimental', default='false') == 'true')
+    if experimental_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< Experimental Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if cd3 mode
+    cd3_mode = (request.args.get('cd3', default='false') == 'true')
+    if cd3_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< CD3 Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if PCA mode
+    pca_mode = (request.args.get('pca', default='false') == 'true')
+    if pca_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< PCA Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if A2C mode
+    a2c_mode = (request.args.get('a2c', default='false') == 'true')
+    if a2c_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<<<< A2C Mode >>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # Test if Ansible mode
+    ansible_mode = (request.args.get('ansible', default='false') == 'true')
+    if ansible_mode:
+        logger.info("<<<<<<<<<<<<<<<<<<<<<<<< Ansible Mode >>>>>>>>>>>>>>>>>>>>>>>>")
+    # Read Artifact Model Specific JavaScript Files
+    artefact_model_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'model', 'js', 'artefacts')))
+    # Read Artifact View Specific JavaScript Files
+    if os.path.exists(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')) and os.path.isdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')):
+        artefact_view_js_files = sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'js', 'artefacts')))
+    else:
+        artefact_view_js_files = []
+    artefact_view_js_files.extend(sorted(os.listdir(os.path.join(bp.static_folder, 'view', 'designer', 'js', 'artefacts'))))
+
+    # Read Pallete Json
+    palette_json = readJsonFile(os.path.join(bp.static_folder, 'palette', 'palette.json'))
+    config_sections = {"sections": readConfigFileSections()}
+
+    #Render The Template
+    return render_template('okit/okit.html',
+                           artefact_model_js_files=artefact_model_js_files,
+                           artefact_view_js_files=artefact_view_js_files,
+                           palette_json=palette_json,
+                           local_okit=local,
+                           developer_mode=developer_mode, experimental_mode=experimental_mode, cd3_mode=cd3_mode, a2c_mode=a2c_mode, pca_mode=pca_mode, ansible_mode=ansible_mode)
+
 @bp.route('/designer', methods=(['GET']))
 def designer():
     local = current_app.config.get('LOCAL', False)
