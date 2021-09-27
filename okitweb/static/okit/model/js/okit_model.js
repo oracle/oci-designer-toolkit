@@ -72,6 +72,7 @@ class OkitJson {
         if (okit_json.description) {
             this.description = okit_json.description;
         }
+        if (okit_json.user_defined && okit_json.user_defined.terraform) this.user_defined.terraform = okit_json.user_defined.terraform
         // Turn Off Default Security List / Route Table Processing
         const okitSettingsClone = JSON.clone(okitSettings);
         okitSettings.is_default_route_table   = false;
