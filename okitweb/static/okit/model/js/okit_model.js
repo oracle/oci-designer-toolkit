@@ -17,6 +17,9 @@ class OkitJson {
         this.created = getCurrentDateTime();
         this.updated = this.created;
         this.okit_version = okitVersion;
+        this.user_defined = {terraform: ''};
+        this.freeform_tags = {};
+        this.defined_tags = {};
 
         this.autonomous_databases = [];
         this.block_storage_volumes = [];

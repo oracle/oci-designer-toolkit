@@ -25,7 +25,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    def __init__(self, template_dir, output_dir, visualiser_json, use_vars=True):
+    def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
         # Initialise generator output data variables
         self.create_sequence = []
         self.run_variables = {}

@@ -94,6 +94,7 @@
 {% block headcss %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_designer.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_panels.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_threedots_menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
 {% endblock %}
@@ -278,7 +279,8 @@
             <div id="properties_toolbar_button" class="properties okit-toolbar-button" title="Resource Properties" onclick="handleOpenProperties()"></div>
             <div id="cost_toolbar_button" class="cost-estimate okit-toolbar-button" title="Cost Estimate" onclick="handleEstimateCost()"></div>
             <div id="documentation_toolbar_button" class="documentation okit-toolbar-button" title="Documentation" onclick="handleDocumentation()"></div>
-            <div id="threedots_toolbar_button" class="threedotmenu okit-toolbar-button"></div>
+            <div id="terraform_toolbar_button" class="terraform okit-toolbar-button" title="Terraform" onclick="handleFreeformTerraform()"></div>
+            <!-- <div id="threedots_toolbar_button" class="threedotmenu okit-toolbar-button" title="Menu" onclick="handleThreeDotsMenu()"></div> -->
         </div>
     </div>
 {% endblock %}
@@ -316,6 +318,7 @@
 {% block bodyendblock %}
 <div id="properties_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
 <div id="documentation_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="json_description" name="json_description" onchange="updateJsonDescription()" wrap="soft"></textarea></div>
+<div id="terraform_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="freeform_terraform" name="freeform_terraform" onchange="updateFreeformTerraform()" wrap="soft" placeholder="Enter custom Terraform"></textarea></div>
 <div id="validation_panel" class="okit-right-side-panel okit-slide-hide-right">
     <div id="validation_header_div"><label id="validation_status"></label></div>
     <details open>
@@ -360,6 +363,38 @@
 </div>
 <div id="cost_estimate_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
 <div id="settings_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
+<div id="threedots_menu_panel" class="okit-threedots-menu-panel okit-slide-hide-right">
+    <!-- <ul>
+        <li><a>Canvas</a> 
+            <ul>
+                <li><a>New</a></li>
+                <li><a>Save</a>
+                    <ul>
+                        <li><a>Local</a></li>
+                        <li><a>As Template</a></li>
+                        <li><a>To Git</a></li>
+                    </ul>
+                </li>
+                <li><a>Import</a>
+                    <ul>
+                        <li><a>Json</a></li>
+                        <li><a>Import</a></li>
+                        <li><a>Export</a></li>
+                    </ul>
+                </li>
+                <li><a>Export</a>
+                    <ul>
+                        <li><a>Json</a></li>
+                        <li><a>Terraform</a></li>
+                        <li><a>SVG</a></li>
+                        <li><a>PNG</a></li>
+                        <li><a>JPG</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul> -->
+</div>
 {% endblock %}
 
 {% block footerblock %}

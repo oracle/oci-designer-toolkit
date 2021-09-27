@@ -131,12 +131,16 @@ function newRegionsModel() {
 function setTitleDescription() {
     okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
     okitJsonModel ? $('#json_description').val(okitJsonModel.description) : $('#json_description').val('');
+    okitJsonModel ? $('#freeform_terraform').val(okitJsonModel.user_defined.terraform) : $('#freeform_terraform').val('');
 }
 function updateJsonTitle() {
     okitJsonModel.title = $('#json_title').val();
 }
 function updateJsonDescription() {
     okitJsonModel.description = $('#json_description').val();
+}
+function updateFreeformTerraform() {
+    okitJsonModel.user_defined.terraform = $('#freeform_terraform').val();
 }
 
 /*
@@ -596,15 +600,8 @@ function redrawSVGCanvas(recalculate=false) {
 ** Toolbar Handlers
  */
 const slideLeftPanel = (id) => {
-    console.warn('Id:', id)
-    console.warn('All:', $(`div.okit-left-side-panel`))
-    console.warn('All:', $(`div.okit-left-side-panel`).length)
-    console.warn('Not Id:', $(`div.okit-left-side-panel:not(#${id})`))
-    console.warn('Not Id:', $(`div.okit-left-side-panel:not(#${id})`).length)
     $(`.okit-left-side-panel:not(#${id})`).addClass('hidden')
     $(`#${id}`).toggleClass('hidden')
-    console.warn('Hidden', $(`div.okit-left-side-panel.hidden`))
-    console.warn('Hidden', $(`div.okit-left-side-panel.hidden`).length)
     $(`.okit-left-side-panel:not(.hidden)`).length === 0 ? $('#designer_left_column').addClass('okit-slide-hide-left') : $('#designer_left_column').removeClass('okit-slide-hide-left')
 }
 const slideRightPanel = (id) => {
@@ -663,6 +660,21 @@ function handleOpenProperties(evt) {
 function handleDocumentation(evt) {
     // $('#documentation_panel').toggleClass('okit-slide-hide-right')
     slideRightPanel('documentation_panel')
+    return false;
+}
+/*
+** Free Form Terraform
+ */
+function handleFreeformTerraform(evt) {
+    slideRightPanel('terraform_panel')
+    return false;
+}
+/*
+** Three Dots Menu
+ */
+function handleThreeDotsMenu(evt) {
+    // slideRightPanel('threedots_menu_panel')
+    $(`#threedots_menu_panel`).toggleClass('okit-slide-hide-right')
     return false;
 }
 /*

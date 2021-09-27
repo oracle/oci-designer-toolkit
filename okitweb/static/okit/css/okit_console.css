@@ -7,12 +7,7 @@
 ** Base template Styling
  */
 
- :root {
-    --console-header-gradient-height: 4px;
-    --console-header-height: 50px;
-    --console-toolbar-height: 25px;
-    --console-footer-height: 30px;
-}
+ @import "variables.css";
 
 * {box-sizing: border-box; overflow: hidden;}
 
@@ -70,6 +65,7 @@ textarea {
     height: 100%;
     resize: none;
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    overflow: auto;
 }
 
 details > summary::-webkit-details-marker {
@@ -97,10 +93,6 @@ details:focus {
 
 summary:focus {
     outline: none;
-}
-
-textarea {
-    overflow: auto;
 }
 
 /*
