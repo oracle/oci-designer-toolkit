@@ -41,7 +41,12 @@ OCI environments through a graphical web based interface.
 
     OKIT will also allow the user to introspect existing OCI environments, through simple query functionality embedded within the
     web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
-  
+
+
+## Changes
+
+[Changes for the current release (0.27.0) are documented here.](CHANGELOG.md#version-0.27.0)
+
 
 ## Releases
 
