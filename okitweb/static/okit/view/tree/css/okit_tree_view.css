@@ -60,6 +60,7 @@ rect.okit-explorer-view-highlight {
     margin-left: 2em;
     text-wrap: none;
     white-space: nowrap;
+    padding-right: 1em;
 }
 
 .collapsible-view-element > div::before {
