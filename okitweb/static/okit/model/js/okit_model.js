@@ -66,13 +66,11 @@ class OkitJson {
     load(okit_json) {
         console.log('Load OKIT Json');
         // Title & Description
-        if (okit_json.title) {
-            this.title = okit_json.title;
-        }
-        if (okit_json.description) {
-            this.description = okit_json.description;
-        }
+        if (okit_json.title) {this.title = okit_json.title;}
+        if (okit_json.description) {this.description = okit_json.description;}
         if (okit_json.user_defined && okit_json.user_defined.terraform) this.user_defined.terraform = okit_json.user_defined.terraform
+        if (okit_json.freeform_tags) {this.freeform_tags = okit_json.freeform_tags}
+        if (okit_json.defined_tags) {this.defined_tags = okit_json.defined_tags}
         // Turn Off Default Security List / Route Table Processing
         const okitSettingsClone = JSON.clone(okitSettings);
         okitSettings.is_default_route_table   = false;

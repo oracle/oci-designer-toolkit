@@ -24,7 +24,7 @@ class Instance extends OkitArtifact {
         this.fault_domain = '';
         this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
         this.vnics = [];
-        this.source_details = {os: 'Oracle Linux', version: '7.8', boot_volume_size_in_gbs: '50', source_type: 'image'};
+        this.source_details = {os: 'Oracle Linux', version: '8', boot_volume_size_in_gbs: '50', source_type: 'image'};
         this.metadata = {ssh_authorized_keys: '', user_data: ''};
         this.shape_config = {memory_in_gbs: 16, ocpus: 1};
         // TODO: Future

@@ -268,8 +268,8 @@
     </div>
     <div id="okit_toolbar_centre" class="okit-toolbar-centre">
         <div>
-            <div id="zoom_out_toolbar_button" class="zoom-out okit-toolbar-button" title="Zoom Out"></div>
-            <div id="zoom_in_toolbar_button" class="zoom-in okit-toolbar-button" title="Zoom In"></div>
+            <div id="zoom_out_toolbar_button" class="zoom-out okit-toolbar-button hidden" title="Zoom Out"></div>
+            <div id="zoom_in_toolbar_button" class="zoom-in okit-toolbar-button hidden" title="Zoom In"></div>
         </div>
     </div>
     <div id="okit_toolbar_right" class="okit-toolbar-right">
@@ -280,6 +280,7 @@
             <div id="cost_toolbar_button" class="cost-estimate okit-toolbar-button" title="Cost Estimate" onclick="handleEstimateCost()"></div>
             <div id="documentation_toolbar_button" class="documentation okit-toolbar-button" title="Documentation" onclick="handleDocumentation()"></div>
             <div id="terraform_toolbar_button" class="terraform okit-toolbar-button" title="Terraform" onclick="handleFreeformTerraform()"></div>
+            <div id="tags_toolbar_button" class="global-tags okit-toolbar-button" title="Global Tags" onclick="handleGlobalTags()"></div>
             <!-- <div id="threedots_toolbar_button" class="threedotmenu okit-toolbar-button" title="Menu" onclick="handleThreeDotsMenu()"></div> -->
         </div>
     </div>
@@ -317,8 +318,8 @@
 
 {% block bodyendblock %}
 <div id="properties_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
-<div id="documentation_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="json_description" name="json_description" onchange="updateJsonDescription()" wrap="soft"></textarea></div>
-<div id="terraform_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="freeform_terraform" name="freeform_terraform" onchange="updateFreeformTerraform()" wrap="soft" placeholder="Enter custom Terraform"></textarea></div>
+<div id="documentation_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="json_description" name="json_description" onchange="updateJsonDescription()" wrap="soft" placeholder="Enter design documentation (Markdown supported)"></textarea></div>
+<div id="terraform_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="freeform_terraform" name="freeform_terraform" onchange="updateFreeformTerraform()" wrap="soft" placeholder="Enter custom Terraform (OKIT does not validate this)"></textarea></div>
 <div id="validation_panel" class="okit-right-side-panel okit-slide-hide-right">
     <div id="validation_header_div"><label id="validation_status"></label></div>
     <details open>
@@ -362,7 +363,18 @@
     </details>
 </div>
 <div id="cost_estimate_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
+<div id="global_tags_panel" class="okit-right-side-panel okit-slide-hide-right">
+    <details open>
+        <summary class="details summary-background"><label>Freeform Tags</label></summary>
+        <div class="table okit-table"><div class="thead"><div class="tr"><div class="th">Key</div><div class="th">Value</div><div class="th add-tag action-button-background" onclick="handleAddGlobalFreeformTag()"></div></div></div><div id="global_freeform_tags_tbody" class="tbody"></div></div>
+    </details>
+    <details open>
+        <summary class="details summary-background"><label>Defined Tags</label></summary>
+        <div class="table okit-table"><div class="thead"><div class="tr"><div class="th">Namespace</div><div class="th">Key</div><div class="th">Value</div><div class="th add-tag action-button-background" onclick="handleAddGlobalDefinedTag()"></div></div></div><div id="global_defined_tags_tbody" class="tbody"></div></div>
+    </details>
+</div>
 <div id="settings_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
+<div id="data_entry_panel" class="okit-right-side-data-entry-panel okit-slide-hide-right"><div class="okit-data-entry-title"><label id="data_entry_panel_title"></label><div class="cancel action-button-background" onclick="handleCancelDataEntry()"></div></div><div id="data_entry_panel_body" class="okit-data-entry-panel"></div><div id="data_entry_panel_footer" class="okit-data-entry-footer"></div></div>
 <div id="threedots_menu_panel" class="okit-threedots-menu-panel okit-slide-hide-right">
     <!-- <ul>
         <li><a>Canvas</a> 

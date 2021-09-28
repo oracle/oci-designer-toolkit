@@ -125,6 +125,21 @@ summary:focus {
     margin-bottom: 5px;
 }
 
+.summary-background {
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 1.5em;
+    padding-left: 2em;
+    margin-right: 1em;
+}
+
+.action-button-background {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 1em;
+    width: 2em;
+}
+
 /*
 ** OCI Console Classes
  */
@@ -933,7 +948,7 @@ li a.parent-item:hover {
 
 .okit-right-side-panel {
     position: absolute;
-    z-index: 1000;
+    z-index: 200;
     right: 0px;
     top: calc(var(--console-header-gradient-height) + var(--console-header-height) + var(--console-toolbar-height) + 2px);
     height: calc(100vh - (var(--console-header-gradient-height) + var(--console-header-height) + var(--console-toolbar-height) + var(--console-footer-height)) - 2px);
@@ -944,6 +959,57 @@ li a.parent-item:hover {
     border-left: #aeaeae 1px solid;
     background-color: white;
     opacity: 1;
+    overflow-y: scroll;
+}
+
+.okit-right-side-data-entry-panel {
+    position: absolute;
+    z-index: 500;
+    right: 0px;
+    top: calc(var(--console-header-gradient-height) + var(--console-header-height) + var(--console-toolbar-height) + 2px);
+    height: calc(100vh - (var(--console-header-gradient-height) + var(--console-header-height) + var(--console-toolbar-height) + var(--console-footer-height)) - 2px);
+    width: 35%;
+    padding: 5px;
+    transition: transform 0.25s;
+    border-top: #aeaeae 1px solid;
+    border-left: #aeaeae 1px solid;
+    background-color: white;
+    opacity: 1;
+    overflow-y: scroll;
+}
+
+.okit-right-side-data-entry-panel input[type="text"] {
+    width: 100%;
+}
+
+.okit-data-entry-title {
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    border-bottom: #aeaeae 1px solid;
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
+}
+
+.okit-data-entry-panel {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 15px;
+}
+
+.okit-data-entry-text-property {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 5px;
+}
+
+.okit-data-entry-footer {
+    padding-top: 0.5em;
+    margin-top: 1em;
+    border-top: #aeaeae 1px solid;
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
 }
 
 /*

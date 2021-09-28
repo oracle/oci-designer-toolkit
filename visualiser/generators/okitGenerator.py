@@ -25,6 +25,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
+    OKIT_VERSION = "0.26.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
         # Initialise generator output data variables
         self.create_sequence = []
@@ -57,7 +58,7 @@ class OCIGenerator(object):
         # -- Add Standard Author / Copyright variables
         self.jinja2_variables["author"] = __author__
         self.jinja2_variables["copyright"] = __copyright__
-        self.jinja2_variables["okit_version"] = "0.26.0"
+        self.jinja2_variables["okit_version"] = self.OKIT_VERSION
 
     def get(self, artifact_type, id):
         artifact = {};
@@ -2143,6 +2144,7 @@ class OCIGenerator(object):
 
     def renderDefinedTags(self, artifact):
         tags = artifact.get("defined_tags", {})
+        tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {})}
         if len(tags.keys()) > 0:
             if self.use_vars:
                 standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
@@ -2157,7 +2159,7 @@ class OCIGenerator(object):
         return
 
     def renderFreeformTags(self, artifact):
-        tags = artifact.get("freeform_tags", {})
+        tags = {**artifact.get("freeform_tags", {}), **self.visualiser_json.get("freeform_tags", {}), 'okit_version': self.OKIT_VERSION}
         if len(tags.keys()) > 0:
             if self.use_vars:
                 standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
