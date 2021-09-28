@@ -11,7 +11,7 @@
     position: relative;
     display: flex;
     min-width: 180px;
-    width: 180px;
+    /* width: 180px; */
     border-right: #aeaeae 1px solid;
     transition: all 0.25s;
 }

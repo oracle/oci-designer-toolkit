@@ -17,7 +17,8 @@ function showSideBars() {
 }
 
 function handleViewSelect(e) {
-    const selected = $("#console_header_view_select").val();
+    // const selected = $("#console_header_view_select").val();
+    const selected = $("#toolbar_view_select").val();
     if (selected === 'designer') handleSwitchToCompartmentView(e)
     else if (selected === 'tabular') handleSwitchToTabularView(e)
     else if (selected === 'relationship') handleSwitchToRelationshipView(e)
