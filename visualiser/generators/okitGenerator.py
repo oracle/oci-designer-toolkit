@@ -13,6 +13,7 @@ __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
+from visualiser.common.okitCommon import jsonToFormattedString
 import jinja2
 import os
 import shutil

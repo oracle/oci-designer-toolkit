@@ -15,6 +15,7 @@ __module__ = "ociTerraformGenerator"
 import os
 import json
 
+from common.okitCommon import jsonToFormattedString
 from common.okitCommon import writeTerraformFile
 from common.okitLogging import getLogger
 from generators.okitGenerator import OCIGenerator
@@ -78,10 +79,10 @@ class OCITerraformGenerator(OCIGenerator):
             return '"{0!s:s}"'.format(value)
 
     def renderDefinedTags(self, artifact):
-        defined_tags = artifact.get("defined_tags", {})
-        if len(defined_tags.keys()) > 0:
+        tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {})}
+        if len(tags.keys()) > 0:
             definedtags = {}
-            for namespace, tags in defined_tags.items():
+            for namespace, tags in tags.items():
                 for key, value in tags.items():
                     definedtags["{0!s:s}.{1!s:s}".format(namespace, key)] = str(value)
             if self.use_vars:
