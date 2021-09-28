@@ -2143,7 +2143,6 @@ class OCIGenerator(object):
         return
 
     def renderDefinedTags(self, artifact):
-        tags = artifact.get("defined_tags", {})
         tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {})}
         if len(tags.keys()) > 0:
             if self.use_vars:
