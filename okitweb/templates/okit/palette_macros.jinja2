@@ -1,5 +1,5 @@
 {%- macro add_palette(palette) -%}
-    <div id="icons_palette" class="okit-icons-palette">
+    <div id="icons_palette" class="okit-left-side-panel okit-palette-panel okit-icons-palette">
         <div id="icon_target_toggle" class="okit-target-toggle {%- if not pca_mode %} hidden{% endif -%}">
         <label>Target</label>
         {% for target in palette.targets %}

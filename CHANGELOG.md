@@ -1,14 +1,29 @@
 # Release Notes
 
 
+## Version 0.27.0
+**Release Date**: 29th September 2021
+### Features
+1. Convert left bar named tabs to simple icon tabs based on OCI console design.
+2. Convert right bar named tabs to simple toolbar icons based on OCI console design.
+3. Add the ability for the user to define custom Terraform code that will be included in the terraform zip file in a user_defined.tf file.
+4. Add Global level Freeform/Defined Tags that will be added to all resources created by OKIT.
+
+### Bug Fixes
+1. GitHub Issue #459 : [UI] "DHCP option" icon missing.
+2. Resolve issue where Read-Only was being ignored for DRGs.
+
+
 ## Version 0.26.0
 **Release Date**: 8th September 2021
 ### Features
 1. Temporarily deprecate Ansible export by making it command line flag driven (ansible=true)
+2. Add Policy Resource to Palette and allow the user to drag them onto the canvas. It assumes that the user understands the policy statement syntax. All policies will be created within the users home region.
 
 ### Bug Fixes
 1. GitHub Issue #440 : Cannot generate terraform when NSG have Rules.
 2. Fix issue where DB System were always created in the root deployment compartment not specified sub-compartment.
+3. GitHub Issue #447 : Unable to create Object Storage Bucket with OKIT
 
 
 ## Version 0.25.1

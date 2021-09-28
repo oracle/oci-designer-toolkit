@@ -13,6 +13,7 @@ __module__ = "ociGenerator"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
+from visualiser.common.okitCommon import jsonToFormattedString
 import jinja2
 import os
 import shutil
@@ -25,7 +26,8 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    def __init__(self, template_dir, output_dir, visualiser_json, use_vars=True):
+    OKIT_VERSION = "0.27.0"
+    def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
         # Initialise generator output data variables
         self.create_sequence = []
         self.run_variables = {}
@@ -57,7 +59,7 @@ class OCIGenerator(object):
         # -- Add Standard Author / Copyright variables
         self.jinja2_variables["author"] = __author__
         self.jinja2_variables["copyright"] = __copyright__
-        self.jinja2_variables["okit_version"] = "0.25.1"
+        self.jinja2_variables["okit_version"] = self.OKIT_VERSION
 
     def get(self, artifact_type, id):
         artifact = {};
@@ -687,30 +689,33 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderDynamicRoutingGateway(self, dynamic_routing_gateway):
+    def renderDynamicRoutingGateway(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(dynamic_routing_gateway['display_name'])
+        standardisedName = self.standardiseResourceName(resource['display_name'])
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = dynamic_routing_gateway['display_name']
+        self.jinja2_variables['output_name'] = resource['display_name']
         # Process Dynamic Routing Gateway Data
         logger.info('Processing Dynamic Routing Gateway Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
         # --- Required
         # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['compartment_id']]))
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
         # ---- Virtual Cloud Network OCID
-        if dynamic_routing_gateway.get('vcn_id', '') != '':
-            self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[dynamic_routing_gateway['vcn_id']]))
+        if resource.get('vcn_id', '') != '':
+            self.jinja2_variables["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['vcn_id']]))
         else:
             self.removeJinja2Variable('vcn_id')
         # ---- Display Name
-        self.addJinja2Variable("display_name", dynamic_routing_gateway["display_name"], standardisedName)
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
         # --- Optional
         # ---- Tags
-        self.renderTags(dynamic_routing_gateway)
+        self.renderTags(resource)
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("dynamic_routing_gateway.jinja2")
@@ -2139,7 +2144,7 @@ class OCIGenerator(object):
         return
 
     def renderDefinedTags(self, artifact):
-        tags = artifact.get("defined_tags", {})
+        tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {})}
         if len(tags.keys()) > 0:
             if self.use_vars:
                 standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
@@ -2154,7 +2159,7 @@ class OCIGenerator(object):
         return
 
     def renderFreeformTags(self, artifact):
-        tags = artifact.get("freeform_tags", {})
+        tags = {**artifact.get("freeform_tags", {}), **self.visualiser_json.get("freeform_tags", {}), 'okit_version': self.OKIT_VERSION}
         if len(tags.keys()) > 0:
             if self.use_vars:
                 standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
