@@ -16,7 +16,7 @@
     {% elif type == 'textarea' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value" rows="2" wrap="soft"></textarea></div></div>
     {% elif type == 'documentation' %}
-        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-resource-description documentation" rows="2" wrap="soft"></textarea></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-resource-description resource-documentation" rows="2" wrap="soft"></textarea></div></div>
     {% elif type == 'code' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><code><textarea id="{{ name }}" name="{{ name }}" class="okit-property-value okit-source-code" rows="10"></textarea></code></div></div>
     {% elif type == 'select1' %}
@@ -102,7 +102,7 @@
                 </details>
             </details>
         </div>
-        <div id="resource_notes_contents" class="okit-tab-contents hidden"><textarea id="definition" class="documentation" name="definition" wrap="soft"></textarea></div>
+        <div id="resource_notes_contents" class="okit-tab-contents hidden"><textarea id="definition" class="resource-documentation" name="definition" wrap="soft"></textarea></div>
     </div>
 </div>
 </div>

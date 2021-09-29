@@ -617,7 +617,7 @@ li a.parent-item:hover {
     white-space: nowrap;
 }
 
-.okit-table .td > textarea.documentation {
+.okit-table .td > textarea.resource-documentation {
     width: 100%;
     overflow: scroll;
     white-space: normal;
@@ -716,7 +716,7 @@ li a.parent-item:hover {
 .okit-modal-dialog {
     display: flex;
     flex-direction: column;
-    z-index:100;
+    z-index:1000;
     position: absolute;
     left: 30%;
     top: 20%;
