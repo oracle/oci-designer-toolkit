@@ -303,6 +303,7 @@ sudo bash -c "mkdir -p /okit/{git,local,log,instance/git,instance/local,instance
 # Link Reference Architecture Templates to Template Directory
 sudo bash -c "ln -sv /okit/okitweb/static/okit/templates/reference_architecture /okit/instance/templates/reference_architecture"
 # Add additional environment information 
+sudo bash -c "echo 'export PATH=$PATH:/usr/local/bin' >> /etc/bashrc"
 sudo bash -c "echo 'export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit' >> /etc/bashrc"
 sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
 sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g compartmentID --value-only`' >> /etc/bashrc"
@@ -312,6 +313,7 @@ sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/
 # Copy GUnicorn Service File
 sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.oci.service > /etc/systemd/system/gunicorn.service'
 sudo bash -c 'sed -i "s/{REGION_IDENTIFIER}/`oci-metadata -g region --value-only`/" /etc/systemd/system/gunicorn.service'
+sudo bash -c 'sed -i "s/<home_region>/`oci-metadata -g region --value-only`/" /okit/instance/config.py'
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
 sudo systemctl start gunicorn.service
@@ -440,6 +442,7 @@ sudo bash -c "ln -sv ${OKIT_DIR}/okitweb/static/okit/templates/reference_archite
 # Add additional environment information 
 sudo bash -c "echo 'export OKIT_DIR=:${OKIT_DIR}' >> /etc/bashrc"
 sudo bash -c "echo 'export PYTHONPATH=:${OKIT_DIR}/visualiser:${OKIT_DIR}/okitweb:/okit' >> /etc/bashrc"
+sudo bash -c "echo 'export PATH=$PATH:/usr/local/bin' >> /etc/bashrc"
 # Generate ssl Self Sign Key
 sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT_DIR}/ssl/okit.key -out ${OKIT_DIR}/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
 
