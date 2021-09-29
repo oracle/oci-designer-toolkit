@@ -131,12 +131,16 @@ function newRegionsModel() {
 function setTitleDescription() {
     okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
     okitJsonModel ? $('#json_description').val(okitJsonModel.description) : $('#json_description').val('');
+    okitJsonModel ? $('#freeform_terraform').val(okitJsonModel.user_defined.terraform) : $('#freeform_terraform').val('');
 }
 function updateJsonTitle() {
     okitJsonModel.title = $('#json_title').val();
 }
 function updateJsonDescription() {
     okitJsonModel.description = $('#json_description').val();
+}
+function updateFreeformTerraform() {
+    okitJsonModel.user_defined.terraform = $('#freeform_terraform').val();
 }
 
 /*
@@ -593,12 +597,188 @@ function redrawSVGCanvas(recalculate=false) {
     displayOkitJson();
 }
 /*
+** Toolbar Handlers
+ */
+const slideLeftPanel = (id) => {
+    $(`.okit-left-side-panel:not(#${id})`).addClass('hidden')
+    $(`#${id}`).toggleClass('hidden')
+    $(`.okit-left-side-panel:not(.hidden)`).length === 0 ? $('#designer_left_column').addClass('okit-slide-hide-left') : $('#designer_left_column').removeClass('okit-slide-hide-left')
+}
+const slideRightPanel = (id) => {
+    $(`.okit-right-side-panel:not(#${id})`).addClass('okit-slide-hide-right')
+    $(`#${id}`).toggleClass('okit-slide-hide-right')
+}
+/* 
+** Settings
+ */
+function handleSettings(evt) {
+    // $('#settings_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('settings_panel')
+    okitSettings.buildPanel('settings_panel', true);
+    return false;
+}
+/*
 ** Validate Model
  */
 function handleValidate(evt) {
-    hideNavMenu();
-    $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
-    $('#toggle_validation_button').click();
+    // $('#validation_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('validation_panel')
+    okitJsonModel.validate(displayValidationResults);
+    // hideNavMenu();
+    // $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_validation_button').click();
+    return false;
+}
+/*
+** Estimate Cost
+ */
+function handleEstimateCost(evt) {
+    // $('#cost_estimate_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('cost_estimate_panel')
+    $(jqId(COST_ESTIMATE_PANEL)).empty();
+    $(jqId(COST_ESTIMATE_PANEL)).text('Estimating...');
+    okitJsonModel.estimateCost(displayPricingResults);
+    // hideNavMenu();
+    // $('#toggle_cost_estimate_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_cost_estimate_button').click();
+    return false;
+}
+/*
+** Display Properties
+ */
+function handleOpenProperties(evt) {
+    // $('#properties_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('properties_panel')
+    // hideNavMenu();
+    // $('#toggle_properties_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_properties_button').click();
+    return false;
+}
+/* 
+** Documentation
+ */
+function handleDocumentation(evt) {
+    // $('#documentation_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('documentation_panel')
+    return false;
+}
+/*
+** Free Form Terraform
+ */
+function handleFreeformTerraform(evt) {
+    loadGlobalTags()
+    slideRightPanel('terraform_panel')
+    return false;
+}
+/*
+** Global Tags
+ */
+function handleGlobalTags(evt) {
+    slideRightPanel('global_tags_panel')
+    return false;
+}
+function loadGlobalTags() {
+    $('#global_freeform_tags_tbody').empty()
+    $('#global_defined_tags_tbody').empty()
+    if (okitJsonModel.freeform_tags) {
+        const tbody = d3.select('#global_freeform_tags_tbody')
+        for (const [key, value] of Object.entries(okitJsonModel.freeform_tags)) {
+            let tr = tbody.append('div').attr('class', 'tr')
+            tr.append('div').attr('class', 'td').append('label').text(key)
+            tr.append('div').attr('class', 'td').append('label').text(value)
+            tr.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', () => {
+                delete okitJsonModel.freeform_tags[key];
+                loadGlobalTags()
+                d3.event.stopPropagation()
+            })
+        }
+    }
+    if (okitJsonModel.defined_tags) {
+        const tbody = d3.select('#global_defined_tags_tbody')
+        for (const [namespace, tags] of Object.entries(okitJsonModel.defined_tags)) {
+            for (const [key, value] of Object.entries(tags)) {
+                let tr = tbody.append('div').attr('class', 'tr')
+                tr.append('div').attr('class', 'td').append('label').text(namespace)
+                tr.append('div').attr('class', 'td').append('label').text(key)
+                tr.append('div').attr('class', 'td').append('label').text(value)
+                tr.append('div').attr('class', 'td  delete-tag action-button-background delete').on('click', () => {
+                    delete okitJsonModel.defined_tags[namespace][key];
+                    if (Object.keys(okitJsonModel.defined_tags[namespace]).length === 0) {delete okitJsonModel.defined_tags[namespace];}
+                    loadGlobalTags()
+                    d3.event.stopPropagation()
+                })
+            }
+        }
+    }
+}
+function handleAddGlobalFreeformTag() {
+    console.info('Adding Global Freeform Tag')
+    $('#data_entry_panel_title').text('Add Freeform Tag')
+    $('#data_entry_panel_body').empty()
+    $('#data_entry_panel_footer').empty()
+    // Add input elements
+    const body = d3.select('#data_entry_panel_body')
+    let div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Key')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_key').attr('placeholder', 'Tag Key (No white space)')
+    div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Value')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_value').attr('placeholder', 'Tag Value')
+    // Add Footer button
+    const footer = d3.select('#data_entry_panel_footer')
+    footer.append('div').append('button').attr('type', 'button').text('Add Tag').on('click', () => {
+        const key = $('#gdep_tag_key').val().replace(/\s+/g, '_')
+        const val = $('#gdep_tag_value').val()
+        if (key.length > 0 && val.length > 0) okitJsonModel.freeform_tags[key] = val
+        loadGlobalTags()
+        $('#data_entry_panel').addClass('okit-slide-hide-right')
+    })
+    // Display Panel
+    $('#data_entry_panel').removeClass('okit-slide-hide-right')
+}
+function handleAddGlobalDefinedTag() {
+    console.info('Adding Global Defined Tag')
+    $('#data_entry_panel_title').text('Add Defined Tag')
+    $('#data_entry_panel_body').empty()
+    $('#data_entry_panel_footer').empty()
+    // Add input elements
+    const body = d3.select('#data_entry_panel_body')
+    let div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Namespace')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_namespace').attr('placeholder', 'Tag Namespace (No white space)').attr('list', 'global_tag_namespaces')
+    const global_tag_namespaces = div.append('datalist').attr('id', 'global_tag_namespaces')
+    if (okitJsonModel.defined_tags) Object.keys(okitJsonModel.defined_tags).forEach((namespace) => global_tag_namespaces.append('option').attr('value', namespace))
+    div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Key')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_key').attr('placeholder', 'Tag Key (No white space)')
+    div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Value')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_value').attr('placeholder', 'Tag Value')
+    // Add Footer button
+    const footer = d3.select('#data_entry_panel_footer')
+    footer.append('div').append('button').attr('type', 'button').text('Add Tag').on('click', () => {
+        const namespace = $('#gdep_tag_namespace').val().replace(/\s+/g, '_')
+        const key = $('#gdep_tag_key').val().replace(/\s+/g, '_')
+        const val = $('#gdep_tag_value').val()
+        if (namespace.length > 0 && key.length > 0 && val.length > 0) okitJsonModel.defined_tags[namespace] ? okitJsonModel.defined_tags[namespace][key] = val : okitJsonModel.defined_tags[namespace] = {key: val}
+        loadGlobalTags()
+        $('#data_entry_panel').addClass('okit-slide-hide-right')
+    })
+    // Display Panel
+    $('#data_entry_panel').removeClass('okit-slide-hide-right')
+}
+/*
+** Cancel Data Entry
+*/
+function handleCancelDataEntry() {
+    $('#data_entry_panel').addClass('okit-slide-hide-right')
+}
+/*
+** Three Dots Menu
+ */
+function handleThreeDotsMenu(evt) {
+    // slideRightPanel('threedots_menu_panel')
+    $(`#threedots_menu_panel`).toggleClass('okit-slide-hide-right')
     return false;
 }
 /*

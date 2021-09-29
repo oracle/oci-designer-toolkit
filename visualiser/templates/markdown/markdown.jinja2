@@ -1,3 +1,4 @@
+{% import "common_macros.jinja2" as common with context %}
 # {{ title }}
 
 {{ description | safe }}
@@ -156,5 +157,20 @@
 
 {%- endif %}
 
+{% if user_defined is defined and user_defined.terraform is defined and user_defined.terraform|length > 0 -%}
+### User Defined Terraform 
+```terraform
+{{ user_defined.terraform|safe }}
+```
+{%- endif %}
 
+{% if freeform_tags is defined or defined_tags is defined -%}
+## Global Tags
+    {% if freeform_tags is defined -%}
+        {{ common.document_freeform_tags(freeform_tags) }}
+    {%- endif %}
+    {% if defined_tags is defined -%}
+        {{ common.document_defined_tags(defined_tags) }}
+    {%- endif %}
+{%- endif %}
 

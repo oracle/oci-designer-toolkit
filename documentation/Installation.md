@@ -287,18 +287,23 @@ to restrict access to the Instance to authorised users or https authenticated us
 
 Once the Instance has been created the following commands will install OKIT and create the service to run the WebServer.
 ```bash
-# Install Required Packages because the packages section may not complete before the runcmd
-sudo bash -c "yum install -y git openssl python-oci-cli oci-utils"
+# Install Required Packages 
+sudo bash -c "yum install -y git"
+sudo bash -c "yum install -y openssl"
+sudo bash -c "yum install -y oci-utils"
+# This is not required for OL8
+sudo bash -c "yum install -y python-oci-cli"
 # Install Required Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
-sudo bash -c "pip3 install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
+sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
 sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
 sudo bash -c "mkdir -p /okit/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
 # Link Reference Architecture Templates to Template Directory
 sudo bash -c "ln -sv /okit/okitweb/static/okit/templates/reference_architecture /okit/instance/templates/reference_architecture"
 # Add additional environment information 
+sudo bash -c "echo 'export PATH=$PATH:/usr/local/bin' >> /etc/bashrc"
 sudo bash -c "echo 'export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit' >> /etc/bashrc"
 sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
 sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g compartmentID --value-only`' >> /etc/bashrc"
@@ -308,6 +313,7 @@ sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/
 # Copy GUnicorn Service File
 sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.oci.service > /etc/systemd/system/gunicorn.service'
 sudo bash -c 'sed -i "s/{REGION_IDENTIFIER}/`oci-metadata -g region --value-only`/" /etc/systemd/system/gunicorn.service'
+sudo bash -c 'sed -i "s/<home_region>/`oci-metadata -g region --value-only`/" /okit/instance/config.py'
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
 sudo systemctl start gunicorn.service
@@ -436,6 +442,7 @@ sudo bash -c "ln -sv ${OKIT_DIR}/okitweb/static/okit/templates/reference_archite
 # Add additional environment information 
 sudo bash -c "echo 'export OKIT_DIR=:${OKIT_DIR}' >> /etc/bashrc"
 sudo bash -c "echo 'export PYTHONPATH=:${OKIT_DIR}/visualiser:${OKIT_DIR}/okitweb:/okit' >> /etc/bashrc"
+sudo bash -c "echo 'export PATH=$PATH:/usr/local/bin' >> /etc/bashrc"
 # Generate ssl Self Sign Key
 sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT_DIR}/ssl/okit.key -out ${OKIT_DIR}/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
 

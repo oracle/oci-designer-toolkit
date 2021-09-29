@@ -1,6 +1,19 @@
 # Release Notes
 
 
+## Version 0.27.0
+**Release Date**: 29th September 2021
+### Features
+1. Convert left bar named tabs to simple icon tabs based on OCI console design.
+2. Convert right bar named tabs to simple toolbar icons based on OCI console design.
+3. Add the ability for the user to define custom Terraform code that will be included in the terraform zip file in a user_defined.tf file.
+4. Add Global level Freeform/Defined Tags that will be added to all resources created by OKIT.
+
+### Bug Fixes
+1. GitHub Issue #459 : [UI] "DHCP option" icon missing.
+2. Resolve issue where Read-Only was being ignored for DRGs.
+
+
 ## Version 0.26.0
 **Release Date**: 8th September 2021
 ### Features

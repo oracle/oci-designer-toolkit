@@ -1,0 +1,18 @@
+/*
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+ @import "variables.css";
+
+ .okit-threedots-menu-panel {
+    position: absolute;
+    z-index: 1001;
+    right: 0px;
+    top: calc(var(--console-header-gradient-height) + var(--console-header-height) + var(--console-toolbar-height) + 3px);
+    padding: 5px;
+    transition: transform 0.25s;
+    background-color: white;
+    opacity: 1;
+    direction: rtl;
+ }
+
