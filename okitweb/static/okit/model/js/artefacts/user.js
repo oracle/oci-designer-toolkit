@@ -14,17 +14,14 @@ class User extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
+        // const array_pos = okitjson.users ? okitjson.users.length + 1 : 0;
         this.display_name = this.generateDefaultName(okitjson.users.length + 1);
-        this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.compartment_id = null;
+        this.description = ''
+        this.email = ''
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
     }
     /*
     ** Clone Functionality
@@ -36,7 +33,7 @@ class User extends OkitArtifact {
     ** Name Generation
     */
     getNamePrefix() {
-        return super.getNamePrefix() + 'u';
+        return super.getNamePrefix() + 'usr';
     }
     /*
     ** Static Functionality

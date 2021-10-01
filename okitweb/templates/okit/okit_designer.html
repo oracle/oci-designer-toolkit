@@ -17,6 +17,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/relationship/js/okit_relationship_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/json/js/okit_json_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/identity/js/okit_identity_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_view_layout.js') }}"></script>
@@ -97,6 +98,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_threedots_menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/identity/css/okit_identity_view.css') }}">
 {% endblock %}
 
 {% block navmenublock %}
@@ -259,7 +261,8 @@
     <div id="okit_toolbar_left" class="okit-toolbar-left">
         <div>
             <select id="toolbar_view_select" class="okit-toolbar-select" onchange="handleViewSelect()">
-                <option id="designer_view_option"  value="designer"selected="selected">Designer</option>
+                <option id="designer_view_option"  value="designer" selected="selected">Designer</option>
+                <option id="identity_view_option"  value="identity">Users/Groups</option>
                 <option id="tabular_view_option" value="tabular">Tabular</option>
                 <option id="relationship_view_option" value="relationship">Relationship</option>
                 <option id="json_view_option" value="json">Json</option>
