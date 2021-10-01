@@ -1,6 +1,14 @@
 # Release Notes
 
 
+## Version 0.27.1
+**Release Date**: 1st October 2021
+### Bug Fixes
+1. Force rename of DhcpOptions.svg to DHCPOptions.svg. The master had not changed case originally to match development branch.
+2. Include the User Defined Terraform in the Resource Manager zip. 
+3. Resolve issue with File Storage System failing to display properties correctly.
+
+
 ## Version 0.27.0
 **Release Date**: 29th September 2021
 ### Features
