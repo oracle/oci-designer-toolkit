@@ -30,7 +30,7 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/file_storage_system.html", () => {
             // Build Network Security Groups
-            this.loadNetworkSecurityGroups('nsg_ids', this.primary_mount_target.subnet_id);
+            this.loadNetworkSecurityGroups('nsg_ids', this.subnet_id);
             // Load Properties
             loadPropertiesSheet(me.artefact);
         });
