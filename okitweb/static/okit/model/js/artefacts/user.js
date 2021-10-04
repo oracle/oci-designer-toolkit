@@ -64,12 +64,6 @@ OkitJson.prototype.getUser = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteUser = function(id) {
-    for (let i = 0; i < this.users.length; i++) {
-        if (this.users[i].id === id) {
-            this.users[i].delete();
-            this.users.splice(i, 1);
-            break;
-        }
-    }
+    this.users = this.users ? this.users.filter((u) => u.id !== id) : []
 }
 

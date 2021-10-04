@@ -17,7 +17,7 @@ class Group extends OkitArtifact {
         this.display_name = this.generateDefaultName(okitjson.groups.length + 1);
         this.compartment_id = null;
         this.description = ''
-        this.users = []
+        this.user_ids = []
         // Update with any passed data
         this.merge(data);
         this.convert();
@@ -63,12 +63,6 @@ OkitJson.prototype.getGroup = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteGroup = function(id) {
-    for (let i = 0; i < this.groups.length; i++) {
-        if (this.groups[i].id === id) {
-            this.groups[i].delete();
-            this.groups.splice(i, 1);
-            break;
-        }
-    }
+    this.groups = this.groups ? this.groups.filter((r) => r.id !== id) : []
 }
 

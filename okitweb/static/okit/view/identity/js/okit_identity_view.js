@@ -45,6 +45,8 @@ class OkitIdentityView extends OkitJsonView {
                 self.updateUserDisplayName(user.display_name, o[0].value)
                 user.display_name = o[0].value
             })
+        users_div.append('div').attr('class', 'cancel action-button-background cancel-overlay')
+            .on('click', () => {self.deleteUser(user.id)})
     }
 
     updateUserDisplayName(existing, updated) {
@@ -66,7 +68,14 @@ class OkitIdentityView extends OkitJsonView {
     addGroupToPanel(parent, group) {
         const self = this
         const groups_div = parent.append('div').attr('class', 'oci-user-group okit-user-group')
-            .on('click', () => {$(jqId(PROPERTIES_PANEL)).load("propertysheets/group.html", () => {loadPropertiesSheet(group);})});
+            .on('click', () => {$(jqId(PROPERTIES_PANEL)).load("propertysheets/group.html", () => {
+                self.loadUsersMultiSelect('user_ids')
+                loadPropertiesSheet(group)
+                $('#user_ids').find("input:checkbox").each(function() {
+                    console.info('Adding Click event')
+                    $(this).on('change', () => {self.draw(); console.info('Clicked')});
+                });    
+            })});
         const details_div = groups_div.append('div').attr('class', 'okit-resource-details')
         details_div.append('div').append('label').attr('class', 'okit-resource-title').text('User Group')
         // details_div.append('div').append('label').attr('class', 'okit-resource-display-name').text(`${group.display_name}`)
@@ -79,7 +88,7 @@ class OkitIdentityView extends OkitJsonView {
                 group.display_name = o[0].value
             })
 
-        group.users.forEach((user) => self.addUserToPanel(groups_div, self.model.getUser(user)))
+        group.user_ids.forEach((id) => self.addUserToPanel(groups_div, self.model.getUser(id)))
     }
 
     updateGroupDisplayName(existing, updated) {
@@ -94,16 +103,25 @@ class OkitIdentityView extends OkitJsonView {
 
     addUser() {
         const users_panel = d3.select('#identity_users_panel')
-        const user = new User({}, this.model)
-        this.model.getUsers().push(user)
+        const user = this.model.newUser({})
         this.addUserToPanel(users_panel, user)
+    }
+
+    deleteUser(id) {
+        this.model.deleteUser(id)
+        this.model.getGroups().forEach((g) => g.user_ids = g.user_ids ? g.user_ids.filter((uid) => uid !== id) : [])
+        this.draw()
     }
 
     addUserGroup() {
         const groups_panel = d3.select('#identity_groups_panel')
-        const group = new Group({}, this.model)
-        this.model.getGroups().push(group)
+        const group = this.model.newGroup({})
         this.addGroupToPanel(groups_panel, group)
+    }
+
+    deleteUserGroup(id) {
+        this.model.deleteGroup(id)
+        this.draw()
     }
 
    newCanvas() {
@@ -114,13 +132,13 @@ class OkitIdentityView extends OkitJsonView {
         const users_details = identify_panel.append('div').attr('id', 'identity_users_div').attr('class', 'okit-identity-details')
         const user_details_title = users_details.append('div').attr('class', 'okit-data-entry-title')
         user_details_title.append('label').text('Users')
-        user_details_title.append('div').attr('class', 'cancel action-button-background')
+        user_details_title.append('div').attr('class', 'okit-user-add user-button-background')
             .on('click', () => {self.addUser()})
         // User Groups
         const groups_details = identify_panel.append('div').attr('id', 'identity_user_groups_div').attr('class', 'okit-identity-details')
         const group_details_title = groups_details.append('div').attr('class', 'okit-data-entry-title')
         group_details_title.append('label').text('User Groups')
-        group_details_title.append('div').attr('class', 'cancel action-button-background')
+        group_details_title.append('div').attr('class', 'okit-user-group-add user-group-button-background')
             .on('click', () => {self.addUserGroup()})
     }
 
