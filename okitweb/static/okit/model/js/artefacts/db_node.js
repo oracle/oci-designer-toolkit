@@ -69,12 +69,6 @@ OkitJson.prototype.getDbNode = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteDbNode = function(id) {
-    for (let i = 0; i < this.db_nodes.length; i++) {
-        if (this.db_nodes[i].id === id) {
-            this.db_nodes[i].delete();
-            this.db_nodes.splice(i, 1);
-            break;
-        }
-    }
+    this.db_nodes = this.db_nodes ? this.db_nodes.filter((r) => r.id !== id) : []
 }
 

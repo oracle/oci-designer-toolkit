@@ -69,12 +69,6 @@ OkitJson.prototype.getDatabase = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteDatabase = function(id) {
-    for (let i = 0; i < this.databases.length; i++) {
-        if (this.databases[i].id === id) {
-            this.databases[i].delete();
-            this.databases.splice(i, 1);
-            break;
-        }
-    }
+    this.databases = this.databases ? this.databases.filter((r) => r.id !== id) : []
 }
 

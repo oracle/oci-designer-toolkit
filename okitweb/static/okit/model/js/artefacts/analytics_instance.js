@@ -81,12 +81,6 @@ OkitJson.prototype.getAnalyticsInstance = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteAnalyticsInstance = function(id) {
-    for (let i = 0; i < this.analytics_instances.length; i++) {
-        if (this.analytics_instances[i].id === id) {
-            this.analytics_instances[i].delete();
-            this.analytics_instances.splice(i, 1);
-            break;
-        }
-    }
+    this.analytics_instances = this.analytics_instances ? this.analytics_instances.filter((r) => r.id !== id) : []
 }
 
