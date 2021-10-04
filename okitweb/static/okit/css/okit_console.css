@@ -137,7 +137,19 @@ summary:focus {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 1em;
-    width: 2em;
+    width: 1em;
+    height: 1em;
+}
+
+.action-button-column {
+    min-width: 2em;
+}
+
+.cancel-overlay {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    z-index: 10;
 }
 
 /*
@@ -458,7 +470,7 @@ summary:focus {
  */
 
 .context-menu {
-    z-index:102;
+    z-index: 102;
     position: absolute;
     border: 1px rgba(37, 49, 65, 0.1) solid;
     padding: 2px;
@@ -706,7 +718,7 @@ li a.parent-item:hover {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 100;
+    z-index: 1000;
     padding: 15px 15px;
     background: rgba(0, 0, 0, 0.6);
     width: 100%;
@@ -716,7 +728,7 @@ li a.parent-item:hover {
 .okit-modal-dialog {
     display: flex;
     flex-direction: column;
-    z-index:1000;
+    z-index: 1000;
     position: absolute;
     left: 30%;
     top: 20%;
@@ -936,12 +948,12 @@ li a.parent-item:hover {
 }
 
 .okit-slide-hide-right {
-    /* padding: 0 !important;
+    padding: 0 !important;
     margin: 0 !important;;
     overflow: hidden !important;
     width: 0 !important;
     min-width: 0 !important;
-    max-width: 0!important; */
+    max-width: 0!important;
     transition: transform 0.25s;
     transform: translateX(100%);
 }

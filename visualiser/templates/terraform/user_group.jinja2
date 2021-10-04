@@ -1,7 +1,7 @@
 
 {% if read_only %}
-# ------ Read Policy
-data "oci_identity_policies" "{{ resource_name }}" {
+# ------ Read User Group
+data "oci_identity_groups" "{{ resource_name }}" {
     #Required
     compartment_id = {{ compartment_id }}
     filter {
@@ -14,20 +14,15 @@ locals {
     {{ resource_name }}_id              = {{ ocid | safe }}
 }
 {% else %}
-# ------ Create Policy
-resource "oci_identity_policy" "{{ resource_name }}" {
+# ------ Create User Group
+resource "oci_identity_group" "{{ resource_name }}" {
     provider       = oci.home_region
     #Required
-    compartment_id = {{ compartment_id }}
+    compartment_id = {{ tenancy_ocid }}
     description = {{ description | safe }}
     name = {{ display_name | safe }}
-    statements = [{% for statement in statements %}"{{ statement | safe }}"{% if not loop.last %},{% endif %}{% endfor %}]
-#    statements = {{ statements | safe }}
 
     #Optional
-{% if version_date is defined %}
-    version_date = {{ version_date | safe }}
-{% endif %}
 {% if defined_tags is defined %}
     defined_tags   = {{ defined_tags | safe }}
 {% endif %}
@@ -37,6 +32,14 @@ resource "oci_identity_policy" "{{ resource_name }}" {
 }
 
 locals {
-    {{ resource_name }}_id              = oci_identity_policy.{{ resource_name }}.id
+    {{ resource_name }}_id              = oci_identity_group.{{ resource_name }}.id
 }
+# ------- Add Members
+{% for user_id in user_ids %}
+resource "oci_identity_user_group_membership" "{{ resource_name }}User{{ loop.index }}" {
+    #Required
+    user_id = {{ user_id }}
+    groups_id = local.{{ resource_name }}_id
+}
+{% endfor %}
 {% endif %}

@@ -26,7 +26,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.27.0"
+    OKIT_VERSION = "0.27.1"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
         # Initialise generator output data variables
         self.create_sequence = []
@@ -130,6 +130,11 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
 
         # Process keys within the input json file
+        # - Users / User Groups
+        for user in self.visualiser_json.get('users', []):
+            self.renderUser(user)
+        for user_group in self.visualiser_json.get('groups', []):
+            self.renderUserGroup(user_group)
         # - Compartment Sub Components
         # -- Compartments
         # --- Get List of Compartment Ids
@@ -1949,6 +1954,81 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("subnet.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderUser(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        display_name = resource.get("display_name", resource.get("name", "Unknown"))
+        # Read Data
+        standardisedName = self.standardiseResourceName(display_name)
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = display_name
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing User Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # --- Required
+        # ---- Display Name
+        self.addJinja2Variable("display_name", display_name, standardisedName)
+        # ---- Description
+        self.addJinja2Variable("description", resource.get("description", display_name), standardisedName)
+        # --- Optional
+        if resource.get("email", '') != '':
+            self.addJinja2Variable("email", resource.get("email", ''), standardisedName)
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("user.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderUserGroup(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        display_name = resource.get("display_name", resource.get("name", "Unknown"))
+        # Read Data
+        standardisedName = self.standardiseResourceName(display_name)
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = display_name
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing User Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # --- Required
+        # ---- Display Name
+        self.addJinja2Variable("display_name", display_name, standardisedName)
+        # ---- Description
+        self.addJinja2Variable("description", resource.get("description", display_name), standardisedName)
+        # --- Optional
+        # ---- User Members
+        if len(resource['user_ids']):
+            jinja2_user_ids = []
+            for user_id in resource.get('user_ids', []):
+                user = self.id_name_map[user_id]
+                jinja2_user_ids.append(self.formatJinja2IdReference(self.standardiseResourceName(user)))
+            self.jinja2_variables["user_ids"] = jinja2_user_ids
+        else:
+            self.jinja2_variables.pop("user_ids", None)
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("user_group.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

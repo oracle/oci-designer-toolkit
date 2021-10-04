@@ -143,7 +143,7 @@ OkitJsonView.prototype.loadUsersSelect = function(select_id, empty_option=false)
 OkitJsonView.prototype.loadUsersMultiSelect = function(select_id) {
     $(jqId(select_id)).empty();
     const multi_select = d3.select(d3Id(select_id));
-    for (let user of this.getUsers()) {
+    for (let user of this.okitjson.getUsers()) {
         const div = multi_select.append('div');
         div.append('input')
             .attr('type', 'checkbox')
