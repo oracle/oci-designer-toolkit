@@ -4,6 +4,10 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 {% block title_block %}Group{% endblock %}
-{% block required_properties_table_rows_block %}{% endblock %}
-{% block optional_properties_table_rows_block %}{% endblock %}
+{% block required_properties_table_rows_block %}
+    {{ properties_input('Description', 'description', type='text') }}
+{% endblock %}
+{% block optional_properties_table_rows_block %}
+    {{ properties_input('Users', 'user_ids', type='multiselect') }}
+{% endblock %}
 {% block optional_properties_block %}{% endblock %}

@@ -1,16 +1,4 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.27.0](CHANGELOG.md#version-0.27.0)
-
-```diff
-+ The 0.25.0 release has now moved the templates from the menu to a new side panel and the can be opened by double clicking 
-+ the file. This new format allows for user templates with sub directories. The corresponding Save As functionality also 
-+ allows the user to create sub directories by specifying the full path.
-
-- The GIT functionality has also been moved to a side panel and on opening the designer page OKIT will attempt to clone/pull
-- from the git repositories specified in the ~/.oci/git_repositories file. If the pull fails then an empty details section
-- will be displayed.
-
-+ The User templates and Git directories can be mounted from the local environment as shown in the updated run instructions.
-```
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.27.1](CHANGELOG.md#version-0.27.1)
 
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
@@ -41,7 +29,12 @@ OCI environments through a graphical web based interface.
 
     OKIT will also allow the user to introspect existing OCI environments, through simple query functionality embedded within the
     web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
-  
+
+
+## Changes
+
+[Changes for the current release (0.27.1) are documented here.](CHANGELOG.md#version-0.27.1)
+
 
 ## Releases
 

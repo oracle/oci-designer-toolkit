@@ -23,6 +23,7 @@ function handleViewSelect(e) {
     else if (selected === 'tabular') handleSwitchToTabularView(e)
     else if (selected === 'relationship') handleSwitchToRelationshipView(e)
     else if (selected === 'json') handleSwitchToTextJsonView(e)
+    else if (selected === 'identity') handleSwitchToIdentityView(e)
     else console.warn('Unknown View', selected)
 }
 
@@ -50,6 +51,14 @@ function handleSwitchToTabularView(e) {
     hideSideBars();
     okitTabularView = new OkitTabularJsonView(okitJsonModel, okitOciData);
     okitTabularView.draw();
+}
+
+function handleSwitchToIdentityView(e) {
+    hideAllViewDivs();
+    $("#identity-div").removeClass('hidden');
+    hideSideBars();
+    okitIdentityView = new OkitIdentityView(okitJsonModel, okitOciData);
+    okitIdentityView.draw();
 }
 
 function handleSwitchToNetworkView(e) {

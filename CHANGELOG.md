@@ -1,11 +1,31 @@
 # Release Notes
 
 
+## Version 0.27.1
+**Release Date**: 1st October 2021
+### Bug Fixes
+1. Force rename of DhcpOptions.svg to DHCPOptions.svg. The master had not changed case originally to match development branch.
+2. Include the User Defined Terraform in the Resource Manager zip. 
+3. Resolve issue with File Storage System failing to display properties correctly.
+
+
 ## Version 0.27.0
 **Release Date**: 29th September 2021
 ### Features
 1. Convert left bar named tabs to simple icon tabs based on OCI console design.
+    1. Palette : <img src="./okitweb/static/svg/palette.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Model Explorer : <img src="./okitweb/static/svg/explorer.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Templates : <img src="./okitweb/static/svg/templates.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. GitHub : <img src="./okitweb/static/svg/git.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
 2. Convert right bar named tabs to simple toolbar icons based on OCI console design.
+    1. Preferences : <img src="./okitweb/static/svg/settings.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Validate : <img src="./okitweb/static/svg/validate.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Templates : <img src="./okitweb/static/svg/templates.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Properties : <img src="./okitweb/static/svg/properties.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Cost Estimate : <img src="./okitweb/static/svg/cost_estimate.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Documentation : <img src="./okitweb/static/svg/notes.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. User Define Terraform : <img src="./okitweb/static/svg/terraform.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Global Tags : <img src="./okitweb/static/svg/tags.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
 3. Add the ability for the user to define custom Terraform code that will be included in the terraform zip file in a user_defined.tf file.
 4. Add Global level Freeform/Defined Tags that will be added to all resources created by OKIT.
 
