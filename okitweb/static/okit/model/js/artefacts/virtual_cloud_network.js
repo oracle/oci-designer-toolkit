@@ -130,6 +130,8 @@ class VirtualCloudNetwork extends OkitArtifact {
             }
             return true;
         }, this);
+        // DHCP Options
+        this.getOkitJson().getDhcpOptions().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         console.log();
     }
 

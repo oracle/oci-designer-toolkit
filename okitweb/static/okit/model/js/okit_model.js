@@ -1129,6 +1129,7 @@ class OkitArtifact {
     get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
     set json_model_list(list) {this.okit_json[this.list_name] = list;}
+    get children() {return Object.values(this.getOkitJson()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
 
     /*
     ** Clone Functionality
