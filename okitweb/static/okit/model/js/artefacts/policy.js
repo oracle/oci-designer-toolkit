@@ -64,12 +64,6 @@ OkitJson.prototype.getPolicy = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deletePolicy = function(id) {
-    for (let i = 0; i < this.policys.length; i++) {
-        if (this.policys[i].id === id) {
-            this.policys[i].delete();
-            this.policys.splice(i, 1);
-            break;
-        }
-    }
+    this.policys = this.policys ? this.policys.filter((r) => r.id !== id) : []
 }
 

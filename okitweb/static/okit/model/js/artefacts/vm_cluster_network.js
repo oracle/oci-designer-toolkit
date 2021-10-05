@@ -68,12 +68,6 @@ OkitJson.prototype.getVmClusterNetwork = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteVmClusterNetwork = function(id) {
-    for (let i = 0; i < this.vm_cluster_networks.length; i++) {
-        if (this.vm_cluster_networks[i].id === id) {
-            this.vm_cluster_networks[i].delete();
-            this.vm_cluster_networks.splice(i, 1);
-            break;
-        }
-    }
+    this.vm_cluster_networks = this.vm_cluster_networks ? this.vm_cluster_networks.filter((r) => r.id !== id) : []
 }
 

@@ -68,12 +68,6 @@ OkitJson.prototype.getDbHome = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteDbHome = function(id) {
-    for (let i = 0; i < this.db_homes.length; i++) {
-        if (this.db_homes[i].id === id) {
-            this.db_homes[i].delete();
-            this.db_homes.splice(i, 1);
-            break;
-        }
-    }
+    this.db_homes = this.db_homes ? this.db_homes.filter((r) => r.id !== id) : []
 }
 

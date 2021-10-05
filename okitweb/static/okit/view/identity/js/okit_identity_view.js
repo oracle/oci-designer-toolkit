@@ -30,12 +30,12 @@ class OkitIdentityView extends OkitJsonView {
         self.model.getUsers().forEach((user) => self.addUserToPanel(users_panel, user))
     }
 
-    addUserToPanel(parent, user) {
+    addUserToPanel(parent, user, group) {
         const self = this
-        const users_div = parent.append('div').attr('class', 'oci-user okit-user')
+        const user_div = parent.append('div').attr('class', 'oci-user okit-user')
             .attr('title', `${user.display_name}`)
             .on('click', (e) => {d3.event.stopPropagation(); $(jqId(PROPERTIES_PANEL)).load("propertysheets/user.html", () => {loadPropertiesSheet(user);})});
-        const details_div = users_div.append('div').attr('class', 'okit-resource-details')
+        const details_div = user_div.append('div').attr('class', 'okit-resource-details')
         details_div.append('div').attr('class', 'okit-resource-title').text('User')
         details_div.append('div').append('input').attr('class', 'okit-resource-display-name').attr('tabindex', -1)
             .attr('type', 'text')
@@ -45,8 +45,14 @@ class OkitIdentityView extends OkitJsonView {
                 self.updateUserDisplayName(user.display_name, o[0].value)
                 user.display_name = o[0].value
             })
-        users_div.append('div').attr('class', 'cancel action-button-background cancel-overlay')
-            .on('click', () => {self.deleteUser(user.id)})
+        user_div.append('div').attr('class', 'cancel action-button-background cancel-overlay')
+            .on('click', () => {group ? self.deleteUserFromGroup(user, group) : self.deleteUser(user.id)})
+        if (!group) {
+            user_div.attr('draggable', 'true').on('dragstart', () => {
+                d3.event.dataTransfer.setData('text/plain', user.id)
+            })
+            // .on('dragend', () => {console.info('Drag End', d3.event)})
+        }
     }
 
     updateUserDisplayName(existing, updated) {
@@ -67,7 +73,7 @@ class OkitIdentityView extends OkitJsonView {
 
     addGroupToPanel(parent, group) {
         const self = this
-        const groups_div = parent.append('div').attr('class', 'oci-user-group okit-user-group')
+        const group_div = parent.append('div').attr('class', 'oci-user-group okit-user-group')
             .on('click', () => {$(jqId(PROPERTIES_PANEL)).load("propertysheets/group.html", () => {
                 self.loadUsersMultiSelect('user_ids')
                 loadPropertiesSheet(group)
@@ -76,9 +82,8 @@ class OkitIdentityView extends OkitJsonView {
                     $(this).on('change', () => {self.draw(); console.info('Clicked')});
                 });    
             })});
-        const details_div = groups_div.append('div').attr('class', 'okit-resource-details')
+        const details_div = group_div.append('div').attr('class', 'okit-resource-details')
         details_div.append('div').append('label').attr('class', 'okit-resource-title').text('User Group')
-        // details_div.append('div').append('label').attr('class', 'okit-resource-display-name').text(`${group.display_name}`)
         details_div.append('div').append('input').attr('class', 'okit-resource-display-name').attr('tabindex', -1)
             .attr('type', 'text')
             .attr('name', `group_${group.display_name.replaceAll(' ','_')}`)
@@ -88,7 +93,15 @@ class OkitIdentityView extends OkitJsonView {
                 group.display_name = o[0].value
             })
 
-        group.user_ids.forEach((id) => self.addUserToPanel(groups_div, self.model.getUser(id)))
+        group.user_ids.forEach((id) => self.addUserToPanel(group_div, self.model.getUser(id), group))
+        group_div.append('div').attr('class', 'cancel action-button-background cancel-overlay')
+            .on('click', () => {self.deleteUserGroup(group.id)})
+        group_div.on('dragover', () => {d3.event.preventDefault()}).on('drop', () => {
+            const user_id = d3.event.dataTransfer.getData('text/plain')
+            if (!group.user_ids.includes(user_id)) group.user_ids.push(user_id)
+            // if (!group.user_ids.includes(user_id)) group.user_ids = [...group.user_ids, user_id]
+            self.draw()
+        })
     }
 
     updateGroupDisplayName(existing, updated) {
@@ -110,6 +123,11 @@ class OkitIdentityView extends OkitJsonView {
     deleteUser(id) {
         this.model.deleteUser(id)
         this.model.getGroups().forEach((g) => g.user_ids = g.user_ids ? g.user_ids.filter((uid) => uid !== id) : [])
+        this.draw()
+    }
+
+    deleteUserFromGroup(user, group) {
+        group.user_ids = group.user_ids.filter((id) => id !== user.id)
         this.draw()
     }
 
