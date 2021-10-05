@@ -619,7 +619,7 @@ li a.parent-item:hover {
     overflow: auto;
 }
 
-.okit-table .td > input[type="text"] {
+.okit-table .td > input[type="text"], input[type="email"], input[type="password"] {
     width: 100%;
 }
 
