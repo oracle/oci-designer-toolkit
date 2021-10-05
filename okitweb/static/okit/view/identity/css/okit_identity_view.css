@@ -65,6 +65,7 @@
 }
 
 .okit-user-group {
+    position: relative;
     background-repeat: no-repeat;
     background-position: 8px 5px;
     background-size: 25px 25px;
