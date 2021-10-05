@@ -68,12 +68,6 @@ OkitJson.prototype.getExadataInfrastructure = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteExadataInfrastructure = function(id) {
-    for (let i = 0; i < this.exadata_infrastructures.length; i++) {
-        if (this.exadata_infrastructures[i].id === id) {
-            this.exadata_infrastructures[i].delete();
-            this.exadata_infrastructures.splice(i, 1);
-            break;
-        }
-    }
+    this.exadata_infrastructures = this.exadata_infrastructures ? this.exadata_infrastructures.filter((r) => r.id !== id) : []
 }
 
