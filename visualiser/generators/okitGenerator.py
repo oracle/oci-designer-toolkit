@@ -1979,7 +1979,10 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", display_name, standardisedName)
         # ---- Description
-        self.addJinja2Variable("description", resource.get("description", display_name), standardisedName)
+        description = resource.get("description", display_name)
+        if len(description) == 0:
+            description = display_name
+        self.addJinja2Variable("description", description, standardisedName)
         # --- Optional
         if resource.get("email", '') != '':
             self.addJinja2Variable("email", resource.get("email", ''), standardisedName)
@@ -2013,7 +2016,11 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", display_name, standardisedName)
         # ---- Description
-        self.addJinja2Variable("description", resource.get("description", display_name), standardisedName)
+        # self.addJinja2Variable("description", resource.get("description", display_name), standardisedName)
+        description = resource.get("description", display_name)
+        if len(description) == 0:
+            description = display_name
+        self.addJinja2Variable("description", description, standardisedName)
         # --- Optional
         # ---- User Members
         if len(resource['user_ids']):
