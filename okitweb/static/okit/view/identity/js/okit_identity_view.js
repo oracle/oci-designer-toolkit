@@ -26,7 +26,7 @@ class OkitIdentityView extends OkitJsonView {
 
     drawUsersPanel(parent) {
         const self = this
-        const users_panel = parent.append('div').attr('id', 'identity_users_panel').attr('class', 'okit-users-grid okit-users-panel')
+        const users_panel = parent.append('div').attr('class', 'okit-identity-scroll-panel').append('div').attr('id', 'identity_users_panel').attr('class', 'okit-users-grid okit-users-panel')
         self.model.getUsers().forEach((user) => self.addUserToPanel(users_panel, user))
     }
 
@@ -67,7 +67,7 @@ class OkitIdentityView extends OkitJsonView {
 
     drawGroupsPanel(parent) {
         const self = this
-        const groups_panel = parent.append('div').attr('id', 'identity_groups_panel').attr('class', 'okit-group-grid okit-groups-panel')
+        const groups_panel = parent.append('div').attr('class', 'okit-identity-scroll-panel').append('div').attr('id', 'identity_groups_panel').attr('class', 'okit-group-grid okit-groups-panel')
         self.model.getGroups().forEach((group) => self.addGroupToPanel(groups_panel, group))
     }
 
