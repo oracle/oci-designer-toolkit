@@ -37,9 +37,10 @@ locals {
 # ------- Add Members
 {% for user_id in user_ids %}
 resource "oci_identity_user_group_membership" "{{ resource_name }}User{{ loop.index }}" {
+    provider       = oci.home_region
     #Required
     user_id = {{ user_id }}
-    groups_id = local.{{ resource_name }}_id
+    group_id = local.{{ resource_name }}_id
 }
 {% endfor %}
 {% endif %}
