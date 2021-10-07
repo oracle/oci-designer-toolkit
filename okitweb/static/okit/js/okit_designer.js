@@ -33,7 +33,7 @@ let right_drag_bar_start_x = 0;
 let ociRegions = [];
 
 function resetDesigner() {
-    $("#console_header_view_select").val('designer');
+    $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     newModel();
     newDesignerView();
