@@ -141,7 +141,7 @@ docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <U
 
 ##### Mount User Templates and Git Directories
 ```bash
-docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/user --volume <PATH TO GIT DIR>:/okit/instance/git --volume <PATH TO LOCAL DIR>:/okit/instance/local --name okit okit
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/templates/user --volume <PATH TO GIT DIR>:/okit/instance/git --volume <PATH TO LOCAL DIR>:/okit/instance/local --name okit okit
 ```
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
