@@ -1011,7 +1011,7 @@ function displayQueryDialog() {
 }
 function handleQueryOci(e) {
     hideNavMenu();
-    $("#console_header_view_select").val('designer');
+    $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
     displayQueryDialog();
