@@ -58,6 +58,11 @@
                     "svg": "MySQLDatabaseServiceMDS.svg"
                 },
                 {
+                    "title": "Autonomous Data Warehouse Cloud Service",
+                    "targets": ["hidden"],
+                    "svg": "AutonomousDataWarehouseCloudService.svg"
+                },
+                {
                     "title": "Exadata Database System",
                     "targets": ["hidden"],
                     "svg": "ExadataDatabaseSystem.svg"
