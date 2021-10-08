@@ -23,6 +23,8 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
         }
         return false;
     }
+    // ---- Icon
+    get icon_definition_id() {return this.shape.startsWith('Exadata.') ? OkitJsonView.toSvgIconDef('ExadataDatabaseSystem') : super.icon_definition_id;}
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
     // Direct Subnet Access
