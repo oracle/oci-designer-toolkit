@@ -30,6 +30,11 @@
                     "title": "Analytics Instance",
                     "targets": ["oci", "pca"],
                     "svg": "AnalyticsCloudService.svg"
+                },
+                {
+                    "title": "Bare Metal Compute",
+                    "targets": ["hidden"],
+                    "svg": "BareMetalCompute.svg"
                 }
             ]
         },
@@ -51,6 +56,11 @@
                     "title": "MySQL Database System",
                     "targets": ["oci"],
                     "svg": "MySQLDatabaseServiceMDS.svg"
+                },
+                {
+                    "title": "Exadata Database System",
+                    "targets": ["hidden"],
+                    "svg": "ExadataDatabaseSystem.svg"
                 }
             ]
         },
