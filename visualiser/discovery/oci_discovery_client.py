@@ -1397,14 +1397,14 @@ class OciResourceDiscoveryClient(object):
                     # add
                     resources_by_region[region][resource_type] = final_resources_by_region[region][resource_type]
 
-            if len(resources_by_region) == 0:
-                logger.warn("Resource discovery results are empty")  
-            else:
-                # replace summary result with resource details
-                self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
-                self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
-                self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
-                self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
+        if len(resources_by_region) == 0:
+            logger.warn("Resource discovery results are empty")  
+        else:
+            # replace summary result with resource details
+            self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
+            self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
+            self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
+            self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
 
         # remove duplicate shapes
         # For multi-AD regions the list_shapes method returns shapes per AD, but does not distinguish which shape
