@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.repository }}/nightly
+          ref: nightly
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -39,5 +39,4 @@ jobs:
       - name: Merge toxophilist/sprint-dev
         run: |
           ls -lash
-        working-directory: $GITHUB_WORKSPACE
         shell: bash
