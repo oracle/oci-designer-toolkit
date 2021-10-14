@@ -34,6 +34,7 @@ jobs:
           git fetch
           git pull
           git branch
-          git merge origin/toxophilist/sprint-dev -m Nightly
+          git checkout origin/toxophilist/sprint-dev
           git status
+          #git merge origin/toxophilist/sprint-dev -m Nightly
         shell: bash
