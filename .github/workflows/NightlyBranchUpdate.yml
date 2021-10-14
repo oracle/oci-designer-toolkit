@@ -31,6 +31,7 @@ jobs:
         run: |
           git status
           git pull
-          git merge toxophilist/sprint-dev -m Nightly
+          git branch
+          # git merge toxophilist/sprint-dev -m Nightly
           git status
         shell: bash
