@@ -21,7 +21,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@nightly
+      - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -35,5 +35,5 @@ jobs:
       # Merge sprint-dev
       - name: Merge toxophilist/sprint-dev
         run: |
-          git merge origin/toxophilist/sprint-dev -m Nightly
+          git status
         working-directory: $GITHUB_WORKSPACE
