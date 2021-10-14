@@ -29,7 +29,9 @@ jobs:
       # Merge sprint-dev
       - name: Merge toxophilist/sprint-dev
         run: |
+          ls -lash
           git status
+          git fetch
           git pull
           git branch
           git merge origin/toxophilist/sprint-dev -m Nightly
