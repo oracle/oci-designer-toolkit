@@ -1,0 +1,9 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_user(resource) -%}
+{{ common.document_property(resource.display_name, resource.description) }}
+{%- endmacro %}
+| User Name | Description    |
+| --------- | -------------- |
+{% for user in users -%}
+    {{ document_user(user) }}
+{% endfor %}

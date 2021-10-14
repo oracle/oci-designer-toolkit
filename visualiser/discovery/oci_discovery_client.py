@@ -20,6 +20,8 @@ class OciResourceDiscoveryClient(object):
     # methods. Creates a map of:
     #     { resource_name -> (Client, list_method) }
     get_resource_client_methods = {
+        # oci.bastion.BastionClient
+        "BastionDetails": (oci.bastion.BastionClient, "get_bastion"), # used to get full details
         # oci.core.BlockstorageClient
         "VolumeBackupPolicyAssignment": (oci.core.BlockstorageClient, "get_volume_backup_policy_asset_assignment"),
         # oci.core.ComputeClient
@@ -32,7 +34,7 @@ class OciResourceDiscoveryClient(object):
         # oci.database.DatabaseClient
         "ExadataIormConfig": (oci.database.DatabaseClient, "get_cloud_vm_cluster_iorm_config"),
         # oci.mysql.DbSystemClient
-        "MySQLDbSystemDetails": (oci.mysql.DbSystemClient, "get_db_system"), # used to get full details of the result and list_db_systems does not include all attributes
+        "MySQLDbSystemDetails": (oci.mysql.DbSystemClient, "get_db_system"), # used to get full details of the result as list_db_systems does not include all attributes
         # oci.mysql.MysqlaasClient
         "MySQLConfiguration": (oci.mysql.MysqlaasClient, "get_configuration"), # used to get details of the Default configurations
         # oci.os_management.OsManagementClient
@@ -600,12 +602,17 @@ class OciResourceDiscoveryClient(object):
                     logger.warn(f"unsupported resource type {resource_type}")
                     continue                    
 
+                # do a get for resources that need full details or don't have a list method
                 if resource_type in self.get_resource_client_methods and item[2]:
                     klass, method_name = self.get_resource_client_methods[resource_type]
                     if method_name == "get_application": # DataFlowApplicationDetails
                         application_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, application_id=application_id)
                         futures_list.update({(region, resource_type, compartment_id, application_id):future})
+                    if method_name == "get_bastion": # BastionDetails
+                        bastion_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, bastion_id=bastion_id)
+                        futures_list.update({(region, resource_type, None, bastion_id):future})
                     elif method_name == "get_cloud_vm_cluster_iorm_config": # CloudExadataInfrastrcture
                         cloud_vm_cluster_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, cloud_vm_cluster_id=cloud_vm_cluster_id)
@@ -640,6 +647,7 @@ class OciResourceDiscoveryClient(object):
                         future = executor.submit(self.list_resources, klass, method_name, region, asset_id=asset_id)
                         futures_list.update({(region, resource_type, compartment_id, asset_id):future})
 
+                # do a list for other resources, which is more efficient than separate get requests
                 if resource_type in self.static_resource_client_methods:
                     klass, method_name = self.static_resource_client_methods[resource_type]
                     if method_name == "get_cluster_options":
@@ -993,6 +1001,7 @@ class OciResourceDiscoveryClient(object):
                         new_result = [ExtendedVirtualCircuitBandwidthShape(fastconnect_provider_id, shape) for shape in result]
                         result = new_result
                     elif resource_type in [
+                        "BastionDetails",
                         "ClusterOptions",
                         "DataFlowApplicationDetails", "DataFlowRunDetails",
                         "Image",
@@ -1017,15 +1026,12 @@ class OciResourceDiscoveryClient(object):
             except oci.exceptions.ConnectTimeout as ct:
                 logger.warn(("get_resources()", future, ct))
                 failed_requests.append(future)
-                # TODO retry
             except oci.exceptions.RequestException as re:
                 logger.warn(("get_resources()", future, re))
                 failed_requests.append(future)
-                # TODO retry
             except TimeoutError as te:
                 logger.error(("get_resources()", future, te, self.timeout))
                 failed_requests.append(future)
-                # TODO retry
             except Exception as e:
                 logger.error(("get_resources()", future, e))
 
@@ -1342,6 +1348,10 @@ class OciResourceDiscoveryClient(object):
             if "DataFlowRun" in resources_by_region[region]:
                 for resource in resources_by_region[region]["DataFlowRun"]:
                     regional_resource_requests.add(("DataFlowRunDetails", resource.compartment_id, resource.id))
+            # get extra details for Bastion
+            if "Bastion" in resources_by_region[region]:
+                for resource in resources_by_region[region]["Bastion"]:
+                    regional_resource_requests.add(("BastionDetails", resource.compartment_id, resource.id))
 
             extra_resource_requests.update({region:regional_resource_requests})
 
@@ -1387,13 +1397,14 @@ class OciResourceDiscoveryClient(object):
                     # add
                     resources_by_region[region][resource_type] = final_resources_by_region[region][resource_type]
 
-            if len(resources_by_region) == 0:
-                logger.warn("Resource discovery results are empty")  
-            else:
-                # replace summary result with resource details
-                self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
-                self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
-                self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
+        if len(resources_by_region) == 0:
+            logger.warn("Resource discovery results are empty")  
+        else:
+            # replace summary result with resource details
+            self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
+            self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
+            self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
+            self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
 
         # remove duplicate shapes
         # For multi-AD regions the list_shapes method returns shapes per AD, but does not distinguish which shape

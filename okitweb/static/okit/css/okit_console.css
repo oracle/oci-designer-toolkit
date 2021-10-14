@@ -108,9 +108,11 @@ summary:focus {
 }
 
 .hidden {
-    visibility: hidden;
+    position: absolute;
     display: none;
+    visibility: hidden;
     max-height: 0;
+    max-width: 0;
 }
 
 .okit-pointer-cursor {

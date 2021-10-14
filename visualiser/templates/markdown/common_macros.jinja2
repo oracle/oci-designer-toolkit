@@ -305,3 +305,21 @@
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
+
+
+{%- macro user_property(id, title="User") -%}
+    {{ document_property(title, user_link(id)) }}
+{%- endmacro -%}
+
+{%- macro user_link(id) -%}
+    {{ property_link(user_name(id)) }}
+{%- endmacro -%}
+
+{%- macro user_name(id) -%}
+    {%- for user in users -%}
+        {%- if user.id == id -%}
+            {{ user.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+

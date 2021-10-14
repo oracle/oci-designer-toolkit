@@ -2,19 +2,19 @@
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded {{ artefact_name }} Javascript');
+console.info('Loaded NoSQL Database Javascript');
 
 /*
-** Define {{ artefact_name }} Class
+** Define NoSQL Database Class
 */
-class {{ model_class_name }} extends OkitArtifact {
+class NoSQLDatabase extends OkitArtifact {
     /*
     ** Create
     */
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.{{ artefact_json_list }}.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.nosql_databases.length + 1);
         this.compartment_id = data.parent_id;
         /*
         ** TODO: Add Resource / Artefact specific parameters and default
@@ -30,43 +30,43 @@ class {{ model_class_name }} extends OkitArtifact {
     ** Clone Functionality
     */
     clone() {
-        return new {{ model_class_name }}(JSON.clone(this), this.getOkitJson());
+        return new NoSQLDatabase(JSON.clone(this), this.getOkitJson());
     }
     /*
     ** Name Generation
     */
     getNamePrefix() {
-        return super.getNamePrefix() + '{{ name_prefix }}';
+        return super.getNamePrefix() + 'nd';
     }
     /*
     ** Static Functionality
     */
     static getArtifactReference() {
-        return '{{ artefact_name }}';
+        return 'NoSQL Database';
     }
 }
 /*
 ** Dynamically Add Model Functions
 */
-OkitJson.prototype.new{{ model_class_name }} = function(data) {
-    this.get{{ model_class_name }}s().push(new {{ model_class_name }}(data, this));
-    return this.get{{ model_class_name }}s()[this.get{{ model_class_name }}s().length - 1];
+OkitJson.prototype.newNoSQLDatabase = function(data) {
+    this.getNoSQLDatabases().push(new NoSQLDatabase(data, this));
+    return this.getNoSQLDatabases()[this.getNoSQLDatabases().length - 1];
 }
-OkitJson.prototype.get{{ model_class_name }}s = function() {
-    if (!this.{{ artefact_json_list }}) {
-        this.{{ artefact_json_list }} = [];
+OkitJson.prototype.getNoSQLDatabases = function() {
+    if (!this.nosql_databases) {
+        this.nosql_databases = [];
     }
-    return this.{{ artefact_json_list }};
+    return this.nosql_databases;
 }
-OkitJson.prototype.get{{ model_class_name }} = function(id='') {
-    for (let artefact of this.get{{ model_class_name }}s()) {
+OkitJson.prototype.getNoSQLDatabase = function(id='') {
+    for (let artefact of this.getNoSQLDatabases()) {
         if (artefact.id === id) {
             return artefact;
         }
     }
 return undefined;
 }
-OkitJson.prototype.delete{{ model_class_name }} = function(id) {
-    this.{{ artefact_json_list }} = this.{{ artefact_json_list }} ? this.{{ artefact_json_list }}.filter((r) => r.id !== id) : []
+OkitJson.prototype.deleteNoSQLDatabase = function(id) {
+    this.nosql_databases = this.nosql_databases ? this.nosql_databases.filter((r) => r.id !== id) : []
 }
 
