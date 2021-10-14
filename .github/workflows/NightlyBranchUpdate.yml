@@ -39,4 +39,5 @@ jobs:
       - name: Merge toxophilist/sprint-dev
         run: |
           ls -lash
+          git status
         shell: bash
