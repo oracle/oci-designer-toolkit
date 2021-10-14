@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: nightly
+          ref: toxophilist/sprint-dev
 
       # Merge sprint-dev
       - name: Merge toxophilist/sprint-dev
@@ -34,7 +34,7 @@ jobs:
           git fetch
           git pull
           git branch
-          git checkout origin/toxophilist/sprint-dev
+          git checkout origin/nightly
           git status
-          #git merge origin/toxophilist/sprint-dev -m Nightly
+          git merge toxophilist/sprint-dev -m Nightly
         shell: bash
