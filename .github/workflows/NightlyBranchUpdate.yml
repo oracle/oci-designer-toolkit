@@ -36,7 +36,6 @@ jobs:
       # Merge sprint-dev
       - name: Merge toxophilist/sprint-dev
         run: |
-          git status
-          git checkout nightly
-          git status
+          ls -lash
         working-directory: $GITHUB_WORKSPACE
+        shell: bash
