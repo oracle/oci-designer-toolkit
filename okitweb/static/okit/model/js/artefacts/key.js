@@ -2,19 +2,19 @@
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded {{ artefact_name }} Javascript');
+console.info('Loaded Key Javascript');
 
 /*
-** Define {{ artefact_name }} Class
+** Define Key Class
 */
-class {{ model_class_name }} extends OkitArtifact {
+class Key extends OkitArtifact {
     /*
     ** Create
     */
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.{{ artefact_json_list }}.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.keys.length + 1);
         this.compartment_id = data.parent_id;
         /*
         ** TODO: Add Resource / Artefact specific parameters and default
@@ -30,43 +30,43 @@ class {{ model_class_name }} extends OkitArtifact {
     ** Clone Functionality
     */
     clone() {
-        return new {{ model_class_name }}(JSON.clone(this), this.getOkitJson());
+        return new Key(JSON.clone(this), this.getOkitJson());
     }
     /*
     ** Name Generation
     */
     getNamePrefix() {
-        return super.getNamePrefix() + '{{ name_prefix }}';
+        return super.getNamePrefix() + 'k';
     }
     /*
     ** Static Functionality
     */
     static getArtifactReference() {
-        return '{{ artefact_name }}';
+        return 'Key';
     }
 }
 /*
 ** Dynamically Add Model Functions
 */
-OkitJson.prototype.new{{ model_class_name }} = function(data) {
-    this.get{{ model_class_name }}s().push(new {{ model_class_name }}(data, this));
-    return this.get{{ model_class_name }}s()[this.get{{ model_class_name }}s().length - 1];
+OkitJson.prototype.newKey = function(data) {
+    this.getKeys().push(new Key(data, this));
+    return this.getKeys()[this.getKeys().length - 1];
 }
-OkitJson.prototype.get{{ model_class_name }}s = function() {
-    if (!this.{{ artefact_json_list }}) {
-        this.{{ artefact_json_list }} = [];
+OkitJson.prototype.getKeys = function() {
+    if (!this.keys) {
+        this.keys = [];
     }
-    return this.{{ artefact_json_list }};
+    return this.keys;
 }
-OkitJson.prototype.get{{ model_class_name }} = function(id='') {
-    for (let artefact of this.get{{ model_class_name }}s()) {
+OkitJson.prototype.getKey = function(id='') {
+    for (let artefact of this.getKeys()) {
         if (artefact.id === id) {
             return artefact;
         }
     }
 return undefined;
 }
-OkitJson.prototype.delete{{ model_class_name }} = function(id) {
-    this.{{ artefact_json_list }} = this.{{ artefact_json_list }} ? this.{{ artefact_json_list }}.filter((r) => r.id !== id) : []
+OkitJson.prototype.deleteKey = function(id) {
+    this.keys = this.keys ? this.keys.filter((r) => r.id !== id) : []
 }
 

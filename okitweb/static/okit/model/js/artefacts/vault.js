@@ -2,19 +2,19 @@
 ** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 */
-console.info('Loaded {{ artefact_name }} Javascript');
+console.info('Loaded Vault Javascript');
 
 /*
-** Define {{ artefact_name }} Class
+** Define Vault Class
 */
-class {{ model_class_name }} extends OkitArtifact {
+class Vault extends OkitArtifact {
     /*
     ** Create
     */
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.{{ artefact_json_list }}.length + 1);
+        this.display_name = this.generateDefaultName(okitjson.vaults.length + 1);
         this.compartment_id = data.parent_id;
         /*
         ** TODO: Add Resource / Artefact specific parameters and default
@@ -30,43 +30,43 @@ class {{ model_class_name }} extends OkitArtifact {
     ** Clone Functionality
     */
     clone() {
-        return new {{ model_class_name }}(JSON.clone(this), this.getOkitJson());
+        return new Vault(JSON.clone(this), this.getOkitJson());
     }
     /*
     ** Name Generation
     */
     getNamePrefix() {
-        return super.getNamePrefix() + '{{ name_prefix }}';
+        return super.getNamePrefix() + 'v';
     }
     /*
     ** Static Functionality
     */
     static getArtifactReference() {
-        return '{{ artefact_name }}';
+        return 'Vault';
     }
 }
 /*
 ** Dynamically Add Model Functions
 */
-OkitJson.prototype.new{{ model_class_name }} = function(data) {
-    this.get{{ model_class_name }}s().push(new {{ model_class_name }}(data, this));
-    return this.get{{ model_class_name }}s()[this.get{{ model_class_name }}s().length - 1];
+OkitJson.prototype.newVault = function(data) {
+    this.getVaults().push(new Vault(data, this));
+    return this.getVaults()[this.getVaults().length - 1];
 }
-OkitJson.prototype.get{{ model_class_name }}s = function() {
-    if (!this.{{ artefact_json_list }}) {
-        this.{{ artefact_json_list }} = [];
+OkitJson.prototype.getVaults = function() {
+    if (!this.vaults) {
+        this.vaults = [];
     }
-    return this.{{ artefact_json_list }};
+    return this.vaults;
 }
-OkitJson.prototype.get{{ model_class_name }} = function(id='') {
-    for (let artefact of this.get{{ model_class_name }}s()) {
+OkitJson.prototype.getVault = function(id='') {
+    for (let artefact of this.getVaults()) {
         if (artefact.id === id) {
             return artefact;
         }
     }
 return undefined;
 }
-OkitJson.prototype.delete{{ model_class_name }} = function(id) {
-    this.{{ artefact_json_list }} = this.{{ artefact_json_list }} ? this.{{ artefact_json_list }}.filter((r) => r.id !== id) : []
+OkitJson.prototype.deleteVault = function(id) {
+    this.vaults = this.vaults ? this.vaults.filter((r) => r.id !== id) : []
 }
 
