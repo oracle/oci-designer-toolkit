@@ -23,8 +23,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          repository: origin/nightly
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -38,5 +36,7 @@ jobs:
       # Merge sprint-dev
       - name: Merge toxophilist/sprint-dev
         run: |
+          git status
+          git checkout nightly
           git status
         working-directory: $GITHUB_WORKSPACE
