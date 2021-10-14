@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          branch: nightly
+          repository: nightly
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
