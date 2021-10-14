@@ -32,6 +32,6 @@ jobs:
           git status
           git pull
           git branch
-          # git merge toxophilist/sprint-dev -m Nightly
+          git merge origin/toxophilist/sprint-dev -m Nightly
           git status
         shell: bash
