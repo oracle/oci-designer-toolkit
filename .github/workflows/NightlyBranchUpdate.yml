@@ -37,5 +37,5 @@ jobs:
           git checkout origin/nightly
           git status
           git merge toxophilist/sprint-dev -m Nightly
-          git push
+          git push origin HEAD:nightly
         shell: bash
