@@ -23,10 +23,22 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: toxophilist/sprint-dev
+
       # Merge sprint-dev
       - name: Merge toxophilist/sprint-dev
         run: |
-          pwd
-          git clone -b nightly git@github.com:oracle/oci-designer-toolkit.git
-          ls -lash
+          git config --global user.email "action@workflow.com"
+          git config --global user.name "Push Action Workflow"
+          git status
+          git fetch
+          git pull
+          git checkout origin/nightly
+          git status
+          git merge --allow-unrelated-histories toxophilist/sprint-dev -m Nightly
+          git push origin HEAD:nightly
         shell: bash
