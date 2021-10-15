@@ -48,7 +48,7 @@ class {{ model_class_name }}View extends OkitContainerArtefactView {
     }
     static getDropTargets() {
         // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Compartment.getArtifactReference()];
     }
 }
 /*
