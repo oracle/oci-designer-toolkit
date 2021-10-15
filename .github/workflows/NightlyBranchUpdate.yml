@@ -37,6 +37,6 @@ jobs:
           git pull
           git checkout origin/nightly
           git status
-          git merge toxophilist/sprint-dev -m Nightly
+          git merge --allow-unrelated-histories toxophilist/sprint-dev -m Nightly
           git push origin HEAD:nightly
         shell: bash
