@@ -27,5 +27,6 @@ jobs:
       - name: Merge toxophilist/sprint-dev
         run: |
           pwd
+          git clone -b nightly git@github.com:oracle/oci-designer-toolkit.git
           ls -lash
         shell: bash
