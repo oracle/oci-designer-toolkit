@@ -32,6 +32,8 @@ jobs:
       # Merge sprint-dev
       - name: Merge toxophilist/sprint-dev
         run: |
+          git config --global user.email "action@workflow.com"
+          git config --global user.name "Push Action Workflow"
           git status
           git fetch
           git pull
