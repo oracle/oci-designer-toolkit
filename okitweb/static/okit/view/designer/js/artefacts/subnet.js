@@ -160,7 +160,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     getTopArtifacts() {
-        return [LoadBalancer.getArtifactReference()];
+        return [Bastion.getArtifactReference(), LoadBalancer.getArtifactReference()];
     }
 
     getBottomArtifacts() {

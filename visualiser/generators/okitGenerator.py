@@ -228,6 +228,9 @@ class OCIGenerator(object):
         # -- Loadbalancers
         for loadbalancer in self.visualiser_json.get('load_balancers', []):
             self.renderLoadbalancer(loadbalancer)
+        # -- Bastions
+        for bastion in self.visualiser_json.get('bastions', []):
+            self.renderBastion(bastion)
         # # -- Exadata Infrastructures
         # for resource in self.visualiser_json.get('exadata_infrastructures', []):
         #     self.renderExadataInfrastructure(resource)
@@ -360,6 +363,46 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("autonomous_database.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderBastion(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        display_name = resource.get("display_name", resource.get("name", "Unknown"))
+        # Read Data
+        standardisedName = self.standardiseResourceName(display_name)
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = display_name
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Bastion Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- Bastion Type
+        self.addJinja2Variable("bastion_type", resource.get("bastion_type", 'STANDARD'), standardisedName)
+        # ---- Subnet
+        self.jinja2_variables["target_subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['target_subnet_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", display_name, standardisedName)
+        # ---- CIDR Blocks
+        self.jinja2_variables["client_cidr_block_allow_list"] = resource.get("client_cidr_block_allow_list", [])
+        # --- Optional
+        if resource.get("max_session_ttl_in_seconds", 0) > 0:
+            self.addJinja2Variable("max_session_ttl_in_seconds", resource.get("max_session_ttl_in_seconds", 10800), standardisedName)
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("bastion.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

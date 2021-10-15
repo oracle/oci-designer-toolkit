@@ -212,8 +212,6 @@ class OCIQuery(OCIConnection):
                         resource_list = self.service_gateways(resource_list, resources)
                     elif resource_type == "Group":
                         resource_list = self.groups(resource_list, resources)
-                    elif resource_type == "Bastion":
-                        logger.info(resource_list)
                     # Check Life Cycle State
                     # logger.info(f'Processing {resource_type} : {resource_list}')
                     response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = [r for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]

@@ -444,7 +444,7 @@ function exportToResourceManager() {
         create_or_update: $('input[name=create_update_toggle]:checked').val(),
         plan_or_apply: $('input[name=plan_apply_toggle]:checked').val()
     };
-    console.info('Resource Manager Options : ' + JSON.stringify(request_json));
+    // console.info('Resource Manager Options : ' + JSON.stringify(request_json));
     hideNavMenu();
     setBusyIcon();
     $(jqId('modal_dialog_progress')).removeClass('hidden');

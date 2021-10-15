@@ -406,7 +406,7 @@ class OkitSettings {
         this.highlight_association = true;
         this.show_label = 'none';
         this.tooltip_type = 'simple';
-        this.name_prefix = 'okit-';
+        this.name_prefix = 'okit';
         this.auto_save = false;
         this.show_ocids = false;
         this.validate_markdown = true;

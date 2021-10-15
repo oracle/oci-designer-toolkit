@@ -12,14 +12,19 @@ class BastionView extends OkitArtefactView {
         if (!json_view.bastions) json_view.bastions = [];
         super(artefact, json_view);
     }
-    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
-    get parent_id() {return this.artefact.vcn_id;}
-    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
+    // -- Reference
+    get parent_id() {
+        let primary_subnet = this.getJsonView().getSubnet(this.subnet_id);
+        if (primary_subnet && primary_subnet.compartment_id === this.artefact.compartment_id) {
+            return this.subnet_id;
+        } else {
+            return this.compartment_id;
+        }
+    }
+    get parent() {return this.getJsonView().getSubnet(this.parent_id) ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
     // Direct Subnet Access
-    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
-    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
+    get subnet_id() {return this.artefact.target_subnet_id;}
+    set subnet_id(id) {this.artefact.target_subnet_id = id;}
     /*
     ** SVG Processing
     */
@@ -43,8 +48,7 @@ class BastionView extends OkitArtefactView {
         return Bastion.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Compartment.getArtifactReference(), Subnet.getArtifactReference()];
     }
 }
 /*
@@ -52,11 +56,12 @@ class BastionView extends OkitArtefactView {
 */
 OkitJsonView.prototype.dropBastionView = function(target) {
     let view_artefact = this.newBastion();
-    if (target.type === Compartment.getArtifactReference()) {
-        view_artefact.artefact.compartment_id = target.id;
-    } else {
-        view_artefact.artefact.compartment_id = target.compartment_id;
-    }
+    if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().target_subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+}
     view_artefact.recalculate_dimensions = true;
     return view_artefact;
 }
