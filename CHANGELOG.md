@@ -1,6 +1,17 @@
 # Release Notes
 
 
+## Version 0.28.0
+**Release Date**: 20th October 2021
+### Features
+1. User / Groups View added
+    1. Allow the creation / definition of local Users
+    2. Allow the creation / definition of OCI Groups
+2. Bastion as a Service functionality added to main design canvas.
+### Bug Fixes
+1. Add missing policy documentation to export to markdown.
+
+
 ## Version 0.27.1
 **Release Date**: 1st October 2021
 ### Bug Fixes
