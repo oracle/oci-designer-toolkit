@@ -35,6 +35,7 @@ class OCIQuery(OCIConnection):
         "AutonomousDatabase",
         "Backend",
         "BackendSet",
+        "Bastion",
         "BootVolume",
         "BootVolumeAttachment",
         "Bucket",
@@ -86,6 +87,7 @@ class OCIQuery(OCIConnection):
     ]
     DISCOVERY_OKIT_MAP = {
         "AutonomousDatabase": "autonomous_databases",
+        "Bastion": "bastions",
         #"BootVolume": "block_storage_volumes",
         "Bucket": "object_storage_buckets",
         "Cluster": "oke_clusters",

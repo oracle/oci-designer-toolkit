@@ -1,0 +1,14 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_group(resource) -%}
+{{ common.document_common_details(resource) }}
+| Property | Value    |
+| -------- | -------- |
+{{ common.document_property("Description", resource.description) }}
+    {% for user_id in resource.user_ids -%}
+        {{ common.user_property(user_id) }}
+    {% endfor %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for group in groups -%}
+    {{ document_group(group) }}
+{%- endfor %}

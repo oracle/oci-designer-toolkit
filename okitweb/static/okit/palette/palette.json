@@ -58,6 +58,16 @@
                     "svg": "MySQLDatabaseServiceMDS.svg"
                 },
                 {
+                    "title": "NoSQL Database",
+                    "targets": ["oci", "hidden"],
+                    "svg": "NoSQLDatabase.svg"
+                },
+                {
+                    "title": "Autonomous Data Warehouse Cloud Service",
+                    "targets": ["hidden"],
+                    "svg": "AutonomousDataWarehouseCloudService.svg"
+                },
+                {
                     "title": "Exadata Database System",
                     "targets": ["hidden"],
                     "svg": "ExadataDatabaseSystem.svg"
@@ -72,6 +82,11 @@
                     "title": "Load Balancer",
                     "targets": ["oci"],
                     "svg": "LoadBalancerLB.svg"
+                },
+                {
+                    "title": "NetworkLoad Balancer",
+                    "targets": ["oci", "hidden"],
+                    "svg": "NetworkLoadBalancerLB.svg"
                 },
                 {
                     "title": "Virtual Cloud Network",
@@ -177,9 +192,24 @@
             "svg": "identity.svg",
             "resources": [
                 {
+                    "title": "Bastion",
+                    "targets": ["oci", "pca"],
+                    "svg": "Bastion.svg"
+                },
+                {
                     "title": "Policy",
                     "targets": ["oci", "pca"],
                     "svg": "Policies.svg"
+                },
+                {
+                    "title": "Vault",
+                    "targets": ["oci", "pca", "hidden"],
+                    "svg": "KeyVault.svg"
+                },
+                {
+                    "title": "Key",
+                    "targets": ["oci", "pca", "hidden"],
+                    "svg": "KeyManagement.svg"
                 }
             ]
         }

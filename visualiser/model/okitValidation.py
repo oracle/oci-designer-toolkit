@@ -29,6 +29,7 @@ class OCIJsonValidator(object):
         logger.info('Validating OKIT Json')
         self.validateCommon()
         self.validateAutonomousDatabases()
+        self.validateBastions()
         self.validateBlockStorageVolumes()
         self.validateCompartments()
         self.validateCustomerPremiseEquipments()
@@ -128,6 +129,26 @@ class OCIJsonValidator(object):
                     'element': 'nsg_ids'
                 }
                 self.results['errors'].append(error)
+
+    # Bastion
+    def validateBastions(self):
+        for resource in self.okit_json.get('bastions', []):
+            logger.info('Validating {!s}'.format(resource['display_name']))
+            for cidr_block in resource.get('client_cidr_block_allow_list', []):
+                for other_cidr_block in resource.get('client_cidr_block_allow_list', []):
+                    logger.info(f'cidr_block {cidr_block} - other_cidr_block {other_cidr_block} : {self.overlaps(cidr_block, other_cidr_block)}')
+                    if cidr_block != other_cidr_block:
+                        if self.overlaps(cidr_block, other_cidr_block):
+                            self.valid = False
+                            error = {
+                                'id': resource['id'],
+                                'type': 'Bastion',
+                                'artefact': resource['display_name'],
+                                'message': 'CIDR Block {!s} overlaps CIDR Block {!s}.'.format(cidr_block, other_cidr_block),
+                                'element': 'client_cidr_block_allow_list'
+                            }
+                            self.results['errors'].append(error)
+
 
     # Block Storage
     def validateBlockStorageVolumes(self):
