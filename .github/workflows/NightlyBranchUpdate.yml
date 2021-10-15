@@ -4,9 +4,10 @@ name: Nightly Branch Update
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push of toxophilist/sprint-dev branch or periodic
   push:
-    branches: [ toxophilist/sprint-dev ]
+    branches: 
+      - 'toxophilist/sprint-dev'
   schedule:
     - cron: '0 0 * * *'
 
