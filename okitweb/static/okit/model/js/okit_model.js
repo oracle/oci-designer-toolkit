@@ -1110,6 +1110,7 @@ class OkitArtifact {
         this.compartment_id = '';
         this.display_name = '';
         this.definition = '';
+        this.okit_reference = `okit-${uuidv4()}`;
         // Add default for common Tag variables
         this.freeform_tags = {};
         this.defined_tags = {};
