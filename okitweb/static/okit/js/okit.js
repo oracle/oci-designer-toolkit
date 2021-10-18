@@ -75,65 +75,66 @@ class OkitGITConfig {
 class OkitOCIData {
     key = "OkitDropdownCache";
     day_milliseconds = 86400000;
-    constructor(profile) {
+    constructor(profile, region='uk-london-1') {
         this.compartments = [];
         this.dropdown_data = {}
-        this.load(profile);
+        this.load(profile, region);
     }
 
     clearLocalStorage() {localStorage.removeItem(this.key)}
 
-    storeLocal(profile) {
+    storeLocal(profile, region='') {
         console.info(`Storing Local Dropdown data for ${profile}`);
         const local_data = localStorage.getItem(this.key)
         let cache = {}
         if (local_data) cache = JSON.parse(local_data)
-        if (profile) cache[profile] = this.dropdown_data
+        if (profile && !cache.hasOwnProperty(profile)) cache[profile] = {}
+        if (profile) cache[profile][region] = this.dropdown_data
         localStorage.setItem(this.key, JSON.stringify(cache))
     }
 
-    loadLocal(profile) {
+    loadLocal(profile, region='') {
         const local_data = localStorage.getItem(this.key)
         console.info(`Loading Local Dropdown data for ${profile}`);
         let cache = {}
         if (local_data) cache = JSON.parse(local_data)
-        if (profile && cache[profile]) {
+        if (profile && region && cache[profile] && cache[profile][region]) {
             // Add test for stale cache  && cache[profile].cache_date && ((Date.now() - cache[profile].cache_date) / this.day_milliseconds) <= 7
-            console.info(`Found Local Dropdown Data for ${profile}`);
-            this.dropdown_data = cache[profile]
+            console.info(`Found Local Dropdown Data for ${profile} ${region}`);
+            this.dropdown_data = cache[profile][region]
             return true;
         } else {
             return false;
         }
     }
 
-    load(profile) {
+    load(profile, region='') {
         console.info('Loading Dropdown data for', profile);
         this.compartments = [];
         const self = this;
-        if (!this.loadLocal(profile)) {
+        if (!this.loadLocal(profile, region)) {
             const start = new Date().getTime()
-            $.getJSON(`dropdown/data/${String(profile)}`, (resp) => {
+            $.getJSON(`dropdown/data/${String(profile)}/${String(region)}`, (resp) => {
                 const end = new Date().getTime()
                 console.info('Load Dropdown Data took', end - start, 'ms')
                 // $.extend(true, self, resp);
                 self.dropdown_data = resp;
-                self.storeLocal(profile);
+                self.storeLocal(profile, region);
                 if (resp.shipped && profile !== undefined) {
-                    self.refresh(profile);
+                    self.refresh(profile, region);
                 }
             });
         }
     }
 
-    refresh(profile) {
+    refresh(profile, region='') {
         console.info('Refreshing Dropdown data for', profile);
-        this.query(profile, false)
+        this.query(profile, false, region)
     }
 
-    save(profile) {
+    save(profile, region='') {
         console.info('Saving Dropdown data for', profile);
-        this.storeLocal(profile);
+        this.storeLocal(profile, region);
         $.ajax({
             type: 'post',
             url: `dropdown/data/${String(profile)}`,
@@ -148,17 +149,17 @@ class OkitOCIData {
         });
     }
 
-    cloneForSave(profile) {
+    cloneForSave(profile, region='') {
         let clone = JSON.clone(this);
         clone.compartments = [];
         return clone;
     }
 
-    query(profile, save=false) {
-        console.info('Querying Dropdown data for', profile);
+    query(profile, save=false, region='') {
+        console.info('Querying Dropdown data for', profile, region);
         const self = this;
         const start = new Date().getTime()
-        $.getJSON(`oci/dropdown/${profile}`, (resp) => {
+        $.getJSON(`oci/dropdown/${profile}/${region}`, (resp) => {
             // Merge with base dropdown overwriting where appropriate with new data
             self.dropdown_data = {...self.dropdown_data, ...resp};
             delete self.dropdown_data.default
@@ -166,8 +167,8 @@ class OkitOCIData {
             self.dropdown_data.cache_date = Date.now()
             const end = new Date().getTime()
             console.info('Queried Dropdown Data for', profile, 'took', end - start, 'ms')
-            if (save) this.save(profile)
-            else this.storeLocal(profile)
+            if (save) this.save(profile, region)
+            else this.storeLocal(profile, region)
             });
     }
 
@@ -394,7 +395,7 @@ class OkitSettings {
         this.is_vcn_defaults = true;
         this.is_timestamp_files = false;
         this.profile = 'DEFAULT';
-        this.region = ''
+        this.region = 'uk-london-1'
         this.is_always_free = false;
         this.is_optional_expanded = true;
         this.is_display_grid = false;

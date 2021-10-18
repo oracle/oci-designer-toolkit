@@ -1837,5 +1837,5 @@ function handleRefreshDropdownData(event) {
     okitRegions.clearLocalStorage()
     okitOciData.clearLocalStorage()
     okitRegions.load(okitSettings.profile)
-    okitOciData.load(okitSettings.profile)
+    okitOciData.load(okitSettings.profile, okitSettings.region)
 }

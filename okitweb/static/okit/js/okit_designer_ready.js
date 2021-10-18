@@ -25,7 +25,7 @@ $(document).ready(function() {
     okitSettings = new OkitSettings();
     okitOciConfig = new OkitOCIConfig(loadHeaderConfigDropDown);
     okitRegions = new OkitRegions(loadHeaderRegionsDropDown);
-    okitOciData = new OkitOCIData(okitSettings.profile);
+    okitOciData = new OkitOCIData(okitSettings.profile, okitSettings.region);
     okitGitConfig = new OkitGITConfig();
     okitJsonModel = new OkitJson();
     okitJsonView = new OkitDesignerJsonView(okitJsonModel);

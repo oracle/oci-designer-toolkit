@@ -577,13 +577,13 @@ def saveas(savetype):
             return str(e), 500
 
 
-@bp.route('/dropdown/data/<string:profile>', methods=(['GET', 'POST']))
-def dropdownData(profile):
+@bp.route('/dropdown/data/<string:profile>/<string:region>', methods=(['GET', 'POST']))
+def dropdownData(profile, region):
     dropdown_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown'))
     shipped_dropdown_file = os.path.abspath(os.path.join(dropdown_dir, 'dropdown.json'))
     # shipped_dropdown_file = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown', 'dropdown.json'))
     profile_dropdown_dir = os.path.abspath(os.path.join(dropdown_dir, 'profiles'))
-    profile_dropdown_file = os.path.abspath(os.path.join(profile_dropdown_dir, f'{profile}.json'))
+    profile_dropdown_file = os.path.abspath(os.path.join(profile_dropdown_dir, profile, f'{region}.json'))
     # Check if profile specific dropdown file exists if not use the default
     if request.method == 'GET':
         if os.path.exists(profile_dropdown_file):

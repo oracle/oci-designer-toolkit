@@ -426,11 +426,11 @@ def resourceTypes(profile):
         return 'Unknown Method', 500
 
 
-@bp.route('/dropdown/<string:profile>', methods=(['GET']))
-def dropdownQuery(profile):
+@bp.route('/dropdown/<string:profile>/<string:region>', methods=(['GET']))
+def dropdownQuery(profile, region):
     if request.method == 'GET':
         dropdown_query = OCIDropdownQuery(profile=profile)
-        dropdown_json = dropdown_query.executeQuery()
+        dropdown_json = dropdown_query.executeQuery([region])
         return dropdown_json
     else:
         return 'Unknown Method', 500
