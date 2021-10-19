@@ -83,6 +83,11 @@ class OkitOCIData {
 
     clearLocalStorage() {localStorage.removeItem(this.key)}
 
+    getCache() {
+        const local_data = localStorage.getItem(this.key)
+        return local_data ? JSON.parse(local_data) : {}
+    }
+
     storeLocal(profile, region='') {
         console.info(`Storing Local Dropdown data for ${profile}`);
         const local_data = localStorage.getItem(this.key)
