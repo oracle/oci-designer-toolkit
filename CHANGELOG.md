@@ -8,8 +8,11 @@
     1. Allow the creation / definition of local Users
     2. Allow the creation / definition of OCI Groups
 2. Bastion as a Service functionality added to main design canvas.
+3. Update cache functionality to store based on Configuration & Region.
+4. Add "OKIT Reference" Tag to all resources created via OKIT to allow for future expansion / reference.
 ### Bug Fixes
 1. Add missing policy documentation to export to markdown.
+2. Fix Save As Template to add .json if not specified.
 
 
 ## Version 0.27.1
