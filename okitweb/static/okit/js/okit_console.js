@@ -117,7 +117,8 @@ function handleConfigChanged(event) {
     console_header_region_select.empty()
     console_header_region_select.append($('<option>').attr('value', '').text('Retrieving....'))
     okitRegions.load(okitSettings.profile)
-    okitOciData.load(okitSettings.profile)
+    okitOciData.load(okitSettings.profile, okitSettings.region)
+    setOCILink()
 }
 
 function loadHeaderRegionsDropDown() {
@@ -141,6 +142,7 @@ function handleRegionChanged(event) {
     event.stopPropagation()
     okitSettings.region = $('#console_header_region_select').val()
     okitSettings.save()
+    okitOciData.load(okitSettings.profile, okitSettings.region)
     setOCILink()
 }
 

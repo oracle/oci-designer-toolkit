@@ -2274,7 +2274,7 @@ class OCIGenerator(object):
         return
 
     def renderDefinedTags(self, artifact):
-        tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {})}
+        tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {}), **self.getOkitDefinedTags(artifact)}
         if len(tags.keys()) > 0:
             if self.use_vars:
                 standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
@@ -2289,7 +2289,8 @@ class OCIGenerator(object):
         return
 
     def renderFreeformTags(self, artifact):
-        tags = {**artifact.get("freeform_tags", {}), **self.visualiser_json.get("freeform_tags", {}), 'okit_version': self.OKIT_VERSION}
+        tags = {**artifact.get("freeform_tags", {}), **self.visualiser_json.get("freeform_tags", {}), **self.getOkitFreeformTags(artifact)}
+        # 'okit_version': self.OKIT_VERSION, 'okit_reference': artifact.get('okit_reference', 'Unknown')
         if len(tags.keys()) > 0:
             if self.use_vars:
                 standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
@@ -2302,6 +2303,13 @@ class OCIGenerator(object):
         else:
             self.jinja2_variables.pop("freeform_tags", None)
         return
+    
+    def getOkitDefinedTags(self, resource):
+        return {}
+        # return {"okit": {"version": self.OKIT_VERSION, "reference": resource.get('okit_reference', 'Unknown')}}
+
+    def getOkitFreeformTags(self, resource):
+        return {"okit_version": self.OKIT_VERSION, "okit_reference": resource.get('okit_reference', 'Unknown')}
 
     def standardiseResourceName(self, name):
         # split() will generate a list with no empty values thus join of this will remove all whitespace
