@@ -303,6 +303,7 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user')
         .attr('id', 'template_file_name')
         .attr('name', 'template_file_name')
         .attr('type', 'text')
+        .attr('placeholder', '<Directory Path>/<Filename>.json')
         .on('keydown', (e) => {
             if (d3.event.keyCode == 220) {
                 d3.event.preventDefault()

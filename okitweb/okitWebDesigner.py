@@ -379,10 +379,12 @@ def template_save():
         instance_path = current_app.instance_path
         root_dir = request.json["root_dir"].strip('/')
         template_filename = request.json["template_file"].strip('/')
+        if not template_filename.endswith('.json'):
+            template_filename = f'{template_filename}.json'
         okit_json = request.json["okit_json"]
         git = request.json.get('git', False)
         git_commit_msg = request.json.get('git_commit_msg', '')
-        logger.info(f'Save Template : {root_dir}')
+        logger.info(f'Save Template : {root_dir} {template_filename}')
 
         template_dir = os.path.dirname(template_filename)
         full_dir = os.path.join(instance_path, root_dir, template_dir)
