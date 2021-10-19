@@ -8,7 +8,7 @@ LABEL "provider"="Oracle" \
       "version"="0.27.1" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2021, Oracle and/or its affiliates."
-SHELL ["/bin/bash", "-c"]
+# SHELL ["/bin/bash", "-c"]
 ENV PYTHONIOENCODING=utf8 \
     PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit" \
     FLASK_APP=okitweb \
