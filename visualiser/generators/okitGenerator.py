@@ -26,7 +26,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.27.1"
+    OKIT_VERSION = "0.28.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
         # Initialise generator output data variables
         self.create_sequence = []
@@ -714,7 +714,7 @@ class OCIGenerator(object):
             logger.info(f'DHCP Option: {dhcp_option}')
             jinja2_dhcp_option["type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_type'.format(option_cnt), dhcp_option["type"], standardisedName)
             # ------ Server Type
-            if dhcp_option.get("server_type", '') != '':
+            if len(dhcp_option.get("server_type", '')) > 0:
                 jinja2_dhcp_option["server_type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_server_type'.format(option_cnt), dhcp_option["server_type"], standardisedName)
             # ------ Custom DNS Servers
             if len(dhcp_option.get("custom_dns_servers", [])) > 0:
