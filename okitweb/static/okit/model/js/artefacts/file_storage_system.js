@@ -62,6 +62,17 @@ class FileStorageSystem extends OkitArtifact {
                 }
             })
         }
+
+        // Updated Structure
+        // this.mount_targets = [
+        //     {
+        //         subnet_id: this.subnet_id ? this.subnet_id : '', 
+        //         hostname_label: this.display_name.toLowerCase(), 
+        //         nsg_ids: [], 
+        //         file_systems: [{}]
+        //     }
+        // ]
+
         this.convert();
         // Expose subnet_id for the first Mount target at the top level
         delete this.subnet_id;

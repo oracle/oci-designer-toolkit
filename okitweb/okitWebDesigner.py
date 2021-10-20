@@ -379,10 +379,12 @@ def template_save():
         instance_path = current_app.instance_path
         root_dir = request.json["root_dir"].strip('/')
         template_filename = request.json["template_file"].strip('/')
+        if not template_filename.endswith('.json'):
+            template_filename = f'{template_filename}.json'
         okit_json = request.json["okit_json"]
         git = request.json.get('git', False)
         git_commit_msg = request.json.get('git_commit_msg', '')
-        logger.info(f'Save Template : {root_dir}')
+        logger.info(f'Save Template : {root_dir} {template_filename}')
 
         template_dir = os.path.dirname(template_filename)
         full_dir = os.path.join(instance_path, root_dir, template_dir)
@@ -577,13 +579,13 @@ def saveas(savetype):
             return str(e), 500
 
 
-@bp.route('/dropdown/data/<string:profile>', methods=(['GET', 'POST']))
-def dropdownData(profile):
+@bp.route('/dropdown/data/<string:profile>/<string:region>', methods=(['GET', 'POST']))
+def dropdownData(profile, region):
     dropdown_dir = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown'))
     shipped_dropdown_file = os.path.abspath(os.path.join(dropdown_dir, 'dropdown.json'))
     # shipped_dropdown_file = os.path.abspath(os.path.join(bp.static_folder, 'json', 'dropdown', 'dropdown.json'))
     profile_dropdown_dir = os.path.abspath(os.path.join(dropdown_dir, 'profiles'))
-    profile_dropdown_file = os.path.abspath(os.path.join(profile_dropdown_dir, f'{profile}.json'))
+    profile_dropdown_file = os.path.abspath(os.path.join(profile_dropdown_dir, profile, f'{region}.json'))
     # Check if profile specific dropdown file exists if not use the default
     if request.method == 'GET':
         if os.path.exists(profile_dropdown_file):

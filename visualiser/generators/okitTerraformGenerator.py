@@ -80,7 +80,8 @@ class OCITerraformGenerator(OCIGenerator):
             return '"{0!s:s}"'.format(value)
 
     def renderDefinedTags(self, artifact):
-        tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {})}
+        # tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {})}
+        tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {}), **self.getOkitDefinedTags(artifact)}
         if len(tags.keys()) > 0:
             definedtags = {}
             for namespace, tags in tags.items():

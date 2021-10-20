@@ -40,6 +40,7 @@ class OCIDropdownQuery(OCIConnection):
         "FastConnectProviderService", 
         "Image",
         "ImageShapeCompatibility",
+        # "Instance",
         "MySQLShape", 
         "MySQLVersion", 
         "MySQLConfiguration", 
@@ -116,6 +117,7 @@ class OCIDropdownQuery(OCIConnection):
         # logger.info(f'Processing Images - Shape: {sorted(shapes)}')
         for image in images:
             # logger.info(f'Image Id: {image["id"]} in/out {image["id"] in ids}')
+            # logger.info(f'Image {image["display_name"]} Compartment {image["compartment_id"]}')
             image["shapes"] = [s["shape"] for s in resources.get("ImageShapeCompatibility", []) if s["image_id"] == image["id"]]
         return images
     
