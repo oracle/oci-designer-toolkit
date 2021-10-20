@@ -13,6 +13,7 @@
 ### Bug Fixes
 1. Add missing policy documentation to export to markdown.
 2. Fix Save As Template to add .json if not specified.
+3. Resolve issue where the default dhcp option would generate terraform with an empty search_domain_names if the server type was changed and then changed back.
 
 
 ## Version 0.27.1

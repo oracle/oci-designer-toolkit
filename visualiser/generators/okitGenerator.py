@@ -714,7 +714,7 @@ class OCIGenerator(object):
             logger.info(f'DHCP Option: {dhcp_option}')
             jinja2_dhcp_option["type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_type'.format(option_cnt), dhcp_option["type"], standardisedName)
             # ------ Server Type
-            if dhcp_option.get("server_type", '') != '':
+            if len(dhcp_option.get("server_type", '')) > 0:
                 jinja2_dhcp_option["server_type"] = self.generateJinja2Variable('dhcp_option_{0:02d}_server_type'.format(option_cnt), dhcp_option["server_type"], standardisedName)
             # ------ Custom DNS Servers
             if len(dhcp_option.get("custom_dns_servers", [])) > 0:
