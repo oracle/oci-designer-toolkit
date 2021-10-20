@@ -472,12 +472,16 @@ rect.highlight-properties {
     stroke-opacity: 1;
 }
 
-.read-only > use > path {
-    fill: red !important;
+.read-only > g {
+    opacity: 0.5;
 }
 
-.read-only1 > use path {
-    fill: #312D2A !important;
+.read-only > rect {
+    opacity: 0.5;
+}
+
+.read-only > text {
+    opacity: 0.5;
 }
 
 /*
