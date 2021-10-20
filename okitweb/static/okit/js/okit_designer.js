@@ -33,7 +33,7 @@ let right_drag_bar_start_x = 0;
 let ociRegions = [];
 
 function resetDesigner() {
-    $("#console_header_view_select").val('designer');
+    $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     newModel();
     newDesignerView();
@@ -303,6 +303,7 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user')
         .attr('id', 'template_file_name')
         .attr('name', 'template_file_name')
         .attr('type', 'text')
+        .attr('placeholder', '<Directory Path>/<Filename>.json')
         .on('keydown', (e) => {
             if (d3.event.keyCode == 220) {
                 d3.event.preventDefault()
@@ -1011,7 +1012,7 @@ function displayQueryDialog() {
 }
 function handleQueryOci(e) {
     hideNavMenu();
-    $("#console_header_view_select").val('designer');
+    $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
     displayQueryDialog();
@@ -1837,5 +1838,5 @@ function handleRefreshDropdownData(event) {
     okitRegions.clearLocalStorage()
     okitOciData.clearLocalStorage()
     okitRegions.load(okitSettings.profile)
-    okitOciData.load(okitSettings.profile)
+    okitOciData.load(okitSettings.profile, okitSettings.region)
 }

@@ -67,12 +67,6 @@ OkitJson.prototype.getDynamicGroup = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteDynamicGroup = function(id) {
-    for (let i = 0; i < this.dynamic_groups.length; i++) {
-        if (this.dynamic_groups[i].id === id) {
-            this.dynamic_groups[i].delete();
-            this.dynamic_groups.splice(i, 1);
-            break;
-        }
-    }
+    this.dynamic_groups = this.dynamic_groups ? this.dynamic_groups.filter((r) => r.id !== id) : []
 }
 

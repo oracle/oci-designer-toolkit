@@ -1,6 +1,21 @@
 # Release Notes
 
 
+## Version 0.28.0
+**Release Date**: 20th October 2021
+### Features
+1. User / Groups View added
+    1. Allow the creation / definition of local Users
+    2. Allow the creation / definition of OCI Groups
+2. Bastion as a Service functionality added to main design canvas.
+3. Update cache functionality to store based on Configuration & Region.
+4. Add "OKIT Reference" Tag to all resources created via OKIT to allow for future expansion / reference.
+### Bug Fixes
+1. Add missing policy documentation to export to markdown.
+2. Fix Save As Template to add .json if not specified.
+3. Resolve issue where the default dhcp option would generate terraform with an empty search_domain_names if the server type was changed and then changed back.
+
+
 ## Version 0.27.1
 **Release Date**: 1st October 2021
 ### Bug Fixes

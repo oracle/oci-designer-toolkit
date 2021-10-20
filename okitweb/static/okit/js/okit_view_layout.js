@@ -23,6 +23,8 @@ function handleViewSelect(e) {
     else if (selected === 'tabular') handleSwitchToTabularView(e)
     else if (selected === 'relationship') handleSwitchToRelationshipView(e)
     else if (selected === 'json') handleSwitchToTextJsonView(e)
+    else if (selected === 'cache') handleSwitchToTextCacheView(e)
+    else if (selected === 'identity') handleSwitchToIdentityView(e)
     else console.warn('Unknown View', selected)
 }
 
@@ -52,6 +54,14 @@ function handleSwitchToTabularView(e) {
     okitTabularView.draw();
 }
 
+function handleSwitchToIdentityView(e) {
+    hideAllViewDivs();
+    $("#identity-div").removeClass('hidden');
+    hideSideBars();
+    okitIdentityView = new OkitIdentityView(okitJsonModel, okitOciData);
+    okitIdentityView.draw();
+}
+
 function handleSwitchToNetworkView(e) {
     hideAllViewDivs();
     $("#network-div").removeClass('hidden');
@@ -78,4 +88,12 @@ function handleSwitchToTextJsonView(e) {
     hideSideBars();
     okitTextJsonView = new OkitTextJsonView(okitJsonModel, okitOciData, resource_icons);
     okitTextJsonView.draw();
+}
+
+function handleSwitchToTextCacheView(e) {
+    hideAllViewDivs();
+    $("#json-text-div").removeClass('hidden');
+    hideSideBars();
+    okitCacheJsonView = new OkitCacheJsonView(okitOciData.getCache(), okitOciData, resource_icons);
+    okitCacheJsonView.draw();
 }

@@ -67,12 +67,6 @@ OkitJson.prototype.getIntegrationInstance = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteIntegrationInstance = function(id) {
-    for (let i = 0; i < this.integration_instances.length; i++) {
-        if (this.integration_instances[i].id === id) {
-            this.integration_instances[i].delete();
-            this.integration_instances.splice(i, 1);
-            break;
-        }
-    }
+    this.integration_instances = this.integration_instances ? this.integration_instances.filter((r) => r.id !== id) : []
 }
 

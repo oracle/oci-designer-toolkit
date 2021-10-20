@@ -25,7 +25,7 @@ class InstanceView extends OkitDesignerArtefactView {
     // --- Dimensions
     // TODO: Decide if show attachments is required
     // ---- Icon
-    get icon_definition_id() {return this.shape.startsWith('BM.') ? 'BareMetalInstanceSvg' : super.icon_definition_id;}
+    get icon_definition_id() {return this.shape.startsWith('BM.') ? OkitJsonView.toSvgIconDef('BareMetalCompute') : super.icon_definition_id;}
     // ---- Text
     get summary_tooltip() {return `Name: ${this.display_name} \nAvailability Domain: ${this.artefact.availability_domain} \nShape: ${this.artefact.shape} \nOS: ${this.source_details.os} ${this.source_details.version}`;}
     // Direct Subnet Access

@@ -67,12 +67,6 @@ OkitJson.prototype.get{{ model_class_name }} = function(id='') {
 return undefined;
 }
 OkitJson.prototype.delete{{ model_class_name }} = function(id) {
-    for (let i = 0; i < this.{{ artefact_json_list }}.length; i++) {
-        if (this.{{ artefact_json_list }}[i].id === id) {
-            this.{{ artefact_json_list }}[i].delete();
-            this.{{ artefact_json_list }}.splice(i, 1);
-            break;
-        }
-    }
+    this.{{ artefact_json_list }} = this.{{ artefact_json_list }} ? this.{{ artefact_json_list }}.filter((r) => r.id !== id) : []
 }
 
