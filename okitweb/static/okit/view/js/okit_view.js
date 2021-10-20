@@ -1421,6 +1421,7 @@ class OkitArtefactView {
         // const g = parent_svg.append("g")
         //     .attr("transform", `translate(${definition.x}, ${definition.y})`)
         const svg = parent_svg.append("svg")
+            .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
             .attr("id",        definition.id)
             .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
             .attr("x",         definition.x)
@@ -1466,7 +1467,7 @@ class OkitArtefactView {
     drawIcon(svg) {
         const icon = svg.append('g')
             .attr("style", "pointer-events: bounding-box;")
-            .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
+            // .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
         .append("use")
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
