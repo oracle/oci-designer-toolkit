@@ -2451,6 +2451,39 @@ class OkitArtefactView {
             select.append($('<option>').attr('value', resource.id).text(resource.display_name));
         }
     }
+
+    /*
+    ** Property Creation Routines
+    */
+   addPropertyHTML(parent, type='text', label='', id='', idx=0, callback=undefined) {
+       let element = undefined;
+       parent = (typeof parent === 'string') ? d3.select(`#${parent}`) : parent
+       // Check to see if we require a collapsable group
+       if (type === 'array') {
+           const table = parent.append('div').attr('class', 'table okit-table')
+           const thead = table.append('div').attr('class', 'thead')
+           const row = thead.append('div').attr('class', 'tr')
+           row.append('div').attr('class', 'th').text(label)
+           row.append('div').attr('class', 'th add-tag action-button-background action-button-column').on('click', callback)
+           element = table.append('div').attr('class', 'tbody').attr('id', `${label.replaceAll(' ', '_').toLowerCase()}_tbody`)
+       } else if (type === 'object') {
+           const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
+           details.append('summary').text(label)
+           element = details.append('div').attr('class', 'okit-details-body')
+       } else if (type === 'row') {
+           const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
+           element = row.append('div').attr('class', 'td')
+           row.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', callback)
+       } else if (type === 'properties') {
+            const table = parent.append('div').attr('class', 'table okit-table okit-properties-table')
+            element = table.append('div').attr('class', 'tbody')
+       } else if (type === 'text') {
+           const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
+           row.append('div').attr('class', 'td').text(label)
+           element = row.append('div').attr('class', 'td').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', type).attr('class', 'okit-property-value')
+       }
+    return element;
+   }
 }
 
 /*
