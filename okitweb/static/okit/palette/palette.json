@@ -181,9 +181,14 @@
                     "svg": "ObjectStorage.svg"
                 },
                 {
-                    "title": "File Storage System",
+                    "title": "Mount Target",
                     "targets": ["oci", "pca"],
-                    "svg": "FileStorage.svg"
+                    "svg": "MountTarget.svg"
+                },
+                {
+                    "title": "File System",
+                    "targets": ["oci", "pca"],
+                    "svg": "FileSystem.svg"
                 }
             ]
         },

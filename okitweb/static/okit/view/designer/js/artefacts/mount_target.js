@@ -12,14 +12,11 @@ class MountTargetView extends OkitArtefactView {
         if (!json_view.mount_targets) json_view.mount_targets = [];
         super(artefact, json_view);
     }
-    // TODO: Return Artefact Parent id e.g. vcn_id for a Internet Gateway
-    get parent_id() {return this.artefact.vcn_id;}
-    // TODO: Return Artefact Parent Object e.g. VirtualCloudNetwork for a Internet Gateway
-    get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
-    // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
+    get parent_id() {return this.artefact.subnet_id;}
+    get parent() {return this.getJsonView().getSubnet(this.parent_id);}
     // Direct Subnet Access
-    get subnet_id() {return this.artefact.primary_mount_target.subnet_id;}
-    set subnet_id(id) {this.artefact.primary_mount_target.subnet_id = id;}
+    // get subnet_id() {return this.artefact.subnet_id;}
+    // set subnet_id(id) {this.artefact.subnet_id = id;}
     /*
     ** SVG Processing
     */
@@ -28,7 +25,46 @@ class MountTargetView extends OkitArtefactView {
     */
     loadProperties() {
         const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/mount_target.html", () => {loadPropertiesSheet(self.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/mount_target.html", () => {
+            this.loadSubnetSelect('subnet_id');
+            const mte_tbody = self.addPropertyHTML('mount_target_exports', 'array', 'File Systems', '', 0, () => self.addExport())
+            loadPropertiesSheet(self.artefact);
+        });
+    }
+
+    addExport() {
+        console.info('Adding Export');
+        const fs_export = this.artefact.newExport();
+        this.artefact.exports.push(fs_export);
+        const idx = this.artefact.exports.length;
+        this.addExportHtml(fs_export, idx);
+    }
+
+    addExportHtml(fs_export, idx) {
+        const id = 'fs_export';
+        const row = this.addPropertyHTML('file_systems_tbody', 'row', '', id, idx, () => self.deleteExport(id, idx, fs_export));
+        const details = this.addPropertyHTML(row, 'object', 'Export', id, idx);
+        const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
+        // Add File System (Select)
+        this.addPropertyHTML(tbody, 'text', 'File Syatem', 'file_system_id', idx);
+        // Path (Text)
+        this.addPropertyHTML(tbody, 'text', 'Path', 'path', idx);
+        // Source (CIDR)
+        this.addPropertyHTML(tbody, 'text', 'Source', 'source', idx);
+        // Access (Select)
+        this.addPropertyHTML(tbody, 'text', 'Access', 'access', idx);
+        // Uid (Text)
+        this.addPropertyHTML(tbody, 'text', 'Anonymous GID', 'anonymous_gid', idx);
+        // Gid (Text)
+        this.addPropertyHTML(tbody, 'text', 'Anonymous UID', 'anonymous_uid', idx);
+        // Squash (Select)
+        this.addPropertyHTML(tbody, 'text', 'Identity Squash', 'identity_squash', idx);
+        // Privileged (Checkbox)
+        this.addPropertyHTML(tbody, 'text', 'Privileged Port', 'require_privileged_source_port', idx);
+    }
+
+    deleteExport(id, idx, fs_export) {
+
     }
     /*
     ** Load and display Value Proposition
@@ -43,8 +79,7 @@ class MountTargetView extends OkitArtefactView {
         return MountTarget.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
-        return [Compartment.getArtifactReference()];
+        return [Subnet.getArtifactReference()];
     }
 }
 /*
@@ -52,10 +87,13 @@ class MountTargetView extends OkitArtefactView {
 */
 OkitJsonView.prototype.dropMountTargetView = function(target) {
     let view_artefact = this.newMountTarget();
-    if (target.type === Compartment.getArtifactReference()) {
-        view_artefact.artefact.compartment_id = target.id;
-    } else {
-        view_artefact.artefact.compartment_id = target.compartment_id;
+    if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        const subnet_ad = this.getSubnet(target.id).availability_domain
+        view_artefact.getArtefact().availability_domain = subnet_ad != '0' ? subnet_ad : 1;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
     }
     view_artefact.recalculate_dimensions = true;
     return view_artefact;

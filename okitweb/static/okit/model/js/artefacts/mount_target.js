@@ -15,16 +15,33 @@ class MountTarget extends OkitArtifact {
         super(okitjson);
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.mount_targets.length + 1);
-        this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        this.compartment_id = data.compartment_id;
+        this.availability_domain = 1;
+        this.subnet_id = '';
+        this.hostname_label = '';
+        this.ip_address = '';
+        this.nsg_ids = [];
+        this.exports = [];
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+    }
+    /*
+    ** Create Export Element
+    */
+    newExport() {
+        return {
+            file_system_id: '',
+            path: '',
+            options: {
+                source: this.getOkitJson().getSubnet(this.subnet_id).cidr_block,
+                access: 'READ_ONLY',
+                anonymous_gid: 65534,
+                anonymous_uid: 65534,
+                identity_squash: 'ROOT',
+                require_privileged_source_port: true
+            }
+        }
     }
     /*
     ** Clone Functionality

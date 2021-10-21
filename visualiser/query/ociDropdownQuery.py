@@ -40,7 +40,7 @@ class OCIDropdownQuery(OCIConnection):
         "FastConnectProviderService", 
         "Image",
         "ImageShapeCompatibility",
-        # "Instance",
+        "Instance",
         "MySQLShape", 
         "MySQLVersion", 
         "MySQLConfiguration", 
