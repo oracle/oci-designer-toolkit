@@ -1033,7 +1033,10 @@ function loadCompartments() {
             url: 'oci/compartment',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
+            // data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
+            data: {
+                config_profile: $(jqId('config_profile')).val()
+            }, // Arguments
             success: function (resp) {
                 let jsonBody = JSON.parse(resp)
                 okitOciData.setCompartments(jsonBody);
