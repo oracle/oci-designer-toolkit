@@ -1417,6 +1417,17 @@ class OciResourceDiscoveryClient(object):
                     unique_shapes[shape.shape] = shape
                 resources_by_region[region]["Shape"] = list(unique_shapes.values())
 
+        # remove duplicate platform images
+        # For every compartment that has a custom image the list_images method also returns the full list of platform 
+        # images, resulting in duplicate entries in the conbined result set.
+        # Reduce to a unique set of of images for the region.
+        for region in resources_by_region:
+            if "Image" in resources_by_region[region]:
+                unique_images = dict()
+                for image in resources_by_region[region]["Image"]:
+                    unique_images[image.id] = image
+                resources_by_region[region]["Image"] = list(unique_images.values())
+
 
         return resources_by_region
 
