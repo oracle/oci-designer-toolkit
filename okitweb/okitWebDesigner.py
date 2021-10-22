@@ -351,25 +351,22 @@ def get_template_entry(root, path, json_file):
     return okit_template
 
 
-@bp.route('/templates/load', methods=(['GET']))
-def templates():
-    if request.method == 'GET':
-        query_string = request.query_string
-        parsed_query_string = urllib.parse.unquote(query_string.decode())
-        query_json = json.loads(parsed_query_string)
-        templates_root = os.path.join(current_app.instance_path, query_json['root_dir'].strip('/'))
-        templates = dir_to_json(templates_root, current_app.instance_path)
-        logger.debug(f'Templates : {jsonToFormattedString(templates)}')
-        return templates
+# @bp.route('/templates/load', methods=(['GET']))
+# def templates():
+#     if request.method == 'GET':
+#         query_string = request.query_string
+#         parsed_query_string = urllib.parse.unquote(query_string.decode())
+#         query_json = json.loads(parsed_query_string)
+#         templates_root = os.path.join(current_app.instance_path, query_json['root_dir'].strip('/'))
+#         templates = dir_to_json(templates_root, current_app.instance_path)
+#         logger.debug(f'Templates : {jsonToFormattedString(templates)}')
+#         return templates
 
 
 @bp.route('/template/load', methods=(['GET']))
 def template_load():
     if request.method == 'GET':
-        query_string = request.query_string
-        parsed_query_string = urllib.parse.unquote(query_string.decode())
-        query_json = json.loads(parsed_query_string)
-        template_file = query_json['template_file']
+        template_file = request.args.get("template_file")
         return send_from_directory(current_app.instance_path, template_file, mimetype='application/json', as_attachment=False)
 
 

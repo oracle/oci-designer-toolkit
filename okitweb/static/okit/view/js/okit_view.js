@@ -2464,7 +2464,7 @@ class OkitArtefactView {
            const thead = table.append('div').attr('class', 'thead')
            const row = thead.append('div').attr('class', 'tr')
            row.append('div').attr('class', 'th').text(label)
-           row.append('div').attr('class', 'th add-tag action-button-background action-button-column').on('click', callback)
+           row.append('div').attr('class', 'th add-property action-button-background action-button-column').on('click', callback)
            element = table.append('div').attr('class', 'tbody').attr('id', `${label.replaceAll(' ', '_').toLowerCase()}_tbody`)
        } else if (type === 'object') {
            const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
@@ -2473,16 +2473,20 @@ class OkitArtefactView {
        } else if (type === 'row') {
            const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
            element = row.append('div').attr('class', 'td')
-           row.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', callback)
+           row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
        } else if (type === 'properties') {
             const table = parent.append('div').attr('class', 'table okit-table okit-properties-table')
             element = table.append('div').attr('class', 'tbody')
-       } else if (type === 'text') {
-           const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
-           row.append('div').attr('class', 'td').text(label)
-           element = row.append('div').attr('class', 'td').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', type).attr('class', 'okit-property-value')
-       }
-    return element;
+       } else {
+            const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
+            row.append('div').attr('class', 'td').text(label)
+            if (['text', 'password', 'email', 'date'].includes(type)) {
+                element = row.append('div').attr('class', 'td').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
+            } else if (type === 'select') {
+                element = row.append('div').attr('class', 'td').append('select').attr('id', `${id}${idx}`).attr('class', 'okit-property-value').on('change', callback)
+            }
+        }
+        return element;
    }
 }
 

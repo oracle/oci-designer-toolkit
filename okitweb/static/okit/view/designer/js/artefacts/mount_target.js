@@ -29,7 +29,12 @@ class MountTargetView extends OkitArtefactView {
             this.loadSubnetSelect('subnet_id');
             const mte_tbody = self.addPropertyHTML('mount_target_exports', 'array', 'File Systems', '', 0, () => self.addExport())
             loadPropertiesSheet(self.artefact);
+            self.loadExports()
         });
+    }
+
+    loadExports() {
+        this.artefact.exports.forEach((e, i) => this.addExportHtml(e, i+1))
     }
 
     addExport() {
@@ -42,29 +47,39 @@ class MountTargetView extends OkitArtefactView {
 
     addExportHtml(fs_export, idx) {
         const id = 'fs_export';
-        const row = this.addPropertyHTML('file_systems_tbody', 'row', '', id, idx, () => self.deleteExport(id, idx, fs_export));
+        const row = this.addPropertyHTML('file_systems_tbody', 'row', '', id, idx, () => this.deleteExport(id, idx, fs_export));
         const details = this.addPropertyHTML(row, 'object', 'Export', id, idx);
         const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
+        let property = undefined
         // Add File System (Select)
-        this.addPropertyHTML(tbody, 'text', 'File Syatem', 'file_system_id', idx);
+        property = this.addPropertyHTML(tbody, 'select', 'File System', 'file_system_id', idx);
+        property.attr('value', fs_export.file_system_id)
         // Path (Text)
-        this.addPropertyHTML(tbody, 'text', 'Path', 'path', idx);
+        property = this.addPropertyHTML(tbody, 'text', 'Path', 'path', idx);
+        property.attr('value', fs_export.path)
         // Source (CIDR)
-        this.addPropertyHTML(tbody, 'text', 'Source', 'source', idx);
+        property = this.addPropertyHTML(tbody, 'text', 'Source', 'source', idx, (d, i, n) => fs_export.options.source = n[i].value);
+        property.attr('value', fs_export.options.source)
         // Access (Select)
-        this.addPropertyHTML(tbody, 'text', 'Access', 'access', idx);
+        property = this.addPropertyHTML(tbody, 'text', 'Access', 'access', idx);
+        property.attr('value', fs_export.options.access)
         // Uid (Text)
-        this.addPropertyHTML(tbody, 'text', 'Anonymous GID', 'anonymous_gid', idx);
+        property = this.addPropertyHTML(tbody, 'text', 'Anonymous GID', 'anonymous_gid', idx);
+        property.attr('value', fs_export.options.anonymous_gid)
         // Gid (Text)
-        this.addPropertyHTML(tbody, 'text', 'Anonymous UID', 'anonymous_uid', idx);
+        property = this.addPropertyHTML(tbody, 'text', 'Anonymous UID', 'anonymous_uid', idx);
+        property.attr('value', fs_export.options.anonymous_uid)
         // Squash (Select)
-        this.addPropertyHTML(tbody, 'text', 'Identity Squash', 'identity_squash', idx);
+        property = this.addPropertyHTML(tbody, 'text', 'Identity Squash', 'identity_squash', idx);
+        property.attr('value', fs_export.options.identity_squash)
         // Privileged (Checkbox)
-        this.addPropertyHTML(tbody, 'text', 'Privileged Port', 'require_privileged_source_port', idx);
+        property = this.addPropertyHTML(tbody, 'text', 'Privileged Port', 'require_privileged_source_port', idx);
+        property.attr('value', fs_export.options.require_privileged_source_port)
     }
 
     deleteExport(id, idx, fs_export) {
-
+        this.artefact.exports = this.artefact.exports.filter((e) => e !== fs_export)
+        $(`#${id}${idx}_row`).remove()
     }
     /*
     ** Load and display Value Proposition
