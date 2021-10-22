@@ -1,3 +1,4 @@
+{% import "common_macros.jinja2" as common with context %}
 # {{ title }}
 
 {{ description | safe }}
@@ -156,5 +157,38 @@
 
 {%- endif %}
 
+{% if (groups is defined and groups|length > 0) or (users is defined and users|length > 0) or (policys is defined and policys|length > 0) -%}
+## Identity
+{% if (users is defined and users|length > 0) -%}
+### Users
+    {% include "user.jinja2" ignore missing with context %}
+{%- endif %}
 
+{% if (groups is defined and groups|length > 0) -%}
+### User Groups
+    {% include "group.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if (policys is defined and policys|length > 0) -%}
+### Policies
+    {% include "policy.jinja2" ignore missing with context %}
+{%- endif %}
+{%- endif %}
+
+{% if user_defined is defined and user_defined.terraform is defined and user_defined.terraform|length > 0 -%}
+## User Defined Terraform 
+```terraform
+{{ user_defined.terraform|safe }}
+```
+{%- endif %}
+
+{% if freeform_tags is defined or defined_tags is defined -%}
+## Global Tags
+    {% if freeform_tags is defined -%}
+        {{ common.document_freeform_tags(freeform_tags) }}
+    {%- endif %}
+    {% if defined_tags is defined -%}
+        {{ common.document_defined_tags(defined_tags) }}
+    {%- endif %}
+{%- endif %}
 

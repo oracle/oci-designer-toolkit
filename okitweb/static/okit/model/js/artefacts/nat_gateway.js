@@ -7,7 +7,7 @@ console.info('Loaded NAT Gateway Javascript');
 /*
 ** Define NAT Gateway Class
  */
-class NATGateway extends OkitArtifact {
+class NatGateway extends OkitArtifact {
     /*
     ** Create
      */
@@ -28,7 +28,7 @@ class NATGateway extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new NATGateway(JSON.clone(this), this.getOkitJson());
+        return new NatGateway(JSON.clone(this), this.getOkitJson());
     }
 
 

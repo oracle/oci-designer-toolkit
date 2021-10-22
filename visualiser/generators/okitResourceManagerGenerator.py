@@ -61,5 +61,9 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
             self.run_variables[key] = str(value)
             variable_definitions.append('variable "{0!s:s}" {{}}'.format(key))
         writeTerraformFile(os.path.join(self.output_dir, self.VARIABLES_FILE_NAME), variable_definitions)
+        # User Defined - Unchecked Terraform
+        user_defined_terraform = self.visualiser_json.get('user_defined', {}).get('terraform', '')
+        if user_defined_terraform.rstrip() != '':
+            writeTerraformFile(os.path.join(self.output_dir, self.USER_DEFINED_FILE_NAME), [user_defined_terraform])
 
         return

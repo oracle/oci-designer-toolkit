@@ -1,4 +1,4 @@
-# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.23.0](CHANGELOG.md#version-0.23.0)
+# Oracle Cloud Infrastructure Designer and Visualisation Toolkit [0.28.0](CHANGELOG.md#version-0.28.0)
 
 OCI designer and visualisation toolKIT (OKIT) is a browser based tool that allows the user to [design](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit), 
 [deploy](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit) and visualise ([introspect/query](https://www.ateam-oracle.com/the-oci-designer-toolkit-query-feature)) 
@@ -29,14 +29,16 @@ OCI environments through a graphical web based interface.
 
     OKIT will also allow the user to introspect existing OCI environments, through simple query functionality embedded within the
     web interface, to provide a portable generic json file, that can be used to visualise existing systems or generate terraform/ansible.
-  
-  _Note:_
-```diff
-+ The 0.18.0 release introduces a new implementation of the Introspection/Query feature  
-+ that improves performance on large queries. The use can return to the classic query 
-+ functionality by unchecking Fast Discovery in the preferences.
-```
 
+
+## Changes
+
+[Changes for the current release (0.28.0) are documented here.](CHANGELOG.md#version-0.28.0)
+
+
+## Releases
+
+See [Releases](https://github.com/oracle/oci-designer-toolkit/releases)
   
 ## Blogs
 - [Introduction to OKIT the OCI Designer Toolkit](https://www.ateam-oracle.com/introduction-to-okit-the-oci-designer-toolkit)
@@ -132,8 +134,14 @@ Host github.com
 
 #### Run Container
 
+##### Simple
 ```bash
-docker run -d --rm -p 80:80 --volume <USER HOME DIR>/okit/user/templates:/okit/templates --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --name okit okit
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --name okit okit
+```
+
+##### Mount User Templates and Git Directories
+```bash
+docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/templates/user --volume <PATH TO GIT DIR>:/okit/instance/git --volume <PATH TO LOCAL DIR>:/okit/instance/local --name okit okit
 ```
 
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)

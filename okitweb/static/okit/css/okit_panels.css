@@ -1,0 +1,104 @@
+/*
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+ .okit-palette-panel {
+    min-width: 180px;
+    width: 180px;
+ }
+
+ .okit-template-panel {
+    font-size: small;
+    overflow: scroll;
+    /* min-width: 400px; */
+    /* width: 100%; */
+    height: 100%;
+    white-space: nowrap;
+}
+
+.okit-template-panel > details {
+    /* width: 180px; */
+}
+
+.okit-template-panel > details > summary {
+    text-transform: uppercase;
+    border-bottom: 1px solid black;
+}
+
+.okit-template-panel ul {
+    list-style: none;
+    display: block;
+    padding-left: 0.2em;
+    margin: 0;
+}
+
+.okit-template-panel li > ul {
+    padding-left: 0.5em;
+}
+
+.okit-template-panel li {
+    padding-left: 0.5em;
+    margin-top: 2px;
+}
+
+.okit-template-panel li > div {
+    display: inline-block;
+    margin-left: 0;
+    padding-left: 0;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-position-x: 0.75em;
+    background-size: 1.25em 1.25em;
+    white-space: nowrap;
+}
+
+.okit-template-panel li label {
+    clear: both;
+    text-wrap: none;
+    white-space: nowrap;
+}
+
+.okit-template-panel input[type=checkbox] {display: none; visibility: hidden;}
+
+.okit-template-panel li > label::before {
+    content: '\25B9';
+    color: #336600;
+    display: inline-block;
+    text-align: left;
+    padding-right: 0.5em;
+}
+
+.okit-template-panel li > input:checked ~ label::before {
+    content: '\25BF';
+}
+
+.okit-template-group ul {display: none}
+
+.okit-template-group input:checked ~ ul {display: block}
+
+.okit-template-panel li a.okit-template-item {
+    text-decoration: none;
+    font-weight: normal;
+    color: black;
+    cursor: default;
+    padding-right: 1em;
+}
+
+.okit-template-panel li a.okit-template-item:hover {
+    color: #364150;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.okit-template-panel li.okit-template-group {
+    font-weight: bolder;
+}
+
+.okit-template-category-summary {
+    text-overflow: ellipsis;
+}
+
+.okit-template-category-summary > label {
+    padding-left: 5px;
+}

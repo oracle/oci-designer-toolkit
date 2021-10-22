@@ -67,12 +67,6 @@ OkitJson.prototype.getDataIntegrationWorkspace = function(id='') {
 return undefined;
 }
 OkitJson.prototype.deleteDataIntegrationWorkspace = function(id) {
-    for (let i = 0; i < this.data_integration_workspaces.length; i++) {
-        if (this.data_integration_workspaces[i].id === id) {
-            this.data_integration_workspaces[i].delete();
-            this.data_integration_workspaces.splice(i, 1);
-            break;
-        }
-    }
+    this.data_integration_workspaces = this.data_integration_workspaces ? this.data_integration_workspaces.filter((r) => r.id !== id) : []
 }
 

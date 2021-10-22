@@ -1,0 +1,46 @@
+
+{% if read_only %}
+# ------ Read User
+data "oci_identity_users" "{{ resource_name }}" {
+    #Required
+    compartment_id = {{ compartment_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id              = {{ ocid | safe }}
+}
+{% else %}
+# ------ Create User
+resource "oci_identity_user" "{{ resource_name }}" {
+    provider       = oci.home_region
+    #Required
+    compartment_id = {{ tenancy_ocid }}
+    description = {{ description | safe }}
+    name = {{ display_name | safe }}
+
+    #Optional
+{% if email is defined %}
+    email = {{ email | safe }}
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags   = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags  = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+locals {
+    {{ resource_name }}_id              = oci_identity_user.{{ resource_name }}.id
+}
+# ------- Create Password
+resource "oci_identity_ui_password" "{{ resource_name }}Password" {
+    provider       = oci.home_region
+    #Required
+    user_id = oci_identity_user.{{ resource_name }}.id
+}
+{% endif %}

@@ -17,6 +17,9 @@ class OkitJson {
         this.created = getCurrentDateTime();
         this.updated = this.created;
         this.okit_version = okitVersion;
+        this.user_defined = {terraform: ''};
+        this.freeform_tags = {};
+        this.defined_tags = {};
 
         this.autonomous_databases = [];
         this.block_storage_volumes = [];
@@ -63,12 +66,11 @@ class OkitJson {
     load(okit_json) {
         console.log('Load OKIT Json');
         // Title & Description
-        if (okit_json.title) {
-            this.title = okit_json.title;
-        }
-        if (okit_json.description) {
-            this.description = okit_json.description;
-        }
+        if (okit_json.title) {this.title = okit_json.title;}
+        if (okit_json.description) {this.description = okit_json.description;}
+        if (okit_json.user_defined && okit_json.user_defined.terraform) this.user_defined.terraform = okit_json.user_defined.terraform
+        if (okit_json.freeform_tags) {this.freeform_tags = okit_json.freeform_tags}
+        if (okit_json.defined_tags) {this.defined_tags = okit_json.defined_tags}
         // Turn Off Default Security List / Route Table Processing
         const okitSettingsClone = JSON.clone(okitSettings);
         okitSettings.is_default_route_table   = false;
@@ -172,7 +174,7 @@ class OkitJson {
         // IPSec Connections
         if (okit_json.hasOwnProperty('ipsec_connections')) {
             for (let artefact of okit_json['ipsec_connections']) {
-                let obj = this.newIPSecConnection(artefact);
+                let obj = this.newIpsecConnection(artefact);
             }
         }
         // RemotePeering Connections
@@ -192,7 +194,7 @@ class OkitJson {
         // NAT Gateway
         if (okit_json.hasOwnProperty('nat_gateways')) {
             for (let artefact of okit_json['nat_gateways']) {
-                let obj = this.newNATGateway(artefact);
+                let obj = this.newNatGateway(artefact);
             }
         }
         // Route Tables
@@ -254,7 +256,7 @@ class OkitJson {
         // MySQL Database Systems
         if (okit_json.hasOwnProperty('mysql_database_systems')) {
             for (let artefact of okit_json['mysql_database_systems']) {
-                let obj = this.newMySQLDatabaseSystem(artefact);
+                let obj = this.newMysqlDatabaseSystem(artefact);
             }
         }
         // Instances
@@ -351,13 +353,14 @@ class OkitJson {
         return undefined;
     }
     deleteAutonomousDatabase(id) {
-        for (let i = 0; i < this.autonomous_databases.length; i++) {
-            if (this.autonomous_databases[i].id === id) {
-                this.autonomous_databases[i].delete();
-                this.autonomous_databases.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.autonomous_databases.length; i++) {
+        //     if (this.autonomous_databases[i].id === id) {
+        //         this.autonomous_databases[i].delete();
+        //         this.autonomous_databases.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.autonomous_databases = this.autonomous_databases ? this.autonomous_databases.filter((r) => r.id !== id) : []
     }
 
     // Block Storage Volume
@@ -378,13 +381,14 @@ class OkitJson {
         return undefined;
     }
     deleteBlockStorageVolume(id) {
-        for (let i = 0; i < this.block_storage_volumes.length; i++) {
-            if (this.block_storage_volumes[i].id === id) {
-                this.block_storage_volumes[i].delete();
-                this.block_storage_volumes.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.block_storage_volumes.length; i++) {
+        //     if (this.block_storage_volumes[i].id === id) {
+        //         this.block_storage_volumes[i].delete();
+        //         this.block_storage_volumes.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.block_storage_volumes = this.block_storage_volumes ? this.block_storage_volumes.filter((r) => r.id !== id) : []
     }
 
     // Compartment
@@ -403,13 +407,14 @@ class OkitJson {
         return undefined;
     }
     deleteCompartment(id) {
-        for (let i = 0; i < this.compartments.length; i++) {
-            if (this.compartments[i].id === id) {
-                this.compartments[i].delete();
-                this.compartments.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.compartments.length; i++) {
+        //     if (this.compartments[i].id === id) {
+        //         this.compartments[i].delete();
+        //         this.compartments.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.compartments = this.compartments ? this.compartments.filter((r) => r.id !== id) : []
     }
 
     // Customer Premise Equipment
@@ -428,13 +433,14 @@ class OkitJson {
         return undefined;
     }
     deleteCustomerPremiseEquipment(id) {
-        for (let i = 0; i < this.customer_premise_equipments.length; i++) {
-            if (this.customer_premise_equipments[i].id === id) {
-                this.customer_premise_equipments[i].delete();
-                this.customer_premise_equipments.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.customer_premise_equipments.length; i++) {
+        //     if (this.customer_premise_equipments[i].id === id) {
+        //         this.customer_premise_equipments[i].delete();
+        //         this.customer_premise_equipments.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.customer_premise_equipments = this.customer_premise_equipments ? this.customer_premise_equipments.filter((r) => r.id !== id) : []
     }
 
     // Database System
@@ -455,13 +461,14 @@ class OkitJson {
         return undefined;
     }
     deleteDatabaseSystem(id) {
-        for (let i = 0; i < this.database_systems.length; i++) {
-            if (this.database_systems[i].id === id) {
-                this.database_systems[i].delete();
-                this.database_systems.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.database_systems.length; i++) {
+        //     if (this.database_systems[i].id === id) {
+        //         this.database_systems[i].delete();
+        //         this.database_systems.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.database_systems = this.database_systems ? this.database_systems.filter((r) => r.id !== id) : []
     }
 
     // Dynamic Routing Gateway
@@ -482,13 +489,14 @@ class OkitJson {
         return undefined;
     }
     deleteDynamicRoutingGateway(id) {
-        for (let i = 0; i < this.dynamic_routing_gateways.length; i++) {
-            if (this.dynamic_routing_gateways[i].id === id) {
-                this.dynamic_routing_gateways[i].delete();
-                this.dynamic_routing_gateways.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.dynamic_routing_gateways.length; i++) {
+        //     if (this.dynamic_routing_gateways[i].id === id) {
+        //         this.dynamic_routing_gateways[i].delete();
+        //         this.dynamic_routing_gateways.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.dynamic_routing_gateways = this.dynamic_routing_gateways ? this.dynamic_routing_gateways.filter((r) => r.id !== id) : []
     }
 
     // FastConnect
@@ -509,13 +517,14 @@ class OkitJson {
         return undefined;
     }
     deleteFastConnect(id) {
-        for (let i = 0; i < this.fast_connects.length; i++) {
-            if (this.fast_connects[i].id === id) {
-                this.fast_connects[i].delete();
-                this.fast_connects.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.fast_connects.length; i++) {
+        //     if (this.fast_connects[i].id === id) {
+        //         this.fast_connects[i].delete();
+        //         this.fast_connects.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.fast_connects = this.fast_connects ? this.fast_connects.filter((r) => r.id !== id) : []
     }
 
     // File Storage System
@@ -536,13 +545,19 @@ class OkitJson {
         return undefined;
     }
     deleteFileStorageSystem(id) {
-        for (let i = 0; i < this.file_storage_systems.length; i++) {
-            if (this.file_storage_systems[i].id === id) {
-                this.file_storage_systems[i].delete();
-                this.file_storage_systems.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.file_storage_systems.length; i++) {
+        //     if (this.file_storage_systems[i].id === id) {
+        //         this.file_storage_systems[i].delete();
+        //         this.file_storage_systems.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.file_storage_systems = this.file_storage_systems ? this.file_storage_systems.filter((r) => r.id !== id) : []
+    }
+
+    // All Instance Resources
+    getAllInstanceTypes() {
+        return [...this.getInstances(), ...this.getAnalyticsInstances()]
     }
 
     // Instance
@@ -563,13 +578,14 @@ class OkitJson {
         return undefined;
     }
     deleteInstance(id) {
-        for (let i = 0; i < this.instances.length; i++) {
-            if (this.instances[i].id === id) {
-                this.instances[i].delete();
-                this.instances.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.instances.length; i++) {
+        //     if (this.instances[i].id === id) {
+        //         this.instances[i].delete();
+        //         this.instances.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.instances = this.instances ? this.instances.filter((r) => r.id !== id) : []
     }
     getInstanceByBlockVolumeId(id) {
         return this.getInstances().filter(i => i.block_storage_volume_ids.includes(id));
@@ -593,13 +609,14 @@ class OkitJson {
         return undefined;
     }
     deleteInstancePool(id) {
-        for (let i = 0; i < this.instance_pools.length; i++) {
-            if (this.instance_pools[i].id === id) {
-                this.instance_pools[i].delete();
-                this.instance_pools.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.instance_pools.length; i++) {
+        //     if (this.instance_pools[i].id === id) {
+        //         this.instance_pools[i].delete();
+        //         this.instance_pools.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.instance_pools = this.instance_pools ? this.instance_pools.filter((r) => r.id !== id) : []
     }
 
     // Internet Gateway
@@ -620,41 +637,40 @@ class OkitJson {
         return undefined;
     }
     deleteInternetGateway(id) {
-        for (let i = 0; i < this.internet_gateways.length; i++) {
-            if (this.internet_gateways[i].id === id) {
-                this.internet_gateways[i].delete();
-                this.internet_gateways.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.internet_gateways.length; i++) {
+        //     if (this.internet_gateways[i].id === id) {
+        //         this.internet_gateways[i].delete();
+        //         this.internet_gateways.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.internet_gateways = this.internet_gateways ? this.internet_gateways.filter((r) => r.id !== id) : []
     }
 
     // IPSec Connection
-    newIpsecConnection(data) {return this.newIPSecConnection(data)}
-    newIPSecConnection(data) {
+    newIpsecConnection(data) {
         console.info('New IPSec Connection');
-        this.ipsec_connections.push(new IPSecConnection(data, this));
+        this.ipsec_connections.push(new IpsecConnection(data, this));
         return this.ipsec_connections[this.ipsec_connections.length - 1];
     }
     getIpsecConnections() {return this.ipsec_connections;}
-    getIpsecConnection(id='') {return this.getIPSecConnection(id)}
-    getIPSecConnections() {return this.ipsec_connections;}
-    getIPSecConnection(id='') {
-        for (let artefact of this.getIPSecConnections()) {
+    getIpsecConnection(id='') {
+        for (let artefact of this.getIpsecConnections()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteIPSecConnection(id) {
-        for (let i = 0; i < this.ipsec_connections.length; i++) {
-            if (this.ipsec_connections[i].id === id) {
-                this.ipsec_connections[i].delete();
-                this.ipsec_connections.splice(i, 1);
-                break;
-            }
-        }
+    deleteIpsecConnection(id) {
+        // for (let i = 0; i < this.ipsec_connections.length; i++) {
+        //     if (this.ipsec_connections[i].id === id) {
+        //         this.ipsec_connections[i].delete();
+        //         this.ipsec_connections.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.ipsec_connections = this.ipsec_connections ? this.ipsec_connections.filter((r) => r.id !== id) : []
     }
 
     // Load Balancer
@@ -675,13 +691,14 @@ class OkitJson {
         return undefined;
     }
     deleteLoadBalancer(id) {
-        for (let i = 0; i < this.load_balancers.length; i++) {
-            if (this.load_balancers[i].id === id) {
-                this.load_balancers[i].delete();
-                this.load_balancers.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.load_balancers.length; i++) {
+        //     if (this.load_balancers[i].id === id) {
+        //         this.load_balancers[i].delete();
+        //         this.load_balancers.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.load_balancers = this.load_balancers ? this.load_balancers.filter((r) => r.id !== id) : []
     }
 
     // Local Peering Gateway
@@ -702,69 +719,66 @@ class OkitJson {
         return undefined;
     }
     deleteLocalPeeringGateway(id) {
-        for (let i = 0; i < this.local_peering_gateways.length; i++) {
-            if (this.local_peering_gateways[i].id === id) {
-                this.local_peering_gateways[i].delete();
-                this.local_peering_gateways.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.local_peering_gateways.length; i++) {
+        //     if (this.local_peering_gateways[i].id === id) {
+        //         this.local_peering_gateways[i].delete();
+        //         this.local_peering_gateways.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.local_peering_gateways = this.local_peering_gateways ? this.local_peering_gateways.filter((r) => r.id !== id) : []
     }
 
     // MySQL Database System
-    newMysqlDatabaseSystem(data) {return this.newMySQLDatabaseSystem(data)}
-    newMySQLDatabaseSystem(data) {
+    newMysqlDatabaseSystem(data) {
         console.info('New MySQL Database System');
-        this.mysql_database_systems.push(new MySQLDatabaseSystem(data, this));
+        this.mysql_database_systems.push(new MysqlDatabaseSystem(data, this));
         return this.mysql_database_systems[this.mysql_database_systems.length - 1];
     }
     getMysqlDatabaseSystems() {return this.mysql_database_systems;}
-    getMysqlDatabaseSystem(id='') {return this.getMySQLDatabaseSystem(id)}
-    getMySQLDatabaseSystems() {return this.mysql_database_systems;}
-    getMySQLDatabaseSystem(id='') {
-        for (let artefact of this.getMySQLDatabaseSystems()) {
+    getMysqlDatabaseSystem(id='') {
+        for (let artefact of this.getMysqlDatabaseSystems()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteMySQLDatabaseSystem(id) {
-        for (let i = 0; i < this.mysql_database_systems.length; i++) {
-            if (this.mysql_database_systems[i].id === id) {
-                this.mysql_database_systems[i].delete();
-                this.mysql_database_systems.splice(i, 1);
-                break;
-            }
-        }
+    deleteMysqlDatabaseSystem(id) {
+        // for (let i = 0; i < this.mysql_database_systems.length; i++) {
+        //     if (this.mysql_database_systems[i].id === id) {
+        //         this.mysql_database_systems[i].delete();
+        //         this.mysql_database_systems.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.mysql_database_systems = this.mysql_database_systems ? this.mysql_database_systems.filter((r) => r.id !== id) : []
     }
 
     // NAT Gateway
-    newNatGateway(data) {return this.newNATGateway(data)}
-    newNATGateway(data) {
+    newNatGateway(data) {
         console.info('New NAT Gateway');
-        this.nat_gateways.push(new NATGateway(data, this));
+        this.nat_gateways.push(new NatGateway(data, this));
         return this.nat_gateways[this.nat_gateways.length - 1];
     }
     getNatGateways() {return this.nat_gateways;}
-    getNatGateway(id='') {return this.getNATGateway(id)}
-    getNATGateways() {return this.nat_gateways;}
-    getNATGateway(id='') {
-        for (let artefact of this.getNATGateways()) {
+    getNatGateway(id='') {
+        for (let artefact of this.getNatGateways()) {
             if (artefact.id === id) {
                 return artefact;
             }
         }
         return undefined;
     }
-    deleteNATGateway(id) {
-        for (let i = 0; i < this.nat_gateways.length; i++) {
-            if (this.nat_gateways[i].id === id) {
-                this.nat_gateways[i].delete();
-                this.nat_gateways.splice(i, 1);
-                break;
-            }
-        }
+    deleteNatGateway(id) {
+        // for (let i = 0; i < this.nat_gateways.length; i++) {
+        //     if (this.nat_gateways[i].id === id) {
+        //         this.nat_gateways[i].delete();
+        //         this.nat_gateways.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.nat_gateways = this.nat_gateways ? this.nat_gateways.filter((r) => r.id !== id) : []
     }
 
     // Network Security Group
@@ -785,13 +799,14 @@ class OkitJson {
         return undefined;
     }
     deleteNetworkSecurityGroup(id) {
-        for (let i = 0; i < this.network_security_groups.length; i++) {
-            if (this.network_security_groups[i].id === id) {
-                this.network_security_groups[i].delete();
-                this.network_security_groups.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.network_security_groups.length; i++) {
+        //     if (this.network_security_groups[i].id === id) {
+        //         this.network_security_groups[i].delete();
+        //         this.network_security_groups.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.network_security_groups = this.network_security_groups ? this.network_security_groups.filter((r) => r.id !== id) : []
     }
 
     // Object Storage Bucket
@@ -812,13 +827,14 @@ class OkitJson {
         return undefined;
     }
     deleteObjectStorageBucket(id) {
-        for (let i = 0; i < this.object_storage_buckets.length; i++) {
-            if (this.object_storage_buckets[i].id === id) {
-                this.object_storage_buckets[i].delete();
-                this.object_storage_buckets.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.object_storage_buckets.length; i++) {
+        //     if (this.object_storage_buckets[i].id === id) {
+        //         this.object_storage_buckets[i].delete();
+        //         this.object_storage_buckets.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.object_storage_buckets = this.object_storage_buckets ? this.object_storage_buckets.filter((r) => r.id !== id) : []
     }
 
     // OkeCluster
@@ -839,13 +855,14 @@ class OkitJson {
         return undefined;
     }
     deleteOkeCluster(id) {
-        for (let i = 0; i < this.oke_clusters.length; i++) {
-            if (this.oke_clusters[i].id === id) {
-                this.oke_clusters[i].delete();
-                this.oke_clusters.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.oke_clusters.length; i++) {
+        //     if (this.oke_clusters[i].id === id) {
+        //         this.oke_clusters[i].delete();
+        //         this.oke_clusters.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.oke_clusters = this.oke_clusters ? this.oke_clusters.filter((r) => r.id !== id) : []
     }
 
     // RemotePeeringConnection
@@ -864,13 +881,14 @@ class OkitJson {
         return undefined;
     }
     deleteRemotePeeringConnection(id) {
-        for (let i = 0; i < this.remote_peering_connections.length; i++) {
-            if (this.remote_peering_connections[i].id === id) {
-                this.remote_peering_connections[i].delete();
-                this.remote_peering_connections.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.remote_peering_connections.length; i++) {
+        //     if (this.remote_peering_connections[i].id === id) {
+        //         this.remote_peering_connections[i].delete();
+        //         this.remote_peering_connections.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.remote_peering_connections = this.remote_peering_connections ? this.remote_peering_connections.filter((r) => r.id !== id) : []
     }
 
     // Route Table
@@ -891,13 +909,14 @@ class OkitJson {
         return undefined;
     }
     deleteRouteTable(id) {
-        for (let i = 0; i < this.route_tables.length; i++) {
-            if (this.route_tables[i].id === id) {
-                this.route_tables[i].delete();
-                this.route_tables.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.route_tables.length; i++) {
+        //     if (this.route_tables[i].id === id) {
+        //         this.route_tables[i].delete();
+        //         this.route_tables.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.route_tables = this.route_tables ? this.route_tables.filter((r) => r.id !== id) : []
     }
 
     // Security List
@@ -918,13 +937,14 @@ class OkitJson {
         return undefined;
     }
     deleteSecurityList(id) {
-        for (let i = 0; i < this.security_lists.length; i++) {
-            if (this.security_lists[i].id === id) {
-                this.security_lists[i].delete();
-                this.security_lists.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.security_lists.length; i++) {
+        //     if (this.security_lists[i].id === id) {
+        //         this.security_lists[i].delete();
+        //         this.security_lists.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.security_lists = this.security_lists ? this.security_lists.filter((r) => r.id !== id) : []
     }
 
     // Service Gateway
@@ -945,13 +965,14 @@ class OkitJson {
         return undefined;
     }
     deleteServiceGateway(id) {
-        for (let i = 0; i < this.service_gateways.length; i++) {
-            if (this.service_gateways[i].id === id) {
-                this.service_gateways[i].delete();
-                this.service_gateways.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.service_gateways.length; i++) {
+        //     if (this.service_gateways[i].id === id) {
+        //         this.service_gateways[i].delete();
+        //         this.service_gateways.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.service_gateways = this.service_gateways ? this.service_gateways.filter((r) => r.id !== id) : []
     }
 
     // Subnet
@@ -972,13 +993,14 @@ class OkitJson {
         return undefined;
     }
     deleteSubnet(id) {
-        for (let i = 0; i < this.subnets.length; i++) {
-            if (this.subnets[i].id === id) {
-                this.subnets[i].delete();
-                this.subnets.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.subnets.length; i++) {
+        //     if (this.subnets[i].id === id) {
+        //         this.subnets[i].delete();
+        //         this.subnets.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.subnets = this.subnets ? this.subnets.filter((r) => r.id !== id) : []
     }
 
     // Virtual Cloud Network
@@ -1002,13 +1024,14 @@ class OkitJson {
         return this.getVirtualCloudNetwork(id);
     }
     deleteVirtualCloudNetwork(id) {
-        for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
-            if (this.virtual_cloud_networks[i].id === id) {
-                this.virtual_cloud_networks[i].delete();
-                this.virtual_cloud_networks.splice(i, 1);
-                break;
-            }
-        }
+        // for (let i = 0; i < this.virtual_cloud_networks.length; i++) {
+        //     if (this.virtual_cloud_networks[i].id === id) {
+        //         this.virtual_cloud_networks[i].delete();
+        //         this.virtual_cloud_networks.splice(i, 1);
+        //         break;
+        //     }
+        // }
+        this.virtual_cloud_networks = this.virtual_cloud_networks ? this.virtual_cloud_networks.filter((r) => r.id !== id) : []
     }
 
     // Fragment
@@ -1087,6 +1110,7 @@ class OkitArtifact {
         this.compartment_id = '';
         this.display_name = '';
         this.definition = '';
+        this.okit_reference = `okit-${uuidv4()}`;
         // Add default for common Tag variables
         this.freeform_tags = {};
         this.defined_tags = {};
@@ -1106,6 +1130,7 @@ class OkitArtifact {
     get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
     set json_model_list(list) {this.okit_json[this.list_name] = list;}
+    get children() {return Object.values(this.getOkitJson()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
 
     /*
     ** Clone Functionality
@@ -1189,7 +1214,7 @@ class OkitArtifact {
     }
 
     getNamePrefix() {
-        return okitSettings ? okitSettings.name_prefix : 'okit-';
+        return okitSettings ? okitSettings.name_prefix : 'okit';
     }
 
     getAvailabilityDomainNumber(availability_domain) {
@@ -1227,7 +1252,7 @@ class OkitArtifact {
 /*
 ** Model Representation of OCI Regions
  */
-class OkitRegions {
+class OkitRegionsJson {
     /*
     ** Create
      */

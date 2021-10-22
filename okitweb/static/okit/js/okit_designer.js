@@ -33,7 +33,7 @@ let right_drag_bar_start_x = 0;
 let ociRegions = [];
 
 function resetDesigner() {
-    $("#console_header_view_select").val('designer');
+    $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     newModel();
     newDesignerView();
@@ -48,6 +48,9 @@ function resetDesigner() {
 ** Set OCI Link
  */
 function setOCILink() {
+    if (okitSettings.region && okitSettings.region != '') $(jqId('oci_link')).attr('href', `https://console.${okitSettings.region}.oraclecloud.com`)
+}
+function setOCILinkOld() {
     $.ajax({
         type: 'get',
         url: `config/region/${okitSettings.profile}`,
@@ -123,17 +126,31 @@ function newModel() {
     okitJsonModel = new OkitJson();
 }
 function newRegionsModel() {
-    regionOkitJson = new OkitRegions();
+    regionOkitJson = new OkitRegionsJson();
 }
 function setTitleDescription() {
     okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
     okitJsonModel ? $('#json_description').val(okitJsonModel.description) : $('#json_description').val('');
+    okitJsonModel ? $('#freeform_terraform').val(okitJsonModel.user_defined.terraform) : $('#freeform_terraform').val('');
 }
 function updateJsonTitle() {
     okitJsonModel.title = $('#json_title').val();
 }
 function updateJsonDescription() {
     okitJsonModel.description = $('#json_description').val();
+}
+function updateFreeformTerraform() {
+    okitJsonModel.user_defined.terraform = $('#freeform_terraform').val();
+}
+
+/*
+** Handle Clone (Switch off Read Only)
+*/
+function handleEnableCreate(event) {
+    if (okitJsonModel) {
+        Object.values(okitJsonModel).filter((v) => Array.isArray(v)).forEach((v) => v.forEach((r) => r.read_only = false));
+        okitJsonModel.title = `${okitJsonModel.title} - Read/Write Copy`;
+    }
 }
 
 /*
@@ -227,6 +244,242 @@ function saveJson(text, filename){
 /*
 ** Save Model As Template
  */
+function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user') {
+    $(jqId('modal_dialog_title')).text(title);
+    $(jqId('modal_dialog_body')).empty();
+    $(jqId('modal_dialog_footer')).empty();
+    // Add Save Options
+    const table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
+        .attr('class', 'table okit-table okit-modal-dialog-table');
+    const tbody = table.append('div').attr('class', 'tbody');
+    // Template Directory
+    const templates_select = tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('select')
+        .attr('id', 'user_template_select')
+        .attr('size', '10')
+        .on('click', () => {
+            let name = $('#user_template_select').val().replace(root_dir, '')
+            if (!name.endsWith('.json')) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}.json`
+            $('#template_file_name').val(name)
+        })
+    // templates_select.append('option')
+    //     .attr('style', 'font-weight: bolder')
+    //     .attr('value', '.')
+    //     .text('user')
+    $.ajax({
+        type: 'get',
+        url: `templates/load`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        data: JSON.stringify({root_dir: root_dir}),
+        success: function(resp) {
+            hierarchy = JSON.parse(resp)
+            console.info(hierarchy)
+            const add_dir = (select, depth, dir) => {
+                dir.files.forEach(file => select.append('option').attr('style', `padding-left: ${depth * 1}em`).attr('value', `${dir.path}/${file.json}`).text(file.json))
+                dir.dirs.forEach((d) => {
+                    select.append('option').attr('style', `padding-left: ${depth * 1}em; font-weight: bolder`).attr('value', `${d.path}`).text(d.name)
+                    add_dir(select, (depth + 1), d)
+                })
+            }
+            add_dir(templates_select, 1, hierarchy)
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+    // Template directory
+    // tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').text('Directory');
+    // tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('input')
+    //     .attr('class', 'okit-input')
+    //     .attr('id', 'template_dir_name')
+    //     .attr('name', 'template_dir_name')
+    //     .attr('readonly', 'readonly')
+    //     .attr('type', 'text');
+    // Template name
+    tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').text('Name');
+    tbody.append('div').attr('class', 'tr').append('div').attr('class', 'td').append('input')
+        .attr('class', 'okit-input')
+        .attr('id', 'template_file_name')
+        .attr('name', 'template_file_name')
+        .attr('type', 'text')
+        .attr('placeholder', '<Directory Path>/<Filename>.json')
+        .on('keydown', (e) => {
+            if (d3.event.keyCode == 220) {
+                d3.event.preventDefault()
+            } else if (d3.event.keyCode == 32) {
+                d3.event.preventDefault()
+            }
+        })
+        .on('blur', () => {$('#template_file_name').val($('#template_file_name').val().replace(' ', '_').replace('\\', '/'))});
+    // Submit Button
+    const submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
+        .attr('id', 'submit_btn')
+        .attr('type', 'button')
+        .text('Save')
+        .on('click', callback);
+    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
+}
+function handleSaveAsTemplate(e) {
+    const root_dir = 'templates/user'
+    displaySaveAsTemplateDialog('Save as Template', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'template/save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel}),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                loadTemplatePanel();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            },
+            complete: function() {
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });    
+    }, root_dir)
+}
+const loadTemplatePanel = () => {
+    const id = 'templates_panel'
+    $.ajax({
+        type: 'get',
+        url: `panel/templates`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_panel = doc.getElementById(id);
+            const current_panel = document.getElementById(id);
+            const template_panel = document.getElementById('designer_left_column')
+            // Check if menu section already exists
+            const hidden = $(`#${id}`).hasClass('hidden')
+            $(`#${id}`).addClass('hidden')
+            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
+            if (!hidden) $(`#${id}`).removeClass('hidden')
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+}
+/*
+** Save Model to Git
+ */
+function handleSaveToGit(e) {
+    const root_dir = 'git'
+    displaySaveAsTemplateDialog('Save to Git', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'template/save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel, git: true}),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                loadGitPanel();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            },
+            complete: function() {
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });    
+    }, root_dir)
+}
+const loadGitPanel = () => {
+    const id = 'git_panel'
+    $.ajax({
+        type: 'get',
+        url: `panel/git`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_panel = doc.getElementById(id);
+            const current_panel = document.getElementById(id);
+            const template_panel = document.getElementById('designer_left_column')
+            // Check if menu section already exists
+            const hidden = $(`#${id}`).hasClass('hidden')
+            $(`#${id}`).addClass('hidden')
+            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
+            if (!hidden) $(`#${id}`).removeClass('hidden')
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+}
+/*
+** Save Model to Container
+ */
+function handleSaveToContainer(e) {
+    const root_dir = 'local'
+    displaySaveAsTemplateDialog('Save to Container', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        $.ajax({
+            type: 'post',
+            url: 'template/save',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel}),
+            success: function(resp) {
+                console.info('Response : ' + resp);
+                loadGitPanel();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            },
+            complete: function() {
+                // Hide modal dialog
+                $(jqId('modal_dialog_wrapper')).addClass('hidden');
+            }
+        });    
+    }, root_dir)
+}
+const loadFilesystemPanel = () => {
+    const id = 'local_panel'
+    $.ajax({
+        type: 'get',
+        url: `panel/local`,
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        success: function(resp) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(resp, "text/html");
+            const new_panel = doc.getElementById(id);
+            const current_panel = document.getElementById(id);
+            const template_panel = document.getElementById('designer_left_column')
+            // Check if menu section already exists
+            const hidden = $(`#${id}`).hasClass('hidden')
+            $(`#${id}`).addClass('hidden')
+            current_panel !== null ? current_panel.replaceWith(new_panel) : template_panel.appendChild(new_panel);
+            if (!hidden) $(`#${id}`).removeClass('hidden')
+        },
+        error: function(xhr, status, error) {
+            console.error('Status : '+ status)
+            console.error('Error : '+ error)
+        }
+    });
+}
+/*
+** Save Model As Template
+ */
+// TODO: Delete
 function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true) {
     $(jqId('modal_dialog_title')).text(title);
     $(jqId('modal_dialog_body')).empty();
@@ -294,75 +547,8 @@ function displayGitSaveDialog(title, callback, show_dir=true, show_filename=true
         .on('click', callback);
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
-function handleSaveAs(evt) {
-    // Display Save As Dialog
-    $(jqId('modal_dialog_title')).text('Save As Template');
-    $(jqId('modal_dialog_body')).empty();
-    $(jqId('modal_dialog_footer')).empty();
-    let table = d3.select(d3Id('modal_dialog_body')).append('div').append('div')
-        .attr('id', 'save_as_template_table')
-        .attr('class', 'table okit-table okit-modal-dialog-table');
-    let tbody = table.append('div').attr('class', 'tbody');
-    // Title
-    let tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Title');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_title')
-        .attr('name', 'template_title')
-        .attr('type', 'text');
-    // Description
-    tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Description');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_description')
-        .attr('name', 'template_description')
-        .attr('type', 'text');
-    // Type
-    /* TODO: Reinstate when sub template types are implemented
-    tr = tbody.append('div').attr('class', 'tr');
-    tr.append('div').attr('class', 'td').text('Type');
-    tr.append('div').attr('class', 'td').append('input')
-        .attr('class', 'okit-input')
-        .attr('id', 'template_type')
-        .attr('name', 'template_type')
-        .attr('type', 'text');
-    */
-    // Save
-    let save_button = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
-        .attr('id', 'save_as_button')
-        .attr('type', 'button')
-        .text('Save');
-    save_button.on("click", handleSaveAsTemplate);
-    $(jqId('modal_dialog_wrapper')).removeClass('hidden');
-}
-function handleSaveAsTemplate(e) {
-    //okitJsonModel.title = $(jqId('template_title')).val();
-    //okitJsonModel.description = $(jqId('template_description')).val();
-    //okitJsonModel.template_type = $(jqId('template_type')).val();
-    okitJsonModel.template_type = 'User';
-    okitJsonModel.updated = getCurrentDateTime();
-    $.ajax({
-        type: 'post',
-        url: 'saveas/template',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(okitJsonModel),
-        success: function(resp) {
-            console.info('Response : ' + resp);
-            // Hide modal dialog
-            $(jqId('modal_dialog_wrapper')).addClass('hidden');
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
-            // Hide modal dialog
-            $(jqId('modal_dialog_wrapper')).addClass('hidden');
-        }
-    });
-}
-function handleSaveToGit(e) {
+// TODO: Delete
+function handleSaveToGit1(e) {
     displayGitSaveDialog('Save To Git', () =>
     {
         let request_json = JSON.clone(okitJsonModel);
@@ -412,12 +598,188 @@ function redrawSVGCanvas(recalculate=false) {
     displayOkitJson();
 }
 /*
+** Toolbar Handlers
+ */
+const slideLeftPanel = (id) => {
+    $(`.okit-left-side-panel:not(#${id})`).addClass('hidden')
+    $(`#${id}`).toggleClass('hidden')
+    $(`.okit-left-side-panel:not(.hidden)`).length === 0 ? $('#designer_left_column').addClass('okit-slide-hide-left') : $('#designer_left_column').removeClass('okit-slide-hide-left')
+}
+const slideRightPanel = (id) => {
+    $(`.okit-right-side-panel:not(#${id})`).addClass('okit-slide-hide-right')
+    $(`#${id}`).toggleClass('okit-slide-hide-right')
+}
+/* 
+** Settings
+ */
+function handleSettings(evt) {
+    // $('#settings_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('settings_panel')
+    okitSettings.buildPanel('settings_panel', true);
+    return false;
+}
+/*
 ** Validate Model
  */
 function handleValidate(evt) {
-    hideNavMenu();
-    $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
-    $('#toggle_validation_button').click();
+    // $('#validation_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('validation_panel')
+    okitJsonModel.validate(displayValidationResults);
+    // hideNavMenu();
+    // $('#toggle_validation_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_validation_button').click();
+    return false;
+}
+/*
+** Estimate Cost
+ */
+function handleEstimateCost(evt) {
+    // $('#cost_estimate_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('cost_estimate_panel')
+    $(jqId(COST_ESTIMATE_PANEL)).empty();
+    $(jqId(COST_ESTIMATE_PANEL)).text('Estimating...');
+    okitJsonModel.estimateCost(displayPricingResults);
+    // hideNavMenu();
+    // $('#toggle_cost_estimate_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_cost_estimate_button').click();
+    return false;
+}
+/*
+** Display Properties
+ */
+function handleOpenProperties(evt) {
+    // $('#properties_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('properties_panel')
+    // hideNavMenu();
+    // $('#toggle_properties_button').removeClass('okit-bar-panel-displayed');
+    // $('#toggle_properties_button').click();
+    return false;
+}
+/* 
+** Documentation
+ */
+function handleDocumentation(evt) {
+    // $('#documentation_panel').toggleClass('okit-slide-hide-right')
+    slideRightPanel('documentation_panel')
+    return false;
+}
+/*
+** Free Form Terraform
+ */
+function handleFreeformTerraform(evt) {
+    loadGlobalTags()
+    slideRightPanel('terraform_panel')
+    return false;
+}
+/*
+** Global Tags
+ */
+function handleGlobalTags(evt) {
+    slideRightPanel('global_tags_panel')
+    return false;
+}
+function loadGlobalTags() {
+    $('#global_freeform_tags_tbody').empty()
+    $('#global_defined_tags_tbody').empty()
+    if (okitJsonModel.freeform_tags) {
+        const tbody = d3.select('#global_freeform_tags_tbody')
+        for (const [key, value] of Object.entries(okitJsonModel.freeform_tags)) {
+            let tr = tbody.append('div').attr('class', 'tr')
+            tr.append('div').attr('class', 'td').append('label').text(key)
+            tr.append('div').attr('class', 'td').append('label').text(value)
+            tr.append('div').attr('class', 'td delete-tag action-button-background delete').on('click', () => {
+                delete okitJsonModel.freeform_tags[key];
+                loadGlobalTags()
+                d3.event.stopPropagation()
+            })
+        }
+    }
+    if (okitJsonModel.defined_tags) {
+        const tbody = d3.select('#global_defined_tags_tbody')
+        for (const [namespace, tags] of Object.entries(okitJsonModel.defined_tags)) {
+            for (const [key, value] of Object.entries(tags)) {
+                let tr = tbody.append('div').attr('class', 'tr')
+                tr.append('div').attr('class', 'td').append('label').text(namespace)
+                tr.append('div').attr('class', 'td').append('label').text(key)
+                tr.append('div').attr('class', 'td').append('label').text(value)
+                tr.append('div').attr('class', 'td  delete-tag action-button-background delete').on('click', () => {
+                    delete okitJsonModel.defined_tags[namespace][key];
+                    if (Object.keys(okitJsonModel.defined_tags[namespace]).length === 0) {delete okitJsonModel.defined_tags[namespace];}
+                    loadGlobalTags()
+                    d3.event.stopPropagation()
+                })
+            }
+        }
+    }
+}
+function handleAddGlobalFreeformTag() {
+    console.info('Adding Global Freeform Tag')
+    $('#data_entry_panel_title').text('Add Freeform Tag')
+    $('#data_entry_panel_body').empty()
+    $('#data_entry_panel_footer').empty()
+    // Add input elements
+    const body = d3.select('#data_entry_panel_body')
+    let div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Key')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_key').attr('placeholder', 'Tag Key (No white space)')
+    div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Value')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_value').attr('placeholder', 'Tag Value')
+    // Add Footer button
+    const footer = d3.select('#data_entry_panel_footer')
+    footer.append('div').append('button').attr('type', 'button').text('Add Tag').on('click', () => {
+        const key = $('#gdep_tag_key').val().replace(/\s+/g, '_')
+        const val = $('#gdep_tag_value').val()
+        if (key.length > 0 && val.length > 0) okitJsonModel.freeform_tags[key] = val
+        loadGlobalTags()
+        $('#data_entry_panel').addClass('okit-slide-hide-right')
+    })
+    // Display Panel
+    $('#data_entry_panel').removeClass('okit-slide-hide-right')
+}
+function handleAddGlobalDefinedTag() {
+    console.info('Adding Global Defined Tag')
+    $('#data_entry_panel_title').text('Add Defined Tag')
+    $('#data_entry_panel_body').empty()
+    $('#data_entry_panel_footer').empty()
+    // Add input elements
+    const body = d3.select('#data_entry_panel_body')
+    let div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Namespace')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_namespace').attr('placeholder', 'Tag Namespace (No white space)').attr('list', 'global_tag_namespaces')
+    const global_tag_namespaces = div.append('datalist').attr('id', 'global_tag_namespaces')
+    if (okitJsonModel.defined_tags) Object.keys(okitJsonModel.defined_tags).forEach((namespace) => global_tag_namespaces.append('option').attr('value', namespace))
+    div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Key')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_key').attr('placeholder', 'Tag Key (No white space)')
+    div = body.append('div').attr('class', 'okit-data-entry-text-property')
+    div.append('div').append('label').text('Value')
+    div.append('div').append('input').attr('type', 'text').attr('id', 'gdep_tag_value').attr('placeholder', 'Tag Value')
+    // Add Footer button
+    const footer = d3.select('#data_entry_panel_footer')
+    footer.append('div').append('button').attr('type', 'button').text('Add Tag').on('click', () => {
+        const namespace = $('#gdep_tag_namespace').val().replace(/\s+/g, '_')
+        const key = $('#gdep_tag_key').val().replace(/\s+/g, '_')
+        const val = $('#gdep_tag_value').val()
+        if (namespace.length > 0 && key.length > 0 && val.length > 0) okitJsonModel.defined_tags[namespace] ? okitJsonModel.defined_tags[namespace][key] = val : okitJsonModel.defined_tags[namespace] = {key: val}
+        loadGlobalTags()
+        $('#data_entry_panel').addClass('okit-slide-hide-right')
+    })
+    // Display Panel
+    $('#data_entry_panel').removeClass('okit-slide-hide-right')
+}
+/*
+** Cancel Data Entry
+*/
+function handleCancelDataEntry() {
+    $('#data_entry_panel').addClass('okit-slide-hide-right')
+}
+/*
+** Three Dots Menu
+ */
+function handleThreeDotsMenu(evt) {
+    // slideRightPanel('threedots_menu_panel')
+    $(`#threedots_menu_panel`).toggleClass('okit-slide-hide-right')
     return false;
 }
 /*
@@ -428,9 +790,10 @@ function loadTemplate(template_url) {
     resetDesigner();
     $.ajax({
         type: 'get',
-        url: template_url,
-        dataType: 'text',
-        contentType: 'application/json',
+        url: 'template/load',
+        dataType: 'text', // Response Type
+        contentType: 'application/json', // Sent Message Type
+        data: JSON.stringify({template_file: template_url}),
         success: function(resp) {
             okitJsonModel = new OkitJson(resp);
             newDesignerView();
@@ -444,6 +807,79 @@ function loadTemplate(template_url) {
         }
     });
 }
+/*
+** Import Model From Template
+ */
+function importTemplate(template_url, event) {
+    console.info('Import Template Event', event)
+    console.info('<<<<<< NEED TO RESOLVE TOP LEVEL SVG REPRESENTATION >>>>>>')
+    return
+    // event = event | window.event
+    event.preventDefault()
+    event.stopPropagation()
+    const right_coll_offset = $('#designer_right_column').offset()
+    const position = {top: event.pageY - right_coll_offset.top - 10, left: event.pageX - 10};
+    console.info('Context Position', position, right_coll_offset)
+    $(jqId("context-menu")).empty();
+    $(jqId("context-menu")).css(position);
+    const contextmenu = d3.select(d3Id("context-menu"));
+    contextmenu.on('mouseenter', function () {
+            $(jqId("context-menu")).removeClass("hidden");
+        })
+        .on('mouseleave', function () {
+            $(jqId("context-menu")).addClass("hidden");
+        });
+    const ul = contextmenu.append('ul').attr('class', 'okit-context-menu-list');
+    ul.append('li').append('a')
+                    .attr('class', 'parent-item')
+                    .attr('href', 'javascript:void(0)')
+                    .text('Import')
+                    .on('click', () => {
+                        $.ajax({
+                            type: 'get',
+                            url: 'template/load',
+                            dataType: 'text', // Response Type
+                            contentType: 'application/json', // Sent Message Type
+                            data: JSON.stringify({template_file: template_url}),
+                            success: function(resp) {
+                                okitJsonModel.load(JSON.parse(resp))
+                                okitJsonView.load()
+                                displayOkitJson();
+                                displayDesignerView();
+                                displayTreeView();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Status : '+ status);
+                                console.error('Error  : '+ error);
+                            }
+                        });
+                        $(jqId("context-menu")).addClass("hidden");
+                    });
+    $(jqId("context-menu")).removeClass("hidden");
+
+}
+// TODO: Delete
+// function loadTemplate(template_url) {
+//     hideNavMenu();
+//     resetDesigner();
+//     $.ajax({
+//         type: 'get',
+//         url: template_url,
+//         dataType: 'text',
+//         contentType: 'application/json',
+//         success: function(resp) {
+//             okitJsonModel = new OkitJson(resp);
+//             newDesignerView();
+//             displayOkitJson();
+//             displayDesignerView();
+//             displayTreeView();
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Status : '+ status);
+//             console.error('Error  : '+ error);
+//         }
+//     });
+// }
 /*
 ** Query OCI
  */
@@ -477,10 +913,11 @@ function displayQueryDialog() {
                 console.info('Profile Select ' + $(jqId('config_profile')).val());
                 okitSettings.profile = $(jqId('config_profile')).val();
                 okitSettings.save();
+                loadHeaderConfigDropDown()
                 // Clear Existing Compartments
                 okitOciData.setCompartments([]);
                 loadCompartments();
-                loadRegions();
+                loadRegions(selectQueryLastUsedRegion);
             });
     for (let section of okitOciConfig.sections) {
         profile_select.append('option')
@@ -501,7 +938,7 @@ function displayQueryDialog() {
             .attr('size', 10)
             .on('change', () => {
                 console.info('Region Select ' + $(jqId('query_region_id')).val());
-                okitSettings.last_used_region = $(jqId('query_region_id')).val();
+                okitSettings.query_regions = $(jqId('query_region_id')).val();
                 okitSettings.save();
             })
             .append('option')
@@ -556,12 +993,13 @@ function displayQueryDialog() {
     td.append('input')
         .attr('id', 'fast_discovery')
         .attr('name', 'fast_discovery')
+        .attr('checked', 'checked')
         .attr('type', 'checkbox');
     td.append('label')
         .attr('for', 'fast_discovery')
         .text('Fast Discovery');
-    // if (developer_mode) $(jqId('fast_discovery_row')).removeClass('collapsed');
-    $(jqId('fast_discovery_row')).removeClass('collapsed');
+    if (developer_mode) $(jqId('fast_discovery_row')).removeClass('collapsed');
+    // $(jqId('fast_discovery_row')).removeClass('collapsed');
     // Submit Button
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
@@ -574,7 +1012,7 @@ function displayQueryDialog() {
 }
 function handleQueryOci(e) {
     hideNavMenu();
-    $("#console_header_view_select").val('designer');
+    $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
     displayQueryDialog();
@@ -592,7 +1030,7 @@ function handleQueryOci(e) {
     // Load Compartment Select
     loadCompartments();
     // Load Region Select
-    loadRegions();
+    loadRegions(selectQueryLastUsedRegion);
 }
 function loadCompartments() {
     // Clear Select
@@ -621,8 +1059,8 @@ function loadCompartments() {
                 $(jqId('query_compartment_id')).empty();
                 let compartment_select = d3.select(d3Id('query_compartment_id'));
                 for (let compartment of jsonBody) {
-                    console.info(compartment['display_name']);
-                    console.info(compartment['canonical_name']);
+                    // console.info(compartment['display_name']);
+                    // console.info(compartment['canonical_name']);
                     compartment_select.append('option')
                         .attr('value', compartment['id'])
                         .text(compartment['canonical_name']);
@@ -631,6 +1069,7 @@ function loadCompartments() {
                     }
                 }
                 selectQueryLastUsedCompartment();
+                loadRegions(selectQueryLastUsedRegion);
             },
             error: function (xhr, status, error) {
                 console.info('Status : ' + status)
@@ -639,31 +1078,33 @@ function loadCompartments() {
         });
     }
 }
-function loadRegions() {
+function loadRegions(callback) {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
     let region_select = d3.select(d3Id('query_region_id'));
-    for(let region of okitOciData.getRegions() ){
+    for(let region of okitRegions.getRegions() ){
         region_select.append('option')
             .attr('value', region['name'])
             .text(region['display_name']);
     }
-    selectQueryLastUsedRegion();
+    callback()
+    // selectQueryLastUsedRegion();
 }
 // TODO: Delete
-function loadRegions1() {
+function loadRegionsOld() {
     // Clear Select
     let select = $(jqId('query_region_id'));
     $(select).empty();
     select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
+    const profile = $(jqId('config_profile')).val()
     // Get Regions
     $.ajax({
         type: 'get',
-        url: 'oci/region',
+        url: `oci/regions/${profile}`,
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify({config_profile: $(jqId('config_profile')).val()}),
+        data: JSON.stringify({config_profile: profile}),
         success: function(resp) {
             //console.info('Response : ' + resp);
             let jsonBody = JSON.parse(resp)
@@ -687,7 +1128,7 @@ function loadRegions1() {
 }
 function selectQueryHomeRegion() {
     if (okitSettings.home_region_key !== '') {
-        for (let region of ociRegions) {
+        for (let region of ociRegions.getRegions()) {
             if (okitSettings.home_region_key === region.key) {
                 $(jqId('query_region_id')).val(region.name);
                 break;
@@ -696,8 +1137,20 @@ function selectQueryHomeRegion() {
     }
 }
 function selectQueryLastUsedRegion() {
-    if (okitSettings.last_used_region !== '') {
-       $(jqId('query_region_id')).val(okitSettings.last_used_region);
+    if (okitSettings.query_regions && okitSettings.query_regions !== '') {
+        $(jqId('query_region_id')).val(okitSettings.query_regions);
+        $(jqId('query_region_id')).change();
+    } else {
+        $(jqId('query_region_id')).val(okitRegions.getHomeRegion().id);
+        $(jqId('query_region_id')).change();
+    }
+}
+function selectRMLastUsedRegion() {
+    if (okitSettings.resource_manager_region && okitSettings.resource_manager_region !== '') {
+        $(jqId('query_region_id')).val(okitSettings.resource_manager_region);
+        $(jqId('query_region_id')).change();
+    } else {
+        $(jqId('query_region_id')).val(okitRegions.getHomeRegion().id);
         $(jqId('query_region_id')).change();
     }
 }
@@ -1376,4 +1829,14 @@ function handleLoaddesignFromGITExec(e) {
         loadTemplate(okitJsonModel.git_repository_filename)
         $(jqId('modal_dialog_wrapper')).addClass('hidden');
     }
+}
+
+function handleRefreshDropdownData(event) {
+    hideNavMenu();
+    event = event || window.event;
+    event.stopPropagation()
+    okitRegions.clearLocalStorage()
+    okitOciData.clearLocalStorage()
+    okitRegions.load(okitSettings.profile)
+    okitOciData.load(okitSettings.profile, okitSettings.region)
 }

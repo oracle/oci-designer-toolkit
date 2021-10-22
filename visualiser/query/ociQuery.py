@@ -35,6 +35,7 @@ class OCIQuery(OCIConnection):
         "AutonomousDatabase",
         "Backend",
         "BackendSet",
+        "Bastion",
         "BootVolume",
         "BootVolumeAttachment",
         "Bucket",
@@ -51,9 +52,10 @@ class OCIQuery(OCIConnection):
         "Export",
         "ExportSet",
         "FileSystem",
+        "Group",
         "Image",
         "Instance",
-        "InstancePool",
+        # "InstancePool",
         "InternetGateway",
         "IPSecConnection",
         "IpSecConnectionTunnel",
@@ -65,6 +67,7 @@ class OCIQuery(OCIConnection):
         "NetworkSecurityGroup",
         "NetworkSecurityGroupSecurityRule",
         "NodePool",
+        "Policy",
         "PrivateIp",
         "PublicIp",
         "RemotePeeringConnection",
@@ -72,6 +75,8 @@ class OCIQuery(OCIConnection):
         "SecurityList",
         "ServiceGateway",
         "Subnet",
+        "User",
+        "UserGroupMembership",
         "Vcn",
         "VmCluster",
         "VmClusterNetwork",
@@ -80,8 +85,9 @@ class OCIQuery(OCIConnection):
         "VnicAttachment",
         "Vnic"
     ]
-    DISCOVER_OKIT_MAP = {
+    DISCOVERY_OKIT_MAP = {
         "AutonomousDatabase": "autonomous_databases",
+        "Bastion": "bastions",
         #"BootVolume": "block_storage_volumes",
         "Bucket": "object_storage_buckets",
         "Cluster": "oke_clusters",
@@ -94,6 +100,7 @@ class OCIQuery(OCIConnection):
         "Drg": "dynamic_routing_gateways",
         "ExadataInfrastructure": "exadata_infrastructures",
         "FileSystem": "file_storage_systems",
+        "Group": "groups",
         "Instance": "instances",
         "InstancePool": "instance_pools",
         "InternetGateway": "internet_gateways",
@@ -103,11 +110,13 @@ class OCIQuery(OCIConnection):
         "MySqlDbSystem": "mysql_database_systems",
         "NatGateway": "nat_gateways",
         "NetworkSecurityGroup": "network_security_groups",
+        "Policy": "policys", # Yes we know it's spelt incorrectly but the okitCodeSkeletonGenerator.py is simple
         "RemotePeeringConnection": "remote_peering_connections",
         "RouteTable": "route_tables",
         "SecurityList": "security_lists",
         "ServiceGateway": "service_gateways",
         "Subnet": "subnets",
+        "User": "users",
         "Vcn": "virtual_cloud_networks",
         "VmCluster": "vm_clusters",
         "VmClusterNetwork": "vm_cluster_networks",
@@ -174,7 +183,7 @@ class OCIQuery(OCIConnection):
         for compartment in response_json["compartments"]:
             if compartment["compartment_id"] not in compartment_ids:
                 compartment["compartment_id"] = None
-        map_keys = self.DISCOVER_OKIT_MAP.keys()
+        map_keys = self.DISCOVERY_OKIT_MAP.keys()
         for region, resources in discovery_data.items():
             logger.info("Processing Region : {0!s:s} {1!s:s}".format(region, resources.keys()))
             for resource_type, resource_list in resources.items():
@@ -201,9 +210,12 @@ class OCIQuery(OCIConnection):
                         resource_list = self.route_tables(resource_list, resources)
                     elif resource_type == "ServiceGateway":
                         resource_list = self.service_gateways(resource_list, resources)
+                    elif resource_type == "Group":
+                        resource_list = self.groups(resource_list, resources)
                     # Check Life Cycle State
-                    response_json[self.DISCOVER_OKIT_MAP[resource_type]] = [r for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
-                    #response_json[self.DISCOVER_OKIT_MAP[resource_type]] = resource_list
+                    # logger.info(f'Processing {resource_type} : {resource_list}')
+                    response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = [r for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
+                    #response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = resource_list
         return response_json
 
     def dynamic_routing_gateways(self, drgs, resources):
@@ -223,6 +235,11 @@ class OCIQuery(OCIConnection):
                 ess = [e for e in export_sets if e["id"] == mt["export_set_id"]]
                 mt["export_set"] = ess[0] if len(ess) else {}
         return file_storage_systems
+
+    def groups(self, groups, resources):
+        for group in groups:
+            group["user_ids"] = [m["user_id"] for m in resources.get("UserGroupMembership", []) if m["group_id"] == group["id"]]
+        return groups
 
     def instances(self, instances, resources):
         # Exclude OKE Instances

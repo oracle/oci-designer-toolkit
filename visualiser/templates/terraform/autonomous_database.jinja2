@@ -48,6 +48,9 @@ resource "oci_database_autonomous_database" "{{ resource_name }}" {
     source_id = {{ source_id }}
     {% endif %}
 {% endif %}
+{% if private_endpoint_label is defined %}
+    private_endpoint_label    = {{ private_endpoint_label | safe }}
+{% endif %}
 {% if defined_tags is defined %}
     defined_tags             = {{ defined_tags | safe }}
 {% endif %}

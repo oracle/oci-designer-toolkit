@@ -242,15 +242,21 @@ docker run -d --rm -p 443:443 -p 80:80 \
 - [Copy Config & Key Files](#copy-config--key-files)
 
 ##### Vagrant Build
+###### MacOS / Linux
 ```bash
-cd oci-designer-toolkit/containers/vagrant/
+cd oci-designer-toolkit/containers/vagrant
 vagrant up; vagrant reload; vagrant ssh
+```
+###### Windows
+```bash
+cd oci-designer-toolkit\containers\vagrant
+vagrant up & vagrant reload & vagrant ssh
 ```
 **NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
 is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
 
 ##### Vagrant
-```bash
+```bat
 cd oci-designer-toolkit/containers/vagrant
 vagrant halt
 vagrant destroy -f
@@ -281,16 +287,23 @@ to restrict access to the Instance to authorised users or https authenticated us
 
 Once the Instance has been created the following commands will install OKIT and create the service to run the WebServer.
 ```bash
-# Install Required Packages because the packages section may not complete before the runcmd
-sudo bash -c "yum install -y git openssl python-oci-cli oci-utils"
+# Install Required Packages 
+sudo bash -c "yum install -y git"
+sudo bash -c "yum install -y openssl"
+sudo bash -c "yum install -y oci-utils"
+# This is not required for OL8
+sudo bash -c "yum install -y python-oci-cli"
 # Install Required Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
-sudo bash -c "pip3 install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
+sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
 sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
-sudo bash -c "mkdir /okit/{log,ssl,workspace}"
-# Add additional environment information because append does not appear to work in write_file
+sudo bash -c "mkdir -p /okit/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
+# Link Reference Architecture Templates to Template Directory
+sudo bash -c "ln -sv /okit/okitweb/static/okit/templates/reference_architecture /okit/instance/templates/reference_architecture"
+# Add additional environment information 
+sudo bash -c "echo 'export PATH=$PATH:/usr/local/bin' >> /etc/bashrc"
 sudo bash -c "echo 'export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit' >> /etc/bashrc"
 sudo bash -c "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
 sudo bash -c "echo 'export OKIT_VM_COMPARTMENT=`oci-metadata -g compartmentID --value-only`' >> /etc/bashrc"
@@ -298,8 +311,9 @@ sudo bash -c "echo 'export OKIT_VM_REGION=`oci-metadata -g region --value-only`'
 # Generate ssl Self Sign Key
 sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
 # Copy GUnicorn Service File
-sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.service > /etc/systemd/system/gunicorn.service'
+sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.oci.service > /etc/systemd/system/gunicorn.service'
 sudo bash -c 'sed -i "s/{REGION_IDENTIFIER}/`oci-metadata -g region --value-only`/" /etc/systemd/system/gunicorn.service'
+sudo bash -c 'sed -i "s/<home_region>/`oci-metadata -g region --value-only`/" /okit/instance/config.py'
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
 sudo systemctl start gunicorn.service
@@ -385,3 +399,69 @@ ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -N -L 8080:127.0.0
 ```
 
 Once the tunnel has been created the OKIT Designer BUI can be accessed on [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer).
+
+
+
+
+
+
+
+
+
+
+## Install on Oracle Linux
+
+If you have a Linux machine and would like to install OKIT directly without the need for Docker or Vagrant then 
+this can be achieved using the following simple instructions. We assume that you have already created the appropriate OCI SDK config
+file in ~/.oci and associated ssh keys/config in ~/.ssh.
+
+The instructions below give 2 options for the server either HTTP or HTTPS and it is up to the user to choose the appropriate 
+command based on their requirements.
+
+These instructions will install OKIT in the root directory __/okit__. If you would like OKIT in an alternative directory 
+modify the OKIT_DIR environment variable. In addition the __/etc/systemd/system/gunicorn.service__ and __${OKIT_DIR}/config/gunicorn_http*.py__ 
+files will need to modified to reflect this new location.
+
+```bash
+export OKIT_DIR='/okit'
+# Install Required Packages 
+sudo bash -c "yum install -y git"
+sudo bash -c "yum install -y openssl"
+sudo bash -c "yum install -y oci-utils"
+# This is not required for OL8
+sudo bash -c "yum install -y python-oci-cli"
+# Install Required Python Modules
+sudo bash -c "python3 -m pip install -U pip"
+sudo bash -c "python3 -m pip install -U setuptools"
+sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
+# Clone OKIT
+sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git ${OKIT_DIR}"
+sudo bash -c "mkdir -p ${OKIT_DIR}/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
+# Link Reference Architecture Templates to Template Directory
+sudo bash -c "ln -sv ${OKIT_DIR}/okitweb/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture"
+# Add additional environment information 
+sudo bash -c "echo 'export OKIT_DIR=:${OKIT_DIR}' >> /etc/bashrc"
+sudo bash -c "echo 'export PYTHONPATH=:${OKIT_DIR}/visualiser:${OKIT_DIR}/okitweb:/okit' >> /etc/bashrc"
+sudo bash -c "echo 'export PATH=$PATH:/usr/local/bin' >> /etc/bashrc"
+# Generate ssl Self Sign Key
+sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${OKIT_DIR}/ssl/okit.key -out ${OKIT_DIR}/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
+
+##################################################################################################################
+#####                        If HTTPS / 443 Is required                                                      #####
+##### Copy GUnicorn Service File (HTTPS)                                                                     #####
+##################################################################################################################
+sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.https.service /etc/systemd/system/gunicorn.service"
+##################################################################################################################
+#####                        If HTTP / 80 Is required                                                        #####
+##### Copy GUnicorn Service File (HTTP)                                                                      #####
+##################################################################################################################
+sudo bash -c "cp -v ${OKIT_DIR}/containers/services/gunicorn.http.service /etc/systemd/system/gunicorn.service"
+
+# Enable Gunicorn Service
+sudo systemctl enable gunicorn.service
+sudo systemctl start gunicorn.service
+# Open Firewall
+sudo firewall-offline-cmd  --add-port=80/tcp
+sudo firewall-offline-cmd  --add-port=443/tcp
+sudo systemctl restart firewalld
+```

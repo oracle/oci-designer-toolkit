@@ -4,33 +4,9 @@
 -->
 {% extends "okit/okit_console.html" %}
 
-{% macro template_menu_item(okit_template) -%}
-    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
-           onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
-{%- endmacro %}
-
-{% macro template_menu(categories) -%}
-    {% for name, category in categories.items() %}
-        {% if name == '.' %}
-            {% if category['templates']|length > 0 %}
-                {% for okit_template in category['templates'] %}
-                    {{ template_menu_item(okit_template) }}
-                {% endfor %}
-            {% endif %}
-        {% else %}
-            <li id="{{ category['name'] }}" class="sub-header-item dropdown"><span>{{ category['name'] }}</span>
-                <ul class="dropdown-content">
-                    {% if category['children'].values()|length > 0 %}
-                        {{ template_menu(category['children']) }}
-                    {% endif %}
-                    {% for okit_template in category['templates'] %}
-                        {{ template_menu_item(okit_template) }}
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endif %}
-    {% endfor %}
-{%- endmacro %}
+{% import "okit/menu_macros.jinja2" as menu with context %}
+{% import "okit/panel_macros.jinja2" as panel with context %}
+{% import "okit/palette_macros.jinja2" as palette with context %}
 
 {% block headscripts %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
@@ -41,6 +17,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/relationship/js/okit_relationship_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/json/js/okit_json_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/identity/js/okit_identity_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_view_layout.js') }}"></script>
@@ -48,35 +25,40 @@
         let palette_svg = {}
         let resource_icon_files = {}
         let xmlSerialiser = new XMLSerializer();
-        {% for palette_icon_group in palette_icon_groups %}
-            {% for palette_icon in palette_icon_group['icons'] %}
-                palette_svg["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
-                resource_icon_files["{{ palette_icon['title'] }}"] = "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}";
+        let icon_title = '';
+        {% for palette_icon_group in palette_json.groups %}
+            {% for palette_icon in palette_icon_group['resources'] %}
+                icon_title = "{{ palette_icon['title']|title }}"
+                icon_title = "{{ palette_icon['title'] }}"
+                palette_svg[icon_title] = "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}";
+                resource_icon_files[icon_title] = "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}";
                 $.ajax({
                     type: 'get',
-                    url: "{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}",
+                    url: "{{ url_for('static', filename='okit/palette/svg/' + palette_icon['svg']) }}",
                     dataType: 'xml',
                     success: function(xml) {
-                        // console.info("{{ 'Loaded ' + palette_icon['svg'] }}");
+                        // const icon_title = "{{ palette_icon['title']|title }}"
+                        const icon_title = "{{ palette_icon['title'] }}"
+                        // console.info("{{ 'Loaded ' + palette_icon['svg'] }}", icon_title);
                         let g = $(xml).find("g");
                         let svg = $(xml).find("svg");
                         let style = $(xml).find("style");
                         g[0].removeAttribute('transform');
-                        palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(g[0]);
-                        // palette_svg["{{ palette_icon['title'] }}"] = xmlSerialiser.serializeToString(svg[0]);
+                        palette_svg[icon_title] = xmlSerialiser.serializeToString(g[0]);
+                        // palette_svg[icon_title] = xmlSerialiser.serializeToString(svg[0]);
                         if (style.length > 0) {
                             if (style[0].sheet) {
                                 for (let rule of style[0].sheet.cssRules) {
                                     const fromStr = `class="${rule.selectorText.substring(1)}"`
                                     const toStr = `style="${rule.style.cssText}"`
-                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                    palette_svg[icon_title] = palette_svg[icon_title].replaceAll(fromStr, toStr)
                                 }
                             } else {
                                 for (let rule of style[0].textContent.split('\n\t').filter((r) => r !== '')) {
                                     const fromStr = `class="${rule.substring(1, rule.indexOf('{')).trim()}"`
                                     const cssText = rule.substring(rule.indexOf('{') + 1, rule.indexOf('}')).trim()
                                     const toStr = `style="${cssText}"`
-                                    palette_svg["{{ palette_icon['title'] }}"] = palette_svg["{{ palette_icon['title'] }}"].replaceAll(fromStr, toStr)
+                                    palette_svg[icon_title] = palette_svg[icon_title].replaceAll(fromStr, toStr)
                                 }
                             }
                         }
@@ -112,13 +94,16 @@
 
 {% block headcss %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_designer.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_panels.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_threedots_menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/identity/css/okit_identity_view.css') }}">
 {% endblock %}
 
 {% block navmenublock %}
     <ul id="navigation_menu_list" class="okit-navigation-list">
-        <ul class="okit-navigation-sub-list">
+        <ul id="canvas_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -129,12 +114,18 @@
             </li>
             <li id="file_recover_menu_item_li" class="hidden"><a id="file-recover-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRecover()">Recover</a></li>
             <li><a id="file-new-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
+            {%- if not a2c_mode -%}
             <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
-            <li id="save_file" class="sub-header-item dropdown">
+            {%- endif -%}
+            <li id="save_menu" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Save</span>
                 <ul class="dropdown-content">
+                    {%- if a2c_mode -%}
+                    <li><a id="file-save-to-container-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveToContainer()">Save</a></li>
+                    {%- else -%}
                     <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
-                    <li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li>
+                    {%- endif -%}
+                    <!--li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li-->
                     <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTemplate()">Save As Template</a></li>
                     <li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save To Git</a></li>
                 </ul>
@@ -144,8 +135,9 @@
             {% endif %}
             <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li>
             <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
+            <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li>
         </ul>
-        <ul class="okit-navigation-sub-list">
+        <!--ul id="templates_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -154,45 +146,18 @@
                     </span>
                 </div>
             </li>
-            <!--{{ template_menu(okit_template_categories) }}-->
             {% for template_group in okit_templates_groups %}
                 {% if template_group['name'] == '.' %}
                     {% for okit_template in template_group['templates'] %}
-                        <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
-                               onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
+                        {{ menu.add_template_menu_item(okit_template) }}
                     {% endfor %}
-                {% elif template_group['templates']|length > 0 %}
-                    <li id="{{ template_group['name'] }}" class="sub-header-item dropdown"><span>{{ template_group['name'] }}</span>
-                        <ul class="dropdown-content">
-                            {% for okit_template in template_group['templates'] %}
-                                <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['description'] }}" class="parent-item" href="javascript:void(0)"
-                                       onclick="loadTemplate('{{ url_for('static', filename='okit/templates/' + okit_template['json']) }}')">{{ okit_template['title'] }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
+                {% elif template_group['templates'] %}
+                    {{ menu.add_template_menu_group(template_group) }}
                 {% endif %}
             {% endfor %}
             <li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li>
-        </ul>
-        <!--ul class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="View Menu"></div>
-                        <span>View</span>
-                    </span>
-                </div>
-            </li>
-            <li><a id="view-compartment-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToCompartmentView()">Designer</a></li>
-            <li><a id="view-tabular-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToTabularView()">Tabular</a></li>
-            <li><a id="view-relationship-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToRelationshipView()">Relationship</a></li>
-            <li><a id="view-json-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToTextJsonView()">Json</a></li>
-            {% if experimental_mode %}
-            <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToNetworkView()">Network (Experimental)</a></li>
-            <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToSecurityView()">Security (Experimental)</a></li>
-            {% endif %}
         </ul-->
-        <ul class="okit-navigation-sub-list">
+        <ul id="export_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -201,7 +166,7 @@
                     </span>
                 </div>
             </li>
-            <li id="image_export" class="sub-header-item dropdown">
+            <li id="image_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Image</span>
                 <ul class="dropdown-content">
                     <li><a id="file-export-svg-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToSVG()">svg</a></li>
@@ -209,22 +174,29 @@
                     <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">jpeg</a></li>
                 </ul>
             </li>
-            <li id="image_export" class="sub-header-item dropdown">
+            {%- if a2c_mode -%}
+            <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Json</a></li>
+            {%- endif -%}
+            <!--li id="terraform_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Terraform</span>
                 <ul class="dropdown-content">
                     <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Local Zip</a></li>
                     <li><a id="generate-terraform-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformGit()">Git</a></li>
                 </ul>
-            </li>
-            <li id="image_export" class="sub-header-item dropdown">
+            </li-->
+            <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
+            {%- if ansible_mode -%}
+            <!--li id="ansible_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Ansible</span>
                 <ul class="dropdown-content">
                     <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Local Zip</a></li>
                     <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleGit()">Git</a></li>
                 </ul>
-            </li>
+            </li-->
+            <li><a id="generate-ansible-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToAnsibleLocal()">Ansible</a></li>
+            {%- endif -%}
             {% if local_okit or session['username'] %}
-            <!--li id="image_export" class="sub-header-item dropdown">
+            <!--li id="image_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Resource Manager</span>
                 <ul class="dropdown-content">
                     <li><a id="file-export-rm-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManager()">Resource Manager</a></li>
@@ -239,7 +211,7 @@
             <!--li><a id="file-export-rm-gitlab-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleExportToResourceManagerLocal()">Resource Manager VCS</a></li-->
             <li><a id="generate-markdown-menu-item"   class="parent-item" href="javascript:void(0)" onclick="handleExportToMarkdownLocal()">Markdown</a></li>
         </ul>
-        <ul class="okit-navigation-sub-list">
+        <ul id="import_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
                     <span class="header-item">
@@ -248,7 +220,24 @@
                     </span>
                 </div>
             </li>
+            {%- if a2c_mode -%}
+            <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">OKIT Json</a></li>
+            {%- endif -%}
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
+            {% if cd3_mode %}
+            <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
+            {% endif %}
+        </ul>
+        <ul id="okit_menu" class="okit-navigation-sub-list">
+            <li>
+                <div>
+                    <span class="header-item">
+                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Admin Menu"></div>
+                        <span>Admin</span>
+                    </span>
+                </div>
+            </li>
+            <li><a id="import-refresh-static-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRefreshDropdownData()">Refresh Cache</a></li>
         </ul>
         {% if experimental_mode %}
         <ul class="okit-navigation-sub-list">
@@ -261,7 +250,6 @@
                 </div>
             </li>
             <li><a id="import-cce-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCCEJson()">Cost Estimator Json (Import)</a></li>
-            <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel (Import)</a></li>
             <li><a id="view-network-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleSwitchToNetworkView()">Network (View)</a></li>
             <li><a id="view-security-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSwitchToSecurityView()">Security (View)</a></li>
         </ul>
@@ -269,125 +257,165 @@
     </ul>
 {% endblock %}
 
+{% block toolbarblock %}
+    <div id="okit_toolbar_left" class="okit-toolbar-left">
+        <div>
+            <select id="toolbar_view_select" class="okit-toolbar-select" onchange="handleViewSelect()">
+                <option id="designer_view_option"  value="designer" selected="selected">Designer</option>
+                <option id="identity_view_option"  value="identity">Users/Groups</option>
+                <option id="tabular_view_option" value="tabular">Tabular</option>
+                <option id="relationship_view_option" value="relationship">Relationship</option>
+                <option id="json_view_option" value="json">Json</option>
+                {%- if developer_mode -%}<option id="cache_view_option" value="cache">Cache</option>{%- endif -%}
+            </select>
+        </div>
+    </div>
+    <div id="okit_toolbar_centre" class="okit-toolbar-centre">
+        <div>
+            <div id="zoom_out_toolbar_button" class="zoom-out okit-toolbar-button hidden" title="Zoom Out"></div>
+            <div id="zoom_in_toolbar_button" class="zoom-in okit-toolbar-button hidden" title="Zoom In"></div>
+        </div>
+    </div>
+    <div id="okit_toolbar_right" class="okit-toolbar-right">
+        <div>
+            <div id="settings_toolbar_button" class="settings okit-toolbar-button" title="Settings" onclick="handleSettings()"></div>
+            <div id="validate_toolbar_button" class="validate okit-toolbar-button" title="Validate" onclick="handleValidate()"></div>
+            <div id="properties_toolbar_button" class="properties okit-toolbar-button" title="Resource Properties" onclick="handleOpenProperties()"></div>
+            <div id="cost_toolbar_button" class="cost-estimate okit-toolbar-button" title="Cost Estimate" onclick="handleEstimateCost()"></div>
+            <div id="documentation_toolbar_button" class="documentation okit-toolbar-button" title="Documentation" onclick="handleDocumentation()"></div>
+            <div id="terraform_toolbar_button" class="terraform okit-toolbar-button" title="Terraform" onclick="handleFreeformTerraform()"></div>
+            <div id="tags_toolbar_button" class="global-tags okit-toolbar-button" title="Global Tags" onclick="handleGlobalTags()"></div>
+            <!-- <div id="threedots_toolbar_button" class="threedotmenu okit-toolbar-button" title="Menu" onclick="handleThreeDotsMenu()"></div> -->
+        </div>
+    </div>
+{% endblock %}
 
 {% block mainblock %}
     <div id="designer_left_column" class="okit-designer-left-column">
-        <div id="icons_palette" class="okit-icons-palette">
-            <div id="icon_text_toggle" class="okit-icons-toggle">
-                <label><input type="radio" name="icon_toggle" checked="checked"
-                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-only');$('.okit-palette-icon-group-icons').removeClass('okit-icons-and-text');okitSettings.icons_only=true;okitSettings.save();">Icons</label>
-                <label><input type="radio" id="icons_and_text" name="icon_toggle"
-                              onclick="$('.okit-palette-icon-group-icons').addClass('okit-icons-and-text');$('.okit-palette-icon-group-icons').removeClass('okit-icons-only');okitSettings.icons_only=false;okitSettings.save();">Icons & Text</label>
-            </div>
-            {% for palette_icon_group in palette_icon_groups %}
-                {% if palette_icon_group['name'] != 'Hidden' and palette_icon_group['name'] != 'Svg'%}
-                    <details  id="{{ palette_icon_group['name'] }}" class="okit-palette-icon-group" open>
-                        <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + palette_icon_group['name'] + '.svg') | lower }}" alt="Generate Menu"><label>{{ palette_icon_group['name'] }}</label></summary>
-                        <div class="okit-palette-icon-group-icons okit-icons-only">
-                            {% for palette_icon in palette_icon_group['icons'] %}
-                                <div>
-                                    <img class="okit-palette-icon"
-                                     src="{{ url_for('static', filename='okit/palette/' + palette_icon['svg']) }}"
-                                     title="{{ palette_icon['title'] }}"
-                                     draggable="true"
-                                     alt="{{ palette_icon['title'] }}"
-                                     ondragstart="dragStart(event, {{ palette_icon['title'] | replace(' ', '') }}View)">
-                                    <label>{{ palette_icon['title'] }}</label>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </details>
-                {% endif %}
-            {% endfor %}
-            <details  id="fragments" class="okit-palette-icon-group" open>
-                <summary class="okit-palette-icon-group-header"><img id="okit-fragment-palette-group-icon" src="{{ url_for('static', filename='svg/fragments.svg') | lower }}" alt="Fragments"><label>Fragments</label></summary>
-                <div class="okit-palette-icon-group-icons okit-icons-only">
-                    {% for fragment_icon in fragment_icons %}
-                        <div>
-                            <img class="okit-fragment-icon"
-                             src="{{ url_for('static', filename='okit/fragments/svg/' + fragment_icon['svg']) }}"
-                             title="{{ fragment_icon['title'] }}"
-                             draggable="true"
-                             alt="{{ fragment_icon['title'] }}"
-                             ondragstart="dragFragmentStart(event, FragmentView, '{{ fragment_icon['title'] }}')">
-                            <label>{{ fragment_icon['title'] }}</label>
-                        </div>
-                    {% endfor %}
-                </div>
-            </details>
-        </div>
-        <div id="preferences_panel" class="okit-preferences-sheet hidden"></div>
-        <div id="explorer_panel" class="okit-explorer-view hidden"></div>
+        {{ palette.add_palette(palette_json) }}
+        <div id="explorer_panel"  class="okit-left-side-panel okit-explorer-panel okit-explorer-view hidden"></div>
+        <div id="git_panel"       class="okit-left-side-panel okit-git-panel hidden"></div>
+        <div id="local_panel"     class="okit-left-side-panel okit-local-panel hidden"></div>
+        <div id="templates_panel" class="okit-left-side-panel okit-template-panel hidden"></div>
     </div>
-    <!--div id="left_column_dragbar" class="okit-vertical-drag-bar"></div-->
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
-        <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
-        <div id="canvas_details" class="okit-canvas-details table">
-            <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
-            <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
+        <div id="center-header">
+            <div id="canvas_details" class="okit-canvas-details table">
+                <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
+                <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
+            </div>
         </div>
-        <div id="canvas-div" class="okit-svg-canvas"></div>
-        <div id="tabular-div" class="okit-tabular-canvas hidden"></div>
-        <div id="network-div" class="okit-network-canvas hidden"></div>
-        <div id="security-div" class="okit-security-canvas hidden"></div>
-        <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
-        <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
-    </div>
-    <div id="designer_right_column" class="okit-designer-right-column okit-slide-hide-right">
-        <div id="right_column_dragbar" class="okit-vertical-drag-bar hidden"></div>
-        <div id="properties_panel" class="okit-property-sheet hidden"></div>
-        <div id="description_panel" class="okit-property-sheet hidden"><textarea id="json_description" name="json_description" onchange="updateJsonDescription()" wrap="soft"></textarea></div>
-        <div id="json_model_panel" class="okit-source-code hidden"></div>
-        <div id="json_view_panel" class="okit-source-code hidden"></div>
-        <div id="json_region_panel" class="okit-source-code hidden"></div>
-        <div id="validation_panel" class="okit-source-code">
-            <div id="validation_header_div"><label id="validation_status"></label></div>
-            <details open>
-                <summary><a>
-                    <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
-                    <span id="validation_errors_summary">Errors</span></a>
-                </summary>
-                <div class="table okit-table okit-properties-table">
-                    <div class="thead">
-                        <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
-                    </div>
-                    <div id="validation_errors_tbody" class="tbody">
-                    </div>
-                </div>
-            </details>
-            <details open>
-                <summary><a>
-                    <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
-                    <span id="validation_warnings_summary">Warnings</span></a>
-                </summary>
-                <div class="table okit-table okit-properties-table">
-                    <div class="thead">
-                        <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
-                    </div>
-                    <div id="validation_warnings_tbody" class="tbody">
-                    </div>
-                </div>
-            </details>
-            <details open>
-                <summary><a>
-                    <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
-                    <span id="validation_info_summary">Information</span></a>
-                </summary>
-                <div class="table okit-table okit-properties-table">
-                    <div class="thead">
-                        <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
-                    </div>
-                    <div id="validation_info_tbody" class="tbody">
-                    </div>
-                </div>
-            </details>
+        <div id="center-panels" class="okit-center-panels">
+            <div id="region_tab_bar" class="okit-tab-bar hidden"></div>
+            <div id="canvas-div" class="okit-svg-canvas"></div>
+            <div id="tabular-div" class="okit-tabular-canvas hidden"></div>
+            <div id="network-div" class="okit-network-canvas hidden"></div>
+            <div id="security-div" class="okit-security-canvas hidden"></div>
+            <div id="identity-div" class="okit-identity-canvas hidden"></div>
+            <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
+            <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
         </div>
-        <div id="value_proposition_panel" class="okit-value-proposition hidden"></div>
-        <div id="cost_estimate_panel" class="okit-cost-estimate hidden"></div>
-        <!--div id="settings_panel" class="okit-settings-sheet hidden"></div-->
-    </div>
+    </div>   
     <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json" onclick="this.value = null"></div>
     <div id="context-menu" class="hidden context-menu"><button id="right-click-delete">Delete</button></div>
+{% endblock %}
+
+{% block bodyendblock %}
+<div id="properties_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
+<div id="documentation_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="json_description" name="json_description" onchange="updateJsonDescription()" wrap="soft" placeholder="Enter design documentation (Markdown supported)"></textarea></div>
+<div id="terraform_panel" class="okit-right-side-panel okit-slide-hide-right"><textarea id="freeform_terraform" name="freeform_terraform" onchange="updateFreeformTerraform()" wrap="soft" placeholder="Enter custom Terraform (OKIT does not validate this)"></textarea></div>
+<div id="validation_panel" class="okit-right-side-panel okit-slide-hide-right">
+    <div id="validation_header_div"><label id="validation_status"></label></div>
+    <details open>
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span id="validation_errors_summary">Errors</span></a>
+        </summary>
+        <div class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
+            </div>
+            <div id="validation_errors_tbody" class="tbody">
+            </div>
+        </div>
+    </details>
+    <details open>
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span id="validation_warnings_summary">Warnings</span></a>
+        </summary>
+        <div class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
+            </div>
+            <div id="validation_warnings_tbody" class="tbody">
+            </div>
+        </div>
+    </details>
+    <details open>
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span id="validation_info_summary">Information</span></a>
+        </summary>
+        <div class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Type</div><div class="th">Artefact</div><div class="th">Message</div></div>
+            </div>
+            <div id="validation_info_tbody" class="tbody">
+            </div>
+        </div>
+    </details>
+</div>
+<div id="cost_estimate_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
+<div id="global_tags_panel" class="okit-right-side-panel okit-slide-hide-right">
+    <details open>
+        <summary class="details summary-background"><label>Freeform Tags</label></summary>
+        <div class="table okit-table"><div class="thead"><div class="tr"><div class="th">Key</div><div class="th">Value</div><div class="th add-tag action-button-background action-button-column" onclick="handleAddGlobalFreeformTag()"></div></div></div><div id="global_freeform_tags_tbody" class="tbody"></div></div>
+    </details>
+    <details open>
+        <summary class="details summary-background"><label>Defined Tags</label></summary>
+        <div class="table okit-table"><div class="thead"><div class="tr"><div class="th">Namespace</div><div class="th">Key</div><div class="th">Value</div><div class="th add-tag action-button-background action-button-column" onclick="handleAddGlobalDefinedTag()"></div></div></div><div id="global_defined_tags_tbody" class="tbody"></div></div>
+    </details>
+</div>
+<div id="settings_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
+<div id="data_entry_panel" class="okit-right-side-data-entry-panel okit-slide-hide-right"><div class="okit-data-entry-title"><label id="data_entry_panel_title"></label><div class="cancel action-button-background" onclick="handleCancelDataEntry()"></div></div><div id="data_entry_panel_body" class="okit-data-entry-panel"></div><div id="data_entry_panel_footer" class="okit-data-entry-footer"></div></div>
+<div id="threedots_menu_panel" class="okit-threedots-menu-panel okit-slide-hide-right">
+    <!-- <ul>
+        <li><a>Canvas</a> 
+            <ul>
+                <li><a>New</a></li>
+                <li><a>Save</a>
+                    <ul>
+                        <li><a>Local</a></li>
+                        <li><a>As Template</a></li>
+                        <li><a>To Git</a></li>
+                    </ul>
+                </li>
+                <li><a>Import</a>
+                    <ul>
+                        <li><a>Json</a></li>
+                        <li><a>Import</a></li>
+                        <li><a>Export</a></li>
+                    </ul>
+                </li>
+                <li><a>Export</a>
+                    <ul>
+                        <li><a>Json</a></li>
+                        <li><a>Terraform</a></li>
+                        <li><a>Resource Manager</a></li>
+                        <li><a>Image</a>
+                            <ul>
+                                <li><a>SVG</a></li>
+                                <li><a>PNG</a></li>
+                                <li><a>JPG</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul> -->
+</div>
 {% endblock %}
 
 {% block footerblock %}

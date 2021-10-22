@@ -24,6 +24,7 @@ class DhcpOptionView extends OkitArtefactView {
     }
     get parent_id() {return this.attached_id ? this.attached_id : this.artefact.vcn_id;}
     get parent() {return this.attached_id ? this.getJsonView().getSubnet(this.parent_id) : this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    get vcn_name() {return this.getJsonView().getVirtualCloudNetwork(this.vcn_id).display_name}
     /*
     ** SVG Processing
     */
@@ -111,8 +112,8 @@ class DhcpOptionView extends OkitArtefactView {
                 const option_type = this.options[this.selectedIndex].value;
                 // Reset Other Options
                 option.server_type = '';
-                option.custom_dns_servers = '';
-                option.search_domain_names = '';
+                option.custom_dns_servers = [];
+                option.search_domain_names = [];
                 // Get Type
                 option['type'] = option_type;
                 if (option_type === 'DomainNameServer') {
@@ -126,8 +127,12 @@ class DhcpOptionView extends OkitArtefactView {
                     $(jqId("server_type_row" + option_idx)).addClass('collapsed');
                     $(jqId("custom_dns_servers_row" + option_idx)).addClass('collapsed');
                     $(jqId("search_domain_names_row" + option_idx)).removeClass('collapsed');
+                    option.search_domain_names = [`${self.vcn_name.split('-').join('')}.oraclevcn.com`];
                 }
-                displayOkitJson();
+                $(jqId(`server_type${option_idx}`)).val(option.server_type);
+                $(jqId(`custom_dns_servers${option_idx}`)).val(option.custom_dns_servers);
+                $(jqId(`search_domain_names${option_idx}`)).val(option.search_domain_names);
+            displayOkitJson();
             });
         types_map.forEach((value, key) => {
             type_select.append('option')
@@ -205,17 +210,17 @@ class DhcpOptionView extends OkitArtefactView {
             $(jqId("server_type_row" + option_idx)).removeClass('collapsed');
             $(jqId("custom_dns_servers_row" + option_idx)).removeClass('collapsed');
             $(jqId("search_domain_names_row" + option_idx)).addClass('collapsed');
+            if (option.server_type === 'VcnLocalPlusInternet') {
+                $(jqId("custom_dns_servers_row" + option_idx)).addClass('collapsed');
+            } else {
+                $(jqId("custom_dns_servers_row" + option_idx)).removeClass('collapsed');
+            }
         } else {
             $(jqId("server_type_row" + option_idx)).addClass('collapsed');
             $(jqId("custom_dns_servers_row" + option_idx)).addClass('collapsed');
             $(jqId("search_domain_names_row" + option_idx)).removeClass('collapsed');
         }
-        if (option.server_type === 'VcnLocalPlusInternet') {
-            $(jqId("custom_dns_servers_row" + option_idx)).addClass('collapsed');
-        } else {
-            $(jqId("custom_dns_servers_row" + option_idx)).removeClass('collapsed');
-        }
-}
+    }
     /*
     ** Load and display Value Proposition
     */

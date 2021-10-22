@@ -1,6 +1,144 @@
 # Release Notes
 
 
+## Version 0.28.0
+**Release Date**: 20th October 2021
+### Features
+1. User / Groups View added
+    1. Allow the creation / definition of local Users
+    2. Allow the creation / definition of OCI Groups
+2. Bastion as a Service functionality added to main design canvas.
+3. Update cache functionality to store based on Configuration & Region.
+4. Add "OKIT Reference" Tag to all resources created via OKIT to allow for future expansion / reference.
+### Bug Fixes
+1. Add missing policy documentation to export to markdown.
+2. Fix Save As Template to add .json if not specified.
+3. Resolve issue where the default dhcp option would generate terraform with an empty search_domain_names if the server type was changed and then changed back.
+
+
+## Version 0.27.1
+**Release Date**: 1st October 2021
+### Bug Fixes
+1. Force rename of DhcpOptions.svg to DHCPOptions.svg. The master had not changed case originally to match development branch.
+2. Include the User Defined Terraform in the Resource Manager zip. 
+3. Resolve issue with File Storage System failing to display properties correctly.
+
+
+## Version 0.27.0
+**Release Date**: 29th September 2021
+### Features
+1. Convert left bar named tabs to simple icon tabs based on OCI console design.
+    1. Palette : <img src="./okitweb/static/svg/palette.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Model Explorer : <img src="./okitweb/static/svg/explorer.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Templates : <img src="./okitweb/static/svg/templates.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. GitHub : <img src="./okitweb/static/svg/git.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+2. Convert right bar named tabs to simple toolbar icons based on OCI console design.
+    1. Preferences : <img src="./okitweb/static/svg/settings.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Validate : <img src="./okitweb/static/svg/validate.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Templates : <img src="./okitweb/static/svg/templates.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Properties : <img src="./okitweb/static/svg/properties.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Cost Estimate : <img src="./okitweb/static/svg/cost_estimate.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Documentation : <img src="./okitweb/static/svg/notes.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. User Define Terraform : <img src="./okitweb/static/svg/terraform.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+    2. Global Tags : <img src="./okitweb/static/svg/tags.svg?sanitize=true" width="15" height="15" style="background-color: white"/>
+3. Add the ability for the user to define custom Terraform code that will be included in the terraform zip file in a user_defined.tf file.
+4. Add Global level Freeform/Defined Tags that will be added to all resources created by OKIT.
+
+### Bug Fixes
+1. GitHub Issue #459 : [UI] "DHCP option" icon missing.
+2. Resolve issue where Read-Only was being ignored for DRGs.
+
+
+## Version 0.26.0
+**Release Date**: 8th September 2021
+### Features
+1. Temporarily deprecate Ansible export by making it command line flag driven (ansible=true)
+2. Add Policy Resource to Palette and allow the user to drag them onto the canvas. It assumes that the user understands the policy statement syntax. All policies will be created within the users home region.
+
+### Bug Fixes
+1. GitHub Issue #440 : Cannot generate terraform when NSG have Rules.
+2. Fix issue where DB System were always created in the root deployment compartment not specified sub-compartment.
+3. GitHub Issue #447 : Unable to create Object Storage Bucket with OKIT
+
+
+## Version 0.25.1
+**Release Date**: 20th August 2021
+### Bug Fixes
+1. Add missing symbolic link to to level Dockerfile to resolve the failure to display Templates in the designer.
+
+
+## Version 0.25.0
+**Release Date**: 18th August 2021
+### Features
+1. Templates Moved from main menu to sidebar and now opened on a Double Click.
+2. Pan and Zoom added to SVG display returning to 1:1 during redraw.
+3. Display Git Directories as a side panel and allow for double click open.
+4. Reorganise Reference Architecture Templates
+
+### Bug Fixes
+1. Fix query pagination issues where not all resources were being retrieved.
+2. Remove uses of Terraform Data Resource oci_identity_tenancy
+3. GitHub Issue #406: Sub-Menu options can't be selected in Chrome (Subtract scrollbar width)
+
+
+## Version 0.24.5
+**Release Date**: 19th July 2021
+### Bug Fixes
+1. Resolve issue where Shapes may be missing from query which caused query to fail silently.
+
+
+## Version 0.24.4
+**Release Date**: 15th July 2021
+### Bug Fixes
+1. Resolve issue with dropping NAT Gateways on canvas
+2. Resolve issue with Dropping MySQL Database Systems on canvas
+3. Resolve issue with dropping IPSec Connection on canvas
+
+
+## Version 0.24.3
+**Release Date**: 13th July 2021
+### Bug Fixes
+1. Resolve issue causing preference modification not to be saved.
+
+
+## Version 0.24.2
+**Release Date**: 9th July 2021
+### Bug Fixes
+1. Resolve issue with missing Instance shapes due to fail compatibility query.
+
+
+## Version 0.24.1
+**Release Date**: 8th July 2021
+### Bug Fixes
+1. Resolve issue stopping Compartments being dragged from the palette and dropped on the canvas
+
+
+## Version 0.24.0
+**Release Date**: 7th July 2021
+### Features
+1. User Template menu dynamically updated when design saved as a template.
+2. Enable Read/Write menu item added to allow the user to switch a queried design to a writeable / deployable design.
+3. Update favicon.
+4. Add Double Click to resource Icon to Open/Close Properties.
+5. Add Config Select to main toolbar to allow selection of the connection where the dropdown data will be selected from. In addition accessible Regions for the Connection profile will be selected.
+6. Add Region select to main toolbar.
+7. Cache Dropdown data & Region data per connection profile within the browsers local storage to improve performance.
+8. Add clear Dropdown Data cache to force refresh of cached data.
+9. Add Target selector to restrict palette based on chosen deployment target. This is early work preparing for the PCA release / Terraform cli.
+10. Add cd3=true URL parameter to enable import of CD3 spreadsheet.
+
+### Bug Fixes
+1. Correctly generate DHCP Options for VCN Default generated resource.
+2. Resolve issue with Private Endpoint Label not being specified for ADB.
+3. Fix FLASK_APP definition for Vagrant flask.service.
+
+
+## Version 0.23.1
+**Release Date**: 21st June 2021
+### Bug Fixes
+1. Fix issue with Terraform generation of Loadbalancers where the subnet ids were not being added to the resource.
+
+
 ## Version 0.23.0
 **Release Date**: 16th June 2021
 ### Features
@@ -15,7 +153,7 @@
 ### Bug Fixes
 1. GitHub Issue #316 : OKIT attempts to add defined_tags to oci_core_network_security_group_security_rule
 2. Remove spurious variables.
-3. Fix invalid local dchp variable name when not using default.
+3. Fix invalid local DHCP variable name when not using default.
 4. Resolve space in output variable name.
 
 

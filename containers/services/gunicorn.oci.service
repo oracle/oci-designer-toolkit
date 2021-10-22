@@ -1,0 +1,30 @@
+# Copyright (c) 2020, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+[Unit]
+Description=gunicorn daemon
+#Requires=gunicorn.socket
+After=network.target
+
+[Service]
+Type=simple
+# the specific user that our service will run as
+User=root
+Group=root
+Environment="OKIT_DIR=/okit"
+Environment="PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+Environment="PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit"
+Environment="OCI_CLI_AUTH=instance_principal"
+Environment="OKIT_VM_COMPARTMENT={COMPARTMENT_OCID}"
+Environment="OKIT_VM_REGION={REGION_IDENTIFIER}"
+RuntimeDirectory=gunicorn
+WorkingDirectory=/okit/workspace
+ExecStart=/usr/local/bin/gunicorn okitweb.wsgi_auth:app --config /okit/config/gunicorn_https.py
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+TimeoutStartSec=300
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

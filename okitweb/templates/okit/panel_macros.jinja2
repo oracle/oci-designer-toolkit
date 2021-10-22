@@ -1,0 +1,99 @@
+{%- macro add_local_side_panel(categories) -%}
+    <div id="local_panel" class="okit-left-side-panel okit-template-panel hidden">
+        {% for category in categories %}
+            {{ add_template_panel_category(category) }}
+        {% endfor %}
+    </div>
+{%- endmacro -%}
+
+{%- macro add_git_side_panel(categories) -%}
+    <div id="git_panel" class="okit-left-side-panel okit-template-panel hidden">
+        {% for category in categories %}
+            {{ add_template_panel_category(category) }}
+        {% endfor %}
+    </div>
+{%- endmacro -%}
+
+{%- macro add_templates_side_panel(categories) -%}
+    <div id="templates_panel" class="okit-left-side-panel okit-template-panel hidden">
+        {% for category in categories %}
+            {{ add_template_panel_category(category) }}
+        {% endfor %}
+    </div>
+{%- endmacro -%}
+
+{%- macro add_template_panel_category_old(category) -%}
+    <details  id="{{ category['path'] }}" class="okit-template-category" open>
+        <summary class="okit-template-category-summary"><label>{{ category['name'] }}</label></summary>
+        <div class="">
+            <ul id="templates_panel_{{ category['path']|replace('/', '_') }}_ul" class="">
+                {{ add_template_panel_dir(category, category['path']) }}
+            </ul>
+        </div>
+    </details>
+{%- endmacro -%}
+
+{%- macro add_template_panel_category(category) -%}
+    <details  id="{{ category['path'] }}" class="okit-template-category" open>
+        <summary class="okit-template-category-summary"><label>{{ category['name'] }}</label></summary>
+        <div class="">
+            <ul id="templates_panel_{{ category['path']|replace('/', '_') }}_ul" class="">
+                {% for template in category['templates'] %}
+                    {{ add_template_panel_item(template) }}
+                {% endfor %}
+                {% for group in category['children'] %}
+                    {{ add_template_panel_dir(group) }}
+                {% endfor %}
+            </ul>
+        </div>
+    </details>
+{%- endmacro -%}
+
+{%- macro add_template_panel_dir(template_group) -%}
+    <li id="{{ template_group['id'] }}" class="okit-template-group"><input id="{{ template_group['id'] }}_cb" type='checkbox' checked/><label for="{{ template_group['id'] }}_cb">{{ template_group['name'] }}</label>
+        <ul class="">
+            {% for template in template_group['templates'] %}
+                {{ add_template_panel_item(template) }}
+            {% endfor %}
+            {% for group in template_group['children'] %}
+                {{ add_template_panel_dir(group) }}
+            {% endfor %}
+        </ul>
+    </li>
+{%- endmacro %}
+
+{%- macro add_template_panel_item(okit_template) -%}
+    <li><a id="{{ okit_template['id'] }}" title="{{ okit_template['title'] }}" class="okit-template-item" href="javascript:void(0)" oncontextmenu="importTemplate('{{ okit_template['path'] + '/' + okit_template['json'] }}', event); return false" ondblclick="loadTemplate('{{ okit_template['path'] + '/' + okit_template['json'] }}')">{{ okit_template['name'] }}</a></li>
+{%- endmacro %}
+
+{%- macro build_template_panel(okit_templates_groups) -%}
+    {% for template_group in okit_templates_groups %}
+        {{ add_template_panel_group(template_group) }}
+    {% endfor %}
+{%- endmacro %}
+
+{%- macro template_panel(categories) -%}
+    {% for name, category in categories.items() %}
+        {% if name == '.' -%}
+            {% if category['templates']|length > 0 %}
+                {% for okit_template in category['templates'] %}
+                    {{ add_template_panel_group(okit_template) }}
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            <li id="{{ category['name'] }}" class=""><span>{{ category['name'] }}</span>
+                <ul class="">
+                    {% if category['children'].values()|length > 0 %}
+                        {{ template_panel(category['children']) }}
+                    {% endif %}
+                    {% for okit_template in category['templates'] %}
+                        {{ add_template_panel_group(okit_template) }}
+                    {% endfor %}
+                </ul>
+            </li>
+        {%- endif %}
+    {% endfor %}
+{%- endmacro -%}
+
+{%- macro template_panel_empty(categories) -%}
+{%- endmacro -%}

@@ -61,7 +61,7 @@ def processWorkflow(args):
         jinja2_template = jinja2_environment.get_template("artefact_view.js.jinja2")
         rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
-        filename = "../okitweb/static/okit/view/js/artefacts/{0!s:s}.js".format(standardised_name)
+        filename = "../okitweb/static/okit/view/designer/js/artefacts/{0!s:s}.js".format(standardised_name)
         writeFile(filename, rendered)
         # ---- View Functions JavaScript
         #jinja2_template = jinja2_environment.get_template("view_functions.jinja2")
@@ -73,7 +73,7 @@ def processWorkflow(args):
         jinja2_template = jinja2_environment.get_template("artefact.svg.jinja2")
         rendered = jinja2_template.render(jinja2_variables)
         #logger.info(rendered)
-        filename = "../okitweb/static/okit/palette/hidden/{0!s:s}.svg".format(svg_id)
+        filename = "../okitweb/static/okit/palette/svg/{0!s:s}.svg".format(svg_id)
         writeFile(filename, rendered)
         # ---- Properties HTML
         jinja2_template = jinja2_environment.get_template("artefact_properties.html.jinja2")

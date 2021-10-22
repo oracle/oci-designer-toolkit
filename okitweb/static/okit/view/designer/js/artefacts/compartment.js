@@ -19,12 +19,12 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     // get parent() {return this.getJsonView().getCompartment(this.parent_id) ? this.getJsonView().getCompartment(this.parent_id) : this.getJsonView().canvas;}
-    get children() {return [...this.json_view.getCompartments(), ...this.json_view.getVirtualCloudNetworks(),
+    get children1() {return [...this.json_view.getCompartments(), ...this.json_view.getVirtualCloudNetworks(),
         // ...this.json_view.getSubnets(), ...this.json_view.getExadataInfrastructures(),
         ...this.json_view.getBlockStorageVolumes(), ...this.json_view.getDynamicRoutingGateways(),
         ...this.json_view.getAutonomousDatabases(), ...this.json_view.getCustomerPremiseEquipments(),
         ...this.json_view.getObjectStorageBuckets(), ...this.json_view.getFastConnects(),
-        ...this.json_view.getIPSecConnections(), ...this.json_view.getRemotePeeringConnections(),
+        ...this.json_view.getIpsecConnections(), ...this.json_view.getRemotePeeringConnections(),
         ...this.json_view.getInstances()].filter(child => child.parent_id === this.artefact.id);}
     get minimum_dimensions() {
         if (this.isTopLevel()) {
@@ -52,6 +52,7 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     cloneChildren(clone) {
+        console.info('Cloning Compartment Children:', this.children)
         for (let child of this.children) {
             child.clone().compartment_id = clone.id;
         }
@@ -82,13 +83,13 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     }
 
     getLeftArtifacts() {
-        return [BlockStorageVolume.getArtifactReference()];
+        return [Bastion.getArtifactReference(), BlockStorageVolume.getArtifactReference(), Policy.getArtifactReference(), FileSystem.getArtifactReference()];
     }
 
     getRightArtifacts() {
         return [DynamicRoutingGateway.getArtifactReference(), AutonomousDatabase.getArtifactReference(),
             ObjectStorageBucket.getArtifactReference(), FastConnect.getArtifactReference(),
-            IPSecConnection.getArtifactReference(), RemotePeeringConnection.getArtifactReference()];
+            IpsecConnection.getArtifactReference(), RemotePeeringConnection.getArtifactReference()];
     }
 
     getRightEdgeArtifacts() {

@@ -17,21 +17,25 @@ function showSideBars() {
 }
 
 function handleViewSelect(e) {
-    const selected = $("#console_header_view_select").val();
+    // const selected = $("#console_header_view_select").val();
+    const selected = $("#toolbar_view_select").val();
     if (selected === 'designer') handleSwitchToCompartmentView(e)
     else if (selected === 'tabular') handleSwitchToTabularView(e)
     else if (selected === 'relationship') handleSwitchToRelationshipView(e)
     else if (selected === 'json') handleSwitchToTextJsonView(e)
+    else if (selected === 'cache') handleSwitchToTextCacheView(e)
+    else if (selected === 'identity') handleSwitchToIdentityView(e)
     else console.warn('Unknown View', selected)
 }
 
 function hideAllViewDivs() {
-    $("#canvas-div").addClass('hidden');
-    $("#tabular-div").addClass('hidden');
-    $("#network-div").addClass('hidden');
-    $("#security-div").addClass('hidden');
-    $("#relationship-div").addClass('hidden');
-    $("#json-text-div").addClass('hidden');
+    // $("#canvas-div").addClass('hidden');
+    // $("#tabular-div").addClass('hidden');
+    // $("#network-div").addClass('hidden');
+    // $("#security-div").addClass('hidden');
+    // $("#relationship-div").addClass('hidden');
+    // $("#json-text-div").addClass('hidden');
+    $("#center-panels > div").each((i, e) => $(e).addClass('hidden'))
 }
 
 function handleSwitchToCompartmentView(e) {
@@ -48,6 +52,14 @@ function handleSwitchToTabularView(e) {
     hideSideBars();
     okitTabularView = new OkitTabularJsonView(okitJsonModel, okitOciData);
     okitTabularView.draw();
+}
+
+function handleSwitchToIdentityView(e) {
+    hideAllViewDivs();
+    $("#identity-div").removeClass('hidden');
+    hideSideBars();
+    okitIdentityView = new OkitIdentityView(okitJsonModel, okitOciData);
+    okitIdentityView.draw();
 }
 
 function handleSwitchToNetworkView(e) {
@@ -76,4 +88,12 @@ function handleSwitchToTextJsonView(e) {
     hideSideBars();
     okitTextJsonView = new OkitTextJsonView(okitJsonModel, okitOciData, resource_icons);
     okitTextJsonView.draw();
+}
+
+function handleSwitchToTextCacheView(e) {
+    hideAllViewDivs();
+    $("#json-text-div").removeClass('hidden');
+    hideSideBars();
+    okitCacheJsonView = new OkitCacheJsonView(okitOciData.getCache(), okitOciData, resource_icons);
+    okitCacheJsonView.draw();
 }

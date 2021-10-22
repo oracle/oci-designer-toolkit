@@ -7,7 +7,7 @@ console.info('Loaded Database System Javascript');
 /*
 ** Define Autonomous Database Class
  */
-class MySQLDatabaseSystem extends OkitArtifact {
+class MysqlDatabaseSystem extends OkitArtifact {
     /*
     ** Create
      */
@@ -45,7 +45,7 @@ class MySQLDatabaseSystem extends OkitArtifact {
     ** Clone Functionality
      */
     clone() {
-        return new MySQLDatabaseSystem(JSON.clone(this), this.getOkitJson());
+        return new MysqlDatabaseSystem(JSON.clone(this), this.getOkitJson());
     }
 
 

@@ -5,10 +5,10 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.23.0" \
+      "version"="0.28.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2021, Oracle and/or its affiliates."
-SHELL ["/bin/bash", "-c"]
+# SHELL ["/bin/bash", "-c"]
 ENV PYTHONIOENCODING=utf8 \
     PYTHONPATH=":/okit/visualiser:/okit/okitweb:/okit" \
     FLASK_APP=okitweb \
@@ -57,15 +57,16 @@ RUN yum install -y \
 # Create Workspace
  && mkdir -p /github \
  && git clone -c core.autocrlf=input https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
- && mkdir -p /okit/{log,workspace,ssl} \
+ && mkdir -p /okit/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl} \
  && mkdir -p /root/bin \
  && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj "/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com" \
  && ln -sv /github/oci-designer-toolkit/config /okit/config \
  && ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb \
  && ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser \
  && ln -sv /github/oci-designer-toolkit/containers/docker/run-server.sh /root/bin/run-server.sh \
- && mkdir -p /okit/okitweb/static/okit/templates \
- && ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
+ && ln -sv /github/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture /okit/instance/templates/reference_architecture \
+ #&& mkdir -p /okit/okitweb/static/okit/templates \
+ #&& ln -sv /okit/templates /okit/okitweb/static/okit/templates/user \
  && chmod a+x /root/bin/run-server.sh
 # Add entrypoint to automatically start webserver
 CMD ["run-server.sh"]

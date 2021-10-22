@@ -1428,6 +1428,7 @@ class OciResourceDiscoveryClient(object):
                     unique_images[image.id] = image
                 resources_by_region[region]["Image"] = list(unique_images.values())
 
+
         return resources_by_region
 
     @staticmethod
