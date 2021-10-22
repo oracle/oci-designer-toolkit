@@ -366,10 +366,7 @@ def templates():
 @bp.route('/template/load', methods=(['GET']))
 def template_load():
     if request.method == 'GET':
-        query_string = request.query_string
-        parsed_query_string = urllib.parse.unquote(query_string.decode())
-        query_json = json.loads(parsed_query_string)
-        template_file = query_json['template_file']
+        template_file = request.args.get("template_file")
         return send_from_directory(current_app.instance_path, template_file, mimetype='application/json', as_attachment=False)
 
 

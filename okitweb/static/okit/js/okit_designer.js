@@ -789,11 +789,14 @@ function loadTemplate(template_url) {
     hideNavMenu();
     resetDesigner();
     $.ajax({
+        cache: false,
         type: 'get',
         url: 'template/load',
         dataType: 'text', // Response Type
         contentType: 'application/json', // Sent Message Type
-        data: JSON.stringify({template_file: template_url}),
+        data: {
+            template_file: template_url
+        }, // Query Arguments
         success: function(resp) {
             okitJsonModel = new OkitJson(resp);
             newDesignerView();
@@ -858,28 +861,6 @@ function importTemplate(template_url, event) {
     $(jqId("context-menu")).removeClass("hidden");
 
 }
-// TODO: Delete
-// function loadTemplate(template_url) {
-//     hideNavMenu();
-//     resetDesigner();
-//     $.ajax({
-//         type: 'get',
-//         url: template_url,
-//         dataType: 'text',
-//         contentType: 'application/json',
-//         success: function(resp) {
-//             okitJsonModel = new OkitJson(resp);
-//             newDesignerView();
-//             displayOkitJson();
-//             displayDesignerView();
-//             displayTreeView();
-//         },
-//         error: function(xhr, status, error) {
-//             console.error('Status : '+ status);
-//             console.error('Error  : '+ error);
-//         }
-//     });
-// }
 /*
 ** Query OCI
  */
