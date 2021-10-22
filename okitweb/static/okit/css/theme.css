@@ -127,6 +127,14 @@
     background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTUuNzU3IDUuNzU3bDguNDg2IDguNDg2bTAtOC40ODZsLTguNDg2IDguNDg2TTEgMWgxOHYxOEgxVjF6IiBzdHJva2U9IiMxNjE1MTMiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==");
 }
 
+.add-property {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMjEiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQgNWgyTTEgMXYxMGw5IDggOS0xMC04LThIMXpNNSAxMGgxMG0tNS01djEwTTEgTmFOIiBzdHJva2U9IiMwNDc1MGEiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==");
+}
+
+.delete-property {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMjEiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQgNWgyTTEgMXYxMGw5IDggOS0xMC04LThIMXoiIHN0cm9rZT0iI2I4MTIxMiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTYuNTEgNi44NDRsNS45MTggNi4wNTZtMC02LjA1Nkw2LjUxMSAxMi45IiBzdHJva2U9IiNiODEyMTIiIHN0cm9rZS13aWR0aD0iMS40MTEiLz48L3N2Zz4=");
+}
+
 /*
 ** Groups
 */
