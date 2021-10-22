@@ -40,7 +40,7 @@ class OCIDropdownQuery(OCIConnection):
         "FastConnectProviderService", 
         "Image",
         "ImageShapeCompatibility",
-        "Instance",
+        # "Instance",
         "MySQLShape", 
         "MySQLVersion", 
         "MySQLConfiguration", 
@@ -75,7 +75,8 @@ class OCIDropdownQuery(OCIConnection):
         if regions is None:
             regions = [self.config['region']]
             logger.info(f'No Region Specified using - Region: {regions}')
-        discovery_client = OciResourceDiscoveryClient(self.config, self.signer, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']])
+        include_sub_compartments = True
+        discovery_client = OciResourceDiscoveryClient(self.config, self.signer, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']], include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
         response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug('Response JSON : {0!s:s}'.format(jsonToFormattedString(response)))
@@ -117,7 +118,7 @@ class OCIDropdownQuery(OCIConnection):
         # logger.info(f'Processing Images - Shape: {sorted(shapes)}')
         for image in images:
             # logger.info(f'Image Id: {image["id"]} in/out {image["id"] in ids}')
-            # logger.info(f'Image {image["display_name"]} Compartment {image["compartment_id"]}')
+            logger.info(f'Image {image["display_name"]} Compartment {image["compartment_id"]}')
             image["shapes"] = [s["shape"] for s in resources.get("ImageShapeCompatibility", []) if s["image_id"] == image["id"]]
         return images
     
