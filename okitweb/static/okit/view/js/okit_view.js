@@ -2455,39 +2455,52 @@ class OkitArtefactView {
     /*
     ** Property Creation Routines
     */
-   addPropertyHTML(parent, type='text', label='', id='', idx=0, callback=undefined) {
-       let element = undefined;
-       parent = (typeof parent === 'string') ? d3.select(`#${parent}`) : parent
-       // Check to see if we require a collapsable group
-       if (type === 'array') {
-           const table = parent.append('div').attr('class', 'table okit-table')
-           const thead = table.append('div').attr('class', 'thead')
-           const row = thead.append('div').attr('class', 'tr')
-           row.append('div').attr('class', 'th').text(label)
-           row.append('div').attr('class', 'th add-property action-button-background action-button-column').on('click', callback)
-           element = table.append('div').attr('class', 'tbody').attr('id', `${label.replaceAll(' ', '_').toLowerCase()}_tbody`)
-       } else if (type === 'object') {
-           const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
-           details.append('summary').text(label)
-           element = details.append('div').attr('class', 'okit-details-body')
-       } else if (type === 'row') {
-           const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
-           element = row.append('div').attr('class', 'td')
-           row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
-       } else if (type === 'properties') {
+    addPropertyHTML(parent, type='text', label='', id='', idx=0, callback=undefined, data={}) {
+        let element = undefined;
+        parent = (typeof parent === 'string') ? d3.select(`#${parent}`) : parent
+        // Check to see if we require a collapsable group
+        if (type === 'array') {
+            const table = parent.append('div').attr('class', 'table okit-table')
+            const thead = table.append('div').attr('class', 'thead')
+            const row = thead.append('div').attr('class', 'tr')
+            row.append('div').attr('class', 'th').text(label)
+            row.append('div').attr('class', 'th add-property action-button-background action-button-column').on('click', callback)
+            element = table.append('div').attr('class', 'tbody').attr('id', `${label.replaceAll(' ', '_').toLowerCase()}_tbody`)
+        } else if (type === 'object') {
+            const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
+            details.append('summary').text(label)
+            element = details.append('div').attr('class', 'okit-details-body')
+        } else if (type === 'row') {
+            const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
+            element = row.append('div').attr('class', 'td')
+            row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
+        } else if (type === 'properties') {
             const table = parent.append('div').attr('class', 'table okit-table okit-properties-table')
             element = table.append('div').attr('class', 'tbody')
-       } else {
+        } else if (type === 'checkbox') {
+            const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
+            row.append('div').attr('class', 'td')
+            const cell = row.append('div').attr('class', 'td')
+            element = cell.append('input').attr('type', 'checkbox').attr('id', `${id}${idx}`).attr('class', 'okit-property-value').on('input', callback)
+            cell.append('label').attr('for', `${id}${idx}`).text(label)
+        } else {
             const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
             row.append('div').attr('class', 'td').text(label)
-            if (['text', 'password', 'email', 'date'].includes(type)) {
+            if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
                 element = row.append('div').attr('class', 'td').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
+                if (data) {
+                    if (data.min) element.attr('min', data.min)
+                    if (data.max) element.attr('max', data.max)
+                }
+            } else if (type === 'ipv4_cidr') {
+                const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+"
+                element = row.append('div').attr('class', 'td').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").on('blur', callback)
             } else if (type === 'select') {
                 element = row.append('div').attr('class', 'td').append('select').attr('id', `${id}${idx}`).attr('class', 'okit-property-value').on('change', callback)
             }
         }
         return element;
-   }
+    }
 }
 
 /*

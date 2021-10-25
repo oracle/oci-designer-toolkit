@@ -130,13 +130,13 @@ OkitJsonView.prototype.pasteFileSystem = function(drop_target) {
     this.okitjson.file_systems.push(clone);
     this.update(this.okitjson);
 }
-OkitJsonView.prototype.loadFileSystemsSelect = function(select_id, empty_option=false) {
+OkitJsonView.prototype.loadFileSystemsSelect = function(select_id, ad, empty_option=false) {
     $(jqId(select_id)).empty();
     const file_system_select = $(jqId(select_id));
     if (empty_option) {
         file_system_select.append($('<option>').attr('value', '').text(''));
     }
-    for (let file_system of this.getFileSystems()) {
+    for (let file_system of this.getFileSystems().filter((fs) => fs.availability_domain === ad)) {
         file_system_select.append($('<option>').attr('value', file_system.id).text(file_system.display_name));
     }
 }

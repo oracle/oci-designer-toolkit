@@ -99,7 +99,7 @@ class OCIQuery(OCIConnection):
         "DHCPOptions": "dhcp_options",
         "Drg": "dynamic_routing_gateways",
         "ExadataInfrastructure": "exadata_infrastructures",
-        "FileSystem": "file_storage_systems",
+        "FileSystem": "file_systems",
         "Group": "groups",
         "Instance": "instances",
         "InstancePool": "instance_pools",
@@ -107,6 +107,7 @@ class OCIQuery(OCIConnection):
         "IPSecConnection": "ipsec_connections",
         "LoadBalancer": "load_balancers",
         "LocalPeeringGateway": "local_peering_gateways",
+        "MountTarget": "mount_targets",
         "MySqlDbSystem": "mysql_database_systems",
         "NatGateway": "nat_gateways",
         "NetworkSecurityGroup": "network_security_groups",
@@ -192,8 +193,8 @@ class OCIQuery(OCIConnection):
                 if resource_type in map_keys:
                     if resource_type == "Drg":
                         resource_list = self.dynamic_routing_gateways(resource_list, resources)
-                    elif resource_type == "FileSystem":
-                        resource_list = self.file_storage_systems(resource_list, resources)
+                    elif resource_type == "MountTarget":
+                        resource_list = self.mount_targets(resource_list, resources)
                     elif resource_type == "Instance":
                         resource_list = self.instances(resource_list, resources)
                     elif resource_type == "LoadBalancer":
@@ -277,6 +278,13 @@ class OCIQuery(OCIConnection):
                     ip_addresses = [ip for ip in resources.get("PrivateIp", []) if ip["ip_address"] == backend["ip_address"]]
                     lb["instance_ids"].extend([va["instance_id"] for va in resources.get("VnicAttachment", []) if va['vnic_id'] == ip_addresses[0]['vnic_id']] if len(ip_addresses) else [])
         return loadbalancers
+
+    def mount_targets(self, mount_targets, resources):
+        for mt in mount_targets:
+            mt["exports"] = [e for e in resources.get("Export", []) if e["export_set_id"] == mt["export_set_id"]]
+            export_sets = [e for e in resources.get("ExportSet", []) if e["id"] == mt["export_set_id"]]
+            mt["export_set"] = export_sets[0]
+        return mount_targets
 
     def mysql_database_systems(self, database_systems, resources):
         for db_system in database_systems:

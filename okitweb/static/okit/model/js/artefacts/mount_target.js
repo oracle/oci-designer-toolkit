@@ -21,6 +21,8 @@ class MountTarget extends OkitArtifact {
         this.hostname_label = '';
         this.ip_address = '';
         this.nsg_ids = [];
+        this.max_fs_stat_bytes = '';
+        this.max_fs_stat_files = '';
         this.exports = [];
         // Update with any passed data
         this.merge(data);
