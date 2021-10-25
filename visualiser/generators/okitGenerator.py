@@ -159,6 +159,9 @@ class OCIGenerator(object):
         # -- Policies
         for policy in self.visualiser_json.get('policys', []):
             self.renderPolicy(policy)
+        # -- File System
+        for file_system in self.visualiser_json.get('file_systems', []):
+            self.renderFileSystem(file_system)
 
         # - Virtual Cloud Network Sub Components
         # -- Internet Gateways
@@ -210,9 +213,12 @@ class OCIGenerator(object):
         # -- Autonomous Databases
         for autonomous_database in self.visualiser_json.get('autonomous_databases', []):
             self.renderAutonomousDatabase(autonomous_database)
+        # # -- File Storage System
+        # for file_storage_system in self.visualiser_json.get('file_storage_systems', []):
+        #     self.renderFileStorageSystem(file_storage_system)
         # -- File Storage System
-        for file_storage_system in self.visualiser_json.get('file_storage_systems', []):
-            self.renderFileStorageSystem(file_storage_system)
+        for mount_target in self.visualiser_json.get('mount_targets', []):
+            self.renderMountTarget(mount_target)
         # -- Database Systems
         for database_system in self.visualiser_json.get('database_systems', []):
             self.renderDatabaseSystem(database_system)
@@ -858,7 +864,7 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
         # Process Virtual Cloud Networks Data
-        logger.info('Processing Block Storage Volume Information {0!s:s}'.format(standardisedName))
+        logger.info('Processing File Storage Systems Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Read / Create
         # ---- Read Only
@@ -908,6 +914,38 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("file_storage_system.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderFileSystem(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(resource['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = resource['display_name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing File System Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- Availability Domain
+        self.addJinja2Variable("availability_domain", resource["availability_domain"], standardisedName)
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("file_system.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
@@ -1257,6 +1295,90 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("local_peering_gateway.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderMountTarget(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(resource['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = resource['display_name']
+        # Process Virtual Cloud Networks Data
+        logger.info('Processing Mount Target Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- Availability Domain
+        self.addJinja2Variable("availability_domain", resource["availability_domain"], standardisedName)
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # ---- Network OCID
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['subnet_id']]))
+        # ---- Hostname
+        if resource["hostname_label"] != "":
+            self.addJinja2Variable("hostname_label", resource["hostname_label"], standardisedName)
+        # --- Optional
+        # ----- Network Security Groups
+        if len(resource["nsg_ids"]):
+            self.jinja2_variables["nsg_ids"] = [self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[id])) for id in resource["nsg_ids"]]
+        
+        # ----- Export Set
+        # ----- Max FS Stat Bytes
+        if str(resource["max_fs_stat_bytes"]).strip() != '':
+            self.addJinja2Variable("max_fs_stat_bytes", resource["max_fs_stat_bytes"], standardisedName)
+        # ----- Max FS Stat Files
+        if str(resource["max_fs_stat_files"]).strip() != '':
+            self.addJinja2Variable("max_fs_stat_files", resource["max_fs_stat_files"], standardisedName)
+        
+        # ----- Exports
+        jinja2_exports = []
+        for export in resource.get('exports', []):
+            jinja2_exports.append(
+                {
+                    "file_system_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[export['file_system_id']])),
+                    "path": self.formatJinja2Value(export["path"]),
+                    "options": {
+                        "source": self.formatJinja2Value(export["options"]["source"]),
+                        "access": self.formatJinja2Value(export["options"]["access"]),
+                        "anonymous_gid": self.formatJinja2Value(export["options"]["anonymous_gid"]),
+                        "anonymous_uid": self.formatJinja2Value(export["options"]["anonymous_uid"]),
+                        "identity_squash": self.formatJinja2Value(export["options"]["identity_squash"]),
+                        "require_privileged_source_port": self.formatJinja2Value(export["options"]["require_privileged_source_port"])
+                    }
+                }
+            )
+        self.jinja2_variables["exports"] = jinja2_exports
+        # # ---- Source (CIDR)
+        # self.addJinja2Variable("source", resource['exports']["options"]["source"], standardisedName)
+        # # ---- (Mount) Path
+        # self.addJinja2Variable("path", resource['exports']["path"], standardisedName)
+        # # ---- Require Privileged Source Port
+        # self.addJinja2Variable("require_privileged_source_port", resource['exports']["options"]["require_privileged_source_port"], standardisedName)
+        # # ---- Access
+        # self.addJinja2Variable("access", resource['exports']["options"]["access"], standardisedName)
+        # # ----- Identity Squash
+        # if resource['exports']["options"]["identity_squash"] != 'NONE':
+        #     # ----- Identity Squash
+        #     self.addJinja2Variable("identity_squash", resource['exports']["options"]["identity_squash"], standardisedName)
+        #     # ----- Identity Squash GID
+        #     self.addJinja2Variable("anonymous_gid", resource['exports']["options"]["anonymous_gid"], standardisedName)
+        #     # ----- Identity Squash UID
+        #     self.addJinja2Variable("anonymous_uid", resource['exports']["options"]["anonymous_uid"], standardisedName)
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("mount_target.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return

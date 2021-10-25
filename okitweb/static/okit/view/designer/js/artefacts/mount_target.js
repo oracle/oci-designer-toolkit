@@ -14,12 +14,24 @@ class MountTargetView extends OkitArtefactView {
     }
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
-    // Direct Subnet Access
-    // get subnet_id() {return this.artefact.subnet_id;}
-    // set subnet_id(id) {this.artefact.subnet_id = id;}
+    get vcn_id() {return this.artefact.subnet_id ? this.getJsonView().getSubnet(this.artefact.subnet_id).vcn_id : '';}
+    // ---- Connectors
+    get top_bottom_connectors_preferred() {return false;}
     /*
     ** SVG Processing
     */
+    checkExports() {
+        const file_systems = this.getJsonView().getFileSystems().filter((fs) => fs.availability_domain === this.availability_domain).map((fs) => fs.id)
+        this.artefact.exports = this.artefact.exports.filter((e) => file_systems.includes(e.file_system_id))
+    }
+    // Draw Connections
+    drawConnections() {
+        console.info('Drawing Mount Target Connections')
+        // Check if there are any missing following query
+        this.checkExports();
+        this.exports.forEach((e) => this.drawConnection(this.id, e.file_system_id))
+    }
+
     /*
     ** Property Sheet Load function
     */
@@ -27,6 +39,7 @@ class MountTargetView extends OkitArtefactView {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/mount_target.html", () => {
             this.loadSubnetSelect('subnet_id');
+            this.getJsonView().loadNetworkSecurityGroupsMultiSelect('nsg_ids', this.vcn_id)
             const mte_tbody = self.addPropertyHTML('mount_target_exports', 'array', 'File Systems', '', 0, () => self.addExport())
             loadPropertiesSheet(self.artefact);
             self.loadExports()
