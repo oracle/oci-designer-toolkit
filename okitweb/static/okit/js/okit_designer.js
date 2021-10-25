@@ -270,7 +270,9 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user')
         url: `templates/load`,
         dataType: 'text', // Response Type
         contentType: 'application/json', // Sent Message Type
-        data: JSON.stringify({root_dir: root_dir}),
+        data: {
+            root_dir: root_dir
+        }, // Arguments
         success: function(resp) {
             hierarchy = JSON.parse(resp)
             console.info(hierarchy)
