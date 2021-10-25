@@ -354,9 +354,6 @@ def get_template_entry(root, path, json_file):
 @bp.route('/templates/load', methods=(['GET']))
 def templates():
     if request.method == 'GET':
-        # query_string = request.query_string
-        # parsed_query_string = urllib.parse.unquote(query_string.decode())
-        # query_json = json.loads(parsed_query_string)
         templates_root = os.path.join(current_app.instance_path, request.args['root_dir'].strip('/'))
         templates = dir_to_json(templates_root, current_app.instance_path)
         logger.debug(f'Templates : {jsonToFormattedString(templates)}')
