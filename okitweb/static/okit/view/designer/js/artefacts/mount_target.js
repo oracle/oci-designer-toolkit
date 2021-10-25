@@ -41,7 +41,7 @@ class MountTargetView extends OkitArtefactView {
         console.info('Adding Export');
         const fs_export = this.artefact.newExport();
         this.artefact.exports.push(fs_export);
-        const idx = this.artefact.exports.length;
+        const idx = this.artefact.exports.length;+-
         this.addExportHtml(fs_export, idx);
     }
 
@@ -52,29 +52,45 @@ class MountTargetView extends OkitArtefactView {
         const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
         let property = undefined
         // Add File System (Select)
-        property = this.addPropertyHTML(tbody, 'select', 'File System', 'file_system_id', idx);
+        property = this.addPropertyHTML(tbody, 'select', 'File System', 'file_system_id', idx, (d, i, n) => fs_export.file_system_id = n[i].value);
+        this.getJsonView().loadFileSystemsSelect(`file_system_id${idx}`, this.availability_domain)
+        if (fs_export.file_system_id === '' && property.node().options.length > 0) fs_export.file_system_id = property.node().options[0].value
         property.attr('value', fs_export.file_system_id)
+        property.node().value = fs_export.file_system_id
         // Path (Text)
-        property = this.addPropertyHTML(tbody, 'text', 'Path', 'path', idx);
+        property = this.addPropertyHTML(tbody, 'text', 'Path', 'path', idx, (d, i, n) => fs_export.path = n[i].value);
         property.attr('value', fs_export.path)
         // Source (CIDR)
-        property = this.addPropertyHTML(tbody, 'text', 'Source', 'source', idx, (d, i, n) => fs_export.options.source = n[i].value);
+        property = this.addPropertyHTML(tbody, 'ipv4_cidr', 'Source', 'source', idx, (d, i, n) => {n[i].reportValidity(); fs_export.options.source = n[i].value});
         property.attr('value', fs_export.options.source)
         // Access (Select)
-        property = this.addPropertyHTML(tbody, 'text', 'Access', 'access', idx);
+        property = this.addPropertyHTML(tbody, 'select', 'Access', 'access', idx, (d, i, n) => fs_export.options.access = n[i].value);
+        this.loadAccess(property)
         property.attr('value', fs_export.options.access)
+        property.node().value = fs_export.options.access
+
         // Uid (Text)
-        property = this.addPropertyHTML(tbody, 'text', 'Anonymous GID', 'anonymous_gid', idx);
+        property = this.addPropertyHTML(tbody, 'number', 'Anonymous GID', 'anonymous_gid', idx, (d, i, n) => fs_export.options.anonymous_gid = n[i].value, {min: 0, max: 65534});
         property.attr('value', fs_export.options.anonymous_gid)
         // Gid (Text)
-        property = this.addPropertyHTML(tbody, 'text', 'Anonymous UID', 'anonymous_uid', idx);
+        property = this.addPropertyHTML(tbody, 'number', 'Anonymous UID', 'anonymous_uid', idx, (d, i, n) => fs_export.options.anonymous_uid = n[i].value, {min: 0, max: 65534});
         property.attr('value', fs_export.options.anonymous_uid)
         // Squash (Select)
-        property = this.addPropertyHTML(tbody, 'text', 'Identity Squash', 'identity_squash', idx);
+        property = this.addPropertyHTML(tbody, 'select', 'Identity Squash', 'identity_squash', idx, (d, i, n) => fs_export.options.identity_squash = n[i].value);
+        this.loadIdentitySquash(property)
         property.attr('value', fs_export.options.identity_squash)
+        property.node().value = fs_export.options.identity_squash
         // Privileged (Checkbox)
-        property = this.addPropertyHTML(tbody, 'text', 'Privileged Port', 'require_privileged_source_port', idx);
-        property.attr('value', fs_export.options.require_privileged_source_port)
+        property = this.addPropertyHTML(tbody, 'checkbox', 'Privileged Port', 'require_privileged_source_port', idx, (d, i, n) => fs_export.options.require_privileged_source_port = n[i].checked);
+        property.attr('checked', fs_export.options.require_privileged_source_port)
+    }
+
+    loadIdentitySquash(parent) {
+        ['ALL', 'ROOT', 'NONE'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v)))
+    }
+
+    loadAccess(parent) {
+        ['READ_ONLY', 'READ_WRITE'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v.replaceAll('_', ' '))))
     }
 
     deleteExport(id, idx, fs_export) {
