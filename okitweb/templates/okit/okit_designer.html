@@ -114,17 +114,12 @@
             </li>
             <li id="file_recover_menu_item_li" class="hidden"><a id="file-recover-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRecover()">Recover</a></li>
             <li><a id="file-new-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
-            {%- if not a2c_mode -%}
-            <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
-            {%- endif -%}
+            <!-- <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li> -->
             <li id="save_menu" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Save</span>
                 <ul class="dropdown-content">
-                    {%- if a2c_mode -%}
                     <li><a id="file-save-to-container-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveToContainer()">Save</a></li>
-                    {%- else -%}
-                    <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
-                    {%- endif -%}
+                    <!-- <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li> -->
                     <!--li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li-->
                     <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTemplate()">Save As Template</a></li>
                     <li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save To Git</a></li>
@@ -174,9 +169,7 @@
                     <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">jpeg</a></li>
                 </ul>
             </li>
-            {%- if a2c_mode -%}
-            <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Json</a></li>
-            {%- endif -%}
+            <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">OKIT Json</a></li>
             <!--li id="terraform_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Terraform</span>
                 <ul class="dropdown-content">
@@ -220,9 +213,7 @@
                     </span>
                 </div>
             </li>
-            {%- if a2c_mode -%}
             <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">OKIT Json</a></li>
-            {%- endif -%}
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
             {% if cd3_mode %}
             <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
