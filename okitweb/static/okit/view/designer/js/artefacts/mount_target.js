@@ -26,7 +26,7 @@ class MountTargetView extends OkitArtefactView {
     }
     // Draw Connections
     drawConnections() {
-        console.info('Drawing Mount Target Connections')
+        // console.info('Drawing Mount Target Connections')
         // Check if there are any missing following query
         this.checkExports();
         this.exports.forEach((e) => this.drawConnection(this.id, e.file_system_id))

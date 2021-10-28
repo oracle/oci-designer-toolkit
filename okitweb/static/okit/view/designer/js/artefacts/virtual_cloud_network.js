@@ -82,7 +82,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     }
 
     getRightEdgeArtifacts() {
-        return[ServiceGateway.getArtifactReference(), DrgAttachment.getArtifactReference(), LocalPeeringGateway.getArtifactReference()]
+        return[ServiceGateway.getArtifactReference(), DrgAttachment.getArtifactReference(), DynamicRoutingGateway.getArtifactReference(), LocalPeeringGateway.getArtifactReference()]
     }
 
     getLeftArtifacts() {
@@ -100,4 +100,14 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
         return [Compartment.getArtifactReference()];
     }
 
+}
+OkitJsonView.prototype.loadVirtualCloudNetworksSelect = function(select_id, empty_option=false) {
+    $(jqId(select_id)).empty();
+    const drg_select = $(jqId(select_id));
+    if (empty_option) {
+        drg_select.append($('<option>').attr('value', '').text(''));
+    }
+    for (let drg of this.getVirtualCloudNetworks()) {
+        drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+    }
 }

@@ -161,7 +161,12 @@
                 },
                 {
                     "title": "Dynamic Routing Gateway",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["pca", "hidden"],
+                    "svg": "DynamicRoutingGatewayDRG.svg"
+                },
+                {
+                    "title": "DRG",
+                    "targets": ["oci", "free tier"],
                     "svg": "DynamicRoutingGatewayDRG.svg"
                 },
                 {

@@ -14,15 +14,27 @@ class DrgAttachmentView extends OkitArtefactView {
     }
     get parent_id() {return this.artefact.vcn_id;}
     get parent() {return this.getJsonView().getVirtualCloudNetwork(this.parent_id);}
+    // ---- Connectors
+    get top_bottom_connectors_preferred() {return false;}
     /*
     ** SVG Processing
     */
-    /*
+    // Draw Connections
+    drawConnections() {
+        this.drawConnection(this.id, this.drg_id);
+    }
+        /*
     ** Property Sheet Load function
     */
     loadProperties() {
         const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg_attachment.html", () => {loadPropertiesSheet(self.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg_attachment.html", () => {
+            const self = this;
+            this.getJsonView().loadVirtualCloudNetworksSelect('vcn_id')
+            this.getJsonView().loadDrgsSelect('drg_id')
+            this.getJsonView().loadRouteTablesSelect('route_table_id', this.vcn_id, true)
+            loadPropertiesSheet(self.artefact);
+        });
     }
     /*
     ** Load and display Value Proposition
@@ -37,7 +49,6 @@ class DrgAttachmentView extends OkitArtefactView {
         return DrgAttachment.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
         return [VirtualCloudNetwork.getArtifactReference()];
     }
 }

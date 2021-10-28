@@ -280,3 +280,13 @@ class RouteTableView extends OkitDesignerArtefactView {
     }
 
 }
+OkitJsonView.prototype.loadRouteTablesSelect = function(select_id, vcn_id, empty_option=false) {
+    $(jqId(select_id)).empty();
+    const mount_target_select = $(jqId(select_id));
+    if (empty_option) {
+        mount_target_select.append($('<option>').attr('value', '').text(''));
+    }
+    for (let mount_target of this.getRouteTables().filter((rt) => rt.vcn_id === vcn_id)) {
+        mount_target_select.append($('<option>').attr('value', mount_target.id).text(mount_target.display_name));
+    }
+}

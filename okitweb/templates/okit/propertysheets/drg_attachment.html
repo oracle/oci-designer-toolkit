@@ -4,6 +4,12 @@
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
 {% block title_block %}DRG Attachment{% endblock %}
-{% block required_properties_table_rows_block %}{% endblock %}
-{% block optional_properties_table_rows_block %}{% endblock %}
+{% block required_properties_table_rows_block %}
+    {{ properties_input('Virtual Cloud Network', 'vcn_id', type='select') }}
+    {{ properties_input('Dynamic Routing Gateway', 'drg_id', type='select') }}
+{% endblock %}
+{% block optional_properties_table_rows_block %}
+    {{ properties_input('VCN Route Table', 'route_table_id', type='select') }}
+    {{ properties_input('DRG Route Table', 'drg_route_table_id', type='select') }}
+{% endblock %}
 {% block optional_properties_block %}{% endblock %}

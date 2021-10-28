@@ -327,8 +327,8 @@ class OkitJsonView {
     dropDynamicRoutingGatewayView(target) {
         let view_artefact = this.newDynamicRoutingGateway();
         view_artefact.getArtefact().compartment_id = target.id;
-        // view_artefact.getArtefact().vcn_id = target.id;
-        // view_artefact.getArtefact().compartment_id = target.compartment_id;
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
@@ -1402,7 +1402,7 @@ class OkitArtefactView {
             this.addMouseEvents(svg);
             // Add Drag Handling Events
             this.addDragEvents(svg);
-            this.addIconDragEvents(icon);
+            // this.addIconDragEvents(icon);
             // Add Context Menu (Right-Click)
             this.addContextMenu(svg);
             // Add Custom Data Attributes

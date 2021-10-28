@@ -229,7 +229,7 @@ class OCIQuery(OCIConnection):
         logger.info(f'DRG Attachments {jsonToFormattedString(resources["DrgAttachment"])}')
         logger.info(f'DRG Distribution {jsonToFormattedString(resources["DrgRouteDistribution"])}')
         logger.info(f'DRG Distribution Statement {jsonToFormattedString(resources["DrgRouteDistributionStatement"])}')
-        logger.info(f'DRG Route Rule {jsonToFormattedString(resources["DrgRouteRule"])}')
+        logger.info(f'DRG Route Rule {jsonToFormattedString(resources.get("DrgRouteRule",[]))}')
         logger.info(f'DRG Route Table {jsonToFormattedString(resources["DrgRouteTable"])}')
         for drg in drgs:
             attachments = [a for a in resources.get("DrgAttachment", []) if a["drg_id"] == drg["id"]]
