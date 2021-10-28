@@ -129,6 +129,11 @@
                     "svg": "RemotePeeringGatewayRPG.svg"
                 },
                 {
+                    "title": "DRG Attachment",
+                    "targets": ["oci", "free tier"],
+                    "svg": "DRGAttachment.svg"
+                },
+                {
                     "title": "Customer Premise Equipment",
                     "targets": ["oci", "free tier"],
                     "svg": "CustomerPremises.svg"

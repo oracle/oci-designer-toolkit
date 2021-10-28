@@ -82,7 +82,7 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     }
 
     getRightEdgeArtifacts() {
-        return[ServiceGateway.getArtifactReference(), DynamicRoutingGateway.getArtifactReference(), LocalPeeringGateway.getArtifactReference()]
+        return[ServiceGateway.getArtifactReference(), DrgAttachment.getArtifactReference(), LocalPeeringGateway.getArtifactReference()]
     }
 
     getLeftArtifacts() {

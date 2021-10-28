@@ -326,8 +326,9 @@ class OkitJsonView {
     // Dynamic Routing Gateway
     dropDynamicRoutingGatewayView(target) {
         let view_artefact = this.newDynamicRoutingGateway();
-        view_artefact.getArtefact().vcn_id = target.id;
-        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        view_artefact.getArtefact().compartment_id = target.id;
+        // view_artefact.getArtefact().vcn_id = target.id;
+        // view_artefact.getArtefact().compartment_id = target.compartment_id;
         view_artefact.recalculate_dimensions = true;
         return view_artefact;
     }
@@ -2309,6 +2310,7 @@ class OkitArtefactView {
     getRightEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightEdgeArtifacts()) {
+            console.info('getFunction', group, this.getArrayFunction(group))
             for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;

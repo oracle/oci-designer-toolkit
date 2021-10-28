@@ -43,7 +43,7 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
     }
 
     static getDropTargets() {
-        return [VirtualCloudNetwork.getArtifactReference()];
+        return [Compartment.getArtifactReference()];
     }
 
 
