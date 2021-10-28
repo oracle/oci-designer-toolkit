@@ -104,13 +104,19 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
         // Zoom & Pan SVG
+        // Zoom function associated with Canvas SVG but acts on the first <g> tag
+        // const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)});
+        const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {transform_group.attr("transform", d3.event.transform)});
         const canvas_root_svg = canvas_div.append("svg")
         .attr("id", 'canvas_root_svg')
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)}));
+        .call(zoom);
         const transform_group = canvas_root_svg.append('g');
+        d3.select('#zoom_in_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.scaleBy, 1.3))
+        d3.select('#zoom_121_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.scale(1)))
+        d3.select('#zoom_out_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.scaleBy, (1/1.3)))
 
         // Wrapper SVG Element to define ViewBox etc
         // let canvas_svg = canvas_div.append("svg")
