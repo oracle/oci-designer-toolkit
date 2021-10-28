@@ -29,13 +29,8 @@ function handleViewSelect(e) {
 }
 
 function hideAllViewDivs() {
-    // $("#canvas-div").addClass('hidden');
-    // $("#tabular-div").addClass('hidden');
-    // $("#network-div").addClass('hidden');
-    // $("#security-div").addClass('hidden');
-    // $("#relationship-div").addClass('hidden');
-    // $("#json-text-div").addClass('hidden');
     $("#center-panels > div").each((i, e) => $(e).addClass('hidden'))
+    $("#zoom_controls > div").each((i, e) => $(e).addClass('hidden'))
 }
 
 function handleSwitchToCompartmentView(e) {
@@ -44,6 +39,7 @@ function handleSwitchToCompartmentView(e) {
     hideAllViewDivs();
     $("#canvas-div").removeClass('hidden');
     showSideBars();
+    $("#zoom_controls > div").each((i, e) => $(e).removeClass('hidden'))
 }
 
 function handleSwitchToTabularView(e) {

@@ -48,6 +48,10 @@ class OCIQuery(OCIConnection):
         "DHCPOptions",
         "Drg",
         "DrgAttachment",
+        "DrgRouteDistribution",
+        "DrgRouteDistributionStatement",
+        "DrgRouteRule",
+        "DrgRouteTable",
         "ExadataInfrastructure",
         "Export",
         "ExportSet",
@@ -98,6 +102,7 @@ class OCIQuery(OCIConnection):
         "DbSystem": "database_systems",
         "DHCPOptions": "dhcp_options",
         "Drg": "dynamic_routing_gateways",
+        "DrgAttachment": "drg_attachments",
         "ExadataInfrastructure": "exadata_infrastructures",
         "FileSystem": "file_systems",
         "Group": "groups",
@@ -134,6 +139,7 @@ class OCIQuery(OCIConnection):
         "UPDATING",
         "CREATING",
         "INACTIVE",
+        "ATTACHED",
         "ALLOCATED"
     ]
 
@@ -220,6 +226,11 @@ class OCIQuery(OCIConnection):
         return response_json
 
     def dynamic_routing_gateways(self, drgs, resources):
+        logger.info(f'DRG Attachments {jsonToFormattedString(resources["DrgAttachment"])}')
+        logger.info(f'DRG Distribution {jsonToFormattedString(resources["DrgRouteDistribution"])}')
+        logger.info(f'DRG Distribution Statement {jsonToFormattedString(resources["DrgRouteDistributionStatement"])}')
+        logger.info(f'DRG Route Rule {jsonToFormattedString(resources.get("DrgRouteRule",[]))}')
+        logger.info(f'DRG Route Table {jsonToFormattedString(resources["DrgRouteTable"])}')
         for drg in drgs:
             attachments = [a for a in resources.get("DrgAttachment", []) if a["drg_id"] == drg["id"]]
             drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""

@@ -1044,3 +1044,41 @@ class OkitAutoSave {
         localStorage.removeItem(this.key);
     }
 }
+
+class OkitEditor {
+    constructor(model, views, callbacks=[]) {
+        this.filename = '';
+        this.location = 'local';
+        this.model = model;
+        this.views = views;
+        this.callbacks = callbacks;
+    }
+
+    new() {
+        this.filename = '';
+        this.location = 'local';
+        if (this.model) this.model.clear();
+        if (this.views) this.views.forEach((v) => v.clear())
+    }
+
+    draw() {
+        if (this.views) this.views.forEach((v) => v.draw())
+    }
+
+    load(location) {}
+
+    save() {
+        if (this.filename.length !== 0) {
+
+        } else {
+            this.saveAs();
+        }
+    }
+
+    saveAs(location) {
+        const self = this;
+    }
+
+}
+
+const okitEditor = new OkitEditor();

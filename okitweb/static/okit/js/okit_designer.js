@@ -440,7 +440,7 @@ function handleSaveToContainer(e) {
             data: JSON.stringify({root_dir: root_dir, template_file: $('#template_file_name').val(), okit_json: okitJsonModel}),
             success: function(resp) {
                 console.info('Response : ' + resp);
-                loadGitPanel();
+                loadFilesystemPanel();
             },
             error: function(xhr, status, error) {
                 console.info('Status : '+ status)

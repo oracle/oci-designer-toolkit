@@ -129,6 +129,11 @@
                     "svg": "RemotePeeringGatewayRPG.svg"
                 },
                 {
+                    "title": "DRG Attachment",
+                    "targets": ["oci", "free tier"],
+                    "svg": "DRGAttachment.svg"
+                },
+                {
                     "title": "Customer Premise Equipment",
                     "targets": ["oci", "free tier"],
                     "svg": "CustomerPremises.svg"
@@ -156,7 +161,12 @@
                 },
                 {
                     "title": "Dynamic Routing Gateway",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["pca", "hidden"],
+                    "svg": "DynamicRoutingGatewayDRG.svg"
+                },
+                {
+                    "title": "DRG",
+                    "targets": ["oci", "free tier"],
                     "svg": "DynamicRoutingGatewayDRG.svg"
                 },
                 {
