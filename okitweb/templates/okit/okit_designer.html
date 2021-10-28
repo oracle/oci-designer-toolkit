@@ -132,26 +132,6 @@
             <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
             <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li>
         </ul>
-        <!--ul id="templates_menu" class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Template Menu"></div>
-                        <span>Templates</span>
-                    </span>
-                </div>
-            </li>
-            {% for template_group in okit_templates_groups %}
-                {% if template_group['name'] == '.' %}
-                    {% for okit_template in template_group['templates'] %}
-                        {{ menu.add_template_menu_item(okit_template) }}
-                    {% endfor %}
-                {% elif template_group['templates'] %}
-                    {{ menu.add_template_menu_group(template_group) }}
-                {% endif %}
-            {% endfor %}
-            <li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li>
-        </ul-->
         <ul id="export_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
