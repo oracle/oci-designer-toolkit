@@ -33,6 +33,8 @@ class OciResourceDiscoveryClient(object):
         "DataFlowRunDetails": (oci.data_flow.DataFlowClient, "get_run"), # get full details
         # oci.database.DatabaseClient
         "ExadataIormConfig": (oci.database.DatabaseClient, "get_cloud_vm_cluster_iorm_config"),
+        # oci.file_storage.FileStorageClient
+        "ExportSetDetails": (oci.file_storage.FileStorageClient, "get_export_set"),
         # oci.mysql.DbSystemClient
         "MySQLDbSystemDetails": (oci.mysql.DbSystemClient, "get_db_system"), # used to get full details of the result as list_db_systems does not include all attributes
         # oci.mysql.MysqlaasClient
@@ -625,6 +627,10 @@ class OciResourceDiscoveryClient(object):
                         db_system_id = item[2]
                         future = executor.submit(self.list_resources, klass, method_name, region, db_system_id=db_system_id)
                         futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
+                    elif method_name == "get_export_set": # ExportSetDetails
+                        export_set_id = item[2]
+                        future = executor.submit(self.list_resources, klass, method_name, region, export_set_id=export_set_id)
+                        futures_list.update({(region, resource_type, compartment_id, export_set_id):future})
                     elif method_name == "get_image" and compartment_id == None:
                         if compartment_id == None and item[2]:
                             image_id = item[2]
@@ -1004,6 +1010,7 @@ class OciResourceDiscoveryClient(object):
                         "BastionDetails",
                         "ClusterOptions",
                         "DataFlowApplicationDetails", "DataFlowRunDetails",
+                        "ExportSetDetails",
                         "Image",
                         "MySQLConfiguration", "MySQLDbSystemDetails",
                         "OsmsManagedInstance",
@@ -1194,9 +1201,13 @@ class OciResourceDiscoveryClient(object):
                     if self.include_resource_types == None or "ExternalDatabaseConnector" in self.include_resource_types:
                         # get connectors for external databases
                         regional_resource_requests.add(("ExternalDatabaseConnector", resource.compartment_id, resource.identifier))
-                elif resource.resource_type == "FileSystem" and (self.include_resource_types == None or "Export" in self.include_resource_types):
-                    # get Exports for FileSystem
-                    regional_resource_requests.add(("Export", resource.compartment_id, resource.identifier))
+                elif resource.resource_type == "FileSystem": 
+                    if self.include_resource_types == None or "Export" in self.include_resource_types:
+                        # get Exports for FileSystem
+                        regional_resource_requests.add(("Export", resource.compartment_id, resource.identifier))
+                    if self.include_resource_types == None or "ExportSet" in self.include_resource_types:
+                        # get ExportSets for FileSystem
+                        regional_resource_requests.add(("ExportSet", resource.compartment_id, resource.identifier))
                 elif resource.resource_type == "Group" and (self.include_resource_types == None or "UserGroupMembership" in self.include_resource_types):
                     # get Users for Groups
                     regional_resource_requests.add(("UserGroupMembership", resource.compartment_id, resource.identifier))
@@ -1348,6 +1359,10 @@ class OciResourceDiscoveryClient(object):
             if "DataFlowRun" in resources_by_region[region]:
                 for resource in resources_by_region[region]["DataFlowRun"]:
                     regional_resource_requests.add(("DataFlowRunDetails", resource.compartment_id, resource.id))
+            # get extra details for ExportSet
+            if "ExportSet" in resources_by_region[region]:
+                for resource in resources_by_region[region]["ExportSet"]:
+                    regional_resource_requests.add(("ExportSetDetails", resource.compartment_id, resource.id))
             # get extra details for Bastion
             if "Bastion" in resources_by_region[region]:
                 for resource in resources_by_region[region]["Bastion"]:
@@ -1404,6 +1419,7 @@ class OciResourceDiscoveryClient(object):
             self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
+            self.replace_resource_details(resources_by_region, region, "ExportSet", "ExportSetDetails")
             self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
 
         # remove duplicate shapes
@@ -1420,14 +1436,13 @@ class OciResourceDiscoveryClient(object):
         # remove duplicate platform images
         # For every compartment that has a custom image the list_images method also returns the full list of platform 
         # images, resulting in duplicate entries in the conbined result set.
-        # Reduce to a unique set of of images for the region.
+        # Reduce to a unique set of images for the region.
         for region in resources_by_region:
             if "Image" in resources_by_region[region]:
                 unique_images = dict()
                 for image in resources_by_region[region]["Image"]:
                     unique_images[image.id] = image
                 resources_by_region[region]["Image"] = list(unique_images.values())
-
 
         return resources_by_region
 
