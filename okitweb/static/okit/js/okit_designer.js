@@ -1065,13 +1065,15 @@ function showQueryResults() {
         okitOCIQuery = new OkitOCIQuery(regions, request.fast_discovery);
         // Add Tabs
         $(jqId('region_progress')).empty();
-        for (const [i, region] of regions.entries()) {
-            addRegionTab(region);
-            addRegionTabProgress(region);
-            addRegionProgressCheckbox(region);
+        if (regions.length > 1) {
+            for (const [i, region] of regions.entries()) {
+                addRegionTab(region);
+                addRegionTabProgress(region);
+                addRegionProgressCheckbox(region);
+            }
+            $(jqId('file-save-regional-menu-item-li')).removeClass('hidden');
+            $(jqId(regionTabName(regions[0]))).trigger("click");
         }
-        $(jqId('file-save-regional-menu-item-li')).removeClass('hidden');
-        $(jqId(regionTabName(regions[0]))).trigger("click");
         okitOCIQuery.query(request, function(region) {
             console.info('Complete ' + region);
             okitJsonModel = regionOkitJson[region];

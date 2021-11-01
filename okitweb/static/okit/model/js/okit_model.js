@@ -98,223 +98,240 @@ class OkitJson {
             if (vcn.default_security_list_id && this.getSecurityList(vcn.default_security_list_id)) this.getSecurityList(vcn.default_security_list_id).default = true;
             if (vcn.default_dhcp_options_id && this.getDhcpOption(vcn.default_dhcp_options_id)) this.getDhcpOption(vcn.default_dhcp_options_id).default = true;
         });
+        // Check for root compartment
+        this.checkCompartmentIds();
     }
-    load1(okit_json) {
-        console.log('Load OKIT Json');
-        // Title & Description
-        if (okit_json.title) {
-            this.title = okit_json.title;
+    checkCompartmentIds() {
+        const compartment_ids = this.compartments ? this.compartments.map((c) => c.id) : []
+        let root_ids = this.compartments ? this.compartments.filter((c) => c.compartment_id === null) : []
+        if (root_ids.length === 0) {
+            this.compartments = [new Compartment({display_name: 'Deployment Compartment'}, this), ...this.compartments]
+            root_ids = this.compartments ? this.compartments.filter((c) => c.compartment_id === null) : []
         }
-        if (okit_json.description) {
-            this.description = okit_json.description;
-        }
-        // Compartments
-        if (okit_json.hasOwnProperty('compartments')) {
-            for (let artefact of okit_json['compartments']) {
-                let obj = this.newCompartment(artefact);
+        const root_id = root_ids[0].id
+        // Assign Resources to root compartment if their compartment id is not in the design
+        for (const [key, value] of Object.entries(this)) {
+            if (Array.isArray(value)) {
+                value.filter((v) => v.id !== root_id && !compartment_ids.includes(v.compartment_id)).forEach((r) => r.compartment_id = root_id)
             }
         }
-
-        // Compartment Subcomponents
-        // Autonomous Databases
-        if (okit_json.hasOwnProperty('autonomous_databases')) {
-            for (let artefact of okit_json['autonomous_databases']) {
-                let obj = this.newAutonomousDatabase(artefact);
-            }
-        }
-        // Block Storage Volumes
-        if (okit_json.hasOwnProperty('block_storage_volumes')) {
-            for (let artefact of okit_json['block_storage_volumes']) {
-                let obj = this.newBlockStorageVolume(artefact);
-            }
-        }
-        // Object Storage Buckets
-        if (okit_json.hasOwnProperty('object_storage_buckets')) {
-            for (let artefact of okit_json['object_storage_buckets']) {
-                let obj = this.newObjectStorageBucket(artefact);
-            }
-        }
-        // Exadata Infrastructures
-        if (okit_json.hasOwnProperty('exadata_infrastructures')) {
-            for (let artefact of okit_json['exadata_infrastructures']) {
-                let obj = this.newExadataInfrastructure(artefact);
-            }
-        }
-        // Virtual Cloud Networks
-        // Turn Off Default Security List / Route Table Processing
-        let okitSettingsClone = JSON.clone(okitSettings);
-        okitSettings.is_default_route_table   = false;
-        okitSettings.is_default_security_list = false;
-        if (okit_json.hasOwnProperty('virtual_cloud_networks')) {
-            for (let artefact of okit_json['virtual_cloud_networks']) {
-                let obj = this.newVirtualCloudNetwork(artefact);
-            }
-        }
-        // Reset
-        okitSettings.is_default_route_table   = okitSettingsClone.is_default_route_table;
-        okitSettings.is_default_security_list = okitSettingsClone.is_default_security_list;
-        // Web Application Firewall
-        if (okit_json.hasOwnProperty('web_application_firewalls')) {
-            for (let artefact of okit_json['web_application_firewalls']) {
-                let obj = this.newWebApplicationFirewall(artefact);
-            }
-        }
-        // Customer Premise Equipments
-        if (okit_json.hasOwnProperty('customer_premise_equipments')) {
-            for (let artefact of okit_json['customer_premise_equipments']) {
-                let obj = this.newCustomerPremiseEquipment(artefact);
-            }
-        }
-        // Dynamic Routing Gateways
-        if (okit_json.hasOwnProperty('dynamic_routing_gateways')) {
-            for (let artefact of okit_json['dynamic_routing_gateways']) {
-                let obj = this.newDynamicRoutingGateway(artefact);
-            }
-        }
-        // IPSec Connections
-        if (okit_json.hasOwnProperty('ipsec_connections')) {
-            for (let artefact of okit_json['ipsec_connections']) {
-                let obj = this.newIpsecConnection(artefact);
-            }
-        }
-        // RemotePeering Connections
-        if (okit_json.hasOwnProperty('remote_peering_connections')) {
-            for (let artefact of okit_json['remote_peering_connections']) {
-                let obj = this.newRemotePeeringConnection(artefact);
-            }
-        }
-
-        // Virtual Cloud Network Sub Components
-        // Internet Gateways
-        if (okit_json.hasOwnProperty('internet_gateways')) {
-            for (let artefact of okit_json['internet_gateways']) {
-                let obj = this.newInternetGateway(artefact);
-            }
-        }
-        // NAT Gateway
-        if (okit_json.hasOwnProperty('nat_gateways')) {
-            for (let artefact of okit_json['nat_gateways']) {
-                let obj = this.newNatGateway(artefact);
-            }
-        }
-        // Route Tables
-        if (okit_json.hasOwnProperty('route_tables')) {
-            for (let artefact of okit_json['route_tables']) {
-                let obj = this.newRouteTable(artefact);
-            }
-        }
-        // Security Lists
-        if (okit_json.hasOwnProperty('security_lists')) {
-            for (let artefact of okit_json['security_lists']) {
-                let obj = this.newSecurityList(artefact);
-            }
-        }
-        // Network Security Groups
-        if (okit_json.hasOwnProperty('network_security_groups')) {
-            for (let artefact of okit_json['network_security_groups']) {
-                let obj = this.newNetworkSecurityGroup(artefact);
-            }
-        }
-        // Service Gateways
-        if (okit_json.hasOwnProperty('service_gateways')) {
-            for (let artefact of okit_json['service_gateways']) {
-                let obj = this.newServiceGateway(artefact);
-            }
-        }
-        // Local Peering Gateways
-        if (okit_json.hasOwnProperty('local_peering_gateways')) {
-            for (let artefact of okit_json['local_peering_gateways']) {
-                let obj = this.newLocalPeeringGateway(artefact);
-            }
-        }
-        // Subnets
-        if (okit_json.hasOwnProperty('subnets')) {
-            for (let artefact of okit_json['subnets']) {
-                let obj = this.newSubnet(artefact);
-            }
-        }
-        // OkeClusters
-        if (okit_json.hasOwnProperty('oke_clusters')) {
-            for (let artefact of okit_json['oke_clusters']) {
-                let obj = this.newOkeCluster(artefact);
-            }
-        }
-
-        // Subnet Subcomponents
-        // File Storage Systems
-        if (okit_json.hasOwnProperty('file_storage_systems')) {
-            for (let artefact of okit_json['file_storage_systems']) {
-                let obj = this.newFileStorageSystem(artefact);
-            }
-        }
-        // Database Systems
-        if (okit_json.hasOwnProperty('database_systems')) {
-            for (let artefact of okit_json['database_systems']) {
-                let obj = this.newDatabaseSystem(artefact);
-            }
-        }
-        // MySQL Database Systems
-        if (okit_json.hasOwnProperty('mysql_database_systems')) {
-            for (let artefact of okit_json['mysql_database_systems']) {
-                let obj = this.newMysqlDatabaseSystem(artefact);
-            }
-        }
-        // Instances
-        if (okit_json.hasOwnProperty('instances')) {
-            for (let artefact of okit_json['instances']) {
-                let subnet = this.getSubnet(artefact.subnet_id)
-                let obj = this.newInstance(artefact);
-            }
-        }
-        // InstancePools
-        if (okit_json.hasOwnProperty('instance_pools')) {
-            for (let artefact of okit_json['instance_pools']) {
-                let obj = this.newInstancePool(artefact);
-            }
-        }
-        // Load Balancers
-        if (okit_json.hasOwnProperty('load_balancers')) {
-            for (let artefact of okit_json['load_balancers']) {
-                let obj = this.newLoadBalancer(artefact);
-            }
-        }
-
-        // Exadata Infrastructure Sub Components
-        // VM Clusters
-        if (okit_json.hasOwnProperty('vm_clusters')) {
-            for (let artefact of okit_json['vm_clusters']) {
-                let obj = this.newVmCluster(artefact);
-            }
-        }
-        // VM Cluster Networks
-        if (okit_json.hasOwnProperty('vm_cluster_networks')) {
-            for (let artefact of okit_json['vm_cluster_networks']) {
-                let obj = this.newVmClusterNetwork(artefact);
-            }
-        }
-
-        // VM Cluster Sub Components
-        // DB Homes
-        if (okit_json.hasOwnProperty('db_homes')) {
-            for (let artefact of okit_json['db_homes']) {
-                let obj = this.newDbHome(artefact);
-            }
-        }
-        // DB Nodes
-        if (okit_json.hasOwnProperty('db_nodes')) {
-            for (let artefact of okit_json['db_nodes']) {
-                let obj = this.newDbNode(artefact);
-            }
-        }
-        // Database
-        if (okit_json.hasOwnProperty('databases')) {
-            for (let artefact of okit_json['databases']) {
-                let obj = this.newDatabase(artefact);
-            }
-        }
-
-        console.log();
     }
+    // load1(okit_json) {
+    //     console.log('Load OKIT Json');
+    //     // Title & Description
+    //     if (okit_json.title) {
+    //         this.title = okit_json.title;
+    //     }
+    //     if (okit_json.description) {
+    //         this.description = okit_json.description;
+    //     }
+    //     // Compartments
+    //     if (okit_json.hasOwnProperty('compartments')) {
+    //         for (let artefact of okit_json['compartments']) {
+    //             let obj = this.newCompartment(artefact);
+    //         }
+    //     }
+
+    //     // Compartment Subcomponents
+    //     // Autonomous Databases
+    //     if (okit_json.hasOwnProperty('autonomous_databases')) {
+    //         for (let artefact of okit_json['autonomous_databases']) {
+    //             let obj = this.newAutonomousDatabase(artefact);
+    //         }
+    //     }
+    //     // Block Storage Volumes
+    //     if (okit_json.hasOwnProperty('block_storage_volumes')) {
+    //         for (let artefact of okit_json['block_storage_volumes']) {
+    //             let obj = this.newBlockStorageVolume(artefact);
+    //         }
+    //     }
+    //     // Object Storage Buckets
+    //     if (okit_json.hasOwnProperty('object_storage_buckets')) {
+    //         for (let artefact of okit_json['object_storage_buckets']) {
+    //             let obj = this.newObjectStorageBucket(artefact);
+    //         }
+    //     }
+    //     // Exadata Infrastructures
+    //     if (okit_json.hasOwnProperty('exadata_infrastructures')) {
+    //         for (let artefact of okit_json['exadata_infrastructures']) {
+    //             let obj = this.newExadataInfrastructure(artefact);
+    //         }
+    //     }
+    //     // Virtual Cloud Networks
+    //     // Turn Off Default Security List / Route Table Processing
+    //     let okitSettingsClone = JSON.clone(okitSettings);
+    //     okitSettings.is_default_route_table   = false;
+    //     okitSettings.is_default_security_list = false;
+    //     if (okit_json.hasOwnProperty('virtual_cloud_networks')) {
+    //         for (let artefact of okit_json['virtual_cloud_networks']) {
+    //             let obj = this.newVirtualCloudNetwork(artefact);
+    //         }
+    //     }
+    //     // Reset
+    //     okitSettings.is_default_route_table   = okitSettingsClone.is_default_route_table;
+    //     okitSettings.is_default_security_list = okitSettingsClone.is_default_security_list;
+    //     // Web Application Firewall
+    //     if (okit_json.hasOwnProperty('web_application_firewalls')) {
+    //         for (let artefact of okit_json['web_application_firewalls']) {
+    //             let obj = this.newWebApplicationFirewall(artefact);
+    //         }
+    //     }
+    //     // Customer Premise Equipments
+    //     if (okit_json.hasOwnProperty('customer_premise_equipments')) {
+    //         for (let artefact of okit_json['customer_premise_equipments']) {
+    //             let obj = this.newCustomerPremiseEquipment(artefact);
+    //         }
+    //     }
+    //     // Dynamic Routing Gateways
+    //     if (okit_json.hasOwnProperty('dynamic_routing_gateways')) {
+    //         for (let artefact of okit_json['dynamic_routing_gateways']) {
+    //             let obj = this.newDynamicRoutingGateway(artefact);
+    //         }
+    //     }
+    //     // IPSec Connections
+    //     if (okit_json.hasOwnProperty('ipsec_connections')) {
+    //         for (let artefact of okit_json['ipsec_connections']) {
+    //             let obj = this.newIpsecConnection(artefact);
+    //         }
+    //     }
+    //     // RemotePeering Connections
+    //     if (okit_json.hasOwnProperty('remote_peering_connections')) {
+    //         for (let artefact of okit_json['remote_peering_connections']) {
+    //             let obj = this.newRemotePeeringConnection(artefact);
+    //         }
+    //     }
+
+    //     // Virtual Cloud Network Sub Components
+    //     // Internet Gateways
+    //     if (okit_json.hasOwnProperty('internet_gateways')) {
+    //         for (let artefact of okit_json['internet_gateways']) {
+    //             let obj = this.newInternetGateway(artefact);
+    //         }
+    //     }
+    //     // NAT Gateway
+    //     if (okit_json.hasOwnProperty('nat_gateways')) {
+    //         for (let artefact of okit_json['nat_gateways']) {
+    //             let obj = this.newNatGateway(artefact);
+    //         }
+    //     }
+    //     // Route Tables
+    //     if (okit_json.hasOwnProperty('route_tables')) {
+    //         for (let artefact of okit_json['route_tables']) {
+    //             let obj = this.newRouteTable(artefact);
+    //         }
+    //     }
+    //     // Security Lists
+    //     if (okit_json.hasOwnProperty('security_lists')) {
+    //         for (let artefact of okit_json['security_lists']) {
+    //             let obj = this.newSecurityList(artefact);
+    //         }
+    //     }
+    //     // Network Security Groups
+    //     if (okit_json.hasOwnProperty('network_security_groups')) {
+    //         for (let artefact of okit_json['network_security_groups']) {
+    //             let obj = this.newNetworkSecurityGroup(artefact);
+    //         }
+    //     }
+    //     // Service Gateways
+    //     if (okit_json.hasOwnProperty('service_gateways')) {
+    //         for (let artefact of okit_json['service_gateways']) {
+    //             let obj = this.newServiceGateway(artefact);
+    //         }
+    //     }
+    //     // Local Peering Gateways
+    //     if (okit_json.hasOwnProperty('local_peering_gateways')) {
+    //         for (let artefact of okit_json['local_peering_gateways']) {
+    //             let obj = this.newLocalPeeringGateway(artefact);
+    //         }
+    //     }
+    //     // Subnets
+    //     if (okit_json.hasOwnProperty('subnets')) {
+    //         for (let artefact of okit_json['subnets']) {
+    //             let obj = this.newSubnet(artefact);
+    //         }
+    //     }
+    //     // OkeClusters
+    //     if (okit_json.hasOwnProperty('oke_clusters')) {
+    //         for (let artefact of okit_json['oke_clusters']) {
+    //             let obj = this.newOkeCluster(artefact);
+    //         }
+    //     }
+
+    //     // Subnet Subcomponents
+    //     // File Storage Systems
+    //     if (okit_json.hasOwnProperty('file_storage_systems')) {
+    //         for (let artefact of okit_json['file_storage_systems']) {
+    //             let obj = this.newFileStorageSystem(artefact);
+    //         }
+    //     }
+    //     // Database Systems
+    //     if (okit_json.hasOwnProperty('database_systems')) {
+    //         for (let artefact of okit_json['database_systems']) {
+    //             let obj = this.newDatabaseSystem(artefact);
+    //         }
+    //     }
+    //     // MySQL Database Systems
+    //     if (okit_json.hasOwnProperty('mysql_database_systems')) {
+    //         for (let artefact of okit_json['mysql_database_systems']) {
+    //             let obj = this.newMysqlDatabaseSystem(artefact);
+    //         }
+    //     }
+    //     // Instances
+    //     if (okit_json.hasOwnProperty('instances')) {
+    //         for (let artefact of okit_json['instances']) {
+    //             let subnet = this.getSubnet(artefact.subnet_id)
+    //             let obj = this.newInstance(artefact);
+    //         }
+    //     }
+    //     // InstancePools
+    //     if (okit_json.hasOwnProperty('instance_pools')) {
+    //         for (let artefact of okit_json['instance_pools']) {
+    //             let obj = this.newInstancePool(artefact);
+    //         }
+    //     }
+    //     // Load Balancers
+    //     if (okit_json.hasOwnProperty('load_balancers')) {
+    //         for (let artefact of okit_json['load_balancers']) {
+    //             let obj = this.newLoadBalancer(artefact);
+    //         }
+    //     }
+
+    //     // Exadata Infrastructure Sub Components
+    //     // VM Clusters
+    //     if (okit_json.hasOwnProperty('vm_clusters')) {
+    //         for (let artefact of okit_json['vm_clusters']) {
+    //             let obj = this.newVmCluster(artefact);
+    //         }
+    //     }
+    //     // VM Cluster Networks
+    //     if (okit_json.hasOwnProperty('vm_cluster_networks')) {
+    //         for (let artefact of okit_json['vm_cluster_networks']) {
+    //             let obj = this.newVmClusterNetwork(artefact);
+    //         }
+    //     }
+
+    //     // VM Cluster Sub Components
+    //     // DB Homes
+    //     if (okit_json.hasOwnProperty('db_homes')) {
+    //         for (let artefact of okit_json['db_homes']) {
+    //             let obj = this.newDbHome(artefact);
+    //         }
+    //     }
+    //     // DB Nodes
+    //     if (okit_json.hasOwnProperty('db_nodes')) {
+    //         for (let artefact of okit_json['db_nodes']) {
+    //             let obj = this.newDbNode(artefact);
+    //         }
+    //     }
+    //     // Database
+    //     if (okit_json.hasOwnProperty('databases')) {
+    //         for (let artefact of okit_json['databases']) {
+    //             let obj = this.newDatabase(artefact);
+    //         }
+    //     }
+
+    //     console.log();
+    // }
 
     /*
     ** Clear Model 
