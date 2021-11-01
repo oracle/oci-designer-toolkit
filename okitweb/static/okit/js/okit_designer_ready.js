@@ -198,6 +198,6 @@ $(document).ready(function() {
 
     loadTemplatePanel()
     loadGitPanel()
-    loadFilesystemPanel()
+    loadFileSystemPanel()
 
 });

@@ -1695,7 +1695,7 @@ class OkitArtefactView {
     drawConnections() {}
 
     drawConnection(start_id, end_id) {
-        if (!this.parent.is_collapsed) {
+        if (this.parent && !this.parent.is_collapsed) {
             const canvas_svg = d3.select(d3Id('canvas-svg'));
             const canvas_rect = d3.select(d3Id('canvas-rect'));
             const svgStartPoint = canvas_svg.node().createSVGPoint();

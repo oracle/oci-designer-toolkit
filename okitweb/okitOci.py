@@ -235,21 +235,28 @@ def ociRegions(profile):
 @bp.route('/query', methods=(['GET']))
 def ociQuery():
     if request.method == 'GET':
-        query_string = request.query_string
-        parsed_query_string = urllib.parse.unquote(query_string.decode())
-        query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
-        logger.debug('===================================== Query Json =====================================')
-        logJson(query_json)
-        logger.debug('======================================================================================')
-        config_profile = query_json.get('config_profile', 'DEFAULT')
-        regions = query_json.get('region', None)
-        compartments = query_json.get('compartment_id', None)
+        config_profile = request.args.get('config_profile', default='DEFAULT')
+        compartments = request.args.get('compartment_id')
+        regions = request.args.get('region')
+        region = request.args.get('region')
+        sub_compartments = request.args.get('sub_compartments', default=False)
+        # query_string = request.query_string
+        # parsed_query_string = urllib.parse.unquote(query_string.decode())
+        # query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
+        # logger.debug('===================================== Query Json =====================================')
+        # logJson(query_json)
+        # logger.debug('======================================================================================')
+        # config_profile = query_json.get('config_profile', 'DEFAULT')
+        # regions = query_json.get('region', None)
+        # compartments = query_json.get('compartment_id', None)
         #compartments = None # TODO need to pass list of compartment ocids
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
-        config = {'region': query_json['region']}
+        config = {'region': region}
+        # config = {'region': query_json['region']}
         query = OCIQuery(config=config, profile=config_profile)
-        response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=query_json['sub_compartments'])
-        config = {'region': query_json['region']}
+        # response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=query_json['sub_compartments'])
+        response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=sub_compartments)
+        # config = {'region': query_json['region']}
         #response_json = response_to_json(response)
         logJson(response)
         return response
