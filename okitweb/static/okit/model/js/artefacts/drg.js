@@ -36,7 +36,7 @@ class Drg extends OkitArtifact {
     ** Name Generation
     */
     getNamePrefix() {
-        return super.getNamePrefix() + 'd';
+        return super.getNamePrefix() + 'drg';
     }
     /*
     ** Static Functionality

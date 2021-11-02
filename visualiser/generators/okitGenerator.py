@@ -173,6 +173,10 @@ class OCIGenerator(object):
         # -- Dynamic Routing Gateways
         for dynamic_routing_gateway in self.visualiser_json.get('dynamic_routing_gateways', []):
             self.renderDynamicRoutingGateway(dynamic_routing_gateway)
+        for drg in self.visualiser_json.get('drgs', []):
+            self.renderDRG(drg)
+        for drg_attachment in self.visualiser_json.get('drg_attachments', []):
+            self.renderDRGAttachment(drg_attachment)
         # -- IPSec Connections
         for ipsec_connection in self.visualiser_json.get('ipsec_connections', []):
             self.renderIPSecConnection(ipsec_connection)
@@ -739,6 +743,76 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("dhcp_option.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderDRG(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(resource['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = resource['display_name']
+        # Process Dynamic Routing Gateway Data
+        logger.info('Processing DRG Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # --- Optional
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("drg.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderDRGAttachment(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(resource['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = resource['display_name']
+        # Process Dynamic Routing Gateway Data
+        logger.info('Processing Dynamic Routing Gateway Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- DRG Id
+        self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['drg_id']]))
+        # ---- Network Details
+        network_details = {
+            "id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource["network_details"]['id']])),
+            # "type": resource["network_details"]['type']
+            "type": self.generateJinja2Variable('network_details_type', resource["network_details"]["type"], standardisedName)
+        }
+        if resource["network_details"].get('route_table_id', '') != '':
+            network_details["route_table_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource["network_details"]['route_table_id']]))
+        # self.addJinja2Variable("network_details", network_details, standardisedName)
+        self.jinja2_variables["network_details"] = network_details
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # --- Optional
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("drg_attachment.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
