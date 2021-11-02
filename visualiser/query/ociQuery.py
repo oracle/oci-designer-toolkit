@@ -101,7 +101,8 @@ class OCIQuery(OCIConnection):
         "DbNode": "db_nodes",
         "DbSystem": "database_systems",
         "DHCPOptions": "dhcp_options",
-        "Drg": "dynamic_routing_gateways",
+        # "Drg": "dynamic_routing_gateways",
+        "Drg": "drgs",
         "DrgAttachment": "drg_attachments",
         "ExadataInfrastructure": "exadata_infrastructures",
         "FileSystem": "file_systems",
@@ -184,14 +185,11 @@ class OCIQuery(OCIConnection):
         response_json = {
             "compartments": compartments
         }
-        logger.info(jsonToFormattedString(response_json))
         compartment_ids = [c["id"] for c in response_json["compartments"]]
         # Set top level compartment parent to None
         for compartment in response_json["compartments"]:
-            # if compartment["compartment_id"] not in compartment_ids:
             if compartment["id"] in query_compartment_ids:
                 compartment["compartment_id"] = None
-        logger.info(jsonToFormattedString(response_json))
         map_keys = self.DISCOVERY_OKIT_MAP.keys()
         for region, resources in discovery_data.items():
             logger.info("Processing Region : {0!s:s} {1!s:s}".format(region, resources.keys()))
@@ -229,14 +227,20 @@ class OCIQuery(OCIConnection):
 
     def dynamic_routing_gateways(self, drgs, resources):
         logger.info(f'DRG Attachments {jsonToFormattedString(resources["DrgAttachment"])}')
+        logger.info(f'DRG Route Table {jsonToFormattedString(resources["DrgRouteTable"])}')
+        logger.info(f'DRG Route Rule {jsonToFormattedString(resources.get("DrgRouteRule",[]))}')
         logger.info(f'DRG Distribution {jsonToFormattedString(resources["DrgRouteDistribution"])}')
         logger.info(f'DRG Distribution Statement {jsonToFormattedString(resources["DrgRouteDistributionStatement"])}')
-        logger.info(f'DRG Route Rule {jsonToFormattedString(resources.get("DrgRouteRule",[]))}')
-        logger.info(f'DRG Route Table {jsonToFormattedString(resources["DrgRouteTable"])}')
         for drg in drgs:
-            attachments = [a for a in resources.get("DrgAttachment", []) if a["drg_id"] == drg["id"]]
-            drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""
-            drg["route_table_id"] = attachments[0]["route_table_id"] if len(attachments) else ""
+            drg["route_tables"] = [r for r in resources.get("DrgRouteTable", []) if r["drg_id"] == drg["id"]]
+            for rt in drg["route_tables"]:
+                rt["rules"] = [r for r in resources.get("DrgRouteRule", []) if r["drg_route_table_id"] == rt["id"]]
+            drg["route_distributions"] = [r for r in resources.get("DrgRouteDistribution", []) if r["drg_id"] == drg["id"]]
+            for rd in drg["route_distributions"]:
+                rd["statements"] = [r for r in resources.get("DrgRouteDistributionStatement", []) if r["drg_route_distribution_id"] == rd["id"]]
+            # attachments = [a for a in resources.get("DrgAttachment", []) if a["drg_id"] == drg["id"]]
+            # drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""
+            # drg["route_table_id"] = attachments[0]["route_table_id"] if len(attachments) else ""
         return drgs
 
     def file_storage_systems(self, file_storage_systems, resources):

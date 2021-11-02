@@ -382,6 +382,12 @@
     width: 100%;
 }
 
+summary .okit-property-value {
+    font-weight: normal;
+    width: 95%;
+    border: none;
+}
+
 .okit-property-sheet .okit-property-label {
 
 }

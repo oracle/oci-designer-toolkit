@@ -54,7 +54,7 @@ class MountTargetView extends OkitArtefactView {
         console.info('Adding Export');
         const fs_export = this.artefact.newExport();
         this.artefact.exports.push(fs_export);
-        const idx = this.artefact.exports.length;+-
+        const idx = this.artefact.exports.length;
         this.addExportHtml(fs_export, idx);
     }
 
@@ -96,6 +96,7 @@ class MountTargetView extends OkitArtefactView {
         // Privileged (Checkbox)
         property = this.addPropertyHTML(tbody, 'checkbox', 'Privileged Port', 'require_privileged_source_port', idx, (d, i, n) => fs_export.options.require_privileged_source_port = n[i].checked);
         property.attr('checked', fs_export.options.require_privileged_source_port)
+        property.node().checked = fs_export.options.require_privileged_source_port
     }
 
     loadIdentitySquash(parent) {
@@ -108,7 +109,6 @@ class MountTargetView extends OkitArtefactView {
 
     deleteExport(id, idx, fs_export) {
         this.artefact.exports = this.artefact.exports.filter((e) => e !== fs_export)
-        $(`#${id}${idx}_row`).remove()
     }
     /*
     ** Load and display Value Proposition

@@ -16,15 +16,51 @@ class Drg extends OkitArtifact {
         // Configure default values
         this.display_name = this.generateDefaultName(okitjson.drgs.length + 1);
         this.compartment_id = data.parent_id;
-        /*
-        ** TODO: Add Resource / Artefact specific parameters and default
-        */
+        // Route Tables
+        this.route_tables = []
+        this.route_distributions = []
         // Update with any passed data
         this.merge(data);
         this.convert();
-        // TODO: If the Resource is within a Subnet but the subnet_iss is not at the top level then raise it with the following functions if not required delete them.
-        // Expose subnet_id at the top level
-        Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_mount_target.subnet_id;}, set: function(id) {this.primary_mount_target.subnet_id = id;}, enumerable: false });
+    }
+    /*
+    ** Create Route Table
+    */
+    newRouteTable() {
+        return {
+            display_name: `${this.display_name} route table ${this.route_tables.length + 1}`,
+            import_drg_route_distribution_id: '',
+            is_ecmp_enabled: false,
+            rules: []
+        }
+    }
+    newRouteRule() {
+        return {
+            destination: '',
+            destination_type: 'CIDR_BLOCK',
+            next_hop_drg_attachment_id: ''
+        }
+    }
+    /*
+    ** Create Distributions
+    */
+    newDistribution() {
+        return {
+            distribution_type: '',
+            display_name: `${this.display_name} route table ${this.route_tables.length + 1}`,
+            statements: []
+        }
+    }
+    newDistributionStatement() {
+        return {
+            action: 'ACCEPT',
+            match_criteria: {
+                match_type: '',
+                attachment_type: '',
+                drg_attachment_id: ''
+            },
+            priority: 1
+        }
     }
     /*
     ** Clone Functionality
@@ -36,7 +72,7 @@ class Drg extends OkitArtifact {
     ** Name Generation
     */
     getNamePrefix() {
-        return super.getNamePrefix() + 'd';
+        return super.getNamePrefix() + 'drg';
     }
     /*
     ** Static Functionality

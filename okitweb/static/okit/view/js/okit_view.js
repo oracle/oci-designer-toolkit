@@ -2472,6 +2472,10 @@ class OkitArtefactView {
             const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
             details.append('summary').text(label)
             element = details.append('div').attr('class', 'okit-details-body')
+        } else if (type === 'object-input') {
+            const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
+            details.append('summary').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', 'text').attr('class', 'okit-property-value').on('blur', callback)
+            element = details.append('div').attr('class', 'okit-details-body')
         } else if (type === 'row') {
             const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
             element = row.append('div').attr('class', 'td')
