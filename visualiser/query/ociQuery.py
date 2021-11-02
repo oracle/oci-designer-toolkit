@@ -184,14 +184,11 @@ class OCIQuery(OCIConnection):
         response_json = {
             "compartments": compartments
         }
-        logger.info(jsonToFormattedString(response_json))
         compartment_ids = [c["id"] for c in response_json["compartments"]]
         # Set top level compartment parent to None
         for compartment in response_json["compartments"]:
-            # if compartment["compartment_id"] not in compartment_ids:
             if compartment["id"] in query_compartment_ids:
                 compartment["compartment_id"] = None
-        logger.info(jsonToFormattedString(response_json))
         map_keys = self.DISCOVERY_OKIT_MAP.keys()
         for region, resources in discovery_data.items():
             logger.info("Processing Region : {0!s:s} {1!s:s}".format(region, resources.keys()))
