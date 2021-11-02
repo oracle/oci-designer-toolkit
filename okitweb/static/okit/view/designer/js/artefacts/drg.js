@@ -22,8 +22,52 @@ class DrgView extends OkitArtefactView {
     */
     loadProperties() {
         const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg.html", () => {loadPropertiesSheet(self.artefact);});
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg.html", () => {
+            const drt_tbody = self.addPropertyHTML('drg_route_tables', 'array', 'Route Tables', '', 0, () => self.addRouteTable())
+            loadPropertiesSheet(self.artefact);
+            self.loadRouteTables();
+        });
     }
+
+    loadRouteTables() {
+        this.artefact.route_tables.forEach((e, i) => this.addRouteTableHtml(e, i+1))
+    }
+    addRouteTable() {
+        console.info('Adding Route Table');
+        const route_table = this.artefact.newRouteTable();
+        this.artefact.route_tables.push(route_table);
+        const idx = this.artefact.route_tables.length;
+        this.addRouteTableHtml(route_table, idx);
+    }
+    addRouteTableHtml(route_table, idx) {
+        const id = 'route_table';
+        const row = this.addPropertyHTML('route_tables_tbody', 'row', '', id, idx, () => this.deleteRouteTable(id, idx, route_table));
+        const details = this.addPropertyHTML(row, 'object-input', 'Route Table', 'rt_display_name', idx, (d, i, n) => route_table.display_name = n[i].value);
+        const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
+        let property = undefined
+        // Display Name (Text)
+        // property = this.addPropertyHTML(tbody, 'text', 'Name', 'display_name', idx, (d, i, n) => route_table.display_name = n[i].value);
+        property = d3.select(`#rt_display_name${idx}`)
+        property.attr('value', route_table.display_name)
+        // property.node().value = route_table.display_name
+        // ECMP Enable (Checkbox)
+        property = this.addPropertyHTML(tbody, 'checkbox', 'ECMP Enabled', 'is_ecmp_enabled', idx, (d, i, n) => route_table.is_ecmp_enabled = n[i].checked);
+        property.attr('checked', route_table.is_ecmp_enabled)
+        property.node().checked = route_table.is_ecmp_enabled
+        // Distribution (Select)
+        property = this.addPropertyHTML(tbody, 'select', 'Route Distribution', 'import_drg_route_distribution_id', idx, (d, i, n) => route_table.import_drg_route_distribution_id = n[i].value);
+        this.loadRouteDistribution(property)
+        property.attr('value', route_table.import_drg_route_distribution_id)
+        property.node().value = route_table.import_drg_route_distribution_id
+        // Rules
+        property = this.addPropertyHTML(details, 'array', 'Rules', '', 0, () => self.addRouteRule())
+    }
+    deleteRouteTable(id, idx, route_table) {
+        this.artefact.route_tables = this.artefact.route_tables.filter((rt) => rt !== route_table)
+        $(`#${id}${idx}_row`).remove()
+    }
+    
+    loadRouteDistribution(parent) {}
     /*
     ** Load and display Value Proposition
     */
@@ -37,7 +81,6 @@ class DrgView extends OkitArtefactView {
         return Drg.getArtifactReference();
     }
     static getDropTargets() {
-        // TODO: Return List of Artefact Drop Targets Parent Object Reference Names e.g. VirtualCloudNetwork for a Internet Gateway
         return [Compartment.getArtifactReference()];
     }
 }
