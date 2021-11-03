@@ -1,0 +1,40 @@
+{% if read_only %}
+# ------ Read DRG Route Table
+data "oci_core_drg_route_tables" "{{ resource_name }}" {
+    # Required
+    drg_id = {{ drg_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+}
+{% else %}
+# ------ Create DRG Route Table
+resource "oci_core_drg_route_table" "{{ resource_name }}" {
+    #Required
+    drg_id = {{ drg_id }}
+    #Optional
+    display_name = {{ display_name | safe }}
+{% if import_drg_route_distribution_id is defined %}
+    import_drg_route_distribution_id = {{ import_drg_route_distribution_id | safe }}
+{% endif %}
+{% if is_ecmp_enabled is defined %}
+    is_ecmp_enabled = {{ is_ecmp_enabled | safe }}
+{% endif %}
+{% if defined_tags is defined %}
+    defined_tags = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+
+locals {
+    {{ resource_name }}_id = oci_core_drg_route_table.{{ resource_name }}.id
+}
+{% endif %}

@@ -177,6 +177,10 @@ class OCIGenerator(object):
             self.renderDRG(drg)
         for drg_attachment in self.visualiser_json.get('drg_attachments', []):
             self.renderDRGAttachment(drg_attachment)
+        for drg in self.visualiser_json.get('drgs', []):
+            for rt in drg.get('route_tables', []):
+                rt['drg_id'] = drg['id']
+                self.renderDRGRouteTable(rt)
         # -- IPSec Connections
         for ipsec_connection in self.visualiser_json.get('ipsec_connections', []):
             self.renderIPSecConnection(ipsec_connection)
@@ -772,6 +776,37 @@ class OCIGenerator(object):
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("drg.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
+    def renderDRGRouteTable(self, resource):
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(resource['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = resource['display_name']
+        # Process Dynamic Routing Gateway Data
+        logger.info('Processing DRG Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- DRG Id
+        self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['drg_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # --- Optional
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("drg_route_table.jinja2")
         self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
         logger.debug(self.create_sequence[-1])
         return
