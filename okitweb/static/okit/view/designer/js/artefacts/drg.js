@@ -11,6 +11,8 @@ class DrgView extends OkitArtefactView {
     constructor(artefact=null, json_view) {
         if (!json_view.drgs) json_view.drgs = [];
         super(artefact, json_view);
+        this.route_table_idx = 0;
+        this.route_rule_idx = [0];
     }
     get parent_id() {return this.artefact.compartment_id;}
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
@@ -23,7 +25,7 @@ class DrgView extends OkitArtefactView {
     loadProperties() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg.html", () => {
-            const drt_tbody = self.addPropertyHTML('drg_route_tables', 'array', 'Route Tables', '', 0, () => self.addRouteTable())
+            const drt_tbody = self.addPropertyHTML('drg_route_tables', 'array', 'Route Tables', 'route_tables', '', () => self.addRouteTable())
             loadPropertiesSheet(self.artefact);
             self.loadRouteTables();
         });
@@ -31,17 +33,27 @@ class DrgView extends OkitArtefactView {
 
     loadRouteTables() {
         this.artefact.route_tables.forEach((e, i) => this.addRouteTableHtml(e, i+1))
+        this.route_table_idx = this.artefact.route_tables.length
+        this.route_rule_idx = Array.from({length: this.route_table_idx + 1}, () => 1)
+        console.info('Route Table Index', this.route_table_idx)
+        console.info('Route Rules Index', this.route_rule_idx)
     }
     addRouteTable() {
         console.info('Adding Route Table');
         const route_table = this.artefact.newRouteTable();
         this.artefact.route_tables.push(route_table);
-        const idx = this.artefact.route_tables.length;
-        this.addRouteTableHtml(route_table, idx);
+        // const idx = this.artefact.route_tables.length;
+        this.route_table_idx += 1
+        if (this.route_rule_idx.length <= this.route_table_idx) this.route_rule_idx.push(1)
+        console.info('Route Table Index', this.route_table_idx)
+        console.info('Route Rules Index', this.route_rule_idx)
+        this.addRouteTableHtml(route_table, this.route_table_idx);
     }
     addRouteTableHtml(route_table, idx) {
+        const self = this
         const id = 'route_table';
-        const row = this.addPropertyHTML('route_tables_tbody', 'row', '', id, idx, () => this.deleteRouteTable(id, idx, route_table));
+        // const row = this.addPropertyHTML('route_tables_tbody', 'row', '', id, idx, () => this.deleteRouteTable(id, idx, route_table));
+        const row = this.addPropertyHTML(this.tbodyId('route_tables', ''), 'row', '', id, idx, () => this.deleteRouteTable(id, idx, route_table));
         const details = this.addPropertyHTML(row, 'object-input', 'Route Table', 'rt_display_name', idx, (d, i, n) => route_table.display_name = n[i].value);
         const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
         let property = undefined
@@ -60,14 +72,52 @@ class DrgView extends OkitArtefactView {
         property.attr('value', route_table.import_drg_route_distribution_id)
         property.node().value = route_table.import_drg_route_distribution_id
         // Rules
-        property = this.addPropertyHTML(details, 'array', 'Rules', '', 0, () => self.addRouteRule())
+        property = this.addPropertyHTML(details, 'array', 'Rules', 'route_rules', idx, () => self.addRouteRule(route_table, idx))
+        self.loadRouteRules(route_table, idx)
     }
     deleteRouteTable(id, idx, route_table) {
         this.artefact.route_tables = this.artefact.route_tables.filter((rt) => rt !== route_table)
         $(`#${id}${idx}_row`).remove()
     }
-    
+    loadRouteRules(route_table, rt_idx) {
+        route_table.rules.forEach((e, i) => this.addRouteRuleHtml(e, i+1, route_table, rt_idx))
+        this.route_rule_idx[rt_idx] = route_table.rules.length
+        console.info('Route Table Index', this.route_table_idx)
+        console.info('Route Rules Index', this.route_rule_idx)
+    }
+    addRouteRule(route_table, rt_idx) {
+        console.info('Add Route Rule', rt_idx)
+        const route_rule = this.artefact.newRouteRule();
+        route_table.rules.push(route_rule);
+        this.route_rule_idx[rt_idx] += 1;
+        console.info('Route Table Index', this.route_table_idx)
+        console.info('Route Rules Index', this.route_rule_idx)
+        this.addRouteRuleHtml(route_rule, this.route_rule_idx[rt_idx], route_table, rt_idx)
+    }
+    addRouteRuleHtml(route_rule, idx, route_table, rt_idx) {
+        const self = this
+        const id = this.tbodyId('route_rule', rt_idx);
+        const row = this.addPropertyHTML(this.tbodyId('route_rules', rt_idx), 'row', '', id, idx, () => this.deleteRouteRule(id, idx, route_rule, route_table));
+        // const details = this.addPropertyHTML(row, 'object-input', 'Route Rule', 'rt_display_name', idx, (d, i, n) => route_table.display_name = n[i].value);
+        const details = this.addPropertyHTML(row, 'object', 'Rule', id, idx);
+        const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
+        let property = undefined
+        // Destination (CIDR)
+        property = this.addPropertyHTML(tbody, 'ipv4_cidr', 'Destination', 'destination', idx, (d, i, n) => {n[i].reportValidity(); route_rule.destination = n[i].value});
+        property.attr('value', route_rule.destination)
+        // DRG Attachment (Select)
+        property = this.addPropertyHTML(tbody, 'select', 'Next Hop', 'next_hop_drg_attachment_id', idx, (d, i, n) => route_rule.next_hop_drg_attachment_id = n[i].value);
+        this.loadDrgAttachment(property)
+        property.attr('value', route_rule.next_hop_drg_attachment_id)
+        property.node().value = route_rule.next_hop_drg_attachment_id
+    }
+    deleteRouteRule(id, idx, route_rule, route_table) {
+        route_table.rules = route_table.rules.filter((rr) => rr !== route_rule)
+        $(`#${id}${idx}_row`).remove()
+
+    }    
     loadRouteDistribution(parent) {}
+    loadDrgAttachment(parent) {}
     /*
     ** Load and display Value Proposition
     */
