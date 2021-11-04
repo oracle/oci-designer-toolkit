@@ -25,12 +25,65 @@ class DrgView extends OkitArtefactView {
     loadProperties() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/drg.html", () => {
+            $('#optional_properties_div').addClass('hidden')
             const drt_tbody = self.addPropertyHTML('drg_route_tables', 'array', 'Route Tables', 'route_tables', '', () => self.addRouteTable())
+            const dd_tbody = self.addPropertyHTML('drg_route_distributions', 'array', 'Route Distributions', 'route_distributions', '', () => self.addRouteDistribution())
             loadPropertiesSheet(self.artefact);
+            self.loadRouteDistributions();
             self.loadRouteTables();
         });
     }
-
+    // Distributions
+    loadRouteDistributions() {
+        this.artefact.route_distributions.forEach((e, i) => this.addRouteDistributionHtml(e, i+1))
+        this.route_distribution_idx = this.artefact.route_distributions.length
+        this.distribution_statement_idx = Array.from({length: this.route_distribution_idx + 1}, () => 1)
+        console.info('Route Distribution Index', this.route_distribution_idx)
+        console.info('Route Rules Index', this.distribution_statement_idx)
+    }
+    addRouteDistribution() {
+        console.info('Adding Route Distribution');
+        const route_distribution = this.artefact.newRouteDistribution();
+        this.artefact.route_distributions.push(route_distribution);
+        // const idx = this.artefact.route_distributions.length;
+        this.route_distribution_idx += 1
+        if (this.distribution_statement_idx.length <= this.route_distribution_idx) this.distribution_statement_idx.push(1)
+        console.info('Route Distribution Index', this.route_distribution_idx)
+        console.info('Route Rules Index', this.distribution_statement_idx)
+        this.addRouteDistributionHtml(route_distribution, this.route_distribution_idx);
+    }
+    addRouteDistributionHtml(route_distribution, idx) {
+        const self = this
+        const id = 'route_distribution';
+        // const row = this.addPropertyHTML('route_distributions_tbody', 'row', '', id, idx, () => this.deleteRouteDistribution(id, idx, route_distribution));
+        const row = this.addPropertyHTML(this.tbodyId('route_distributions', ''), 'row', '', id, idx, () => this.deleteRouteDistribution(id, idx, route_distribution));
+        const details = this.addPropertyHTML(row, 'object-input', 'Route Distribution', 'rt_display_name', idx, (d, i, n) => route_distribution.display_name = n[i].value);
+        const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
+        let property = undefined
+        // Display Name (Text)
+        // property = this.addPropertyHTML(tbody, 'text', 'Name', 'display_name', idx, (d, i, n) => route_distribution.display_name = n[i].value);
+        property = d3.select(`#rt_display_name${idx}`)
+        property.attr('value', route_distribution.display_name)
+        // property.node().value = route_distribution.display_name
+        // ECMP Enable (Checkbox)
+        property = this.addPropertyHTML(tbody, 'checkbox', 'ECMP Enabled', 'is_ecmp_enabled', idx, (d, i, n) => route_distribution.is_ecmp_enabled = n[i].checked);
+        property.attr('checked', route_distribution.is_ecmp_enabled)
+        property.node().checked = route_distribution.is_ecmp_enabled
+        // Distribution (Select)
+        property = this.addPropertyHTML(tbody, 'select', 'Route Distribution', 'import_drg_route_distribution_id', idx, (d, i, n) => route_distribution.import_drg_route_distribution_id = n[i].value);
+        this.loadRouteDistribution(property)
+        property.attr('value', route_distribution.import_drg_route_distribution_id)
+        property.node().value = route_distribution.import_drg_route_distribution_id
+        // Rules
+        property = this.addPropertyHTML(details, 'array', 'Rules', 'distribution_statements', idx, () => self.addDistributionStatement(route_distribution, idx))
+        self.loadDistributionStatements(route_distribution, idx)
+    }
+    deleteRouteDistribution(id, idx, route_distribution) {
+        this.artefact.route_distributions = this.artefact.route_distributions.filter((rt) => rt !== route_distribution)
+        $(`#${id}${idx}_row`).remove()
+    }
+    loadDistributionStatements(route_distribution, d_idx) {}
+    // Route Tables
     loadRouteTables() {
         this.artefact.route_tables.forEach((e, i) => this.addRouteTableHtml(e, i+1))
         this.route_table_idx = this.artefact.route_tables.length
