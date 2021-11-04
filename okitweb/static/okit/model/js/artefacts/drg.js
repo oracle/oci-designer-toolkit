@@ -44,7 +44,7 @@ class Drg extends OkitArtifact {
     /*
     ** Create Distributions
     */
-    newDistribution() {
+    newRouteDistribution() {
         return {
             distribution_type: '',
             display_name: `${this.display_name} route table ${this.route_tables.length + 1}`,

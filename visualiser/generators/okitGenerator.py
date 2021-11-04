@@ -795,13 +795,18 @@ class OCIGenerator(object):
         # ---- Read Only
         self.jinja2_variables['read_only'] = resource.get('read_only', False)
         # --- Required
-        # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # # ---- Compartment Id
+        # self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
         # ---- DRG Id
         self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['drg_id']]))
+        # ---- Distribution Id
+        # self.jinja2_variables["import_drg_route_distribution_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['import_drg_route_distribution_id']]))
         # ---- Display Name
         self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # ---- ECMP Enabled
+        self.addJinja2Variable("is_ecmp_enabled", resource["is_ecmp_enabled"], standardisedName)
         # --- Optional
+        # ---- Rules
         # ---- Tags
         self.renderTags(resource)
 
