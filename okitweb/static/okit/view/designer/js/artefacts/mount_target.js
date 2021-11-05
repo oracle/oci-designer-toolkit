@@ -86,10 +86,10 @@ class MountTargetView extends OkitArtefactView {
         property.attr('value', fs_export.options.access)
         property.node().value = fs_export.options.access
 
-        // Uid (Text)
+        // Uid (Number)
         property = this.addPropertyHTML(tbody, 'number', 'Anonymous GID', 'anonymous_gid', idx, (d, i, n) => fs_export.options.anonymous_gid = n[i].value, {min: 0, max: 65534});
         property.attr('value', fs_export.options.anonymous_gid)
-        // Gid (Text)
+        // Gid (Number)
         property = this.addPropertyHTML(tbody, 'number', 'Anonymous UID', 'anonymous_uid', idx, (d, i, n) => fs_export.options.anonymous_uid = n[i].value, {min: 0, max: 65534});
         property.attr('value', fs_export.options.anonymous_uid)
         // Squash (Select)

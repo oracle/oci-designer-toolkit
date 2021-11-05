@@ -2478,20 +2478,20 @@ class OkitArtefactView {
             details.append('summary').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', 'text').attr('class', 'okit-property-value').on('blur', callback)
             element = details.append('div').attr('class', 'okit-details-body')
         } else if (type === 'row') {
-            const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
+            const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
             element = row.append('div').attr('class', 'td')
             row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
         } else if (type === 'properties') {
             const table = parent.append('div').attr('class', 'table okit-table okit-properties-table')
             element = table.append('div').attr('class', 'tbody')
         } else if (type === 'checkbox') {
-            const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
+            const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
             row.append('div').attr('class', 'td')
             const cell = row.append('div').attr('class', 'td')
             element = cell.append('input').attr('type', 'checkbox').attr('id', `${id}${idx}`).attr('class', 'okit-property-value').on('input', callback)
             cell.append('label').attr('for', `${id}${idx}`).text(label)
         } else {
-            const row = parent.append('div').attr('class', 'tr').attr('id', `${id}${idx}_row`)
+            const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
             row.append('div').attr('class', 'td').text(label)
             if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
                 element = row.append('div').attr('class', 'td').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
@@ -2510,6 +2510,7 @@ class OkitArtefactView {
         return element;
     }
     tbodyId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`
+    trId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}${idx}_row`
     // generateTBodyId(id, idx) {return `${id.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`}
 }
 

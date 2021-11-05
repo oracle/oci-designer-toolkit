@@ -13,6 +13,8 @@ class DrgView extends OkitArtefactView {
         super(artefact, json_view);
         this.route_table_idx = 0;
         this.route_rule_idx = [0];
+        this.route_distribution_idx = 0;
+        this.distribution_statement_idx = [0];
     }
     get parent_id() {return this.artefact.compartment_id;}
     get parent() {return this.getJsonView().getCompartment(this.parent_id);}
@@ -49,7 +51,7 @@ class DrgView extends OkitArtefactView {
         this.route_distribution_idx += 1
         if (this.distribution_statement_idx.length <= this.route_distribution_idx) this.distribution_statement_idx.push(1)
         console.info('Route Distribution Index', this.route_distribution_idx)
-        console.info('Route Rules Index', this.distribution_statement_idx)
+        console.info('Route Statement Index', this.distribution_statement_idx)
         this.addRouteDistributionHtml(route_distribution, this.route_distribution_idx);
     }
     addRouteDistributionHtml(route_distribution, idx) {
@@ -57,32 +59,83 @@ class DrgView extends OkitArtefactView {
         const id = 'route_distribution';
         // const row = this.addPropertyHTML('route_distributions_tbody', 'row', '', id, idx, () => this.deleteRouteDistribution(id, idx, route_distribution));
         const row = this.addPropertyHTML(this.tbodyId('route_distributions', ''), 'row', '', id, idx, () => this.deleteRouteDistribution(id, idx, route_distribution));
-        const details = this.addPropertyHTML(row, 'object-input', 'Route Distribution', 'rt_display_name', idx, (d, i, n) => route_distribution.display_name = n[i].value);
+        const details = this.addPropertyHTML(row, 'object-input', 'Route Distribution', 'rd_display_name', idx, (d, i, n) => route_distribution.display_name = n[i].value);
         const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
         let property = undefined
         // Display Name (Text)
         // property = this.addPropertyHTML(tbody, 'text', 'Name', 'display_name', idx, (d, i, n) => route_distribution.display_name = n[i].value);
-        property = d3.select(`#rt_display_name${idx}`)
+        property = d3.select(`#rd_display_name${idx}`)
         property.attr('value', route_distribution.display_name)
         // property.node().value = route_distribution.display_name
-        // ECMP Enable (Checkbox)
-        property = this.addPropertyHTML(tbody, 'checkbox', 'ECMP Enabled', 'is_ecmp_enabled', idx, (d, i, n) => route_distribution.is_ecmp_enabled = n[i].checked);
-        property.attr('checked', route_distribution.is_ecmp_enabled)
-        property.node().checked = route_distribution.is_ecmp_enabled
-        // Distribution (Select)
-        property = this.addPropertyHTML(tbody, 'select', 'Route Distribution', 'import_drg_route_distribution_id', idx, (d, i, n) => route_distribution.import_drg_route_distribution_id = n[i].value);
-        this.loadRouteDistribution(property)
-        property.attr('value', route_distribution.import_drg_route_distribution_id)
-        property.node().value = route_distribution.import_drg_route_distribution_id
-        // Rules
-        property = this.addPropertyHTML(details, 'array', 'Rules', 'distribution_statements', idx, () => self.addDistributionStatement(route_distribution, idx))
+        // Distribution Type (Select)
+        property = this.addPropertyHTML(tbody, 'select', 'Distribution Type', 'distribution_type', idx, (d, i, n) => route_distribution.distribution_type = n[i].value);
+        this.loadDistributionTypes(property)
+        property.attr('value', route_distribution.distribution_type)
+        property.node().value = route_distribution.distribution_type
+        // Statements
+        property = this.addPropertyHTML(details, 'array', 'Statements', 'distribution_statements', idx, () => self.addDistributionStatement(route_distribution, idx))
         self.loadDistributionStatements(route_distribution, idx)
     }
     deleteRouteDistribution(id, idx, route_distribution) {
         this.artefact.route_distributions = this.artefact.route_distributions.filter((rt) => rt !== route_distribution)
         $(`#${id}${idx}_row`).remove()
     }
-    loadDistributionStatements(route_distribution, d_idx) {}
+    loadDistributionStatements(route_distribution, d_idx) {
+        route_distribution.statements.forEach((e, i) => this.addDistributionStatementHtml(e, i+1, route_distribution, d_idx))
+        this.distribution_statement_idx[d_idx] = route_distribution.statements.length
+        console.info('Route Distribution Index', this.route_distribution_idx)
+        console.info('Route Statement Index', this.distribution_statement_idx)
+    }
+    addDistributionStatement(route_distribution, d_idx) {
+        console.info('Add Distribution Statement', route_distribution)
+        const statement = this.artefact.newDistributionStatement()
+        route_distribution.statements.push(statement)
+        this.distribution_statement_idx[d_idx] += 1
+        console.info('Route Distribution Index', this.route_distribution_idx)
+        console.info('Route Statement Index', this.distribution_statement_idx)
+        this.addDistributionStatementHtml(statement, this.distribution_statement_idx[d_idx], route_distribution, d_idx)
+    }
+    addDistributionStatementHtml(statement, idx, route_distribution, d_idx) {
+        const self = this
+        const id = this.tbodyId('statement', d_idx)
+        const row = this.addPropertyHTML(this.tbodyId('distribution_statements', d_idx), 'row', '', id, idx, () => this.deleteDistributionStatement(id, idx, statement, route_distribution));
+        const details = this.addPropertyHTML(row, 'object', 'Statement', id, idx);
+        const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
+        let property = undefined
+        // Action (Select)
+        property = this.addPropertyHTML(tbody, 'select', 'Action', 'action', idx, (d, i, n) => statement.action = n[i].value);
+        this.loadStatementActions(property)
+        property.attr('value', statement.action)
+        property.node().value = statement.action
+        // Match Type (Select)
+        property = this.addPropertyHTML(tbody, 'select', 'Match Type', 'match_type', idx, (d, i, n) => {
+            statement.match_criteria.match_type = n[i].value
+            $(`#${this.trId('attachment_type', idx)}`).addClass('collapsed')
+            $(`#${this.trId('drg_attachment_id', idx)}`).addClass('collapsed')
+            $(`#${this.trId(statement.match_criteria.match_type === 'DRG_ATTACHMENT_ID' ? 'drg_attachment_id' : 'attachment_type', idx)}`).removeClass('collapsed')
+        });
+        this.loadMatchTypes(property)
+        property.attr('value', statement.match_criteria.match_type)
+        property.node().value = statement.match_criteria.match_type
+        // Attachment Type (Select)
+        property = this.addPropertyHTML(tbody, 'select', 'Attachment Type', 'attachment_type', idx, (d, i, n) => statement.match_criteria.attachment_type = n[i].value);
+        this.loadAttachmentTypes(property)
+        property.attr('value', statement.match_criteria.attachment_type)
+        property.node().value = statement.match_criteria.attachment_type
+        // Attachment id (Select)
+        property = this.addPropertyHTML(tbody, 'select', 'DRG Attachment', 'drg_attachment_id', idx, (d, i, n) => statement.match_criteria.drg_attachment_id = n[i].value);
+        this.loadDrgAttachment(property)
+        property.attr('value', statement.match_criteria.drg_attachment_id)
+        property.node().value = statement.match_criteria.drg_attachment_id
+        // Priority (Number)
+        property = this.addPropertyHTML(tbody, 'number', 'Priority', 'priority', idx, (d, i, n) => statement.priority = n[i].value, {min: 0, max: 65534});
+        property.attr('value', statement.priority)
+        // Set initial display
+        $(`#${this.trId('attachment_type', idx)}`).addClass('collapsed')
+        $(`#${this.trId('drg_attachment_id', idx)}`).addClass('collapsed')
+        $(`#${this.trId(statement.match_criteria.match_type === 'DRG_ATTACHMENT_ID' ? 'drg_attachment_id' : 'attachment_type', idx)}`).removeClass('collapsed')
+    }
+    deleteDistributionStatement(id, idx, statement, route_distribution) {}
     // Route Tables
     loadRouteTables() {
         this.artefact.route_tables.forEach((e, i) => this.addRouteTableHtml(e, i+1))
@@ -168,9 +221,23 @@ class DrgView extends OkitArtefactView {
         route_table.rules = route_table.rules.filter((rr) => rr !== route_rule)
         $(`#${id}${idx}_row`).remove()
 
-    }    
+    }
+    // Helper Functions
     loadRouteDistribution(parent) {}
     loadDrgAttachment(parent) {}
+    loadDistributionTypes(parent) {
+        ['IMPORT'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v.replaceAll('_', ' '))))
+    }
+    loadStatementActions(parent) {
+        ['ACCEPT'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v.replaceAll('_', ' '))))
+    }
+    loadMatchTypes(parent) {
+        ['DRG_ATTACHMENT_TYPE', 'DRG_ATTACHMENT_ID'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v.replaceAll('_', ' '))))
+    }
+    loadAttachmentTypes(parent) {
+        ['VCN', 'IPSEC_TUNNEL', 'REMOTE_PEERING_CONNECTION', 'VIRTUAL_CIRCUIT'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v.replaceAll('_', ' '))))
+    }
+
     /*
     ** Load and display Value Proposition
     */
