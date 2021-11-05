@@ -46,8 +46,8 @@ class Drg extends OkitArtifact {
     */
     newRouteDistribution() {
         return {
-            distribution_type: '',
-            display_name: `${this.display_name} route table ${this.route_tables.length + 1}`,
+            distribution_type: 'IMPORT',
+            display_name: `${this.display_name} route distribution ${this.route_tables.length + 1}`,
             statements: []
         }
     }
@@ -55,8 +55,8 @@ class Drg extends OkitArtifact {
         return {
             action: 'ACCEPT',
             match_criteria: {
-                match_type: '',
-                attachment_type: '',
+                match_type: 'DRG_ATTACHMENT_ID',
+                attachment_type: 'VCN',
                 drg_attachment_id: ''
             },
             priority: 1
