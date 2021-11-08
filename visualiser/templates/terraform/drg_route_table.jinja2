@@ -37,4 +37,15 @@ resource "oci_core_drg_route_table" "{{ resource_name }}" {
 locals {
     {{ resource_name }}_id = oci_core_drg_route_table.{{ resource_name }}.id
 }
+# ------ Create DRG Route Table Rules
+{% for rule in drg_route_rules %}
+resource "oci_core_drg_route_table_route_rule" "{{ resource_name }}Rule{{ loop.index }}" {
+    #Required
+    drg_route_table_id = local.{{ resource_name }}_id
+    destination = {{ rule.destination | safe }}
+    destination_type = {{ rule.destination_type | safe }}
+    next_hop_drg_attachment_id = {{ rule.next_hop_drg_attachment_id | safe }}
+
+}
+{% endfor %}
 {% endif %}

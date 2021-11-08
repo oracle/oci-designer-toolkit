@@ -178,6 +178,9 @@ class OCIGenerator(object):
         for drg_attachment in self.visualiser_json.get('drg_attachments', []):
             self.renderDRGAttachment(drg_attachment)
         for drg in self.visualiser_json.get('drgs', []):
+            for dist in drg.get('route_distributions', []):
+                dist['drg_id'] = drg['id']
+                self.renderDRGRouteDistribution(dist)
             for rt in drg.get('route_tables', []):
                 rt['drg_id'] = drg['id']
                 self.renderDRGRouteTable(rt)
@@ -780,6 +783,55 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    def renderDRGRouteDistribution(self, resource):
+        self.id_name_map[self.formatOcid(resource["id"])] = resource.get("display_name", resource.get("name", "Unknown"))
+        # Reset Variables
+        self.initialiseJinja2Variables()
+        # Read Data
+        standardisedName = self.standardiseResourceName(resource['display_name'])
+        resourceName = '{0:s}'.format(standardisedName)
+        self.jinja2_variables['resource_name'] = resourceName
+        self.jinja2_variables['output_name'] = resource['display_name']
+        # Process Dynamic Routing Gateway Data
+        logger.info('Processing DRG Distribution Information {0!s:s}'.format(standardisedName))
+        # -- Define Variables
+        # --- Read / Create
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # --- Required
+        # # ---- Compartment Id
+        # self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- DRG Id
+        self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['drg_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # ---- Distribution Type
+        self.addJinja2Variable("distribution_type", resource["distribution_type"], standardisedName)
+        # --- Optional
+        # ---- Rules
+        jinja2_statements = []
+        for rule in resource.get('rules', []):
+            jinja2_statements.append({
+                "action": self.formatJinja2Value(rule["action"]),
+                "priority": self.formatJinja2Value(rule["priority"]),
+                "match_criteria": {
+                    "match_type": self.formatJinja2Value(rule["match_criteria"]["match_type"]),
+                }
+            })
+            if rule["match_criteria"]["match_type"] == "DRG_ATTACHMENT_ID":
+                jinja2_statements[-1]["match_criteria"]["drg_attachment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[rule["match_criteria"]['drg_attachment_id']]))
+            else:
+                jinja2_statements[-1]["match_criteria"]["attachment_type"] = self.formatJinja2Value(rule["match_criteria"]["attachment_type"])
+        self.jinja2_variables["drg_distribution_statements"] = jinja2_statements
+        # ---- Tags
+        self.renderTags(resource)
+
+        # -- Render Template
+        jinja2_template = self.jinja2_environment.get_template("drg_route_distribution.jinja2")
+        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        logger.debug(self.create_sequence[-1])
+        return
+
     def renderDRGRouteTable(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
@@ -789,7 +841,7 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
         # Process Dynamic Routing Gateway Data
-        logger.info('Processing DRG Information {0!s:s}'.format(standardisedName))
+        logger.info('Processing DRG Route Table Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Read / Create
         # ---- Read Only
@@ -800,13 +852,22 @@ class OCIGenerator(object):
         # ---- DRG Id
         self.jinja2_variables["drg_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['drg_id']]))
         # ---- Distribution Id
-        # self.jinja2_variables["import_drg_route_distribution_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['import_drg_route_distribution_id']]))
+        if len(resource["import_drg_route_distribution_id"]):
+            self.jinja2_variables["import_drg_route_distribution_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['import_drg_route_distribution_id']]))
         # ---- Display Name
         self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
         # ---- ECMP Enabled
         self.addJinja2Variable("is_ecmp_enabled", resource["is_ecmp_enabled"], standardisedName)
         # --- Optional
         # ---- Rules
+        jinja2_rules = []
+        for rule in resource.get('rules', []):
+            jinja2_rules.append({
+                "destination": self.formatJinja2Value(rule["destination"]),
+                "destination_type": self.formatJinja2Value(rule["destination_type"]),
+                "next_hop_drg_attachment_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[rule['next_hop_drg_attachment_id']]))
+            })
+        self.jinja2_variables["drg_route_rules"] = jinja2_rules
         # ---- Tags
         self.renderTags(resource)
 
