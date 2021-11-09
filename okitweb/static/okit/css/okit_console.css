@@ -954,9 +954,9 @@ li a.parent-item:hover {
     margin: 0 !important;;
     overflow: hidden !important;
     width: 0 !important;
-    min-width: 0 !important;
-    max-width: 0!important;
-    transition: transform 0.25s;
+    /* min-width: 0;
+    max-width: 0; */
+    transition: transform 0.25s, width 20s;
     transform: translateX(100%);
 }
 
