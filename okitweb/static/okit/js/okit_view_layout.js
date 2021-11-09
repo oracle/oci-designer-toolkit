@@ -31,6 +31,7 @@ function handleViewSelect(e) {
 function hideAllViewDivs() {
     $("#center-panels > div").each((i, e) => $(e).addClass('hidden'))
     $("#zoom_controls > div").each((i, e) => $(e).addClass('hidden'))
+    slideRightPanel()
 }
 
 function handleSwitchToCompartmentView(e) {

@@ -503,8 +503,12 @@ const slideLeftPanel = (id) => {
     $(`.okit-left-side-panel:not(.hidden)`).length === 0 ? $('#designer_left_column').addClass('okit-slide-hide-left') : $('#designer_left_column').removeClass('okit-slide-hide-left')
 }
 const slideRightPanel = (id) => {
-    $(`.okit-right-side-panel:not(#${id})`).addClass('okit-slide-hide-right')
-    $(`#${id}`).toggleClass('okit-slide-hide-right')
+    if (id) {
+        $(`.okit-right-side-panel:not(#${id})`).addClass('okit-slide-hide-right')
+        $(`#${id}`).toggleClass('okit-slide-hide-right')
+    } else {
+        $(`.okit-right-side-panel`).addClass('okit-slide-hide-right')
+    }
 }
 /* 
 ** Settings
