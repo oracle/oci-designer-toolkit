@@ -479,15 +479,15 @@ rect.highlight-properties {
 }
 
 .read-only > g {
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 .read-only > rect {
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 .read-only > text {
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 /*
