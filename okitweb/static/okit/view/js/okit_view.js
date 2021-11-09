@@ -2475,7 +2475,7 @@ class OkitArtefactView {
             element = details.append('div').attr('class', 'okit-details-body')
         } else if (type === 'object-input') {
             const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
-            details.append('summary').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', 'text').attr('class', 'okit-property-value').on('blur', callback)
+            details.append('summary').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').on('blur', callback)
             element = details.append('div').attr('class', 'okit-details-body')
         } else if (type === 'row') {
             const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
@@ -2488,13 +2488,13 @@ class OkitArtefactView {
             const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
             row.append('div').attr('class', 'td')
             const cell = row.append('div').attr('class', 'td')
-            element = cell.append('input').attr('type', 'checkbox').attr('id', `${id}${idx}`).attr('class', 'okit-property-value').on('input', callback)
-            cell.append('label').attr('for', `${id}${idx}`).text(label)
+            element = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
+            cell.append('label').attr('for', this.inputId(id, idx)).text(label)
         } else {
             const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
             row.append('div').attr('class', 'td').text(label)
             if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
-                element = row.append('div').attr('class', 'td').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
+                element = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
                 if (data) {
                     if (data.min) element.attr('min', data.min)
                     if (data.max) element.attr('max', data.max)
@@ -2502,15 +2502,16 @@ class OkitArtefactView {
             } else if (type === 'ipv4_cidr') {
                 const placeholder = '0.0.0.0/0'
                 const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+"
-                element = row.append('div').attr('class', 'td').append('input').attr('name', `${id}${idx}`).attr('id', `${id}${idx}`).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
+                element = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
             } else if (type === 'select') {
-                element = row.append('div').attr('class', 'td').append('select').attr('id', `${id}${idx}`).attr('class', 'okit-property-value').on('change', callback)
+                element = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
             }
         }
         return element;
     }
     tbodyId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`
     trId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}${idx}_row`
+    inputId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}${idx}`
     // generateTBodyId(id, idx) {return `${id.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`}
 }
 

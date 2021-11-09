@@ -28,6 +28,7 @@ class Drg extends OkitArtifact {
     */
     newRouteTable() {
         return {
+            id: `${this.id}.rt${this.route_tables.length + 1}`,
             display_name: `${this.display_name} route table ${this.route_tables.length + 1}`,
             import_drg_route_distribution_id: '',
             is_ecmp_enabled: false,
@@ -46,6 +47,7 @@ class Drg extends OkitArtifact {
     */
     newRouteDistribution() {
         return {
+            id: `${this.id}.rd${this.route_tables.length + 1}`,
             distribution_type: 'IMPORT',
             display_name: `${this.display_name} route distribution ${this.route_tables.length + 1}`,
             statements: []

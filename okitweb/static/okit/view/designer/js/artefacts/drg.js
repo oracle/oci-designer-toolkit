@@ -214,6 +214,7 @@ class DrgView extends OkitArtefactView {
         // DRG Attachment (Select)
         property = this.addPropertyHTML(tbody, 'select', 'Next Hop', 'next_hop_drg_attachment_id', idx, (d, i, n) => route_rule.next_hop_drg_attachment_id = n[i].value);
         this.loadDrgAttachment(property)
+        // this.getJsonView().loadDrgAttachmentsSelect('next_hop_drg_attachment_id', idx)
         property.attr('value', route_rule.next_hop_drg_attachment_id)
         property.node().value = route_rule.next_hop_drg_attachment_id
     }
@@ -223,8 +224,14 @@ class DrgView extends OkitArtefactView {
 
     }
     // Helper Functions
-    loadRouteDistribution(parent) {}
-    loadDrgAttachment(parent) {}
+    loadRouteDistribution(parent) {
+        parent.selectAll('option').remove()
+        parent.append('option').attr('value', '').text('')
+        this.route_distributions.forEach((rd) => parent.append('option').attr('value', rd.id).text(rd.display_name))
+    }
+    loadDrgAttachment(parent) {
+        this.json_view.getDrgAttachments().forEach((da) => parent.append('option').attr('value', da.id).text(da.display_name))
+    }
     loadDistributionTypes(parent) {
         ['IMPORT'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v.replaceAll('_', ' '))))
     }

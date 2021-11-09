@@ -778,7 +778,7 @@ function displayQueryDialog() {
     let tbody = table.append('div')
         .attr('class', 'tbody');
     // Profile
-    let tr = tbody.append('div')
+    let tr = tbody.append('div').attr('id', 'config_profile_row')
         .attr('class', 'tr');
     tr.append('div')
         .attr('class', 'td')
@@ -802,6 +802,7 @@ function displayQueryDialog() {
             .attr('value', section)
             .text(section);
     }
+    if (okitOciConfig.sections.length === 1 && okitOciConfig.sections[0] === 'InstancePrincipal') $('#config_profile_row').addClass('collapsed')
     // Region Ids
     tr = tbody.append('div')
         .attr('class', 'tr');

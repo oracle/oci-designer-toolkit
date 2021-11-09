@@ -1,0 +1,57 @@
+{% if read_only %}
+# ------ Read DRG Route Distribution
+data "oci_core_drg_route_distributions" "{{ resource_name }}" {
+    # Required
+    drg_id = {{ drg_id }}
+    filter {
+        name = "id"
+        values = [{{ ocid | safe }}]
+    }
+}
+
+locals {
+    {{ resource_name }}_id = {{ ocid | safe }}
+}
+{% else %}
+# ------ Create DRG Route Distribution
+resource "oci_core_drg_route_distribution" "{{ resource_name }}" {
+    #Required
+    drg_id = {{ drg_id }}
+    distribution_type = {{ distribution_type | safe }}
+    #Optional
+    display_name = {{ display_name | safe }}
+{% if defined_tags is defined %}
+    defined_tags = {{ defined_tags | safe }}
+{% endif %}
+{% if freeform_tags is defined %}
+    freeform_tags = {{ freeform_tags | safe }}
+{% endif %}
+}
+
+
+locals {
+    {{ resource_name }}_id = oci_core_drg_route_distribution.{{ resource_name }}.id
+}
+# ------ Create DRG Route Distribution Statemments
+{% for rule in drg_distribution_statementss %}
+resource "oci_core_drg_route_distribution_statement" "{{ resource_name }}Statement{{ loop.index }}" {
+    #Required
+    drg_route_distribution_id = local.{{ resource_name }}_id
+    action = {{ rule.action | safe }}
+    #Optional
+    match_criteria {
+        #Required
+        match_type = {{ rule.match_criteria.match_type | safe }}
+
+        #Optional
+{% if rule.match_criteria.attachment_type is defined %}
+        attachment_type = {{ rule.match_criteria.attachment_type | safe }}
+{% endif %}
+{% if rule.match_criteria.drg_attachment_id is defined %}
+        drg_attachment_id = {{ rule.match_criteria.drg_attachment_id }}
+{% endif %}
+    }
+    priority = {{ rule.priority | safe }}
+
+}{% endfor %}
+{% endif %}
