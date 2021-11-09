@@ -226,11 +226,6 @@ class OCIQuery(OCIConnection):
         return response_json
 
     def dynamic_routing_gateways(self, drgs, resources):
-        logger.info(f'DRG Attachments {jsonToFormattedString(resources["DrgAttachment"])}')
-        logger.info(f'DRG Route Table {jsonToFormattedString(resources["DrgRouteTable"])}')
-        logger.info(f'DRG Route Rule {jsonToFormattedString(resources.get("DrgRouteRule",[]))}')
-        logger.info(f'DRG Distribution {jsonToFormattedString(resources["DrgRouteDistribution"])}')
-        logger.info(f'DRG Distribution Statement {jsonToFormattedString(resources["DrgRouteDistributionStatement"])}')
         for drg in drgs:
             drg["route_tables"] = [r for r in resources.get("DrgRouteTable", []) if r["drg_id"] == drg["id"]]
             for rt in drg["route_tables"]:
