@@ -188,6 +188,7 @@ class OkitTabularJsonView extends OkitJsonView {
                 $('#tabular_view_tab_bar > button').removeClass("okit-tab-active");
                 $(jqId(self.generateTabId(resource_type))).addClass("okit-tab-active");
                 self.loadTabContent(resource_type);
+                slideRightPanel()                
             });
         $('#tabular_view_tab_bar button:first-child').trigger("click");
     }

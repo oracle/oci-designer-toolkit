@@ -23,6 +23,7 @@ python modules are installed and in addition provide a simple flask server that 
     2. [Dynamic Group](#dynamic-group)
     3. [Policies](#policies)
     4. [SSH Tunnel](#ssh-tunnel)
+5. [Install on Oracle Linux](#install-on-oracle-linux)
 
 
 
