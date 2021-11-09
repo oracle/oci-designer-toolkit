@@ -102,7 +102,10 @@ function dragDrop(evt) {
     }
     let palette_artefact_data = JSON.parse(evt.dataTransfer.getData('text/plain'));
     let target = {
-        id: evt.target.id,
+        // id: evt.target.id,
+        id: evt.target.getAttribute('data-okit-id'),
+        element_id: evt.target.id,
+        okit_id: evt.target.getAttribute('data-okit-id'),
         type: evt.target.getAttribute('data-type'),
         compartment_id: evt.target.getAttribute('data-compartment-id'),
         title: palette_artefact_data.title
