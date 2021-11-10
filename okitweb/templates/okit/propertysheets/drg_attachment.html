@@ -3,11 +3,13 @@
 ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
 {% extends "okit/propertysheets/base_property_sheet.html" %}
-{% block title_block %}Bastion{% endblock %}
+{% block title_block %}DRG Attachment{% endblock %}
 {% block required_properties_table_rows_block %}
-    {{ properties_input('CIDR block allowlist', 'client_cidr_block_allow_list', type='ipv4-cidr-list') }}
+    {{ properties_input('Virtual Cloud Network', 'vcn_id', type='select') }}
+    {{ properties_input('Dynamic Routing Gateway', 'drg_id', type='select') }}
 {% endblock %}
 {% block optional_properties_table_rows_block %}
-    {{ properties_input('Session TTL (Seconds)', 'max_session_ttl_in_seconds', type='number') }}
+    {{ properties_input('VCN Route Table', 'route_table_id', type='select') }}
+    {{ properties_input('DRG Route Table', 'drg_route_table_id', type='select') }}
 {% endblock %}
 {% block optional_properties_block %}{% endblock %}

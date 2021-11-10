@@ -74,6 +74,14 @@ $(document).ready(function() {
             okit_tree.draw();
             slideLeftPanel('explorer_panel')
         });
+    // Container
+    d3.select(d3Id('console_left_bar')).append('div')
+        .attr('id', 'toggle_local_button')
+        .attr('class', 'okit-pointer-cursor folders okit-toolbar-button')
+        .attr('title', 'Container Files')
+        .on('click', function () {
+            slideLeftPanel('local_panel')
+        });
     // Templates
     d3.select(d3Id('console_left_bar')).append('div')
         .attr('id', 'toggle_templates_button')
@@ -90,25 +98,6 @@ $(document).ready(function() {
         .on('click', function () {
             slideLeftPanel('git_panel')
         });
-    if (a2c_mode) {
-        // Container
-        d3.select(d3Id('console_left_bar')).append('div')
-            .attr('id', 'toggle_local_button')
-            .attr('class', 'okit-pointer-cursor folders okit-toolbar-button')
-            .attr('title', 'Container Files')
-            .on('click', function () {
-                slideLeftPanel('local_panel')
-                // let open = $(this).hasClass('okit-bar-panel-displayed');
-                // slideLeftPanelsOffScreen();
-                // if (!open) {
-                //     $('#local_panel').removeClass('hidden');
-                //     $(this).addClass('okit-bar-panel-displayed');
-                // } else {
-                //     $('#local_panel').empty();
-                // }
-                // checkLeftColumn();
-            });
-    }
 
     console.info('Added Designer Handlers');
 
@@ -209,6 +198,6 @@ $(document).ready(function() {
 
     loadTemplatePanel()
     loadGitPanel()
-    loadFilesystemPanel()
+    loadFileSystemPanel()
 
 });

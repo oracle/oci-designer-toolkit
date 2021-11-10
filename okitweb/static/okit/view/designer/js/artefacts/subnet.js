@@ -169,7 +169,7 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
     getLeftArtifacts() {
-        return [FileStorageSystem.getArtifactReference()];
+        return [FileStorageSystem.getArtifactReference(), MountTarget.getArtifactReference()];
     }
 
     /*

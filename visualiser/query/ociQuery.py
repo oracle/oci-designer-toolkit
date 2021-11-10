@@ -48,6 +48,10 @@ class OCIQuery(OCIConnection):
         "DHCPOptions",
         "Drg",
         "DrgAttachment",
+        "DrgRouteDistribution",
+        "DrgRouteDistributionStatement",
+        "DrgRouteRule",
+        "DrgRouteTable",
         "ExadataInfrastructure",
         "Export",
         "ExportSet",
@@ -97,9 +101,11 @@ class OCIQuery(OCIConnection):
         "DbNode": "db_nodes",
         "DbSystem": "database_systems",
         "DHCPOptions": "dhcp_options",
-        "Drg": "dynamic_routing_gateways",
+        # "Drg": "dynamic_routing_gateways",
+        "Drg": "drgs",
+        "DrgAttachment": "drg_attachments",
         "ExadataInfrastructure": "exadata_infrastructures",
-        "FileSystem": "file_storage_systems",
+        "FileSystem": "file_systems",
         "Group": "groups",
         "Instance": "instances",
         "InstancePool": "instance_pools",
@@ -107,6 +113,7 @@ class OCIQuery(OCIConnection):
         "IPSecConnection": "ipsec_connections",
         "LoadBalancer": "load_balancers",
         "LocalPeeringGateway": "local_peering_gateways",
+        "MountTarget": "mount_targets",
         "MySqlDbSystem": "mysql_database_systems",
         "NatGateway": "nat_gateways",
         "NetworkSecurityGroup": "network_security_groups",
@@ -133,6 +140,7 @@ class OCIQuery(OCIConnection):
         "UPDATING",
         "CREATING",
         "INACTIVE",
+        "ATTACHED",
         "ALLOCATED"
     ]
 
@@ -145,7 +153,6 @@ class OCIQuery(OCIConnection):
     def executeQuery(self, regions, compartments, include_sub_compartments=False, **kwargs):
         logger.info('Request : {0!s:s}'.format(str(regions)))
         logger.info('Request : {0!s:s}'.format(str(compartments)))
-        logger.info('Request : {0!s:s}'.format(str(self.config)))
         logger.info('Request : {0!s:s}'.format(str(include_sub_compartments)))
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
@@ -161,7 +168,7 @@ class OCIQuery(OCIConnection):
         if include_sub_compartments:
             for id in compartments:
                 queried_compartments.extend([c for c in all_compartments if c["id"] in discovery_client.get_subcompartment_ids(id)])
-        response_json = self.convert(response, queried_compartments)
+        response_json = self.convert(response, queried_compartments, compartments)
 
         return response_json
 
@@ -174,14 +181,14 @@ class OCIQuery(OCIConnection):
         #return json.dumps(json.loads(json_str), indent=2)
         return json.loads(json_str)
 
-    def convert(self, discovery_data, compartments):
+    def convert(self, discovery_data, compartments, query_compartment_ids=[]):
         response_json = {
             "compartments": compartments
         }
         compartment_ids = [c["id"] for c in response_json["compartments"]]
         # Set top level compartment parent to None
         for compartment in response_json["compartments"]:
-            if compartment["compartment_id"] not in compartment_ids:
+            if compartment["id"] in query_compartment_ids:
                 compartment["compartment_id"] = None
         map_keys = self.DISCOVERY_OKIT_MAP.keys()
         for region, resources in discovery_data.items():
@@ -192,8 +199,8 @@ class OCIQuery(OCIConnection):
                 if resource_type in map_keys:
                     if resource_type == "Drg":
                         resource_list = self.dynamic_routing_gateways(resource_list, resources)
-                    elif resource_type == "FileSystem":
-                        resource_list = self.file_storage_systems(resource_list, resources)
+                    elif resource_type == "MountTarget":
+                        resource_list = self.mount_targets(resource_list, resources)
                     elif resource_type == "Instance":
                         resource_list = self.instances(resource_list, resources)
                     elif resource_type == "LoadBalancer":
@@ -220,9 +227,15 @@ class OCIQuery(OCIConnection):
 
     def dynamic_routing_gateways(self, drgs, resources):
         for drg in drgs:
-            attachments = [a for a in resources.get("DrgAttachment", []) if a["drg_id"] == drg["id"]]
-            drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""
-            drg["route_table_id"] = attachments[0]["route_table_id"] if len(attachments) else ""
+            drg["route_tables"] = [r for r in resources.get("DrgRouteTable", []) if r["drg_id"] == drg["id"]]
+            for rt in drg["route_tables"]:
+                rt["rules"] = [r for r in resources.get("DrgRouteRule", []) if r["drg_route_table_id"] == rt["id"]]
+            drg["route_distributions"] = [r for r in resources.get("DrgRouteDistribution", []) if r["drg_id"] == drg["id"]]
+            for rd in drg["route_distributions"]:
+                rd["statements"] = [r for r in resources.get("DrgRouteDistributionStatement", []) if r["drg_route_distribution_id"] == rd["id"]]
+            # attachments = [a for a in resources.get("DrgAttachment", []) if a["drg_id"] == drg["id"]]
+            # drg["vcn_id"] = attachments[0]["vcn_id"] if len(attachments) else ""
+            # drg["route_table_id"] = attachments[0]["route_table_id"] if len(attachments) else ""
         return drgs
 
     def file_storage_systems(self, file_storage_systems, resources):
@@ -277,6 +290,13 @@ class OCIQuery(OCIConnection):
                     ip_addresses = [ip for ip in resources.get("PrivateIp", []) if ip["ip_address"] == backend["ip_address"]]
                     lb["instance_ids"].extend([va["instance_id"] for va in resources.get("VnicAttachment", []) if va['vnic_id'] == ip_addresses[0]['vnic_id']] if len(ip_addresses) else [])
         return loadbalancers
+
+    def mount_targets(self, mount_targets, resources):
+        for mt in mount_targets:
+            mt["exports"] = [e for e in resources.get("Export", []) if e["export_set_id"] == mt["export_set_id"]]
+            export_sets = [e for e in resources.get("ExportSet", []) if e["id"] == mt["export_set_id"]]
+            mt["export_set"] = export_sets[0]
+        return mount_targets
 
     def mysql_database_systems(self, database_systems, resources):
         for db_system in database_systems:

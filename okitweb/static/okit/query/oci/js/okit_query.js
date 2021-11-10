@@ -35,13 +35,15 @@ class OkitOCIQuery {
     queryAllResources(request) {
         console.info('------------- All Resources Query --------------------');
         let me = this;
+        const self = this;
         this.region_query_count[request.region] = 1;
         $.ajax({
             type: 'get',
             url: 'oci/query',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify(request),
+            // data: JSON.stringify(request),
+            data: request,
             success: function(resp) {
                 console.log(resp)
                 const response_json = JSON.parse(resp);
