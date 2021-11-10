@@ -73,9 +73,9 @@ def readConfigFileSections(config_file='~/.oci/config'):
         if 'DEFAULT' in config:
             config_sections = ['DEFAULT']
         config_sections.extend(config.sections())
-        logger.info('Config Sections {0!s:s}'.format(config_sections))
     else:
         config_sections = ['InstancePrincipal']
+    logger.info('Config Sections {0!s:s}'.format(config_sections))
     return config_sections
 
 def readGitConfigFile(config_file='~/.oci/git_repositories'):
