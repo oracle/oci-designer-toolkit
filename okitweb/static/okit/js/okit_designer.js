@@ -150,6 +150,7 @@ function handleEnableCreate(event) {
     if (okitJsonModel) {
         Object.values(okitJsonModel).filter((v) => Array.isArray(v)).forEach((v) => v.forEach((r) => r.read_only = false));
         okitJsonModel.title = `${okitJsonModel.title} - Read/Write Copy`;
+        redrawSVGCanvas();
     }
 }
 

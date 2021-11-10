@@ -239,7 +239,7 @@ def ociQuery():
         compartments = request.args.get('compartment_id')
         regions = request.args.get('region')
         region = request.args.get('region')
-        sub_compartments = request.args.get('sub_compartments', default=False)
+        sub_compartments = request.args.get('sub_compartments', default=False).lower() == 'true'
         # query_string = request.query_string
         # parsed_query_string = urllib.parse.unquote(query_string.decode())
         # query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
