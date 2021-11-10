@@ -326,6 +326,7 @@ class OkitJsonView {
     // Dynamic Routing Gateway
     dropDynamicRoutingGatewayView(target) {
         let view_artefact = this.newDynamicRoutingGateway();
+        view_artefact.getArtefact().compartment_id = target.id;
         view_artefact.getArtefact().vcn_id = target.id;
         view_artefact.getArtefact().compartment_id = target.compartment_id;
         view_artefact.recalculate_dimensions = true;
@@ -1401,7 +1402,7 @@ class OkitArtefactView {
             this.addMouseEvents(svg);
             // Add Drag Handling Events
             this.addDragEvents(svg);
-            this.addIconDragEvents(icon);
+            // this.addIconDragEvents(icon);
             // Add Context Menu (Right-Click)
             this.addContextMenu(svg);
             // Add Custom Data Attributes
@@ -1421,6 +1422,7 @@ class OkitArtefactView {
         // const g = parent_svg.append("g")
         //     .attr("transform", `translate(${definition.x}, ${definition.y})`)
         const svg = parent_svg.append("svg")
+            .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
             .attr("id",        definition.id)
             .attr("data-type", this.artefact ? this.artefact.getArtifactReference() : '')
             .attr("x",         definition.x)
@@ -1466,7 +1468,7 @@ class OkitArtefactView {
     drawIcon(svg) {
         const icon = svg.append('g')
             .attr("style", "pointer-events: bounding-box;")
-            .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
+            // .attr("class", this.artefact && this.artefact.read_only ? 'read-only' : '')
         .append("use")
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
@@ -1693,7 +1695,7 @@ class OkitArtefactView {
     drawConnections() {}
 
     drawConnection(start_id, end_id) {
-        if (!this.parent.is_collapsed) {
+        if (this.parent && !this.parent.is_collapsed) {
             const canvas_svg = d3.select(d3Id('canvas-svg'));
             const canvas_rect = d3.select(d3Id('canvas-rect'));
             const svgStartPoint = canvas_svg.node().createSVGPoint();
@@ -2308,6 +2310,7 @@ class OkitArtefactView {
     getRightEdgeChildrenMaxDimensions() {
         let max_dimensions = {height: 0, width: 0};
         for (let group of this.getRightEdgeArtifacts()) {
+            console.info('getFunction', group, this.getArrayFunction(group))
             for(let artefact of this.json_view[this.getArrayFunction(group)]()) {
                 if (artefact.parent_id === this.id) {
                     let dimension = artefact.dimensions;
@@ -2450,6 +2453,66 @@ class OkitArtefactView {
             select.append($('<option>').attr('value', resource.id).text(resource.display_name));
         }
     }
+
+    /*
+    ** Property Creation Routines
+    */
+    addPropertyHTML(parent, type='text', label='', id='', idx=0, callback=undefined, data={}) {
+        let element = undefined;
+        parent = (typeof parent === 'string') ? d3.select(`#${parent}`) : parent
+        // Check to see if we require a collapsable group
+        if (type === 'array') {
+            const table = parent.append('div').attr('class', 'table okit-table')
+            const thead = table.append('div').attr('class', 'thead')
+            const row = thead.append('div').attr('class', 'tr')
+            row.append('div').attr('class', 'th').text(label)
+            row.append('div').attr('class', 'th add-property action-button-background action-button-column').on('click', callback)
+            // element = table.append('div').attr('class', 'tbody').attr('id', `${label.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`)
+            element = table.append('div').attr('class', 'tbody').attr('id', this.tbodyId(id, idx))
+        } else if (type === 'object') {
+            const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
+            details.append('summary').text(label)
+            element = details.append('div').attr('class', 'okit-details-body')
+        } else if (type === 'object-input') {
+            const details = parent.append('details').attr('class', 'okit-details').attr('open', 'open')
+            details.append('summary').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').on('blur', callback)
+            element = details.append('div').attr('class', 'okit-details-body')
+        } else if (type === 'row') {
+            const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
+            element = row.append('div').attr('class', 'td')
+            row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
+        } else if (type === 'properties') {
+            const table = parent.append('div').attr('class', 'table okit-table okit-properties-table')
+            element = table.append('div').attr('class', 'tbody')
+        } else if (type === 'checkbox') {
+            const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
+            row.append('div').attr('class', 'td')
+            const cell = row.append('div').attr('class', 'td')
+            element = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
+            cell.append('label').attr('for', this.inputId(id, idx)).text(label)
+        } else {
+            const row = parent.append('div').attr('class', 'tr').attr('id', this.trId(id, idx))
+            row.append('div').attr('class', 'td').text(label)
+            if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
+                element = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
+                if (data) {
+                    if (data.min) element.attr('min', data.min)
+                    if (data.max) element.attr('max', data.max)
+                }
+            } else if (type === 'ipv4_cidr') {
+                const placeholder = '0.0.0.0/0'
+                const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+"
+                element = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
+            } else if (type === 'select') {
+                element = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
+            }
+        }
+        return element;
+    }
+    tbodyId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`
+    trId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}${idx}_row`
+    inputId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}${idx}`
+    // generateTBodyId(id, idx) {return `${id.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`}
 }
 
 /*

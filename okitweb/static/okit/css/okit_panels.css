@@ -86,9 +86,11 @@
 }
 
 .okit-template-panel li a.okit-template-item:hover {
-    color: #364150;
+    color: #336600;
+    /* color: #364150;
     font-weight: 700;
     font-size: 14px;
+    text-overflow: ellipsis; */
 }
 
 .okit-template-panel li.okit-template-group {

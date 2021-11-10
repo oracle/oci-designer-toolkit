@@ -61,7 +61,7 @@ OkitJsonView.prototype.dropBastionView = function(target) {
         view_artefact.getArtefact().compartment_id = target.compartment_id;
     } else if (target.type === Compartment.getArtifactReference()) {
         view_artefact.getArtefact().compartment_id = target.id;
-}
+    }
     view_artefact.recalculate_dimensions = true;
     return view_artefact;
 }

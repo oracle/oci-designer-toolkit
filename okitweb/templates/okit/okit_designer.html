@@ -98,6 +98,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_threedots_menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tabular/css/okit_tabular_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/identity/css/okit_identity_view.css') }}">
 {% endblock %}
 
@@ -114,17 +115,12 @@
             </li>
             <li id="file_recover_menu_item_li" class="hidden"><a id="file-recover-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRecover()">Recover</a></li>
             <li><a id="file-new-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleNew()">New</a></li>
-            {%- if not a2c_mode -%}
-            <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li>
-            {%- endif -%}
+            <!-- <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">Open</a></li> -->
             <li id="save_menu" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Save</span>
                 <ul class="dropdown-content">
-                    {%- if a2c_mode -%}
                     <li><a id="file-save-to-container-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveToContainer()">Save</a></li>
-                    {%- else -%}
-                    <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li>
-                    {%- endif -%}
+                    <!-- <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Save</a></li> -->
                     <!--li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li-->
                     <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTemplate()">Save As Template</a></li>
                     <li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save To Git</a></li>
@@ -137,26 +133,6 @@
             <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
             <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li>
         </ul>
-        <!--ul id="templates_menu" class="okit-navigation-sub-list">
-            <li>
-                <div>
-                    <span class="header-item">
-                        <div class="header-item-icon"><img src="{{ url_for('static', filename='svg/compute.svg') }}" alt="Template Menu"></div>
-                        <span>Templates</span>
-                    </span>
-                </div>
-            </li>
-            {% for template_group in okit_templates_groups %}
-                {% if template_group['name'] == '.' %}
-                    {% for okit_template in template_group['templates'] %}
-                        {{ menu.add_template_menu_item(okit_template) }}
-                    {% endfor %}
-                {% elif template_group['templates'] %}
-                    {{ menu.add_template_menu_group(template_group) }}
-                {% endif %}
-            {% endfor %}
-            <li><a id="loadfromgit-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoadFromGIT()">GIT</a></li>
-        </ul-->
         <ul id="export_menu" class="okit-navigation-sub-list">
             <li>
                 <div>
@@ -174,9 +150,7 @@
                     <li><a id="file_export_jpg_menu_item" class="parent-item" href="javascript:void(0)" onclick="handleExportToJPG()">jpeg</a></li>
                 </ul>
             </li>
-            {%- if a2c_mode -%}
-            <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">Json</a></li>
-            {%- endif -%}
+            <li><a id="file-save-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSave()">OKIT Json</a></li>
             <!--li id="terraform_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Terraform</span>
                 <ul class="dropdown-content">
@@ -220,9 +194,7 @@
                     </span>
                 </div>
             </li>
-            {%- if a2c_mode -%}
             <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">OKIT Json</a></li>
-            {%- endif -%}
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
             {% if cd3_mode %}
             <li><a id="import-cd3-xlsx-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromCd3Xlsx()">CD3 Excel</a></li>
@@ -271,9 +243,10 @@
         </div>
     </div>
     <div id="okit_toolbar_centre" class="okit-toolbar-centre">
-        <div>
-            <div id="zoom_out_toolbar_button" class="zoom-out okit-toolbar-button hidden" title="Zoom Out"></div>
-            <div id="zoom_in_toolbar_button" class="zoom-in okit-toolbar-button hidden" title="Zoom In"></div>
+        <div id="zoom_controls">
+            <div id="zoom_out_toolbar_button" class="zoom-out okit-toolbar-button" title="Zoom Out"></div>
+            <div id="zoom_121_toolbar_button" class="zoom-121 okit-toolbar-button" title="Zoom 1"></div>
+            <div id="zoom_in_toolbar_button" class="zoom-in okit-toolbar-button" title="Zoom In"></div>
         </div>
     </div>
     <div id="okit_toolbar_right" class="okit-toolbar-right">

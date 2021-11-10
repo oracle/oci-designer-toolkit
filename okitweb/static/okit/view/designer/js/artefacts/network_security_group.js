@@ -497,3 +497,21 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     }
 
 }
+
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.loadNetworkSecurityGroupsMultiSelect = function(select_id, vcn_id) {
+    $(jqId(select_id)).empty();
+    const multi_select = d3.select(d3Id(select_id));
+    for (let nsg of this.getNetworkSecurityGroups().filter((n) => n.vcn_id === vcn_id)) {
+        const div = multi_select.append('div');
+        div.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', safeId(nsg.id))
+            .attr('value', nsg.id);
+        div.append('label')
+            .attr('for', safeId(nsg.id))
+            .text(nsg.display_name);
+    }
+}

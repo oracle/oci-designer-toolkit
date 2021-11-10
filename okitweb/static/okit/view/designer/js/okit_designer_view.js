@@ -70,216 +70,6 @@ class OkitDesignerJsonView extends OkitJsonView {
         Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => !(r instanceof OkitContainerArtefactView)).forEach((e) => e.drawConnections())
     }
 
-    // TODO: Delete
-    drawOrigDeprecated(for_export=false) {
-        console.info('Drawing Designer Canvas');
-        // Display Json
-        this.displayOkitJson();
-        // New canvas
-        let width = 0;
-        let height = 0;
-        for (let compartment of this.compartments) {
-            let dimensions = compartment.dimensions;
-            width = Math.max(width, dimensions.width);
-            height = Math.max(height, dimensions.height);
-        }
-        let canvas_svg = this.newCanvas(width, height, for_export);
-
-        // Draw top Level Canvas
-        // this.canvas.draw();
-        const resource_lists = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], [])
-        console.info('Resources: ', resource_lists)
-        console.info('Container Resources: ', resource_lists.filter((r) => r instanceof OkitContainerArtefactView))
-        console.info('Simple Resources: ', resource_lists.filter((r) => !(r instanceof OkitContainerArtefactView)))
-
-        // Draw Compartments
-        for (let compartment of this.compartments) {
-            compartment.draw();
-        }
-
-        // Draw Compartment Sub Components
-        // Virtual Cloud Networks
-        for (let virtual_cloud_network of this.virtual_cloud_networks) {
-            virtual_cloud_network.draw();
-        }
-        // Exadata Infrastructures
-        for (let exadata_infrastructure of this.getExadataInfrastructures()) {
-            exadata_infrastructure.draw();
-        }
-        // Block Storage Volumes
-        for (let block_storage_volume of this.block_storage_volumes) {
-            block_storage_volume.draw();
-        }
-        // Object Storage Buckets
-        for (let object_storage_bucket of this.object_storage_buckets) {
-            object_storage_bucket.draw();
-        }
-        // Customer Premise Equipment
-        for (let customer_premise_equipment of this.customer_premise_equipments) {
-            customer_premise_equipment.draw();
-        }
-        // FastConnects
-        for (let fast_connect of this.fast_connects) {
-            fast_connect.draw();
-        }
-        // IPSec Connections
-        for (let ipsec_connection of this.ipsec_connections) {
-            ipsec_connection.draw();
-        }
-        // Remote Peering Connections
-        for (let remote_peering_connection of this.remote_peering_connections) {
-            remote_peering_connection.draw();
-        }
-        // Policies
-        for (let resource of this.getPolicys()) {
-            resource.draw();
-        }
-        // Groups
-        for (let resource of this.getGroups()) {
-            resource.draw();
-        }
-        // Users
-        for (let resource of this.getUsers()) {
-            resource.draw();
-        }
-
-        // Draw Virtual Cloud Network Sub Components
-        // Internet Gateways
-        for (let internet_gateway of this.internet_gateways) {
-            internet_gateway.draw();
-        }
-        // NAT Gateways
-        for (let nat_gateway of this.nat_gateways) {
-            nat_gateway.draw();
-        }
-        // Service Gateways
-        for (let service_gateway of this.service_gateways) {
-            service_gateway.draw();
-        }
-        // Dynamic Routing Gateways
-        for (let dynamic_routing_gateway of this.dynamic_routing_gateways) {
-            dynamic_routing_gateway.draw();
-        }
-        // Local Peering Gateways
-        for (let local_peering_gateway of this.local_peering_gateways) {
-            local_peering_gateway.draw();
-        }
-        // Route Tables
-        for (let route_table of this.route_tables) {
-            route_table.draw();
-        }
-        // Security Lists
-        for (let security_list of this.security_lists) {
-            security_list.draw();
-        }
-        // Dhcp Options
-        if (this.dhcp_options) {for (let dhcp_option of this.dhcp_options) {dhcp_option.draw();}}
-        // Network Security Groups
-        for (let network_security_group of this.network_security_groups) {
-            network_security_group.draw();
-        }
-        // Subnets
-        for (let subnet of this.subnets) {
-            subnet.draw();
-        }
-        // OKE Clusters
-        for (let oke_cluster of this.oke_clusters) {
-            oke_cluster.draw();
-        }
-
-        // Draw Subnet Sub Components
-        // Database System
-        for (let database_system of this.database_systems) {
-            database_system.draw();
-        }
-        // File Storage System
-        for (let file_storage_system of this.file_storage_systems) {
-            file_storage_system.draw();
-        }
-        // Instances
-        for (let instance of this.instances) {
-            instance.draw();
-        }
-        // Analytics Instances
-        if (this.analytics_instances) {for (let instance of this.analytics_instances) {instance.draw();}}
-        // Integration Instances
-        if(this.integration_instances) {for (let instance of this.integration_instances) {instance.draw();}}
-        // Instance Pools
-        for (let instance_pool of this.instance_pools) {
-            instance_pool.draw();
-        }
-        // Load Balancers
-        for (let load_balancer of this.load_balancers) {
-            load_balancer.draw();
-        }
-        // Autonomous Databases
-        for (let autonomous_database of this.autonomous_databases) {
-            autonomous_database.draw();
-        }
-        // MySQL Database System
-        for (let mysql_database_system of this.mysql_database_systems) {
-            mysql_database_system.draw();
-        }
-
-        // Exadata Infrastructure Subcomponents
-        // VM Cluster
-        for (let vm_cluster of this.getVmClusters()) {
-            vm_cluster.draw();
-        }
-        // VM Cluster Network
-        for (let vm_cluster_network of this.getVmClusterNetworks()) {
-            vm_cluster_network.draw();
-        }
-
-        // VM Cluster Subcomponents
-        for (let db_node of this.getDbNodes()) {
-            db_node.draw();
-        }
-        for (let db_home of this.getDbHomes()) {
-            db_home.draw();
-        }
-        for (let database of this.getDatabases()) {
-            database.draw();
-        }
-
-        // Resize Main Canvas if required
-        $(jqId("canvas-svg")).children("svg [data-type='" + Compartment.getArtifactReference() + "']").each(function () {
-            canvas_svg.attr('width', Math.max(Number(canvas_svg.attr('width')), Number(this.getAttribute('width'))));
-            canvas_svg.attr('height', Math.max(Number(canvas_svg.attr('height')), Number(this.getAttribute('height'))));
-            canvas_svg.attr('viewBox', '0 0 ' + canvas_svg.attr('width') + ' ' + canvas_svg.attr('height'));
-        });
-        if (selectedArtefact) {
-            $(jqId(selectedArtefact)).toggleClass('highlight');
-        }
-
-        // Draw Connection
-        this.drawConnections();
-    }
-
-    // TODO: Delete
-    drawConnectionsOrigDeprecated() {
-        // IPSec Connections
-        for (let ipsec_connection of this.ipsec_connections) {
-            ipsec_connection.drawConnections();
-        }
-        // Remote Peering Connections
-        for (let remote_peering_connection of this.remote_peering_connections) {
-            remote_peering_connection.drawConnections();
-        }
-        // Fast Connects
-        for (let fast_connect of this.fast_connects) {
-            fast_connect.drawConnections();
-        }
-        // Load Balancers
-        for (let load_balancer of this.load_balancers) {
-            load_balancer.drawConnections();
-        }
-        // Local Peering Connections
-        for (let local_peering_gateway of this.local_peering_gateways) {
-            local_peering_gateway.drawConnections();
-        }
-    }
-
     /*
     ** Draw Functions for each specific Artefact
      */
@@ -314,13 +104,19 @@ class OkitDesignerJsonView extends OkitJsonView {
         // Empty existing Canvas
         canvas_div.selectAll('*').remove();
         // Zoom & Pan SVG
+        // Zoom function associated with Canvas SVG but acts on the first <g> tag
+        // const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)});
+        const zoom = d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {transform_group.attr("transform", d3.event.transform)});
         const canvas_root_svg = canvas_div.append("svg")
         .attr("id", 'canvas_root_svg')
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        .call(d3.zoom().scaleExtent([0.1, 3]).on("zoom", () => {d3.select("#canvas_root_svg g").attr("transform", d3.event.transform)}));
+        .call(zoom);
         const transform_group = canvas_root_svg.append('g');
+        d3.select('#zoom_in_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.scaleBy, 1.3))
+        d3.select('#zoom_121_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.scale(1)))
+        d3.select('#zoom_out_toolbar_button').on('click', () => canvas_root_svg.transition().duration(750).call(zoom.scaleBy, (1/1.3)))
 
         // Wrapper SVG Element to define ViewBox etc
         // let canvas_svg = canvas_div.append("svg")
