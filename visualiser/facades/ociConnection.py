@@ -35,6 +35,7 @@ class OCIConnection(object):
         self.profile = profile
         self.region = region
         # Create Instance Security Signer
+        logger.info('OCI_CLI_AUTH = ', os.getenv('OCI_CLI_AUTH'))
         if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
             self.signerFromInstancePrincipal()
         else:
