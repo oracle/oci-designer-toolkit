@@ -1,6 +1,21 @@
 # Release Notes
 
 
+## Version 0.29.0
+**Release Date**: 10th November 2021
+### Features
+1. File Storage System split into Mount Target and File System to allow a Mount Target to export multiple File Systems.
+2. Dynamic Routing Gateway extended to include to be a Compartment Resources and DRG Attachments used to connect to VCN.
+3. DRG Extended to include Route Table and Distribution functionality.
+4. Model Load functionality modified so that it checks if a Resources Compartment id exists in the model and if not assigns it to the root deployment compartment.
+5. Save / Load functionality modified to Save to container directory and current Save/Load moved to Import/Export OKIT Json.
+6. Highlight selected row in Tabular view.
+7. Hide Profile Select within query when using Instance Principal.
+### Bug Fixes
+1. Query fixed so that when querying a tenancy all sub compartments are no longer assigned null compartment id and appear overlaid.
+2. Fix issue when using Instance Principal where the url contained a space.
+
+
 ## Version 0.28.0
 **Release Date**: 20th October 2021
 ### Features

@@ -12,6 +12,8 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
         super(artefact, json_view);
     }
 
+    // get parent_id() {return this.artefact.compartment_id;}
+    // get parent() {return this.getJsonView().getCompartment(this.parent_id);}
     get parent_id() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.artefact.vcn_id : this.artefact.compartment_id;}
     get parent() {return this.artefact.vcn_id && this.artefact.vcn_id !== '' ? this.getJsonView().getVirtualCloudNetwork(this.parent_id) : this.getJsonView().getCompartment(this.parent_id);}
 
@@ -44,6 +46,7 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
 
     static getDropTargets() {
         return [VirtualCloudNetwork.getArtifactReference()];
+        // return [Compartment.getArtifactReference()];
     }
 
 

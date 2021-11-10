@@ -36,7 +36,9 @@ class OCIRegionQuery(OCIConnection):
         pass
 
     def executeQuery(self, **kwargs):
-        logger.info('Querying Regions')
+        logger.info('Querying Regions' + str(self.config))
+        if self.instance_principal:
+            self.config['tenancy'] = self.getTenancy()
         discovery_client = OciResourceDiscoveryClient(self.config, self.signer, include_resource_types=self.SUPPORTED_RESOURCES)
         regions = self.response_to_json(discovery_client.regions)
         for region in regions:

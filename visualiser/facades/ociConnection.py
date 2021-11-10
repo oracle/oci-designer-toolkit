@@ -25,7 +25,7 @@ logger = getLogger()
 
 class OCIConnection(object):
     PAGINATION_LIMIT = 1000
-    OKIT_VERSION = 'v0.28.0'
+    OKIT_VERSION = 'v0.29.0'
 
     def __init__(self, config=None, configfile=None, profile=None, region=None):
         self.tenancy_ocid = ''
@@ -35,13 +35,14 @@ class OCIConnection(object):
         self.profile = profile
         self.region = region
         # Create Instance Security Signer
+        logger.info('OCI_CLI_AUTH = ' + os.getenv('OCI_CLI_AUTH', 'Undefined'))
         if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
             self.signerFromInstancePrincipal()
         else:
             self.signerFromConfig()
         # Set OKIT User Agent
         self.config['additional_user_agent'] = f'OKIT {self.OKIT_VERSION}'
-        # Connecct
+        # Connect
         self.connect()
 
     def signerFromInstancePrincipal(self):
