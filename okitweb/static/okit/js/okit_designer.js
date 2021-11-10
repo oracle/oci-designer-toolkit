@@ -807,7 +807,7 @@ function displayQueryDialog() {
             .attr('value', section)
             .text(section);
     }
-    // if (okitOciConfig.sections.length === 1 && okitOciConfig.sections[0] === 'InstancePrincipal') $('#config_profile_row').addClass('collapsed')
+    if (okitOciConfig.sections.length === 1 && okitOciConfig.sections[0] === 'InstancePrincipal') $('#config_profile_row').addClass('collapsed')
     // Region Ids
     tr = tbody.append('div')
         .attr('class', 'tr');
