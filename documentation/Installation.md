@@ -297,15 +297,23 @@ sudo bash -c "yum install -y openssl"
 sudo bash -c "yum install -y oci-utils"
 # This is not required for OL8
 sudo bash -c "yum install -y python-oci-cli"
+# Update
+sudo bash -c "yum update -y"
 # Install Required Python Modules
 sudo bash -c "python3 -m pip install -U pip"
 sudo bash -c "python3 -m pip install -U setuptools"
 sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter"
 # Clone OKIT
-sudo bash -c "git clone -b master --depth 1 https://github.com/oracle/oci-designer-toolkit.git /okit"
+sudo bash -c "mkdir -p /github"
+sudo bash -c "git clone -b master https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit"
 sudo bash -c "mkdir -p /okit/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
-# Link Reference Architecture Templates to Template Directory
-sudo bash -c "ln -sv /okit/okitweb/static/okit/templates/reference_architecture /okit/instance/templates/reference_architecture"
+# Link Git Directories
+sudo bash -c "ln -sv /github/oci-designer-toolkit/config /okit/config"
+sudo bash -c "ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb"
+sudo bash -c "ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser"
+sudo bash -c "ln -sv /github/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture /okit/instance/templates/reference_architecture"
+# Copy Config
+sudo bash -c "cp -v /github/oci-designer-toolkit/instance/config.py /okit/instance"
 # Add additional environment information 
 sudo bash -c "echo 'export PATH=$PATH:/usr/local/bin' >> /etc/bashrc"
 sudo bash -c "echo 'export PYTHONPATH=:/okit/visualiser:/okit/okitweb:/okit' >> /etc/bashrc"
@@ -315,9 +323,13 @@ sudo bash -c "echo 'export OKIT_VM_REGION=`oci-metadata -g region --value-only`'
 # Generate ssl Self Sign Key
 sudo bash -c "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /okit/ssl/okit.key -out /okit/ssl/okit.crt -subj '/C=GB/ST=Berkshire/L=Reading/O=Oracle/OU=OKIT/CN=www.oci_okit.com'"
 # Copy GUnicorn Service File
-sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.oci.service > /etc/systemd/system/gunicorn.service'
+# sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /okit/containers/services/gunicorn.oci.service > /etc/systemd/system/gunicorn.service'
+sudo bash -c 'sed "s/{COMPARTMENT_OCID}/`oci-metadata -g compartmentID --value-only`/" /github/oci-designer-toolkit/containers/services/gunicorn.oci.service > /etc/systemd/system/gunicorn.service'
 sudo bash -c 'sed -i "s/{REGION_IDENTIFIER}/`oci-metadata -g region --value-only`/" /etc/systemd/system/gunicorn.service'
 sudo bash -c 'sed -i "s/<home_region>/`oci-metadata -g region --value-only`/" /okit/instance/config.py'
+#####################################################################################
+### Edit /okit/instance/config.py as described in OKIT Configuration File section ###
+#####################################################################################
 # Enable Gunicorn Service
 sudo systemctl enable gunicorn.service
 sudo systemctl start gunicorn.service

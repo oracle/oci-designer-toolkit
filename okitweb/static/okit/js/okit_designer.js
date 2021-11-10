@@ -807,7 +807,7 @@ function displayQueryDialog() {
             .attr('value', section)
             .text(section);
     }
-    if (okitOciConfig.sections.length === 1 && okitOciConfig.sections[0] === 'InstancePrincipal') $('#config_profile_row').addClass('collapsed')
+    // if (okitOciConfig.sections.length === 1 && okitOciConfig.sections[0] === 'InstancePrincipal') $('#config_profile_row').addClass('collapsed')
     // Region Ids
     tr = tbody.append('div')
         .attr('class', 'tr');
@@ -977,41 +977,6 @@ function loadRegions(callback) {
     }
     callback()
     // selectQueryLastUsedRegion();
-}
-// TODO: Delete
-function loadRegionsOld() {
-    // Clear Select
-    let select = $(jqId('query_region_id'));
-    $(select).empty();
-    select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
-    const profile = $(jqId('config_profile')).val()
-    // Get Regions
-    $.ajax({
-        type: 'get',
-        url: `oci/regions/${profile}`,
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify({config_profile: profile}),
-        success: function(resp) {
-            //console.info('Response : ' + resp);
-            let jsonBody = JSON.parse(resp)
-            $(jqId('query_region_id')).empty();
-            let region_select = d3.select(d3Id('query_region_id'));
-            ociRegions = jsonBody;
-            for(let region of jsonBody ){
-                //console.info(region['display_name']);
-                //console.info(region['name']);
-                region_select.append('option')
-                    .attr('value', region['name'])
-                    .text(region['display_name']);
-            }
-            selectQueryLastUsedRegion();
-        },
-        error: function(xhr, status, error) {
-            console.info('Status : '+ status)
-            console.info('Error : '+ error)
-        }
-    });
 }
 function selectQueryHomeRegion() {
     if (okitSettings.home_region_key !== '') {

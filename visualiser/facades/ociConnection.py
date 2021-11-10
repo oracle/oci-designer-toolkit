@@ -42,7 +42,7 @@ class OCIConnection(object):
             self.signerFromConfig()
         # Set OKIT User Agent
         self.config['additional_user_agent'] = f'OKIT {self.OKIT_VERSION}'
-        # Connecct
+        # Connect
         self.connect()
 
     def signerFromInstancePrincipal(self):
