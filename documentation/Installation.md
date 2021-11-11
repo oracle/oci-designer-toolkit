@@ -307,7 +307,7 @@ sudo bash -c "python3 -m pip install --no-cache-dir authlib flask gitpython git-
 sudo bash -c "mkdir -p /github"
 sudo bash -c "git clone -b master https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit"
 sudo bash -c "mkdir -p /okit/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}"
-# Link Git Directories
+# Link Directories
 sudo bash -c "ln -sv /github/oci-designer-toolkit/config /okit/config"
 sudo bash -c "ln -sv /github/oci-designer-toolkit/okitweb /okit/okitweb"
 sudo bash -c "ln -sv /github/oci-designer-toolkit/visualiser /okit/visualiser"
