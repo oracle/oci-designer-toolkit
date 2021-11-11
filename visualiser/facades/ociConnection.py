@@ -50,9 +50,9 @@ class OCIConnection(object):
             # Get region
             if self.region is None:
                 if self.config is not None:
-                    self.region = self.config.get('region', os.getenv('OCI_VM_REGION', 'uk-london-1'))
+                    self.region = self.config.get('region', os.getenv('OKIT_VM_REGION', 'uk-london-1'))
                 else:
-                    self.region = os.getenv('OCI_VM_REGION', 'uk-london-1')
+                    self.region = os.getenv('OKIT_VM_REGION', 'uk-london-1')
            # Get Signer from Instance Principal
             self.signer = oci.auth.signers.InstancePrincipalsSecurityTokenSigner()
             self.config = {"region": self.region}
