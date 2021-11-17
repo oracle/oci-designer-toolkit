@@ -3,11 +3,31 @@
 {{ common.document_common_details(resource) }}
 {{ common.document_common_properties(resource) }}
 {{ common.document_property("DNS Label", resource.dns_label) }}
-{{ common.document_property("CIDR Block", resource.cidr_block) }}
+{{ common.document_property("CIDR Blocks", resource.cidr_blocks) }}
     {% if resource.is_ipv6enabled %}
 {{ common.document_property("IPv6 Enabled", resource.is_ipv6enabled) }}
 {{ common.document_property("IPv6 CIDR Block", resource.ipv6cidr_block) }}
     {% endif %}
+{% for nat_gateway in nat_gateways -%}
+{% if nat_gateway.vcn_id == resource.id %}{{ common.nat_gateway_property(nat_gateway.id, "NAT Gateway") }}
+{% endif %}
+{%- endfor %}
+{% for internet_gateway in internet_gateways -%}
+{% if internet_gateway.vcn_id == resource.id %}{{ common.internet_gateway_property(internet_gateway.id, "Internet Gateway") }}
+{% endif %}
+{%- endfor %}
+{% for service_gateway in service_gateways -%}
+{% if service_gateway.vcn_id == resource.id %}{{ common.service_gateway_property(service_gateway.id, "Service Gateway") }}
+{% endif %}
+{%- endfor %}
+{% for drg_attachment in drg_attachments -%}
+{%- if drg_attachment.vcn_id == resource.id -%}{{ common.drg_attachment_property(drg_attachment.id, "DRG Attachment") }}
+{% endif %}
+{%- endfor %}
+{% for local_peering_gateway in local_peering_gateways -%}
+{% if local_peering_gateway.vcn_id == resource.id %}{{ common.local_peering_gateway_property(local_peering_gateway.id, "Local Peering Gateway") }}
+{% endif %}
+{%- endfor %}
 {{ common.document_tags(resource) }}
 {%- endmacro %}
 {% for virtual_cloud_network in virtual_cloud_networks -%}
