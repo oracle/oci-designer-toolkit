@@ -6,11 +6,12 @@
 | ----------- | ------ | ----------- | ----------- |
     {% for rule in rules -%}
         | {{ rule.target_type | replace("_", " ") | title | trim("s") }} |
-        {%- if rule.target_type == "internet_gateways" %} {{ common.internet_gateway_name(rule.network_entity_id) -}}
-        {%- elif rule.target_type == "nat_gateways" %} {{ common.nat_gateway_name(rule.network_entity_id) -}}
-        {%- elif rule.target_type == "local_peering_gateways" %} {{ common.local_peering_gateway_name(rule.network_entity_id) -}}
-        {%- elif rule.target_type == "dynamic_routing_gateways" %} {{ common.dynamic_routing_gateway_name(rule.network_entity_id) -}}
-        {%- elif rule.target_type == "service_gateways" %} {{ common.service_gateway_name(rule.network_entity_id) -}}
+        {%- if rule.target_type == "internet_gateway" or rule.target_type == "internet_gateways" %} {{ common.internet_gateway_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "nat_gateway" or rule.target_type == "nat_gateways" %} {{ common.nat_gateway_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "local_peering_gateway" or rule.target_type == "local_peering_gateways" %} {{ common.local_peering_gateway_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "dynamic_routing_gateway" or rule.target_type == "dynamic_routing_gateways" %} {{ common.drg_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "dynamic_routing_gateway" or rule.target_type == "dynamic_routing_gateways" %} {{ common.dynamic_routing_gateway_name(rule.network_entity_id) -}}
+        {%- elif rule.target_type == "service_gateway" or rule.target_type == "service_gateways" %} {{ common.service_gateway_name(rule.network_entity_id) -}}
         {%- else -%}
         {%- endif -%}
         | {{ rule.destination }} | {{ rule.description }} |
