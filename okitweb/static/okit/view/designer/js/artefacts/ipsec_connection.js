@@ -46,7 +46,8 @@ class IpsecConnectionView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/ipsec_connection.html", () => {
             // Build Dynamic Routing Gateways
-            this.loadDynamicRoutingGateways('drg_id');
+            this.getJsonView().loadDrgsSelect('drg_id');
+            // this.loadDynamicRoutingGateways('drg_id');
             // Build Customer Premise Equipments
             this.loadCustomerPremiseEquipments('cpe_id');
             // Load Sheet
