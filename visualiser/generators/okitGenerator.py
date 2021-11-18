@@ -1330,7 +1330,8 @@ class OCIGenerator(object):
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
         # ---- Static Routes
-        self.addJinja2Variable("static_routes", resource["static_routes"], standardisedName)
+        # self.addJinja2Variable("static_routes", resource["static_routes"], standardisedName)
+        self.jinja2_variables["static_routes"] = resource.get("static_routes", [])
         # ---- Customer Premise Equipment
         self.jinja2_variables["cpe_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['cpe_id']]))
         # ---- Dynamic Routing Gateway
