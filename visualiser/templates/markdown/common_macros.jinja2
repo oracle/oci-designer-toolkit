@@ -88,7 +88,7 @@
 {%- endmacro -%}
 
 {%- macro property_link(value) -%}
-    {{ "[%s](#%s)" | format(value, value) }}
+    {{ "[%s](#%s)" | format(value, value | replace(" ", "-") | lower) }}
 {%- endmacro -%}
 
 {%- macro document_availability_domain(name, regional_name, title="Availability Domain") -%}
@@ -103,7 +103,7 @@
 
 
 {%- macro compartment_property(id, title="Compartment") -%}
-    {{ document_property_link(title, compartment_link(id)) }}
+    {{ document_property(title, compartment_link(id)) }}
 {%- endmacro -%}
 
 {%- macro compartment_link(id) -%}
@@ -182,6 +182,27 @@
     {%- for drg_attachment in drg_attachments -%}
         {%- if drg_attachment.id == id -%}
             {{ drg_attachment.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+
+{%- macro drg_route_table_property(drg_id, id, title="Dynamic Route Table") -%}
+    {{ document_property(title, drg_route_table_link(drg_id, id)) }}
+{%- endmacro -%}
+
+{% macro drg_route_table_link(drg_id, id) -%}
+    {{ property_link(drg_route_table_name(drg_id, id)) }}
+{%- endmacro %}
+
+{% macro drg_route_table_name(drg_id, id) -%}
+    {%- for drg in drgs -%}
+        {%- if drg.id == drg_id -%}
+            {%- for rt in drg.route_tables -%}
+                {%- if rt.id == id -%}
+            {{ drg.display_name }}
+                {%- endif -%}
+            {%- endfor -%}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}

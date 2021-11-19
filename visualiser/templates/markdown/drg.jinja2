@@ -1,9 +1,37 @@
 {% import "common_macros.jinja2" as common with context %}
-{% macro document_drg_gateway(resource) -%}
+{% macro document_drg_route_table(resource) -%}
+{%- endmacro %}
+{% macro document_drg_route_rule(resource) -%}
+{%- endmacro %}
+{% macro document_drg_route_distribution(resource) -%}
+| Property | Value    |
+| -------- | -------- |
+{{ common.document_property('Type', resource.distribution_type) }}
+{{ common.document_property('Name', resource.display_name) }}
+{% if resource.statements | length > 0 %}
+##### Statements
+| Action | Type / Attachment | Priority |
+| ------ | ----------------- | -------- |
+{% for statement of resource.statements %}
+    {{ document_drg_distribution_statement(statement) }}
+{% endfor %}
+{% endif %}
+{%- endmacro %}
+{% macro document_drg_distribution_statement(resource) -%}
+{%- endmacro %}
+{% macro document_drg(resource) -%}
 {{ common.document_common_details(resource) }}
 {{ common.document_common_properties(resource) }}
+#### Route Distributions
+{% for distribution of resource.route_distributions -%}
+    {{ document_drg_route_distribution(distribution) }}
+{%- endfor %}
+#### Route Tables
+{% for rt of resource.route_tables -%}
+    {{ document_drg_route_table(rt) }}
+{%- endfor %}
 {{ common.document_tags(resource) }}
 {%- endmacro %}
 {% for drg in drgs -%}
-    {{ document_drg_gateway(drg) }}
+    {{ document_drg(drg) }}
 {%- endfor %}
