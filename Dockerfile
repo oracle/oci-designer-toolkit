@@ -57,7 +57,7 @@ RUN yum install -y \
         xlsxwriter==1.3.7 \
 # Create Workspace
  && mkdir -p /github \
- && echo $BRANCH \
+ && echo "Branch: $BRANCH" \
  && git clone --branch $BRANCH --config core.autocrlf=input https://github.com/oracle/oci-designer-toolkit.git /github/oci-designer-toolkit \
  && mkdir -p /okit/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl} \
  && mkdir -p /root/bin \
