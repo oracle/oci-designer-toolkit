@@ -381,7 +381,8 @@ OkitJsonView.prototype.loadDrgRouteTablesSelect = function(select_id, drg_id, em
     if (empty_option) {
         drg_select.append($('<option>').attr('value', '').text(''));
     }
-    for (let drg_rt of this.getDrg(drg_id).route_tables) {
+    const drg = this.getDrg(drg_id)
+    for (let drg_rt of drg ? drg.route_tables : []) {
         drg_select.append($('<option>').attr('value', drg_rt.id).text(drg_rt.display_name));
     }
 }
