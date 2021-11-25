@@ -229,6 +229,23 @@
 {%- endmacro %}
 
 
+{%- macro file_system_property(id, title="File System") -%}
+    {{ document_property(title, file_system_link(id)) }}
+{%- endmacro -%}
+
+{%- macro file_system_link(id) -%}
+    {{ property_link(file_system_name(id)) }}
+{%- endmacro -%}
+
+{%- macro file_system_name(id) -%}
+    {%- for file_system in file_systems -%}
+        {%- if file_system.id == id -%}
+            {{ file_system.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+
 {%- macro instance_property(id, title="Instance") -%}
     {{ document_property(title, instance_link(id)) }}
 {%- endmacro -%}

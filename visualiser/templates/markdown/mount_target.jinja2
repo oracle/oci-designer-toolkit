@@ -1,0 +1,29 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_mount_target(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.subnet_property(resource.subnet_id, "Subnet") }}
+{{ common.document_property("Hostname", resource.hostname_label) }}
+{{ common.document_property("IP Address", resource.ip_address) }}
+{% for id in resource.nsg_ids -%}
+    {{ common.nsg_property(id) }}
+{% endfor %}
+{{ common.document_property("Max FS Stat Bytes", resource.max_fs_stat_bytes) }}
+{{ common.document_property("Max FS Stat Files", resource.max_fs_stat_files) }}
+{% if resource.exports is defined and resource.exports | length > 0 -%}
+
+##### Exports
+| File System | Path | Source | Access | GID | UID | Squash | Privileged Access |
+| ----------- | ---- | ------ | ------ | --- | --- | ------ | ----------------- |
+    {% for export in resource.exports -%}
+        {{ document_export(export) }}
+    {% endfor %}
+{%- endif -%}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% macro document_export(export) -%}
+         | {{ common.file_system_link(export.file_system_id) }} | {{ export.path }} | {{ export.options.source }} | {{ export.options.access | replace("_", " ") | title }} | {{ export.options.anonymous_gid }} | {{ export.options.anonymous_uid }} | {{ export.options.identity_squash | title }} | {{ export.options.require_privileged_source_port }} |
+{%- endmacro %}
+{% for mount_target in mount_targets -%}
+    {{ document_mount_target(mount_target) }}
+{%- endfor %}
