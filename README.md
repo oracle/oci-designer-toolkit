@@ -144,6 +144,11 @@ docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <U
 docker run -d --rm -p 80:80 --volume <USER HOME DIR>/.oci:/root/.oci --volume <USER HOME DIR>/.ssh:/root/.ssh --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/templates/user --volume <PATH TO GIT DIR>:/okit/instance/git --volume <PATH TO LOCAL DIR>:/okit/instance/local --name okit okit
 ```
 
+__Note:__ Occasionally Docker Container may have clock drift and this can cause authentication issues this can be resolved by executing.
+```bash
+docker run --rm --privileged okit hwclock -s
+```
+
 Once started the Designer BUI can be accessed on [http://localhost/okit/designer](http://localhost/okit/designer)
 
 ## Usage / Examples

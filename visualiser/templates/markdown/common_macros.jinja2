@@ -200,12 +200,50 @@
         {%- if drg.id == drg_id -%}
             {%- for rt in drg.route_tables -%}
                 {%- if rt.id == id -%}
-            {{ drg.display_name }}
+            {{ rt.display_name }}
                 {%- endif -%}
             {%- endfor -%}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}
+
+
+{%- macro drg_route_distribution_property(drg_id, id, title="Dynamic Route Distribution") -%}
+    {{ document_property(title, drg_route_distribution_link(drg_id, id)) }}
+{%- endmacro -%}
+
+{% macro drg_route_distribution_link(drg_id, id) -%}
+    {{ property_link(drg_route_distribution_name(drg_id, id)) }}
+{%- endmacro %}
+
+{% macro drg_route_distribution_name(drg_id, id) -%}
+    {%- for drg in drgs -%}
+        {%- if drg.id == drg_id -%}
+            {%- for rd in drg.route_distributions -%}
+                {%- if rd.id == id -%}
+            {{ rd.display_name }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+
+{%- macro file_system_property(id, title="File System") -%}
+    {{ document_property(title, file_system_link(id)) }}
+{%- endmacro -%}
+
+{%- macro file_system_link(id) -%}
+    {{ property_link(file_system_name(id)) }}
+{%- endmacro -%}
+
+{%- macro file_system_name(id) -%}
+    {%- for file_system in file_systems -%}
+        {%- if file_system.id == id -%}
+            {{ file_system.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
 
 
 {%- macro instance_property(id, title="Instance") -%}

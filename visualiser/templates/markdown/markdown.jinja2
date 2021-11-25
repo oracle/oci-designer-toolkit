@@ -122,6 +122,16 @@
     {% include "file_storage_system.jinja2" ignore missing with context %}
 {%- endif %}
 
+{% if file_systems is defined and file_systems|length > 0 -%}
+    ### File Systems
+    {% include "file_system.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if mount_targets is defined and mount_targets|length > 0 -%}
+    ### Mount Targets
+    {% include "mount_target.jinja2" ignore missing with context %}
+{%- endif %}
+
 ## External
 
 {% if customer_premise_equipments is defined and customer_premise_equipments|length > 0 -%}
