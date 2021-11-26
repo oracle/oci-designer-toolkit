@@ -4,7 +4,10 @@
 ## Version 0.30.0
 **Release Date**: 1st December 2021
 ### Features
+1. Add DRG / DRG Attachments to Markdown
+2. Add Mount Table / File Systems to Markdown
 ### Bug Fixes
+1. Resolve issue where DRGv2 were not showing it Route Rules
 
 
 ## Version 0.29.0
