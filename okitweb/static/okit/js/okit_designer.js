@@ -766,8 +766,8 @@ function importTemplate(template_url, event) {
 /*
 ** Query OCI
  */
-function displayQueryDialog() {
-    $(jqId('modal_dialog_title')).text('Query OCI');
+function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
+    $(jqId('modal_dialog_title')).text(title);
     // if (okitSettings.fast_discovery) {
     //     $(jqId('modal_dialog_title')).text('OCI Introspection (Fast Discovery)');
     // //    document.getElementById('sub_compartments_row').classList.add('collapsed');
@@ -888,7 +888,7 @@ function displayQueryDialog() {
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
         .attr('type', 'button')
-        .text('Query')
+        .text(btn_text)
         .on('click', function () {
             showQueryResults();
         });

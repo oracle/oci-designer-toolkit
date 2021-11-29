@@ -476,18 +476,17 @@ function loadResourceManagerStacks() {
     let select = $(jqId('stack_id'));
     $(select).empty();
     select.append($('<option>').attr('value', 'Retrieving').text('Retrieving..........'));
-    let request_json = {};
-    request_json.location = {
-        config_profile: $(jqId('config_profile')).val(),
-        compartment_id: $(jqId('query_compartment_id')).val(),
-        region: $(jqId('query_region_id')).val()
-    };
     $.ajax({
+        cache: false,
         type: 'get',
         url: 'oci/resourcemanager',
         dataType: 'text',
         contentType: 'application/json',
-        data: JSON.stringify(request_json),
+        data: {
+            config_profile: $(jqId('config_profile')).val(),
+            compartment_id: $(jqId('query_compartment_id')).val(),
+            region: $(jqId('query_region_id')).val()
+        },
         success: function(resp) {
             let jsonBody = JSON.parse(resp)
             $(jqId('stack_id')).empty();
