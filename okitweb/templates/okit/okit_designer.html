@@ -194,6 +194,7 @@
                     </span>
                 </div>
             </li>
+            <!-- <li><a id="import-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromOCI()">OCI Resources</a></li> -->
             <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">OKIT Json</a></li>
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
             {% if cd3_mode %}
@@ -266,10 +267,11 @@
 {% block mainblock %}
     <div id="designer_left_column" class="okit-designer-left-column">
         {{ palette.add_palette(palette_json) }}
-        <div id="explorer_panel"  class="okit-left-side-panel okit-explorer-panel okit-explorer-view hidden"></div>
-        <div id="git_panel"       class="okit-left-side-panel okit-git-panel hidden"></div>
-        <div id="local_panel"     class="okit-left-side-panel okit-local-panel hidden"></div>
-        <div id="templates_panel" class="okit-left-side-panel okit-template-panel hidden"></div>
+        <div id="explorer_panel"   class="okit-left-side-panel okit-explorer-panel okit-explorer-view hidden"></div>
+        <div id="git_panel"        class="okit-left-side-panel okit-git-panel hidden"></div>
+        <div id="local_panel"      class="okit-left-side-panel okit-local-panel hidden"></div>
+        <div id="templates_panel"  class="okit-left-side-panel okit-template-panel hidden"></div>
+        <div id="oci_import_panel" class="okit-left-side-panel okit-oci-import-panel hidden"></div>
     </div>
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
         <div id="center-header">
@@ -287,6 +289,8 @@
             <div id="identity-div" class="okit-identity-canvas hidden"></div>
             <div id="relationship-div" class="okit-relationship-canvas hidden"></div>
             <div id="json-text-div" class="okit-text-json-canvas hidden"></div>
+            <div id="terraform-div" class="okit-terraform-canvas hidden"></div>
+            <div id="bom-div" class="okit-bom-canvas hidden"></div>
         </div>
     </div>   
     <div class="hidden"><input type="file" id="files" class="file-button toolbar-button" name="file[]" accept="application/json" onclick="this.value = null"></div>

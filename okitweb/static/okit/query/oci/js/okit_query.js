@@ -38,11 +38,11 @@ class OkitOCIQuery {
         const self = this;
         this.region_query_count[request.region] = 1;
         $.ajax({
+            cache: false,
             type: 'get',
             url: 'oci/query',
             dataType: 'text',
             contentType: 'application/json',
-            // data: JSON.stringify(request),
             data: request,
             success: function(resp) {
                 console.log(resp)
