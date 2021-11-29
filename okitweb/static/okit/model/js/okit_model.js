@@ -18,6 +18,9 @@ class OkitJson {
         this.updated = this.created;
         this.okit_version = okitVersion;
         this.okit_model_id = `okit-model-${uuidv4()}`;
+        // this.meta_data = {
+        //     resource_count: 0
+        // }
         this.user_defined = {terraform: ''};
         this.freeform_tags = {};
         this.defined_tags = {};
@@ -964,6 +967,8 @@ class OkitArtifact {
         });
         // Read Only flag to indicate that we should not create this Resource
         this.read_only = false;
+        // Add Terraform Resource Name
+        // this.tf_resource_name = undefined;
     }
 
     get name() {return this.display_name;}
@@ -999,6 +1004,7 @@ class OkitArtifact {
             delete update.name;
         }
         $.extend(true, this, this.clean(update));
+        // if (this.tf_resource_name === undefined || this.tf_resource_name === '') this.tf_resource_name = this.generateTFResourceName(this.display_name)
     }
 
     /*
@@ -1067,6 +1073,8 @@ class OkitArtifact {
             return availability_domain;
         }
     }
+
+    generateTFResourceName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
 
     /*
     ** Static Functionality
