@@ -142,6 +142,7 @@ def ociResourceManger():
             return str(e), 500
     elif request.method == 'POST':
         logger.debug('JSON     : {0:s}'.format(str(request.json)))
+        okit_model_id = request.json.get('okit_model_id', '')
         config_profile = request.json.get('location', {}).get('config_profile', 'DEFAULT')
         compartment_id = request.json.get('location', {}).get('compartment_id', None)
         region = request.json.get('location', {}).get('region', None)
@@ -170,6 +171,7 @@ def ociResourceManger():
             stack['compartment_id'] = compartment_id
             stack['zipfile'] = zipname
             stack['variables'] = generator.getVariables()
+            stack['freeform_tags'] = generator.getOkitFreeformTags()
             resource_manager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
             if create_or_update == 'UPDATE':
                 stack['id'] = stack_id

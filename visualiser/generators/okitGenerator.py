@@ -2606,8 +2606,11 @@ class OCIGenerator(object):
         return {}
         # return {"okit": {"version": self.OKIT_VERSION, "reference": resource.get('okit_reference', 'Unknown')}}
 
-    def getOkitFreeformTags(self, resource):
-        return {"okit_version": self.OKIT_VERSION, "okit_reference": resource.get('okit_reference', 'Unknown')}
+    def getOkitFreeformTags(self, resource=None):
+        if resource is None:
+            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("okit_model_id", "Unknown")}
+        else:
+            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("okit_model_id", "Unknown"), "okit_reference": resource.get('okit_reference', 'Unknown')}
 
     def standardiseResourceName(self, name):
         # split() will generate a list with no empty values thus join of this will remove all whitespace
