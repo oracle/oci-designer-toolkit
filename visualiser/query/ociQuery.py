@@ -90,6 +90,7 @@ class OCIQuery(OCIConnection):
         "Vnic"
     ]
     DISCOVERY_OKIT_MAP = {
+        "AnalyticsInstance": "analytics_instances",
         "AutonomousDatabase": "autonomous_databases",
         "Bastion": "bastions",
         #"BootVolume": "block_storage_volumes",
