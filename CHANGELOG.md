@@ -11,6 +11,7 @@
 ### Bug Fixes
 1. Resolve issue where DRGv2 were not showing it Route Rules.
 2. Add Analytics Instance to the query discovery mapping class to include missing queries information.
+3. Replace missing code to generate private network Analytics Instance.
 
 
 ## Version 0.29.0
