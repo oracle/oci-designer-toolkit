@@ -58,12 +58,12 @@ $(document).ready(function() {
     */ 
     // Palette
     d3.select(d3Id('console_left_bar')).append('div')
-    .attr('id', 'toggle_palette_button')
-    .attr('class', 'okit-pointer-cursor palette okit-toolbar-button')
-    .attr('title', 'Palette')
-    .on('click', function () {
-        slideLeftPanel('icons_palette')
-    });
+        .attr('id', 'toggle_palette_button')
+        .attr('class', 'okit-pointer-cursor palette okit-toolbar-button')
+        .attr('title', 'Palette')
+        .on('click', function () {
+            slideLeftPanel('icons_palette')
+        });
     // Compartment Explorer
     d3.select(d3Id('console_left_bar')).append('div')
         .attr('id', 'toggle_explorer_button')
