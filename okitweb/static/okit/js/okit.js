@@ -415,9 +415,11 @@ class OkitSettings {
         this.name_prefix = 'okit';
         this.auto_save = false;
         this.show_ocids = false;
-        this.validate_markdown = true;
+        this.validate_markdown = false;
         this.fast_discovery = true;
         this.load();
+        // Disable variables
+        this.is_variables = false;
     }
 
     getCookieName() {
@@ -468,7 +470,7 @@ class OkitSettings {
                 me.is_always_free = $(jqId('is_always_free')).is(':checked');
                 me.is_timestamp_files = $(jqId('is_timestamp_files')).is(':checked');
                 me.is_optional_expanded = $(jqId('is_optional_expanded')).is(':checked');
-                me.is_variables = $(jqId('is_variables')).is(':checked');
+                // me.is_variables = $(jqId('is_variables')).is(':checked');
                 me.hide_attached = $(jqId('hide_attached')).is(':checked');
                 me.profile = $(jqId('profile')).val();
                 me.show_label = $("input:radio[name='show_label']:checked").val();
@@ -504,7 +506,7 @@ class OkitSettings {
             // Auto Expand Optional
             this.addAutoExpandAdvanced(tbody, autosave);
             // Generate Variables File
-            this.addUseVariables(tbody, autosave);
+            // this.addUseVariables(tbody, autosave);
             // Hide Attached Artefacts
             this.addHideAttachedArtefacts(tbody, autosave);
             // Highlight Associations

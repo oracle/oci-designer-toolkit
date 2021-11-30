@@ -21,14 +21,15 @@ class AnalyticsInstance extends OkitArtifact {
         this.license_type = '';
         this.capacity = {
             capacity_type: '',
-            capacity_value: ''
+            capacity_value: 1
         }
         this.description = '';
+        this.email_notification = '';
         this.network_endpoint_details = {
             network_endpoint_type: '',
             subnet_id: '',
             vcn_id: '',
-            whitelisted_ips: '',
+            whitelisted_ips: [],
             whitelisted_vcns: []
         }
         // Update with any passed data

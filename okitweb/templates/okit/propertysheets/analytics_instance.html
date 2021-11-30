@@ -6,7 +6,7 @@
 {% block title_block %}Analytics Instance{% endblock %}
 {% block required_properties_table_rows_block %}
     {{ properties_input('Capacity Type', 'capacity_type', type='select', data={"options": ["OLPU_COUNT", "USER_COUNT"]}) }}
-    {{ properties_input('Capacity Value', 'capacity_value', type='number') }}
+    {{ properties_input('Capacity Value', 'capacity_value', type='number', data={"min": 1}) }}
     {{ properties_input('Feature Set', 'feature_set', type='select', data={"options": ["SELF_SERVICE_ANALYTICS", "ENTERPRISE_ANALYTICS"]}) }}
     {{ properties_input('IDCS Access Token', 'idcs_access_token', type='text') }}
     {{ properties_input('License', 'license_type', type='select', data={"options": ["LICENSE_INCLUDED", "BRING_YOUR_OWN_LICENSE"]}) }}
@@ -17,7 +17,7 @@
     {{ properties_input('Network Endpoint Type', 'network_endpoint_type', type='select', data={"options": ["", "PUBLIC", "PRIVATE"]}) }}
     {{ properties_input('Vcn', 'vcn_id', type='select', collapsed=True) }}
     {{ properties_input('Subnet', 'subnet_id', type='select', collapsed=True) }}
-    {{ properties_input('Whitelist Ips', 'whitelisted_ips', type='text', collapsed=True) }}
+    {{ properties_input('Whitelist Ips', 'whitelisted_ips', type='ipv4-list', collapsed=True) }}
     <div id='whitelisted_vcns_row' class='tr collapsed'><div class='td'>Whitelist Vcn</div><div class='td'>
         <div id="whitelisted_vcns_table" class="table okit-table okit-properties-table okit-dynamic-table">
             <div class="thead">
