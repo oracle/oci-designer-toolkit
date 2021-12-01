@@ -4,7 +4,14 @@
 ## Version 0.30.0
 **Release Date**: 1st December 2021
 ### Features
+1. Add DRG / DRG Attachments to Markdown
+2. Add Mount Table / File Systems to Markdown
+3. Add unique OKIT Model id to each OKIT design and add as a Freeform Tag.
+4. Tag Resource Manager Stack with unique OKIT Model id.
 ### Bug Fixes
+1. Resolve issue where DRGv2 were not showing it Route Rules.
+2. Add Analytics Instance to the query discovery mapping class to include missing queries information.
+3. Replace missing code to generate private network Analytics Instance.
 
 
 ## Version 0.29.0

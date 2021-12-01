@@ -1,0 +1,13 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_drg_attachment(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+{{ common.vcn_property(resource.vcn_id) }}
+{{ common.drg_property(resource.drg_id) }}
+{{ common.drg_route_table_property(resource.drg_id, resource.drg_route_table_id) }}
+{{ common.route_table_property(resource.network_details.route_table_id) }}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for drg_attachment in drg_attachments -%}
+    {{ document_drg_attachment(drg_attachment) }}
+{%- endfor %}

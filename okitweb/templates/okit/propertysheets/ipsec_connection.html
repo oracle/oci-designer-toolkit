@@ -9,7 +9,8 @@
 {% block required_properties_table_rows_block %}
     <div class='tr'><div class='td'>Customer Premise Equipment</div><div class='td'><select id="cpe_id" class="okit-property-value"></select></div></div>
     <div class='tr'><div class='td'>Dynamic Routing Gateway</div><div class='td'><select id="drg_id" class="okit-property-value"></select></div></div>
-    <div class='tr'><div class='td'>Static Route</div><div class='td'><input type="text" id="static_routes" name="static_routes" class="okit-property-value"></div></div>
+    <!-- <div class='tr'><div class='td'>Static Route</div><div class='td'><input type="text" id="static_routes" name="static_routes" class="okit-property-value"></div></div> -->
+    {{ properties_input('Static Routes', 'static_routes', type='ipv4-cidr-list') }}
 {% endblock %}
 
 {% block optional_properties_table_rows_block %}

@@ -132,10 +132,10 @@ class OkitJsonTreeView extends OkitJsonView {
             if (v.length > 0 && v.filter((r) => self.isResourceParent(r, parent_id, compartment_id)).length > 0) {
                 v.filter((r) => self.isResourceParent(r, parent_id, compartment_id)).forEach((resource) => {
                     if (k.slice(0, -1) in this.container_key_map) {
-                        const child_ul = this.addCollapsibleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, prefix);
+                        const child_ul = this.addCollapsibleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, prefix);
                         this.addDesignTreeChildren(child_ul, resource.id, compartment_id, prefix)
                     } else {
-                        this.addSimpleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, false, prefix)
+                        this.addSimpleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, false, prefix)
                     }
                 })
             }
@@ -157,8 +157,8 @@ class OkitJsonTreeView extends OkitJsonView {
         // Loop through sorted resource lists
         Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([k, v]) => {
             if (v.length > 0) {
-                const parent = this.addCollapsibleTreeElement(root_ul, `${this.resource_prefix}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}-tree-view`, `${titleCase(k.split('_').join(' '))}`, `${this.resource_prefix}`);
-                v.forEach((resource) => {this.addSimpleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, false, `${this.resource_prefix}`)})
+                const parent = this.addCollapsibleTreeElement(root_ul, `${this.resource_prefix}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}`, `${titleCase(k.split('_').join(' '))}`, `${this.resource_prefix}`);
+                v.forEach((resource) => {this.addSimpleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, false, `${this.resource_prefix}`)})
             }
         })
     }
@@ -180,15 +180,15 @@ class OkitJsonTreeView extends OkitJsonView {
     addCompartmentTreeChildren(parent, parent_id, prefix) {
         Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([k, v], idx) => {
             if (v.length > 0 && v.filter((r) => r.compartment_id === parent_id).length > 0) {
-                const ul = this.addCollapsibleTreeElement(parent, `${idx}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}-tree-view`, `${titleCase(k.split('_').join(' '))}`, prefix);
+                const ul = this.addCollapsibleTreeElement(parent, `${idx}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}`, `${titleCase(k.split('_').join(' '))}`, prefix);
                 v.filter((r) => r.compartment_id === parent_id).forEach((resource) => {
                     if (k.slice(0, -1) === 'compartment') {
-                        const child_ul = this.addCollapsibleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, prefix);
+                        const child_ul = this.addCollapsibleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, prefix);
                         this.addCompartmentTreeChildren(child_ul, resource.id, prefix)
                     } else {
-                        this.addSimpleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, false, prefix)
+                        this.addSimpleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, false, prefix)
                     }
-                    // this.addSimpleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, false, prefix)
+                    // this.addSimpleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, false, prefix)
                 })
             }
         })
@@ -206,8 +206,8 @@ class OkitJsonTreeView extends OkitJsonView {
             const ul = this.addCollapsibleTreeElement(root_ul, `${i}_root`, 'availability-domain-tree-view', `Availability Domain ${i}`, this.ad_prefix);
             Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([k, v], idx) => {
                 if (v.length > 0 && v[0].availability_domain !== undefined) {
-                    const parent = this.addCollapsibleTreeElement(ul, `${i}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}-tree-view`, `${titleCase(k.split('_').join(' '))}`, this.ad_prefix);
-                    v.filter((r) => parseInt(r.availability_domain) === i || parseInt(r.availability_domain) === 0).forEach((resource) => {this.addSimpleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, false, `${this.ad_prefix}_${i}`)})
+                    const parent = this.addCollapsibleTreeElement(ul, `${i}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}`, `${titleCase(k.split('_').join(' '))}`, this.ad_prefix);
+                    v.filter((r) => parseInt(r.availability_domain) === i || parseInt(r.availability_domain) === 0).forEach((resource) => {this.addSimpleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, false, `${this.ad_prefix}_${i}`)})
                 }
             })
         }
@@ -231,13 +231,13 @@ class OkitJsonTreeView extends OkitJsonView {
     addNetworkTreeChildren(parent, parent_key, parent_id, prefix) {
         Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([k, v], idx) => {
             if (v.length > 0 && v[0][parent_key] !== undefined && v.filter((r) => r[parent_key] === parent_id).length > 0) {
-                const ul = this.addCollapsibleTreeElement(parent, `${idx}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}-tree-view`, `${titleCase(k.split('_').join(' '))}`, prefix);
+                const ul = this.addCollapsibleTreeElement(parent, `${idx}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}`, `${titleCase(k.split('_').join(' '))}`, prefix);
                 v.filter((r) => r[parent_key] === parent_id).forEach((resource) => {
                     if (k.slice(0, -1) in this.container_key_map) {
-                        const child_ul = this.addCollapsibleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, prefix);
+                        const child_ul = this.addCollapsibleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, prefix);
                         this.addNetworkTreeChildren(child_ul, this.container_key_map[k.slice(0, -1)], resource.id, prefix)
                     } else {
-                        this.addSimpleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}-tree-view`, resource.display_name, false, prefix)
+                        this.addSimpleTreeElement(ul, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, false, prefix)
                     }
                 })
             }
@@ -247,9 +247,10 @@ class OkitJsonTreeView extends OkitJsonView {
     addCollapsibleTreeElement(parent, id, css_class, text, prefix='') {
         const li = parent.append('li')
             .attr('id', `${prefix}${id}_li`)
-            .attr('class', `collapsible-view-element ${css_class}`);
+            .attr('class', `collapsible-view-element`);
         const div = li.append('div')
             .attr('id', `${prefix}${id}_div`)
+            .attr('class', css_class)
             .on('click', () => {
                 $(jqId(`${prefix}${id}_li ul`)).toggleClass('hidden');
                 $(jqId(`${prefix}${id}_div`)).toggleClass('tree_closed');
@@ -268,9 +269,10 @@ class OkitJsonTreeView extends OkitJsonView {
     addSimpleTreeElement(parent, id, css_class, text, prefix='') {
         const li = parent.append('li')
             .attr('id', `${prefix}${id}_li`)
-            .attr('class', `simple-view-element ${css_class}`);
+            .attr('class', `simple-view-element`);
         const div = li.append('div')
             .attr('id', `${prefix}${id}_div`)
+            .attr('class', css_class)
             .on('click', () => {
                 $(jqId(`${prefix}${id}_li ul`)).toggleClass('hidden');
                 $(jqId(`${prefix}${id}_div`)).toggleClass('tree_closed');

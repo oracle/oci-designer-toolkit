@@ -90,6 +90,7 @@ class OCIQuery(OCIConnection):
         "Vnic"
     ]
     DISCOVERY_OKIT_MAP = {
+        "AnalyticsInstance": "analytics_instances",
         "AutonomousDatabase": "autonomous_databases",
         "Bastion": "bastions",
         #"BootVolume": "block_storage_volumes",
@@ -219,11 +220,18 @@ class OCIQuery(OCIConnection):
                         resource_list = self.service_gateways(resource_list, resources)
                     elif resource_type == "Group":
                         resource_list = self.groups(resource_list, resources)
+                    # elif resource_type == "AnalyticsInstance":
+                    #     resource_list = self.analytics_instances(resource_list, resources)
                     # Check Life Cycle State
                     # logger.info(f'Processing {resource_type} : {resource_list}')
                     response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = [r for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
                     #response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = resource_list
         return response_json
+
+    def analytics_instances(self, analytics_instances, resources):
+        for ai in analytics_instances:
+            logger.info(jsonToFormattedString(ai))
+        return analytics_instances
 
     def dynamic_routing_gateways(self, drgs, resources):
         for drg in drgs:

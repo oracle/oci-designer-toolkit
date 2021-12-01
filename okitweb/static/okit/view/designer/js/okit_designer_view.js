@@ -241,15 +241,6 @@ class OkitDesignerArtefactView extends OkitArtefactView {
         }
     }
 
-    loadDynamicRoutingGateways(select_id) {
-        $(jqId(select_id)).empty();
-        const drg_select = $(jqId(select_id));
-        drg_select.append($('<option>').attr('value', '').text(''));
-        for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
-            drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
-        }
-    }
-
     loadNetworkSecurityGroups(select_id, subnet_id) {
         $(jqId(select_id)).empty();
         let multi_select = d3.select(d3Id(select_id));

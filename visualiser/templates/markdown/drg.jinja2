@@ -1,0 +1,57 @@
+{% import "common_macros.jinja2" as common with context %}
+{% macro document_drg_route_table(resource, drg_id) -%}
+| Property | Value    |
+| -------- | -------- |
+{{ common.document_property('Name', resource.display_name) }}
+{{ common.drg_route_distribution_property(drg_id, resource.import_drg_route_distribution_id, 'Import Route Distribution') }}
+{{ common.document_property('ECMP Enabled', resource.is_ecmp_enabled) }}
+{% if resource.rules | length > 0 -%}
+##### Rules
+| Type | Destination | Next Hop |
+| ---- | ----------- | -------- |
+{% for rule in resource.rules -%}
+    {{ document_drg_route_rule(rule) }}
+{% endfor %}
+{%- endif -%}
+{%- endmacro %}
+{%- macro document_drg_route_rule(resource) -%}
+    {{ "| %-15s | %-15s | %-15s |" | format(resource.destination_type, resource.destination, common.drg_attachment_link(resource.next_hop_drg_attachment_id)) }}{%- endmacro -%}
+{% macro document_drg_route_distribution(resource) -%}
+| Property | Value    |
+| -------- | -------- |
+{{ common.document_property('Type', resource.distribution_type) }}
+{{ common.document_property('Name', resource.display_name) }}
+{% if resource.statements | length > 0 -%}
+##### Statements
+| Action | Type / Attachment | Priority |
+| ------ | ----------------- | -------- |
+{% for statement in resource.statements -%}
+    {{ document_drg_distribution_statement(statement) }}
+{% endfor %}
+{%- endif -%}
+{%- endmacro %}
+{%- macro document_drg_distribution_statement(resource) -%}
+    {%- if resource.match_criteria.match_type == "DRG_ATTACHMENT_ID" -%}
+        {{ "| %-15s | %-15s | %-15s |" | format(resource.action, common.drg_attachment_link(resource.match_criteria.drg_attachment_id), resource.priority) }}
+    {%- else -%}
+        {{ "| %-15s | %-15s | %-15s |" | format(resource.action, resource.match_criteria.attachment_type, resource.priority) }}
+    {%- endif -%}
+{%- endmacro -%}
+{% macro document_drg(resource) -%}
+{{ common.document_common_details(resource) }}
+{{ common.document_common_properties(resource) }}
+
+#### Route Distributions
+{% for distribution in resource.route_distributions -%}
+    {{ document_drg_route_distribution(distribution) }}
+{%- endfor %}
+
+#### Route Tables
+{% for rt in resource.route_tables -%}
+    {{ document_drg_route_table(rt, resource.id) }}
+{%- endfor %}
+{{ common.document_tags(resource) }}
+{%- endmacro %}
+{% for drg in drgs -%}
+    {{ document_drg(drg) }}
+{%- endfor %}

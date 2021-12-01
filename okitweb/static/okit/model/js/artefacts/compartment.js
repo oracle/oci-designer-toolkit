@@ -29,7 +29,7 @@ class Compartment extends OkitArtifact {
     convert() {
         super.convert();
         // Check if Root
-        if (this.id === this.compartment_id) {this.compartment_id = null;}
+        if (this.id === this.compartment_id || this.compartment_id === 'canvas') {this.compartment_id = null;}
     }
 
     /*

@@ -59,7 +59,7 @@ class RouteTableView extends OkitDesignerArtefactView {
 
     addRouteRule() {
         let new_rule = {
-            target_type: "internet_gateways",
+            target_type: "internet_gateway",
             destination_type: "CIDR_BLOCK",
             destination: "0.0.0.0/0",
             network_entity_id: "",
@@ -77,6 +77,7 @@ class RouteTableView extends OkitDesignerArtefactView {
     }
 
     addRouteRuleHtml(route_rule, rule_num=1) {
+        const self = this;
         let me = this;
         let vcn_id = '';
         if (this.parent.getArtifactReference() === VirtualCloudNetwork.getArtifactReference()) {
@@ -84,6 +85,27 @@ class RouteTableView extends OkitDesignerArtefactView {
         } else {
             // Must be a child of the Virtual Cloud Network
             vcn_id = this.parent.parent_id;
+        }
+
+        const loadNetworkEntityIds = (rule_num, target_type) => {
+            const select = $(`#network_entity_id${rule_num}`)
+            select.empty();
+            const getListFunction = self.getArrayFunction(target_type.split('_').join(' '))
+            console.info('getListFunction', getListFunction)
+            const gateways = self.getJsonView()[getListFunction]().filter((g) => g.vcn_id === vcn_id)
+            let gateway_id = ''
+            gateways.forEach((gateway) => {
+                gateway_id = gateway.id
+                let text = gateway.display_name
+                if (target_type === 'drg_attachment') {
+                    const drg = self.getJsonView().getDrg(gateway.drg_id)
+                    gateway_id = drg.id
+                    text = drg.display_name
+                }
+                select.append($('<option>').attr('value', gateway_id).text(text));
+            })
+            // return gateways.length ? gateways[0].id : ''
+            return gateway_id
         }
 
         let rules_table_body = d3.select('#route_rules_table_body');
@@ -105,13 +127,23 @@ class RouteTableView extends OkitDesignerArtefactView {
             });
 
         // Target Type
+        // const target_types_map = new Map([
+        //     ['Internet Gateway', 'internet_gateways'],
+        //     ['NAT Gateway', 'nat_gateways'],
+        //     ['Local Peering Gateway', 'local_peering_gateways'],
+        //     ['Dynamic Routing Gateway', 'drgs'],
+        //     // ['Dynamic Routing Gateway', 'dynamic_routing_gateways'], // Needed when PCA is available
+        //     ['Private IP', 'private_ips'],
+        //     ['Service Gateway', 'service_gateways'],
+        // ]);
         const target_types_map = new Map([
-            ['Internet Gateway', 'internet_gateways'],
-            ['NAT Gateway', 'nat_gateways'],
-            ['Local Peering Gateway', 'local_peering_gateways'],
-            ['Dynamic Routing Gateway', 'dynamic_routing_gateways'],
-            ['Private IP', 'private_ips'],
-            ['Service Gateway', 'service_gateways'],
+            ['Internet Gateway', 'internet_gateway'],
+            ['NAT Gateway', 'nat_gateway'],
+            ['Local Peering Gateway', 'local_peering_gateway'],
+            ['Dynamic Routing Gateway', 'drg_attachment'],
+            // ['Dynamic Routing Gateway', 'dynamic_routing_gateways'], // Needed when PCA is available
+            ['Private IP', 'private_ip'],
+            ['Service Gateway', 'service_gateway'],
         ]);
         let rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td')
@@ -125,9 +157,9 @@ class RouteTableView extends OkitDesignerArtefactView {
                 route_rule.network_entity_id = '';
                 // Get Type
                 route_rule['target_type'] = target_type;
-                if (target_type !== 'private_ips') {
+                if (target_type !== 'private_ip') {
                     $(jqId("destination_type_row" + rule_num)).addClass('collapsed');
-                    if (target_type !== 'service_gateways') {
+                    if (target_type !== 'service_gateway') {
                         $(jqId("destination_type" + rule_num)).val('CIDR_BLOCK');
                         route_rule['destination_type'] = 'CIDR_BLOCK';
                         $(jqId("destination_row" + rule_num)).removeClass('collapsed');
@@ -136,21 +168,38 @@ class RouteTableView extends OkitDesignerArtefactView {
                         route_rule['destination_type'] = 'SERVICE_CIDR_BLOCK';
                         $(jqId("destination_row" + rule_num)).addClass('collapsed');
                     }
-                    $(jqId("network_entity_id" + rule_num)).empty();
-                    if (me.getOkitJson()[target_type]) {
-                        for (let gateway of me.getOkitJson()[target_type]) {
-                            if (gateway.vcn_id === vcn_id) {
-                                $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
-                                if (route_rule.network_entity_id === '') {
-                                    // No Network Entity Specified will assume the first of "Target Type"
-                                    route_rule.network_entity_id = gateway.id;
-                                }
-                            }
-                        }
-                        $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
-                    }
-                    if (route_rule.target_type === 'service_gateways') {
-                        route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
+                    // $(jqId("network_entity_id" + rule_num)).empty();
+                    // const getListFunction = self.getArrayFunction(target_type.split('_').join(' '))
+                    // console.info('getListFunction', getListFunction)
+                    // self.getJsonView()[getListFunction]().forEach((gateway) => {
+                    //     let value = gateway.id
+                    //     let text = gateway.display_name
+                    //     if (target_type === 'drg_attachment') {
+                    //         const drg = self.getJsonView().getDrg(gateway.drg_id)
+                    //         value = drg.id
+                    //         text = drg.display_name
+                    //     }
+                    //     $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', value).text(text));
+                    // })
+
+                    // Load and assign first in list
+                    route_rule.network_entity_id = loadNetworkEntityIds(rule_num, target_type) 
+
+                    // if (me.getOkitJson()[target_type]) {
+                    //     for (let gateway of me.getOkitJson()[target_type]) {
+                    //         if (gateway.vcn_id === vcn_id) {
+                    //             $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
+                    //             if (route_rule.network_entity_id === '') {
+                    //                 // No Network Entity Specified will assume the first of "Target Type"
+                    //                 route_rule.network_entity_id = gateway.id;
+                    //             }
+                    //         }
+                    //     }
+                    //     $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
+                    // }
+                    if (route_rule.target_type === 'service_gateway' && route_rule.network_entity_id !== '') {
+                        const sg = self.getOkitJson().getServiceGateway(route_rule.network_entity_id)
+                        route_rule.destination = sg ? sg.service_name : ''
                     }
                 } else {
                     $(jqId("destination_type_row" + rule_num)).removeClass('collapsed');
@@ -164,10 +213,10 @@ class RouteTableView extends OkitDesignerArtefactView {
         });
         target_type_select.property('value', route_rule.target_type);
         if (!route_rule.target_type || route_rule.target_type === '') {
-            route_rule.target_type = 'internet_gateways';
+            route_rule.target_type = 'internet_gateway';
         }
         $(jqId("target_type" + rule_num)).val(route_rule.target_type);
-        if (route_rule.target_type === 'service_gateways') {
+        if (route_rule.target_type === 'service_gateway') {
             route_rule.destination = this.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
         }
 
@@ -220,25 +269,29 @@ class RouteTableView extends OkitDesignerArtefactView {
             .attr("id", "network_entity_id" + rule_num)
             .on("change", function() {
                 route_rule['network_entity_id'] = this.options[this.selectedIndex].value;
-                if (route_rule.target_type === 'service_gateways') {
+                if (route_rule.target_type === 'service_gateway') {
                     route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
                 }
                 displayOkitJson();
             });
         let target_type = $(jqId("target_type" + rule_num)).val();
-        $(jqId("network_entity_id" + rule_num)).empty();
-        if (this.getOkitJson()[target_type]) {
-            for (let gateway of this.getOkitJson()[target_type]) {
-                if (gateway.vcn_id === vcn_id) {
-                    $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
-                    if (route_rule.network_entity_id === '') {
-                        // No Network Entity Specified will assume the first of "Target Type"
-                        route_rule.network_entity_id = gateway.id;
-                    }
-                }
-            }
-            $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
-        }
+        // $(jqId("network_entity_id" + rule_num)).empty();
+        // // ================================== Need to update
+        // if (this.getOkitJson()[target_type]) {
+        //     for (let gateway of this.getOkitJson()[target_type]) {
+        //         if (gateway.vcn_id === vcn_id) {
+        //             $(jqId("network_entity_id" + rule_num)).append($('<option>').attr('value', gateway.id).text(gateway.display_name));
+        //             if (route_rule.network_entity_id === '') {
+        //                 // No Network Entity Specified will assume the first of "Target Type"
+        //                 route_rule.network_entity_id = gateway.id;
+        //             }
+        //         }
+        //     }
+        //     $(jqId("network_entity_id" + rule_num)).val(route_rule.network_entity_id);
+        // }
+        loadNetworkEntityIds(rule_num, target_type)
+        $(`#network_entity_id${rule_num}`).val(route_rule.network_entity_id)
+        console.info('Network Entity Id', $(`#network_entity_id${rule_num}`).val())
         // Description
         rule_row = rule_table.append('div').attr('class', 'tr');
         rule_row.append('div').attr('class', 'td')
@@ -255,7 +308,7 @@ class RouteTableView extends OkitDesignerArtefactView {
                 displayOkitJson();
             });
         // Check if we need to hide destination
-        if (route_rule.target_type === 'service_gateways') {
+        if (route_rule.target_type === 'service_gateway') {
             $(jqId("destination_row" + rule_num)).addClass('collapsed');
             route_rule.destination = me.getOkitJson().getServiceGateway(route_rule.network_entity_id).service_name;
         }

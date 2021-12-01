@@ -129,13 +129,9 @@ def handle_oci_service_error(error):
 @bp.route('/resourcemanager', methods=(['GET', 'POST']))
 def ociResourceManger():
     if request.method == 'GET':
-        query_string = request.query_string
-        parsed_query_string = urllib.parse.unquote(query_string.decode())
-        query_json = json.loads(parsed_query_string)
-        logJson(query_json)
-        config_profile = query_json.get('location', {}).get('config_profile', 'DEFAULT')
-        compartment_id = query_json.get('location', {}).get('compartment_id', None)
-        region = query_json.get('location', {}).get('region', None)
+        config_profile = request.args.get('config_profile', default='DEFAULT')
+        compartment_id = request.args.get('compartment_id')
+        region = request.args.get('region')
         try:
             config = {'region': region}
             oci_resourcemanager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
@@ -146,6 +142,7 @@ def ociResourceManger():
             return str(e), 500
     elif request.method == 'POST':
         logger.debug('JSON     : {0:s}'.format(str(request.json)))
+        okit_model_id = request.json.get('okit_model_id', '')
         config_profile = request.json.get('location', {}).get('config_profile', 'DEFAULT')
         compartment_id = request.json.get('location', {}).get('compartment_id', None)
         region = request.json.get('location', {}).get('region', None)
@@ -174,6 +171,7 @@ def ociResourceManger():
             stack['compartment_id'] = compartment_id
             stack['zipfile'] = zipname
             stack['variables'] = generator.getVariables()
+            stack['freeform_tags'] = generator.getOkitFreeformTags()
             resource_manager = OCIResourceManagers(config=config, profile=config_profile, compartment_id=compartment_id)
             if create_or_update == 'UPDATE':
                 stack['id'] = stack_id
@@ -240,24 +238,10 @@ def ociQuery():
         regions = request.args.get('region')
         region = request.args.get('region')
         sub_compartments = request.args.get('sub_compartments', default=False).lower() == 'true'
-        # query_string = request.query_string
-        # parsed_query_string = urllib.parse.unquote(query_string.decode())
-        # query_json = standardiseIds(json.loads(parsed_query_string), from_char='-', to_char='.')
-        # logger.debug('===================================== Query Json =====================================')
-        # logJson(query_json)
-        # logger.debug('======================================================================================')
-        # config_profile = query_json.get('config_profile', 'DEFAULT')
-        # regions = query_json.get('region', None)
-        # compartments = query_json.get('compartment_id', None)
-        #compartments = None # TODO need to pass list of compartment ocids
         logger.info('Using Profile : {0!s:s}'.format(config_profile))
         config = {'region': region}
-        # config = {'region': query_json['region']}
         query = OCIQuery(config=config, profile=config_profile)
-        # response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=query_json['sub_compartments'])
         response = query.executeQuery(regions=[regions] if regions else None, compartments=[compartments] if compartments else None, include_sub_compartments=sub_compartments)
-        # config = {'region': query_json['region']}
-        #response_json = response_to_json(response)
         logJson(response)
         return response
     else:

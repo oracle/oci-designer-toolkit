@@ -379,7 +379,7 @@ class OciResourceDiscoveryClient(object):
         # return the "list_*" methods for a class
         return {method for method in dir(klass) if method.startswith('list_')}
 
-    def __init__(self, config, signer=None, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS):
+    def __init__(self, config, signer=None, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS, include_root_as_compartment=False):
         self.config = config
         if signer:
             logger.debug("Using provided OCI API signer")
@@ -418,6 +418,19 @@ class OciResourceDiscoveryClient(object):
 
         # get all compartments
         self.all_compartments = self.get_compartments()
+        if include_root_as_compartment:
+            self.all_compartments.append(oci.identity.models.Compartment(
+                compartment_id=None,
+                defined_tags=self.tenancy.defined_tags,
+                description=self.tenancy.description,
+                freeform_tags=self.tenancy.freeform_tags,
+                id=self.tenancy.id,
+                inactive_status=None,
+                is_accessible=None,
+                lifecycle_state="ACTIVE",
+                name=self.tenancy.name,
+                time_created=None
+            ))
         self.compartments = set(compartments) if compartments else None
         self.include_sub_compartments = include_sub_compartments
         if include_sub_compartments:

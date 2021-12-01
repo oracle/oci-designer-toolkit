@@ -30,16 +30,26 @@ resource "oci_analytics_analytics_instance" "{{ resource_name }}" {
 {% if network_endpoint_details is defined %}
     network_endpoint_details {
         #Required
-        network_endpoint_type = {{ network_endpoint_type | safe }}
+        network_endpoint_type = {{ network_endpoint_details.network_endpoint_type | safe }}
         #Optional
-        subnet_id = {{ subnet_id }}
-        vcn_id = {{ vcn_id }}
-        whitelisted_ips = [{{ network_endpoint_details.whitelisted_ips | safe }}]
+{% if network_endpoint_details.subnet_id is defined %}
+        subnet_id = {{ network_endpoint_details.subnet_id | safe }}
+{% endif %}
+{% if network_endpoint_details.vcn_id is defined %}
+        vcn_id = {{ network_endpoint_details.vcn_id | safe }}
+{% endif %}
+{% if network_endpoint_details.whitelisted_ips is defined %}
+        whitelisted_ips = [{% for ip in network_endpoint_details.whitelisted_ips %}"{{ ip | replace(" ", "") }}"{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}
+{% if network_endpoint_details.whitelisted_vcns is defined %}
+    {% for wlv in network_endpoint_details.whitelisted_vcns %}
         whitelisted_vcns {
             #Optional
-            id = var.analytics_instance_network_endpoint_details_whitelisted_vcns_id
-            whitelisted_ips = var.analytics_instance_network_endpoint_details_whitelisted_vcns_whitelisted_ips
+            id = {{ wlv.id | safe }}
+            whitelisted_ips = [{% for ip in wlv.whitelisted_ips %}"{{ ip | replace(" ", "") }}"{% if not loop.last %},{% endif %}{% endfor %}]
         }
+    {% endfor %}
+{% endif %}
     }
 {% endif %}
 {% if defined_tags is defined %}
