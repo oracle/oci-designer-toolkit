@@ -312,8 +312,10 @@ class OCIGenerator(object):
                 "network_endpoint_type": self.generateJinja2Variable('network_endpoint_type', resource["network_endpoint_details"]["network_endpoint_type"], standardisedName)
                 }
             if resource["network_endpoint_details"]["network_endpoint_type"] == 'PRIVATE':
-                network_endpoint_details["subnet_id"] = self.generateJinja2Variable('subnet_id', resource["network_endpoint_details"]["subnet_id"], standardisedName)
-                network_endpoint_details["vcn_id"] = self.generateJinja2Variable('vcn_id', resource["network_endpoint_details"]["vcn_id"], standardisedName)
+                network_endpoint_details["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['network_endpoint_details']['subnet_id']]))
+                network_endpoint_details["vcn_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['network_endpoint_details']['vcn_id']]))
+                # network_endpoint_details["subnet_id"] = self.generateJinja2Variable('subnet_id', resource["network_endpoint_details"]["subnet_id"], standardisedName)
+                # network_endpoint_details["vcn_id"] = self.generateJinja2Variable('vcn_id', resource["network_endpoint_details"]["vcn_id"], standardisedName)
             else:
                 if len(resource["network_endpoint_details"]["whitelisted_ips"]) > 0:
                     # network_endpoint_details["whitelisted_ips"] = self.generateJinja2Variable('whitelisted_ips', resource["network_endpoint_details"]["whitelisted_ips"], standardisedName)
@@ -322,7 +324,8 @@ class OCIGenerator(object):
                     network_endpoint_details["whitelisted_vcns"] = []
                     for wlv in resource["network_endpoint_details"]["whitelisted_vcns"]:
                         vcn = {
-                            "id": self.generateJinja2Variable('whitelisted_vcns_id', wlv["id"], standardisedName),
+                            # "id": self.generateJinja2Variable('whitelisted_vcns_id', wlv["id"], standardisedName),
+                            "id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[wlv["id"]])),
                             "whitelisted_ips":  wlv["whitelisted_ips"]
                             # "whitelisted_ips": self.generateJinja2Variable('whitelisted_vcns_whitelisted_ips', wlv["whitelisted_ips"], standardisedName)
                         }
