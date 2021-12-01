@@ -2,7 +2,7 @@
 # file: docker-compose
 # Copyright (c) 2020, 2021, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
-version: '3.1'
+version: '3.8'
 services:
   okit:
     build:
@@ -14,5 +14,10 @@ services:
       - 443:443/tcp
       - 80:80/tcp
     volumes:
-      - "~/okit/user/templates:/okit/templates"
+      - "~/.oci:/root/.oci"
+      - "~/.ssh:/root/.ssh"
+      - "~/Workspace/okit/log:/okit/log"
+      - "~/Workspace/okit/git:/okit/instance/git"
+      - "~/Workspace/okit/local:/okit/instance/local"
+      - "~/Workspace/okit/templates/user:/okit/instance/templates/user"
 ...

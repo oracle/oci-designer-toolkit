@@ -1,0 +1,69 @@
+/*
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ */
+
+ .okit-oci-import-options {
+    border-bottom: 2px black solid;
+    padding-bottom: 5px;
+}
+
+.okit-oci-import-view {
+    font-size: small;
+    overflow: scroll;
+    width: 100%;
+    height: 100%;
+    white-space: nowrap;
+}
+
+.okit-oci-import-view ul {
+    list-style: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.okit-oci-import-view li {
+    padding-left: 0.5em;
+    margin-top: 2px;
+}
+
+.okit-oci-import-view li > div {
+    display: inline-block;
+    margin-left: 0;
+    padding-left: 0;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: 1.25em 1.25em;
+    white-space: nowrap;
+}
+
+.okit-oci-import-resource-group > div {
+    background-position-x: 0.75em;
+}
+
+.okit-oci-import-resource > div {
+    background-position-x: 0.2em;
+}
+
+.okit-oci-import-view li > div > label {
+    clear: both;
+    text-wrap: none;
+    white-space: nowrap;
+    padding-right: 1em;
+}
+
+.okit-oci-import-resource-group > div > label {
+    margin-left: 1.75em;
+    font-weight: bolder;
+}
+
+.okit-oci-import-resource > div > label {
+    margin-left: 0.2em;
+}
+
+.okit-oci-import-view li > div > input[type="checkbox"] {
+    padding-right: 1em;
+}
+
+

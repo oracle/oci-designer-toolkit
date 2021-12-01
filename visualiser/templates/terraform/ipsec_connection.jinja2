@@ -21,7 +21,7 @@ resource "oci_core_ipsec" "{{ resource_name }}" {
     compartment_id = {{ compartment_id }}
     cpe_id         = {{ cpe_id | safe }}
     drg_id         = {{ drg_id | safe }}
-    static_routes  = [{{ static_routes | safe }}]
+    static_routes    = [{% for static_route in static_routes %}"{{ static_route }}"{% if not loop.last %},{% endif %}{% endfor %}]
     # Optional
     display_name   = {{ display_name | safe }}
 {% if cpe_local_identifier_type is defined %}

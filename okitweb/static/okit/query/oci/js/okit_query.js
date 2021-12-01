@@ -38,14 +38,13 @@ class OkitOCIQuery {
         const self = this;
         this.region_query_count[request.region] = 1;
         $.ajax({
+            cache: false,
             type: 'get',
             url: 'oci/query',
             dataType: 'text',
             contentType: 'application/json',
-            // data: JSON.stringify(request),
             data: request,
             success: function(resp) {
-                console.log(resp)
                 const response_json = JSON.parse(resp);
                 const title = request.sub_compartments ? `Queried Compartment ${request.compartment_name} and Sub-Compartments` : `Queried Compartment ${request.compartment_name}`;
                 const description = `${title} in Region ${request.region}`;

@@ -375,3 +375,14 @@ OkitJsonView.prototype.loadDrgsMultiSelect = function(select_id) {
             .text(drg.display_name);
     }
 }
+OkitJsonView.prototype.loadDrgRouteTablesSelect = function(select_id, drg_id, empty_option=false) {
+    $(jqId(select_id)).empty();
+    const drg_select = $(jqId(select_id));
+    if (empty_option) {
+        drg_select.append($('<option>').attr('value', '').text(''));
+    }
+    const drg = this.getDrg(drg_id)
+    for (let drg_rt of drg ? drg.route_tables : []) {
+        drg_select.append($('<option>').attr('value', drg_rt.id).text(drg_rt.display_name));
+    }
+}

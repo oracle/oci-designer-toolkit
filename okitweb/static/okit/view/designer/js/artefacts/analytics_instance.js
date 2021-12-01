@@ -37,8 +37,6 @@ class AnalyticsInstanceView extends OkitArtefactView {
             // Add Subnet & Vcn Lists
             this.loadVirtualCloudNetworkSelect('vcn_id');
             this.loadSubnetSelect('subnet_id');
-            // Add Handler for Network Endpoint
-            $(jqId('network_endpoint_type')).on('change', () => {self.changeNetworkEndpoint();});
             self.collapseExpandNetworkEndPointInputs();
             // Whitelisted Vcns
             self.loadWhitelistedVcns();
@@ -46,6 +44,8 @@ class AnalyticsInstanceView extends OkitArtefactView {
             $(jqId('add_whitelisted_vcns')).on('click', () => {self.addWhitelistedVcn();});
             // load Properties
             loadPropertiesSheet(self.artefact);
+            // Add Handler for Network Endpoint
+            $(jqId('network_endpoint_type')).on('change', () => {self.changeNetworkEndpoint();});
         });
     }
     changeNetworkEndpoint() {
@@ -88,13 +88,13 @@ class AnalyticsInstanceView extends OkitArtefactView {
             this.network_endpoint_details.vcn_id = '';
         } else if (this.network_endpoint_details.network_endpoint_type === 'PRIVATE') {
             // Reset Values
-            this.network_endpoint_details.whitelisted_ips = '';
+            this.network_endpoint_details.whitelisted_ips = [];
             this.network_endpoint_details.whitelisted_vcns = [];
         } else {
             // Reset Values
             this.network_endpoint_details.subnet_id = '';
             this.network_endpoint_details.vcn_id = '';
-            this.network_endpoint_details.whitelisted_ips = '';
+            this.network_endpoint_details.whitelisted_ips = [];
             this.network_endpoint_details.whitelisted_vcns = [];
         }
     }
@@ -111,7 +111,7 @@ class AnalyticsInstanceView extends OkitArtefactView {
     addWhitelistedVcn() {
         let new_vcn = {
             id: "",
-            whitelisted_ips: ""
+            whitelisted_ips: []
         };
         this.network_endpoint_details.whitelisted_vcns.push(new_vcn);
         this.loadWhitelistedVcns();
@@ -146,9 +146,9 @@ class AnalyticsInstanceView extends OkitArtefactView {
         tr.append('div').attr('class', 'td')
             .append('select')
                 .attr('class', 'property-value')
-                .attr('id', `vcn_id${idx}`)
-                .on('change', () => {vcn.id = this.options[this.selectedIndex].value});
-        this.loadVirtualCloudNetworkSelect(`vcn_id${idx}`)
+                .attr('id', `wlv_vcn_id${idx}`)
+                .on('change', () => {vcn.id = $(`#wlv_vcn_id${idx}`).val()});
+        this.loadVirtualCloudNetworkSelect(`wlv_vcn_id${idx}`)
         $(`#vcn_id${idx}`).val(vcn.id);
         // Ips
         tr = table.append('div').attr('class', 'tr')
@@ -157,10 +157,12 @@ class AnalyticsInstanceView extends OkitArtefactView {
             .append('input')
                 .attr('type', 'text')
                 .attr('class', 'property-value')
-                .attr('id', `whitelisted_ips${idx}`)
-                .attr('name', `whitelisted_ips${idx}`)
+                .attr('id', `wlv_whitelisted_ips${idx}`)
+                .attr('name', `wlv_whitelisted_ips${idx}`)
+                .attr('pattern', "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(,\s?|$))+")
+                .attr('title', "Comma separated IPv4 Addresses")
                 .attr('value', vcn.whitelisted_ips)
-                .on('change', () => {vcn.whitelisted_ips = this.value});
+                .on('change', () => {vcn.whitelisted_ips = $(`#wlv_whitelisted_ips${idx}`).val().split(',')});
     }
    /*
     ** Load and display Value Proposition

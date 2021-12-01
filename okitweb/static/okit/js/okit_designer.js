@@ -766,8 +766,8 @@ function importTemplate(template_url, event) {
 /*
 ** Query OCI
  */
-function displayQueryDialog() {
-    $(jqId('modal_dialog_title')).text('Query OCI');
+function displayQueryDialog(title='Query OCI', btn_text='Query', callback) {
+    $(jqId('modal_dialog_title')).text(title);
     // if (okitSettings.fast_discovery) {
     //     $(jqId('modal_dialog_title')).text('OCI Introspection (Fast Discovery)');
     // //    document.getElementById('sub_compartments_row').classList.add('collapsed');
@@ -811,23 +811,41 @@ function displayQueryDialog() {
     // Region Ids
     tr = tbody.append('div')
         .attr('class', 'tr');
-    tr.append('div')
-        .attr('class', 'td')
-        .text('Region(s)');
-    tr.append('div')
-        .attr('class', 'td')
-        .append('select')
-            .attr('id', 'query_region_id')
-            .attr('multiple', 'multiple')
-            .attr('size', 10)
-            .on('change', () => {
-                console.info('Region Select ' + $(jqId('query_region_id')).val());
-                okitSettings.query_regions = $(jqId('query_region_id')).val();
-                okitSettings.save();
-            })
-            .append('option')
-                .attr('value', 'Retrieving')
-                .text('Retrieving..........');
+    if (btn_text === 'Query') {
+        tr.append('div')
+            .attr('class', 'td')
+            .text('Region(s)');
+        tr.append('div')
+            .attr('class', 'td')
+            .append('select')
+                .attr('id', 'query_region_id')
+                .attr('multiple', 'multiple')
+                .attr('size', 10)
+                .on('change', () => {
+                    console.info('Region Select ' + $(jqId('query_region_id')).val());
+                    okitSettings.query_regions = $(jqId('query_region_id')).val();
+                    okitSettings.save();
+                })
+                .append('option')
+                    .attr('value', 'Retrieving')
+                    .text('Retrieving..........');
+    } else {
+        tr.append('div')
+            .attr('class', 'td')
+            .text('Region');
+        tr.append('div')
+            .attr('class', 'td')
+            .append('select')
+                .attr('id', 'query_region_id')
+                .on('change', () => {
+                    console.info('Region Select ' + $(jqId('query_region_id')).val());
+                    okitSettings.query_regions = $(jqId('query_region_id')).val();
+                    okitSettings.save();
+                })
+                .append('option')
+                    .attr('value', 'Retrieving')
+                    .text('Retrieving..........');
+    }
     // Compartment Id
     tr = tbody.append('div')
         .attr('class', 'tr');
@@ -888,10 +906,11 @@ function displayQueryDialog() {
     let submit = d3.select(d3Id('modal_dialog_footer')).append('div').append('button')
         .attr('id', 'submit_query_btn')
         .attr('type', 'button')
-        .text('Query')
-        .on('click', function () {
-            showQueryResults();
-        });
+        .text(btn_text)
+        .on('click', callback);
+        // .on('click', function () {
+        //     showQueryResults();
+        // });
     $(jqId('modal_dialog_wrapper')).removeClass('hidden');
 }
 function handleQueryOci(e) {
@@ -899,7 +918,29 @@ function handleQueryOci(e) {
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog();
+    displayQueryDialog('Query OCI', 'Query', () => {showQueryResults()});
+    // Set Query Config Profile
+    console.info('Profile : ' + okitSettings.profile);
+    if (!okitSettings.profile) {
+        okitSettings.profile = 'DEFAULT';
+    }
+    console.info('Profile : ' + okitSettings.profile);
+    okitSettings.home_region_key = '';
+    okitSettings.home_region = '';
+    ociRegions = [];
+    // Load Previous Profile
+    $(jqId('config_profile')).val(okitSettings.profile);
+    // Load Compartment Select
+    loadCompartments();
+    // Load Region Select
+    loadRegions(selectQueryLastUsedRegion);
+}
+function handleImportFromOci(e) {
+    hideNavMenu();
+    $("#toolbar_view_select").val('designer');
+    handleSwitchToCompartmentView();
+    // Display Dialog
+    displayQueryDialog('Import From OCI', 'Import', () => {showImportOciResults()});
     // Set Query Config Profile
     console.info('Profile : ' + okitSettings.profile);
     if (!okitSettings.profile) {
@@ -1052,6 +1093,39 @@ function showQueryResults() {
             redrawSVGCanvas(region);
             displayTreeView();
             $(jqId('modal_loading_wrapper')).addClass('hidden');
+        }, function (region) {
+            $(jqId(regionCheckboxName(region))).prop('checked', true);
+            removeRegionTabProgress(region);
+        });
+    } else {
+        console.info('Region Not Selected.');
+    }
+    $(jqId('modal_dialog_wrapper')).addClass('hidden');
+    hideRecoverMenuItem();
+}
+function showImportOciResults() {
+    console.info('Generating Import Oci Results');
+    let regions = [$(jqId('query_region_id')).val()];
+    let request = {};
+    request.compartment_id = $(jqId('query_compartment_id')).val();
+    request.compartment_name = $(`${jqId('query_compartment_id')} option:selected`).text();
+    request.config_profile = $(jqId('config_profile')).val();
+    request.sub_compartments = $(jqId('include_sub_compartments')).is(':checked');
+    request.fast_discovery = $(jqId('fast_discovery')).is(':checked');
+    request.region = '';
+    console.info('Regions Ids : ' + regions);
+    newRegionsModel();
+    if (regions.length > 0) {
+        $(jqId('modal_loading_wrapper')).removeClass('hidden');
+        okitOCIQuery = new OkitOCIQuery(regions, request.fast_discovery);
+        // Add Tabs
+        $(jqId('region_progress')).empty();
+        okitOCIQuery.query(request, function(region) {
+            console.info('Complete ' + region);
+            $(jqId('modal_loading_wrapper')).addClass('hidden');
+            slideLeftPanel('oci_import_panel');
+            const importView = new OkitOciImportView(regionOkitJson[region])
+            importView.draw()
         }, function (region) {
             $(jqId(regionCheckboxName(region))).prop('checked', true);
             removeRegionTabProgress(region);

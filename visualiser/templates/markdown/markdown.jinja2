@@ -46,11 +46,6 @@
     {% include "local_peering_gateway.jinja2" ignore missing with context %}
 {%- endif %}
 
-{% if remote_peering_connections is defined and remote_peering_connections|length > 0 -%}
-    ### Remote Peering Connections
-    {% include "remote_peering_connection.jinja2" ignore missing with context %}
-{%- endif %}
-
 {% if route_tables is defined and route_tables|length > 0 -%}
     ### Route Tables
     {% include "route_table.jinja2" ignore missing with context %}
@@ -64,6 +59,21 @@
 {% if network_security_groups is defined and network_security_groups|length > 0 -%}
     ### Network Security Groups
     {% include "network_security_group.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if drg_attachments is defined and drg_attachments|length > 0 -%}
+    ### DRG Attachments
+    {% include "drg_attachment.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if drgs is defined and drgs|length > 0 -%}
+    ### Dynamic Routing Gateways
+    {% include "drg.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if remote_peering_connections is defined and remote_peering_connections|length > 0 -%}
+    ### Remote Peering Connections
+    {% include "remote_peering_connection.jinja2" ignore missing with context %}
 {%- endif %}
 
 ## Databases
@@ -110,6 +120,16 @@
 {% if file_storage_systems is defined and file_storage_systems|length > 0 -%}
     ### File Storage Systems
     {% include "file_storage_system.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if file_systems is defined and file_systems|length > 0 -%}
+    ### File Systems
+    {% include "file_system.jinja2" ignore missing with context %}
+{%- endif %}
+
+{% if mount_targets is defined and mount_targets|length > 0 -%}
+    ### Mount Targets
+    {% include "mount_target.jinja2" ignore missing with context %}
 {%- endif %}
 
 ## External

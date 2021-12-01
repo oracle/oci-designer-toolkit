@@ -88,7 +88,7 @@
 {%- endmacro -%}
 
 {%- macro property_link(value) -%}
-    {{ "[%s](#%s)" | format(value, value) }}
+    {{ "[%s](#%s)" | format(value, value | replace(" ", "-") | lower) }}
 {%- endmacro -%}
 
 {%- macro document_availability_domain(name, regional_name, title="Availability Domain") -%}
@@ -103,7 +103,7 @@
 
 
 {%- macro compartment_property(id, title="Compartment") -%}
-    {{ document_property_link(title, compartment_link(id)) }}
+    {{ document_property(title, compartment_link(id)) }}
 {%- endmacro -%}
 
 {%- macro compartment_link(id) -%}
@@ -153,8 +153,101 @@
 {%- endmacro %}
 
 
+{%- macro drg_property(id, title="Dynamic Routing Gateway") -%}
+    {{ document_property(title, drg_link(id)) }}
+{%- endmacro -%}
+
+{% macro drg_link(id) -%}
+    {{ property_link(drg_name(id)) }}
+{%- endmacro %}
+
+{% macro drg_name(id) -%}
+    {%- for drg in drgs -%}
+        {%- if drg.id == id -%}
+            {{ drg.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+
+{%- macro drg_attachment_property(id, title="DRG Attachment") -%}
+    {{ document_property(title, drg_attachment_link(id)) }}
+{%- endmacro -%}
+
+{% macro drg_attachment_link(id) -%}
+    {{ property_link(drg_attachment_name(id)) }}
+{%- endmacro %}
+
+{% macro drg_attachment_name(id) -%}
+    {%- for drg_attachment in drg_attachments -%}
+        {%- if drg_attachment.id == id -%}
+            {{ drg_attachment.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+
+{%- macro drg_route_table_property(drg_id, id, title="Dynamic Route Table") -%}
+    {{ document_property(title, drg_route_table_link(drg_id, id)) }}
+{%- endmacro -%}
+
+{% macro drg_route_table_link(drg_id, id) -%}
+    {{ property_link(drg_route_table_name(drg_id, id)) }}
+{%- endmacro %}
+
+{% macro drg_route_table_name(drg_id, id) -%}
+    {%- for drg in drgs -%}
+        {%- if drg.id == drg_id -%}
+            {%- for rt in drg.route_tables -%}
+                {%- if rt.id == id -%}
+            {{ rt.display_name }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+
+{%- macro drg_route_distribution_property(drg_id, id, title="Dynamic Route Distribution") -%}
+    {{ document_property(title, drg_route_distribution_link(drg_id, id)) }}
+{%- endmacro -%}
+
+{% macro drg_route_distribution_link(drg_id, id) -%}
+    {{ property_link(drg_route_distribution_name(drg_id, id)) }}
+{%- endmacro %}
+
+{% macro drg_route_distribution_name(drg_id, id) -%}
+    {%- for drg in drgs -%}
+        {%- if drg.id == drg_id -%}
+            {%- for rd in drg.route_distributions -%}
+                {%- if rd.id == id -%}
+            {{ rd.display_name }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+
+{%- macro file_system_property(id, title="File System") -%}
+    {{ document_property(title, file_system_link(id)) }}
+{%- endmacro -%}
+
+{%- macro file_system_link(id) -%}
+    {{ property_link(file_system_name(id)) }}
+{%- endmacro -%}
+
+{%- macro file_system_name(id) -%}
+    {%- for file_system in file_systems -%}
+        {%- if file_system.id == id -%}
+            {{ file_system.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+
 {%- macro instance_property(id, title="Instance") -%}
-    {{ document_property_link(title, instance_link(id)) }}
+    {{ document_property(title, instance_link(id)) }}
 {%- endmacro -%}
 
 {%- macro instance_link(id) -%}
@@ -170,6 +263,10 @@
 {%- endmacro -%}
 
 
+{%- macro internet_gateway_property(id, title="Internet Gateway") -%}
+    {{ document_property(title, internet_gateway_link(id)) }}
+{%- endmacro -%}
+
 {% macro internet_gateway_link(id) -%}
     {{ property_link(internet_gateway_name(id)) }}
 {%- endmacro %}
@@ -183,6 +280,10 @@
 {%- endmacro %}
 
 
+{%- macro local_peering_gateway_property(id, title="Local Peering Gateway") -%}
+    {{ document_property(title, local_peering_gateway_link(id)) }}
+{%- endmacro -%}
+
 {% macro local_peering_gateway_link(id) -%}
     {{ property_link(local_peering_gateway_name(id)) }}
 {%- endmacro %}
@@ -195,6 +296,10 @@
     {%- endfor -%}
 {%- endmacro %}
 
+
+{%- macro nat_gateway_property(id, title="NAT Gateway") -%}
+    {{ document_property(title, nat_gateway_link(id)) }}
+{%- endmacro -%}
 
 {% macro nat_gateway_link(id) -%}
     {{ property_link(nat_gateway_name(id)) }}
@@ -224,6 +329,23 @@
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro -%}
+
+
+{%- macro remote_peering_connection_property(id, title="Remote Peering Connection") -%}
+    {{ document_property(title, remote_peering_connection_link(id)) }}
+{%- endmacro -%}
+
+{% macro remote_peering_connection_link(id) -%}
+    {{ property_link(remote_peering_connection_name(id)) }}
+{%- endmacro %}
+
+{% macro remote_peering_connection_name(id) -%}
+    {%- for remote_peering_connection in remote_peering_connections -%}
+        {%- if remote_peering_connection.id == id -%}
+            {{ remote_peering_connection.display_name }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
 
 
 {%- macro route_table_property(id, title="Route Table") -%}
@@ -259,6 +381,10 @@
     {%- endfor -%}
 {%- endmacro -%}
 
+
+{%- macro service_gateway_property(id, title="Service Gateway") -%}
+    {{ document_property(title, service_gateway_link(id)) }}
+{%- endmacro -%}
 
 {% macro service_gateway_link(id) -%}
     {{ property_link(service_gateway_name(id)) }}
