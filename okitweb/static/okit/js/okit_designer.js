@@ -940,7 +940,7 @@ function handleImportFromOci(e) {
     $("#toolbar_view_select").val('designer');
     handleSwitchToCompartmentView();
     // Display Dialog
-    displayQueryDialog('Import From OCI', 'Import', () => {showImportOciResults()});
+    displayQueryDialog('Import From OCI', 'Introspect', () => {showImportOciResults()});
     // Set Query Config Profile
     console.info('Profile : ' + okitSettings.profile);
     if (!okitSettings.profile) {
@@ -1124,7 +1124,7 @@ function showImportOciResults() {
             console.info('Complete ' + region);
             $(jqId('modal_loading_wrapper')).addClass('hidden');
             slideLeftPanel('oci_import_panel');
-            const importView = new OkitOciImportView(regionOkitJson[region])
+            const importView = new OkitOciImportView(regionOkitJson[region], okitJsonModel)
             importView.draw()
         }, function (region) {
             $(jqId(regionCheckboxName(region))).prop('checked', true);
