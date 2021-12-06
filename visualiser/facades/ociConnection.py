@@ -75,8 +75,9 @@ class OCIConnection(object):
             self.signer = oci.auth.certificate_retriever.FileBasedCertificateRetriever(oci.config.get_config_value_or_default(self.config, "certificate_file_path"))
             self.config = {"region": self.region}
             self.instance_principal = False
-        except Exception:
+        except Exception as e:
             logger.warn('X509 Cert is not available')
+            logger.exception(e)
             self.signerFromConfig()
 
     def signerFromConfig(self):
