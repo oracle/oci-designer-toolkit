@@ -18,9 +18,14 @@ class OkitJson {
         this.updated = this.created;
         this.okit_version = okitVersion;
         this.okit_model_id = `okit-model-${uuidv4()}`;
-        // this.meta_data = {
-        //     resource_count: 0
-        // }
+        this.meta_data = {
+            resource_count: 0,
+            platform: 'oci',
+            created = getCurrentDateTime(),
+            updated = this.created,
+            okit_version = okitVersion,
+            okit_model_id = `okit-model-${uuidv4()}`
+            }
         this.user_defined = {terraform: ''};
         this.freeform_tags = {};
         this.defined_tags = {};
@@ -56,6 +61,8 @@ class OkitJson {
             this.load(JSON.parse(okit_json_string));
         }
     }
+
+    get deployment_platforms() {return ['oci', 'pca', 'freetier']}
 
     getResourceLists() {
         return Object.entries(this).reduce((r, [k, v]) => {
