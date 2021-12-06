@@ -12,20 +12,21 @@ class OkitJson {
     ** Create
      */
     constructor(okit_json_string = '') {
+        const now = getCurrentDateTime();
         this.title = "OKIT OCI Visualiser Json";
         this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
-        this.created = getCurrentDateTime();
-        this.updated = this.created;
-        this.okit_version = okitVersion;
-        this.okit_model_id = `okit-model-${uuidv4()}`;
-        this.meta_data = {
+        // this.created = getCurrentDateTime();
+        // this.updated = this.created;
+        // this.okit_version = okitVersion;
+        // this.okit_model_id = `okit-model-${uuidv4()}`;
+        this.metadata = {
             resource_count: 0,
             platform: 'oci',
-            created = getCurrentDateTime(),
-            updated = this.created,
-            okit_version = okitVersion,
-            okit_model_id = `okit-model-${uuidv4()}`
-            }
+            created: now,
+            updated: now,
+            okit_version: okitVersion,
+            okit_model_id: `okit-model-${uuidv4()}`
+        }
         this.user_defined = {terraform: ''};
         this.freeform_tags = {};
         this.defined_tags = {};
@@ -63,6 +64,10 @@ class OkitJson {
     }
 
     get deployment_platforms() {return ['oci', 'pca', 'freetier']}
+    get created() {return this.metadata.created}
+    get updated() {return this.metadata.updated}
+    get okit_version() {return this.metadata.okit_version}
+    get okit_model_id() {return this.metadata.okit_model_id}
 
     getResourceLists() {
         return Object.entries(this).reduce((r, [k, v]) => {
@@ -79,9 +84,15 @@ class OkitJson {
         // Title & Description
         if (okit_json.title) {this.title = okit_json.title;}
         if (okit_json.description) {this.description = okit_json.description;}
-        if (okit_json.user_defined && okit_json.user_defined.terraform) this.user_defined.terraform = okit_json.user_defined.terraform
+        if (okit_json.user_defined && okit_json.user_defined.terraform) {this.user_defined.terraform = okit_json.user_defined.terraform}
         if (okit_json.freeform_tags) {this.freeform_tags = okit_json.freeform_tags}
         if (okit_json.defined_tags) {this.defined_tags = okit_json.defined_tags}
+        if (okit_json.metadata) {this.metadata = {...this.metadata, ...okit_json.metadata}}
+        // Update from older versions of file
+        if (okit_json.created) {this.metadata.created = okit_json.created}
+        if (okit_json.updated) {this.metadata.updated = okit_json.updated}
+        if (okit_json.okit_version) {this.metadata.okit_version = okit_json.okit_version}
+        if (okit_json.okit_model_id) {this.metadata.okit_model_id = okit_json.okit_model_id}
         // Turn Off Default Security List / Route Table Processing
         const okitSettingsClone = JSON.clone(okitSettings);
         okitSettings.is_default_route_table   = false;
@@ -137,7 +148,17 @@ class OkitJson {
         this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
         this.created = getCurrentDateTime();
         this.updated = this.created;
-        this.okit_version = okitVersion;
+        this.meta_data = {
+            resource_count: 0,
+            platform: 'oci',
+            created: getCurrentDateTime(),
+            updated: this.created,
+            okit_version: okitVersion,
+            okit_model_id: `okit-model-${uuidv4()}`
+            }
+        this.user_defined = {terraform: ''};
+        this.freeform_tags = {};
+        this.defined_tags = {};
         for (const [key, value] of Object.entries(this)) {
             if (Array.isArray(value)) {this[key] = []}
         }
