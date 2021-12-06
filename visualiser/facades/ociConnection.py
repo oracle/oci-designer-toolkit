@@ -71,8 +71,10 @@ class OCIConnection(object):
                     self.region = self.config.get('region', os.getenv('OKIT_VM_REGION', 'uk-london-1'))
                 else:
                     self.region = os.getenv('OKIT_VM_REGION', 'uk-london-1')
-           # Get Signer from Instance Principal
-            self.signer = oci.auth.certificate_retriever.FileBasedCertificateRetriever(oci.config.get_config_value_or_default(self.config, "certificate_file_path"))
+            # Get Signer from Instance Principal
+            cert_path = oci.config.get_config_value_or_default(self.config, "certificate_file_path")
+            logger.info(f'Cert Path {cert_path}')
+            self.signer = oci.auth.certificate_retriever.FileBasedCertificateRetriever(cert_path)
             self.config = {"region": self.region}
             self.instance_principal = False
         except Exception as e:
