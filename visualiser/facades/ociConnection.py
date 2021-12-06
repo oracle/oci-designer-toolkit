@@ -38,6 +38,8 @@ class OCIConnection(object):
         logger.info('OCI_CLI_AUTH = ' + os.getenv('OCI_CLI_AUTH', 'Undefined'))
         if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
             self.signerFromInstancePrincipal()
+        elif os.getenv('OCI_CLI_AUTH', 'config') == 'x509_cert':
+            self.signerFromX509Cert()
         else:
             self.signerFromConfig()
         # Set OKIT User Agent
@@ -59,6 +61,22 @@ class OCIConnection(object):
             self.instance_principal = True
         except Exception:
             logger.warn('Instance Principal is not available')
+            self.signerFromConfig()
+
+    def signerFromX509Cert(self):
+        try:
+            # Get region
+            if self.region is None:
+                if self.config is not None:
+                    self.region = self.config.get('region', os.getenv('OKIT_VM_REGION', 'uk-london-1'))
+                else:
+                    self.region = os.getenv('OKIT_VM_REGION', 'uk-london-1')
+           # Get Signer from Instance Principal
+            self.signer = oci.auth.certificate_retriever.FileBasedCertificateRetriever(oci.config.get_config_value_or_default(self.config, "certificate_file_path"))
+            self.config = {"region": self.region}
+            self.instance_principal = False
+        except Exception:
+            logger.warn('X509 Cert is not available')
             self.signerFromConfig()
 
     def signerFromConfig(self):
