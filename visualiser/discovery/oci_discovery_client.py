@@ -769,21 +769,27 @@ class OciResourceDiscoveryClient(object):
                         future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, dedicated_vm_host_id=dedicated_vm_host_id)
                         futures_list.update({(region, resource_type, compartment_id, dedicated_vm_host_id):future})
                     elif method_name == "list_db_homes":
-                        db_system_id = item[2][1]
-                        vm_cluster_id = item[2][1]
-                        if item[2][0] == "DbSystem":
+                        if item[2] is None:
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
+                            futures_list.update({(region, resource_type, compartment_id, None):future})
+                        elif item[2][0] == "DbSystem":
+                            db_system_id = item[2][1]
                             future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
                             futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
                         elif item[2][0] == "VmCluster":
+                            vm_cluster_id = item[2][1]
                             future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, vm_cluster_id=vm_cluster_id)
                             futures_list.update({(region, resource_type, compartment_id, vm_cluster_id):future})
                     elif method_name == "list_db_nodes":
-                        db_system_id = item[2][1]
-                        vm_cluster_id = item[2][1]
-                        if item[2][0] == "DbSystem":
+                        if item[2] is None:
+                            future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id)
+                            futures_list.update({(region, resource_type, compartment_id, None):future})
+                        elif item[2][0] == "DbSystem":
+                            db_system_id = item[2][1]
                             future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, db_system_id=db_system_id)
                             futures_list.update({(region, resource_type, compartment_id, db_system_id):future})
                         elif item[2][0] == "VmCluster":
+                            vm_cluster_id = item[2][1]
                             future = executor.submit(self.list_resources, klass, method_name, region, compartment_id=compartment_id, vm_cluster_id=vm_cluster_id)
                             futures_list.update({(region, resource_type, compartment_id, vm_cluster_id):future})
                     elif method_name == "list_drg_route_distributions":
