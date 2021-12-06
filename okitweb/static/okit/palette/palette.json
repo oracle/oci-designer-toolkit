@@ -1,5 +1,5 @@
 {
-    "targets": ["oci", "free tier", "pca"],
+    "targets": ["oci", "freetier", "pca"],
     "groups": [
         {
             "title": "Containers",
@@ -23,7 +23,7 @@
             "resources": [
                 {
                     "title": "Instance",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "VirtualMachine.svg"
                 },
                 {
@@ -90,22 +90,22 @@
                 },
                 {
                     "title": "Virtual Cloud Network",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "VirtualCloudNetworkVCN.svg"
                 },
                 {
                     "title": "Subnet",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "Backbone.svg"
                 },
                 {
                     "title": "Route Table",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "RouteTable.svg"
                 },
                 {
                     "title": "Security List",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "SecurityList.svg"
                 },
                 {
@@ -115,12 +115,12 @@
                 },
                 {
                     "title": "DHCP Option",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "DHCPOptions.svg"
                 },
                 {
                     "title": "IPSec Connection",
-                    "targets": ["oci", "free tier"],
+                    "targets": ["oci", "freetier"],
                     "svg": "VirtualPrivateNetworkVPN.svg"
                 },
                 {
@@ -130,12 +130,12 @@
                 },
                 {
                     "title": "DRG Attachment",
-                    "targets": ["oci", "free tier"],
+                    "targets": ["oci", "freetier"],
                     "svg": "DRGAttachment.svg"
                 },
                 {
                     "title": "Customer Premise Equipment",
-                    "targets": ["oci", "free tier"],
+                    "targets": ["oci", "freetier"],
                     "svg": "CustomerPremises.svg"
                 }
             ]
@@ -146,12 +146,12 @@
             "resources": [
                 {
                     "title": "Internet Gateway",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "InternetGateway.svg"
                 },
                 {
                     "title": "NAT Gateway",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "NATGateway.svg"
                 },
                 {
@@ -166,7 +166,7 @@
                 },
                 {
                     "title": "DRG",
-                    "targets": ["oci", "free tier"],
+                    "targets": ["oci", "freetier"],
                     "svg": "DynamicRoutingGatewayDRG.svg"
                 },
                 {
@@ -182,7 +182,7 @@
             "resources": [
                 {
                     "title": "Block Storage Volume",
-                    "targets": ["oci", "free tier", "pca"],
+                    "targets": ["oci", "freetier", "pca"],
                     "svg": "BlockStorage.svg"
                 },
                 {
