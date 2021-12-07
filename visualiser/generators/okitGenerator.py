@@ -16,6 +16,7 @@ __module__ = "ociGenerator"
 from visualiser.common.okitCommon import jsonToFormattedString
 import jinja2
 import os
+import re
 import shutil
 
 from common.okitCommon import readYamlFile
@@ -2644,6 +2645,8 @@ class OCIGenerator(object):
     def standardiseResourceName(self, name):
         # split() will generate a list with no empty values thus join of this will remove all whitespace
         standardised_name = ''.join(name.title().split()).replace('-', '_')
+        # Remove all non alphanumeric character appart from '_'
+        standardised_name = re.sub('[^0-9a-zA-Z_]+', '', standardised_name)
         return standardised_name
 
     def standardiseOutputName(self, name):
