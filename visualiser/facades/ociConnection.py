@@ -64,6 +64,7 @@ class OCIConnection(object):
             self.signerFromConfig()
 
     def signerFromX509Cert(self):
+        self.loadConfig()
         try:
             # Get region
             if self.region is None:
