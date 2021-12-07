@@ -75,7 +75,7 @@ class OCIConnection(object):
             # Get Signer from Instance Principal
             cert_path = oci.config.get_config_value_or_default(self.config, "certificate_file_path")
             logger.info(f'Cert Path {cert_path}')
-            self.signer = oci.auth.certificate_retriever.FileBasedCertificateRetriever(cert_path)
+            self.signer = oci.auth.certificate_retriever.FileBasedCertificateRetriever(certificate_file_path=cert_path)
             self.config = {"region": self.region}
             self.instance_principal = False
         except Exception as e:
