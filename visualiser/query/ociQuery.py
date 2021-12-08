@@ -157,7 +157,13 @@ class OCIQuery(OCIConnection):
         logger.info('Request : {0!s:s}'.format(str(include_sub_compartments)))
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
-        discovery_client = OciResourceDiscoveryClient(self.config, self.signer, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
+
+        if "certificate_file_path" in self.config:
+            cert_bundle = self.config["certificate_file_path"]
+        else:
+            cert_bundle = None
+
+        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
         response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug(f"Response : {response}")
