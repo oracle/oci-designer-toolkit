@@ -147,17 +147,28 @@ class OCIGenerator(object):
         validator.validate()
         # Build the Id to Name Map
         self.buildIdNameMap()
+        # Generate Copyright 
+        logger.info("Processing Copyright Information")
+        jinja2_template = self.jinja2_environment.get_template("copyright.jinja2")
+        self.copyright = jinja2_template.render(self.jinja2_variables)
         # Process Provider Connection information
         logger.info("Processing Provider Information")
+        self.connection_provider.append(self.copyright)
         jinja2_template = self.jinja2_environment.get_template("provider.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
+        self.connection_provider.append(jinja2_template.render(self.jinja2_variables))
+        # self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
 
         # Process Regional Data
         logger.info("Processing Region Information")
+        self.metadata.append(self.copyright)
         jinja2_template = self.jinja2_environment.get_template("region_data.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
+        self.metadata.append(jinja2_template.render(self.jinja2_variables))
+        # self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
+
+        # Process Main Data
+        self.create_sequence.append(self.copyright)
 
         # Process keys within the input json file
         # - Users / User Groups

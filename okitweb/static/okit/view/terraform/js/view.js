@@ -48,11 +48,11 @@ class OkitTerraformView extends OkitJsonView {
             contentType: 'application/json',
             data: {
                 destination: 'json',
-                design: JSON.stringify(self.model)
+                model: JSON.stringify(self.model)
             },
             success: function(resp) {
-                console.info('exportTerraformForDisplay Response : ' + resp);
-                console.info(JSON.parse(resp));
+                // console.info('exportTerraformForDisplay Response : ' + resp);
+                // console.info(JSON.parse(resp));
                 self.terraform = JSON.parse(resp)
                 self.objectToTabbedLayout(self.terraform, tab_bar, tab_content)
             },
@@ -101,7 +101,7 @@ class OkitTerraformView extends OkitJsonView {
         contents_div.selectAll('*').remove();
         // Build Table
         const table = contents_div.append('textarea')
-            .attr('class', '')
+            .attr('class', 'code')
             .attr('readonly', 'readonly')
             .text(this.terraform[key]);
     }
