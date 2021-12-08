@@ -141,7 +141,12 @@ class OCIConnection(object):
                     logger.debug('{0!s:s} = {1!s:s}'.format(key, val))
                 json_list = [bs for bs in json_list if re.compile(val).search(bs[key])]
         return json_list
-
+    
+    def getClient(self, oci_class):
+        client = oci_class(config=self.config, signer=self.signer)
+        if "certificate_file_path" in self.config:
+            client.base_client.session.verify = self.config["certificate_file_path"]
+        return client
 
 class OCIAutoScalingConnection(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None):
