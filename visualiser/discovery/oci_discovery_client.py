@@ -440,6 +440,8 @@ class OciResourceDiscoveryClient(object):
 
         # object storage namespace
         object_storage = oci.object_storage.ObjectStorageClient(config=self.config, signer=self.signer)
+        if self.cert_bundle:
+            object_storage.base_client.session.verify = self.cert_bundle
         self.object_storage_namespace = object_storage.get_namespace().data
 
 
@@ -464,6 +466,9 @@ class OciResourceDiscoveryClient(object):
         logger.debug(query)
 
         search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
+        if self.cert_bundle:
+            search.base_client.session.verify = self.cert_bundle
+
         search_details = oci.resource_search.models.StructuredSearchDetails(
             type="Structured",
             query=query,
@@ -475,6 +480,8 @@ class OciResourceDiscoveryClient(object):
 
     def get_compartments(self):
         identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
+        if self.cert_bundle:
+            identity.base_client.session.verify = self.cert_bundle
         return oci.pagination.list_call_get_all_results(identity.list_compartments, self.config["tenancy"], compartment_id_in_subtree=True).data
 
     def get_subcompartment_ids(self, compartment_id):
@@ -497,11 +504,15 @@ class OciResourceDiscoveryClient(object):
 
     def get_tenancy(self):
         identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
+        if self.cert_bundle:
+            identity.base_client.session.verify = self.cert_bundle
         tenancy = identity.get_tenancy(self.config["tenancy"]).data
         return tenancy
 
     def get_regions(self, region_filter=None):
         identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
+        if self.cert_bundle:
+            identity.base_client.session.verify = self.cert_bundle
         all_regions = identity.list_region_subscriptions(self.config["tenancy"]).data
         active_regions = [region for region in all_regions if region.status == "READY" and (region_filter == None or region.region_name in region_filter)]
         home_region = [region for region in all_regions if region.is_home_region]
@@ -511,6 +522,8 @@ class OciResourceDiscoveryClient(object):
         region_config = self.config.copy()
         region_config["region"] = region
         search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
+        if self.cert_bundle:
+            search.base_client.session.verify = self.cert_bundle
         all_searchable_resource_types = [resource_type.name for resource_type in oci.pagination.list_call_get_all_results(search.list_resource_types).data]
         return all_searchable_resource_types
 
