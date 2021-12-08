@@ -18,6 +18,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/json/js/okit_json_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/oci/js/view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/terraform/js/view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/identity/js/okit_identity_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
@@ -99,6 +100,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_threedots_menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/oci/css/view.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/terraform/css/view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tabular/css/okit_tabular_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/identity/css/okit_identity_view.css') }}">
@@ -161,6 +163,7 @@
                 </ul>
             </li-->
             <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
+            <!-- <li><a id="export-terraform-for-display-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformForDisplay()">Terraform Display</a></li> -->
             {%- if ansible_mode -%}
             <!--li id="ansible_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Ansible</span>
@@ -241,6 +244,7 @@
                 <option id="tabular_view_option" value="tabular">Tabular</option>
                 <option id="relationship_view_option" value="relationship">Relationship</option>
                 <option id="json_view_option" value="json">Json</option>
+                <option id="tf_view_option" value="terraform">Terraform</option>
                 {%- if developer_mode -%}<option id="cache_view_option" value="cache">Cache</option>{%- endif -%}
             </select>
         </div>
@@ -276,7 +280,7 @@
         <div id="oci_import_panel" class="okit-left-side-panel okit-oci-import-panel hidden"></div>
     </div>
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
-        <div id="center-header">
+        <div id="center-header" class="okit-center-header">
             <div id="canvas_details" class="okit-canvas-details table">
                 <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
                 <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->

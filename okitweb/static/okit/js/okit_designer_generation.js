@@ -123,6 +123,10 @@ function handleExportToTerraformGit(e) {
     hideNavMenu();
     okitJsonModel.validate(generateTerraformGitRepo);
 }
+function handleExportToTerraformForDisplay(e) {
+    hideNavMenu();
+    okitJsonModel.validate(exportTerraformForDisplay);
+}
 function generateTerraformLocalZip(results) {
     if (results.valid) {
         let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
@@ -137,6 +141,30 @@ function generateTerraformLocalZip(results) {
             success: function(resp) {
                 console.info('Response : ' + resp);
                 saveZip('generate/terraform/local');
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
+function exportTerraformForDisplay(results) {
+    if (results.valid) {
+        $.ajax({
+            type: 'get',
+            url: 'export/terraform',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: {
+                destination: 'json',
+                design: JSON.stringify(okitJsonModel)
+            },
+            success: function(resp) {
+                console.info('exportTerraformForDisplay Response : ' + resp);
+                console.info(JSON.parse(resp));
             },
             error: function(xhr, status, error) {
                 console.info('Status : '+ status)

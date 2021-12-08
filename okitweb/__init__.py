@@ -63,6 +63,8 @@ def create_local_app(test_config=None):
     app.register_blueprint(okitOci.bp)
     from . import okitImport
     app.register_blueprint(okitImport.bp)
+    from . import okitExport
+    app.register_blueprint(okitExport.bp)
 
     return app
 
@@ -148,6 +150,8 @@ def create_authenticated_app(test_config=None):
     app.register_blueprint(okitOci.bp)
     from . import okitImport
     app.register_blueprint(okitImport.bp)
+    from . import okitExport
+    app.register_blueprint(okitExport.bp)
 
     @app.route('/')
     def index():
