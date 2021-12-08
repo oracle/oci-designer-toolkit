@@ -158,10 +158,11 @@ class OCIQuery(OCIConnection):
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
 
-        if "certificate_file_path" in self.config:
-            cert_bundle = self.config["certificate_file_path"]
+        if "cert-bumdle" in self.config:
+            cert_bundle = self.config["cert-bundle"]
         else:
             cert_bundle = None
+        logger.info(f'cert_bundle={cert_bundle}')
 
         discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
