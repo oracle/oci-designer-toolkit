@@ -158,7 +158,7 @@ class OCIQuery(OCIConnection):
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
 
-        if "cert-bumdle" in self.config:
+        if "cert-bundle" in self.config:
             cert_bundle = self.config["cert-bundle"]
         else:
             cert_bundle = None
