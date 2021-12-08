@@ -32,23 +32,10 @@ data "oci_identity_region_subscriptions" "HomeRegion" {
         values = [true]
     }
 }
-#output "Home_Region" {
-# value = data.oci_identity_region_subscriptions.HomeRegion.region_subscriptions
-#}
 data "oci_identity_regions" "Regions" {
 }
-#data "oci_identity_tenancy" "Tenancy" {
-#    tenancy_id = {{ tenancy_ocid }}
-#}
 
 locals {
-#    HomeRegion = [for x in data.oci_identity_region_subscriptions.RegionSubscriptions.region_subscriptions: x if x.is_home_region][0]
-#    home_region = lookup(
-#        {
-#            for r in data.oci_identity_regions.Regions.regions : r.key => r.name
-#        },
-#        data.oci_identity_tenancy.Tenancy.home_region_key
-#    )
     home_region = lookup(element(data.oci_identity_region_subscriptions.HomeRegion.region_subscriptions, 0), "region_name")
 }
 output "Home_Region_Name" {

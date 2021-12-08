@@ -483,7 +483,7 @@ def generate(language, destination):
                     repo.remotes.origin.pull()
                 destination_dir = os.path.abspath(os.path.join(git_repo_dir, request.json['git_repository_filename']))
             else:
-                destination_dir = tempfile.mkdtemp();
+                destination_dir = tempfile.mkdtemp()
             if language == 'terraform':
                 generator = OCITerraformGenerator(template_root, destination_dir, request.json, use_vars=use_vars)
             elif language == 'ansible':

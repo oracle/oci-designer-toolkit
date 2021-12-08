@@ -25,6 +25,7 @@ function handleViewSelect(e) {
     else if (selected === 'json') handleSwitchToTextJsonView(e)
     else if (selected === 'cache') handleSwitchToTextCacheView(e)
     else if (selected === 'identity') handleSwitchToIdentityView(e)
+    else if (selected === 'terraform') handleSwitchTerraformView(e)
     else console.warn('Unknown View', selected)
 }
 
@@ -93,4 +94,12 @@ function handleSwitchToTextCacheView(e) {
     hideSideBars();
     okitCacheJsonView = new OkitCacheJsonView(okitOciData.getCache(), okitOciData, resource_icons);
     okitCacheJsonView.draw();
+}
+
+function handleSwitchTerraformView(e) {
+    hideAllViewDivs();
+    $("#terraform-div").removeClass('hidden');
+    hideSideBars();
+    okitTerraformView = new OkitTerraformView(okitJsonModel, okitOciData, resource_icons);
+    okitTerraformView.draw();
 }

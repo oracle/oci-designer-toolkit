@@ -61,6 +61,44 @@ class OCITerraformGenerator(OCIGenerator):
             writeTerraformFile(os.path.join(self.output_dir, self.USER_DEFINED_FILE_NAME), [user_defined_terraform])
 
         return
+    
+    def getVariableDefinitions(self):
+        variable_definitions = []
+        variable_values = []
+        for key, value in self.getVariables().items():
+            if type(value) is dict:
+                variable_values.append('{0!s:s} = {1!s:s}'.format(key, json.dumps(value)))
+            elif type(value) is bool:
+                variable_values.append('{0!s:s} = "{1}"'.format(key, str(value).lower()))
+            else:
+                variable_values.append('{0!s:s} = "{1}"'.format(key, value))
+            variable_definitions.append('variable "{0:s}" {{}}'.format(key))
+        return variable_definitions
+    
+    def getVariableValues(self):
+        variable_definitions = []
+        variable_values = []
+        for key, value in self.getVariables().items():
+            if type(value) is dict:
+                variable_values.append('{0!s:s} = {1!s:s}'.format(key, json.dumps(value)))
+            elif type(value) is bool:
+                variable_values.append('{0!s:s} = "{1}"'.format(key, str(value).lower()))
+            else:
+                variable_values.append('{0!s:s} = "{1}"'.format(key, value))
+            variable_definitions.append('variable "{0:s}" {{}}'.format(key))
+        return variable_values
+    
+    def toJson(self):
+        generated_tf = {
+            "provider.tf": '\n'.join(self.getProvider()),
+            "metadata.tf": '\n'.join(self.getMetadata()),
+            "main.tf": '\n'.join(self.getRenderedMain()),
+            "variables.tf": '\n'.join(self.getVariableDefinitions()),
+            "terraform.tfvar": '\n'.join(self.getVariableValues()),
+            # "output.tf": '\n'.join(self.getRenderedOutput()),
+            "user_defined.tf": self.visualiser_json.get('user_defined', {}).get('terraform', '')
+        }
+        return generated_tf
 
     def formatJinja2Variable(self, variable_name):
         return 'var.{0:s}'.format(variable_name)
