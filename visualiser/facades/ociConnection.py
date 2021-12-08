@@ -73,7 +73,7 @@ class OCIConnection(object):
                 else:
                     self.region = os.getenv('OKIT_VM_REGION', 'uk-london-1')
             # Get Signer from From Cert
-            cert_path = oci.config.get_config_value_or_default(self.config, "certificate_file_path")
+            cert_path = oci.config.get_config_value_or_default(self.config, "cert-bumdle")
             logger.info(f'Cert Path {cert_path}')
             self.signerFromConfig()
             self.instance_principal = False
@@ -144,8 +144,8 @@ class OCIConnection(object):
     
     def getClient(self, oci_class):
         client = oci_class(config=self.config, signer=self.signer)
-        if "certificate_file_path" in self.config:
-            client.base_client.session.verify = self.config["certificate_file_path"]
+        if "cert-bumdle" in self.config:
+            client.base_client.session.verify = self.config["cert-bumdle"]
         return client
 
 class OCIAutoScalingConnection(OCIConnection):
