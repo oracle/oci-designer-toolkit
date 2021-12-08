@@ -42,10 +42,13 @@ class OCIResourceManagerGenerator(OCITerraformGenerator):
         self.jinja2_variables["resource_manager"] = True
 
     def writeFiles(self):
-        main_rendered = self.getRenderedMain()
+        # Write Metadata tf file
+        writeTerraformFile(os.path.join(self.output_dir, self.METADATA_FILE_NAME), self.getMetadata())
         # Write Main tf processing file
         # Remove Provider entry because this is not required for Resource Manager
-        writeTerraformFile(os.path.join(self.output_dir, self.MAIN_FILE_NAME), main_rendered[1:])
+        main_rendered = self.getRenderedMain()
+        # writeTerraformFile(os.path.join(self.output_dir, self.MAIN_FILE_NAME), main_rendered[1:])
+        writeTerraformFile(os.path.join(self.output_dir, self.MAIN_FILE_NAME), self.getRenderedMain())
         # Write Variable files
         variable_definitions = []
         # Delete Provider Variables

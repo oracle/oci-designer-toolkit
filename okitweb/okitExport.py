@@ -41,7 +41,7 @@ def terraform():
     if request.method == 'GET':
         destination = request.args.get('destination', default='zip')
         directory = request.args.get('destination', default='')
-        design = json.loads(request.args.get('okit_model', default='{}'))
+        design = json.loads(request.args.get('model', default='{}'))
         response_json = {}
         if destination == 'git':
             destination_dir = '/tmp'

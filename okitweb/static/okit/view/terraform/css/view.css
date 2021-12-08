@@ -15,3 +15,6 @@
     font-size: smaller;
 }
 
+.okit-terraform-canvas textarea.code {
+    font-family: Consolas,"courier new",monaco,monospace;
+}

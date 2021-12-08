@@ -379,8 +379,9 @@ class OciResourceDiscoveryClient(object):
         # return the "list_*" methods for a class
         return {method for method in dir(klass) if method.startswith('list_')}
 
-    def __init__(self, config, signer=None, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS, include_root_as_compartment=False):
+    def __init__(self, config, signer=None, cert_bundle=None, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS, include_root_as_compartment=False):
         self.config = config
+        self.cert_bundle = cert_bundle
         if signer:
             logger.debug("Using provided OCI API signer")
             self.signer = signer
@@ -592,6 +593,8 @@ class OciResourceDiscoveryClient(object):
             else:
                 client = klass(config=region_config, signer=self.signer)
             client.base_client.timeout = (self.timeout, self.timeout)  # set connect timeout, read timeout
+            if self.cert_bundle:
+                client.base_client.session.verify = self.cert_bundle
             if method_name.startswith("list_"):
                 result = oci.pagination.list_call_get_all_results(getattr(client, method_name), **kwargs)
             else:

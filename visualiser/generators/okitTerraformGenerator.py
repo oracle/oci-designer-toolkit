@@ -25,6 +25,8 @@ logger = getLogger()
 
 class OCITerraformGenerator(OCIGenerator):
     DIRECTORY_SUFFIX = 'terraform'
+    PROVIDER_FILE_NAME = 'provider.tf'
+    METADATA_FILE_NAME = 'metadata.tf'
     MAIN_FILE_NAME = 'main.tf'
     USER_DEFINED_FILE_NAME = 'user_defined.tf'
     VARIABLES_FILE_NAME = 'variables.tf'
@@ -38,9 +40,13 @@ class OCITerraformGenerator(OCIGenerator):
         super(OCITerraformGenerator, self).__init__(template_dir, output_dir, visualiser_json, use_vars)
 
     def writeFiles(self):
-        main_rendered = self.getRenderedMain()
+        # Write Provider tf file
+        writeTerraformFile(os.path.join(self.output_dir, self.PROVIDER_FILE_NAME), self.getProvider())
+        # Write Metadata tf file
+        writeTerraformFile(os.path.join(self.output_dir, self.METADATA_FILE_NAME), self.getMetadata())
         # Write Main tf processing file
-        writeTerraformFile(os.path.join(self.output_dir, self.MAIN_FILE_NAME), main_rendered)
+        main_rendered = self.getRenderedMain()
+        writeTerraformFile(os.path.join(self.output_dir, self.MAIN_FILE_NAME), self.getRenderedMain())
         # Write Variable files
         variable_definitions = []
         variable_values = []
