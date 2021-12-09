@@ -5,8 +5,8 @@
 console.info('Loaded Console Javascript');
 
 
-const okitVersion = '0.30.0';
-const okitReleaseDate = '1st December 2021';
+const okitVersion = '0.30.1';
+const okitReleaseDate = '9th December 2021';
 
 // Validation
 const validate_error_colour = "#ff4d4d";
@@ -112,10 +112,12 @@ function handleConfigChanged(event) {
     event = event || window.event;
     event.stopPropagation()
     okitSettings.profile = $('#console_header_config_select').val()
+    okitSettings.region = undefined
     okitSettings.save()
     const console_header_region_select = $('#console_header_region_select')
     console_header_region_select.empty()
     console_header_region_select.append($('<option>').attr('value', '').text('Retrieving....'))
+    okitRegions.clearLocalStorage()
     okitRegions.load(okitSettings.profile)
     okitOciData.load(okitSettings.profile, okitSettings.region)
     setOCILink()

@@ -16,6 +16,7 @@ __module__ = "ociGenerator"
 from visualiser.common.okitCommon import jsonToFormattedString
 import jinja2
 import os
+import re
 import shutil
 
 from common.okitCommon import readYamlFile
@@ -26,12 +27,14 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.30.0"
+    OKIT_VERSION = "0.30.1"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
         # Initialise generator output data variables
         self.create_sequence = []
         self.run_variables = {}
         self.data_output = []
+        self.connection_provider = []
+        self.metadata = []
         # Assign passed values to local
         self.template_dir = template_dir
         self.output_dir = output_dir
@@ -60,6 +63,24 @@ class OCIGenerator(object):
         self.jinja2_variables["author"] = __author__
         self.jinja2_variables["copyright"] = __copyright__
         self.jinja2_variables["okit_version"] = self.OKIT_VERSION
+        self.jinja2_variables["deployment_platform"] = self.visualiser_json.get('metadata', {}).get('platform', 'oci')
+    
+    def addStandardResourceVariables(self, resource={}):
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
+        self.jinja2_variables['resource_name'] = standardisedName
+        self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # ---- Tags
+        self.renderTags(resource)
+
 
     def get(self, artifact_type, id):
         artifact = {};
@@ -75,6 +96,12 @@ class OCIGenerator(object):
         elif not os.path.isdir(self.output_dir):
             logger.error('Output directory {0:s} is not a directory'.format(self.output_dir))
 
+    def getProvider(self):
+        return self.connection_provider
+
+    def getMetadata(self):
+        return self.metadata
+
     def getRenderedMain(self):
         return self.create_sequence
 
@@ -85,6 +112,9 @@ class OCIGenerator(object):
         return self.create_sequence
 
     def writeFiles(self):
+        pass
+
+    def toJson(self):
         pass
 
     def formatJinja2Variable(self, variable_name):
@@ -117,17 +147,28 @@ class OCIGenerator(object):
         validator.validate()
         # Build the Id to Name Map
         self.buildIdNameMap()
+        # Generate Copyright 
+        logger.info("Processing Copyright Information")
+        jinja2_template = self.jinja2_environment.get_template("copyright.jinja2")
+        self.copyright = jinja2_template.render(self.jinja2_variables)
         # Process Provider Connection information
         logger.info("Processing Provider Information")
+        self.connection_provider.append(self.copyright)
         jinja2_template = self.jinja2_environment.get_template("provider.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
+        self.connection_provider.append(jinja2_template.render(self.jinja2_variables))
+        # self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
 
         # Process Regional Data
         logger.info("Processing Region Information")
+        self.metadata.append(self.copyright)
         jinja2_template = self.jinja2_environment.get_template("region_data.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
+        self.metadata.append(jinja2_template.render(self.jinja2_variables))
+        # self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
+
+        # Process Main Data
+        self.create_sequence.append(self.copyright)
 
         # Process keys within the input json file
         # - Users / User Groups
@@ -2637,13 +2678,15 @@ class OCIGenerator(object):
 
     def getOkitFreeformTags(self, resource=None):
         if resource is None:
-            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("okit_model_id", "Unknown")}
+            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("metadata", {}).get("okit_model_id", "Unknown")}
         else:
-            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("okit_model_id", "Unknown"), "okit_reference": resource.get('okit_reference', 'Unknown')}
+            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("metadata", {}).get("okit_model_id", "Unknown"), "okit_reference": resource.get('okit_reference', 'Unknown')}
 
     def standardiseResourceName(self, name):
         # split() will generate a list with no empty values thus join of this will remove all whitespace
         standardised_name = ''.join(name.title().split()).replace('-', '_')
+        # Remove all non alphanumeric character appart from '_'
+        standardised_name = re.sub('[^0-9a-zA-Z_]+', '', standardised_name)
         return standardised_name
 
     def standardiseOutputName(self, name):

@@ -178,6 +178,11 @@
     transition: all 0.25s;
 }
 
+.okit-center-header {
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+}
+
 .okit-center-panels {
     width: 100%;
     height: 100%;
@@ -202,7 +207,7 @@
 .okit-tab {
     display: inline-block;
     margin-top: 1px;
-    height: 29px;
+    height: var(--tab-bar-height);
     border: none;
     font-size: 14px;
     color: #aeaeae;
@@ -211,6 +216,7 @@
 .okit-tab-contents {
     display: block;
     width: 100%;
+    height: var(--tab-content-height);
     overflow-x: auto;
     white-space: nowrap;
     flex-wrap: nowrap;
