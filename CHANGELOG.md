@@ -1,8 +1,8 @@
 # Release Notes
 
 
-## Version 0.31.0
-**Release Date**: 19th January 2022
+## Version 0.30.1
+**Release Date**: 9th December 2021
 ### Features
 1. Add Terraform view which will display the generated Terraform (First Release)
 ### Bug Fixes
