@@ -334,13 +334,14 @@ class OCIQuery(OCIConnection):
         return clusters
 
     def route_tables(self, route_tables, resources):
-        rule_type_map = {'internetgateway': 'internet_gateways',
-                         'natgateway':'nat_gateways',
-                         'localpeeringgateway': 'local_peering_gateways',
-                         'dynamicroutinggateway': 'dynamic_routing_gateways',
-                         'drg': 'dynamic_routing_gateways',
-                         'privateip':'private_ips',
-                         'servicegateway': 'service_gateways'}
+        rule_type_map = {'internetgateway': 'internet_gateway',
+                         'natgateway':'nat_gateway',
+                         'localpeeringgateway': 'local_peering_gateway',
+                         'dynamicroutinggateway': 'dynamic_routing_gateway',
+                         'drg': 'drg_attachment',
+                        #  'drg': 'dynamic_routing_gateway',
+                         'privateip':'private_ip',
+                         'servicegateway': 'service_gateway'}
         for route_table in route_tables:
             for rule in route_table.get('route_rules', []):
                 if len(rule['network_entity_id']) > 0:
