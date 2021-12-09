@@ -7,6 +7,7 @@
 1. Add Terraform view which will display the generated Terraform (First Release)
 ### Bug Fixes
 1. Fix Standardised resource name issue when display_name contain non-alphanumeric characters.
+2. Resolve query issue where querying db_homes caused a NoneType exception.
 
 
 ## Version 0.30.0
