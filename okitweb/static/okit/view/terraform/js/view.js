@@ -51,8 +51,6 @@ class OkitTerraformView extends OkitJsonView {
                 model: JSON.stringify(self.model)
             },
             success: function(resp) {
-                // console.info('exportTerraformForDisplay Response : ' + resp);
-                // console.info(JSON.parse(resp));
                 self.terraform = JSON.parse(resp)
                 self.objectToTabbedLayout(self.terraform, tab_bar, tab_content)
             },
@@ -66,8 +64,6 @@ class OkitTerraformView extends OkitJsonView {
     objectToTabbedLayout(data, tab_bar, tab_content) {
         const self = this
         Object.entries(data).forEach(([k,v]) => {
-            console.info('Key:', k)
-            console.info('Terraform:', v)
             self.addTab(tab_bar, k)
         })
         $('#terraform_view_tab_bar button:first-child').trigger("click");
