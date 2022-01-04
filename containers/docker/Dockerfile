@@ -38,6 +38,10 @@ RUN yum install -y \
 #        python36-oci-sdk \
 #        rh-nginx114 \
  && rm -rf /var/cache/yum \
+# Configure ssh
+ && echo 'Host *' > /etc/ssh/ssh_config \
+ && echo '  StrictHostKeyChecking no' >> /etc/ssh/ssh_config \
+ && echo '  UserKnownHostsFile=/dev/null' >> /etc/ssh/ssh_config \
 # Upgrade pip
  && python3 -m pip install --upgrade pip \
 # Install required python modules
