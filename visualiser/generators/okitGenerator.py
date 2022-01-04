@@ -2562,6 +2562,7 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    # TODO: Generic Render
     def renderResource(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
@@ -2571,7 +2572,12 @@ class OCIGenerator(object):
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
         logger.info('Processing Resource {0!s:s}'.format(standardisedName))
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
 
+    # TODO: Generic Render Element need to pass in parent and then walk hierarchy
     def processResourceElements(self, json_data, standardisedName, parent=None, idx=0):
         # Process Elements in Json Data
         if isinstance(json_data, dict):

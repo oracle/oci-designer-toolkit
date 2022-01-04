@@ -7,6 +7,7 @@
 ### Bug Fixes
 1. Test that instance has primary_vnic defined.
 2. Resolve issue where queried compartments containing a route table with a rule pointing to a DRG were not displaying the rule correctly.
+3. Fix issue where Read Only DRGs were not specifying the ocid as a local variable.
 
 
 ## Version 0.30.1
