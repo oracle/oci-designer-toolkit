@@ -24,7 +24,7 @@ loglevelmap = {'critical': logging.CRITICAL, 'error': logging.ERROR, 'warning': 
                'debug': logging.DEBUG}
 
 def getOkitHome():
-    return os.getenv('OKIT_HOME', '/okit')
+    return os.getenv('OKIT_DIR', '/okit')
 
 
 def getConsoleFormat():
