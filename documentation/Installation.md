@@ -11,7 +11,16 @@ python modules are installed and in addition provide a simple flask server that 
 1. [OCI Connection Information](#oci-connection-information)
     1. [Key File](#key-file)
     2. [Config File](#config-file)
-2. [Quick Start Runtime](#quick-start-runtime)
+2. [Git Connection](#git-connection)
+    1. [GIT Repositories File](#git-repository-file)
+3. [Quick Start Runtime](#quick-start-runtime)
+4. [Container](#container)
+    1. [Docker](#docker)
+    2. [Lima (MacOS)](#lima-macos)
+    3. [Vagrant / VirtualBox](#vagrant--virtualbox)
+5. [Native](#native)
+    1. [Oracle Linux](oracle-linux)
+    2. [macOS](#macos)
 3. [Build From Source](#build-from-source)
     1. [OKIT Repository](#okit-repository)
     2. [Create Container](#create-container)
@@ -138,6 +147,42 @@ Once started the Designer BUI can be accessed on [http://localhost/okit/designer
 
 ### Docker
 
+The docker image  can be built and started using the scripts in the docker sub directory.
+It should be noted that the current Docker script is designed for development purposes and mounts the source directories
+at runtime. 
+
+#### Prerequisites
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+- Create local directory __~/okit/user/templates__ for storage of custom templates.
+- [Copy Config & Key Files](#copy-config--key-files)
+
+#### Docker Build
+```bash
+cd oci-designer-toolkit
+docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
+```
+
+#### Docker Update
+```bash
+cd oci-designer-toolkit
+docker rmi okit
+docker build --tag okit --no-cache --file ./containers/docker/Dockerfile --force-rm .
+```
+
+#### Start Docker Container
+```bash
+cd oci-designer-toolkit
+docker run -d --rm -p 80:80 
+        --name okit \
+        --hostname okit \
+        --volume <USER HOME DIR>/.oci:/root/.oci \
+        --volume <USER HOME DIR>/.ssh:/root/.ssh \
+        --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/templates/user \
+        --volume <PATH TO GIT DIR>:/okit/instance/git \
+        --volume <PATH TO LOCAL DIR>:/okit/instance/local \
+        okit
+```
+
 ### Lima (MacOS)
 
 [Lima](https://github.com/lima-vm/lima) is an alternative option to Docker Desktop to run a container based OKIT installation on MacOS. 
@@ -159,17 +204,27 @@ For most docker commands the equivalent is to run lima nerdctl
 
 With Lima installed and running we need to build the OKIT container, replacing the regular docker build with
 ```bash
-lima nerdctl build . --tag okit
+cd oci-designer-toolkit
+lima nerdctl rmi okit
+lima nerdctl build --tag okit --no-cache --file ./containers/docker/Dockerfile .
 ```
 
 Run OKIT using the container run command, adjust or add additional required volume mounts as required
 ```bash
-lima nerdctl container run --rm -p 80:80 --volume ~/.oci:/root/.oci --volume ~/.ssh:/root/.ssh --name okit okit
+lima nerdctl run --rm -p 80:80 \
+        --name okit \
+        --hostname okit \
+        --volume <USER HOME DIR>/.oci:/root/.oci \
+        --volume <USER HOME DIR>/.ssh:/root/.ssh \
+        --volume <PATH TO USER TEMPLATES DIR>:/okit/instance/templates/user \
+        --volume <PATH TO GIT DIR>:/okit/instance/git \
+        --volume <PATH TO LOCAL DIR>:/okit/instance/local \
+        okit
 ```
 
 To stop the OKIT container
 ```bash
-lima nerdctl container stop okit
+lima nerdctl stop okit
 ```
 
 To stop the Lima service VM
@@ -178,6 +233,27 @@ limactl stop
 ```
 
 ### Vagrant / VirtualBox
+
+#### Prerequisites
+- Install [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+- Install [Vagrant](https://vagrantup.com/)
+- Create local directory __~/okit/user/templates__ for storage of custom templates.
+- [Copy Config & Key Files](#copy-config--key-files)
+
+#### Vagrant Build
+
+##### MacOS / Linux
+```bash
+cd oci-designer-toolkit/containers/vagrant
+vagrant up; vagrant reload; vagrant ssh
+```
+##### Windows
+```bash
+cd oci-designer-toolkit\containers\vagrant
+vagrant up & vagrant reload & vagrant ssh
+```
+**NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
+is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
 
 
 
@@ -371,68 +447,7 @@ docker-compose build
 ```
 
 #### Docker 
-The docker image  can be built and started using the scripts in the docker sub directory.
-It should be noted that the current Docker script is designed for development purposes and mounts the source directories
-at runtime. 
 
-##### Prerequisites
-- Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
-- Create local directory __~/okit/user/templates__ for storage of custom templates.
-- [Copy Config & Key Files](#copy-config--key-files)
-
-##### Docker Build
-```bash
-cd oci-designer-toolkit
-docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
-```
-
-##### Docker Update
-```bash
-cd oci-designer-toolkit
-docker rmi okit
-docker build --tag okit --no-cache --file ./containers/docker/Dockerfile --force-rm .
-```
-
-##### Start Docker Container
-```bash
-cd oci-designer-toolkit
-docker run -d --rm -p 443:443 -p 80:80 \
-           --name okit \
-           --hostname okit \
-           --volume ~/okit/user/templates:/okit/templates \
-           okit
-```
-
-#### Vagrant
-
-##### Prerequisites
-- Install [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-- Install [Vagrant](https://vagrantup.com/)
-- Create local directory __~/okit/user/templates__ for storage of custom templates.
-- [Copy Config & Key Files](#copy-config--key-files)
-
-##### Vagrant Build
-###### MacOS / Linux
-```bash
-cd oci-designer-toolkit/containers/vagrant
-vagrant up; vagrant reload; vagrant ssh
-```
-###### Windows
-```bash
-cd oci-designer-toolkit\containers\vagrant
-vagrant up & vagrant reload & vagrant ssh
-```
-**NOTE**: This step takes about 30 minutes on my mac when you build the VM, a little longer the first time as the Vbox image 
-is downloaded from github. Once the VM is built the vagrant up should just take a few seconds.
-
-##### Vagrant
-```bat
-cd oci-designer-toolkit/containers/vagrant
-vagrant halt
-vagrant destroy -f
-vagrant up
-vagrant reload
-```
 
 
 
