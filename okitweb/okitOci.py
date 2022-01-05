@@ -29,6 +29,7 @@ from common.okitCommon import jsonToFormattedString
 from common.okitCommon import readJsonFile
 from common.okitCommon import standardiseIds
 from common.okitCommon import writeJsonFile
+from common.okitCommon import getOkitHome
 from common.okitLogging import getLogger
 from model.okitValidation import OCIJsonValidator
 from facades.ociAutonomousDatabases import OCIAutonomousDatabases
@@ -89,7 +90,7 @@ logger = getLogger()
 bp = Blueprint('oci', __name__, url_prefix='/okit/oci', static_folder='static/okit')
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
-template_root = '/okit/visualiser/templates'
+template_root = f'{getOkitHome()}/visualiser/templates'
 
 #
 # Define Error Handlers
