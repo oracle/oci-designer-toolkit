@@ -20,6 +20,7 @@ import tempfile
 from werkzeug.utils import secure_filename
 
 from common.okitCommon import logJson
+from common.okitCommon import getOkitHome
 from common.okitLogging import getLogger
 from model.okitValidation import OCIJsonValidator
 from generators.okitAnsibleGenerator import OCIAnsibleGenerator
@@ -34,7 +35,7 @@ logger = getLogger()
 bp = Blueprint('export', __name__, url_prefix='/okit/export', static_folder='static/okit')
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
-template_root = '/okit/visualiser/templates'
+template_root = f'{getOkitHome()}/visualiser/templates'
 
 @bp.route('terraform', methods=(['GET']))
 def terraform():
