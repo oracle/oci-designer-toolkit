@@ -23,6 +23,10 @@ logger = None
 loglevelmap = {'critical': logging.CRITICAL, 'error': logging.ERROR, 'warning': logging.WARNING, 'info': logging.INFO,
                'debug': logging.DEBUG}
 
+def getOkitHome():
+    return os.getenv('OKIT_HOME', '/okit')
+
+
 def getConsoleFormat():
     defaultformat = '%(levelname)s: %(message)s'
     return os.getenv('OKIT_CONSOLE_LOG_FORMAT', defaultformat)
@@ -37,7 +41,7 @@ def getConsoleLogLevel():
 
 
 def getLogFilename():
-    return os.getenv('OKIT_LOGFILE', '/okit/log/okit.log')
+    return os.getenv('OKIT_LOGFILE', f'{getOkitHome()}/log/okit.log')
 
 
 def getDebugLogFilename():

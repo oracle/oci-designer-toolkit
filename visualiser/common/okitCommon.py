@@ -23,6 +23,7 @@ from contextlib import closing
 
 import json
 from common.okitLogging import getLogger
+from common.okitLogging import getOkitHome
 
 # Configure logging
 logger = getLogger()
