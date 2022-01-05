@@ -140,6 +140,43 @@ Once started the Designer BUI can be accessed on [http://localhost/okit/designer
 
 ### Lima (MacOS)
 
+[Lima](https://github.com/lima-vm/lima) is an alternative option to Docker Desktop to run a container based OKIT installation on MacOS. 
+It will build a container based on the existing Dockerfile without any modifications.
+
+Install Lima using Homebrew
+```bash
+brew install lima
+```
+
+Lima runs a Linux VM in the background that is used for running the containers, to start the Lima VM service run
+```bash
+limactl start
+```
+
+Lima uses containerd as its container run-time and nertctl as the Docker-compatible CLI for containerd. 
+As containerd is running in the VM, not on the Mac directly the lima command passes the nerdctl commands to the VM.  
+For most docker commands the equivalent is to run lima nerdctl
+
+With Lima installed and running we need to build the OKIT container, replacing the regular docker build with
+```bash
+lima nerdctl build . --tag okit
+```
+
+Run OKIT using the container run command, adjust or add additional required volume mounts as required
+```bash
+lima nerdctl container run --rm -p 80:80 --volume ~/.oci:/root/.oci --volume ~/.ssh:/root/.ssh --name okit okit
+```
+
+To stop the OKIT container
+```bash
+lima nerdctl container stop okit
+```
+
+To stop the Lima service VM
+```bash
+limactl stop
+```
+
 ### Vagrant / VirtualBox
 
 
@@ -548,14 +585,4 @@ ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -N -L 8080:127.0.0
 
 Once the tunnel has been created the OKIT Designer BUI can be accessed on [http://localhost:8080/okit/designer](http://localhost:8080/okit/designer).
 
-
-
-
-
-
-
-
-
-
-## Install on Oracle Linux
 
