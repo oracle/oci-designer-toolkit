@@ -782,7 +782,7 @@ class OkitArtifact {
         // Read Only flag to indicate that we should not create this Resource
         this.read_only = false;
         // Add Terraform Resource Name
-        this.resource_name = undefined;
+        this.resource_name = this.generateResourceName();
     }
 
     get name() {return this.display_name;}
@@ -817,8 +817,9 @@ class OkitArtifact {
             if (update.display_name === undefined || update.display_name === '') update.display_name = update.name;
             delete update.name;
         }
+        console.info(update)
+        if ((update.resource_name === undefined || update.resource_name === '') && update.display_name) update.resource_name = this.generateResourceNameFromDisplayName(update.display_name)
         $.extend(true, this, this.clean(update));
-        if (this.resource_name === undefined || this.resource_name === '') this.resource_name = this.generateTFResourceName(this.display_name)
     }
 
     /*
@@ -888,7 +889,9 @@ class OkitArtifact {
         }
     }
 
-    generateTFResourceName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
+    generateResourceName() {return `Okit${this.getArtifactReference().split(' ').join('')}${Date.now()}`}
+
+    generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
 
     /*
     ** Static Functionality
