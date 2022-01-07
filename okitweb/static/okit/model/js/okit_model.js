@@ -107,6 +107,8 @@ class OkitJson {
                 const new_function = `new${func_name.slice(0, -1)}`;
                 // console.warn('Functions:', get_function, new_function);
                 for (const resource of okit_json[key]) {this[new_function](resource);}
+                // Increment resource count by number of resources added
+                this.metadata.resource_count += this[key].length;
             }
         }
         // Reset Default Security List / Route Table Processing
@@ -766,7 +768,7 @@ class OkitArtifact {
         this.id = this.okit_id;
         // All Artefacts will have compartment id, display name & description
         this.compartment_id = '';
-        this.display_name = '';
+        this.display_name = this.generateDefaultName(okitjson.metadata.resource_count += 1);
         this.definition = '';
         this.okit_reference = `okit-${uuidv4()}`;
         // Add default for common Tag variables
@@ -780,14 +782,14 @@ class OkitArtifact {
         // Read Only flag to indicate that we should not create this Resource
         this.read_only = false;
         // Add Terraform Resource Name
-        // this.tf_resource_name = undefined;
+        this.resource_name = undefined;
     }
 
     get name() {return this.display_name;}
     set name(name) {this.display_name = name;}
     get okit_id() {return 'okit.' + this.constructor.name.toLowerCase() + '.' + uuidv4();}
-    get resource_name() {return this.getArtifactReference();}
-    get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
+    get resource_type() {return this.getArtifactReference();}
+    get list_name() {return `${this.resource_type.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
     set json_model_list(list) {this.okit_json[this.list_name] = list;}
     get children() {return Object.values(this.getOkitJson()).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.parent_id === this.id)}
@@ -816,7 +818,7 @@ class OkitArtifact {
             delete update.name;
         }
         $.extend(true, this, this.clean(update));
-        // if (this.tf_resource_name === undefined || this.tf_resource_name === '') this.tf_resource_name = this.generateTFResourceName(this.display_name)
+        if (this.resource_name === undefined || this.resource_name === '') this.resource_name = this.generateTFResourceName(this.display_name)
     }
 
     /*

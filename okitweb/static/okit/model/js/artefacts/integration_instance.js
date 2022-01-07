@@ -14,7 +14,7 @@ class IntegrationInstance extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.integration_instances.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.integration_instances.length + 1);
         this.compartment_id = data.parent_id;
         /*
         ** TODO: Add Resource / Artefact specific parameters and default

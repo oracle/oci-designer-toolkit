@@ -14,7 +14,7 @@ class Group extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.groups.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.groups.length + 1);
         this.compartment_id = null;
         this.description = ''
         this.user_ids = []

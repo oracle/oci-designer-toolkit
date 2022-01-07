@@ -1076,10 +1076,10 @@ class OkitArtefactView {
     }
 
     // -- Reference
-    get resource_name() {return this.getArtifactReference();}
+    get resource_type() {return this.getArtifactReference();}
     get json_view() {return this.getJsonView();}
     get okit_json() {return this.getJsonView().getOkitJson();}
-    get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
+    get list_name() {return `${this.resource_type.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
     // set json_model_list(list) {this.okit_json[this.list_name] = list;}
     get json_view_list() {return this.json_view[this.list_name];}
@@ -1343,8 +1343,8 @@ class OkitArtefactView {
         return OkitArtefactView.cut_copy_paste.resource ? OkitArtefactView.cut_copy_paste.resource.getDropTargets().includes(this.getArtifactReference()) : false;
     }
 
-    getFunction(resource_name) {return `get${titleCase(resource_name).split(' ').join('')}`}
-    getArrayFunction(resource_name) {return `${this.getFunction(resource_name)}s`}
+    getFunction(resource_type) {return `get${titleCase(resource_type).split(' ').join('')}`}
+    getArrayFunction(resource_type) {return `${this.getFunction(resource_type)}s`}
 
     getArtefact() {return this.artefact;}
 

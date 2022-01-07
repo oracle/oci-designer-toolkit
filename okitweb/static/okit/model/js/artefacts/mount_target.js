@@ -14,7 +14,7 @@ class MountTarget extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.mount_targets.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.mount_targets.length + 1);
         this.compartment_id = data.compartment_id;
         this.availability_domain = 1;
         this.subnet_id = '';

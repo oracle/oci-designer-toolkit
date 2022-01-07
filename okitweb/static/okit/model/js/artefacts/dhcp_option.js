@@ -14,7 +14,7 @@ class DhcpOption extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.dhcp_options.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.dhcp_options.length + 1);
         this.compartment_id = '';
         this.vcn_id = '';
         this.options = [{

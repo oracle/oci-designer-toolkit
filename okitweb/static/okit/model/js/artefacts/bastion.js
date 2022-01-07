@@ -15,7 +15,7 @@ class Bastion extends OkitArtifact {
         super(okitjson);
         // Configure default values
         // # Required
-        this.display_name = this.generateDefaultName(okitjson.bastions.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.bastions.length + 1);
         this.compartment_id = '';
         this.bastion_type = 'STANDARD';
         this.target_subnet_id = '';

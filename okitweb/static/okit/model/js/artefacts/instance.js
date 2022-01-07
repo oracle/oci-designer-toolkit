@@ -15,7 +15,7 @@ class Instance extends OkitArtifact {
         super(okitjson);
         // Configure default values
         // # Required
-        this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
         this.availability_domain = '1';
         this.compartment_id = '';
         this.shape = 'VM.Standard.E3.Flex';
