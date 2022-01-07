@@ -28,6 +28,11 @@ class MountTarget extends OkitArtifact {
         this.merge(data);
         this.convert();
     }
+
+    convert() {
+        super.convert()
+        this.exports.forEach((e) => {if (!e.options) e.options = this.newExportOptions()})
+    }
     /*
     ** Create Export Element
     */
@@ -35,14 +40,17 @@ class MountTarget extends OkitArtifact {
         return {
             file_system_id: '',
             path: '',
-            options: {
-                source: this.getOkitJson().getSubnet(this.subnet_id).cidr_block,
-                access: 'READ_ONLY',
-                anonymous_gid: 65534,
-                anonymous_uid: 65534,
-                identity_squash: 'ROOT',
-                require_privileged_source_port: true
-            }
+            options: this.newExportOptions()
+        }
+    }
+    newExportOptions() {
+        return {
+            source: this.getOkitJson().getSubnet(this.subnet_id) ? this.getOkitJson().getSubnet(this.subnet_id).cidr_block : '',
+            access: 'READ_ONLY',
+            anonymous_gid: 65534,
+            anonymous_uid: 65534,
+            identity_squash: 'ROOT',
+            require_privileged_source_port: true
         }
     }
     /*
