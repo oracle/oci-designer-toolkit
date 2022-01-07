@@ -14,7 +14,7 @@ class VirtualCloudNetwork extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.virtual_cloud_networks.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.virtual_cloud_networks.length + 1);
         this.compartment_id = data.parent_id;
         // Generate Cidr
         this.cidr_blocks = [''];

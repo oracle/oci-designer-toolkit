@@ -14,7 +14,7 @@ class SecurityList extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.security_lists.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.security_lists.length + 1);
         this.compartment_id = '';
         this.vcn_id = data.parent_id;
         this.egress_security_rules = [];

@@ -15,8 +15,8 @@ class Compartment extends OkitArtifact {
         super(okitjson);
         // Configure default values
         this.compartment_id = null;
-        this.name = this.generateDefaultName(okitjson.compartments.length + 1);
-        this.display_name = this.name;
+        // this.name = this.generateDefaultName(okitjson.compartments.length + 1);
+        // this.display_name = this.name;
         this.description = this.name;
         // Update with any passed data
         this.merge(data);

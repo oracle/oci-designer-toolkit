@@ -14,7 +14,7 @@ class IpsecConnection extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.ipsec_connections.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.ipsec_connections.length + 1);
         this.compartment_id = data.parent_id;
         this.cpe_id = '';
         this.drg_id = '';

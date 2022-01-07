@@ -14,7 +14,7 @@ class MysqlDatabaseSystem extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.mysql_database_systems.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.mysql_database_systems.length + 1);
         this.compartment_id = data.parent_id;
         this.availability_domain = 1;
         this.hostname_label = this.display_name.toLowerCase();

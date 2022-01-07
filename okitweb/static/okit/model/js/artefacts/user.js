@@ -15,7 +15,7 @@ class User extends OkitArtifact {
         super(okitjson);
         // Configure default values
         // const array_pos = okitjson.users ? okitjson.users.length + 1 : 0;
-        this.display_name = this.generateDefaultName(okitjson.users.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.users.length + 1);
         this.compartment_id = null;
         this.description = ''
         this.email = ''

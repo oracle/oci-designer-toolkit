@@ -14,7 +14,7 @@ class AutonomousDatabase extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.autonomous_databases.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.autonomous_databases.length + 1);
         this.compartment_id = data.parent_id;
         this.db_name = this.display_name.replace('-', '');
         this.admin_password = generatePassword();

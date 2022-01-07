@@ -14,7 +14,7 @@ class BlockStorageVolume extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.block_storage_volumes.length + 1);
         this.compartment_id = data.parent_id;
         this.availability_domain = '1';
         this.size_in_gbs = 1024;
