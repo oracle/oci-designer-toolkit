@@ -282,7 +282,17 @@
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
         <div id="center-header" class="okit-center-header">
             <div id="canvas_details" class="okit-canvas-details table">
-                <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
+                <div class="tr">
+                    <div class="td"><label>Target</label></div>
+                    <div class="td">
+                        <select id="deployment_platform" onchange="handleTargetPlatformSelect()">
+                            <option value="oci" selected="selected">OCI</option>
+                            <option value="pca">PCA X-9</option>
+                            <option value="freetier">Free Tier</option>
+                        </select>
+                    </div>
+                    <div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div>
+                </div>
                 <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
             </div>
         </div>

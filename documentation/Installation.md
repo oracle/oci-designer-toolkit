@@ -166,7 +166,7 @@ docker build --tag okit --file ./containers/docker/Dockerfile --force-rm .
 ```bash
 cd oci-designer-toolkit
 docker rmi okit
-docker build --tag okit --no-cache --file ./containers/docker/Dockerfile --force-rm .
+docker build --tag okit --no-cache --file ./Dockerfile --force-rm .
 ```
 
 #### Start Docker Container
@@ -206,7 +206,7 @@ With Lima installed and running we need to build the OKIT container, replacing t
 ```bash
 cd oci-designer-toolkit
 lima nerdctl rmi okit
-lima nerdctl build --tag okit --no-cache --file ./containers/docker/Dockerfile .
+lima nerdctl build --tag okit --no-cache --file ./Dockerfile .
 ```
 
 Run OKIT using the container run command, adjust or add additional required volume mounts as required

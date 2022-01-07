@@ -142,6 +142,18 @@ function updateJsonDescription() {
 function updateFreeformTerraform() {
     okitJsonModel.user_defined.terraform = $('#freeform_terraform').val();
 }
+function handleTargetPlatformSelect() {
+    okitJsonModel.metadata.platform = $('#deployment_platform').val();
+    updatePaletteForPlatform();
+}
+function setTargetPlatform() {
+    $('#deployment_platform').val(okitJsonModel.metadata.platform);
+    updatePaletteForPlatform();
+}
+function updatePaletteForPlatform() {
+    $('.okit-palette-icon-div').addClass('hidden');
+    $(`.${okitJsonModel.metadata.platform}`).removeClass('hidden');
+}
 
 /*
 ** Handle Clone (Switch off Read Only)
@@ -1307,6 +1319,7 @@ function displayOkitJson() {
     $(jqId(JSON_MODEL_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonModel, null, 2) + '</code></pre>');
     $(jqId(JSON_VIEW_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonView, null, 2) + '</code></pre>');
     $(jqId(JSON_REGION_PANEL)).html('<pre><code>' + JSON.stringify(regionOkitJson, null, 2) + '</code></pre>');
+    updatePaletteForPlatform();
 }
 /*
 ** Draw Canvas
