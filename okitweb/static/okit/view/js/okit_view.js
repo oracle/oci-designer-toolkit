@@ -1549,7 +1549,7 @@ class OkitArtefactView {
             // const open = $('#toggle_properties_button').hasClass('okit-bar-panel-displayed');
             // if (!open) $('#toggle_properties_button').trigger('click');
             $(this).trigger('click');
-            $('#toggle_properties_button').trigger('click');
+            $('#properties_toolbar_button').trigger('click');
             window.getSelection().removeAllRanges();
         });
     }
