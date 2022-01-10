@@ -1470,10 +1470,8 @@ function displayValidationResults(results) {
         tr.on('click', () => {
             warning_properties.push(warning.element);
             // d3.select(d3Id(warning.id + '-svg')).on("click")();
-            d3.select(d3Id(warning.id + '-svg')).on("dblclick")();
             // $('#toggle_properties_button').click();
-            $(`#${warning.id}-svg`).dblclick();
-            // handleOpenProperties();
+            handleOpenProperties();
         });
     }
     $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
