@@ -1437,8 +1437,10 @@ function displayValidationResults(results) {
         });
         tr.on('click', () => {
             error_properties.push(error.element);
-            d3.select(d3Id(error.id + '-svg')).on("click")();
-            $('#toggle_properties_button').click();
+            // d3.select(d3Id(error.id + '-svg')).on("click")();
+            // $('#toggle_properties_button').click();
+            // $('#properties_toolbar_button').click();
+            handleOpenProperties();
         });
     }
     $(jqId('validation_errors_summary')).text(`Errors (${results.results.errors.length})`)
@@ -1467,8 +1469,9 @@ function displayValidationResults(results) {
         });
         tr.on('click', () => {
             warning_properties.push(warning.element);
-            d3.select(d3Id(warning.id + '-svg')).on("click")();
-            $('#toggle_properties_button').click();
+            // d3.select(d3Id(warning.id + '-svg')).on("click")();
+            // $('#toggle_properties_button').click();
+            handleOpenProperties();
         });
     }
     $(jqId('validation_warnings_summary')).text(`Warnings (${results.results.warnings.length})`)
@@ -1497,8 +1500,9 @@ function displayValidationResults(results) {
         });
         tr.on('click', () => {
             warning_properties.push(warning.element);
-            d3.select(d3Id(warning.id + '-svg')).on("click")();
-            $('#toggle_properties_button').click();
+            // d3.select(d3Id(warning.id + '-svg')).on("click")();
+            // $('#toggle_properties_button').click();
+            handleOpenProperties();
         });
     }
     $(jqId('validation_info_summary')).text(`Information (${results.results.info.length})`)
