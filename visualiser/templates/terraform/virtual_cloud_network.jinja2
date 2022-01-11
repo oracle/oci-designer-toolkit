@@ -19,7 +19,11 @@ locals {
 resource "oci_core_vcn" "{{ resource_name }}" {
     # Required
     compartment_id = {{ compartment_id }}
+{% if deployment_platform is defined and deployment_platform != "pca" %}
     cidr_blocks    = [{% for cidr_block in cidr_blocks %}"{{ cidr_block }}"{% if not loop.last %},{% endif %}{% endfor %}]
+{% else %}
+    cidr_block     = {% for cidr_block in cidr_blocks %}{% if loop.first %}"{{ cidr_block }}"{% endif %}{% endfor %} 
+{% endif %}
     # Optional
     dns_label      = {{ dns_label | safe }}
     display_name   = {{ display_name | safe }}
