@@ -171,6 +171,13 @@ class OkitJsonView {
     ** Artefact Processing
      */
 
+    getResource(id='') {
+        const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        console.info('Resource', resource)
+        return resource
+    }
+
+
     // Autonomous Database
     dropAutonomousDatabaseView(target) {
         let view_artefact = this.newAutonomousDatabase();

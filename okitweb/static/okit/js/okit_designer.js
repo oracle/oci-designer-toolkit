@@ -1405,7 +1405,7 @@ function setCenterColumnWidth() {
 ** Model Validation
  */
 function displayValidationResults(results) {
-    console.info('Displaying Validation Results');
+    console.info('Displaying Validation Results', results);
     if (results.valid) {
         $(jqId('validation_status')).text('Validation Successful');
     } else {
@@ -1437,9 +1437,7 @@ function displayValidationResults(results) {
         });
         tr.on('click', () => {
             error_properties.push(error.element);
-            // d3.select(d3Id(error.id + '-svg')).on("click")();
-            // $('#toggle_properties_button').click();
-            // $('#properties_toolbar_button').click();
+            okitJsonView.getResource(error.id).loadProperties()
             handleOpenProperties();
         });
     }
@@ -1469,8 +1467,7 @@ function displayValidationResults(results) {
         });
         tr.on('click', () => {
             warning_properties.push(warning.element);
-            // d3.select(d3Id(warning.id + '-svg')).on("click")();
-            // $('#toggle_properties_button').click();
+            okitJsonView.getResource(warning.id).loadProperties()
             handleOpenProperties();
         });
     }
@@ -1500,8 +1497,7 @@ function displayValidationResults(results) {
         });
         tr.on('click', () => {
             warning_properties.push(warning.element);
-            // d3.select(d3Id(warning.id + '-svg')).on("click")();
-            // $('#toggle_properties_button').click();
+            okitJsonView.getResource(warning.id).loadProperties()
             handleOpenProperties();
         });
     }
