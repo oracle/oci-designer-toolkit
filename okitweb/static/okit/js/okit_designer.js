@@ -257,7 +257,7 @@ function saveJson(text, filename){
 /*
 ** Save Model As Template
  */
-function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user') {
+function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user', placeholder='<Directory Path>/<Filename>.json') {
     $(jqId('modal_dialog_title')).text(title);
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
@@ -318,7 +318,7 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user')
         .attr('id', 'template_file_name')
         .attr('name', 'template_file_name')
         .attr('type', 'text')
-        .attr('placeholder', '<Directory Path>/<Filename>.json')
+        .attr('placeholder', placeholder)
         .on('keydown', (e) => {
             if (d3.event.keyCode == 220) {
                 d3.event.preventDefault()
@@ -490,6 +490,46 @@ const loadFileSystemPanel = () => {
             console.error('Error : '+ error)
         }
     });
+}
+/*
+** Save Model as Terraform
+ */
+function handleSaveAsTerraform(e) {
+    const root_dir = 'local'
+    const placeholder = '<Directory Path>'
+    displaySaveAsTemplateDialog('Save as Terraform', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        okitJsonModel.validate((results) => {
+            if (results.valid) {
+                $.ajax({
+                    type: 'get',
+                    url: 'export/terraform',
+                    dataType: 'text',
+                    contentType: 'application/json',
+                    data: {
+                        root_dir: root_dir, 
+                        directory: $('#template_file_name').val(),
+                        destination: 'terraform',
+                        design: JSON.stringify(okitJsonModel)
+                    },
+                    success: function(resp) {
+                        console.info('handleSaveAsTerraform Response : ' + resp);
+                        console.info(JSON.parse(resp));
+                    },
+                    error: function(xhr, status, error) {
+                        console.info('Status : '+ status)
+                        console.info('Error : '+ error)
+                    },
+                    complete: function() {
+                        // Hide modal dialog
+                        $(jqId('modal_dialog_wrapper')).addClass('hidden');
+                    }
+                });
+            } else {
+                validationFailedNotification();
+            }        
+        })
+    }, root_dir, placeholder)
 }
 /*
 ** Save Model As Template

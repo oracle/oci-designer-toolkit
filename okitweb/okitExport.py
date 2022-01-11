@@ -13,6 +13,7 @@ __module__ = "okitExport"
 import os
 import urllib
 from flask import Blueprint
+from flask import current_app
 from flask import request
 from flask import send_from_directory
 import json
@@ -40,17 +41,30 @@ template_root = f'{getOkitHome()}/visualiser/templates'
 @bp.route('terraform', methods=(['GET']))
 def terraform():
     if request.method == 'GET':
+        instance_path = current_app.instance_path
+        root_dir = request.args.get('root_dir', default='/tmp')
+        terraform_dir = request.args.get('terraform_dir', default='/tmp')
         destination = request.args.get('destination', default='zip')
-        directory = request.args.get('destination', default='')
+        directory = request.args.get('directory', default='')
         design = json.loads(request.args.get('model', default='{}'))
+        add_suffix = True
         response_json = {}
-        if destination == 'git':
+        if destination == 'terraform':
+            destination_dir = os.path.join(instance_path, root_dir.strip('/'), directory.strip('/'))
+            add_suffix = False
+        elif destination == 'git':
             destination_dir = '/tmp'
         else:
             destination_dir = tempfile.mkdtemp()
-        generator = OCITerraformGenerator(template_root, destination_dir, design, use_vars=False)
+        logger.info(f'Export To Terraform Instance Path {instance_path}')
+        logger.info(f'Export To Terraform Root Directory {root_dir}')
+        logger.info(f'Export To Terraform Directory {directory}')
+        logger.info(f'Export To Terraform Destination Directory {destination_dir}')
+        generator = OCITerraformGenerator(template_root, destination_dir, design, use_vars=False, add_suffix=add_suffix)
         generator.generate()
-        if destination == 'zip':
+        if destination == 'terraform':
+            generator.writeFiles()
+        elif destination == 'zip':
             generator.writeFiles()
             return send_from_directory('/tmp', "okit-terraform.zip", mimetype='application/zip', as_attachment=True)
         elif destination == 'json':
