@@ -259,7 +259,7 @@ function saveJson(text, filename){
 /*
 ** Save Model As Template
  */
-function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user', placeholder='<Directory Path>/<Filename>.json') {
+function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user', placeholder='<Directory Path>/<Filename>.json', ext='.json') {
     $(jqId('modal_dialog_title')).text(title);
     $(jqId('modal_dialog_body')).empty();
     $(jqId('modal_dialog_footer')).empty();
@@ -273,7 +273,7 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user',
         .attr('size', '10')
         .on('click', () => {
             let name = $('#user_template_select').val().replace(root_dir, '')
-            if (!name.endsWith('.json')) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}.json`
+            if (!name.endsWith('.json')) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}${ext}`
             $('#template_file_name').val(name)
         })
     // templates_select.append('option')
@@ -499,6 +499,7 @@ const loadFileSystemPanel = () => {
 function handleSaveAsTerraform(e) {
     const root_dir = 'local'
     const placeholder = '<Directory Path>'
+    const ext = ''
     displaySaveAsTemplateDialog('Save as Terraform', () => {
         okitJsonModel.updated = getCurrentDateTime();
         okitJsonModel.validate((results) => {
@@ -531,7 +532,48 @@ function handleSaveAsTerraform(e) {
                 validationFailedNotification();
             }        
         })
-    }, root_dir, placeholder)
+    }, root_dir, placeholder, ext)
+}
+/*
+** Save Model as Markdown
+ */
+function handleSaveAsMarkdown(e) {
+    const root_dir = 'local'
+    const placeholder = '<Directory Path>/<Filename>.md'
+    const ext = '.md'
+    displaySaveAsTemplateDialog('Save as Markdown', () => {
+        okitJsonModel.updated = getCurrentDateTime();
+        okitJsonModel.validate((results) => {
+            if (results.valid) {
+                $.ajax({
+                    type: 'get',
+                    url: 'export/terraform',
+                    dataType: 'text',
+                    contentType: 'application/json',
+                    data: {
+                        root_dir: root_dir, 
+                        directory: $('#template_file_name').val(),
+                        destination: 'terraform',
+                        design: JSON.stringify(okitJsonModel)
+                    },
+                    success: function(resp) {
+                        console.info('handleSaveAsTerraform Response : ' + resp);
+                        console.info(JSON.parse(resp));
+                    },
+                    error: function(xhr, status, error) {
+                        console.info('Status : '+ status)
+                        console.info('Error : '+ error)
+                    },
+                    complete: function() {
+                        // Hide modal dialog
+                        $(jqId('modal_dialog_wrapper')).addClass('hidden');
+                    }
+                });
+            } else {
+                validationFailedNotification();
+            }        
+        })
+    }, root_dir, placeholder, ext)
 }
 /*
 ** Save Model As Template
