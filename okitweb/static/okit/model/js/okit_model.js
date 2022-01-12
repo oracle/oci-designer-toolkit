@@ -108,7 +108,7 @@ class OkitJson {
                 // console.warn('Functions:', get_function, new_function);
                 for (const resource of okit_json[key]) {this[new_function](resource);}
                 // Increment resource count by number of resources added
-                this.metadata.resource_count += this[key].length;
+                this.metadata.resource_count += this[key] ? this[key].length : 0;
             }
         }
         // Reset Default Security List / Route Table Processing
@@ -889,7 +889,7 @@ class OkitArtifact {
         }
     }
 
-    generateResourceName() {return `Okit${this.getArtifactReference().split(' ').join('')}${Date.now()}`}
+    generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').join('_')}_${Date.now()}`}
 
     generateResourceNameFromDisplayName(name) {return titleCase(name).split(' ').join('').replaceAll('-','_')}
 

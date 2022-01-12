@@ -7,7 +7,8 @@
 1. Add deployment target (platform) drop-down to specify where the design will be deployed. This modifies the palette icons available.
 2. Restructure generated terraform files.
 3. Add Save As Terraform to allow saving to the container local directory / local directory if OKIT is installed natively.
-3. Update Installation guide to include information on alternatives to Docker.
+4. Update Installation guide to include information on alternatives to Docker.
+5. Add Unique resource_name element to the model.
 ### Bug Fixes
 1. Test that instance has primary_vnic defined.
 2. Resolve issue where queried compartments containing a route table with a rule pointing to a DRG were not displaying the rule correctly.
