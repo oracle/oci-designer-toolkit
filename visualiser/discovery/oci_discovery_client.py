@@ -418,9 +418,11 @@ class OciResourceDiscoveryClient(object):
             "region_name": config['region'],
             "status": "READY"
             }]
+        self.regions = [oci.identity.models.region_subscription.RegionSubscription(is_home_region=True, region_key=config['region'], region_name=config['region'], status="READY")]
         self.home_region = config['region']
         try:
             self.regions, self.home_region = self.get_regions(regions)
+            logger.info(f'Type: {type(self.regions[0])}')
         except Exception as e:
             logger.warning(e)
 
