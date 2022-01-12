@@ -412,7 +412,12 @@ class OciResourceDiscoveryClient(object):
         self.tenancy = self.get_tenancy()
 
         # get regions
-        self.regions, self.home_region = self.get_regions(regions)
+        self.regions = [config['region']]
+        self.home_region = config['region']
+        try:
+            self.regions, self.home_region = self.get_regions(regions)
+        except Exception as e:
+            logger.warning(e)
 
         # get availability_domains
         self.availability_domains = self.get_availability_domains(self.regions)

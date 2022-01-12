@@ -14,6 +14,7 @@
 2. Resolve issue where queried compartments containing a route table with a rule pointing to a DRG were not displaying the rule correctly.
 3. Fix issue where Read Only DRGs were not specifying the ocid as a local variable.
 4. Fix display of spurious right side panel when clicking validation errors.
+5. Convert file system availability domain name to number.
 
 
 ## Version 0.30.1
