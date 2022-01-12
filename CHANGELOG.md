@@ -4,10 +4,15 @@
 ## Version 0.31.0
 **Release Date**: 19th January 2022
 ### Features
+1. Add deployment target (platform) drop-down to specify where the design will be deployed. This modifies the palette icons available.
+2. Restructure generated terraform files.
+3. Add Save As Terraform to allow saving to the container local directory / local directory if OKIT is installed natively.
+3. Update Installation guide to include information on alternatives to Docker.
 ### Bug Fixes
 1. Test that instance has primary_vnic defined.
 2. Resolve issue where queried compartments containing a route table with a rule pointing to a DRG were not displaying the rule correctly.
 3. Fix issue where Read Only DRGs were not specifying the ocid as a local variable.
+4. Fix display of spurious right side panel when clicking validation errors.
 
 
 ## Version 0.30.1
