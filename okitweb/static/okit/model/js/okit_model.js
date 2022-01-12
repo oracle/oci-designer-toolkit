@@ -827,6 +827,9 @@ class OkitArtifact {
      */
     convert() {
         if (this.parent_id !== undefined) {delete this.parent_id;}
+        // Check if built from a query
+        if (this.availability_domain && this.availability_domain.length > 1) {this.availability_domain = this.getAvailabilityDomainNumber(this.availability_domain);
+        }
     }
 
     /*
@@ -883,9 +886,9 @@ class OkitArtifact {
 
     getAvailabilityDomainNumber(availability_domain) {
         if (availability_domain) {
-            return availability_domain.slice(-1);
+            return +availability_domain.slice(-1);
         } else {
-            return availability_domain;
+            return +availability_domain;
         }
     }
 
