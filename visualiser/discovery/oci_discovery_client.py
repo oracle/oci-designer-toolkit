@@ -412,11 +412,11 @@ class OciResourceDiscoveryClient(object):
         self.tenancy = self.get_tenancy()
 
         # get regions
-        self.regions = [oci.identity.models.region_subscription.RegionSubscription(is_home_region=True, region_key=config['region'], region_name=config['region'], status="READY")]
-        self.home_region = config['region']
         try:
             self.regions, self.home_region = self.get_regions(regions)
         except Exception as e:
+            self.regions = [oci.identity.models.region_subscription.RegionSubscription(is_home_region=True, region_key=config['region'], region_name=config['region'], status="READY")]
+            self.home_region = config['region']
             logger.warning(e)
 
         # get availability_domains
