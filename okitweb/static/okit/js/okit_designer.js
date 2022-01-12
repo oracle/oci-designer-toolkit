@@ -145,6 +145,8 @@ function updateFreeformTerraform() {
 function handleTargetPlatformSelect() {
     okitJsonModel.metadata.platform = $('#deployment_platform').val();
     updatePaletteForPlatform();
+    const selected = $("#toolbar_view_select").val();
+    if (selected === 'terraform') okitTerraformView.draw();
 }
 function setTargetPlatform() {
     $('#deployment_platform').val(okitJsonModel.metadata.platform);
