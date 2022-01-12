@@ -412,7 +412,12 @@ class OciResourceDiscoveryClient(object):
         self.tenancy = self.get_tenancy()
 
         # get regions
-        self.regions = [config['region']]
+        self.regions = [{
+            "is_home_region": True,
+            "region_key": config['region'],
+            "region_name": config['region'],
+            "status": "READY"
+            }]
         self.home_region = config['region']
         try:
             self.regions, self.home_region = self.get_regions(regions)
