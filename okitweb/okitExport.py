@@ -17,6 +17,7 @@ from flask import current_app
 from flask import request
 from flask import send_from_directory
 import json
+import shutil
 import tempfile
 from werkzeug.utils import secure_filename
 
@@ -46,10 +47,10 @@ def terraform():
         terraform_dir = request.args.get('terraform_dir', default='/tmp')
         destination = request.args.get('destination', default='zip')
         directory = request.args.get('directory', default='')
-        design = json.loads(request.args.get('model', default='{}'))
+        design = json.loads(request.args.get('design', default='{}'))
         add_suffix = True
         response_json = {}
-        if destination == 'terraform':
+        if destination == 'file':
             destination_dir = os.path.join(instance_path, root_dir.strip('/'), directory.strip('/'))
             add_suffix = False
         elif destination == 'git':
@@ -57,16 +58,23 @@ def terraform():
         else:
             destination_dir = tempfile.mkdtemp()
         logger.info(f'Export To Terraform Instance Path {instance_path}')
+        logger.info(f'Export To Terraform Destination {destination}')
         logger.info(f'Export To Terraform Root Directory {root_dir}')
         logger.info(f'Export To Terraform Directory {directory}')
         logger.info(f'Export To Terraform Destination Directory {destination_dir}')
         generator = OCITerraformGenerator(template_root, destination_dir, design, use_vars=False, add_suffix=add_suffix)
         generator.generate()
-        if destination == 'terraform':
+        if destination == 'file':
+            response_json = generator.toJson()
             generator.writeFiles()
         elif destination == 'zip':
             generator.writeFiles()
-            return send_from_directory('/tmp', "okit-terraform.zip", mimetype='application/zip', as_attachment=True)
+            zipname = generator.createZipArchive(os.path.join(destination_dir, 'terraform'), "/tmp/okit-terraform")
+            logger.info('Zipfile : {0:s}'.format(str(zipname)))
+            shutil.rmtree(destination_dir)
+            filename = os.path.split(zipname)
+            logger.info('Split Zipfile : {0:s}'.format(str(filename)))
+            return send_from_directory('/tmp', "okit-terraform.zip", mimetype='application/zip', as_attachment=True, cache_timeout=0)
         elif destination == 'json':
             response_json = generator.toJson()
         return json.dumps(response_json, sort_keys=False, indent=2, separators=(',', ': '))

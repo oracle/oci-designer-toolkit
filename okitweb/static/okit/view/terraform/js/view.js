@@ -48,7 +48,7 @@ class OkitTerraformView extends OkitJsonView {
             contentType: 'application/json',
             data: {
                 destination: 'json',
-                model: JSON.stringify(self.model)
+                design: JSON.stringify(self.model)
             },
             success: function(resp) {
                 self.terraform = JSON.parse(resp)

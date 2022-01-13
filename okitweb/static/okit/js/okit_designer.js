@@ -132,6 +132,7 @@ function setTitleDescription() {
     okitJsonModel ? $('#json_title').val(okitJsonModel.title) : $('#json_title').val('');
     okitJsonModel ? $('#json_description').val(okitJsonModel.description) : $('#json_description').val('');
     okitJsonModel ? $('#freeform_terraform').val(okitJsonModel.user_defined.terraform) : $('#freeform_terraform').val('');
+    okitJsonModel ? setTargetPlatform() : $('#deployment_platform').val('oci');
 }
 function updateJsonTitle() {
     okitJsonModel.title = $('#json_title').val();
@@ -273,7 +274,7 @@ function displaySaveAsTemplateDialog(title, callback, root_dir='templates/user',
         .attr('size', '10')
         .on('click', () => {
             let name = $('#user_template_select').val().replace(root_dir, '')
-            if (!name.endsWith('.json')) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}${ext}`
+            if (!name.endsWith(ext)) name = `${name}/${okitJsonModel.title.split(' ').join('_').toLowerCase()}${ext}`
             $('#template_file_name').val(name)
         })
     // templates_select.append('option')
@@ -505,6 +506,7 @@ function handleSaveAsTerraform(e) {
         okitJsonModel.validate((results) => {
             if (results.valid) {
                 $.ajax({
+                    cache: false,
                     type: 'get',
                     url: 'export/terraform',
                     dataType: 'text',
@@ -512,12 +514,11 @@ function handleSaveAsTerraform(e) {
                     data: {
                         root_dir: root_dir, 
                         directory: $('#template_file_name').val(),
-                        destination: 'terraform',
+                        destination: 'file',
                         design: JSON.stringify(okitJsonModel)
                     },
                     success: function(resp) {
-                        console.info('handleSaveAsTerraform Response : ' + resp);
-                        console.info(JSON.parse(resp));
+                        console.info(`Terraform generated and saved to ${$('#template_file_name').val()}`);
                     },
                     error: function(xhr, status, error) {
                         console.info('Status : '+ status)
@@ -1400,10 +1401,9 @@ function handlePropertiesTabClick(id) {
 ** Json / Source Code
  */
 function displayOkitJson() {
-    $(jqId(JSON_MODEL_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonModel, null, 2) + '</code></pre>');
-    $(jqId(JSON_VIEW_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonView, null, 2) + '</code></pre>');
-    $(jqId(JSON_REGION_PANEL)).html('<pre><code>' + JSON.stringify(regionOkitJson, null, 2) + '</code></pre>');
-    updatePaletteForPlatform();
+    // $(jqId(JSON_MODEL_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonModel, null, 2) + '</code></pre>');
+    // $(jqId(JSON_VIEW_PANEL)).html('<pre><code>' + JSON.stringify(okitJsonView, null, 2) + '</code></pre>');
+    // $(jqId(JSON_REGION_PANEL)).html('<pre><code>' + JSON.stringify(regionOkitJson, null, 2) + '</code></pre>');
 }
 /*
 ** Draw Canvas

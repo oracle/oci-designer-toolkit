@@ -127,6 +127,40 @@ function handleExportToTerraformForDisplay(e) {
     hideNavMenu();
     okitJsonModel.validate(exportTerraformForDisplay);
 }
+function generateTerraformLocalZipGet(results) {
+    if (results.valid) {
+        let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
+        console.info(okitSettings);
+        requestJson.use_variables = okitSettings.is_variables;
+        $.ajax({
+
+            type: 'get',
+            url: 'export/terraform',
+            dataType: 'text',
+            contentType: 'application/zip',
+            data: {
+                destination: 'zip',
+                design: JSON.stringify(okitJsonModel)
+            },
+            success: function(resp, status, xhr) {
+                console.info('Response : ' + resp);
+                console.info('Response : ' + typeof resp);
+                console.info('xhr : ' + xhr.getAllResponseHeaders("Content-Type"));
+                const blob = new Blob([resp], { type: 'application/zip' });
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'okit-terraform.zip';
+                link.click();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
 function generateTerraformLocalZip(results) {
     if (results.valid) {
         let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
