@@ -370,7 +370,54 @@ source ${OKIT_DIR}/.venv/bin/activate
 ${OKIT_DIR}/.venv/bin/gunicorn okitweb.wsgi:app --config ${OKIT_DIR}/config/gunicorn_http.py
 ```
 
+### Windows 10 / WSL (Ubuntu)
 
+#### Package Install
+```bash
+sudo apt install git
+sudo apt install python3
+sudo apt install libmagic-dev
+sudo apt install python3.8-venv
+```
+
+#### Install
+```bash
+export OKIT_DIR=${HOME}/okit
+export OKIT_GITHUB_DIR=${HOME}/okit_github
+export OKIT_BRANCH='master'
+mkdir -p ${OKIT_DIR}
+mkdir -p ${OKIT_GITHUB_DIR}
+# Create Python Virtual Environment
+python3 -m venv ${OKIT_DIR}/.venv
+# Activate Virtual Environment
+source ${OKIT_DIR}/.venv/bin/activate
+# Update python & Install modules
+python3 -m pip install -U pip
+python3 -m pip install -U setuptools
+python3 -m pip install --no-cache-dir authlib flask gitpython git-url-parse gunicorn oci openpyxl pandas python-magic pyyaml requests xlsxwriter
+# Clone OKIT 
+git clone -b ${OKIT_BRANCH} https://github.com/oracle/oci-designer-toolkit.git ${OKIT_GITHUB_DIR}/oci-designer-toolkit
+# Create OKIT Required Directories
+mkdir -p ${OKIT_DIR}/{git,local,log,instance/git,instance/local,instance/templates/user,workspace,ssl}
+# Link Directories
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/config ${OKIT_DIR}/config
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb ${OKIT_DIR}/okitweb
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/visualiser ${OKIT_DIR}/visualiser
+ln -sv ${OKIT_GITHUB_DIR}/oci-designer-toolkit/okitweb/static/okit/templates/reference_architecture ${OKIT_DIR}/instance/templates/reference_architecture
+```
+
+#### Run
+```bash
+export OKIT_DIR=${HOME}/okit
+export OKIT_LOGFILE=${OKIT_DIR}/log/okit.log
+export PYTHONPATH=:${OKIT_DIR}/visualiser:${OKIT_DIR}/okitweb:${OKIT_DIR}
+# Activate Virtual Environment
+source ${OKIT_DIR}/.venv/bin/activate
+# Run Server
+${OKIT_DIR}/.venv/bin/gunicorn okitweb.wsgi:app --config ${OKIT_DIR}/config/gunicorn_http.py
+```
+
+__Note:__ You may need to replace "localhost" in the OKIT URL with the IP Address of you WSL2 Virtual Machine.
 
 
 
