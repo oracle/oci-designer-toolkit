@@ -817,7 +817,6 @@ class OkitArtifact {
             if (update.display_name === undefined || update.display_name === '') update.display_name = update.name;
             delete update.name;
         }
-        console.info(update)
         if ((update.resource_name === undefined || update.resource_name === '') && update.display_name) update.resource_name = this.generateResourceNameFromDisplayName(update.display_name)
         $.extend(true, this, this.clean(update));
     }
@@ -877,7 +876,10 @@ class OkitArtifact {
     ** Default name generation
      */
     generateDefaultName(count = 0) {
-        return this.getNamePrefix() + ('000' + count).slice(-3);
+        const today = new Date();
+        const pad = (n) => ("0" + n).slice(-2)
+        return `${this.getNamePrefix()}-${today.getFullYear()}${pad(today.getMonth() + 1)}${pad(today.getDate())}-${pad(today.getHours())}${pad(today.getMinutes())}`;
+        // return this.getNamePrefix() + ('000' + count).slice(-3);
     }
 
     getNamePrefix() {
