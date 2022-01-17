@@ -409,6 +409,7 @@ function displayResourceManagerDialog() {
             $(jqId('stack_name_tr')).removeClass('collapsed');
             $(jqId('stack_id_tr')).addClass('collapsed');
             $(jqId('submit_query_btn')).text('Create Stack');
+            $('#rm_apply').prop('disabled', false);
         });
     div.append('label')
         .attr('for', 'rm_create')
@@ -424,6 +425,8 @@ function displayResourceManagerDialog() {
             $(jqId('stack_id_tr')).removeClass('collapsed');
             $(jqId('submit_query_btn')).text('Update Stack');
             loadResourceManagerStacks();
+            $('#rm_apply').prop('disabled', true);
+            $('#rm_plan').prop('checked', true);
         });
     div.append('label')
         .attr('for', 'rm_update')
