@@ -1,0 +1,110 @@
+<!--
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Instance{% endblock %}
+
+{% block required_properties_table_rows_block %}{% endblock %}
+
+{% block additional_properties_block %}
+    <details open="open">
+        <summary class="details summary-background"><label>Placement</label></summary>
+        <div id="instance_placement_div" class="table okit-table okit-properties-table">
+            <div class="thead"><div class="tr"><div class="th">Property</div><div class="th">Value</div></div></div>
+            <div class="tbody">
+                {{ properties_input('Availability Domain', 'availability_domain', type='kvselect', data={"options": [[1, "Availability Domain 1"], [2, "Availability Domain 2"], [3, "Availability Domain 3"]]}) }}
+                {{ properties_input('Fault Domain', 'fault_domain', type='kvselect', data={"options": [["", "Let Oracle Choose"], ["FAULT-DOMAIN-1", "Fault Domain 1"], ["FAULT-DOMAIN-2", "Fault Domain 2"], ["FAULT-DOMAIN-2", "Fault Domain 3"]]}) }}
+            </div>
+        </div>
+    </details>
+    <details open="open">
+        <summary class="details summary-background"><label>Image and Shape</label></summary>
+        <details open="open">
+            <summary class="details summary-background"><label>Image</label></summary>
+            <div id="instance_image_div" class="table okit-table okit-properties-table">
+                <div class="thead"><div class="tr"><div class="th">Property</div><div class="th">Value</div></div></div>
+                <div class="tbody">
+                    {{ properties_input('Image Source', 'image_source', type='kvselect', data={"options": [["platform", "Platform Images"], ["custom", "Custom Images"]]}) }}
+                    {{ properties_input('Image OS', 'os', type='select') }}
+                    {{ properties_input('Image OS Version', 'version', type='select') }}
+                    {{ properties_input('Custom Image', 'image_id', type='select') }}
+                </div>
+            </div>
+        </details>
+        <details open="open">
+            <summary class="details summary-background"><label>Shape</label></summary>
+            <div id="instance_shape_div" class="table okit-table okit-properties-table">
+                <div class="thead"><div class="tr"><div class="th">Property</div><div class="th">Value</div></div></div>
+                <div class="tbody">
+                    {{ properties_input('Instance Type', 'instance_type', type='kvselect', data={"options": [["vm", "Virtual Machine"], ["bm", "Bare Metal"]]}) }}
+                    {{ properties_input('Shape Series', 'chipset', type='kvselect', data={"options": [["amd", "AMD"], ["intel", "Intel"], ["arm", "Ampere"]]}) }}
+                    {{ properties_input('Shape', 'shape', type='select') }}
+                    {{ properties_input('OCPUs', 'ocpus', type='number', collapsed=True, data={"min": 1, "max": 16}) }}
+                    {{ properties_input('Memory (Gbs)', 'memory_in_gbs', type='number', collapsed=True, data={"min": 1, "max": 64}) }}
+                </div>
+            </div>
+        </details>
+    </details>
+    <details open="open">
+        <summary class="details summary-background"><label>Networking</label></summary>
+        <div id="instance_network_div" class="table okit-table okit-properties-table">
+            <div class="thead"><div class="tr"><div class="th">Property</div><div class="th">Value</div></div></div>
+            <div class="tbody">
+            </div>
+        </div>
+    </details>
+    <details open="open">
+        <summary><a>
+            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+            <span>Configure Network</span></a>
+        </summary>
+        <div id="optional_properties_div" class="table okit-table okit-properties-table">
+            <div class="thead">
+                <div class="tr"><div class="th">Property</div><div class="th">Value</div></div>
+            </div>
+            <div class="tbody">
+                <div class='tr'><div class='td'>Subnet</div><div class='td'><select id="subnet_id" class="okit-property-value"></select></div></div>
+                <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="assign_public_ip" name="assign_public_ip" value="true">Assign Public IP</label></div></div>
+                <div class='tr'><div class='td'>Hostname</div><div class='td'><input type="text" id="hostname_label" name="hostname_label" class="okit-property-value"></div></div>
+                <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="skip_source_dest_check" name="skip_source_dest_check" value="false">Skip Source / Destination Check</label></div></div>
+                <div class='tr'><div class='td'>Network Security Groups</div><div class='td'><div id="nsg_ids" class="okit-multiple-select"></div></div></div>
+            </div>
+        </div>
+        <details class="secondary-vnics ingress-rules" >
+            <summary><a>
+                <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1"> <ellipse fill="none" stroke="#000" cx="6.11" cy="3.55" rx="2.11" ry="2.15"></ellipse> <ellipse fill="none" stroke="#000" cx="6.11" cy="15.55" rx="2.11" ry="2.15"></ellipse> <circle fill="none" stroke="#000" cx="13.15" cy="9.55" r="2.15"></circle> <rect x="1" y="3" width="3" height="1"></rect> <rect x="10" y="3" width="8" height="1"></rect> <rect x="1" y="9" width="8" height="1"></rect> <rect x="15" y="9" width="3" height="1"></rect> <rect x="1" y="15" width="3" height="1"></rect> <rect x="10" y="15" width="8" height="1"></rect></svg>
+                <span>Secondary VNICs</span></a>
+            </summary>
+            <div id="vnics_table" class="table okit-table okit-properties-table okit-dynamic-table">
+                <div class="thead">
+                    <div class="tr"><div class="th"></div><div class="th"><button type="button" id="add_vnic" class="okit-add-button">+</button></div></div>
+                </div>
+                <div class="tbody" id="vnics_table_body"></div>
+            </div>
+        </details>
+    </details>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    <div class='tr'><div class='td'>OS</div><div class='td'><select id="os" class="okit-property-value">
+        <option value="Oracle Linux" selected="selected">Oracle Linux</option>
+    </select></div></div>
+    <div class='tr'><div class='td'>Version</div><div class='td'><select id="version" class="okit-property-value">
+        <option value="7.7" selected="selected">7.7</option>
+    </select></div></div>
+    <!--div class='tr'><div class='td'>Boot Volume Size (in GB)</div><div class='td'><input type="text" id="boot_volume_size_in_gbs" name="boot_volume_size_in_gbs" class="okit-property-value"></div></div-->
+    {{ properties_input('Boot Volume Size (in GB)', 'boot_volume_size_in_gbs', type='number', collapsed=False, data={"min": 50, "max": 32768}) }}
+    <div class='tr'><div class='td'>Authorised Keys</div><div class='td'><input type="text" id="ssh_authorized_keys" name="ssh_authorized_keys" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Block Storage Volumes</div><div class='td'><div id="block_storage_volume_ids" class="okit-multiple-select"></div></div></div>
+    <div class='tr'><div class='td'>Cloud Init YAML</div><div class='td'><code><textarea id="user_data" name="user_data" class="okit-property-value okit-source-code" rows="10" wrap="off"></textarea></code></div></div>
+    <div class='tr'><div class='td'>Agent</div><div class='td'><div id="agent_config">
+        <label><input type="checkbox" id="is_management_disabled" name="is_management_disabled" value="false">Management Disabled</label>
+        <label><input type="checkbox" id="is_monitoring_disabled" name="is_monitoring_disabled" value="false">Monitoring Disabled</label>
+    </div></div></div>
+    <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="preserve_boot_volume" name="preserve_boot_volume" value="false">Preserve Boot Volume</label></div></div>
+    <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="is_pv_encryption_in_transit_enabled" name="is_pv_encryption_in_transit_enabled" value="false">Use In-Transit Encryption</label></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}

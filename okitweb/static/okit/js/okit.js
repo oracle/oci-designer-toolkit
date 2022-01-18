@@ -96,6 +96,14 @@ class OkitOCIData {
         if (profile && !cache.hasOwnProperty(profile)) cache[profile] = {}
         if (profile) cache[profile][region] = this.dropdown_data
         localStorage.setItem(this.key, JSON.stringify(cache))
+        console.info(this.dropdown_data)
+        console.info('Platform Images', this.getPlatformImages())
+        console.info('Custom Images', this.getCustomImages())
+        console.info('Bare Metal Shares', this.getBareMetalInstanceShapes())
+        console.info('Virtual Machine Shares', this.getVirtualMachineInstanceShapes())
+        console.info('ARM Shares', this.getARMInstanceShapes())
+        console.info('AMD Shares', this.getAMDInstanceShapes())
+        console.info('Intel Shares', this.getIntelInstanceShapes())
     }
 
     loadLocal(profile, region='') {
@@ -218,6 +226,12 @@ class OkitOCIData {
         }
     }
 
+    getBareMetalInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('BM.'))
+    getVirtualMachineInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.'))
+    getIntelInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.') && !s.shape.includes('.A') && !s.shape.includes('.E'))
+    getARMInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.') && s.shape.includes('.A'))
+    getAMDInstanceShapes = () => this.dropdown_data.shapes.filter(s => s.shape.startsWith('VM.') && s.shape.includes('.E'))
+
     getInstanceShape(shape) {
         return this.getInstanceShapes().find(s => s.shape === shape);
     }
@@ -255,6 +269,28 @@ class OkitOCIData {
             images.push(image.display_name);
         }
         return [...new Set(images)].sort((a, b) => b - a);
+    }
+
+    getPlatformImages() {
+        return this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null)
+    }
+    getPlatformImageOSs() {
+        return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort();
+        // return [...new Set(this.dropdown_data.images.filter(i => !i.compartment_id || i.compartment_id === null).map((i) => i.operating_system))].sort((a, b) => b - a);
+    }
+    getPlatformImageOSVersions(os='') {
+        return [...new Set(this.dropdown_data.images.filter(i =>( !i.compartment_id || i.compartment_id === null) && i.operating_system === os).map((i) => i.operating_system_version))].sort((a, b) => b - a);
+    }
+
+    getCustomImages() {
+        return this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null)
+    }
+    getCustomImageOSs() {
+        return [...new Set(this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).map((i) => i.operating_system))].sort();
+        // return [...new Set(this.dropdown_data.images.filter(i => i.compartment_id && i.compartment_id !== null).map((i) => i.operating_system))].sort((a, b) => b - a);
+    }
+    getCustomImageOSVersions(os='') {
+        return [...new Set(this.dropdown_data.images.filter(i =>( i.compartment_id && i.compartment_id !== null) && i.operating_system === os).map((i) => i.operating_system_version))].sort((a, b) => b - a);
     }
 
     getKubernetesVersions() {

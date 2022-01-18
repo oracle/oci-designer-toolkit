@@ -81,7 +81,7 @@ class InstanceView extends OkitDesignerArtefactView {
     /*
     ** Property Sheet Load function
      */
-    loadProperties() {
+    loadPropertiesV1() {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance.html", () => {
             // Load Referenced Ids
@@ -132,6 +132,144 @@ class InstanceView extends OkitDesignerArtefactView {
         });
     }
 
+    loadProperties() {
+        let me = this;
+        const self = this;
+        $(jqId(PROPERTIES_PANEL)).load("propertysheets/instance_v2.html", () => {
+            // Load Referenced Ids
+            // Build Block Storage Select
+            self.getJsonView().loadBlockStorageVolumesMultiSelect('block_storage_volume_ids')
+            // Build Primary Vnic / Subnet List
+            self.getJsonView().loadSubnetsSelect('subnet_id', true)
+            // Build Network Security Groups
+            this.loadNetworkSecurityGroups('nsg_ids', this.primary_vnic.subnet_id);
+
+            // Image Source / Platform or Custom
+            $('#image_source').on('change', () => {self.handleImageSourceChange()})
+            // Load Images
+            // self.loadImageOSs();
+            $('#os').on('change', () => {self.handleImageOSChange()})
+            // Load OS Versions
+            // this.loadImageOSVersions(this.source_details.os);
+            $('#versiom').on('change', () => {self.handleImageOSVersionChange()})
+            // Custom Images
+            // this.loadCustomImages()
+            // Load Shapes
+            // this.loadImageShapes();
+            // this.loadOCPUs(this.shape)
+            // Instance Type
+            $('#instance_type').on('change', () => {self.handleInstanceTypeChange()})
+            // Chipset 
+            $('#chipset').on('change', () => {self.handleShapeSeriesChange()})
+
+            this.handleImageSourceChange()
+
+            // Secondary Vnics
+            this.loadSecondaryVnics();
+            $(jqId('add_vnic')).on('click', () => {this.addSecondaryVnic();});
+            // Load Properties
+            loadPropertiesSheet(me.artefact);
+        });
+    }
+    handleImageSourceChange() {
+        this.artefact.source_details.image_source = $('#image_source').val()
+        if (this.artefact.source_details.image_source === 'custom') {
+            $('#image_id_row').removeClass('collapsed')
+        } else {
+            $('#image_id_row').addClass('collapsed')
+        }
+        this.loadImageOSs()
+        this.handleImageOSChange()
+    }
+    loadImageOSs() {
+        const self = this
+        const oss = this.source_details.image_source === 'custom' ? okitOciData.getCustomImageOSs() : okitOciData.getPlatformImageOSs()
+        console.info('OSs:', this.source_details.image_source, oss)
+        const os_select = $(jqId('os'));
+        let os_exists = false;
+        $(os_select).empty();
+        oss.forEach((os) => {
+            console.info(os)
+            os_select.append($('<option>').attr('value', os).text(os));
+            os_exists = os_exists | self.source_details.os === os;
+        })
+        if (!os_exists) {
+            this.source_details.os = $("#os option:first").val();
+        }
+        $("#os").val(this.source_details.os);
+    }
+    handleImageOSChange() {
+        this.loadImageOSVersions();
+        this.handleImageOSVersionChange();
+    }
+    loadImageOSVersions(os=undefined) {
+        os = os ? os : $("#os").val()
+        const self = this;
+        const version_select = $(jqId('version'));
+        const osv = this.source_details.image_source === 'custom' ? okitOciData.getCustomImageOSVersions(os) : okitOciData.getPlatformImageOSVersions(os)
+        let version_exists = false;
+        $(version_select).empty();
+        for (let version of osv) {
+            version_select.append($('<option>').attr('value', version).text(version));
+            version_exists = version_exists | this.source_details.version === version;
+        }
+        if (!version_exists) {
+            this.source_details.version = $("#version option:first").val();
+        }
+        $("#version").val(this.source_details.version);
+    }
+    handleImageOSVersionChange() {
+        this.loadImageShapes();
+        this.loadCustomImages()
+    }
+    loadCustomImages() {
+        const self = this
+        const custom_select = $('#image_id')
+        const os = $('#os').val()
+        const version = $('#version').val()
+        let image_exists = false;
+        $(custom_select).empty()
+        if (this.source_details.image_source === 'custom') {
+            okitOciData.getCustomImages().filter((i) => i.operating_system === os && i.operating_system_version === version).forEach((img) => {
+                custom_select.append($('<option>').attr('value', img.id).text(img.display_name));
+                image_exists = image_exists | this.source_details.image_id === img.id
+            })
+        }
+        if (!image_exists) {
+            this.source_details.image_id = $("#image_id option:first").val();
+        }
+        $("#image_id").val(this.source_details.image_id);
+    }
+    handleInstanceTypeChange() {
+        const type = $('#instance_type').val()
+        if (type === 'bm') {
+            $('#chipset_row').addClass('collapsed')
+            this.artefact.shape = okitOciData.getBareMetalInstanceShapes()[0].shape
+        } else {
+            $('#chipset_row').removeClass('collapsed')
+            this.artefact.shape = okitOciData.getAMDInstanceShapes()[0].shape
+        }
+        this.loadImageShapes()
+    }
+    handleShapeSeriesChange() {
+        const chipset = $('#chipset').val()
+        this.artefact.shape = chipset === 'amd' ? okitOciData.getAMDInstanceShapes()[0].shape : chipset === 'arm' ? okitOciData.getARMInstanceShapes()[0].shape : okitOciData.getIntelInstanceShapes()[0].shape
+        this.loadImageShapes()
+    }
+    loadImageShapes() {
+        const self = this;
+        const shapes = this.instance_type === 'bm' ? okitOciData.getBareMetalInstanceShapes() : this.chipset === 'amd' ? okitOciData.getAMDInstanceShapes() : this.chipset === 'arm' ? okitOciData.getARMInstanceShapes() : okitOciData.getIntelInstanceShapes()
+        const shape_select = $(jqId('shape'));
+        $(shape_select).empty();
+        shapes.forEach((shape) => {
+            let shape_text = `${shape.shape}`;
+            shape_select.append($('<option>').attr('value', shape.shape).text(shape_text));
+        })
+        shape_select.on('change', () => {self.loadOCPUs($("#shape").val());});
+        this.loadOCPUs()
+    }
+
+    // V1 Implementation
     loadShapes() {
         const self = this;
         const shape_select = $(jqId('shape'));
@@ -145,6 +283,7 @@ class InstanceView extends OkitDesignerArtefactView {
         shape_select.on('change', () => {self.loadOSs($("#shape").val());self.loadOCPUs($("#shape").val());});
     }
 
+    // V1 Implementation
     loadOSs(shape) {
         const self = this;
         const os_select = $(jqId('os'));
@@ -161,6 +300,7 @@ class InstanceView extends OkitDesignerArtefactView {
         $("#os").val(this.source_details.os);
     }
 
+    // V1 Implementation
     loadOSVersions(os) {
         const self = this;
         const version_select = $(jqId('version'));
@@ -176,7 +316,9 @@ class InstanceView extends OkitDesignerArtefactView {
         $("#version").val(this.source_details.version);
     }
 
-    loadOCPUs(shape_name) {
+    loadOCPUs(shape_name=undefined) {
+        shape_name = shape_name ? shape_name : this.shape;
+        console.info('Shape:', shape_name)
         const self = this;
         const shape = okitOciData.getInstanceShape(shape_name);
         $('#ocpus_row').addClass('collapsed');
