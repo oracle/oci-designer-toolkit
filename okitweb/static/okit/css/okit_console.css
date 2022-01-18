@@ -130,8 +130,8 @@ summary:focus {
 .summary-background {
     background-position: left center;
     background-repeat: no-repeat;
-    background-size: 1.5em;
-    padding-left: 2em;
+    background-size: 20px;
+    padding-left: 25px;
     margin-right: 1em;
 }
 
@@ -285,6 +285,10 @@ summary:focus {
 .okit-console-header-dropdown > select:focus {
     outline: none;
     border: none;
+}
+
+.okit-console-header-dropdown > select option[data-valid="false"] {
+    background-color: #e66363;
 }
 
 .okit-console-header-centre {

@@ -100,7 +100,7 @@ function loadHeaderConfigDropDown() {
     */
     const console_header_config_select = $('#console_header_config_select')
     console_header_config_select.empty()
-    okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).text(section))})
+    okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).attr('data-valid', section !== 'Error').text(section))})
     console_header_config_select.val(okitSettings.profile)
     const console_header_region_select = $('#console_header_region_select')
     console_header_region_select.empty()
