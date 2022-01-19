@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.31.0"
+    OKIT_VERSION = "0.32.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
         # Initialise generator output data variables
         self.create_sequence = []
@@ -1247,6 +1247,10 @@ class OCIGenerator(object):
                 }
                 self.jinja2_variables["shape_config"] = shape_config
             # ---- Source Details
+            # ----- Image Source
+            self.addJinja2Variable("image_source", resource["source_details"]["image_source"], standardisedName)
+            if resource["source_details"]["image_source"] and resource["source_details"].get("image_id", '') != '':
+                self.addJinja2Variable("image_id", resource["source_details"]["image_id"], standardisedName)
             # ----- Source Type
             self.addJinja2Variable("source_type", resource["source_details"]["source_type"], standardisedName)
             # ----- Operating System

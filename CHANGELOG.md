@@ -1,6 +1,12 @@
 # Release Notes
 
 
+## Version 0.32.0
+**Release Date**: 9th February 2022
+### Features
+### Bug Fixes
+
+
 ## Version 0.31.0
 **Release Date**: 19th January 2022
 ### Features
@@ -10,6 +16,7 @@
 4. Update Installation guide to include information on alternatives to Docker.
 5. Add Unique resource_name element to the model.
 6. Force Plan only for RM Update.
+7. Allow the user to select Custom Images for Instances. This assumes that the design will be deployed to the Tenancy/Region where the image exists.
 ### Bug Fixes
 1. Test that instance has primary_vnic defined.
 2. Resolve issue where queried compartments containing a route table with a rule pointing to a DRG were not displaying the rule correctly.

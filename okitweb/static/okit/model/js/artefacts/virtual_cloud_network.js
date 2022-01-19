@@ -18,7 +18,7 @@ class VirtualCloudNetwork extends OkitArtifact {
         this.compartment_id = data.parent_id;
         // Generate Cidr
         this.cidr_blocks = [''];
-        this.dns_label = this.display_name.toLowerCase().slice(-6);
+        this.dns_label = `vcn${this.display_name.toLowerCase().slice(-6)}`;
         this.is_ipv6enabled = false;
         this.ipv6cidr_blocks = [''];
         // Update with any passed data

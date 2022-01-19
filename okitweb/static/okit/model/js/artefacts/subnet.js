@@ -18,7 +18,7 @@ class Subnet extends OkitArtifact {
         this.compartment_id = '';
         this.vcn_id = '';
         this.cidr_block = '';
-        this.dns_label = this.display_name.toLowerCase().slice(-5);
+        this.dns_label = `sn${this.display_name.toLowerCase().slice(-6)}`;
         this.prohibit_public_ip_on_vnic = false;
         this.route_table_id = '';
         this.security_list_ids = [];
