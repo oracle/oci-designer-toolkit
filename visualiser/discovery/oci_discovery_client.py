@@ -578,6 +578,7 @@ class OciResourceDiscoveryClient(object):
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             for region in regions:
+                logger.info(resource_types_by_region)
                 futures = executor.submit(self.search_resources_for_region, region.region_name, resource_types_by_region[region.region_name], compartments)
                 futures_list.update({region.region_name:futures})
 
