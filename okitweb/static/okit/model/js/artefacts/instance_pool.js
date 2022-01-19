@@ -15,7 +15,7 @@ class InstancePool extends OkitArtifact {
         super(okitjson);
         // Configure default values
         this.compartment_id = '';
-        this.display_name = this.generateDefaultName(okitjson.instance_pools.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.instance_pools.length + 1);
         this.placement_configurations = [
             {
                 availability_domain: '1',

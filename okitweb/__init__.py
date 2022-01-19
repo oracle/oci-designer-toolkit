@@ -20,13 +20,14 @@ from flask import Response, session, redirect, url_for, render_template
 from authlib.integrations.flask_client import OAuth
 import base64, secrets, socket, urllib
 
+from common.okitCommon import getOkitHome
 from common.okitLogging import getLogger
 # Configure logging
 logger = getLogger()
 
 def create_local_app(test_config=None):
     # Create and Configure OKIT Web Designer App
-    app = Flask(__name__, instance_relative_config=True, instance_path='/okit/instance')
+    app = Flask(__name__, instance_relative_config=True, instance_path=f'{getOkitHome()}/instance')
 
     # Load Config
     if test_config is None:
@@ -41,7 +42,7 @@ def create_local_app(test_config=None):
         pass
 
     # Add Upload location
-    app.config['UPLOADS_FOLDER'] = '/okit/uploads'
+    app.config['UPLOADS_FOLDER'] = f'{getOkitHome()}/uploads'
 
     # Set local
     app.config['LOCAL'] = True
@@ -70,7 +71,7 @@ def create_local_app(test_config=None):
 
 def create_authenticated_app(test_config=None):
     # Create and Configure OKIT Web Designer App
-    app = Flask(__name__, instance_relative_config=True, instance_path='/okit/instance')
+    app = Flask(__name__, instance_relative_config=True, instance_path=f'{getOkitHome()}/instance')
 
     # Load Config
     if test_config is None:
@@ -85,7 +86,7 @@ def create_authenticated_app(test_config=None):
         pass
 
     # Add Upload location
-    app.config['UPLOADS_FOLDER'] = '/okit/uploads'
+    app.config['UPLOADS_FOLDER'] = f'{getOkitHome()}/uploads'
 
     # The secret key must be static to be the same for all gunicorn workers
     app.secret_key = '8980ffsd675747jjjh'

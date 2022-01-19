@@ -14,7 +14,7 @@ class CustomerPremiseEquipment extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.customer_premise_equipments.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.customer_premise_equipments.length + 1);
         this.compartment_id = data.parent_id;
         this.ip_address = '';
         this.cpe_device_shape_id = '';

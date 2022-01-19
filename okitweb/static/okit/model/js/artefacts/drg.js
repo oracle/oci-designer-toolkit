@@ -14,7 +14,7 @@ class Drg extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.drgs.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.drgs.length + 1);
         this.compartment_id = data.parent_id;
         // Route Tables
         this.route_tables = []

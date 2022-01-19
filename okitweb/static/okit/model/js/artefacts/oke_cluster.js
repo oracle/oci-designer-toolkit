@@ -15,7 +15,7 @@ class OkeCluster extends OkitArtifact {
         super(okitjson);
         // Configure default values
         this.compartment_id = '';
-        this.display_name = this.generateDefaultName(okitjson.oke_clusters.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.oke_clusters.length + 1);
         this.vcn_id = '';
         this.kubernetes_version = '';
         this.options = {

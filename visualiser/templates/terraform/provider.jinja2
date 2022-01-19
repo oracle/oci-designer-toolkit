@@ -1,5 +1,13 @@
 
 terraform {
+{% if deployment_platform is defined and deployment_platform == "pca" %}
+    required_providers {
+        oci = {
+            source = "hashicorp/oci"
+            version = "= 4.50.0"
+        }
+    }
+{% endif %}
     required_version = ">= 0.12.0"
 }
 
@@ -10,4 +18,37 @@ provider "oci" {
   fingerprint      = {{ fingerprint }}
   private_key_path = {{ private_key_path }}
   region           = {{ region }}
+}
+
+# ------ Home Region Provider
+{% if deployment_platform is defined and deployment_platform != "pca" %}
+data "oci_identity_region_subscriptions" "HomeRegion" {
+    tenancy_id = {{ tenancy_ocid }}
+    filter {
+        name = "is_home_region"
+        values = [true]
+    }
+}
+locals {
+    home_region = lookup(element(data.oci_identity_region_subscriptions.HomeRegion.region_subscriptions, 0), "region_name")
+}
+{% else %}
+locals {
+    home_region = {{ region }}
+}
+{% endif %}
+
+provider "oci" {
+    alias            = "home_region"
+{% if resource_manager is not defined %}
+    tenancy_ocid     = {{ tenancy_ocid }}
+    user_ocid        = {{ user_ocid }}
+    fingerprint      = {{ fingerprint }}
+    private_key_path = {{ private_key_path }}
+{% endif %}
+    region           = local.home_region
+}
+
+output "Home_Region_Name" {
+ value = local.home_region
 }

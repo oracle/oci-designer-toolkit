@@ -39,6 +39,7 @@ from common.okitCommon import logJson
 from common.okitCommon import readJsonFile
 from common.okitCommon import standardiseIds
 from common.okitCommon import writeJsonFile
+from common.okitCommon import getOkitHome
 from common.okitLogging import getLogger
 from model.okitValidation import OCIJsonValidator
 from generators.okitAnsibleGenerator import OCIAnsibleGenerator
@@ -53,7 +54,7 @@ logger = getLogger()
 bp = Blueprint('okit', __name__, url_prefix='/okit', static_folder='static/okit')
 
 debug_mode = bool(str(os.getenv('DEBUG_MODE', 'False')).title())
-template_root = '/okit/visualiser/templates'
+template_root = f'{getOkitHome()}/visualiser/templates'
 
 
 def standardiseJson(json_data={}, **kwargs):

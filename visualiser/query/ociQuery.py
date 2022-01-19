@@ -12,6 +12,7 @@ __version__ = "1.0.0"
 __module__ = "ociQuery"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import datetime
 import json
 import oci
 import re
@@ -190,7 +191,7 @@ class OCIQuery(OCIConnection):
 
     def convert(self, discovery_data, compartments, query_compartment_ids=[]):
         response_json = {
-            "compartments": compartments
+            "compartments": [self.addResourceName(c) for c in compartments]
         }
         compartment_ids = [c["id"] for c in response_json["compartments"]]
         # Set top level compartment parent to None
@@ -230,9 +231,15 @@ class OCIQuery(OCIConnection):
                     #     resource_list = self.analytics_instances(resource_list, resources)
                     # Check Life Cycle State
                     # logger.info(f'Processing {resource_type} : {resource_list}')
-                    response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = [r for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
-                    #response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = resource_list
+                    response_json[self.DISCOVERY_OKIT_MAP[resource_type]] = [self.addResourceName(r) for r in resource_list if "lifecycle_state" not in r or r["lifecycle_state"] in self.VALID_LIFECYCLE_STATES]
         return response_json
+    
+    def addResourceName(self,resource):
+        resource['resource_name'] = f'Okit_{resource["id"].split(".")[-1]}'
+        return resource
+
+    def generateResourceName(self, resource_type):
+        return f'Okit_{resource_type}_{str(datetime.datetime.now().timestamp())}'
 
     def analytics_instances(self, analytics_instances, resources):
         for ai in analytics_instances:
@@ -334,13 +341,14 @@ class OCIQuery(OCIConnection):
         return clusters
 
     def route_tables(self, route_tables, resources):
-        rule_type_map = {'internetgateway': 'internet_gateways',
-                         'natgateway':'nat_gateways',
-                         'localpeeringgateway': 'local_peering_gateways',
-                         'dynamicroutinggateway': 'dynamic_routing_gateways',
-                         'drg': 'dynamic_routing_gateways',
-                         'privateip':'private_ips',
-                         'servicegateway': 'service_gateways'}
+        rule_type_map = {'internetgateway': 'internet_gateway',
+                         'natgateway':'nat_gateway',
+                         'localpeeringgateway': 'local_peering_gateway',
+                         'dynamicroutinggateway': 'dynamic_routing_gateway',
+                         'drg': 'drg_attachment',
+                        #  'drg': 'dynamic_routing_gateway',
+                         'privateip':'private_ip',
+                         'servicegateway': 'service_gateway'}
         for route_table in route_tables:
             for rule in route_table.get('route_rules', []):
                 if len(rule['network_entity_id']) > 0:

@@ -5,7 +5,7 @@
 FROM oraclelinux:7-slim
 LABEL "provider"="Oracle" \
       "issues"="https://github.com/oracle/oci-designer-toolkit/issues" \
-      "version"="0.30.1" \
+      "version"="0.31.0" \
       "description"="OKIT Web Server Container." \
       "copyright"="Copyright (c) 2020, 2021, Oracle and/or its affiliates."
 # SHELL ["/bin/bash", "-c"]
@@ -38,6 +38,10 @@ RUN yum install -y \
 #        python36-oci-sdk \
 #        rh-nginx114 \
  && rm -rf /var/cache/yum \
+# Configure ssh
+ && echo 'Host *' > /etc/ssh/ssh_config \
+ && echo '  StrictHostKeyChecking no' >> /etc/ssh/ssh_config \
+ && echo '  UserKnownHostsFile=/dev/null' >> /etc/ssh/ssh_config \
 # Upgrade pip
  && python3 -m pip install --upgrade pip \
 # Install required python modules

@@ -23,13 +23,17 @@ logger = None
 loglevelmap = {'critical': logging.CRITICAL, 'error': logging.ERROR, 'warning': logging.WARNING, 'info': logging.INFO,
                'debug': logging.DEBUG}
 
+def getOkitHome():
+    return os.getenv('OKIT_DIR', '/okit')
+
+
 def getConsoleFormat():
     defaultformat = '%(levelname)s: %(message)s'
-    return os.getenv('OCI_CONSOLE_LOG_FORMAT', defaultformat)
+    return os.getenv('OKIT_CONSOLE_LOG_FORMAT', defaultformat)
 
 
 def getConsoleLogLevel():
-    loglevel = os.getenv('OCI_CONSOLE_LOG_LEVEL', 'INFO')
+    loglevel = os.getenv('OKIT_CONSOLE_LOG_LEVEL', 'INFO')
     if loglevel.lower() in loglevelmap:
         return loglevelmap[loglevel.lower()]
     else:
@@ -37,20 +41,20 @@ def getConsoleLogLevel():
 
 
 def getLogFilename():
-    return os.getenv('OCI_LOGFILE', '/okit/log/okit.log')
+    return os.getenv('OKIT_LOGFILE', f'{getOkitHome()}/log/okit.log')
 
 
 def getDebugLogFilename():
-    return os.getenv('OCI_DEBUG_LOGFILE', getLogFilename().replace('.log', '-debug.log'))
+    return os.getenv('OKIT_DEBUG_LOGFILE', getLogFilename().replace('.log', '-debug.log'))
 
 
 def getFileFormat():
     defaultformat = '%(asctime)-15s [%(process)5s] %(levelname)6s : %(module)15s[%(lineno)04d] : %(message)s'
-    return os.getenv('OCI_LOG_FORMAT', defaultformat)
+    return os.getenv('OKIT_LOG_FORMAT', defaultformat)
 
 
 def getFileLogLevel():
-    loglevel = os.getenv('OCI_LOG_LEVEL', 'INFO')
+    loglevel = os.getenv('OKIT_LOG_LEVEL', 'INFO')
     if loglevel.lower() in loglevelmap:
         return loglevelmap[loglevel.lower()]
     else:

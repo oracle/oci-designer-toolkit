@@ -14,11 +14,11 @@ class Subnet extends OkitArtifact {
     constructor (data={}, okitjson={},) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.subnets.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.subnets.length + 1);
         this.compartment_id = '';
         this.vcn_id = '';
         this.cidr_block = '';
-        this.dns_label = this.display_name.toLowerCase().slice(-5);
+        this.dns_label = `sn${this.display_name.toLowerCase().slice(-6)}`;
         this.prohibit_public_ip_on_vnic = false;
         this.route_table_id = '';
         this.security_list_ids = [];

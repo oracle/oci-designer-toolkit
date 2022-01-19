@@ -14,7 +14,7 @@ class AnalyticsInstance extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.display_name = this.generateDefaultName(okitjson.analytics_instances.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.analytics_instances.length + 1);
         this.compartment_id = '';
         this.feature_set = '';
         this.idcs_access_token = '';

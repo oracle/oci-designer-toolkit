@@ -59,7 +59,7 @@
                 },
                 {
                     "title": "NoSQL Database",
-                    "targets": ["oci", "hidden"],
+                    "targets": ["hidden"],
                     "svg": "NoSQLDatabase.svg"
                 },
                 {
@@ -84,8 +84,8 @@
                     "svg": "LoadBalancerLB.svg"
                 },
                 {
-                    "title": "NetworkLoad Balancer",
-                    "targets": ["oci", "hidden"],
+                    "title": "Network Load Balancer",
+                    "targets": ["hidden"],
                     "svg": "NetworkLoadBalancerLB.svg"
                 },
                 {
@@ -218,12 +218,12 @@
                 },
                 {
                     "title": "Vault",
-                    "targets": ["oci", "pca", "hidden"],
+                    "targets": ["hidden"],
                     "svg": "KeyVault.svg"
                 },
                 {
                     "title": "Key",
-                    "targets": ["oci", "pca", "hidden"],
+                    "targets": ["hidden"],
                     "svg": "KeyManagement.svg"
                 }
             ]

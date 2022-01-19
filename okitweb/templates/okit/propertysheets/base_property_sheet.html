@@ -28,7 +28,7 @@
     {% elif type == 'select' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><select id="{{ name }}" class="okit-property-value">{% if data.options is defined %}{% for opt in data.options %}<option value="{{ opt }}">{{ opt|replace("_"," ")|title }}</option>{% endfor %}{% endif %}</select></div></div>
     {% elif type == 'kvselect' %}
-        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><select id="{{ name }}" class="okit-property-value">{% if data.options is defined %}{% for opt in data.options %}<option value="{{ opt[0] }}">{{ opt[1]|replace("_"," ")|title }}</option>{% endfor %}{% endif %}</select></div></div>
+        <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><select id="{{ name }}" class="okit-property-value">{% if data.options is defined %}{% for opt in data.options %}<option value="{{ opt[0] }}">{{ opt[1] }}</option>{% endfor %}{% endif %}</select></div></div>
     {% elif type == 'multiselect' %}
         <div id="{{ name }}_row" class='tr{% if collapsed %} collapsed{% endif %}'><div class='td'>{{ title }}</div><div class='td'><div id="{{ name }}" class="okit-multiple-select"></div></div></div>
     {% elif type == 'table' %}

@@ -1,0 +1,84 @@
+<!--
+** Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+-->
+{% extends "okit/propertysheets/base_property_sheet.html" %}
+
+{% block title_block %}Instance{% endblock %}
+
+{% block required_properties_table_rows_block %}{% endblock %}
+
+{% block additional_properties_block %}
+    <details open="open">
+        <summary class="details summary-background"><label>Placement</label></summary>
+        <div id="instance_placement_div" class="table okit-table okit-properties-table">
+            <div class="thead"><div class="tr"><div class="th">Property</div><div class="th">Value</div></div></div>
+            <div class="tbody">
+                {{ properties_input('Availability Domain', 'availability_domain', type='kvselect', data={"options": [[1, "Availability Domain 1"], [2, "Availability Domain 2"], [3, "Availability Domain 3"]]}) }}
+                {{ properties_input('Fault Domain', 'fault_domain', type='kvselect', data={"options": [["", "Let Oracle Choose"], ["FAULT-DOMAIN-1", "Fault Domain 1"], ["FAULT-DOMAIN-2", "Fault Domain 2"], ["FAULT-DOMAIN-2", "Fault Domain 3"]]}) }}
+            </div>
+        </div>
+    </details>
+    <details open="open">
+        <summary class="details summary-background"><label>Image and Shape</label></summary>
+        <details open="open">
+            <summary class="details summary-background"><label>Image</label></summary>
+            <div id="instance_image_div" class="table okit-table okit-properties-table">
+                <div class="thead"><div class="tr"><div class="th">Property</div><div class="th">Value</div></div></div>
+                <div class="tbody">
+                    {{ properties_input('Image Source', 'image_source', type='kvselect', data={"options": [["platform", "Platform Images"], ["custom", "Custom Images"]]}) }}
+                    {{ properties_input('Image OS', 'os', type='select') }}
+                    {{ properties_input('Image OS Version', 'version', type='select') }}
+                    {{ properties_input('Custom Image', 'image_id', type='select') }}
+                </div>
+            </div>
+        </details>
+        <details open="open">
+            <summary class="details summary-background"><label>Shape</label></summary>
+            <div id="instance_shape_div" class="table okit-table okit-properties-table">
+                <div class="thead"><div class="tr"><div class="th">Property</div><div class="th">Value</div></div></div>
+                <div class="tbody">
+                    {{ properties_input('Instance Type', 'instance_type', type='kvselect', data={"options": [["vm", "Virtual Machine"], ["bm", "Bare Metal"]]}) }}
+                    {{ properties_input('Shape Series', 'chipset', type='kvselect', data={"options": [["amd", "AMD"], ["intel", "Intel"], ["arm", "Ampere"]]}) }}
+                    {{ properties_input('Shape', 'shape', type='select') }}
+                    {{ properties_input('OCPUs', 'ocpus', type='number', collapsed=True, data={"min": 1, "max": 16}) }}
+                    {{ properties_input('Memory (Gbs)', 'memory_in_gbs', type='number', collapsed=True, data={"min": 1, "max": 64}) }}
+                </div>
+            </div>
+        </details>
+    </details>
+    <details open="open">
+        <summary class="details summary-background"><label>Networking</label></summary>
+        <details open="open">
+            <summary class="details summary-background"><label>Primary Network</label></summary>
+            <div id="primary_network_div" class="table okit-table okit-properties-table">
+                <div class="thead"><div class="tr"><div class="th">Property</div><div class="th">Value</div></div></div>
+                <div class="tbody">
+                    {{ properties_input('Subnet', 'subnet_id', type='select') }}
+                    {{ properties_input('Assign Public IP', 'assign_public_ip', type='checkbox') }}
+                    {{ properties_input('Hostname', 'hostname_label', type='text') }}
+                    {{ properties_input('Skip Source / Destination Check', 'skip_source_dest_check', type='checkbox') }}
+                    {{ properties_input('Network Security Groups', 'nsg_ids', type='multiselect') }}
+                </div>
+            </div>
+        </details>
+        <details id="secondary_networks">
+            <summary class="details summary-background"><label>Secondary Networks</label></summary>
+        </details>
+    </details>
+{% endblock %}
+
+{% block optional_properties_table_rows_block %}
+    {{ properties_input('Boot Volume Size (in GB)', 'boot_volume_size_in_gbs', type='number', collapsed=False, data={"min": 50, "max": 32768}) }}
+    <div class='tr'><div class='td'>Authorised Keys</div><div class='td'><input type="text" id="ssh_authorized_keys" name="ssh_authorized_keys" class="okit-property-value"></div></div>
+    <div class='tr'><div class='td'>Block Storage Volumes</div><div class='td'><div id="block_storage_volume_ids" class="okit-multiple-select"></div></div></div>
+    <div class='tr'><div class='td'>Cloud Init YAML</div><div class='td'><code><textarea id="user_data" name="user_data" class="okit-property-value okit-source-code" rows="10" wrap="off"></textarea></code></div></div>
+    <div class='tr'><div class='td'>Agent</div><div class='td'><div id="agent_config">
+        <label><input type="checkbox" id="is_management_disabled" name="is_management_disabled" value="false">Management Disabled</label>
+        <label><input type="checkbox" id="is_monitoring_disabled" name="is_monitoring_disabled" value="false">Monitoring Disabled</label>
+    </div></div></div>
+    <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="preserve_boot_volume" name="preserve_boot_volume" value="false">Preserve Boot Volume</label></div></div>
+    <div class='tr'><div class='td'></div><div class='td'><label><input type="checkbox" id="is_pv_encryption_in_transit_enabled" name="is_pv_encryption_in_transit_enabled" value="false">Use In-Transit Encryption</label></div></div>
+{% endblock %}
+
+{% block optional_properties_block %}{% endblock %}
