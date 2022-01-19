@@ -123,7 +123,7 @@ class OCIDropdownQuery(OCIConnection):
         # logger.info(f'Processing Images - Shape: {sorted(shapes)}')
         for image in images:
             # logger.info(f'Image Id: {image["id"]} in/out {image["id"] in ids}')
-            logger.info(f'Image {image["display_name"]} Compartment {image["compartment_id"]}')
+            # logger.info(f'Image {image["display_name"]} Compartment {image["compartment_id"]}')
             image["shapes"] = [s["shape"] for s in resources.get("ImageShapeCompatibility", []) if s["image_id"] == image["id"]]
         return images
     
@@ -139,5 +139,5 @@ class OCIDropdownQuery(OCIConnection):
                     shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])
                 deduplicated.append(shape)
                 seen.append(shape['shape'])
-        logger.info(sorted([s["shape"] for s in deduplicated]))
+        # logger.info(sorted([s["shape"] for s in deduplicated]))
         return sorted(deduplicated, key=lambda k: k['sort_key'])
