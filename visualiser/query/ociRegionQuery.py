@@ -49,12 +49,16 @@ class OCIRegionQuery(OCIConnection):
         discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, include_resource_types=self.SUPPORTED_RESOURCES)
         regions = self.response_to_json(discovery_client.regions)
         for region in regions:
-            logger.info(jsonToFormattedString(region))
+            # logger.info(jsonToFormattedString(region))
             region["id"] = region["region_name"]
             region["name"] = region["region_name"]
             region["key"] = region["region_key"]
-            name_parts = region['name'].split('-')
-            region['display_name'] = '{0!s:s} {1!s:s}'.format(name_parts[0].upper(), name_parts[1].capitalize())
+            if region["name"] == region["key"]:
+                # PCA-X9
+                region['display_name'] = region["name"]
+            else:
+                name_parts = region['name'].split('-')
+                region['display_name'] = '{0!s:s} {1!s:s}'.format(name_parts[0].upper(), name_parts[1].capitalize())
         return regions
 
     def response_to_json(self, data):
