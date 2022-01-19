@@ -123,6 +123,44 @@ function handleExportToTerraformGit(e) {
     hideNavMenu();
     okitJsonModel.validate(generateTerraformGitRepo);
 }
+function handleExportToTerraformForDisplay(e) {
+    hideNavMenu();
+    okitJsonModel.validate(exportTerraformForDisplay);
+}
+function generateTerraformLocalZipGet(results) {
+    if (results.valid) {
+        let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
+        console.info(okitSettings);
+        requestJson.use_variables = okitSettings.is_variables;
+        $.ajax({
+
+            type: 'get',
+            url: 'export/terraform',
+            dataType: 'text',
+            contentType: 'application/zip',
+            data: {
+                destination: 'zip',
+                design: JSON.stringify(okitJsonModel)
+            },
+            success: function(resp, status, xhr) {
+                console.info('Response : ' + resp);
+                console.info('Response : ' + typeof resp);
+                console.info('xhr : ' + xhr.getAllResponseHeaders("Content-Type"));
+                const blob = new Blob([resp], { type: 'application/zip' });
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'okit-terraform.zip';
+                link.click();
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
 function generateTerraformLocalZip(results) {
     if (results.valid) {
         let requestJson = JSON.parse(JSON.stringify(okitJsonModel));
@@ -137,6 +175,30 @@ function generateTerraformLocalZip(results) {
             success: function(resp) {
                 console.info('Response : ' + resp);
                 saveZip('generate/terraform/local');
+            },
+            error: function(xhr, status, error) {
+                console.info('Status : '+ status)
+                console.info('Error : '+ error)
+            }
+        });
+    } else {
+        validationFailedNotification();
+    }
+}
+function exportTerraformForDisplay(results) {
+    if (results.valid) {
+        $.ajax({
+            type: 'get',
+            url: 'export/terraform',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: {
+                destination: 'json',
+                design: JSON.stringify(okitJsonModel)
+            },
+            success: function(resp) {
+                console.info('exportTerraformForDisplay Response : ' + resp);
+                console.info(JSON.parse(resp));
             },
             error: function(xhr, status, error) {
                 console.info('Status : '+ status)
@@ -347,6 +409,7 @@ function displayResourceManagerDialog() {
             $(jqId('stack_name_tr')).removeClass('collapsed');
             $(jqId('stack_id_tr')).addClass('collapsed');
             $(jqId('submit_query_btn')).text('Create Stack');
+            $('#rm_apply').prop('disabled', false);
         });
     div.append('label')
         .attr('for', 'rm_create')
@@ -362,6 +425,8 @@ function displayResourceManagerDialog() {
             $(jqId('stack_id_tr')).removeClass('collapsed');
             $(jqId('submit_query_btn')).text('Update Stack');
             loadResourceManagerStacks();
+            $('#rm_apply').prop('disabled', true);
+            $('#rm_plan').prop('checked', true);
         });
     div.append('label')
         .attr('for', 'rm_update')

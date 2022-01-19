@@ -171,6 +171,13 @@ class OkitJsonView {
     ** Artefact Processing
      */
 
+    getResource(id='') {
+        const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        console.info('Resource', resource)
+        return resource
+    }
+
+
     // Autonomous Database
     dropAutonomousDatabaseView(target) {
         let view_artefact = this.newAutonomousDatabase();
@@ -959,7 +966,8 @@ class OkitJsonView {
         for (let subnet of this.getSubnets()) {
             const compartment = this.getCompartment(subnet.compartment_id);
             const vcn = this.getVirtualCloudNetwork(subnet.vcn_id);
-            const display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+            const display_name = subnet.display_name;
+            // const display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
             subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
         }
     }
@@ -1076,10 +1084,10 @@ class OkitArtefactView {
     }
 
     // -- Reference
-    get resource_name() {return this.getArtifactReference();}
+    get resource_type() {return this.getArtifactReference();}
     get json_view() {return this.getJsonView();}
     get okit_json() {return this.getJsonView().getOkitJson();}
-    get list_name() {return `${this.resource_name.toLowerCase().split(' ').join('_')}s`;}
+    get list_name() {return `${this.resource_type.toLowerCase().split(' ').join('_')}s`;}
     get json_model_list() {return this.okit_json[this.list_name];}
     // set json_model_list(list) {this.okit_json[this.list_name] = list;}
     get json_view_list() {return this.json_view[this.list_name];}
@@ -1343,8 +1351,8 @@ class OkitArtefactView {
         return OkitArtefactView.cut_copy_paste.resource ? OkitArtefactView.cut_copy_paste.resource.getDropTargets().includes(this.getArtifactReference()) : false;
     }
 
-    getFunction(resource_name) {return `get${titleCase(resource_name).split(' ').join('')}`}
-    getArrayFunction(resource_name) {return `${this.getFunction(resource_name)}s`}
+    getFunction(resource_type) {return `get${titleCase(resource_type).split(' ').join('')}`}
+    getArrayFunction(resource_type) {return `${this.getFunction(resource_type)}s`}
 
     getArtefact() {return this.artefact;}
 
@@ -1549,7 +1557,7 @@ class OkitArtefactView {
             // const open = $('#toggle_properties_button').hasClass('okit-bar-panel-displayed');
             // if (!open) $('#toggle_properties_button').trigger('click');
             $(this).trigger('click');
-            $('#toggle_properties_button').trigger('click');
+            $('#properties_toolbar_button').trigger('click');
             window.getSelection().removeAllRanges();
         });
     }
@@ -2505,6 +2513,8 @@ class OkitArtefactView {
                 element = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
             } else if (type === 'select') {
                 element = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
+            } else if (type === 'multiselect') {
+                element = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
             }
         }
         return element;

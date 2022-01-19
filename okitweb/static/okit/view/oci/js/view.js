@@ -6,9 +6,10 @@ console.info('Loaded OKIT OCI Import View Javascript');
 
 class OkitOciImportView extends OkitJsonView {
     resource_prefix = 'oi_rt'
-    constructor(okitjson = null, parent_id = 'oci_import_panel') {
+    constructor(import_json, okitjson = null, parent_id = 'oci_import_panel') {
         super(okitjson);
         this.parent_id = parent_id;
+        this.import_json = import_json;
     }
     get root() {return 'root_ul';}
 
@@ -24,11 +25,21 @@ class OkitOciImportView extends OkitJsonView {
         const options_div = parent.append('div').attr('class', 'okit-oci-import-options')
         const import_btn = options_div.append('button').text('Import')
             .on('click', () => {
+                let selected = {}
                 $("#oi_resources_tree_div").find("input:checked").each((i, ob) => { 
                     const resource_type = $(ob).attr('data-resource-type')
                     const resource_id = $(ob).attr('data-resource-id')
                     console.info('Type:', resource_type,'Id:', resource_id);
+                    selected[resource_type] = selected[resource_type] ? [...selected[resource_type], ...[resource_id]] : [resource_id]
                 });
+                console.info('Selected', selected)
+                Object.entries(selected).forEach(([k, v]) => {
+                    console.info('Key', k, 'Value', v)
+                    self.getOkitJson()[k] = self.getOkitJson()[k] ? [...self.getOkitJson()[k], ...this.import_json[k].filter((r) => v.includes(r.id))] : this.import_json[k].filter((r) => v.includes(r.id))
+                })
+                self.getOkitJson().checkCompartmentIds()
+                newDesignerView()
+                redrawSVGCanvas()
             })
     }
 
@@ -41,7 +52,7 @@ class OkitOciImportView extends OkitJsonView {
             .attr('id', 'oi_resources_root_ul')
             .attr('class', '')
         // Loop through sorted resource lists
-        Object.entries(this.getOkitJson().getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([k, v]) => {
+        Object.entries(this.import_json.getResourceLists()).sort((a, b) => a[0].localeCompare(b[0])).forEach(([k, v]) => {
             if (v.length > 0) {
                 const parent = this.addCollapsibleTreeElement(root_ul, `${this.resource_prefix}_${k}_root`, `${k.slice(0, -1).split('_').join('-')}`, `${titleCase(k.split('_').join(' '))}`, `${this.resource_prefix}`);
                 v.forEach((resource) => {this.addSimpleTreeElement(parent, resource.id, `${k.slice(0, -1).split('_').join('-')}`, resource.display_name, `${this.resource_prefix}`, k)})

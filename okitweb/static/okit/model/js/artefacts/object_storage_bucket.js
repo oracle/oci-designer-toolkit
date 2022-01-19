@@ -14,7 +14,7 @@ class ObjectStorageBucket extends OkitArtifact {
     constructor (data={}, okitjson={}) {
         super(okitjson);
         // Configure default values
-        this.name = this.generateDefaultName(okitjson.object_storage_buckets.length + 1);
+        // this.name = this.generateDefaultName(okitjson.object_storage_buckets.length + 1);
         this.compartment_id = data.parent_id;
         this.display_name = this.name;
         this.namespace = 'Tenancy Name';

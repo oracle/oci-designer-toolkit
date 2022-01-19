@@ -16,6 +16,7 @@ __module__ = "ociGenerator"
 from visualiser.common.okitCommon import jsonToFormattedString
 import jinja2
 import os
+import re
 import shutil
 
 from common.okitCommon import readYamlFile
@@ -32,6 +33,8 @@ class OCIGenerator(object):
         self.create_sequence = []
         self.run_variables = {}
         self.data_output = []
+        self.connection_provider = []
+        self.metadata = []
         # Assign passed values to local
         self.template_dir = template_dir
         self.output_dir = output_dir
@@ -60,6 +63,24 @@ class OCIGenerator(object):
         self.jinja2_variables["author"] = __author__
         self.jinja2_variables["copyright"] = __copyright__
         self.jinja2_variables["okit_version"] = self.OKIT_VERSION
+        self.jinja2_variables["deployment_platform"] = self.visualiser_json.get('metadata', {}).get('platform', 'oci')
+    
+    def addStandardResourceVariables(self, resource={}):
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
+        self.jinja2_variables['resource_name'] = standardisedName
+        self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
+        # --- Required
+        # ---- Compartment Id
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
+        # ---- Display Name
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
+        # ---- Tags
+        self.renderTags(resource)
+
 
     def get(self, artifact_type, id):
         artifact = {};
@@ -75,6 +96,12 @@ class OCIGenerator(object):
         elif not os.path.isdir(self.output_dir):
             logger.error('Output directory {0:s} is not a directory'.format(self.output_dir))
 
+    def getProvider(self):
+        return self.connection_provider
+
+    def getMetadata(self):
+        return self.metadata
+
     def getRenderedMain(self):
         return self.create_sequence
 
@@ -85,6 +112,9 @@ class OCIGenerator(object):
         return self.create_sequence
 
     def writeFiles(self):
+        pass
+
+    def toJson(self):
         pass
 
     def formatJinja2Variable(self, variable_name):
@@ -105,7 +135,8 @@ class OCIGenerator(object):
         for key, value in self.visualiser_json.items():
             if isinstance(value, list):
                 for asset in value:
-                    self.id_name_map[self.formatOcid(asset["id"])] = asset.get("display_name", asset.get("name", "Unknown"))
+                    # self.id_name_map[self.formatOcid(asset["id"])] = asset.get("display_name", asset.get("name", "Unknown"))
+                    self.id_name_map[self.formatOcid(asset["id"])] = asset.get("resource_name", asset.get("display_name", "Unknown"))
         return
 
     def formatOcid(self, id):
@@ -117,17 +148,28 @@ class OCIGenerator(object):
         validator.validate()
         # Build the Id to Name Map
         self.buildIdNameMap()
+        # Generate Copyright 
+        logger.info("Processing Copyright Information")
+        jinja2_template = self.jinja2_environment.get_template("copyright.jinja2")
+        self.copyright = jinja2_template.render(self.jinja2_variables)
         # Process Provider Connection information
         logger.info("Processing Provider Information")
+        self.connection_provider.append(self.copyright)
         jinja2_template = self.jinja2_environment.get_template("provider.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
+        self.connection_provider.append(jinja2_template.render(self.jinja2_variables))
+        # self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
 
         # Process Regional Data
         logger.info("Processing Region Information")
+        self.metadata.append(self.copyright)
         jinja2_template = self.jinja2_environment.get_template("region_data.jinja2")
-        self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
-        logger.debug(self.create_sequence[-1])
+        self.metadata.append(jinja2_template.render(self.jinja2_variables))
+        # self.create_sequence.append(jinja2_template.render(self.jinja2_variables))
+        # logger.debug(self.create_sequence[-1])
+
+        # Process Main Data
+        self.create_sequence.append(self.copyright)
 
         # Process keys within the input json file
         # - Users / User Groups
@@ -347,7 +389,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -419,6 +461,7 @@ class OCIGenerator(object):
         display_name = resource.get("display_name", resource.get("name", "Unknown"))
         # Read Data
         standardisedName = self.standardiseResourceName(display_name)
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = display_name
@@ -457,7 +500,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -498,6 +541,7 @@ class OCIGenerator(object):
         display_name = resource.get("display_name", resource.get("name", "Unknown"))
         # Read Data
         standardisedName = self.standardiseResourceName(display_name)
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = display_name
@@ -533,7 +577,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -571,7 +615,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
@@ -593,76 +637,77 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
-    def renderDatabaseSystem(self, database_system):
+    def renderDatabaseSystem(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(database_system['display_name'])
+        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
-        self.jinja2_variables['output_name'] = database_system['display_name']
+        self.jinja2_variables['output_name'] = resource['display_name']
         # Process Database System Data
         logger.info('Processing Database System Information {0!s:s}'.format(standardisedName))
         # -- Define Variables
         # --- Required
         # ---- Compartment Id
-        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[database_system['compartment_id']]))
+        self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
         # ---- Availability Domain
-        self.addJinja2Variable("availability_domain", database_system["availability_domain"], standardisedName)
+        self.addJinja2Variable("availability_domain", resource["availability_domain"], standardisedName)
         # ---- Display Name
-        self.addJinja2Variable("display_name", database_system["display_name"], standardisedName)
+        self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
         # ---- Subnet
-        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[database_system['subnet_id']]))
+        self.jinja2_variables["subnet_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['subnet_id']]))
         # ---- Database Edition
-        self.addJinja2Variable("database_edition", database_system["database_edition"], standardisedName)
+        self.addJinja2Variable("database_edition", resource["database_edition"], standardisedName)
         # ---- Hostname
-        self.addJinja2Variable("hostname", database_system["hostname"], standardisedName)
+        self.addJinja2Variable("hostname", resource["hostname"], standardisedName)
         # ---- Shape
-        self.addJinja2Variable("shape", database_system["shape"], standardisedName)
+        self.addJinja2Variable("shape", resource["shape"], standardisedName)
         # ---- Public Keys
-        self.addJinja2Variable("ssh_public_keys", database_system["ssh_public_keys"], standardisedName)
+        self.addJinja2Variable("ssh_public_keys", resource["ssh_public_keys"], standardisedName)
         # ---- Admin Password
-        self.addJinja2Variable("admin_password", database_system["db_home"]["database"]["admin_password"], standardisedName)
+        self.addJinja2Variable("admin_password", resource["db_home"]["database"]["admin_password"], standardisedName)
         # --- Optional
         # ---- Database Name
-        self.addJinja2Variable("db_name", database_system["db_home"]["database"]["db_name"], standardisedName)
+        self.addJinja2Variable("db_name", resource["db_home"]["database"]["db_name"], standardisedName)
         # ---- Database Workload
-        self.addJinja2Variable("db_workload", database_system["db_home"]["database"]["db_workload"], standardisedName)
+        self.addJinja2Variable("db_workload", resource["db_home"]["database"]["db_workload"], standardisedName)
         # ---- Database Version
-        self.addJinja2Variable("db_version", database_system["db_home"]["db_version"], standardisedName)
+        self.addJinja2Variable("db_version", resource["db_home"]["db_version"], standardisedName)
         # ---- License Model
-        self.addJinja2Variable("license_model", database_system["license_model"], standardisedName)
+        self.addJinja2Variable("license_model", resource["license_model"], standardisedName)
         # ---- Data Storage Size
-        self.addJinja2Variable("data_storage_size_in_gb", database_system["data_storage_size_in_gb"], standardisedName)
+        self.addJinja2Variable("data_storage_size_in_gb", resource["data_storage_size_in_gb"], standardisedName)
         # ---- Storage Management
-        self.addJinja2Variable("storage_management", database_system["db_system_options"]["storage_management"], standardisedName)
+        self.addJinja2Variable("storage_management", resource["db_system_options"]["storage_management"], standardisedName)
         # ---- Node Count
-        self.addJinja2Variable("node_count", database_system["node_count"], standardisedName)
+        self.addJinja2Variable("node_count", resource["node_count"], standardisedName)
         # ---- CPU Core Count
-        if int(database_system["cpu_core_count"]) > 0:
-            self.addJinja2Variable("cpu_core_count", database_system["cpu_core_count"], standardisedName)
+        if int(resource["cpu_core_count"]) > 0:
+            self.addJinja2Variable("cpu_core_count", resource["cpu_core_count"], standardisedName)
         else:
             self.removeJinja2Variable("cpu_core_count")
         # ---- Fault Domains
-        if len(database_system["fault_domains"]) > 0:
+        if len(resource["fault_domains"]) > 0:
             logger.info("Fault Domains")
-            logger.info(database_system["fault_domains"])
-            if isinstance(database_system["fault_domains"], list):
-                fault_domains = database_system["fault_domains"]
+            logger.info(resource["fault_domains"])
+            if isinstance(resource["fault_domains"], list):
+                fault_domains = resource["fault_domains"]
             else:
-                fault_domains = [database_system["fault_domains"]]
+                fault_domains = [resource["fault_domains"]]
             self.addJinja2Variable("fault_domains", fault_domains, standardisedName)
             self.jinja2_variables["fault_domains"] = fault_domains
         else:
             self.removeJinja2Variable("fault_domains")
         # ---- Cluster Name
-        if str(database_system["cluster_name"]).strip() != '':
-            self.addJinja2Variable("cluster_name", database_system["cluster_name"], standardisedName)
+        if str(resource["cluster_name"]).strip() != '':
+            self.addJinja2Variable("cluster_name", resource["cluster_name"], standardisedName)
         else:
             self.removeJinja2Variable("cluster_name")
 
         # ---- Tags
-        self.renderTags(database_system)
+        self.renderTags(resource)
 
         # -- Render Template
         jinja2_template = self.jinja2_environment.get_template("database_system.jinja2")
@@ -674,7 +719,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
@@ -700,7 +745,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
@@ -787,7 +832,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -797,6 +842,8 @@ class OCIGenerator(object):
         # --- Read / Create
         # ---- Read Only
         self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
         # --- Required
         # ---- Compartment Id
         self.jinja2_variables["compartment_id"] = self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[resource['compartment_id']]))
@@ -817,7 +864,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -865,7 +912,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -910,7 +957,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -951,7 +998,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -985,7 +1032,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
@@ -1011,7 +1058,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1063,7 +1110,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1126,7 +1173,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1165,10 +1212,10 @@ class OCIGenerator(object):
         for i in range(count):
             self.initialiseJinja2Variables()
             if count == 1:
-                standardisedName = self.standardiseResourceName(resource['display_name'])
+                standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
                 self.jinja2_variables['output_name'] = resource['display_name']
             else:
-                standardisedName = self.standardiseResourceName('{0!s:s}-{1!s:s}'.format(resource['display_name'], i + 1))
+                standardisedName = self.standardiseResourceName('{0!s:s}-{1!s:s}'.format(resource.get('resource_name', resource['display_name']), i + 1))
                 self.jinja2_variables['output_name'] = '{0!s:s}-{1!s:s}'.format(resource['display_name'], i + 1)
             resourceName = '{0:s}'.format(standardisedName)
             self.jinja2_variables['resource_name'] = resourceName
@@ -1200,6 +1247,10 @@ class OCIGenerator(object):
                 }
                 self.jinja2_variables["shape_config"] = shape_config
             # ---- Source Details
+            # ----- Image Source
+            self.addJinja2Variable("image_source", resource["source_details"]["image_source"], standardisedName)
+            if resource["source_details"]["image_source"] and resource["source_details"].get("image_id", '') != '':
+                self.addJinja2Variable("image_id", resource["source_details"]["image_id"], standardisedName)
             # ----- Source Type
             self.addJinja2Variable("source_type", resource["source_details"]["source_type"], standardisedName)
             # ----- Operating System
@@ -1308,7 +1359,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1343,7 +1394,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1391,7 +1442,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1465,7 +1516,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1508,7 +1559,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1592,7 +1643,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1673,7 +1724,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1708,7 +1759,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1803,6 +1854,7 @@ class OCIGenerator(object):
         display_name = resource.get("display_name", resource.get("name", "Unknown"))
         # Read Data
         standardisedName = self.standardiseResourceName(display_name)
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = display_name
@@ -1841,7 +1893,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1933,7 +1985,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -1976,7 +2028,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -2019,7 +2071,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -2077,7 +2129,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -2220,7 +2272,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -2260,7 +2312,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -2334,6 +2386,7 @@ class OCIGenerator(object):
         display_name = resource.get("display_name", resource.get("name", "Unknown"))
         # Read Data
         standardisedName = self.standardiseResourceName(display_name)
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = display_name
@@ -2371,6 +2424,7 @@ class OCIGenerator(object):
         display_name = resource.get("display_name", resource.get("name", "Unknown"))
         # Read Data
         standardisedName = self.standardiseResourceName(display_name)
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = display_name
@@ -2414,7 +2468,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
@@ -2461,7 +2515,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
@@ -2492,7 +2546,7 @@ class OCIGenerator(object):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
+        standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         resourceName = '{0:s}'.format(standardisedName)
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = self.standardiseOutputName(resource['display_name'])
@@ -2519,16 +2573,21 @@ class OCIGenerator(object):
         logger.debug(self.create_sequence[-1])
         return
 
+    # TODO: Generic Render
     def renderResource(self, resource):
         # Reset Variables
         self.initialiseJinja2Variables()
         # Read Data
-        standardisedName = self.standardiseResourceName(resource['display_name'])
-        resourceName = '{0:s}'.format(standardisedName)
+        resourceName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
         self.jinja2_variables['resource_name'] = resourceName
         self.jinja2_variables['output_name'] = resource['display_name']
-        logger.info('Processing Resource {0!s:s}'.format(standardisedName))
+        logger.info('Processing Resource {0!s:s}'.format(resourceName))
+        # ---- Read Only
+        self.jinja2_variables['read_only'] = resource.get('read_only', False)
+        # ---- Id
+        self.jinja2_variables["ocid"] = self.formatJinja2Value(resource['id'])
 
+    # TODO: Generic Render Element need to pass in parent and then walk hierarchy
     def processResourceElements(self, json_data, standardisedName, parent=None, idx=0):
         # Process Elements in Json Data
         if isinstance(json_data, dict):
@@ -2600,11 +2659,12 @@ class OCIGenerator(object):
         self.renderFreeformTags(artifact)
         return
 
-    def renderDefinedTags(self, artifact):
-        tags = {**artifact.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {}), **self.getOkitDefinedTags(artifact)}
+    def renderDefinedTags(self, resource):
+        tags = {**resource.get("defined_tags", {}), **self.visualiser_json.get("defined_tags", {}), **self.getOkitDefinedTags(resource)}
         if len(tags.keys()) > 0:
             if self.use_vars:
-                standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+                standardisedName = self.standardiseResourceName(resource.get('display_name', resource.get('name', '')))
+                standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
                 # -- Defined Tags
                 variableName = '{0:s}_defined_tags'.format(standardisedName)
                 self.run_variables[variableName] = tags
@@ -2615,12 +2675,13 @@ class OCIGenerator(object):
             self.jinja2_variables.pop("defined_tags", None)
         return
 
-    def renderFreeformTags(self, artifact):
-        tags = {**artifact.get("freeform_tags", {}), **self.visualiser_json.get("freeform_tags", {}), **self.getOkitFreeformTags(artifact)}
-        # 'okit_version': self.OKIT_VERSION, 'okit_reference': artifact.get('okit_reference', 'Unknown')
+    def renderFreeformTags(self, resource):
+        tags = {**resource.get("freeform_tags", {}), **self.visualiser_json.get("freeform_tags", {}), **self.getOkitFreeformTags(resource)}
+        # 'okit_version': self.OKIT_VERSION, 'okit_reference': resource.get('okit_reference', 'Unknown')
         if len(tags.keys()) > 0:
             if self.use_vars:
-                standardisedName = self.standardiseResourceName(artifact.get('display_name', artifact.get('name', '')))
+                standardisedName = self.standardiseResourceName(resource.get('display_name', resource.get('name', '')))
+                standardisedName = self.standardiseResourceName(resource.get('resource_name', resource['display_name']))
                 # -- Freeform Tags
                 variableName = '{0:s}_freeform_tags'.format(standardisedName)
                 self.run_variables[variableName] = tags
@@ -2637,13 +2698,15 @@ class OCIGenerator(object):
 
     def getOkitFreeformTags(self, resource=None):
         if resource is None:
-            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("okit_model_id", "Unknown")}
+            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("metadata", {}).get("okit_model_id", "Unknown")}
         else:
-            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("okit_model_id", "Unknown"), "okit_reference": resource.get('okit_reference', 'Unknown')}
+            return {"okit_version": self.OKIT_VERSION, "okit_model_id": self.visualiser_json.get("metadata", {}).get("okit_model_id", "Unknown"), "okit_reference": resource.get('okit_reference', 'Unknown')}
 
     def standardiseResourceName(self, name):
         # split() will generate a list with no empty values thus join of this will remove all whitespace
         standardised_name = ''.join(name.title().split()).replace('-', '_')
+        # Remove all non alphanumeric character appart from '_'
+        standardised_name = re.sub('[^0-9a-zA-Z_]+', '', standardised_name)
         return standardised_name
 
     def standardiseOutputName(self, name):

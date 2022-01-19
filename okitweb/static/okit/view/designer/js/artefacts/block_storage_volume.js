@@ -76,3 +76,17 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
     }
 
 }
+OkitJsonView.prototype.loadBlockStorageVolumesMultiSelect = function(select_id) {
+    $(jqId(select_id)).empty();
+    const multi_select = d3.select(d3Id(select_id));
+    for (let resource of this.getBlockStorageVolumes()) {
+        const div = multi_select.append('div');
+        div.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', safeId(resource.id))
+            .attr('value', resource.id);
+        div.append('label')
+            .attr('for', safeId(resource.id))
+            .text(resource.display_name);
+    }
+}

@@ -81,6 +81,25 @@ class OCIJsonValidator(object):
                             'message': 'Duplicate Display Name.',
                             'element': 'display_name'
                         }
+                        self.results['warnings'].append(error)
+        # Build Resource Name List
+        used_resource_names = {}
+        for key in self.okit_json:
+            if isinstance(self.okit_json[key], list):
+                for artefact in self.okit_json[key]:
+                    used_resource_names[artefact['resource_name']] = used_resource_names.get(artefact['resource_name'], 0) + 1;
+        for key in self.okit_json:
+            if isinstance(self.okit_json[key], list):
+                for artefact in self.okit_json[key]:
+                    if used_resource_names[artefact['resource_name']] > 1:
+                        self.valid = False
+                        error = {
+                            'id': artefact['id'],
+                            'type': self.keyToType(key),
+                            'artefact': artefact['display_name'],
+                            'message': 'Duplicate Resource Name.',
+                            'element': 'resource_name'
+                        }
                         self.results['errors'].append(error)
 
     # Autonomous Database

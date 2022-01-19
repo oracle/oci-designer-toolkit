@@ -26,7 +26,7 @@ class LoadBalancerView extends OkitDesignerArtefactView {
             for (let [key, value] of Object.entries(this.backend_sets)) {
                 for (let backend of value.backends) {
                     for (let instance of this.getOkitJson().getAllInstanceTypes()) {
-                        if (instance.primary_vnic.private_ip === backend.ip_address) {
+                        if (instance.primary_vnic && instance.primary_vnic.private_ip === backend.ip_address) {
                             if (!this.instance_ids.includes(instance.id)) {
                                 this.instance_ids.push(instance.id);
                                 backend.instance_id = instance.id;

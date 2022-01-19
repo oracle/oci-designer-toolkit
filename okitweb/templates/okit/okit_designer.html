@@ -18,6 +18,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/json/js/okit_json_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tree/js/okit_tree_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/oci/js/view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/view/terraform/js/view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/identity/js/okit_identity_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/query/oci/js/okit_query.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer.js') }}"></script>
@@ -99,6 +100,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/css/okit_threedots_menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tree/css/okit_tree_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/oci/css/view.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/terraform/css/view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/json/css/okit_json_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/tabular/css/okit_tabular_view.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='okit/view/identity/css/okit_identity_view.css') }}">
@@ -126,14 +128,16 @@
                     <!--li id="file-save-regional-menu-item-li" class="hidden"><a id="file-save-regional-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveRegional()">Save Regions</a></li-->
                     <li><a id="file-save-as-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTemplate()">Save As Template</a></li>
                     <li><a id="file-save-as-menu-item-git" class="parent-item" href="javascript:void(0)" onclick="handleSaveToGit()">Save To Git</a></li>
+                    <li><a id="file-save-as-menu-item-terraform" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsTerraform()">Save As Terraform</a></li>
+                    <!-- <li><a id="file-save-as-menu-item-md" class="parent-item" href="javascript:void(0)" onclick="handleSaveAsMarkdown()">Save As Markdown</a></li> -->
                 </ul>
             </li>
             {% if local_okit or session['username'] %}
             <li><a id="query-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleQueryOci()">Query</a></li>
             {% endif %}
-            <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li>
-            <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li>
-            <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li>
+            <!-- <li><a id="file-redraw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleRedraw()">Redraw</a></li> -->
+            <!-- <li><a id="file-validate-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleValidate()">Validate</a></li> -->
+            <!-- <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li> -->
         </ul>
         <ul id="export_menu" class="okit-navigation-sub-list">
             <li>
@@ -161,6 +165,7 @@
                 </ul>
             </li-->
             <li><a id="generate-terraform-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformLocal()">Terraform</a></li>
+            <!-- <li><a id="export-terraform-for-display-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleExportToTerraformForDisplay()">Terraform Display</a></li> -->
             {%- if ansible_mode -%}
             <!--li id="ansible_export" class="sub-header-item dropdown" onmouseover="handleDropdownMenuMouseOver()">
                 <span>Ansible</span>
@@ -196,7 +201,7 @@
                     </span>
                 </div>
             </li>
-            <!-- <li><a id="import-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromOci()">OCI Resources</a></li> -->
+            <li><a id="import-oci-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromOci()">OCI Resources</a></li>
             <li><a id="file-load-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleLoad()">OKIT Json</a></li>
             <li><a id="import-hcl-json-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleImportFromHCLJson()">Terraform Json</a></li>
             {% if cd3_mode %}
@@ -212,6 +217,7 @@
                     </span>
                 </div>
             </li>
+            <li><a id="file-clone-rw-menu-item"  class="parent-item" href="javascript:void(0)" onclick="handleEnableCreate()">Enable R/W</a></li>
             <li><a id="import-refresh-static-menu-item" class="parent-item" href="javascript:void(0)" onclick="handleRefreshDropdownData()">Refresh Cache</a></li>
         </ul>
         {% if experimental_mode %}
@@ -241,6 +247,7 @@
                 <option id="tabular_view_option" value="tabular">Tabular</option>
                 <option id="relationship_view_option" value="relationship">Relationship</option>
                 <option id="json_view_option" value="json">Json</option>
+                <option id="tf_view_option" value="terraform">Terraform</option>
                 {%- if developer_mode -%}<option id="cache_view_option" value="cache">Cache</option>{%- endif -%}
             </select>
         </div>
@@ -254,6 +261,7 @@
     </div>
     <div id="okit_toolbar_right" class="okit-toolbar-right">
         <div>
+            <div id="refresh_toolbar_button" class="refresh okit-toolbar-button" title="Settings" onclick="handleRedraw()"></div>
             <div id="settings_toolbar_button" class="settings okit-toolbar-button" title="Settings" onclick="handleSettings()"></div>
             <div id="validate_toolbar_button" class="validate okit-toolbar-button" title="Validate" onclick="handleValidate()"></div>
             <div id="properties_toolbar_button" class="properties okit-toolbar-button" title="Resource Properties" onclick="handleOpenProperties()"></div>
@@ -276,9 +284,19 @@
         <div id="oci_import_panel" class="okit-left-side-panel okit-oci-import-panel hidden"></div>
     </div>
     <div id="designer_center_column" class="okit-designer-center-column okit-slide-show">
-        <div id="center-header">
+        <div id="center-header" class="okit-center-header">
             <div id="canvas_details" class="okit-canvas-details table">
-                <div class="tr"><div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div></div>
+                <div class="tr">
+                    <div class="td"><label>Target</label></div>
+                    <div class="td">
+                        <select id="deployment_platform" onchange="handleTargetPlatformSelect()">
+                            <option value="oci" selected="selected">OCI</option>
+                            <option value="pca">PCA X-9</option>
+                            <option value="freetier">Free Tier</option>
+                        </select>
+                    </div>
+                    <div class="td"><label>Title</label></div><div class="td"><input id="json_title" type="text" size="100" onchange="updateJsonTitle()"/></div>
+                </div>
                 <!--div class="td"><div class="td"><label>Description</label></div><div class="td"><input id="json_description" type="text" size="100" onchange="updateJsonDescription()"/></div></div-->
             </div>
         </div>
@@ -357,7 +375,7 @@
     </details>
 </div>
 <div id="settings_panel" class="okit-right-side-panel okit-slide-hide-right"></div>
-<div id="data_entry_panel" class="okit-right-side-data-entry-panel okit-slide-hide-right"><div class="okit-data-entry-title"><label id="data_entry_panel_title"></label><div class="cancel action-button-background" onclick="handleCancelDataEntry()"></div></div><div id="data_entry_panel_body" class="okit-data-entry-panel"></div><div id="data_entry_panel_footer" class="okit-data-entry-footer"></div></div>
+<div id="data_entry_panel" class="okit-right-side-panel okit-slide-hide-right"><div class="okit-data-entry-title"><label id="data_entry_panel_title"></label><div class="cancel action-button-background" onclick="handleCancelDataEntry()"></div></div><div id="data_entry_panel_body" class="okit-data-entry-panel"></div><div id="data_entry_panel_footer" class="okit-data-entry-footer"></div></div>
 <div id="threedots_menu_panel" class="okit-threedots-menu-panel okit-slide-hide-right">
     <!-- <ul>
         <li><a>Canvas</a> 

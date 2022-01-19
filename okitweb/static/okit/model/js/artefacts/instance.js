@@ -15,18 +15,33 @@ class Instance extends OkitArtifact {
         super(okitjson);
         // Configure default values
         // # Required
-        this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
+        // this.display_name = this.generateDefaultName(okitjson.instances.length + 1);
         this.availability_domain = '1';
         this.compartment_id = '';
         this.shape = 'VM.Standard.E3.Flex';
         // # Optional
         this.count = 1;
         this.fault_domain = '';
-        this.agent_config = {is_monitoring_disabled: false, is_management_disabled: false};
+        this.agent_config = {
+            is_monitoring_disabled: false, 
+            is_management_disabled: false
+        };
         this.vnics = [];
-        this.source_details = {os: 'Oracle Linux', version: '8', boot_volume_size_in_gbs: '50', source_type: 'image'};
-        this.metadata = {ssh_authorized_keys: '', user_data: ''};
-        this.shape_config = {memory_in_gbs: 16, ocpus: 1};
+        this.source_details = {
+            os: 'Oracle Linux', 
+            version: '8', 
+            boot_volume_size_in_gbs: '50', 
+            source_type: 'image', 
+            image_source: 'platform'
+        };
+        this.metadata = {
+            ssh_authorized_keys: '', 
+            user_data: ''
+        };
+        this.shape_config = {
+            memory_in_gbs: 16, 
+            ocpus: 1
+        };
         // TODO: Future
         //this.launch_options_specified = false;
         //this.launch_options = {boot_volume_type: '', firmware: '', is_consistent_volume_naming_enabled: false, is_pv_encryption_in_transit_enabled: false, network_type: '', remote_data_volume_type: ''};
@@ -58,6 +73,9 @@ class Instance extends OkitArtifact {
         delete this.subnet_id;
         Object.defineProperty(this, 'primary_vnic', {get: function() {return this.vnics[0];}, set: function(vnic) {this.vnics[0] = vnic;}, enumerable: true });
         Object.defineProperty(this, 'subnet_id', {get: function() {return this.primary_vnic.subnet_id;}, set: function(id) {this.primary_vnic.subnet_id = id;}, enumerable: true });
+        Object.defineProperty(this, 'instance_type', {get: function() {return this.shape.toLowerCase().substr(0,2);}, set: function(type) {}, enumerable: true });
+        Object.defineProperty(this, 'chipset', {get: function() {return this.shape.startsWith('VM.') && this.shape.includes('.E') ? 'amd' : this.shape.startsWith('VM.') && this.shape.includes('.A') ? 'arm' : 'intel'}, set: function(chipset) {}, enumerable: true });
+        Object.defineProperty(this, 'flex_shape', {get: function() {return this.shape.endsWith('.Flex')}, set: function(flex_shape) {}, enumerable: true });
     }
 
     /*
@@ -84,6 +102,18 @@ class Instance extends OkitArtifact {
             if (!vnic.hasOwnProperty('assign_public_ip')) {vnic.assign_public_ip = true;}
             if (!vnic.hasOwnProperty('skip_source_dest_check')) {vnic.skip_source_dest_check = false;}
             if (!vnic.hasOwnProperty('nsg_ids')) {vnic.nsg_ids = [];}
+        }
+    }
+    /*
+    ** Create Secondary Network (VNIC)
+    */
+    newVnic() {
+        return {
+            subnet_id: '', 
+            assign_public_ip: true, 
+            nsg_ids: [], 
+            skip_source_dest_check: false, 
+            hostname_label: this.display_name.toLowerCase()
         }
     }
 
