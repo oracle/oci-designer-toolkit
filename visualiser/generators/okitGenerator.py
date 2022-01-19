@@ -1247,6 +1247,10 @@ class OCIGenerator(object):
                 }
                 self.jinja2_variables["shape_config"] = shape_config
             # ---- Source Details
+            # ----- Image Source
+            self.addJinja2Variable("image_source", resource["source_details"]["image_source"], standardisedName)
+            if resource["source_details"]["image_source"] and resource["source_details"].get("image_id", '') != '':
+                self.addJinja2Variable("image_id", resource["source_details"]["image_id"], standardisedName)
             # ----- Source Type
             self.addJinja2Variable("source_type", resource["source_details"]["source_type"], standardisedName)
             # ----- Operating System

@@ -966,7 +966,8 @@ class OkitJsonView {
         for (let subnet of this.getSubnets()) {
             const compartment = this.getCompartment(subnet.compartment_id);
             const vcn = this.getVirtualCloudNetwork(subnet.vcn_id);
-            const display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+            const display_name = subnet.display_name;
+            // const display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
             subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
         }
     }
@@ -2512,6 +2513,8 @@ class OkitArtefactView {
                 element = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
             } else if (type === 'select') {
                 element = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
+            } else if (type === 'multiselect') {
+                element = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
             }
         }
         return element;

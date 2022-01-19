@@ -104,6 +104,18 @@ class Instance extends OkitArtifact {
             if (!vnic.hasOwnProperty('nsg_ids')) {vnic.nsg_ids = [];}
         }
     }
+    /*
+    ** Create Secondary Network (VNIC)
+    */
+    newVnic() {
+        return {
+            subnet_id: '', 
+            assign_public_ip: true, 
+            nsg_ids: [], 
+            skip_source_dest_check: false, 
+            hostname_label: this.display_name.toLowerCase()
+        }
+    }
 
     /*
     ** Clone Functionality

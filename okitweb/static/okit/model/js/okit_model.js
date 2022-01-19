@@ -878,7 +878,7 @@ class OkitArtifact {
     generateDefaultName(count = 0) {
         const today = new Date();
         const pad = (n) => ("0" + n).slice(-2)
-        return `${this.getNamePrefix()}-${today.getFullYear()}${pad(today.getMonth() + 1)}${pad(today.getDate())}-${pad(today.getHours())}${pad(today.getMinutes())}`;
+        return `${this.getNamePrefix()}-${today.getFullYear()}${pad(today.getMonth() + 1)}${pad(today.getDate())}-${pad(today.getHours())}${pad(today.getMinutes())}${pad(today.getSeconds())}`;
         // return this.getNamePrefix() + ('000' + count).slice(-3);
     }
 
