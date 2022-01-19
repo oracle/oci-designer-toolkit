@@ -21,6 +21,7 @@ from discovery import OciResourceDiscoveryClient
 from common.okitCommon import logJson
 from common.okitLogging import getLogger
 from facades.ociConnection import OCIConnection
+from visualiser.common.okitCommon import jsonToFormattedString
 
 # Configure logging
 logger = getLogger()
@@ -48,6 +49,7 @@ class OCIRegionQuery(OCIConnection):
         discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, include_resource_types=self.SUPPORTED_RESOURCES)
         regions = self.response_to_json(discovery_client.regions)
         for region in regions:
+            logger.info(jsonToFormattedString(region))
             region["id"] = region["region_name"]
             region["name"] = region["region_name"]
             region["key"] = region["region_key"]
