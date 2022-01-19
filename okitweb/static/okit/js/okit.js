@@ -96,14 +96,14 @@ class OkitOCIData {
         if (profile && !cache.hasOwnProperty(profile)) cache[profile] = {}
         if (profile) cache[profile][region] = this.dropdown_data
         localStorage.setItem(this.key, JSON.stringify(cache))
-        console.info(this.dropdown_data)
-        console.info('Platform Images', this.getPlatformImages())
-        console.info('Custom Images', this.getCustomImages())
-        console.info('Bare Metal Shares', this.getBareMetalInstanceShapes())
-        console.info('Virtual Machine Shares', this.getVirtualMachineInstanceShapes())
-        console.info('ARM Shares', this.getARMInstanceShapes())
-        console.info('AMD Shares', this.getAMDInstanceShapes())
-        console.info('Intel Shares', this.getIntelInstanceShapes())
+        // console.info(this.dropdown_data)
+        // console.info('Platform Images', this.getPlatformImages())
+        // console.info('Custom Images', this.getCustomImages())
+        // console.info('Bare Metal Shares', this.getBareMetalInstanceShapes())
+        // console.info('Virtual Machine Shares', this.getVirtualMachineInstanceShapes())
+        // console.info('ARM Shares', this.getARMInstanceShapes())
+        // console.info('AMD Shares', this.getAMDInstanceShapes())
+        // console.info('Intel Shares', this.getIntelInstanceShapes())
     }
 
     loadLocal(profile, region='') {
