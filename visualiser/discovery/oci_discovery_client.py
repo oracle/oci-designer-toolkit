@@ -526,10 +526,12 @@ class OciResourceDiscoveryClient(object):
     def list_seachable_resource_types_for_region(self, region):
         region_config = self.config.copy()
         region_config["region"] = region
+        logger.info(F'Using Region Config : {region_config}')
         search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
         if self.cert_bundle:
             search.base_client.session.verify = self.cert_bundle
         all_searchable_resource_types = [resource_type.name for resource_type in oci.pagination.list_call_get_all_results(search.list_resource_types).data]
+        logger.info(f'All Searchable Resource Types: {all_searchable_resource_types}')
         return all_searchable_resource_types
 
     # fetch supported resource type for each region
@@ -578,7 +580,7 @@ class OciResourceDiscoveryClient(object):
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             for region in regions:
-                logger.info(f'Resource Byt Region: {resource_types_by_region}')
+                logger.info(f'Resource By Region: {resource_types_by_region}')
                 futures = executor.submit(self.search_resources_for_region, region.region_name, resource_types_by_region[region.region_name], compartments)
                 futures_list.update({region.region_name:futures})
 
