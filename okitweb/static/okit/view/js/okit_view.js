@@ -1281,6 +1281,25 @@ class OkitArtefactView {
         }
         return `translate(${dx}, ${dy})`;
     }
+    // ---- Foreign Object
+    get fo_width() {return 100}
+    get fo_transform() {
+        let dx = 0;
+        let dy = 0;
+        // Horizontal
+        if (this.icon_h_align === 'middle' || this.icon_h_align === 'center' || this.icon_h_align === 'centre') {
+            dx = this.svg_width/2 - this.icon_width/2;
+        } else if (this.icon_h_align === 'end' || this.icon_h_align === 'right') {
+            dx = this.svg_width - this.icon_width;
+        }
+        // Vertical
+        if (this.icon_v_align === 'middle' || this.icon_v_align === 'center' || this.icon_v_align === 'centre') {
+            dy = this.svg_height/2 - this.icon_height/2;
+        } else if (this.icon_v_align === 'end' || this.icon_v_align === 'bottom') {
+            dy = this.svg_height - this.icon_height;
+        }
+        return `translate(${dx + this.icon_width}, ${dy})`;
+    }
     // ---- Padding
     get padding_dx() {return 0;}
     get padding_dy() {return 0;}
@@ -1481,6 +1500,19 @@ class OkitArtefactView {
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
         return icon;
+    }
+
+    drawForeignObject(svg) {
+        const foreignObject = svg.append('foreignObject')
+        const details_div = foreignObject.append('xhtml:div').attr('class', 'okit-resource-details')
+        details_div.append('div').attr('class', 'okit-resource-title').text(this.type_text)
+        details_div.append('div').append('input').attr('class', 'okit-resource-display-name').attr('tabindex', -1)
+            .attr('type', 'text')
+            .attr('name', `${this.resource_name}_display_name`)
+            .attr('value', `${this.display_name}`)
+            .on('change', (d, i, o) => {
+                this.artefact.display_name = o[0].value
+            })
     }
 
     drawIconOverlay(svg) {

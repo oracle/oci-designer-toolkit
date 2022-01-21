@@ -28,7 +28,7 @@
                 },
                 {
                     "title": "Analytics Instance",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "AnalyticsCloudService.svg"
                 },
                 {
@@ -171,7 +171,7 @@
                 },
                 {
                     "title": "Service Gateway",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "ServiceGateway.svg"
                 }
             ]
@@ -208,7 +208,7 @@
             "resources": [
                 {
                     "title": "Bastion",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "Bastion.svg"
                 },
                 {
