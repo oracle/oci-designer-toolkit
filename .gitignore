@@ -40,7 +40,9 @@ containers/ssh/*
 
 !okitweb/static/model
 /docker-compose.yml
+/lima-compose.yml
 /containers/runtime/
+/containers/lima/
 
 **/node_modules
 **/package-lock.json
