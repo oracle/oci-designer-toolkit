@@ -520,7 +520,8 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
         # ---- Backup Policy
-        self.addJinja2Variable("backup_policy", resource["backup_policy"], standardisedName)
+        if resource.get("backup_policy", "") != '':
+            self.addJinja2Variable("backup_policy", resource["backup_policy"], standardisedName)
         # ---- Size In GBs
         self.addJinja2Variable("size_in_gbs", resource["size_in_gbs"], standardisedName)
         # --- Optional

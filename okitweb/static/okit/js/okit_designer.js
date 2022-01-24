@@ -156,6 +156,7 @@ function setTargetPlatform() {
 function updatePaletteForPlatform() {
     $('.okit-palette-icon-div').addClass('hidden');
     $('.menu-item').addClass('hidden');
+    $('.okit-palette-icon-group').addClass('hidden');
     $(`.${okitJsonModel.metadata.platform}`).removeClass('hidden');
 }
 
