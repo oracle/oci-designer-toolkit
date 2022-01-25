@@ -33,20 +33,20 @@ logger = getLogger()
 class PCADropdownQuery(OCIConnection):
 
     SUPPORTED_RESOURCES = [
-        "Service", 
+        # "Service", 
         "Shape", 
-        "DbSystemShape", 
-        "DbVersion", 
-        "CpeDeviceShape", 
+        # "DbSystemShape", 
+        # "DbVersion", 
+        # "CpeDeviceShape", 
         # "FastConnectProviderService", 
         "Image",
         # "ImageShapeCompatibility",
         # "Instance",
-        "MySQLShape", 
-        "MySQLVersion", 
-        "MySQLConfiguration", 
-        "LoadBalancerShape", 
-        "ClusterOptions"
+        # "MySQLShape", 
+        # "MySQLVersion", 
+        # "MySQLConfiguration", 
+        # "LoadBalancerShape", 
+        # "ClusterOptions"
     ]
 
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
@@ -54,11 +54,11 @@ class PCADropdownQuery(OCIConnection):
         self.dropdown_json = {}
         self.clients = {
             "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
-            "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
-            "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
-            "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
-            "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
-            "mysqlaas": oci.mysql.MysqlaasClient(config=self.config, signer=self.signer),
+            # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
+            # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
+            # "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
+            # "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
+            # "mysqlaas": oci.mysql.MysqlaasClient(config=self.config, signer=self.signer),
             # "mysqldb": oci.mysql.DbSystemClient(config=self.config, signer=self.signer),
             "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
         }
@@ -88,13 +88,13 @@ class PCADropdownQuery(OCIConnection):
                 }, 
             "CpeDeviceShape": {
                 "method": self.cpe_device_shapes, 
-                "client": "network", "array": 
-                "cpe_device_shapes"
+                "client": "network", 
+                "array": "cpe_device_shapes"
                 }, 
             "FastConnectProviderService": {
                 "method": self.fast_connect_provider_services, 
-                "client": "network", "array": 
-                "fast_connect_provider_services"
+                "client": "network", 
+                "array": "fast_connect_provider_services"
                 }, 
             "Image": {
                 "method": self.images, 
