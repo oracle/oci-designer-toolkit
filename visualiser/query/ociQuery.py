@@ -16,6 +16,7 @@ import datetime
 import json
 import oci
 import re
+import uuid
 
 from discovery import OciResourceDiscoveryClient
 
@@ -235,7 +236,8 @@ class OCIQuery(OCIConnection):
         return response_json
     
     def addResourceName(self,resource):
-        resource['resource_name'] = f'Okit_{resource["id"].split(".")[-1]}'
+        # resource['resource_name'] = f'Okit_{resource["id"].split(".")[-1]}'
+        resource['resource_name'] = f'Okit_{uuid.uuid4().hex}'
         return resource
 
     def generateResourceName(self, resource_type):
