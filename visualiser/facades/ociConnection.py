@@ -27,21 +27,25 @@ class OCIConnection(object):
     PAGINATION_LIMIT = 1000
     OKIT_VERSION = 'v0.32.0'
 
-    def __init__(self, config=None, configfile=None, profile=None, region=None):
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.tenancy_ocid = ''
         self.config = config
         self.configfile = configfile
         self.client = None
         self.profile = profile
         self.region = region
+        self.instance_principal = (os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal')
         # Create Instance Security Signer
         logger.info('OCI_CLI_AUTH = ' + os.getenv('OCI_CLI_AUTH', 'Undefined'))
-        if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
-            self.signerFromInstancePrincipal()
-        elif os.getenv('OCI_CLI_AUTH', 'config') == 'x509_cert':
-            self.signerFromX509Cert()
+        if signer is None:
+            if os.getenv('OCI_CLI_AUTH', 'config') == 'instance_principal':
+                self.signerFromInstancePrincipal()
+            elif os.getenv('OCI_CLI_AUTH', 'config') == 'x509_cert':
+                self.signerFromX509Cert()
+            else:
+                self.signerFromConfig()
         else:
-            self.signerFromConfig()
+            self.signer = signer
         # Set OKIT User Agent
         self.config['additional_user_agent'] = f'OKIT {self.OKIT_VERSION}'
         # Connect
@@ -149,8 +153,8 @@ class OCIConnection(object):
         return client
 
 class OCIAutoScalingConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIAutoScalingConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIAutoScalingConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.autoscaling.AutoScalingClient(config=self.config, signer=self.signer)
@@ -158,8 +162,8 @@ class OCIAutoScalingConnection(OCIConnection):
 
 
 class OCIBlockStorageVolumeConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.core.BlockstorageClient(config=self.config, signer=self.signer)
@@ -167,8 +171,8 @@ class OCIBlockStorageVolumeConnection(OCIConnection):
 
 
 class OCIComputeConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIComputeConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIComputeConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.core.ComputeClient(config=self.config, signer=self.signer)
@@ -176,8 +180,8 @@ class OCIComputeConnection(OCIConnection):
 
 
 class OCIComputeManagementConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIComputeManagementConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIComputeManagementConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.core.ComputeManagementClient(config=self.config, signer=self.signer)
@@ -185,8 +189,8 @@ class OCIComputeManagementConnection(OCIConnection):
 
 
 class OCIContainerConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIContainerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIContainerConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer)
@@ -194,8 +198,8 @@ class OCIContainerConnection(OCIConnection):
 
 
 class OCIDatabaseConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIDatabaseConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIDatabaseConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.database.DatabaseClient(config=self.config, signer=self.signer)
@@ -203,8 +207,8 @@ class OCIDatabaseConnection(OCIConnection):
 
 
 class OCIFileStorageSystemConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIFileStorageSystemConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIFileStorageSystemConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.file_storage.FileStorageClient(config=self.config, signer=self.signer)
@@ -212,9 +216,9 @@ class OCIFileStorageSystemConnection(OCIConnection):
 
 
 class OCIIdentityConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.compartment_ocid = None
-        super(OCIIdentityConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+        super(OCIIdentityConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.identity.IdentityClient(config=self.config, signer=self.signer)
@@ -223,9 +227,9 @@ class OCIIdentityConnection(OCIConnection):
 
 
 class OCILimitsConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         self.compartment_ocid = None
-        super(OCILimitsConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+        super(OCILimitsConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.limits.LimitsClient(config=self.config, signer=self.signer)
@@ -234,8 +238,8 @@ class OCILimitsConnection(OCIConnection):
 
 
 class OCILoadBalancerConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer)
@@ -243,8 +247,8 @@ class OCILoadBalancerConnection(OCIConnection):
 
 
 class OCIMySQLDatabaseConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIMySQLDatabaseConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIMySQLDatabaseConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.mysql.DbSystemClient(config=self.config, signer=self.signer)
@@ -252,8 +256,8 @@ class OCIMySQLDatabaseConnection(OCIConnection):
 
 
 class OCIMySQLaaSConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIMySQLaaSConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIMySQLaaSConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.mysql.MysqlaasClient(config=self.config, signer=self.signer)
@@ -261,8 +265,8 @@ class OCIMySQLaaSConnection(OCIConnection):
 
 
 class OCIObjectStorageBucketConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIObjectStorageBucketConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIObjectStorageBucketConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.object_storage.ObjectStorageClient(config=self.config, signer=self.signer)
@@ -270,8 +274,8 @@ class OCIObjectStorageBucketConnection(OCIConnection):
 
 
 class OCIResourceManagerConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.resource_manager.ResourceManagerClient(config=self.config, signer=self.signer)
@@ -279,8 +283,8 @@ class OCIResourceManagerConnection(OCIConnection):
 
 
 class OCIResourceSearchConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIResourceSearchConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIResourceSearchConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.resource_search.ResourceSearchClient(config=self.config, signer=self.signer)
@@ -288,8 +292,8 @@ class OCIResourceSearchConnection(OCIConnection):
 
 
 class OCIVirtualNetworkConnection(OCIConnection):
-    def __init__(self, config=None, configfile=None, profile=None):
-        super(OCIVirtualNetworkConnection, self).__init__(config=config, configfile=configfile, profile=profile)
+    def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
+        super(OCIVirtualNetworkConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
         self.client = oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
