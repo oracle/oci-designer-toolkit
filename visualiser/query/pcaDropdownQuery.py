@@ -63,7 +63,7 @@ class PCADropdownQuery(OCIConnection):
             "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
         }
         if 'cert-bundle' in self.config:
-            for client in self.clients:
+            for client in self.clients.values():
                 client.base_client.session.verify = self.config['cert-bundle']
         self.resource_map = {
             "Service": {
