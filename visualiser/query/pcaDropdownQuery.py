@@ -204,8 +204,8 @@ class PCADropdownQuery(OCIConnection):
         for r in resources:
             r['sort_key'] = f"{r['operating_system']} {r['operating_system_version']}"
         self.dropdown_json[array] = sorted(self.deduplicate(resources, 'sort_key'), key=lambda k: k['sort_key'])
-        for r in self.dropdown_json[array]:
-            r['shapes'] = [s.shape for s in oci.pagination.list_call_get_all_results(client.list_image_shape_compatibility_entries, image_id=r['id']).data]
+        # for r in self.dropdown_json[array]:
+        #     r['shapes'] = [s.shape for s in oci.pagination.list_call_get_all_results(client.list_image_shape_compatibility_entries, image_id=r['id']).data]
         return self.dropdown_json[array]
 
     def kubernetes_versions(self):
