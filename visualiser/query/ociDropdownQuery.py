@@ -69,7 +69,7 @@ class OCIDropdownQuery(OCIConnection):
         pass
 
     def executeQuery(self, regions=None, **kwargs):
-        logger.info(f'Querying Dropdowns - Region: {regions}')
+        logger.info(f'OCI Querying Dropdowns - Region: {regions}')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         if regions is None:

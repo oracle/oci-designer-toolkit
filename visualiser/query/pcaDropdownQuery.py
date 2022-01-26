@@ -134,7 +134,7 @@ class PCADropdownQuery(OCIConnection):
         pass
 
     def executeQuery(self, regions=None, **kwargs):
-        logger.info(f'Querying Dropdowns - Region: {regions} {self}')
+        logger.info(f'PCA Querying Dropdowns - Region: {regions} {self}')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         if regions is None:
