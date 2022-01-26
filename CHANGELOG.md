@@ -7,6 +7,13 @@
 ### Bug Fixes
 
 
+## Version 0.31.1
+**Release Date**: 26th December 2021
+### Features
+### Bug Fixes
+1. Fix Standardised resource name issue when querying switching from using queried id, which is not alway present, to uuid.
+
+
 ## Version 0.31.0
 **Release Date**: 19th January 2022
 ### Features
