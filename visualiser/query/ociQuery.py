@@ -159,13 +159,13 @@ class OCIQuery(OCIConnection):
         logger.info('Request : {0!s:s}'.format(str(include_sub_compartments)))
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
-        if "cert-bundle" in self.config:
-            cert_bundle = self.config["cert-bundle"]
-        else:
-            cert_bundle = None
-        logger.info(f'cert_bundle={cert_bundle}')
+        # if "cert-bundle" in self.config:
+        #     cert_bundle = self.config["cert-bundle"]
+        # else:
+        #     cert_bundle = None
+        logger.info(f'cert_bundle={self.cert_bundle}')
 
-        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
+        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=compartments, include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
         response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug(f"Response : {response}")

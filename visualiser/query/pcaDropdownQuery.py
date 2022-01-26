@@ -62,9 +62,9 @@ class PCADropdownQuery(OCIConnection):
             # "mysqldb": oci.mysql.DbSystemClient(config=self.config, signer=self.signer),
             "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
         }
-        if 'cert-bundle' in self.config:
+        if self.cert_bundle is not None:
             for client in self.clients.values():
-                client.base_client.session.verify = self.config['cert-bundle']
+                client.base_client.session.verify = self.cert_bundle
         self.resource_map = {
             "Service": {
                 "method": self.services, 

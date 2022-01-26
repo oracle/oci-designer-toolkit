@@ -75,13 +75,13 @@ class OCIDropdownQuery(OCIConnection):
         if regions is None:
             regions = [self.config['region']]
             logger.info(f'No Region Specified using - Region: {regions}')
-        if "cert-bundle" in self.config:
-            cert_bundle = self.config["cert-bundle"]
-        else:
-            cert_bundle = None
-        logger.info(f'cert_bundle={cert_bundle}')
+        # if "cert-bundle" in self.config:
+        #     cert_bundle = self.config["cert-bundle"]
+        # else:
+        #     cert_bundle = None
+        logger.info(f'cert_bundle={self.cert_bundle}')
         include_sub_compartments = True
-        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']], include_sub_compartments=include_sub_compartments)
+        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']], include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
         response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug('Response JSON : {0!s:s}'.format(jsonToFormattedString(response)))
