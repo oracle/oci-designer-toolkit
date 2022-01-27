@@ -180,7 +180,7 @@ class OkitOCIData {
             const response = resp
             const end = new Date().getTime()
             console.info('Region Subscription for', profile, 'took', end - start, 'ms')
-            console.info('Region Subscriptions', typeof(response), response)
+            // console.info('Region Subscriptions', typeof(response), response)
             // We Know that this Profile is not a PCA-X9 so we can use the OCI Dropdowwn Query
             $.getJSON('oci/dropdown', {
                 profile: profile,
@@ -452,6 +452,16 @@ class OkitRegions {
         const self = this
         if (!this.loadLocal(profile)) {
             const start = new Date().getTime()
+
+            $.getJSON('oci/subscription', {
+                profile: profile
+            }).done((resp) => {
+                const response = resp
+                const end = new Date().getTime()
+                console.info('Region Subscription for', profile, 'took', end - start, 'ms')
+                console.info('Region Subscriptions', typeof(response), response)
+            })
+
             $.getJSON(`oci/regions/${profile}`, (resp) => {
                 const end = new Date().getTime()
                 console.info('Load Regions took', end - start, 'ms')
