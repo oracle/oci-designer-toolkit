@@ -52,19 +52,19 @@ class PCADropdownQuery(OCIConnection):
     def __init__(self, config=None, configfile=None, profile=None, region=None, signer=None):
         super(PCADropdownQuery, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
         self.dropdown_json = {}
-        self.clients = {
-            "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
-            # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
-            # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
-            # "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
-            # "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
-            # "mysqlaas": oci.mysql.MysqlaasClient(config=self.config, signer=self.signer),
-            # "mysqldb": oci.mysql.DbSystemClient(config=self.config, signer=self.signer),
-            "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
-        }
-        if 'cert-bundle' in self.config:
-            for client in self.clients.values():
-                client.base_client.session.verify = self.config['cert-bundle']
+        # self.clients = {
+        #     "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
+        #     # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
+        #     # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
+        #     # "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
+        #     # "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
+        #     # "mysqlaas": oci.mysql.MysqlaasClient(config=self.config, signer=self.signer),
+        #     # "mysqldb": oci.mysql.DbSystemClient(config=self.config, signer=self.signer),
+        #     "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
+        # }
+        # if self.cert_bundle is not None:
+        #     for client in self.clients.values():
+        #         client.base_client.session.verify = self.cert_bundle
         self.resource_map = {
             "Service": {
                 "method": self.services, 
@@ -131,10 +131,23 @@ class PCADropdownQuery(OCIConnection):
         self.getTenancy()
 
     def connect(self):
-        pass
+        logger.info(f'<<< Connecting PCA Clients >>> {self.cert_bundle}')
+        self.clients = {
+            "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
+            # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
+            # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
+            # "limits":  oci.limits.LimitsClient(config=self.config, signer=self.signer),
+            # "loadbalancer": oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer),
+            # "mysqlaas": oci.mysql.MysqlaasClient(config=self.config, signer=self.signer),
+            # "mysqldb": oci.mysql.DbSystemClient(config=self.config, signer=self.signer),
+            "network": oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
+        }
+        if self.cert_bundle is not None:
+            for client in self.clients.values():
+                client.base_client.session.verify = self.cert_bundle
 
     def executeQuery(self, regions=None, **kwargs):
-        logger.info(f'Querying Dropdowns - Region: {regions} {self}')
+        logger.info(f'PCA Querying Dropdowns - Region: {regions} {self}')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         if regions is None:

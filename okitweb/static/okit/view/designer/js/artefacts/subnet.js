@@ -57,7 +57,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
         $(jqId(`${this.artefact_id}-vnic`)).removeClass('highlight-association');
     }
     drawAttachments() {
-        console.log(`Drawing ${this.getArtifactReference()} : ${this.display_name} Attachments (${this.artefact_id})`);
         let attachment_count = 0;
         // Draw Route Table
         if (this.artefact.route_table_id !== '') {

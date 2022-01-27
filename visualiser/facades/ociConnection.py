@@ -48,6 +48,12 @@ class OCIConnection(object):
             self.signer = signer
         # Set OKIT User Agent
         self.config['additional_user_agent'] = f'OKIT {self.OKIT_VERSION}'
+        # Check Cert Bundle
+        if 'cert-bundle' in self.config:
+            self.config['cert-bundle'] = os.path.expanduser(self.config['cert-bundle'])
+            self.cert_bundle = os.path.expanduser(self.config['cert-bundle'])
+        else:
+            self.cert_bundle = None
         # Connect
         self.connect()
 
@@ -148,8 +154,8 @@ class OCIConnection(object):
     
     def getClient(self, oci_class):
         client = oci_class(config=self.config, signer=self.signer)
-        if "cert-bumdle" in self.config:
-            client.base_client.session.verify = self.config["cert-bumdle"]
+        if self.cert_bundle is not None:
+            client.base_client.session.verify = self.cert_bundle
         return client
 
 class OCIAutoScalingConnection(OCIConnection):
@@ -157,9 +163,8 @@ class OCIAutoScalingConnection(OCIConnection):
         super(OCIAutoScalingConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.autoscaling.AutoScalingClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.autoscaling.AutoScalingClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.autoscaling.AutoScalingClient)
         return
 
 
@@ -168,9 +173,8 @@ class OCIBlockStorageVolumeConnection(OCIConnection):
         super(OCIBlockStorageVolumeConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.core.BlockstorageClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.core.BlockstorageClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.core.BlockstorageClient)
         return
 
 
@@ -179,9 +183,8 @@ class OCIComputeConnection(OCIConnection):
         super(OCIComputeConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.core.ComputeClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.core.ComputeClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.core.ComputeClient)
         return
 
 
@@ -190,9 +193,8 @@ class OCIComputeManagementConnection(OCIConnection):
         super(OCIComputeManagementConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.core.ComputeManagementClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.core.ComputeManagementClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.core.ComputeManagementClient)
         return
 
 
@@ -201,9 +203,8 @@ class OCIContainerConnection(OCIConnection):
         super(OCIContainerConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.container_engine.ContainerEngineClient)
         return
 
 
@@ -212,9 +213,8 @@ class OCIDatabaseConnection(OCIConnection):
         super(OCIDatabaseConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.database.DatabaseClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.database.DatabaseClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.database.DatabaseClient)
         return
 
 
@@ -223,9 +223,8 @@ class OCIFileStorageSystemConnection(OCIConnection):
         super(OCIFileStorageSystemConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.file_storage.FileStorageClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.file_storage.FileStorageClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.file_storage.FileStorageClient)
         return
 
 
@@ -235,9 +234,8 @@ class OCIIdentityConnection(OCIConnection):
         super(OCIIdentityConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.identity.IdentityClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.identity.IdentityClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.identity.IdentityClient)
         self.compartment_ocid = self.getTenancy()
         return
 
@@ -248,9 +246,8 @@ class OCILimitsConnection(OCIConnection):
         super(OCILimitsConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.limits.LimitsClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.limits.LimitsClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.limits.LimitsClient)
         self.compartment_ocid = self.getTenancy()
         return
 
@@ -260,9 +257,8 @@ class OCILoadBalancerConnection(OCIConnection):
         super(OCILoadBalancerConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.load_balancer.LoadBalancerClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.load_balancer.LoadBalancerClient)
         return
 
 
@@ -271,9 +267,8 @@ class OCIMySQLDatabaseConnection(OCIConnection):
         super(OCIMySQLDatabaseConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.mysql.DbSystemClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.mysql.DbSystemClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.mysql.DbSystemClient)
         return
 
 
@@ -282,9 +277,8 @@ class OCIMySQLaaSConnection(OCIConnection):
         super(OCIMySQLaaSConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.mysql.MysqlaasClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.mysql.MysqlaasClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.mysql.MysqlaasClient)
         return
 
 
@@ -293,9 +287,8 @@ class OCIObjectStorageBucketConnection(OCIConnection):
         super(OCIObjectStorageBucketConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.object_storage.ObjectStorageClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.object_storage.ObjectStorageClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.object_storage.ObjectStorageClient)
         return
 
 
@@ -304,9 +297,8 @@ class OCIResourceManagerConnection(OCIConnection):
         super(OCIResourceManagerConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.resource_manager.ResourceManagerClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.resource_manager.ResourceManagerClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.resource_manager.ResourceManagerClient)
         return
 
 
@@ -315,9 +307,8 @@ class OCIResourceSearchConnection(OCIConnection):
         super(OCIResourceSearchConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.resource_search.ResourceSearchClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.resource_search.ResourceSearchClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.resource_search.ResourceSearchClient)
         return
 
 
@@ -326,8 +317,7 @@ class OCIVirtualNetworkConnection(OCIConnection):
         super(OCIVirtualNetworkConnection, self).__init__(config=config, configfile=configfile, profile=profile, region=region, signer=signer)
 
     def connect(self):
-        self.client = oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
-        if 'cert-bundle' in self.config:
-            self.client.base_client.session.verify = self.config['cert-bundle']
+        # self.client = oci.core.VirtualNetworkClient(config=self.config, signer=self.signer)
+        self.client = self.getClient(oci.core.VirtualNetworkClient)
         return
 

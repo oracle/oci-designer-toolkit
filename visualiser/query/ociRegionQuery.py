@@ -40,13 +40,13 @@ class OCIRegionQuery(OCIConnection):
         logger.info('Querying Regions' + str(self.config))
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
-        if "cert-bundle" in self.config:
-            cert_bundle = self.config["cert-bundle"]
-        else:
-            cert_bundle = None
-        logger.info(f'cert_bundle={cert_bundle}')
+        # if "cert-bundle" in self.config:
+        #     cert_bundle = self.config["cert-bundle"]
+        # else:
+        #     cert_bundle = None
+        logger.info(f'cert_bundle={self.cert_bundle}')
 
-        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, include_resource_types=self.SUPPORTED_RESOURCES)
+        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, include_resource_types=self.SUPPORTED_RESOURCES)
         regions = self.response_to_json(discovery_client.regions)
         for region in regions:
             # logger.info(jsonToFormattedString(region))
