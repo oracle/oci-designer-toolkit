@@ -222,9 +222,9 @@ def ociRegionSubscription():
         logJson(response)
         return response
         # except Exception as e:
-        #     return '500'
+        #     return 500
     else:
-        return '404'
+        return 404
 
 
 @bp.route('/region', methods=(['GET']))
@@ -265,7 +265,7 @@ def ociQuery():
         logJson(response)
         return response
     else:
-        return '404'
+        return 404
 
 
 def response_to_json(data):
@@ -422,7 +422,7 @@ def ociArtifacts(artifact):
         response_json = oci_vm_cluster_networks.list(filter=query_json.get('vm_cluster_network_filter', None))
     else:
         logger.warn('---- Unknown Artifact : {0:s}'.format(str(artifact)))
-        return '404'
+        return 404
 
     logger.debug(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))
     return json.dumps(standardiseIds(response_json), sort_keys=True)

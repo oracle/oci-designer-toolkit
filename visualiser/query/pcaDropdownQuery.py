@@ -33,6 +33,7 @@ logger = getLogger()
 class PCADropdownQuery(OCIConnection):
 
     SUPPORTED_RESOURCES = [
+        "VolumeBackupPolicy",
         # "Service", 
         "Shape", 
         # "DbSystemShape", 
@@ -66,6 +67,11 @@ class PCADropdownQuery(OCIConnection):
         #     for client in self.clients.values():
         #         client.base_client.session.verify = self.cert_bundle
         self.resource_map = {
+            "VolumeBackupPolicy": {
+                "method": self.volume_backup_policy, 
+                "client": "volume", 
+                "array": "volume_backup_policy"
+                }, 
             "Service": {
                 "method": self.services, 
                 "client": "limits", 
@@ -133,6 +139,7 @@ class PCADropdownQuery(OCIConnection):
     def connect(self):
         logger.info(f'<<< Connecting PCA Clients >>> {self.cert_bundle}')
         self.clients = {
+            "volume": oci.core.BlockstorageClient(config=self.config, signer=self.signer),
             "compute": oci.core.ComputeClient(config=self.config, signer=self.signer),
             # "container": oci.container_engine.ContainerEngineClient(config=self.config, signer=self.signer),
             # "database": oci.database.DatabaseClient(config=self.config, signer=self.signer),
@@ -217,8 +224,17 @@ class PCADropdownQuery(OCIConnection):
         for r in resources:
             r['sort_key'] = f"{r['operating_system']} {r['operating_system_version']}"
         self.dropdown_json[array] = sorted(self.deduplicate(resources, 'sort_key'), key=lambda k: k['sort_key'])
-        # for r in self.dropdown_json[array]:
-        #     r['shapes'] = [s.shape for s in oci.pagination.list_call_get_all_results(client.list_image_shape_compatibility_entries, image_id=r['id']).data]
+        not_found = False
+        for r in self.dropdown_json[array]:
+            logger.info(f'Getting Shapes for {r["id"]}')
+            if not_found:
+                r['shapes'] = self.dropdown_json['shapes']
+            else:
+                try:
+                    r['shapes'] = [s.shape for s in oci.pagination.list_call_get_all_results(client.list_image_shape_compatibility_entries, image_id=r['id']).data]
+                except oci.exceptions.ServiceError as e:
+                    not_found = True
+                    r['shapes'] = self.dropdown_json['shapes']
         return self.dropdown_json[array]
 
     def kubernetes_versions(self):
@@ -299,11 +315,27 @@ class PCADropdownQuery(OCIConnection):
         client = self.clients[resource_map["client"]]
         array = resource_map["array"]
         resources = []
-        # Instance Shapes
+        # Query
         results = oci.pagination.list_call_get_all_results(client.list_shapes, compartment_id=self.tenancy_ocid).data
         # Convert to Json object
         resources = self.toJson(results)
         self.dropdown_json[array] = sorted(self.deduplicate(resources, 'shape'), key=lambda k: k['shape'])
+        return self.dropdown_json[array]
+    
+    def volume_backup_policy(self):
+        resource_map = self.resource_map["VolumeBackupPolicy"]
+        client = self.clients[resource_map["client"]]
+        array = resource_map["array"]
+        resources = []
+        # Query (Oracle)
+        results = oci.pagination.list_call_get_all_results(client.list_volume_backup_policies).data
+        # Convert to Json object
+        resources = self.toJson(results)
+        # Query (Custom)
+        results = oci.pagination.list_call_get_all_results(client.list_volume_backup_policies, compartment_id=self.tenancy_ocid).data
+        # Extend
+        resources.extend(self.toJson(results))
+        self.dropdown_json[array] = sorted(resources, key=lambda k: k['display_name'])
         return self.dropdown_json[array]
     
     def deduplicate(self, resources, key):
