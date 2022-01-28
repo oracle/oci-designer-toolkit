@@ -42,7 +42,7 @@
         },
         {
             "title": "Database",
-            "targets": ["oci", "freetier"],
+            "targets": ["oci"],
             "svg": "database.svg",
             "resources": [
                 {
