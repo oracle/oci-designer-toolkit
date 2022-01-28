@@ -5,7 +5,8 @@
 **Release Date**: 9th February 2022
 ### Features
 ### Bug Fixes
-1. Fix issue where Custom image information is lost if the properties are reopened
+1. Fix issue where Custom image information is lost if the properties are reopened.
+2. Hide Export to Resource Manager when PCA Selected.
 
 
 ## Version 0.31.1
