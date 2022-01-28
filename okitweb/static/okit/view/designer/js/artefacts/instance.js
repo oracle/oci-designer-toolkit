@@ -154,6 +154,7 @@ class InstanceView extends OkitDesignerArtefactView {
             // Chipset 
             $('#chipset').on('change', () => {self.handleShapeSeriesChange()})
 
+            $('#image_source').val(self.artefact.source_details.image_source)
             this.handleImageSourceChange()
 
             // Add Secondary Networks Table
