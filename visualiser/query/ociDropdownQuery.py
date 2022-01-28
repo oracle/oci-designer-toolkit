@@ -45,7 +45,8 @@ class OCIDropdownQuery(OCIConnection):
         "MySQLVersion", 
         "MySQLConfiguration", 
         "LoadBalancerShape", 
-        "ClusterOptions"
+        "ClusterOptions",
+        "VolumeBackupPolicy"
     ]
     DISCOVER_OKIT_MAP = {
         "Service": "services", 
@@ -59,7 +60,8 @@ class OCIDropdownQuery(OCIConnection):
         "MySQLVersion": "mysql_versions", 
         "MySQLConfiguration": "mysql_configurations", 
         "LoadBalancerShape": "loadbalancer_shapes", 
-        "ClusterOptions": "kubernetes_versions"
+        "ClusterOptions": "kubernetes_versions",
+        "VolumeBackupPolicy": "volume_backup_policy"
     }
 
     def __init__(self, config=None, configfile=None, profile=None):
