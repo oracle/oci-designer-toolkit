@@ -154,10 +154,14 @@ function setTargetPlatform() {
     updatePaletteForPlatform();
 }
 function updatePaletteForPlatform() {
-    $('.okit-palette-icon-div').addClass('hidden');
-    $('.menu-item').addClass('hidden');
-    $('.okit-palette-icon-group').addClass('hidden');
+    console.info(`Selected Platform ${okitJsonModel.metadata.platform}`)
+    // $('.okit-palette-icon-div').addClass('hidden');
+    // $('.menu-item').addClass('hidden');
+    // $('.okit-palette-icon-group').addClass('hidden');
+    $('.okit-target').addClass('hidden');
+    $('.okit-target-row').addClass('collapsed');
     $(`.${okitJsonModel.metadata.platform}`).removeClass('hidden');
+    $(`.${okitJsonModel.metadata.platform}`).removeClass('collapsed');
 }
 
 /*
