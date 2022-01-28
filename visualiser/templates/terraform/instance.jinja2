@@ -39,6 +39,7 @@ resource "oci_core_instance" "{{ resource_name }}" {
     # Optional
     display_name        = {{ display_name | safe }}
     availability_domain = data.oci_identity_availability_domains.AvailabilityDomains.availability_domains[{{ availability_domain | safe }} - 1]["name"]
+{% if is_management_disabled is defined or is_monitoring_disabled is defined %}
     agent_config {
         # Optional
 {% if is_management_disabled is defined %}
@@ -48,6 +49,7 @@ resource "oci_core_instance" "{{ resource_name }}" {
         is_monitoring_disabled = {{ is_monitoring_disabled | safe }}
 {% endif %}
     }
+{% endif %}
     create_vnic_details {
         # Required
         subnet_id        = {{ subnet_id }}
