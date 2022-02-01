@@ -31,6 +31,7 @@ class MountTarget extends OkitArtifact {
 
     convert() {
         super.convert()
+        delete this.export_set
         this.exports.forEach((e) => {if (!e.options) e.options = this.newExportOptions()})
     }
     /*

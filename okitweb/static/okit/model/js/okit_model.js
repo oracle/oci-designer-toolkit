@@ -783,6 +783,7 @@ class OkitArtifact {
         this.read_only = false;
         // Add Terraform Resource Name
         this.resource_name = this.generateResourceName();
+        Object.defineProperty(this, 'documentation', {get: function() {return this.definition;}, set: function(documentation) {this.definition = documentation;}, enumerable: true });
     }
 
     get name() {return this.display_name;}
@@ -827,8 +828,11 @@ class OkitArtifact {
     convert() {
         if (this.parent_id !== undefined) {delete this.parent_id;}
         // Check if built from a query
-        if (this.availability_domain && this.availability_domain.length > 1) {this.availability_domain = this.getAvailabilityDomainNumber(this.availability_domain);
+        if (this.availability_domain) {
+            console.info('OkitArtifact convert() availability_domain', this.availability_domain, typeof(this.availability_domain))
         }
+        if (this.availability_domain) {this.availability_domain = this.getAvailabilityDomainNumber(this.availability_domain);}
+        // if (this.availability_domain && this.availability_domain.length > 1) {this.availability_domain = this.getAvailabilityDomainNumber(this.availability_domain);}
     }
 
     /*
@@ -887,11 +891,13 @@ class OkitArtifact {
     }
 
     getAvailabilityDomainNumber(availability_domain) {
-        if (availability_domain) {
-            return +availability_domain.slice(-1);
-        } else {
-            return +availability_domain;
-        }
+        console.info(`getAvailabilityDomainNumber(${availability_domain}) ${typeof availability_domain} ${typeof availability_domain.toString()}`)
+        return availability_domain.toString().slice(-1)
+        // if (availability_domain) {
+        //     return +availability_domain.slice(-1);
+        // } else {
+        //     return +availability_domain;
+        // }
     }
 
     generateResourceName() {return `Okit_${this.getArtifactReference().split(' ').join('_')}_${Date.now()}`}

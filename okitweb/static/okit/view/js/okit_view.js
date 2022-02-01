@@ -1058,11 +1058,14 @@ let okitViews = [];
 /*
 ** Simple Artefact View Class for all artefacts that are not Containers
  */
+const model_proxy_handler = {}
+
 class OkitArtefactView {
     static cut_copy_paste = {resource: undefined, paste_count: 0, is_cut: false};
 
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
+        // this.artefact = new Proxy(artefact, model_proxy_handler);
         this.collapsed = false;
         this._recalculate_dimensions = true;
         // Raise Artefact Elements to View Class
@@ -1072,6 +1075,7 @@ class OkitArtefactView {
                     if (!(value instanceof Function)) {
                         Object.defineProperty(this, key, {
                             get: function () {
+                                // console.warn(`${this.constructor.name} accessing ${key} directly`)
                                 return this.artefact[key];
                             }
                         });
@@ -1953,6 +1957,10 @@ class OkitArtefactView {
         }
     }
 
+    removeConnection(start_id, end_id) {
+        d3.select(`#${this.generateConnectorId(end_id, start_id)}`).remove()
+    }
+
     coordString(coord) {
         let coord_str = coord['x'] + ',' + coord['y'];
         return coord_str;
@@ -2422,7 +2430,9 @@ class OkitArtefactView {
      */
 
     generateConnectorId(sourceid, destinationid) {
-        return sourceid + '-' + destinationid;
+        const id = `${sourceid}-${destinationid}`
+        const safeid = id.replace(/[\W_]+/g,"_")
+        return safeid
     }
 
     /*

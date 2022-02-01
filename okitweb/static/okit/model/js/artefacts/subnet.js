@@ -29,10 +29,10 @@ class Subnet extends OkitArtifact {
         // Update with any passed data
         this.merge(data);
         this.convert();
-        if (this.availability_domain && this.availability_domain.length > 1) {
-            this.region_availability_domain = this.availability_domain;
-            this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
-        }
+        // if (this.availability_domain && this.availability_domain.length > 1) {
+        //     this.region_availability_domain = this.availability_domain;
+        //     this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
+        // }
     }
 
 

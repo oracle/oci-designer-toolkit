@@ -12,6 +12,7 @@ class MountTargetView extends OkitArtefactView {
         if (!json_view.mount_targets) json_view.mount_targets = [];
         super(artefact, json_view);
         this.export_idx = 0;
+        this.properties_sheet = new MountTargetProperties(artefact)
     }
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
@@ -22,20 +23,28 @@ class MountTargetView extends OkitArtefactView {
     ** SVG Processing
     */
     checkExports() {
-        const file_systems = this.getJsonView().getFileSystems().filter((fs) => fs.availability_domain === this.availability_domain).map((fs) => fs.id)
+        const self = this
+        const file_systems = this.getJsonView().getFileSystems().filter((fs) => fs.artefact.availability_domain === self.artefact.availability_domain).map((fs) => fs.id)
         this.artefact.exports = this.artefact.exports.filter((e) => file_systems.includes(e.file_system_id))
     }
     // Draw Connections
     drawConnections() {
+        const self = this
         // console.info('Drawing Mount Target Connections')
         // Check if there are any missing following query
-        this.checkExports();
+        // this.checkExports();
+        this.exports.forEach((e) => this.removeConnection(this.id, e.file_system_id))
         this.exports.forEach((e) => this.drawConnection(this.id, e.file_system_id))
     }
 
     /*
     ** Property Sheet Load function
     */
+   loadPropertiesNew() {
+    $(jqId(PROPERTIES_PANEL)).empty()
+    this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
+    this.properties_sheet.load()
+   }
     loadProperties() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/mount_target.html", () => {
@@ -62,6 +71,7 @@ class MountTargetView extends OkitArtefactView {
     }
 
     addExportHtml(fs_export, idx) {
+        const self = this
         const id = 'fs_export';
         // const row = this.addPropertyHTML('file_systems_tbody', 'row', '', id, idx, () => this.deleteExport(id, idx, fs_export));
         const row = this.addPropertyHTML(this.tbodyId('file_systems', ''), 'row', '', id, idx, () => this.deleteExport(id, idx, fs_export));
@@ -69,8 +79,11 @@ class MountTargetView extends OkitArtefactView {
         const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
         let property = undefined
         // Add File System (Select)
-        property = this.addPropertyHTML(tbody, 'select', 'File System', 'file_system_id', idx, (d, i, n) => fs_export.file_system_id = n[i].value);
-        this.getJsonView().loadFileSystemsSelect(`file_system_id${idx}`, this.availability_domain)
+        property = this.addPropertyHTML(tbody, 'select', 'File System', 'file_system_id', idx, (d, i, n) => {
+            fs_export.file_system_id = n[i].value
+            // self.drawConnections()
+        });
+        this.getJsonView().loadFileSystemsSelect(`file_system_id${idx}`, this.artefact.availability_domain)
         if (fs_export.file_system_id === '' && property.node().options.length > 0) fs_export.file_system_id = property.node().options[0].value
         property.attr('value', fs_export.file_system_id)
         property.node().value = fs_export.file_system_id
