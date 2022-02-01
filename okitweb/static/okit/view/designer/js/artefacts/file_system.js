@@ -136,7 +136,7 @@ OkitJsonView.prototype.loadFileSystemsSelect = function(select_id, ad, empty_opt
     if (empty_option) {
         file_system_select.append($('<option>').attr('value', '').text(''));
     }
-    for (let file_system of this.getFileSystems().filter((fs) => fs.availability_domain === ad)) {
+    for (let file_system of this.getFileSystems().filter((fs) => fs.availability_domain.toString() === ad.toString())) {
         file_system_select.append($('<option>').attr('value', file_system.id).text(file_system.display_name));
     }
 }

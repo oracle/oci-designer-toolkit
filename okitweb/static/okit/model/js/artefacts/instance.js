@@ -54,21 +54,22 @@ class Instance extends OkitArtifact {
         this.merge(data);
         this.convert();
         // Check if built from a query
-        if (this.availability_domain.length > 1) {
-            this.region_availability_domain = this.availability_domain;
-            this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
-        }
-        if (this.vnics.length > 0) {
-            // this.primary_vnic = this.vnics[0];
-            for (let vnic of this.vnics) {
-                vnic.region_availability_domain = vnic.availability_domain;
-                vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.region_availability_domain);
-            }
-        } else {
-            this.vnics[0] = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
-            // this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
-            // this.vnics[0] = this.primary_vnic;
-        }
+        // if (this.availability_domain.length > 1) {
+        //     this.region_availability_domain = this.availability_domain;
+        //     this.availability_domain = this.getAvailabilityDomainNumber(this.region_availability_domain);
+        // }
+        // if (this.vnics.length > 0) {
+        //     // this.primary_vnic = this.vnics[0];
+        //     // for (let vnic of this.vnics) {
+        //     //     // vnic.region_availability_domain = vnic.availability_domain;
+        //     //     // vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.region_availability_domain);
+        //     // }
+        // } else {
+        //     // this.vnics[0] = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
+        //     // this.primary_vnic = {subnet_id: '', assign_public_ip: true, nsg_ids: [], skip_source_dest_check: false, hostname_label: this.display_name.toLowerCase() + '0'};
+        //     // this.vnics[0] = this.primary_vnic;
+        // }
+        if (this.vnics.length === 0) this.vnics.push(this.newVnic())
         // Expose subnet_id for the first Mount target at the top level
         delete this.subnet_id;
         Object.defineProperty(this, 'primary_vnic', {get: function() {return this.vnics[0];}, set: function(vnic) {this.vnics[0] = vnic;}, enumerable: true });
@@ -102,6 +103,7 @@ class Instance extends OkitArtifact {
             if (!vnic.hasOwnProperty('assign_public_ip')) {vnic.assign_public_ip = true;}
             if (!vnic.hasOwnProperty('skip_source_dest_check')) {vnic.skip_source_dest_check = false;}
             if (!vnic.hasOwnProperty('nsg_ids')) {vnic.nsg_ids = [];}
+            if (vnic.availability_domain) {vnic.availability_domain = this.getAvailabilityDomainNumber(vnic.availability_domain)}
         }
     }
     /*
@@ -113,7 +115,7 @@ class Instance extends OkitArtifact {
             assign_public_ip: true, 
             nsg_ids: [], 
             skip_source_dest_check: false, 
-            hostname_label: this.display_name.toLowerCase()
+            hostname_label: this.display_name.toLowerCase().substring(0, 7)
         }
     }
 
