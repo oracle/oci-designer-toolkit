@@ -4,9 +4,11 @@
 ## Version 0.32.0
 **Release Date**: 9th February 2022
 ### Features
+1. Add Target specific resource check to validation.
 ### Bug Fixes
 1. Fix issue where Custom image information is lost if the properties are reopened.
 2. Hide Export to Resource Manager when PCA Selected.
+3. Fix issue where queried Mount Targets were losing the exports when the properties were open.
 
 
 ## Version 0.31.1
