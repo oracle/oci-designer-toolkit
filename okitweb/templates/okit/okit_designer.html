@@ -12,6 +12,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_views.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/js/okit_view.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='okit/properties/js/okit_properties.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/okit_designer_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/tabular/js/okit_tabular_view.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='okit/view/relationship/js/okit_relationship_view.js') }}"></script>
@@ -90,6 +91,9 @@
     {% endfor %}
     {% for view_js in artefact_view_js_files %}
         <script type="text/javascript" src="{{ url_for('static', filename='okit/view/designer/js/artefacts/' + view_js) }}"></script>
+    {% endfor %}
+    {% for js in resource_properties_js_files %}
+        <script type="text/javascript" src="{{ url_for('static', filename='okit/properties/js/resources/' + js) }}"></script>
     {% endfor %}
     <script type="text/javascript" src="{{ url_for('static', filename='okit/js/okit_designer_ready.js') }}"></script>
 {% endblock %}
