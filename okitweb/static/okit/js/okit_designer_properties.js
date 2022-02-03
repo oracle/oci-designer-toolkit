@@ -219,7 +219,7 @@ function loadTags(json_element) {
     }
 }
 
-function handleAddFreeformTag(json_element) {
+function handleAddFreeformTag(json_element, callback=loadTags) {
     console.info('Adding Freeform Tag')
     $('#data_entry_panel_title').text('Add Freeform Tag')
     $('#data_entry_panel_body').empty()
@@ -238,13 +238,13 @@ function handleAddFreeformTag(json_element) {
         const key = $('#gdep_tag_key').val().replace(/\s+/g, '_')
         const val = $('#gdep_tag_value').val()
         if (key.length > 0 && val.length > 0) json_element.freeform_tags[key] = val
-        loadTags(json_element)
+        callback(json_element)
         $('#data_entry_panel').addClass('okit-slide-hide-right')
     })
     // Display Panel
     $('#data_entry_panel').removeClass('okit-slide-hide-right')
 }
-function handleAddDefinedTag(json_element) {
+function handleAddDefinedTag(json_element, callback=loadTags) {
     console.info('Adding Global Defined Tag')
     $('#data_entry_panel_title').text('Add Defined Tag')
     $('#data_entry_panel_body').empty()
@@ -269,7 +269,7 @@ function handleAddDefinedTag(json_element) {
         const key = $('#gdep_tag_key').val().replace(/\s+/g, '_')
         const val = $('#gdep_tag_value').val()
         if (namespace.length > 0 && key.length > 0 && val.length > 0) json_element.defined_tags[namespace] ? json_element.defined_tags[namespace][key] = val : json_element.defined_tags[namespace] = {key: val}
-        loadTags(json_element)
+        callback(json_element)
         $('#data_entry_panel').addClass('okit-slide-hide-right')
     })
     // Display Panel

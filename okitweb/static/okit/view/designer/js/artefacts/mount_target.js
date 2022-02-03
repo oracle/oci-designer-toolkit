@@ -40,12 +40,12 @@ class MountTargetView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
-   loadPropertiesNew() {
+   loadProperties() {
     $(jqId(PROPERTIES_PANEL)).empty()
     this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
     this.properties_sheet.load()
    }
-    loadProperties() {
+    loadPropertiesOld() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/mount_target.html", () => {
             this.loadSubnetSelect('subnet_id');
