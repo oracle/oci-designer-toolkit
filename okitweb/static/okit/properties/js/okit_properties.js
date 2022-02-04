@@ -54,52 +54,6 @@ class OkitResourceProperties {
                                             .attr('id', `${self.id}_${tab_id}_contents`)
                                             .attr('class', `okit-tab-contents ${i > 0 ? 'hidden' : ''}`)
         })
-        // this.sheet_btn = this.tabbar.append('button')
-        //                         .attr('id', `${self.id}_sheet_tab`)
-        //                         .attr('class', 'okit-tab okit-tab-active')
-        //                         .text('Properties')
-        //                         .on('click', () => {
-        //                             $(`#${self.id}_panel .okit-tab-contents`).addClass('hidden')
-        //                             $(`#${self.id}_panel .okit-tab`).removeClass('okit-tab-active')
-        //                             $(`#${self.id}_sheet_tab`).addClass('okit-tab-active')
-        //                             $(`#${self.id}_sheet_contents`).removeClass('hidden')
-        //                         })
-        // this.notes_btn = this.tabbar.append('button')
-        //                         .attr('id', `${self.id}_notes_tab`)
-        //                         .attr('class', 'okit-tab')
-        //                         .text('Documentation')
-        //                         .on('click', () => {
-        //                             $(`#${self.id}_panel .okit-tab-contents`).addClass('hidden')
-        //                             $(`#${self.id}_panel .okit-tab`).removeClass('okit-tab-active')
-        //                             $(`#${self.id}_notes_tab`).addClass('okit-tab-active')
-        //                             $(`#${self.id}_notes_contents`).removeClass('hidden')
-        //                         })
-        // this.tags_btn = this.tabbar.append('button')
-        //                         .attr('id', `${self.id}_tags_tab`)
-        //                         .attr('class', 'okit-tab')
-        //                         .text('Tags')
-        //                         .on('click', () => {
-        //                             $(`#${self.id}_panel .okit-tab-contents`).addClass('hidden')
-        //                             $(`#${self.id}_panel .okit-tab`).removeClass('okit-tab-active')
-        //                             $(`#${self.id}_tags_tab`).addClass('okit-tab-active')
-        //                             $(`#${self.id}_tags_contents`).removeClass('hidden')
-        //                         })
-        // this.sheet = this.panel.append('div')
-        //                         .attr('id', `${self.id}_sheet_contents`)
-        //                         .attr('class', 'okit-tab-contents')
-        // this.notes = this.panel.append('div')
-        //                         .attr('id', `${self.id}_notes_contents`)
-        //                         .attr('class', 'okit-tab-contents hidden')
-        //                         .append('textarea')
-        //                             .attr('id', `${self.id}_documentation`)
-        //                             .attr('class', 'resource-documentation')
-        //                             .attr('name', 'documentation')
-        //                             .attr('wrap', 'soft')
-        //                             .attr('placeholder', `Markdown documentation for this ${this.resource.resource_type} resource`)
-        //                             .on('change', (d, i, n) => self.resource.documentation = n[i].value)
-        // this.tags = this.panel.append('div')
-        //                         .attr('id', `${self.id}_tags_contents`)
-        //                         .attr('class', 'okit-tab-contents hidden')
     
         console.info('Properties div', this.properties_div)
     }
@@ -217,8 +171,8 @@ class OkitResourceProperties {
     createInput(type='text', label='', id='', idx=0, callback=undefined, data={}) {
         const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
         let input = undefined
-        row.append('div').attr('class', 'td').text(label)
         if (['text', 'password', 'email', 'date', 'number'].includes(type)) {
+            row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
             if (data) {
                 if (data.min) element.attr('min', data.min)
@@ -227,25 +181,34 @@ class OkitResourceProperties {
         } else if (type === 'ipv4') {
             const placeholder = '0.0.0.0'
             const ipv4_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)+"
+            row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_regex).attr('title', "IPv4 Address").attr('placeholder', placeholder).on('blur', callback)
         } else if (type === 'ipv4_cidr') {
             const placeholder = '0.0.0.0/0'
             const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+"
+            row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
         } else if (type === 'select') {
+            row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
             if (data && data.options) {
                 Object.entries(data.options).forEach(([k, v]) => input.append('option').attr('value', k).text(v))
             }
         } else if (type === 'multiselect') {
+            row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('div').attr('id', this.inputId(id, idx)).attr('class', 'okit-multiple-select').on('change', callback)
+        } else if (type === 'checkbox') {
+            row.append('div').attr('class', 'td')
+            const cell = row.append('div').attr('class', 'td')
+            input = cell.append('input').attr('type', 'checkbox').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('input', callback)
+            cell.append('label').attr('for', this.inputId(id, idx)).text(label)
         } else {
             alert(`Unknown Type ${type}`)
         }
         return [row, input]
     }
 
-    createTable(label='', id='', idx=0, callback=undefined, data={}) {
+    createTable(label='', id='', idx='', callback=undefined, data={}) {
         const table = d3.create('div').attr('class', 'table okit-table')
         const thead = table.append('div').attr('class', 'thead')
         const tbody = table.append('div').attr('class', 'tbody').attr('id', this.tbodyId(id, idx))
@@ -268,11 +231,18 @@ class OkitResourceProperties {
         return [table, thead, tbody]
     }
 
-    createDetailsSection(label='', id='', idx=0, callback=undefined, data={}, open='open') {
+    createDetailsSection(label='', id='', idx='', callback=undefined, data={}, open='open') {
         const details = d3.create('details').attr('class', 'okit-details').attr('open', open)
         const summary = details.append('summary').attr('class', 'summary-background').append('label').text(label)
         const div = details.append('div').attr('class', 'okit-details-body')
         return [details, summary, div]
+    }
+
+    createDeleteRow(id='', idx='', callback=undefined, data={}) {
+        const row = d3.create('div').attr('class', 'tr').attr('id', this.trId(id, idx))
+        const div = row.append('div').attr('class', 'td')
+        row.append('div').attr('class', 'td delete-property action-button-background delete').on('click', callback)
+        return [row, div]
     }
 
     tbodyId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}_tbody${idx}`
