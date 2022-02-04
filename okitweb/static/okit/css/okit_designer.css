@@ -490,6 +490,14 @@ rect.highlight-properties {
     stroke-opacity: 1;
 }
 
+.read-only input,
+.read-only button,
+.read-only select,
+.read-only .action-button-background {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
 .read-only > g {
     opacity: 0.6;
 }

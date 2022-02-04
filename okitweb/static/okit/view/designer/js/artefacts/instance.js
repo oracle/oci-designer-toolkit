@@ -148,7 +148,7 @@ class InstanceView extends OkitDesignerArtefactView {
             // Images
             $('#os').on('change', () => {self.handleImageOSChange()})
             // OS Versions
-            $('#versiom').on('change', () => {self.handleImageOSVersionChange()})
+            $('#version').on('change', () => {self.handleImageOSVersionChange()})
             // Instance Type
             $('#instance_type').on('change', () => {self.handleInstanceTypeChange()})
             // Chipset 
