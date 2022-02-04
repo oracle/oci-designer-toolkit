@@ -12,7 +12,7 @@ class MountTargetView extends OkitArtefactView {
         if (!json_view.mount_targets) json_view.mount_targets = [];
         super(artefact, json_view);
         this.export_idx = 0;
-        this.properties_sheet = new MountTargetProperties(artefact)
+        this.newPropertiesSheet()
     }
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
@@ -40,11 +40,14 @@ class MountTargetView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
-   loadProperties() {
-    $(jqId(PROPERTIES_PANEL)).empty()
-    this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
-    this.properties_sheet.load()
-   }
+    newPropertiesSheet() {
+        this.properties_sheet = new MountTargetProperties(this.artefact)
+    }
+    loadProperties() {
+        $(jqId(PROPERTIES_PANEL)).empty()
+        this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
+        this.properties_sheet.load()
+    }
     loadPropertiesOld() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/mount_target.html", () => {

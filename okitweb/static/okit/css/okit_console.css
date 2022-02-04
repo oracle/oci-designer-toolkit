@@ -295,8 +295,8 @@ summary:focus {
     border: none;
 }
 
-.okit-console-header-dropdown > select option[data-valid="false"] {
-    background-color: #e66363;
+.okit-console-header-dropdown > select option:disabled {
+    background-color: #5a0b0b;
 }
 
 .okit-console-header-centre {

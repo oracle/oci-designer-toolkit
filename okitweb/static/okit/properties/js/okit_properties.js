@@ -52,7 +52,7 @@ class OkitResourceProperties {
                                         })
             self[`${tab_id}_contents`] = this.panel.append('div')
                                             .attr('id', `${self.id}_${tab_id}_contents`)
-                                            .attr('class', `okit-tab-contents ${i > 0 ? 'hidden' : ''}`)
+                                            .attr('class', `okit-tab-contents ${i > 0 ? 'hidden' : ''} ${self.resource.read_only && name !== 'Documentation' ? 'read-only' : ''}`)
         })
     
         console.info('Properties div', this.properties_div)
