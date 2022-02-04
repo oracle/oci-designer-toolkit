@@ -1294,7 +1294,8 @@ class OCIGenerator(object):
                 # variableName = '{0:s}_volume_attachment_{1:02d}_block_storage_volume_id'.format(standardisedName, attachment_number)
                 # self.run_variables[variableName] = block_storage_volume_id
                 jinja2_volume_attachment = {
-                    "attachment_type": '"iscsi"',
+                    "attachment_type": '"paravirtualized"',
+                    # "attachment_type": '"iscsi"',
                     "block_storage_volume_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume_id]))
                 }
                 # ---- Display Name
