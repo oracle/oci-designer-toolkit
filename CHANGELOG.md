@@ -7,6 +7,7 @@
 1. Add Target specific resource check to validation.
 2. Update Mount Target properties to new layout.
 3. Change default for Block Volume attachment to paravirualised.
+4. Add refresh toolbar icon.
 ### Bug Fixes
 1. Fix issue where Custom image information is lost if the properties are reopened.
 2. Hide Export to Resource Manager when PCA Selected.
