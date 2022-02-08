@@ -20,7 +20,7 @@ from common.okitLogging import getLogger
 logger = getLogger()
 
 class OCIJsonValidator(object):
-    pca_resources      = ['block_storage_volume', 'compartment', 'dhcp_option', 'dynamic_routing_gateway', 'file_storage_system', 'instance', 'internet_gateway', 'local_peering_gateway', 'mount_target', 'nat_gateway', 'network_security_group', 'object_storage_bucket', 'policy', 'route_table', 'security_list', 'subnet', 'virtual_cloud_network']
+    pca_resources      = ['block_storage_volume', 'compartment', 'dhcp_option', 'dynamic_routing_gateway', 'file_storage_system', 'group', 'instance', 'internet_gateway', 'local_peering_gateway', 'mount_target', 'nat_gateway', 'network_security_group', 'object_storage_bucket', 'policy', 'route_table', 'security_list', 'subnet', 'user', 'virtual_cloud_network']
     freetier_resources = ['block_storage_volume', 'compartment', 'dhcp_option', 'dynamic_routing_gateway', 'file_storage_system', 'instance', 'internet_gateway', 'local_peering_gateway', 'mount_target', 'nat_gateway', 'network_security_group', 'object_storage_bucket', 'policy', 'route_table', 'security_list', 'subnet', 'virtual_cloud_network']
     def __init__(self, okit_json={}):
         self.okit_json = okit_json
@@ -158,7 +158,7 @@ class OCIJsonValidator(object):
                         'type': self.keyToType(key),
                         'artefact': resource['display_name'],
 
-                        'message': f'Resource Type is not support for {target} deployment.',
+                        'message': f'Resource Type is not supported for {target} deployment.',
                         'element': 'resource_name'
                     }
                     self.results['errors'].append(error)
