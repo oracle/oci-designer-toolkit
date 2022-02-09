@@ -21,6 +21,7 @@ from discovery import OciResourceDiscoveryClient
 from common.okitCommon import logJson
 from common.okitLogging import getLogger
 from facades.ociConnection import OCIConnection
+from visualiser.common.okitCommon import jsonToFormattedString
 
 # Configure logging
 logger = getLogger()
@@ -39,20 +40,25 @@ class OCIRegionQuery(OCIConnection):
         logger.info('Querying Regions' + str(self.config))
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
-        if "cert-bundle" in self.config:
-            cert_bundle = self.config["cert-bundle"]
-        else:
-            cert_bundle = None
-        logger.info(f'cert_bundle={cert_bundle}')
+        # if "cert-bundle" in self.config:
+        #     cert_bundle = self.config["cert-bundle"]
+        # else:
+        #     cert_bundle = None
+        logger.info(f'cert_bundle={self.cert_bundle}')
 
-        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, include_resource_types=self.SUPPORTED_RESOURCES)
+        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, include_resource_types=self.SUPPORTED_RESOURCES)
         regions = self.response_to_json(discovery_client.regions)
         for region in regions:
+            # logger.info(jsonToFormattedString(region))
             region["id"] = region["region_name"]
             region["name"] = region["region_name"]
             region["key"] = region["region_key"]
-            name_parts = region['name'].split('-')
-            region['display_name'] = '{0!s:s} {1!s:s}'.format(name_parts[0].upper(), name_parts[1].capitalize())
+            if region["name"] == region["key"]:
+                # PCA-X9
+                region['display_name'] = region["name"]
+            else:
+                name_parts = region['name'].split('-')
+                region['display_name'] = '{0!s:s} {1!s:s}'.format(name_parts[0].upper(), name_parts[1].capitalize())
         return regions
 
     def response_to_json(self, data):

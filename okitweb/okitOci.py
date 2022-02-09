@@ -66,6 +66,7 @@ from facades.ociNATGateway import OCINATGateways
 from facades.ociNetworkSecurityGroup import OCINetworkSecurityGroups
 from facades.ociObjectStorageBuckets import OCIObjectStorageBuckets
 from facades.ociRegion import OCIRegions
+from facades.ociRegionSubscription import OCIRegionSubscriptions
 from facades.ociRemotePeeringConnection import OCIRemotePeeringConnections
 from facades.ociResourceManager import OCIResourceManagers
 from facades.ociResourceTypes import OCIResourceTypes
@@ -208,6 +209,24 @@ def ociCompartment():
     return json.dumps(compartments, sort_keys=False, indent=2, separators=(',', ': '))
 
 
+@bp.route('/subscription', methods=(['GET']))
+def ociRegionSubscription():
+    if request.method == 'GET':
+        profile = request.args.get('profile', default='DEFAULT')
+        logger.info('Subscriptions Query Using Profile : {0!s:s}'.format(profile))
+        # try:
+        oci_regions = OCIRegionSubscriptions(profile=profile)
+        regions = oci_regions.list()
+        logger.debug(">>>>>>>>> Region Subscriptions: {0!s:s}".format(regions))
+        response = jsonToFormattedString(regions)
+        logJson(response)
+        return response
+        # except Exception as e:
+        #     return 500
+    else:
+        return 404
+
+
 @bp.route('/region', methods=(['GET']))
 def ociRegion():
     query_string = request.query_string
@@ -246,7 +265,7 @@ def ociQuery():
         logJson(response)
         return response
     else:
-        return '404'
+        return 404
 
 
 def response_to_json(data):
@@ -403,7 +422,7 @@ def ociArtifacts(artifact):
         response_json = oci_vm_cluster_networks.list(filter=query_json.get('vm_cluster_network_filter', None))
     else:
         logger.warn('---- Unknown Artifact : {0:s}'.format(str(artifact)))
-        return '404'
+        return 404
 
     logger.debug(json.dumps(response_json, sort_keys=True, indent=2, separators=(',', ': ')))
     return json.dumps(standardiseIds(response_json), sort_keys=True)
@@ -419,8 +438,19 @@ def resourceTypes(profile):
         return 'Unknown Method', 500
 
 
-@bp.route('/dropdown/<string:profile>/<string:region>', methods=(['GET']))
-def dropdownQuery(profile, region):
+@bp.route('/dropdown', methods=(['GET']))
+def dropdownQuery():
+    if request.method == 'GET':
+        profile = request.args.get('profile', None)
+        region = request.args.get('region', None)
+        dropdown_query = OCIDropdownQuery(profile=profile)
+        dropdown_json = dropdown_query.executeQuery([region])
+        return dropdown_json
+    else:
+        return 'Unknown Method', 500
+
+@bp.route('/dropdown1/<string:profile>/<string:region>', methods=(['GET']))
+def dropdown1Query(profile, region):
     if request.method == 'GET':
         dropdown_query = OCIDropdownQuery(profile=profile)
         dropdown_json = dropdown_query.executeQuery([region])

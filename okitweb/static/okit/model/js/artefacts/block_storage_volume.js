@@ -18,7 +18,7 @@ class BlockStorageVolume extends OkitArtifact {
         this.compartment_id = data.parent_id;
         this.availability_domain = '1';
         this.size_in_gbs = 1024;
-        this.backup_policy = 'bronze';
+        this.backup_policy = '';
         this.vpus_per_gb = '10';
         // Update with any passed data
         this.merge(data);

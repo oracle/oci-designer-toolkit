@@ -45,7 +45,8 @@ class OCIDropdownQuery(OCIConnection):
         "MySQLVersion", 
         "MySQLConfiguration", 
         "LoadBalancerShape", 
-        "ClusterOptions"
+        "ClusterOptions",
+        "VolumeBackupPolicy"
     ]
     DISCOVER_OKIT_MAP = {
         "Service": "services", 
@@ -59,7 +60,8 @@ class OCIDropdownQuery(OCIConnection):
         "MySQLVersion": "mysql_versions", 
         "MySQLConfiguration": "mysql_configurations", 
         "LoadBalancerShape": "loadbalancer_shapes", 
-        "ClusterOptions": "kubernetes_versions"
+        "ClusterOptions": "kubernetes_versions",
+        "VolumeBackupPolicy": "volume_backup_policy"
     }
 
     def __init__(self, config=None, configfile=None, profile=None):
@@ -69,19 +71,19 @@ class OCIDropdownQuery(OCIConnection):
         pass
 
     def executeQuery(self, regions=None, **kwargs):
-        logger.info(f'Querying Dropdowns - Region: {regions}')
+        logger.info(f'OCI Querying Dropdowns - Region: {regions}')
         if self.instance_principal:
             self.config['tenancy'] = self.getTenancy()
         if regions is None:
             regions = [self.config['region']]
             logger.info(f'No Region Specified using - Region: {regions}')
-        if "cert-bundle" in self.config:
-            cert_bundle = self.config["cert-bundle"]
-        else:
-            cert_bundle = None
-        logger.info(f'cert_bundle={cert_bundle}')
+        # if "cert-bundle" in self.config:
+        #     cert_bundle = self.config["cert-bundle"]
+        # else:
+        #     cert_bundle = None
+        logger.info(f'cert_bundle={self.cert_bundle}')
         include_sub_compartments = True
-        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']], include_sub_compartments=include_sub_compartments)
+        discovery_client = OciResourceDiscoveryClient(self.config, signer=self.signer, cert_bundle=self.cert_bundle, regions=regions, include_resource_types=self.SUPPORTED_RESOURCES, compartments=[self.config['tenancy']], include_sub_compartments=include_sub_compartments)
         # Get Supported Resources
         response = self.response_to_json(discovery_client.get_all_resources())
         logger.debug('Response JSON : {0!s:s}'.format(jsonToFormattedString(response)))
@@ -123,7 +125,7 @@ class OCIDropdownQuery(OCIConnection):
         # logger.info(f'Processing Images - Shape: {sorted(shapes)}')
         for image in images:
             # logger.info(f'Image Id: {image["id"]} in/out {image["id"] in ids}')
-            logger.info(f'Image {image["display_name"]} Compartment {image["compartment_id"]}')
+            # logger.info(f'Image {image["display_name"]} Compartment {image["compartment_id"]}')
             image["shapes"] = [s["shape"] for s in resources.get("ImageShapeCompatibility", []) if s["image_id"] == image["id"]]
         return images
     
@@ -139,5 +141,5 @@ class OCIDropdownQuery(OCIConnection):
                     shape['sort_key'] = "{0:s}-{1:s}-{2:03n}-{3:03n}".format(split_shape[0], split_shape[1], shape['ocpus'], shape['memory_in_gbs'])
                 deduplicated.append(shape)
                 seen.append(shape['shape'])
-        logger.info(sorted([s["shape"] for s in deduplicated]))
+        # logger.info(sorted([s["shape"] for s in deduplicated]))
         return sorted(deduplicated, key=lambda k: k['sort_key'])

@@ -66,6 +66,8 @@ def create_local_app(test_config=None):
     app.register_blueprint(okitImport.bp)
     from . import okitExport
     app.register_blueprint(okitExport.bp)
+    from . import okitPca
+    app.register_blueprint(okitPca.bp)
 
     return app
 

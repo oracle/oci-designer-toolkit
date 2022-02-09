@@ -20,6 +20,8 @@ from common.okitLogging import getLogger
 logger = getLogger()
 
 class OCIJsonValidator(object):
+    pca_resources      = ['block_storage_volume', 'compartment', 'dhcp_option', 'dynamic_routing_gateway', 'file_storage_system', 'group', 'instance', 'internet_gateway', 'local_peering_gateway', 'mount_target', 'nat_gateway', 'network_security_group', 'object_storage_bucket', 'policy', 'route_table', 'security_list', 'subnet', 'user', 'virtual_cloud_network']
+    freetier_resources = ['block_storage_volume', 'compartment', 'dhcp_option', 'dynamic_routing_gateway', 'file_storage_system', 'instance', 'internet_gateway', 'local_peering_gateway', 'mount_target', 'nat_gateway', 'network_security_group', 'object_storage_bucket', 'policy', 'route_table', 'security_list', 'subnet', 'virtual_cloud_network']
     def __init__(self, okit_json={}):
         self.okit_json = okit_json
         self.results = {'errors': [], 'warnings': [], 'info': []}
@@ -28,6 +30,41 @@ class OCIJsonValidator(object):
     def validate(self):
         logger.info('Validating OKIT Json')
         self.validateCommon()
+        target = self.okit_json.get('metadata', {}).get('platform', 'oci')
+        if target == 'pca':
+            self.validatePCA()
+        elif target == 'freetier':
+            self.validateFreeTier()
+        else:
+            self.validateOCI()
+        # self.validateAutonomousDatabases()
+        # self.validateBastions()
+        # self.validateBlockStorageVolumes()
+        # self.validateCompartments()
+        # self.validateCustomerPremiseEquipments()
+        # self.validateDhcpOptions()
+        # self.validateDatabaseSystems()
+        # self.validateDynamicRoutingGateways()
+        # self.validateFastConnects()
+        # self.validateFileStorageSystems()
+        # self.validateInstances()
+        # self.validateInternetGateways()
+        # self.validateIPSecConnections()
+        # self.validateLoadBalancers()
+        # self.validateLocalPeeringGateways()
+        # self.validateMySqlDatabaseSystems()
+        # self.validateNATGateways()
+        # self.validateNetworkSecurityGroups()
+        # self.validateObjectStorageBuckets()
+        # self.validateRemotePeeringConnections()
+        # self.validateRouteTables()
+        # self.validateSecurityLists()
+        # self.validateServiceGateways()
+        # self.validateSubnets()
+        # self.validateVirtualCloudNetworks()
+        return self.valid
+
+    def validateOCI(self):
         self.validateAutonomousDatabases()
         self.validateBastions()
         self.validateBlockStorageVolumes()
@@ -53,13 +90,79 @@ class OCIJsonValidator(object):
         self.validateServiceGateways()
         self.validateSubnets()
         self.validateVirtualCloudNetworks()
-        return self.valid
+        return
+    
+    def validateFreeTier(self):
+        self.validateSupportedResources('Free Tier', self.freetier_resources)
+        self.validateAutonomousDatabases()
+        self.validateBastions()
+        self.validateBlockStorageVolumes()
+        self.validateCompartments()
+        self.validateCustomerPremiseEquipments()
+        self.validateDhcpOptions()
+        self.validateDatabaseSystems()
+        self.validateDynamicRoutingGateways()
+        self.validateFastConnects()
+        self.validateFileStorageSystems()
+        self.validateInstances()
+        self.validateInternetGateways()
+        self.validateIPSecConnections()
+        self.validateLoadBalancers()
+        self.validateLocalPeeringGateways()
+        self.validateMySqlDatabaseSystems()
+        self.validateNATGateways()
+        self.validateNetworkSecurityGroups()
+        self.validateObjectStorageBuckets()
+        self.validateRemotePeeringConnections()
+        self.validateRouteTables()
+        self.validateSecurityLists()
+        self.validateServiceGateways()
+        self.validateSubnets()
+        self.validateVirtualCloudNetworks()
+        return
+
+    def validatePCA(self):
+        self.validateSupportedResources('PCA-X9', self.pca_resources)
+        self.validateBlockStorageVolumes()
+        self.validateCompartments()
+        self.validateDhcpOptions()
+        self.validateDynamicRoutingGateways()
+        self.validateFileStorageSystems()
+        self.validateInstances()
+        self.validateInternetGateways()
+        self.validateLocalPeeringGateways()
+        self.validateNATGateways()
+        self.validateNetworkSecurityGroups()
+        self.validateObjectStorageBuckets()
+        self.validateRouteTables()
+        self.validateSecurityLists()
+        self.validateSubnets()
+        self.validateVirtualCloudNetworks()
+        return
 
     def getResults(self):
         return self.results
 
     def keyToType(self, key):
         return key.replace('_', ' ').title()[:-1]
+
+    # Supported Resources
+    def validateSupportedResources(self, target, supported):
+        for key, value in self.okit_json.items():
+            if key[:-1] not in supported and isinstance(value, list) and len(value) > 0:
+                # Not Supported 
+                for resource in value:
+                    self.valid = False
+                    error = {
+                        'id': resource['id'],
+                        'type': self.keyToType(key),
+                        'artefact': resource['display_name'],
+
+                        'message': f'Resource Type is not supported for {target} deployment.',
+                        'element': 'resource_name'
+                    }
+                    self.results['errors'].append(error)
+        return
 
     # Common
     def validateCommon(self):

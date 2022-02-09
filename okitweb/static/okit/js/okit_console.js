@@ -5,8 +5,8 @@
 console.info('Loaded Console Javascript');
 
 
-const okitVersion = '0.31.1';
-const okitReleaseDate = '26th January 2022';
+const okitVersion = '0.32.0';
+const okitReleaseDate = '9th February 2022';
 
 // Validation
 const validate_error_colour = "#ff4d4d";
@@ -100,7 +100,7 @@ function loadHeaderConfigDropDown() {
     */
     const console_header_config_select = $('#console_header_config_select')
     console_header_config_select.empty()
-    okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).attr('data-valid', section !== 'Error').text(section))})
+    okitOciConfig.sections.forEach((section) => {console_header_config_select.append($('<option>').attr('value', section).attr('disabled', section === 'Error').text(section))})
     console_header_config_select.val(okitSettings.profile)
     const console_header_region_select = $('#console_header_region_select')
     console_header_region_select.empty()

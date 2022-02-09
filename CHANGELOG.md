@@ -1,6 +1,19 @@
 # Release Notes
 
 
+## Version 0.32.0
+**Release Date**: 9th February 2022
+### Features
+1. Add Target specific resource check to validation.
+2. Update Mount Target properties to new layout.
+3. Change default for Block Volume attachment to paravirualised.
+4. Add refresh toolbar icon.
+### Bug Fixes
+1. Fix issue where Custom image information is lost if the properties are reopened.
+2. Hide Export to Resource Manager when PCA Selected.
+3. Fix issue where queried Mount Targets were losing the exports when the properties were open.
+
+
 ## Version 0.31.1
 **Release Date**: 26th December 2021
 ### Features

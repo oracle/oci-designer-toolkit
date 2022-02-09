@@ -16,7 +16,7 @@ class MountTarget extends OkitArtifact {
         // Configure default values
         // this.display_name = this.generateDefaultName(okitjson.mount_targets.length + 1);
         this.compartment_id = data.compartment_id;
-        this.availability_domain = 1;
+        this.availability_domain = '1';
         this.subnet_id = '';
         this.hostname_label = '';
         this.ip_address = '';
@@ -31,6 +31,7 @@ class MountTarget extends OkitArtifact {
 
     convert() {
         super.convert()
+        delete this.export_set
         this.exports.forEach((e) => {if (!e.options) e.options = this.newExportOptions()})
     }
     /*

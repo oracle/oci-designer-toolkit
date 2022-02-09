@@ -27,7 +27,7 @@ from model.okitValidation import OCIJsonValidator
 logger = getLogger()
 
 class OCIGenerator(object):
-    OKIT_VERSION = "0.31.1"
+    OKIT_VERSION = "0.32.0"
     def __init__(self, template_dir, output_dir, visualiser_json, use_vars=False):
         # Initialise generator output data variables
         self.create_sequence = []
@@ -520,7 +520,8 @@ class OCIGenerator(object):
         # ---- Display Name
         self.addJinja2Variable("display_name", resource["display_name"], standardisedName)
         # ---- Backup Policy
-        self.addJinja2Variable("backup_policy", resource["backup_policy"], standardisedName)
+        if resource.get("backup_policy", "") != '':
+            self.addJinja2Variable("backup_policy", resource["backup_policy"], standardisedName)
         # ---- Size In GBs
         self.addJinja2Variable("size_in_gbs", resource["size_in_gbs"], standardisedName)
         # --- Optional
@@ -1293,7 +1294,8 @@ class OCIGenerator(object):
                 # variableName = '{0:s}_volume_attachment_{1:02d}_block_storage_volume_id'.format(standardisedName, attachment_number)
                 # self.run_variables[variableName] = block_storage_volume_id
                 jinja2_volume_attachment = {
-                    "attachment_type": '"iscsi"',
+                    "attachment_type": '"paravirtualized"',
+                    # "attachment_type": '"iscsi"',
                     "block_storage_volume_id": self.formatJinja2IdReference(self.standardiseResourceName(self.id_name_map[block_storage_volume_id]))
                 }
                 # ---- Display Name

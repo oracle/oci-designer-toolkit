@@ -12,6 +12,7 @@ class MountTargetView extends OkitArtefactView {
         if (!json_view.mount_targets) json_view.mount_targets = [];
         super(artefact, json_view);
         this.export_idx = 0;
+        this.newPropertiesSheet()
     }
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
@@ -22,99 +23,32 @@ class MountTargetView extends OkitArtefactView {
     ** SVG Processing
     */
     checkExports() {
-        const file_systems = this.getJsonView().getFileSystems().filter((fs) => fs.availability_domain === this.availability_domain).map((fs) => fs.id)
+        const self = this
+        const file_systems = this.getJsonView().getFileSystems().filter((fs) => fs.artefact.availability_domain === self.artefact.availability_domain).map((fs) => fs.id)
         this.artefact.exports = this.artefact.exports.filter((e) => file_systems.includes(e.file_system_id))
     }
     // Draw Connections
     drawConnections() {
+        const self = this
         // console.info('Drawing Mount Target Connections')
         // Check if there are any missing following query
-        this.checkExports();
+        // this.checkExports();
+        this.exports.forEach((e) => this.removeConnection(this.id, e.file_system_id))
         this.exports.forEach((e) => this.drawConnection(this.id, e.file_system_id))
     }
 
     /*
     ** Property Sheet Load function
     */
+    newPropertiesSheet() {
+        this.properties_sheet = new MountTargetProperties(this.artefact)
+    }
     loadProperties() {
-        const self = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/mount_target.html", () => {
-            this.loadSubnetSelect('subnet_id');
-            this.getJsonView().loadNetworkSecurityGroupsMultiSelect('nsg_ids', this.vcn_id)
-            const mte_tbody = self.addPropertyHTML('mount_target_exports', 'array', 'File Systems', 'file_systems', '', () => self.addExport())
-            loadPropertiesSheet(self.artefact);
-            self.loadExports()
-        });
+        $(jqId(PROPERTIES_PANEL)).empty()
+        this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
+        this.properties_sheet.load()
     }
 
-    loadExports() {
-        this.artefact.exports.forEach((e, i) => this.addExportHtml(e, i+1))
-        this.export_idx = this.artefact.exports.length;
-    }
-
-    addExport() {
-        console.info('Adding Export');
-        const fs_export = this.artefact.newExport();
-        this.artefact.exports.push(fs_export);
-        // const idx = this.artefact.exports.length;
-        this.export_idx += 1
-        this.addExportHtml(fs_export, this.export_idx);
-    }
-
-    addExportHtml(fs_export, idx) {
-        const id = 'fs_export';
-        // const row = this.addPropertyHTML('file_systems_tbody', 'row', '', id, idx, () => this.deleteExport(id, idx, fs_export));
-        const row = this.addPropertyHTML(this.tbodyId('file_systems', ''), 'row', '', id, idx, () => this.deleteExport(id, idx, fs_export));
-        const details = this.addPropertyHTML(row, 'object', 'Export', id, idx);
-        const tbody = this.addPropertyHTML(details, 'properties', '', id, idx);
-        let property = undefined
-        // Add File System (Select)
-        property = this.addPropertyHTML(tbody, 'select', 'File System', 'file_system_id', idx, (d, i, n) => fs_export.file_system_id = n[i].value);
-        this.getJsonView().loadFileSystemsSelect(`file_system_id${idx}`, this.availability_domain)
-        if (fs_export.file_system_id === '' && property.node().options.length > 0) fs_export.file_system_id = property.node().options[0].value
-        property.attr('value', fs_export.file_system_id)
-        property.node().value = fs_export.file_system_id
-        // Path (Text)
-        property = this.addPropertyHTML(tbody, 'text', 'Path', 'path', idx, (d, i, n) => fs_export.path = n[i].value);
-        property.attr('value', fs_export.path)
-        // Source (CIDR)
-        property = this.addPropertyHTML(tbody, 'ipv4_cidr', 'Source', 'source', idx, (d, i, n) => {n[i].reportValidity(); fs_export.options.source = n[i].value});
-        property.attr('value', fs_export.options.source)
-        // Access (Select)
-        property = this.addPropertyHTML(tbody, 'select', 'Access', 'access', idx, (d, i, n) => fs_export.options.access = n[i].value);
-        this.loadAccess(property)
-        property.attr('value', fs_export.options.access)
-        property.node().value = fs_export.options.access
-
-        // Uid (Number)
-        property = this.addPropertyHTML(tbody, 'number', 'Anonymous GID', 'anonymous_gid', idx, (d, i, n) => fs_export.options.anonymous_gid = n[i].value, {min: 0, max: 65534});
-        property.attr('value', fs_export.options.anonymous_gid)
-        // Gid (Number)
-        property = this.addPropertyHTML(tbody, 'number', 'Anonymous UID', 'anonymous_uid', idx, (d, i, n) => fs_export.options.anonymous_uid = n[i].value, {min: 0, max: 65534});
-        property.attr('value', fs_export.options.anonymous_uid)
-        // Squash (Select)
-        property = this.addPropertyHTML(tbody, 'select', 'Identity Squash', 'identity_squash', idx, (d, i, n) => fs_export.options.identity_squash = n[i].value);
-        this.loadIdentitySquash(property)
-        property.attr('value', fs_export.options.identity_squash)
-        property.node().value = fs_export.options.identity_squash
-        // Privileged (Checkbox)
-        property = this.addPropertyHTML(tbody, 'checkbox', 'Privileged Port', 'require_privileged_source_port', idx, (d, i, n) => fs_export.options.require_privileged_source_port = n[i].checked);
-        property.attr('checked', fs_export.options.require_privileged_source_port)
-        property.node().checked = fs_export.options.require_privileged_source_port
-    }
-
-    loadIdentitySquash(parent) {
-        ['ALL', 'ROOT', 'NONE'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v)))
-    }
-
-    loadAccess(parent) {
-        ['READ_ONLY', 'READ_WRITE'].forEach((v) => parent.append('option').attr('value', v).text(titleCase(v.replaceAll('_', ' '))))
-    }
-
-    deleteExport(id, idx, fs_export) {
-        this.artefact.exports = this.artefact.exports.filter((e) => e !== fs_export)
-        $(`#${id}${idx}_row`).remove()
-    }
     /*
     ** Load and display Value Proposition
     */

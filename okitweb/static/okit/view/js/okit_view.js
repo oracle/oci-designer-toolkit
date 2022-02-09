@@ -1058,11 +1058,14 @@ let okitViews = [];
 /*
 ** Simple Artefact View Class for all artefacts that are not Containers
  */
+const model_proxy_handler = {}
+
 class OkitArtefactView {
     static cut_copy_paste = {resource: undefined, paste_count: 0, is_cut: false};
 
     constructor(artefact=null, json_view) {
         this.artefact = artefact;
+        // this.artefact = new Proxy(artefact, model_proxy_handler);
         this.collapsed = false;
         this._recalculate_dimensions = true;
         // Raise Artefact Elements to View Class
@@ -1072,6 +1075,7 @@ class OkitArtefactView {
                     if (!(value instanceof Function)) {
                         Object.defineProperty(this, key, {
                             get: function () {
+                                // console.warn(`${this.constructor.name} accessing ${key} directly`)
                                 return this.artefact[key];
                             }
                         });
@@ -1281,6 +1285,25 @@ class OkitArtefactView {
         }
         return `translate(${dx}, ${dy})`;
     }
+    // ---- Foreign Object
+    get fo_width() {return 100}
+    get fo_transform() {
+        let dx = 0;
+        let dy = 0;
+        // Horizontal
+        if (this.icon_h_align === 'middle' || this.icon_h_align === 'center' || this.icon_h_align === 'centre') {
+            dx = this.svg_width/2 - this.icon_width/2;
+        } else if (this.icon_h_align === 'end' || this.icon_h_align === 'right') {
+            dx = this.svg_width - this.icon_width;
+        }
+        // Vertical
+        if (this.icon_v_align === 'middle' || this.icon_v_align === 'center' || this.icon_v_align === 'centre') {
+            dy = this.svg_height/2 - this.icon_height/2;
+        } else if (this.icon_v_align === 'end' || this.icon_v_align === 'bottom') {
+            dy = this.svg_height - this.icon_height;
+        }
+        return `translate(${dx + this.icon_width}, ${dy})`;
+    }
     // ---- Padding
     get padding_dx() {return 0;}
     get padding_dy() {return 0;}
@@ -1392,7 +1415,7 @@ class OkitArtefactView {
     draw() {
         // console.warn('Drawing', this)
         if ((!this.parent || !this.parent.is_collapsed) && (!okitSettings.hide_attached || !this.attached)) {
-            console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
+            // console.info(`Drawing ${this.getArtifactReference()} : ${this.display_name} (${this.artefact_id}) [${this.parent_id}]`);
             const svg = this.drawSvg();
             this.drawRect(svg);
             this.drawText(svg, this.svg_name_text);
@@ -1481,6 +1504,19 @@ class OkitArtefactView {
             .attr("xlink:href",`#${this.icon_definition_id}`)
             .attr("transform", this.icon_transform);
         return icon;
+    }
+
+    drawForeignObject(svg) {
+        const foreignObject = svg.append('foreignObject')
+        const details_div = foreignObject.append('xhtml:div').attr('class', 'okit-resource-details')
+        details_div.append('div').attr('class', 'okit-resource-title').text(this.type_text)
+        details_div.append('div').append('input').attr('class', 'okit-resource-display-name').attr('tabindex', -1)
+            .attr('type', 'text')
+            .attr('name', `${this.resource_name}_display_name`)
+            .attr('value', `${this.display_name}`)
+            .on('change', (d, i, o) => {
+                this.artefact.display_name = o[0].value
+            })
     }
 
     drawIconOverlay(svg) {
@@ -1919,6 +1955,10 @@ class OkitArtefactView {
                 .attr("marker-start", "url(#connector-end-circle)")
                 .attr("marker-end", "url(#connector-end-circle)");
         }
+    }
+
+    removeConnection(start_id, end_id) {
+        d3.select(`#${this.generateConnectorId(end_id, start_id)}`).remove()
     }
 
     coordString(coord) {
@@ -2390,7 +2430,9 @@ class OkitArtefactView {
      */
 
     generateConnectorId(sourceid, destinationid) {
-        return sourceid + '-' + destinationid;
+        const id = `${sourceid}-${destinationid}`
+        const safeid = id.replace(/[\W_]+/g,"_")
+        return safeid
     }
 
     /*

@@ -1126,9 +1126,12 @@ class OciResourceDiscoveryClient(object):
             regional_resource_requests = set()
 
             if self.include_resource_types != None and "Image" in self.include_resource_types:
-                # If requested, search for Image in the root compartment to ensure we get the default images that are
-                # not inlcuded in the search results
+                # If Image is specifically requested search for platform images in the root Compartment
                 regional_resource_requests.add(("Image", self.config["tenancy"], None))
+
+            if self.include_resource_types != None and "VolumeBackupPolicy" in self.include_resource_types:
+                # If VolumeBackupPolicy is specifically requested search for platform policies where Compartment is None
+                regional_resource_requests.add(("VolumeBackupPolicy", None, None))
 
             if self.include_resource_types and "MySQLConfiguration" in self.include_resource_types:
                 # add search for MySQLConfiguration in tenancy to get the default configurations that are

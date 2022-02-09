@@ -3,6 +3,7 @@
     "groups": [
         {
             "title": "Containers",
+            "targets": ["oci", "freetier", "pca"],
             "svg": "containers.svg",
             "resources": [
                 {
@@ -19,6 +20,7 @@
         },
         {
             "title": "Compute",
+            "targets": ["oci", "freetier", "pca"],
             "svg": "compute.svg",
             "resources": [
                 {
@@ -28,7 +30,7 @@
                 },
                 {
                     "title": "Analytics Instance",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "AnalyticsCloudService.svg"
                 },
                 {
@@ -40,6 +42,7 @@
         },
         {
             "title": "Database",
+            "targets": ["oci"],
             "svg": "database.svg",
             "resources": [
                 {
@@ -76,6 +79,7 @@
         },
         {
             "title": "Networking",
+            "targets": ["oci", "freetier", "pca"],
             "svg": "networking.svg",
             "resources": [
                 {
@@ -142,6 +146,7 @@
         },
         {
             "title": "Gateways",
+            "targets": ["oci", "freetier", "pca"],
             "svg": "gateways.svg",
             "resources": [
                 {
@@ -171,13 +176,14 @@
                 },
                 {
                     "title": "Service Gateway",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "ServiceGateway.svg"
                 }
             ]
         },
         {
             "title": "Storage",
+            "targets": ["oci", "freetier", "pca"],
             "svg": "storage.svg",
             "resources": [
                 {
@@ -204,11 +210,12 @@
         },
         {
             "title": "Identity",
+            "targets": ["oci", "freetier", "pca"],
             "svg": "identity.svg",
             "resources": [
                 {
                     "title": "Bastion",
-                    "targets": ["oci", "pca"],
+                    "targets": ["oci"],
                     "svg": "Bastion.svg"
                 },
                 {

@@ -51,12 +51,10 @@ class InstanceView extends OkitDesignerArtefactView {
     }
     // TODO: Decide If Required
     drawAttachmentsOrig() {
-        console.log('Drawing ' + Instance.getArtifactReference() + ' : ' + this.id + ' Attachments');
         let attachment_count = 0;
         for (let block_storage_id of this.block_storage_volume_ids) {
             let attachment = new BlockStorageVolumeView(this.getJsonView().getOkitJson().getBlockStorageVolume(block_storage_id), this.getJsonView());
             attachment.attached_id = this.id;
-            console.info('Drawing ' + this.getArtifactReference() + ' Block Storage Volume : ' + attachment.display_name);
             attachment.draw();
             attachment_count += 1;
         }
@@ -68,7 +66,6 @@ class InstanceView extends OkitDesignerArtefactView {
             attachment.attached_id = this.id;
             // Add the -vnic suffix
             //attachment.artefact.id += '-vnic';
-            console.info('Drawing ' + this.getArtifactReference() + ' Virtual Network Interface : ' + attachment.display_name);
             let svg = attachment.draw();
             attachment_count += 1;
         }
@@ -151,12 +148,13 @@ class InstanceView extends OkitDesignerArtefactView {
             // Images
             $('#os').on('change', () => {self.handleImageOSChange()})
             // OS Versions
-            $('#versiom').on('change', () => {self.handleImageOSVersionChange()})
+            $('#version').on('change', () => {self.handleImageOSVersionChange()})
             // Instance Type
             $('#instance_type').on('change', () => {self.handleInstanceTypeChange()})
             // Chipset 
             $('#chipset').on('change', () => {self.handleShapeSeriesChange()})
 
+            $('#image_source').val(self.artefact.source_details.image_source)
             this.handleImageSourceChange()
 
             // Add Secondary Networks Table

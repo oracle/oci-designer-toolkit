@@ -26,7 +26,7 @@
 {%- endmacro -%}
 
 {%- macro add_palette_group(group) -%}
-    <details  id="{{ group['title'] }}" class="okit-palette-icon-group" open>
+    <details  id="{{ group['title'] }}" class="okit-palette-icon-group okit-target {{ group['targets'] | join(' ') }}" open>
         <summary class="okit-palette-icon-group-header"><img id="okit-palette-group-icon" src="{{ url_for('static', filename='svg/' + group['svg']) | lower }}" alt="{{ group['title'] }}"><label>{{ group['title'] }}</label></summary>
         <div class="okit-palette-icon-group-icons okit-icons-only">
             {% for resource in group['resources'] %}
@@ -37,7 +37,7 @@
 {%- endmacro -%}
 
 {%- macro add_palette_resource(resource) -%}
-    <div class="okit-palette-icon-div {{ resource['targets'] | join(' ') }}">
+    <div class="okit-palette-icon-div okit-target {{ resource['targets'] | join(' ') }}">
         <img class="okit-palette-icon"
             src="{{ url_for('static', filename='okit/palette/svg/' + resource['svg']) }}"
             title="{{ resource['title'] }}"
