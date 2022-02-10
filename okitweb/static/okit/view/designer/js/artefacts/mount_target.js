@@ -154,7 +154,7 @@ OkitJsonView.prototype.pasteMountTarget = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.mount_targets.push(clone);
+    this.okitjson.getMountTargets().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadMountTargetsSelect = function(select_id, empty_option=false) {

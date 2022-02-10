@@ -14,7 +14,7 @@ class RouteTableView extends OkitDesignerArtefactView {
 
     get attached() {
         if (!this.attached_id) {
-            for (let subnet of this.getOkitJson().subnets) {
+            for (let subnet of this.getOkitJson().getSubnets()) {
                 if (subnet.route_table_id === this.id) {
                     return true;
                 }

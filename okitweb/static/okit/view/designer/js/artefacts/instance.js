@@ -98,7 +98,7 @@ class InstanceView extends OkitDesignerArtefactView {
             // Build Primary Vnic / Subnet List
             let subnet_select = $(jqId('subnet_id'));
             subnet_select.append($('<option>').attr('value', '').text(''));
-            for (let subnet of this.getOkitJson().subnets) {
+            for (let subnet of this.getOkitJson().getSubnets()) {
                 let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
                 let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
                 let display_name = `${compartment ? compartment.display_name : ''}/${vcn ? vcn.display_name : ''}/${subnet.display_name}`;
@@ -453,7 +453,7 @@ class InstanceView extends OkitDesignerArtefactView {
                 redrawSVGCanvas();
                 me.loadNetworkSecurityGroups("nsg_ids" + idx, vnic.subnet_id);
             });
-        for (let subnet of this.getOkitJson().subnets) {
+        for (let subnet of this.getOkitJson().getSubnets()) {
             let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
             let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
             let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;

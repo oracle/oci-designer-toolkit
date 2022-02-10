@@ -40,13 +40,8 @@ class ServiceGateway extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Service Gateway references
-        for (let route_table of this.getOkitJson().route_tables) {
-            for (let i = 0; i < route_table.route_rules.length; i++) {
-                if (route_table.route_rules[i]['network_entity_id'] === this.id) {
-                    route_table.route_rules.splice(i, 1);
-                }
-            }
-        }
+        // Remove Route Rules
+        this.getOkitJson().getRouteTables().forEach((rt) => rt.route_rules = rt.route_rules.filter((d) => d.network_entity_id !== this.id))        
     }
 
     getNamePrefix() {

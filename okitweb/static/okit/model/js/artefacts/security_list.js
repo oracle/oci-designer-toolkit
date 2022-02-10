@@ -39,7 +39,7 @@ class SecurityList extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Subnet references
-        for (let subnet of this.getOkitJson().subnets) {
+        for (let subnet of this.getOkitJson().getSubnets()) {
             subnet.security_list_ids = subnet.security_list_ids.filter((id) => id !== this.id);
             // for (let i=0; i < subnet.security_list_ids.length; i++) {
             //     if (subnet.security_list_ids[i] === this.id) {

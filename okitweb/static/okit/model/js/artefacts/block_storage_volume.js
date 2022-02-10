@@ -44,7 +44,7 @@ class BlockStorageVolume extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Instance references
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             for (let i=0; i < instance.block_storage_volume_ids.length; i++) {
                 if (instance.block_storage_volume_ids[i] === this.id) {
                     instance.block_storage_volume_ids.splice(i, 1);

@@ -135,7 +135,7 @@ OkitJsonView.prototype.pasteDbHome = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.db_homes.push(clone);
+    this.okitjson.getDbHomes().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadDbHomesSelect = function(select_id, empty_option=false) {

@@ -37,7 +37,7 @@ class NetworkSecurityGroup extends OkitArtifact {
      */
     deleteChildren() {
         // Remove Instance vnic references
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             for (let vnic of instance.vnics) {
                 for (let i = 0; i < vnic.nsg_ids.length; i++) {
                     if (vnic.nsg_ids[i] === this.id) {

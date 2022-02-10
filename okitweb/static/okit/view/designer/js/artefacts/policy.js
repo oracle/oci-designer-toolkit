@@ -184,7 +184,7 @@ OkitJsonView.prototype.pastePolicy = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.policys.push(clone);
+    this.okitjson.getPolicys().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadPolicysSelect = function(select_id, empty_option=false) {

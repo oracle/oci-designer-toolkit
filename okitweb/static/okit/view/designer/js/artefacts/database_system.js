@@ -15,7 +15,7 @@ class DatabaseSystemView extends OkitDesignerArtefactView {
     // TODO: Enable when Instance code added
     get attached1() {
         if (!this.attached_id) {
-            for (let instance of this.getOkitJson().instances) {
+            for (let instance of this.getOkitJson().getInstances()) {
                 if (instance.database_system_ids.includes(this.id)) {
                     return true;
                 }

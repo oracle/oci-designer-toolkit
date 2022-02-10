@@ -134,7 +134,7 @@ OkitJsonView.prototype.pasteNetworkLoadBalancer = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.network_load_balancers.push(clone);
+    this.okitjson.getNetworkLoadBalancers().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadNetworkLoadBalancersSelect = function(select_id, empty_option=false) {

@@ -56,39 +56,8 @@ class OkitJsonView {
     }
 
     init() {
-        this.compartments = [];
-        this.autonomous_databases = [];
-        this.block_storage_volumes = [];
-        this.customer_premise_equipments = [];
-        this.databases = [];
-        this.database_systems = [];
-        this.db_homes = [];
-        this.db_nodes = [];
-        this.dynamic_routing_gateways = [];
-        this.fast_connects = [];
-        this.file_storage_systems = [];
-        this.instances = [];
-        this.instance_pools = [];
-        this.internet_gateways = [];
-        this.ipsec_connections = [];
-        this.load_balancers = [];
-        this.local_peering_gateways = [];
-        this.mysql_database_systems = [];
-        this.nat_gateways = [];
-        this.network_security_groups = [];
-        this.object_storage_buckets = [];
-        this.oke_clusters = [];
-        this.remote_peering_connections = [];
-        this.route_tables = [];
-        this.security_lists = [];
-        this.service_gateways = [];
-        this.subnets = [];
-        this.virtual_cloud_networks = [];
-        this.virtual_network_interfaces = [];
-        this.exadata_infrastructures = [];
-        this.vm_clusters = [];
-        this.vm_cluster_networks = [];
     }
+
     clear() {
         for (const [key, value] of Object.entries(this)) {
             if (Array.isArray(value)) this[key] = [];
@@ -106,38 +75,6 @@ class OkitJsonView {
                 for (const resource of this.getOkitJson()[get_function]()) {this[new_function](resource);}
             }
         }
-    }
-
-    load1() {
-        this.clear();
-        for (let artefact of this.okitjson.compartments) {this.newCompartment(artefact);}
-        for (let artefact of this.okitjson.autonomous_databases) {this.newAutonomousDatabase(artefact);}
-        for (let artefact of this.okitjson.block_storage_volumes) {this.newBlockStorageVolume(artefact);}
-        for (let artefact of this.okitjson.customer_premise_equipments) {this.newCustomerPremiseEquipment(artefact);}
-        for (let artefact of this.okitjson.database_systems) {this.newDatabaseSystem(artefact);}
-        for (let artefact of this.okitjson.dynamic_routing_gateways) {this.newDynamicRoutingGateway(artefact);}
-        for (let artefact of this.okitjson.getExadataInfrastructures()) {this.newExadataInfrastructure(artefact);}
-        for (let artefact of this.okitjson.fast_connects) {this.newFastConnect(artefact);}
-        for (let artefact of this.okitjson.file_storage_systems) {this.newFileStorageSystem(artefact);}
-        for (let artefact of this.okitjson.instances) {this.newInstance(artefact);}
-        for (let artefact of this.okitjson.instance_pools) {this.newInstancePool(artefact);}
-        for (let artefact of this.okitjson.internet_gateways) {this.newInternetGateway(artefact);}
-        for (let artefact of this.okitjson.ipsec_connections) {this.newIpsecConnection(artefact);}
-        for (let artefact of this.okitjson.load_balancers) {this.newLoadBalancer(artefact);}
-        for (let artefact of this.okitjson.local_peering_gateways) {this.newLocalPeeringGateway(artefact);}
-        for (let artefact of this.okitjson.mysql_database_systems) {this.newMysqlDatabaseSystem(artefact);}
-        for (let artefact of this.okitjson.nat_gateways) {this.newNatGateway(artefact);}
-        for (let artefact of this.okitjson.network_security_groups) {this.newNetworkSecurityGroup(artefact);}
-        for (let artefact of this.okitjson.object_storage_buckets) {this.newObjectStorageBucket(artefact);}
-        for (let artefact of this.okitjson.oke_clusters) {this.newOkeCluster(artefact);}
-        for (let artefact of this.okitjson.remote_peering_connections) {this.newRemotePeeringConnection(artefact);}
-        for (let artefact of this.okitjson.route_tables) {this.newRouteTable(artefact);}
-        for (let artefact of this.okitjson.security_lists) {this.newSecurityList(artefact);}
-        for (let artefact of this.okitjson.service_gateways) {this.newServiceGateway(artefact);}
-        for (let artefact of this.okitjson.subnets) {this.newSubnet(artefact);}
-        for (let artefact of this.okitjson.virtual_cloud_networks) {this.newVirtualCloudNetwork(artefact);}
-        for (let artefact of this.okitjson.getVmClusters()) {this.newVmCluster(artefact);}
-        for (let artefact of this.okitjson.getVmClusterNetworks()) {this.newVmClusterNetwork(artefact);}
     }
 
     update(model) {
@@ -191,10 +128,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newAutonomousDatabase(database) {
-        this.autonomous_databases.push(database ? new AutonomousDatabaseView(database, this) : new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase(), this));
-        return this.autonomous_databases[this.autonomous_databases.length - 1];
+        this.getAutonomousDatabases().push(database ? new AutonomousDatabaseView(database, this) : new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase(), this));
+        return this.getAutonomousDatabases()[this.getAutonomousDatabases().length - 1];
     }
     getAutonomousDatabases() {
+        if (!this.autonomous_databases) this.autonomous_databases = []
         return this.autonomous_databases;
     }
     getAutonomousDatabase(id='') {
@@ -207,7 +145,7 @@ class OkitJsonView {
     }
     loadAutonomousDatabases(autonomous_databases) {
         for (const artefact of autonomous_databases) {
-            this.autonomous_databases.push(new AutonomousDatabaseView(new AutonomousDatabase(artefact, this.okitjson), this));
+            this.getAutonomousDatabases().push(new AutonomousDatabaseView(new AutonomousDatabase(artefact, this.okitjson), this));
         }
     }
 
@@ -219,10 +157,13 @@ class OkitJsonView {
         return view_artefact;
     }
     newBlockStorageVolume(volume) {
-        this.block_storage_volumes.push(volume ? new BlockStorageVolumeView(volume, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
-        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
+        this.getBlockStorageVolumes().push(volume ? new BlockStorageVolumeView(volume, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
+        return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
     }
-    getBlockStorageVolumes() {return this.block_storage_volumes;}
+    getBlockStorageVolumes() {
+        if (!this.block_storage_volumes) this.block_storage_volumes = []
+        return this.block_storage_volumes;
+    }
     getBlockStorageVolume(id='') {
         for (let artefact of this.getBlockStorageVolumes()) {
             if (artefact.id === id) {
@@ -233,7 +174,7 @@ class OkitJsonView {
     }
     loadBlockStorageVolumes(block_storage_volumes) {
         for (const artefact of block_storage_volumes) {
-            this.block_storage_volumes.push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
+            this.getBlockStorageVolumes().push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
         }
     }
 
@@ -245,10 +186,13 @@ class OkitJsonView {
         return view_artefact;
     }
     newCompartment(compartment) {
-        this.compartments.push(compartment ? new CompartmentView(compartment, this) : new CompartmentView(this.okitjson.newCompartment(), this));
-        return this.compartments[this.compartments.length - 1];
+        this.getCompartments().push(compartment ? new CompartmentView(compartment, this) : new CompartmentView(this.okitjson.newCompartment(), this));
+        return this.getCompartments()[this.getCompartments().length - 1];
     }
-    getCompartments() {return this.compartments;}
+    getCompartments() {
+        if (!this.compartments) this.compartments = []
+        return this.compartments;
+    }
     getCompartment(id) {
         for (let artefact of this.getCompartments()) {
             if (artefact.id === id) {
@@ -259,7 +203,7 @@ class OkitJsonView {
     }
     loadCompartments(compartments) {
         for (const artefact of compartments) {
-            this.compartments.push(new CompartmentView(new Compartment(artefact, this.okitjson), this));
+            this.getCompartments().push(new CompartmentView(new Compartment(artefact, this.okitjson), this));
         }
     }
     loadCompartmentsSelect(select_id, empty_option=false) {
@@ -281,10 +225,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newCustomerPremiseEquipment(connect) {
-        this.customer_premise_equipments.push(connect ? new CustomerPremiseEquipmentView(connect, this) : new CustomerPremiseEquipmentView(this.okitjson.newCustomerPremiseEquipment(), this));
-        return this.customer_premise_equipments[this.customer_premise_equipments.length - 1];
+        this.getCustomerPremiseEquipments().push(connect ? new CustomerPremiseEquipmentView(connect, this) : new CustomerPremiseEquipmentView(this.okitjson.newCustomerPremiseEquipment(), this));
+        return this.getCustomerPremiseEquipments()[this.getCustomerPremiseEquipments().length - 1];
     }
     getCustomerPremiseEquipments() {
+        if (!this.customer_premise_equipments) this.customer_premise_equipments = []
         return this.customer_premise_equipments;
     }
     getCustomerPremiseEquipment(id='') {
@@ -297,7 +242,7 @@ class OkitJsonView {
     }
     loadCustomerPremiseEquipments(fast_connects) {
         for (const artefact of fast_connects) {
-            this.customer_premise_equipments.push(new CustomerPremiseEquipmentView(new CustomerPremiseEquipment(artefact, this.okitjson), this));
+            this.getCustomerPremiseEquipments().push(new CustomerPremiseEquipmentView(new CustomerPremiseEquipment(artefact, this.okitjson), this));
         }
     }
 
@@ -310,10 +255,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newDatabaseSystem(database) {
-        this.database_systems.push(database ? new DatabaseSystemView(database, this) : new DatabaseSystemView(this.okitjson.newDatabaseSystem(), this));
-        return this.database_systems[this.database_systems.length - 1];
+        this.getDatabaseSystems().push(database ? new DatabaseSystemView(database, this) : new DatabaseSystemView(this.okitjson.newDatabaseSystem(), this));
+        return this.getDatabaseSystems()[this.getDatabaseSystems().length - 1];
     }
     getDatabaseSystems() {
+        if (!this.database_systems) this.database_systems = []
         return this.database_systems;
     }
     getDatabaseSystem(id='') {
@@ -326,7 +272,7 @@ class OkitJsonView {
     }
     loadDatabaseSystems(database_systems) {
         for (const artefact of database_systems) {
-            this.database_systems.push(new DatabaseSystemView(new DatabaseSystem(artefact, this.okitjson), this));
+            this.getDatabaseSystems().push(new DatabaseSystemView(new DatabaseSystem(artefact, this.okitjson), this));
         }
     }
 
@@ -340,10 +286,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newDynamicRoutingGateway(gateway) {
-        this.dynamic_routing_gateways.push(gateway ? new DynamicRoutingGatewayView(gateway, this) : new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway(), this));
-        return this.dynamic_routing_gateways[this.dynamic_routing_gateways.length - 1];
+        this.getDynamicRoutingGateways().push(gateway ? new DynamicRoutingGatewayView(gateway, this) : new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway(), this));
+        return this.getDynamicRoutingGateways()[this.getDynamicRoutingGateways().length - 1];
     }
     getDynamicRoutingGateways() {
+        if (!this.dynamic_routing_gateways) this.dynamic_routing_gateways = []
         return this.dynamic_routing_gateways;
     }
     getDynamicRoutingGateway(id='') {
@@ -356,7 +303,7 @@ class OkitJsonView {
     }
     loadDynamicRoutingGateways(dynamic_routing_gateways) {
         for (const artefact of dynamic_routing_gateways) {
-            this.dynamic_routing_gateways.push(new DynamicRoutingGatewayView(new DynamicRoutingGateway(artefact, this.okitjson), this));
+            this.getDynamicRoutingGateways().push(new DynamicRoutingGatewayView(new DynamicRoutingGateway(artefact, this.okitjson), this));
         }
     }
 
@@ -368,10 +315,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newFastConnect(connect) {
-        this.fast_connects.push(connect ? new FastConnectView(connect, this) : new FastConnectView(this.okitjson.newFastConnect(), this));
-        return this.fast_connects[this.fast_connects.length - 1];
+        this.getFastConnects().push(connect ? new FastConnectView(connect, this) : new FastConnectView(this.okitjson.newFastConnect(), this));
+        return this.getFastConnects()[this.getFastConnects().length - 1];
     }
     getFastConnects() {
+        if (!this.fast_connects) this.fast_connects = []
         return this.fast_connects;
     }
     getFastConnect(id='') {
@@ -384,7 +332,7 @@ class OkitJsonView {
     }
     loadFastConnects(fast_connects) {
         for (const artefact of fast_connects) {
-            this.fast_connects.push(new FastConnectView(new FastConnect(artefact, this.okitjson), this));
+            this.getFastConnects().push(new FastConnectView(new FastConnect(artefact, this.okitjson), this));
         }
     }
 
@@ -397,10 +345,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newFileStorageSystem(storage) {
-        this.file_storage_systems.push(storage ? new FileStorageSystemView(storage, this) : new FileStorageSystemView(this.okitjson.newFileStorageSystem(), this));
-        return this.file_storage_systems[this.file_storage_systems.length - 1];
+        this.getFileStorageSystems().push(storage ? new FileStorageSystemView(storage, this) : new FileStorageSystemView(this.okitjson.newFileStorageSystem(), this));
+        return this.getFileStorageSystems()[this.getFileStorageSystems().length - 1];
     }
     getFileStorageSystems() {
+        if (!this.file_storage_systems) this.file_storage_systems = []
         return this.file_storage_systems;
     }
     getFileStorageSystem(id='') {
@@ -413,7 +362,7 @@ class OkitJsonView {
     }
     loadFileStorageSystems(file_storage_systems) {
         for (const artefact of file_storage_systems) {
-            this.file_storage_systems.push(new FileStorageSystemView(new FileStorageSystem(artefact, this.okitjson), this));
+            this.getFileStorageSystems().push(new FileStorageSystemView(new FileStorageSystem(artefact, this.okitjson), this));
         }
     }
 
@@ -430,10 +379,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newInstance(instance) {
-        this.instances.push(instance ? new InstanceView(instance, this) : new InstanceView(this.okitjson.newInstance(), this));
-        return this.instances[this.instances.length - 1];
+        this.getInstances().push(instance ? new InstanceView(instance, this) : new InstanceView(this.okitjson.newInstance(), this));
+        return this.getInstances()[this.getInstances().length - 1];
     }
     getInstances() {
+        if (!this.instances) this.instances = []
         return this.instances;
     }
     getInstance(id='') {
@@ -446,7 +396,7 @@ class OkitJsonView {
     }
     loadInstances(instances) {
         for (const artefact of instances) {
-            this.instances.push(new InstanceView(new Instance(artefact, this.okitjson), this));
+            this.getInstances().push(new InstanceView(new Instance(artefact, this.okitjson), this));
         }
     }
 
@@ -459,11 +409,12 @@ class OkitJsonView {
         return view_artefact;
     }
     newInstancePool(instance_pool) {
-        this.instance_pools.push(instance_pool ? new InstancePoolView(instance_pool, this) : new InstancePoolView(this.okitjson.newInstancePool(), this));
-        return this.instance_pools[this.instance_pools.length - 1];
+        this.getInstancePools().push(instance_pool ? new InstancePoolView(instance_pool, this) : new InstancePoolView(this.okitjson.newInstancePool(), this));
+        return this.getInstancePools()[this.getInstancePools().length - 1];
     }
     getInstancePools() {
-        return this.instances;
+        if (!this.instance_pools) this.instance_pools = []
+        return this.instance_pools;
     }
     getInstancePool(id='') {
         for (let artefact of this.getInstancePools()) {
@@ -475,7 +426,7 @@ class OkitJsonView {
     }
     loadInstancePools(instance_pools) {
         for (const artefact of instance_pools) {
-            this.instance_pools.push(new InstancePoolView(new InstancePool(artefact, this.okitjson), this));
+            this.getInstancePools().push(new InstancePoolView(new InstancePool(artefact, this.okitjson), this));
         }
     }
 
@@ -499,10 +450,11 @@ class OkitJsonView {
         if (ig.artefact === null) {
             return null;
         }
-        this.internet_gateways.push(ig);
-        return this.internet_gateways[this.internet_gateways.length - 1];
+        this.getInternetGateways().push(ig);
+        return this.getInternetGateways()[this.getInternetGateways().length - 1];
     }
     getInternetGateways() {
+        if (!this.internet_gateways) this.internet_gateways = []
         return this.internet_gateways;
     }
     getInternetGateway(id='') {
@@ -515,7 +467,7 @@ class OkitJsonView {
     }
     loadInternetGateways(internet_gateways) {
         for (const artefact of internet_gateways) {
-            this.internet_gateways.push(new InternetGatewayView(new InternetGateway(artefact, this.okitjson), this));
+            this.getInternetGateways().push(new InternetGatewayView(new InternetGateway(artefact, this.okitjson), this));
         }
     }
 
@@ -527,10 +479,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newIpsecConnection(connect) {
-        this.ipsec_connections.push(connect ? new IpsecConnectionView(connect, this) : new IpsecConnectionView(this.okitjson.newIpsecConnection(), this));
-        return this.ipsec_connections[this.ipsec_connections.length - 1];
+        this.getIpsecConnections().push(connect ? new IpsecConnectionView(connect, this) : new IpsecConnectionView(this.okitjson.newIpsecConnection(), this));
+        return this.getIpsecConnections()[this.getIpsecConnections().length - 1];
     }
     getIpsecConnections() {
+        if (!this.ipsec_connections) this.ipsec_connections = []
         return this.ipsec_connections;
     }
     getIpsecConnection(id='') {
@@ -543,7 +496,7 @@ class OkitJsonView {
     }
     loadIpsecConnections(fast_connects) {
         for (const artefact of fast_connects) {
-            this.ipsec_connections.push(new IpsecConnectionView(new IpsecConnection(artefact, this.okitjson), this));
+            this.getIpsecConnections().push(new IpsecConnectionView(new IpsecConnection(artefact, this.okitjson), this));
         }
     }
 
@@ -556,10 +509,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newLoadBalancer(loadbalancer) {
-        this.load_balancers.push(loadbalancer ? new LoadBalancerView(loadbalancer, this) : new LoadBalancerView(this.okitjson.newLoadBalancer(), this));
-        return this.load_balancers[this.load_balancers.length - 1];
+        this.getLoadBalancers().push(loadbalancer ? new LoadBalancerView(loadbalancer, this) : new LoadBalancerView(this.okitjson.newLoadBalancer(), this));
+        return this.getLoadBalancers()[this.getLoadBalancers().length - 1];
     }
     getLoadBalancers() {
+        if (!this.load_balancers) this.load_balancers = []
         return this.load_balancers;
     }
     getLoadBalancer(id='') {
@@ -572,7 +526,7 @@ class OkitJsonView {
     }
     loadLoadBalancers(load_balancers) {
         for (const artefact of load_balancers) {
-            this.load_balancers.push(new LoadBalancerView(new LoadBalancer(artefact, this.okitjson), this));
+            this.getLoadBalancers().push(new LoadBalancerView(new LoadBalancer(artefact, this.okitjson), this));
         }
     }
 
@@ -585,10 +539,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newLocalPeeringGateway(gateway) {
-        this.local_peering_gateways.push(gateway ? new LocalPeeringGatewayView(gateway, this) : new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway(), this));
-        return this.local_peering_gateways[this.local_peering_gateways.length - 1];
+        this.getLocalPeeringGateways().push(gateway ? new LocalPeeringGatewayView(gateway, this) : new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway(), this));
+        return this.getLocalPeeringGateways()[this.getLocalPeeringGateways().length - 1];
     }
     getLocalPeeringGateways() {
+        if (!this.local_peering_gateways) this.local_peering_gateways = []
         return this.local_peering_gateways;
     }
     getLocalPeeringGateway(id='') {
@@ -601,7 +556,7 @@ class OkitJsonView {
     }
     loadLocalPeeringGateways(local_peering_gateways) {
         for (const artefact of local_peering_gateways) {
-            this.local_peering_gateways.push(new LocalPeeringGatewayView(new LocalPeeringGateway(artefact, this.okitjson), this));
+            this.getLocalPeeringGateways().push(new LocalPeeringGatewayView(new LocalPeeringGateway(artefact, this.okitjson), this));
         }
     }
 
@@ -614,10 +569,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newMysqlDatabaseSystem(database) {
-        this.mysql_database_systems.push(database ? new MysqlDatabaseSystemView(database, this) : new MysqlDatabaseSystemView(this.okitjson.newMysqlDatabaseSystem(), this));
-        return this.mysql_database_systems[this.mysql_database_systems.length - 1];
+        this.getMysqlDatabaseSystems().push(database ? new MysqlDatabaseSystemView(database, this) : new MysqlDatabaseSystemView(this.okitjson.newMysqlDatabaseSystem(), this));
+        return this.getMysqlDatabaseSystems()[this.getMysqlDatabaseSystems().length - 1];
     }
     getMysqlDatabaseSystems() {
+        if (!this.mysql_database_systems) this.mysql_database_systems = []
         return this.mysql_database_systems;
     }
     getMysqlDatabaseSystem(id='') {
@@ -630,7 +586,7 @@ class OkitJsonView {
     }
     loadMysqlDatabaseSystems(database_systems) {
         for (const artefact of database_systems) {
-            this.mysql_database_systems.push(new MysqlDatabaseSystemView(new MysqlDatabaseSystem(artefact, this.okitjson), this));
+            this.getMysqlDatabaseSystems().push(new MysqlDatabaseSystemView(new MysqlDatabaseSystem(artefact, this.okitjson), this));
         }
     }
 
@@ -654,10 +610,11 @@ class OkitJsonView {
         if (ng.artefact === null) {
             return null;
         }
-        this.nat_gateways.push(ng);
-        return this.nat_gateways[this.nat_gateways.length - 1];
+        this.getNatGateways().push(ng);
+        return this.getNatGateways()[this.getNatGateways().length - 1];
     }
     getNatGateways() {
+        if (!this.nat_gateways) this.nat_gateways = []
         return this.nat_gateways;
     }
     getNatGateway(id='') {
@@ -670,7 +627,7 @@ class OkitJsonView {
     }
     loadNatGateways(nat_gateways) {
         for (const artefact of nat_gateways) {
-            this.nat_gateways.push(new NatGatewayView(new NatGateway(artefact, this.okitjson), this));
+            this.getNatGateways().push(new NatGatewayView(new NatGateway(artefact, this.okitjson), this));
         }
     }
 
@@ -683,10 +640,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newNetworkSecurityGroup(security) {
-        this.network_security_groups.push(security ? new NetworkSecurityGroupView(security, this) : new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup(), this));
-        return this.network_security_groups[this.network_security_groups.length - 1];
+        this.getNetworkSecurityGroups().push(security ? new NetworkSecurityGroupView(security, this) : new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup(), this));
+        return this.getNetworkSecurityGroups()[this.getNetworkSecurityGroups().length - 1];
     }
     getNetworkSecurityGroups() {
+        if (!this.network_security_groups) this.network_security_groups = []
         return this.network_security_groups;
     }
     getNetworkSecurityGroup(id='') {
@@ -699,7 +657,7 @@ class OkitJsonView {
     }
     loadNetworkSecurityGroups(network_security_groups) {
         for (const artefact of network_security_groups) {
-            this.network_security_groups.push(new NetworkSecurityGroupView(new NetworkSecurityGroup(artefact, this.okitjson), this));
+            this.getNetworkSecurityGroups().push(new NetworkSecurityGroupView(new NetworkSecurityGroup(artefact, this.okitjson), this));
         }
     }
     loadNetworkSecurityGroupsSelect(select_id, empty_option=false) {
@@ -737,10 +695,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newObjectStorageBucket(storage) {
-        this.object_storage_buckets.push(storage ? new ObjectStorageBucketView(storage, this) : new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket(), this));
-        return this.object_storage_buckets[this.object_storage_buckets.length - 1];
+        this.getObjectStorageBuckets().push(storage ? new ObjectStorageBucketView(storage, this) : new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket(), this));
+        return this.getObjectStorageBuckets()[this.getObjectStorageBuckets().length - 1];
     }
     getObjectStorageBuckets() {
+        if (!this.object_storage_buckets) this.object_storage_buckets = []
         return this.object_storage_buckets;
     }
     getObjectStorageBucket(id='') {
@@ -753,7 +712,7 @@ class OkitJsonView {
     }
     loadObjectStorageBuckets(object_storage_buckets) {
         for (const artefact of object_storage_buckets) {
-            this.object_storage_buckets.push(new ObjectStorageBucketView(new ObjectStorageBucket(artefact, this.okitjson), this));
+            this.getObjectStorageBuckets().push(new ObjectStorageBucketView(new ObjectStorageBucket(artefact, this.okitjson), this));
         }
     }
 
@@ -766,10 +725,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newOkeCluster(cluster) {
-        this.oke_clusters.push(cluster ? new OkeClusterView(cluster, this) : new OkeClusterView(this.okitjson.newOkeCluster(), this));
-        return this.oke_clusters[this.oke_clusters.length - 1];
+        this.getOkeClusters().push(cluster ? new OkeClusterView(cluster, this) : new OkeClusterView(this.okitjson.newOkeCluster(), this));
+        return this.getOkeClusters()[this.getOkeClusters().length - 1];
     }
     getOkeClusters() {
+        if (!this.oke_clusters) this.oke_clusters = []
         return this.oke_clusters;
     }
     getOkeCluster(id='') {
@@ -782,7 +742,7 @@ class OkitJsonView {
     }
     loadOkeClusters(oke_clusters) {
         for (const artefact of oke_clusters) {
-            this.oke_clusters.push(new OkeClusterView(new OkeCluster(artefact, this.okitjson), this));
+            this.getOkeClusters().push(new OkeClusterView(new OkeCluster(artefact, this.okitjson), this));
         }
     }
 
@@ -794,10 +754,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newRemotePeeringConnection(connect) {
-        this.remote_peering_connections.push(connect ? new RemotePeeringConnectionView(connect, this) : new RemotePeeringConnectionView(this.okitjson.newRemotePeeringConnection(), this));
-        return this.remote_peering_connections[this.remote_peering_connections.length - 1];
+        this.getRemotePeeringConnections().push(connect ? new RemotePeeringConnectionView(connect, this) : new RemotePeeringConnectionView(this.okitjson.newRemotePeeringConnection(), this));
+        return this.getRemotePeeringConnections()[this.getRemotePeeringConnections().length - 1];
     }
     getRemotePeeringConnections() {
+        if (!this.remote_peering_connections) this.remote_peering_connections = []
         return this.remote_peering_connections;
     }
     getRemotePeeringConnection(id='') {
@@ -810,7 +771,7 @@ class OkitJsonView {
     }
     loadRemotePeeringConnections(fast_connects) {
         for (const artefact of fast_connects) {
-            this.remote_peering_connections.push(new RemotePeeringConnectionView(new RemotePeeringConnection(artefact, this.okitjson), this));
+            this.getRemotePeeringConnections().push(new RemotePeeringConnectionView(new RemotePeeringConnection(artefact, this.okitjson), this));
         }
     }
 
@@ -832,10 +793,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newRouteTable(routetable) {
-        this.route_tables.push(routetable ? new RouteTableView(routetable, this) : new RouteTableView(this.okitjson.newRouteTable(), this));
-        return this.route_tables[this.route_tables.length - 1];
+        this.getRouteTables().push(routetable ? new RouteTableView(routetable, this) : new RouteTableView(this.okitjson.newRouteTable(), this));
+        return this.getRouteTables()[this.getRouteTables().length - 1];
     }
     getRouteTables() {
+        if (!this.route_tables) this.route_tables = []
         return this.route_tables;
     }
     getRouteTable(id='') {
@@ -848,7 +810,7 @@ class OkitJsonView {
     }
     loadRouteTables(route_tables) {
         for (const artefact of route_tables) {
-            this.route_tables.push(new RouteTableView(new RouteTable(artefact, this.okitjson), this));
+            this.getRouteTables().push(new RouteTableView(new RouteTable(artefact, this.okitjson), this));
         }
     }
 
@@ -870,10 +832,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newSecurityList(security) {
-        this.security_lists.push(security ? new SecurityListView(security, this) : new SecurityListView(this.okitjson.newSecurityList(), this));
-        return this.security_lists[this.security_lists.length - 1];
+        this.getSecurityLists().push(security ? new SecurityListView(security, this) : new SecurityListView(this.okitjson.newSecurityList(), this));
+        return this.getSecurityLists()[this.getSecurityLists().length - 1];
     }
     getSecurityLists() {
+        if (!this.security_lists) this.security_lists = []
         return this.security_lists;
     }
     getSecurityList(id='') {
@@ -886,14 +849,14 @@ class OkitJsonView {
     }
     loadSecurityLists(security_lists) {
         for (const artefact of security_lists) {
-            this.security_lists.push(new SecurityListView(new SecurityList(artefact, this.okitjson), this));
+            this.getSecurityLists().push(new SecurityListView(new SecurityList(artefact, this.okitjson), this));
         }
     }
 
     // Service Gateway
     dropServiceGatewayView(target) {
         // Check if Gateway Already exists
-        for (let gateway of this.service_gateways) {
+        for (let gateway of this.getServiceGateways()) {
             if (gateway.vcn_id === target.id) {
                 alert('The maximum limit of 1 Service Gateway per Virtual Cloud Network has been exceeded for ' + this.getVirtualCloudNetwork(target.id).display_name);
                 return null;
@@ -906,10 +869,11 @@ class OkitJsonView {
         return view_artefact;
     }
     newServiceGateway(gateway) {
-        this.service_gateways.push(gateway ? new ServiceGatewayView(gateway, this) : new ServiceGatewayView(this.okitjson.newServiceGateway(), this));
-        return this.service_gateways[this.service_gateways.length - 1];
+        this.getServiceGateways().push(gateway ? new ServiceGatewayView(gateway, this) : new ServiceGatewayView(this.okitjson.newServiceGateway(), this));
+        return this.getServiceGateways()[this.getServiceGateways().length - 1];
     }
     getServiceGateways() {
+        if (!this.service_gateways) this.service_gateways = []
         return this.service_gateways;
     }
     getServiceGateway(id='') {
@@ -922,7 +886,7 @@ class OkitJsonView {
     }
     loadServiceGateways(service_gateways) {
         for (const artefact of service_gateways) {
-            this.service_gateways.push(new ServiceGatewayView(new ServiceGateway(artefact, this.okitjson), this));
+            this.getServiceGateways().push(new ServiceGatewayView(new ServiceGateway(artefact, this.okitjson), this));
         }
     }
 
@@ -940,10 +904,13 @@ class OkitJsonView {
         return view_artefact;
     }
     newSubnet(subnet) {
-        this.subnets.push(subnet ? new SubnetView(subnet, this) : new SubnetView(this.okitjson.newSubnet(), this));
-        return this.subnets[this.subnets.length - 1];
+        this.getSubnets().push(subnet ? new SubnetView(subnet, this) : new SubnetView(this.okitjson.newSubnet(), this));
+        return this.getSubnets()[this.getSubnets().length - 1];
     }
-    getSubnets() {return this.subnets;}
+    getSubnets() {
+        if (!this.subnets) this.subnets = []
+        return this.subnets;
+    }
     getSubnet(id='') {
         for (let artefact of this.getSubnets()) {
             if (artefact.id === id) {
@@ -954,7 +921,7 @@ class OkitJsonView {
     }
     loadSubnets(subnets) {
         for (const artefact of subnets) {
-            this.subnets.push(new SubnetView(new Subnet(artefact, this.okitjson), this));
+            this.getSubnets().push(new SubnetView(new Subnet(artefact, this.okitjson), this));
         }
     }
     loadSubnetsSelect(select_id, empty_option=false) {
@@ -991,14 +958,15 @@ class OkitJsonView {
         return view_artefact;
     }
     newVirtualCloudNetwork(vcn) {
-        this.virtual_cloud_networks.push(vcn ? new VirtualCloudNetworkView(vcn, this) : new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork(), this));
-        return this.virtual_cloud_networks[this.virtual_cloud_networks.length - 1];
+        this.getVirtualCloudNetworks().push(vcn ? new VirtualCloudNetworkView(vcn, this) : new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork(), this));
+        return this.getVirtualCloudNetworks()[this.getVirtualCloudNetworks().length - 1];
     }
     getVirtualCloudNetworks() {
+        if (!this.virtual_cloud_networks) this.virtual_cloud_networks = []
         return this.virtual_cloud_networks;
     }
     getVirtualCloudNetwork(id='') {
-        for (let artefact of this.virtual_cloud_networks) {
+        for (let artefact of this.getVirtualCloudNetworks()) {
             if (artefact.id === id) {
                 return artefact;
             }
@@ -1028,10 +996,13 @@ class OkitJsonView {
 
     // Virtual Network Interface
     newVirtualNetworkInterface(vnic) {
-        this.virtual_network_interfaces.push(vnic ? new VirtualNetworkInterfaceView(vnic, this) : new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this));
-        return this.virtual_network_interfaces[this.virtual_network_interfaces.length - 1];
+        this.getVirtualNetworkInterfaces().push(vnic ? new VirtualNetworkInterfaceView(vnic, this) : new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this));
+        return this.getVirtualNetworkInterfaces()[this.getVirtualNetworkInterfaces().length - 1];
     }
-    getVirtualNetworkInterfaces() {return this.virtual_network_interfaces;}
+    getVirtualNetworkInterfaces() {
+        if (!this.virtual_network_interfaces) this.virtual_network_interfaces = []
+        return this.virtual_network_interfaces;
+    }
     getVirtualNetworkInterface(id='') {
         for (let artefact of this.getVirtualNetworkInterfaces()) {
             if (artefact.id === id) {

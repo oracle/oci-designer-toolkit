@@ -20,12 +20,12 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
      */
     // Add Specific Mouse Events
     addAssociationHighlighting() {
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             if (instance.primary_vnic.nsg_ids.includes(this.id)) {
                 $(jqId(instance.id)).addClass('highlight-association');
             }
         }
-        for (let ad of this.getOkitJson().autonomous_databases) {
+        for (let ad of this.getOkitJson().getAutonomousDatabases()) {
             if (ad.nsg_ids.includes(this.id)) {
                 $(jqId(ad.id)).addClass('highlight-association');
             }
@@ -34,12 +34,12 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     }
 
     removeAssociationHighlighting() {
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             if (instance.primary_vnic.nsg_ids.includes(this.id)) {
                 $(jqId(instance.id)).removeClass('highlight-association');
             }
         }
-        for (let ad of this.getOkitJson().autonomous_databases) {
+        for (let ad of this.getOkitJson().getAutonomousDatabases()) {
             if (ad.nsg_ids.includes(this.id)) {
                 $(jqId(ad.id)).removeClass('highlight-association');
             }

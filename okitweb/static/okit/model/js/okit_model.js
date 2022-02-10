@@ -31,31 +31,31 @@ class OkitJson {
         this.freeform_tags = {};
         this.defined_tags = {};
 
-        this.autonomous_databases = [];
-        this.block_storage_volumes = [];
-        this.compartments = [];
-        this.customer_premise_equipments = [];
-        this.database_systems = [];
-        this.dynamic_routing_gateways = [];
-        this.fast_connects = [];
-        this.file_storage_systems = [];
-        this.instances = [];
-        this.instance_pools = [];
-        this.internet_gateways = [];
-        this.ipsec_connections = [];
-        this.load_balancers = [];
-        this.local_peering_gateways = [];
-        this.mysql_database_systems = [];
-        this.nat_gateways = [];
-        this.network_security_groups = [];
-        this.object_storage_buckets = [];
-        this.oke_clusters = [];
-        this.remote_peering_connections = [];
-        this.route_tables = [];
-        this.security_lists = [];
-        this.service_gateways = [];
-        this.subnets = [];
-        this.virtual_cloud_networks = [];
+        // this.autonomous_databases = [];
+        // this.block_storage_volumes = [];
+        // this.compartments = [];
+        // this.customer_premise_equipments = [];
+        // this.database_systems = [];
+        // this.dynamic_routing_gateways = [];
+        // this.fast_connects = [];
+        // this.file_storage_systems = [];
+        // this.instances = [];
+        // this.instance_pools = [];
+        // this.internet_gateways = [];
+        // this.ipsec_connections = [];
+        // this.load_balancers = [];
+        // this.local_peering_gateways = [];
+        // this.mysql_database_systems = [];
+        // this.nat_gateways = [];
+        // this.network_security_groups = [];
+        // this.object_storage_buckets = [];
+        // this.oke_clusters = [];
+        // this.remote_peering_connections = [];
+        // this.route_tables = [];
+        // this.security_lists = [];
+        // this.service_gateways = [];
+        // this.subnets = [];
+        // this.virtual_cloud_networks = [];
         //this.web_application_firewalls = [];
 
         if (okit_json_string !== undefined && okit_json_string.length > 0) {
@@ -173,10 +173,11 @@ class OkitJson {
     // Autonomous Database
     newAutonomousDatabase(data) {
         console.info('New Autonomous Database');
-        this.autonomous_databases.push(new AutonomousDatabase(data, this));
-        return this.autonomous_databases[this.autonomous_databases.length - 1];
+        this.getAutonomousDatabases().push(new AutonomousDatabase(data, this));
+        return this.getAutonomousDatabases()[this.getAutonomousDatabases().length - 1];
     }
     getAutonomousDatabases() {
+        if (!this.autonomous_databases) this.autonomous_databases = [];
         return this.autonomous_databases;
     }
     getAutonomousDatabase(id='') {
@@ -194,10 +195,11 @@ class OkitJson {
     // Block Storage Volume
     newBlockStorageVolume(data) {
         console.info('New Block Storage Volume');
-        this.block_storage_volumes.push(new BlockStorageVolume(data, this));
-        return this.block_storage_volumes[this.block_storage_volumes.length - 1];
+        this.getBlockStorageVolumes().push(new BlockStorageVolume(data, this));
+        return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
     }
     getBlockStorageVolumes() {
+        if (!this.block_storage_volumes) this.block_storage_volumes = [];
         return this.block_storage_volumes;
     }
     getBlockStorageVolume(id='') {
@@ -215,10 +217,13 @@ class OkitJson {
     // Compartment
     newCompartment(data = {}) {
         console.info('New Compartment');
-        this.compartments.push(new Compartment(data, this));
-        return this.compartments[this.compartments.length - 1];
+        this.getCompartments().push(new Compartment(data, this));
+        return this.getCompartments()[this.getCompartments().length - 1];
     }
-    getCompartments() {return this.compartments;}
+    getCompartments() {
+        if (!this.compartments) this.compartments = [];
+        return this.compartments;
+    }
     getCompartment(id='') {
         for (let artefact of this.getCompartments()) {
             if (artefact.id === id) {
@@ -234,10 +239,13 @@ class OkitJson {
     // Customer Premise Equipment
     newCustomerPremiseEquipment(data = {}) {
         console.info('New CustomerPremiseEquipment');
-        this.customer_premise_equipments.push(new CustomerPremiseEquipment(data, this));
-        return this.customer_premise_equipments[this.customer_premise_equipments.length - 1];
+        this.getCustomerPremiseEquipments().push(new CustomerPremiseEquipment(data, this));
+        return this.getCustomerPremiseEquipments()[this.getCustomerPremiseEquipments().length - 1];
     }
-    getCustomerPremiseEquipments() {return this.customer_premise_equipments;}
+    getCustomerPremiseEquipments() {
+        if (!this.customer_premise_equipments) this.customer_premise_equipments = [];
+        return this.customer_premise_equipments;
+    }
     getCustomerPremiseEquipment(id='') {
         for (let artefact of this.getCustomerPremiseEquipments()) {
             if (artefact.id === id) {
@@ -253,10 +261,11 @@ class OkitJson {
     // Database System
     newDatabaseSystem(data) {
         console.info('New Database System');
-        this.database_systems.push(new DatabaseSystem(data, this));
-        return this.database_systems[this.database_systems.length - 1];
+        this.getDatabaseSystems().push(new DatabaseSystem(data, this));
+        return this.getDatabaseSystems()[this.getDatabaseSystems().length - 1];
     }
     getDatabaseSystems() {
+        if (!this.database_systems) this.database_systems = [];
         return this.database_systems;
     }
     getDatabaseSystem(id='') {
@@ -274,10 +283,11 @@ class OkitJson {
     // Dynamic Routing Gateway
     newDynamicRoutingGateway(data) {
         console.info('New Dynamic Routing Gateway');
-        this.dynamic_routing_gateways.push(new DynamicRoutingGateway(data, this));
-        return this.dynamic_routing_gateways[this.dynamic_routing_gateways.length - 1];
+        this.getDynamicRoutingGateways().push(new DynamicRoutingGateway(data, this));
+        return this.getDynamicRoutingGateways()[this.getDynamicRoutingGateways().length - 1];
     }
     getDynamicRoutingGateways() {
+        if (!this.dynamic_routing_gateways) this.dynamic_routing_gateways = [];
         return this.dynamic_routing_gateways;
     }
     getDynamicRoutingGateway(id='') {
@@ -295,10 +305,11 @@ class OkitJson {
     // FastConnect
     newFastConnect(data) {
         console.info('New FastConnect');
-        this.fast_connects.push(new FastConnect(data, this));
-        return this.fast_connects[this.fast_connects.length - 1];
+        this.getFastConnects().push(new FastConnect(data, this));
+        return this.getFastConnects()[this.getFastConnects().length - 1];
     }
     getFastConnects() {
+        if (!this.fast_connects) this.fast_connects = [];
         return this.fast_connects;
     }
     getFastConnect(id='') {
@@ -316,10 +327,11 @@ class OkitJson {
     // File Storage System
     newFileStorageSystem(data) {
         console.info('New File Storage System');
-        this.file_storage_systems.push(new FileStorageSystem(data, this));
-        return this.file_storage_systems[this.file_storage_systems.length - 1];
+        this.getFileStorageSystems().push(new FileStorageSystem(data, this));
+        return this.getFileStorageSystems()[this.getFileStorageSystems().length - 1];
     }
     getFileStorageSystems() {
+        if (!this.file_storage_systems) this.file_storage_systems = [];
         return this.file_storage_systems;
     }
     getFileStorageSystem(id='') {
@@ -342,10 +354,11 @@ class OkitJson {
     // Instance
     newInstance(data) {
         console.info('New Instance');
-        this.instances.push(new Instance(data, this));
-        return this.instances[this.instances.length - 1];
+        this.getInstances().push(new Instance(data, this));
+        return this.getInstances()[this.getInstances().length - 1];
     }
     getInstances() {
+        if (!this.instances) this.instances = [];
         return this.instances;
     }
     getInstance(id='') {
@@ -366,10 +379,11 @@ class OkitJson {
     // InstancePool
     newInstancePool(data) {
         console.info('New InstancePool');
-        this.instance_pools.push(new InstancePool(data, this));
-        return this.instance_pools[this.instance_pools.length - 1];
+        this.getInstancePools().push(new InstancePool(data, this));
+        return this.getInstancePools()[this.getInstancePools().length - 1];
     }
     getInstancePools() {
+        if (!this.instance_pools) this.instance_pools = [];
         return this.instance_pools;
     }
     getInstancePool(id='') {
@@ -387,10 +401,11 @@ class OkitJson {
     // Internet Gateway
     newInternetGateway(data) {
         console.info('New Internet Gateway');
-        this.internet_gateways.push(new InternetGateway(data, this));
-        return this.internet_gateways[this.internet_gateways.length - 1];
+        this.getInternetGateways().push(new InternetGateway(data, this));
+        return this.getInternetGateways()[this.getInternetGateways().length - 1];
     }
     getInternetGateways() {
+        if (!this.internet_gateways) this.internet_gateways = [];
         return this.internet_gateways;
     }
     getInternetGateway(id='') {
@@ -408,10 +423,13 @@ class OkitJson {
     // IPSec Connection
     newIpsecConnection(data) {
         console.info('New IPSec Connection');
-        this.ipsec_connections.push(new IpsecConnection(data, this));
-        return this.ipsec_connections[this.ipsec_connections.length - 1];
+        this.getIpsecConnections().push(new IpsecConnection(data, this));
+        return this.getIpsecConnections()[this.getIpsecConnections().length - 1];
     }
-    getIpsecConnections() {return this.ipsec_connections;}
+    getIpsecConnections() {
+        if (!this.ipsec_connections) this.ipsec_connections = [];
+        return this.ipsec_connections;
+    }
     getIpsecConnection(id='') {
         for (let artefact of this.getIpsecConnections()) {
             if (artefact.id === id) {
@@ -427,10 +445,11 @@ class OkitJson {
     // Load Balancer
     newLoadBalancer(data) {
         console.info('New Load Balancer');
-        this.load_balancers.push(new LoadBalancer(data, this));
-        return this.load_balancers[this.load_balancers.length - 1];
+        this.getLoadBalancers().push(new LoadBalancer(data, this));
+        return this.getLoadBalancers()[this.getLoadBalancers().length - 1];
     }
     getLoadBalancers() {
+        if (!this.load_balancers) this.load_balancers = [];
         return this.load_balancers;
     }
     getLoadBalancer(id='') {
@@ -448,10 +467,11 @@ class OkitJson {
     // Local Peering Gateway
     newLocalPeeringGateway(data) {
         console.info('New Local Peering Gateway');
-        this.local_peering_gateways.push(new LocalPeeringGateway(data, this));
-        return this.local_peering_gateways[this.local_peering_gateways.length - 1];
+        this.getLocalPeeringGateways().push(new LocalPeeringGateway(data, this));
+        return this.getLocalPeeringGateways()[this.getLocalPeeringGateways().length - 1];
     }
     getLocalPeeringGateways() {
+        if (!this.local_peering_gateways) this.local_peering_gateways = [];
         return this.local_peering_gateways;
     }
     getLocalPeeringGateway(id='') {
@@ -469,10 +489,13 @@ class OkitJson {
     // MySQL Database System
     newMysqlDatabaseSystem(data) {
         console.info('New MySQL Database System');
-        this.mysql_database_systems.push(new MysqlDatabaseSystem(data, this));
-        return this.mysql_database_systems[this.mysql_database_systems.length - 1];
+        this.getMysqlDatabaseSystems().push(new MysqlDatabaseSystem(data, this));
+        return this.getMysqlDatabaseSystems()[this.getMysqlDatabaseSystems().length - 1];
     }
-    getMysqlDatabaseSystems() {return this.mysql_database_systems;}
+    getMysqlDatabaseSystems() {
+        if (!this.mysql_database_systems) this.mysql_database_systems = [];
+        return this.mysql_database_systems;
+    }
     getMysqlDatabaseSystem(id='') {
         for (let artefact of this.getMysqlDatabaseSystems()) {
             if (artefact.id === id) {
@@ -488,10 +511,13 @@ class OkitJson {
     // NAT Gateway
     newNatGateway(data) {
         console.info('New NAT Gateway');
-        this.nat_gateways.push(new NatGateway(data, this));
-        return this.nat_gateways[this.nat_gateways.length - 1];
+        this.getNatGateways().push(new NatGateway(data, this));
+        return this.getNatGateways()[this.getNatGateways().length - 1];
     }
-    getNatGateways() {return this.nat_gateways;}
+    getNatGateways() {
+        if (!this.nat_gateways) this.nat_gateways = [];
+        return this.nat_gateways;
+    }
     getNatGateway(id='') {
         for (let artefact of this.getNatGateways()) {
             if (artefact.id === id) {
@@ -507,10 +533,11 @@ class OkitJson {
     // Network Security Group
     newNetworkSecurityGroup(data) {
         console.info('New Network Security Group');
-        this.network_security_groups.push(new NetworkSecurityGroup(data, this));
-        return this.network_security_groups[this.network_security_groups.length - 1];
+        this.getNetworkSecurityGroups().push(new NetworkSecurityGroup(data, this));
+        return this.getNetworkSecurityGroups()[this.getNetworkSecurityGroups().length - 1];
     }
     getNetworkSecurityGroups() {
+        if (!this.network_security_groups) this.network_security_groups = [];
         return this.network_security_groups;
     }
     getNetworkSecurityGroup(id='') {
@@ -528,10 +555,11 @@ class OkitJson {
     // Object Storage Bucket
     newObjectStorageBucket(data) {
         console.info('New Object Storage Bucket');
-        this.object_storage_buckets.push(new ObjectStorageBucket(data, this));
-        return this.object_storage_buckets[this.object_storage_buckets.length - 1];
+        this.getObjectStorageBuckets().push(new ObjectStorageBucket(data, this));
+        return this.getObjectStorageBuckets()[this.getObjectStorageBuckets().length - 1];
     }
     getObjectStorageBuckets() {
+        if (!this.object_storage_buckets) this.object_storage_buckets = [];
         return this.object_storage_buckets;
     }
     getObjectStorageBucket(id='') {
@@ -549,10 +577,11 @@ class OkitJson {
     // OkeCluster
     newOkeCluster(data) {
         console.info('New OkeCluster');
-        this.oke_clusters.push(new OkeCluster(data, this));
-        return this.oke_clusters[this.oke_clusters.length - 1];
+        this.getOkeClusters().push(new OkeCluster(data, this));
+        return this.getOkeClusters()[this.getOkeClusters().length - 1];
     }
     getOkeClusters() {
+        if (!this.oke_clusters) this.oke_clusters = [];
         return this.oke_clusters;
     }
     getOkeCluster(id='') {
@@ -570,10 +599,13 @@ class OkitJson {
     // RemotePeeringConnection
     newRemotePeeringConnection(data) {
         console.info('New Remote Peering Connection');
-        this.remote_peering_connections.push(new RemotePeeringConnection(data, this));
-        return this.remote_peering_connections[this.remote_peering_connections.length - 1];
+        this.getRemotePeeringConnections().push(new RemotePeeringConnection(data, this));
+        return this.getRemotePeeringConnections()[this.getRemotePeeringConnections().length - 1];
     }
-    getRemotePeeringConnections() {return this.remote_peering_connections;}
+    getRemotePeeringConnections() {
+        if (!this.remote_peering_connections) this.remote_peering_connections = [];
+        return this.remote_peering_connections;
+    }
     getRemotePeeringConnection(id='') {
         for (let artefact of this.getRemotePeeringConnections()) {
             if (artefact.id === id) {
@@ -589,10 +621,11 @@ class OkitJson {
     // Route Table
     newRouteTable(data) {
         console.info('New Route Table');
-        this.route_tables.push(new RouteTable(data, this));
-        return this.route_tables[this.route_tables.length - 1];
+        this.getRouteTables().push(new RouteTable(data, this));
+        return this.getRouteTables()[this.getRouteTables().length - 1];
     }
     getRouteTables() {
+        if (!this.route_tables) this.route_tables = [];
         return this.route_tables;
     }
     getRouteTable(id='') {
@@ -610,10 +643,11 @@ class OkitJson {
     // Security List
     newSecurityList(data) {
         console.info('New Security List');
-        this.security_lists.push(new SecurityList(data, this));
-        return this.security_lists[this.security_lists.length - 1];
+        this.getSecurityLists().push(new SecurityList(data, this));
+        return this.getSecurityLists()[this.getSecurityLists().length - 1];
     }
     getSecurityLists() {
+        if (!this.security_lists) this.security_lists = [];
         return this.security_lists;
     }
     getSecurityList(id='') {
@@ -631,10 +665,11 @@ class OkitJson {
     // Service Gateway
     newServiceGateway(data) {
         console.info('New Service Gateway');
-        this.service_gateways.push(new ServiceGateway(data, this));
-        return this.service_gateways[this.service_gateways.length - 1];
+        this.getServiceGateways().push(new ServiceGateway(data, this));
+        return this.getServiceGateways()[this.getServiceGateways().length - 1];
     }
     getServiceGateways() {
+        if (!this.service_gateways) this.service_gateways = [];
         return this.service_gateways;
     }
     getServiceGateway(id='') {
@@ -652,10 +687,11 @@ class OkitJson {
     // Subnet
     newSubnet(data) {
         console.info('New Subnet');
-        this.subnets.push(new Subnet(data, this));
-        return this.subnets[this.subnets.length - 1];
+        this.getSubnets().push(new Subnet(data, this));
+        return this.getSubnets()[this.getSubnets().length - 1];
     }
     getSubnets() {
+        if (!this.subnets) this.subnets = [];
         return this.subnets;
     }
     getSubnet(id='') {
@@ -673,10 +709,11 @@ class OkitJson {
     // Virtual Cloud Network
     newVirtualCloudNetwork(data) {
         console.info('New Virtual Cloud Network');
-        this.virtual_cloud_networks.push(new VirtualCloudNetwork(data, this));
-        return this.virtual_cloud_networks[this.virtual_cloud_networks.length - 1];
+        this.getVirtualCloudNetworks().push(new VirtualCloudNetwork(data, this));
+        return this.getVirtualCloudNetworks()[this.getVirtualCloudNetworks().length - 1];
     }
     getVirtualCloudNetworks() {
+        if (!this.virtual_cloud_networks) this.virtual_cloud_networks = [];
         return this.virtual_cloud_networks;
     }
     getVirtualCloudNetwork(id='') {
