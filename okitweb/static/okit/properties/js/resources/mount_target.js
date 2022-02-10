@@ -28,7 +28,7 @@ class MountTargetProperties extends OkitResourceProperties {
         this.subnet_id = s_input
         this.append(this.core_tbody, s_row)
 
-        // Option Properties
+        // Optional Properties
         const [details, summary, div] = this.createDetailsSection('Optional Networking', `${self.id}_optional_network_details`)
         this.append(this.properties_contents, details)
         const [table, thead, tbody] = this.createTable('', `${self.id}_option_network_properties`)

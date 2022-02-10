@@ -68,6 +68,10 @@ textarea {
     overflow: auto;
 }
 
+input:read-only {
+    opacity: 0.5;
+}
+
 details > summary::-webkit-details-marker {
     display:none;
 }

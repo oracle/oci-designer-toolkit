@@ -175,8 +175,11 @@ class OkitResourceProperties {
             row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', type).attr('class', 'okit-property-value').on('blur', callback)
             if (data) {
-                if (data.min) element.attr('min', data.min)
-                if (data.max) element.attr('max', data.max)
+                if (data.min) input.attr('min', data.min)
+                if (data.max) input.attr('max', data.max)
+                if (data.maxlength) input.attr('maxlength', data.maxlength)
+                if (data.pattern) input.attr('pattern', data.pattern)
+                if (data.title) input.attr('title', data.title)
             }
         } else if (type === 'ipv4') {
             const placeholder = '0.0.0.0'
@@ -188,6 +191,16 @@ class OkitResourceProperties {
             const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))$)+"
             row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "IPv4 CIDR block").attr('placeholder', placeholder).on('blur', callback)
+        } else if (type === 'ipv4_cidr_list') {
+            const placeholder = '0.0.0.0/0,0.0.0.0/0'
+            const ipv4_cidr_regex = "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))(,\s?|$))+"
+            row.append('div').attr('class', 'td').text(label)
+            input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "Comma separated IPv4 CIDR blocks").attr('placeholder', placeholder).on('blur', callback)
+        } else if (type === 'ipv6_cidr_list') {
+            const placeholder = ''
+            const ipv4_cidr_regex = "^((((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7})(,\s?|$))+"
+            row.append('div').attr('class', 'td').text(label)
+            input = row.append('div').attr('class', 'td').append('input').attr('name', this.inputId(id, idx)).attr('id', this.inputId(id, idx)).attr('type', 'text').attr('class', 'okit-property-value').attr('pattern', ipv4_cidr_regex).attr('title', "Comma separated IPv6 CIDR blocks").attr('placeholder', placeholder).on('blur', callback)
         } else if (type === 'select') {
             row.append('div').attr('class', 'td').text(label)
             input = row.append('div').attr('class', 'td').append('select').attr('id', this.inputId(id, idx)).attr('class', 'okit-property-value').on('change', callback)
@@ -231,8 +244,10 @@ class OkitResourceProperties {
         return [table, thead, tbody]
     }
 
-    createDetailsSection(label='', id='', idx='', callback=undefined, data={}, open='open') {
-        const details = d3.create('details').attr('class', 'okit-details').attr('open', open)
+    createDetailsSection(label='', id='', idx='', callback=undefined, data={}, open=true) {
+        // const details = d3.create('details').attr('class', 'okit-details').attr('open', open)
+        const details = d3.create('details').attr('class', 'okit-details')
+        if (open) details.attr('open', open)
         const summary = details.append('summary').attr('class', 'summary-background').append('label').text(label)
         const div = details.append('div').attr('class', 'okit-details-body')
         return [details, summary, div]

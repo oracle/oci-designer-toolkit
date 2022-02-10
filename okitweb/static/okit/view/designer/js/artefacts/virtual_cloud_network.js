@@ -10,6 +10,7 @@ console.info('Loaded Designer VirtualCloudNetwork View Javascript');
 class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
+        this.newPropertiesSheet()
     }
 
     get parent_id() {return this.artefact.compartment_id;}
@@ -42,21 +43,14 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
      */
     /*
     ** Property Sheet Load function
-     */
+    */
+    newPropertiesSheet() {
+        this.properties_sheet = new VirtualCloudNetworkProperties(this.artefact)
+    }
     loadProperties() {
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/virtual_cloud_network.html", () => {
-            loadPropertiesSheet(me.artefact);
-            $(jqId('cidr_blocks')).on('change', function() {
-                console.info('CIDR Block Changed ' + $(jqId('cidr_blocks')).val());
-                for (let subnet of me.artefact.getOkitJson().subnets) {
-                    if (subnet.vcn_id === me.id) {
-                        subnet.generateCIDR();
-                    }
-                }
-                redrawSVGCanvas();
-            });
-        });
+        $(jqId(PROPERTIES_PANEL)).empty()
+        this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
+        this.properties_sheet.load()
     }
 
     /*
