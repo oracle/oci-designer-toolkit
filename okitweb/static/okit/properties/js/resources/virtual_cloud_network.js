@@ -37,7 +37,7 @@ class VirtualCloudNetworkProperties extends OkitResourceProperties {
         this.optional_network_tbody = tbody
         this.append(div, table)
         // IPv6 CIDR Allowed
-        const [ipv6flag_row, ipv6flag_input] = this.createInput('checkbox', 'IPv6 Allowed', `${self.id}_ipv6cidr_blocks`, '', (d, i, n) => {n[i].reportValidity(); self.resource.is_ipv6enabled = n[i].checked; self.ipv6EnabledChange()})
+        const [ipv6flag_row, ipv6flag_input] = this.createInput('checkbox', 'IPv6 Allowed', `${self.id}_is_ipv6enabled`, '', (d, i, n) => {n[i].reportValidity(); self.resource.is_ipv6enabled = n[i].checked; self.ipv6EnabledChange()})
         this.is_ipv6enabled = ipv6flag_input
         this.append(this.optional_network_tbody, ipv6flag_row)
         // IPv6 CIDR Blocks
