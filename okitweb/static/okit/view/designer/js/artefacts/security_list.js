@@ -14,7 +14,7 @@ class SecurityListView extends OkitDesignerArtefactView {
 
     get attached() {
         if (!this.attached_id) {
-            for (let subnet of this.getOkitJson().subnets) {
+            for (let subnet of this.getOkitJson().getSubnets()) {
                 if (subnet.security_list_ids.includes(this.id)) {
                     return true;
                 }

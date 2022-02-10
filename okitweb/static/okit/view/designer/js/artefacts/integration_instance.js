@@ -127,7 +127,7 @@ OkitJsonView.prototype.pasteIntegrationInstance = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.integration_instances.push(clone);
+    this.okitjson.getIntegrationInstances().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadIntegrationInstancesSelect = function(select_id, empty_option=false) {

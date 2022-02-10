@@ -14,7 +14,7 @@ class DhcpOptionView extends OkitArtefactView {
     }
     get attached() {
         if (!this.attached_id) {
-            for (let subnet of this.getOkitJson().subnets) {
+            for (let subnet of this.getOkitJson().getSubnets()) {
                 if (subnet.dhcp_options_id === this.id) {
                     return true;
                 }
@@ -330,7 +330,7 @@ OkitJsonView.prototype.pasteDhcpOption = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.dhcp_options.push(clone);
+    this.okitjson.getDhcpOptions().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadDhcpOptionsSelect = function(select_id, empty_option=false) {

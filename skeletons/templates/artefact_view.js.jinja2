@@ -138,7 +138,7 @@ OkitJsonView.prototype.paste{{ model_class_name }} = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.{{ artefact_json_list }}.push(clone);
+    this.okitjson.get{{ model_class_name }}s().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.load{{ model_class_name }}sSelect = function(select_id, empty_option=false) {

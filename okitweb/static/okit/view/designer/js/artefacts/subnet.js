@@ -83,41 +83,14 @@ class SubnetView extends OkitContainerDesignerArtefactView {
 
     /*
     ** Property Sheet Load function
-     */
+    */
+    newPropertiesSheet() {
+        this.properties_sheet = new SubnetProperties(this.artefact)
+    }
     loadProperties() {
-        let me = this;
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/subnet.html", () => {
-            // Load Referenced Ids
-            // Virtual Cloud Network
-            this.loadVirtualCloudNetworkSelect('vcn_id');
-            $(jqId('vcn_id')).on('change', () => {if ($(jqId('vcn_id')).val() != '') me.artefact.generateCIDR();});
-            // Route Table
-            let route_table_select = $(jqId('route_table_id'));
-            route_table_select.append($('<option>').attr('value', '').text(''));
-            for (let route_table of me.artefact.getOkitJson().route_tables) {
-                if (me.vcn_id === route_table.vcn_id) {
-                    route_table_select.append($('<option>').attr('value', route_table.id).text(route_table.display_name));
-                }
-            }
-            // Security Lists
-            let security_lists_select = d3.select(d3Id('security_list_ids'));
-            for (let security_list of me.artefact.getOkitJson().security_lists) {
-                if (me.vcn_id === security_list.vcn_id) {
-                    let div = security_lists_select.append('div');
-                    div.append('input')
-                        .attr('type', 'checkbox')
-                        .attr('id', safeId(security_list.id))
-                        .attr('value', security_list.id);
-                    div.append('label')
-                        .attr('for', safeId(security_list.id))
-                        .text(security_list.display_name);
-                }
-            }
-            // Dhcp Options
-            this.json_view.loadDhcpOptionsSelect('dhcp_options_id', true)
-            // Load Properties
-            loadPropertiesSheet(me.artefact);
-        });
+        $(jqId(PROPERTIES_PANEL)).empty()
+        this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
+        this.properties_sheet.load()
     }
 
     /*

@@ -12,7 +12,6 @@ class MountTargetView extends OkitArtefactView {
         if (!json_view.mount_targets) json_view.mount_targets = [];
         super(artefact, json_view);
         this.export_idx = 0;
-        this.newPropertiesSheet()
     }
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
@@ -155,7 +154,7 @@ OkitJsonView.prototype.pasteMountTarget = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.mount_targets.push(clone);
+    this.okitjson.getMountTargets().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadMountTargetsSelect = function(select_id, empty_option=false) {

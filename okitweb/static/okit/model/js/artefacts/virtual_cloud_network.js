@@ -59,77 +59,21 @@ class VirtualCloudNetwork extends OkitArtifact {
     deleteChildren() {
         console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Subnets
-        this.getOkitJson().subnets = this.getOkitJson().subnets.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getSubnets().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Remove Route_tables
-        this.getOkitJson().route_tables = this.getOkitJson().route_tables.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getRouteTables().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Remove Security Lists
-        this.getOkitJson().security_lists = this.getOkitJson().security_lists.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getSecurityLists().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Remove Internet Gateways
-        this.getOkitJson().internet_gateways = this.getOkitJson().internet_gateways.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getInternetGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Remove NAT Gateways
-        this.getOkitJson().nat_gateways = this.getOkitJson().nat_gateways.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getNatGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Remove Service Gateways
-        this.getOkitJson().service_gateways = this.getOkitJson().service_gateways.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getServiceGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Local Peering Gateways
-        this.getOkitJson().local_peering_gateways = this.getOkitJson().local_peering_gateways.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getLocalPeeringGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Network Security Groups
-        this.getOkitJson().network_security_groups = this.getOkitJson().network_security_groups.filter(function(child) {
-            if (child.vcn_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getNetworkSecurityGroups().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // DHCP Options
         this.getOkitJson().getDhcpOptions().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         console.log();
@@ -139,91 +83,54 @@ class VirtualCloudNetwork extends OkitArtifact {
     ** Artifact Specific Functions
      */
     hasUnattachedSecurityList() {
-        for (let security_list of this.getOkitJson().security_lists) {
-            if (security_list.vcn_id === this.id) {
-                return true;
-            }
-        }
-        return false;
+        const self = this
+        return this.getOkitJson().getSecurityLists().filter((r) => r.vcn_id === self.id).length > 0
     }
 
     hasUnattachedRouteTable() {
-         for (let route_table of this.getOkitJson().route_tables) {
-            if (route_table.vcn_id === this.id) {
-                return true;
-            }
-        }
-        return false;
+        const self = this
+        return this.getOkitJson().getRouteTables().filter((r) => r.vcn_id === self.id).length > 0
     }
 
     getGateways() {
-        let gateways = [];
-        // Internet Gateways
-        gateways.push(...this.getInternetGateways());
-        // NAT Gateways
-        gateways.push(...this.getNatGateways());
-        // Local Peering Gateways
-        gateways.push(...this.getLocalPeeringGateways());
-        // Service Gateways
-        gateways.push(...this.getServiceGateways());
-        // Dynamic Routing Gateways
-        gateways.push(...this.getDynamicRoutingGateways());
-        return gateways;
+        return [...this.getInternetGateways(), ...this.getNatGateways(), ...this.getLocalPeeringGateways(), ...this.getServiceGateways(), ...this.getDynamicRoutingGateways()]
+        // let gateways = [];
+        // // Internet Gateways
+        // gateways.push(...this.getInternetGateways());
+        // // NAT Gateways
+        // gateways.push(...this.getNatGateways());
+        // // Local Peering Gateways
+        // gateways.push(...this.getLocalPeeringGateways());
+        // // Service Gateways
+        // gateways.push(...this.getServiceGateways());
+        // // Dynamic Routing Gateways
+        // gateways.push(...this.getDynamicRoutingGateways());
+        // return gateways;
     }
 
     getInternetGateways() {
-        let gateways = [];
-        // Internet Gateways
-        for (let gateway of this.getOkitJson().internet_gateways) {
-            if (gateway.vcn_id === this.id) {
-                gateways.push(gateway);
-            }
-        }
-        return gateways;
+        const self = this
+        return this.getOkitJson().getInternetGateways().filter((r) => r.vcn_id === self.id)
     }
 
     getNatGateways() {
-        let gateways = [];
-        // NAT Gateways
-        for (let gateway of this.getOkitJson().nat_gateways) {
-            if (gateway.vcn_id === this.id) {
-                gateways.push(gateway);
-            }
-        }
-        return gateways;
+        const self = this
+        return this.getOkitJson().getNatGateways().filter((r) => r.vcn_id === self.id)
     }
 
     getLocalPeeringGateways() {
-        let gateways = [];
-        // NAT Gateways
-        for (let gateway of this.getOkitJson().local_peering_gateways) {
-            if (gateway.vcn_id === this.id) {
-                gateways.push(gateway);
-            }
-        }
-        return gateways;
+        const self = this
+        return this.getOkitJson().getLocalPeeringGateways().filter((r) => r.vcn_id === self.id)
     }
 
     getServiceGateways() {
-        let gateways = [];
-        // Service Gateways
-        for (let gateway of this.getOkitJson().service_gateways) {
-            if (gateway.vcn_id === this.id) {
-                gateways.push(gateway);
-            }
-        }
-        return gateways;
+        const self = this
+        return this.getOkitJson().getServiceGateways().filter((r) => r.vcn_id === self.id)
     }
 
     getDynamicRoutingGateways() {
-        let gateways = [];
-        // Dynamic Routing Gateways
-        for (let gateway of this.getOkitJson().dynamic_routing_gateways) {
-            if (gateway.vcn_id === this.id) {
-                gateways.push(gateway);
-            }
-        }
-        return gateways;
+        const self = this
+        return this.getOkitJson().getDynamicRoutingGateways().filter((r) => r.vcn_id === self.id)
     }
 
     getNamePrefix() {

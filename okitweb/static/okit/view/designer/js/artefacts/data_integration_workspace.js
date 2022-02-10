@@ -134,7 +134,7 @@ OkitJsonView.prototype.pasteDataIntegrationWorkspace = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.data_integration_workspaces.push(clone);
+    this.okitjson.getDataIntegrationWorkspaces().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadDataIntegrationWorkspacesSelect = function(select_id, empty_option=false) {

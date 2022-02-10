@@ -348,7 +348,7 @@ OkitJsonView.prototype.pasteDrg = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.drgs.push(clone);
+    this.okitjson.getDrgs().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadDrgsSelect = function(select_id, empty_option=false) {

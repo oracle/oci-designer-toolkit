@@ -45,61 +45,19 @@ class Compartment extends OkitArtifact {
      */
     deleteChildren() {
         console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
+
         // Remove Compartments
-        this.getOkitJson().compartments = this.getOkitJson().compartments.filter(function(child) {
-            if (child.compartment_id === this.id && child.id !== this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getCompartments().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Virtual Cloud Networks
-        this.getOkitJson().virtual_cloud_networks = this.getOkitJson().virtual_cloud_networks.filter(function(child) {
-            if (child.compartment_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getVirtualCloudNetworks().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Block Storage Volumes
-        this.getOkitJson().block_storage_volumes = this.getOkitJson().block_storage_volumes.filter(function(child) {
-            if (child.compartment_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getBlockStorageVolumes().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Object Storage Buckets
-        this.getOkitJson().object_storage_buckets = this.getOkitJson().object_storage_buckets.filter(function(child) {
-            if (child.compartment_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getObjectStorageBuckets().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Autonomous Databases
-        this.getOkitJson().autonomous_databases = this.getOkitJson().autonomous_databases.filter(function(child) {
-            if (child.compartment_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
-        console.log();
+        this.getOkitJson().getAutonomousDatabases().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
         // Dynamic Routing Gateways
-        this.getOkitJson().dynamic_routing_gateways = this.getOkitJson().dynamic_routing_gateways.filter(function(child) {
-            if (child.compartment_id === this.id) {
-                console.info('Deleting ' + child.display_name);
-                child.delete();
-                return false; // So the filter removes the element
-            }
-            return true;
-        }, this);
+        this.getOkitJson().getDynamicRoutingGateways().filter((d) => d.vcn_id === this.id).forEach((c) => c.delete())
     }
 
 

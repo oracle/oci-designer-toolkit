@@ -128,7 +128,7 @@ OkitJsonView.prototype.pasteDatabase = function(drop_target) {
         clone.subnet_id = drop_target.id;
         clone.compartment_id = drop_target.compartment_id;
     }
-    this.okitjson.databases.push(clone);
+    this.okitjson.getDatabases().push(clone);
     this.update(this.okitjson);
 }
 OkitJsonView.prototype.loadDatabasesSelect = function(select_id, empty_option=false) {

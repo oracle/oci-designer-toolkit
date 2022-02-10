@@ -27,7 +27,7 @@ class OkeClusterView extends OkitDesignerArtefactView {
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/oke_cluster.html", () => {
             let service_lb_subnet_select = d3.select(d3Id('service_lb_subnet_ids'));
-            for (let subnet of me.artefact.getOkitJson().subnets) {
+            for (let subnet of me.artefact.getOkitJson().getSubnets()) {
                 let div = service_lb_subnet_select.append('div');
                 div.append('input')
                     .attr('type', 'checkbox')
@@ -278,7 +278,7 @@ class OkeClusterView extends OkitDesignerArtefactView {
     addSubnets(element) {
         let subnet_select = $(jqId(element));
         subnet_select.append($('<option>').attr('value', '').text(''));
-        for (let subnet of this.getOkitJson().subnets) {
+        for (let subnet of this.getOkitJson().getSubnets()) {
             let compartment = this.getOkitJson().getCompartment(this.getOkitJson().getSubnet(subnet.id).compartment_id);
             let vcn = this.getOkitJson().getVirtualCloudNetwork(this.getOkitJson().getSubnet(subnet.id).vcn_id);
             let display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;

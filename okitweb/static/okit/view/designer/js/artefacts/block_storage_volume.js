@@ -15,7 +15,7 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
     // TODO: Enable when Instance code added
     get attached1() {
         if (!this.attached_id) {
-            for (let instance of this.getOkitJson().instances) {
+            for (let instance of this.getOkitJson().getInstances()) {
                 if (instance.block_storage_volume_ids.includes(this.id)) {
                     return true;
                 }
@@ -31,7 +31,7 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
      */
     // Add Specific Mouse Events
     addAssociationHighlighting() {
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             if (instance.block_storage_volume_ids.includes(this.id)) {
                 $(jqId(instance.id)).addClass('highlight-association');
             }
@@ -40,7 +40,7 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
     }
 
     removeAssociationHighlighting() {
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             if (instance.block_storage_volume_ids.includes(this.id)) {
                 $(jqId(instance.id)).removeClass('highlight-association');
             }

@@ -50,7 +50,7 @@ class Subnet extends OkitArtifact {
     deleteChildren() {
         console.log('Deleting Children of ' + this.getArtifactReference() + ' : ' + this.display_name);
         // Remove Instances
-        this.getOkitJson().instances = this.getOkitJson().instances.filter(function(child) {
+        this.getOkitJson().getInstances() = this.getOkitJson().getInstances().filter(function(child) {
             if (child.primary_vnic.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);
                 //child.delete();
@@ -58,7 +58,7 @@ class Subnet extends OkitArtifact {
             }
             return true;
         }, this);
-        for (let instance of this.getOkitJson().instances) {
+        for (let instance of this.getOkitJson().getInstances()) {
             instance.vnics = instance.vnics.filter(function(child) {
                 if (child.subnet_id === this.id) {
                     console.info('Deleting ' + child.hostname_label);
@@ -68,7 +68,7 @@ class Subnet extends OkitArtifact {
             }, this);
         }
         // Remove Load Balancers
-        this.getOkitJson().load_balancers = this.getOkitJson().load_balancers.filter(function(child) {
+        this.getOkitJson().getLoadBalancers() = this.getOkitJson().getLoadBalancers().filter(function(child) {
             if (child.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);
                 //child.delete();
@@ -77,7 +77,7 @@ class Subnet extends OkitArtifact {
             return true;
         }, this);
         // Remove File Storage Systems
-        this.getOkitJson().file_storage_systems = this.getOkitJson().file_storage_systems.filter(function(child) {
+        this.getOkitJson().getFileStorageSystems() = this.getOkitJson().getFileStorageSystems().filter(function(child) {
             if (child.subnet_id === this.id) {
                 console.info('Deleting ' + child.display_name);
                 //child.delete();
