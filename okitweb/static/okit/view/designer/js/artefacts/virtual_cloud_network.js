@@ -10,7 +10,6 @@ console.info('Loaded Designer VirtualCloudNetwork View Javascript');
 class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
-        this.newPropertiesSheet()
     }
 
     get parent_id() {return this.artefact.compartment_id;}

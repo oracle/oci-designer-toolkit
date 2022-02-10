@@ -1085,6 +1085,8 @@ class OkitArtefactView {
         }
         this.getJsonView = function() {return json_view};
         this.getOkitJson = function() {return json_view.getOkitJson()};
+        // Create Properties Sheet Object
+        this.newPropertiesSheet()
     }
 
     // -- Reference
@@ -1374,6 +1376,7 @@ class OkitArtefactView {
         return OkitArtefactView.cut_copy_paste.resource ? OkitArtefactView.cut_copy_paste.resource.getDropTargets().includes(this.getArtifactReference()) : false;
     }
 
+    newPropertiesSheet() {}
     getFunction(resource_type) {return `get${titleCase(resource_type).split(' ').join('')}`}
     getArrayFunction(resource_type) {return `${this.getFunction(resource_type)}s`}
 

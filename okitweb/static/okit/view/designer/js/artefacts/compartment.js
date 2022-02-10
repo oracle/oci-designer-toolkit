@@ -11,7 +11,6 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     constructor(artefact=null, json_view) {
         super(artefact, json_view);
         this.export = false;
-        this.newPropertiesSheet()
     }
 
     get parent_id() {

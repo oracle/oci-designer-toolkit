@@ -12,7 +12,6 @@ class MountTargetView extends OkitArtefactView {
         if (!json_view.mount_targets) json_view.mount_targets = [];
         super(artefact, json_view);
         this.export_idx = 0;
-        this.newPropertiesSheet()
     }
     get parent_id() {return this.artefact.subnet_id;}
     get parent() {return this.getJsonView().getSubnet(this.parent_id);}
