@@ -83,3 +83,14 @@ OkitJsonView.prototype.loadDynamicRoutingGateways = function(dynamic_routing_gat
         this.getDynamicRoutingGateways().push(new DynamicRoutingGatewayView(new DynamicRoutingGateway(artefact, this.okitjson), this));
     }
 }
+OkitJsonView.prototype.loadDynamicRoutingGatewaysSelect = function(id, empty_option=false) {
+    // Build Dynamic Routing Gateways
+    let drg_select = $(jqId(id));
+    $(drg_select).empty();
+    if (empty_option) drg_select.append($('<option>').attr('value', '').text(''));
+    for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
+        drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+    }
+}
+OkitArtefactView.prototype.loadDynamicRoutingGatewaysSelect = function(id, empty=true) {this.getJsonView().loadDynamicRoutingGatewaysSelect(id, empty)}
+OkitArtefactView.prototype.loadDynamicRoutingGatewaySelect = function(id, empty=true) {this.getJsonView().loadDynamicRoutingGatewaysSelect(id, empty)}

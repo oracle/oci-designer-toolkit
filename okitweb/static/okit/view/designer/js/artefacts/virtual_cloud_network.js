@@ -138,13 +138,24 @@ OkitJsonView.prototype.loadVirtualCloudNetworks = function(virtual_cloud_network
         this.virtual_cloud_networks.push(new VirtualCloudNetworkView(new VirtualCloudNetwork(artefact, this.okitjson), this));
     }
 }
-OkitJsonView.prototype.loadVirtualCloudNetworksSelect = function(select_id, empty_option=false) {
-    $(jqId(select_id)).empty();
-    const drg_select = $(jqId(select_id));
-    if (empty_option) {
-        drg_select.append($('<option>').attr('value', '').text(''));
-    }
-    for (let drg of this.getVirtualCloudNetworks()) {
-        drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+// OkitJsonView.prototype.loadVirtualCloudNetworksSelect = function(select_id, empty_option=false) {
+//     $(jqId(select_id)).empty();
+//     const drg_select = $(jqId(select_id));
+//     if (empty_option) {
+//         drg_select.append($('<option>').attr('value', '').text(''));
+//     }
+//     for (let drg of this.getVirtualCloudNetworks()) {
+//         drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+//     }
+// }
+OkitJsonView.prototype.loadVirtualCloudNetworksSelect = function(id, empty_option=false) {
+    // Build Virtual Cloud Network
+    let select = $(jqId(id));
+    $(select).empty();
+    if (empty_option) select.append($('<option>').attr('value', '').text(''));
+    for (const resource of this.getOkitJson().getVirtualCloudNetworks()) {
+        select.append($('<option>').attr('value', resource.id).text(resource.display_name));
     }
 }
+OkitArtefactView.prototype.loadVirtualCloudNetworksSelect = function(id, empty=true) {this.getJsonView().loadVirtualCloudNetworksSelect(id, empty)}
+OkitArtefactView.prototype.loadVirtualCloudNetworkSelect = function(id, empty=true) {this.getJsonView().loadVirtualCloudNetworksSelect(id, empty)}

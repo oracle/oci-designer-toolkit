@@ -1550,35 +1550,35 @@ class OkitArtefactView {
     ** Common Single Select Input build & load functions
      */
 
-    loadDynamicRoutingGatewaySelect(id) {
-        // Build Dynamic Routing Gateways
-        let drg_select = $(jqId(id));
-        $(drg_select).empty();
-        drg_select.append($('<option>').attr('value', '').text(''));
-        for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
-            drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
-        }
-    }
+    // loadDynamicRoutingGatewaySelect(id) {
+    //     // Build Dynamic Routing Gateways
+    //     let drg_select = $(jqId(id));
+    //     $(drg_select).empty();
+    //     drg_select.append($('<option>').attr('value', '').text(''));
+    //     for (const drg of this.getOkitJson().getDynamicRoutingGateways()) {
+    //         drg_select.append($('<option>').attr('value', drg.id).text(drg.display_name));
+    //     }
+    // }
 
-    loadSubnetSelect(id, vcn_id=undefined) {
-        // Build Subnet Select
-        let select = $(jqId(id));
-        $(select).empty();
-        select.append($('<option>').attr('value', '').text(''));
-        for (const resource of this.getOkitJson().getSubnets().filter((s) => vcn_id === undefined || s.vcn_id === vcn_id)) {
-            select.append($('<option>').attr('value', resource.id).text(resource.display_name));
-        }
-    }
+    // loadSubnetSelect(id, vcn_id=undefined) {
+    //     // Build Subnet Select
+    //     let select = $(jqId(id));
+    //     $(select).empty();
+    //     select.append($('<option>').attr('value', '').text(''));
+    //     for (const resource of this.getOkitJson().getSubnets().filter((s) => vcn_id === undefined || s.vcn_id === vcn_id)) {
+    //         select.append($('<option>').attr('value', resource.id).text(resource.display_name));
+    //     }
+    // }
 
-    loadVirtualCloudNetworkSelect(id) {
-        // Build Virtual Cloud Network
-        let select = $(jqId(id));
-        $(select).empty();
-        select.append($('<option>').attr('value', '').text(''));
-        for (const resource of this.getOkitJson().getVirtualCloudNetworks()) {
-            select.append($('<option>').attr('value', resource.id).text(resource.display_name));
-        }
-    }
+    // loadVirtualCloudNetworkSelect(id) {
+    //     // Build Virtual Cloud Network
+    //     let select = $(jqId(id));
+    //     $(select).empty();
+    //     select.append($('<option>').attr('value', '').text(''));
+    //     for (const resource of this.getOkitJson().getVirtualCloudNetworks()) {
+    //         select.append($('<option>').attr('value', resource.id).text(resource.display_name));
+    //     }
+    // }
 
     /*
     ** Property Creation Routines
