@@ -52,3 +52,26 @@ class IpsecConnection extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newIpsecConnection = function(data) {
+    console.info('New IPSec Connection');
+    this.getIpsecConnections().push(new IpsecConnection(data, this));
+    return this.getIpsecConnections()[this.getIpsecConnections().length - 1];
+}
+OkitJson.prototype.getIpsecConnections = function() {
+    if (!this.ipsec_connections) this.ipsec_connections = [];
+    return this.ipsec_connections;
+}
+OkitJson.prototype.getIpsecConnection = function(id='') {
+    for (let artefact of this.getIpsecConnections()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteIpsecConnection = function(id) {
+    this.ipsec_connections = this.ipsec_connections ? this.ipsec_connections.filter((r) => r.id !== id) : []
+}

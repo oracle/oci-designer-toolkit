@@ -71,3 +71,26 @@ class LoadBalancer extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newLoadBalancer = function(data) {
+    console.info('New Load Balancer');
+    this.getLoadBalancers().push(new LoadBalancer(data, this));
+    return this.getLoadBalancers()[this.getLoadBalancers().length - 1];
+}
+OkitJson.prototype.getLoadBalancers = function() {
+    if (!this.load_balancers) this.load_balancers = [];
+    return this.load_balancers;
+}
+OkitJson.prototype.getLoadBalancer = function(id='') {
+    for (let artefact of this.getLoadBalancers()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteLoadBalancer = function(id) {
+    this.load_balancers = this.load_balancers ? this.load_balancers.filter((r) => r.id !== id) : []
+}

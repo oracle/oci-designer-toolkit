@@ -59,3 +59,26 @@ class ObjectStorageBucket extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newObjectStorageBucket = function(data) {
+    console.info('New Object Storage Bucket');
+    this.getObjectStorageBuckets().push(new ObjectStorageBucket(data, this));
+    return this.getObjectStorageBuckets()[this.getObjectStorageBuckets().length - 1];
+}
+OkitJson.prototype.getObjectStorageBuckets = function() {
+    if (!this.object_storage_buckets) this.object_storage_buckets = [];
+    return this.object_storage_buckets;
+}
+OkitJson.prototype.getObjectStorageBucket = function(id='') {
+    for (let artefact of this.getObjectStorageBuckets()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteObjectStorageBucket = function(id) {
+    this.object_storage_buckets = this.object_storage_buckets ? this.object_storage_buckets.filter((r) => r.id !== id) : []
+}

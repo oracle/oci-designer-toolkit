@@ -60,3 +60,26 @@ class NetworkSecurityGroup extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newNetworkSecurityGroup = function(data) {
+    console.info('New Network Security Group');
+    this.getNetworkSecurityGroups().push(new NetworkSecurityGroup(data, this));
+    return this.getNetworkSecurityGroups()[this.getNetworkSecurityGroups().length - 1];
+}
+OkitJson.prototype.getNetworkSecurityGroups = function() {
+    if (!this.network_security_groups) this.network_security_groups = [];
+    return this.network_security_groups;
+}
+OkitJson.prototype.getNetworkSecurityGroup = function(id='') {
+    for (let artefact of this.getNetworkSecurityGroups()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteNetworkSecurityGroup = function(id) {
+    this.network_security_groups = this.network_security_groups ? this.network_security_groups.filter((r) => r.id !== id) : []
+}

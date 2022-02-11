@@ -61,3 +61,26 @@ class MysqlDatabaseSystem extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newMysqlDatabaseSystem = function(data) {
+    console.info('New MySQL Database System');
+    this.getMysqlDatabaseSystems().push(new MysqlDatabaseSystem(data, this));
+    return this.getMysqlDatabaseSystems()[this.getMysqlDatabaseSystems().length - 1];
+}
+OkitJson.prototype.getMysqlDatabaseSystems = function() {
+    if (!this.mysql_database_systems) this.mysql_database_systems = [];
+    return this.mysql_database_systems;
+}
+OkitJson.prototype.getMysqlDatabaseSystem = function(id='') {
+    for (let artefact of this.getMysqlDatabaseSystems()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteMysqlDatabaseSystem = function(id) {
+    this.mysql_database_systems = this.mysql_database_systems ? this.mysql_database_systems.filter((r) => r.id !== id) : []
+}

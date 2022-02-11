@@ -131,3 +131,26 @@ class Subnet extends OkitArtifact {
         return 'Subnet';
     }
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newSubnet = function(data) {
+    console.info('New Subnet');
+    this.getSubnets().push(new Subnet(data, this));
+    return this.getSubnets()[this.getSubnets().length - 1];
+}
+OkitJson.prototype.getSubnets = function() {
+    if (!this.subnets) this.subnets = [];
+    return this.subnets;
+}
+OkitJson.prototype.getSubnet = function(id='') {
+    for (let artefact of this.getSubnets()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteSubnet = function(id) {
+    this.subnets = this.subnets ? this.subnets.filter((r) => r.id !== id) : []
+}

@@ -73,3 +73,26 @@ class Compartment extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newCompartment = function(data = {}) {
+    console.info('New Compartment');
+    this.getCompartments().push(new Compartment(data, this));
+    return this.getCompartments()[this.getCompartments().length - 1];
+}
+OkitJson.prototype.getCompartments = function() {
+    if (!this.compartments) this.compartments = [];
+    return this.compartments;
+}
+OkitJson.prototype.getCompartment = function(id='') {
+    for (let artefact of this.getCompartments()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteCompartment = function(id) {
+    this.compartments = this.compartments ? this.compartments.filter((r) => r.id !== id) : []
+}

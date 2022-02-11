@@ -45,3 +45,26 @@ class RemotePeeringConnection extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newRemotePeeringConnection = function(data) {
+    console.info('New Remote Peering Connection');
+    this.getRemotePeeringConnections().push(new RemotePeeringConnection(data, this));
+    return this.getRemotePeeringConnections()[this.getRemotePeeringConnections().length - 1];
+}
+OkitJson.prototype.getRemotePeeringConnections = function() {
+    if (!this.remote_peering_connections) this.remote_peering_connections = [];
+    return this.remote_peering_connections;
+}
+OkitJson.prototype.getRemotePeeringConnection = function(id='') {
+    for (let artefact of this.getRemotePeeringConnections()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteRemotePeeringConnection = function(id) {
+    this.remote_peering_connections = this.remote_peering_connections ? this.remote_peering_connections.filter((r) => r.id !== id) : []
+}

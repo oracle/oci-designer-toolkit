@@ -55,3 +55,26 @@ class DynamicRoutingGateway extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newDynamicRoutingGateway = function(data) {
+    console.info('New Dynamic Routing Gateway');
+    this.getDynamicRoutingGateways().push(new DynamicRoutingGateway(data, this));
+    return this.getDynamicRoutingGateways()[this.getDynamicRoutingGateways().length - 1];
+}
+OkitJson.prototype.getDynamicRoutingGateways = function() {
+    if (!this.dynamic_routing_gateways) this.dynamic_routing_gateways = [];
+    return this.dynamic_routing_gateways;
+}
+OkitJson.prototype.getDynamicRoutingGateway = function(id='') {
+    for (let artefact of this.getDynamicRoutingGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteDynamicRoutingGateway = function(id) {
+    this.dynamic_routing_gateways = this.dynamic_routing_gateways ? this.dynamic_routing_gateways.filter((r) => r.id !== id) : []
+}
