@@ -419,3 +419,43 @@ class SecurityListView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropSecurityListView = function(target) {
+    let view_artefact = this.newSecurityList();
+    if (target.type === VirtualCloudNetwork.getArtifactReference()) {
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Subnet.getArtifactReference()) {
+        const subnet = this.getOkitJson().getSubnet(target.id)
+        view_artefact.getArtefact().vcn_id = subnet.vcn_id;
+        view_artefact.getArtefact().compartment_id = target.id;
+        subnet.security_list_ids.push(view_artefact.id);
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newSecurityList = function(security) {
+    this.getSecurityLists().push(security ? new SecurityListView(security, this) : new SecurityListView(this.okitjson.newSecurityList(), this));
+    return this.getSecurityLists()[this.getSecurityLists().length - 1];
+}
+OkitJsonView.prototype.getSecurityLists = function() {
+    if (!this.security_lists) this.security_lists = []
+    return this.security_lists;
+}
+OkitJsonView.prototype.getSecurityList = function(id='') {
+    for (let artefact of this.getSecurityLists()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadSecurityLists = function(security_lists) {
+    for (const artefact of security_lists) {
+        this.getSecurityLists().push(new SecurityListView(new SecurityList(artefact, this.okitjson), this));
+    }
+}

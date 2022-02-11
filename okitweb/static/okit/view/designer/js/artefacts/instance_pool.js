@@ -46,3 +46,34 @@ class InstancePoolView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropInstancePoolView = function(target) {
+    let view_artefact = this.newInstancePool();
+    view_artefact.getArtefact().placement_configurations[0].primary_subnet_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newInstancePool = function(instance_pool) {
+    this.getInstancePools().push(instance_pool ? new InstancePoolView(instance_pool, this) : new InstancePoolView(this.okitjson.newInstancePool(), this));
+    return this.getInstancePools()[this.getInstancePools().length - 1];
+}
+OkitJsonView.prototype.getInstancePools = function() {
+    if (!this.instance_pools) this.instance_pools = []
+    return this.instance_pools;
+}
+OkitJsonView.prototype.getInstancePool = function(id='') {
+    for (let artefact of this.getInstancePools()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadInstancePools = function(instance_pools) {
+    for (const artefact of instance_pools) {
+        this.getInstancePools().push(new InstancePoolView(new InstancePool(artefact, this.okitjson), this));
+    }
+}

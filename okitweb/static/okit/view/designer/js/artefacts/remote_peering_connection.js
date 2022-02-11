@@ -75,3 +75,33 @@ class RemotePeeringConnectionView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropRemotePeeringConnectionView = function(target) {
+    let view_artefact = this.newRemotePeeringConnection();
+    view_artefact.getArtefact().compartment_id = target.id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newRemotePeeringConnection = function(connect) {
+    this.getRemotePeeringConnections().push(connect ? new RemotePeeringConnectionView(connect, this) : new RemotePeeringConnectionView(this.okitjson.newRemotePeeringConnection(), this));
+    return this.getRemotePeeringConnections()[this.getRemotePeeringConnections().length - 1];
+}
+OkitJsonView.prototype.getRemotePeeringConnections = function() {
+    if (!this.remote_peering_connections) this.remote_peering_connections = []
+    return this.remote_peering_connections;
+}
+OkitJsonView.prototype.getRemotePeeringConnection = function(id='') {
+    for (let artefact of this.getRemotePeeringConnections()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadRemotePeeringConnections = function(fast_connects) {
+    for (const artefact of fast_connects) {
+        this.getRemotePeeringConnections().push(new RemotePeeringConnectionView(new RemotePeeringConnection(artefact, this.okitjson), this));
+    }
+}

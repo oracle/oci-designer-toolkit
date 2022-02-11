@@ -343,3 +343,43 @@ OkitJsonView.prototype.loadRouteTablesSelect = function(select_id, vcn_id, empty
         mount_target_select.append($('<option>').attr('value', mount_target.id).text(mount_target.display_name));
     }
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropRouteTableView = function(target) {
+    let view_artefact = this.newRouteTable();
+    if (target.type === VirtualCloudNetwork.getArtifactReference()) {
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Subnet.getArtifactReference()) {
+        const subnet = this.getOkitJson().getSubnet(target.id)
+        view_artefact.getArtefact().vcn_id = subnet.vcn_id;
+        view_artefact.getArtefact().compartment_id = target.id;
+        subnet.route_table_id = view_artefact.id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newRouteTable = function(routetable) {
+    this.getRouteTables().push(routetable ? new RouteTableView(routetable, this) : new RouteTableView(this.okitjson.newRouteTable(), this));
+    return this.getRouteTables()[this.getRouteTables().length - 1];
+}
+OkitJsonView.prototype.getRouteTables = function() {
+    if (!this.route_tables) this.route_tables = []
+    return this.route_tables;
+}
+OkitJsonView.prototype.getRouteTable = function(id='') {
+    for (let artefact of this.getRouteTables()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadRouteTables = function(route_tables) {
+    for (const artefact of route_tables) {
+        this.getRouteTables().push(new RouteTableView(new RouteTable(artefact, this.okitjson), this));
+    }
+}

@@ -76,6 +76,36 @@ class BlockStorageVolumeView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropBlockStorageVolumeView = function(target) {
+    let view_artefact = this.newBlockStorageVolume();
+    view_artefact.getArtefact().compartment_id = target.id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newBlockStorageVolume = function(volume) {
+    this.getBlockStorageVolumes().push(volume ? new BlockStorageVolumeView(volume, this) : new BlockStorageVolumeView(this.okitjson.newBlockStorageVolume(), this));
+    return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
+}
+OkitJsonView.prototype.getBlockStorageVolumes = function() {
+    if (!this.block_storage_volumes) this.block_storage_volumes = []
+    return this.block_storage_volumes;
+}
+OkitJsonView.prototype.getBlockStorageVolume = function(id='') {
+    for (let artefact of this.getBlockStorageVolumes()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadBlockStorageVolumes = function(block_storage_volumes) {
+    for (const artefact of block_storage_volumes) {
+        this.getBlockStorageVolumes().push(new BlockStorageVolumeView(new BlockStorageVolume(artefact, this.okitjson), this));
+    }
+}
 OkitJsonView.prototype.loadBlockStorageVolumesMultiSelect = function(select_id) {
     $(jqId(select_id)).empty();
     const multi_select = d3.select(d3Id(select_id));

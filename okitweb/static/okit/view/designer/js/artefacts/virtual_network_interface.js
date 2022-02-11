@@ -72,3 +72,22 @@ class VirtualNetworkInterfaceView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.newVirtualNetworkInterface = function(vnic) {
+    this.getVirtualNetworkInterfaces().push(vnic ? new VirtualNetworkInterfaceView(vnic, this) : new VirtualNetworkInterfaceView(this.okitjson.newVirtualNetworkInterface(), this));
+    return this.getVirtualNetworkInterfaces()[this.getVirtualNetworkInterfaces().length - 1];
+}
+OkitJsonView.prototype.getVirtualNetworkInterfaces = function() {
+    if (!this.virtual_network_interfaces) this.virtual_network_interfaces = []
+    return this.virtual_network_interfaces;
+}
+OkitJsonView.prototype.getVirtualNetworkInterface = function(id='') {
+    for (let artefact of this.getVirtualNetworkInterfaces()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}

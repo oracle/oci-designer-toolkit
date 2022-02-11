@@ -128,3 +128,41 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropServiceGatewayView = function(target) {
+    // Check if Gateway Already exists
+    for (let gateway of this.getServiceGateways()) {
+        if (gateway.vcn_id === target.id) {
+            alert('The maximum limit of 1 Service Gateway per Virtual Cloud Network has been exceeded for ' + this.getVirtualCloudNetwork(target.id).display_name);
+            return null;
+        }
+    }
+    let view_artefact = this.newServiceGateway();
+    view_artefact.getArtefact().vcn_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newServiceGateway = function(gateway) {
+    this.getServiceGateways().push(gateway ? new ServiceGatewayView(gateway, this) : new ServiceGatewayView(this.okitjson.newServiceGateway(), this));
+    return this.getServiceGateways()[this.getServiceGateways().length - 1];
+}
+OkitJsonView.prototype.getServiceGateways = function() {
+    if (!this.service_gateways) this.service_gateways = []
+    return this.service_gateways;
+}
+OkitJsonView.prototype.getServiceGateway = function(id='') {
+    for (let artefact of this.getServiceGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadServiceGateways = function(service_gateways) {
+    for (const artefact of service_gateways) {
+        this.getServiceGateways().push(new ServiceGatewayView(new ServiceGateway(artefact, this.okitjson), this));
+    }
+}

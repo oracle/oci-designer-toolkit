@@ -51,3 +51,35 @@ class DynamicRoutingGatewayView extends OkitDesignerArtefactView {
 
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropDynamicRoutingGatewayView = function(target) {
+    let view_artefact = this.newDynamicRoutingGateway();
+    view_artefact.getArtefact().compartment_id = target.id;
+    view_artefact.getArtefact().vcn_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newDynamicRoutingGateway = function(gateway) {
+    this.getDynamicRoutingGateways().push(gateway ? new DynamicRoutingGatewayView(gateway, this) : new DynamicRoutingGatewayView(this.okitjson.newDynamicRoutingGateway(), this));
+    return this.getDynamicRoutingGateways()[this.getDynamicRoutingGateways().length - 1];
+}
+OkitJsonView.prototype.getDynamicRoutingGateways = function() {
+    if (!this.dynamic_routing_gateways) this.dynamic_routing_gateways = []
+    return this.dynamic_routing_gateways;
+}
+OkitJsonView.prototype.getDynamicRoutingGateway = function(id='') {
+    for (let artefact of this.getDynamicRoutingGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadDynamicRoutingGateways = function(dynamic_routing_gateways) {
+    for (const artefact of dynamic_routing_gateways) {
+        this.getDynamicRoutingGateways().push(new DynamicRoutingGatewayView(new DynamicRoutingGateway(artefact, this.okitjson), this));
+    }
+}

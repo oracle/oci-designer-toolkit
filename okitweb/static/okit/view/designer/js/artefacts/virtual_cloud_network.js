@@ -94,6 +94,50 @@ class VirtualCloudNetworkView extends OkitContainerDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropVirtualCloudNetworkView = function(target) {
+    let view_artefact = this.newVirtualCloudNetwork();
+    view_artefact.getArtefact().compartment_id = target.id;
+    view_artefact.getArtefact().generateCIDR();
+    if (okitSettings.is_vcn_defaults) {
+        // Default Route Table
+        let route_table = this.newRouteTable(this.getOkitJson().newRouteTable({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
+        // Default Security List
+        let security_list = this.newSecurityList(this.getOkitJson().newSecurityList({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
+        security_list.artefact.addDefaultSecurityListRules(view_artefact.artefact.cidr_block);
+        // Defaul Dhcp Options
+        let dhcp_options = this.newDhcpOption(this.getOkitJson().newDhcpOption({vcn_id: view_artefact.id, compartment_id: view_artefact.compartment_id, default: true}));
+        dhcp_options.artefact.addDefaultOptions(view_artefact.display_name);
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newVirtualCloudNetwork = function(vcn) {
+    this.getVirtualCloudNetworks().push(vcn ? new VirtualCloudNetworkView(vcn, this) : new VirtualCloudNetworkView(this.okitjson.newVirtualCloudNetwork(), this));
+    return this.getVirtualCloudNetworks()[this.getVirtualCloudNetworks().length - 1];
+}
+OkitJsonView.prototype.getVirtualCloudNetworks = function() {
+    if (!this.virtual_cloud_networks) this.virtual_cloud_networks = []
+    return this.virtual_cloud_networks;
+}
+OkitJsonView.prototype.getVirtualCloudNetwork = function(id='') {
+    for (let artefact of this.getVirtualCloudNetworks()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.getVcn = function(id='') {
+    return this.getVirtualCloudNetwork(id);
+}
+OkitJsonView.prototype.loadVirtualCloudNetworks = function(virtual_cloud_networks) {
+    for (const artefact of virtual_cloud_networks) {
+        this.virtual_cloud_networks.push(new VirtualCloudNetworkView(new VirtualCloudNetwork(artefact, this.okitjson), this));
+    }
+}
 OkitJsonView.prototype.loadVirtualCloudNetworksSelect = function(select_id, empty_option=false) {
     $(jqId(select_id)).empty();
     const drg_select = $(jqId(select_id));

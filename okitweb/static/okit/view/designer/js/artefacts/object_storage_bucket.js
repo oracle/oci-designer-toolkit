@@ -47,3 +47,33 @@ class ObjectStorageBucketView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropObjectStorageBucketView = function(target) {
+    let view_artefact = this.newObjectStorageBucket();
+    view_artefact.getArtefact().compartment_id = target.id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newObjectStorageBucket = function(storage) {
+    this.getObjectStorageBuckets().push(storage ? new ObjectStorageBucketView(storage, this) : new ObjectStorageBucketView(this.okitjson.newObjectStorageBucket(), this));
+    return this.getObjectStorageBuckets()[this.getObjectStorageBuckets().length - 1];
+}
+OkitJsonView.prototype.getObjectStorageBuckets = function() {
+    if (!this.object_storage_buckets) this.object_storage_buckets = []
+    return this.object_storage_buckets;
+}
+OkitJsonView.prototype.getObjectStorageBucket = function(id='') {
+    for (let artefact of this.getObjectStorageBuckets()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadObjectStorageBuckets = function(object_storage_buckets) {
+    for (const artefact of object_storage_buckets) {
+        this.getObjectStorageBuckets().push(new ObjectStorageBucketView(new ObjectStorageBucket(artefact, this.okitjson), this));
+    }
+}
