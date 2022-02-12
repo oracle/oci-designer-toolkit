@@ -497,10 +497,47 @@ class NetworkSecurityGroupView extends OkitDesignerArtefactView {
     }
 
 }
-
 /*
 ** Dynamically Add View Functions
 */
+OkitJsonView.prototype.dropNetworkSecurityGroupView = function(target) {
+    let view_artefact = this.newNetworkSecurityGroup();
+    view_artefact.getArtefact().vcn_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newNetworkSecurityGroup = function(security) {
+    this.getNetworkSecurityGroups().push(security ? new NetworkSecurityGroupView(security, this) : new NetworkSecurityGroupView(this.okitjson.newNetworkSecurityGroup(), this));
+    return this.getNetworkSecurityGroups()[this.getNetworkSecurityGroups().length - 1];
+}
+OkitJsonView.prototype.getNetworkSecurityGroups = function() {
+    if (!this.network_security_groups) this.network_security_groups = []
+    return this.network_security_groups;
+}
+OkitJsonView.prototype.getNetworkSecurityGroup = function(id='') {
+    for (let artefact of this.getNetworkSecurityGroups()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadNetworkSecurityGroups = function(network_security_groups) {
+    for (const artefact of network_security_groups) {
+        this.getNetworkSecurityGroups().push(new NetworkSecurityGroupView(new NetworkSecurityGroup(artefact, this.okitjson), this));
+    }
+}
+OkitJsonView.prototype.loadNetworkSecurityGroupsSelect = function(select_id, empty_option=false) {
+    $(jqId(select_id)).empty();
+    const nsg_select = $(jqId(select_id));
+    if (empty_option) {
+        nsg_select.append($('<option>').attr('value', '').text(''));
+    }
+    for (let nsg of this.getNetworkSecurityGroups()) {
+        nsg_select.append($('<option>').attr('value', nsg.id).text(nsg.display_name));
+    }
+}
 OkitJsonView.prototype.loadNetworkSecurityGroupsMultiSelect = function(select_id, vcn_id) {
     $(jqId(select_id)).empty();
     const multi_select = d3.select(d3Id(select_id));

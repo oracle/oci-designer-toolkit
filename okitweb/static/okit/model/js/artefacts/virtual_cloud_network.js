@@ -167,3 +167,29 @@ class VirtualCloudNetwork extends OkitArtifact {
         return 'Virtual Cloud Network';
     }
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newVirtualCloudNetwork = function(data) {
+    console.info('New Virtual Cloud Network');
+    this.getVirtualCloudNetworks().push(new VirtualCloudNetwork(data, this));
+    return this.getVirtualCloudNetworks()[this.getVirtualCloudNetworks().length - 1];
+}
+OkitJson.prototype.getVirtualCloudNetworks = function() {
+    if (!this.virtual_cloud_networks) this.virtual_cloud_networks = [];
+    return this.virtual_cloud_networks;
+}
+OkitJson.prototype.getVirtualCloudNetwork = function(id='') {
+    for (let artefact of this.virtual_cloud_networks) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.getVcn = function(id='') {
+    return this.getVirtualCloudNetwork(id);
+}
+OkitJson.prototype.deleteVirtualCloudNetwork = function(id) {
+    this.virtual_cloud_networks = this.virtual_cloud_networks ? this.virtual_cloud_networks.filter((r) => r.id !== id) : []
+}

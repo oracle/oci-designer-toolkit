@@ -49,3 +49,26 @@ class CustomerPremiseEquipment extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newCustomerPremiseEquipment = function(data = {}) {
+    console.info('New CustomerPremiseEquipment');
+    this.getCustomerPremiseEquipments().push(new CustomerPremiseEquipment(data, this));
+    return this.getCustomerPremiseEquipments()[this.getCustomerPremiseEquipments().length - 1];
+}
+OkitJson.prototype.getCustomerPremiseEquipments = function() {
+    if (!this.customer_premise_equipments) this.customer_premise_equipments = [];
+    return this.customer_premise_equipments;
+}
+OkitJson.prototype.getCustomerPremiseEquipment = function(id='') {
+    for (let artefact of this.getCustomerPremiseEquipments()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteCustomerPremiseEquipment = function(id) {
+    this.customer_premise_equipments = this.customer_premise_equipments ? this.customer_premise_equipments.filter((r) => r.id !== id) : []
+}

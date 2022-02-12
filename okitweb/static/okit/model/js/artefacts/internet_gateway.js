@@ -54,3 +54,26 @@ class InternetGateway extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newInternetGateway = function(data) {
+    console.info('New Internet Gateway');
+    this.getInternetGateways().push(new InternetGateway(data, this));
+    return this.getInternetGateways()[this.getInternetGateways().length - 1];
+}
+OkitJson.prototype.getInternetGateways = function() {
+    if (!this.internet_gateways) this.internet_gateways = [];
+    return this.internet_gateways;
+}
+OkitJson.prototype.getInternetGateway = function(id='') {
+    for (let artefact of this.getInternetGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteInternetGateway = function(id) {
+    this.internet_gateways = this.internet_gateways ? this.internet_gateways.filter((r) => r.id !== id) : []
+}

@@ -57,3 +57,26 @@ class RouteTable extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newRouteTable = function(data) {
+    console.info('New Route Table');
+    this.getRouteTables().push(new RouteTable(data, this));
+    return this.getRouteTables()[this.getRouteTables().length - 1];
+}
+OkitJson.prototype.getRouteTables = function() {
+    if (!this.route_tables) this.route_tables = [];
+    return this.route_tables;
+}
+OkitJson.prototype.getRouteTable = function(id='') {
+    for (let artefact of this.getRouteTables()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteRouteTable = function(id) {
+    this.route_tables = this.route_tables ? this.route_tables.filter((r) => r.id !== id) : []
+}

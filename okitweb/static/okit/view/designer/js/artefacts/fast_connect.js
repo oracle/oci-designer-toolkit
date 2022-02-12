@@ -66,3 +66,33 @@ class FastConnectView extends OkitDesignerArtefactView {
 
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropFastConnectView = function(target) {
+    let view_artefact = this.newFastConnect();
+    view_artefact.getArtefact().compartment_id = target.id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newFastConnect = function(connect) {
+    this.getFastConnects().push(connect ? new FastConnectView(connect, this) : new FastConnectView(this.okitjson.newFastConnect(), this));
+    return this.getFastConnects()[this.getFastConnects().length - 1];
+}
+OkitJsonView.prototype.getFastConnects = function() {
+    if (!this.fast_connects) this.fast_connects = []
+    return this.fast_connects;
+}
+OkitJsonView.prototype.getFastConnect = function(id='') {
+    for (let artefact of this.getFastConnects()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadFastConnects = function(fast_connects) {
+    for (const artefact of fast_connects) {
+        this.getFastConnects().push(new FastConnectView(new FastConnect(artefact, this.okitjson), this));
+    }
+}

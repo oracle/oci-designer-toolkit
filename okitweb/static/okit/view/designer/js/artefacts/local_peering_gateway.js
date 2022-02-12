@@ -81,3 +81,34 @@ class LocalPeeringGatewayView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropLocalPeeringGatewayView = function(target) {
+    let view_artefact = this.newLocalPeeringGateway();
+    view_artefact.getArtefact().vcn_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newLocalPeeringGateway = function(gateway) {
+    this.getLocalPeeringGateways().push(gateway ? new LocalPeeringGatewayView(gateway, this) : new LocalPeeringGatewayView(this.okitjson.newLocalPeeringGateway(), this));
+    return this.getLocalPeeringGateways()[this.getLocalPeeringGateways().length - 1];
+}
+OkitJsonView.prototype.getLocalPeeringGateways = function() {
+    if (!this.local_peering_gateways) this.local_peering_gateways = []
+    return this.local_peering_gateways;
+}
+OkitJsonView.prototype.getLocalPeeringGateway = function(id='') {
+    for (let artefact of this.getLocalPeeringGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadLocalPeeringGateways = function(local_peering_gateways) {
+    for (const artefact of local_peering_gateways) {
+        this.getLocalPeeringGateways().push(new LocalPeeringGatewayView(new LocalPeeringGateway(artefact, this.okitjson), this));
+    }
+}

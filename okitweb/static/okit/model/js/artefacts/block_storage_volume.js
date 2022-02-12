@@ -66,3 +66,26 @@ class BlockStorageVolume extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newBlockStorageVolume = function(data) {
+    console.info('New Block Storage Volume');
+    this.getBlockStorageVolumes().push(new BlockStorageVolume(data, this));
+    return this.getBlockStorageVolumes()[this.getBlockStorageVolumes().length - 1];
+}
+OkitJson.prototype.getBlockStorageVolumes = function() {
+    if (!this.block_storage_volumes) this.block_storage_volumes = [];
+    return this.block_storage_volumes;
+}
+OkitJson.prototype.getBlockStorageVolume = function(id='') {
+    for (let artefact of this.getBlockStorageVolumes()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteBlockStorageVolume = function(id) {
+    this.block_storage_volumes = this.block_storage_volumes ? this.block_storage_volumes.filter((r) => r.id !== id) : []
+}

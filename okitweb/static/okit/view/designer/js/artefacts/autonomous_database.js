@@ -98,3 +98,38 @@ class AutonomousDatabaseView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropAutonomousDatabaseView = function(target) {
+    let view_artefact = this.newAutonomousDatabase();
+    if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newAutonomousDatabase = function(database) {
+    this.getAutonomousDatabases().push(database ? new AutonomousDatabaseView(database, this) : new AutonomousDatabaseView(this.okitjson.newAutonomousDatabase(), this));
+    return this.getAutonomousDatabases()[this.getAutonomousDatabases().length - 1];
+}
+OkitJsonView.prototype.getAutonomousDatabases = function() {
+    if (!this.autonomous_databases) this.autonomous_databases = []
+    return this.autonomous_databases;
+}
+OkitJsonView.prototype.getAutonomousDatabase = function(id='') {
+    for (let artefact of this.getAutonomousDatabases()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadAutonomousDatabases = function(autonomous_databases) {
+    for (const artefact of autonomous_databases) {
+        this.getAutonomousDatabases().push(new AutonomousDatabaseView(new AutonomousDatabase(artefact, this.okitjson), this));
+    }
+}

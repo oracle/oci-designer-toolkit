@@ -582,3 +582,38 @@ class InstanceView extends OkitDesignerArtefactView {
 
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropInstanceView = function(target) {
+    let view_artefact = this.newInstance();
+    if (target.type === Subnet.getArtifactReference()) {
+        view_artefact.getArtefact().primary_vnic.subnet_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newInstance = function(instance) {
+    this.getInstances().push(instance ? new InstanceView(instance, this) : new InstanceView(this.okitjson.newInstance(), this));
+    return this.getInstances()[this.getInstances().length - 1];
+}
+OkitJsonView.prototype.getInstances = function() {
+    if (!this.instances) this.instances = []
+    return this.instances;
+}
+OkitJsonView.prototype.getInstance = function(id='') {
+    for (let artefact of this.getInstances()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadInstances = function(instances) {
+    for (const artefact of instances) {
+        this.getInstances().push(new InstanceView(new Instance(artefact, this.okitjson), this));
+    }
+}

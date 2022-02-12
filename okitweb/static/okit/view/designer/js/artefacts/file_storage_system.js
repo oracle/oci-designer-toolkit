@@ -55,3 +55,34 @@ class FileStorageSystemView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropFileStorageSystemView = function(target) {
+    // Pass in subnet so we create a default mount
+    let view_artefact = this.newFileStorageSystem(this.okitjson.newFileStorageSystem({subnet_id: target.id}));
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newFileStorageSystem = function(storage) {
+    this.getFileStorageSystems().push(storage ? new FileStorageSystemView(storage, this) : new FileStorageSystemView(this.okitjson.newFileStorageSystem(), this));
+    return this.getFileStorageSystems()[this.getFileStorageSystems().length - 1];
+}
+OkitJsonView.prototype.getFileStorageSystems = function() {
+    if (!this.file_storage_systems) this.file_storage_systems = []
+    return this.file_storage_systems;
+}
+OkitJsonView.prototype.getFileStorageSystem = function(id='') {
+    for (let artefact of this.getFileStorageSystems()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadFileStorageSystems = function(file_storage_systems) {
+    for (const artefact of file_storage_systems) {
+        this.getFileStorageSystems().push(new FileStorageSystemView(new FileStorageSystem(artefact, this.okitjson), this));
+    }
+}

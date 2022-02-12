@@ -133,3 +133,26 @@ class SecurityList extends OkitArtifact {
         );
     }
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newSecurityList = function(data) {
+    console.info('New Security List');
+    this.getSecurityLists().push(new SecurityList(data, this));
+    return this.getSecurityLists()[this.getSecurityLists().length - 1];
+}
+OkitJson.prototype.getSecurityLists = function() {
+    if (!this.security_lists) this.security_lists = [];
+    return this.security_lists;
+}
+OkitJson.prototype.getSecurityList = function(id='') {
+    for (let artefact of this.getSecurityLists()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteSecurityList = function(id) {
+    this.security_lists = this.security_lists ? this.security_lists.filter((r) => r.id !== id) : []
+}

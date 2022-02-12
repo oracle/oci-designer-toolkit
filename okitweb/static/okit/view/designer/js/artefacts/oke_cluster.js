@@ -329,3 +329,34 @@ class OkeClusterView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropOkeClusterView = function(target) {
+    let view_artefact = this.newOkeCluster();
+    view_artefact.getArtefact().vcn_id = target.id;
+    view_artefact.getArtefact().compartment_id = target.compartment_id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newOkeCluster = function(cluster) {
+    this.getOkeClusters().push(cluster ? new OkeClusterView(cluster, this) : new OkeClusterView(this.okitjson.newOkeCluster(), this));
+    return this.getOkeClusters()[this.getOkeClusters().length - 1];
+}
+OkitJsonView.prototype.getOkeClusters = function() {
+    if (!this.oke_clusters) this.oke_clusters = []
+    return this.oke_clusters;
+}
+OkitJsonView.prototype.getOkeCluster = function(id='') {
+    for (let artefact of this.getOkeClusters()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadOkeClusters = function(oke_clusters) {
+    for (const artefact of oke_clusters) {
+        this.getOkeClusters().push(new OkeClusterView(new OkeCluster(artefact, this.okitjson), this));
+    }
+}

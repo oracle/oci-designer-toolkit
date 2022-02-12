@@ -57,3 +57,33 @@ class CustomerPremiseEquipmentView extends OkitDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropCustomerPremiseEquipmentView = function(target) {
+    let view_artefact = this.newCustomerPremiseEquipment();
+    view_artefact.getArtefact().compartment_id = target.id;
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newCustomerPremiseEquipment = function(connect) {
+    this.getCustomerPremiseEquipments().push(connect ? new CustomerPremiseEquipmentView(connect, this) : new CustomerPremiseEquipmentView(this.okitjson.newCustomerPremiseEquipment(), this));
+    return this.getCustomerPremiseEquipments()[this.getCustomerPremiseEquipments().length - 1];
+}
+OkitJsonView.prototype.getCustomerPremiseEquipments = function() {
+    if (!this.customer_premise_equipments) this.customer_premise_equipments = []
+    return this.customer_premise_equipments;
+}
+OkitJsonView.prototype.getCustomerPremiseEquipment = function(id='') {
+    for (let artefact of this.getCustomerPremiseEquipments()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadCustomerPremiseEquipments = function(fast_connects) {
+    for (const artefact of fast_connects) {
+        this.getCustomerPremiseEquipments().push(new CustomerPremiseEquipmentView(new CustomerPremiseEquipment(artefact, this.okitjson), this));
+    }
+}

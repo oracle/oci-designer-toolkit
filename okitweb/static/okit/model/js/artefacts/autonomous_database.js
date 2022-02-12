@@ -69,3 +69,26 @@ class AutonomousDatabase extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newAutonomousDatabase = function(data) {
+    console.info('New Autonomous Database');
+    this.getAutonomousDatabases().push(new AutonomousDatabase(data, this));
+    return this.getAutonomousDatabases()[this.getAutonomousDatabases().length - 1];
+}
+OkitJson.prototype.getAutonomousDatabases = function() {
+    if (!this.autonomous_databases) this.autonomous_databases = [];
+    return this.autonomous_databases;
+}
+OkitJson.prototype.getAutonomousDatabase = function(id='') {
+    for (let artefact of this.getAutonomousDatabases()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteAutonomousDatabase = function(id) {
+    this.autonomous_databases = this.autonomous_databases ? this.autonomous_databases.filter((r) => r.id !== id) : []
+}

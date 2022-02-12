@@ -53,3 +53,26 @@ class NatGateway extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newNatGateway = function(data) {
+    console.info('New NAT Gateway');
+    this.getNatGateways().push(new NatGateway(data, this));
+    return this.getNatGateways()[this.getNatGateways().length - 1];
+}
+OkitJson.prototype.getNatGateways = function() {
+    if (!this.nat_gateways) this.nat_gateways = [];
+    return this.nat_gateways;
+}
+OkitJson.prototype.getNatGateway = function(id='') {
+    for (let artefact of this.getNatGateways()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteNatGateway = function(id) {
+    this.nat_gateways = this.nat_gateways ? this.nat_gateways.filter((r) => r.id !== id) : []
+}

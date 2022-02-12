@@ -156,3 +156,64 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     }
 
 }
+/*
+** Dynamically Add View Functions
+*/
+OkitJsonView.prototype.dropSubnetView = function(target) {
+    let view_artefact = this.newSubnet();
+    if (target.type === VirtualCloudNetwork.getArtifactReference()) {
+        view_artefact.getArtefact().vcn_id = target.id;
+        view_artefact.getArtefact().compartment_id = target.compartment_id;
+        view_artefact.getArtefact().generateCIDR();
+    } else if (target.type === Compartment.getArtifactReference()) {
+        view_artefact.getArtefact().compartment_id = target.id;
+    }
+    view_artefact.recalculate_dimensions = true;
+    return view_artefact;
+}
+OkitJsonView.prototype.newSubnet = function(subnet) {
+    this.getSubnets().push(subnet ? new SubnetView(subnet, this) : new SubnetView(this.okitjson.newSubnet(), this));
+    return this.getSubnets()[this.getSubnets().length - 1];
+}
+OkitJsonView.prototype.getSubnets = function() {
+    if (!this.subnets) this.subnets = []
+    return this.subnets;
+}
+OkitJsonView.prototype.getSubnet = function(id='') {
+    for (let artefact of this.getSubnets()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJsonView.prototype.loadSubnets = function(subnets) {
+    for (const artefact of subnets) {
+        this.getSubnets().push(new SubnetView(new Subnet(artefact, this.okitjson), this));
+    }
+}
+// OkitJsonView.prototype.loadSubnetsSelect = function(select_id, empty_option=false) {
+//     $(jqId(select_id)).empty();
+//     const subnet_select = $(jqId(select_id));
+//     if (empty_option) {
+//         subnet_select.append($('<option>').attr('value', '').text(''));
+//     }
+//     for (let subnet of this.getSubnets()) {
+//         const compartment = this.getCompartment(subnet.compartment_id);
+//         const vcn = this.getVirtualCloudNetwork(subnet.vcn_id);
+//         const display_name = subnet.display_name;
+//         // const display_name = `${compartment.display_name}/${vcn.display_name}/${subnet.display_name}`;
+//         subnet_select.append($('<option>').attr('value', subnet.id).text(display_name));
+//     }
+// }
+OkitJsonView.prototype.loadSubnetsSelect = function(id, empty_option=false, vcn_id=undefined) {
+    // Build Subnet Select
+    let select = $(jqId(id));
+    $(select).empty();
+    if (empty_option) select.append($('<option>').attr('value', '').text(''));
+    for (const resource of this.getOkitJson().getSubnets().filter((s) => vcn_id === undefined || s.vcn_id === vcn_id)) {
+        select.append($('<option>').attr('value', resource.id).text(resource.display_name));
+    }
+}
+OkitArtefactView.prototype.loadSubnetsSelect = function(id, empty=true, vcn_id=undefined) {this.getJsonView().loadSubnetsSelect(id, empty, vcn_id)}
+OkitArtefactView.prototype.loadSubnetSelect = function(id, empty=true, vcn_id=undefined) {this.getJsonView().loadSubnetsSelect(id, empty, vcn_id)}

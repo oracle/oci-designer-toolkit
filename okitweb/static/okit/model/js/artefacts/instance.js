@@ -153,3 +153,29 @@ class Instance extends OkitArtifact {
     }
 
 }
+/*
+** Dynamically Add Model Functions
+*/
+OkitJson.prototype.newInstance = function(data) {
+    console.info('New Instance');
+    this.getInstances().push(new Instance(data, this));
+    return this.getInstances()[this.getInstances().length - 1];
+}
+OkitJson.prototype.getInstances = function() {
+    if (!this.instances) this.instances = [];
+    return this.instances;
+}
+OkitJson.prototype.getInstance = function(id='') {
+    for (let artefact of this.getInstances()) {
+        if (artefact.id === id) {
+            return artefact;
+        }
+    }
+    return undefined;
+}
+OkitJson.prototype.deleteInstance = function(id) {
+    this.instances = this.instances ? this.instances.filter((r) => r.id !== id) : []
+}
+OkitJson.prototype.getInstanceByBlockVolumeId = function(id) {
+    return this.getInstances().filter(i => i.block_storage_volume_ids.includes(id));
+}
