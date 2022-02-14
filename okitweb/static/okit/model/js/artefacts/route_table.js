@@ -32,6 +32,15 @@ class RouteTable extends OkitArtifact {
         return new RouteTable(JSON.clone(this), this.getOkitJson());
     }
 
+    newRule() {
+        return {
+            target_type: "internet_gateway",
+            destination_type: "CIDR_BLOCK",
+            destination: "0.0.0.0/0",
+            network_entity_id: "",
+            description: ""
+        }
+    }
 
     /*
     ** Delete Processing

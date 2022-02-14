@@ -81,13 +81,13 @@ class ServiceGatewayView extends OkitDesignerArtefactView {
                 }
             }
             let autonomous_database_select = $(jqId('autonomous_database_ids'));
-            for (let autonomous_database of okitJson.autonomous_databases) {
+            for (let autonomous_database of okitJson.getAutonomousDatabases()) {
                 if (me.compartment_id === autonomous_database.compartment_id) {
                     autonomous_database_select.append($('<option>').attr('value', autonomous_database.id).text(autonomous_database.display_name));
                 }
             }
             let object_storage_bucket_select = $(jqId('object_storage_bucket_ids'));
-            for (let object_storage_bucket of okitJson.object_storage_buckets) {
+            for (let object_storage_bucket of okitJson.getObjectStorageBuckets()) {
                 if (me.compartment_id === object_storage_bucket.compartment_id) {
                     object_storage_bucket_select.append($('<option>').attr('value', object_storage_bucket.id).text(object_storage_bucket.display_name));
                 }

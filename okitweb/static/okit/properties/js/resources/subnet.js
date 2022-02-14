@@ -13,8 +13,6 @@ class SubnetProperties extends OkitResourceProperties {
         super(resource, resource_tabs)
     }
 
-    vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
-
     // Build Additional Resource Specific Properties
     buildResource() {
         const self = this
