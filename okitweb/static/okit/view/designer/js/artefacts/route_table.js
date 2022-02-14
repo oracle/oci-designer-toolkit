@@ -31,8 +31,14 @@ class RouteTableView extends OkitDesignerArtefactView {
 
     /*
     ** Property Sheet Load function
+    */
+    newPropertiesSheet() {
+        this.properties_sheet = new RouteTableProperties(this.artefact)
+    }
+    /*
+    ** Property Sheet Load function
      */
-    loadProperties() {
+    loadPropertiesOld() {
         let okitJson = this.getOkitJson();
         let me = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/route_table.html", () => {

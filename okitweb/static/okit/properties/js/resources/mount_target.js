@@ -91,7 +91,7 @@ class MountTargetProperties extends OkitResourceProperties {
         this.append(e_tbody, p_row)
         p_input.property('value', fs_export.path)
         // CIDR
-        const [cidr_row, cidr_input] = this.createInput('ipv4_cidr', 'Source CIDR', `${id}_options_source`, idx, (d, i, n) => fs_export.options.source = n[i].value)
+        const [cidr_row, cidr_input] = this.createInput('ipv4_cidr', 'Source CIDR', `${id}_options_source`, idx, (d, i, n) => {n[i].reportValidity(); fs_export.options.source = n[i].value})
         this.append(e_tbody, cidr_row)
         cidr_input.property('value', fs_export.options.source)
         // Access

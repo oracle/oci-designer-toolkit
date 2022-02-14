@@ -92,7 +92,7 @@ class DhcpOptionProperties extends OkitResourceProperties {
             ['Domain Name Server', 'DomainNameServer'],
             ['Search Domain', 'SearchDomain'],
         ]);
-        this.loadTypeSelect(select, types_map)
+        this.loadSelectFromMap(select, types_map)
     }
     loadServerTypeSelect(select) {
         const types_map = new Map([
@@ -100,7 +100,7 @@ class DhcpOptionProperties extends OkitResourceProperties {
             // ['Vcn Local', 'VcnLocal'],
             ['Vcn Local Plus Internet', 'VcnLocalPlusInternet'],
         ]);
-        this.loadTypeSelect(select, types_map)
+        this.loadSelectFromMap(select, types_map)
     }
     loadTypeSelect(type_select, types_map) {
         types_map.forEach((v, t) => type_select.append('option').attr('value', v).text(t))

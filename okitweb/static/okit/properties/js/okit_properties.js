@@ -14,6 +14,10 @@ class OkitResourceProperties {
         this.build()
     }
 
+    compartment_filter = (r) => r.compartment_id.toString() === this.resource.compartment_id.toString()
+    vcn_filter = (r) => r.vcn_id.toString() === this.resource.vcn_id.toString()
+    subnet_filter = (r) => r.subnet_id.toString() === this.resource.subnet_id.toString()
+
     build() {
         this.buildBaseSheet()
         this.buildCore()
@@ -271,8 +275,16 @@ class OkitResourceProperties {
         select.selectAll('*').remove()
         if (!filter) filter = () => true
         if (empty_option) select.append('option').attr('value', '').text('')
+        let id = ''
         const resources = this.resource.okit_json[`${resource_type}s`] ? this.resource.okit_json[`${resource_type}s`] : this.resource.okit_json[`${resource_type}`] ? this.resource.okit_json[`${resource_type}`] : []
-        resources.filter(filter).forEach((r) => select.append('option').attr('value', r.id).text(r.display_name))
+        resources.filter(filter).forEach((r, i) => {
+            const option = select.append('option').attr('value', r.id).text(r.display_name)
+            if (i === 0) {
+                option.attr('selected', 'selected')
+                id = r.id
+            }
+        })
+        return id
     }
 
     loadMultiSelect(select, resource_type, empty_option=false, filter=undefined) {
@@ -285,5 +297,9 @@ class OkitResourceProperties {
             div.append('input').attr('type', 'checkbox').attr('id', safeid).attr('value', r.id)
             div.append('label').attr('for', safeid).text(r.display_name)
         })
+    }
+
+    loadSelectFromMap(select, map) {
+        map.forEach((v, t) => select.append('option').attr('value', v).text(t))
     }
 }
