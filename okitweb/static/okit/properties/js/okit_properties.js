@@ -264,6 +264,9 @@ class OkitResourceProperties {
     trId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}${idx}_row`
     inputId = (id, idx) => `${id.replaceAll(' ', '_').toLowerCase()}${idx}`
 
+    hideProperty = (id, idx) => d3.select(`#${this.trId(id, idx)}`).classed('collapsed', true)
+    showProperty = (id, idx) => d3.select(`#${this.trId(id, idx)}`).classed('collapsed', false)
+
     loadSelect(select, resource_type, empty_option=false, filter=undefined) {
         select.selectAll('*').remove()
         if (!filter) filter = () => true

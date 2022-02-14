@@ -31,7 +31,18 @@ class DhcpOptionView extends OkitArtefactView {
     /*
     ** Property Sheet Load function
     */
+    newPropertiesSheet() {
+        this.properties_sheet = new DhcpOptionProperties(this.artefact)
+    }
     loadProperties() {
+        $(jqId(PROPERTIES_PANEL)).empty()
+        this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
+        this.properties_sheet.load()
+    }
+    /*
+    ** Property Sheet Load function
+    */
+    loadPropertiesOld() {
         const self = this;
         $(jqId(PROPERTIES_PANEL)).load("propertysheets/dhcp_option.html", () => {
             loadPropertiesSheet(self.artefact);
@@ -52,12 +63,7 @@ class DhcpOptionView extends OkitArtefactView {
         }
     }
     addOption() {
-        let new_option = {
-            type: "DomainNameServer",
-            server_type: "CustomDnsServer",
-            custom_dns_servers: [],
-            search_domain_names: []
-        };
+        const new_option = this.artefact.newOption();
         this.options.push(new_option);
         this.loadOptions();
         displayOkitJson();

@@ -5,7 +5,7 @@
 console.info('Loaded VirtualCloudNetwork Properties Javascript');
 
 /*
-** Define VirtualCloudNetwork View Class
+** Define VirtualCloudNetwork Properties Class
 */
 class VirtualCloudNetworkProperties extends OkitResourceProperties {
     constructor (resource) {
