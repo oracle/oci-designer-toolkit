@@ -1059,7 +1059,10 @@ class OkitArtefactView {
     ** Property Sheet Load function
      */
     loadProperties() {
-        $(jqId(PROPERTIES_PANEL)).load("propertysheets/empty.html");
+        // $(jqId(PROPERTIES_PANEL)).load("propertysheets/empty.html");
+        $(jqId(PROPERTIES_PANEL)).empty()
+        this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
+        this.properties_sheet.load()
     }
 
 

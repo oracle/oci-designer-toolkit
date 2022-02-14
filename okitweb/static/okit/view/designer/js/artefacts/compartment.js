@@ -68,11 +68,6 @@ class CompartmentView extends OkitContainerDesignerArtefactView {
     newPropertiesSheet() {
         this.properties_sheet = new CompartmentProperties(this.artefact)
     }
-    loadProperties() {
-        $(jqId(PROPERTIES_PANEL)).empty()
-        this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
-        this.properties_sheet.load()
-    }
 
     /*
     ** Child Type Functions

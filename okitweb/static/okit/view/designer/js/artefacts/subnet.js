@@ -87,11 +87,6 @@ class SubnetView extends OkitContainerDesignerArtefactView {
     newPropertiesSheet() {
         this.properties_sheet = new SubnetProperties(this.artefact)
     }
-    loadProperties() {
-        $(jqId(PROPERTIES_PANEL)).empty()
-        this.properties_sheet.show(document.getElementById(PROPERTIES_PANEL))
-        this.properties_sheet.load()
-    }
 
     /*
     ** Load and display Value Proposition
