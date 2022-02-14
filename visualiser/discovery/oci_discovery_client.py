@@ -379,7 +379,7 @@ class OciResourceDiscoveryClient(object):
         # return the "list_*" methods for a class
         return {method for method in dir(klass) if method.startswith('list_')}
 
-    def __init__(self, config, signer=None, cert_bundle=None, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS, include_root_as_compartment=False):
+    def __init__(self, config, signer=None, cert_bundle=None, regions=None, compartments=None, include_sub_compartments=False, include_resource_types=None, exclude_resource_types=None, timeout=DEFAULT_TIMEOUT, max_workers=DEFAULT_MAX_WORKERS, include_root_as_compartment=False, tenancy_override=None):
         self.config = config
         self.cert_bundle = cert_bundle
         if signer:
@@ -409,7 +409,8 @@ class OciResourceDiscoveryClient(object):
         self.exclude_resource_types = set(exclude_resource_types) if exclude_resource_types else None
 
         # get tenancy
-        self.tenancy = self.get_tenancy()
+        self.tenancy = self.get_tenancy(tenancy_override)
+        self.config["tenancy"] = self.tenancy.id
 
         # get regions
         try:
@@ -418,7 +419,7 @@ class OciResourceDiscoveryClient(object):
             self.regions = [oci.identity.models.region_subscription.RegionSubscription(is_home_region=True, region_key=config['region'], region_name=config['region'], status="READY")]
             self.home_region = config['region']
             logger.warning(e)
-
+        
         # get availability_domains
         self.availability_domains = self.get_availability_domains(self.regions)
 
@@ -473,21 +474,20 @@ class OciResourceDiscoveryClient(object):
         search = oci.resource_search.ResourceSearchClient(config=region_config, signer=self.signer)
         if self.cert_bundle:
             search.base_client.session.verify = self.cert_bundle
-
         search_details = oci.resource_search.models.StructuredSearchDetails(
             type="Structured",
             query=query,
             matching_context_type=oci.resource_search.models.SearchDetails.MATCHING_CONTEXT_TYPE_NONE,
         )
         logger.info("requesting resources for " + region_name)
-        results = oci.pagination.list_call_get_all_results(search.search_resources, search_details).data
+        results = oci.pagination.list_call_get_all_results(search.search_resources, search_details, tenant_id=self.tenancy.id).data
         return results
 
     def get_compartments(self):
         identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         if self.cert_bundle:
             identity.base_client.session.verify = self.cert_bundle
-        return oci.pagination.list_call_get_all_results(identity.list_compartments, self.config["tenancy"], compartment_id_in_subtree=True).data
+        return oci.pagination.list_call_get_all_results(identity.list_compartments, self.tenancy.id, compartment_id_in_subtree=True).data
 
     def get_subcompartment_ids(self, compartment_id):
         all_subcompartment_ids = set()
@@ -501,24 +501,27 @@ class OciResourceDiscoveryClient(object):
     def get_availability_domains(self, regions):
         tasks = dict()
         for region in regions:
-            tasks[region.region_name] = [("AvailabilityDomain", self.config["tenancy"], None)]
+            tasks[region.region_name] = [("AvailabilityDomain", self.tenancy.id, None)]
         results = self.get_resources(tasks)
         for region in results:
             results[region] = [ad.name for ad in results[region]["AvailabilityDomain"]]
         return results
 
-    def get_tenancy(self):
+    def get_tenancy(self, tenancy_override=None):
         identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         if self.cert_bundle:
             identity.base_client.session.verify = self.cert_bundle
-        tenancy = identity.get_tenancy(self.config["tenancy"]).data
+        if tenancy_override:
+            tenancy = identity.get_tenancy(tenancy_override).data
+        else:
+            tenancy = identity.get_tenancy(self.config["tenancy"]).data
         return tenancy
 
     def get_regions(self, region_filter=None):
         identity = oci.identity.IdentityClient(config=self.config, signer=self.signer)
         if self.cert_bundle:
             identity.base_client.session.verify = self.cert_bundle
-        all_regions = identity.list_region_subscriptions(self.config["tenancy"]).data
+        all_regions = identity.list_region_subscriptions(self.tenancy.id).data
         active_regions = [region for region in all_regions if region.status == "READY" and (region_filter == None or region.region_name in region_filter)]
         home_region = [region for region in all_regions if region.is_home_region]
         return active_regions, home_region[0].region_name
@@ -1127,7 +1130,7 @@ class OciResourceDiscoveryClient(object):
 
             if self.include_resource_types != None and "Image" in self.include_resource_types:
                 # If Image is specifically requested search for platform images in the root Compartment
-                regional_resource_requests.add(("Image", self.config["tenancy"], None))
+                regional_resource_requests.add(("Image", self.tenancy.id, None))
 
             if self.include_resource_types != None and "VolumeBackupPolicy" in self.include_resource_types:
                 # If VolumeBackupPolicy is specifically requested search for platform policies where Compartment is None
@@ -1136,13 +1139,13 @@ class OciResourceDiscoveryClient(object):
             if self.include_resource_types and "MySQLConfiguration" in self.include_resource_types:
                 # add search for MySQLConfiguration in tenancy to get the default configurations that are
                 # not included in the per compartment results.
-                regional_resource_requests.add(("MySQLConfiguration", self.config["tenancy"], "DEFAULT"))
+                regional_resource_requests.add(("MySQLConfiguration", self.tenancy.id, "DEFAULT"))
 
             # get static/read-only resources 
             for ro_resource_type in OciResourceDiscoveryClient.static_resource_client_methods:
                 if self.include_resource_types and ro_resource_type in self.include_resource_types and ro_resource_type not in ["VirtualCircuitBandwidthShape"]:
                     # always add search for these resources in the root compartment
-                    regional_resource_requests.add((ro_resource_type, self.config["tenancy"], None))
+                    regional_resource_requests.add((ro_resource_type, self.tenancy.id, None))
                 
             for resource in resources[region]:
                 # handle list resource query varient cases
@@ -1455,15 +1458,16 @@ class OciResourceDiscoveryClient(object):
                     # add
                     resources_by_region[region][resource_type] = final_resources_by_region[region][resource_type]
 
-        if len(resources_by_region) == 0:
-            logger.warn("Resource discovery results are empty")  
-        else:
+        for region in resources_by_region:
             # replace summary result with resource details
             self.replace_resource_details(resources_by_region, region, "MySQLDbSystem", "MySQLDbSystemDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowApplication", "DataFlowApplicationDetails")
             self.replace_resource_details(resources_by_region, region, "DataFlowRun", "DataFlowRunDetails")
             self.replace_resource_details(resources_by_region, region, "ExportSet", "ExportSetDetails")
             self.replace_resource_details(resources_by_region, region, "Bastion", "BastionDetails")
+
+        if len(resources_by_region) == 0:
+            logger.warn("Resource discovery results are empty")  
 
         # remove duplicate shapes
         # For multi-AD regions the list_shapes method returns shapes per AD, but does not distinguish which shape

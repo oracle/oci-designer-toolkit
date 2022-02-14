@@ -5,7 +5,7 @@
 console.info('Loaded Subnet Properties Javascript');
 
 /*
-** Define Subnet View Class
+** Define Subnet Properties Class
 */
 class SubnetProperties extends OkitResourceProperties {
     constructor (resource) {
@@ -18,7 +18,7 @@ class SubnetProperties extends OkitResourceProperties {
     // Build Additional Resource Specific Properties
     buildResource() {
         const self = this
-        // Subnet
+        // VCN
         const [vcn_row, vcn_input] = this.createInput('select', 'Virtual Cloud Network', `${self.id}_vcn_id`, '', (d, i, n) => self.resource.vcn_id = n[i].value)
         this.vcn_id = vcn_input
         this.append(this.core_tbody, vcn_row)

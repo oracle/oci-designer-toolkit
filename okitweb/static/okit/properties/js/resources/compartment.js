@@ -5,7 +5,7 @@
 console.info('Loaded Compartment Properties Javascript');
 
 /*
-** Define Compartment View Class
+** Define Compartment Properties Class
 */
 class CompartmentProperties extends OkitResourceProperties {
     constructor (resource) {

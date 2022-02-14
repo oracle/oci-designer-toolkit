@@ -48,6 +48,11 @@ class OkitJson {
                 return r
             }, {})
     }
+    getResource(id='') {
+        const resource = Object.values(this).filter((val) => Array.isArray(val)).reduce((a, v) => [...a, ...v], []).filter((r) => r.id === id)[0]
+        console.info('Resource', resource)
+        return resource
+    }
 
     /*
     ** Load Simple Json Structure and build Object Based JSON
@@ -117,7 +122,7 @@ class OkitJson {
     /*
     ** Clear Model 
     */
-   clear() {
+    clear() {
         // Clear
         this.title = "OKIT OCI Visualiser Json";
         this.description = `# Description\n__Created ${getCurrentDateTime()}__\n\n--------------------------------------\n\n`;
@@ -137,7 +142,7 @@ class OkitJson {
         for (const [key, value] of Object.entries(this)) {
             if (Array.isArray(value)) {this[key] = []}
         }
-   }
+    }
 
     /*
     ** Artifact Processing
