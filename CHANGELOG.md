@@ -4,6 +4,14 @@
 ## Version 0.33.0
 **Release Date**: 2nd March 2022
 ### Features
+1. BOAT Authentication added (Requires tenancy_override in config file to indicate the actual tenancy whilst tenancy indicates the authentication tenancy)
+2. New Properties Sheet format added for 
+    1. Compartment
+    2. Dhcp Option
+    3. Route Table
+    4. Security list
+    5. Subnet
+    6. VCN
 ### Bug Fixes
 
 

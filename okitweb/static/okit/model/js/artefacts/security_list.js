@@ -76,8 +76,8 @@ class SecurityList extends OkitArtifact {
 
     newIcmpOptions() {
         return {
-            type: '',
-            code: ''
+            type: '3',
+            code: '4'
         }
     }
 

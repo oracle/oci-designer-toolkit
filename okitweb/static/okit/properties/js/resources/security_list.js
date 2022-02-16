@@ -65,7 +65,7 @@ class SecurityListProperties extends OkitResourceProperties {
         const id = `${this.id}_ingress_rule`
         const [row, div] = this.createDeleteRow(id, idx, () => this.deleteIngressRule(id, idx, rule))
         this.append(this.ingress_rules_tbody, row)
-        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${id}_details`, idx)
+        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${id}_details`, idx, (d, i, n) => this.toggleSummaryText(n, i, rule))
         this.append(div, rule_details)
         const [rule_table, rule_thead, rule_tbody] = this.createTable('', `${id}_rule`, '')
         this.append(rule_div, rule_table)
@@ -74,12 +74,12 @@ class SecurityListProperties extends OkitResourceProperties {
         this.append(rule_tbody, desc_row)
         desc_input.property('value', rule.description)
         // Source Type
-        const [sdtype_row, sdtype_input] = this.createInput('select', 'Source Type', `${id}_source_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showIngressRuleRows(rule, id, idx)})
+        const [sdtype_row, sdtype_input] = this.createInput('select', 'Source Type', `${id}_source_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
         this.append(rule_tbody, sdtype_row)
         this.loadSourceDestinationTypeSelect(sdtype_input)
         sdtype_input.property('value', rule.source_type)
         // Source
-        const [source_row, source_input] = this.createInput('ipv4_cidr', 'Destination', `${id}_source`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
+        const [source_row, source_input] = this.createInput('ipv4_cidr', 'Source', `${id}_source`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
         this.append(rule_tbody, source_row)
         source_input.property('value', rule.source)
         // Stateless
@@ -87,7 +87,7 @@ class SecurityListProperties extends OkitResourceProperties {
         this.append(rule_tbody, stateless_row)
         stateless_input.property('checked', rule.is_stateless)
         // Protocol
-        const [sdprotocol_row, sdprotocol_input] = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showIngressRuleRows(rule, id, idx)})
+        const [sdprotocol_row, sdprotocol_input] = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
         this.append(rule_tbody, sdprotocol_row)
         this.loadProtocolSelect(sdprotocol_input)
         sdprotocol_input.property('value', rule.protocol)
@@ -98,7 +98,124 @@ class SecurityListProperties extends OkitResourceProperties {
         // ICMP Options
         this.addIcmpOptionsHtml(rule_tbody, rule, id, idx)
         // Check Display
-        this.showIngressRuleRows(rule, id, idx)
+        this.showProtocolRuleRows(rule, id, idx)
+    }
+    addIngressRule() {
+        const rule = this.resource.newIngressRule();
+        this.resource.ingress_security_rules.push(rule);
+        this.ingress_rule_idx += 1
+        this.addIngressRuleHtml(rule, this.ingress_rule_idx);
+    }
+    deleteIngressRule(id, idx, rule) {
+        this.resource.ingress_security_rules = this.resource.ingress_security_rules.filter((e) => e !== rule)
+        $(`#${id}${idx}_row`).remove()
+    }
+    // Egress Rules
+    loadEgressRules() {
+        this.egress_rules_tbody.selectAll('*').remove()
+        this.resource.egress_security_rules.forEach((e, i) => this.addEgressRuleHtml(e, i+1))
+        this.egress_rule_idx = this.resource.egress_security_rules.length;
+    }
+    addEgressRuleHtml(rule, idx) {
+        const self = this
+        const id = `${this.id}_egress_rule`
+        const [row, div] = this.createDeleteRow(id, idx, () => this.deleteEgressRule(id, idx, rule))
+        this.append(this.egress_rules_tbody, row)
+        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${id}_details`, idx, (d, i, n) => this.toggleSummaryText(n, i, rule))
+        this.append(div, rule_details)
+        const [rule_table, rule_thead, rule_tbody] = this.createTable('', `${id}_rule`, '')
+        this.append(rule_div, rule_table)
+        // Description
+        const [desc_row, desc_input] = this.createInput('text', 'Description', `${id}_description`, '', (d, i, n) => rule.description = n[i].value)
+        this.append(rule_tbody, desc_row)
+        desc_input.property('value', rule.description)
+        // Source Type
+        const [sdtype_row, sdtype_input] = this.createInput('select', 'Destination Type', `${id}_destination_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showProtocolRuleRows(rule, id, idx)})
+        this.append(rule_tbody, sdtype_row)
+        this.loadSourceDestinationTypeSelect(sdtype_input)
+        sdtype_input.property('value', rule.source_type)
+        // Source
+        const [source_row, source_input] = this.createInput('ipv4_cidr', 'Destination', `${id}_destination`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
+        this.append(rule_tbody, source_row)
+        source_input.property('value', rule.source)
+        // Stateless
+        const [stateless_row, stateless_input] = this.createInput('checkbox', 'Stateless', `${id}_is_stateless`, idx, (d, i, n) => rule.is_stateless = n[i].checked)
+        this.append(rule_tbody, stateless_row)
+        stateless_input.property('checked', rule.is_stateless)
+        // Protocol
+        const [sdprotocol_row, sdprotocol_input] = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showProtocolRuleRows(rule, id, idx)})
+        this.append(rule_tbody, sdprotocol_row)
+        this.loadProtocolSelect(sdprotocol_input)
+        sdprotocol_input.property('value', rule.protocol)
+        // TCP Options
+        this.addTcpOptionsHtml(rule_tbody, rule, id, idx)
+        // UDP Options
+        this.addUdpOptionsHtml(rule_tbody, rule, id, idx)
+        // ICMP Options
+        this.addIcmpOptionsHtml(rule_tbody, rule, id, idx)
+        // Check Display
+        this.showProtocolRuleRows(rule, id, idx)
+
+    }
+    addEgressRule() {
+        const rule = this.resource.newEgressRule();
+        this.resource.egress_security_rules.push(rule);
+        this.egress_rule_idx += 1
+        this.addEgressRuleHtml(rule, this.egress_rule_idx);
+    }
+    deleteEgressRule(id, idx, rule) {
+        this.resource.egress_security_rules = this.resource.egress_security_rules.filter((e) => e !== rule)
+        $(`#${id}${idx}_row`).remove()
+    }
+    // Common
+    toggleSummaryText(n, i, rule) {
+        const summary_label = n[i].querySelector('summary > label')
+        let source_dest = ''
+        if (rule.source) {
+            source_dest = `Source ${rule.source_type.split('_')[0]} ${rule.source}`
+        } else {
+            source_dest = `Destination ${rule.destination_type.split('_')[0]} ${rule.destination}`
+        }
+        const all_range = (range) => range === '' ? 'All' : range
+        const tcp = rule.tcp_options ? `TCP Source: ${all_range(this.getPortRange(rule.tcp_options.source_port_range))} / Destination: ${all_range(this.getPortRange(rule.tcp_options.destination_port_range))}` : ''
+        const udp = rule.udp_options ? `UDP Source: ${all_range(this.getPortRange(rule.udp_options.source_port_range))} / Destination: ${all_range(this.getPortRange(rule.udp_options.destination_port_range))}` : ''
+        const icmp = rule.icmp_options ? `ICMP Type: ${rule.icmp_options.type} Code: ${rule.icmp_options.code ? rule.icmp_options.code : ''}` : ''
+        const protocol = rule.protocol.toString() === 'all' ? 'All' : `${tcp}${udp}${icmp}`
+        const innerText = n[i].open ? 'Rule' : `${source_dest} ${protocol}`
+        summary_label.innerText = innerText
+    }
+    showProtocolRuleRows(rule, id, idx) {
+        const tcp_source_id = `${id}_tcp_source_port_range`
+        const tcp_destination_id = `${id}_tcp_destination_port_range`
+        const udp_source_id = `${id}_udp_source_port_range`
+        const udp_destination_id = `${id}_udp_destination_port_range`
+        const icmp_type_id = `${id}_icmp_type`
+        const icmp_code_id = `${id}_icmp_code`
+        // Hide All
+        this.hideProperty(tcp_source_id, idx)
+        this.hideProperty(tcp_destination_id, idx)
+        this.hideProperty(udp_source_id, idx)
+        this.hideProperty(udp_destination_id, idx)
+        this.hideProperty(icmp_type_id, idx)
+        this.hideProperty(icmp_code_id, idx)
+        // Show
+        if (rule.target_type !== 'private_ip') {
+        } else {
+            this.showProperty(`${id}_destination_type`, idx)
+        }
+        if (rule.protocol === '1') {
+            // ICMP
+            this.showProperty(icmp_type_id, idx)
+            this.showProperty(icmp_code_id, idx)
+       } else if (rule.protocol === '6') {
+           // 'TCP'
+           this.showProperty(tcp_source_id, idx)
+           this.showProperty(tcp_destination_id, idx)
+        } else if (rule.protocol === '17') {
+            // 'UDP'
+            this.showProperty(udp_source_id, idx)
+            this.showProperty(udp_destination_id, idx)
+        }
     }
     getPortRange(port_range){
         if (port_range) {
@@ -145,118 +262,14 @@ class SecurityListProperties extends OkitResourceProperties {
     addIcmpOptionsHtml(rule_tbody, rule, rule_id, idx) {
         const id = `${rule_id}_icmp`
         // Type
-        const [type_row, type_input] = this.createInput('number', 'Type', `${id}_type`, idx, (d, i, n) => rule.icmp_options.type = n[i].value)
+        const [type_row, type_input] = this.createInput('number', 'Type', `${id}_type`, idx, (d, i, n) => rule.icmp_options.type = n[i].value, {min: 0})
         this.append(rule_tbody, type_row)
         if (rule.icmp_options) type_input.property('value', rule.icmp_options.type)
         // Code
-        const [code_row, code_input] = this.createInput('number', 'Code', `${id}_code`, idx, (d, i, n) => rule.icmp_options.code = n[i].value)
+        const [code_row, code_input] = this.createInput('number', 'Code', `${id}_code`, idx, (d, i, n) => rule.icmp_options.code = n[i].value, {min: 0})
         this.append(rule_tbody, code_row)
         if (rule.icmp_options) code_input.property('value', rule.icmp_options.code)
     }
-    addIngressRule() {
-        const rule = this.resource.newIngressRule();
-        this.resource.ingress_security_rules.push(rule);
-        this.ingress_rule_idx += 1
-        this.addIngressRuleHtml(rule, this.ingress_rule_idx);
-    }
-    deleteIngressRule(id, idx, rule) {
-        this.resource.ingress_security_rules = this.resource.ingress_security_rules.filter((e) => e !== rule)
-        $(`#${id}${idx}_row`).remove()
-    }
-    showIngressRuleRows(rule, id, idx) {
-        const tcp_source_id = `${id}_tcp_source_port_range`
-        const tcp_destination_id = `${id}_tcp_destination_port_range`
-        const udp_source_id = `${id}_udp_source_port_range`
-        const udp_destination_id = `${id}_udp_destination_port_range`
-        const icmp_type_id = `${id}_icmp_type`
-        const icmp_code_id = `${id}_icmp_code`
-        // Hide All
-        this.hideProperty(tcp_source_id, idx)
-        this.hideProperty(tcp_destination_id, idx)
-        this.hideProperty(udp_source_id, idx)
-        this.hideProperty(udp_destination_id, idx)
-        this.hideProperty(icmp_type_id, idx)
-        this.hideProperty(icmp_code_id, idx)
-        // Show
-        if (rule.target_type !== 'private_ip') {
-        } else {
-            this.showProperty(`${id}_destination_type`, idx)
-        }
-        if (rule.protocol === '1') {
-            // ICMP
-            this.showProperty(icmp_type_id, idx)
-            this.showProperty(icmp_code_id, idx)
-       } else if (rule.protocol === '6') {
-           // 'TCP'
-           this.showProperty(tcp_source_id, idx)
-           this.showProperty(tcp_destination_id, idx)
-     } else if (rule.protocol === '17') {
-           // 'UDP'
-           this.showProperty(udp_source_id, idx)
-           this.showProperty(udp_destination_id, idx)
-     }
-    }
-    // Egress Rules
-    loadEgressRules() {
-        this.egress_rules_tbody.selectAll('*').remove()
-        this.resource.egress_security_rules.forEach((e, i) => this.addEgressRuleHtml(e, i+1))
-        this.egress_rule_idx = this.resource.egress_security_rules.length;
-    }
-    addEgressRuleHtml(rule, idx) {
-        const self = this
-        const id = `${this.id}_egress_rule`
-        const [row, div] = this.createDeleteRow(id, idx, () => this.deleteEgressRule(id, idx, rule))
-        this.append(this.egress_rules_tbody, row)
-        const [rule_details, rule_summary, rule_div] = this.createDetailsSection('Rule', `${id}_details`, idx)
-        this.append(div, rule_details)
-        const [rule_table, rule_thead, rule_tbody] = this.createTable('', `${id}_rule`, '')
-        this.append(rule_div, rule_table)
-        // Description
-        const [desc_row, desc_input] = this.createInput('text', 'Description', `${id}_description`, '', (d, i, n) => rule.description = n[i].value)
-        this.append(rule_tbody, desc_row)
-        desc_input.property('value', rule.description)
-        // Source Type
-        const [sdtype_row, sdtype_input] = this.createInput('select', 'Source Type', `${id}_source_type`, idx, (d, i, n) => {rule.source_type = n[i].value = n[i].value; self.showEgressRuleRows(rule, id, idx)})
-        this.append(rule_tbody, sdtype_row)
-        this.loadSourceDestinationTypeSelect(sdtype_input)
-        sdtype_input.property('value', rule.source_type)
-        // Source
-        const [source_row, source_input] = this.createInput('ipv4_cidr', 'Destination', `${id}_source`, idx, (d, i, n) => {n[i].reportValidity(); rule.source = n[i].value})
-        this.append(rule_tbody, source_row)
-        source_input.property('value', rule.source)
-        // Stateless
-        const [stateless_row, stateless_input] = this.createInput('checkbox', 'Stateless', `${id}_is_stateless`, idx, (d, i, n) => rule.is_stateless = n[i].checked)
-        this.append(rule_tbody, stateless_row)
-        stateless_input.property('checked', rule.is_stateless)
-        // Protocol
-        const [sdprotocol_row, sdprotocol_input] = this.createInput('select', 'Protocol', `${id}_protocol`, idx, (d, i, n) => {rule.protocol = n[i].value = n[i].value; this.createOptions(rule); self.showEgressRuleRows(rule, id, idx)})
-        this.append(rule_tbody, sdprotocol_row)
-        this.loadProtocolSelect(sdprotocol_input)
-        sdprotocol_input.property('value', rule.protocol)
-        // TCP Options
-        this.addTcpOptionsHtml(rule_tbody, rule, id, idx)
-        // UDP Options
-        this.addUdpOptionsHtml(rule_tbody, rule, id, idx)
-        // ICMP Options
-        this.addIcmpOptionsHtml(rule_tbody, rule, id, idx)
-        // Check Display
-        this.showEgressRuleRows(rule, id, idx)
-
-    }
-    addEgressRule() {
-        const rule = this.resource.newEgressRule();
-        this.resource.egress_security_rules.push(rule);
-        this.egress_rule_idx += 1
-        this.addEgressRuleHtml(rule, this.egress_rule_idx);
-    }
-    deleteEgressRule(id, idx, rule) {
-        this.resource.egress_security_rules = this.resource.egress_security_rules.filter((e) => e !== rule)
-        $(`#${id}${idx}_row`).remove()
-    }
-    showEgressRuleRows(rule, id, idx) {
-        this.showIngressRuleRows(rule, id, idx)
-    }
-    // Common
     createOptions(rule) {
         if (rule.protocol === '1') {
              // ICMP
