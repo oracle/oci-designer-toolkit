@@ -33,6 +33,53 @@ class SecurityList extends OkitArtifact {
         return new SecurityList(JSON.clone(this), this.getOkitJson());
     }
 
+    newIngressRule() {
+        return {
+            protocol: "all", 
+            is_stateless: false, 
+            description: "", 
+            source_type: "CIDR_BLOCK", 
+            source: "0.0.0.0/0"
+        };
+    }
+
+    newEgressRule() {
+        return {
+            protocol: "all", 
+            is_stateless: false, 
+            description: "", 
+            destination_type: "CIDR_BLOCK", 
+            destination: "0.0.0.0/0"
+        };
+    }
+
+    newTcpOptions() {
+        return {
+            source_port_range: this.newPortRange(),
+            destination_port_range: this.newPortRange()
+        }
+    }
+
+    newUdpOptions() {
+        return {
+            source_port_range: this.newPortRange(),
+            destination_port_range: this.newPortRange()
+        }
+    }
+
+    newPortRange() {
+        return {
+            min: '',
+            max: ''
+        }
+    }
+
+    newIcmpOptions() {
+        return {
+            type: '3',
+            code: '4'
+        }
+    }
 
     /*
     ** Delete Processing
